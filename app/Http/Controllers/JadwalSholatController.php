@@ -26,10 +26,11 @@ class JadwalSholatController extends Controller
 	}
 
 	public function index()
-	{
-		$jadwal = JadwalSholat::all();
-		return view('jadwal_sholat.index', compact('jadwal'));
-	}
+{
+    $sholatJumat = SholatJumat::orderBy('tanggal', 'desc')->get();
+
+    return view('sholat_jumat.index', compact('sholatJumat'));
+}
 
 	public function create()
 	{
