@@ -426,6 +426,13 @@
                     <span>Pengumuman</span>
                 </a>
             </li>
+            <!-- Nav Item - Agenda Kajian -->
+<li class="nav-item {{ request()->routeIs('agenda_kajian.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('agenda_kajian.index') }}">
+        <i class="fas fa-fw fa-book-open"></i>
+        <span>Agenda Kajian</span>
+    </a>
+</li>
 
             <!-- Nav Item - Keuangan -->
             <li class="nav-item {{ request()->routeIs('keuangan.*') ? 'active' : '' }}">

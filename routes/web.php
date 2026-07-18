@@ -18,6 +18,8 @@ use App\Http\Controllers\RotationController;
 use App\Http\Controllers\QrisController;
 use App\Http\Controllers\SholatIdulFitriController;
 use App\Http\Controllers\SholatIdulAdhaController;
+use App\Http\Controllers\SlideController;
+use App\Http\Controllers\AgendaKajianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,7 +89,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('idul-adha', SholatIdulAdhaController::class);
     Route::resource('pengumuman', PengumumanController::class);
     Route::resource('keuangan', KeuanganController::class);
-    
+    Route::resource('slides', SlideController::class);
+    Route::resource('agenda_kajian', AgendaKajianController::class);
     // ============================================
     // ROUTES QRIS (MEMERLUKAN LOGIN)
     // ============================================
