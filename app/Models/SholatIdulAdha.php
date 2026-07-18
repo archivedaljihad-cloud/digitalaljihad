@@ -1,54 +1,65 @@
 <?php
-// app/Models/SholatIdulAdha.php
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
-class SholatIdulAdha extends Model
+class SholatIdulFitri extends Model
 {
-	use HasFactory;
+    use HasFactory;
 
-	protected $table = 'sholat_idul_adha';
+    protected $table = 'sholat_idul_fitri';
 
-	protected $fillable = [
-		'tahun',
-		'tanggal',
-		'imam',
-		'khatib',
-		'muadzin',
-		'waktu',
-		'keterangan'
-	];
+    protected $fillable = [
+        'tahun',
+        'tanggal',
+        'imam',
+        'khatib',
+        'muadzin',
+        'waktu',
+        'keterangan',
+    ];
 
-	protected $casts = [
-		'tanggal' => 'date',
-		'waktu' => 'datetime'
-	];
+    protected $casts = [
+        'tanggal' => 'date',
+        'waktu'   => 'datetime:H:i',
+    ];
 
-    // Scope untuk tahun tertentu
-	public function scopeTahun($query, $tahun)
-	{
-		return $query->where('tahun', $tahun);
-	}
+    /**
+     * Scope berdasarkan tahun.
+     */
+    public function scopeTahun($query, $tahun)
+    {
+        return $query->where('tahun', $tahun);
+    }
 
-    // Scope untuk tahun berjalan
-	public function scopeTahunIni($query)
-	{
-		return $query->where('tahun', date('Y'));
-	}
+    /**
+     * Scope tahun berjalan.
+     */
+    public function scopeTahunIni($query)
+    {
+        return $query->where('tahun', now()->year);
+    }
 
-    // Accessor format tanggal
-	public function getFormattedTanggalAttribute()
-	{
-		return Carbon::parse($this->tanggal)->translatedFormat('l, d F Y');
-	}
+    /**
+     * Accessor tanggal.
+     */
+    public function getFormattedTanggalAttribute()
+    {
+        return $this->tanggal
+            ? $this->tanggal->translatedFormat('l, d F Y')
+            : '-';
+    }
 
-    // Accessor format waktu
-	public function getFormattedWaktuAttribute()
-	{
-		return Carbon::parse($this->waktu)->format('H:i') . ' WIB';
-	}
+    /**
+     * Accessor waktu.
+     */
+    public function getFormattedWaktuAttribute()
+    {
+        return $this->waktu
+            ? Carbon::parse($this->waktu)->format('H:i') . ' WIB'
+            : '-';
+    }
 }
