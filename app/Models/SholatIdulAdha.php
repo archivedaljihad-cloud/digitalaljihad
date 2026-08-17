@@ -6,11 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SholatIdulFitri extends Model
+class SholatIdulAdha extends Model
 {
     use HasFactory;
 
-    protected $table = 'sholat_idul_fitri';
+    protected $table = 'sholat_idul_adha';
 
     protected $fillable = [
         'tahun',

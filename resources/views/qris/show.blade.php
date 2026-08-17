@@ -25,7 +25,7 @@
 			<div class="row">
 				<div class="col-md-4 text-center">
 					@if($qris->gambar)
-					<img src="{{ $qris->gambar_url }}" alt="{{ $qris->nama }}" 
+					<img src=" http://127.0.0.1:8000/storage/qris/1784991035_1784990365_QRIS-cGPT.png" alt="http://127.0.0.1:8000/img/default-qris.png" 
 					style="width: 250px; height: 250px; object-fit: contain; border: 1px solid #ddd;">
 					@else
 					<div class="alert alert-warning">Tidak ada gambar</div>

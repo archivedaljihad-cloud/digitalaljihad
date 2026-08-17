@@ -150,8 +150,8 @@
 	<!-- Data Table -->
 	<div class="card shadow mb-4">
 		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">
-				<i class="fas fa-list"></i> Daftar Transaksi
+			<h6 class="m-0 font-weight-bold" style="color: #ffd700;">
+    <i class="fas fa-list" style="color: #ffd700;"></i> Daftar Transaksi
 			</h6>
 		</div>
 		<div class="card-body">

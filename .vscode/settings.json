@@ -1,0 +1,11 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "Set-Content": true,
+        "/^php artisan tinker --execute=\"echo view\\('prayer-mode', \\['setting' => \\(object\\)\\['footer' => 'Test footer'\\], 'currentPrayer' => \\(object\\)\\['nama_sholat' => 'Subuh'\\], 'remainingSeconds' => 300, 'isPrayerMode' => true, 'theme' => 'gold'\\]\\)->render\\(\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    },
+    "window.autoDetectColorScheme": false,
+    "telemetry.editStats.showStatusBar": false
+}

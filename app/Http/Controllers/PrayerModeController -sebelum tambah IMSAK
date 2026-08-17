@@ -1,0 +1,156 @@
+<?php
+namespace App\Http\Controllers;
+
+use App\Models\AppSetting;
+use App\Models\JadwalSholat;
+use Carbon\Carbon;
+
+class PrayerModeController extends Controller
+{
+    /**
+     * Logika utama penentuan fase Prayer Mode.
+     */
+    private const PHASE_INACTIVE = 'inactive';
+    private const PHASE_COUNTDOWN = 'countdown';
+    private const PHASE_ADZAN = 'adzan';
+    private const PHASE_IQAMAH = 'iqamah';
+    private const PHASE_PRAYER = 'prayer';
+
+    private function getPrayerState()
+    {
+        $setting = AppSetting::first();
+        if (!$setting || !$setting->prayer_mode_enabled) {
+            return [
+                'active' => false,
+                'phase' => self::PHASE_INACTIVE,
+                'setting' => $setting,
+            ];
+        }
+
+        $now = Carbon::now(config('app.timezone'));
+        $jadwal = JadwalSholat::urutkan()->get();
+
+        if ($jadwal->isEmpty()) {
+            return [
+                'active' => false,
+                'phase' => self::PHASE_INACTIVE,
+                'setting' => $setting,
+            ];
+        }
+
+        $beforeAdzan = $setting->prayer_mode_before_adzan ?? 5;
+        $adzanDuration = $setting->prayer_mode_adzan_duration ?? 4;
+        $iqamahDuration = $setting->prayer_mode_iqamah_duration ?? 10;
+        $prayerDuration = $setting->prayer_mode_duration ?? 10;
+        $theme = $setting->prayer_mode_theme ?? 'gold';
+
+        foreach ($jadwal as $item) {
+            if (empty($item->waktu)) {
+                continue;
+            }
+
+            $adzanTime = Carbon::parse(
+                $now->format('Y-m-d') . ' ' . $item->waktu,
+                config('app.timezone')
+            );
+
+            $phase = self::PHASE_INACTIVE;
+            $remaining = 0;
+            $countdownStart = (clone $adzanTime)->subMinutes($beforeAdzan);
+            $adzanEnd = (clone $adzanTime)->addMinutes($adzanDuration);
+            $iqamahEnd = (clone $adzanEnd)->addMinutes($iqamahDuration);
+            $prayerEnd = (clone $iqamahEnd)->addMinutes($prayerDuration);
+
+            if ($now->lt($countdownStart)) {
+                continue;
+            }
+
+            if ($now->gte($prayerEnd)) {
+                continue;
+            }
+
+            if ($now->lt($adzanTime)) {
+
+                $phase = self::PHASE_COUNTDOWN;
+                $remaining = $adzanTime->timestamp - $now->timestamp;
+
+            } elseif ($now->lt($adzanEnd)) {
+                $phase = self::PHASE_ADZAN;
+                $remaining = $adzanEnd->timestamp - $now->timestamp;
+            } elseif ($now->lt($iqamahEnd)) {
+                $phase = self::PHASE_IQAMAH;
+                $remaining = $iqamahEnd->timestamp - $now->timestamp;
+            } else {
+                $phase = self::PHASE_PRAYER;
+                $remaining = $prayerEnd->timestamp - $now->timestamp;
+            }
+
+            return [
+                'active' => true,
+                'setting' => $setting,
+                'phase' => $phase,
+                'prayer' => $item->nama_sholat,
+                'currentPrayer' => $item,
+                'remaining' => max(0, $remaining),
+                'theme' => $theme,
+            ];
+        }
+
+        return [
+            'active' => false,
+            'phase' => self::PHASE_INACTIVE,
+            'setting' => $setting,
+        ];
+    }
+
+    /**
+     * Menampilkan halaman Mode Sholat.
+     */
+    public function index()
+    {
+        $state = $this->getPrayerState();
+
+        $debugMode = request()->boolean('debug');
+
+if (!$state['active'] && !$debugMode) {
+    return redirect('/');
+}
+
+if ($debugMode && !$state['active']) {
+    $setting = AppSetting::first();
+
+    $state = [
+        'active' => true,
+        'setting' => $setting,
+        'phase' => self::PHASE_COUNTDOWN,
+        'currentPrayer' => (object) [
+            'nama_sholat' => 'DZUHUR',
+            'waktu' => '12:00:00',
+        ],
+        'remaining' => 300,
+        'theme' => $setting?->prayer_mode_theme ?? 'gold',
+    ];
+}
+
+        $setting = $state['setting'];
+        //dd($state);
+
+        return view('prayer-mode', [
+            'setting' => $setting,
+            'phase' => $state['phase'],
+            'currentPrayer' => $state['currentPrayer'],
+            'remainingSeconds' => $state['remaining'],
+            'theme' => $state['theme'],
+        ]);
+    }
+
+    /**
+     * Endpoint AJAX
+     * Mengembalikan status Mode Sholat.
+     */
+    public function status()
+    {
+        return response()->json($this->getPrayerState());
+
+    }
+}

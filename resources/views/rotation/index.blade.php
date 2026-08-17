@@ -20,7 +20,7 @@
 
 	<div class="card shadow mb-4">
 		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">Pengaturan Rotasi Halaman</h6>
+			<h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">Pengaturan Rotasi Halaman</h6>
 		</div>
 		<div class="card-body">
 			<form method="POST" action="{{ route('rotation.update') }}">
@@ -45,7 +45,7 @@
 				<hr>
 				
 				<h5>Halaman yang Ditampilkan</h5>
-				<p class="text-muted">Centang halaman yang ingin ditampilkan dalam rotasi (Total 9 Halaman)</p>
+				<p class="text-muted">Centang halaman yang ingin ditampilkan dalam rotasi (Total 10 Halaman)</p>
 				
 				<div class="table-responsive">
 					<table class="table table-bordered">
@@ -67,6 +67,7 @@
 							['url' => 'pengumuman-embed', 'name' => 'Pengumuman', 'desc' => 'Daftar pengumuman terbaru untuk jamaah'],
 							['url' => 'keuangan-summary-embed', 'name' => 'Ringkasan Keuangan', 'desc' => 'Ringkasan keuangan dengan grafik donat'],
 							['url' => 'qris-embed', 'name' => 'QRIS Donasi', 'desc' => 'QR Code untuk donasi dan infak online'],
+							['url' => 'slide-embed', 'name' => 'Slide Informasi', 'desc' => 'Slideshow informasi, gambar, dan pengumuman bergambar'],
 							['url' => 'idul-fitri-embed', 'name' => 'Idul Fitri', 'desc' => 'Jadwal sholat Idul Fitri dengan imam, khatib, muadzin'],
 							['url' => 'idul-adha-embed', 'name' => 'Idul Adha', 'desc' => 'Jadwal sholat Idul Adha dengan imam, khatib, muadzin']
 							];
@@ -109,7 +110,7 @@
 				
 				<div class="alert alert-info mt-3">
 					<i class="fas fa-info-circle"></i>
-					<strong>Informasi:</strong> Total ada 9 halaman yang tersedia. Pilih halaman mana saja yang ingin ditampilkan dalam rotasi.
+					<strong>Informasi:</strong> Total ada 10 halaman yang tersedia. Pilih halaman mana saja yang ingin ditampilkan dalam rotasi.
 				</div>
 				
 				<button type="submit" class="btn btn-primary">

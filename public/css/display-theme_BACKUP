@@ -1,0 +1,51 @@
+:root{
+    /* Warna utama */
+    --primary-color: #0d6e6e;
+    --secondary-color: #ffd700;
+    --accent-color: #0a4d68;
+
+    /* Warna teks */
+    --text-light: #ffffff;
+    --text-dark: #333333;
+
+    /* Background utama */
+    --bg-gradient: linear-gradient(135deg, #0a4d68, #088395);
+
+    /* Warna panel */
+    --income-bg: rgba(0,255,127,.15);
+    --expense-bg: rgba(255,99,71,.15);
+
+    /* Background display */
+    --display-bg: #0b1f35;
+}
+/* =====================================================
+   DISPLAY THEME
+   Versi : 1.0
+   Status : Fondasi
+   ===================================================== */
+
+/* =====================================================
+   DISPLAY BACKGROUND
+   ===================================================== */
+
+.display-background{
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    background: var(--display-bg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.display-overlay{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -9;
+}
+
+.display-content{
+    position: relative;
+    z-index: 1;
+}

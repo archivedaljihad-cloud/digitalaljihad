@@ -1,0 +1,66 @@
+:root {
+    /* =====================================================
+       WARNA UTAMA & TEKS
+       ===================================================== */
+    --primary-color: #0d6e6e;
+    --secondary-color: #ffd700;
+    --accent-color: #0a4d68;
+
+    --text-light: #ffffff;
+    --text-dark: #333333;
+
+    /* =====================================================
+       BACKGROUND & PANEL
+       ===================================================== */
+    --bg-gradient: linear-gradient(135deg, #0a4d68, #088395);
+
+    --income-bg: rgba(0, 255, 127, 0.15);
+    --expense-bg: rgba(255, 99, 71, 0.15);
+
+    /* Base gelap agar gambar transparan terlihat elegan */
+    --display-bg: #062b2b; 
+}
+
+/* Base Body untuk melandasi gambar yang transparan */
+body {
+    background-color: var(--display-bg);
+}
+
+/* =====================================================
+   DISPLAY THEME (v1.0)
+   ===================================================== */
+
+/* Display Background */
+.display-background {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    
+    /* Pengaturan Gambar Latar (Masjid Nabawi) */
+    background-image: url('../images/Nabawi001.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    /* Opacity / Transparansi Gambar (Rentang: 0.1 s/d 1.0) */
+    opacity: 1; 
+}
+
+/* Display Overlay */
+.display-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -9;
+    pointer-events: none;
+    background: transparent; /* Overlay netral */
+}
+
+/* Display Content Layer */
+.display-content {
+    position: relative;
+    z-index: 1;
+}
+/* Mengubah tingkat kegelapan overlay background agar jauh lebih terang/jelas */
+    .display-overlay {
+        background-color: rgba(0, 0, 0, 0.1) !important; /* Ubah angkanya: 0.1 untuk sangat terang, 0.3 untuk agak gelap */
+    }

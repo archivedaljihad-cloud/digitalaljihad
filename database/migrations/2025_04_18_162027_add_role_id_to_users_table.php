@@ -9,14 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null');
-        $table->dropColumn('role'); // hapus enum role bawaan
-    });
+        });
     }
-
 
     /**
      * Reverse the migrations.
@@ -24,7 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropForeign(['role_id']);
+            $table->dropColumn('role_id');
         });
     }
 };

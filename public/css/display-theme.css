@@ -1,0 +1,80 @@
+:root {
+    /* =====================================================
+       WARNA UTAMA & TEKS
+       ===================================================== */
+    --primary-color: #0d6e6e;
+    --secondary-color: #ffd700;
+    --accent-color: #0a4d68;
+
+    --text-light: #ffffff;
+    --text-dark: #333333;
+
+    /* =====================================================
+       BACKGROUND & PANEL
+       ===================================================== */
+    --bg-gradient: linear-gradient(135deg, #0a4d68, #088395);
+
+    --income-bg: rgba(0, 255, 127, 0.15);
+    --expense-bg: rgba(255, 99, 71, 0.15);
+
+    /* Base gelap agar gambar transparan terlihat elegan */
+    --display-bg: #062b2b; 
+}
+
+/* Base Body untuk melandasi gambar yang transparan */
+body {
+    background-color: var(--display-bg);
+}
+
+/* =====================================================
+   DISPLAY THEME (v1.0)
+   ===================================================== */
+
+/* Display Background */
+.display-background {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    
+    /* Path disesuaikan dengan lokasi folder Anda */
+    background-image: url('../image/display/background/Nabawi.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    /* Mengatur tingkat kecerahan dan kontras agar sama persis seperti foto aslinya */
+    filter: brightness(1.35) contrast(1.2); 
+    
+    opacity: 1; 
+}
+
+/* Display Overlay (Dibuat transparan total agar gambar bersih) */
+.display-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -9;
+    pointer-events: none;
+    background: transparent !important; 
+}
+
+/* Display Content Layer */
+.display-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Mengatur tingkat kegelapan overlay agar background tampak 98% jelas */
+.display-overlay {
+    background-color: rgba(0, 0, 0, 0.02) !important; 
+}
+/* Menghilangkan kotak background di semua halaman */
+.running-text, 
+.running-text-container, 
+.marquee-wrapper,
+.bottom-section,
+.footer {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}

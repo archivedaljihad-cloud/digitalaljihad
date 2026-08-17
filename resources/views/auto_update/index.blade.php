@@ -37,7 +37,7 @@
 		<div class="col-lg-8">
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">Form Pengaturan Auto-Update</h6>
+					<h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">Form Pengaturan Auto-Update</h6>
 				</div>
 				<div class="card-body">
 					<form action="{{ route('auto_update.settings') }}" method="POST" id="autoUpdateForm">
@@ -159,7 +159,7 @@
 		<div class="col-lg-4">
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">Update Manual</h6>
+					<h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">Update Manual</h6>
 				</div>
 				<div class="card-body">
 					<p>Lakukan update manual jika diperlukan:</p>

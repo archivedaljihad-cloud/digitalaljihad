@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Controllers;
+
 use App\Models\AppSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
 class AppSettingController extends Controller
 {
     /**
@@ -56,9 +58,20 @@ class AppSettingController extends Controller
                         'active' => true,
                     ],
                 ],
+                // ==========================================
+                // DEFAULT PRAYER MODE
+                // ==========================================
+                'prayer_mode_enabled'        => true,
+                'prayer_mode_duration'       => 10,
+                'prayer_mode_before_adzan'   => 5,
+                'prayer_mode_adzan_duration' => 4,
+                'prayer_mode_iqamah_duration'=> 10,
+                'prayer_mode_after_prayer'   => 2,
+                'prayer_mode_theme'          => 'gold',
             ]
         );
     }
+
     /**
      * Menampilkan halaman About.
      */
@@ -67,6 +80,7 @@ class AppSettingController extends Controller
         $setting = $this->getOrCreateSetting();
         return view('about', compact('setting'));
     }
+
     /**
      * Menampilkan halaman pengaturan.
      */
@@ -75,6 +89,7 @@ class AppSettingController extends Controller
         $setting = $this->getOrCreateSetting();
         return view('settings.edit', compact('setting'));
     }
+
     /**
      * Memperbarui pengaturan aplikasi.
      */
@@ -93,51 +108,104 @@ class AppSettingController extends Controller
             'auto_update_city'       => 'required_if:auto_update_jadwal,1|string|max:255',
             'auto_update_country'    => 'required_if:auto_update_jadwal,1|string|max:255',
             'auto_update_method'     => 'required_if:auto_update_jadwal,1|integer|between:1,21',
-            'rotation_interval'      => 'nullable|integer|min:1|max:3600',
-            'rotation_enabled'       => 'sometimes|boolean',
-            'rotation_pages'         => 'nullable|array',
         ]);
-        $setting = $this->getOrCreateSetting();         
+
+        $setting = $this->getOrCreateSetting();
+
+        // ==================================================
+        // PENGATURAN UMUM
+        // ==================================================
         $setting->nama_aplikasi = $validated['nama_aplikasi'];
         $setting->footer = $validated['footer'] ?? null;
         $setting->running_text = $validated['running_text'] ?? null;
-        // Pengaturan auto update jadwal
+
+        // ==================================================
+        // AUTO UPDATE JADWAL
+        // ==================================================
         $setting->auto_update_jadwal = $request->boolean('auto_update_jadwal');
         $setting->auto_update_frequency = $validated['auto_update_frequency'] ?? 'daily';
         $setting->auto_update_city = $validated['auto_update_city'] ?? 'Jakarta';
         $setting->auto_update_country = $validated['auto_update_country'] ?? 'Indonesia';
         $setting->auto_update_method = $validated['auto_update_method'] ?? 11;
+        
         if (!empty($validated['auto_update_time'])) {
             $setting->auto_update_time = $validated['auto_update_time'] . ':00';
         }
-        // Pengaturan rotasi halaman
-        $setting->rotation_interval = $validated['rotation_interval'] ?? 10;
-        $setting->rotation_enabled = $request->boolean('rotation_enabled', true);
-        if (isset($validated['rotation_pages'])) {
-            $setting->rotation_pages = $validated['rotation_pages'];
-        }
-        // Upload file
-        $this->handleFileUpload($request, 'favicon', $setting);
-        $this->handleFileUpload($request, 'background', $setting);
-        $this->handleFileUpload($request, 'logo', $setting);
+
+        // ==================================================
+        // UPLOAD FILE
+        // ==================================================
+        $this->handleFileUpload(
+            $request,
+            'favicon',
+            $setting
+        );
+        $this->handleFileUpload(
+            $request,
+            'background',
+            $setting
+        );
+        $this->handleFileUpload(
+            $request,
+            'logo',
+            $setting
+        );
+
         $setting->save();
+
         return redirect()
             ->route('settings.edit')
-            ->with('success', 'Pengaturan aplikasi berhasil diperbarui!');
+            ->with(
+                'success',
+                'Pengaturan aplikasi berhasil diperbarui!'
+            );
     }
+    public function updatePrayerSettings(Request $request)
+{
+    $validated = $request->validate([
+        'rotation_interval'             => 'required|integer|min:1|max:3600',
+        'prayer_mode_duration'          => 'required|integer|min:1|max:120',
+        'prayer_mode_before_adzan'      => 'required|integer|min:0|max:60',
+        'prayer_mode_adzan_duration'    => 'required|integer|min:1|max:60',
+        'prayer_mode_iqamah_duration'   => 'required|integer|min:1|max:60',
+        'prayer_mode_after_prayer'      => 'required|integer|min:0|max:60',
+    ]);
+
+    $setting = $this->getOrCreateSetting();
+
+    $setting->rotation_interval = $validated['rotation_interval'];
+    $setting->prayer_mode_duration = $validated['prayer_mode_duration'];
+    $setting->prayer_mode_before_adzan = $validated['prayer_mode_before_adzan'];
+    $setting->prayer_mode_adzan_duration = $validated['prayer_mode_adzan_duration'];
+    $setting->prayer_mode_iqamah_duration = $validated['prayer_mode_iqamah_duration'];
+    $setting->prayer_mode_after_prayer = $validated['prayer_mode_after_prayer'];
+
+    $setting->save();
+
+    return redirect()
+        ->route('jadwal_sholat.index')
+        ->with('success', 'Pengaturan waktu sistem berhasil diperbarui.');
+}
+
     /**
      * Menangani upload file pengaturan.
      */
-    protected function handleFileUpload(Request $request, string $fieldName, AppSetting $setting)
-    {
+    protected function handleFileUpload(
+        Request $request,
+        string $fieldName,
+        AppSetting $setting
+    ) {
         if ($request->hasFile($fieldName)) {
-            if ($setting->$fieldName &&
-                Storage::disk('public')->exists($setting->$fieldName)) {
+            if (
+                $setting->$fieldName &&
+                Storage::disk('public')->exists($setting->$fieldName)
+            ) {
                 Storage::disk('public')->delete($setting->$fieldName);
             }
+            
             $setting->$fieldName = $request
                 ->file($fieldName)
                 ->store('settings', 'public');
         }
-    }                                 
+    }
 }

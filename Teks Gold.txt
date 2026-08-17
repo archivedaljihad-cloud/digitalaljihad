@@ -1,0 +1,53 @@
+<i class="fas fa-sync-alt" style="color: #ffd700;">
+
+<i class="fas fa-list"></i> Daftar Jadwal Sholat
+
+
+
+<h6 class="m-0 font-weight-bold text-primary">
+    <i class="fas fa-list"></i> Daftar Jadwal Sholat
+</h6>
+
+<h6 class="m-0 font-weight-bold" style="color: #ffd700;">
+    <i class="fas fa-list" style="color: #ffd700;"></i> Daftar Jadwal Sholat
+</h6>
+
+<h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
+    <i class="fas fa-list" style="color: #ffd700 !important;"></i> <span style="color: #ffd700 !important;">Daftar Jadwal Sholat</span>
+</h6>
+
+<h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">Pengaturan Rotasi Halaman</h6>
+
+
+/* Reload otomatis jika theme berubah saat runtime (opsional) */
+                        if(data.theme !== '{{ $theme }}' || data.displayMessage !== '{{ $displayMessage }}' || data.bgOpacity !== {{ $bgOpacity }}) {
+                            window.location.reload();
+
+/* Reload otomatis jika theme berubah saat runtime (opsional) */
+                        if(data.theme !== '{{ $theme }}' || data.displayMessage !== @json($displayMessage) || data.bgOpacity !== {{ $bgOpacity }}) {
+                            window.location.reload();
+                        }
+                        }
+
+HILANGKAN KOTAK running teks, letakkan di atas </style> akhir
+
+.running-text, footer, .footer, .card-footer. {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+<style>
+    .running-text, footer, .footer {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+</style>
+php artisan view:clear

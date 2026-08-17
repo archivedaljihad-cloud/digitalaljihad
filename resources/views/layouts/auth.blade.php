@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,7 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
-    
+
     <!-- Custom Styles -->
     <style>
         :root {
@@ -26,17 +27,17 @@
             --gold: #ffd700;
             --light-gold: #ffed4a;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
         }
-        
+
         .bg-gradient-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             position: relative;
         }
-        
+
         /* Islamic Pattern Background */
         .bg-gradient-primary::before {
             content: '';
@@ -50,90 +51,91 @@
             background-size: 60px;
             pointer-events: none;
         }
-        
+
         .card {
             border-radius: 20px !important;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
         }
-        
+
         .form-control {
             border-radius: 30px !important;
             padding: 12px 20px;
             font-size: 14px;
         }
-        
+
         .form-control:focus {
             box-shadow: 0 0 0 0.2rem rgba(45, 90, 59, 0.25);
             border-color: var(--secondary-green);
         }
-        
+
         .btn {
             border-radius: 30px !important;
             padding: 12px 20px;
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        
+
         .btn-success {
             background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
             border: none;
         }
-        
+
         .btn-success:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(45, 90, 59, 0.4);
             background: linear-gradient(135deg, var(--secondary-green), var(--primary-green));
         }
-        
+
         .btn-outline-success {
             border-radius: 30px !important;
             border: 2px solid var(--secondary-green);
             color: var(--secondary-green);
         }
-        
+
         .btn-outline-success:hover {
             background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
             border-color: transparent;
         }
-        
+
         .input-group-text {
             border-radius: 30px 0 0 30px !important;
             background-color: #f8f9fc;
             border: none;
         }
-        
+
         .input-group .form-control {
             border-radius: 0 30px 30px 0 !important;
         }
-        
+
         /* Custom Checkbox */
-        .custom-control-input:checked ~ .custom-control-label::before {
+        .custom-control-input:checked~.custom-control-label::before {
             background-color: var(--secondary-green);
             border-color: var(--secondary-green);
         }
-        
+
         /* Animation */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+
         .card {
             animation: fadeInUp 0.6s ease-out;
         }
-        
+
         /* Islamic Corner Ornament */
         .islamic-corner {
             position: absolute;
@@ -141,7 +143,7 @@
             height: 100px;
             pointer-events: none;
         }
-        
+
         .corner-tl {
             top: 0;
             left: 0;
@@ -149,7 +151,7 @@
             border-left: 3px solid var(--gold);
             border-radius: 20px 0 0 0;
         }
-        
+
         .corner-tr {
             top: 0;
             right: 0;
@@ -157,18 +159,18 @@
             border-right: 3px solid var(--gold);
             border-radius: 0 20px 0 0;
         }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
             .card {
                 margin: 1rem !important;
             }
-            
+
             .p-5 {
                 padding: 1.5rem !important;
             }
         }
-        
+
         /* Toast Notification */
         .toast-custom {
             position: fixed;
@@ -177,34 +179,37 @@
             z-index: 9999;
             animation: slideInRight 0.3s ease-out;
         }
-        
+
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
             }
         }
-        
+
         /* Loading Spinner */
         .spinner-custom {
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 0.6s linear infinite;
             display: inline-block;
             margin-right: 8px;
         }
-        
+
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        
+
         /* Password Strength Indicator */
         .password-strength {
             height: 4px;
@@ -212,17 +217,28 @@
             margin-top: 8px;
             transition: all 0.3s ease;
         }
-        
-        .strength-weak { width: 33%; background: #dc3545; }
-        .strength-medium { width: 66%; background: #ffc107; }
-        .strength-strong { width: 100%; background: #28a745; }
-        
+
+        .strength-weak {
+            width: 33%;
+            background: #dc3545;
+        }
+
+        .strength-medium {
+            width: 66%;
+            background: #ffc107;
+        }
+
+        .strength-strong {
+            width: 100%;
+            background: #28a745;
+        }
+
         /* Floating Labels */
         .floating-label-group {
             position: relative;
             margin-bottom: 1.5rem;
         }
-        
+
         .floating-label {
             position: absolute;
             left: 15px;
@@ -232,9 +248,9 @@
             transition: 0.2s ease all;
             font-size: 14px;
         }
-        
-        .floating-input:focus ~ .floating-label,
-        .floating-input:not(:placeholder-shown) ~ .floating-label {
+
+        .floating-input:focus~.floating-label,
+        .floating-input:not(:placeholder-shown)~.floating-label {
             top: -10px;
             left: 10px;
             font-size: 11px;
@@ -243,10 +259,11 @@
             color: var(--secondary-green);
         }
     </style>
-    
+
     <!-- Favicon -->
     <link href="{{ isset($setting['favicon']) ? asset('storage/' . $setting['favicon']) : asset('img/favicon.png') }}" rel="icon" type="image/png">
 </head>
+
 <body class="bg-gradient-primary min-vh-100 d-flex justify-content-center align-items-center">
 
     <!-- Islamic Corner Ornaments -->
@@ -259,7 +276,7 @@
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-    
+
     <!-- Custom Scripts -->
     <script>
         // Auto-hide alerts after 5 seconds
@@ -267,7 +284,7 @@
             setTimeout(function() {
                 $('.alert').fadeOut('slow');
             }, 5000);
-            
+
             // Add loading effect on form submit
             $('form').on('submit', function() {
                 const submitBtn = $(this).find('button[type="submit"]');
@@ -275,7 +292,7 @@
                     const originalText = submitBtn.html();
                     submitBtn.html('<span class="spinner-custom"></span> Memproses...');
                     submitBtn.prop('disabled', true);
-                    
+
                     // Reset button after 3 seconds if no response (fallback)
                     setTimeout(function() {
                         submitBtn.html(originalText);
@@ -284,7 +301,7 @@
                 }
             });
         });
-        
+
         // Password strength checker
         function checkPasswordStrength(password) {
             let strength = 0;
@@ -295,12 +312,12 @@
             if (password.match(/[$@#&!]+/)) strength++;
             return strength;
         }
-        
+
         // Toggle password visibility
         function togglePasswordVisibility(button) {
             const input = button.previousElementSibling;
             const icon = button.querySelector('i');
-            
+
             if (input.type === 'password') {
                 input.type = 'text';
                 icon.classList.remove('fa-eye');
@@ -311,7 +328,7 @@
                 icon.classList.add('fa-eye');
             }
         }
-        
+
         // Show toast notification
         function showToast(message, type = 'success') {
             const toast = $(`
@@ -322,8 +339,11 @@
                 </div>
             `);
             $('body').append(toast);
-            setTimeout(() => toast.fadeOut('slow', function() { $(this).remove(); }), 5000);
+            setTimeout(() => toast.fadeOut('slow', function() {
+                $(this).remove();
+            }), 5000);
         }
     </script>
 </body>
+
 </html>

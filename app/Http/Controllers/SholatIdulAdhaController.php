@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 class SholatIdulAdhaController extends Controller
 {
     public function index()
-    {
-        $SholatIdulAdha = SholatIdulAdha::orderBy('tahun', 'desc')->get();
+      {
+    $sholatIdulAdha = SholatIdulAdha::orderBy('tahun', 'desc')->get();
 
-        return view('idul-adha.index', compact('SholatIdulAdha'));
-    }
+    return view('idul-adha.index', compact('sholatIdulAdha'));
+   }
 
     public function create()
     {
@@ -74,7 +74,7 @@ class SholatIdulAdhaController extends Controller
     public function embed()
     {
         $settings = \App\Models\AppSetting::first();
-        $idulAdha = SholatIdulAdha::tahunIni()->first();
+        $idulAdha = SholatIdulAdha::orderBy('tahun', 'desc')->first();
 
         return view('idul-adha-embed', compact('settings', 'idulAdha'));
     }

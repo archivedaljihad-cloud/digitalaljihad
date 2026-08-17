@@ -74,7 +74,7 @@ class SholatIdulFitriController extends Controller
     public function embed()
     {
         $settings = \App\Models\AppSetting::first();
-        $idulFitri = SholatIdulFitri::tahunIni()->first();
+        $idulFitri = SholatIdulFitri::orderBy('tahun', 'desc')->first();
 
         return view('idul-fitri-embed', compact('settings', 'idulFitri'));
     }

@@ -163,4 +163,15 @@
 		</div>
 	</div>
 </div>
+
+<style>
+    .running-text, footer, .footer {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+</style>
 @endsection
