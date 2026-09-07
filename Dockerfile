@@ -37,7 +37,7 @@ ENV REAL_IP_HEADER 1
 ENV APP_ENV production
 ENV APP_DEBUG true
 ENV APP_KEY base64:TUI/rs1egTQjO+U3V3hMZYeY8Me8J4TzahQt6iZpcto=
-ENV APP_URL https://digitalaljihad001.onrender.com
+ENV APP_URL https://digitalaljihad.onrender.com
 ENV LOG_CHANNEL stderr
 
 # Default Database config (TiDB Cloud)
