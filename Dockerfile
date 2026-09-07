@@ -29,8 +29,17 @@ ENV REAL_IP_HEADER 1
 
 # Laravel config
 ENV APP_ENV production
-ENV APP_DEBUG false
+ENV APP_DEBUG true
+ENV APP_KEY base64:TUI/rs1egTQjO+U3V3hMZYeY8Me8J4TzahQt6iZpcto=
 ENV LOG_CHANNEL stderr
+
+# Default Database config (TiDB Cloud)
+ENV DB_CONNECTION mysql
+ENV DB_HOST gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+ENV DB_PORT 4000
+ENV DB_DATABASE digitalv304
+ENV DB_USERNAME Fjc45gFUNDbWiTq.root
+ENV MYSQL_ATTR_SSL_CA /etc/ssl/certs/ca-certificates.crt
 
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
