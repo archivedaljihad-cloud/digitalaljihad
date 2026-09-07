@@ -556,7 +556,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `last_name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `role_id`) VALUES
 (1, 'Super', 'Admin', 'archived.aljihad@gmail.com', NULL, '$2y$12$mN8feXaqXmnEofT9UgMuUeDf.AqlPTc93ENTvbPcdaZrOfJIBsdaq', 'MXbggeE2MX7jMabixa5dhcI7ITURrUUYNzGVSw8AkWSPM4shKezhtnEawET1', '2025-04-05 03:24:59', '2026-07-23 09:45:01', 1),
 (22, 'Samsuri', 'Wijaya', 'sam@sam.com', NULL, '$2y$12$Tq6LBvMqlgdkUcEpGb7ZPO7MvdAu5e5hJzAwHvacKWPY/BryB3Etq', NULL, '2026-04-18 18:15:40', '2026-04-18 18:15:40', 2),
-(24, 'Bendahara', 'Masjid', 'bendahara@masjid.com', '2026-03-31 17:00:00', '$2y$12$q2W5k5pP8XH9Z1aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5A6bC7dE8fG', NULL, '2026-04-01 01:00:00', '2026-04-01 01:00:00', 2),
+(24, 'Bendahara', 'Masjid', 'bendahara@masjid.com', '2026-03-31 17:00:00', '$2y$12$q2W5k5pP8XH9Z1aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5A6bC7dE8fG', NULL, '2026-04-01 01:00:00', '2026-04-01 01:00:00', 3),
 (25, 'Petugas', 'Keamanan', 'satpam@masjid.com', '2026-04-01 17:00:00', '$2y$12$q2W5k5pP8XH9Z1aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5A6bC7dE8fG', NULL, '2026-04-02 02:00:00', '2026-04-02 02:00:00', 2),
 (26, 'Operator', 'Takmir', 'operator@masjid.com', '2026-04-02 17:00:00', '$2y$12$q2W5k5pP8XH9Z1aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5A6bC7dE8fG', NULL, '2026-04-03 03:00:00', '2026-04-03 03:00:00', 2);
 

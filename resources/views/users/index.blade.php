@@ -72,8 +72,16 @@
 								<span class="badge badge-danger px-3 py-2">
 									<i class="fas fa-shield-alt"></i> Administrator
 								</span>
-								@else
+								@elseif($user->role->name == 'bendahara')
+								<span class="badge badge-success px-3 py-2">
+									<i class="fas fa-wallet"></i> Bendahara
+								</span>
+								@elseif($user->role->name == 'petugas')
 								<span class="badge badge-info px-3 py-2">
+									<i class="fas fa-user-clock"></i> Petugas / Operator
+								</span>
+								@else
+								<span class="badge badge-primary px-3 py-2">
 									<i class="fas fa-user"></i> {{ ucfirst($user->role->name) }}
 								</span>
 								@endif
