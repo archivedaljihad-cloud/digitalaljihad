@@ -16,9 +16,10 @@ RUN rm -f /var/www/html/bootstrap/cache/*.php \
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
-# Discover packages and set permissions
+# Discover packages, link storage, and set permissions
 RUN php artisan package:discover --ansi || true \
-    && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
+    && php artisan storage:link || true \
+    && chmod -R 777 /var/www/html/storage /var/www/html/public/storage /var/www/html/bootstrap/cache
 
 # Apply custom Laravel Nginx site configuration
 RUN cp /var/www/html/conf/nginx/nginx-site.conf /etc/nginx/sites-available/default.conf \
