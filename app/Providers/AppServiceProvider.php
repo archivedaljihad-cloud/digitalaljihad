@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Eloquent\Model;
@@ -28,10 +29,18 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Auto-assign incremental ID if database table does not have AUTO_INCREMENT (e.g. TiDB)
-        Model::creating(function ($model) {
-            if ($model->getKeyType() === 'int' && $model->getIncrementing() && empty($model->getKey())) {
-                $maxId = $model->newQuery()->max($model->getKeyName()) ?? 0;
-                $model->setAttribute($model->getKeyName(), $maxId + 1);
+        Event::listen('eloquent.creating: *', function ($event, array $payload) {
+            $model = $payload[0] ?? null;
+            if ($model instanceof Model) {
+                if ($model->getKeyType() === 'int' && $model->getIncrementing() && empty($model->getKey())) {
+                    try {
+                        $keyName = $model->getKeyName();
+                        $maxId = $model->newQuery()->max($keyName) ?? 0;
+                        $model->setAttribute($keyName, (int)$maxId + 1);
+                    } catch (\Throwable $e) {
+                        // ignore and proceed
+                    }
+                }
             }
         });
 

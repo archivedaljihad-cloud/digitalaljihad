@@ -5,10 +5,11 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasAutoIncrementId;
 
 class SholatIdulFitri extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAutoIncrementId;
 
     protected $table = 'sholat_idul_fitri';
 

@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasAutoIncrementId;
 
 class SlideInformasi extends Model
 {
+    use HasAutoIncrementId;
     protected $table = 'slide_informasis';
 
     protected $fillable = [
