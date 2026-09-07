@@ -202,17 +202,20 @@
 		}
 
 		.table-wrapper {
-			max-height: 360px;
-			min-height: 360px;
+			max-height: 480px;
+			min-height: 440px;
 			overflow: hidden;
 			position: relative;
-			border-radius: 8px;
+			border-radius: 12px;
+			border: 1px solid rgba(255, 215, 0, 0.25);
+			background: rgba(0, 0, 0, 0.2);
+			box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
 		}
 
 		.keuangan table {
 			width: 100%;
 			border-collapse: collapse;
-			font-size: 1.2rem;
+			font-size: 1.18rem;
 			table-layout: fixed;
 		}
 
@@ -231,9 +234,8 @@
 			display: block;
 			width: 100%;
 			will-change: transform;
-			/* PENGATURAN KECEPATAN: Ubah angka 15s di bawah ini */
-			/* 15s = 15 detik. Perbesar untuk MELAMBATKAN (misal 25s), perkecil untuk MEMPERCEPAT (misal 10s) */
-			animation: scrollUp 40s linear infinite; 
+			/* Kecepatan dibuat sangat smooth & tenang: dihitung otomatis per baris atau fallback 85 detik */
+			animation: scrollUp var(--scroll-duration, 85s) linear infinite; 
 		}
 
 		.keuangan tbody tr {
@@ -244,42 +246,84 @@
 
 		.keuangan th,
 		.keuangan td {
-			padding: 9px 12px;
+			padding: 10px 14px;
 			text-align: left;
-			width: 16.66%;
 			word-wrap: break-word;
+			vertical-align: middle;
 		}
 
+		/* Proporsi Lebar Kolom yang Ideal & Seimbang */
+		.keuangan th:nth-child(1), .keuangan td:nth-child(1) { width: 14%; } /* Tanggal */
+		.keuangan th:nth-child(2), .keuangan td:nth-child(2) { width: 32%; } /* Deskripsi */
+		.keuangan th:nth-child(3), .keuangan td:nth-child(3) { width: 14%; text-align: right; } /* Pemasukan */
+		.keuangan th:nth-child(4), .keuangan td:nth-child(4) { width: 14%; text-align: right; } /* Pengeluaran */
+		.keuangan th:nth-child(5), .keuangan td:nth-child(5) { width: 14%; text-align: right; } /* Saldo */
+		.keuangan th:nth-child(6), .keuangan td:nth-child(6) { width: 12%; text-align: center; } /* Kategori */
+
 		.keuangan th {
-			background: #0d382b !important;
-			color: var(--secondary-color);
-			font-weight: 600;
+			background: linear-gradient(180deg, #0f3d2e 0%, #09261c 100%) !important;
+			color: #ffd700;
+			font-weight: 700;
+			font-size: 1.22rem;
+			letter-spacing: 0.5px;
 			position: sticky;
 			top: 0;
 			z-index: 5;
-			border-bottom: 2px solid var(--secondary-color);
-			box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+			border-bottom: 2px solid rgba(255, 215, 0, 0.7);
+			box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 		}
 
 		.keuangan tbody:hover {
 			animation-play-state: paused;
 		}
 
+		.keuangan tbody tr {
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+			transition: background 0.2s ease;
+		}
+
 		.keuangan tr.income {
-			background: rgba(0, 230, 118, 0.08);
+			background: rgba(0, 230, 118, 0.07);
 		}
 
 		.keuangan tr.expense {
-			background: rgba(255, 107, 107, 0.08);
+			background: rgba(255, 107, 107, 0.07);
 		}
 
 		.keuangan tr:hover {
-			background: rgba(255, 215, 0, 0.2);
+			background: rgba(255, 215, 0, 0.22);
 		}
 
 		.keuangan td i {
-			margin-right: 6px;
+			margin-right: 8px;
 			color: var(--secondary-color);
+		}
+
+		.keuangan td.amount-income {
+			color: #00e676;
+			font-weight: 700;
+			font-family: 'Poppins', monospace;
+			letter-spacing: 0.3px;
+		}
+
+		.keuangan td.amount-expense {
+			color: #ff6b6b;
+			font-weight: 700;
+			font-family: 'Poppins', monospace;
+			letter-spacing: 0.3px;
+		}
+
+		.keuangan td.amount-saldo {
+			color: #ffd700;
+			font-weight: 700;
+			font-family: 'Poppins', monospace;
+			letter-spacing: 0.3px;
+		}
+
+		.keuangan td.badge-kategori {
+			font-size: 0.92rem;
+			color: #ffffff;
+			opacity: 0.9;
 		}
 
 		.no-data {
@@ -338,7 +382,12 @@
 								<th class="kategori">Kategori</th>
 							</tr>
 						</thead>
-						<tbody id="keuangan-tbody">
+						@php
+							$rowCount = isset($keuangan) ? $keuangan->count() : 0;
+							// Tiap baris diberi waktu 5.5 detik agar sangat santai dan mudah dibaca jamaah, minimal 75 detik
+							$calcDuration = max(75, $rowCount * 5.5);
+						@endphp
+						<tbody id="keuangan-tbody" style="--scroll-duration: {{ $calcDuration }}s;">
 							@if(isset($keuangan) && $keuangan->isEmpty())
 								<tr>
 									<td colspan="6" class="no-data">Tidak ada data keuangan tersedia.</td>
@@ -348,14 +397,14 @@
 									<tr class="{{ $item->pemasukan > 0 ? 'income' : 'expense' }}">
 										<td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
 										<td><i class="fas {{ $item->pemasukan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i> {{ $item->deskripsi }}</td>
-										<td style="{{ $item->pemasukan > 0 ? 'color: #00e676; font-weight: 600;' : 'opacity: 0.5;' }}">
+										<td class="amount-income" style="{{ $item->pemasukan > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
 											Rp {{ number_format($item->pemasukan, 2, ',', '.') }}
 										</td>
-										<td style="{{ $item->pengeluaran > 0 ? 'color: #ff6b6b; font-weight: 600;' : 'opacity: 0.5;' }}">
+										<td class="amount-expense" style="{{ $item->pengeluaran > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
 											Rp {{ number_format($item->pengeluaran, 2, ',', '.') }}
 										</td>
-										<td>Rp {{ number_format($item->saldo, 2, ',', '.') }}</td>
-										<td class="kategori">{{ $item->kategori ?? '-' }}</td>
+										<td class="amount-saldo">Rp {{ number_format($item->saldo, 2, ',', '.') }}</td>
+										<td class="badge-kategori">{{ $item->kategori ?? '-' }}</td>
 									</tr>
 								@endforeach
 								{{-- Duplikasi untuk animasi loop mulus --}}
@@ -363,14 +412,14 @@
 									<tr class="{{ $item->pemasukan > 0 ? 'income' : 'expense' }}">
 										<td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
 										<td><i class="fas {{ $item->pemasukan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i> {{ $item->deskripsi }}</td>
-										<td style="{{ $item->pemasukan > 0 ? 'color: #00e676; font-weight: 600;' : 'opacity: 0.5;' }}">
+										<td class="amount-income" style="{{ $item->pemasukan > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
 											Rp {{ number_format($item->pemasukan, 2, ',', '.') }}
 										</td>
-										<td style="{{ $item->pengeluaran > 0 ? 'color: #ff6b6b; font-weight: 600;' : 'opacity: 0.5;' }}">
+										<td class="amount-expense" style="{{ $item->pengeluaran > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
 											Rp {{ number_format($item->pengeluaran, 2, ',', '.') }}
 										</td>
-										<td>Rp {{ number_format($item->saldo, 2, ',', '.') }}</td>
-										<td class="kategori">{{ $item->kategori ?? '-' }}</td>
+										<td class="amount-saldo">Rp {{ number_format($item->saldo, 2, ',', '.') }}</td>
+										<td class="badge-kategori">{{ $item->kategori ?? '-' }}</td>
 									</tr>
 								@endforeach
 							@endif
