@@ -134,49 +134,50 @@
     }
 
         .datetime {
-            font-size: 1.2rem;
+            font-size: 1.45rem;
             margin-top: 0px;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(3, 20, 15, 0.65);
             display: inline-block;
-            padding: 6px 22px;
-            border-radius: 30px;
-            font-weight: 500;
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
+            padding: 6px 26px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .running-text {
-            font-size: 1.1rem;
+            font-size: 1.35rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
             margin-top: 10px;
             color: #ffffff !important;
-            max-width: 80%;
+            max-width: 85%;
             margin-left: auto;
             margin-right: auto;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
         }
 
         .main-content {
             display: flex;
             flex: 1;
-            gap: 20px;
+            gap: 22px;
             flex-direction: row;
             align-items: stretch;
             padding-bottom: 10px;
         }
 
-        /* KARTU KACA MELAYANG (FLOATING GLASSMORPHISM) - Lebih transparan agar Nabawi nampak jelas */
+        /* KARTU KACA MELAYANG (FLOATING GLASSMORPHISM) - Elegan, seimbang & kontras */
         .panel {
-            background: rgba(10, 30, 25, 0.25);
-            /* Sangat transparan, membuat background tembus pandang */
+            background: rgba(5, 25, 20, 0.65);
             border-radius: 18px;
             padding: 20px;
-            backdrop-filter: blur(8px);
-            /* Efek buram kaca */
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            /* Garis tepi emas tipis elegan */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             flex: 1;
             display: flex;
@@ -185,12 +186,13 @@
 
         .panel:hover {
             transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             border-color: rgba(255, 215, 0, 0.7);
         }
 
         .panel h2 {
-            font-size: 1.6rem;
+            font-size: 1.75rem;
+            font-weight: 700;
             margin-top: 0;
             margin-bottom: 15px;
             padding-bottom: 8px;
@@ -199,7 +201,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
         }
 
         .panel h2 i {
@@ -208,7 +210,7 @@
 
         @keyframes spin {
             0% {
-                transform: rotate(0deg);
+				transform: rotate(0deg);
             }
 
             100% {
@@ -221,7 +223,7 @@
             position: absolute;
             left: 0;
             bottom: 0;
-            width: 45px;
+            width: 50px;
             height: 3px;
             background: var(--secondary-color);
             border-radius: 3px;
@@ -231,29 +233,30 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            font-size: 1.05rem;
-            border-radius: 10px;
+            font-size: 1.25rem;
+            border-radius: 12px;
             overflow: hidden;
         }
 
         .jadwal-sholat th,
         .jadwal-sholat td {
-            padding: 9px 10px;
+            padding: 10px 12px;
             text-align: left;
         }
 
         .jadwal-sholat th {
-            background: rgba(255, 215, 0, 0.85);
+            background: rgba(255, 215, 0, 0.9);
             color: var(--accent-color);
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .jadwal-sholat tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .jadwal-sholat tr:nth-child(odd) {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
         }
 
         .jadwal-sholat tr:hover {
@@ -262,24 +265,24 @@
 
         .jadwal-sholat tr.active {
             border: 2px solid var(--success-color);
-            background: rgba(40, 167, 69, 0.25);
+            background: rgba(40, 167, 69, 0.35);
         }
 
         .sholat-jumat .card {
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 10px;
-            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 12px;
+            padding: 14px 16px;
             margin-bottom: 8px;
-            border-left: 4px solid var(--secondary-color);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 5px solid var(--secondary-color);
+            border: 1px solid rgba(255, 215, 0, 0.25);
         }
 
         .sholat-jumat .card p {
             margin: 6px 0;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1.05rem;
+            gap: 10px;
+            font-size: 1.2rem;
         }
 
         .sholat-jumat .card p i {

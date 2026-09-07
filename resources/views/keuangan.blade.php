@@ -108,16 +108,18 @@
 		}
 
 		.datetime {
-			font-size: 1.2rem;
-			margin-top: 2px;
-			background: rgba(0, 0, 0, 0.4);
+			font-size: 1.55rem;
+			margin-top: 6px;
+			background: rgba(3, 20, 15, 0.65);
 			display: inline-block;
-			padding: 3px 16px;
-			border-radius: 30px;
-			font-weight: 500;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-			backdrop-filter: blur(5px);
+			padding: 6px 28px;
+			border-radius: 35px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 
 		.main-content {
@@ -129,27 +131,27 @@
 		}
 
 		.panel {
-			background: rgba(10, 30, 25, 0.45);
+			background: rgba(4, 25, 18, 0.72);
 			border-radius: 18px;
-			padding: 15px 25px;
+			padding: 18px 28px;
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
-			box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
-			border: 1px solid rgba(255, 215, 0, 0.4);
+			box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
 			width: 100%;
-			max-width: 1350px;
+			max-width: 1400px;
 			display: flex;
 			flex-direction: column;
 		}
 
 		.keuangan h2 {
-			font-size: 1.8rem;
-			margin-bottom: 8px;
-			padding-bottom: 4px;
+			font-size: 2rem;
+			margin-bottom: 12px;
+			padding-bottom: 6px;
 			position: relative;
 			color: var(--secondary-color);
 			text-align: center;
-			text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+			text-shadow: 0 2px 5px rgba(0,0,0,0.6);
 		}
 
 		.keuangan h2:after {
@@ -168,21 +170,22 @@
 			display: flex;
 			justify-content: space-around;
 			align-items: center;
-			margin-bottom: 10px;
-			padding: 8px 12px;
-			background: rgba(0, 0, 0, 0.35);
-			border-radius: 10px;
-			border: 1px solid rgba(255, 215, 0, 0.25);
+			margin-bottom: 14px;
+			padding: 12px 18px;
+			background: rgba(0, 0, 0, 0.4);
+			border-radius: 12px;
+			border: 1px solid rgba(255, 215, 0, 0.3);
 		}
 
 		.summary p {
 			margin: 0;
-			font-size: 1.05rem;
-			font-weight: 600;
+			font-size: 1.35rem;
+			font-weight: 700;
+			letter-spacing: 0.5px;
 		}
 
 		.summary p i {
-			margin-right: 6px;
+			margin-right: 8px;
 			color: var(--secondary-color);
 		}
 
@@ -209,7 +212,7 @@
 		.keuangan table {
 			width: 100%;
 			border-collapse: collapse;
-			font-size: 1rem;
+			font-size: 1.2rem;
 			table-layout: fixed;
 		}
 

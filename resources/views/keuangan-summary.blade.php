@@ -103,42 +103,50 @@
     }
 
 		.datetime {
-			font-size: 1.2rem;
-			background: rgba(0, 0, 0, 0.3);
+			font-size: 1.55rem;
+			background: rgba(3, 20, 15, 0.65);
 			display: inline-block;
-			padding: 3px 12px;
-			border-radius: 20px;
-			margin-top: 3px;
+			padding: 6px 28px;
+			border-radius: 35px;
+			margin-top: 6px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 
 		/* Stats Cards - 3 kolom dengan warna kontras */
 		.stats-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 15px;
+			gap: 16px;
 			margin-bottom: 15px;
 			flex-shrink: 0;
 		}
 
 		.stat-card {
-			background: rgba(0, 0, 0, 0.35);
-			backdrop-filter: blur(10px);
-			border-radius: 12px;
-			padding: 12px 15px;
+			background: rgba(4, 25, 18, 0.72);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-radius: 16px;
+			padding: 16px 20px;
 			text-align: center;
 			transition: transform 0.2s ease;
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 		}
 
 		/* Warna Kontras untuk setiap card */
 		.stat-card.income {
-			border-left: 4px solid #00e676;
-			border-right: 1px solid rgba(0, 230, 118, 0.3);
-			box-shadow: 0 0 15px rgba(0, 230, 118, 0.1);
+			border-left: 5px solid #00e676;
+			border-right: 1px solid rgba(0, 230, 118, 0.35);
+			box-shadow: 0 0 20px rgba(0, 230, 118, 0.15);
 		}
 
 		.stat-card.income i {
 			color: #00e676;
-			text-shadow: 0 0 5px rgba(0, 230, 118, 0.5);
+			text-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
 		}
 
 		.stat-card.income .stat-value {
@@ -146,14 +154,14 @@
 		}
 
 		.stat-card.expense {
-			border-left: 4px solid #ff6b6b;
-			border-right: 1px solid rgba(255, 107, 107, 0.3);
-			box-shadow: 0 0 15px rgba(255, 107, 107, 0.1);
+			border-left: 5px solid #ff6b6b;
+			border-right: 1px solid rgba(255, 107, 107, 0.35);
+			box-shadow: 0 0 20px rgba(255, 107, 107, 0.15);
 		}
 
 		.stat-card.expense i {
 			color: #ff6b6b;
-			text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+			text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
 		}
 
 		.stat-card.expense .stat-value {
@@ -161,15 +169,15 @@
 		}
 
 		.stat-card.balance {
-			border-left: 4px solid #ffd700;
-			border-right: 1px solid rgba(255, 215, 0, 0.3);
-			box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
-			background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(255, 215, 0, 0.1));
+			border-left: 5px solid #ffd700;
+			border-right: 1px solid rgba(255, 215, 0, 0.35);
+			box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+			background: linear-gradient(135deg, rgba(4, 25, 18, 0.8), rgba(255, 215, 0, 0.12));
 		}
 
 		.stat-card.balance i {
 			color: #ffd700;
-			text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+			text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 		}
 
 		.stat-card.balance .stat-value {
@@ -177,23 +185,25 @@
 		}
 
 		.stat-card i {
-			font-size: 1.8rem;
-			margin-bottom: 5px;
+			font-size: 2rem;
+			margin-bottom: 6px;
 		}
 
 		.stat-label {
-			font-size: 0.7rem;
+			font-size: 0.95rem;
 			text-transform: uppercase;
-			letter-spacing: 1px;
-			opacity: 0.8;
+			letter-spacing: 1.5px;
+			font-weight: 600;
 			color: #e0e0e0;
+			margin-bottom: 4px;
 		}
 
 		.stat-value {
-			font-size: 1.3rem;
+			font-size: 1.8rem;
 			font-weight: 700;
-			margin-top: 5px;
+			margin-top: 6px;
 			letter-spacing: 0.5px;
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
 		}
 
 		/* Chart & Transaction - 2 kolom */

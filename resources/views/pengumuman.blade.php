@@ -140,17 +140,18 @@
 		}
 
 		.datetime {
-			font-size: 1.2rem;
-			background: rgba(0, 0, 0, 0.4);
+			font-size: 1.55rem;
+			background: rgba(3, 20, 15, 0.65);
 			display: inline-block;
-			padding: 4px 20px;
-			border-radius: 30px;
-			margin-top: 30px;
-			margin-left: 820px;
-			font-weight: 500;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-			backdrop-filter: blur(5px);
+			padding: 6px 28px;
+			border-radius: 35px;
+			margin-top: 8px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 
 		/* Main Announcement Card - Floating Glassmorphism di Tengah */

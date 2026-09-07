@@ -111,14 +111,14 @@
 
 		/* KARTU KACA MELAYANG (FLOATING GLASSMORPHISM) */
 		.idul-card {
-			background: rgba(10, 30, 25, 0.35);
+			background: rgba(4, 25, 18, 0.72);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			border-radius: 24px;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
 			width: 100%;
-			max-width: 1000px;
+			max-width: 1050px;
 			overflow: hidden;
 			animation: fadeInUp 0.6s ease-out;
 		}

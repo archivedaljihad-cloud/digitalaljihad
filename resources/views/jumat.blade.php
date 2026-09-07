@@ -106,15 +106,17 @@
 		}
 
 		.datetime {
-			font-size: 1.2rem;
-			background: rgba(0, 0, 0, 0.4);
+			font-size: 1.55rem;
+			background: rgba(3, 20, 15, 0.65);
 			display: inline-block;
-			padding: 4px 18px;
-			border-radius: 30px;
-			font-weight: 500;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-			backdrop-filter: blur(5px);
+			padding: 6px 28px;
+			border-radius: 35px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 
 		.jumat-header-section {
@@ -144,69 +146,69 @@
 			margin-top: 2px;
 		}
 
-		/* LEBAR MAKSIMAL DIKURANGI MENJADI 820px AGAR LEBIH RAMPING & LEGA */
+		/* RAMPING, ELEGAN & TERBACA JELAS DARI 15 METER */
 		.info-stack {
 			display: flex;
 			flex-direction: column;
-			gap: 12px;
+			gap: 14px;
 			flex: 1;
 			justify-content: center;
-			max-width: 720px;
+			max-width: 860px;
 			width: 100%;
 			margin: 0 auto;
 		}
 
 		.info-row {
 			display: flex;
-			gap: 15px;
+			gap: 16px;
 			width: 100%;
 		}
 
 		/* Kotak Kiri (Label) */
 		.info-box-label {
-			flex: 0 0 200px;
-			background: rgba(10, 30, 25, 0.45);
+			flex: 0 0 220px;
+			background: rgba(4, 25, 18, 0.72);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
-			border-radius: 12px;
-			padding: 12px 20px;
+			border-radius: 14px;
+			padding: 14px 22px;
 			display: flex;
 			align-items: center;
-			gap: 12px;
-			font-size: 1.15rem;
+			gap: 14px;
+			font-size: 1.25rem;
 			font-weight: 600;
 			color: #ffd700;
-			border: 1px solid rgba(255, 215, 0, 0.35);
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 		}
 
 		.info-box-label i {
-			font-size: 1.35rem;
+			font-size: 1.45rem;
 			color: #ffd700;
-			width: 25px;
+			width: 28px;
 			text-align: center;
 		}
 
 		/* Kotak Kanan (Nilai / Nama) */
 		.info-box-value {
 			flex: 1;
-			background: rgba(10, 30, 25, 0.45);
+			background: rgba(4, 25, 18, 0.72);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
-			border-radius: 12px;
-			padding: 12px 25px;
+			border-radius: 14px;
+			padding: 14px 28px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			border: 1px solid rgba(255, 215, 0, 0.35);
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 		}
 
 		.info-box-value .value {
-			font-size: 1.3rem;
+			font-size: 1.55rem;
 			font-weight: 700;
 			color: #ffffff;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
 		}
 
 		.jadwal-mendatang-badge {

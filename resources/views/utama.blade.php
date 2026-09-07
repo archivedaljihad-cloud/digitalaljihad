@@ -113,16 +113,18 @@
 		}
 
 		.datetime {
-			font-size: 1.2rem;
-			margin-top: 4px;
-			background: rgba(0, 0, 0, 0.4);
+			font-size: 1.55rem;
+			margin-top: 6px;
+			background: rgba(3, 20, 15, 0.65);
 			display: inline-block;
-			padding: 4px 20px;
-			border-radius: 30px;
-			font-weight: 500;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-			backdrop-filter: blur(5px);
+			padding: 6px 28px;
+			border-radius: 35px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 
 		.bottom-section {
@@ -131,20 +133,21 @@
 			flex-direction: column;
 			align-items: center;
 			position: relative;
-			top: -20px;
+			top: -15px;
 		}
 
 		.jadwal-sholat-title {
-			font-size: 2rem;
-			font-weight: bold !important;
-			margin-bottom: 12px;
-			padding-bottom: 4px;
+			font-size: 2.1rem;
+			font-weight: 700 !important;
+			letter-spacing: 2px;
+			margin-bottom: 14px;
+			padding-bottom: 5px;
 			position: relative;
 			color: var(--secondary-color);
 			display: flex;
 			align-items: center;
-			gap: 8px;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+			gap: 10px;
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
 		}
 
 		.jadwal-sholat-title i {
@@ -167,7 +170,7 @@
 			left: 50%;
 			transform: translateX(-50%);
 			bottom: 0;
-			width: 140px;
+			width: 150px;
 			height: 3px;
 			background: var(--secondary-color);
 			border-radius: 3px;
@@ -176,53 +179,60 @@
 		.sholat-list {
 			display: flex;
 			justify-content: center;
-			gap: 15px;
+			gap: 16px;
 			width: 100%;
+			max-width: 1720px;
+			margin: 0 auto;
 			margin-bottom: 12px;
 		}
 
 		.sholat-card {
-			background: rgba(10, 30, 25, 0.35);
-			border-radius: 14px;
-			padding: 12px 10px;
-			backdrop-filter: blur(8px);
-			-webkit-backdrop-filter: blur(8px);
-			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
-			border: 1px solid rgba(255, 215, 0, 0.4);
+			background: rgba(4, 25, 18, 0.72);
+			border-radius: 18px;
+			padding: 15px 12px;
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
 			flex: 1;
-			max-width: 190px;
+			max-width: 225px;
 			text-align: center;
+			transition: all 0.3s ease;
 		}
 
 		.sholat-card.active {
 			background: radial-gradient(circle at center,
-					rgba(255, 213, 79, 0.4) 0%,
-					rgba(10, 46, 31, 0.8) 100%);
-			border: 2px solid #FFD54F;
-			box-shadow: 0 0 25px rgba(255, 213, 79, 0.45);
-			transform: scale(1.03);
+					rgba(255, 213, 79, 0.45) 0%,
+					rgba(6, 42, 28, 0.95) 100%);
+			border: 2.5px solid #FFD54F;
+			box-shadow: 0 0 35px rgba(255, 213, 79, 0.55), 0 12px 30px rgba(0, 0, 0, 0.5);
+			transform: translateY(-6px) scale(1.04);
 		}
 
 		.sholat-card.khusus-imsak-terbit {
-			border: 1px solid rgba(255, 255, 255, 0.4);
+			border: 1.5px solid rgba(255, 255, 255, 0.45);
+			background: rgba(15, 30, 25, 0.65);
 		}
 
 		.sholat-card.khusus-imsak-terbit i {
-			color: #fff;
+			color: #ffffff;
 		}
 
 		.sholat-card i {
-			font-size: 1.3rem;
+			font-size: 1.45rem;
 			color: var(--secondary-color);
-			margin-bottom: 4px;
+			margin-bottom: 5px;
 			display: block;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 		}
 
 		.sholat-card .nama-sholat {
-			font-size: 1.25rem;
+			font-size: 1.35rem;
 			font-weight: 600;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
 			color: var(--text-light);
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
 		}
 
 		.sholat-card.khusus-imsak-terbit .nama-sholat {
@@ -230,11 +240,12 @@
 		}
 
 		.sholat-card .waktu-sholat {
-			font-size: 1.6rem;
-			font-weight: 600;
-			color: var(--secondary-color);
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-			margin-top: 2px;
+			font-size: 2.35rem;
+			font-weight: 700;
+			color: #ffe066;
+			letter-spacing: 1px;
+			text-shadow: 0 3px 8px rgba(0, 0, 0, 0.9);
+			margin-top: 4px;
 		}
 
 		.auto-update-status {
