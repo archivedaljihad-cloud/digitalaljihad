@@ -410,7 +410,8 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/home') }}">
                 <div class="sidebar-brand-icon">
                     <img src="{{ $logoUrl }}"
-                        alt="Logo" class="img-fluid" style="max-width: 50px; max-height: 50px; object-fit: contain;">
+                        alt="Logo" class="img-fluid" style="max-width: 50px; max-height: 50px; object-fit: contain;"
+                        onerror="this.onerror=null; this.src='{{ asset('img/logo.png') }}';">
                 </div>
                 <div class="sidebar-brand-text mx-2">
                     <small>{{ Str::limit($appName, 15) }}</small>
