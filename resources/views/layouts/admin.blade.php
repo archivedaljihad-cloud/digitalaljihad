@@ -617,34 +617,71 @@
             </div>
 
             <!-- Nav Item - Jadwal Sholat -->
-            <li class="nav-item">
+            <li class="nav-item {{ request()->routeIs('jadwal_sholat.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('jadwal_sholat.index') }}">
                     <i class="fas fa-fw fa-clock"></i>
                     <span>Jadwal Sholat</span>
                 </a>
             </li>
 
+            <!-- Nav Item - Sholat Jumat -->
+            <li class="nav-item {{ request()->routeIs('sholat_jumat.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('sholat_jumat.index') }}">
+                    <i class="fas fa-fw fa-calendar-alt"></i>
+                    <span>Sholat Jumat</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Sholat Idul Fitri -->
+            <li class="nav-item {{ request()->routeIs('idul-fitri.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('idul-fitri.index') }}">
+                    <i class="fas fa-fw fa-moon"></i>
+                    <span>Idul Fitri</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Sholat Idul Adha -->
+            <li class="nav-item {{ request()->routeIs('idul-adha.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('idul-adha.index') }}">
+                    <i class="fas fa-fw fa-drumstick-bite"></i>
+                    <span>Idul Adha</span>
+                </a>
+            </li>
+
             <!-- Nav Item - Pengumuman -->
-            <li class="nav-item">
+            <li class="nav-item {{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('pengumuman.index') }}">
                     <i class="fas fa-fw fa-bullhorn"></i>
                     <span>Pengumuman</span>
                 </a>
             </li>
 
-            <!-- Nav Item - Keuangan -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('keuangan.index') }}">
-                    <i class="fas fa-fw fa-hand-holding-heart"></i>
-                    <span>Keuangan</span>
+            <!-- Nav Item - Agenda Kajian -->
+            <li class="nav-item {{ request()->routeIs('agenda_kajian.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('agenda_kajian.index') }}">
+                    <i class="fas fa-fw fa-book-open"></i>
+                    <span>Agenda Kajian</span>
                 </a>
             </li>
 
-            <!-- Nav Item - QRIS -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('qris.embed') }}" target="_blank">
-                    <i class="fas fa-fw fa-qrcode"></i>
-                    <span>QRIS Donasi</span>
+            <!-- Nav Item - Rotasi Halaman TV -->
+            <li class="nav-item {{ request()->routeIs('rotation.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('rotation.index') }}">
+                    <i class="fas fa-fw fa-exchange-alt"></i>
+                    <span>Rotasi Halaman TV</span>
+                    @if($setting->rotation_enabled ?? true)
+                    <span class="badge badge-success ml-2" style="font-size: 9px;">AKTIF</span>
+                    @else
+                    <span class="badge badge-secondary ml-2" style="font-size: 9px;">NONAKTIF</span>
+                    @endif
+                </a>
+            </li>
+
+            <!-- Nav Item - Keuangan -->
+            <li class="nav-item {{ request()->routeIs('keuangan.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('keuangan.index') }}">
+                    <i class="fas fa-fw fa-hand-holding-heart"></i>
+                    <span>Keuangan</span>
                 </a>
             </li>
             @endif

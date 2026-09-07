@@ -60,6 +60,15 @@
 </div>
 @endif
 
+@if (session('error'))
+<div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
+    <i class="fas fa-exclamation-circle mr-2"></i> {{ session('error') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
 <!-- Welcome Card -->
 <div class="row mb-4">
     <div class="col-md-12">
@@ -407,28 +416,8 @@
 @elseif (auth()->user()->role && auth()->user()->role->name === 'petugas')
 <!-- Petugas Dashboard -->
 <div class="row">
-    <div class="col-xl-4 col-md-6 mb-4">
-        <a href="{{ route('profile') }}" class="card-link">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                <i class="fas fa-user"></i> Profil Saya
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ auth()->user()->name }}</div>
-                            <div class="mt-2 text-xs text-muted">{{ auth()->user()->email }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-user-circle fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-xl-4 col-md-6 mb-4">
+    <!-- Jadwal Sholat -->
+    <div class="col-xl-3 col-md-6 mb-4">
         <a href="{{ route('jadwal_sholat.index') }}" class="card-link">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
@@ -440,7 +429,7 @@
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{\App\Models\JadwalSholat::count()}} Jadwal
                             </div>
-                            <div class="mt-2 text-xs text-muted">Lihat jadwal harian</div>
+                            <div class="mt-2 text-xs text-muted">Kelola jadwal harian</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-mosque fa-2x text-gray-300"></i>
@@ -451,22 +440,171 @@
         </a>
     </div>
 
-    <div class="col-xl-4 col-md-6 mb-4">
+    <!-- Sholat Jumat -->
+    <div class="col-xl-3 col-md-6 mb-4">
         <a href="{{ route('sholat_jumat.index') }}" class="card-link">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                <i class="fas fa-praying-hands"></i> Jadwal Jumat
+                                <i class="fas fa-calendar-alt"></i> Sholat Jumat
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{\App\Models\SholatJumat::where('tanggal', '>=', now())->count()}} Mendatang
                             </div>
-                            <div class="mt-2 text-xs text-muted">Lihat jadwal Anda</div>
+                            <div class="mt-2 text-xs text-muted">Petugas & tema khutbah</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+                            <i class="fas fa-praying-hands fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Sholat Idul Fitri -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('idul-fitri.index') }}" class="card-link">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                <i class="fas fa-moon"></i> Idul Fitri
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{\App\Models\SholatIdulFitri::count()}} Data
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Petugas & zakat fitrah</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-star-and-crescent fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Sholat Idul Adha -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('idul-adha.index') }}" class="card-link">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                <i class="fas fa-drumstick-bite"></i> Idul Adha
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{\App\Models\SholatIdulAdha::count()}} Data
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Petugas & info qurban</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-kaaba fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Agenda Kajian -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('agenda_kajian.index') }}" class="card-link">
+            <div class="card border-left-purple shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-purple text-uppercase mb-1">
+                                <i class="fas fa-book-open"></i> Agenda Kajian
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{\App\Models\AgendaKajian::count()}} Jadwal
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Jadwal & ustadz kajian</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-quran fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Rotasi Halaman TV -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('rotation.index') }}" class="card-link">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                <i class="fas fa-exchange-alt"></i> Rotasi Halaman TV
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @if($setting->rotation_enabled ?? true)
+                                <span class="badge badge-success">AKTIF</span>
+                                @else
+                                <span class="badge badge-secondary">NONAKTIF</span>
+                                @endif
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Atur jeda & urutan slide</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tv fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Pengumuman -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('pengumuman.index') }}" class="card-link">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                <i class="fas fa-bullhorn"></i> Pengumuman
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{\App\Models\Pengumuman::count()}} Info
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Kelola warta masjid</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Profil Saya -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('profile') }}" class="card-link">
+            <div class="card border-left-dark shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                <i class="fas fa-user"></i> Profil Saya
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ auth()->user()->name }}</div>
+                            <div class="mt-2 text-xs text-muted">{{ auth()->user()->email }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-circle fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>

@@ -138,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
     | ROUTES QRIS
     |--------------------------------------------------------------------------
     */
-    Route::prefix('qris')->name('qris.')->group(function () {
+    Route::prefix('qris')->middleware('role:admin')->name('qris.')->group(function () {
         Route::get('/', [QrisController::class, 'index'])
             ->name('index');
         Route::get('/create', [QrisController::class, 'create'])

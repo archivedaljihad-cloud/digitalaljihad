@@ -72,6 +72,18 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    /**
+     * Check if the user has a specific role.
+     */
+    public function hasRole($role)
+    {
+        $roleName = strtolower(optional($this->role)->name ?? '');
+        $checkRole = strtolower($role);
 
+        if (in_array($checkRole, ['admin', 'superadmin'])) {
+            return in_array($roleName, ['admin', 'superadmin']);
+        }
 
+        return $roleName === $checkRole;
+    }
 }

@@ -17,6 +17,7 @@ class QrisController extends Controller
     {
         // Embed harus bisa diakses publik
         $this->middleware('auth')->except('embed');
+        $this->middleware('role:admin')->except('embed');
 
         $this->setting = AppSetting::first();
 

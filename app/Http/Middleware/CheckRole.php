@@ -30,6 +30,10 @@ class CheckRole
             }
         }
 
-        abort(403, 'Unauthorized');
+        if ($request->expectsJson()) {
+            abort(403, 'Unauthorized');
+        }
+
+        return redirect()->route('home')->with('error', 'Akses ditolak. Halaman ini hanya dapat diakses oleh Administrator / Super Admin.');
     }
 }
