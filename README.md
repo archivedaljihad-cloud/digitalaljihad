@@ -138,42 +138,10 @@ SB Admin 2
 
 👨‍💻 DKM AL JIHAD Dev.Syatem
 
-📱 WhatsApp: 0817-9851-011
+📱 WhatsApp : 0877 5876 7000
 
 🎥 Channel YouTube:
 YouTube Channel DKM AL JIHAD Dev.Syatem
-
-Membership:
-Gabung Membership Channel
-
-🚀 Jangan lupa:
-
-👍 Like
-💬 Comment
-🔔 Subscribe
-
-Agar tidak ketinggalan update project Laravel terbaru, otomasi industri, IoT, dan aplikasi digital lainnya.
-
-Hashtag
-
-#SistemInformasiMasjid
-#MasjidDigital
-#Laravel12
-#Laravel
-#QRISMasjid
-#SholatIdulFitri
-#SholatIdulAdha
-#SmartMosque
-#AplikasiMasjid
-#WebDeveloperIndonesia
-#FullStackDeveloper
-#ProgrammingIndonesia
-#DigitalisasiMasjid
-#1000MasjidGratis
-#OpenSourceIndonesia
-#AplikasiLaravel
-#DashboardMasjid
-
 
 🕌 SISTEM INFORMASI MASJID DIGITAL Versi 3
 ADMIN
