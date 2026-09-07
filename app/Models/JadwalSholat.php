@@ -10,11 +10,23 @@ class JadwalSholat extends Model
     protected $table = 'jadwal_sholat';
 
     protected $fillable = [
+        'id',
         'nama_sholat',
         'waktu',
+        'durasi_jeda',
     ];
 
     public $timestamps = true;
+
+    protected static function booted(): void
+    {
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $maxId = static::max('id') ?? 0;
+                $model->id = $maxId + 1;
+            }
+        });
+    }
 
     /**
      * Scope untuk mengurutkan jadwal sholat sesuai urutan harian.
