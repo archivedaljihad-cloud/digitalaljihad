@@ -133,23 +133,29 @@ class AppSettingController extends Controller
         }
 
         // ==================================================
+        // PRAYER MODE SETTINGS
+        // ==================================================
+        $setting->prayer_mode_enabled = $request->boolean('prayer_mode_enabled');
+        if ($request->has('prayer_mode_duration')) $setting->prayer_mode_duration = $request->input('prayer_mode_duration');
+        if ($request->has('countdown_adzan_duration')) $setting->prayer_mode_before_adzan = $request->input('countdown_adzan_duration');
+        if ($request->has('iqamah_duration')) $setting->prayer_mode_iqamah_duration = $request->input('iqamah_duration');
+        if ($request->has('tarhim_trigger_seconds')) $setting->tarhim_trigger_seconds = $request->input('tarhim_trigger_seconds');
+        if ($request->has('prayer_theme')) $setting->prayer_mode_theme = $request->input('prayer_theme');
+        if ($request->has('prayer_bg_opacity')) $setting->prayer_bg_opacity = $request->input('prayer_bg_opacity');
+        if ($request->has('msg_countdown')) $setting->msg_countdown = $request->input('msg_countdown');
+        if ($request->has('msg_adzan')) $setting->msg_adzan = $request->input('msg_adzan');
+        if ($request->has('msg_iqamah')) $setting->msg_iqamah = $request->input('msg_iqamah');
+        if ($request->has('msg_shalat')) $setting->msg_shalat = $request->input('msg_shalat');
+        if ($request->has('prayer_mode_message')) $setting->prayer_mode_message = $request->input('prayer_mode_message');
+
+        // ==================================================
         // UPLOAD FILE
         // ==================================================
-        $this->handleFileUpload(
-            $request,
-            'favicon',
-            $setting
-        );
-        $this->handleFileUpload(
-            $request,
-            'background',
-            $setting
-        );
-        $this->handleFileUpload(
-            $request,
-            'logo',
-            $setting
-        );
+        $this->handleFileUpload($request, 'favicon', $setting);
+        $this->handleFileUpload($request, 'background', $setting);
+        $this->handleFileUpload($request, 'logo', $setting);
+        $this->handleFileUpload($request, 'prayer_bg_image', $setting);
+        $this->handleFileUpload($request, 'tarhim_audio', $setting);
 
         $setting->save();
 

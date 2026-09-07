@@ -56,9 +56,9 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text"><i class="fas fa-clock"></i></span>
 									</div>
-									<input type="time" name="waktu" id="waktu"
+									<input type="text" name="waktu" id="waktu"
 										class="form-control @error('waktu') is-invalid @enderror" value="{{ old('waktu') }}"
-										required>
+										placeholder="00:00" required>
 									<div class="input-group-append">
 										<span class="input-group-text">WIB</span>
 									</div>
@@ -105,3 +105,27 @@
 		</div>
 	</div>
 @endsection
+
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    .flatpickr-input {
+        background-color: #fff !important;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#waktu", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            allowInput: true
+        });
+    });
+</script>
+@endpush

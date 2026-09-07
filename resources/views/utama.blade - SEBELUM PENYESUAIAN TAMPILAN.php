@@ -274,40 +274,6 @@
 		.auto-update-status.active .badge {
 			background: var(--success-color);
 		}
-
-		/* RESPONSIF MEDIA QUERIES UNTUK HP / TABLET */
-		@media (max-width: 1024px) {
-			body {
-				height: auto;
-				overflow-y: auto;
-			}
-			.page-layout {
-				height: auto;
-				min-height: 100vh;
-			}
-			.sholat-list {
-				flex-wrap: wrap;
-			}
-			.sholat-card {
-				flex: 1 1 40%;
-				max-width: none;
-			}
-			.kaligrafi {
-				font-size: 2.5rem;
-			}
-		}
-
-		@media (max-width: 768px) {
-			.header-section h1 {
-				font-size: 2rem !important;
-			}
-			.header-section h3.sub-header {
-				font-size: 0.9rem !important;
-			}
-			.sholat-card {
-				flex: 1 1 100%;
-			}
-		}
 	</style>
 </head>
 
@@ -318,6 +284,10 @@
 	<div class="kaligrafi kaligrafi-allah">ﷲ</div>
 	<div class="kaligrafi kaligrafi-muhammad">ﷺ</div>
 
+	<!-- Elemen Audio Tarhim Otomatis -->
+	<audio id="tarhimAudio" preload="auto">
+		<source src="{{ asset('audio/Tarhim1.mp3') }}" type="audio/mpeg">
+	</audio>
 
 	@if($settings->auto_update_jadwal ?? false)
 	<div class="auto-update-status active" id="autoUpdateStatus">
@@ -347,7 +317,7 @@
 				$now = \Carbon\Carbon::now('Asia/Jakarta');
 				$currentHour = $now->format('H:i');
 
-				$customOrder = ['Imsak', 'Subuh', 'Syuruk', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+				$customOrder = ['Imsak', 'Subuh', 'Terbit', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
 
 				$sortedJadwal = $jadwalSholat->sortBy(function ($item) use ($customOrder) {
 				$index = array_search(trim($item->nama_sholat), $customOrder);
@@ -357,12 +327,12 @@
 
 				@foreach ($sortedJadwal as $jadwal)
 				@php
-				$isImsakOrTerbit = in_array(strtolower(trim($jadwal->nama_sholat)), ['imsak', 'syuruk', 'terbit']);
+				$isImsakOrTerbit = in_array(strtolower(trim($jadwal->nama_sholat)), ['imsak', 'terbit']);
 				@endphp
 
 				<div
 					class="sholat-card {{ $isImsakOrTerbit ? 'khusus-imsak-terbit' : '' }}" data-waktu="{{ \Carbon\Carbon::parse($jadwal->waktu)->format('H:i') }}">
-					<i class="fas {{ in_array(strtolower(trim($jadwal->nama_sholat)), ['syuruk', 'terbit']) ? 'fa-sun' : (strtolower(trim($jadwal->nama_sholat)) == 'imsak' ? 'fa-utensils' : 'fa-mosque') }}"></i>
+					<i class="fas {{ strtolower(trim($jadwal->nama_sholat)) == 'terbit' ? 'fa-sun' : (strtolower(trim($jadwal->nama_sholat)) == 'imsak' ? 'fa-utensils' : 'fa-mosque') }}"></i>
 					<div class="nama-sholat">{{ $jadwal->nama_sholat }}</div>
 					<div class="waktu-sholat">{{ \Carbon\Carbon::parse($jadwal->waktu)->format('H:i') }}</div>
 				</div>
@@ -375,6 +345,16 @@
 	@include('partials.bottom-section')
 
 	<script>
+		let currentPlayingPrayer = null;
+
+		// Daftar nama file MP3 berdasarkan waktu sholat di folder public/audio/
+		const audioMap = {
+			'Subuh': 'Subuh.mp3',
+			'Dzuhur': 'Dzuhur.mp3',
+			'Ashar': 'Ashar.mp3',
+			'Maghrib': 'Maghrib.mp3',
+			'Isya': 'Isya.mp3'
+		};
 
 		function updateDateTime() {
 			const now = new Date();
@@ -396,7 +376,6 @@
 			const currentTotalMinutes = (currentHours * 60) + currentMinutes;
 
 			let activePrayerName = null;
-			let prayerSchedules = [];
 
 			document.querySelectorAll('.sholat-card').forEach(card => {
 				const waktuText = card.getAttribute('data-waktu');
@@ -407,14 +386,8 @@
 				const [jadwalHours, jadwalMinutes] = waktuText.split(':').map(Number);
 				let jadwalTotalMinutes = (jadwalHours * 60) + jadwalMinutes;
 
-				// Simpan ke array untuk dibaca rotator induk secara lokal
-				prayerSchedules.push({
-					name: namaSholat,
-					time: waktuText
-				});
-
-				// Kotak menyala 5 menit sebelum hingga 30 menit sesudah
-				let startMinutes = jadwalTotalMinutes - 5;
+				// Kotak menyala 2 menit sebelum hingga 30 menit sesudah
+				let startMinutes = jadwalTotalMinutes - 2;
 				let endMinutes = jadwalTotalMinutes + 30;
 
 				if (currentTotalMinutes >= startMinutes && currentTotalMinutes <= endMinutes) {
@@ -424,6 +397,39 @@
 					card.classList.remove('active');
 				}
 			});
+
+			const tarhimAudio = document.getElementById('tarhimAudio');
+			const sourceEl = tarhimAudio.querySelector('source');
+
+			// Jika sholat aktif dan memiliki file MP3
+			if (activePrayerName && audioMap[activePrayerName]) {
+				let targetFile = audioMap[activePrayerName];
+
+				// KUNCI ROTASI: Memberitahu browser agar halaman tidak pindah/refresh
+				localStorage.setItem('lockPageRotation', 'true');
+
+				if (currentPlayingPrayer !== activePrayerName) {
+					currentPlayingPrayer = activePrayerName;
+					sourceEl.src = "{{ asset('audio/') }}/" + targetFile;
+					tarhimAudio.load();
+					tarhimAudio.play().then(() => {
+						console.log("Memutar audio: " + targetFile);
+					}).catch(e => {
+						console.log("Autoplay dicegah browser:", e);
+					});
+				}
+			} else {
+				// BUKA KUNCI ROTASI: Jika waktu sholat/tarhim sudah selesai
+				localStorage.setItem('lockPageRotation', 'false');
+
+				if (currentPlayingPrayer !== null) {
+					currentPlayingPrayer = null;
+					if (!tarhimAudio.paused) {
+						tarhimAudio.pause();
+						tarhimAudio.currentTime = 0;
+					}
+				}
+			}
 		}
 
 		updateDateTime();

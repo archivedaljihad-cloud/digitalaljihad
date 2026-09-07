@@ -503,9 +503,6 @@
 				</div>
 			</div>
 
-			<div class="footer">
-				{!! $settings['footer'] ?? 'Hak Cipta © 2025 Ali Mochtar Development System' !!}
-			</div>
 		</div>
 	</div>
 

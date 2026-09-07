@@ -27,37 +27,13 @@
             width: 100%;
             height: 100%;
             border: none;
-            overflow: hidden;
         }
 
         iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             border: none;
-            /* Menggunakan GPU acceleration dan timing function yang stabil */
-            transition: transform 1.2s ease-in-out, opacity 1.2s ease-in-out;
-            transform: translate3d(100%, 0, 0); /* 3D transform forces GPU rendering */
-            opacity: 0;
-            z-index: 1;
-            background-color: #050505;
-            will-change: transform, opacity;
-            backface-visibility: hidden;
-            perspective: 1000px;
-        }
-        
-        iframe.active {
-            transform: translate3d(0, 0, 0);
-            opacity: 1;
-            z-index: 2;
-        }
-
-        iframe.outgoing {
-            transform: translate3d(-100%, 0, 0);
-            opacity: 0;
-            z-index: 1;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .loading-overlay {
@@ -84,8 +60,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .page-indicator {
@@ -106,7 +87,9 @@
             border-left: 3px solid #ffd700;
         }
 
-        .page-indicator.debug-visible { display: flex; }
+        .page-indicator.debug-visible {
+            display: flex;
+        }
 
         .page-indicator .page-name {
             font-weight: bold;
@@ -118,6 +101,21 @@
             padding: 2px 8px;
             border-radius: 20px;
             font-size: 0.8rem;
+        }
+
+        .page-indicator button {
+            background: rgba(255, 215, 0, 0.3);
+            border: none;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-indicator button:hover {
+            background: rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
         }
 
         .auto-update-notification {
@@ -141,8 +139,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
         }
 
         @media (max-width: 768px) {
@@ -172,14 +179,15 @@
         <i class="fas fa-sync-alt"></i> Pengaturan diperbarui...
     </div>
 
-    <div class="iframe-container" id="iframeContainer">
-        <!-- Dua iframe untuk efek slide -->
-        <iframe id="frame1" class="active" src="" title="Rotating Content" allow="autoplay"></iframe>
-        <iframe id="frame2" src="" title="Rotating Content" allow="autoplay"></iframe>
+    <div class="iframe-container">
+        <iframe id="contentFrame" src="" title="Rotating Content"></iframe>
     </div>
 
     <script>
-        const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
+        const DEBUG_MODE =
+            new URLSearchParams(window.location.search)
+            .get('debug') === '1';
+
         const parseBool = (val) => val === true || val === 1 || val === "1" || String(val).toLowerCase() === "true";
 
         let rotationInterval = parseInt({{ $rotationInterval ?? 10 }});
@@ -199,16 +207,24 @@
                 }
             }
         }
-        if (!is_array($safePages)) { $safePages = []; }
+        if (!is_array($safePages)) {
+            $safePages = [];
+        }
         @endphp
 
         let pages = {!! json_encode($safePages) !!};
-        if (!Array.isArray(pages)) { pages = []; }
+        if (!Array.isArray(pages)) {
+            pages = [];
+        }
 
         let activePages = pages.filter(page => parseBool(page.active));
 
         if (activePages.length === 0) {
-            activePages = [{ url: '/welcome-embed', name: 'Dashboard Lengkap', active: true }];
+            activePages = [{
+                url: '/welcome-embed',
+                name: 'Dashboard Lengkap',
+                active: true
+            }];
         }
 
         let currentIndex = 0;
@@ -217,29 +233,19 @@
         let isLoading = false;
         let failsafeTimeout = null;
 
-        // Iframe management for sliding
-        let currentFrameId = 'frame1';
-
-        function getFrames() {
-            if (currentFrameId === 'frame1') {
-                return { current: document.getElementById('frame1'), next: document.getElementById('frame2') };
-            } else {
-                return { current: document.getElementById('frame2'), next: document.getElementById('frame1') };
-            }
-        }
-
+        // Cek apakah rotasi sedang dikunci oleh sholat aktif
         function isPrayerActive() {
             return localStorage.getItem('lockPageRotation') === 'true';
         }
 
         function applyDebugVisibility() {
             const pageIndicator = document.getElementById('pageIndicator');
-            if (pageIndicator) {
-                if (DEBUG_MODE) {
-                    pageIndicator.classList.add('debug-visible');
-                } else {
-                    pageIndicator.classList.remove('debug-visible');
-                }
+            if (!pageIndicator) return;
+
+            if (DEBUG_MODE) {
+                pageIndicator.classList.add('debug-visible');
+            } else {
+                pageIndicator.classList.remove('debug-visible');
             }
         }
 
@@ -247,15 +253,11 @@
             if (isLoading) return;
             isLoading = true;
 
-            const frames = getFrames();
-            const nextFrame = frames.next;
+            const iframe = document.getElementById('contentFrame');
             const loadingOverlay = document.getElementById('loadingOverlay');
             const pageName = document.getElementById('pageName');
 
-            // If it's the very first load, show loader
-            if (!frames.current.src || frames.current.src === window.location.href) {
-                loadingOverlay.style.display = 'flex';
-            }
+            loadingOverlay.style.display = 'flex';
 
             if (activePages[index] && activePages[index].name) {
                 pageName.textContent = activePages[index].name;
@@ -266,11 +268,7 @@
                 if (!routeUrl.startsWith('/') && !routeUrl.startsWith('http')) {
                     routeUrl = '/' + routeUrl;
                 }
-                
-                // Siapkan iframe berikutnya (posisi dikanan karena reset class)
-                nextFrame.className = ''; 
-                // Set src untuk mulai memuat
-                nextFrame.src = routeUrl;
+                iframe.src = routeUrl;
             }
 
             clearTimeout(failsafeTimeout);
@@ -287,14 +285,21 @@
         }
 
         function resetCountdown() {
-            if (countdownIntervalId) clearInterval(countdownIntervalId);
+            if (countdownIntervalId) {
+                clearInterval(countdownIntervalId);
+            }
             countdown = rotationInterval;
             updateCountdownDisplay();
 
             if (rotationEnabled && activePages.length > 1) {
                 countdownIntervalId = setInterval(() => {
                     if (isPrayerActive()) {
-                        return;
+                        const utamaIndex = activePages.findIndex(p => p.url && p.url.includes('utama-embed'));
+                        if (utamaIndex !== -1 && currentIndex !== utamaIndex) {
+                            currentIndex = utamaIndex;
+                            loadPage(currentIndex);
+                        }
+                        return; // Jeda hitung mundur rotasi
                     }
 
                     if (countdown > 0 && !isLoading) {
@@ -343,30 +348,23 @@
             const notification = document.getElementById('notification');
             notification.innerHTML = `<i class="fas fa-sync-alt fa-spin"></i> ${message}`;
             notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 3500);
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3500);
         }
 
+        // Pengecekan waktu sholat secara server untuk akurasi mode prayer
         async function checkPrayerModeAPI() {
             try {
                 const response = await fetch('/prayer-mode/status?_=' + Date.now());
                 const data = await response.json();
                 
                 if (data.active) {
-                    if (localStorage.getItem('lockPageRotation') !== 'true') {
-                        localStorage.setItem('lockPageRotation', 'true');
-                        // Load prayer mode in next iframe without page reload
-                        const frames = getFrames();
-                        frames.next.className = '';
-                        frames.next.src = '/prayer-mode';
-                    }
+                    localStorage.setItem('lockPageRotation', 'true');
+                    // Langsung redirect ke halaman prayer mode
+                    window.location.href = '/prayer-mode';
                 } else {
-                    if (localStorage.getItem('lockPageRotation') === 'true') {
-                        localStorage.setItem('lockPageRotation', 'false');
-                        // Resume normal rotation
-                        if (activePages.length > 0) {
-                            loadPage(currentIndex);
-                        }
-                    }
+                    localStorage.setItem('lockPageRotation', 'false');
                 }
             } catch (error) {
                 console.error('Prayer Mode Check Failed:', error);
@@ -405,7 +403,9 @@
                     if (typeof apiPagesRaw === 'string') {
                         try {
                             newPages = JSON.parse(apiPagesRaw);
-                            if (typeof newPages === 'string') newPages = JSON.parse(newPages);
+                            if (typeof newPages === 'string') {
+                                newPages = JSON.parse(newPages);
+                            }
                         } catch (e) {
                             console.error('Parse JSON Halaman API Error:', e);
                         }
@@ -414,10 +414,15 @@
                     }
 
                     if (!Array.isArray(newPages)) newPages = [];
+
                     let newActivePages = newPages.filter(page => parseBool(page.active));
 
                     if (newActivePages.length === 0) {
-                        newActivePages = [{ url: '/welcome-embed', name: 'Dashboard Lengkap', active: true }];
+                        newActivePages = [{
+                            url: '/welcome-embed',
+                            name: 'Dashboard Lengkap',
+                            active: true
+                        }];
                     }
 
                     const oldActiveUrls = activePages.map(p => p.url).sort().join(',');
@@ -427,7 +432,9 @@
                         pages = newPages;
                         activePages = newActivePages;
                         hasChanges = true;
-                        if (currentIndex >= activePages.length) currentIndex = 0;
+                        if (currentIndex >= activePages.length) {
+                            currentIndex = 0;
+                        }
                         showNotification(`Halaman yang ditampilkan diperbarui`);
                     }
                 }
@@ -447,75 +454,49 @@
             }
         }
 
-        // Setup event listener untuk frame 1 & 2
-        function onFrameLoad(frameElement) {
-            const frames = getFrames();
-            
-            // Jika ini frame pertama yang dimuat saat awal buka halaman
-            if (!frames.current.src || frames.current.src === window.location.href) {
-                clearTimeout(failsafeTimeout);
-                document.getElementById('loadingOverlay').style.display = 'none';
-                
-                // Jadikan frame yang baru dimuat ini sebagai current (karena current tadinya kosong)
-                frameElement.className = 'active';
-                currentFrameId = frameElement.id;
-                
+        document.getElementById('contentFrame').addEventListener('load', function() {
+            clearTimeout(failsafeTimeout);
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                loadingOverlay.style.display = 'none';
                 isLoading = false;
+
                 if (rotationEnabled && activePages.length > 1) {
                     resetCountdown();
                 }
-                return;
-            }
+            }, 500);
+        });
 
-            // Jika yang selesai memuat adalah iframe berikutnya (next)
-            if (frameElement === frames.next && frameElement.src && frameElement.src !== window.location.href) {
-                clearTimeout(failsafeTimeout);
-                
-                // Lakukan transisi slide
-                frames.current.className = 'outgoing'; // Geser ke kiri
-                frames.next.className = 'active'; // Masuk dari kanan ke tengah
+        document.getElementById('contentFrame').addEventListener('error', function() {
+            console.error('Iframe Error Event Terpicu');
+            clearTimeout(failsafeTimeout);
+            isLoading = false;
+            document.getElementById('loadingOverlay').style.display = 'none';
 
-                // Swap ID
-                currentFrameId = frames.next.id;
-                
-                isLoading = false;
-                if (rotationEnabled && activePages.length > 1) {
-                    resetCountdown();
+            setTimeout(() => {
+                if (activePages.length > 0) {
+                    loadPage(currentIndex);
                 }
-            }
-        }
-
-        function onFrameError(frameElement) {
-            const frames = getFrames();
-            if (frameElement === frames.next) {
-                console.error('Iframe Error Event Terpicu pada halaman baru');
-                clearTimeout(failsafeTimeout);
-                isLoading = false;
-                document.getElementById('loadingOverlay').style.display = 'none';
-
-                setTimeout(() => {
-                    if (activePages.length > 0) {
-                        loadPage(currentIndex);
-                    }
-                }, 3000);
-            }
-        }
-
-        document.getElementById('frame1').addEventListener('load', function() { onFrameLoad(this); });
-        document.getElementById('frame2').addEventListener('load', function() { onFrameLoad(this); });
-        
-        document.getElementById('frame1').addEventListener('error', function() { onFrameError(this); });
-        document.getElementById('frame2').addEventListener('error', function() { onFrameError(this); });
+            }, 3000);
+        });
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight') nextPage();
-            else if (e.key === ' ' || e.key === 'Space') { e.preventDefault(); skipToNext(); }
-            else if (e.key === 's' || e.key === 'S') openSettings();
+            if (e.key === 'ArrowRight') {
+                nextPage();
+            } else if (e.key === ' ' || e.key === 'Space') {
+                e.preventDefault();
+                skipToNext();
+            } else if (e.key === 's' || e.key === 'S') {
+                openSettings();
+            }
         });
 
         applyDebugVisibility();
+
+        // Cek waktu sholat dan pengaturan rotasi
         setInterval(checkPrayerModeAPI, 5000);
         setInterval(fetchLatestSettings, 5000);
+
         checkPrayerModeAPI();
 
         console.log('Rotator Initialized. Active Pages:', activePages.length, '| DEBUG_MODE:', DEBUG_MODE);
@@ -526,5 +507,7 @@
             document.getElementById('pageName').textContent = 'Tidak ada halaman (Sistem Error)';
         }
     </script>
+
 </body>
+
 </html>

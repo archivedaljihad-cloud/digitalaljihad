@@ -136,12 +136,12 @@ AJAX
 SB Admin 2
 📞 KONTAK DEVELOPER
 
-👨‍💻 Ali Mochtar Development System
+👨‍💻 DKM AL JIHAD Dev.Syatem
 
 📱 WhatsApp: 0817-9851-011
 
 🎥 Channel YouTube:
-YouTube Channel Ali Mochtar Development System
+YouTube Channel DKM AL JIHAD Dev.Syatem
 
 Membership:
 Gabung Membership Channel

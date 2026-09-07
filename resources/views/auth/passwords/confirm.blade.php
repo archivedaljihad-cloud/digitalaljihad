@@ -67,7 +67,7 @@
                                 {!! $setting['footer'] !!}
                                 @else
                                 <a href="https://wa.me/628179851011" target="_blank" style="font-size: 12px; text-decoration: none; color: gray;">
-                                    Hak Cipta &copy; {{ now()->year }} Ali Mochtar Development System
+                                    Copyright &copy; 2026 Masjid Al-Jihad Dev. System
                                 </a>
                                 @endif
                             </center>

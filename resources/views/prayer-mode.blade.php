@@ -204,11 +204,7 @@
         .footer {
             margin-top: 70px;
             font-size: 20px;
-            @if($theme == 'light')
-                color: #6b7280;
-            @else
-                color: #bbbbbb;
-            @endif
+            color: #ffd700;
         }
 
         @media (max-width:1200px) {
@@ -351,9 +347,9 @@
                 el.innerHTML =
                     formatTime(remaining);
 
-                // AUDIO TARHIM BERBUNYI SAAT SISA WAKTU <= 60 DETIK
+                // AUDIO TARHIM BERBUNYI SAAT SISA WAKTU <= 300 DETIK (5 MENIT)
                 @if($phase == 'countdown')
-                    if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 60 }} && !hasPlayedTarhim) {
+                    if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 300 }} && !hasPlayedTarhim) {
                         const tarhimAudio = document.getElementById('audioTarhim');
                         if (tarhimAudio) {
                             tarhimAudio.play().catch(function(error) {
@@ -399,7 +395,11 @@
                     .then(response => response.json())
                     .then(function (data) {
                         if (!data.active) {
-                            window.location.href = "/";
+                            if (window !== window.parent) {
+                                // Biarkan parent (rotator) yang mengurus peralihan halaman
+                            } else {
+                                window.location.href = "/";
+                            }
                         } else if (data.phase !== '{{ $phase }}') {
                             window.location.reload();
                         }
@@ -417,10 +417,22 @@
 
     <!-- ELEMEN AUDIO TERSEMBUNYI (DIKONTROL JAVASCRIPT) -->
     <audio id="audioTarhim">
-        <source src="{{ asset('audio/tarhim2.mp3') }}" type="audio/mpeg">
+        @if(!empty($setting->tarhim_audio))
+            <source src="{{ asset('storage/' . $setting->tarhim_audio) }}" type="audio/mpeg">
+        @else
+            <source src="{{ asset('audio/tarhim2.mp3') }}" type="audio/mpeg">
+        @endif
     </audio>
     <audio id="audioAdzan">
-        <source src="{{ asset('audio/adzan.mp3?v=2') }}" type="audio/mpeg">
+        @php
+            $namaSholat = $currentPrayer ? (is_object($currentPrayer) ? $currentPrayer->nama_sholat : $currentPrayer) : '';
+            $namaSholatClean = ucwords(strtolower(trim($namaSholat)));
+            $audioFile = 'adzan.mp3?v=2';
+            if (in_array($namaSholatClean, ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'])) {
+                $audioFile = $namaSholatClean . '.mp3';
+            }
+        @endphp
+        <source src="{{ asset('audio/' . $audioFile) }}" type="audio/mpeg">
     </audio>
 </body>
 

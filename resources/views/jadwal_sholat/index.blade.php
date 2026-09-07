@@ -333,14 +333,23 @@
 									<td class="text-center">{{ $index + 1 }}</td>
 									<td>
 										<div class="d-flex align-items-center">
-											<div class="icon-circle bg-{{ 
-												$item->nama_sholat == 'Subuh' ? 'primary' :
-												($item->nama_sholat == 'Dzuhur' ? 'success' :
-													($item->nama_sholat == 'Ashar' ? 'info' :
-														($item->nama_sholat == 'Maghrib' ? 'warning' : 'danger'))) 
-											}} text-white mr-3"
+											@php
+												$bgColor = 'secondary';
+												if (strtolower($item->nama_sholat) == 'imsak') $bgColor = 'dark';
+												elseif (strtolower($item->nama_sholat) == 'subuh') $bgColor = 'primary';
+												elseif (strtolower($item->nama_sholat) == 'syuruk' || strtolower($item->nama_sholat) == 'terbit') $bgColor = 'warning';
+												elseif (strtolower($item->nama_sholat) == 'dzuhur') $bgColor = 'success';
+												elseif (strtolower($item->nama_sholat) == 'ashar') $bgColor = 'info';
+												elseif (strtolower($item->nama_sholat) == 'maghrib') $bgColor = 'warning';
+												elseif (strtolower($item->nama_sholat) == 'isya') $bgColor = 'danger';
+
+												$icon = 'fa-mosque';
+												if (strtolower($item->nama_sholat) == 'imsak') $icon = 'fa-utensils';
+												elseif (strtolower($item->nama_sholat) == 'syuruk' || strtolower($item->nama_sholat) == 'terbit') $icon = 'fa-sun';
+											@endphp
+											<div class="icon-circle bg-{{ $bgColor }} text-white mr-3"
 												style="width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-												<i class="fas fa-mosque"></i>
+												<i class="fas {{ $icon }}"></i>
 											</div>
 											<div>
 												<strong>{{ $item->nama_sholat }}</strong>

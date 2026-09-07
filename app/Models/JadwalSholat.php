@@ -23,11 +23,13 @@ class JadwalSholat extends Model
     {
         return $query->orderByRaw("
             CASE nama_sholat
-                WHEN 'Subuh' THEN 1
-                WHEN 'Dzuhur' THEN 2
-                WHEN 'Ashar' THEN 3
-                WHEN 'Maghrib' THEN 4
-                WHEN 'Isya' THEN 5
+                WHEN 'Imsak' THEN 1
+                WHEN 'Subuh' THEN 2
+                WHEN 'Syuruk' THEN 3
+                WHEN 'Dzuhur' THEN 4
+                WHEN 'Ashar' THEN 5
+                WHEN 'Maghrib' THEN 6
+                WHEN 'Isya' THEN 7
                 ELSE 99
             END
         ");

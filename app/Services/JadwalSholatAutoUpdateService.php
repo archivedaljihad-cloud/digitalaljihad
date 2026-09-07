@@ -65,7 +65,9 @@ class JadwalSholatAutoUpdateService
 
             // Mapping nama sholat
             $sholatMapping = [
+                'Imsak' => 'Imsak',
                 'Fajr' => 'Subuh',
+                'Sunrise' => 'Syuruk',
                 'Dhuhr' => 'Dzuhur',
                 'Asr' => 'Ashar',
                 'Maghrib' => 'Maghrib',
@@ -166,7 +168,9 @@ class JadwalSholatAutoUpdateService
             $timings = $data['data']['timings'];
 
             $sholatMapping = [
+                'Imsak' => 'Imsak',
                 'Fajr' => 'Subuh',
+                'Sunrise' => 'Syuruk',
                 'Dhuhr' => 'Dzuhur',
                 'Asr' => 'Ashar',
                 'Maghrib' => 'Maghrib',
@@ -252,7 +256,9 @@ class JadwalSholatAutoUpdateService
             $timings = $data['data']['timings'];
 
             $sholatMapping = [
+                'Imsak' => 'Imsak',
                 'Fajr' => 'Subuh',
+                'Sunrise' => 'Syuruk',
                 'Dhuhr' => 'Dzuhur',
                 'Asr' => 'Ashar',
                 'Maghrib' => 'Maghrib',

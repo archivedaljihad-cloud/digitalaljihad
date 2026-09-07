@@ -25,7 +25,7 @@ class HomeController extends Controller
         // Ambil atau buat pengaturan aplikasi
         $this->setting = AppSetting::first() ?? AppSetting::create([
             'nama_aplikasi' => 'Masjid Al-Ikhlas',
-            'footer' => 'Copyright &copy; <a href="https://wa.me/628179851011" target="_blank">Ali Mochtar Development System</a> ' . date('Y'),
+            'footer' => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System',
             'favicon' => 'path/to/default-favicon.ico'
         ]);
 

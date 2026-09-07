@@ -28,4 +28,8 @@
             <i class="fas fa-bullhorn" style="color: #ffc107; margin-right: 8px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.9));"></i> {!! $runningTextValue !!}
         </div>
     </div>
+    
+    <div style="text-align: center; padding: 4px; font-size: 0.85rem; color: #ffd700; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);">
+        {!! $settings['footer'] ?? 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System' !!}
+    </div>
 </div>

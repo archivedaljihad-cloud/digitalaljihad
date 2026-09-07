@@ -430,7 +430,7 @@
             text-align: center;
             font-size: 0.85rem;
             margin-top: 10px;
-            color: rgba(255, 255, 255, 0.85);
+            color: #ffd700;
             padding: 10px;
             background: rgba(0, 0, 0, 0.35);
             border-radius: 8px;

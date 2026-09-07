@@ -17,7 +17,7 @@ class WelcomeController extends Controller
         if (!$settings) {
             $settings = AppSetting::create([
                 'nama_aplikasi'       => 'MASJID AL-IKHLAS',
-                'footer'              => '<a href="https://wa.me/628" target="_blank" style="font-size:12px;text-decoration:none;color:gray;">Copyright 2025 Ali Mochtar Development System</a>',
+                'footer'              => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System',
                 'running_text'        => '🌙 "Hati yang tenang ada pada mereka yang selalu mengingat Allah. Mari perbanyak zikir dan shalat berjamaah."',
                 'auto_update_jadwal' => true,
                 'auto_update_city'   => 'Jakarta',
@@ -87,7 +87,7 @@ class WelcomeController extends Controller
                 'auto_update_country' => 'Indonesia',
             ]);
         }
-        $jadwalSholat = JadwalSholat::all();
+        $jadwalSholat = JadwalSholat::urutkan()->get();
         $today = Carbon::today('Asia/Jakarta');
         $sholatJumat = SholatJumat::where('tanggal', '>=', $today)
             ->orderBy('tanggal')
@@ -121,7 +121,7 @@ class WelcomeController extends Controller
     public function utamaEmbed()
     {
         $settings = AppSetting::first();
-        $jadwalSholat = JadwalSholat::all();
+        $jadwalSholat = JadwalSholat::urutkan()->get();
         return view(
             'utama',
             compact(
@@ -151,7 +151,7 @@ class WelcomeController extends Controller
     public function jumatEmbed()
     {
         $settings = AppSetting::first();
-        $jadwalSholat = JadwalSholat::all();
+        $jadwalSholat = JadwalSholat::urutkan()->get();
         $today = Carbon::today('Asia/Jakarta');
         $sholatJumat = SholatJumat::where('tanggal', '>=', $today)
             ->orderBy('tanggal')

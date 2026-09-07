@@ -399,7 +399,7 @@
                 <section class="text-center">
                     <div class="card shadow-sm" style="border-radius: 10px; background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white;">
                         <div class="card-body">
-                            {!! $setting->footer ?? '<p class="small mb-0">Dikembangkan oleh <a href="https://wa.me/628179851011" target="_blank" style="color: #c9a03d; text-decoration: none;">Ali Mochtar Development System</a></p>' !!}
+                            {!! $setting->footer ?? '<p class="small mb-0">Copyright &copy; 2026 Masjid Al-Jihad Dev. System</p>' !!}
                             <p class="small mt-2 mb-0">Versi Aplikasi: 2.1.0 (Update: {{ now()->format('d F Y') }})</p>
                             <p class="small mt-2 mb-0">
                                 <i class="fas fa-exchange-alt" style="color: #c9a03d;"></i> Fitur Rotasi Halaman: 

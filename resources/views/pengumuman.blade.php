@@ -334,7 +334,7 @@
 			text-align: center;
 			padding: 6px;
 			font-size: 0.8rem;
-			color: rgba(255, 255, 255, 0.95);
+			color: #ffd700;
 			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 		}
 

@@ -194,7 +194,7 @@
                                 <i class="fas fa-heart text-danger"></i> 
                                 Developed with <i class="fas fa-code"></i> by 
                                 <a href="https://wa.me/628179851011" target="_blank" class="text-success text-decoration-none fw-bold">
-                                    Ali Mochtar Development System
+                                    Masjid Al-Jihad Dev. System
                                 </a>
                             </p>
                             <p class="small text-muted mb-0">

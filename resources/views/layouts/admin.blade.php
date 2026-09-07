@@ -32,7 +32,7 @@
     @endphp
 
     <meta name="description" content="{{ $appName }}">
-    <meta name="author" content="Ali Mochtar Development System">
+    <meta name="author" content="Masjid Al-Jihad Dev. System">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $appName }} - Panel Admin</title>
@@ -799,7 +799,7 @@
                         <span>
                             <i class="far fa-copyright"></i> {{ now()->year }}
                             <a href="https://wa.me/628179851011" target="_blank" style="text-decoration: none;">
-                                <i class="fas fa-heart text-danger"></i> Ali Mochtar Development System
+                                Copyright &copy; 2026 Masjid Al-Jihad Dev. System
                             </a>
                         </span>
                         <div class="mt-1">
