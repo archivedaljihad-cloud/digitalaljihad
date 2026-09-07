@@ -37,27 +37,40 @@
             width: 100%;
             height: 100%;
             border: none;
-            /* Menggunakan GPU acceleration dan kurva perlambatan ekstra halus */
-            transition: transform 2.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 2.2s cubic-bezier(0.22, 1, 0.36, 1);
-            transform: translate3d(100%, 0, 0); /* 3D transform forces GPU rendering */
-            opacity: 0;
-            z-index: 1;
             background-color: #050505;
             will-change: transform, opacity;
             backface-visibility: hidden;
             perspective: 1000px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translate3d(40px, 0, 0);
+            /* Transisi anggun: awal meluncur tenang tanpa sentakan, berpadu lembut dengan fade */
+            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         iframe.active {
             transform: translate3d(0, 0, 0);
             opacity: 1;
             z-index: 2;
+            pointer-events: auto;
+            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         iframe.outgoing {
-            transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-40px, 0, 0);
             opacity: 0;
             z-index: 1;
+            pointer-events: none;
+            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Mode standby instan tanpa animasi saat me-reset frame berikutnya ke sisi kanan */
+        iframe.standby {
+            transition: none !important;
+            transform: translate3d(40px, 0, 0) !important;
+            opacity: 0 !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
         }
 
         .loading-overlay {
@@ -267,8 +280,9 @@
                     routeUrl = '/' + routeUrl;
                 }
                 
-                // Siapkan iframe berikutnya (posisi dikanan karena reset class)
-                nextFrame.className = ''; 
+                // Siapkan iframe berikutnya di posisi standby (sisi kanan) seketika tanpa transisi
+                nextFrame.className = 'standby'; 
+                void nextFrame.offsetWidth; // Force layout reflow
                 // Set src untuk mulai memuat
                 nextFrame.src = routeUrl;
             }
@@ -471,17 +485,25 @@
             if (frameElement === frames.next && frameElement.src && frameElement.src !== window.location.href) {
                 clearTimeout(failsafeTimeout);
                 
-                // Lakukan transisi slide
-                frames.current.className = 'outgoing'; // Geser ke kiri
-                frames.next.className = 'active'; // Masuk dari kanan ke tengah
+                // Beri waktu 80ms dan double requestAnimationFrame agar iframe baru selesai initial layout paint
+                // Hal ini menghilangkan stutter/jank (hentakan awal) secara total
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            // Lakukan transisi slide & fade yang lembut
+                            frames.current.className = 'outgoing'; // Meluncur pelan ke kiri sambil memudar
+                            frames.next.className = 'active';     // Masuk anggun dari kanan ke tengah
 
-                // Swap ID
-                currentFrameId = frames.next.id;
-                
-                isLoading = false;
-                if (rotationEnabled && activePages.length > 1) {
-                    resetCountdown();
-                }
+                            // Swap ID
+                            currentFrameId = frames.next.id;
+                            
+                            isLoading = false;
+                            if (rotationEnabled && activePages.length > 1) {
+                                resetCountdown();
+                            }
+                        });
+                    });
+                }, 80);
             }
         }
 

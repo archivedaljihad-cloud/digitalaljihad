@@ -479,7 +479,7 @@
 						<div class="qris-column">
 							<div class="qris-image">
 								@if(!empty($qris->gambar))
-								<img id="qrisImage" src="{{ asset('storage/' . str_replace('storage/', '', $qris->gambar)) }}" alt="QRIS Donasi">
+								<img id="qrisImage" src="{{ asset('storage/' . str_replace('storage/', '', $qris->gambar)) }}" alt="QRIS Donasi" onerror="this.onerror=null; this.src='{{ asset('storage/qris/1784990365_QRIS-cGPT.png') }}';">
 								@else
 								<div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; text-align: center; color: #ffd700;">
 									<i class="fas fa-exclamation-triangle"></i> Gambar QRIS belum diunggah

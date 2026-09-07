@@ -168,7 +168,7 @@
             @foreach($slides as $slide)
             <div class="slide {{ $loop->first ? 'active' : '' }}" data-duration="{{ max(3, $slide->durasi) }}">
                 @if($slide->gambar)
-                <img src="{{ asset('storage/' . $slide->gambar) }}" alt="{{ $slide->judul }}">
+                <img src="{{ asset('storage/' . $slide->gambar) }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png') }}';">
                 @endif
                 <div class="judul">
                     {{ $slide->judul }}
