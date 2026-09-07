@@ -145,13 +145,14 @@
 
 		/* QRIS Card - Layout 2 Kolom */
 		.qris-card {
-			background: rgba(255, 255, 255, 0.12);
-			backdrop-filter: blur(10px);
+			background: rgba(4, 25, 18, 0.75);
+			backdrop-filter: blur(14px);
+			-webkit-backdrop-filter: blur(14px);
 			border-radius: 20px;
-			border: 2px solid rgba(255, 215, 0, 0.3);
-			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
 			width: 100%;
-			max-width: 1100px;
+			max-width: 1320px;
 			overflow: hidden;
 			transition: transform 0.3s ease, box-shadow 0.3s ease;
 			animation: fadeInUp 0.6s ease-out;
@@ -159,23 +160,24 @@
 
 		/* Header Card */
 		.qris-header {
-			background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
-			padding: 15px 25px;
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.45), rgba(4, 25, 18, 0.6));
+			padding: 14px 28px;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+			border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
 		}
 
 		.qris-header h2 {
-			font-size: 2rem;
-			font-weight: 600;
+			font-size: 2.1rem;
+			font-weight: 700;
 			color: #ffd700;
-			letter-spacing: 1px;
+			letter-spacing: 1.5px;
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
 		}
 
 		.qris-header h2 i {
-			margin-right: 10px;
+			margin-right: 12px;
 			animation: pulse 2s ease infinite;
 		}
 
@@ -193,10 +195,11 @@
 
 		/* Body Card - Layout 2 Kolom */
 		.qris-body {
-			padding: 40px;
+			padding: 28px 36px;
 			display: flex;
-			gap: 40px;
-			flex-wrap: wrap;
+			gap: 36px;
+			flex-wrap: nowrap;
+			align-items: center;
 		}
 
 		/* Kolom Kiri - Informasi Rekening */
@@ -209,11 +212,82 @@
 		}
 
 		.qris-description {
-			font-size: 0.95rem;
-			line-height: 1.5;
-			color: rgba(255, 255, 255, 0.9);
-			margin-bottom: 25px;
-			text-align: left;
+			background: rgba(3, 22, 16, 0.75);
+			border: 1.5px solid rgba(255, 215, 0, 0.4);
+			border-radius: 16px;
+			padding: 18px 22px;
+			margin-bottom: 22px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+		}
+
+		.qris-main-instruction {
+			font-size: 1.15rem;
+			line-height: 1.6;
+			color: #ffffff;
+			margin-bottom: 14px;
+			text-align: justify;
+			letter-spacing: 0.3px;
+		}
+
+		.qris-warning-box {
+			background: linear-gradient(135deg, rgba(255, 170, 0, 0.16), rgba(255, 82, 82, 0.18));
+			border-left: 4px solid #ffd700;
+			border-radius: 10px;
+			padding: 12px 16px;
+			margin-bottom: 14px;
+			display: flex;
+			align-items: flex-start;
+			gap: 12px;
+		}
+
+		.qris-warning-icon {
+			color: #ffd700;
+			font-size: 1.4rem;
+			margin-top: 2px;
+			flex-shrink: 0;
+			animation: pulse 2s infinite;
+		}
+
+		.qris-warning-text {
+			font-size: 1.05rem;
+			line-height: 1.55;
+			color: #ffffff;
+		}
+
+		.qris-warning-alert {
+			color: #ff5252;
+			font-weight: 800;
+			letter-spacing: 0.5px;
+			text-shadow: 0 0 10px rgba(255, 82, 82, 0.4);
+		}
+
+		.qris-warning-name {
+			color: #ffd700;
+			font-weight: 800;
+			font-size: 1.18rem;
+			letter-spacing: 0.5px;
+			text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+			display: inline-block;
+			background: rgba(0, 0, 0, 0.4);
+			padding: 2px 10px;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 215, 0, 0.35);
+		}
+
+		.qris-gratitude {
+			text-align: center;
+			margin-top: 6px;
+			padding-top: 10px;
+			border-top: 1px dashed rgba(255, 215, 0, 0.3);
+			font-family: 'Poppins', sans-serif;
+			font-size: 1.25rem;
+			font-weight: 700;
+			font-style: italic;
+			color: #ffd700;
+			letter-spacing: 1px;
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 215, 0, 0.3);
 		}
 
 		/* Bank Info */
@@ -307,31 +381,33 @@
 		}
 
 		.qris-image img {
-			max-width: 320px;
+			max-width: 340px;
 			width: 100%;
 			height: auto;
 			border-radius: 20px;
-			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-			border: 3px solid rgba(255, 215, 0, 0.3);
+			box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+			border: 3px solid rgba(255, 215, 0, 0.45);
 			transition: transform 0.3s ease, box-shadow 0.3s ease;
 			cursor: pointer;
 			background: white;
-			padding: 10px;
+			padding: 12px;
 		}
 
 		.qris-image img:hover {
 			transform: scale(1.02);
-			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
 			border-color: #ffd700;
 		}
 
 		.scan-hint {
 			margin-top: 15px;
-			font-size: 0.7rem;
-			color: rgba(255, 215, 0, 0.8);
+			font-size: 1.05rem;
+			font-weight: 500;
+			color: #ffd700;
 			display: flex;
 			align-items: center;
-			gap: 8px;
+			gap: 10px;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 		}
 
 		/* Footer */
@@ -435,12 +511,24 @@
 						@if(isset($qris) && $qris)
 						<!-- KOLOM KIRI: Informasi Rekening -->
 						<div class="info-column">
-							@if(!empty($qris->keterangan))
 							<div class="qris-description">
-								<i class="fas fa-info-circle" style="color: #ffd700; margin-right: 8px;"></i>
-								{!! nl2br(e($qris->keterangan)) !!}
+								<div class="qris-main-instruction">
+									<i class="fas fa-hand-holding-heart" style="color: #ffd700; margin-right: 8px;"></i>
+									Bagi siapa saja yang ingin berinfaq atau sedekah secara digital, silakan men-scan QRIS yang ada di area masjid ini.
+								</div>
+								
+								<div class="qris-warning-box">
+									<i class="fas fa-exclamation-triangle qris-warning-icon"></i>
+									<div class="qris-warning-text">
+										Sebelum memasukkan PIN TRANSAKSI, <span class="qris-warning-alert">PASTIKAN !!!</span> QRIS tersebut atas nama :<br>
+										<span class="qris-warning-name">{{ !empty($qris->atas_nama) ? $qris->atas_nama : 'DKM Jami Al Jihad' }}</span>
+									</div>
+								</div>
+
+								<div class="qris-gratitude">
+									" Jazakumullah khairan katsiran "
+								</div>
 							</div>
-							@endif
 
 							@if(!empty($qris->bank) || !empty($qris->nomor_rekening) || !empty($qris->atas_nama))
 							<div class="bank-info">
