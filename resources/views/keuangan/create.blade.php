@@ -85,10 +85,10 @@
 									<label for="pemasukan">Pemasukan (Rp)</label>
 									<div class="input-group">
 										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="fas fa-arrow-down text-success"></i></span>
+											<span class="input-group-text font-weight-bold text-success">Rp</span>
 										</div>
-										<input type="number" class="form-control @error('pemasukan') is-invalid @enderror" 
-										id="pemasukan" name="pemasukan" step="1" value="{{ old('pemasukan') }}" placeholder="0">
+										<input type="text" inputmode="numeric" class="form-control rupiah-input @error('pemasukan') is-invalid @enderror" 
+										id="pemasukan" name="pemasukan" value="{{ old('pemasukan') ? number_format((float)str_replace(['.', ','], ['', '.'], old('pemasukan')), 0, ',', '.') : '' }}" placeholder="Contoh: 500.000">
 									</div>
 									@error('pemasukan')
 									<small class="text-danger">{{ $message }}</small>
@@ -100,10 +100,10 @@
 									<label for="pengeluaran">Pengeluaran (Rp)</label>
 									<div class="input-group">
 										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="fas fa-arrow-up text-danger"></i></span>
+											<span class="input-group-text font-weight-bold text-danger">Rp</span>
 										</div>
-										<input type="number" class="form-control @error('pengeluaran') is-invalid @enderror" 
-										id="pengeluaran" name="pengeluaran" step="1" value="{{ old('pengeluaran') }}" placeholder="0">
+										<input type="text" inputmode="numeric" class="form-control rupiah-input @error('pengeluaran') is-invalid @enderror" 
+										id="pengeluaran" name="pengeluaran" value="{{ old('pengeluaran') ? number_format((float)str_replace(['.', ','], ['', '.'], old('pengeluaran')), 0, ',', '.') : '' }}" placeholder="Contoh: 2.000.000">
 									</div>
 									@error('pengeluaran')
 									<small class="text-danger">{{ $message }}</small>
@@ -116,7 +116,7 @@
 
 						<div class="alert alert-info">
 							<i class="fas fa-info-circle"></i>
-							<strong>Informasi:</strong> Saldo akan dihitung secara otomatis berdasarkan transaksi sebelumnya.
+							<strong>Informasi:</strong> Nilai rupiah otomatis diberi titik pemisah ribuan (contoh: <strong>500.000</strong> atau <strong>2.000.000</strong>) untuk memudahkan bendahara.
 						</div>
 
 						<div class="form-group text-center">
@@ -135,12 +135,31 @@
 </div>
 
 <script>
-    // Auto format number as Rupiah
-	const pemasukanInput = document.getElementById('pemasukan');
-	const pengeluaranInput = document.getElementById('pengeluaran');
-	
-	function formatRupiah(value) {
-		return new Intl.NumberFormat('id-ID').format(value);
+	function formatRupiah(angka) {
+		let number_string = angka.replace(/[^0-9]/g, '').toString();
+		let sisa = number_string.length % 3;
+		let rupiah = number_string.substr(0, sisa);
+		let ribuan = number_string.substr(sisa).match(/\d{3}/gi);
+
+		if (ribuan) {
+			let separator = sisa ? '.' : '';
+			rupiah += separator + ribuan.join('.');
+		}
+		return rupiah;
 	}
+
+	document.querySelectorAll('.rupiah-input').forEach(function(input) {
+		input.addEventListener('input', function() {
+			this.value = formatRupiah(this.value);
+		});
+		input.addEventListener('blur', function() {
+			if (this.value) {
+				this.value = formatRupiah(this.value);
+			}
+		});
+		if (input.value) {
+			input.value = formatRupiah(input.value);
+		}
+	});
 </script>
 @endsection

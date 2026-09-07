@@ -40,6 +40,18 @@ class KeuanganController extends Controller
     }
     public function store(Request $request)
     {
+        // Bersihkan titik ribuan dari input rupiah
+        if ($request->has('pemasukan')) {
+            $request->merge([
+                'pemasukan' => str_replace(['.', ','], ['', '.'], (string)$request->pemasukan)
+            ]);
+        }
+        if ($request->has('pengeluaran')) {
+            $request->merge([
+                'pengeluaran' => str_replace(['.', ','], ['', '.'], (string)$request->pengeluaran)
+            ]);
+        }
+
         $request->validate([
             'tanggal'      => 'required|date',
             'deskripsi'    => 'required|string|max:255',
@@ -74,6 +86,18 @@ class KeuanganController extends Controller
     }
     public function update(Request $request, Keuangan $keuangan)
     {
+        // Bersihkan titik ribuan dari input rupiah
+        if ($request->has('pemasukan')) {
+            $request->merge([
+                'pemasukan' => str_replace(['.', ','], ['', '.'], (string)$request->pemasukan)
+            ]);
+        }
+        if ($request->has('pengeluaran')) {
+            $request->merge([
+                'pengeluaran' => str_replace(['.', ','], ['', '.'], (string)$request->pengeluaran)
+            ]);
+        }
+
         $request->validate([
             'tanggal'      => 'required|date',
             'deskripsi'    => 'required|string|max:255',
