@@ -37,8 +37,8 @@
             width: 100%;
             height: 100%;
             border: none;
-            /* Menggunakan GPU acceleration dan timing function yang stabil */
-            transition: transform 1.2s ease-in-out, opacity 1.2s ease-in-out;
+            /* Menggunakan GPU acceleration dan kurva perlambatan ekstra halus */
+            transition: transform 2.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 2.2s cubic-bezier(0.22, 1, 0.36, 1);
             transform: translate3d(100%, 0, 0); /* 3D transform forces GPU rendering */
             opacity: 0;
             z-index: 1;
@@ -182,8 +182,8 @@
         const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
         const parseBool = (val) => val === true || val === 1 || val === "1" || String(val).toLowerCase() === "true";
 
-        let rotationInterval = parseInt({{ $rotationInterval ?? 10 }});
-        if (isNaN(rotationInterval) || rotationInterval < 1) rotationInterval = 10;
+        let rotationInterval = parseInt({{ $rotationInterval ?? 15 }});
+        if (isNaN(rotationInterval) || rotationInterval < 10) rotationInterval = 15;
         let rotationEnabled = parseBool("{{ $rotationEnabled ?? true }}");
 
         @php
