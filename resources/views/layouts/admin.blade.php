@@ -58,11 +58,33 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Flatpickr (24-Hour System Timepicker) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <!-- Favicon (Diperbarui dengan Cache Busting) -->
     <link rel="icon" href="{{ $faviconUrl }}?v={{ time() }}" type="image/x-icon">
 
     <!-- Islamic Admin Custom Styles -->
     <style>
+        .flatpickr-time {
+            background: #ffffff !important;
+            border-radius: 8px !important;
+            border: 1px solid #c9a03d !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+        .flatpickr-time input.flatpickr-hour,
+        .flatpickr-time input.flatpickr-minute {
+            font-weight: 700 !important;
+            font-size: 1.25rem !important;
+            color: #1e5a3a !important;
+        }
+        .flatpickr-time .flatpickr-time-separator {
+            font-weight: 800 !important;
+            color: #c9a03d !important;
+        }
+        .flatpickr-am-pm {
+            display: none !important;
+        }
         :root {
             --islamic-green: #1e5a3a;
             --islamic-gold: #c9a03d;
@@ -963,6 +985,23 @@
         if (typeof updatePrayerTimes === 'function') {
             setInterval(updatePrayerTimes, 60000);
         }
+    </script>
+
+    <!-- Flatpickr JS (Sistem 24 Jam) -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof flatpickr !== 'undefined') {
+                flatpickr(".timepicker-24, input[type=time], #waktu", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    allowInput: true,
+                    minuteIncrement: 1
+                });
+            }
+        });
     </script>
 
     <!-- Stack untuk scripts tambahan -->

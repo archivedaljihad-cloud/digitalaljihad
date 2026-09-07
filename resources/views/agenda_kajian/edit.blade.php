@@ -90,10 +90,11 @@
                             Waktu
                         </label>
                         <input
-                            type="time"
+                            type="text"
                             name="waktu"
-                            class="form-control @error('waktu') is-invalid @enderror"
+                            class="form-control timepicker-24 @error('waktu') is-invalid @enderror"
                             value="{{ old('waktu', \Carbon\Carbon::parse($agenda->waktu)->format('H:i')) }}"
+                            placeholder="Format 24 Jam (Contoh: 18:30)"
                             required>
                         @error('waktu')
                             <div class="invalid-feedback">

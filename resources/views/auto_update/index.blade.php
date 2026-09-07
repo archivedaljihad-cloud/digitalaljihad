@@ -78,8 +78,8 @@
 
 							<div class="form-group">
 								<label for="auto_update_time">Waktu Update</label>
-								<input type="time" class="form-control" id="auto_update_time" 
-								name="auto_update_time" value="{{ substr($setting->auto_update_time ?? '00:00:00', 0, 5) }}">
+								<input type="text" class="form-control timepicker-24" id="auto_update_time" 
+								name="auto_update_time" value="{{ substr($setting->auto_update_time ?? '00:00:00', 0, 5) }}" placeholder="Format 24 Jam (Contoh: 00:00)">
 								<small class="form-text text-muted">
 									Waktu ketika sistem akan melakukan update otomatis
 								</small>

@@ -81,8 +81,8 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Waktu</label>
-							<input type="time" name="waktu" class="form-control @error('waktu') is-invalid @enderror" 
-							value="{{ old('waktu', $idulFitri->waktu ? \Carbon\Carbon::parse($idulFitri->waktu)->format('H:i') : '07:00') }}">
+							<input type="text" name="waktu" class="form-control timepicker-24 @error('waktu') is-invalid @enderror" 
+							value="{{ old('waktu', $idulFitri->waktu ? \Carbon\Carbon::parse($idulFitri->waktu)->format('H:i') : '07:00') }}" placeholder="Format 24 Jam (Contoh: 07:00)">
 							@error('waktu')
 							<div class="invalid-feedback">{{ $message }}</div>
 							@enderror
