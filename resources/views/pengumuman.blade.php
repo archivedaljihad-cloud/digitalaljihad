@@ -397,20 +397,7 @@
 			<div class="indicator-container" id="indicatorContainer"></div>
 		</div>
 
-		<!-- Bagian Bawah: Running Text & Footer -->
-		<div class="bottom-section">
-			@if($settings['running_text'] ?? false)
-			<div class="running-text-container">
-				<div class="running-text">
-					<i class="fas fa-bullhorn"></i> {{ $settings['running_text'] }}
-				</div>
-			</div>
-			@endif
-
-			<div class="footer">
-				{!! $settings['footer'] ?? '© 2026 DKM AL JIHAD' !!}
-			</div>
-		</div>
+		@include('partials.bottom-section')
 	</div>
 
 	<script>

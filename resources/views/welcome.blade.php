@@ -481,8 +481,40 @@
             <h1 id="nama-masjid">{{ $settings['nama_aplikasi'] ?? 'Masjid Al-Jihad' }}</h1>
             <h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
             <div class="datetime" id="datetime"></div>
-            @if(!empty($settings['running_text']))
-            <marquee class="running-text">{!! $settings['running_text'] !!}</marquee>
+            @php
+                $rawTextWelcome = $settings['running_text'] ?? null;
+                $runningTextListWelcome = [];
+                if (!empty($rawTextWelcome)) {
+                    $linesWelcome = preg_split('/\r\n|\r|\n/', $rawTextWelcome);
+                    foreach ($linesWelcome as $lw) {
+                        $tw = trim($lw);
+                        if (!empty($tw)) {
+                            $runningTextListWelcome[] = $tw;
+                        }
+                    }
+                }
+            @endphp
+            @if(!empty($runningTextListWelcome))
+            <div class="running-text" style="overflow: hidden; white-space: nowrap; position: relative; min-height: 28px;">
+                <span id="welcomeRunningText" style="transition: opacity 0.5s ease; display: inline-block;">{!! $runningTextListWelcome[0] !!}</span>
+            </div>
+            <script>
+                (function() {
+                    const msgs = {!! json_encode(array_values($runningTextListWelcome)) !!};
+                    if (!msgs || msgs.length <= 1) return;
+                    let idx = 0;
+                    const wEl = document.getElementById('welcomeRunningText');
+                    if (!wEl) return;
+                    setInterval(() => {
+                        wEl.style.opacity = '0';
+                        setTimeout(() => {
+                            idx = (idx + 1) % msgs.length;
+                            wEl.innerHTML = msgs[idx];
+                            wEl.style.opacity = '1';
+                        }, 500);
+                    }, 8000);
+                })();
+            </script>
             @endif
         </div>
         <div class="main-content">

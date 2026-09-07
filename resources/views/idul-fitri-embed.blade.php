@@ -482,20 +482,7 @@
 				@endif
 			</div>
 
-			<!-- BAGIAN RUNNING TEXT & FOOTER (Disamakan dengan Idul Adha) -->
-			<div class="bottom-section">
-				@if(isset($settings['running_text']) && $settings['running_text'])
-				<div class="running-text-container">
-					<div class="running-text">
-						<i class="fas fa-bullhorn"></i> {{ $settings['running_text'] }}
-					</div>
-				</div>
-				@endif
-
-				<div class="footer">
-					{!! $settings['footer'] ?? '© 2026 DKM AL JIHAD' !!}
-				</div>
-			</div>
+		@include('partials.bottom-section')
 		</div>
 	</div>
 

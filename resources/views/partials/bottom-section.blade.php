@@ -1,35 +1,127 @@
 <!-- resources/views/partials/bottom-section.blade.php -->
-<div style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: transparent; padding: 6px 0; box-sizing: border-box;">
+<div class="fixed-bottom-section" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: transparent; padding: 4px 0 2px 0; box-sizing: border-box; pointer-events: none;">
     @php
-        $runningTextValue = $settings['running_text'] ?? ($settings->running_text ?? null);
-        if (empty($runningTextValue)) {
-            $runningTextValue = "Mari penuhi panggilan Allah. Jangan tunda kewajiban kita.";
+        $rawText = $settings['running_text'] ?? ($settings->running_text ?? null);
+        $runningTextList = [];
+        if (!empty($rawText)) {
+            $lines = preg_split('/\r\n|\r|\n/', $rawText);
+            foreach ($lines as $line) {
+                $trimmed = trim($line);
+                if (!empty($trimmed)) {
+                    $runningTextList[] = $trimmed;
+                }
+            }
+        }
+        if (empty($runningTextList)) {
+            $runningTextList = [
+                "🌙 \"Luruskan dan rapatkan shaf, karena lurusnya shaf merupakan kesempurnaan sholat.\" (HR. Bukhari & Muslim)",
+                "📱 Mohon menonaktifkan atau mengalihkan HP ke mode hening selama berada di dalam masjid.",
+                "🤲 \"Barangsiapa membangun masjid karena Allah, maka Allah bangunkan baginya rumah di surga.\" (HR. Muslim)",
+                "🧹 Jagalah selalu kebersihan dan kesucian masjid kita tercinta.",
+                "💧 Hematlah dalam penggunaan air wudhu demi kelestarian bersama."
+            ];
         }
     @endphp
 
     <style>
-        .running-text-fixed {
-            display: inline-block;
-            animation: marqueeFixed 50s linear infinite !important;
-            color: #fff !important;
-            font-weight: 600;
+        .running-track-container {
+            width: 100%;
+            overflow: hidden;
             white-space: nowrap;
-            /* Efek bayangan teks agar tetap jelas terbaca tanpa kotak hitam */
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+            position: relative;
+            height: 38px;
+            display: flex;
+            align-items: center;
         }
-        @keyframes marqueeFixed {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+
+        .running-single-item {
+            position: absolute;
+            left: 0;
+            white-space: nowrap;
+            will-change: transform;
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: #ffffff !important;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.95), 0 0 12px rgba(0, 0, 0, 0.85);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(100vw);
+        }
+
+        .running-single-item i {
+            color: #ffd700;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9));
+        }
+
+        .footer-credit {
+            text-align: center;
+            padding: 2px 0;
+            font-size: 0.85rem;
+            color: #ffd700;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.95);
+            letter-spacing: 0.5px;
         }
     </style>
 
-    <div style="width: 100%; overflow: hidden; white-space: nowrap; box-sizing: border-box;">
-        <div class="running-text-fixed">
-            <i class="fas fa-bullhorn" style="color: #ffc107; margin-right: 8px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.9));"></i> {!! $runningTextValue !!}
+    <div class="running-track-container">
+        <div id="runningTextModelA" class="running-single-item">
+            <i class="fas fa-bullhorn"></i>
+            <span id="runningTextModelAContent"></span>
         </div>
     </div>
     
-    <div style="text-align: center; padding: 4px; font-size: 0.85rem; color: #ffd700; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);">
+    <div class="footer-credit">
         {!! $settings['footer'] ?? 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System' !!}
     </div>
+
+    <script>
+        (function() {
+            const messages = {!! json_encode(array_values($runningTextList)) !!};
+            if (!messages || messages.length === 0) return;
+
+            const el = document.getElementById('runningTextModelA');
+            const content = document.getElementById('runningTextModelAContent');
+            if (!el || !content) return;
+
+            let currentIndex = 0;
+
+            function startNextMessage(index) {
+                content.innerHTML = messages[index];
+
+                requestAnimationFrame(() => {
+                    const screenWidth = window.innerWidth || document.documentElement.clientWidth || 1920;
+                    const textWidth = el.offsetWidth || 600;
+                    const totalDistance = screenWidth + textWidth;
+
+                    // Kecepatan membaca layar TV: ~110 pixel per detik
+                    const speed = 110; 
+                    const duration = Math.max(10, totalDistance / speed);
+
+                    el.style.transition = 'none';
+                    el.style.transform = 'translateX(' + screenWidth + 'px)';
+
+                    requestAnimationFrame(() => {
+                        el.style.transition = 'transform ' + duration + 's linear';
+                        el.style.transform = 'translateX(-' + (textWidth + 40) + 'px)';
+
+                        const handleEnd = () => {
+                            el.removeEventListener('transitionend', handleEnd);
+                            // Lanjut ke pesan berikutnya (Model A: satu per satu bergantian)
+                            currentIndex = (currentIndex + 1) % messages.length;
+                            setTimeout(() => {
+                                startNextMessage(currentIndex);
+                            }, 600);
+                        };
+
+                        el.addEventListener('transitionend', handleEnd, { once: true });
+                    });
+                });
+            }
+
+            startNextMessage(0);
+        })();
+    </script>
 </div>

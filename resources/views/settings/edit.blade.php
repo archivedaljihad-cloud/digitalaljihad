@@ -75,9 +75,12 @@
 									</div>
 
 									<div class="form-group">
-										<label for="running_text">Teks Berjalan</label>
+										<label for="running_text"><strong>Teks Berjalan (Bisa Banyak Pesan Bergantian)</strong></label>
 										<textarea class="form-control" id="running_text" name="running_text"
-											rows="3">{{ old('running_text', $setting->running_text ?? '') }}</textarea>
+											rows="7" placeholder="Tuliskan teks berjalan. Tekan ENTER untuk membuat pesan berikutnya (1 baris = 1 pesan bergantian)...">{{ old('running_text', $setting->running_text ?? '') }}</textarea>
+										<small class="text-muted d-block mt-1">
+											<i class="fas fa-info-circle text-primary"></i> <strong>Model Bergantian (Model A):</strong> Setiap baris kalimat baru (Enter) akan otomatis ditampilkan bergantian satu per satu di layar TV. Anda bisa memasukkan 6 s/d 11 pesan hadits, doa, atau himbauan jamaah.
+										</small>
 									</div>
 								</div>
 
