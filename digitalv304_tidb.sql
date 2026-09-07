@@ -95,6 +95,10 @@ CREATE TABLE `app_settings` (
   `prayer_mode_iqamah_duration` int(11) NOT NULL DEFAULT 10,
   `prayer_mode_after_prayer` int(11) NOT NULL DEFAULT 2,
   `prayer_mode_theme` varchar(50) NOT NULL DEFAULT 'gold',
+  `tarhim_trigger_seconds` int(11) NOT NULL DEFAULT 300,
+  `tarhim_audio` varchar(255) DEFAULT NULL,
+  `tarhim_audio_subuh` varchar(255) DEFAULT NULL,
+  `tarhim_audio_reguler` varchar(255) DEFAULT NULL,
   `last_auto_update` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL

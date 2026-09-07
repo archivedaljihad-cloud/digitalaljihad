@@ -368,15 +368,34 @@
                 if (data.active) {
                     if (localStorage.getItem('lockPageRotation') !== 'true') {
                         localStorage.setItem('lockPageRotation', 'true');
-                        // Load prayer mode in next iframe without page reload
+                        // Segera hentikan countdown timer & proses rotasi halaman manapun
+                        if (countdownIntervalId) {
+                            clearInterval(countdownIntervalId);
+                            countdownIntervalId = null;
+                        }
+                        clearTimeout(failsafeTimeout);
+                        isLoading = false;
+
+                        const pageName = document.getElementById('pageName');
+                        if (pageName) {
+                            pageName.textContent = 'Mode Sholat (' + (data.prayer || 'Waktu Sholat') + ')';
+                        }
+                        const countdownEl = document.getElementById('countdown');
+                        if (countdownEl) {
+                            countdownEl.textContent = 'Sholat';
+                        }
+
+                        // Langsung muat halaman Mode Sholat pada iframe next dan tampilkan
                         const frames = getFrames();
-                        frames.next.className = '';
+                        frames.next.className = 'standby';
                         frames.next.src = '/prayer-mode';
                     }
                 } else {
                     if (localStorage.getItem('lockPageRotation') === 'true') {
                         localStorage.setItem('lockPageRotation', 'false');
-                        // Resume normal rotation
+                        // Resume normal rotation seketika saat waktu sholat selesai
+                        currentIndex = 0; // Kembalikan ke halaman pertama / utama
+                        isLoading = false;
                         if (activePages.length > 0) {
                             loadPage(currentIndex);
                         }
@@ -536,7 +555,7 @@
         });
 
         applyDebugVisibility();
-        setInterval(checkPrayerModeAPI, 5000);
+        setInterval(checkPrayerModeAPI, 2000); // Periksa status sholat setiap 2 detik untuk respon cepat
         setInterval(fetchLatestSettings, 5000);
         checkPrayerModeAPI();
 

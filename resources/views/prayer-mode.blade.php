@@ -416,17 +416,39 @@
     </div>
 
     <!-- ELEMEN AUDIO TERSEMBUNYI (DIKONTROL JAVASCRIPT) -->
+    @php
+        $namaSholatRaw = $currentPrayer ? (is_object($currentPrayer) ? ($currentPrayer->nama_sholat ?? '') : $currentPrayer) : '';
+        $isSubuh = strtolower(trim($namaSholatRaw)) === 'subuh';
+
+        // Tentukan file audio tarhim:
+        // Jika sholat Subuh: prioritaskan tarhim_audio_subuh, fallback ke tarhim_audio, atau default Subuh.mp3/tarhim2.mp3
+        // Jika sholat selain Subuh: prioritaskan tarhim_audio_reguler, fallback ke tarhim_audio, atau default tarhim2.mp3
+        if ($isSubuh) {
+            if (!empty($setting->tarhim_audio_subuh)) {
+                $tarhimSource = asset('storage/' . $setting->tarhim_audio_subuh);
+            } elseif (!empty($setting->tarhim_audio)) {
+                $tarhimSource = asset('storage/' . $setting->tarhim_audio);
+            } elseif (file_exists(public_path('audio/Subuh.mp3'))) {
+                $tarhimSource = asset('audio/Subuh.mp3');
+            } else {
+                $tarhimSource = asset('audio/tarhim2.mp3');
+            }
+        } else {
+            if (!empty($setting->tarhim_audio_reguler)) {
+                $tarhimSource = asset('storage/' . $setting->tarhim_audio_reguler);
+            } elseif (!empty($setting->tarhim_audio)) {
+                $tarhimSource = asset('storage/' . $setting->tarhim_audio);
+            } else {
+                $tarhimSource = asset('audio/tarhim2.mp3');
+            }
+        }
+    @endphp
     <audio id="audioTarhim">
-        @if(!empty($setting->tarhim_audio))
-            <source src="{{ asset('storage/' . $setting->tarhim_audio) }}" type="audio/mpeg">
-        @else
-            <source src="{{ asset('audio/tarhim2.mp3') }}" type="audio/mpeg">
-        @endif
+        <source src="{{ $tarhimSource }}" type="audio/mpeg">
     </audio>
     <audio id="audioAdzan">
         @php
-            $namaSholat = $currentPrayer ? (is_object($currentPrayer) ? $currentPrayer->nama_sholat : $currentPrayer) : '';
-            $namaSholatClean = ucwords(strtolower(trim($namaSholat)));
+            $namaSholatClean = ucwords(strtolower(trim($namaSholatRaw)));
             $audioFile = 'adzan.mp3?v=2';
             if (in_array($namaSholatClean, ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'])) {
                 $audioFile = $namaSholatClean . '.mp3';

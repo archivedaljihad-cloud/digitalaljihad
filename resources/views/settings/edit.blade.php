@@ -189,21 +189,60 @@
 									</div>
 
 									<div class="form-group">
-										<label for="tarhim_trigger_seconds" class="font-weight-bold">Bunyikan Audio Tarhim (Detik Sebelum Adzan)</label>
-										<input type="number" name="tarhim_trigger_seconds" id="tarhim_trigger_seconds" class="form-control" value="{{ old('tarhim_trigger_seconds', $setting->tarhim_trigger_seconds ?? 60) }}" min="0">
-										<small class="text-muted">Audio tarhim akan otomatis berbunyi sekian detik sebelum waktu adzan tiba.</small>
+										<label for="tarhim_trigger_minutes" class="font-weight-bold">Waktu Mulai Audio Tarhim Sebelum Adzan</label>
+										@php
+											$currentTriggerSec = old('tarhim_trigger_seconds', $setting->tarhim_trigger_seconds ?? 300);
+											$currentTriggerMin = round($currentTriggerSec / 60);
+										@endphp
+										<select name="tarhim_trigger_minutes" id="tarhim_trigger_minutes" class="form-control" onchange="document.getElementById('tarhim_trigger_seconds').value = this.value * 60;">
+											<option value="5" {{ $currentTriggerMin == 5 ? 'selected' : '' }}>5 Menit Sebelum Adzan (Standar)</option>
+											<option value="10" {{ $currentTriggerMin == 10 ? 'selected' : '' }}>10 Menit Sebelum Adzan</option>
+											<option value="15" {{ $currentTriggerMin == 15 ? 'selected' : '' }}>15 Menit Sebelum Adzan</option>
+										</select>
+										<input type="hidden" name="tarhim_trigger_seconds" id="tarhim_trigger_seconds" value="{{ $currentTriggerSec }}">
+										<small class="text-muted">Audio Tarhim akan otomatis berbunyi sesuai durasi menit yang dipilih sebelum adzan tiba.</small>
 									</div>
 
-									{{-- KOLOM PILIH FILE AUDIO TARHIM BARU --}}
+									{{-- KOLOM PILIH FILE AUDIO TARHIM SUBUH (PANJANG / LENGKAP) --}}
 									<div class="form-group">
-										<label for="tarhim_audio" class="font-weight-bold">Pilih File Audio Tarhim (.mp3/.wav)</label>
+										<label for="tarhim_audio_subuh" class="font-weight-bold">
+											<i class="fas fa-moon text-primary mr-1"></i> File Audio Tarhim Subuh (Lengkap / Panjang)
+										</label>
 										<div class="custom-file">
-											<input type="file" class="custom-file-input" id="tarhim_audio" name="tarhim_audio" accept=".mp3,.wav,.ogg">
-											<label class="custom-file-label" for="tarhim_audio">Pilih file audio tarhim</label>
+											<input type="file" class="custom-file-input" id="tarhim_audio_subuh" name="tarhim_audio_subuh" accept=".mp3,.wav,.ogg">
+											<label class="custom-file-label" for="tarhim_audio_subuh">Pilih audio tarhim Subuh</label>
 										</div>
-										@if(!empty($setting->tarhim_audio))
+										@if(!empty($setting->tarhim_audio_subuh))
 											<div class="mt-2">
-												<small class="text-success font-weight-bold"><i class="fas fa-check-circle"></i> File audio tarhim saat ini sudah terpasang.</small>
+												<small class="text-success font-weight-bold"><i class="fas fa-check-circle"></i> Audio Tarhim Subuh khusus sudah terpasang.</small>
+											</div>
+										@else
+											<div class="mt-1">
+												<small class="text-muted">Jika kosong, sistem menggunakan audio default sistem (Subuh.mp3/tarhim panjang).</small>
+											</div>
+										@endif
+									</div>
+
+									{{-- KOLOM PILIH FILE AUDIO TARHIM REGULER (PENDEK / SELAIN SUBUH) --}}
+									<div class="form-group">
+										<label for="tarhim_audio_reguler" class="font-weight-bold">
+											<i class="fas fa-sun text-warning mr-1"></i> File Audio Tarhim Reguler (Pendek / Dzuhur, Ashar, Maghrib, Isya)
+										</label>
+										<div class="custom-file">
+											<input type="file" class="custom-file-input" id="tarhim_audio_reguler" name="tarhim_audio_reguler" accept=".mp3,.wav,.ogg">
+											<label class="custom-file-label" for="tarhim_audio_reguler">Pilih audio tarhim reguler</label>
+										</div>
+										@if(!empty($setting->tarhim_audio_reguler))
+											<div class="mt-2">
+												<small class="text-success font-weight-bold"><i class="fas fa-check-circle"></i> Audio Tarhim Reguler sudah terpasang.</small>
+											</div>
+										@elseif(!empty($setting->tarhim_audio))
+											<div class="mt-2">
+												<small class="text-info font-weight-bold"><i class="fas fa-check-circle"></i> Menggunakan file audio tarhim umum yang sudah diunggah sebelumnya.</small>
+											</div>
+										@else
+											<div class="mt-1">
+												<small class="text-muted">Jika kosong, sistem menggunakan audio tarhim standar pendek (tarhim2.mp3).</small>
 											</div>
 										@endif
 									</div>

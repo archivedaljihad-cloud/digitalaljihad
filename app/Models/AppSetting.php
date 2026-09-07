@@ -38,6 +38,9 @@ class AppSetting extends Model
         'prayer_mode_after_prayer',
         'prayer_mode_theme',
         'audio_tarhim',
+        'tarhim_audio',
+        'tarhim_audio_subuh',
+        'tarhim_audio_reguler',
         'tarhim_trigger_seconds',
     ];
 

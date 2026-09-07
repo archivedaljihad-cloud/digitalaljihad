@@ -156,6 +156,8 @@ class AppSettingController extends Controller
         $this->handleFileUpload($request, 'logo', $setting);
         $this->handleFileUpload($request, 'prayer_bg_image', $setting);
         $this->handleFileUpload($request, 'tarhim_audio', $setting);
+        $this->handleFileUpload($request, 'tarhim_audio_subuh', $setting);
+        $this->handleFileUpload($request, 'tarhim_audio_reguler', $setting);
 
         $setting->save();
 
