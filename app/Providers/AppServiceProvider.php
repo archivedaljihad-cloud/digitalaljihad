@@ -21,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('app.env') === 'production' || !empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Membuat variabel $setting otomatis ada di layouts.admin
         View::composer('layouts.admin', function ($view) {
             $view->with('setting', AppSetting::first());
