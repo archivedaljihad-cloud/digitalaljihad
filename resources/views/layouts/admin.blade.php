@@ -613,7 +613,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                <i class="fas fa-tasks"></i> Menu Petugas
+                <i class="fas fa-tasks"></i> Menu Petugas / Operator
             </div>
 
             <!-- Nav Item - Jadwal Sholat -->
@@ -664,6 +664,14 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Slide Informasi -->
+            <li class="nav-item {{ request()->routeIs('slides.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('slides.index') }}">
+                    <i class="fas fa-fw fa-images"></i>
+                    <span>Slide Informasi</span>
+                </a>
+            </li>
+
             <!-- Nav Item - Rotasi Halaman TV -->
             <li class="nav-item {{ request()->routeIs('rotation.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('rotation.index') }}">
@@ -676,12 +684,38 @@
                     @endif
                 </a>
             </li>
+            @endif
 
-            <!-- Nav Item - Keuangan -->
+            @if ($roleName === 'bendahara')
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                <i class="fas fa-wallet"></i> Menu Bendahara
+            </div>
+
+            <!-- Nav Item - Keuangan Kas -->
             <li class="nav-item {{ request()->routeIs('keuangan.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('keuangan.index') }}">
                     <i class="fas fa-fw fa-hand-holding-heart"></i>
-                    <span>Keuangan</span>
+                    <span>Buku Kas & Transaksi</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Laporan Keuangan -->
+            <li class="nav-item {{ request()->routeIs('laporan.keuangan*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('laporan.keuangan') }}">
+                    <i class="fas fa-fw fa-chart-bar"></i>
+                    <span>Laporan & Rekap Kas</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Export Data Keuangan -->
+            <li class="nav-item {{ request()->routeIs('export.keuangan') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('export.keuangan') }}">
+                    <i class="fas fa-fw fa-file-excel"></i>
+                    <span>Export Excel Kas</span>
                 </a>
             </li>
             @endif

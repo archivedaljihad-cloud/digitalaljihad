@@ -124,97 +124,76 @@ Route::middleware(['auth'])->group(function () {
 
     });
    
-    Route::resource('jadwal_sholat', JadwalSholatController::class);
-    Route::resource('sholat_jumat', SholatJumatController::class);
-    Route::resource('idul-fitri', SholatIdulFitriController::class);
-    Route::resource('idul-adha', SholatIdulAdhaController::class);
-    Route::resource('pengumuman', PengumumanController::class);
-    Route::resource('keuangan', KeuanganController::class);
-    Route::resource('slides', SlideController::class);
-    Route::resource('agenda_kajian', AgendaKajianController::class);       
-
     /*
     |--------------------------------------------------------------------------
-    | ROUTES QRIS
+    | MENU OPERASIONAL MASJID (ADMIN & PETUGAS / OPERATOR)
     |--------------------------------------------------------------------------
     */
-    Route::prefix('qris')->middleware('role:admin')->name('qris.')->group(function () {
-        Route::get('/', [QrisController::class, 'index'])
-            ->name('index');
-        Route::get('/create', [QrisController::class, 'create'])
-            ->name('create');
-        Route::post('/', [QrisController::class, 'store'])
-            ->name('store');
-        Route::get('/{qris}', [QrisController::class, 'show'])
-            ->name('show');
-        Route::get('/{qris}/edit', [QrisController::class, 'edit'])
-            ->name('edit');
-        Route::put('/{qris}', [QrisController::class, 'update'])
-            ->name('update');
-        Route::delete('/{qris}', [QrisController::class, 'destroy'])
-            ->name('destroy');
-        Route::put('/{qris}/set-aktif', [QrisController::class, 'setAktif'])
-            ->name('set-aktif');
+    Route::middleware(['role:admin,petugas'])->group(function () {
+        Route::resource('jadwal_sholat', JadwalSholatController::class);
+        Route::resource('sholat_jumat', SholatJumatController::class);
+        Route::resource('idul-fitri', SholatIdulFitriController::class);
+        Route::resource('idul-adha', SholatIdulAdhaController::class);
+        Route::resource('pengumuman', PengumumanController::class);
+        Route::resource('slides', SlideController::class);
+        Route::resource('agenda_kajian', AgendaKajianController::class);
+
+        Route::prefix('rotation')->name('rotation.')->group(function () {
+            Route::get('/', [RotationController::class, 'index'])->name('index');
+            Route::put('/update', [RotationController::class, 'update'])->name('update');
+            Route::get('/preview', [RotationController::class, 'preview'])->name('preview');
+            Route::get('/status', [RotationController::class, 'status'])->name('status');
+        });
+
+        Route::prefix('export')->name('export.')->group(function () {
+            Route::get('/jadwal-sholat', [JadwalSholatController::class, 'export'])->name('jadwal-sholat');
+            Route::get('/pengumuman', [PengumumanController::class, 'export'])->name('pengumuman');
+        });
     });
 
     /*
     |--------------------------------------------------------------------------
-    | AUTO UPDATE
+    | MENU KEUANGAN & KAS (ADMIN & BENDAHARA)
     |--------------------------------------------------------------------------
     */
-    Route::prefix('auto-update')->name('auto_update.')->group(function () {
-        Route::get('/', [AutoUpdateController::class, 'index'])
-            ->name('index');
-        Route::post('/settings', [AutoUpdateController::class, 'updateSettings'])
-            ->name('settings');
-        Route::get('/manual', [AutoUpdateController::class, 'manualUpdate'])
-            ->name('manual');
-        Route::get('/log', [AutoUpdateController::class, 'getUpdateLog'])
-            ->name('log');
-        Route::get('/methods', [AutoUpdateController::class, 'getAvailableMethods'])
-            ->name('methods');
+    Route::middleware(['role:admin,bendahara'])->group(function () {
+        Route::resource('keuangan', KeuanganController::class);
+
+        Route::get('/export/keuangan', [KeuanganController::class, 'export'])
+            ->name('export.keuangan');
+
+        Route::prefix('laporan')->name('laporan.')->group(function () {
+            Route::get('/keuangan', [KeuanganController::class, 'laporan'])->name('keuangan');
+            Route::get('/keuangan/pdf', [KeuanganController::class, 'pdf'])->name('keuangan.pdf');
+        });
     });
 
     /*
     |--------------------------------------------------------------------------
-    | ROTATION
+    | ROUTES KHUSUS SUPER ADMIN
     |--------------------------------------------------------------------------
     */
-    Route::prefix('rotation')->name('rotation.')->group(function () {
-        Route::get('/', [RotationController::class, 'index'])
-            ->name('index');
-        Route::put('/update', [RotationController::class, 'update'])
-            ->name('update');
-        Route::get('/preview', [RotationController::class, 'preview'])
-            ->name('preview');
-        Route::get('/status', [RotationController::class, 'status'])
-            ->name('status');
-    });
+    Route::middleware(['role:admin'])->group(function () {
+        // QRIS
+        Route::prefix('qris')->name('qris.')->group(function () {
+            Route::get('/', [QrisController::class, 'index'])->name('index');
+            Route::get('/create', [QrisController::class, 'create'])->name('create');
+            Route::post('/', [QrisController::class, 'store'])->name('store');
+            Route::get('/{qris}', [QrisController::class, 'show'])->name('show');
+            Route::get('/{qris}/edit', [QrisController::class, 'edit'])->name('edit');
+            Route::put('/{qris}', [QrisController::class, 'update'])->name('update');
+            Route::delete('/{qris}', [QrisController::class, 'destroy'])->name('destroy');
+            Route::put('/{qris}/set-aktif', [QrisController::class, 'setAktif'])->name('set-aktif');
+        });
 
-    /*
-    |--------------------------------------------------------------------------
-    | EXPORT
-    |--------------------------------------------------------------------------
-    */
-    Route::prefix('export')->name('export.')->group(function () {
-        Route::get('/jadwal-sholat', [JadwalSholatController::class, 'export'])
-            ->name('jadwal-sholat');
-        Route::get('/keuangan', [KeuanganController::class, 'export'])
-            ->name('keuangan');
-        Route::get('/pengumuman', [PengumumanController::class, 'export'])
-            ->name('pengumuman');
-    });
-
-    /*
-    |--------------------------------------------------------------------------
-    | LAPORAN
-    |--------------------------------------------------------------------------
-    */
-    Route::prefix('laporan')->name('laporan.')->group(function () {
-        Route::get('/keuangan', [KeuanganController::class, 'laporan'])
-            ->name('keuangan');
-        Route::get('/keuangan/pdf', [KeuanganController::class, 'pdf'])
-            ->name('keuangan.pdf');
+        // Auto Update
+        Route::prefix('auto-update')->name('auto_update.')->group(function () {
+            Route::get('/', [AutoUpdateController::class, 'index'])->name('index');
+            Route::post('/settings', [AutoUpdateController::class, 'updateSettings'])->name('settings');
+            Route::get('/manual', [AutoUpdateController::class, 'manualUpdate'])->name('manual');
+            Route::get('/log', [AutoUpdateController::class, 'getUpdateLog'])->name('log');
+            Route::get('/methods', [AutoUpdateController::class, 'getAvailableMethods'])->name('methods');
+        });
     });
 });
 

@@ -34,6 +34,6 @@ class CheckRole
             abort(403, 'Unauthorized');
         }
 
-        return redirect()->route('home')->with('error', 'Akses ditolak. Halaman ini hanya dapat diakses oleh Administrator / Super Admin.');
+        return redirect()->route('home')->with('error', 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman tersebut.');
     }
 }

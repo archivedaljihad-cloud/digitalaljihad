@@ -14,16 +14,25 @@
         <button class="btn btn-primary dropdown-toggle" type="button" id="quickActionsDropdown" data-toggle="dropdown">
             <i class="fas fa-bolt"></i> Aksi Cepat
         </button>
+        @php
+        $currentRole = strtolower(optional(auth()->user()->role)->name ?? '');
+        @endphp
         <div class="dropdown-menu dropdown-menu-right">
+            @if(in_array($currentRole, ['admin', 'petugas']))
             <a class="dropdown-item" href="{{ route('jadwal_sholat.create') }}">
                 <i class="fas fa-plus-circle text-success"></i> Tambah Jadwal Sholat
             </a>
             <a class="dropdown-item" href="{{ route('pengumuman.create') }}">
                 <i class="fas fa-bullhorn text-info"></i> Buat Pengumuman
             </a>
+            @endif
+
+            @if(in_array($currentRole, ['admin', 'bendahara']))
             <a class="dropdown-item" href="{{ route('keuangan.create') }}">
-                <i class="fas fa-money-bill text-warning"></i> Input Keuangan
+                <i class="fas fa-money-bill text-warning"></i> Input Transaksi Kas
             </a>
+            @endif
+
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ route('rotator') }}" target="_blank">
                 <i class="fas fa-tv text-primary"></i> Buka Tampilan TV
@@ -664,6 +673,179 @@
                                 </td>
                             </tr>
                             @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@elseif (auth()->user()->role && auth()->user()->role->name === 'bendahara')
+<!-- Bendahara Dashboard -->
+<div class="row">
+    <!-- Saldo Kas Masjid -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <a href="{{ route('keuangan.index') }}" class="card-link">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                <i class="fas fa-wallet"></i> Saldo Kas Saat Ini
+                            </div>
+                            @php
+                            $totalPemasukan = \App\Models\Keuangan::sum('pemasukan');
+                            $totalPengeluaran = \App\Models\Keuangan::sum('pengeluaran');
+                            $saldo = $totalPemasukan - $totalPengeluaran;
+                            @endphp
+                            <div class="h4 mb-0 font-weight-bold text-gray-800">
+                                Rp {{ number_format($saldo, 0, ',', '.') }}
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Total saldo bersih kas masjid</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-coins fa-2x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Total Pemasukan -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <a href="{{ route('keuangan.index') }}" class="card-link">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                <i class="fas fa-arrow-down"></i> Total Pemasukan Kas
+                            </div>
+                            <div class="h4 mb-0 font-weight-bold text-primary">
+                                Rp {{ number_format($totalPemasukan, 0, ',', '.') }}
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Infaq, sedekah, dan donasi</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hand-holding-usd fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Total Pengeluaran -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <a href="{{ route('keuangan.index') }}" class="card-link">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                <i class="fas fa-arrow-up"></i> Total Pengeluaran Kas
+                            </div>
+                            <div class="h4 mb-0 font-weight-bold text-danger">
+                                Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Operasional & perawatan masjid</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-receipt fa-2x text-danger"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Action Cards & Quick Links untuk Bendahara -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <a href="{{ route('keuangan.create') }}" class="btn btn-success btn-block btn-lg shadow-sm py-3 text-left">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-plus-circle fa-2x mr-3"></i>
+                <div>
+                    <strong class="d-block">Input Transaksi Kas Baru</strong>
+                    <small>Catat pemasukan atau pengeluaran</small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 mb-3">
+        <a href="{{ route('laporan.keuangan') }}" class="btn btn-primary btn-block btn-lg shadow-sm py-3 text-left">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-chart-line fa-2x mr-3"></i>
+                <div>
+                    <strong class="d-block">Laporan & Rekap Keuangan</strong>
+                    <small>Rekap per periode bulanan/tahunan</small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 mb-3">
+        <a href="{{ route('export.keuangan') }}" class="btn btn-warning btn-block btn-lg shadow-sm py-3 text-left text-dark">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-file-excel fa-2x mr-3"></i>
+                <div>
+                    <strong class="d-block">Export Laporan Excel</strong>
+                    <small>Unduh file spreadsheet kas masjid</small>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Transaksi Kas Terbaru -->
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-history"></i> Transaksi Kas Terbaru
+                </h6>
+                <a href="{{ route('keuangan.index') }}" class="btn btn-sm btn-outline-primary">
+                    Lihat Semua Transaksi <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Deskripsi</th>
+                                <th>Kategori</th>
+                                <th class="text-right">Pemasukan</th>
+                                <th class="text-right">Pengeluaran</th>
+                                <th class="text-right">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $recentKas = \App\Models\Keuangan::orderBy('tanggal', 'desc')->orderBy('id', 'desc')->take(8)->get();
+                            @endphp
+                            @forelse($recentKas as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}</td>
+                                <td>{{ $item->deskripsi }}</td>
+                                <td><span class="badge badge-secondary">{{ $item->kategori ?? '-' }}</span></td>
+                                <td class="text-right text-success font-weight-bold">
+                                    {{ $item->pemasukan > 0 ? 'Rp ' . number_format($item->pemasukan, 0, ',', '.') : '-' }}
+                                </td>
+                                <td class="text-right text-danger font-weight-bold">
+                                    {{ $item->pengeluaran > 0 ? 'Rp ' . number_format($item->pengeluaran, 0, ',', '.') : '-' }}
+                                </td>
+                                <td class="text-right text-dark font-weight-bold">
+                                    Rp {{ number_format($item->saldo, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">Belum ada transaksi tercatat.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
