@@ -20,6 +20,11 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 RUN php artisan package:discover --ansi || true \
     && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Apply custom Laravel Nginx site configuration
+RUN cp /var/www/html/conf/nginx/nginx-site.conf /etc/nginx/sites-available/default.conf \
+    && (cp /var/www/html/conf/nginx/nginx-site.conf /etc/nginx/http.d/default.conf 2>/dev/null || true) \
+    && (cp /var/www/html/conf/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf 2>/dev/null || true)
+
 # Image config
 ENV SKIP_COMPOSER 1
 ENV WEBROOT /var/www/html/public
