@@ -237,17 +237,19 @@
 		.chart-wrapper {
 			position: relative;
 			width: 100%;
-			height: 330px; /* <--- Berikan tinggi pasti */
-			margin-top: 30px;
+			flex: 1;
+			min-height: 0;
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			padding: 5px;
 		}
 
-		canvas {
-			width: 100% !important;
-			height: 100% !important;
+		.chart-wrapper canvas {
+			max-width: 100% !important;
+			max-height: 100% !important;
 		}
+
 
 		.transactions-container {
 			background: rgba(0, 0, 0, 0.35);
@@ -489,8 +491,16 @@
 			},
 			options: {
 				responsive: true,
-				maintainAspectRatio: false, // <--- Pastikan ini false
+				maintainAspectRatio: true,
 				cutout: '60%',
+				layout: {
+					padding: {
+						top: 5,
+						bottom: 10,
+						left: 10,
+						right: 10
+					}
+				},
 				plugins: {
 					legend: {
 						position: 'bottom',
