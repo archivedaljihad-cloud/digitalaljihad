@@ -67,7 +67,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-			padding: 15px 20px;
+			padding: 10px 20px 85px 20px;
 			box-sizing: border-box;
 			z-index: 5;
 		}
@@ -81,7 +81,6 @@
 		.header-section h1 {
 			font-family: 'Masking Renta', sans-serif !important;
 			font-size: 3.2rem !important;
-			margin: 0;
 			letter-spacing: 5px !important;
 			text-transform: uppercase !important;
 			background: none !important;
@@ -97,6 +96,7 @@
 				0 0 25px #ffd700,
 				0 0 40px rgba(255, 170, 0, 0.06) !important;
 			filter: none !important;
+			margin-bottom: -15px !important;
 		}
 
 		.header-section h3.sub-header {
@@ -108,16 +108,16 @@
 			text-transform: uppercase !important;
 			opacity: 0.95 !important;
 			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important;
-			margin-top: -5px !important;
-			margin-bottom: 8px !important;
+			margin-top: 10px !important;
+			margin-bottom: 6px !important;
 		}
 
 		.datetime {
 			font-size: 1.55rem;
-			margin-top: 6px;
+			margin-top: 4px;
 			background: rgba(3, 20, 15, 0.65);
 			display: inline-block;
-			padding: 6px 28px;
+			padding: 5px 28px;
 			border-radius: 35px;
 			font-weight: 600;
 			letter-spacing: 1px;
@@ -133,14 +133,14 @@
 			flex-direction: column;
 			align-items: center;
 			position: relative;
-			top: -15px;
+			margin-bottom: 10px;
 		}
 
 		.jadwal-sholat-title {
 			font-size: 2.1rem;
 			font-weight: 700 !important;
 			letter-spacing: 2px;
-			margin-bottom: 14px;
+			margin-bottom: 12px;
 			padding-bottom: 5px;
 			position: relative;
 			color: var(--secondary-color);
@@ -183,13 +183,13 @@
 			width: 100%;
 			max-width: 1720px;
 			margin: 0 auto;
-			margin-bottom: 12px;
+			margin-bottom: 0;
 		}
 
 		.sholat-card {
 			background: rgba(4, 25, 18, 0.72);
-			border-radius: 18px;
-			padding: 15px 12px;
+			border-radius: 16px;
+			padding: 12px 10px 10px 10px;
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
@@ -219,15 +219,15 @@
 		}
 
 		.sholat-card i {
-			font-size: 1.45rem;
+			font-size: 1.35rem;
 			color: var(--secondary-color);
-			margin-bottom: 5px;
+			margin-bottom: 4px;
 			display: block;
 			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 		}
 
 		.sholat-card .nama-sholat {
-			font-size: 1.35rem;
+			font-size: 1.3rem;
 			font-weight: 600;
 			letter-spacing: 1.5px;
 			text-transform: uppercase;
@@ -240,12 +240,12 @@
 		}
 
 		.sholat-card .waktu-sholat {
-			font-size: 2.35rem;
+			font-size: 2.25rem;
 			font-weight: 700;
 			color: #ffe066;
 			letter-spacing: 1px;
 			text-shadow: 0 3px 8px rgba(0, 0, 0, 0.9);
-			margin-top: 4px;
+			margin-top: 3px;
 		}
 
 		.auto-update-status {
