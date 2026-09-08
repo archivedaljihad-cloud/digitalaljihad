@@ -52,35 +52,7 @@
 			left: 35px;
 		}
 
-		/* Judul Halaman di Kiri Atas (di bawah kaligrafi kiri) */
-		.page-title-badge {
-			position: absolute;
-			top: 121px;
-			left: 40px;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			background: rgba(10, 30, 25, 0.4);
-			backdrop-filter: blur(8px);
-			padding: 8px 20px;
-			border-radius: 30px;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-			z-index: 10;
-		}
 
-		.page-title-badge i {
-			font-size: 3rem;
-			color: #ffd700;
-		}
-
-		.page-title-badge span {
-			font-size: 1.2rem;
-			font-weight: 700;
-			color: #ffd700;
-			letter-spacing: 1px;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-		}
 
 		/* Container Utama */
 		.container {
@@ -199,11 +171,36 @@
 		/* Header Card */
 		.card-header {
 			display: flex;
-			justify-content: flex-end;
+			justify-content: space-between;
 			align-items: center;
 			margin-bottom: 20px;
-			padding-bottom: 12px;
+			padding-bottom: 14px;
 			border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+		}
+
+		.page-title-badge {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			background: rgba(255, 215, 0, 0.15);
+			backdrop-filter: blur(8px);
+			padding: 6px 20px;
+			border-radius: 30px;
+			border: 1px solid rgba(255, 215, 0, 0.4);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+		}
+
+		.page-title-badge i {
+			font-size: 1.3rem;
+			color: #ffd700;
+		}
+
+		.page-title-badge span {
+			font-size: 1.05rem;
+			font-weight: 700;
+			color: #ffd700;
+			letter-spacing: 1px;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 		}
 
 		.date-badge {
@@ -365,12 +362,6 @@
 	<div class="kaligrafi kaligrafi-allah">ﷲ</div>
 	<div class="kaligrafi kaligrafi-muhammad">ﷺ</div>
 
-	<!-- Judul Halaman di Kiri Atas sesuai permintaan -->
-	<div class="page-title-badge">
-		<i class="fas fa-bullhorn"></i>
-		<span>Informasi Kegiatan</span>
-	</div>
-
 	<div class="container">
 		<div class="header">
 			<h1>{{ $settings['nama_aplikasi'] ?? 'Masjid Al-Jihad' }}</h1>
@@ -381,6 +372,10 @@
 		<div class="announcement-container" id="announcementContainer">
 			<div class="announcement-card" id="announcementCard">
 				<div class="card-header">
+					<div class="page-title-badge">
+						<i class="fas fa-bullhorn"></i>
+						<span>Informasi Kegiatan</span>
+					</div>
 					<span class="date-badge" id="announcementDate">
 						<i class="fas fa-calendar-alt"></i> Memuat...
 					</span>
