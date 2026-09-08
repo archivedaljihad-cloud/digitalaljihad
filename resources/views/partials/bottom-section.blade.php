@@ -1,7 +1,21 @@
 <!-- resources/views/partials/bottom-section.blade.php -->
 <div class="fixed-bottom-section" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: transparent; padding: 4px 0 2px 0; box-sizing: border-box; pointer-events: none;">
     @php
+        // Pastikan ambil data setting terbaru dari controller, cache, atau model AppSetting langsung
+        if (empty($settings)) {
+            $settings = \App\Models\AppSetting::first() ?? cache('settings');
+        }
+
         $rawText = $settings['running_text'] ?? ($settings->running_text ?? null);
+        if (empty($rawText)) {
+            $rawText = \App\Models\AppSetting::value('running_text');
+        }
+
+        $footerText = $settings['footer'] ?? ($settings->footer ?? null);
+        if (empty($footerText)) {
+            $footerText = \App\Models\AppSetting::value('footer');
+        }
+
         $runningTextList = [];
         if (!empty($rawText)) {
             $lines = preg_split('/\r\n|\r|\n/', $rawText);
@@ -74,7 +88,7 @@
     </div>
     
     <div class="footer-credit">
-        {!! $settings['footer'] ?? 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System' !!}
+        {!! !empty($footerText) ? $footerText : '' !!}
     </div>
 
     <script>

@@ -27,7 +27,7 @@
             flex-direction: column;
             color: #fff;
             text-align: center;
-            padding: 190px 40px 90px 40px;
+            padding: 160px 40px 110px 40px;
             box-sizing: border-box;
             opacity: 0;
             visibility: hidden;
@@ -49,7 +49,7 @@
             align-items: center;
             justify-content: center;
             max-width: 90%;
-            max-height: 56vh;
+            max-height: 50vh;
         }
 
         .slide-poster-backdrop {
@@ -77,19 +77,19 @@
 
         /* --- KODE PENGATURAN TEKS ATAS (JUDUL) --- */
         .judul {
-            margin-top: 50px;
-            margin-bottom: 0px;
-            font-size: 2rem;
+            margin-top: 15px;
+            margin-bottom: 2px;
+            font-size: 1.65rem;
             font-weight: bold;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
         }
 
         /* --- KODE PENGATURAN TEKS BAWAH (DESKRIPSI) --- */
         .deskripsi {
-            margin-top: -15px !important;
-            font-size: 1.25rem !important;
-            font-weight: bold !important;
-            line-height: 1.5 !important;
+            margin-top: 2px !important;
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
             color: #ffd700 !important;
             white-space: pre-line !important;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 15px rgba(0, 0, 0, 0.8) !important;

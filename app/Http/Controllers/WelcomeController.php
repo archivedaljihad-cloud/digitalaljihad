@@ -222,12 +222,13 @@ class WelcomeController extends Controller
     }
     public function slideEmbed()
     {
+        $settings = AppSetting::first();
         $slides = Slide::aktif()
             ->urut()
             ->get();
         return view(
             'slide-embed',
-            compact('slides')
+            compact('slides', 'settings')
         );
     }                        
     public function getRotationSettings()
