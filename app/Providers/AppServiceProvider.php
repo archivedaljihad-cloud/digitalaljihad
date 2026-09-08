@@ -115,6 +115,49 @@ class AppServiceProvider extends ServiceProvider
             // ignore and proceed
         }
 
+        // Auto-provision missing columns in table app_settings if not exists (e.g. TiDB Cloud)
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('app_settings')) {
+                \Illuminate\Support\Facades\Schema::table('app_settings', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_trigger_seconds')) {
+                        $table->integer('tarhim_trigger_seconds')->nullable()->default(300);
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_audio')) {
+                        $table->string('tarhim_audio')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_audio_subuh')) {
+                        $table->string('tarhim_audio_subuh')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_audio_reguler')) {
+                        $table->string('tarhim_audio_reguler')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'prayer_bg_image')) {
+                        $table->string('prayer_bg_image')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'prayer_bg_opacity')) {
+                        $table->integer('prayer_bg_opacity')->nullable()->default(80);
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_countdown')) {
+                        $table->text('msg_countdown')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_adzan')) {
+                        $table->text('msg_adzan')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_iqamah')) {
+                        $table->text('msg_iqamah')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_shalat')) {
+                        $table->text('msg_shalat')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'prayer_mode_message')) {
+                        $table->text('prayer_mode_message')->nullable();
+                    }
+                });
+            }
+        } catch (\Throwable $e) {
+            // ignore and proceed
+        }
+
         // Membuat variabel $setting otomatis ada di layouts.admin
         View::composer('layouts.admin', function ($view) {
             $view->with('setting', AppSetting::first());
