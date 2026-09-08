@@ -468,8 +468,8 @@
 			const now = new Date();
 			const datetimeElement = document.getElementById('datetime');
 			if (datetimeElement) {
-				datetimeElement.textContent = typeof getStandardMasjidDateTime === 'function'
-					? getStandardMasjidDateTime(now)
+				datetimeElement.innerHTML = typeof getStandardMasjidDateTime === 'function'
+					? getStandardMasjidDateTime(now, true)
 					: now.toLocaleString('id-ID');
 			}
 		}

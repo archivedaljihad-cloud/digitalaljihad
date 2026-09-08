@@ -525,8 +525,8 @@
 			const now = new Date();
 			const dt = document.getElementById('datetime');
 			if (dt) {
-				dt.textContent = typeof getStandardMasjidDateTime === 'function'
-					? getStandardMasjidDateTime(now)
+				dt.innerHTML = typeof getStandardMasjidDateTime === 'function'
+					? getStandardMasjidDateTime(now, true)
 					: now.toLocaleString('id-ID');
 			}
 		}

@@ -190,16 +190,48 @@ h2.sub-header {
 .header-section .datetime {
     font-size: 1.55rem !important;
     background: rgba(3, 20, 15, 0.65) !important;
-    display: inline-block !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     padding: 5px 28px !important;
     border-radius: 35px !important;
     margin-top: 4px !important;
     font-weight: 600 !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 0.8px !important;
     border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+    white-space: nowrap !important;
+}
+
+.datetime .masehi-date {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.datetime .hijri-date {
+    color: #ffd700 !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.65), 0 0 20px rgba(255, 170, 0, 0.35) !important;
+    padding: 0 2px !important;
+}
+
+.datetime .jam-time {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+.datetime .dt-sep {
+    color: #ffd700 !important;
+    opacity: 0.85 !important;
+    margin: 0 10px !important;
+    font-weight: bold !important;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
 }
 
 /* =====================================================
@@ -283,9 +315,9 @@ h2.sub-header {
 <script>
 /**
  * Global Unified Hijri + Masehi + Realtime Clock Formatter
- * Format: [Hari, DD MMMM YYYY] • [DD BulanHijri YYYY H] • [HH:mm:ss WIB]
+ * Format: [Hari, DD MMMM YYYY] <span class="dt-sep">•</span> <span class="hijri-date">[DD BulanHijri YYYY H]</span> <span class="dt-sep">•</span> [HH:mm:ss WIB]
  */
-function getStandardMasjidDateTime(now = new Date()) {
+function getStandardMasjidDateTime(now = new Date(), asHtml = true) {
     try {
         const masehi = new Intl.DateTimeFormat('id-ID', {
             weekday: 'long',
@@ -310,6 +342,9 @@ function getStandardMasjidDateTime(now = new Date()) {
             timeZone: 'Asia/Jakarta'
         }).format(now).replace(/\./g, ':');
 
+        if (asHtml) {
+            return `<span class="masehi-date">${masehi}</span><span class="dt-sep">•</span><span class="hijri-date">${hijri}</span><span class="dt-sep">•</span><span class="jam-time">${time} WIB</span>`;
+        }
         return `${masehi} • ${hijri} • ${time} WIB`;
     } catch (err) {
         return now.toLocaleString('id-ID');
@@ -321,7 +356,7 @@ function getStandardMasjidDateTime(now = new Date()) {
     function refreshClock() {
         const el = document.getElementById('datetime');
         if (el) {
-            el.textContent = getStandardMasjidDateTime();
+            el.innerHTML = getStandardMasjidDateTime(new Date(), true);
         }
     }
     if (document.readyState === 'loading') {
