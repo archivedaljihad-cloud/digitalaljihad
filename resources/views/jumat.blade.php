@@ -59,7 +59,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-			padding: 15px 30px;
+			padding: 10px 30px 85px 30px;
 		}
 
 		.header {
@@ -150,7 +150,7 @@
 		.info-stack {
 			display: flex;
 			flex-direction: column;
-			gap: 14px;
+			gap: 10px;
 			flex: 1;
 			justify-content: center;
 			max-width: 860px;
@@ -160,7 +160,7 @@
 
 		.info-row {
 			display: flex;
-			gap: 16px;
+			gap: 14px;
 			width: 100%;
 		}
 
@@ -171,7 +171,7 @@
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			border-radius: 14px;
-			padding: 14px 22px;
+			padding: 11px 20px;
 			display: flex;
 			align-items: center;
 			gap: 14px;
@@ -196,7 +196,7 @@
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			border-radius: 14px;
-			padding: 14px 28px;
+			padding: 11px 24px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;

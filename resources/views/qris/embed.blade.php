@@ -77,16 +77,16 @@
 			width: 100%;
 			display: flex;
 			flex-direction: column;
-			padding: 15px 25px;
+			padding: 10px 25px 85px 25px;
+			box-sizing: border-box;
 		}
 
 		/* Header - Hanya Nama Masjid di atas */
 		.header {
 			text-align: center;
-			margin-bottom: 35px;
+			margin-bottom: 20px;
 			flex-shrink: 0;
-			margin-top: 30px;
-			/* TEKS HEADER DITARIK KE ATAS */
+			margin-top: 10px;
 		}
 
 		.header h1 {

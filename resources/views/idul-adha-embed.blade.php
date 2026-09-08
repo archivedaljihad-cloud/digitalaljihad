@@ -57,7 +57,8 @@
 			width: 100%;
 			display: flex;
 			flex-direction: column;
-			padding: 15px 25px;
+			padding: 10px 25px 85px 25px;
+			box-sizing: border-box;
 			justify-content: space-between;
 		}
 

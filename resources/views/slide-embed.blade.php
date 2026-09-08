@@ -27,7 +27,8 @@
             flex-direction: column;
             color: #fff;
             text-align: center;
-            padding: 200px 40px 60px 40px;
+            padding: 190px 40px 90px 40px;
+            box-sizing: border-box;
         }
 
         .slide.active {

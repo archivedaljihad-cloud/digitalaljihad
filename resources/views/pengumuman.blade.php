@@ -91,7 +91,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-			padding: 15px 25px;
+			padding: 10px 25px 85px 25px;
 			box-sizing: border-box;
 		}
 

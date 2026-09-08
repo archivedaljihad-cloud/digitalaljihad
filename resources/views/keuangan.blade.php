@@ -63,7 +63,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-			padding: 12px 25px;
+			padding: 10px 25px 85px 25px;
 			box-sizing: border-box;
 			position: relative;
 			z-index: 5;
@@ -202,8 +202,8 @@
 		}
 
 		.table-wrapper {
-			max-height: 480px;
-			min-height: 440px;
+			max-height: 420px;
+			min-height: 380px;
 			overflow: hidden;
 			position: relative;
 			border-radius: 12px;
