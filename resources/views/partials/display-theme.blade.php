@@ -1,5 +1,32 @@
 <!-- resources/views/partials/display-theme.blade.php -->
 <style>
+/* =====================================================
+   CUSTOM FONTS (Masking Renta, Aloevera, Sabiyah)
+   ===================================================== */
+@font-face {
+    font-family: 'Masking Renta';
+    src: url('{{ asset("fonts/MaskingRenta.otf") }}') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Aloevera';
+    src: url('{{ asset("fonts/Aloevera.ttf") }}') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sabiyah';
+    src: url('{{ asset("fonts/Sabiyah.ttf") }}') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     --primary-color: #0d6e6e;
     --secondary-color: #ffd700;

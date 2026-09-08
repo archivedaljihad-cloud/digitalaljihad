@@ -1,3 +1,30 @@
+/* =====================================================
+   CUSTOM FONTS (Masking Renta, Aloevera, Sabiyah)
+   ===================================================== */
+@font-face {
+    font-family: 'Masking Renta';
+    src: url('../fonts/MaskingRenta.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Aloevera';
+    src: url('../fonts/Aloevera.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sabiyah';
+    src: url('../fonts/Sabiyah.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     /* =====================================================
        WARNA UTAMA & TEKS

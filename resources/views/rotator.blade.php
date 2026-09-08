@@ -8,6 +8,14 @@
     <title>Sistem Informasi Masjid - Rotating Display</title>
 
     <style>
+        @font-face {
+            font-family: 'Masking Renta';
+            src: url('{{ asset("fonts/MaskingRenta.otf") }}') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
         * {
             margin: 0;
             padding: 0;
