@@ -88,37 +88,49 @@
             height: 100%;
             overflow: hidden;
             min-height: 0;
+            perspective: 1400px; /* Perspective untuk 3D Billboard Flip */
         }
 
-        /* --- OPSI A: SPLIT 2-COLUMN LANDSCAPE LAYOUT --- */
+        /* --- OPSI A: SPLIT 2-COLUMN LANDSCAPE LAYOUT DENGAN 3D BILLBOARD FLIP TRANSITION --- */
         .slide {
             position: absolute;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 45px;
-            padding: 10px 40px 10px 40px;
+            gap: 40px;
+            padding: 10px 35px 10px 35px;
             box-sizing: border-box;
             opacity: 0;
             visibility: hidden;
-            transform: scale(0.96);
-            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s;
             pointer-events: none;
             width: 100%;
             height: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            transform: rotateY(90deg) scale(0.9);
+            transition: transform 0.9s cubic-bezier(0.3, 1.2, 0.4, 1), opacity 0.7s ease-in-out, visibility 0.9s;
         }
 
         .slide.active {
             opacity: 1;
             visibility: visible;
-            transform: scale(1);
+            transform: rotateY(0deg) scale(1);
             pointer-events: auto;
+            z-index: 2;
         }
 
-        /* Kolom Kiri: Poster / Foto Gambar Utama (~62% Lebar) */
+        .slide.prev-flip {
+            opacity: 0;
+            visibility: hidden;
+            transform: rotateY(-90deg) scale(0.9);
+            transition: transform 0.9s cubic-bezier(0.3, 1.2, 0.4, 1), opacity 0.7s ease-in-out, visibility 0.9s;
+            z-index: 1;
+        }
+
+        /* Kolom Kiri: Poster / Foto Gambar Utama (Diperbesar) */
         .slide-left-col {
-            flex: 1.45;
+            flex: 1.6;
             height: 100%;
             max-height: 100%;
             display: flex;
@@ -135,7 +147,7 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            max-height: 58vh;
+            max-height: 66vh;
         }
 
         .slide-poster-backdrop {
@@ -155,56 +167,63 @@
             position: relative;
             z-index: 2;
             max-width: 100%;
-            max-height: 58vh;
+            max-height: 65vh;
             width: auto;
             height: auto;
             object-fit: contain;
-            border-radius: 16px;
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(255, 215, 0, 0.15);
+            border-radius: 18px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 215, 0, 0.2);
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* Kolom Kanan: Panel Glassmorphism Elegan (~38% Lebar) */
+        /* Kolom Kanan: Panel Glassmorphism Elegan Rata Tengah (Center All) */
         .slide-right-col {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             height: 100%;
             max-height: 100%;
             min-width: 0;
         }
 
         .slide-card {
-            background: rgba(4, 25, 18, 0.72);
+            background: rgba(4, 25, 18, 0.75);
             border: 1.5px solid rgba(255, 215, 0, 0.45);
-            border-radius: 20px;
-            padding: 30px 34px;
-            text-align: left;
+            border-radius: 24px;
+            padding: 35px 36px;
+            text-align: center;
+            align-items: center;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            max-height: 58vh;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            max-height: 65vh;
+            width: 100%;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            justify-content: center;
         }
 
         .slide-badge {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(0, 230, 118, 0.2));
-            border: 1px solid rgba(255, 215, 0, 0.45);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(0, 230, 118, 0.22));
+            border: 1px solid rgba(255, 215, 0, 0.5);
             color: #ffd700;
-            padding: 6px 16px;
+            padding: 7px 22px;
             border-radius: 30px;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
-            margin-bottom: 16px;
-            align-self: flex-start;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 18px;
+            align-self: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
         }
 
         .slide-badge i {
@@ -214,25 +233,30 @@
 
         .slide-card .judul {
             font-family: 'Poppins', sans-serif;
-            font-size: 2.1rem;
+            font-size: 2.15rem;
             font-weight: 700;
-            line-height: 1.28;
+            line-height: 1.3;
             color: #ffffff;
-            margin-bottom: 14px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-            border-bottom: 2px solid rgba(255, 215, 0, 0.25);
-            padding-bottom: 12px;
+            margin-bottom: 16px;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 14px;
+            width: 100%;
         }
 
         .slide-card .deskripsi {
-            font-size: 1.25rem;
-            line-height: 1.6;
+            font-size: 1.22rem;
+            line-height: 1.65;
             color: rgba(255, 255, 255, 0.92);
             white-space: pre-line;
+            text-align: center;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
             overflow-y: auto;
             max-height: 32vh;
-            padding-right: 10px;
+            padding: 0 10px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         /* Custom Scrollbar halus jika teks deskripsi sangat panjang */
@@ -411,7 +435,7 @@
         }
     </script>
 
-    <!-- SCRIPT UNTUK ROTASI KONTEN SLIDE INFORMASI -->
+    <!-- SCRIPT UNTUK ROTASI KONTEN SLIDE INFORMASI (3D BILLBOARD FLIP) -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const slideElements = document.querySelectorAll('.slide');
@@ -421,9 +445,23 @@
             let slideTimer = null;
 
             function showNextSlide() {
-                slideElements[currentSlideIndex].classList.remove('active');
+                const prevSlide = slideElements[currentSlideIndex];
                 currentSlideIndex = (currentSlideIndex + 1) % slideElements.length;
-                slideElements[currentSlideIndex].classList.add('active');
+                const nextSlide = slideElements[currentSlideIndex];
+
+                // Efek Billboard Flip: Slide lama memutar keluar (-90deg)
+                prevSlide.classList.remove('active');
+                prevSlide.classList.add('prev-flip');
+
+                // Siapkan slide berikutnya untuk flip masuk (dari 90deg ke 0deg)
+                nextSlide.classList.remove('prev-flip');
+                void nextSlide.offsetWidth; // Trigger reflow
+                nextSlide.classList.add('active');
+
+                // Bersihkan class prev-flip setelah animasi selesai
+                setTimeout(() => {
+                    prevSlide.classList.remove('prev-flip');
+                }, 900);
 
                 scheduleNextSlide();
             }

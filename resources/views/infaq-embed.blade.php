@@ -443,13 +443,13 @@
 
 				<!-- 4 Statistik Angka -->
 				<div class="summary-grid">
-					<!-- Target Dana -->
+					<!-- Target Dana Infaq -->
 					<div class="stat-pill target">
 						<div class="icon-box">
 							<i class="fas fa-bullseye"></i>
 						</div>
 						<div class="stat-info">
-							<span class="stat-label">Target Dana</span>
+							<span class="stat-label">Target Dana Infaq</span>
 							<span class="stat-value">Rp {{ number_format($targetDana, 0, ',', '.') }}</span>
 						</div>
 					</div>

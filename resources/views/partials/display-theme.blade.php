@@ -234,6 +234,73 @@ h2.sub-header {
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
 }
 
+/* Penataan khusus datetime di dalam Header Card (QRIS, Idul Fitri, Idul Adha) */
+.qris-header .datetime,
+.idul-header .datetime,
+.header-clock .datetime,
+.qris-card .datetime,
+.idul-card .datetime {
+    display: inline-flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important; /* Rata kanan agar jam sejajar pas di bawah kalender Hijriah */
+    justify-content: center !important;
+    text-align: right !important;
+    padding: 6px 18px !important;
+    border-radius: 14px !important;
+    background: rgba(3, 20, 15, 0.7) !important;
+    border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    line-height: 1.35 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+.qris-header .datetime .dt-date-row,
+.idul-header .datetime .dt-date-row,
+.header-clock .datetime .dt-date-row,
+.qris-card .datetime .dt-date-row,
+.idul-card .datetime .dt-date-row {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+}
+
+.qris-header .datetime .dt-sep-time,
+.idul-header .datetime .dt-sep-time,
+.header-clock .datetime .dt-sep-time,
+.qris-card .datetime .dt-sep-time,
+.idul-card .datetime .dt-sep-time {
+    display: none !important;
+}
+
+.qris-header .datetime .dt-time-row,
+.idul-header .datetime .dt-time-row,
+.header-clock .datetime .dt-time-row,
+.qris-card .datetime .dt-time-row,
+.idul-card .datetime .dt-time-row {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    font-size: 1.02rem !important;
+    color: #ffffff !important;
+    margin-top: 2px !important;
+    font-weight: 700 !important;
+    text-align: right !important;
+}
+
+.qris-header .datetime .dt-time-row::before,
+.idul-header .datetime .dt-time-row::before,
+.header-clock .datetime .dt-time-row::before {
+    content: "\f017";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #ffd700;
+    font-size: 0.95rem;
+}
+
 /* =====================================================
    MEDALI KALIGRAFI 3D EMAS MENYALA (ALLAH & MUHAMMAD)
    ===================================================== */
@@ -343,7 +410,7 @@ function getStandardMasjidDateTime(now = new Date(), asHtml = true) {
         }).format(now).replace(/\./g, ':');
 
         if (asHtml) {
-            return `<span class="masehi-date">${masehi}</span><span class="dt-sep">•</span><span class="hijri-date">${hijri}</span><span class="dt-sep">•</span><span class="jam-time">${time} WIB</span>`;
+            return `<div class="dt-date-row"><span class="masehi-date">${masehi}</span><span class="dt-sep">•</span><span class="hijri-date">${hijri}</span></div><span class="dt-sep dt-sep-time">•</span><div class="dt-time-row"><span class="jam-time">${time} WIB</span></div>`;
         }
         return `${masehi} • ${hijri} • ${time} WIB`;
     } catch (err) {

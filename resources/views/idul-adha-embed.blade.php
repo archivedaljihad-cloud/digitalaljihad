@@ -164,13 +164,53 @@
 		}
 
 		.header-clock .datetime {
-			font-size: 1.2rem;
-			padding: 8px 16px;
-			background: rgba(0, 0, 0, 0.3);
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			border-radius: 20px;
-			backdrop-filter: blur(5px);
-			white-space: nowrap;
+			font-size: 1.05rem !important;
+			padding: 6px 18px !important;
+			background: rgba(3, 20, 15, 0.72) !important;
+			border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
+			border-radius: 14px !important;
+			backdrop-filter: blur(8px) !important;
+			white-space: nowrap !important;
+			display: inline-flex !important;
+			flex-direction: column !important;
+			align-items: flex-end !important;
+			justify-content: center !important;
+			text-align: right !important;
+			line-height: 1.35 !important;
+			flex-shrink: 0 !important;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+		}
+
+		.header-clock .datetime .dt-date-row {
+			display: inline-flex !important;
+			align-items: center !important;
+			justify-content: flex-end !important;
+			font-size: 1.05rem !important;
+			font-weight: 600 !important;
+		}
+
+		.header-clock .datetime .dt-sep-time {
+			display: none !important;
+		}
+
+		.header-clock .datetime .dt-time-row {
+			display: inline-flex !important;
+			align-items: center !important;
+			justify-content: flex-end !important;
+			gap: 6px !important;
+			font-size: 1.02rem !important;
+			color: #ffffff !important;
+			margin-top: 2px !important;
+			font-weight: 700 !important;
+			text-align: right !important;
+		}
+
+		.header-clock .datetime .dt-time-row::before {
+			content: "\f017";
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			color: #ffd700;
+			font-size: 0.95rem;
 		}
 
 		.idul-header i {
@@ -187,6 +227,8 @@
 			color: #ffd700;
 			letter-spacing: 1.5px;
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			white-space: nowrap !important;
+			margin: 0;
 		}
 
 		.idul-header p {
