@@ -153,13 +153,23 @@
 		}
 
 		.keuangan h2 {
-			font-size: 2rem;
+			font-size: 2.05rem;
 			margin-bottom: 12px;
-			padding-bottom: 6px;
+			padding-bottom: 8px;
 			position: relative;
 			color: var(--secondary-color);
 			text-align: center;
 			text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 16px;
+		}
+
+		.keuangan h2 i.fa-ambulance {
+			color: #ffd700;
+			font-size: 1.85rem;
+			filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.75));
 		}
 
 		.keuangan h2:after {
@@ -168,7 +178,7 @@
 			left: 50%;
 			transform: translateX(-50%);
 			bottom: 0;
-			width: 480px;
+			width: 560px;
 			height: 3px;
 			background: var(--secondary-color);
 			border-radius: 3px;
@@ -369,9 +379,13 @@
 
 		<div class="main-content">
 			<div class="panel keuangan">
-				<h2>Rincian Keuangan Kas Ambulance</h2>
+				<h2>
+					<i class="fas fa-ambulance"></i>
+					<span>Rincian Keuangan Kas Ambulance</span>
+					<i class="fas fa-ambulance"></i>
+				</h2>
 				<div class="summary">
-					<p class="income"><i class="fas fa-coins"></i> Total Pemasukan: Rp {{ number_format($totalPemasukan, 2, ',', '.') }}</p>
+					<p class="income"><i class="fas fa-coins"></i> Total Penerimaan: Rp {{ number_format($totalPemasukan, 2, ',', '.') }}</p>
 					<p class="expense"><i class="fas fa-coins"></i> Total Pengeluaran: Rp {{ number_format($totalPengeluaran, 2, ',', '.') }}</p>
 					<p class="balance"><i class="fas fa-coins"></i> Saldo: Rp {{ number_format($saldo, 2, ',', '.') }}</p>
 				</div>
@@ -381,7 +395,7 @@
 							<tr>
 								<th>Tanggal</th>
 								<th>Deskripsi</th>
-								<th>Pemasukan</th>
+								<th>Penerimaan</th>
 								<th>Pengeluaran</th>
 								<th>Saldo</th>
 								<th class="kategori">Kategori</th>
