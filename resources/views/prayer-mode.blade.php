@@ -76,24 +76,36 @@
             content: "";
             position: absolute;
             inset: 0;
-            background-image: url('/storage/background/islamic.png');
+            background-image: url('{{ asset("storage/background/islamic.png") }}');
             background-repeat: repeat;
             background-position: center;
-            background-size: 320px;
-            opacity: 0.12;
+            background-size: 280px;
+            opacity: 0.18;
             pointer-events: none;
+            z-index: 1;
         }
 
-        /* LAYER 2: GAMBAR KABAH DI ATAS PATTERN */
+        /* LAYER 2: GAMBAR KABAH DI TENGAH DENGAN OVERLAY HALUS */
         .background::after {
             content: "";
             position: absolute;
             inset: 0;
-            background-image: url('{{ asset("img/kaabah.png") }}');
-            background-size: contain;
-            background-position: center;
+            background-image: url('{{ asset("img/Kaabah.png") }}');
+            background-size: cover;
+            background-position: center bottom;
             background-repeat: no-repeat;
-            opacity: 0.35;
+            opacity: 0.28;
+            mix-blend-mode: luminosity;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* LAYER 3: OVERLAY GRADIENT AGAR TEKS TETAP SANGAT JELAS */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            background: radial-gradient(circle at center, rgba(1, 22, 11, 0.45) 0%, rgba(1, 22, 11, 0.85) 100%);
             pointer-events: none;
         }
 
