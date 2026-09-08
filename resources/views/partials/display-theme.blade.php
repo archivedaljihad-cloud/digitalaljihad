@@ -44,25 +44,43 @@ body {
 }
 
 /* =====================================================
-   DISPLAY BACKGROUND (Gambar Masjid Nabawi)
+   DISPLAY BACKGROUND (Cerah, Tajam, Jelas Seperti Gambar Aslinya)
    ===================================================== */
 .display-background {
     position: fixed !important;
     inset: 0;
     z-index: -10 !important;
-    background-image: url('{{ asset("image/display/background/Nabawi001.jpg") }}') !important;
+    background-image: url('{{ asset("image/display/background/BG1.png") }}');
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
-    opacity: 0.3 !important; 
+    opacity: 1 !important; 
+    filter: brightness(0.96) contrast(1.06) saturate(1.08) !important;
 }
 
+/* =====================================================
+   DISPLAY OVERLAY (Lapisan Penyejuk Adem, Anti-Silau & Pelindung Teks)
+   Menjaga seluruh teks tetap super kontras dan mudah dibaca
+   tanpa menutupi keindahan, ketajaman & kecerahan foto masjid
+   ===================================================== */
 .display-overlay {
     position: fixed !important;
     inset: 0;
     pointer-events: none;
     z-index: -9 !important;
-    background: transparent !important;
+    background: 
+        /* Vignette lembut sudut luar layar untuk keteduhan visual & bebas silau */
+        radial-gradient(ellipse at 50% 50%, rgba(2, 14, 10, 0.04) 0%, rgba(1, 12, 8, 0.32) 100%),
+        /* Gradasi vertikal penopang kontras Header atas dan Running Text bawah */
+        linear-gradient(180deg, 
+            rgba(2, 16, 11, 0.65) 0%, 
+            rgba(2, 16, 11, 0.38) 15%, 
+            rgba(2, 16, 11, 0.16) 28%, 
+            rgba(2, 16, 11, 0.12) 50%, 
+            rgba(2, 16, 11, 0.18) 75%, 
+            rgba(2, 16, 11, 0.52) 88%, 
+            rgba(2, 16, 11, 0.75) 100%
+        ) !important;
 }
 
 .display-content {

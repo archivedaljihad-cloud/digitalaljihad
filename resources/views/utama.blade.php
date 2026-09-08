@@ -512,8 +512,8 @@
 				div.style.backgroundPosition = 'center';
 				div.style.backgroundRepeat = 'no-repeat';
 
-				// Mencerahkan background slideshow agar gambar tampak lebih terang dan jelas
-				div.style.filter = 'brightness(1.6) contrast(1.1)';
+				// Pencahayaan cerah, tajam dan jelas seperti foto aslinya, tetap adem dan tidak menyilaukan
+				div.style.filter = 'brightness(0.96) contrast(1.06) saturate(1.08)';
 
 				div.style.opacity = initialOpacity;
 				div.style.transition = 'opacity 2s ease-in-out';

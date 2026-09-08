@@ -424,7 +424,7 @@
 	<div class="container">
 		<!-- Master Header Bersama (Pixel-Locked) -->
 		<div class="header">
-			<h1>{{ $settings['nama_aplikasi'] ?? 'Masjid Al-Jihad' }}</h1>
+			<h1>{{ $settings['nama_aplikasi'] ?? "MASJID JAMI' AL JIHAD" }}</h1>
 			<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
 			<div class="datetime" id="datetime"></div>
 		</div>
@@ -599,6 +599,40 @@
 				requestAnimationFrame(autoScroll);
 			}
 		});
+	</script>
+
+	<!-- Script Rotasi Background Slideshow (Halus & Elegan) -->
+	<script>
+		const backgroundImages = [
+			"{{ asset('image/display/background/BG1.png') }}",
+			"{{ asset('image/display/background/BG2.png') }}",
+			"{{ asset('image/display/background/BG3.png') }}",
+			"{{ asset('image/display/background/BG4.png') }}",
+			"{{ asset('image/display/background/BG5.png') }}",
+			"{{ asset('image/display/background/BG6.png') }}",
+			"{{ asset('image/display/background/BG7.png') }}",
+			"{{ asset('image/display/background/BG8.png') }}",
+			"{{ asset('image/display/background/BG9.png') }}",
+			"{{ asset('image/display/background/BG10.png') }}",
+			"{{ asset('image/display/background/BG11.png') }}"
+		];
+
+		let currentBgIndex = 0;
+		const bgElement = document.querySelector('.display-background') || document.body;
+
+		if (backgroundImages.length > 0 && bgElement) {
+			bgElement.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+			bgElement.style.setProperty('background-size', 'cover', 'important');
+			bgElement.style.setProperty('background-position', 'center', 'important');
+			bgElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+			function changeBackground() {
+				currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+				bgElement.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+			}
+
+			setInterval(changeBackground, 10000);
+		}
 	</script>
 </body>
 
