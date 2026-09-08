@@ -64,6 +64,11 @@ class ProgramInfaqController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->has('target_dana')) {
+            $cleaned = str_replace(['.', ','], '', (string) $request->target_dana);
+            $request->merge(['target_dana' => $cleaned]);
+        }
+
         $validated = $request->validate([
             'nama_program'    => 'required|string|max:255',
             'target_dana'     => 'required|numeric|min:0',
@@ -112,6 +117,11 @@ class ProgramInfaqController extends Controller
     public function update(Request $request, $id)
     {
         $program = ProgramInfaq::findOrFail($id);
+
+        if ($request->has('target_dana')) {
+            $cleaned = str_replace(['.', ','], '', (string) $request->target_dana);
+            $request->merge(['target_dana' => $cleaned]);
+        }
 
         $validated = $request->validate([
             'nama_program'    => 'required|string|max:255',
@@ -181,6 +191,11 @@ class ProgramInfaqController extends Controller
     public function storeDonasi(Request $request, $programId)
     {
         $program = ProgramInfaq::findOrFail($programId);
+
+        if ($request->has('nominal')) {
+            $cleaned = str_replace(['.', ','], '', (string) $request->nominal);
+            $request->merge(['nominal' => $cleaned]);
+        }
 
         $validated = $request->validate([
             'nama_donatur' => 'nullable|string|max:255',

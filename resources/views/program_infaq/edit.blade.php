@@ -42,12 +42,15 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text font-weight-bold">Rp</span>
 								</div>
-								<input type="number" class="form-control font-weight-bold text-primary @error('target_dana') is-invalid @enderror" 
-									id="target_dana" name="target_dana" value="{{ old('target_dana', (int)$program->target_dana) }}" min="0" step="1000" required>
+								<input type="text" class="form-control font-weight-bold text-primary @error('target_dana') is-invalid @enderror" 
+									id="target_dana" name="target_dana" 
+									value="{{ old('target_dana') ? number_format((float)str_replace('.', '', old('target_dana')), 0, ',', '.') : number_format((float)$program->target_dana, 0, ',', '.') }}" 
+									placeholder="Contoh: 25.000.000" onkeyup="formatRupiahInput(this)" autocomplete="off" required>
 							</div>
 							@error('target_dana')
 								<div class="text-danger small mt-1">{{ $message }}</div>
 							@enderror
+							<small class="text-muted">Target nominal yang dibutuhkan untuk menyelesaikan kegiatan (titik pemisah otomatis).</small>
 						</div>
 
 						<div class="row">
@@ -72,17 +75,18 @@
 							<div class="custom-control custom-checkbox">
 								<input type="checkbox" class="custom-control-input" id="is_active" name="is_active" value="1" {{ old('is_active', $program->is_active) ? 'checked' : '' }}>
 								<label class="custom-control-label font-weight-bold text-success" for="is_active">
-									<i class="fas fa-tv mr-1"></i> Jadikan program aktif tampil di Layar Monitor TV
+									<i class="fas fa-tv mr-1"></i> Aktifkan untuk tampil di Layar Monitor TV
 								</label>
 							</div>
+							<small class="text-muted">Jika dicentang, program ini akan menjadi program utama yang tayang pada rotasi display TV.</small>
 						</div>
 
 						<hr>
 
 						<div class="d-flex justify-content-end">
 							<a href="{{ route('program-infaq.index', ['program_id' => $program->id]) }}" class="btn btn-secondary mr-2">Batal</a>
-							<button type="submit" class="btn btn-warning px-4 shadow-sm">
-								<i class="fas fa-save mr-1"></i> Simpan Perubahan
+							<button type="submit" class="btn btn-primary px-4 shadow-sm">
+								<i class="fas fa-save mr-1"></i> Perbarui Program Infaq
 							</button>
 						</div>
 					</form>
@@ -91,4 +95,15 @@
 		</div>
 	</div>
 </div>
+
+<script>
+function formatRupiahInput(el) {
+	let value = el.value.replace(/[^0-9]/g, '');
+	if (value) {
+		el.value = parseInt(value, 10).toLocaleString('id-ID');
+	} else {
+		el.value = '';
+	}
+}
+</script>
 @endsection

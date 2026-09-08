@@ -43,14 +43,14 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text font-weight-bold">Rp</span>
 								</div>
-								<input type="number" class="form-control font-weight-bold text-primary @error('target_dana') is-invalid @enderror" 
-									id="target_dana" name="target_dana" value="{{ old('target_dana') }}" 
-									placeholder="Contoh: 25000000" min="0" step="1000" required>
+								<input type="text" class="form-control font-weight-bold text-primary @error('target_dana') is-invalid @enderror" 
+									id="target_dana" name="target_dana" value="{{ old('target_dana') ? number_format((float)str_replace('.', '', old('target_dana')), 0, ',', '.') : '' }}" 
+									placeholder="Contoh: 25.000.000" onkeyup="formatRupiahInput(this)" autocomplete="off" required>
 							</div>
 							@error('target_dana')
 								<div class="text-danger small mt-1">{{ $message }}</div>
 							@enderror
-							<small class="text-muted">Target nominal yang dibutuhkan untuk menyelesaikan kegiatan.</small>
+							<small class="text-muted">Target nominal yang dibutuhkan untuk menyelesaikan kegiatan (titik pemisah otomatis).</small>
 						</div>
 
 						<div class="row">
@@ -94,4 +94,15 @@
 		</div>
 	</div>
 </div>
+
+<script>
+function formatRupiahInput(el) {
+	let value = el.value.replace(/[^0-9]/g, '');
+	if (value) {
+		el.value = parseInt(value, 10).toLocaleString('id-ID');
+	} else {
+		el.value = '';
+	}
+}
+</script>
 @endsection

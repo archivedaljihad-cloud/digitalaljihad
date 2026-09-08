@@ -246,12 +246,19 @@
 
 						<div class="form-group">
 							<label class="font-weight-bold text-gray-700">Nominal Infaq (Rp) <span class="text-danger">*</span></label>
-							<input type="number" name="nominal" class="form-control font-weight-bold text-primary" placeholder="0" min="1000" step="1000" required>
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text font-weight-bold">Rp</span>
+								</div>
+								<input type="text" name="nominal" class="form-control font-weight-bold text-primary" 
+									placeholder="0" onkeyup="formatRupiahInput(this)" autocomplete="off" required>
+							</div>
+							<small class="text-muted">Titik pemisah ribuan otomatis.</small>
 						</div>
 
 						<div class="form-group">
-							<label class="font-weight-bold text-gray-700">Keterangan / Catatan</label>
-							<input type="text" name="keterangan" class="form-control" placeholder="Contoh: Titipan infaq subuh, transfer BSI, dll.">
+							<label class="font-weight-bold text-gray-700">Keterangan / Doa / Catatan (Opsional)</label>
+							<textarea name="keterangan" class="form-control" rows="2" placeholder="Contoh: Wakaf atas nama orang tua, Infaq jariyah hamba Allah"></textarea>
 						</div>
 
 						<button type="submit" class="btn btn-success btn-block shadow-sm">
@@ -354,6 +361,15 @@ function toggleAnonim(checkbox) {
 		input.value = '';
 		input.removeAttribute('disabled');
 		input.focus();
+	}
+}
+
+function formatRupiahInput(el) {
+	let value = el.value.replace(/[^0-9]/g, '');
+	if (value) {
+		el.value = parseInt(value, 10).toLocaleString('id-ID');
+	} else {
+		el.value = '';
 	}
 }
 </script>
