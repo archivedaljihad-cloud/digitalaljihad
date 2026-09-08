@@ -201,9 +201,9 @@
 
 		/* Body Card - Layout 2 Kolom */
 		.qris-body {
-			padding: 28px 36px;
+			padding: 20px 32px 18px 32px;
 			display: flex;
-			gap: 36px;
+			gap: 32px;
 			flex-wrap: nowrap;
 			align-items: center;
 		}
@@ -221,18 +221,18 @@
 			background: rgba(3, 22, 16, 0.75);
 			border: 1.5px solid rgba(255, 215, 0, 0.4);
 			border-radius: 16px;
-			padding: 18px 22px;
-			margin-bottom: 22px;
+			padding: 14px 18px;
+			margin-bottom: 14px;
 			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 			backdrop-filter: blur(8px);
 			-webkit-backdrop-filter: blur(8px);
 		}
 
 		.qris-main-instruction {
-			font-size: 1.15rem;
-			line-height: 1.6;
+			font-size: 1.08rem;
+			line-height: 1.5;
 			color: #ffffff;
-			margin-bottom: 14px;
+			margin-bottom: 10px;
 			text-align: justify;
 			letter-spacing: 0.3px;
 		}
@@ -241,24 +241,23 @@
 			background: linear-gradient(135deg, rgba(255, 170, 0, 0.16), rgba(255, 82, 82, 0.18));
 			border-left: 4px solid #ffd700;
 			border-radius: 10px;
-			padding: 12px 16px;
-			margin-bottom: 14px;
+			padding: 8px 12px;
+			margin-bottom: 8px;
 			display: flex;
-			align-items: flex-start;
-			gap: 12px;
+			align-items: center;
+			gap: 10px;
 		}
 
 		.qris-warning-icon {
 			color: #ffd700;
-			font-size: 1.4rem;
-			margin-top: 2px;
+			font-size: 1.3rem;
 			flex-shrink: 0;
 			animation: pulse 2s infinite;
 		}
 
 		.qris-warning-text {
-			font-size: 1.05rem;
-			line-height: 1.55;
+			font-size: 1.02rem;
+			line-height: 1.45;
 			color: #ffffff;
 		}
 
@@ -272,23 +271,25 @@
 		.qris-warning-name {
 			color: #ffd700;
 			font-weight: 800;
-			font-size: 1.18rem;
+			font-size: 1.1rem;
 			letter-spacing: 0.5px;
 			text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
 			display: inline-block;
-			background: rgba(0, 0, 0, 0.4);
+			background: rgba(0, 0, 0, 0.45);
 			padding: 2px 10px;
+			margin-left: 6px;
 			border-radius: 6px;
-			border: 1px solid rgba(255, 215, 0, 0.35);
+			border: 1px solid rgba(255, 215, 0, 0.4);
+			vertical-align: middle;
 		}
 
 		.qris-gratitude {
 			text-align: center;
-			margin-top: 6px;
-			padding-top: 10px;
+			margin-top: 4px;
+			padding-top: 6px;
 			border-top: 1px dashed rgba(255, 215, 0, 0.3);
 			font-family: 'Poppins', sans-serif;
-			font-size: 1.25rem;
+			font-size: 1.15rem;
 			font-weight: 700;
 			font-style: italic;
 			color: #ffd700;
@@ -299,30 +300,30 @@
 		/* Bank Info */
 		.bank-info {
 			background: rgba(0, 0, 0, 0.35);
-			border-radius: 15px;
-			padding: 20px;
+			border-radius: 14px;
+			padding: 14px 18px;
 			text-align: left;
 			border-left: 5px solid #ffd700;
-			margin-bottom: 25px;
+			margin-bottom: 14px;
 		}
 
 		.bank-info h4 {
 			color: #ffd700;
-			margin-bottom: 15px;
-			font-size: 1rem;
+			margin-bottom: 10px;
+			font-size: 0.98rem;
 			display: flex;
 			align-items: center;
 			gap: 10px;
 		}
 
 		.bank-info p {
-			margin: 10px 0;
+			margin: 6px 0;
 			color: rgba(255, 255, 255, 0.9);
-			font-size: 0.9rem;
+			font-size: 0.88rem;
 			display: flex;
 			align-items: center;
 			gap: 12px;
-			padding: 5px 0;
+			padding: 4px 0;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 		}
 
@@ -346,9 +347,9 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 8px;
-			padding: 10px 25px;
+			padding: 7px 20px;
 			border-radius: 30px;
-			font-size: 0.85rem;
+			font-size: 0.82rem;
 			font-weight: 600;
 			background: rgba(0, 230, 118, 0.2);
 			color: #00e676;
@@ -387,16 +388,16 @@
 		}
 
 		.qris-image img {
-			max-width: 340px;
+			max-width: 305px;
 			width: 100%;
 			height: auto;
-			border-radius: 20px;
-			box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+			border-radius: 18px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 			border: 3px solid rgba(255, 215, 0, 0.45);
 			transition: transform 0.3s ease, box-shadow 0.3s ease;
 			cursor: pointer;
 			background: white;
-			padding: 12px;
+			padding: 10px;
 		}
 
 		.qris-image img:hover {
@@ -406,13 +407,13 @@
 		}
 
 		.scan-hint {
-			margin-top: 15px;
-			font-size: 1.05rem;
+			margin-top: 10px;
+			font-size: 0.98rem;
 			font-weight: 500;
 			color: #ffd700;
 			display: flex;
 			align-items: center;
-			gap: 10px;
+			gap: 8px;
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 		}
 
@@ -526,7 +527,7 @@
 								<div class="qris-warning-box">
 									<i class="fas fa-exclamation-triangle qris-warning-icon"></i>
 									<div class="qris-warning-text">
-										Sebelum memasukkan PIN TRANSAKSI, <span class="qris-warning-alert">PASTIKAN !!!</span> QRIS tersebut atas nama :<br>
+										Sebelum memasukkan PIN TRANSAKSI, <span class="qris-warning-alert">PASTIKAN !!!</span> QRIS tersebut atas nama :
 										<span class="qris-warning-name">{{ !empty($qris->atas_nama) ? $qris->atas_nama : 'DKM Jami Al Jihad' }}</span>
 									</div>
 								</div>
