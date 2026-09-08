@@ -333,8 +333,7 @@
 	<div class="display-background"></div>
 	<div class="display-overlay"></div>
 
-	<div class="kaligrafi kaligrafi-allah">ﷲ</div>
-	<div class="kaligrafi kaligrafi-muhammad">ﷺ</div>
+	@include('partials.medallion-header')
 
 
 	@if($settings->auto_update_jadwal ?? false)

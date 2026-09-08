@@ -491,10 +491,8 @@
 <body>
 	<div class="display-background"></div>
 	<div class="display-overlay"></div>
-	<div class="display-content">
-		<!-- Kaligrafi Background -->
-		<div class="kaligrafi kaligrafi-allah">ﷲ</div>
-		<div class="kaligrafi kaligrafi-muhammad">ﷺ</div>
+		<!-- Medali Kaligrafi 3D Emas Menyala -->
+		@include('partials.medallion-header')
 
 		<div class="container" id="mainContainer">
 			<!-- Header Atas (Hanya Nama Masjid) -->
@@ -597,6 +595,9 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- Memanggil Komponen Running Text dan Footer -->
+			@include('partials.bottom-section')
 
 		</div>
 	</div>

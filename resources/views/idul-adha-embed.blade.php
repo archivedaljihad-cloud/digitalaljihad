@@ -378,9 +378,7 @@
 <body>
 	<div class="display-background"></div>
 	<div class="display-overlay"></div>
-	<div class="display-content">
-		<div class="kaligrafi kaligrafi-allah">ﷲ</div>
-		<div class="kaligrafi kaligrafi-muhammad">ﷺ</div>
+		@include('partials.medallion-header')
 
 		<div class="container">
 			<div class="header">

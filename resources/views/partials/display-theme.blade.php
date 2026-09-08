@@ -201,4 +201,61 @@ h2.sub-header {
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
 }
+
+/* =====================================================
+   MEDALI KALIGRAFI 3D EMAS MENYALA (ALLAH & MUHAMMAD)
+   ===================================================== */
+.kaligrafi-medallion {
+    position: absolute !important;
+    top: 15px !important;
+    width: 92px !important;
+    height: 92px !important;
+    z-index: 10 !important;
+    user-select: none !important;
+    pointer-events: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.kaligrafi-medallion img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.85)) 
+           drop-shadow(0 0 22px rgba(255, 170, 0, 0.6))
+           drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7)) !important;
+    animation: goldenMedallionGlow 4s ease-in-out infinite alternate !important;
+}
+
+.kaligrafi-medallion.kaligrafi-allah {
+    right: 32px !important;
+    left: auto !important;
+}
+
+.kaligrafi-medallion.kaligrafi-muhammad {
+    left: 32px !important;
+    right: auto !important;
+}
+
+@keyframes goldenMedallionGlow {
+    0% {
+        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7)) 
+               drop-shadow(0 0 18px rgba(255, 170, 0, 0.45))
+               drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 14px rgba(255, 225, 50, 0.95)) 
+               drop-shadow(0 0 30px rgba(255, 190, 0, 0.75))
+               drop-shadow(0 8px 18px rgba(0, 0, 0, 0.8));
+        transform: scale(1.02);
+    }
+    100% {
+        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7)) 
+               drop-shadow(0 0 18px rgba(255, 170, 0, 0.45))
+               drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+        transform: scale(1);
+    }
+}
 </style>

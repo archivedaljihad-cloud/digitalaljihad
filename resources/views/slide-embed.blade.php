@@ -148,6 +148,7 @@
     <div class="display-overlay"></div>
 
     <div class="display-content" style="height: 100%; width: 100%; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+        @include('partials.medallion-header')
 
         <div class="header-section">
             <h1>
