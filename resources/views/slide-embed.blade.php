@@ -18,116 +18,16 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        .slide {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            color: #fff;
+        .header {
             text-align: center;
-            padding: 160px 40px 110px 40px;
-            box-sizing: border-box;
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.96);
-            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, visibility 0.8s;
-            pointer-events: none;
-        }
-
-        .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-
-        .slide-poster-wrapper {
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
             position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            max-width: 90%;
-            max-height: 50vh;
-        }
-
-        .slide-poster-backdrop {
-            position: absolute;
-            inset: -15px;
-            background-size: cover;
-            background-position: center;
-            filter: blur(28px);
-            opacity: 0.42;
-            border-radius: 20px;
-            transform: scale(1.04);
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .slide img {
-            position: relative;
-            z-index: 2;
-            max-width: 100%;
-            max-height: 55vh;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.1);
-        }
-
-        /* --- KODE PENGATURAN TEKS ATAS (JUDUL) --- */
-        .judul {
-            margin-top: 15px;
-            margin-bottom: 2px;
-            font-size: 1.65rem;
-            font-weight: bold;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-        }
-
-        /* --- KODE PENGATURAN TEKS BAWAH (DESKRIPSI) --- */
-        .deskripsi {
-            margin-top: 2px !important;
-            font-size: 1.1rem !important;
-            font-weight: 600 !important;
-            line-height: 1.4 !important;
-            color: #ffd700 !important;
-            white-space: pre-line !important;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 15px rgba(0, 0, 0, 0.8) !important;
-            text-align: center !important;
-            max-width: 85% !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
-            background: transparent !important;
-            border: none !important;
-            padding: 0 !important;
-            box-shadow: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-
-        .empty {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #d1d5db;
-        }
-
-        /* --- GAYA UNTUK HEADER H1 DAN H3 (HIJAU EMAS) --- */
-        .header-section {
-            position: absolute;
-            top: 10px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            margin: 0;
-            padding: 0;
             z-index: 50;
         }
 
-        .header-section h1 {
+        .header h1 {
             font-family: 'Masking Renta', sans-serif !important;
             font-size: 3.2rem !important;
             line-height: 1.1 !important;
@@ -150,7 +50,7 @@
             padding: 0 !important;
         }
 
-        .header-section h3.sub-header {
+        .header h3.sub-header {
             font-family: 'Poppins', sans-serif !important;
             font-size: 1.25rem !important;
             font-weight: 500 !important;
@@ -164,65 +64,248 @@
             margin-bottom: 6px !important;
             padding: 0 !important;
         }
+
+        .datetime {
+            font-size: 1.55rem;
+            margin-top: 4px;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 5px 28px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Container Slide Utama */
+        .slide-stage {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        /* --- OPSI A: SPLIT 2-COLUMN LANDSCAPE LAYOUT --- */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 45px;
+            padding: 10px 40px 10px 40px;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.96);
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        /* Kolom Kiri: Poster / Foto Gambar Utama (~62% Lebar) */
+        .slide-left-col {
+            flex: 1.45;
+            height: 100%;
+            max-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-width: 0;
+        }
+
+        .slide-poster-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            max-height: 58vh;
+        }
+
+        .slide-poster-backdrop {
+            position: absolute;
+            inset: -12px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(28px);
+            opacity: 0.45;
+            border-radius: 20px;
+            transform: scale(1.03);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide-left-col img {
+            position: relative;
+            z-index: 2;
+            max-width: 100%;
+            max-height: 58vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(255, 215, 0, 0.15);
+        }
+
+        /* Kolom Kanan: Panel Glassmorphism Elegan (~38% Lebar) */
+        .slide-right-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            max-height: 100%;
+            min-width: 0;
+        }
+
+        .slide-card {
+            background: rgba(4, 25, 18, 0.72);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            border-radius: 20px;
+            padding: 30px 34px;
+            text-align: left;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            max-height: 58vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(0, 230, 118, 0.2));
+            border: 1px solid rgba(255, 215, 0, 0.45);
+            color: #ffd700;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            align-self: flex-start;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide-badge i {
+            color: #ffd700;
+            font-size: 0.95rem;
+        }
+
+        .slide-card .judul {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 700;
+            line-height: 1.28;
+            color: #ffffff;
+            margin-bottom: 14px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 12px;
+        }
+
+        .slide-card .deskripsi {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.92);
+            white-space: pre-line;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            overflow-y: auto;
+            max-height: 32vh;
+            padding-right: 10px;
+        }
+
+        /* Custom Scrollbar halus jika teks deskripsi sangat panjang */
+        .slide-card .deskripsi::-webkit-scrollbar {
+            width: 5px;
+        }
+        .slide-card .deskripsi::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.4);
+            border-radius: 10px;
+        }
+
+        .empty {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #d1d5db;
+        }
     </style>
 </head>
 
 <body>
     <div class="display-background"></div>
     <div class="display-overlay"></div>
+    @include('partials.medallion-header')
 
-    <div class="display-content" style="height: 100%; width: 100%; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
-        @include('partials.medallion-header')
+    <div class="display-content" style="height: 100vh; width: 100vw; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 25px 85px 25px; box-sizing: border-box; z-index: 5;">
 
-        <div class="header-section">
-            <h1>
-                @php
-                // 1. Cek dari variabel controller
-                $appName = $settings['nama_aplikasi'] ?? ($settings->nama_aplikasi ?? null);
-
-                // 2. Jika kosong, coba ambil dari Cache aplikasi (biasanya disimpan admin di sini)
-                if (empty($appName)) {
-                $appName = cache('nama_aplikasi') ?? cache('settings')['nama_aplikasi'] ?? null;
-                }
-
-                // 3. Jika masih kosong, coba ambil dari tabel singular 'setting' (tanpa 's')
-                if (empty($appName)) {
-                try {
-                $settingData = \DB::table('setting')->first();
-                $appName = $settingData->nama_aplikasi ?? $settingData->nama_masjid ?? null;
-                } catch (\Exception $e) {
-                // Abaikan jika tabel tidak ada
-                }
-                }
-
-                // 4. Fallback terakhir jika semuanya kosong
-                if (empty($appName)) {
-                $appName = 'MASJID JAMI AL- JIHAD';
-                }
-                @endphp
-                {{ $appName }}
-            </h1>
+        <!-- Header Standar Bersama (Pixel-Locked) -->
+        <div class="header">
+            <h1>{{ $settings['nama_aplikasi'] ?? 'MASJID JAMI AL- JIHAD' }}</h1>
             <h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime"></div>
         </div>
 
-        <div style="flex: 1; position: relative; width: 100%; overflow: hidden;">
+        <!-- Stage Konten Slide Informasi (Opsi A: Split 2-Kolom) -->
+        <div class="slide-stage">
             @if($slides->count())
             @foreach($slides as $slide)
             <div class="slide {{ $loop->first ? 'active' : '' }}" data-duration="{{ max(3, $slide->durasi) }}">
-                @if($slide->gambar)
-                <div class="slide-poster-wrapper">
-                    <div class="slide-poster-backdrop" style="background-image: url('{{ $slide->gambar_url }}');"></div>
-                    <img src="{{ $slide->gambar_url }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                
+                {{-- Kolom Kiri: Foto / Gambar Utama --}}
+                <div class="slide-left-col">
+                    @if($slide->gambar)
+                    <div class="slide-poster-wrapper">
+                        <div class="slide-poster-backdrop" style="background-image: url('{{ $slide->gambar_url }}');"></div>
+                        <img src="{{ $slide->gambar_url }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                    </div>
+                    @else
+                    <div class="slide-poster-wrapper">
+                        <img src="{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}" alt="{{ $slide->judul }}">
+                    </div>
+                    @endif
                 </div>
-                @endif
-                <div class="judul">
-                    {{ $slide->judul }}
+
+                {{-- Kolom Kanan: Kartu Informasi Elegan (Glassmorphism) --}}
+                <div class="slide-right-col">
+                    <div class="slide-card">
+                        <div class="slide-badge">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Informasi Kegiatan</span>
+                        </div>
+                        <div class="judul">
+                            {{ $slide->judul }}
+                        </div>
+                        @if($slide->deskripsi)
+                        <div class="deskripsi">{{ $slide->deskripsi }}</div>
+                        @endif
+                    </div>
                 </div>
-                @if($slide->deskripsi)
-                <div class="deskripsi">
-                    {{ $slide->deskripsi }}
-                </div>
-                @endif
+
             </div>
             @endforeach
             @else
