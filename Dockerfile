@@ -16,9 +16,18 @@ RUN rm -f /var/www/html/bootstrap/cache/*.php \
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
-# Discover packages, link storage, and set permissions
-RUN php artisan package:discover --ansi || true \
-    && php artisan storage:link || true \
+# Discover packages, ensure public/storage is a real symlink, and set permissions
+RUN mkdir -p /var/www/html/storage/app/public/slides \
+             /var/www/html/storage/app/public/qris \
+             /var/www/html/storage/app/public/background \
+             /var/www/html/storage/app/public/settings \
+    && if [ -d /var/www/html/public/storage ] && [ ! -L /var/www/html/public/storage ]; then \
+        cp -rn /var/www/html/public/storage/* /var/www/html/storage/app/public/ 2>/dev/null || true; \
+        rm -rf /var/www/html/public/storage; \
+    fi \
+    && rm -f /var/www/html/public/storage \
+    && php artisan package:discover --ansi || true \
+    && ln -s /var/www/html/storage/app/public /var/www/html/public/storage \
     && chmod -R 777 /var/www/html/storage /var/www/html/public/storage /var/www/html/bootstrap/cache
 
 # Apply custom Laravel Nginx site configuration

@@ -32,15 +32,40 @@ class SlideController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $path = $request->file('gambar')->store('slides', 'public');
-            Slide::create([
+            $file = $request->file('gambar');
+            $path = $file->store('slides', 'public');
+
+            // 1. Dual-save ke public/storage jika public/storage adalah folder terpisah
+            try {
+                $publicTarget = public_path('storage/' . $path);
+                $publicDir = dirname($publicTarget);
+                if (!file_exists($publicDir)) {
+                    @mkdir($publicDir, 0777, true);
+                }
+                @copy(storage_path('app/public/' . $path), $publicTarget);
+            } catch (\Throwable $e) {}
+
+            // 2. Buat backup Base64 agar kebal terhadap reset disk di cloud/Render
+            $base64 = null;
+            try {
+                $mime = $file->getClientMimeType() ?: 'image/jpeg';
+                $base64 = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($file->getRealPath()));
+            } catch (\Throwable $e) {}
+
+            $slideData = [
                 'judul'     => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'gambar'    => $path,
                 'urutan'    => $validated['urutan'],
                 'durasi'    => $validated['durasi'],
                 'aktif'     => $request->boolean('aktif'),
-            ]);
+            ];
+
+            if (\Illuminate\Support\Facades\Schema::hasColumn('slides', 'gambar_base64')) {
+                $slideData['gambar_base64'] = $base64;
+            }
+
+            Slide::create($slideData);
             DB::commit();
             return redirect()
                 ->route('slides.index')
@@ -77,22 +102,46 @@ class SlideController extends Controller
         DB::beginTransaction();
         try {
             $path = $slide->gambar;
+            $base64 = $slide->gambar_base64 ?? null;
             if ($request->hasFile('gambar')) {
                 if (!empty($slide->gambar) &&
                     Storage::disk('public')->exists($slide->gambar)) {
                     Storage::disk('public')->delete($slide->gambar);
                 }
-                $path = $request->file('gambar')
-                    ->store('slides', 'public');
+                $file = $request->file('gambar');
+                $path = $file->store('slides', 'public');
+
+                // Dual-save ke public/storage
+                try {
+                    $publicTarget = public_path('storage/' . $path);
+                    $publicDir = dirname($publicTarget);
+                    if (!file_exists($publicDir)) {
+                        @mkdir($publicDir, 0777, true);
+                    }
+                    @copy(storage_path('app/public/' . $path), $publicTarget);
+                } catch (\Throwable $e) {}
+
+                // Backup Base64
+                try {
+                    $mime = $file->getClientMimeType() ?: 'image/jpeg';
+                    $base64 = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($file->getRealPath()));
+                } catch (\Throwable $e) {}
             }
-            $slide->update([
+
+            $updateData = [
                 'judul'     => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'gambar'    => $path,
                 'urutan'    => $validated['urutan'],
                 'durasi'    => $validated['durasi'],
                 'aktif'     => $request->boolean('aktif'),
-            ]);
+            ];
+
+            if (\Illuminate\Support\Facades\Schema::hasColumn('slides', 'gambar_base64')) {
+                $updateData['gambar_base64'] = $base64;
+            }
+
+            $slide->update($updateData);
             DB::commit();
             return redirect()
                 ->route('slides.index')

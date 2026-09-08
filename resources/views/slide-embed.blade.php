@@ -179,7 +179,7 @@
             @foreach($slides as $slide)
             <div class="slide {{ $loop->first ? 'active' : '' }}" data-duration="{{ max(3, $slide->durasi) }}">
                 @if($slide->gambar)
-                <img src="{{ asset('storage/' . $slide->gambar) }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png') }}';">
+                <img src="{{ $slide->gambar_url }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
                 @endif
                 <div class="judul">
                     {{ $slide->judul }}

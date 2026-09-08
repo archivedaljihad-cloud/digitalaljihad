@@ -48,9 +48,10 @@
                     <div class="mt-2">
                         @if($slide->gambar)
                             <img
-                                src="{{ asset('storage/'.$slide->gambar) }}"
+                                src="{{ $slide->gambar_url }}"
                                 class="img-thumbnail"
-                                style="max-width:220px;">
+                                style="max-width:220px; object-fit:contain; background:#fdfdfd;"
+                                onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
                         @else
                             <span class="text-muted">
                                 Tidak ada gambar.

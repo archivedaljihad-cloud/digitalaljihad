@@ -59,10 +59,11 @@
                             <td class="text-center">
                                 @if($slide->gambar)
                                     <img
-                                        src="{{ asset('storage/'.$slide->gambar) }}"
+                                        src="{{ $slide->gambar_url }}"
                                         class="img-thumbnail"
-                                        style="max-width:120px; max-height:90px;"
-                                        alt="{{ $slide->judul }}">
+                                        style="max-width:120px; max-height:90px; object-fit:contain; background:#fdfdfd;"
+                                        alt="{{ $slide->judul }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
                                 @else
                                     <span class="text-muted">
                                         Tidak ada gambar

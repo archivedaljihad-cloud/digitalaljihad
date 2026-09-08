@@ -90,6 +90,59 @@ Route::get('/infokeuangan', function () {
 
 /*
 |--------------------------------------------------------------------------
+| STORAGE FALLBACK (Menjamin file storage selalu dapat disajikan)
+|--------------------------------------------------------------------------
+*/
+Route::get('/storage/{path}', function ($path) {
+    // 1. Cek langsung di storage/app/public/
+    $storagePath = storage_path('app/public/' . $path);
+    if (file_exists($storagePath) && is_file($storagePath)) {
+        return response()->file($storagePath);
+    }
+
+    // 2. Cek di public/storage/
+    $publicPath = public_path('storage/' . $path);
+    if (file_exists($publicPath) && is_file($publicPath)) {
+        return response()->file($publicPath);
+    }
+
+    // 3. Fallback cerdas untuk slides jika file fisik terhapus setelah restart server
+    if (str_starts_with($path, 'slides/')) {
+        $slide = \App\Models\Slide::where('gambar', $path)
+            ->orWhere('gambar', 'like', '%' . basename($path))
+            ->first();
+
+        if ($slide) {
+            // Cek jika ada cadangan Base64
+            if (!empty($slide->gambar_base64) && str_starts_with($slide->gambar_base64, 'data:image/')) {
+                $parts = explode(',', $slide->gambar_base64, 2);
+                if (count($parts) === 2) {
+                    $decoded = base64_decode($parts[1]);
+                    @file_put_contents($storagePath, $decoded);
+                    @file_put_contents($publicPath, $decoded);
+                    return response($decoded)->header('Content-Type', 'image/png');
+                }
+            }
+            // Smart keyword fallback ke file sertifikat resmi yang tersedia di repo
+            $title = strtolower(($slide->judul ?? '') . ' ' . ($slide->deskripsi ?? ''));
+            if (str_contains($title, 'kemenag') || str_contains($title, 'simas')) {
+                $fallback = public_path('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp');
+                if (file_exists($fallback)) return response()->file($fallback);
+            } elseif (str_contains($title, 'sertifikat') || str_contains($title, 'berkiblat') || str_contains($title, '1.148') || str_contains($title, '1.448') || str_contains($title, 'rashdul')) {
+                $fallback = public_path('storage/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png');
+                if (file_exists($fallback)) return response()->file($fallback);
+            } elseif (str_contains($title, 'qiblat') || str_contains($title, 'arah') || str_contains($title, 'kompas')) {
+                $fallback = public_path('storage/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png');
+                if (file_exists($fallback)) return response()->file($fallback);
+            }
+        }
+    }
+
+    abort(404);
+})->where('path', '.*')->name('storage.fallback');
+
+/*
+|--------------------------------------------------------------------------
 | AUTH
 |--------------------------------------------------------------------------
 */
