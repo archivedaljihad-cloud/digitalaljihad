@@ -21,7 +21,7 @@
         .slide {
             position: absolute;
             inset: 0;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
@@ -29,16 +29,26 @@
             text-align: center;
             padding: 190px 40px 90px 40px;
             box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.96);
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, visibility 0.8s;
+            pointer-events: none;
         }
 
         .slide.active {
-            display: flex;
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            pointer-events: auto;
         }
 
         .slide img {
             max-width: 90%;
             max-height: 55vh;
             object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         /* --- KODE PENGATURAN TEKS ATAS (JUDUL) --- */
@@ -282,6 +292,34 @@
 
             setInterval(changeBackground, 10000);
         }
+    </script>
+
+    <!-- SCRIPT UNTUK ROTASI KONTEN SLIDE INFORMASI -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slideElements = document.querySelectorAll('.slide');
+            if (!slideElements || slideElements.length <= 1) return;
+
+            let currentSlideIndex = 0;
+            let slideTimer = null;
+
+            function showNextSlide() {
+                slideElements[currentSlideIndex].classList.remove('active');
+                currentSlideIndex = (currentSlideIndex + 1) % slideElements.length;
+                slideElements[currentSlideIndex].classList.add('active');
+
+                scheduleNextSlide();
+            }
+
+            function scheduleNextSlide() {
+                if (slideTimer) clearTimeout(slideTimer);
+                const currentSlide = slideElements[currentSlideIndex];
+                const duration = (parseInt(currentSlide.getAttribute('data-duration'), 10) || 5) * 1000;
+                slideTimer = setTimeout(showNextSlide, duration);
+            }
+
+            scheduleNextSlide();
+        });
     </script>
 
 </body>
