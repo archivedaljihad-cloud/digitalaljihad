@@ -67,6 +67,24 @@ class AppServiceProvider extends ServiceProvider
             // ignore and proceed
         }
 
+        // Auto-provision table keuangan_ambulance if not exists
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('keuangan_ambulance')) {
+                \Illuminate\Support\Facades\Schema::create('keuangan_ambulance', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    $table->id();
+                    $table->date('tanggal');
+                    $table->string('deskripsi');
+                    $table->decimal('pemasukan', 15, 2)->default(0.00);
+                    $table->decimal('pengeluaran', 15, 2)->default(0.00);
+                    $table->decimal('saldo', 15, 2)->default(0.00);
+                    $table->string('kategori', 100)->nullable();
+                    $table->timestamps();
+                });
+            }
+        } catch (\Throwable $e) {
+            // ignore and proceed
+        }
+
         // Membuat variabel $setting otomatis ada di layouts.admin
         View::composer('layouts.admin', function ($view) {
             $view->with('setting', AppSetting::first());

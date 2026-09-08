@@ -70,6 +70,11 @@ class RotationController extends Controller
                         'name'   => 'Idul Adha',
                         'active' => true,
                     ],
+                    [
+                        'url'    => 'ambulance-embed',
+                        'name'   => 'Kas Ambulance',
+                        'active' => true,
+                    ],
                 ])
             ]);
         }
@@ -131,6 +136,11 @@ class RotationController extends Controller
                 'url'    => 'idul-adha-embed',
                 'name'   => 'Idul Adha',
                 'active' => in_array('idul-adha-embed', $activePages),
+            ],
+            [
+                'url'    => 'ambulance-embed',
+                'name'   => 'Kas Ambulance',
+                'active' => in_array('ambulance-embed', $activePages),
             ],
         ];
         DB::table('app_settings')->update([

@@ -148,6 +148,21 @@ class AppSetting extends Model
             ];
         }
 
+        $hasAmbulance = false;
+        foreach ($data as $item) {
+            if (isset($item['url']) && $item['url'] === 'ambulance-embed') {
+                $hasAmbulance = true;
+                break;
+            }
+        }
+        if (!$hasAmbulance) {
+            $data[] = [
+                'url' => 'ambulance-embed',
+                'name' => 'Kas Ambulance',
+                'active' => true,
+            ];
+        }
+
         return $data;
     }
 

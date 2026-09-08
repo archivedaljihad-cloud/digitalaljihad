@@ -517,6 +517,14 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Kas Ambulance -->
+            <li class="nav-item {{ request()->routeIs('ambulance.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('ambulance.index') }}">
+                    <i class="fas fa-fw fa-ambulance"></i>
+                    <span>Kas Ambulance</span>
+                </a>
+            </li>
+
             <!-- Nav Item - QRIS -->
             <li class="nav-item {{ request()->routeIs('qris.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('qris.index') }}">
@@ -710,6 +718,14 @@
                 <a class="nav-link" href="{{ route('keuangan.index') }}">
                     <i class="fas fa-fw fa-hand-holding-heart"></i>
                     <span>Buku Kas & Transaksi</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Buku Kas Ambulance -->
+            <li class="nav-item {{ request()->routeIs('ambulance.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('ambulance.index') }}">
+                    <i class="fas fa-fw fa-ambulance"></i>
+                    <span>Buku Kas Ambulance</span>
                 </a>
             </li>
 

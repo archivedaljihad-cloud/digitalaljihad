@@ -38,11 +38,17 @@
             <a class="dropdown-item" href="{{ route('keuangan.create') }}">
                 <i class="fas fa-money-bill text-warning"></i> Input Transaksi Kas
             </a>
+            <a class="dropdown-item" href="{{ route('ambulance.create') }}">
+                <i class="fas fa-ambulance text-danger"></i> Input Kas Ambulance
+            </a>
             @endif
 
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ route('rotator') }}" target="_blank">
                 <i class="fas fa-tv text-primary"></i> Buka Tampilan TV
+            </a>
+            <a class="dropdown-item" href="{{ route('ambulance.embed') }}" target="_blank">
+                <i class="fas fa-ambulance text-success"></i> Monitor TV Kas Ambulance
             </a>
         </div>
     </div>
@@ -767,37 +773,128 @@
     </div>
 </div>
 
+<!-- Kas Ambulance Cards -->
+<div class="row">
+    <!-- Saldo Kas Ambulance -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <a href="{{ route('ambulance.index') }}" class="card-link">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                <i class="fas fa-ambulance"></i> Saldo Kas Ambulance
+                            </div>
+                            @php
+                            $totalPemasukanAmb = \App\Models\KeuanganAmbulance::sum('pemasukan');
+                            $totalPengeluaranAmb = \App\Models\KeuanganAmbulance::sum('pengeluaran');
+                            $saldoAmb = $totalPemasukanAmb - $totalPengeluaranAmb;
+                            @endphp
+                            <div class="h4 mb-0 font-weight-bold text-gray-800">
+                                Rp {{ number_format($saldoAmb, 0, ',', '.') }}
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Total saldo kas operasional ambulance</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-ambulance fa-2x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Total Pemasukan Kas Ambulance -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <a href="{{ route('ambulance.index') }}" class="card-link">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                <i class="fas fa-arrow-down"></i> Pemasukan Ambulance
+                            </div>
+                            <div class="h4 mb-0 font-weight-bold text-primary">
+                                Rp {{ number_format($totalPemasukanAmb, 0, ',', '.') }}
+                            </div>
+                            <div class="mt-2 text-xs text-muted">Infak & sumbangan ambulance</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hand-holding-usd fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Total Pengeluaran Kas Ambulance -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <a href="{{ route('ambulance.index') }}" class="card-link">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                <i class="fas fa-arrow-up"></i> Pengeluaran Ambulance
+                            </div>
+                            <div class="h4 mb-0 font-weight-bold text-danger">
+                                Rp {{ number_format($totalPengeluaranAmb, 0, ',', '.') }}
+                            </div>
+                            <div class="mt-2 text-xs text-muted">BBM, service & driver ambulance</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-gas-pump fa-2x text-danger"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
 <!-- Action Cards & Quick Links untuk Bendahara -->
 <div class="row mb-4">
-    <div class="col-md-4 mb-3">
+    <div class="col-md-3 mb-3">
         <a href="{{ route('keuangan.create') }}" class="btn btn-success btn-block btn-lg shadow-sm py-3 text-left">
             <div class="d-flex align-items-center">
                 <i class="fas fa-plus-circle fa-2x mr-3"></i>
                 <div>
-                    <strong class="d-block">Input Transaksi Kas Baru</strong>
-                    <small>Catat pemasukan atau pengeluaran</small>
+                    <strong class="d-block">Input Kas Masjid</strong>
+                    <small>Catat transaksi kas umum</small>
                 </div>
             </div>
         </a>
     </div>
-    <div class="col-md-4 mb-3">
-        <a href="{{ route('laporan.keuangan') }}" class="btn btn-primary btn-block btn-lg shadow-sm py-3 text-left">
+    <div class="col-md-3 mb-3">
+        <a href="{{ route('ambulance.create') }}" class="btn btn-danger btn-block btn-lg shadow-sm py-3 text-left">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-ambulance fa-2x mr-3"></i>
+                <div>
+                    <strong class="d-block">Input Kas Ambulance</strong>
+                    <small>Catat kas ambulance</small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3 mb-3">
+        <a href="{{ route('laporan.ambulance') }}" class="btn btn-primary btn-block btn-lg shadow-sm py-3 text-left">
             <div class="d-flex align-items-center">
                 <i class="fas fa-chart-line fa-2x mr-3"></i>
                 <div>
-                    <strong class="d-block">Laporan & Rekap Keuangan</strong>
-                    <small>Rekap per periode bulanan/tahunan</small>
+                    <strong class="d-block">Laporan Ambulance</strong>
+                    <small>Rekap kas ambulance</small>
                 </div>
             </div>
         </a>
     </div>
-    <div class="col-md-4 mb-3">
-        <a href="{{ route('export.keuangan') }}" class="btn btn-warning btn-block btn-lg shadow-sm py-3 text-left text-dark">
+    <div class="col-md-3 mb-3">
+        <a href="{{ route('ambulance.index') }}" class="btn btn-warning btn-block btn-lg shadow-sm py-3 text-left text-dark">
             <div class="d-flex align-items-center">
-                <i class="fas fa-file-excel fa-2x mr-3"></i>
+                <i class="fas fa-book-open fa-2x mr-3"></i>
                 <div>
-                    <strong class="d-block">Export Laporan Excel</strong>
-                    <small>Unduh file spreadsheet kas masjid</small>
+                    <strong class="d-block">Buku Kas Ambulance</strong>
+                    <small>Kelola seluruh transaksi</small>
                 </div>
             </div>
         </a>

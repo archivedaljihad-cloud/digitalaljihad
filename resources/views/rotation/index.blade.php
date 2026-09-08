@@ -45,7 +45,7 @@
 				<hr>
 				
 				<h5>Halaman yang Ditampilkan</h5>
-				<p class="text-muted">Centang halaman yang ingin ditampilkan dalam rotasi (Total 10 Halaman)</p>
+				<p class="text-muted">Centang halaman yang ingin ditampilkan dalam rotasi (Total {{ count($availablePages ?? []) }} Halaman)</p>
 				
 				<div class="table-responsive">
 					<table class="table table-bordered">
@@ -69,7 +69,8 @@
 							['url' => 'qris-embed', 'name' => 'QRIS Donasi', 'desc' => 'QR Code untuk donasi dan infak online'],
 							['url' => 'slide-embed', 'name' => 'Slide Informasi', 'desc' => 'Slideshow informasi, gambar, dan pengumuman bergambar'],
 							['url' => 'idul-fitri-embed', 'name' => 'Idul Fitri', 'desc' => 'Jadwal sholat Idul Fitri dengan imam, khatib, muadzin'],
-							['url' => 'idul-adha-embed', 'name' => 'Idul Adha', 'desc' => 'Jadwal sholat Idul Adha dengan imam, khatib, muadzin']
+							['url' => 'idul-adha-embed', 'name' => 'Idul Adha', 'desc' => 'Jadwal sholat Idul Adha dengan imam, khatib, muadzin'],
+							['url' => 'ambulance-embed', 'name' => 'Kas Ambulance', 'desc' => 'Tampilan monitor TV buku kas dan keuangan ambulance']
 							];
 							
 							// PERBAIKAN: Decode JSON jika masih string
@@ -110,7 +111,7 @@
 				
 				<div class="alert alert-info mt-3">
 					<i class="fas fa-info-circle"></i>
-					<strong>Informasi:</strong> Total ada 10 halaman yang tersedia. Pilih halaman mana saja yang ingin ditampilkan dalam rotasi.
+					<strong>Informasi:</strong> Total ada {{ count($availablePages) }} halaman yang tersedia. Pilih halaman mana saja yang ingin ditampilkan dalam rotasi.
 				</div>
 				
 				<button type="submit" class="btn btn-primary">

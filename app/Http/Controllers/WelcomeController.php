@@ -64,6 +64,21 @@ class WelcomeController extends Controller
                         'url'    => 'slide-embed',
                         'name'   => 'Slide Informasi',
                         'active' => true
+                    ],
+                    [
+                        'url'    => 'idul-fitri-embed',
+                        'name'   => 'Idul Fitri',
+                        'active' => true
+                    ],
+                    [
+                        'url'    => 'idul-adha-embed',
+                        'name'   => 'Idul Adha',
+                        'active' => true
+                    ],
+                    [
+                        'url'    => 'ambulance-embed',
+                        'name'   => 'Kas Ambulance',
+                        'active' => true
                     ]
                 ])
             ]);

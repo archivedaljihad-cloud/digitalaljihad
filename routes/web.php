@@ -20,6 +20,7 @@ use App\Http\Controllers\SholatIdulAdhaController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\AgendaKajianController;
 use App\Http\Controllers\PrayerModeController;
+use App\Http\Controllers\KeuanganAmbulanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,8 @@ Route::get('/idul-fitri-embed', [SholatIdulFitriController::class, 'embed'])
     ->name('idul-fitri.embed');
 Route::get('/idul-adha-embed', [SholatIdulAdhaController::class, 'embed'])
     ->name('idul-adha.embed');
+Route::get('/ambulance-embed', [KeuanganAmbulanceController::class, 'embed'])
+    ->name('ambulance.embed');
 Route::get('/data-timestamp', [WelcomeController::class, 'getDataTimestamp'])
     ->name('data.timestamp');
 Route::get('/rotation-settings', [WelcomeController::class, 'getRotationSettings'])
@@ -211,13 +214,18 @@ Route::middleware(['auth'])->group(function () {
     */
     Route::middleware(['role:admin,bendahara'])->group(function () {
         Route::resource('keuangan', KeuanganController::class);
+        Route::resource('ambulance', KeuanganAmbulanceController::class);
 
         Route::get('/export/keuangan', [KeuanganController::class, 'export'])
             ->name('export.keuangan');
+        Route::get('/export/ambulance', [KeuanganAmbulanceController::class, 'export'])
+            ->name('export.ambulance');
 
         Route::prefix('laporan')->name('laporan.')->group(function () {
             Route::get('/keuangan', [KeuanganController::class, 'laporan'])->name('keuangan');
             Route::get('/keuangan/pdf', [KeuanganController::class, 'pdf'])->name('keuangan.pdf');
+            Route::get('/ambulance', [KeuanganAmbulanceController::class, 'laporan'])->name('ambulance');
+            Route::get('/ambulance/pdf', [KeuanganAmbulanceController::class, 'pdf'])->name('ambulance.pdf');
         });
     });
 
