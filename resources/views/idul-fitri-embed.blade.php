@@ -65,13 +65,16 @@
 
 		.header {
 			text-align: center;
-			margin-bottom: 15px;
+			margin-top: 0;
+			margin-bottom: 12px;
 			flex-shrink: 0;
+			position: relative;
 		}
 
 		.header h1 {
         font-family: 'Masking Renta', sans-serif !important;
         font-size: 3.2rem !important;
+        line-height: 1.1 !important;
         letter-spacing: 5px !important;
         text-transform: uppercase !important;
         background: none !important;
@@ -87,19 +90,23 @@
              0    0  25px #ffd700,
              0    0  40px rgba(255, 170, 0, 0.06) !important;
         filter: none !important;
-        margin-bottom: -15px !important; 
+        margin: 0 0 -15px 0 !important;
+        padding: 0 !important;
     }
 
     .header h3.sub-header {
         font-family: 'Poppins', sans-serif !important;
         font-size: 1.25rem !important;
         font-weight: 500 !important;
+        line-height: 1.2 !important;
         letter-spacing: 4px !important;
         color: #ffffff !important;
         text-transform: uppercase !important;
         opacity: 0.95 !important;
         text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important;
         margin-top: 10px !important;
+        margin-bottom: 6px !important;
+        padding: 0 !important;
     }
 
 		.main-content {

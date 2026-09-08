@@ -105,3 +105,79 @@ body {
     box-shadow: none !important;
     backdrop-filter: none !important;
 }
+
+/* =====================================================
+   MASTER UNIFIED HEADER (H1, SUB-HEADER, DATETIME)
+   ===================================================== */
+.header,
+.header-section {
+    text-align: center !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+}
+
+.header h1,
+.header-section h1 {
+    font-family: 'Masking Renta', sans-serif !important;
+    font-size: 3.2rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: 5px !important;
+    text-transform: uppercase !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    color: #0b4f26 !important;
+    text-shadow:
+        2px 2px 0 #ffffff,
+        -2px 2px 0 #ffffff,
+        2px -2px 0 #ffffff,
+        -2px -2px 0 #ffffff,
+        0 0 12px #ffd700,
+        0 0 25px #ffd700,
+        0 0 40px rgba(255, 170, 0, 0.06) !important;
+    filter: none !important;
+    margin: 0 0 -15px 0 !important;
+    padding: 0 !important;
+}
+
+.header h2.sub-header,
+.header h3.sub-header,
+.header .sub-header,
+.header-section h2.sub-header,
+.header-section h3.sub-header,
+.header-section .sub-header,
+h3.sub-header,
+h2.sub-header {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 4px !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    opacity: 0.95 !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important;
+    margin-top: 10px !important;
+    margin-bottom: 6px !important;
+    padding: 0 !important;
+}
+
+.header .datetime,
+.header-section .datetime {
+    font-size: 1.55rem !important;
+    background: rgba(3, 20, 15, 0.65) !important;
+    display: inline-block !important;
+    padding: 5px 28px !important;
+    border-radius: 35px !important;
+    margin-top: 4px !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}

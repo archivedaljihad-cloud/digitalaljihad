@@ -83,7 +83,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 10px 25px 85px 25px;
             box-sizing: border-box;
             position: relative;
             z-index: 2;
@@ -91,14 +91,16 @@
 
         .header {
             text-align: center;
-            margin-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 12px;
             position: relative;
+            flex-shrink: 0;
         }
 
         .header h1 {
         font-family: 'Masking Renta', sans-serif !important;
         font-size: 3.2rem !important;
-        /* Perbesar jarak antar huruf di sini */
+        line-height: 1.1 !important;
         letter-spacing: 5px !important;
         text-transform: uppercase !important;
         background: none !important;
@@ -114,9 +116,8 @@
              0    0  25px #ffd700,
              0    0  40px rgba(255, 170, 0, 0.06) !important;
         filter: none !important;
-        
-        /* Kurangi jarak bawah h1 */
-        margin-bottom: -15px !important; 
+        margin: 0 0 -15px 0 !important;
+        padding: 0 !important;
     }
 
     .header h3.sub-header {
@@ -128,17 +129,18 @@
         text-transform: uppercase !important;
         opacity: 0.95 !important;
         text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important;
-        
-        /* Tarik h3 sedikit ke atas mendekati h1 */
         margin-top: 10px !important;
+        margin-bottom: 6px !important;
+        line-height: 1.2 !important;
+        padding: 0 !important;
     }
 
         .datetime {
-            font-size: 1.45rem;
-            margin-top: 0px;
+            font-size: 1.55rem;
+            margin-top: 4px;
             background: rgba(3, 20, 15, 0.65);
             display: inline-block;
-            padding: 6px 26px;
+            padding: 5px 28px;
             border-radius: 35px;
             font-weight: 600;
             letter-spacing: 1px;
