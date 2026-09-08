@@ -213,13 +213,26 @@
 
 		.jadwal-mendatang-badge {
 			background: #ffd700;
-			color: #0a4d68;
-			padding: 4px 12px;
+			color: #000000 !important;
+			padding: 5px 14px;
 			border-radius: 20px;
-			font-size: 0.8rem;
-			font-weight: bold;
-			display: inline-block;
-			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+			font-size: 0.95rem;
+			font-weight: 800 !important;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			letter-spacing: 0.5px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+			border: 1px solid rgba(255, 255, 255, 0.4);
+		}
+
+		.jadwal-mendatang-badge i {
+			color: inherit !important;
+		}
+
+		.jadwal-mendatang-badge.badge-hari-ini {
+			background: #28a745 !important;
+			color: #ffffff !important;
 		}
 
 		.bottom-section {
@@ -401,9 +414,9 @@
 				<div class="info-box-value">
 					<span class="value">{{ $formattedDate }}</span>
 					@if($isToday)
-					<span class="jadwal-mendatang-badge" style="background: #28a745; color: #fff;"><i class="fas fa-clock"></i> Hari Ini</span>
+					<span class="jadwal-mendatang-badge badge-hari-ini" style="background: #28a745; color: #ffffff !important;"><i class="fas fa-clock mr-1"></i> Hari Ini</span>
 					@elseif($isMendatang)
-					<span class="jadwal-mendatang-badge"><i class="fas fa-calendar-week"></i> Jumat Mendatang</span>
+					<span class="jadwal-mendatang-badge" style="background: #ffd700; color: #000000 !important; font-weight: 800;"><i class="fas fa-calendar-week mr-1" style="color: #000000 !important;"></i> Jumat Mendatang</span>
 					@endif
 				</div>
 			</div>
