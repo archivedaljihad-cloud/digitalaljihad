@@ -5,7 +5,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Sistem Informasi Masjid - Pengumuman</title>
+	<title>Sistem Informasi Masjid - Informasi Kegiatan & Kajian</title>
 	<link rel="icon" type="image/x-icon" href="{{ asset($settings['favicon'] ? 'storage/' . $settings['favicon'] : 'favicon.ico') }}?v={{ time() }}">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
@@ -29,32 +29,7 @@
 			position: relative;
 		}
 
-		/* Kaligrafi */
-		.kaligrafi {
-			position: absolute;
-			top: 15px;
-			font-family: 'Amiri', serif;
-			font-size: 4.5rem;
-			opacity: 0.85;
-			z-index: 2;
-			user-select: none;
-			background: linear-gradient(to right, #ffd700, #ffffff);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
-		}
-
-		.kaligrafi-allah {
-			right: 35px;
-		}
-
-		.kaligrafi-muhammad {
-			left: 35px;
-		}
-
-
-
-		/* Container Utama */
+		/* Container Utama Pixel-Locked */
 		.container {
 			position: relative;
 			z-index: 5;
@@ -71,7 +46,7 @@
 		.header {
 			text-align: center;
 			margin-top: 0;
-			margin-bottom: 12px;
+			margin-bottom: 8px;
 			flex-shrink: 0;
 			position: relative;
 		}
@@ -129,119 +104,268 @@
 			-webkit-backdrop-filter: blur(8px);
 		}
 
-		/* Main Announcement Card - Floating Glassmorphism di Tengah */
+		/* Main Announcement Stage */
 		.announcement-container {
 			flex: 1;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			min-height: 0;
-			margin: 10px 0;
+			width: 100%;
+			max-width: 1450px;
+			margin: 0 auto;
+			padding: 0 15px;
+			box-sizing: border-box;
 		}
 
+		/* Premiere 2-Column Card (Glassmorphism Elegan) */
 		.announcement-card {
-			background: rgba(10, 30, 25, 0.35);
-			backdrop-filter: blur(12px);
-			-webkit-backdrop-filter: blur(12px);
-			border-radius: 24px;
-			padding: 30px 40px;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			border-left: 6px solid #ffd700;
-			box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+			background: rgba(4, 25, 18, 0.76);
+			backdrop-filter: blur(14px);
+			-webkit-backdrop-filter: blur(14px);
+			border-radius: 22px;
+			padding: 24px 32px;
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 			width: 100%;
-			max-width: 950px;
+			max-height: 58vh;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
-			animation: fadeIn 0.5s ease;
+			animation: cardFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 		}
 
-		@keyframes fadeIn {
+		@keyframes cardFadeIn {
 			from {
 				opacity: 0;
-				transform: scale(0.98);
+				transform: scale(0.97);
 			}
-
 			to {
 				opacity: 1;
 				transform: scale(1);
 			}
 		}
 
-		/* Header Card */
-		.card-header {
+		/* Card Header */
+		.card-header-bar {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			margin-bottom: 20px;
-			padding-bottom: 14px;
-			border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+			margin-bottom: 16px;
+			padding-bottom: 12px;
+			border-bottom: 1.5px solid rgba(255, 215, 0, 0.3);
+			flex-shrink: 0;
 		}
 
 		.page-title-badge {
-			display: flex;
+			display: inline-flex;
 			align-items: center;
-			gap: 10px;
-			background: rgba(255, 215, 0, 0.15);
-			backdrop-filter: blur(8px);
-			padding: 6px 20px;
+			gap: 9px;
+			background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(0, 230, 118, 0.22));
+			padding: 6px 18px;
 			border-radius: 30px;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+			border: 1px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 		}
 
 		.page-title-badge i {
-			font-size: 1.3rem;
+			font-size: 1.15rem;
 			color: #ffd700;
 		}
 
 		.page-title-badge span {
-			font-size: 1.05rem;
+			font-size: 0.98rem;
 			font-weight: 700;
 			color: #ffd700;
 			letter-spacing: 1px;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			text-transform: uppercase;
+			text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 		}
 
 		.date-badge {
-			background: rgba(255, 215, 0, 0.15);
+			background: rgba(3, 20, 15, 0.65);
 			color: #ffd700;
 			padding: 6px 18px;
 			border-radius: 30px;
 			font-size: 1rem;
 			font-weight: 600;
-			border: 1px solid rgba(255, 215, 0, 0.3);
-			backdrop-filter: blur(5px);
-			display: flex;
+			border: 1px solid rgba(255, 215, 0, 0.35);
+			display: inline-flex;
 			align-items: center;
 			gap: 8px;
+			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 		}
 
-		.date-badge i {
-			font-size: 1.1rem;
+		/* Split Layout Body */
+		.card-main-body {
+			display: flex;
+			align-items: center;
+			gap: 36px;
+			flex: 1;
+			min-height: 0;
+			overflow: hidden;
 		}
 
-		/* Announcement Content */
-		.announcement-content {
-			font-size: 1.8rem;
-			line-height: 1.5;
+		/* Kolom Kiri: Foto Ustadz / Flyer */
+		.speaker-col {
+			flex: 0 0 280px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+		}
+
+		.speaker-frame {
+			position: relative;
+			width: 230px;
+			height: 230px;
+			border-radius: 20px;
+			padding: 5px;
+			background: linear-gradient(135deg, rgba(255, 215, 0, 0.6), rgba(0, 230, 118, 0.3));
+			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.2);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			overflow: hidden;
+		}
+
+		.speaker-frame img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: 16px;
+		}
+
+		.speaker-avatar-fallback {
+			width: 100%;
+			height: 100%;
+			background: radial-gradient(circle, rgba(11, 79, 38, 0.8) 0%, rgba(3, 20, 15, 0.95) 100%);
+			border-radius: 16px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			color: #ffd700;
+			gap: 10px;
+		}
+
+		.speaker-avatar-fallback i {
+			font-size: 4rem;
+			filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+		}
+
+		.speaker-avatar-fallback span {
+			font-size: 0.88rem;
+			font-weight: 600;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			opacity: 0.9;
+		}
+
+		/* Kolom Kanan: Rincian Agenda & Materi */
+		.details-col {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			min-width: 0;
+			padding-right: 5px;
+		}
+
+		.activity-title {
+			font-size: 2.15rem;
+			font-weight: 700;
+			line-height: 1.25;
+			color: #ffd700;
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+			margin-bottom: 6px;
+		}
+
+		.speaker-name-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 9px;
+			font-size: 1.28rem;
 			font-weight: 600;
 			color: #ffffff;
-			text-align: center;
-			word-break: break-word;
-			padding: 15px;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			margin-bottom: 16px;
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+		}
+
+		.speaker-name-badge i {
+			color: #00e676;
+			font-size: 1.2rem;
+		}
+
+		/* Grid Info Pill (Hari/Tanggal, Waktu, Tempat) */
+		.meta-pills-row {
+			display: flex;
+			gap: 14px;
+			flex-wrap: wrap;
+			margin-bottom: 16px;
+		}
+
+		.meta-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 9px;
+			background: rgba(0, 0, 0, 0.45);
+			border: 1px solid rgba(255, 215, 0, 0.35);
+			padding: 7px 16px;
+			border-radius: 12px;
+			font-size: 0.96rem;
+			color: #ffffff;
+			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+		}
+
+		.meta-pill i {
+			font-size: 1.05rem;
+		}
+
+		.meta-pill.time-pill i { color: #ffd700; }
+		.meta-pill.location-pill i { color: #ff5252; }
+		.meta-pill.date-pill i { color: #00b4d8; }
+
+		.meta-pill span.label {
+			color: rgba(255, 255, 255, 0.75);
+			font-weight: 500;
+		}
+
+		.meta-pill span.val {
+			font-weight: 700;
+			color: #ffffff;
+		}
+
+		/* Deskripsi / Isi Pengumuman */
+		.activity-description {
+			font-size: 1.2rem;
+			line-height: 1.55;
+			color: rgba(255, 255, 255, 0.92);
+			text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+			max-height: 18vh;
+			overflow-y: auto;
+			padding-right: 8px;
+			white-space: pre-line;
+		}
+
+		.activity-description::-webkit-scrollbar {
+			width: 4px;
+		}
+		.activity-description::-webkit-scrollbar-thumb {
+			background: rgba(255, 215, 0, 0.4);
+			border-radius: 8px;
 		}
 
 		/* Progress & Indicators */
 		.progress-container {
 			flex-shrink: 0;
-			margin-top: 8px;
-			margin-bottom: 8px;
-			max-width: 950px;
+			margin-top: 6px;
+			margin-bottom: 4px;
+			max-width: 1450px;
 			margin-left: auto;
 			margin-right: auto;
 			width: 100%;
+			padding: 0 15px;
 		}
 
 		.progress-bar {
@@ -253,7 +377,7 @@
 
 		.progress-fill {
 			height: 100%;
-			background: #ffd700;
+			background: linear-gradient(90deg, #00b4d8, #00e676, #ffd700);
 			width: 0%;
 			transition: width linear;
 		}
@@ -281,78 +405,17 @@
 			border-radius: 10px;
 		}
 
-		/* Bagian Bawah (Running Text & Footer) - Transparan Total Tanpa Kotak */
-		.bottom-section {
-			flex-shrink: 0;
-			width: 100%;
-			margin-top: auto;
-		}
-
-		.running-text-container,
-		.footer {
-			background: transparent !important;
-			background-color: transparent !important;
-			background-image: none !important;
-			border: none !important;
-			box-shadow: none !important;
-			backdrop-filter: none !important;
-			-webkit-backdrop-filter: none !important;
-		}
-
-		.running-text-container {
-			padding: 6px 15px;
-			margin-bottom: 6px;
-			overflow: hidden;
-		}
-
-		.running-text {
-			white-space: nowrap;
-			animation: marquee 25s linear infinite;
-			/* Tambahkan !important di baris bawah ini */
-			font-size: 1.1rem !important; 
-			letter-spacing: 0.5px;
-			font-weight: 500;
-			color: #ffffff;
-			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-		}
-
-		.running-text i {
-			margin-right: 8px;
-			color: #ffd700;
-		}
-
-		@keyframes marquee {
-			0% {
-				transform: translateX(100%);
-			}
-
-			100% {
-				transform: translateX(-100%);
-			}
-		}
-
-		.footer {
+		.empty-activity {
 			text-align: center;
-			padding: 6px;
-			font-size: 0.8rem;
-			color: #ffd700;
-			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+			padding: 40px;
+			color: rgba(255, 255, 255, 0.8);
 		}
-
-		/* Responsive */
-		@media (max-width: 1024px) {
-			.page-title-badge {
-				display: none;
-			}
-
-			.announcement-content {
-				font-size: 1.5rem;
-			}
+		.empty-activity i {
+			font-size: 3.5rem;
+			color: #ffd700;
+			margin-bottom: 12px;
 		}
 	</style>
-
-	{{-- Posisikan include di bawah agar menang menimpa style --}}
-	@include('partials.display-theme')
 </head>
 
 <body>
@@ -362,30 +425,83 @@
 	@include('partials.medallion-header')
 
 	<div class="container">
+		<!-- Header Standar Bersama (Pixel-Locked) -->
 		<div class="header">
-			<h1>{{ $settings['nama_aplikasi'] ?? 'Masjid Al-Jihad' }}</h1>
+			<h1>{{ $settings['nama_aplikasi'] ?? 'MASJID JAMI AL- JIHAD' }}</h1>
 			<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
 			<div class="datetime" id="datetime"></div>
 		</div>
 
+		<!-- Stage Kartu Premiere Kegiatan (2-Column Showcase) -->
 		<div class="announcement-container" id="announcementContainer">
 			<div class="announcement-card" id="announcementCard">
-				<div class="card-header">
+				
+				<!-- Top Bar: Badge Kategori & Badge Tanggal -->
+				<div class="card-header-bar">
 					<div class="page-title-badge">
 						<i class="fas fa-bullhorn"></i>
-						<span>Informasi Kegiatan</span>
+						<span>Kajian & Kegiatan Masjid</span>
 					</div>
 					<span class="date-badge" id="announcementDate">
 						<i class="fas fa-calendar-alt"></i> Memuat...
 					</span>
 				</div>
-				<div class="announcement-content" id="announcementContent">
-					Memuat pengumuman...
+
+				<!-- Main 2-Column Content -->
+				<div class="card-main-body" id="cardMainBody">
+					
+					<!-- Kolom Kiri: Foto Ustadz / Flyer -->
+					<div class="speaker-col">
+						<div class="speaker-frame" id="speakerFrame">
+							<div class="speaker-avatar-fallback" id="speakerFallback">
+								<i class="fas fa-user-tie"></i>
+								<span>Info Kegiatan</span>
+							</div>
+							<img id="speakerImage" src="" alt="Pemateri" style="display: none;" onerror="this.style.display='none'; document.getElementById('speakerFallback').style.display='flex';">
+						</div>
+					</div>
+
+					<!-- Kolom Kanan: Detail Judul, Pemateri, Jadwal, Lokasi, Deskripsi -->
+					<div class="details-col">
+						<div class="activity-title" id="activityTitle">
+							Memuat kegiatan...
+						</div>
+
+						<div class="speaker-name-badge" id="speakerBadge" style="display: none;">
+							<i class="fas fa-microphone-alt"></i>
+							<span id="speakerName">-</span>
+						</div>
+
+						<!-- Grid Info Pill -->
+						<div class="meta-pills-row">
+							<div class="meta-pill date-pill" id="pillDateContainer">
+								<i class="fas fa-calendar-check"></i>
+								<span class="label">Hari:</span>
+								<span class="val" id="pillDateVal">-</span>
+							</div>
+							<div class="meta-pill time-pill" id="pillTimeContainer" style="display: none;">
+								<i class="fas fa-clock"></i>
+								<span class="label">Waktu:</span>
+								<span class="val" id="pillTimeVal">-</span>
+							</div>
+							<div class="meta-pill location-pill" id="pillLocationContainer">
+								<i class="fas fa-map-marker-alt"></i>
+								<span class="label">Lokasi:</span>
+								<span class="val" id="pillLocationVal">Ruang Utama Masjid Al-Jihad</span>
+							</div>
+						</div>
+
+						<!-- Keterangan / Deskripsi Lengkap -->
+						<div class="activity-description" id="announcementContent">
+							Memuat keterangan...
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
 
-		<!-- Progress Bar -->
+		<!-- Progress Bar Pergantian Slide -->
 		<div class="progress-container">
 			<div class="progress-bar">
 				<div class="progress-fill" id="progressFill"></div>
@@ -394,12 +510,13 @@
 			<div class="indicator-container" id="indicatorContainer"></div>
 		</div>
 
+		<!-- Memanggil Running Text dan Footer Terpusat -->
 		@include('partials.bottom-section')
 	</div>
 
 	<script>
 		const announcements = @json($pengumuman);
-		const displayDuration = 8000;
+		const displayDuration = 10000;
 		let currentIndex = 0;
 		let intervalId = null;
 		let progressIntervalId = null;
@@ -418,14 +535,29 @@
 
 		function displayAnnouncement(index) {
 			if (!announcements.length) {
-				document.getElementById('announcementContent').innerHTML = '<i class="fas fa-inbox"></i> Belum ada pengumuman';
+				document.getElementById('cardMainBody').innerHTML = `
+					<div class="empty-activity" style="width: 100%;">
+						<i class="fas fa-calendar-times"></i>
+						<h3 style="font-size: 1.6rem; color: #fff; margin-top: 10px;">Belum Ada Agenda Kegiatan Aktif</h3>
+						<p style="color: rgba(255,255,255,0.7); margin-top: 5px;">Silakan tambahkan informasi kajian atau pengumuman melalui Dashboard Admin.</p>
+					</div>
+				`;
 				document.getElementById('announcementDate').innerHTML = '<i class="fas fa-calendar-alt"></i> -';
 				return;
 			}
 
 			const item = announcements[index];
 			const date = new Date(item.tanggal);
-			const formattedDate = date.toLocaleDateString('id-ID', {
+			
+			// Format Hari dan Tanggal Bahasa Indonesia
+			const formattedFullDate = date.toLocaleDateString('id-ID', {
+				weekday: 'long',
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric'
+			});
+
+			const formattedShortDate = date.toLocaleDateString('id-ID', {
 				day: 'numeric',
 				month: 'short',
 				year: 'numeric'
@@ -434,10 +566,56 @@
 			const card = document.getElementById('announcementCard');
 			card.style.animation = 'none';
 			card.offsetHeight;
-			card.style.animation = 'fadeIn 0.5s ease';
+			card.style.animation = 'cardFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
 
+			// 1. Tanggal Badge Atas
+			document.getElementById('announcementDate').innerHTML = `<i class="fas fa-calendar-alt"></i> ${formattedShortDate}`;
+
+			// 2. Judul Kegiatan
+			const titleEl = document.getElementById('activityTitle');
+			titleEl.textContent = item.judul ? item.judul : (item.isi ? item.isi.split('\n')[0].substring(0, 60) : 'Informasi Kegiatan');
+
+			// 3. Nama Ustadz / Pemateri
+			const speakerBadge = document.getElementById('speakerBadge');
+			const speakerName = document.getElementById('speakerName');
+			if (item.pemateri && item.pemateri.trim() !== '') {
+				speakerName.textContent = item.pemateri;
+				speakerBadge.style.display = 'inline-flex';
+			} else {
+				speakerBadge.style.display = 'none';
+			}
+
+			// 4. Foto Ustadz / Pamflet
+			const imgEl = document.getElementById('speakerImage');
+			const fallbackEl = document.getElementById('speakerFallback');
+			const photoUrl = item.foto ? (item.foto.startsWith('http') ? item.foto : ('{{ asset("storage") }}/' + item.foto)) : null;
+			
+			if (photoUrl) {
+				imgEl.src = photoUrl;
+				imgEl.style.display = 'block';
+				fallbackEl.style.display = 'none';
+			} else {
+				imgEl.style.display = 'none';
+				fallbackEl.style.display = 'flex';
+			}
+
+			// 5. Pill Jadwal & Lokasi
+			document.getElementById('pillDateVal').textContent = formattedFullDate;
+			
+			const pillTime = document.getElementById('pillTimeContainer');
+			const pillTimeVal = document.getElementById('pillTimeVal');
+			if (item.waktu && item.waktu.trim() !== '') {
+				pillTimeVal.textContent = item.waktu;
+				pillTime.style.display = 'inline-flex';
+			} else {
+				pillTime.style.display = 'none';
+			}
+
+			const pillLocVal = document.getElementById('pillLocationVal');
+			pillLocVal.textContent = item.tempat && item.tempat.trim() !== '' ? item.tempat : 'Ruang Utama Masjid Al-Jihad';
+
+			// 6. Deskripsi / Keterangan Tambahan
 			document.getElementById('announcementContent').innerHTML = item.isi;
-			document.getElementById('announcementDate').innerHTML = `<i class="fas fa-calendar-alt"></i> ${formattedDate}`;
 
 			updateActiveDot(index);
 		}
@@ -525,13 +703,7 @@
 				displayAnnouncement(0);
 				startRotation();
 			} else {
-				document.getElementById('announcementContent').innerHTML = `
-					<div class="no-data">
-						<i class="fas fa-inbox"></i>
-						<p>Belum ada pengumuman tersedia</p>
-					</div>
-				`;
-				document.getElementById('announcementDate').innerHTML = '<i class="fas fa-calendar-alt"></i> -';
+				displayAnnouncement(0);
 				const progressFill = document.getElementById('progressFill');
 				progressFill.style.width = '100%';
 				progressFill.style.background = '#6c757d';
@@ -539,24 +711,10 @@
 		}
 
 		init();
-		
-@push('styles')
-<style>
-    /* Memaksa kontainer, header, dan area pengumuman menjadi transparan */
-    .container, .header, #announcement-container, .announcement-container {
-        background: rgba(0, 0, 0, 0.1) !important;
-        background-color: rgba(0, 0, 0, 0.1) !important;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-</style>
-@endpush
-
 	</script>
+
 	<!-- SCRIPT UNTUK BACKGROUND SLIDESHOW (EFEK BLINDS / TRIVISION) -->
 	<script>
-		// URUTAN GAMBAR BACKGROUND (Silakan sesuaikan urutan dan daftarnya)
 		const backgroundImages = [
 			"{{ asset('image/display/background/BG1.png') }}",
 			"{{ asset('image/display/background/BG2.png') }}",
@@ -570,41 +728,34 @@
 		let currentBgIndex = 0;
 		const bgContainer = document.querySelector('.display-background');
 		
-		// PENGATURAN EFEK BLINDS
-		const numBlinds = 10; // Jumlah bilah potongan (Bisa diubah jadi 8, 12, atau 15)
+		const numBlinds = 10;
 		let blinds = [];
 
 		if (backgroundImages.length > 0 && bgContainer) {
-			// 1. Siapkan kontainer utama
 			bgContainer.style.setProperty('overflow', 'hidden', 'important');
 			bgContainer.style.setProperty('position', 'absolute', 'important');
 			bgContainer.style.setProperty('z-index', '-1', 'important');
 			bgContainer.style.setProperty('perspective', '1500px', 'important');
 			bgContainer.style.setProperty('display', 'flex', 'important');
 
-			// 2. Buat bilah-bilah (slices) gambar
 			for (let i = 0; i < numBlinds; i++) {
 				const blind = document.createElement('div');
 				blind.style.flex = '1';
 				blind.style.height = '100%';
 				blind.style.position = 'relative';
 				blind.style.transformStyle = 'preserve-3d';
-				
-				// Kecepatan putaran dan efek bergelombang (stagger)
 				blind.style.transition = 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)';
-				blind.style.transitionDelay = `${i * 0.1}s`; // Jeda putaran antar bilah
+				blind.style.transitionDelay = `${i * 0.1}s`;
 
-				// Rumus agar posisi gambar di tiap potongan tersambung sempurna
 				const bgPosX = numBlinds === 1 ? 0 : (i / (numBlinds - 1)) * 100;
 
-				// Fungsi pembuat sisi depan dan belakang untuk tiap bilah
 				const createFace = (isFront) => {
 					const face = document.createElement('div');
 					face.style.position = 'absolute';
 					face.style.width = '100%';
 					face.style.height = '100%';
 					face.style.backfaceVisibility = 'hidden';
-					face.style.backgroundSize = '100vw 100vh'; // Kunci agar gambar memenuhi layar
+					face.style.backgroundSize = '100vw 100vh';
 					face.style.backgroundPosition = `${bgPosX}% center`;
 					face.style.backgroundRepeat = 'no-repeat';
 					if (!isFront) {
@@ -616,29 +767,24 @@
 				const front = createFace(true);
 				const back = createFace(false);
 
-				// Pasang gambar pertama di sisi depan
 				front.style.backgroundImage = `url('${backgroundImages[0]}')`;
 
 				blind.appendChild(front);
 				blind.appendChild(back);
 				bgContainer.appendChild(blind);
 
-				// Simpan ke memori array
 				blinds.push({ el: blind, front: front, back: back, isFlipped: false });
 			}
 
-			// 3. Fungsi memutar bilah-bilah layaknya Trivision
 			function changeBackground() {
 				currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
 				const nextImgUrl = `url('${backgroundImages[currentBgIndex]}')`;
 
 				blinds.forEach((blind) => {
 					if (!blind.isFlipped) {
-						// Jika sedang menghadap depan, siapkan gambar baru di belakang, lalu putar!
 						blind.back.style.backgroundImage = nextImgUrl;
 						blind.el.style.transform = 'rotateY(180deg)';
 					} else {
-						// Jika sedang menghadap belakang, siapkan gambar baru di depan, lalu putar balik!
 						blind.front.style.backgroundImage = nextImgUrl;
 						blind.el.style.transform = 'rotateY(0deg)';
 					}
@@ -646,7 +792,6 @@
 				});
 			}
 
-			// Waktu pergantian gambar (10000 = 10 detik)
 			setInterval(changeBackground, 10000); 
 		}
 	</script>	

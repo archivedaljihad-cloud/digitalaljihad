@@ -39,11 +39,33 @@ class PengumumanController extends Controller
 	public function store(Request $request)
 	{
 		$request->validate([
+			'judul' => 'nullable|string|max:255',
+			'pemateri' => 'nullable|string|max:255',
+			'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
 			'isi' => 'required|string',
 			'tanggal' => 'required|date',
+			'waktu' => 'nullable|string|max:100',
+			'tempat' => 'nullable|string|max:255',
 		]);
-		Pengumuman::create($request->all());
-		return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil ditambahkan.');
+
+		$data = $request->only(['judul', 'pemateri', 'isi', 'tanggal', 'waktu', 'tempat']);
+
+		if ($request->hasFile('foto')) {
+			$file = $request->file('foto');
+			$path = $file->store('pengumuman', 'public');
+			try {
+				$publicTarget = public_path('storage/' . $path);
+				$publicDir = dirname($publicTarget);
+				if (!file_exists($publicDir)) {
+					@mkdir($publicDir, 0777, true);
+				}
+				@copy(storage_path('app/public/' . $path), $publicTarget);
+			} catch (\Throwable $e) {}
+			$data['foto'] = $path;
+		}
+
+		Pengumuman::create($data);
+		return redirect()->route('pengumuman.index')->with('success', 'Pengumuman / Kegiatan berhasil ditambahkan.');
 	}
 
 	public function edit(Pengumuman $pengumuman)
@@ -54,11 +76,33 @@ class PengumumanController extends Controller
 	public function update(Request $request, Pengumuman $pengumuman)
 	{
 		$request->validate([
+			'judul' => 'nullable|string|max:255',
+			'pemateri' => 'nullable|string|max:255',
+			'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
 			'isi' => 'required|string',
 			'tanggal' => 'required|date',
+			'waktu' => 'nullable|string|max:100',
+			'tempat' => 'nullable|string|max:255',
 		]);
-		$pengumuman->update($request->all());
-		return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil diperbarui.');
+
+		$data = $request->only(['judul', 'pemateri', 'isi', 'tanggal', 'waktu', 'tempat']);
+
+		if ($request->hasFile('foto')) {
+			$file = $request->file('foto');
+			$path = $file->store('pengumuman', 'public');
+			try {
+				$publicTarget = public_path('storage/' . $path);
+				$publicDir = dirname($publicTarget);
+				if (!file_exists($publicDir)) {
+					@mkdir($publicDir, 0777, true);
+				}
+				@copy(storage_path('app/public/' . $path), $publicTarget);
+			} catch (\Throwable $e) {}
+			$data['foto'] = $path;
+		}
+
+		$pengumuman->update($data);
+		return redirect()->route('pengumuman.index')->with('success', 'Pengumuman / Kegiatan berhasil diperbarui.');
 	}
 
 	public function destroy(Pengumuman $pengumuman)

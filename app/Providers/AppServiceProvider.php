@@ -158,6 +158,31 @@ class AppServiceProvider extends ServiceProvider
             // ignore and proceed
         }
 
+        // Auto-provision missing columns in table pengumuman if not exists (e.g. TiDB Cloud)
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('pengumuman')) {
+                \Illuminate\Support\Facades\Schema::table('pengumuman', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'judul')) {
+                        $table->string('judul')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'pemateri')) {
+                        $table->string('pemateri')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'foto')) {
+                        $table->string('foto')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'waktu')) {
+                        $table->string('waktu')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'tempat')) {
+                        $table->string('tempat')->nullable();
+                    }
+                });
+            }
+        } catch (\Throwable $e) {
+            // ignore and proceed
+        }
+
         // Membuat variabel $setting otomatis ada di layouts.admin
         View::composer('layouts.admin', function ($view) {
             $view->with('setting', AppSetting::first());

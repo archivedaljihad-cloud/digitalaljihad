@@ -118,80 +118,98 @@
 						<thead>
 							<tr>
 								<th width="30">No</th>
-								<th>Isi Pengumuman</th>
-								<th width="120">Tanggal</th>
-								<th width="100">Status</th>
+								<th width="70">Foto</th>
+								<th>Kegiatan & Ustadz</th>
+								<th>Keterangan / Isi</th>
+								<th width="160">Waktu & Tempat</th>
+								<th width="90">Status</th>
 								<th width="100">Aksi</th>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach ($pengumuman as $index => $item)
 							@php
-							$isActive = \Carbon\Carbon::parse($item->tanggal)->gte(now());
+							$isActive = \Carbon\Carbon::parse($item->tanggal)->gte(now()->startOfDay());
 							$isToday = \Carbon\Carbon::parse($item->tanggal)->isToday();
 							@endphp
 							<tr>
-								<td class="text-center">{{ $index + 1 }}</td>
-								<td>
-									<div class="d-flex align-items-start">
-										<div class="icon-circle bg-{{ $isActive ? ($isToday ? 'success' : 'primary') : 'secondary' }} text-white mr-3" 
-										style="width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-										<i class="fas fa-bullhorn"></i>
-									</div>
-									<div>
-										<div class="announcement-text">
-											{{ \Illuminate\Support\Str::limit($item->isi, 100) }}
+								<td class="text-center align-middle">{{ $index + 1 }}</td>
+								<td class="text-center align-middle">
+									@if($item->foto_url)
+										<img src="{{ $item->foto_url }}" alt="Foto" class="rounded shadow-sm" style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #ffd700;">
+									@else
+										<div class="bg-light text-secondary rounded d-flex align-items-center justify-content-center mx-auto" style="width: 50px; height: 50px; border: 1px dashed #ccc;">
+											<i class="fas fa-user-tie fa-lg text-gray-400"></i>
 										</div>
-										@if(strlen($item->isi) > 100)
-										<a href="#" class="small text-primary read-more" data-content="{{ $item->isi }}">
-											<i class="fas fa-expand-alt"></i> Baca Selengkapnya
-										</a>
-										@endif
+									@endif
+								</td>
+								<td class="align-middle">
+									<strong class="text-primary font-weight-bold" style="font-size: 1.05rem;">
+										{{ $item->judul ?: 'Kegiatan / Pengumuman' }}
+									</strong>
+									@if($item->pemateri)
+									<div class="text-dark small font-weight-bold mt-1">
+										<i class="fas fa-user-check text-success mr-1"></i> {{ $item->pemateri }}
 									</div>
-								</div>
-							</td>
-							<td>
-								<span class="badge {{ $isToday ? 'badge-success' : ($isActive ? 'badge-primary' : 'badge-secondary') }} p-2">
-									<i class="fas fa-calendar-day"></i> 
-									{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
-								</span>
-								<br>
-								<small class="text-muted">
-									<i class="fas fa-clock"></i> 
-									{{ \Carbon\Carbon::parse($item->tanggal)->diffForHumans() }}
-								</small>
-							</td>
-							<td>
-								@if($isToday)
-								<span class="badge badge-success">
-									<i class="fas fa-bell"></i> Hari Ini
-								</span>
-								@elseif($isActive)
-								<span class="badge badge-primary">
-									<i class="fas fa-clock"></i> Aktif
-								</span>
-								@else
-								<span class="badge badge-secondary">
-									<i class="fas fa-check-double"></i> Berlalu
-								</span>
-								@endif
-							</td>
-							<td class="text-center">
-								<a href="{{ route('pengumuman.edit', $item) }}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit">
-									<i class="fas fa-edit"></i>
-								</a>
-								<form action="{{ route('pengumuman.destroy', $item) }}" method="POST" class="d-inline delete-form" id="delete-form-{{ $item->id }}">
-									@csrf
-									@method('DELETE')
-									<button type="button" class="btn btn-sm btn-danger delete-btn" data-id="{{ $item->id }}" data-title="{{ \Illuminate\Support\Str::limit($item->isi, 50) }}" data-toggle="tooltip" title="Hapus">
-										<i class="fas fa-trash-alt"></i>
-									</button>
-								</form>
-							</td>
-						</tr>
-						@endforeach
-					</tbody>
-				</table>
+									@endif
+								</td>
+								<td class="align-middle">
+									<div class="announcement-text">
+										{{ \Illuminate\Support\Str::limit($item->isi, 90) }}
+									</div>
+									@if(strlen($item->isi) > 90)
+									<a href="#" class="small text-primary read-more" data-content="{{ $item->isi }}">
+										<i class="fas fa-expand-alt"></i> Selengkapnya
+									</a>
+									@endif
+								</td>
+								<td class="align-middle">
+									<span class="badge {{ $isToday ? 'badge-success' : ($isActive ? 'badge-primary' : 'badge-secondary') }} p-2 d-block mb-1">
+										<i class="fas fa-calendar-day"></i> 
+										{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
+									</span>
+									@if($item->waktu)
+									<div class="small text-dark font-weight-bold">
+										<i class="fas fa-clock text-warning mr-1"></i> {{ $item->waktu }}
+									</div>
+									@endif
+									@if($item->tempat)
+									<div class="small text-muted text-truncate" style="max-width: 150px;">
+										<i class="fas fa-map-marker-alt text-danger mr-1"></i> {{ $item->tempat }}
+									</div>
+									@endif
+								</td>
+								<td class="text-center align-middle">
+									@if($isToday)
+									<span class="badge badge-success">
+										<i class="fas fa-bell"></i> Hari Ini
+									</span>
+									@elseif($isActive)
+									<span class="badge badge-primary">
+										<i class="fas fa-clock"></i> Aktif
+									</span>
+									@else
+									<span class="badge badge-secondary">
+										<i class="fas fa-check-double"></i> Berlalu
+									</span>
+									@endif
+								</td>
+								<td class="text-center align-middle">
+									<a href="{{ route('pengumuman.edit', $item) }}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit">
+										<i class="fas fa-edit"></i>
+									</a>
+									<form action="{{ route('pengumuman.destroy', $item) }}" method="POST" class="d-inline delete-form" id="delete-form-{{ $item->id }}">
+										@csrf
+										@method('DELETE')
+										<button type="button" class="btn btn-sm btn-danger delete-btn" data-id="{{ $item->id }}" data-title="{{ $item->judul ?: \Illuminate\Support\Str::limit($item->isi, 40) }}" data-toggle="tooltip" title="Hapus">
+											<i class="fas fa-trash-alt"></i>
+										</button>
+									</form>
+								</td>
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
 			</div>
 		</div>
 	</div>

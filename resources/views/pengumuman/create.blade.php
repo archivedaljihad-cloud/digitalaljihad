@@ -6,7 +6,7 @@
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 		<h1 class="h3 mb-0 text-gray-800">
-			<i class="fas fa-plus-circle"></i> Tambah Pengumuman
+			<i class="fas fa-plus-circle text-primary"></i> Tambah Informasi Kegiatan & Kajian
 		</h1>
 		<a href="{{ route('pengumuman.index') }}" class="btn btn-secondary btn-sm shadow-sm">
 			<i class="fas fa-arrow-left"></i> Kembali
@@ -14,95 +14,132 @@
 	</div>
 
 	<div class="row">
-		<div class="col-lg-8 mx-auto">
+		<div class="col-lg-10 mx-auto">
 			<div class="card shadow mb-4">
-				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">
-						<i class="fas fa-info-circle"></i> Form Tambah Pengumuman
+				<div class="card-header py-3 bg-gradient-primary text-white">
+					<h6 class="m-0 font-weight-bold">
+						<i class="fas fa-calendar-alt mr-1"></i> Form Rincian Kegiatan & Kajian Masjid
 					</h6>
 				</div>
 				<div class="card-body">
-					<form action="{{ route('pengumuman.store') }}" method="POST" id="createForm">
+					<form action="{{ route('pengumuman.store') }}" method="POST" enctype="multipart/form-data" id="createForm">
 						@csrf
 
-						<div class="form-group">
-							<label for="isi">Isi Pengumuman <span class="text-danger">*</span></label>
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="fas fa-bullhorn"></i></span>
+						<div class="row">
+							<!-- Kolom Kiri: Detail Kegiatan -->
+							<div class="col-md-7">
+								<div class="form-group">
+									<label for="judul"><strong>Judul / Nama Kegiatan</strong></label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="fas fa-bullhorn text-primary"></i></span>
+										</div>
+										<input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" 
+										value="{{ old('judul') }}" placeholder="Contoh: Kajian Rutin Ahad Pagi / Tahsin Al-Qur'an">
+									</div>
+									<small class="form-text text-muted">Akan ditampilkan sebagai judul utama berukuran besar pada layar TV.</small>
 								</div>
-								<textarea name="isi" id="isi" class="form-control @error('isi') is-invalid @enderror" 
-								rows="5" required placeholder="Tulis isi pengumuman di sini...">{{ old('isi') }}</textarea>
+
+								<div class="form-group">
+									<label for="pemateri"><strong>Nama Ustadz / Pemateri / Narasumber</strong></label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="fas fa-user-tie text-success"></i></span>
+										</div>
+										<input type="text" name="pemateri" id="pemateri" class="form-control @error('pemateri') is-invalid @enderror" 
+										value="{{ old('pemateri') }}" placeholder="Contoh: Ustadz Dr. H. Fulan, Lc., M.A.">
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="tanggal"><strong>Tanggal Kegiatan <span class="text-danger">*</span></strong></label>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text"><i class="fas fa-calendar-day text-info"></i></span>
+												</div>
+												<input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" 
+												value="{{ old('tanggal', date('Y-m-d')) }}" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="waktu"><strong>Waktu / Jam</strong></label>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text"><i class="fas fa-clock text-warning"></i></span>
+												</div>
+												<input type="text" name="waktu" id="waktu" class="form-control @error('waktu') is-invalid @enderror" 
+												value="{{ old('waktu') }}" placeholder="Contoh: Ba'da Maghrib / 08.00 WIB">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="tempat"><strong>Tempat / Lokasi</strong></label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="fas fa-map-marker-alt text-danger"></i></span>
+										</div>
+										<input type="text" name="tempat" id="tempat" class="form-control @error('tempat') is-invalid @enderror" 
+										value="{{ old('tempat', 'Ruang Utama Masjid Jami Al-Jihad') }}" placeholder="Contoh: Ruang Utama Masjid">
+									</div>
+								</div>
 							</div>
-							<small class="form-text text-muted">
-								<i class="fas fa-info-circle"></i> Tulis pengumuman yang ingin disampaikan kepada jamaah
-							</small>
-							<div class="mt-2 text-muted small">
-								<span id="charCount">0</span> karakter
+
+							<!-- Kolom Kanan: Foto Ustadz / Flyer -->
+							<div class="col-md-5">
+								<div class="form-group">
+									<label for="foto"><strong>Foto Ustadz / Pamflet Kegiatan</strong></label>
+									<div class="custom-file mb-2">
+										<input type="file" name="foto" id="foto" class="custom-file-input @error('foto') is-invalid @enderror" accept=".jpg,.jpeg,.png,.webp">
+										<label class="custom-file-label" for="foto">Pilih Foto...</label>
+									</div>
+									<small class="form-text text-muted">Format: JPG, PNG, WEBP. Maks 10MB. Foto ustadz portrait atau pamflet kotak/persegi sangat direkomendasikan.</small>
+									@error('foto')
+									<small class="text-danger d-block">{{ $message }}</small>
+									@enderror
+								</div>
+
+								<div class="card p-2 text-center bg-light border-dashed mb-3" style="min-height: 200px; display: flex; align-items: center; justify-content: center;">
+									<img id="imgPreview" src="" alt="Preview Foto" class="img-fluid rounded shadow-sm" style="max-height: 210px; display: none; object-fit: cover;">
+									<div id="noPreviewText" class="text-muted p-3">
+										<i class="fas fa-user-circle fa-4x text-gray-300 mb-2"></i>
+										<div>Pratinjau Foto Ustadz</div>
+										<small class="text-secondary">(Opsi default islami jika tidak ada foto)</small>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Keterangan / Deskripsi -->
+						<div class="form-group mt-2">
+							<label for="isi"><strong>Deskripsi / Keterangan Tambahan <span class="text-danger">*</span></strong></label>
+							<textarea name="isi" id="isi" class="form-control @error('isi') is-invalid @enderror" 
+							rows="4" required placeholder="Tuliskan keterangan kegiatan, materi bahasan, atau ajakan untuk jamaah...">{{ old('isi') }}</textarea>
+							<div class="d-flex justify-content-between mt-1 text-muted small">
+								<span><i class="fas fa-info-circle"></i> Pesan ini akan tampil di layar TV & berjalan pada sistem display.</span>
+								<span><span id="charCount">0</span> karakter</span>
 							</div>
 							@error('isi')
 							<small class="text-danger">{{ $message }}</small>
 							@enderror
 						</div>
 
-						<div class="form-group">
-							<label for="tanggal">Tanggal <span class="text-danger">*</span></label>
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-								</div>
-								<input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" 
-								value="{{ old('tanggal', date('Y-m-d')) }}" required>
-							</div>
-							<small class="form-text text-muted">
-								<i class="fas fa-info-circle"></i> Tanggal pengumuman akan ditampilkan
-							</small>
-							@error('tanggal')
-							<small class="text-danger">{{ $message }}</small>
-							@enderror
-						</div>
-
 						<hr>
 
-						<!-- Preview Card -->
-						<div class="card bg-light mb-3">
-							<div class="card-header">
-								<i class="fas fa-eye"></i> Pratinjau
-							</div>
-							<div class="card-body">
-								<div id="previewContent" class="text-muted">
-									Pratinjau akan muncul di sini...
-								</div>
-							</div>
-						</div>
-
-						<div class="form-group text-center">
-							<button type="submit" class="btn btn-primary btn-lg px-5">
-								<i class="fas fa-save"></i> Simpan Pengumuman
+						<div class="form-group text-center mb-0">
+							<button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+								<i class="fas fa-save mr-1"></i> Simpan Kegiatan
 							</button>
-							<a href="{{ route('pengumuman.index') }}" class="btn btn-secondary btn-lg px-4">
-								<i class="fas fa-times"></i> Batal
+							<a href="{{ route('pengumuman.index') }}" class="btn btn-secondary btn-lg px-4 ml-2">
+								<i class="fas fa-times mr-1"></i> Batal
 							</a>
 						</div>
 					</form>
-				</div>
-			</div>
-
-			<!-- Tips Card -->
-			<div class="card shadow mb-4 border-left-info">
-				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-info">
-						<i class="fas fa-lightbulb"></i> Tips Menulis Pengumuman
-					</h6>
-				</div>
-				<div class="card-body">
-					<ul class="mb-0">
-						<li>Gunakan bahasa yang jelas dan mudah dipahami</li>
-						<li>Sebutkan waktu, tempat, dan pihak yang terkait</li>
-						<li>Untuk pengumuman penting, gunakan format yang menonjol</li>
-						<li>Pengumuman akan ditampilkan di running text TV Display</li>
-						<li>Pengumuman dengan tanggal mendatang akan otomatis tampil</li>
-					</ul>
 				</div>
 			</div>
 		</div>
@@ -110,29 +147,34 @@
 </div>
 
 <script>
+    // Preview image
+    document.getElementById('foto').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imgPreview');
+        const noPreview = document.getElementById('noPreviewText');
+        const label = document.querySelector('.custom-file-label');
+        
+        if (file) {
+            label.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                preview.src = evt.target.result;
+                preview.style.display = 'block';
+                noPreview.style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            label.textContent = 'Pilih Foto...';
+            preview.style.display = 'none';
+            noPreview.style.display = 'block';
+        }
+    });
+
     // Character counter
 	const textarea = document.getElementById('isi');
 	const charCount = document.getElementById('charCount');
-	const previewContent = document.getElementById('previewContent');
-	
-	function updatePreview() {
-		const text = textarea.value;
-		charCount.textContent = text.length;
-		
-		if (text.trim() === '') {
-			previewContent.innerHTML = '<em class="text-muted">Pratinjau akan muncul di sini...</em>';
-		} else {
-			previewContent.innerHTML = text.replace(/\n/g, '<br>');
-		}
-	}
-	
-	textarea.addEventListener('input', updatePreview);
-	updatePreview();
-	
-    // Set default date to today if empty
-	const tanggalInput = document.getElementById('tanggal');
-	if (!tanggalInput.value) {
-		tanggalInput.value = new Date().toISOString().split('T')[0];
-	}
+	textarea.addEventListener('input', function() {
+		charCount.textContent = this.value.length;
+	});
 </script>
 @endsection
