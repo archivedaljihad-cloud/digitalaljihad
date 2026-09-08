@@ -149,16 +149,26 @@ class AppSetting extends Model
         }
 
         $hasAmbulance = false;
+        $hasInfaq = false;
         foreach ($data as $item) {
             if (isset($item['url']) && $item['url'] === 'ambulance-embed') {
                 $hasAmbulance = true;
-                break;
+            }
+            if (isset($item['url']) && $item['url'] === 'infaq-embed') {
+                $hasInfaq = true;
             }
         }
         if (!$hasAmbulance) {
             $data[] = [
                 'url' => 'ambulance-embed',
                 'name' => 'Rincian Kas Ambulance',
+                'active' => true,
+            ];
+        }
+        if (!$hasInfaq) {
+            $data[] = [
+                'url' => 'infaq-embed',
+                'name' => 'Penggalangan Infaq',
                 'active' => true,
             ];
         }

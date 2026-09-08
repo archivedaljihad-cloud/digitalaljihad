@@ -79,6 +79,11 @@ class WelcomeController extends Controller
                         'url'    => 'ambulance-embed',
                         'name'   => 'Rincian Kas Ambulance',
                         'active' => true
+                    ],
+                    [
+                        'url'    => 'infaq-embed',
+                        'name'   => 'Penggalangan Infaq',
+                        'active' => true
                     ]
                 ])
             ]);

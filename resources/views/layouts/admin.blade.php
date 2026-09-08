@@ -525,6 +525,14 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Penggalangan Infaq -->
+            <li class="nav-item {{ request()->routeIs('program-infaq.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('program-infaq.index') }}">
+                    <i class="fas fa-fw fa-donate"></i>
+                    <span>Penggalangan Infaq</span>
+                </a>
+            </li>
+
             <!-- Nav Item - QRIS -->
             <li class="nav-item {{ request()->routeIs('qris.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('qris.index') }}">
@@ -726,6 +734,14 @@
                 <a class="nav-link" href="{{ route('ambulance.index') }}">
                     <i class="fas fa-fw fa-ambulance"></i>
                     <span>Buku Kas Ambulance</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Penggalangan Infaq -->
+            <li class="nav-item {{ request()->routeIs('program-infaq.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('program-infaq.index') }}">
+                    <i class="fas fa-fw fa-donate"></i>
+                    <span>Penggalangan Infaq</span>
                 </a>
             </li>
 

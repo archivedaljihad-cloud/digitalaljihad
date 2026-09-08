@@ -85,6 +85,36 @@ class AppServiceProvider extends ServiceProvider
             // ignore and proceed
         }
 
+        // Auto-provision table program_infaq & donasi_infaq if not exists
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('program_infaq')) {
+                \Illuminate\Support\Facades\Schema::create('program_infaq', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    $table->id();
+                    $table->string('nama_program');
+                    $table->text('keterangan')->nullable();
+                    $table->decimal('target_dana', 15, 2)->default(0.00);
+                    $table->date('tanggal_mulai')->nullable();
+                    $table->date('tanggal_selesai')->nullable();
+                    $table->boolean('is_active')->default(true);
+                    $table->timestamps();
+                });
+            }
+            if (!\Illuminate\Support\Facades\Schema::hasTable('donasi_infaq')) {
+                \Illuminate\Support\Facades\Schema::create('donasi_infaq', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    $table->id();
+                    $table->unsignedBigInteger('program_infaq_id');
+                    $table->string('nama_donatur')->default('Hamba Allah');
+                    $table->boolean('is_anonim')->default(false);
+                    $table->decimal('nominal', 15, 2)->default(0.00);
+                    $table->date('tanggal');
+                    $table->string('keterangan')->nullable();
+                    $table->timestamps();
+                });
+            }
+        } catch (\Throwable $e) {
+            // ignore and proceed
+        }
+
         // Membuat variabel $setting otomatis ada di layouts.admin
         View::composer('layouts.admin', function ($view) {
             $view->with('setting', AppSetting::first());

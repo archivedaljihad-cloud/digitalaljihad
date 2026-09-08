@@ -21,6 +21,7 @@ use App\Http\Controllers\SlideController;
 use App\Http\Controllers\AgendaKajianController;
 use App\Http\Controllers\PrayerModeController;
 use App\Http\Controllers\KeuanganAmbulanceController;
+use App\Http\Controllers\ProgramInfaqController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,8 @@ Route::get('/idul-adha-embed', [SholatIdulAdhaController::class, 'embed'])
     ->name('idul-adha.embed');
 Route::get('/ambulance-embed', [KeuanganAmbulanceController::class, 'embed'])
     ->name('ambulance.embed');
+Route::get('/infaq-embed', [ProgramInfaqController::class, 'embed'])
+    ->name('infaq.embed');
 Route::get('/data-timestamp', [WelcomeController::class, 'getDataTimestamp'])
     ->name('data.timestamp');
 Route::get('/rotation-settings', [WelcomeController::class, 'getRotationSettings'])
@@ -215,6 +218,11 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin,bendahara'])->group(function () {
         Route::resource('keuangan', KeuanganController::class);
         Route::resource('ambulance', KeuanganAmbulanceController::class);
+
+        Route::resource('program-infaq', ProgramInfaqController::class);
+        Route::put('/program-infaq/{id}/activate', [ProgramInfaqController::class, 'activate'])->name('program-infaq.activate');
+        Route::post('/program-infaq/{id}/donasi', [ProgramInfaqController::class, 'storeDonasi'])->name('program-infaq.donasi.store');
+        Route::delete('/program-infaq/donasi/{id}', [ProgramInfaqController::class, 'destroyDonasi'])->name('program-infaq.donasi.destroy');
 
         Route::get('/export/keuangan', [KeuanganController::class, 'export'])
             ->name('export.keuangan');
