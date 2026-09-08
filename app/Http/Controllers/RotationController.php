@@ -72,7 +72,7 @@ class RotationController extends Controller
                     ],
                     [
                         'url'    => 'ambulance-embed',
-                        'name'   => 'Kas Ambulance',
+                        'name'   => 'Rincian Kas Ambulance',
                         'active' => true,
                     ],
                 ])
@@ -139,7 +139,7 @@ class RotationController extends Controller
             ],
             [
                 'url'    => 'ambulance-embed',
-                'name'   => 'Kas Ambulance',
+                'name'   => 'Rincian Kas Ambulance',
                 'active' => in_array('ambulance-embed', $activePages),
             ],
         ];

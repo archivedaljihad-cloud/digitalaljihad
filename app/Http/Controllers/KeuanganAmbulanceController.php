@@ -265,23 +265,21 @@ class KeuanganAmbulanceController extends Controller
     public function embed()
     {
         $settings = AppSetting::first();
+        $keuangan = KeuanganAmbulance::orderBy('tanggal', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
         $totalPemasukan = KeuanganAmbulance::sum('pemasukan');
         $totalPengeluaran = KeuanganAmbulance::sum('pengeluaran');
         $saldo = $totalPemasukan - $totalPengeluaran;
-
-        $recentTransactions = KeuanganAmbulance::orderBy('tanggal', 'desc')
-            ->orderBy('id', 'desc')
-            ->take(10)
-            ->get();
 
         return view(
             'ambulance-embed',
             compact(
                 'settings',
+                'keuangan',
                 'totalPemasukan',
                 'totalPengeluaran',
-                'saldo',
-                'recentTransactions'
+                'saldo'
             )
         );
     }

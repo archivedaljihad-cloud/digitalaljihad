@@ -70,7 +70,7 @@
 							['url' => 'slide-embed', 'name' => 'Slide Informasi', 'desc' => 'Slideshow informasi, gambar, dan pengumuman bergambar'],
 							['url' => 'idul-fitri-embed', 'name' => 'Idul Fitri', 'desc' => 'Jadwal sholat Idul Fitri dengan imam, khatib, muadzin'],
 							['url' => 'idul-adha-embed', 'name' => 'Idul Adha', 'desc' => 'Jadwal sholat Idul Adha dengan imam, khatib, muadzin'],
-							['url' => 'ambulance-embed', 'name' => 'Kas Ambulance', 'desc' => 'Tampilan monitor TV buku kas dan keuangan ambulance']
+							['url' => 'ambulance-embed', 'name' => 'Rincian Kas Ambulance', 'desc' => 'Tampilan rincian keuangan kas ambulance lengkap']
 							];
 							
 							// PERBAIKAN: Decode JSON jika masih string

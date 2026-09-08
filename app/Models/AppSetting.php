@@ -158,7 +158,7 @@ class AppSetting extends Model
         if (!$hasAmbulance) {
             $data[] = [
                 'url' => 'ambulance-embed',
-                'name' => 'Kas Ambulance',
+                'name' => 'Rincian Kas Ambulance',
                 'active' => true,
             ];
         }

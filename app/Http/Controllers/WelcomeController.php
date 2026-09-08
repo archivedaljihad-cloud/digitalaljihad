@@ -77,7 +77,7 @@ class WelcomeController extends Controller
                     ],
                     [
                         'url'    => 'ambulance-embed',
-                        'name'   => 'Kas Ambulance',
+                        'name'   => 'Rincian Kas Ambulance',
                         'active' => true
                     ]
                 ])
