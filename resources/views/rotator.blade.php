@@ -229,7 +229,7 @@
         let activePages = pages.filter(page => parseBool(page.active));
 
         if (activePages.length === 0) {
-            activePages = [{ url: '/welcome-embed', name: 'Dashboard Lengkap', active: true }];
+            activePages = [{ url: '/utama-embed', name: 'Jadwal Sholat', active: true }];
         }
 
         let currentIndex = 0;
@@ -458,7 +458,7 @@
                     let newActivePages = newPages.filter(page => parseBool(page.active));
 
                     if (newActivePages.length === 0) {
-                        newActivePages = [{ url: '/welcome-embed', name: 'Dashboard Lengkap', active: true }];
+                        newActivePages = [{ url: '/utama-embed', name: 'Jadwal Sholat', active: true }];
                     }
 
                     const oldActiveUrls = activePages.map(p => p.url).sort().join(',');

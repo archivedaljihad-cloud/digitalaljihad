@@ -79,7 +79,7 @@ class AppSetting extends Model
                 [
                     'url' => 'welcome-embed',
                     'name' => 'Dashboard Lengkap',
-                    'active' => true
+                    'active' => false
                 ],
                 [
                     'url' => 'utama-embed',
@@ -118,7 +118,7 @@ class AppSetting extends Model
                 [
                     'url' => 'welcome-embed',
                     'name' => 'Dashboard Lengkap',
-                    'active' => true
+                    'active' => false
                 ],
                 [
                     'url' => 'utama-embed',

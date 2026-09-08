@@ -28,7 +28,7 @@ class WelcomeController extends Controller
                     [
                         'url'    => 'welcome-embed',
                         'name'   => 'Dashboard Lengkap',
-                        'active' => true
+                        'active' => false
                     ],
                     [
                         'url'    => 'utama-embed',
