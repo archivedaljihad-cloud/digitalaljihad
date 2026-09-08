@@ -110,9 +110,9 @@
                     const textWidth = el.offsetWidth || 600;
                     const totalDistance = screenWidth + textWidth;
 
-                    // Kecepatan membaca layar TV: ~110 pixel per detik
-                    const speed = 110; 
-                    const duration = Math.max(10, totalDistance / speed);
+                    // Kecepatan membaca layar TV santai dan tenang: ~65 pixel per detik
+                    const speed = 65; 
+                    const duration = Math.max(14, totalDistance / speed);
 
                     el.style.transition = 'none';
                     el.style.transform = 'translateX(' + screenWidth + 'px)';
