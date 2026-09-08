@@ -68,7 +68,7 @@
                         class="form-control"
                         accept=".jpg,.jpeg,.png,.webp">
                     <small class="text-muted">
-                        Kosongkan jika gambar tidak ingin diganti.
+                        Format: JPG, JPEG, PNG, WEBP. Maksimal 10 MB. Kosongkan jika gambar tidak ingin diganti.
                     </small>
                 </div>
                 <div class="form-row">

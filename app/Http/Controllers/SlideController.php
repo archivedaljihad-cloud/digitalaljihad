@@ -26,7 +26,7 @@ class SlideController extends Controller
         $validated = $request->validate([
             'judul'     => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'gambar'    => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'gambar'    => 'required|image|mimes:jpg,jpeg,png,webp|max:10240',
             'urutan'    => 'required|integer|min:1',
             'durasi'    => 'required|integer|min:1|max:300',
         ]);
@@ -52,7 +52,7 @@ class SlideController extends Controller
             }
             return back()
                 ->withInput()
-                ->with('error', 'Gagal menambahkan Slide Informasi.');
+                ->with('error', 'Gagal menambahkan Slide Informasi: ' . $e->getMessage());
         }
     }
     public function show(string $id)
@@ -70,7 +70,7 @@ class SlideController extends Controller
         $validated = $request->validate([
             'judul'     => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
             'urutan'    => 'required|integer|min:1',
             'durasi'    => 'required|integer|min:1|max:300',
         ]);

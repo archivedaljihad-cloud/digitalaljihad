@@ -50,7 +50,7 @@
                         accept=".jpg,.jpeg,.png,.webp"
                         required>
                     <small class="text-muted">
-                        Format: JPG, JPEG, PNG, WEBP. Maksimal 2 MB.
+                        Format: JPG, JPEG, PNG, WEBP. Maksimal 10 MB.
                     </small>
                 </div>
                 <div class="form-row">
