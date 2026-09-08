@@ -457,6 +457,8 @@
 				</div>
 			</div>
 
+			<!-- Memanggil Komponen Running Text dan Footer -->
+			@include('partials.bottom-section')
 
 		</div>
 	</div>
