@@ -431,7 +431,17 @@
 
             @auth
             @php
-            $roleName = optional(auth()->user()->role)->name;
+            $rawRole = optional(auth()->user()->role)->name ?? '';
+            $roleName = strtolower(trim($rawRole));
+
+            // Fallback jika akun bendahara di database masih terpasang role_id lama
+            if ($roleName !== 'bendahara' && $roleName !== 'admin') {
+                $userEmail = strtolower(auth()->user()->email ?? '');
+                $userName = strtolower(auth()->user()->name ?? '');
+                if (str_contains($userEmail, 'bendahara') || str_contains($userName, 'bendahara')) {
+                    $roleName = 'bendahara';
+                }
+            }
             @endphp
 
             @if ($roleName === 'admin')

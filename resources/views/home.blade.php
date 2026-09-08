@@ -15,7 +15,14 @@
             <i class="fas fa-bolt"></i> Aksi Cepat
         </button>
         @php
-        $currentRole = strtolower(optional(auth()->user()->role)->name ?? '');
+        $currentRole = strtolower(trim(optional(auth()->user()->role)->name ?? ''));
+        if ($currentRole !== 'bendahara' && $currentRole !== 'admin') {
+            $uEmail = strtolower(auth()->user()->email ?? '');
+            $uName = strtolower(auth()->user()->name ?? '');
+            if (str_contains($uEmail, 'bendahara') || str_contains($uName, 'bendahara')) {
+                $currentRole = 'bendahara';
+            }
+        }
         @endphp
         <div class="dropdown-menu dropdown-menu-right">
             @if(in_array($currentRole, ['admin', 'petugas']))
@@ -98,7 +105,7 @@
     </div>
 </div>
 
-@if (auth()->user()->role && auth()->user()->role->name === 'admin')
+@if ($currentRole === 'admin')
 <!-- Admin Dashboard Cards -->
 <div class="row">
     <div class="col-xl-3 col-md-6 mb-4">
@@ -422,7 +429,7 @@
     </div>
 </div>
 
-@elseif (auth()->user()->role && auth()->user()->role->name === 'petugas')
+@elseif ($currentRole === 'petugas')
 <!-- Petugas Dashboard -->
 <div class="row">
     <!-- Jadwal Sholat -->
@@ -679,7 +686,7 @@
             </div>
         </div>
     </div>
-@elseif (auth()->user()->role && auth()->user()->role->name === 'bendahara')
+@elseif ($currentRole === 'bendahara')
 <!-- Bendahara Dashboard -->
 <div class="row">
     <!-- Saldo Kas Masjid -->

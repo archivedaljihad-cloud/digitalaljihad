@@ -77,8 +77,17 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        $roleName = strtolower(optional($this->role)->name ?? '');
-        $checkRole = strtolower($role);
+        $roleName = strtolower(trim(optional($this->role)->name ?? ''));
+        $checkRole = strtolower(trim($role));
+
+        // Fallback cerdas jika user bendahara belum termigrasi role_id nya
+        if ($checkRole === 'bendahara' && $roleName !== 'bendahara') {
+            $email = strtolower($this->email ?? '');
+            $name = strtolower($this->name ?? '');
+            if (str_contains($email, 'bendahara') || str_contains($name, 'bendahara')) {
+                return true;
+            }
+        }
 
         if (in_array($checkRole, ['admin', 'superadmin'])) {
             return in_array($roleName, ['admin', 'superadmin']);
