@@ -466,25 +466,13 @@
 	<script>
 		function updateDateTime() {
 			const now = new Date();
-			const hariIndonesia = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-			const bulanIndonesia = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
-			const hari = hariIndonesia[now.getDay()];
-			const tanggal = now.getDate();
-			const bulan = bulanIndonesia[now.getMonth()];
-			const tahun = now.getFullYear();
-
-			let jam = now.getHours().toString().padStart(2, '0');
-			let menit = now.getMinutes().toString().padStart(2, '0');
-			let detik = now.getSeconds().toString().padStart(2, '0');
-
-			const formattedDateTime = `${hari}, ${tanggal} ${bulan} ${tahun} pukul ${jam}.${menit}.${detik}`;
 			const datetimeElement = document.getElementById('datetime');
 			if (datetimeElement) {
-				datetimeElement.textContent = formattedDateTime;
+				datetimeElement.textContent = typeof getStandardMasjidDateTime === 'function'
+					? getStandardMasjidDateTime(now)
+					: now.toLocaleString('id-ID');
 			}
 		}
-
 		if (document.getElementById('datetime')) {
 			updateDateTime();
 			setInterval(updateDateTime, 1000);

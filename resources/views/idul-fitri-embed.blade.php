@@ -501,17 +501,12 @@
 
 		function updateDateTime() {
 			const now = new Date();
-			const hari = hariIndo[now.getDay()];
-			const tanggal = now.getDate();
-			const bulan = bulanIndo[now.getMonth()];
-			const tahun = now.getFullYear();
-			const jam = now.getHours().toString().padStart(2, '0');
-			const menit = now.getMinutes().toString().padStart(2, '0');
-			const detik = now.getSeconds().toString().padStart(2, '0');
-
-			const formattedDateTime = `${hari}, ${tanggal} ${bulan} ${tahun} | ${jam}:${menit}:${detik} WIB`;
 			const dtEl = document.getElementById('datetime');
-			if(dtEl) dtEl.textContent = formattedDateTime;
+			if(dtEl) {
+				dtEl.textContent = typeof getStandardMasjidDateTime === 'function'
+					? getStandardMasjidDateTime(now)
+					: now.toLocaleString('id-ID');
+			}
 		}
 
 		updateDateTime();

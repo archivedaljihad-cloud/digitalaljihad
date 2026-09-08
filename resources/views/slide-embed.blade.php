@@ -43,12 +43,36 @@
             pointer-events: auto;
         }
 
-        .slide img {
+        .slide-poster-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             max-width: 90%;
+            max-height: 56vh;
+        }
+
+        .slide-poster-backdrop {
+            position: absolute;
+            inset: -15px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(28px);
+            opacity: 0.42;
+            border-radius: 20px;
+            transform: scale(1.04);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide img {
+            position: relative;
+            z-index: 2;
+            max-width: 100%;
             max-height: 55vh;
             object-fit: contain;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
 
         /* --- KODE PENGATURAN TEKS ATAS (JUDUL) --- */
@@ -186,7 +210,10 @@
             @foreach($slides as $slide)
             <div class="slide {{ $loop->first ? 'active' : '' }}" data-duration="{{ max(3, $slide->durasi) }}">
                 @if($slide->gambar)
-                <img src="{{ $slide->gambar_url }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                <div class="slide-poster-wrapper">
+                    <div class="slide-poster-backdrop" style="background-image: url('{{ $slide->gambar_url }}');"></div>
+                    <img src="{{ $slide->gambar_url }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                </div>
                 @endif
                 <div class="judul">
                     {{ $slide->judul }}

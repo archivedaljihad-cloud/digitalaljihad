@@ -553,19 +553,11 @@
 	<script>
 		function updateDateTime() {
 			const now = new Date();
-			const options = {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric'
-			};
-			const tanggal = now.toLocaleDateString('id-ID', options);
-			const jam = String(now.getHours()).padStart(2, '0');
-			const menit = String(now.getMinutes()).padStart(2, '0');
-			const detik = String(now.getSeconds()).padStart(2, '0');
 			const el = document.getElementById('datetime');
 			if (el) {
-				el.innerHTML = `${tanggal} &bull; ${jam}:${menit}:${detik} WIB`;
+				el.textContent = typeof getStandardMasjidDateTime === 'function'
+					? getStandardMasjidDateTime(now)
+					: now.toLocaleString('id-ID');
 			}
 		}
 		setInterval(updateDateTime, 1000);

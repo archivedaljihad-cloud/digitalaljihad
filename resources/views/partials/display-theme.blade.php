@@ -258,4 +258,80 @@ h2.sub-header {
         transform: scale(1);
     }
 }
+
+/* =====================================================
+   KONTEN UTAMA HALUS (ENTRANCE FADE IN UP)
+   Menjaga header & footer tetap kokoh di tempatnya
+   ===================================================== */
+.display-content > div:not(.header):not(.header-section):not(.bottom-section):not(.kaligrafi-medallion),
+.page-layout {
+    animation: contentPanelFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes contentPanelFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 </style>
+
+<script>
+/**
+ * Global Unified Hijri + Masehi + Realtime Clock Formatter
+ * Format: [Hari, DD MMMM YYYY] • [DD BulanHijri YYYY H] • [HH:mm:ss WIB]
+ */
+function getStandardMasjidDateTime(now = new Date()) {
+    try {
+        const masehi = new Intl.DateTimeFormat('id-ID', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            timeZone: 'Asia/Jakarta'
+        }).format(now);
+
+        const hijri = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            timeZone: 'Asia/Jakarta'
+        }).format(now);
+
+        const time = new Intl.DateTimeFormat('id-ID', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Jakarta'
+        }).format(now).replace(/\./g, ':');
+
+        return `${masehi} • ${hijri} • ${time} WIB`;
+    } catch (err) {
+        return now.toLocaleString('id-ID');
+    }
+}
+
+// Auto-bind realtime clock ke #datetime jika elemen tersedia
+(function initGlobalClock() {
+    function refreshClock() {
+        const el = document.getElementById('datetime');
+        if (el) {
+            el.textContent = getStandardMasjidDateTime();
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshClock();
+            setInterval(refreshClock, 1000);
+        });
+    } else {
+        refreshClock();
+        setInterval(refreshClock, 1000);
+    }
+})();
+</script>

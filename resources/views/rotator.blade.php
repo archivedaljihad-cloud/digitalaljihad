@@ -46,37 +46,37 @@
             height: 100%;
             border: none;
             background-color: #050505;
-            will-change: transform, opacity;
+            will-change: opacity, transform;
             backface-visibility: hidden;
             perspective: 1000px;
             pointer-events: none;
             opacity: 0;
-            transform: translate3d(40px, 0, 0);
-            /* Transisi anggun: awal meluncur tenang tanpa sentakan, berpadu lembut dengan fade */
-            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.995);
+            /* Transisi cross-fade siaran TV: sangat halus tanpa pergeseran horizontal */
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         iframe.active {
-            transform: translate3d(0, 0, 0);
             opacity: 1;
+            transform: scale(1);
             z-index: 2;
             pointer-events: auto;
-            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         iframe.outgoing {
-            transform: translate3d(-40px, 0, 0);
             opacity: 0;
+            transform: scale(1.005);
             z-index: 1;
             pointer-events: none;
-            transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Mode standby instan tanpa animasi saat me-reset frame berikutnya ke sisi kanan */
+        /* Mode standby instan tanpa animasi saat memuat halaman berikutnya */
         iframe.standby {
             transition: none !important;
-            transform: translate3d(40px, 0, 0) !important;
             opacity: 0 !important;
+            transform: scale(0.995) !important;
             z-index: 1 !important;
             pointer-events: none !important;
         }
