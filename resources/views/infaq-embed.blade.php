@@ -160,18 +160,19 @@
 		}
 
 		.program-title-banner h2 {
-			font-size: 1.75rem;
+			font-size: 1.85rem;
 			font-weight: 800;
-			color: #ffd700;
+			color: #ffffff;
 			letter-spacing: 1.5px;
 			text-transform: uppercase;
-			text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.4);
-			margin-bottom: 4px;
+			text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.7);
+			margin-bottom: 6px;
 		}
 
 		.program-title-banner h2 i {
 			color: #00e676;
-			margin-right: 8px;
+			margin-right: 10px;
+			filter: drop-shadow(0 0 8px rgba(0, 230, 118, 0.6));
 		}
 
 		.program-title-banner .divider-line {
