@@ -46,7 +46,7 @@
                                 @endif
 
                                 <h3 class="h4 text-gray-900 font-weight-bold mt-3" style="font-family: 'Amiri', serif;">
-                                    {{ $setting['nama_aplikasi'] ?? 'MASJID JAMI AL-JIHAD' }}
+                                    {{ $setting['nama_aplikasi'] ?? "MASJID JAMI' AL JIHAD" }}
                                 </h3>
                                 <p class="text-muted small">Masukkan kredensial untuk mengakses dashboard</p>
                             </div>

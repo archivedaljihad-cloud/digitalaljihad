@@ -187,5 +187,24 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.admin', function ($view) {
             $view->with('setting', AppSetting::first());
         });
+
+        // Standarisasi nama masjid ke MASJID JAMI' AL JIHAD untuk seluruh tampilan layar
+        View::composer('*', function ($view) {
+            $data = $view->getData();
+            if (isset($data['settings'])) {
+                $settings = $data['settings'];
+                if (is_array($settings)) {
+                    $settings['nama_aplikasi'] = "MASJID JAMI' AL JIHAD";
+                    $view->with('settings', $settings);
+                } elseif (is_object($settings)) {
+                    $settings->nama_aplikasi = "MASJID JAMI' AL JIHAD";
+                    $view->with('settings', $settings);
+                }
+            }
+            if (isset($data['setting']) && is_object($data['setting'])) {
+                $data['setting']->nama_aplikasi = "MASJID JAMI' AL JIHAD";
+                $view->with('setting', $data['setting']);
+            }
+        });
     }
 }

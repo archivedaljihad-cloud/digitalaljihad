@@ -427,7 +427,7 @@
 	<div class="container">
 		<!-- Header Standar Bersama (Pixel-Locked) -->
 		<div class="header">
-			<h1>{{ $settings['nama_aplikasi'] ?? 'MASJID JAMI AL- JIHAD' }}</h1>
+			<h1>{{ $settings['nama_aplikasi'] ?? "MASJID JAMI' AL JIHAD" }}</h1>
 			<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
 			<div class="datetime" id="datetime"></div>
 		</div>
