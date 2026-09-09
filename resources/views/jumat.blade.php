@@ -6,11 +6,14 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Sistem Informasi Masjid - Jadwal Sholat Jumat</title>
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v={{ time() }}">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
+
 	@include('partials.display-theme')
+
 	<style>
 		* {
 			margin: 0;
@@ -20,46 +23,27 @@
 
 		body {
 			font-family: 'Poppins', sans-serif;
-			color: #ffffff;
+			color: var(--text-light);
 			height: 100vh;
 			width: 100vw;
-			overflow: hidden;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 			position: relative;
-		}
-
-		.kaligrafi {
-			position: absolute;
-			top: 15px;
-			font-family: 'Amiri', serif;
-			font-size: 4.5rem;
-			z-index: 2;
-			user-select: none;
-			background: linear-gradient(to right, #ffd700, #ffffff);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
-			opacity: 0.85;
-		}
-
-		.kaligrafi-allah {
-			right: 35px;
-		}
-
-		.kaligrafi-muhammad {
-			left: 35px;
+			overflow: hidden;
 		}
 
 		.container {
-			position: relative;
-			z-index: 5;
-			height: 100vh;
 			width: 100%;
 			max-width: 1600px;
-			margin: 0 auto;
+			height: 100vh;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
 			padding: 10px 25px 85px 25px;
+			box-sizing: border-box;
+			position: relative;
+			z-index: 5;
 		}
 
 		.header {
@@ -79,8 +63,8 @@
 			background: none !important;
 			-webkit-background-clip: initial !important;
 			-webkit-text-fill-color: #085a2b !important;
-			color: #085a2b !important;
-			text-shadow:
+			color: #085a2b !important; 
+			text-shadow: 
 				1px 1px 0 #ffd700,
 				-1px 1px 0 #ffd700,
 				1px -1px 0 #ffd700,
@@ -115,8 +99,10 @@
 			padding: 0 !important;
 		}
 
-		.datetime {
-			font-size: 1.55rem;
+		.header .datetime {
+			font-size: 1.55rem !important;
+			color: #ffffff;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 			margin-top: 4px;
 			background: rgba(3, 20, 15, 0.65);
 			display: inline-block;
@@ -130,63 +116,164 @@
 			-webkit-backdrop-filter: blur(8px);
 		}
 
-		.jumat-header-section {
+		/* SECTION JUDUL DENGAN DUA IKON (NO 1 = ICON 1, NO 2 = ICON 2) */
+		.schedule-header-section {
 			text-align: center;
 			flex-shrink: 0;
-			margin: 5px 0;
+			margin: 2px 0 10px 0;
 		}
 
-		.jumat-header-section i {
-			font-size: 3.2rem;
+		.title-with-icons {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 22px;
+		}
+
+		.title-icon-badge {
+			width: 64px;
+			height: 64px;
+			border-radius: 50%;
+			background: rgba(4, 25, 18, 0.78);
+			border: 1.5px solid rgba(255, 215, 0, 0.55);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.25);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			flex-shrink: 0;
+		}
+
+		.title-icon-badge i {
+			font-size: 1.85rem;
 			color: #ffd700;
-			margin-bottom: 2px;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 		}
 
-		.jumat-header-section h2 {
+		.title-text-wrap h2 {
 			font-size: 2.2rem;
 			color: #ffd700;
 			letter-spacing: 1.5px;
 			font-weight: 700;
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			margin: 0;
+			line-height: 1.15;
 		}
 
-		.jumat-header-section p {
-			font-size: 1.1rem;
-			color: rgba(255, 255, 255, 0.85);
-			margin-top: 2px;
+		.title-text-wrap p {
+			font-size: 1.05rem;
+			color: rgba(255, 255, 255, 0.88);
+			margin-top: 3px;
+			margin-bottom: 0;
 		}
 
-		/* RAMPING, ELEGAN & TERBACA JELAS DARI 15 METER */
+		/* LAYOUT KONTEN: FOTO IMAM DI KIRI (KOTAK NO 3) & INFO DI KANAN */
+		.schedule-content-layout {
+			display: flex;
+			align-items: stretch;
+			justify-content: center;
+			gap: 20px;
+			max-width: 1040px;
+			width: 100%;
+			margin: 0 auto;
+			flex: 1;
+		}
+
+		/* KOTAK NO 3: FOTO IMAM */
+		.imam-card-box {
+			flex: 0 0 260px;
+			background: rgba(4, 25, 18, 0.72);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-radius: 16px;
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+			padding: 8px;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.imam-photo-frame {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			min-height: 280px;
+			border-radius: 12px;
+			overflow: hidden;
+			border: 1px solid rgba(255, 215, 0, 0.3);
+			background: #02120b;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.imam-photo {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center top;
+			display: block;
+			flex: 1;
+		}
+
+		.imam-badge-overlay {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: linear-gradient(0deg, rgba(2, 16, 11, 0.96) 0%, rgba(2, 16, 11, 0.75) 75%, transparent 100%);
+			padding: 14px 8px 8px 8px;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+		}
+
+		.imam-badge-overlay .badge-role {
+			font-size: 0.8rem;
+			font-weight: 700;
+			color: #ffd700;
+			letter-spacing: 1.2px;
+			text-transform: uppercase;
+		}
+
+		.imam-badge-overlay .badge-name {
+			font-size: 1.05rem;
+			font-weight: 700;
+			color: #ffffff;
+			line-height: 1.2;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		/* KANAN: INFO ROWS STACK */
 		.info-stack {
 			display: flex;
 			flex-direction: column;
 			gap: 10px;
 			flex: 1;
 			justify-content: center;
-			max-width: 860px;
-			width: 100%;
-			margin: 0 auto;
 		}
 
 		.info-row {
 			display: flex;
-			gap: 14px;
+			gap: 12px;
 			width: 100%;
 		}
 
-		/* Kotak Kiri (Label) */
 		.info-box-label {
-			flex: 0 0 220px;
+			flex: 0 0 190px;
 			background: rgba(4, 25, 18, 0.72);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			border-radius: 14px;
-			padding: 11px 20px;
+			padding: 11px 18px;
 			display: flex;
 			align-items: center;
-			gap: 14px;
-			font-size: 1.25rem;
+			gap: 12px;
+			font-size: 1.15rem;
 			font-weight: 600;
 			color: #ffd700;
 			border: 1.5px solid rgba(255, 215, 0, 0.45);
@@ -194,20 +281,19 @@
 		}
 
 		.info-box-label i {
-			font-size: 1.45rem;
+			font-size: 1.35rem;
 			color: #ffd700;
-			width: 28px;
+			width: 24px;
 			text-align: center;
 		}
 
-		/* Kotak Kanan (Nilai / Nama) */
 		.info-box-value {
 			flex: 1;
 			background: rgba(4, 25, 18, 0.72);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			border-radius: 14px;
-			padding: 11px 24px;
+			padding: 11px 20px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -216,7 +302,7 @@
 		}
 
 		.info-box-value .value {
-			font-size: 1.55rem;
+			font-size: 1.45rem;
 			font-weight: 700;
 			color: #ffffff;
 			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
@@ -225,9 +311,9 @@
 		.jadwal-mendatang-badge {
 			background: #ffd700;
 			color: #000000 !important;
-			padding: 5px 14px;
+			padding: 4px 14px;
 			border-radius: 20px;
-			font-size: 0.95rem;
+			font-size: 0.92rem;
 			font-weight: 800 !important;
 			display: inline-flex;
 			align-items: center;
@@ -237,132 +323,32 @@
 			border: 1px solid rgba(255, 255, 255, 0.4);
 		}
 
-		.jadwal-mendatang-badge i {
-			color: inherit !important;
-		}
-
 		.jadwal-mendatang-badge.badge-hari-ini {
 			background: #28a745 !important;
 			color: #ffffff !important;
 		}
 
-		.bottom-section {
-			flex-shrink: 0;
-			width: 100%;
-			margin-top: auto;
-		}
-
-		.running-text-container {
-			background: rgba(10, 30, 25, 0.65) !important;
-			border-radius: 12px !important;
-			padding: 8px 18px;
-			margin-bottom: 8px;
-			overflow: hidden;
-			border: 1px solid rgba(255, 215, 0, 0.35) !important;
-			backdrop-filter: blur(10px) !important;
-			-webkit-backdrop-filter: blur(10px) !important;
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
-		}
-
-		.running-text-container {
-			background: transparent !important;
-			border: none !important;
-			box-shadow: none !important;
-			backdrop-filter: none !important;
-			-webkit-backdrop-filter: none !important;
-			padding: 6px 15px;
-			margin-bottom: 6px;
-			overflow: hidden;
-		}
-
-		.running-text {
-			white-space: nowrap;
-			animation: marquee 25s linear infinite;
-			font-size: 1.1rem;
-			letter-spacing: 0.5px;
-			font-weight: 500;
-			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-		}
-
-		.running-text i {
-			margin-right: 8px;
-			color: #ffd700;
-		}
-
-		@keyframes marquee {
-			0% {
-				transform: translateX(100%);
-			}
-
-			100% {
-				transform: translateX(-100%);
-			}
-		}
-
-		.footer {
-			text-align: center;
-			padding: 6px;
-			border: none !important;
-			background: transparent !important;
-			box-shadow: none !important;
-			backdrop-filter: none !important;
-			-webkit-backdrop-filter: none !important;
-			font-size: 0.8rem;
-			color: rgba(255, 255, 255, 0.95);
-			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
-		}
-
-		@media (max-width: 1024px) {
-			.info-row {
-				flex-direction: column;
-				gap: 6px;
-			}
-
-			.info-box-label {
-				flex: none;
-				width: 100%;
-			}
-
-			.info-box-value {
-				width: 100%;
-			}
-		}
-
 		.no-data {
 			text-align: center;
-			padding: 50px;
-			background: rgba(10, 30, 25, 0.4);
-			border-radius: 14px;
-			border: 1px solid rgba(255, 215, 0, 0.3);
-			max-width: 820px;
-			margin: 0 auto;
+			padding: 40px;
+			background: rgba(4, 25, 18, 0.72);
+			backdrop-filter: blur(12px);
+			border-radius: 16px;
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			max-width: 860px;
+			margin: 20px auto;
 			width: 100%;
 		}
 
 		.no-data i {
-			font-size: 3.5rem;
+			font-size: 3rem;
 			color: #ffd700;
-			opacity: 0.7;
-			margin-bottom: 15px;
-			display: block;
+			margin-bottom: 12px;
 		}
 
 		.no-data p {
-			font-size: 1.3rem;
-			opacity: 0.85;
-		}
-
-		/* Paksa hapus total background dan border di seluruh bagian bawah */
-		.bottom-section,
-		.bottom-section div,
-		.running-text-container,
-		.footer {
-			background: transparent !important;
-			background-color: transparent !important;
-			border: none !important;
-			box-shadow: none !important;
-			backdrop-filter: none !important;
-			-webkit-backdrop-filter: none !important;
+			font-size: 1.25rem;
+			color: #ffffff;
 		}
 	</style>
 </head>
@@ -373,88 +359,118 @@
 	@include('partials.medallion-header')
 
 	<div class="container">
+		<!-- HEADER DENGAN LOCK PIXEL SAMA PERSIS -->
 		<div class="header">
-			<h1>{{ $settings['nama_aplikasi'] ?? 'Masjid Al-Jihad' }}</h1>
+			<h1>{{ $settings['nama_aplikasi'] ?? 'MASJID JAMI\' AL JIHAD' }}</h1>
 			<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
 			<div class="datetime" id="datetime"></div>
 		</div>
 
-		<div class="jumat-header-section">
-			<i class="fas fa-mosque"></i>
-			<h2>Jadwal Sholat Jumat</h2>
-			<p>Informasi Imam, Khatib & Muadzin</p>
+		<!-- SECTION JUDUL: NO 1 (MASJID) DI KIRI, NO 2 (KA'BAH) DI KANAN -->
+		<div class="schedule-header-section">
+			<div class="title-with-icons">
+				<div class="title-icon-badge left-icon" title="Masjid">
+					<i class="fas fa-mosque"></i>
+				</div>
+				<div class="title-text-wrap">
+					<h2>Jadwal Sholat Jumat</h2>
+					<p>Informasi Imam, Khatib & Muadzin</p>
+				</div>
+				<div class="title-icon-badge right-icon" title="Ka'bah">
+					<i class="fas fa-kaaba"></i>
+				</div>
+			</div>
 		</div>
 
 		@php
-		$sholatJumat = isset($sholatJumat) ? $sholatJumat : null;
+			$sholatJumat = isset($sholatJumat) ? $sholatJumat : null;
 		@endphp
 
 		@if($sholatJumat && isset($sholatJumat->tanggal))
 		@php
-		$tanggalObj = \Carbon\Carbon::parse($sholatJumat->tanggal);
-		$today = \Carbon\Carbon::today('Asia/Jakarta');
-		$isToday = $tanggalObj->isToday();
-		$isMendatang = $tanggalObj->greaterThan($today);
+			$tanggalObj = \Carbon\Carbon::parse($sholatJumat->tanggal);
+			$today = \Carbon\Carbon::today('Asia/Jakarta');
+			$isToday = $tanggalObj->isToday();
+			$isMendatang = $tanggalObj->greaterThan($today);
 
-		$hariMap = [
-		'Sunday' => 'Ahad', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
-		'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
-		];
-		$bulanMap = [
-		'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret',
-		'April' => 'April', 'May' => 'Mei', 'June' => 'Juni',
-		'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September',
-		'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
-		];
+			$hariMap = [
+				'Sunday' => 'Ahad', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+				'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+			];
+			$bulanMap = [
+				'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret',
+				'April' => 'April', 'May' => 'Mei', 'June' => 'Juni',
+				'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September',
+				'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
+			];
 
-		$hariInggris = $tanggalObj->format('l');
-		$hari = isset($hariMap[$hariInggris]) ? $hariMap[$hariInggris] : $hariInggris;
-		$tanggal = $tanggalObj->format('j');
-		$bulanInggris = $tanggalObj->format('F');
-		$bulan = isset($bulanMap[$bulanInggris]) ? $bulanMap[$bulanInggris] : $bulanInggris;
-		$tahun = $tanggalObj->format('Y');
-		$formattedDate = "$hari, $tanggal $bulan $tahun";
+			$hariInggris = $tanggalObj->format('l');
+			$hari = isset($hariMap[$hariInggris]) ? $hariMap[$hariInggris] : $hariInggris;
+			$tanggal = $tanggalObj->format('j');
+			$bulanInggris = $tanggalObj->format('F');
+			$bulan = isset($bulanMap[$bulanInggris]) ? $bulanMap[$bulanInggris] : $bulanInggris;
+			$tahun = $tanggalObj->format('Y');
+			$formattedDate = "$hari, $tanggal $bulan $tahun";
 		@endphp
 
-		<div class="info-stack">
-			<div class="info-row">
-				<div class="info-box-label">
-					<i class="fas fa-calendar-alt"></i> Tanggal
-				</div>
-				<div class="info-box-value">
-					<span class="value">{{ $formattedDate }}</span>
-					@if($isToday)
-					<span class="jadwal-mendatang-badge badge-hari-ini" style="background: #28a745; color: #ffffff !important;"><i class="fas fa-clock mr-1"></i> Hari Ini</span>
-					@elseif($isMendatang)
-					<span class="jadwal-mendatang-badge" style="background: #ffd700; color: #000000 !important; font-weight: 800;"><i class="fas fa-calendar-week mr-1" style="color: #000000 !important;"></i> Jumat Mendatang</span>
-					@endif
+		<!-- LAYOUT UTAMA: KOTAK NO 3 (FOTO IMAM) DI KIRI & INFO ROWS DI KANAN -->
+		<div class="schedule-content-layout">
+			<!-- KOTAK NO 3: FOTO IMAM -->
+			<div class="imam-card-box">
+				<div class="imam-photo-frame">
+					<img src="{{ !empty($sholatJumat->foto_imam) ? asset('storage/' . $sholatJumat->foto_imam) : asset('image/display/default_imam.jpg') }}" alt="Foto Imam" class="imam-photo">
+					<div class="imam-badge-overlay">
+						<span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam Sholat</span>
+						<span class="badge-name">{{ $sholatJumat->imam ?? 'Ustd. Imam Sholat' }}</span>
+					</div>
 				</div>
 			</div>
 
-			<div class="info-row">
-				<div class="info-box-label">
-					<i class="fas fa-user"></i> Imam
+			<!-- KANAN: INFO ROWS (TANGGAL, IMAM, KHATIB, MUADZIN) -->
+			<div class="info-stack">
+				<!-- Row 1: Tanggal -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-calendar-alt"></i> Tanggal
+					</div>
+					<div class="info-box-value">
+						<span class="value">{{ $formattedDate }}</span>
+						@if($isToday)
+						<span class="jadwal-mendatang-badge badge-hari-ini"><i class="fas fa-clock mr-1"></i> Hari Ini</span>
+						@elseif($isMendatang)
+						<span class="jadwal-mendatang-badge"><i class="fas fa-calendar-week mr-1"></i> Jumat Mendatang</span>
+						@endif
+					</div>
 				</div>
-				<div class="info-box-value">
-					<span class="value">{{ $sholatJumat->imam ?? 'Belum Ditetapkan' }}</span>
-				</div>
-			</div>
 
-			<div class="info-row">
-				<div class="info-box-label">
-					<i class="fas fa-book"></i> Khatib
+				<!-- Row 2: Imam -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-user-tie"></i> Imam
+					</div>
+					<div class="info-box-value">
+						<span class="value">{{ $sholatJumat->imam ?? 'Belum Ditetapkan' }}</span>
+					</div>
 				</div>
-				<div class="info-box-value">
-					<span class="value">{{ $sholatJumat->khatib ?? 'Belum Ditetapkan' }}</span>
-				</div>
-			</div>
 
-			<div class="info-row">
-				<div class="info-box-label">
-					<i class="fas fa-microphone-alt"></i> Muadzin
+				<!-- Row 3: Khatib -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-book-reader"></i> Khatib
+					</div>
+					<div class="info-box-value">
+						<span class="value">{{ $sholatJumat->khatib ?? 'Belum Ditetapkan' }}</span>
+					</div>
 				</div>
-				<div class="info-box-value">
-					<span class="value">{{ $sholatJumat->muadzin ?? 'Belum Ditetapkan' }}</span>
+
+				<!-- Row 4: Muadzin -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-microphone-alt"></i> Muadzin
+					</div>
+					<div class="info-box-value">
+						<span class="value">{{ $sholatJumat->muadzin ?? 'Belum Ditetapkan' }}</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -466,10 +482,9 @@
 		@endif
 
 		@include('partials.bottom-section')
-				
-		</div>
 	</div>
 
+	<!-- Script Jam Digital & Tanggal Lock-Pixel Standar Masjid -->
 	<script>
 		function updateDateTime() {
 			const now = new Date();
@@ -485,7 +500,8 @@
 			setInterval(updateDateTime, 1000);
 		}
 	</script>
-<!-- SCRIPT UNTUK BACKGROUND SLIDESHOW (VERSI SUPER KUAT) -->
+
+	<!-- Script Background Slideshow -->
 	<script>
 		const backgroundImages = [
 			"{{ asset('image/display/background/BG1.png') }}",
@@ -502,29 +518,25 @@
 		];
 
 		let currentBgIndex = 0;
-		// Mencari div background, jika tidak ditemukan, langsung targetkan seluruh layar (body)
 		const bgElement = document.querySelector('.display-background') || document.body;
 
-		if (backgroundImages.length > 0) {
-			// Menggunakan setProperty('...', '...', 'important') untuk menjebol CSS bawaan
+		if (backgroundImages.length > 0 && bgElement) {
 			bgElement.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
 			bgElement.style.setProperty('background-size', 'cover', 'important');
 			bgElement.style.setProperty('background-position', 'center', 'important');
 			bgElement.style.setProperty('background-repeat', 'no-repeat', 'important');
-			
-			// Pasang gambar pertama
-			bgElement.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
 
-			// Fungsi putar otomatis
 			function changeBackground() {
 				currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
-				bgElement.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+				const nextImg = new Image();
+				nextImg.src = backgroundImages[currentBgIndex];
+				nextImg.onload = function () {
+					bgElement.style.backgroundImage = `url('${backgroundImages[currentBgIndex]}')`;
+				};
 			}
-
-			// Ganti setiap 10 detik
-			setInterval(changeBackground, 10000); 
+			setInterval(changeBackground, 15000);
 		}
-	</script>	
+	</script>
 </body>
 
 </html>

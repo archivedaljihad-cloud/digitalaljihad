@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Sapi (Cow) Silhouette / Line Art -->
+  <!-- Tanduk (Horns) -->
+  <path d="M46 16 C 48 8, 54 8, 56 12" stroke="#ffd700" stroke-width="3" stroke-linecap="round"/>
+  <path d="M40 18 C 39 12, 42 10, 44 14" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Telinga (Ears) -->
+  <path d="M54 22 C 58 23, 60 26, 56 28" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Kepala & Moncong (Head & Muzzle) -->
+  <path d="M44 18 C 48 18, 56 22, 56 28 C 56 34, 52 38, 48 38 C 44 38, 42 34, 42 30" fill="#ffd700" fill-opacity="0.2" stroke="#ffd700" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="50" cy="24" r="1.5" fill="#ffd700"/>
+  <circle cx="53" cy="33" r="1" fill="#ffd700"/>
+  
+  <!-- Badan, Punggung, Kaki Depan, Kaki Belakang (Body & Legs) -->
+  <path d="M44 26 C 36 24, 22 24, 16 28 C 12 31, 10 36, 11 44 L 14 54 L 18 54 L 19 46 C 24 47, 30 47, 34 46 L 36 54 L 40 54 L 42 42 C 43 38, 44 32, 44 26 Z" fill="#ffd700" fill-opacity="0.25" stroke="#ffd700" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  
+  <!-- Kaki Sisi Dalam (Inner Legs Depth) -->
+  <line x1="21" y1="46" x2="23" y2="54" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="33" y1="45" x2="33" y2="54" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Ekor (Tail) -->
+  <path d="M12 32 C 8 36, 7 44, 9 47" stroke="#ffd700" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="9" cy="48" r="2" fill="#ffd700"/>
+</svg>
