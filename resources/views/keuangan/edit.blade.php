@@ -140,7 +140,17 @@
 
 <script>
 	function formatRupiah(angka) {
-		let number_string = angka.replace(/[^0-9]/g, '').toString();
+		if (angka === null || angka === undefined) return '';
+		let str = angka.toString().trim();
+		if (str === '' || str === '-') return '';
+		let number_string = str.replace(/[^0-9]/g, '');
+		if (!number_string) return '';
+
+		// Hilangkan leading zero kecuali jika nilai hanya '0'
+		if (number_string.length > 1 && number_string.startsWith('0')) {
+			number_string = parseInt(number_string, 10).toString();
+		}
+
 		let sisa = number_string.length % 3;
 		let rupiah = number_string.substr(0, sisa);
 		let ribuan = number_string.substr(sisa).match(/\d{3}/gi);

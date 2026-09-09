@@ -88,7 +88,7 @@
 											<span class="input-group-text font-weight-bold text-success">Rp</span>
 										</div>
 										<input type="text" inputmode="numeric" class="form-control rupiah-input @error('pemasukan') is-invalid @enderror" 
-										id="pemasukan" name="pemasukan" value="{{ old('pemasukan') ? number_format((float)str_replace(['.', ','], ['', '.'], old('pemasukan')), 0, ',', '.') : '' }}" placeholder="Contoh: 500.000">
+										id="pemasukan" name="pemasukan" value="{{ (old('pemasukan') !== null && old('pemasukan') !== '' && (float)str_replace(['.', ','], ['', '.'], (string)old('pemasukan')) > 0) ? number_format((float)str_replace(['.', ','], ['', '.'], (string)old('pemasukan')), 0, ',', '.') : ((string)old('pemasukan') === '0' ? '0' : '') }}" placeholder="Contoh: 500.000">
 									</div>
 									@error('pemasukan')
 									<small class="text-danger">{{ $message }}</small>
@@ -103,7 +103,7 @@
 											<span class="input-group-text font-weight-bold text-danger">Rp</span>
 										</div>
 										<input type="text" inputmode="numeric" class="form-control rupiah-input @error('pengeluaran') is-invalid @enderror" 
-										id="pengeluaran" name="pengeluaran" value="{{ old('pengeluaran') ? number_format((float)str_replace(['.', ','], ['', '.'], old('pengeluaran')), 0, ',', '.') : '' }}" placeholder="Contoh: 2.000.000">
+										id="pengeluaran" name="pengeluaran" value="{{ (old('pengeluaran') !== null && old('pengeluaran') !== '' && (float)str_replace(['.', ','], ['', '.'], (string)old('pengeluaran')) > 0) ? number_format((float)str_replace(['.', ','], ['', '.'], (string)old('pengeluaran')), 0, ',', '.') : ((string)old('pengeluaran') === '0' ? '0' : '') }}" placeholder="Contoh: 2.000.000">
 									</div>
 									@error('pengeluaran')
 									<small class="text-danger">{{ $message }}</small>
@@ -136,7 +136,17 @@
 
 <script>
 	function formatRupiah(angka) {
-		let number_string = angka.replace(/[^0-9]/g, '').toString();
+		if (angka === null || angka === undefined) return '';
+		let str = angka.toString().trim();
+		if (str === '' || str === '-') return '';
+		let number_string = str.replace(/[^0-9]/g, '');
+		if (!number_string) return '';
+
+		// Hilangkan leading zero kecuali jika nilai hanya '0'
+		if (number_string.length > 1 && number_string.startsWith('0')) {
+			number_string = parseInt(number_string, 10).toString();
+		}
+
 		let sisa = number_string.length % 3;
 		let rupiah = number_string.substr(0, sisa);
 		let ribuan = number_string.substr(sisa).match(/\d{3}/gi);

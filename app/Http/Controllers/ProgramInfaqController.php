@@ -60,14 +60,53 @@ class ProgramInfaqController extends Controller
     }
 
     /**
+     * Membersihkan input rupiah dari format teks (Rp, titik ribuan, spasi, dash, dll)
+     */
+    private function cleanRupiah($value): float
+    {
+        if ($value === null) {
+            return 0.0;
+        }
+
+        $val = trim((string)$value);
+        if ($val === '' || $val === '-' || strtolower($val) === 'null') {
+            return 0.0;
+        }
+
+        // Hapus 'Rp', 'rp', spasi, dan karakter non-digit selain koma dan titik
+        $cleaned = preg_replace('/[^\d,\.]/', '', $val);
+        if ($cleaned === '') {
+            return 0.0;
+        }
+
+        if (strpos($cleaned, '.') !== false && strpos($cleaned, ',') !== false) {
+            $cleaned = str_replace('.', '', $cleaned);
+            $cleaned = str_replace(',', '.', $cleaned);
+        } elseif (substr_count($cleaned, '.') > 1) {
+            $cleaned = str_replace('.', '', $cleaned);
+        } elseif (substr_count($cleaned, ',') > 1) {
+            $cleaned = str_replace(',', '', $cleaned);
+        } else {
+            if (preg_match('/\.\d{3}$/', $cleaned)) {
+                $cleaned = str_replace('.', '', $cleaned);
+            } elseif (preg_match('/,\d{3}$/', $cleaned)) {
+                $cleaned = str_replace(',', '', $cleaned);
+            } else {
+                $cleaned = str_replace(',', '.', $cleaned);
+            }
+        }
+
+        return is_numeric($cleaned) ? (float)$cleaned : 0.0;
+    }
+
+    /**
      * Simpan program baru
      */
     public function store(Request $request)
     {
-        if ($request->has('target_dana')) {
-            $cleaned = str_replace(['.', ','], '', (string) $request->target_dana);
-            $request->merge(['target_dana' => $cleaned]);
-        }
+        $request->merge([
+            'target_dana' => $this->cleanRupiah($request->input('target_dana'))
+        ]);
 
         $validated = $request->validate([
             'nama_program'    => 'required|string|max:255',
@@ -118,10 +157,9 @@ class ProgramInfaqController extends Controller
     {
         $program = ProgramInfaq::findOrFail($id);
 
-        if ($request->has('target_dana')) {
-            $cleaned = str_replace(['.', ','], '', (string) $request->target_dana);
-            $request->merge(['target_dana' => $cleaned]);
-        }
+        $request->merge([
+            'target_dana' => $this->cleanRupiah($request->input('target_dana'))
+        ]);
 
         $validated = $request->validate([
             'nama_program'    => 'required|string|max:255',
@@ -192,10 +230,9 @@ class ProgramInfaqController extends Controller
     {
         $program = ProgramInfaq::findOrFail($programId);
 
-        if ($request->has('nominal')) {
-            $cleaned = str_replace(['.', ','], '', (string) $request->nominal);
-            $request->merge(['nominal' => $cleaned]);
-        }
+        $request->merge([
+            'nominal' => $this->cleanRupiah($request->input('nominal'))
+        ]);
 
         $validated = $request->validate([
             'nama_donatur' => 'nullable|string|max:255',

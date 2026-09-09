@@ -49,19 +49,54 @@ class KeuanganAmbulanceController extends Controller
         return view('ambulance.create');
     }
 
+    /**
+     * Membersihkan input rupiah dari format teks (Rp, titik ribuan, spasi, dash, dll)
+     */
+    private function cleanRupiah($value): float
+    {
+        if ($value === null) {
+            return 0.0;
+        }
+
+        $val = trim((string)$value);
+        if ($val === '' || $val === '-' || strtolower($val) === 'null') {
+            return 0.0;
+        }
+
+        // Hapus 'Rp', 'rp', spasi, dan karakter non-digit selain koma dan titik
+        $cleaned = preg_replace('/[^\d,\.]/', '', $val);
+        if ($cleaned === '') {
+            return 0.0;
+        }
+
+        // Format standar Indonesia / internasional
+        if (strpos($cleaned, '.') !== false && strpos($cleaned, ',') !== false) {
+            $cleaned = str_replace('.', '', $cleaned);
+            $cleaned = str_replace(',', '.', $cleaned);
+        } elseif (substr_count($cleaned, '.') > 1) {
+            $cleaned = str_replace('.', '', $cleaned);
+        } elseif (substr_count($cleaned, ',') > 1) {
+            $cleaned = str_replace(',', '', $cleaned);
+        } else {
+            if (preg_match('/\.\d{3}$/', $cleaned)) {
+                $cleaned = str_replace('.', '', $cleaned);
+            } elseif (preg_match('/,\d{3}$/', $cleaned)) {
+                $cleaned = str_replace(',', '', $cleaned);
+            } else {
+                $cleaned = str_replace(',', '.', $cleaned);
+            }
+        }
+
+        return is_numeric($cleaned) ? (float)$cleaned : 0.0;
+    }
+
     public function store(Request $request)
     {
-        // Bersihkan titik ribuan dari input rupiah
-        if ($request->has('pemasukan')) {
-            $request->merge([
-                'pemasukan' => str_replace(['.', ','], ['', '.'], (string)$request->pemasukan)
-            ]);
-        }
-        if ($request->has('pengeluaran')) {
-            $request->merge([
-                'pengeluaran' => str_replace(['.', ','], ['', '.'], (string)$request->pengeluaran)
-            ]);
-        }
+        // Bersihkan dan amankan input angka rupiah
+        $request->merge([
+            'pemasukan'   => $this->cleanRupiah($request->input('pemasukan')),
+            'pengeluaran' => $this->cleanRupiah($request->input('pengeluaran')),
+        ]);
 
         $request->validate([
             'tanggal'      => 'required|date',
@@ -69,10 +104,15 @@ class KeuanganAmbulanceController extends Controller
             'pemasukan'    => 'nullable|numeric|min:0',
             'pengeluaran'  => 'nullable|numeric|min:0',
             'kategori'     => 'nullable|string|max:100',
+        ], [
+            'tanggal.required'    => 'Tanggal transaksi wajib diisi.',
+            'deskripsi.required'  => 'Uraian / deskripsi transaksi wajib diisi.',
+            'pemasukan.numeric'   => 'Nominal pemasukan harus berupa angka yang valid.',
+            'pengeluaran.numeric' => 'Nominal pengeluaran harus berupa angka yang valid.',
         ]);
 
-        $pemasukan = $request->pemasukan ?? 0;
-        $pengeluaran = $request->pengeluaran ?? 0;
+        $pemasukan = (float)($request->pemasukan ?? 0);
+        $pengeluaran = (float)($request->pengeluaran ?? 0);
 
         // Ambil saldo terakhir dengan aman
         $lastSaldo = optional(
@@ -104,17 +144,11 @@ class KeuanganAmbulanceController extends Controller
 
     public function update(Request $request, KeuanganAmbulance $ambulance)
     {
-        // Bersihkan titik ribuan dari input rupiah
-        if ($request->has('pemasukan')) {
-            $request->merge([
-                'pemasukan' => str_replace(['.', ','], ['', '.'], (string)$request->pemasukan)
-            ]);
-        }
-        if ($request->has('pengeluaran')) {
-            $request->merge([
-                'pengeluaran' => str_replace(['.', ','], ['', '.'], (string)$request->pengeluaran)
-            ]);
-        }
+        // Bersihkan dan amankan input angka rupiah
+        $request->merge([
+            'pemasukan'   => $this->cleanRupiah($request->input('pemasukan')),
+            'pengeluaran' => $this->cleanRupiah($request->input('pengeluaran')),
+        ]);
 
         $request->validate([
             'tanggal'      => 'required|date',
@@ -122,10 +156,15 @@ class KeuanganAmbulanceController extends Controller
             'pemasukan'    => 'nullable|numeric|min:0',
             'pengeluaran'  => 'nullable|numeric|min:0',
             'kategori'     => 'nullable|string|max:100',
+        ], [
+            'tanggal.required'    => 'Tanggal transaksi wajib diisi.',
+            'deskripsi.required'  => 'Uraian / deskripsi transaksi wajib diisi.',
+            'pemasukan.numeric'   => 'Nominal pemasukan harus berupa angka yang valid.',
+            'pengeluaran.numeric' => 'Nominal pengeluaran harus berupa angka yang valid.',
         ]);
 
-        $pemasukan = $request->pemasukan ?? 0;
-        $pengeluaran = $request->pengeluaran ?? 0;
+        $pemasukan = (float)($request->pemasukan ?? 0);
+        $pengeluaran = (float)($request->pengeluaran ?? 0);
 
         $previousRecord = KeuanganAmbulance::where(function ($query) use ($ambulance) {
                 $query->where('tanggal', '<', $ambulance->tanggal)
