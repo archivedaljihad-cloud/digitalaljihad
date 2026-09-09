@@ -468,6 +468,7 @@ CREATE TABLE `sholat_jumat` (
   `imam` varchar(255) DEFAULT NULL,
   `khatib` varchar(255) DEFAULT NULL,
   `muadzin` varchar(255) DEFAULT NULL,
+  `bilal` varchar(255) DEFAULT NULL,
   `tanggal` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL

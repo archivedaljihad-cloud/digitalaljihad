@@ -42,7 +42,21 @@ class SholatJumatController extends Controller
 			'bilal' => 'nullable|string|max:255',
 			'tanggal' => 'required|date',
 		]);
-		SholatJumat::create($request->all());
+
+		$data = $request->all();
+
+		// Auto-provision or guard 'bilal' column if not yet in database
+		if (isset($data['bilal']) && !\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+			try {
+				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+					$table->string('bilal')->nullable()->after('muadzin');
+				});
+			} catch (\Throwable $e) {
+				unset($data['bilal']);
+			}
+		}
+
+		SholatJumat::create($data);
 		return redirect()->route('sholat_jumat.index')->with('success', 'Jadwal sholat Jumat berhasil ditambahkan.');
 	}
 
@@ -60,7 +74,21 @@ class SholatJumatController extends Controller
 			'bilal' => 'nullable|string|max:255',
 			'tanggal' => 'required|date',
 		]);
-		$sholat_jumat->update($request->all());
+
+		$data = $request->all();
+
+		// Auto-provision or guard 'bilal' column if not yet in database
+		if (isset($data['bilal']) && !\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+			try {
+				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+					$table->string('bilal')->nullable()->after('muadzin');
+				});
+			} catch (\Throwable $e) {
+				unset($data['bilal']);
+			}
+		}
+
+		$sholat_jumat->update($data);
 		return redirect()->route('sholat_jumat.index')->with('success', 'Jadwal sholat Jumat berhasil diperbarui.');
 	}
 

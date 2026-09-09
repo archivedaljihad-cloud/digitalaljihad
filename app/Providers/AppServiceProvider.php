@@ -183,6 +183,19 @@ class AppServiceProvider extends ServiceProvider
             // ignore and proceed
         }
 
+        // Auto-provision missing columns in table sholat_jumat if not exists (e.g. TiDB Cloud)
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('sholat_jumat')) {
+                \Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+                        $table->string('bilal')->nullable()->after('muadzin');
+                    }
+                });
+            }
+        } catch (\Throwable $e) {
+            // ignore and proceed
+        }
+
         // Membuat variabel $setting otomatis ada di layouts.admin
         View::composer('layouts.admin', function ($view) {
             $view->with('setting', AppSetting::first());
