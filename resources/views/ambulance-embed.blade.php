@@ -251,6 +251,9 @@
 		.keuangan tbody {
 			display: block;
 			width: 100%;
+		}
+
+		.keuangan tbody.can-scroll {
 			will-change: transform;
 			animation: scrollUp var(--scroll-duration, 85s) linear infinite; 
 		}
@@ -425,21 +428,6 @@
 										<td class="badge-kategori">{{ $item->kategori ?? '-' }}</td>
 									</tr>
 								@endforeach
-								{{-- Duplikasi untuk animasi loop mulus --}}
-								@foreach ($keuangan as $item)
-									<tr class="{{ $item->pemasukan > 0 ? 'income' : 'expense' }}">
-										<td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
-										<td><i class="fas {{ $item->pemasukan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i> {{ $item->deskripsi }}</td>
-										<td class="amount-income" style="{{ $item->pemasukan > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
-											Rp {{ number_format($item->pemasukan, 2, ',', '.') }}
-										</td>
-										<td class="amount-expense" style="{{ $item->pengeluaran > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
-											Rp {{ number_format($item->pengeluaran, 2, ',', '.') }}
-										</td>
-										<td class="amount-saldo">Rp {{ number_format($item->saldo, 2, ',', '.') }}</td>
-										<td class="badge-kategori">{{ $item->kategori ?? '-' }}</td>
-									</tr>
-								@endforeach
 							@endif
 						</tbody>
 					</table>
@@ -466,6 +454,20 @@
 		setInterval(updateDateTime, 1000);
 
 		document.addEventListener('DOMContentLoaded', function () {
+			// Auto-scroll tabel secara cerdas HANYA jika baris data melebihi area pandang layar
+			const tableWrapper = document.querySelector('.table-wrapper');
+			const tbody = document.getElementById('keuangan-tbody');
+			if (tbody && tableWrapper) {
+				if (tbody.scrollHeight > tableWrapper.clientHeight + 10) {
+					// Duplikasi secara dinamis saat runtime HANYA jika data panjang dan butuh animasi loop
+					const originalRows = Array.from(tbody.children);
+					originalRows.forEach(row => {
+						tbody.appendChild(row.cloneNode(true));
+					});
+					tbody.classList.add('can-scroll');
+				}
+			}
+
 			let lastTimestamp = null;
 			async function checkForUpdates() {
 				try {

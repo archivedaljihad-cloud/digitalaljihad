@@ -18,7 +18,12 @@ class PrayerModeController extends Controller
 
     private function getPrayerState()
     {
-        $setting = AppSetting::first();
+        try {
+            $setting = AppSetting::first();
+        } catch (\Throwable $e) {
+            $setting = null;
+        }
+
         if (!$setting || !$setting->prayer_mode_enabled) {
             return [
                 'active' => false,
@@ -119,19 +124,26 @@ class PrayerModeController extends Controller
             return redirect('/');
         }
 
-        if ($debugMode && !$state['active']) {
-            $setting = AppSetting::first();
+        if ($debugMode) {
+            try {
+                $setting = $state['setting'] ?? AppSetting::first();
+            } catch (\Throwable $e) {
+                $setting = null;
+            }
+            $debugPhase = request()->query('phase', $state['active'] ? $state['phase'] : self::PHASE_COUNTDOWN);
+            $debugPrayer = request()->query('prayer', $state['active'] ? (is_object($state['currentPrayer']) ? $state['currentPrayer']->nama_sholat : $state['currentPrayer']) : 'ASHAR');
+            $debugRemaining = request()->has('remaining') ? (int) request()->query('remaining') : ($state['active'] ? $state['remaining'] : 18);
 
             $state = [
                 'active' => true,
                 'setting' => $setting,
-                'phase' => self::PHASE_COUNTDOWN,
+                'phase' => $debugPhase,
                 'currentPrayer' => (object) [
-                    'nama_sholat' => 'DZUHUR',
-                    'waktu' => '12:00:00',
+                    'nama_sholat' => strtoupper($debugPrayer),
+                    'waktu' => '15:30:00',
                 ],
-                'remaining' => 300,
-                'theme' => $setting?->prayer_mode_theme ?? 'gold',
+                'remaining' => $debugRemaining,
+                'theme' => request()->query('theme', $setting?->prayer_mode_theme ?? 'gold'),
             ];
         }
 

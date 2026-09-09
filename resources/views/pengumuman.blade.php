@@ -112,23 +112,24 @@
 			justify-content: center;
 			min-height: 0;
 			width: 100%;
-			max-width: 1450px;
+			max-width: 1680px;
 			margin: 0 auto;
-			padding: 0 15px;
+			padding: 0 20px;
 			box-sizing: border-box;
 		}
 
-		/* Premiere 2-Column Card (Glassmorphism Elegan) */
+		/* Premiere 2-Column Card (Glassmorphism Elegan - Diperbesar & Megah) */
 		.announcement-card {
-			background: rgba(4, 25, 18, 0.76);
+			background: rgba(4, 25, 18, 0.80);
 			backdrop-filter: blur(14px);
 			-webkit-backdrop-filter: blur(14px);
-			border-radius: 22px;
-			padding: 24px 32px;
+			border-radius: 26px;
+			padding: 28px 42px;
 			border: 1.5px solid rgba(255, 215, 0, 0.45);
-			box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 			width: 100%;
-			max-height: 58vh;
+			height: 66vh;
+			max-height: 68vh;
 			display: flex;
 			flex-direction: column;
 			animation: cardFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -150,48 +151,50 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			margin-bottom: 16px;
-			padding-bottom: 12px;
+			margin-bottom: 20px;
+			padding-bottom: 14px;
 			border-bottom: 1.5px solid rgba(255, 215, 0, 0.3);
 			flex-shrink: 0;
 		}
 
+		/* Badge Kategori Judul (Font Diperbesar & Teks Berwarna Putih Bersih) */
 		.page-title-badge {
 			display: inline-flex;
 			align-items: center;
-			gap: 9px;
-			background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(0, 230, 118, 0.22));
-			padding: 6px 18px;
+			gap: 12px;
+			background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(0, 230, 118, 0.25));
+			padding: 8px 24px;
 			border-radius: 30px;
-			border: 1px solid rgba(255, 215, 0, 0.5);
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			border: 1.5px solid rgba(255, 215, 0, 0.6);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
 		}
 
 		.page-title-badge i {
-			font-size: 1.15rem;
-			color: #ffd700;
+			font-size: 1.38rem;
+			color: #ffffff;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 		}
 
 		.page-title-badge span {
-			font-size: 0.98rem;
+			font-size: 1.38rem;
 			font-weight: 700;
-			color: #ffd700;
-			letter-spacing: 1px;
+			color: #ffffff !important;
+			letter-spacing: 1.2px;
 			text-transform: uppercase;
-			text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
 		}
 
 		.date-badge {
 			background: rgba(3, 20, 15, 0.65);
 			color: #ffd700;
-			padding: 6px 18px;
+			padding: 8px 24px;
 			border-radius: 30px;
-			font-size: 1rem;
+			font-size: 1.2rem;
 			font-weight: 600;
 			border: 1px solid rgba(255, 215, 0, 0.35);
 			display: inline-flex;
 			align-items: center;
-			gap: 8px;
+			gap: 9px;
 			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 		}
 
@@ -199,15 +202,15 @@
 		.card-main-body {
 			display: flex;
 			align-items: center;
-			gap: 36px;
+			gap: 48px;
 			flex: 1;
 			min-height: 0;
 			overflow: hidden;
 		}
 
-		/* Kolom Kiri: Foto Ustadz / Flyer */
+		/* Kolom Kiri: Foto Ustadz / Flyer (Diperbesar Signifikan) */
 		.speaker-col {
-			flex: 0 0 280px;
+			flex: 0 0 380px;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -217,12 +220,14 @@
 
 		.speaker-frame {
 			position: relative;
-			width: 230px;
-			height: 230px;
-			border-radius: 20px;
-			padding: 5px;
-			background: linear-gradient(135deg, rgba(255, 215, 0, 0.6), rgba(0, 230, 118, 0.3));
-			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.2);
+			width: 340px;
+			height: 340px;
+			max-width: 100%;
+			max-height: 48vh;
+			border-radius: 24px;
+			padding: 6px;
+			background: linear-gradient(135deg, rgba(255, 215, 0, 0.65), rgba(0, 230, 118, 0.35));
+			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 28px rgba(255, 215, 0, 0.25);
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -233,68 +238,68 @@
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
-			border-radius: 16px;
+			border-radius: 20px;
 		}
 
 		.speaker-avatar-fallback {
 			width: 100%;
 			height: 100%;
-			background: radial-gradient(circle, rgba(11, 79, 38, 0.8) 0%, rgba(3, 20, 15, 0.95) 100%);
-			border-radius: 16px;
+			background: radial-gradient(circle, rgba(11, 79, 38, 0.85) 0%, rgba(3, 20, 15, 0.98) 100%);
+			border-radius: 20px;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
 			color: #ffd700;
-			gap: 10px;
+			gap: 14px;
 		}
 
 		.speaker-avatar-fallback i {
-			font-size: 4rem;
-			filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+			font-size: 5.8rem;
+			filter: drop-shadow(0 4px 12px rgba(0,0,0,0.55));
 		}
 
 		.speaker-avatar-fallback span {
-			font-size: 0.88rem;
-			font-weight: 600;
-			letter-spacing: 1px;
+			font-size: 1.15rem;
+			font-weight: 700;
+			letter-spacing: 1.2px;
 			text-transform: uppercase;
-			opacity: 0.9;
+			opacity: 0.95;
 		}
 
-		/* Kolom Kanan: Rincian Agenda & Materi */
+		/* Kolom Kanan: Rincian Agenda & Materi (Proporsional & Lebih Terbaca) */
 		.details-col {
 			flex: 1;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			min-width: 0;
-			padding-right: 5px;
+			padding-right: 10px;
 		}
 
 		.activity-title {
-			font-size: 2.15rem;
+			font-size: 2.7rem;
 			font-weight: 700;
 			line-height: 1.25;
 			color: #ffd700;
-			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-			margin-bottom: 6px;
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+			margin-bottom: 8px;
 		}
 
 		.speaker-name-badge {
 			display: inline-flex;
 			align-items: center;
-			gap: 9px;
-			font-size: 1.28rem;
+			gap: 10px;
+			font-size: 1.45rem;
 			font-weight: 600;
 			color: #ffffff;
-			margin-bottom: 16px;
+			margin-bottom: 18px;
 			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
 		}
 
 		.speaker-name-badge i {
 			color: #00e676;
-			font-size: 1.2rem;
+			font-size: 1.35rem;
 		}
 
 		/* Grid Info Pill (Hari/Tanggal, Waktu, Tempat) */
@@ -302,7 +307,7 @@
 			display: flex;
 			gap: 14px;
 			flex-wrap: wrap;
-			margin-bottom: 16px;
+			margin-bottom: 18px;
 		}
 
 		.meta-pill {
@@ -311,15 +316,15 @@
 			gap: 9px;
 			background: rgba(0, 0, 0, 0.45);
 			border: 1px solid rgba(255, 215, 0, 0.35);
-			padding: 7px 16px;
+			padding: 9px 18px;
 			border-radius: 12px;
-			font-size: 0.96rem;
+			font-size: 1.08rem;
 			color: #ffffff;
 			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 		}
 
 		.meta-pill i {
-			font-size: 1.05rem;
+			font-size: 1.15rem;
 		}
 
 		.meta-pill.time-pill i { color: #ffd700; }
@@ -338,34 +343,34 @@
 
 		/* Deskripsi / Isi Pengumuman */
 		.activity-description {
-			font-size: 1.2rem;
-			line-height: 1.55;
-			color: rgba(255, 255, 255, 0.92);
+			font-size: 1.32rem;
+			line-height: 1.6;
+			color: rgba(255, 255, 255, 0.94);
 			text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-			max-height: 18vh;
+			max-height: 24vh;
 			overflow-y: auto;
-			padding-right: 8px;
+			padding-right: 10px;
 			white-space: pre-line;
 		}
 
 		.activity-description::-webkit-scrollbar {
-			width: 4px;
+			width: 5px;
 		}
 		.activity-description::-webkit-scrollbar-thumb {
-			background: rgba(255, 215, 0, 0.4);
+			background: rgba(255, 215, 0, 0.45);
 			border-radius: 8px;
 		}
 
 		/* Progress & Indicators */
 		.progress-container {
 			flex-shrink: 0;
-			margin-top: 6px;
+			margin-top: 8px;
 			margin-bottom: 4px;
-			max-width: 1450px;
+			max-width: 1680px;
 			margin-left: auto;
 			margin-right: auto;
 			width: 100%;
-			padding: 0 15px;
+			padding: 0 20px;
 		}
 
 		.progress-bar {

@@ -88,49 +88,25 @@
             height: 100%;
             overflow: hidden;
             min-height: 0;
-            perspective: 1400px; /* Perspective untuk 3D Billboard Flip */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* --- OPSI A: SPLIT 2-COLUMN LANDSCAPE LAYOUT DENGAN 3D BILLBOARD FLIP TRANSITION --- */
-        .slide {
-            position: absolute;
-            inset: 0;
+        .slide-layout {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 40px;
-            padding: 10px 35px 10px 35px;
+            padding: 10px 35px;
             box-sizing: border-box;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
             width: 100%;
             height: 100%;
-            transform-style: preserve-3d;
-            backface-visibility: hidden;
-            transform: rotateY(90deg) scale(0.9);
-            transition: transform 0.9s cubic-bezier(0.3, 1.2, 0.4, 1), opacity 0.7s ease-in-out, visibility 0.9s;
         }
 
-        .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: rotateY(0deg) scale(1);
-            pointer-events: auto;
-            z-index: 2;
-        }
-
-        .slide.prev-flip {
-            opacity: 0;
-            visibility: hidden;
-            transform: rotateY(-90deg) scale(0.9);
-            transition: transform 0.9s cubic-bezier(0.3, 1.2, 0.4, 1), opacity 0.7s ease-in-out, visibility 0.9s;
-            z-index: 1;
-        }
-
-        /* Kolom Kiri: Poster / Foto Gambar Utama (Diperbesar) */
+        /* --- KOLOM KIRI: 3D TILE FLIP / MOSAIC GRID BOARD (EFEK KOTAK-KOTAK BERATURAN) --- */
         .slide-left-col {
-            flex: 1.6;
+            flex: 1.5;
             height: 100%;
             max-height: 100%;
             display: flex;
@@ -140,7 +116,7 @@
             min-width: 0;
         }
 
-        .slide-poster-wrapper {
+        .mosaic-wrapper {
             position: relative;
             display: flex;
             align-items: center;
@@ -150,34 +126,115 @@
             max-height: 66vh;
         }
 
-        .slide-poster-backdrop {
+        .mosaic-backdrop {
             position: absolute;
-            inset: -12px;
+            inset: -14px;
             background-size: cover;
             background-position: center;
             filter: blur(28px);
             opacity: 0.45;
-            border-radius: 20px;
+            border-radius: 24px;
             transform: scale(1.03);
             z-index: 1;
             pointer-events: none;
+            transition: background-image 0.8s ease, opacity 0.8s ease;
         }
 
-        .slide-left-col img {
+        .mosaic-board {
             position: relative;
             z-index: 2;
+            width: 100%;
             max-width: 100%;
-            max-height: 65vh;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            border-radius: 18px;
-            border: 2px solid rgba(255, 215, 0, 0.5);
+            height: 65vh;
+            border-radius: 20px;
+            background: #020e0a;
+            border: 2px solid rgba(255, 215, 0, 0.55);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 215, 0, 0.2);
-            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            gap: 2px;
+            padding: 2px;
+            box-sizing: border-box;
+            background-color: rgba(255, 215, 0, 0.18); /* Garis batas grid kotak bernuansa emas */
+            perspective: 1400px;
         }
 
-        /* Kolom Kanan: Panel Glassmorphism Elegan Rata Tengah (Center All) */
+        .mosaic-tile {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 800px;
+            transform-style: preserve-3d;
+        }
+
+        .tile-flipper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform-origin: center center;
+            will-change: transform;
+        }
+
+        .tile-flipper.animate-flip {
+            transition: transform 0.65s cubic-bezier(0.35, 0.0, 0.15, 1.0);
+            transform: rotateY(-180deg);
+        }
+
+        .tile-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+            background: #020e0a;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .tile-face.front {
+            transform: rotateY(0deg);
+        }
+
+        .tile-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .tile-slice {
+            position: absolute;
+            width: 800%;  /* 8 kolom = 800% */
+            height: 600%; /* 6 baris = 600% */
+            pointer-events: none;
+        }
+
+        .tile-slice img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+        }
+
+        .tile-shadow {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.9) 100%);
+            opacity: 0;
+            transition: opacity 0.65s cubic-bezier(0.35, 0.0, 0.15, 1.0);
+            transition-delay: inherit;
+        }
+
+        .tile-flipper.animate-flip .tile-face.front .tile-shadow {
+            opacity: 0.75;
+        }
+
+        .tile-flipper.animate-flip .tile-face.back .tile-shadow {
+            opacity: 0;
+        }
+
+        /* --- KOLOM KANAN: PANEL GLASSMORPHISM ELEGAN --- */
         .slide-right-col {
             flex: 1;
             display: flex;
@@ -205,6 +262,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
         }
 
         .slide-badge {
@@ -231,6 +289,25 @@
             font-size: 0.95rem;
         }
 
+        .card-text-wrapper {
+            width: 100%;
+            transition: transform 0.45s cubic-bezier(0.35, 0, 0.2, 1), opacity 0.4s ease, filter 0.4s ease;
+            transform-origin: center top;
+            will-change: transform, opacity;
+        }
+
+        .card-text-wrapper.flip-out {
+            transform: rotateX(35deg) translateY(-12px);
+            opacity: 0;
+            filter: blur(2px);
+        }
+
+        .card-text-wrapper.flip-in {
+            transform: rotateX(0deg) translateY(0);
+            opacity: 1;
+            filter: blur(0);
+        }
+
         .slide-card .judul {
             font-family: 'Poppins', sans-serif;
             font-size: 2.15rem;
@@ -253,7 +330,7 @@
             text-align: center;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
             overflow-y: auto;
-            max-height: 32vh;
+            max-height: 30vh;
             padding: 0 10px;
             width: 100%;
             box-sizing: border-box;
@@ -266,6 +343,28 @@
         .slide-card .deskripsi::-webkit-scrollbar-thumb {
             background: rgba(255, 215, 0, 0.4);
             border-radius: 10px;
+        }
+
+        .slide-indicators {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.4s cubic-bezier(0.35, 0, 0.2, 1);
+        }
+
+        .indicator-dot.active {
+            width: 32px;
+            background: linear-gradient(90deg, #ffd700, #00e676);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
         }
 
         .empty {
@@ -294,44 +393,85 @@
             <div class="datetime" id="datetime"></div>
         </div>
 
-        <!-- Stage Konten Slide Informasi (Opsi A: Split 2-Kolom) -->
-        <div class="slide-stage">
+        <!-- Stage Konten Slide Informasi (Efek 3D Tile Flip / Mosaic Grid) -->
+        <div class="slide-stage" id="slideStage">
             @if($slides->count())
-            @foreach($slides as $slide)
-            <div class="slide {{ $loop->first ? 'active' : '' }}" data-duration="{{ max(3, $slide->durasi) }}">
+            @php
+                $firstSlide = $slides[0];
+                $firstImg = $firstSlide->gambar ? $firstSlide->gambar_url : asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp');
+                $secondImg = (isset($slides[1]) && $slides[1]->gambar) ? $slides[1]->gambar_url : $firstImg;
+            @endphp
+            <div class="slide-layout">
                 
-                {{-- Kolom Kiri: Foto / Gambar Utama --}}
+                {{-- Kolom Kiri: 3D Tile Flip / Mosaic Grid Board (48 Kotak: 8 Kolom x 6 Baris) --}}
                 <div class="slide-left-col">
-                    @if($slide->gambar)
-                    <div class="slide-poster-wrapper">
-                        <div class="slide-poster-backdrop" style="background-image: url('{{ $slide->gambar_url }}');"></div>
-                        <img src="{{ $slide->gambar_url }}" alt="{{ $slide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                    <div class="mosaic-wrapper">
+                        <div class="mosaic-backdrop" id="mosaicBackdrop" style="background-image: url('{{ $firstImg }}');"></div>
+                        
+                        <div class="mosaic-board" id="mosaicBoard">
+                            @for($r = 0; $r < 6; $r++)
+                                @for($c = 0; $c < 8; $c++)
+                                <div class="mosaic-tile" data-col="{{ $c }}" data-row="{{ $r }}">
+                                    <div class="tile-flipper">
+                                        <div class="tile-face front">
+                                            <div class="tile-slice" style="left: -{{ $c * 100 }}%; top: -{{ $r * 100 }}%;">
+                                                <img src="{{ $firstImg }}" alt="{{ $firstSlide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                                            </div>
+                                            <div class="tile-shadow"></div>
+                                        </div>
+                                        <div class="tile-face back">
+                                            <div class="tile-slice" style="left: -{{ $c * 100 }}%; top: -{{ $r * 100 }}%;">
+                                                <img src="{{ $secondImg }}" alt="" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                                            </div>
+                                            <div class="tile-shadow"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endfor
+                            @endfor
+                        </div>
                     </div>
-                    @else
-                    <div class="slide-poster-wrapper">
-                        <img src="{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}" alt="{{ $slide->judul }}">
-                    </div>
-                    @endif
                 </div>
 
-                {{-- Kolom Kanan: Kartu Informasi Elegan (Glassmorphism) --}}
+                {{-- Kolom Kanan: Kartu Informasi Elegan (Glassmorphism) dengan Transisi Sinkron --}}
                 <div class="slide-right-col">
                     <div class="slide-card">
                         <div class="slide-badge">
                             <i class="fas fa-bullhorn"></i>
                             <span>Informasi Kegiatan</span>
                         </div>
-                        <div class="judul">
-                            {{ $slide->judul }}
+                        <div class="card-text-wrapper" id="cardText">
+                            <div class="judul" id="slideJudul">
+                                {{ $firstSlide->judul }}
+                            </div>
+                            <div class="deskripsi" id="slideDeskripsi">
+                                {{ $firstSlide->deskripsi ?? '' }}
+                            </div>
                         </div>
-                        @if($slide->deskripsi)
-                        <div class="deskripsi">{{ $slide->deskripsi }}</div>
+                        @if($slides->count() > 1)
+                        <div class="slide-indicators" id="slideIndicators">
+                            @foreach($slides as $idx => $s)
+                            <span class="indicator-dot {{ $idx === 0 ? 'active' : '' }}" data-index="{{ $idx }}"></span>
+                            @endforeach
+                        </div>
                         @endif
                     </div>
                 </div>
 
             </div>
-            @endforeach
+
+            <!-- JSON Data Slide untuk Controller 3D Tile Flip / Mosaic Grid -->
+            <script id="slides-data" type="application/json">
+                {!! json_encode($slides->map(function($s) {
+                    return [
+                        'id' => $s->id,
+                        'judul' => $s->judul,
+                        'deskripsi' => $s->deskripsi,
+                        'gambar_url' => $s->gambar ? $s->gambar_url : asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp'),
+                        'durasi' => max(3, (int)$s->durasi)
+                    ];
+                })) !!}
+            </script>
             @else
             <div class="empty">
                 Belum ada Slide Informasi yang aktif.
@@ -344,7 +484,7 @@
 
     </div>
 
-    <!-- SCRIPT UNTUK BACKGROUND SLIDESHOW (EFEK CHECKERBOARD / PAPAN CATUR) -->
+    <!-- SCRIPT UNTUK BACKGROUND SLIDESHOW (EFEK TRIVISION BLINDS SMOOTH) -->
     <script>
         const backgroundImages = [
             "{{ asset('image/display/background/BG1.png') }}",
@@ -359,118 +499,212 @@
         let currentBgIndex = 0;
         const bgContainer = document.querySelector('.display-background');
 
-        const cols = 10;
-        const rows = 6;
+        const numBlinds = 12;
+        let blinds = [];
 
         if (backgroundImages.length > 0 && bgContainer) {
             bgContainer.style.setProperty('overflow', 'hidden', 'important');
             bgContainer.style.setProperty('position', 'absolute', 'important');
             bgContainer.style.setProperty('z-index', '-1', 'important');
-            bgContainer.style.setProperty('perspective', '1000px', 'important');
+            bgContainer.style.setProperty('perspective', '1600px', 'important');
+            bgContainer.style.setProperty('display', 'flex', 'important');
 
-            bgContainer.style.backgroundImage = `url('${backgroundImages[0]}')`;
-            bgContainer.style.backgroundSize = 'cover';
-            bgContainer.style.backgroundPosition = 'center';
+            for (let i = 0; i < numBlinds; i++) {
+                const blind = document.createElement('div');
+                blind.style.flex = '1';
+                blind.style.height = '100%';
+                blind.style.position = 'relative';
+                blind.style.transformStyle = 'preserve-3d';
+                blind.style.transition = 'transform 1.05s cubic-bezier(0.35, 0, 0.25, 1)';
+                blind.style.transitionDelay = `${i * 0.075}s`;
+
+                const bgPosX = numBlinds === 1 ? 0 : (i / (numBlinds - 1)) * 100;
+
+                const createFace = (isFront) => {
+                    const face = document.createElement('div');
+                    face.style.position = 'absolute';
+                    face.style.width = '100%';
+                    face.style.height = '100%';
+                    face.style.backfaceVisibility = 'hidden';
+                    face.style.backgroundSize = '100vw 100vh';
+                    face.style.backgroundPosition = `${bgPosX}% center`;
+                    face.style.backgroundRepeat = 'no-repeat';
+                    face.style.boxShadow = 'inset 0 0 10px rgba(0, 0, 0, 0.35)';
+                    if (!isFront) {
+                        face.style.transform = 'rotateY(180deg)';
+                    }
+                    return face;
+                };
+
+                const front = createFace(true);
+                const back = createFace(false);
+
+                front.style.backgroundImage = `url('${backgroundImages[0]}')`;
+
+                blind.appendChild(front);
+                blind.appendChild(back);
+                bgContainer.appendChild(blind);
+
+                blinds.push({ el: blind, front: front, back: back, isFlipped: false });
+            }
 
             function changeBackground() {
-                const nextBgIndex = (currentBgIndex + 1) % backgroundImages.length;
-                const nextImgUrl = backgroundImages[nextBgIndex];
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                const nextImgUrl = `url('${backgroundImages[currentBgIndex]}')`;
 
-                const gridContainer = document.createElement('div');
-                gridContainer.style.position = 'absolute';
-                gridContainer.style.top = '0';
-                gridContainer.style.left = '0';
-                gridContainer.style.width = '100%';
-                gridContainer.style.height = '100%';
-                gridContainer.style.display = 'grid';
-                gridContainer.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-                gridContainer.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-                bgContainer.appendChild(gridContainer);
-
-                let blocks = [];
-
-                for (let r = 0; r < rows; r++) {
-                    for (let c = 0; c < cols; c++) {
-                        const block = document.createElement('div');
-                        block.style.position = 'relative';
-                        block.style.width = '100%';
-                        block.style.height = '100%';
-
-                        block.style.backgroundImage = `url('${nextImgUrl}')`;
-                        block.style.backgroundSize = '100vw 100vh';
-
-                        const posX = cols === 1 ? 0 : (c / (cols - 1)) * 100;
-                        const posY = rows === 1 ? 0 : (r / (rows - 1)) * 100;
-                        block.style.backgroundPosition = `${posX}% ${posY}%`;
-
-                        block.style.opacity = '0';
-                        block.style.transform = 'rotateY(90deg) scale(0.5)';
-
-                        const delay = Math.random() * 1.5;
-                        block.style.transition = `all 0.8s cubic-bezier(0.25, 1, 0.5, 1) ${delay}s`;
-
-                        gridContainer.appendChild(block);
-                        blocks.push(block);
+                blinds.forEach((blind) => {
+                    if (!blind.isFlipped) {
+                        blind.back.style.backgroundImage = nextImgUrl;
+                        blind.el.style.transform = 'rotateY(180deg)';
+                    } else {
+                        blind.front.style.backgroundImage = nextImgUrl;
+                        blind.el.style.transform = 'rotateY(0deg)';
                     }
-                }
-
-                void gridContainer.offsetWidth;
-
-                blocks.forEach(block => {
-                    block.style.opacity = '1';
-                    block.style.transform = 'rotateY(0deg) scale(1)';
+                    blind.isFlipped = !blind.isFlipped;
                 });
-
-                setTimeout(() => {
-                    bgContainer.style.backgroundImage = `url('${nextImgUrl}')`;
-                    if (gridContainer && gridContainer.parentNode) {
-                        gridContainer.parentNode.removeChild(gridContainer);
-                    }
-                }, 2600);
-
-                currentBgIndex = nextBgIndex;
             }
 
             setInterval(changeBackground, 10000);
         }
     </script>
 
-    <!-- SCRIPT UNTUK ROTASI KONTEN SLIDE INFORMASI (3D BILLBOARD FLIP) -->
+    <!-- SCRIPT UNTUK JAM & ROTASI KONTEN SLIDE INFORMASI (EFEK 3D TILE FLIP / MOSAIC GRID) -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const slideElements = document.querySelectorAll('.slide');
-            if (!slideElements || slideElements.length <= 1) return;
+        // Jam & Tanggal Standar Masjid
+        function updateDateTime() {
+            const now = new Date();
+            const dt = document.getElementById('datetime');
+            if (dt) {
+                dt.innerHTML = typeof getStandardMasjidDateTime === 'function'
+                    ? getStandardMasjidDateTime(now, true)
+                    : now.toLocaleString('id-ID');
+            }
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
 
-            let currentSlideIndex = 0;
+        // Kontroller 3D Tile Flip / Mosaic Grid Wave untuk Pergantian Gambar & Konten Slide
+        document.addEventListener('DOMContentLoaded', function () {
+            const dataElement = document.getElementById('slides-data');
+            if (!dataElement) return;
+
+            let slides = [];
+            try {
+                slides = JSON.parse(dataElement.textContent || '[]');
+            } catch (e) {
+                console.error("Gagal membaca data slide", e);
+            }
+
+            if (!slides || slides.length <= 1) return;
+
+            const STAGGER_STEP = 0.04; // 40ms jeda per gelombang diagonal kotak
+            let currentIdx = 0;
+            let isTransitioning = false;
             let slideTimer = null;
 
-            function showNextSlide() {
-                const prevSlide = slideElements[currentSlideIndex];
-                currentSlideIndex = (currentSlideIndex + 1) % slideElements.length;
-                const nextSlide = slideElements[currentSlideIndex];
+            const board = document.getElementById('mosaicBoard');
+            const backdrop = document.getElementById('mosaicBackdrop');
+            const cardText = document.getElementById('cardText');
+            const slideJudul = document.getElementById('slideJudul');
+            const slideDeskripsi = document.getElementById('slideDeskripsi');
+            const indicatorDots = document.querySelectorAll('.indicator-dot');
 
-                // Efek Billboard Flip: Slide lama memutar keluar (-90deg)
-                prevSlide.classList.remove('active');
-                prevSlide.classList.add('prev-flip');
+            // Kumpulkan referensi 48 kotak kecil (tiles)
+            const tileElements = board.querySelectorAll('.mosaic-tile');
+            const tiles = [];
+            let maxDiagonal = 0;
 
-                // Siapkan slide berikutnya untuk flip masuk (dari 90deg ke 0deg)
-                nextSlide.classList.remove('prev-flip');
-                void nextSlide.offsetWidth; // Trigger reflow
-                nextSlide.classList.add('active');
+            tileElements.forEach(tile => {
+                const c = parseInt(tile.getAttribute('data-col'), 10) || 0;
+                const r = parseInt(tile.getAttribute('data-row'), 10) || 0;
+                const diagonal = c + r;
+                if (diagonal > maxDiagonal) maxDiagonal = diagonal;
 
-                // Bersihkan class prev-flip setelah animasi selesai
+                const flipper = tile.querySelector('.tile-flipper');
+                const frontFace = tile.querySelector('.tile-face.front');
+                const backFace = tile.querySelector('.tile-face.back');
+
+                tiles.push({
+                    c, r,
+                    diagonal,
+                    flipper,
+                    frontImg: frontFace.querySelector('img'),
+                    backImg: backFace.querySelector('img'),
+                    frontShadow: frontFace.querySelector('.tile-shadow'),
+                    backShadow: backFace.querySelector('.tile-shadow')
+                });
+            });
+
+            function flipToNextSlide() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+
+                const nextIdx = (currentIdx + 1) % slides.length;
+                const nextSlide = slides[nextIdx];
+
+                // 1. Siapkan gambar berikutnya pada sisi belakang setiap kotak
+                tiles.forEach(t => {
+                    t.backImg.src = nextSlide.gambar_url;
+                    t.backShadow.style.opacity = '0.75';
+                    t.frontShadow.style.opacity = '0';
+                });
+
+                // 2. Putar balik kotak-kotak secara bergelombang teratur (diagonal wave cascade)
+                tiles.forEach(t => {
+                    t.flipper.style.transitionDelay = `${t.diagonal * STAGGER_STEP}s`;
+                    t.flipper.classList.add('animate-flip');
+                });
+
+                // 3. Sinkronkan kilauan ambient backdrop di belakang frame
                 setTimeout(() => {
-                    prevSlide.classList.remove('prev-flip');
-                }, 900);
+                    if (backdrop) {
+                        backdrop.style.backgroundImage = `url('${nextSlide.gambar_url}')`;
+                    }
+                }, 250);
 
-                scheduleNextSlide();
+                // 4. Sinkronkan teks kartu informasi kanan saat gelombang kotak mencapai tengah
+                setTimeout(() => {
+                    if (cardText) {
+                        cardText.classList.remove('flip-in');
+                        cardText.classList.add('flip-out');
+
+                        setTimeout(() => {
+                            if (slideJudul) slideJudul.textContent = nextSlide.judul;
+                            if (slideDeskripsi) slideDeskripsi.textContent = nextSlide.deskripsi || '';
+                            cardText.classList.remove('flip-out');
+                            cardText.classList.add('flip-in');
+                        }, 220);
+                    }
+                }, 220);
+
+                // Update titik indikator slide
+                indicatorDots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === nextIdx);
+                });
+
+                // 5. Reset instan & mulus setelah seluruh 48 kotak mendarat rata (0 flicker)
+                const totalWaveDuration = maxDiagonal * STAGGER_STEP + 0.65 + 0.08;
+                setTimeout(() => {
+                    tiles.forEach(t => {
+                        t.flipper.style.transition = 'none';
+                        t.flipper.style.transitionDelay = '0s';
+                        t.flipper.classList.remove('animate-flip');
+                        t.frontImg.src = nextSlide.gambar_url;
+                        void t.flipper.offsetWidth; // Force reflow
+                        t.flipper.style.transition = '';
+                    });
+
+                    currentIdx = nextIdx;
+                    isTransitioning = false;
+                    scheduleNextSlide();
+                }, totalWaveDuration * 1000);
             }
 
             function scheduleNextSlide() {
                 if (slideTimer) clearTimeout(slideTimer);
-                const currentSlide = slideElements[currentSlideIndex];
-                const duration = (parseInt(currentSlide.getAttribute('data-duration'), 10) || 5) * 1000;
-                slideTimer = setTimeout(showNextSlide, duration);
+                const currentSlide = slides[currentIdx];
+                const duration = (parseInt(currentSlide.durasi, 10) || 6) * 1000;
+                slideTimer = setTimeout(flipToNextSlide, duration);
             }
 
             scheduleNextSlide();

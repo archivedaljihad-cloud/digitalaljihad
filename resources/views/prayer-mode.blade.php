@@ -1,4 +1,4 @@
-<!-- resources/views/prayer-mode.blade.php -->[cite: 1]
+<!-- resources/views/prayer-mode.blade.php -->
 <!DOCTYPE html>
 <html lang="id">
 
@@ -9,10 +9,22 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap"
         rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --gold-light: #FFF8E1;
+            --gold-primary: #D4AF37;
+            --gold-dark: #9A7514;
+            --gold-glow: rgba(212, 175, 55, 0.35);
+            --gold-gradient: linear-gradient(180deg, #FFFDF0 0%, #F5DC8C 28%, #D4AF37 58%, #9E7416 88%, #F7DE88 100%);
+            --gold-border: rgba(212, 175, 55, 0.45);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -25,29 +37,21 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Poppins', sans-serif;
-
-            /* TEMA DINAMIS */
-            @if($theme == 'dark')
-                background: #000000;
-                color: #ffffff;
-            @elseif($theme == 'light')
-                background: #f4f6f9;
-                color: #333333;
-            @else
-                /* default / hijau */
-                background: #052614;
-                color: #ffffff;
-            @endif
+            background-color: #01130a;
+            color: #ffffff;
         }
 
         body {
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
-        /* BACKGROUND UTAMA */
-        @keyframes emeraldGlow {
+        /* =====================================================
+           BACKGROUND ATMOSPHERE
+           ===================================================== */
+        @keyframes emeraldMotion {
             0% {
                 background-position: 0% 50%;
             }
@@ -61,380 +65,981 @@
             }
         }
 
-        /* BACKGROUND UTAMA DENGAN EFEK GERAKAN HALUS */
-        .background {
+        @keyframes pulseGlow {
+            0%, 100% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.95;
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes floatingDust {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.2;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(0px) rotate(360deg);
+                opacity: 0.2;
+            }
+        }
+
+        .bg-layer {
             position: fixed;
             inset: 0;
             z-index: 0;
-            background: linear-gradient(120deg, #01160b, #042b17, #0b4f2c, #032212, #01160b);
-            background-size: 300% 300%;
-            animation: emeraldGlow 22s ease infinite;
+            pointer-events: none;
         }
 
-        /* LAYER 1: PATTERN ISLAMIC DI BELAKANG */
-        .background::before {
-            content: "";
-            position: absolute;
-            inset: 0;
+        /* Gradient Dasar */
+        .bg-gradient {
+            @if($theme == 'dark')
+                background: radial-gradient(circle at 50% 20%, #16181d 0%, #0c0d10 50%, #000000 100%);
+            @elseif($theme == 'light')
+                background: radial-gradient(circle at 50% 20%, #f7f9fc 0%, #e8edf3 50%, #d5dde6 100%);
+            @else
+                /* Royal Emerald & Obsidian */
+                background: radial-gradient(circle at 50% 15%, #064024 0%, #032716 42%, #01150c 80%, #000c06 100%);
+            @endif
+        }
+
+        /* Islamic Geometric Pattern */
+        .bg-pattern {
             background-image: url('{{ asset("storage/background/islamic.png") }}');
             background-repeat: repeat;
             background-position: center;
-            background-size: 280px;
-            opacity: 0.18;
-            pointer-events: none;
-            z-index: 1;
+            background-size: 260px;
+            opacity: 0.08;
+            mix-blend-mode: overlay;
         }
 
-        /* LAYER 2: GAMBAR KABAH DI TENGAH DENGAN OVERLAY HALUS */
-        .background::after {
-            content: "";
-            position: absolute;
-            inset: 0;
+        /* Ka'bah Watermark Vignette */
+        .bg-kaabah {
             background-image: url('{{ asset("img/Kaabah.png") }}');
-            background-size: cover;
-            background-position: center bottom;
+            background-size: contain;
+            background-position: center 85%;
             background-repeat: no-repeat;
-            opacity: 0.28;
+            opacity: 0.22;
             mix-blend-mode: luminosity;
-            pointer-events: none;
-            z-index: 2;
+            filter: contrast(1.15) brightness(0.9);
+            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
+            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
         }
 
-        /* LAYER 3: OVERLAY GRADIENT AGAR TEKS TETAP SANGAT JELAS */
-        .overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            background: radial-gradient(circle at center, rgba(1, 22, 11, 0.45) 0%, rgba(1, 22, 11, 0.85) 100%);
+        /* Dark Radial Vignette */
+        .bg-vignette {
+            background: radial-gradient(ellipse at center, rgba(1, 19, 10, 0.15) 0%, rgba(1, 12, 7, 0.75) 75%, rgba(0, 5, 2, 0.95) 100%);
+        }
+
+        /* Ambient Sparkles / Light Orbs */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(45px);
             pointer-events: none;
         }
 
+        .ambient-orb-1 {
+            top: 5%;
+            left: 20%;
+            width: 380px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
+            animation: floatingDust 18s ease-in-out infinite;
+        }
+
+        .ambient-orb-2 {
+            bottom: 10%;
+            right: 20%;
+            width: 420px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(10, 92, 53, 0.35), transparent 70%);
+            animation: floatingDust 22s ease-in-out infinite reverse;
+        }
+
+        /* =====================================================
+           THE ROYAL MIHRAB CARD CONTAINER
+           ===================================================== */
         .container {
             position: relative;
-            z-index: 2;
+            z-index: 5;
             width: 100%;
-            max-width: 1600px;
-            padding: 40px;
+            max-width: 1400px;
+            height: 94vh;
+            max-height: 980px;
+            margin: 0 auto;
+            padding: 24px 38px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
             text-align: center;
+
+            /* Luxury Glassmorphism */
+            @if($theme == 'dark')
+                background: radial-gradient(120% 120% at 50% 0%, rgba(25, 27, 34, 0.78) 0%, rgba(12, 13, 17, 0.92) 100%);
+            @elseif($theme == 'light')
+                background: radial-gradient(120% 120% at 50% 0%, rgba(255, 255, 255, 0.85) 0%, rgba(240, 244, 248, 0.94) 100%);
+                color: #222222;
+            @else
+                background: radial-gradient(120% 120% at 50% 0%, rgba(5, 45, 25, 0.75) 0%, rgba(2, 20, 11, 0.89) 100%);
+            @endif
+
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 40px;
+            border: 1.5px solid var(--gold-border);
+            box-shadow:
+                0 30px 90px rgba(0, 0, 0, 0.75),
+                0 0 50px rgba(212, 175, 55, 0.12),
+                inset 0 1px 0 rgba(255, 240, 185, 0.35);
         }
 
-        /* TULISAN ARAB */
-        .arabic {
-            font-family: 'Amiri', serif;
-            font-size: 70px;
-            line-height: 1.4;
-            color: #FFD54F;
-            margin-bottom: 15px;
-            transform: translateY(20px);
-            text-shadow:
-                0 0 10px rgba(255, 213, 79, .3),
-                0 0 30px rgba(255, 213, 79, .2);
+        /* Ornamen Sudut Arabesque */
+        .corner-bracket {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border-color: #D4AF37;
+            border-style: solid;
+            pointer-events: none;
+            opacity: 0.85;
         }
 
-        /* TULISAN WARNA DINAMIS */
-        .title {
-            font-size: 50px;
-            font-weight: 600;
+        .corner-top-left {
+            top: 14px;
+            left: 14px;
+            border-width: 2px 0 0 2px;
+            border-top-left-radius: 20px;
+        }
+
+        .corner-top-right {
+            top: 14px;
+            right: 14px;
+            border-width: 2px 2px 0 0;
+            border-top-right-radius: 20px;
+        }
+
+        .corner-bottom-left {
+            bottom: 14px;
+            left: 14px;
+            border-width: 0 0 2px 2px;
+            border-bottom-left-radius: 20px;
+        }
+
+        .corner-bottom-right {
+            bottom: 14px;
+            right: 14px;
+            border-width: 0 2px 2px 0;
+            border-bottom-right-radius: 20px;
+        }
+
+        /* Ornamen Mihrab Arch Outline di Atas Card */
+        .mihrab-arch-top {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 340px;
+            height: 6px;
+            background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, transparent 100%);
+            box-shadow: 0 0 15px #D4AF37;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* =====================================================
+           BAGIAN 1: KALIGRAFI ARAB EMAS
+           ===================================================== */
+        .arabic-section {
+            width: 100%;
+            padding-top: 6px;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: clamp(46px, 4.4vw, 70px);
+            font-weight: 700;
+            line-height: 1.25;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 16px rgba(212, 175, 55, 0.45));
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .gold-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            max-width: 550px;
+            margin: 0 auto;
+            opacity: 0.85;
+        }
+
+        .gold-divider .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.8), transparent);
+        }
+
+        .gold-divider .divider-star {
+            color: #D4AF37;
+            font-size: 15px;
+            letter-spacing: 6px;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+        }
+
+        /* =====================================================
+           BAGIAN 2: PHASE TITLE & NAMA SHOLAT BADGE
+           ===================================================== */
+        .phase-section {
+            margin-top: 4px;
+            margin-bottom: 2px;
+        }
+
+        .phase-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(20px, 2vw, 30px);
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
             @if($theme == 'light')
-                color: #1f2937;
-                text-shadow: none;
+                color: #1a202c;
             @else
                 color: #ffffff;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
             @endif
-            letter-spacing: 2px;
-            margin-top: 30px;
-            margin-bottom: 0px;
+            margin-bottom: 12px;
+        }
+
+        .prayer-badge-wrapper {
+            display: inline-block;
+        }
+
+        .prayer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            padding: 8px 36px;
+            border-radius: 50px;
+            border: 1.5px solid rgba(212, 175, 55, 0.65);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.18) 0%, rgba(4, 40, 22, 0.7) 100%);
+            box-shadow:
+                0 0 24px rgba(212, 175, 55, 0.22),
+                inset 0 1px 0 rgba(255, 238, 170, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-gem {
+            width: 8px;
+            height: 8px;
+            background: #D4AF37;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #D4AF37;
+            animation: pulseGlow 2.5s infinite;
+        }
+
+        .prayer-name {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(26px, 2.8vw, 42px);
+            font-weight: 800;
+            letter-spacing: 7px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F5DE94 45%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.3));
             text-transform: uppercase;
         }
 
-        .subtitle {
-            font-size: 40px;
-            @if($theme == 'light')
-                color: #4b5563;
-            @else
-                color: #dddddd;
-            @endif
-            margin-bottom: 0px;
+        /* =====================================================
+           BAGIAN 3: INTERACTIVE BADGE & SPLIT DUAL-TILE COUNTDOWN
+           ===================================================== */
+        .countdown-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 4px 0;
         }
 
-        .countdown-box {
-            display: inline-block;
-            margin-top: 15px;
-            margin-bottom: 25px;
-        }
-
-        .countdown-label {
-            font-size: 26px;
-            font-weight: 600;
-            @if($theme == 'light')
-                color: #374151;
-            @else
-                color: #ffffff;
-            @endif
-            margin-bottom: 10px;
-        }
-
-        .countdown {
-            margin-top: 0;
-            font-size: 96px;
-            font-weight: 700;
-            color: #FFD54F;
-            line-height: 1;
-            text-shadow:
-                0 0 10px rgba(255, 213, 79, .3),
-                0 0 25px rgba(255, 213, 79, .2);
-        }
-
-        .message {
-            margin-top: 20px;
-            font-size: 38px;
-            font-weight: bold;
-            line-height: 1.4;
-            @if($theme == 'light')
-                color: #1f2937;
-            @else
-                color: #ffffff;
-            @endif
-            padding: 0 40px;
-        }
-
-        .hadith {
-            margin-top: 55px;
-            font-size: 26px;
-            @if($theme == 'light')
-                color: #4b5563;
-            @else
-                color: #dddddd;
-            @endif
-            font-style: italic;
-            line-height: 1.4;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .footer {
-            margin-top: 70px;
-            font-size: 20px;
-            color: #ffd700;
-        }
-
-        @media (max-width:1200px) {
-            .arabic {
-                font-size: 72px;
+        /* MENUJU ADZAN INTERACTIVE BADGE */
+        @keyframes timerBadgePulse {
+            0%, 100% {
+                border-color: rgba(212, 175, 55, 0.55);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 175, 55, 0.28), inset 0 1px 0 rgba(255, 235, 170, 0.4);
+                transform: scale(1);
             }
+            50% {
+                border-color: rgba(255, 228, 130, 0.95);
+                box-shadow: 0 6px 28px rgba(0, 0, 0, 0.6), 0 0 35px rgba(212, 175, 55, 0.65), 0 0 15px rgba(255, 215, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                transform: scale(1.035);
+            }
+        }
 
-            .title {
+        @keyframes lightSweep {
+            0% {
+                transform: translateX(-150%) skewX(-22deg);
+            }
+            35%, 100% {
+                transform: translateX(250%) skewX(-22deg);
+            }
+        }
+
+        @keyframes clockTick {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+                color: #D4AF37;
+            }
+            20% {
+                transform: rotate(14deg) scale(1.25);
+                color: #FFF2A8;
+            }
+            40% {
+                transform: rotate(-10deg) scale(1.25);
+                color: #FFF2A8;
+            }
+            60% {
+                transform: rotate(6deg) scale(1.1);
+            }
+            80% {
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        .timer-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 30px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.24) 0%, rgba(3, 33, 18, 0.88) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.65);
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            color: #FFF5CC;
+            text-transform: uppercase;
+            overflow: hidden;
+            margin-bottom: 16px;
+            animation: timerBadgePulse 2.6s infinite ease-in-out;
+            backdrop-filter: blur(12px);
+        }
+
+        .badge-shimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+            pointer-events: none;
+            animation: lightSweep 2.8s ease-in-out infinite;
+        }
+
+        .clock-pulse-icon {
+            display: inline-block;
+            font-size: 15px;
+            animation: clockTick 2s infinite ease-in-out;
+            transform-origin: center center;
+        }
+
+        .pulse-indicator-dot {
+            width: 7px;
+            height: 7px;
+            background: #D4AF37;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #FFD700;
+            animation: pulseGlow 1.5s infinite;
+        }
+
+        .adab-notice {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 7px 26px;
+            margin-bottom: 12px;
+            border-radius: 50px;
+            background: rgba(212, 175, 55, 0.16);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            color: #FFF3BD;
+            font-size: clamp(14px, 1.35vw, 18px);
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .adab-notice i {
+            color: #D4AF37;
+            font-size: 15px;
+        }
+
+        .phase-quote {
+            font-size: clamp(18px, 1.85vw, 26px) !important;
+            font-weight: 600 !important;
+            color: #FFFDF0 !important;
+            line-height: 1.5 !important;
+            padding: 6px 12px;
+        }
+
+        .countdown-tiles-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .countdown-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tile-face {
+            position: relative;
+            width: clamp(130px, 13vw, 190px);
+            height: clamp(95px, 9.5vw, 135px);
+            background: linear-gradient(180deg, rgba(8, 48, 28, 0.92) 0%, rgba(2, 20, 11, 0.98) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.45);
+            border-radius: 20px;
+            box-shadow:
+                0 16px 36px rgba(0, 0, 0, 0.65),
+                0 0 28px rgba(212, 175, 55, 0.16),
+                inset 0 2px 0 rgba(255, 240, 185, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Garis Horisontal Crease (Mewah seperti flip clock) */
+        .tile-crease {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.45);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            pointer-events: none;
+        }
+
+        .tile-number {
+            font-family: 'Cinzel', 'Poppins', sans-serif;
+            font-size: clamp(62px, 6.2vw, 92px);
+            font-weight: 800;
+            line-height: 1;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 14px rgba(212, 175, 55, 0.45));
+            letter-spacing: 2px;
+        }
+
+        .tile-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #D4AF37;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
+        .countdown-separator {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(52px, 5vw, 76px);
+            font-weight: 800;
+            color: #D4AF37;
+            text-shadow: 0 0 18px rgba(212, 175, 55, 0.6);
+            margin-bottom: 24px;
+            animation: pulseGlow 1.8s infinite;
+        }
+
+        /* =====================================================
+           BAGIAN 4: PESAN DINAMIS MASJID
+           ===================================================== */
+        .message-section {
+            width: 100%;
+            max-width: 1100px;
+            margin: 4px auto;
+        }
+
+        .message-banner {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 10px 32px;
+            border-radius: 16px;
+            background: rgba(1, 16, 8, 0.55);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .message-icon {
+            color: #D4AF37;
+            font-size: 22px;
+        }
+
+        .message-text {
+            font-size: clamp(20px, 2vw, 30px);
+            font-weight: 600;
+            line-height: 1.35;
+            color: #FFFFFF;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Saat Mode Sholat Aktif (Fase Prayer) */
+        .prayer-mode-box {
+            padding: 24px 44px;
+            background: linear-gradient(135deg, rgba(8, 48, 28, 0.95), rgba(2, 20, 11, 0.98));
+            border: 2px solid #D4AF37;
+            border-radius: 28px;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.35);
+            animation: pulseGlow 4s infinite;
+        }
+
+        .prayer-mode-box .icons-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 14px;
+            color: #D4AF37;
+            font-size: 34px;
+        }
+
+        /* =====================================================
+           BAGIAN 5: HADITH VIGNETTE PLAKAT
+           ===================================================== */
+        .hadith-plakat {
+            position: relative;
+            width: 100%;
+            max-width: 1120px;
+            margin: 6px auto 2px;
+            padding: 14px 48px;
+            border-radius: 22px;
+            background: rgba(1, 18, 9, 0.65);
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 238, 170, 0.15), 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .quote-watermark {
+            position: absolute;
+            font-family: 'Cinzel', serif;
+            font-size: 80px;
+            color: #D4AF37;
+            opacity: 0.14;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .quote-left {
+            top: 2px;
+            left: 18px;
+        }
+
+        .quote-right {
+            bottom: -22px;
+            right: 18px;
+        }
+
+        .hadith-header {
+            font-size: clamp(14px, 1.4vw, 18px);
+            font-weight: 500;
+            color: #F0DEAA;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .saw-symbol {
+            font-family: 'Amiri', serif;
+            font-weight: bold;
+            color: #D4AF37;
+            font-size: 1.15em;
+        }
+
+        .hadith-body {
+            font-size: clamp(16px, 1.65vw, 23px);
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.45;
+            color: #F8FAFC;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+            margin-bottom: 4px;
+        }
+
+        .hadith-source {
+            font-size: clamp(12px, 1.1vw, 15px);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: #D4AF37;
+        }
+
+        /* =====================================================
+           BAGIAN 6: FOOTER MASJID
+           ===================================================== */
+        .masjid-footer {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: rgba(212, 175, 55, 0.75);
+            text-transform: uppercase;
+            padding-bottom: 2px;
+        }
+
+        /* =====================================================
+           RESPONSIVE TWEAKS (Full HD, Laptop & Tablet)
+           ===================================================== */
+        @media (max-height: 800px) {
+            .container {
+                padding: 16px 28px;
+                height: 96vh;
+            }
+            .arabic-text {
                 font-size: 42px;
             }
-
-            .countdown {
-                font-size: 56px;
+            .phase-title {
+                font-size: 18px;
+                margin-bottom: 6px;
             }
-
-            .message {
+            .prayer-badge {
+                padding: 6px 28px;
+            }
+            .prayer-name {
                 font-size: 26px;
+            }
+            .tile-face {
+                width: 120px;
+                height: 85px;
+            }
+            .tile-number {
+                font-size: 58px;
+            }
+            .hadith-plakat {
+                padding: 10px 32px;
+            }
+            .hadith-body {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="background"></div>
-    <div class="overlay"></div>
+    <!-- BACKGROUND MULTI-LAYER -->
+    <div class="bg-layer bg-gradient"></div>
+    <div class="bg-layer bg-pattern"></div>
+    <div class="bg-layer bg-kaabah"></div>
+    <div class="bg-layer bg-vignette"></div>
+
+    <!-- CAHAYA AMBIEN HALUS -->
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+
+    <!-- THE ROYAL MIHRAB CONTAINER -->
     <div class="container">
-        <div class="arabic">
-            ﴿ وَأَقِيمُوا الصَّلَاةَ ﴾
+        <!-- ORNAMEN SUDUT EMAS -->
+        <div class="corner-bracket corner-top-left"></div>
+        <div class="corner-bracket corner-top-right"></div>
+        <div class="corner-bracket corner-bottom-left"></div>
+        <div class="corner-bracket corner-bottom-right"></div>
+        <div class="mihrab-arch-top"></div>
+
+        <!-- 1. KALIGRAFI ARAB SAKRAL -->
+        <div class="arabic-section">
+            <div class="arabic-text">
+                ﴿ وَأَقِيمُوا الصَّلَاةَ ﴾
+            </div>
+            <div class="gold-divider">
+                <span class="divider-line"></span>
+                <span class="divider-star">✦ ۞ ✦</span>
+                <span class="divider-line"></span>
+            </div>
         </div>
 
-        <div class="title">
-            @if($phase == 'countdown')
-                MENJELANG WAKTU SHOLAT
-            @elseif($phase == 'adzan')
-                WAKTU ADZAN
-            @elseif($phase == 'iqamah')
-                MENUNGGU IQAMAH
-            @elseif($phase == 'prayer')
-                MODE SHOLAT
-            @else
-                MODE SHOLAT
-            @endif
-        </div>
-
-        <div class="subtitle">
-            @if($currentPrayer)
-                {{ strtoupper(is_object($currentPrayer) ? $currentPrayer->nama_sholat : $currentPrayer) }}
-            @else
-                Menunggu Waktu Sholat
-            @endif
-        </div>
-
-        <div class="countdown-box" @if($phase == 'prayer') style="display:none;" @endif>
-            <div class="countdown-label">
+        <!-- 2. JUDUL FASE & BADGE NAMA SHOLAT -->
+        <div class="phase-section">
+            <div class="phase-title">
                 @if($phase == 'countdown')
-                    Menuju Adzan
+                    Menjelang Waktu Sholat
                 @elseif($phase == 'adzan')
-                    Durasi Adzan
+                    Menuju waktu sholat
                 @elseif($phase == 'iqamah')
-                    Menuju Iqamah
+                    Menunggu Waktu Iqamah
+                @elseif($phase == 'prayer')
+                    Sholat Sedang Berlangsung
                 @else
-                    Sisa Waktu
+                    Mode Sholat
                 @endif
             </div>
-            <div class="countdown" id="countdown" data-seconds="{{ $remainingSeconds }}">
-                00:00
+
+            <div class="prayer-badge-wrapper">
+                <div class="prayer-badge">
+                    <span class="badge-gem"></span>
+                    <span class="prayer-name">
+                        @if($currentPrayer)
+                            {{ strtoupper(is_object($currentPrayer) ? $currentPrayer->nama_sholat : $currentPrayer) }}
+                        @else
+                            WAKTU SHOLAT
+                        @endif
+                    </span>
+                    <span class="badge-gem"></span>
+                </div>
             </div>
         </div>
 
-        <!-- PESAN DINAMIS DARI DATABASE -->
-        <div class="message">
+        <!-- 3. COUNTDOWN TIMER (SPLIT DUAL-TILE) -->
+        @if($phase != 'prayer')
+            <div class="countdown-section">
+                <!-- Badge Interaktif Menuju Adzan / Fase (Tanpa Kapsul Waktu Sekarang) -->
+                <div class="timer-badge">
+                    <div class="badge-shimmer"></div>
+                    <i class="fa-regular fa-clock clock-pulse-icon"></i>
+                    <span class="badge-text">
+                        @if($phase == 'countdown')
+                            Menuju Adzan
+                        @elseif($phase == 'adzan')
+                            Adzan sedang di Kumandangkan
+                        @elseif($phase == 'iqamah')
+                            Menuju Iqamah
+                        @else
+                            Sisa Waktu
+                        @endif
+                    </span>
+                    <span class="pulse-indicator-dot"></span>
+                </div>
+
+                <div class="countdown-tiles-wrapper">
+                    <!-- TILE MENIT -->
+                    <div class="countdown-tile">
+                        <div class="tile-face">
+                            <span class="tile-number" id="timerMinutes">00</span>
+                            <div class="tile-crease"></div>
+                        </div>
+                        <div class="tile-label">MENIT</div>
+                    </div>
+
+                    <div class="countdown-separator">:</div>
+
+                    <!-- TILE DETIK -->
+                    <div class="countdown-tile">
+                        <div class="tile-face">
+                            <span class="tile-number" id="timerSeconds">00</span>
+                            <div class="tile-crease"></div>
+                        </div>
+                        <div class="tile-label">DETIK</div>
+                    </div>
+                </div>
+
+                <!-- Elemen tersembunyi untuk kompatibilitas script -->
+                <div class="countdown" id="countdown" data-seconds="{{ $remainingSeconds }}" style="display:none;">00:00</div>
+            </div>
+        @endif
+
+        <!-- 4. PESAN MASJID DINAMIS -->
+        <div class="message-section">
             @php
                 $displayMessage = '';
-
                 if ($phase == 'countdown') {
                     $displayMessage = $setting->Countdown_Adzan ?? 'Bersiap Masuk Waktu Sholat';
                 } elseif ($phase == 'adzan') {
-                    $displayMessage = $setting->Berkumandang_Adzan ?? 'Waktu Adzan Telah Tiba';
+                    $displayMessage = 'Mohon untuk menonaktifkan/silent alat komunikasi';
                 } elseif ($phase == 'iqamah') {
                     $displayMessage = $setting->Hitung_Mundur_Iqamah ?? 'Menuju Waktu Iqamah';
                 } elseif ($phase == 'prayer') {
-                    $displayMessage = $setting->Sholat_Berlangsung ?? 'Luruskan & Rapatkan Shaf. Matikan Alat Komunikasi.';
+                    $displayMessage = 'Iqamah Segera Dikumandangkan. Mari Bersiap Mengisi Shaf Terdepan Yang Masih Kosong, Luruskan dan Rapatkan shaf sholat';
                 } else {
-                    $displayMessage = $setting->Mode_Sholat ?? 'Harap Tenang';
+                    $displayMessage = $setting->Mode_Sholat ?? 'Harap Tenang & Khusyuk';
                 }
             @endphp
-            {!! nl2br(e($displayMessage)) !!}
+
+            @if($phase == 'prayer')
+                <div class="prayer-mode-box">
+                    <div class="icons-row">
+                        <i class="fa-solid fa-volume-xmark" title="Matikan Suara HP"></i>
+                        <i class="fa-solid fa-people-arrows" title="Rapatkan Shaf"></i>
+                        <i class="fa-solid fa-mosque"></i>
+                    </div>
+                    <div class="message-text">
+                        {!! nl2br(e($displayMessage)) !!}
+                    </div>
+                </div>
+            @elseif($phase == 'adzan')
+                <div class="message-banner">
+                    <i class="fa-solid fa-volume-xmark message-icon"></i>
+                    <span class="message-text">
+                        {!! nl2br(e($displayMessage)) !!}
+                    </span>
+                    <i class="fa-solid fa-volume-xmark message-icon"></i>
+                </div>
+            @else
+                <div class="message-banner">
+                    <i class="fa-solid fa-mosque message-icon"></i>
+                    <span class="message-text">
+                        {!! nl2br(e($displayMessage)) !!}
+                    </span>
+                </div>
+            @endif
         </div>
 
-        <div class="hadith">
-            Rasulullah ﷺ bersabda:
-            <br><br>
-            <strong>
-                "Shalat berjamaah lebih utama daripada
-                shalat sendirian dengan dua puluh tujuh derajat."
-            </strong>
-            <br>
-            <small>
-                (HR. Bukhari dan Muslim)
-            </small>
-        </div>
+        <!-- 5. PLAKAT PESAN & HADITS SHOLAT -->
+        <div class="hadith-plakat">
+            <span class="quote-watermark quote-left">“</span>
 
-        <div class="footer">
-            {{ $setting->footer ?? '' }}
-        </div>
-
-        <script>
-            let remaining =
-                parseInt(
-                    document
-                        .getElementById('countdown')
-                        .dataset
-                        .seconds
-                );
-
-            let hasPlayedTarhim = false; // Penanda agar audio tarhim/adzan hanya diputar sekali
-
-            function formatTime(seconds) {
-                if (seconds < 0) {
-                    seconds = 0;
-                }
-                const minutes =
-                    Math.floor(seconds / 60);
-                const secs =
-                    seconds % 60;
-                return (
-                    String(minutes).padStart(2, '0')
-                    + ':'
-                    +
-                    String(secs).padStart(2, '0')
-                );
-            }
-
-            function updateCountdown() {
-                const el =
-                    document.getElementById('countdown');
-                if (!el) {
-                    return;
-                }
-                el.innerHTML =
-                    formatTime(remaining);
-
-                // AUDIO TARHIM BERBUNYI SAAT SISA WAKTU <= 300 DETIK (5 MENIT)
-                @if($phase == 'countdown')
-                    if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 300 }} && !hasPlayedTarhim) {
-                        const tarhimAudio = document.getElementById('audioTarhim');
-                        if (tarhimAudio) {
-                            tarhimAudio.play().catch(function(error) {
-                                console.log("Audio tarhim diblokir browser:", error);
-                            });
-                        }
-                        hasPlayedTarhim = true;
-                    }
-                @endif
-
-                // AUDIO ADZAN BERBUNYI PAS MASUK WAKTU ADZAN
-                @if($phase == 'adzan')
-                    const adzanAudio = document.getElementById('audioAdzan');
-                    if (adzanAudio && !hasPlayedTarhim) {
-                        adzanAudio.play().catch(function(error) {
-                            console.log("Audio adzan diblokir browser:", error);
-                        });
-                        hasPlayedTarhim = true;
-                    }
-                @endif
-
-                if (remaining > 0) {
-                    remaining--;
-                } else {
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
-                }
-            }
-
-            @if($phase != 'prayer')
-                updateCountdown();
-                setInterval(updateCountdown, 1000);
+            @if($phase == 'countdown')
+                <div class="adab-notice">
+                    <i class="fa-solid fa-person-praying"></i>
+                    <span>Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.</span>
+                </div>
+                <div class="hadith-header">
+                    Rasulullah <span class="saw-symbol">ﷺ</span> bersabda:
+                </div>
+                <div class="hadith-body">
+                    "Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."
+                </div>
+                <div class="hadith-source">
+                    (HR. Bukhari dan Muslim)
+                </div>
+            @elseif($phase == 'adzan')
+                <div class="hadith-body phase-quote">
+                    "Adzan Sedang Dikumandangkan. Dengarkanlah, Jawablah, Dan Raih Pahala Kesempurnaannya."
+                </div>
+            @elseif($phase == 'iqamah')
+                <div class="hadith-body phase-quote">
+                    "Adzan Telah selesai, Mari Gunakan Waktu Yang Tersedia Untuk Berdoa. Doa Antara Adzan & Iqamah Tidak Ditolak."
+                </div>
+            @else
+                {{-- prayer phase --}}
+                <div class="hadith-header">
+                    Rasulullah <span class="saw-symbol">ﷺ</span> bersabda:
+                </div>
+                <div class="hadith-body">
+                    "Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."
+                </div>
+                <div class="hadith-source">
+                    (HR. Bukhari dan Muslim)
+                </div>
             @endif
 
-            /*
-            |--------------------------------------------------------------------------
-            | Cek status Mode Sholat
-            |--------------------------------------------------------------------------
-            */
-            setInterval(function () {
-                fetch('/prayer-mode/status')
-                    .then(response => response.json())
-                    .then(function (data) {
-                        if (!data.active) {
-                            if (window !== window.parent) {
-                                // Biarkan parent (rotator) yang mengurus peralihan halaman
-                            } else {
-                                window.location.href = "/";
-                            }
-                        } else if (data.phase !== '{{ $phase }}') {
-                            window.location.reload();
-                        }
+            <span class="quote-watermark quote-right">”</span>
+        </div>
 
-                        if (data.theme !== '{{ $theme }}' || data.displayMessage !== @json($displayMessage) || data.bgOpacity !== {{ $bgOpacity }}) {
-                            window.location.reload();
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }, 5000);
-        </script>
+        <!-- 6. FOOTER MASJID -->
+        <div class="masjid-footer">
+            @php
+                $rawFooter = $setting->footer ?? '';
+                // Mengonversi kode &copy;, &COPY;, &#169;, dll menjadi simbol © asli
+                $cleanFooter = preg_replace('/&amp;copy;|&copy;|&#169;|&#xa9;/i', '©', $rawFooter);
+                $cleanFooter = html_entity_decode($cleanFooter, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            @endphp
+            {!! $cleanFooter !!}
+        </div>
     </div>
 
-    <!-- ELEMEN AUDIO TERSEMBUNYI (DIKONTROL JAVASCRIPT) -->
+    <!-- SCRIPT AUDIO & COUNTDOWN LOGIC -->
+    <script>
+        let remaining = parseInt(document.getElementById('countdown')?.dataset?.seconds || 0);
+        let hasPlayedTarhim = false;
+
+        function formatTwoDigits(num) {
+            return String(Math.max(0, num)).padStart(2, '0');
+        }
+
+        function updateCountdown() {
+            const elHidden = document.getElementById('countdown');
+            const elMinutes = document.getElementById('timerMinutes');
+            const elSeconds = document.getElementById('timerSeconds');
+
+            const current = Math.max(0, remaining);
+            const minutes = Math.floor(current / 60);
+            const seconds = current % 60;
+
+            const minStr = formatTwoDigits(minutes);
+            const secStr = formatTwoDigits(seconds);
+
+            if (elMinutes) elMinutes.textContent = minStr;
+            if (elSeconds) elSeconds.textContent = secStr;
+            if (elHidden) elHidden.textContent = minStr + ':' + secStr;
+
+            // AUDIO TARHIM (Countdown phase <= trigger seconds, default 300)
+            @if($phase == 'countdown')
+                if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 300 }} && !hasPlayedTarhim) {
+                    const tarhimAudio = document.getElementById('audioTarhim');
+                    if (tarhimAudio) {
+                        tarhimAudio.play().catch(function(error) {
+                            console.log("Audio tarhim diblokir browser:", error);
+                        });
+                    }
+                    hasPlayedTarhim = true;
+                }
+            @endif
+
+            // AUDIO ADZAN (Adzan phase)
+            @if($phase == 'adzan')
+                const adzanAudio = document.getElementById('audioAdzan');
+                if (adzanAudio && !hasPlayedTarhim) {
+                    adzanAudio.play().catch(function(error) {
+                        console.log("Audio adzan diblokir browser:", error);
+                    });
+                    hasPlayedTarhim = true;
+                }
+            @endif
+
+            if (remaining > 0) {
+                remaining--;
+            } else {
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            }
+        }
+
+        @if($phase != 'prayer')
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        @endif
+
+        /* Status polling */
+        setInterval(function () {
+            fetch('/prayer-mode/status')
+                .then(response => response.json())
+                .then(function (data) {
+                    if (!data.active) {
+                        if (window !== window.parent) {
+                            // Rotator parent mengurus pergantian
+                        } else {
+                            window.location.href = "/";
+                        }
+                    } else if (data.phase !== '{{ $phase }}') {
+                        window.location.reload();
+                    }
+
+                    if (data.theme !== '{{ $theme }}' || data.displayMessage !== @json($displayMessage) || data.bgOpacity !== {{ $bgOpacity }}) {
+                        window.location.reload();
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }, 5000);
+    </script>
+
+    <!-- ELEMEN AUDIO TERSEMBUNYI -->
     @php
         $namaSholatRaw = $currentPrayer ? (is_object($currentPrayer) ? ($currentPrayer->nama_sholat ?? '') : $currentPrayer) : '';
         $isSubuh = strtolower(trim($namaSholatRaw)) === 'subuh';
 
-        // Tentukan file audio tarhim:
-        // Jika sholat Subuh: prioritaskan tarhim_audio_subuh, fallback ke tarhim_audio, atau default Subuh.mp3/tarhim2.mp3
-        // Jika sholat selain Subuh: prioritaskan tarhim_audio_reguler, fallback ke tarhim_audio, atau default tarhim2.mp3
         if ($isSubuh) {
             if (!empty($setting->tarhim_audio_subuh)) {
                 $tarhimSource = asset('storage/' . $setting->tarhim_audio_subuh);
