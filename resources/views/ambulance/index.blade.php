@@ -132,49 +132,50 @@
 		<div class="card-body">
 			<div class="table-responsive">
 				<table class="table table-bordered table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
-					<thead class="thead-light">
+					<thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
 						<tr>
-							<th width="50" class="text-center">No</th>
-							<th width="120" class="text-center">Tanggal</th>
-							<th>Deskripsi</th>
-							<th width="130" class="text-center">Kategori</th>
-							<th width="150" class="text-right">Pemasukan</th>
-							<th width="150" class="text-right">Pengeluaran</th>
-							<th width="150" class="text-right">Saldo</th>
-							<th width="110" class="text-center">Aksi</th>
+							<th width="50" class="text-center" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">No</th>
+							<th width="130" class="text-center" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">Tanggal</th>
+							<th style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">Deskripsi</th>
+							<th width="130" class="text-center" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">Kategori</th>
+							<th width="160" class="text-right" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">Pemasukan</th>
+							<th width="160" class="text-right" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">Pengeluaran</th>
+							<th width="160" class="text-right" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">Saldo</th>
+							<th width="110" class="text-center" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.3px;">Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
 						@forelse($keuangan as $item)
 						<tr>
-							<td class="text-center">{{ $loop->iteration }}</td>
-							<td class="text-center">
-								<span class="badge badge-info px-2 py-1">
+							<td class="text-center font-weight-bold text-dark align-middle" style="font-size: 0.95rem;">{{ $loop->iteration }}</td>
+							<td class="text-center align-middle" style="white-space: nowrap;">
+								<span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.92rem;">
+									<i class="far fa-calendar-alt text-success mr-1"></i>
 									{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
 								</span>
 							</td>
-							<td>
+							<td class="align-middle">
 								<div class="d-flex align-items-center">
 									@if($item->pemasukan > 0)
-									<span class="badge badge-success mr-2 p-1"><i class="fas fa-arrow-down"></i></span>
+									<span class="badge badge-success mr-2 p-1" style="font-size: 0.8rem;"><i class="fas fa-arrow-down"></i></span>
 									@else
-									<span class="badge badge-danger mr-2 p-1"><i class="fas fa-arrow-up"></i></span>
+									<span class="badge badge-danger mr-2 p-1" style="font-size: 0.8rem;"><i class="fas fa-arrow-up"></i></span>
 									@endif
-									<span>{{ $item->deskripsi }}</span>
+									<span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.95rem;">{{ $item->deskripsi }}</span>
 								</div>
 							</td>
-							<td class="text-center">
-								<span class="badge badge-secondary px-2 py-1">
-									<i class="fas fa-tag mr-1"></i> {{ $item->kategori ?? '-' }}
+							<td class="text-center align-middle">
+								<span class="badge badge-light border border-secondary text-dark font-weight-bold px-2 py-1" style="font-size: 0.85rem; color: #1e293b !important;">
+									<i class="fas fa-tag text-primary mr-1"></i> {{ $item->kategori ?? '-' }}
 								</span>
 							</td>
-							<td class="text-right font-weight-bold text-success">
+							<td class="text-right font-weight-bold text-success align-middle" style="font-size: 1rem; color: #047857 !important;">
 								{{ $item->pemasukan > 0 ? 'Rp ' . number_format($item->pemasukan, 0, ',', '.') : '-' }}
 							</td>
-							<td class="text-right font-weight-bold text-danger">
+							<td class="text-right font-weight-bold text-danger align-middle" style="font-size: 1rem; color: #b91c1c !important;">
 								{{ $item->pengeluaran > 0 ? 'Rp ' . number_format($item->pengeluaran, 0, ',', '.') : '-' }}
 							</td>
-							<td class="text-right font-weight-bold text-dark">
+							<td class="text-right font-weight-bold text-dark align-middle" style="font-size: 1rem; color: #0f172a !important;">
 								Rp {{ number_format($item->saldo, 0, ',', '.') }}
 							</td>
 							<td class="text-center">

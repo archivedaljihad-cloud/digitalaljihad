@@ -353,12 +353,12 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
-                        <thead>
+                        <thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
                             <tr>
-                                <th>Tanggal</th>
-                                <th>Deskripsi</th>
-                                <th>Pemasukan</th>
-                                <th>Pengeluaran</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Tanggal</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Deskripsi</th>
+                                <th class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Pemasukan</th>
+                                <th class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Pengeluaran</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -367,16 +367,25 @@
                             @endphp
                             @forelse($recentTransactions as $transaction)
                             <tr>
-                                <td>{{ \Carbon\Carbon::parse($transaction->tanggal)->translatedFormat('d M Y') }}</td>
-                                <td>{{ \Illuminate\Support\Str::limit($transaction->deskripsi, 40) }}</td>
-                                <td class="text-success">
+                                <td class="align-middle text-nowrap">
+                                    <span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.92rem;">
+                                        <i class="far fa-calendar-alt text-success mr-1"></i>
+                                        {{ \Carbon\Carbon::parse($transaction->tanggal)->translatedFormat('d M Y') }}
+                                    </span>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.95rem;">
+                                        {{ \Illuminate\Support\Str::limit($transaction->deskripsi, 40) }}
+                                    </span>
+                                </td>
+                                <td class="text-right font-weight-bold text-success align-middle" style="font-size: 1rem; color: #047857 !important;">
                                     @if($transaction->pemasukan > 0)
                                     Rp {{ number_format($transaction->pemasukan, 0, ',', '.') }}
                                     @else
                                     -
                                     @endif
                                 </td>
-                                <td class="text-danger">
+                                <td class="text-right font-weight-bold text-danger align-middle" style="font-size: 1rem; color: #b91c1c !important;">
                                     @if($transaction->pengeluaran > 0)
                                     Rp {{ number_format($transaction->pengeluaran, 0, ',', '.') }}
                                     @else
@@ -648,11 +657,11 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
-                        <thead class="thead-light">
+                        <thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
                             <tr>
-                                <th>Sholat</th>
-                                <th>Waktu</th>
-                                <th>Status</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Sholat</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Waktu</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -916,14 +925,14 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
-                        <thead class="thead-light">
+                        <thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
                             <tr>
-                                <th>Tanggal</th>
-                                <th>Deskripsi</th>
-                                <th>Kategori</th>
-                                <th class="text-right">Pemasukan</th>
-                                <th class="text-right">Pengeluaran</th>
-                                <th class="text-right">Saldo</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Tanggal</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Deskripsi</th>
+                                <th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Kategori</th>
+                                <th class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Pemasukan</th>
+                                <th class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Pengeluaran</th>
+                                <th class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Saldo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -932,16 +941,29 @@
                             @endphp
                             @forelse($recentKas as $item)
                             <tr>
-                                <td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}</td>
-                                <td>{{ $item->deskripsi }}</td>
-                                <td><span class="badge badge-secondary">{{ $item->kategori ?? '-' }}</span></td>
-                                <td class="text-right text-success font-weight-bold">
+                                <td class="align-middle text-nowrap">
+                                    <span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.92rem;">
+                                        <i class="far fa-calendar-alt text-success mr-1"></i>
+                                        {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
+                                    </span>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.95rem;">
+                                        {{ $item->deskripsi }}
+                                    </span>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge badge-light border border-secondary text-dark font-weight-bold px-2 py-1" style="font-size: 0.85rem; color: #1e293b !important;">
+                                        <i class="fas fa-tag text-primary mr-1"></i> {{ $item->kategori ?? '-' }}
+                                    </span>
+                                </td>
+                                <td class="text-right text-success font-weight-bold align-middle" style="font-size: 1rem; color: #047857 !important;">
                                     {{ $item->pemasukan > 0 ? 'Rp ' . number_format($item->pemasukan, 0, ',', '.') : '-' }}
                                 </td>
-                                <td class="text-right text-danger font-weight-bold">
+                                <td class="text-right text-danger font-weight-bold align-middle" style="font-size: 1rem; color: #b91c1c !important;">
                                     {{ $item->pengeluaran > 0 ? 'Rp ' . number_format($item->pengeluaran, 0, ',', '.') : '-' }}
                                 </td>
-                                <td class="text-right text-dark font-weight-bold">
+                                <td class="text-right text-dark font-weight-bold align-middle" style="font-size: 1rem; color: #0f172a !important;">
                                     Rp {{ number_format($item->saldo, 0, ',', '.') }}
                                 </td>
                             </tr>

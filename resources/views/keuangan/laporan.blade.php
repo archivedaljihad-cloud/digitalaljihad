@@ -119,43 +119,52 @@
 		<div class="card-body">
 			<div class="table-responsive">
 				<table class="table table-bordered table-hover" width="100%" cellspacing="0">
-					<thead>
+					<thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
 						<tr>
-							<th>No</th>
-							<th>Tanggal</th>
-							<th>Deskripsi</th>
-							<th>Kategori</th>
-							<th>Pemasukan</th>
-							<th>Pengeluaran</th>
-							<th>Saldo</th>
+							<th width="50" class="text-center" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">No</th>
+							<th width="140" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Tanggal</th>
+							<th style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Deskripsi</th>
+							<th width="140" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Kategori</th>
+							<th width="160" class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Pemasukan</th>
+							<th width="160" class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Pengeluaran</th>
+							<th width="160" class="text-right" style="color: #ffffff !important; font-weight: 700; border: none; font-size: 0.9rem;">Saldo</th>
 						</tr>
 					</thead>
 					<tbody>
 						@forelse($keuangan as $index => $item)
 						<tr>
-							<td class="text-center">{{ $index + 1 }}</td>
-							<td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
-							<td>{{ $item->deskripsi }}</td>
-							<td>{{ $item->kategori ?? '-' }}</td>
-							<td class="text-success">Rp {{ number_format($item->pemasukan, 0, ',', '.') }}</td>
-							<td class="text-danger">Rp {{ number_format($item->pengeluaran, 0, ',', '.') }}</td>
-							<td>Rp {{ number_format($item->saldo, 0, ',', '.') }}</td>
+							<td class="text-center font-weight-bold text-dark align-middle" style="font-size: 0.95rem;">{{ $index + 1 }}</td>
+							<td class="align-middle text-nowrap">
+								<span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.92rem;">
+									<i class="far fa-calendar-alt text-success mr-1"></i>
+									{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+								</span>
+							</td>
+							<td class="align-middle font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.95rem;">{{ $item->deskripsi }}</td>
+							<td class="align-middle">
+								<span class="badge badge-light border border-secondary text-dark font-weight-bold px-2 py-1" style="font-size: 0.85rem; color: #1e293b !important;">
+									<i class="fas fa-tag text-primary mr-1"></i> {{ $item->kategori ?? '-' }}
+								</span>
+							</td>
+							<td class="text-right text-success font-weight-bold align-middle" style="font-size: 1rem; color: #047857 !important;">Rp {{ number_format($item->pemasukan, 0, ',', '.') }}</td>
+							<td class="text-right text-danger font-weight-bold align-middle" style="font-size: 1rem; color: #b91c1c !important;">Rp {{ number_format($item->pengeluaran, 0, ',', '.') }}</td>
+							<td class="text-right font-weight-bold text-dark align-middle" style="font-size: 1rem; color: #0f172a !important;">Rp {{ number_format($item->saldo, 0, ',', '.') }}</td>
 						</tr>
 						@empty
 						<tr>
-							<td colspan="7" class="text-center text-muted">
-								<i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+							<td colspan="7" class="text-center text-muted py-4">
+								<i class="fas fa-inbox fa-2x mb-2 d-block text-gray-300"></i>
 								Tidak ada data transaksi pada periode ini
 							</td>
 						</tr>
 						@endforelse
 					</tbody>
-					<tfoot class="thead-light">
+					<tfoot style="background-color: #f8fafc; border-top: 2px solid #cbd5e1;">
 						<tr>
-							<th colspan="4" class="text-right">Total:</th>
-							<th class="text-success">Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</th>
-							<th class="text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</th>
-							<th class="text-primary">Rp {{ number_format($saldo, 0, ',', '.') }}</th>
+							<th colspan="4" class="text-right font-weight-bold text-dark" style="font-size: 1rem;">Total:</th>
+							<th class="text-right text-success font-weight-bold" style="font-size: 1.05rem; color: #047857 !important;">Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</th>
+							<th class="text-right text-danger font-weight-bold" style="font-size: 1.05rem; color: #b91c1c !important;">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</th>
+							<th class="text-right text-dark font-weight-bold" style="font-size: 1.05rem; color: #0f172a !important;">Rp {{ number_format($saldo, 0, ',', '.') }}</th>
 						</tr>
 					</tfoot>
 				</table>

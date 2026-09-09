@@ -157,64 +157,50 @@
 		<div class="card-body">
 			<div class="table-responsive">
 				<table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-					<thead>
+					<thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
 						<tr>
-							<th width="30">No</th>
-							<th>Tanggal</th>
-							<th>Deskripsi</th>
-							<th>Kategori</th>
-							<th>Pemasukan</th>
-							<th>Pengeluaran</th>
-							<th>Saldo</th>
-							<th width="100">Aksi</th>
+							<th width="40" class="text-center" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">No</th>
+							<th width="130" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Tanggal</th>
+							<th style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Deskripsi</th>
+							<th width="130" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Kategori</th>
+							<th width="150" class="text-right" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Pemasukan</th>
+							<th width="150" class="text-right" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Pengeluaran</th>
+							<th width="150" class="text-right" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Saldo</th>
+							<th width="100" class="text-center" style="color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach ($keuangan as $index => $item)
 						<tr>
-							<td class="text-center">{{ $index + 1 }}</td>
-							<td class="text-nowrap">
-								<span class="badge badge-info p-2">
-									<i class="fas fa-calendar-day"></i> 
+							<td class="text-center font-weight-bold text-dark align-middle" style="font-size: 0.95rem;">{{ $index + 1 }}</td>
+							<td class="text-nowrap align-middle">
+								<span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.92rem;">
+									<i class="far fa-calendar-alt text-success mr-1"></i> 
 									{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
 								</span>
 							</td>
-							<td>
+							<td class="align-middle">
 								<div class="d-flex align-items-center">
 									<div class="icon-circle bg-{{ $item->pemasukan > 0 ? 'success' : 'danger' }} text-white mr-2" 
-										style="width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+										style="width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">
 										<i class="fas fa-{{ $item->pemasukan > 0 ? 'arrow-down' : 'arrow-up' }}"></i>
 									</div>
-									<span>{{ \Illuminate\Support\Str::limit($item->deskripsi, 50) }}</span>
+									<span class="font-weight-bold text-dark" style="color: #0f172a !important; font-size: 0.95rem;">{{ \Illuminate\Support\Str::limit($item->deskripsi, 50) }}</span>
 								</div>
 							</td>
-							<td>
-								@if($item->kategori)
-								<span class="badge badge-secondary">
-									<i class="fas fa-tag"></i> {{ $item->kategori }}
+							<td class="align-middle">
+								<span class="badge badge-light border border-secondary text-dark font-weight-bold px-2 py-1" style="font-size: 0.85rem; color: #1e293b !important;">
+									<i class="fas fa-tag text-primary mr-1"></i> {{ $item->kategori ?? '-' }}
 								</span>
-								@else
-								<span class="text-muted">-</span>
-								@endif
 							</td>
-							<td class="text-success font-weight-bold">
-								@if($item->pemasukan > 0)
-								Rp {{ number_format($item->pemasukan, 0, ',', '.') }}
-								@else
-								-
-								@endif
+							<td class="text-right text-success font-weight-bold align-middle" style="font-size: 1rem; color: #047857 !important;">
+								{{ $item->pemasukan > 0 ? 'Rp ' . number_format($item->pemasukan, 0, ',', '.') : '-' }}
 							</td>
-							<td class="text-danger font-weight-bold">
-								@if($item->pengeluaran > 0)
-								Rp {{ number_format($item->pengeluaran, 0, ',', '.') }}
-								@else
-								-
-								@endif
+							<td class="text-right text-danger font-weight-bold align-middle" style="font-size: 1rem; color: #b91c1c !important;">
+								{{ $item->pengeluaran > 0 ? 'Rp ' . number_format($item->pengeluaran, 0, ',', '.') : '-' }}
 							</td>
-							<td>
-								<span class="badge {{ $item->saldo >= 0 ? 'badge-success' : 'badge-danger' }} p-2">
-									Rp {{ number_format($item->saldo, 0, ',', '.') }}
-								</span>
+							<td class="text-right text-dark font-weight-bold align-middle" style="font-size: 1rem; color: #0f172a !important;">
+								Rp {{ number_format($item->saldo, 0, ',', '.') }}
 							</td>
 							<td class="text-center">
 								<a href="{{ route('keuangan.edit', $item) }}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit">

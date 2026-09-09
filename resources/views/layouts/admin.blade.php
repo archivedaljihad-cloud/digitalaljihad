@@ -319,12 +319,22 @@
             overflow: hidden;
         }
 
+        table thead th,
         .table thead th,
-        .table thead.thead-light th {
+        .table thead.thead-light th,
+        .table .thead-light th,
+        .table thead tr th,
+        thead.thead-light th,
+        thead th {
             background: linear-gradient(135deg, var(--islamic-green), var(--islamic-dark)) !important;
             color: #ffffff !important;
-            border: none;
-            font-weight: 700;
+            border-top: none !important;
+            border-bottom: 2px solid var(--islamic-gold) !important;
+            font-weight: 700 !important;
+            font-size: 0.92rem !important;
+            letter-spacing: 0.3px;
+            vertical-align: middle !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
