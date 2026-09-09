@@ -79,16 +79,23 @@
         text-transform: uppercase !important;
         background: none !important;
         -webkit-background-clip: initial !important;
-        -webkit-text-fill-color: initial !important;
-        color: #0b4f26 !important; 
+        -webkit-text-fill-color: #085a2b !important;
+        color: #085a2b !important; 
         text-shadow: 
-             2px  2px 0 #ffffff,
-            -2px  2px 0 #ffffff,
-             2px -2px 0 #ffffff,
-            -2px -2px 0 #ffffff,
-             0    0  12px #ffd700,
-             0    0  25px #ffd700,
-             0    0  40px rgba(255, 170, 0, 0.06) !important;
+            1px 1px 0 #ffd700,
+            -1px 1px 0 #ffd700,
+            1px -1px 0 #ffd700,
+            -1px -1px 0 #ffd700,
+            2px 2px 0 #000000,
+            -2px 2px 0 #000000,
+            2px -2px 0 #000000,
+            -2px -2px 0 #000000,
+            3px 3px 0 #000000,
+            -3px 3px 0 #000000,
+            3px -3px 0 #000000,
+            -3px -3px 0 #000000,
+            0 5px 12px rgba(0, 0, 0, 0.95),
+            0 0 20px rgba(255, 215, 0, 0.65) !important;
         filter: none !important;
         margin: 0 0 -15px 0 !important;
         padding: 0 !important;
