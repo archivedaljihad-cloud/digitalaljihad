@@ -387,24 +387,68 @@
         transform: translateX(4px);
     }
 
-    /* Back Link */
-    .return-home-wrap {
+    /* Back Link & Help Support */
+    .auth-nav-links {
         margin-top: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
     }
 
     .return-home-link {
-        color: rgba(255, 255, 255, 0.72);
+        color: rgba(255, 255, 255, 0.78);
         font-size: 0.88rem;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        transition: color 0.2s;
+        gap: 7px;
+        transition: all 0.2s ease;
     }
 
     .return-home-link:hover {
         color: #ffd700;
-        text-decoration: underline;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+
+    .return-home-link i {
+        color: #ffd700;
+        font-size: 0.95rem;
+    }
+
+    .help-support-link {
+        color: #d1fae5;
+        font-size: 0.84rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        border-radius: 20px;
+        transition: all 0.25s ease;
+    }
+
+    .help-support-link:hover {
+        color: #ffffff;
+        background: rgba(37, 211, 102, 0.22);
+        border-color: #25d366;
+        text-decoration: none;
+        box-shadow: 0 0 14px rgba(37, 211, 102, 0.4);
+        transform: translateY(-1px);
+    }
+
+    .help-support-link .help-icon {
+        color: #ffd700;
+        font-size: 0.95rem;
+    }
+
+    .help-support-link .wa-icon {
+        color: #25d366;
+        font-size: 1.05rem;
     }
 
     /* 5. FOOTER PERSIS SESUAI INSTRUKSI USER */
@@ -609,11 +653,20 @@
                         </button>
                     </form>
 
-                    <!-- Link Kembali ke Beranda / Display TV -->
-                    <div class="return-home-wrap">
-                        <a href="{{ url('/') }}" class="return-home-link">
-                            <i class="fas fa-arrow-left"></i> Kembali ke Beranda / Display TV
-                        </a>
+                    <!-- Link Navigasi Display TV & Bantuan WhatsApp -->
+                    <div class="auth-nav-links">
+                        <div>
+                            <a href="{{ url('/') }}" class="return-home-link">
+                                <i class="fas fa-tv"></i> Kembali ke Display TV
+                            </a>
+                        </div>
+                        <div>
+                            <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" target="_blank" rel="noopener noreferrer" class="help-support-link" title="Hubungi Bantuan via WhatsApp 087758767000">
+                                <i class="fas fa-headset help-icon"></i>
+                                <span>Butuh Bantuan</span>
+                                <i class="fab fa-whatsapp wa-icon"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- 5. FOOTER SESUAI INSTRUKSI USER PERSIS -->
