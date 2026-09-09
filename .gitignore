@@ -23,3 +23,4 @@ yarn-error.log
 !/storage/logs/.gitignore
 /bootstrap/cache/*.php
 !/bootstrap/cache/.gitignore
+/scratch/

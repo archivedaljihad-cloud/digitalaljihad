@@ -10,11 +10,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $setting['nama_aplikasi'] ?? config('app.name', 'Sistem Informasi Masjid Digital') }}</title>
 
-    <!-- Fonts -->
-    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
@@ -22,23 +21,32 @@
     <!-- Custom Styles -->
     <style>
         :root {
-            --primary-green: #1e3c2c;
-            --secondary-green: #2d5a3b;
-            --gold: #ffd700;
-            --light-gold: #ffed4a;
+            --nu-green-darkest: #02170d;
+            --nu-green-dark: #042918;
+            --nu-green-base: #064426;
+            --nu-green-light: #0d6338;
+            --nu-green-bright: #128049;
+            --gold-primary: #ffd700;
+            --gold-dark: #c59b27;
+            --gold-light: #ffea79;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at 50% 30%, #084c2b 0%, #042918 55%, #02170d 100%) !important;
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
         }
 
         .bg-gradient-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: radial-gradient(circle at 50% 30%, #084c2b 0%, #042918 55%, #02170d 100%) !important;
             min-height: 100vh;
             position: relative;
         }
 
-        /* Islamic Pattern Background */
+        /* Islamic Arabesque Geometric Pattern Background */
         .bg-gradient-primary::before {
             content: '';
             position: fixed;
@@ -46,10 +54,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' opacity='0.05'%3E%3Cpath fill='white' d='M50,0 L61.8,19 L84.5,22.5 L69,38 L72.5,61.8 L50,70 L27.5,61.8 L31,38 L15.5,22.5 L38.2,19 L50,0 Z'/%3E%3Ccircle cx='50' cy='50' r='15' fill='white'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 60px;
+            background-image: 
+                radial-gradient(rgba(255, 215, 0, 0.08) 1.5px, transparent 1.5px),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffd700' stroke-width='0.75' stroke-opacity='0.08'%3E%3Cpath d='M40,0 L80,40 L40,80 L0,40 Z'/%3E%3Cpath d='M40,10 L70,40 L40,70 L10,40 Z'/%3E%3Ccircle cx='40' cy='40' r='18'/%3E%3Cpath d='M0,0 L80,80 M80,0 L0,80'/%3E%3Cpolygon points='40,18 46,34 62,40 46,46 40,62 34,46 18,40 34,34'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 80px 80px, 80px 80px;
             pointer-events: none;
+            z-index: 1;
         }
 
         .card {
@@ -138,57 +148,50 @@
 
         /* Islamic Corner Ornament */
         .islamic-corner {
-            position: absolute;
-            width: 100px;
-            height: 100px;
+            position: fixed;
+            width: 90px;
+            height: 90px;
             pointer-events: none;
+            z-index: 2;
+            opacity: 0.6;
         }
 
         .corner-tl {
-            top: 0;
-            left: 0;
-            border-top: 3px solid var(--gold);
-            border-left: 3px solid var(--gold);
-            border-radius: 20px 0 0 0;
+            top: 15px;
+            left: 15px;
+            border-top: 3px solid var(--gold-primary);
+            border-left: 3px solid var(--gold-primary);
+            border-top-left-radius: 16px;
         }
 
         .corner-tr {
-            top: 0;
-            right: 0;
-            border-top: 3px solid var(--gold);
-            border-right: 3px solid var(--gold);
-            border-radius: 0 20px 0 0;
+            top: 15px;
+            right: 15px;
+            border-top: 3px solid var(--gold-primary);
+            border-right: 3px solid var(--gold-primary);
+            border-top-right-radius: 16px;
+        }
+
+        .corner-bl {
+            bottom: 15px;
+            left: 15px;
+            border-bottom: 3px solid var(--gold-primary);
+            border-left: 3px solid var(--gold-primary);
+            border-bottom-left-radius: 16px;
+        }
+
+        .corner-br {
+            bottom: 15px;
+            right: 15px;
+            border-bottom: 3px solid var(--gold-primary);
+            border-right: 3px solid var(--gold-primary);
+            border-bottom-right-radius: 16px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .card {
-                margin: 1rem !important;
-            }
-
-            .p-5 {
-                padding: 1.5rem !important;
-            }
-        }
-
-        /* Toast Notification */
-        .toast-custom {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            animation: slideInRight 0.3s ease-out;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
+            .islamic-corner {
+                display: none;
             }
         }
 
@@ -264,11 +267,13 @@
     <link href="{{ isset($setting['favicon']) ? asset('storage/' . $setting['favicon']) : asset('img/favicon.png') }}" rel="icon" type="image/png">
 </head>
 
-<body class="bg-gradient-primary min-vh-100 d-flex justify-content-center align-items-center">
+<body class="bg-gradient-primary min-vh-100 d-flex justify-content-center align-items-center py-4">
 
     <!-- Islamic Corner Ornaments -->
     <div class="islamic-corner corner-tl"></div>
     <div class="islamic-corner corner-tr"></div>
+    <div class="islamic-corner corner-bl"></div>
+    <div class="islamic-corner corner-br"></div>
 
     @yield('main-content')
 
