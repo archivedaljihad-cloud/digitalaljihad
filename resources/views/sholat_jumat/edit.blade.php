@@ -82,6 +82,20 @@
 							@enderror
 						</div>
 
+						<div class="form-group">
+							<label for="bilal">Bilal</label>
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-bullhorn"></i></span>
+								</div>
+								<input type="text" name="bilal" id="bilal" class="form-control @error('bilal') is-invalid @enderror" 
+								value="{{ old('bilal', $sholat_jumat->bilal) }}" placeholder="Masukkan nama bilal">
+							</div>
+							@error('bilal')
+							<small class="text-danger">{{ $message }}</small>
+							@enderror
+						</div>
+
 						<hr>
 
 						<div class="form-group text-center">

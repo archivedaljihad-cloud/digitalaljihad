@@ -39,6 +39,7 @@ class SholatJumatController extends Controller
 			'imam' => 'nullable|string|max:255',
 			'khatib' => 'nullable|string|max:255',
 			'muadzin' => 'nullable|string|max:255',
+			'bilal' => 'nullable|string|max:255',
 			'tanggal' => 'required|date',
 		]);
 		SholatJumat::create($request->all());
@@ -56,6 +57,7 @@ class SholatJumatController extends Controller
 			'imam' => 'nullable|string|max:255',
 			'khatib' => 'nullable|string|max:255',
 			'muadzin' => 'nullable|string|max:255',
+			'bilal' => 'nullable|string|max:255',
 			'tanggal' => 'required|date',
 		]);
 		$sholat_jumat->update($request->all());

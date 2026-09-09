@@ -378,7 +378,7 @@
 				</div>
 				<div class="title-text-wrap">
 					<h2>Jadwal Sholat Jumat</h2>
-					<p>Informasi Imam, Khatib & Muadzin</p>
+					<p>Informasi Imam, Khotib, Muadzin & Bilal</p>
 				</div>
 				<div class="title-icon-badge right-icon" title="Ka'bah">
 					<i class="fas fa-kaaba"></i>
@@ -424,13 +424,13 @@
 				<div class="imam-photo-frame">
 					<img src="{{ !empty($sholatJumat->foto_imam) ? asset('storage/' . $sholatJumat->foto_imam) : asset('image/display/default_imam.jpg') }}" alt="Foto Imam" class="imam-photo">
 					<div class="imam-badge-overlay">
-						<span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam Sholat</span>
-						<span class="badge-name">{{ $sholatJumat->imam ?? 'Ustd. Imam Sholat' }}</span>
+						<span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam & Khotib</span>
+						<span class="badge-name">{{ $sholatJumat->imam ?? $sholatJumat->khatib ?? 'Ustd. Imam & Khotib' }}</span>
 					</div>
 				</div>
 			</div>
 
-			<!-- KANAN: INFO ROWS (TANGGAL, IMAM, KHATIB, MUADZIN) -->
+			<!-- KANAN: INFO ROWS (TANGGAL, IMAM & KHOTIB, MUADZIN, BILAL) -->
 			<div class="info-stack">
 				<!-- Row 1: Tanggal -->
 				<div class="info-row">
@@ -447,33 +447,39 @@
 					</div>
 				</div>
 
-				<!-- Row 2: Imam -->
+				<!-- Row 2: Imam & Khotib (1 Kolom) -->
 				<div class="info-row">
 					<div class="info-box-label">
-						<i class="fas fa-user-tie"></i> Imam
+						<i class="fas fa-user-tie"></i> Imam & Khotib
 					</div>
 					<div class="info-box-value">
-						<span class="value">{{ $sholatJumat->imam ?? 'Belum Ditetapkan' }}</span>
+						<span class="value">
+							@if(!empty($sholatJumat->imam) && !empty($sholatJumat->khatib) && $sholatJumat->imam !== $sholatJumat->khatib)
+								{{ $sholatJumat->imam }} / {{ $sholatJumat->khatib }}
+							@else
+								{{ $sholatJumat->imam ?? $sholatJumat->khatib ?? 'Belum Ditetapkan' }}
+							@endif
+						</span>
 					</div>
 				</div>
 
-				<!-- Row 3: Khatib -->
-				<div class="info-row">
-					<div class="info-box-label">
-						<i class="fas fa-book-reader"></i> Khatib
-					</div>
-					<div class="info-box-value">
-						<span class="value">{{ $sholatJumat->khatib ?? 'Belum Ditetapkan' }}</span>
-					</div>
-				</div>
-
-				<!-- Row 4: Muadzin -->
+				<!-- Row 3: Muadzin -->
 				<div class="info-row">
 					<div class="info-box-label">
 						<i class="fas fa-microphone-alt"></i> Muadzin
 					</div>
 					<div class="info-box-value">
 						<span class="value">{{ $sholatJumat->muadzin ?? 'Belum Ditetapkan' }}</span>
+					</div>
+				</div>
+
+				<!-- Row 4: Bilal -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-bullhorn"></i> Bilal
+					</div>
+					<div class="info-box-value">
+						<span class="value">{{ $sholatJumat->bilal ?? 'Belum Ditetapkan' }}</span>
 					</div>
 				</div>
 			</div>

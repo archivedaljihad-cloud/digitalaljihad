@@ -17,6 +17,7 @@ class SholatJumat extends Model
         'imam',
         'khatib',
         'muadzin',
+        'bilal',
         'tanggal',
     ];
 

@@ -87,6 +87,7 @@
 							<th>Imam</th>
 							<th>Khatib</th>
 							<th>Muadzin</th>
+							<th>Bilal</th>
 							<th>Status</th>
 							<th width="100">Aksi</th>
 						</tr>
@@ -143,6 +144,18 @@
 										{{ strtoupper(substr($item->muadzin, 0, 1)) }}
 									</div>
 									<span>{{ $item->muadzin }}</span>
+								</div>
+								@else
+								<span class="text-muted">- Belum ditentukan -</span>
+								@endif
+							</td>
+							<td>
+								@if(!empty($item->bilal))
+								<div class="d-flex align-items-center">
+									<div class="avatar-circle bg-warning text-dark mr-2" style="width: 30px; height: 30px; font-size: 12px; font-weight: bold;">
+										{{ strtoupper(substr($item->bilal, 0, 1)) }}
+									</div>
+									<span>{{ $item->bilal }}</span>
 								</div>
 								@else
 								<span class="text-muted">- Belum ditentukan -</span>
