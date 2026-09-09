@@ -29,6 +29,9 @@
             <a class="dropdown-item" href="{{ route('jadwal_sholat.create') }}">
                 <i class="fas fa-plus-circle text-success"></i> Tambah Jadwal Sholat
             </a>
+            <a class="dropdown-item" href="{{ route('sholat_jumat.create') }}">
+                <i class="fas fa-calendar-plus text-warning"></i> Tambah Sholat Jumat & Foto
+            </a>
             <a class="dropdown-item" href="{{ route('pengumuman.create') }}">
                 <i class="fas fa-bullhorn text-info"></i> Buat Pengumuman
             </a>
