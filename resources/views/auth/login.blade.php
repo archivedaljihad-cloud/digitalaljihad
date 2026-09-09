@@ -214,7 +214,7 @@
         background: rgba(2, 23, 13, 0.82);
         border: 1.5px solid rgba(255, 215, 0, 0.38);
         border-radius: 12px;
-        padding: 0 45px 0 48px;
+        padding: 0 50px 0 48px;
         font-family: 'Poppins', sans-serif;
         font-size: 0.95rem;
         color: #ffffff;
@@ -239,18 +239,31 @@
     .pwd-visibility-toggle {
         position: absolute;
         right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
         background: transparent;
         border: none;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 1rem;
+        outline: none;
+        color: #ffd700;
+        font-size: 1.15rem;
         cursor: pointer;
-        padding: 4px;
-        transition: color 0.2s;
-        z-index: 2;
+        padding: 6px 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.25s ease;
+        z-index: 5;
     }
 
     .pwd-visibility-toggle:hover {
-        color: #ffd700;
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.85);
+        transform: translateY(-50%) scale(1.12);
+    }
+
+    .pwd-visibility-toggle:focus {
+        outline: none;
+        color: #ffffff;
     }
 
     /* Options Row (Remember Me & Forgot Password) */
@@ -402,42 +415,62 @@
         text-align: center;
     }
 
-    .footer-text-line1 {
+    .footer-credit-intro {
         font-size: 0.84rem;
-        color: rgba(255, 255, 255, 0.92);
-        font-weight: 500;
+        color: rgba(255, 255, 255, 0.88);
+        font-weight: 400;
         letter-spacing: 0.3px;
-        margin-bottom: 6px;
+        margin-bottom: 3px;
         line-height: 1.4;
     }
 
-    .footer-text-line1 strong {
+    .footer-credit-brand {
+        font-size: 1.05rem;
+        font-weight: 700;
         color: #ffffff;
+        letter-spacing: 0.5px;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+        margin-bottom: 10px;
+    }
+
+    .footer-version-container {
+        margin-bottom: 10px;
     }
 
     .footer-version-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
         color: #032314;
         font-weight: 800;
-        font-size: 0.76rem;
-        padding: 3px 14px;
+        font-size: 0.78rem;
+        padding: 4px 16px;
         border-radius: 20px;
         letter-spacing: 1px;
-        margin-bottom: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.35);
     }
 
-    .footer-text-line3 {
+    .footer-text-copyright {
         font-size: 0.78rem;
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.75);
         letter-spacing: 0.5px;
         text-transform: uppercase;
         margin-bottom: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
     }
 
-    .footer-text-line3 strong {
+    .footer-text-copyright i {
         color: #ffd700;
+        font-size: 0.85rem;
+    }
+
+    .footer-text-copyright strong {
+        color: #ffd700;
+        font-weight: 700;
     }
 
     /* Responsive */
@@ -585,13 +618,18 @@
 
                     <!-- 5. FOOTER SESUAI INSTRUKSI USER PERSIS -->
                     <div class="secret-login-footer">
-                        <div class="footer-text-line1">
-                            System Informasi Digital ini dibuat dan di kembangkan oleh <strong>Masjid Jami' Al Jihad</strong>
+                        <div class="footer-credit-intro">
+                            System Informasi Digital ini dibuat dan di kembangkan oleh :
                         </div>
-                        <div class="footer-version-badge">
-                            <i class="fas fa-code-branch mr-1"></i> Web Aplication VERSION 3.0.4
+                        <div class="footer-credit-brand">
+                            Masjid Jami' Al Jihad
                         </div>
-                        <div class="footer-text-line3">
+                        <div class="footer-version-container">
+                            <span class="footer-version-badge">
+                                <i class="fas fa-code-branch mr-1"></i> WEB APP. VERSION 3.0.4
+                            </span>
+                        </div>
+                        <div class="footer-text-copyright">
                             <i class="far fa-copyright mr-1"></i> 2026 Powered by <strong>MASJID AL JIHAD GRAHA ASRI</strong>
                         </div>
                     </div>
