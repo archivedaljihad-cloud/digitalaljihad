@@ -54,43 +54,42 @@
         display: inline-block;
     }
 
-    /* 2. Logo Masjid Al-Jihad di Tengah Halaman */
+    /* 1. Logo Masjid Al-Jihad di Posisi Atas-Center dengan Background Putih */
     .logo-center-wrap {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin: 4px auto 16px auto;
-    }
-
-    .logo-halo-ring {
-        width: 112px;
-        height: 112px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, rgba(6, 68, 38, 0.4) 60%, transparent 70%);
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid rgba(255, 215, 0, 0.6);
+        margin: 0 auto 16px auto;
+    }
+
+    .logo-halo-ring {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3.5px solid #ffd700;
         box-shadow: 
-            0 8px 25px rgba(0, 0, 0, 0.55),
-            0 0 22px rgba(255, 215, 0, 0.35);
+            0 0 24px rgba(255, 215, 0, 0.55),
+            0 10px 30px rgba(0, 0, 0, 0.6);
         padding: 8px;
-        background-color: rgba(2, 23, 13, 0.88);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .logo-halo-ring:hover {
-        transform: scale(1.04);
+        transform: scale(1.05);
         box-shadow: 
-            0 10px 30px rgba(0, 0, 0, 0.6),
-            0 0 30px rgba(255, 215, 0, 0.5);
+            0 0 34px rgba(255, 215, 0, 0.75),
+            0 14px 35px rgba(0, 0, 0, 0.7);
     }
 
     .logo-center-img {
-        max-height: 88px;
-        max-width: 88px;
+        max-height: 96px;
+        max-width: 96px;
         object-fit: contain;
-        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.45));
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.15));
     }
 
     /* 4. Ucapan Selamat Datang */
@@ -541,24 +540,16 @@
             <div class="login-container-wrap">
                 <div class="secret-login-card">
 
-                    <!-- 3. Kalimat Pembuka Bismillah dalam Huruf Arab Berwarna Kuning Emas -->
-                    <div class="bismillah-text">
-                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-                    </div>
-
-                    <!-- 2. Logo Masjid Al-Jihad di Posisi Tengah -->
+                    <!-- 1. Logo Masjid Al-Jihad di Atas-Center Kalimat Bismillah -->
                     <div class="logo-center-wrap">
                         <div class="logo-halo-ring">
-                            @if(isset($setting['logo']) && !empty($setting['logo']))
-                            @php
-                            $logoPath = $setting['logo'];
-                            $imageUrl = Str::startsWith($logoPath, 'storage/') ? asset($logoPath) : asset('storage/' . $logoPath);
-                            @endphp
-                            <img src="{{ $imageUrl }}" alt="Logo Masjid Al-Jihad" class="logo-center-img" onerror="this.onerror=null; this.src='{{ asset('img/logo.png') }}';">
-                            @else
-                            <img src="{{ asset('img/logo.png') }}" alt="Logo Masjid Al-Jihad" class="logo-center-img">
-                            @endif
+                            <img src="{{ asset('img/logo-aljihad.png') }}" alt="Logo Masjid Al-Jihad" class="logo-center-img" onerror="this.onerror=null; this.src='{{ asset('img/logo.png') }}';">
                         </div>
+                    </div>
+
+                    <!-- 2. Kalimat Pembuka Bismillah dalam Huruf Arab Berwarna Kuning Emas -->
+                    <div class="bismillah-text">
+                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                     </div>
 
                     <!-- 4. Ucapan Selamat Datang & Nama Aplikasi -->
