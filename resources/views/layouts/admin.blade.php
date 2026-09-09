@@ -219,6 +219,16 @@
             border-bottom: 2px solid var(--islamic-gold);
         }
 
+        .card-header h1, .card-header h2, .card-header h3, 
+        .card-header h4, .card-header h5, .card-header h6,
+        .card-header .text-primary {
+            color: #ffffff !important;
+        }
+
+        .card-header .text-muted {
+            color: rgba(255, 255, 255, 0.88) !important;
+        }
+
         /* Button Style */
         .btn-primary {
             background: linear-gradient(135deg, var(--islamic-green), var(--islamic-dark));
@@ -309,10 +319,12 @@
             overflow: hidden;
         }
 
-        .table thead th {
-            background: linear-gradient(135deg, var(--islamic-green), var(--islamic-dark));
-            color: white;
+        .table thead th,
+        .table thead.thead-light th {
+            background: linear-gradient(135deg, var(--islamic-green), var(--islamic-dark)) !important;
+            color: #ffffff !important;
             border: none;
+            font-weight: 700;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {

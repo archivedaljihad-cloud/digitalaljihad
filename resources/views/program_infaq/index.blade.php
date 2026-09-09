@@ -218,21 +218,21 @@
 		<!-- Kolom Kiri: Form Input Cepat Donasi -->
 		<div class="col-lg-4 mb-4">
 			<div class="card shadow">
-				<div class="card-header py-3 bg-gradient-primary text-white">
-					<h6 class="m-0 font-weight-bold text-white"><i class="fas fa-hand-holding-heart mr-1"></i> Catat Donasi Masuk</h6>
+				<div class="card-header py-3" style="background: linear-gradient(135deg, var(--islamic-green), var(--islamic-dark)); border-bottom: 2px solid var(--islamic-gold);">
+					<h6 class="m-0 font-weight-bold text-white"><i class="fas fa-hand-holding-heart text-warning mr-1"></i> Catat Donasi Masuk</h6>
 				</div>
 				<div class="card-body">
 					<form action="{{ route('program-infaq.donasi.store', $selectedProgram->id) }}" method="POST">
 						@csrf
 						<div class="form-group">
-							<label class="font-weight-bold text-gray-700">Tanggal Infaq <span class="text-danger">*</span></label>
-							<input type="date" name="tanggal" class="form-control" value="{{ date('Y-m-d') }}" required>
+							<label class="font-weight-bold text-gray-800">Tanggal Infaq <span class="text-danger">*</span></label>
+							<input type="date" name="tanggal" class="form-control font-weight-bold text-gray-800" value="{{ date('Y-m-d') }}" required>
 						</div>
 
 						<div class="form-group">
-							<label class="font-weight-bold text-gray-700">Nama Donatur</label>
+							<label class="font-weight-bold text-gray-800">Nama Donatur</label>
 							<input type="text" name="nama_donatur" id="namaDonaturInput" class="form-control" placeholder="Contoh: H. Ahmad, Ibu Fatimah">
-							<small class="text-muted">Kosongkan jika ingin otomatis dicatat sebagai Hamba Allah.</small>
+							<small class="text-gray-600 font-weight-500 d-block mt-1">Kosongkan jika ingin otomatis dicatat sebagai Hamba Allah.</small>
 						</div>
 
 						<div class="form-group">
@@ -245,23 +245,23 @@
 						</div>
 
 						<div class="form-group">
-							<label class="font-weight-bold text-gray-700">Nominal Infaq (Rp) <span class="text-danger">*</span></label>
+							<label class="font-weight-bold text-gray-800">Nominal Infaq (Rp) <span class="text-danger">*</span></label>
 							<div class="input-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text font-weight-bold">Rp</span>
+									<span class="input-group-text font-weight-bold text-gray-800">Rp</span>
 								</div>
-								<input type="text" name="nominal" class="form-control font-weight-bold text-primary" 
-									placeholder="0" onkeyup="formatRupiahInput(this)" autocomplete="off" required>
+								<input type="text" name="nominal" class="form-control font-weight-bold text-success" 
+									placeholder="0" onkeyup="formatRupiahInput(this)" autocomplete="off" style="font-size: 1.1rem;" required>
 							</div>
-							<small class="text-muted">Titik pemisah ribuan otomatis.</small>
+							<small class="text-gray-600 font-weight-500 d-block mt-1">Titik pemisah ribuan otomatis.</small>
 						</div>
 
 						<div class="form-group">
-							<label class="font-weight-bold text-gray-700">Keterangan / Doa / Catatan (Opsional)</label>
-							<textarea name="keterangan" class="form-control" rows="2" placeholder="Contoh: Wakaf atas nama orang tua, Infaq jariyah hamba Allah"></textarea>
+							<label class="font-weight-bold text-gray-800">Keterangan / Doa / Catatan (Opsional)</label>
+							<textarea name="keterangan" class="form-control text-gray-800" rows="2" placeholder="Contoh: Wakaf atas nama orang tua, Infaq jariyah hamba Allah"></textarea>
 						</div>
 
-						<button type="submit" class="btn btn-success btn-block shadow-sm">
+						<button type="submit" class="btn btn-success btn-block shadow-sm font-weight-bold py-2">
 							<i class="fas fa-save mr-1"></i> Simpan Donasi Infaq
 						</button>
 					</form>
@@ -272,44 +272,64 @@
 		<!-- Kolom Kanan: Daftar Donatur Terkini -->
 		<div class="col-lg-8 mb-4">
 			<div class="card shadow">
-				<div class="card-header py-3 d-flex align-items-center justify-content-between">
-					<h6 class="m-0 font-weight-bold text-primary">
-						<i class="fas fa-clipboard-list mr-1"></i> Daftar Penerimaan Infaq Donatur ({{ $donasiList->count() }})
+				<div class="card-header py-3 d-flex flex-wrap align-items-center justify-content-between" style="background: linear-gradient(135deg, var(--islamic-green), var(--islamic-dark)); border-bottom: 2px solid var(--islamic-gold);">
+					<h6 class="m-0 font-weight-bold text-white d-flex align-items-center" style="font-size: 1.05rem;">
+						<i class="fas fa-clipboard-list text-warning mr-2"></i> Daftar Penerimaan Infaq Donatur
+						<span class="badge badge-warning text-dark font-weight-bold ml-2 px-2 py-1" style="font-size: 0.85rem; border-radius: 6px;">
+							{{ $donasiList->count() }} Data
+						</span>
 					</h6>
-					<span class="small text-muted">Akan ditampilkan otomatis bergulir (scroll) di layar TV</span>
+					<span class="small font-weight-bold mt-1 mt-md-0" style="color: #ffffff !important; opacity: 0.95; font-size: 0.85rem;">
+						<i class="fas fa-tv text-warning mr-1"></i> Akan ditampilkan otomatis bergulir (scroll) di layar TV
+					</span>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
 						<table class="table table-bordered table-hover text-center" id="dataTable" width="100%" cellspacing="0">
-							<thead class="thead-light">
+							<thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
 								<tr>
-									<th style="width: 5%;">No</th>
-									<th style="width: 15%;">Tanggal</th>
-									<th style="width: 35%;">Nama Donatur</th>
-									<th style="width: 25%;">Nominal (Rp)</th>
-									<th style="width: 10%;">Keterangan</th>
-									<th style="width: 10%;">Aksi</th>
+									<th style="width: 5%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.5px;">No</th>
+									<th style="width: 16%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.5px;">Tanggal</th>
+									<th style="width: 34%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.5px;">Nama Donatur</th>
+									<th style="width: 23%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.5px;">Nominal (Rp)</th>
+									<th style="width: 12%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.5px;">Keterangan</th>
+									<th style="width: 10%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem; letter-spacing: 0.5px;">Aksi</th>
 								</tr>
 							</thead>
 							<tbody>
 								@forelse($donasiList as $index => $donasi)
 								<tr>
-									<td>{{ $index + 1 }}</td>
-									<td>{{ $donasi->tanggal ? $donasi->tanggal->format('d/m/Y') : '-' }}</td>
-									<td class="text-left font-weight-bold">
+									<td class="font-weight-bold text-dark align-middle" style="font-size: 0.95rem;">
+										{{ $index + 1 }}
+									</td>
+									<td class="align-middle" style="white-space: nowrap;">
+										<span class="font-weight-bold text-dark" style="font-size: 0.95rem; color: #1e293b !important;">
+											<i class="far fa-calendar-alt text-success mr-1"></i>
+											{{ $donasi->tanggal ? $donasi->tanggal->format('d/m/Y') : '-' }}
+										</span>
+									</td>
+									<td class="text-left align-middle">
 										@if($donasi->is_anonim)
-											<span class="badge badge-success px-2 py-1">
+											<span class="badge badge-success px-2 py-1 font-weight-bold" style="font-size: 0.85rem;">
 												<i class="fas fa-user-secret mr-1"></i> Hamba Allah
 											</span>
 										@else
-											<i class="fas fa-user text-primary mr-1"></i> {{ $donasi->nama_donatur }}
+											<span class="font-weight-bold text-dark" style="font-size: 0.95rem; color: #0f172a !important;">
+												<i class="fas fa-user-circle text-primary mr-1"></i> {{ $donasi->nama_donatur }}
+											</span>
 										@endif
 									</td>
-									<td class="text-right font-weight-bold text-success">
-										Rp {{ number_format($donasi->nominal, 0, ',', '.') }}
+									<td class="text-right align-middle">
+										<span class="font-weight-bold text-success" style="font-size: 1rem; color: #047857 !important;">
+											Rp {{ number_format($donasi->nominal, 0, ',', '.') }}
+										</span>
 									</td>
-									<td class="text-muted small text-left">{{ $donasi->keterangan ?? '-' }}</td>
-									<td>
+									<td class="text-left align-middle">
+										<span class="font-weight-bold text-dark small" style="color: #334155 !important;">
+											{{ $donasi->keterangan ?? '-' }}
+										</span>
+									</td>
+									<td class="align-middle">
 										<form action="{{ route('program-infaq.donasi.destroy', $donasi->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus catatan donasi ini?');">
 											@csrf
 											@method('DELETE')
@@ -321,9 +341,14 @@
 								</tr>
 								@empty
 								<tr>
-									<td colspan="6" class="text-center py-4 text-muted">
-										<i class="fas fa-info-circle fa-2x mb-2 text-gray-400 d-block"></i>
-										Belum ada catatan infaq untuk program ini. Gunakan formulir di sebelah kiri untuk mencatat donasi masuk.
+									<td colspan="6" class="text-center py-5" style="background-color: #f8fafc;">
+										<i class="fas fa-info-circle fa-3x mb-2 text-info d-block"></i>
+										<h6 class="font-weight-bold text-gray-800 mb-1" style="font-size: 1.05rem;">
+											Belum ada catatan infaq untuk program ini
+										</h6>
+										<p class="text-gray-600 small mb-0 font-weight-500">
+											Gunakan formulir di sebelah kiri untuk mencatat donasi masuk.
+										</p>
 									</td>
 								</tr>
 								@endforelse
