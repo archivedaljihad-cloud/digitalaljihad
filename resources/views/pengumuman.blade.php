@@ -125,15 +125,15 @@
 			box-sizing: border-box;
 		}
 
-		/* Premiere 2-Column Card (Glassmorphism Elegan - Diperbesar & Megah) */
+		/* Premiere 2-Column Card (Glassmorphism Elegan & Transparan) */
 		.announcement-card {
-			background: rgba(4, 25, 18, 0.80);
-			backdrop-filter: blur(14px);
-			-webkit-backdrop-filter: blur(14px);
+			background: rgba(3, 20, 15, 0.42);
+			backdrop-filter: blur(16px);
+			-webkit-backdrop-filter: blur(16px);
 			border-radius: 26px;
 			padding: 28px 42px;
 			border: 1.5px solid rgba(255, 215, 0, 0.45);
-			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+			box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 			width: 100%;
 			height: 66vh;
 			max-height: 68vh;
@@ -160,7 +160,7 @@
 			align-items: center;
 			margin-bottom: 20px;
 			padding-bottom: 14px;
-			border-bottom: 1.5px solid rgba(255, 215, 0, 0.3);
+			border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
 			flex-shrink: 0;
 		}
 
@@ -169,11 +169,13 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 12px;
-			background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(0, 230, 118, 0.25));
+			background: linear-gradient(135deg, rgba(255, 215, 0, 0.28), rgba(0, 230, 118, 0.22));
 			padding: 8px 24px;
 			border-radius: 30px;
 			border: 1.5px solid rgba(255, 215, 0, 0.6);
 			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 
 		.page-title-badge i {
@@ -188,21 +190,24 @@
 			color: #ffffff !important;
 			letter-spacing: 1.2px;
 			text-transform: uppercase;
-			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
 		}
 
 		.date-badge {
-			background: rgba(3, 20, 15, 0.65);
+			background: rgba(2, 16, 11, 0.62);
 			color: #ffd700;
 			padding: 8px 24px;
 			border-radius: 30px;
 			font-size: 1.2rem;
 			font-weight: 600;
-			border: 1px solid rgba(255, 215, 0, 0.35);
+			border: 1px solid rgba(255, 215, 0, 0.4);
 			display: inline-flex;
 			align-items: center;
 			gap: 9px;
-			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 		}
 
 		/* Split Layout Body */
@@ -215,7 +220,7 @@
 			overflow: hidden;
 		}
 
-		/* Kolom Kiri: Foto Ustadz / Flyer (Diperbesar Signifikan) */
+		/* Kolom Kiri: Foto Ustadz / Flyer (Glass Transparan & Elegan) */
 		.speaker-col {
 			flex: 0 0 380px;
 			display: flex;
@@ -232,13 +237,16 @@
 			max-width: 100%;
 			max-height: 48vh;
 			border-radius: 24px;
-			padding: 6px;
-			background: linear-gradient(135deg, rgba(255, 215, 0, 0.65), rgba(0, 230, 118, 0.35));
-			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 28px rgba(255, 215, 0, 0.25);
+			padding: 4px;
+			background: rgba(4, 25, 18, 0.35);
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.18);
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			overflow: hidden;
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
 		}
 
 		.speaker-frame img {
@@ -251,7 +259,7 @@
 		.speaker-avatar-fallback {
 			width: 100%;
 			height: 100%;
-			background: radial-gradient(circle, rgba(11, 79, 38, 0.85) 0%, rgba(3, 20, 15, 0.98) 100%);
+			background: radial-gradient(circle, rgba(11, 79, 38, 0.30) 0%, rgba(3, 20, 15, 0.45) 100%);
 			border-radius: 20px;
 			display: flex;
 			flex-direction: column;
@@ -259,11 +267,14 @@
 			justify-content: center;
 			color: #ffd700;
 			gap: 14px;
+			border: 1px solid rgba(255, 215, 0, 0.25);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 
 		.speaker-avatar-fallback i {
 			font-size: 5.8rem;
-			filter: drop-shadow(0 4px 12px rgba(0,0,0,0.55));
+			filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.8));
 		}
 
 		.speaker-avatar-fallback span {
@@ -272,6 +283,7 @@
 			letter-spacing: 1.2px;
 			text-transform: uppercase;
 			opacity: 0.95;
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
 		}
 
 		/* Kolom Kanan: Rincian Agenda & Materi (Proporsional & Lebih Terbaca) */
@@ -286,10 +298,13 @@
 
 		.activity-title {
 			font-size: 2.7rem;
-			font-weight: 700;
+			font-weight: 800;
 			line-height: 1.25;
 			color: #ffd700;
-			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+			text-shadow: 
+				0 2px 4px rgba(0, 0, 0, 1),
+				0 4px 14px rgba(0, 0, 0, 0.95),
+				0 0 20px rgba(0, 0, 0, 0.85);
 			margin-bottom: 8px;
 		}
 
@@ -301,12 +316,13 @@
 			font-weight: 600;
 			color: #ffffff;
 			margin-bottom: 18px;
-			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 2px #000000;
 		}
 
 		.speaker-name-badge i {
 			color: #00e676;
 			font-size: 1.35rem;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 		}
 
 		/* Grid Info Pill (Hari/Tanggal, Waktu, Tempat) */
@@ -321,13 +337,16 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 9px;
-			background: rgba(0, 0, 0, 0.45);
-			border: 1px solid rgba(255, 215, 0, 0.35);
+			background: rgba(2, 16, 11, 0.62);
+			border: 1px solid rgba(255, 215, 0, 0.45);
 			padding: 9px 18px;
 			border-radius: 12px;
 			font-size: 1.08rem;
 			color: #ffffff;
-			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
 		}
 
 		.meta-pill i {
@@ -339,7 +358,7 @@
 		.meta-pill.date-pill i { color: #00b4d8; }
 
 		.meta-pill span.label {
-			color: rgba(255, 255, 255, 0.75);
+			color: rgba(255, 255, 255, 0.85);
 			font-weight: 500;
 		}
 
@@ -352,8 +371,11 @@
 		.activity-description {
 			font-size: 1.32rem;
 			line-height: 1.6;
-			color: rgba(255, 255, 255, 0.94);
-			text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+			color: #ffffff;
+			font-weight: 500;
+			text-shadow: 
+				0 2px 4px rgba(0, 0, 0, 1),
+				0 3px 10px rgba(0, 0, 0, 0.95);
 			max-height: 24vh;
 			overflow-y: auto;
 			padding-right: 10px;
