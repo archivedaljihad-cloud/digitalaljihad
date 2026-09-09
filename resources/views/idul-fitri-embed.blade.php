@@ -172,49 +172,49 @@
 		/* LAYOUT KONTEN: FOTO IMAM DI KIRI (KOTAK NO 3) & INFO DI KANAN */
 		.schedule-content-layout {
 			display: flex;
-			align-items: stretch;
+			align-items: center;
 			justify-content: center;
-			gap: 20px;
-			max-width: 1040px;
+			gap: 24px;
+			max-width: 1080px;
 			width: 100%;
 			margin: 0 auto;
 			flex: 1;
 		}
 
-		/* KOTAK NO 3: FOTO IMAM */
+		/* KOTAK NO 3: FOTO IMAM RASIO 4:5 */
 		.imam-card-box {
-			flex: 0 0 260px;
-			background: rgba(4, 25, 18, 0.72);
+			flex: 0 0 270px;
+			width: 270px;
+			background: rgba(4, 25, 18, 0.75);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
-			border-radius: 16px;
+			border-radius: 18px;
 			border: 1.5px solid rgba(255, 215, 0, 0.45);
 			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 			padding: 8px;
 			display: flex;
 			flex-direction: column;
+			align-self: center;
+			box-sizing: border-box;
 		}
 
 		.imam-photo-frame {
 			position: relative;
 			width: 100%;
-			height: 100%;
-			min-height: 280px;
+			aspect-ratio: 4 / 5;
 			border-radius: 12px;
 			overflow: hidden;
 			border: 1px solid rgba(255, 215, 0, 0.3);
 			background: #02120b;
-			display: flex;
-			flex-direction: column;
 		}
 
 		.imam-photo {
 			width: 100%;
 			height: 100%;
+			aspect-ratio: 4 / 5;
 			object-fit: cover;
-			object-position: center top;
+			object-position: center 15%;
 			display: block;
-			flex: 1;
 		}
 
 		.imam-badge-overlay {
@@ -222,38 +222,42 @@
 			bottom: 0;
 			left: 0;
 			right: 0;
-			background: linear-gradient(0deg, rgba(2, 16, 11, 0.96) 0%, rgba(2, 16, 11, 0.75) 75%, transparent 100%);
-			padding: 14px 8px 8px 8px;
+			background: linear-gradient(0deg, rgba(2, 16, 11, 0.96) 0%, rgba(2, 16, 11, 0.8) 70%, transparent 100%);
+			padding: 16px 10px 8px 10px;
 			text-align: center;
 			display: flex;
 			flex-direction: column;
-			gap: 2px;
+			gap: 3px;
+			border-bottom-left-radius: 12px;
+			border-bottom-right-radius: 12px;
 		}
 
 		.imam-badge-overlay .badge-role {
-			font-size: 0.8rem;
+			font-size: 0.82rem;
 			font-weight: 700;
 			color: #ffd700;
 			letter-spacing: 1.2px;
 			text-transform: uppercase;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 5px;
 		}
 
 		.imam-badge-overlay .badge-name {
-			font-size: 1.05rem;
+			font-size: 1.02rem;
 			font-weight: 700;
 			color: #ffffff;
-			line-height: 1.2;
+			line-height: 1.25;
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
+			word-break: break-word;
 		}
 
 		/* KANAN: INFO ROWS STACK (PERSIS SEPERTI JUMAT) */
 		.info-stack {
 			display: flex;
 			flex-direction: column;
-			gap: 8px;
+			gap: 9px;
 			flex: 1;
 			justify-content: center;
 		}
