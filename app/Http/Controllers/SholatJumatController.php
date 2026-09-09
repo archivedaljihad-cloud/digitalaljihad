@@ -40,24 +40,53 @@ class SholatJumatController extends Controller
 			'khatib' => 'nullable|string|max:255',
 			'muadzin' => 'nullable|string|max:255',
 			'bilal' => 'nullable|string|max:255',
+			'foto_imam' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
 			'tanggal' => 'required|date',
 		]);
 
-		$data = $request->all();
-
-		// Auto-provision or guard 'bilal' column if not yet in database
-		if (isset($data['bilal']) && !\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+		// Auto-provision missing columns if not yet in database
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
 			try {
 				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
 					$table->string('bilal')->nullable()->after('muadzin');
 				});
-			} catch (\Throwable $e) {
-				unset($data['bilal']);
+			} catch (\Throwable $e) {}
+		}
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
+			try {
+				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+					$table->string('foto_imam')->nullable()->after('bilal');
+				});
+			} catch (\Throwable $e) {}
+		}
+
+		$data = $request->except(['foto_imam', '_token']);
+
+		// Guard columns if migration failed
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+			unset($data['bilal']);
+		}
+
+		// Handle file upload
+		if ($request->hasFile('foto_imam')) {
+			$file = $request->file('foto_imam');
+			$path = $file->store('sholat_jumat', 'public');
+			try {
+				$publicTarget = public_path('storage/' . $path);
+				$publicDir = dirname($publicTarget);
+				if (!file_exists($publicDir)) {
+					@mkdir($publicDir, 0777, true);
+				}
+				@copy(storage_path('app/public/' . $path), $publicTarget);
+			} catch (\Throwable $e) {}
+
+			if (\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
+				$data['foto_imam'] = $path;
 			}
 		}
 
 		SholatJumat::create($data);
-		return redirect()->route('sholat_jumat.index')->with('success', 'Jadwal sholat Jumat berhasil ditambahkan.');
+		return redirect()->route('sholat_jumat.index')->with('success', 'Jadwal sholat Jumat & foto imam berhasil ditambahkan.');
 	}
 
 	public function edit(SholatJumat $sholat_jumat)
@@ -72,28 +101,75 @@ class SholatJumatController extends Controller
 			'khatib' => 'nullable|string|max:255',
 			'muadzin' => 'nullable|string|max:255',
 			'bilal' => 'nullable|string|max:255',
+			'foto_imam' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
 			'tanggal' => 'required|date',
 		]);
 
-		$data = $request->all();
-
-		// Auto-provision or guard 'bilal' column if not yet in database
-		if (isset($data['bilal']) && !\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+		// Auto-provision missing columns if not yet in database
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
 			try {
 				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
 					$table->string('bilal')->nullable()->after('muadzin');
 				});
-			} catch (\Throwable $e) {
-				unset($data['bilal']);
+			} catch (\Throwable $e) {}
+		}
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
+			try {
+				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+					$table->string('foto_imam')->nullable()->after('bilal');
+				});
+			} catch (\Throwable $e) {}
+		}
+
+		$data = $request->except(['foto_imam', '_token', '_method', 'hapus_foto']);
+
+		// Guard columns if migration failed
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+			unset($data['bilal']);
+		}
+
+		// Handle file upload or removal
+		if ($request->hasFile('foto_imam')) {
+			// Delete old photo if exists
+			if (!empty($sholat_jumat->foto_imam)) {
+				\Illuminate\Support\Facades\Storage::disk('public')->delete($sholat_jumat->foto_imam);
+				@unlink(public_path('storage/' . $sholat_jumat->foto_imam));
+			}
+
+			$file = $request->file('foto_imam');
+			$path = $file->store('sholat_jumat', 'public');
+			try {
+				$publicTarget = public_path('storage/' . $path);
+				$publicDir = dirname($publicTarget);
+				if (!file_exists($publicDir)) {
+					@mkdir($publicDir, 0777, true);
+				}
+				@copy(storage_path('app/public/' . $path), $publicTarget);
+			} catch (\Throwable $e) {}
+
+			if (\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
+				$data['foto_imam'] = $path;
+			}
+		} elseif ($request->boolean('hapus_foto')) {
+			if (!empty($sholat_jumat->foto_imam)) {
+				\Illuminate\Support\Facades\Storage::disk('public')->delete($sholat_jumat->foto_imam);
+				@unlink(public_path('storage/' . $sholat_jumat->foto_imam));
+			}
+			if (\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
+				$data['foto_imam'] = null;
 			}
 		}
 
 		$sholat_jumat->update($data);
-		return redirect()->route('sholat_jumat.index')->with('success', 'Jadwal sholat Jumat berhasil diperbarui.');
+		return redirect()->route('sholat_jumat.index')->with('success', 'Jadwal sholat Jumat & foto imam berhasil diperbarui.');
 	}
 
 	public function destroy(SholatJumat $sholat_jumat)
 	{
+		if (!empty($sholat_jumat->foto_imam)) {
+			\Illuminate\Support\Facades\Storage::disk('public')->delete($sholat_jumat->foto_imam);
+			@unlink(public_path('storage/' . $sholat_jumat->foto_imam));
+		}
 		$sholat_jumat->delete();
 		return redirect()->route('sholat_jumat.index')->with('success', 'Jadwal sholat Jumat berhasil dihapus.');
 	}

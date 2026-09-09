@@ -82,6 +82,7 @@
 					<thead>
 						<tr>
 							<th width="30">No</th>
+							<th width="65" class="text-center">Foto</th>
 							<th>Tanggal</th>
 							<th>Hari</th>
 							<th>Imam</th>
@@ -103,6 +104,13 @@
 						@endphp
 						<tr>
 							<td class="text-center">{{ $index + 1 }}</td>
+							<td class="text-center">
+								@if(!empty($item->foto_imam))
+								<img src="{{ asset('storage/' . $item->foto_imam) }}" alt="Foto" style="width: 42px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; border: 2px solid #28a745; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" data-toggle="tooltip" title="Foto Khusus Aktif">
+								@else
+								<img src="{{ asset('image/display/default_imam.jpg') }}" alt="Default" style="width: 42px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; border: 1px solid #ced4da; opacity: 0.85;" data-toggle="tooltip" title="Foto Bawaan (Default)">
+								@endif
+							</td>
 							<td class="text-nowrap">
 								<span class="badge {{ $isToday ? 'badge-success' : ($isUpcoming ? 'badge-info' : 'badge-secondary') }} p-2">
 									<i class="fas fa-calendar-day"></i> {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}

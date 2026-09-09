@@ -190,6 +190,9 @@ class AppServiceProvider extends ServiceProvider
                     if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
                         $table->string('bilal')->nullable()->after('muadzin');
                     }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
+                        $table->string('foto_imam')->nullable()->after('bilal');
+                    }
                 });
             }
         } catch (\Throwable $e) {
