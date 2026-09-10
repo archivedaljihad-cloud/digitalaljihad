@@ -59,6 +59,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-left: clamp(90px, 10vw, 125px); /* Geser logo tepat ke tengah lingkaran pusat mandala */
         animation: pulseLogoGlow 4s infinite alternate ease-in-out;
     }
 
@@ -529,6 +530,10 @@
         .login-mandala-side {
             flex: 0 0 auto;
             padding: 10px 0;
+        }
+
+        .mandala-logo-box {
+            margin-left: 0 !important;
         }
 
         .mandala-logo-img {
