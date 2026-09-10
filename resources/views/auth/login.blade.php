@@ -2,352 +2,358 @@
 
 @section('main-content')
 <style>
-    .login-container-wrap {
-        width: 100%;
-        max-width: 600px;
-        margin: 20px auto;
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@400;700&display=swap');
+
+    /* 1. OVERRIDE AUTH LAYOUT BACKGROUND & CORNERS */
+    body.bg-gradient-primary {
+        background: #020810 url('{{ asset("img/login-bg.jpg") }}') no-repeat center center fixed !important;
+        background-size: cover !important;
+        min-height: 100vh;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        overflow-x: hidden;
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Sembunyikan ornamen bawaan layouts.auth agar background baru tampil bersih */
+    .bg-gradient-primary::before,
+    .islamic-corner {
+        display: none !important;
+    }
+
+    /* 2. SPLIT LAYOUT 2-KOLOM (GAMBAR 2) */
+    .login-page-wrap {
+        width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 40px;
         position: relative;
         z-index: 10;
+        box-sizing: border-box;
     }
 
-    .secret-login-card {
-        background: linear-gradient(180deg, rgba(6, 42, 25, 0.94) 0%, rgba(3, 26, 15, 0.98) 100%);
-        border: 1.5px solid rgba(255, 215, 0, 0.45);
-        border-radius: 26px;
-        box-shadow: 
-            0 25px 60px rgba(0, 0, 0, 0.75),
-            0 0 35px rgba(18, 128, 73, 0.28),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-        padding: 40px 42px 32px 42px;
-        text-align: center;
+    .login-grid-split {
+        width: 100%;
+        max-width: 1320px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
+    /* SISI KIRI: MANDALA EMAS DENGAN LOGO MASJID AL-JIHAD */
+    .login-mandala-side {
+        flex: 0 0 38%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 10px;
+    }
+
+    .mandala-logo-box {
         position: relative;
-        overflow: hidden;
-        animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulseLogoGlow 4s infinite alternate ease-in-out;
     }
 
-    /* Gold top accent glow line */
-    .secret-login-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 10%;
-        right: 10%;
-        height: 3px;
-        background: linear-gradient(90deg, transparent, #ffd700, #fff6b8, #ffd700, transparent);
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.85);
+    .mandala-logo-img {
+        width: 290px;
+        max-width: 95%;
+        height: auto;
+        object-fit: contain;
+        filter: 
+            drop-shadow(0 0 16px rgba(255, 255, 255, 0.95))
+            drop-shadow(0 0 36px rgba(0, 230, 118, 0.5))
+            drop-shadow(0 8px 25px rgba(0, 0, 0, 0.95));
+        transition: transform 0.35s ease, filter 0.35s ease;
     }
 
-    /* 3. Kalimat Pembuka Basmalah */
-    .bismillah-text {
-        font-family: 'Amiri', serif;
+    .mandala-logo-img:hover {
+        transform: scale(1.05);
+        filter: 
+            drop-shadow(0 0 24px rgba(255, 255, 255, 1))
+            drop-shadow(0 0 50px rgba(0, 230, 118, 0.75))
+            drop-shadow(0 12px 30px rgba(0, 0, 0, 0.98));
+    }
+
+    @keyframes pulseLogoGlow {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.025); }
+    }
+
+    /* SISI KANAN: KONTEN LOGIN & FORM */
+    .login-content-side {
+        flex: 0 0 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 15px;
+    }
+
+    .login-box-stack {
+        width: 100%;
+        max-width: 530px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* KALIGRAFI ARAB SALAM & BISMILLAH */
+    .arabic-greeting-wrap {
+        text-align: center;
+        margin-bottom: 12px;
+        width: 100%;
+    }
+
+    .arabic-salam-text {
+        font-family: 'Amiri', 'Scheherazade New', serif;
         font-size: 2.15rem;
-        font-weight: 700;
         line-height: 1.35;
+        font-weight: 700;
         color: #ffd700;
         text-shadow: 
-            0 0 15px rgba(255, 215, 0, 0.55),
-            0 2px 6px rgba(0, 0, 0, 0.85);
-        margin-bottom: 12px;
+            0 0 12px rgba(255, 215, 0, 0.65),
+            0 2px 10px rgba(0, 0, 0, 0.95);
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
+        direction: rtl;
+    }
+
+    .arabic-bismillah-text {
+        font-family: 'Amiri', 'Scheherazade New', serif;
+        font-size: 1.95rem;
+        line-height: 1.35;
+        font-weight: 700;
+        color: #ffd700;
+        text-shadow: 
+            0 0 12px rgba(255, 215, 0, 0.65),
+            0 2px 10px rgba(0, 0, 0, 0.95);
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+        direction: rtl;
+    }
+
+    /* UCAPAN SELAMAT DATANG & JUDUL SISTEM */
+    .welcome-login-title {
+        font-size: 1.28rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+        margin-bottom: 4px;
+        text-align: center;
+        letter-spacing: 0.5px;
+    }
+
+    .welcome-login-subtitle {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: #ffffff;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+        margin-bottom: 18px;
+        text-align: center;
         letter-spacing: 1px;
-        display: inline-block;
+        text-transform: uppercase;
     }
 
-    /* 1. Logo Masjid Al-Jihad di Posisi Atas-Center dengan Background Putih */
-    .logo-center-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 16px auto;
-    }
-
-    .logo-halo-ring {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background-color: #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 3.5px solid #ffd700;
-        box-shadow: 
-            0 0 24px rgba(255, 215, 0, 0.55),
-            0 10px 30px rgba(0, 0, 0, 0.6);
-        padding: 8px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .logo-halo-ring:hover {
-        transform: scale(1.05);
-        box-shadow: 
-            0 0 34px rgba(255, 215, 0, 0.75),
-            0 14px 35px rgba(0, 0, 0, 0.7);
-    }
-
-    .logo-center-img {
-        max-height: 96px;
-        max-width: 96px;
-        object-fit: contain;
-        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.15));
-    }
-
-    /* 4. Ucapan Selamat Datang */
-    .secret-badge {
+    /* PILL PANDUAN KREDENSIAL */
+    .credential-guide-pill {
         display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 9px 18px;
+        background: rgba(4, 40, 24, 0.85);
+        border: 1px solid rgba(0, 230, 118, 0.45);
+        border-radius: 25px;
+        color: #e0f2fe;
+        font-size: 0.88rem;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        margin-bottom: 18px;
+        backdrop-filter: blur(6px);
+    }
+
+    .credential-guide-pill i {
+        color: #ffd700;
+        font-size: 1.05rem;
+    }
+
+    /* CARD FORMULIR LOGIN */
+    .login-form-card {
+        width: 100%;
+        background: rgba(3, 26, 17, 0.72);
+        border: 1px solid rgba(0, 230, 118, 0.35);
+        border-radius: 18px;
+        padding: 24px 26px 20px 26px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 
+            0 15px 35px rgba(0, 0, 0, 0.75),
+            0 0 25px rgba(0, 230, 118, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        margin-bottom: 22px;
+    }
+
+    /* FORM INPUT FIELDS */
+    .login-field-row {
+        margin-bottom: 16px;
+        width: 100%;
+    }
+
+    .login-field-label {
+        display: flex;
         align-items: center;
         gap: 7px;
-        background: rgba(255, 215, 0, 0.12);
-        border: 1px solid rgba(255, 215, 0, 0.45);
-        color: #ffd700;
-        font-size: 0.76rem;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        padding: 4px 16px;
-        border-radius: 30px;
-        margin-bottom: 10px;
-    }
-
-    .welcome-heading {
-        font-family: 'Outfit', sans-serif;
-        font-size: 1.45rem;
-        font-weight: 700;
-        color: #ffffff;
-        line-height: 1.35;
-        letter-spacing: 0.5px;
-        margin-bottom: 2px;
-        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
-    }
-
-    .sub-heading-masjid {
-        font-family: 'Outfit', sans-serif;
-        font-size: 1.15rem;
+        font-size: 0.86rem;
         font-weight: 600;
-        color: #ffd700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 14px;
-        text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
-    }
-
-    /* Ayat Arab & Artinya (Tidak Dihilangkan) */
-    .verse-banner {
-        background: rgba(2, 20, 12, 0.65);
-        border-left: 3px solid #ffd700;
-        border-right: 3px solid #ffd700;
-        border-radius: 12px;
-        padding: 10px 18px;
-        margin: 10px auto 16px auto;
-        max-width: 500px;
-    }
-
-    .verse-arabic-text {
-        font-family: 'Amiri', serif;
-        font-size: 1.38rem;
-        font-weight: 700;
-        color: #ffffff;
-        margin-bottom: 2px;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    }
-
-    .verse-meaning-text {
-        font-size: 0.84rem;
-        font-style: italic;
-        color: rgba(255, 255, 255, 0.85);
-        line-height: 1.35;
-    }
-
-    /* Petunjuk Kredensial */
-    .credential-guide {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        font-size: 0.88rem;
-        color: rgba(255, 255, 255, 0.92);
-        margin-bottom: 22px;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 7px 20px;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-    }
-
-    .credential-guide i {
-        color: #ffd700;
-    }
-
-    /* Input Fields */
-    .custom-field-group {
-        margin-bottom: 18px;
-        text-align: left;
-    }
-
-    .custom-field-label {
-        display: block;
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: #d1fae5;
+        color: #f1f5f9;
         margin-bottom: 6px;
         letter-spacing: 0.3px;
     }
 
-    .custom-field-box {
+    .login-field-label i {
+        color: #ffd700;
+        font-size: 0.95rem;
+    }
+
+    .login-input-container {
         position: relative;
         display: flex;
         align-items: center;
+        width: 100%;
     }
 
-    .field-lead-icon {
+    .login-input-icon-lead {
         position: absolute;
-        left: 16px;
-        color: #ffd700;
-        font-size: 1rem;
+        left: 14px;
+        color: #f59e0b;
+        font-size: 1.05rem;
         pointer-events: none;
         z-index: 2;
     }
 
-    .custom-auth-input {
+    .login-input-control {
         width: 100%;
-        height: 50px;
-        background: rgba(2, 23, 13, 0.82);
-        border: 1.5px solid rgba(255, 215, 0, 0.38);
-        border-radius: 12px;
-        padding: 0 50px 0 48px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.95rem;
-        color: #ffffff;
+        background: #ffffff !important;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        padding: 10px 42px 10px 42px;
+        font-size: 0.92rem;
+        color: #1e293b;
+        font-weight: 500;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
         transition: all 0.25s ease;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
-    }
-
-    .custom-auth-input:focus {
         outline: none;
+    }
+
+    .login-input-control::placeholder {
+        color: #94a3b8;
+        font-size: 0.88rem;
+    }
+
+    .login-input-control:focus {
         border-color: #ffd700;
-        background: rgba(3, 33, 19, 0.96);
         box-shadow: 
-            0 0 16px rgba(255, 215, 0, 0.38),
-            inset 0 1px 3px rgba(0,0,0,0.3);
+            0 0 0 3px rgba(255, 215, 0, 0.35),
+            0 4px 14px rgba(0, 0, 0, 0.45);
+        background: #ffffff !important;
+        color: #0f172a;
     }
 
-    .custom-auth-input::placeholder {
-        color: rgba(255, 255, 255, 0.42);
-        font-size: 0.9rem;
-    }
-
-    .pwd-visibility-toggle {
+    .pwd-visibility-btn {
         position: absolute;
-        right: 14px;
-        top: 50%;
-        transform: translateY(-50%);
+        right: 12px;
         background: transparent;
         border: none;
-        outline: none;
-        color: #ffd700;
-        font-size: 1.15rem;
+        color: #d97706;
         cursor: pointer;
-        padding: 6px 10px;
-        display: inline-flex;
+        padding: 6px;
+        display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.25s ease;
-        z-index: 5;
+        font-size: 1.05rem;
+        transition: color 0.2s, transform 0.15s;
+        z-index: 3;
     }
 
-    .pwd-visibility-toggle:hover {
-        color: #ffffff;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.85);
-        transform: translateY(-50%) scale(1.12);
+    .pwd-visibility-btn:hover {
+        color: #b45309;
+        transform: scale(1.12);
     }
 
-    .pwd-visibility-toggle:focus {
-        outline: none;
-        color: #ffffff;
-    }
-
-    /* Options Row (Remember Me & Forgot Password) */
-    .auth-options-row {
+    /* REMEMBER & FORGOT PASSWORD ROW */
+    .login-options-row {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 24px;
-        font-size: 0.86rem;
+        justify-content: space-between;
+        margin-top: 10px;
+        margin-bottom: 18px;
+        font-size: 0.83rem;
     }
 
-    .remember-label-click {
+    .remember-check-label {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        color: rgba(255, 255, 255, 0.88);
+        gap: 7px;
+        color: #cbd5e1;
         cursor: pointer;
         user-select: none;
         margin-bottom: 0;
+        font-weight: 500;
     }
 
-    .remember-custom-tick {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 18px;
-        height: 18px;
-        border: 1.5px solid rgba(255, 215, 0, 0.65);
-        border-radius: 4px;
-        background: rgba(2, 23, 13, 0.85);
+    .remember-check-input {
+        width: 16px;
+        height: 16px;
+        accent-color: #059669;
         cursor: pointer;
-        position: relative;
-        outline: none;
-        transition: all 0.2s;
+        border-radius: 4px;
     }
 
-    .remember-custom-tick:checked {
-        background: #ffd700;
-        border-color: #ffd700;
-    }
-
-    .remember-custom-tick:checked::after {
-        content: '✓';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #032314;
-        font-size: 12px;
-        font-weight: 900;
-    }
-
-    .forgot-pwd-link {
+    .forgot-pwd-anchor {
         color: #ffd700;
         text-decoration: none;
-        font-weight: 500;
-        transition: all 0.2s;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s ease;
     }
 
-    .forgot-pwd-link:hover {
+    .forgot-pwd-anchor:hover {
         color: #ffffff;
         text-decoration: underline;
         text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
     }
 
-    /* Submit Button */
+    /* TOMBOL MASUK KE DASHBOARD */
     .btn-submit-dashboard {
         width: 100%;
-        height: 52px;
-        background: linear-gradient(135deg, #128049 0%, #08552f 50%, #04361e 100%);
-        border: 1.5px solid rgba(255, 215, 0, 0.75);
-        border-radius: 12px;
-        font-family: 'Outfit', sans-serif;
-        font-size: 1.05rem;
-        font-weight: 700;
-        letter-spacing: 0.8px;
+        background: linear-gradient(135deg, #056e3b 0%, #034825 100%);
+        border: 1px solid #10b981;
+        border-radius: 9px;
+        padding: 11px 20px;
         color: #ffffff;
+        font-size: 0.98rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
         cursor: pointer;
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
         box-shadow: 
-            0 8px 25px rgba(0, 0, 0, 0.5),
-            0 0 20px rgba(18, 128, 73, 0.4);
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            0 6px 18px rgba(0, 0, 0, 0.6),
+            0 0 15px rgba(16, 185, 129, 0.25);
+        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
     }
@@ -359,17 +365,17 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: 0.5s;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+        transition: 0.6s;
     }
 
     .btn-submit-dashboard:hover {
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, #07894a 0%, #045a2f 100%);
         border-color: #ffd700;
+        transform: translateY(-2px);
         box-shadow: 
-            0 12px 30px rgba(0, 0, 0, 0.6),
-            0 0 25px rgba(255, 215, 0, 0.5);
-        background: linear-gradient(135deg, #159556 0%, #0a6639 50%, #064426 100%);
+            0 10px 25px rgba(0, 0, 0, 0.75),
+            0 0 25px rgba(255, 215, 0, 0.45);
     }
 
     .btn-submit-dashboard:hover::before {
@@ -378,7 +384,7 @@
 
     .btn-submit-dashboard i {
         color: #ffd700;
-        font-size: 1.15rem;
+        font-size: 1.05rem;
         transition: transform 0.2s;
     }
 
@@ -386,301 +392,360 @@
         transform: translateX(4px);
     }
 
-    /* Back Link & Help Support */
-    .auth-nav-links {
-        margin-top: 18px;
+    /* ROW LINK NAVIGASI DISPLAY TV & WHATSAPP */
+    .login-nav-sublinks {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        gap: 10px;
+        justify-content: space-between;
+        margin-top: 15px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        width: 100%;
     }
 
-    .return-home-link {
-        color: rgba(255, 255, 255, 0.78);
-        font-size: 0.88rem;
+    .link-return-disp {
+        color: #cbd5e1;
+        font-size: 0.84rem;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        transition: all 0.2s ease;
-    }
-
-    .return-home-link:hover {
-        color: #ffd700;
-        text-decoration: none;
-        transform: translateY(-1px);
-    }
-
-    .return-home-link i {
-        color: #ffd700;
-        font-size: 0.95rem;
-    }
-
-    .help-support-link {
-        color: #d1fae5;
-        font-size: 0.84rem;
         font-weight: 500;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 16px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        border-radius: 20px;
-        transition: all 0.25s ease;
+        transition: color 0.2s;
     }
 
-    .help-support-link:hover {
-        color: #ffffff;
-        background: rgba(37, 211, 102, 0.22);
-        border-color: #25d366;
-        text-decoration: none;
-        box-shadow: 0 0 14px rgba(37, 211, 102, 0.4);
-        transform: translateY(-1px);
-    }
-
-    .help-support-link .help-icon {
+    .link-return-disp i {
         color: #ffd700;
         font-size: 0.95rem;
     }
 
-    .help-support-link .wa-icon {
-        color: #25d366;
-        font-size: 1.05rem;
-    }
-
-    /* 5. FOOTER PERSIS SESUAI INSTRUKSI USER */
-    .secret-login-footer {
-        margin-top: 26px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(255, 215, 0, 0.25);
-        text-align: center;
-    }
-
-    .footer-credit-intro {
-        font-size: 0.84rem;
-        color: rgba(255, 255, 255, 0.88);
-        font-weight: 400;
-        letter-spacing: 0.3px;
-        margin-bottom: 3px;
-        line-height: 1.4;
-    }
-
-    .footer-credit-brand {
-        font-size: 1.05rem;
-        font-weight: 700;
+    .link-return-disp:hover {
         color: #ffffff;
-        letter-spacing: 0.5px;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
-        margin-bottom: 10px;
+        text-decoration: underline;
     }
 
-    .footer-version-container {
-        margin-bottom: 10px;
-    }
-
-    .footer-version-badge {
+    .btn-help-wa {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
-        color: #032314;
-        font-weight: 800;
-        font-size: 0.78rem;
-        padding: 4px 16px;
-        border-radius: 20px;
-        letter-spacing: 1px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+        background: rgba(5, 150, 105, 0.2);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        padding: 5px 12px;
+        border-radius: 7px;
+        color: #e2e8f0;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s;
     }
 
-    .footer-text-copyright {
-        font-size: 0.78rem;
-        color: rgba(255, 255, 255, 0.75);
+    .btn-help-wa i.fab.fa-whatsapp {
+        color: #25d366;
+        font-size: 1rem;
+    }
+
+    .btn-help-wa:hover {
+        background: rgba(16, 185, 129, 0.35);
+        border-color: #25d366;
+        color: #ffffff;
+        text-decoration: none;
+        box-shadow: 0 0 12px rgba(37, 211, 102, 0.4);
+    }
+
+    /* CARD FOOTER IDENTITAS DEVELOPER (BAWAH) */
+    .developer-attribution-card {
+        width: 100%;
+        background: rgba(2, 28, 14, 0.85);
+        border: 1px solid rgba(0, 230, 118, 0.4);
+        border-radius: 12px;
+        padding: 12px 20px;
+        text-align: center;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .attribution-intro {
+        font-size: 0.76rem;
+        color: #cbd5e1;
+        font-weight: 400;
+    }
+
+    .attribution-brand {
+        font-size: 0.96rem;
+        font-weight: 800;
+        color: #ffffff;
         letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 0;
+    }
+
+    .attribution-version-badge {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        gap: 5px;
+        background: #f59e0b;
+        color: #000000;
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 3px 14px;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+        margin: 3px 0;
+    }
+
+    .attribution-copyright {
+        font-size: 0.72rem;
+        color: #cbd5e1;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
         gap: 5px;
     }
 
-    .footer-text-copyright i {
+    .attribution-copyright strong {
         color: #ffd700;
-        font-size: 0.85rem;
+        font-weight: 800;
     }
 
-    .footer-text-copyright strong {
-        color: #ffd700;
-        font-weight: 700;
+    /* RESPONSIVE LAYOUT BREAKPOINTS */
+    @media (max-width: 991px) {
+        .login-grid-split {
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .login-mandala-side {
+            flex: 0 0 auto;
+            padding: 10px 0;
+        }
+
+        .mandala-logo-img {
+            width: 190px;
+        }
+
+        .login-content-side {
+            flex: 0 0 100%;
+            width: 100%;
+            padding: 0;
+        }
+
+        .arabic-salam-text {
+            font-size: 1.8rem;
+        }
+
+        .arabic-bismillah-text {
+            font-size: 1.6rem;
+        }
     }
 
-    /* Responsive */
     @media (max-width: 576px) {
-        .secret-login-card {
-            padding: 28px 20px 24px 20px;
-            border-radius: 20px;
+        .login-page-wrap {
+            padding: 20px 15px;
         }
-        .bismillah-text {
-            font-size: 1.7rem;
+
+        .mandala-logo-img {
+            width: 150px;
         }
-        .welcome-heading {
-            font-size: 1.25rem;
+
+        .arabic-salam-text {
+            font-size: 1.55rem;
         }
-        .sub-heading-masjid {
-            font-size: 1rem;
+
+        .arabic-bismillah-text {
+            font-size: 1.4rem;
+        }
+
+        .welcome-login-title {
+            font-size: 1.12rem;
+        }
+
+        .welcome-login-subtitle {
+            font-size: 0.9rem;
+        }
+
+        .login-form-card {
+            padding: 20px 18px;
         }
     }
 </style>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="login-container-wrap">
-                <div class="secret-login-card">
+<div class="login-page-wrap">
+    <div class="login-grid-split">
+        
+        <!-- SISI KIRI: MANDALA EMAS DENGAN LOGO AL-JIHAD -->
+        <div class="login-mandala-side">
+            <div class="mandala-logo-box">
+                <img src="{{ asset('img/logo-aljihad-transparent.png') }}" 
+                     alt="Logo Masjid Al-Jihad" 
+                     class="mandala-logo-img"
+                     onerror="this.onerror=null; this.src='{{ asset('img/logo-aljihad.png') }}';">
+            </div>
+        </div>
 
-                    <!-- 1. Logo Masjid Al-Jihad di Atas-Center Kalimat Bismillah -->
-                    <div class="logo-center-wrap">
-                        <div class="logo-halo-ring">
-                            <img src="{{ asset('img/logo-aljihad.png') }}" alt="Logo Masjid Al-Jihad" class="logo-center-img" onerror="this.onerror=null; this.src='{{ asset('img/logo.png') }}';">
-                        </div>
+        <!-- SISI KANAN: KONTEN LOGIN & FORM -->
+        <div class="login-content-side">
+            <div class="login-box-stack">
+                
+                <!-- 1. Kaligrafi Arab Salam & Bismillah (Kuning Emas) -->
+                <div class="arabic-greeting-wrap">
+                    <div class="arabic-salam-text">
+                        السلام عليكم ورحمة الله وبركاته
                     </div>
-
-                    <!-- 2. Kalimat Pembuka Bismillah dalam Huruf Arab Berwarna Kuning Emas -->
-                    <div class="bismillah-text">
-                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                    <div class="arabic-bismillah-text">
+                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                     </div>
+                </div>
 
-                    <!-- 4. Ucapan Selamat Datang & Nama Aplikasi -->
-                    <div class="secret-badge">
-                        <i class="fas fa-shield-alt"></i> SECRET CREDENTIAL PORTAL
-                    </div>
-                    <h1 class="welcome-heading">Selamat datang di halaman LOGIN</h1>
-                    <h2 class="sub-heading-masjid">System Informasi Digital Masjid Jami' Al Jihad</h2>
+                <!-- 2. Ucapan Selamat Datang & Nama Sistem -->
+                <h1 class="welcome-login-title">Selamat datang di halaman LOGIN</h1>
+                <h2 class="welcome-login-subtitle">SYSTEM INFORMASI DIGITAL MASJID JAMI' AL JIHAD</h2>
 
-                    <!-- Ayat Arab & Artinya (Tidak Dihilangkan) -->
-                    <div class="verse-banner">
-                        <div class="verse-arabic-text">وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ</div>
-                        <div class="verse-meaning-text">"Dan tidak ada taufikku melainkan dengan pertolongan Allah" (QS. Hud: 88)</div>
-                    </div>
+                <!-- 3. Pill Petunjuk Masukkan Kredensial -->
+                <div class="credential-guide-pill">
+                    <i class="fas fa-key"></i>
+                    <span>Masukkan kredensial untuk mengakses halaman dashboard</span>
+                </div>
 
-                    <!-- Keterangan Masukkan Kredensial -->
-                    <div class="credential-guide">
-                        <i class="fas fa-key"></i> Masukkan kredensial untuk mengakses halaman dashboard
-                    </div>
+                <!-- Notifikasi Alert Session & Validation Errors -->
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show w-100" role="alert" style="background: rgba(18, 128, 73, 0.95); color: #ffffff; border: 1px solid #ffd700; border-radius: 10px; font-size: 0.88rem; margin-bottom: 15px;">
+                    <i class="fas fa-check-circle mr-2"></i> {{ session('success') }}
+                    <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
 
-                    <!-- Alerts Session & Errors -->
-                    @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert" style="background: rgba(18, 128, 73, 0.9); color: white; border: 1px solid #ffd700; border-radius: 12px;">
-                        <i class="fas fa-check-circle mr-2"></i> {{ session('success') }}
-                        <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    @endif
+                @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show w-100" role="alert" style="background: rgba(180, 40, 40, 0.95); color: #ffffff; border: 1px solid #ff9999; border-radius: 10px; font-size: 0.86rem; text-align: left; margin-bottom: 15px;">
+                    <ul class="mb-0 pl-3">
+                        @foreach($errors->all() as $error)
+                        <li><i class="fas fa-exclamation-circle mr-1"></i> {{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
 
-                    @if($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background: rgba(180, 40, 40, 0.9); color: white; border: 1px solid #ff9999; border-radius: 12px; text-align: left;">
-                        <ul class="mb-0 pl-3">
-                            @foreach($errors->all() as $error)
-                            <li><i class="fas fa-exclamation-circle mr-1"></i> {{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    @endif
-
-                    <!-- Form Login -->
+                <!-- 4. Card Form Login -->
+                <div class="login-form-card">
                     <form class="user" method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
 
-                        <!-- Kolom Email / Username -->
-                        <div class="custom-field-group">
-                            <label class="custom-field-label">
-                                <i class="fas fa-user-circle mr-1 text-warning"></i> Email / Username
+                        <!-- Field Email / Username -->
+                        <div class="login-field-row">
+                            <label class="login-field-label">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Email / Username</span>
                             </label>
-                            <div class="custom-field-box">
-                                <i class="fas fa-envelope field-lead-icon"></i>
-                                <input type="text" class="custom-auth-input @error('email') is-invalid @enderror"
-                                    name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="nama@email.com atau username">
+                            <div class="login-input-container">
+                                <i class="fas fa-envelope login-input-icon-lead"></i>
+                                <input type="text" 
+                                       class="login-input-control @error('email') is-invalid @enderror"
+                                       name="email" 
+                                       value="{{ old('email') }}" 
+                                       required 
+                                       autocomplete="email" 
+                                       autofocus 
+                                       placeholder="bendahara@aljihad.com">
                             </div>
                         </div>
 
-                        <!-- Kolom Password -->
-                        <div class="custom-field-group">
-                            <label class="custom-field-label">
-                                <i class="fas fa-lock mr-1 text-warning"></i> Kata Sandi
+                        <!-- Field Kata Sandi -->
+                        <div class="login-field-row">
+                            <label class="login-field-label">
+                                <i class="fas fa-lock"></i>
+                                <span>Kata Sandi</span>
                             </label>
-                            <div class="custom-field-box">
-                                <i class="fas fa-shield-alt field-lead-icon"></i>
-                                <input type="password" class="custom-auth-input @error('password') is-invalid @enderror"
-                                    name="password" id="loginPasswordInput" required autocomplete="current-password" placeholder="Masukkan kata sandi rahasia">
-                                <button type="button" class="pwd-visibility-toggle" onclick="togglePasswordVisibilityLogin()" title="Tampilkan / Sembunyikan Kata Sandi">
+                            <div class="login-input-container">
+                                <i class="fas fa-shield-alt login-input-icon-lead"></i>
+                                <input type="password" 
+                                       class="login-input-control @error('password') is-invalid @enderror"
+                                       name="password" 
+                                       id="loginPasswordInput" 
+                                       required 
+                                       autocomplete="current-password" 
+                                       placeholder="••••••••••••">
+                                <button type="button" 
+                                        class="pwd-visibility-btn" 
+                                        onclick="togglePasswordVisibilityLogin()" 
+                                        title="Tampilkan / Sembunyikan Kata Sandi">
                                     <i class="fas fa-eye" id="pwdToggleIcon"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Tik Ingatkan Saya & Lupa Kata Sandi -->
-                        <div class="auth-options-row">
-                            <label class="remember-label-click" for="rememberTick">
-                                <input type="checkbox" class="remember-custom-tick" id="rememberTick" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <!-- Row Opsi Ingatkan Saya & Lupa Kata Sandi -->
+                        <div class="login-options-row">
+                            <label class="remember-check-label" for="rememberTick">
+                                <input type="checkbox" 
+                                       class="remember-check-input" 
+                                       id="rememberTick" 
+                                       name="remember" 
+                                       {{ old('remember') ? 'checked' : '' }}>
                                 <span>Ingatkan saya</span>
                             </label>
                             @if (Route::has('password.request'))
-                            <a class="forgot-pwd-link" href="{{ route('password.request') }}">
-                                <i class="fas fa-question-circle mr-1"></i> Lupa Kata Sandi?
+                            <a class="forgot-pwd-anchor" href="{{ route('password.request') }}">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Lupa Kata Sandi?</span>
                             </a>
                             @endif
                         </div>
 
-                        <!-- Tombol Masuk ke Dashboard -->
+                        <!-- Tombol Submit Masuk ke Dashboard -->
                         <button type="submit" class="btn-submit-dashboard" id="btnSubmitDashboard">
                             <span>Masuk ke Dashboard</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </form>
 
-                    <!-- Link Navigasi Display TV & Bantuan WhatsApp -->
-                    <div class="auth-nav-links">
-                        <div>
-                            <a href="{{ url('/') }}" class="return-home-link">
-                                <i class="fas fa-tv"></i> Kembali ke Display TV
-                            </a>
-                        </div>
-                        <div>
-                            <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" target="_blank" rel="noopener noreferrer" class="help-support-link" title="Hubungi Bantuan via WhatsApp 087758767000">
-                                <i class="fas fa-headset help-icon"></i>
-                                <span>Butuh Bantuan</span>
-                                <i class="fab fa-whatsapp wa-icon"></i>
-                            </a>
-                        </div>
+                    <!-- Navigasi Bawah Form: Kembali ke Display & Butuh Bantuan WA -->
+                    <div class="login-nav-sublinks">
+                        <a href="{{ url('/') }}" class="link-return-disp">
+                            <i class="fas fa-tv"></i>
+                            <span>Kembali ke Display</span>
+                        </a>
+                        <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="btn-help-wa" 
+                           title="Hubungi Bantuan via WhatsApp 087758767000">
+                            <span>Butuh Bantuan</span>
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
                     </div>
-
-                    <!-- 5. FOOTER SESUAI INSTRUKSI USER PERSIS -->
-                    <div class="secret-login-footer">
-                        <div class="footer-credit-intro">
-                            System Informasi Digital ini dibuat dan di kembangkan oleh :
-                        </div>
-                        <div class="footer-credit-brand">
-                            Masjid Jami' Al Jihad
-                        </div>
-                        <div class="footer-version-container">
-                            <span class="footer-version-badge">
-                                <i class="fas fa-code-branch mr-1"></i> WEB APP. VERSION 3.0.4
-                            </span>
-                        </div>
-                        <div class="footer-text-copyright">
-                            <i class="far fa-copyright mr-1"></i> 2026 Powered by <strong>MASJID AL JIHAD GRAHA ASRI</strong>
-                        </div>
-                    </div>
-
                 </div>
+
+                <!-- 5. Card Footer Identitas Developer & Versi -->
+                <div class="developer-attribution-card">
+                    <div class="attribution-intro">
+                        System Informasi Digital ini dibuat dan di kembangkan oleh :
+                    </div>
+                    <div class="attribution-brand">
+                        Masjid Jami' Al Jihad
+                    </div>
+                    <div>
+                        <span class="attribution-version-badge">
+                            <i class="fas fa-bolt mr-1"></i> WEB APP. VERSION 3.0.4
+                        </span>
+                    </div>
+                    <div class="attribution-copyright">
+                        <i class="far fa-copyright mr-1"></i> 2026 POWERED BY <strong>MASJID AL JIHAD GRAHA ASRI</strong>
+                    </div>
+                </div>
+
             </div>
         </div>
+
     </div>
 </div>
 
