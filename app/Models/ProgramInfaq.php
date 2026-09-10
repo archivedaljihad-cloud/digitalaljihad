@@ -29,7 +29,7 @@ class ProgramInfaq extends Model
 
     public function donasi()
     {
-        return $this->hasMany(DonasiInfaq::class, 'program_infaq_id')->orderBy('tanggal', 'desc')->orderBy('id', 'desc');
+        return $this->hasMany(DonasiInfaq::class, 'program_infaq_id')->orderBy('tanggal', 'asc')->orderBy('id', 'asc');
     }
 
     public function totalTerkumpul()
