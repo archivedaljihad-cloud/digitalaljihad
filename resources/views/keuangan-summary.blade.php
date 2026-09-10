@@ -272,9 +272,118 @@
 			padding: 5px;
 		}
 
-		.chart-wrapper canvas {
-			max-width: 100% !important;
-			max-height: 100% !important;
+		/* 3D ISOMETRIC PIE CHART STYLING */
+		.chart-3d-wrapper {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+		}
+
+		.chart-3d-wrapper svg {
+			width: 100%;
+			height: 100%;
+			max-height: 250px;
+			overflow: visible;
+		}
+
+		.pie-slice-group {
+			transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+			cursor: pointer;
+		}
+
+		.pie-slice-group:hover,
+		.pie-slice-group.active {
+			transform: translateY(-8px);
+			filter: brightness(1.15) drop-shadow(0 10px 18px rgba(0, 0, 0, 0.6));
+		}
+
+		.pie-top-face {
+			stroke: rgba(255, 255, 255, 0.5);
+			stroke-width: 1.2;
+		}
+
+		.pie-wall {
+			stroke: rgba(0, 0, 0, 0.3);
+			stroke-width: 0.5;
+		}
+
+		/* LEGEND KEUANGAN 3D (BAWAH GRAFIK) */
+		.pie-legend-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 12px;
+			margin-top: 10px;
+			padding-top: 10px;
+			border-top: 1px solid rgba(255, 255, 255, 0.1);
+			flex-shrink: 0;
+		}
+
+		.pie-legend-card {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 8px 14px;
+			border-radius: 12px;
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			transition: all 0.25s ease;
+			cursor: pointer;
+		}
+
+		.pie-legend-card:hover,
+		.pie-legend-card.active {
+			background: rgba(255, 255, 255, 0.12);
+			border-color: rgba(255, 215, 0, 0.5);
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+		}
+
+		.legend-color-pill {
+			width: 12px;
+			height: 36px;
+			border-radius: 6px;
+			flex-shrink: 0;
+		}
+
+		.legend-meta {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+
+		.legend-name {
+			font-size: 0.78rem;
+			font-weight: 600;
+			color: #cbd5e1;
+			text-transform: uppercase;
+			letter-spacing: 0.6px;
+		}
+
+		.legend-val-row {
+			display: flex;
+			align-items: baseline;
+			gap: 6px;
+			white-space: nowrap;
+		}
+
+		.legend-nominal {
+			font-size: 1.12rem;
+			font-weight: 800;
+			font-family: 'Poppins', monospace;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.legend-percent {
+			font-size: 0.82rem;
+			font-weight: 700;
+			color: #ffd700;
+			background: rgba(255, 215, 0, 0.14);
+			padding: 1px 6px;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 215, 0, 0.25);
 		}
 
 		.transactions-container {
@@ -431,10 +540,11 @@
 
 			<div class="dashboard-row">
 				<div class="chart-container">
-					<h3><i class="fas fa-chart-pie"></i> Grafik Keuangan</h3>
+					<h3><i class="fas fa-chart-pie"></i> Grafik Keuangan 3D</h3>
 					<div class="chart-wrapper">
-						<canvas id="financeChart"></canvas>
+						<div id="chart3dContainer" class="chart-3d-wrapper"></div>
 					</div>
+					<div class="pie-legend-grid" id="pieLegendGrid"></div>
 				</div>
 
 				<div class="transactions-container">
@@ -489,55 +599,201 @@
 		updateDateTime();
 		setInterval(updateDateTime, 1000);
 
-		// Chart dengan warna kontras
-		const ctx = document.getElementById('financeChart').getContext('2d');
-		new Chart(ctx, {
-			type: 'doughnut',
-			data: {
-				labels: ['Pemasukan', 'Pengeluaran'],
-				datasets: [{
-					data: [{{ $totalPemasukan }}, {{ $totalPengeluaran }}],
-					backgroundColor: ['#00e676', '#ff6b6b'],
-					borderColor: '#ffffff',
-					borderWidth: 2,
-					hoverOffset: 10
-				}]
-			},
-			options: {
-				responsive: true,
-				maintainAspectRatio: true,
-				cutout: '60%',
-				layout: {
-					padding: {
-						top: 5,
-						bottom: 10,
-						left: 10,
-						right: 10
-					}
-				},
-				plugins: {
-					legend: {
-						position: 'bottom',
-						labels: {
-							color: '#ffffff',
-							font: {size: 11, weight: 'bold'},
-							padding: 10
-						}
-					},
-					tooltip: {
-						callbacks: {
-							label: function (context) {
-								let label = context.label || '';
-								let value = context.raw || 0;
-								let total = context.dataset.data.reduce((a, b) => a + b, 0);
-								let percentage = ((value / total) * 100).toFixed(1);
-								return `${label}: Rp ${value.toLocaleString('id-ID')} (${percentage}%)`;
-							}
-						}
+		// 3D Isometric Pie Chart Renderer
+		function render3DPieChart(containerId, legendId, items) {
+			const container = document.getElementById(containerId);
+			const legendEl = document.getElementById(legendId);
+			if (!container) return;
+
+			const total = items.reduce((sum, item) => sum + item.value, 0);
+			if (total === 0) {
+				container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#94a3b8;"><i class="fas fa-chart-pie fa-2x" style="opacity:0.4;margin-bottom:8px;"></i><p>Belum ada data keuangan</p></div>';
+				return;
+			}
+
+			const width = 500;
+			const height = 240;
+			const centerX = width / 2;
+			const centerY = 100;
+			const radiusX = 145;
+			const tilt = 0.54; // isometric perspective
+			const radiusY = radiusX * tilt; // ~78px
+			const depth = 36; // 3D extrusion thickness
+			const explodeDist = 16; // exploded slice separation
+
+			// Helper color darken / brighten
+			function shade(color, p) {
+				let num = parseInt(color.replace("#",""), 16),
+					amt = Math.round(2.55 * p),
+					R = Math.min(255, Math.max(0, (num >> 16) + amt)),
+					G = Math.min(255, Math.max(0, (num >> 8 & 0x00FF) + amt)),
+					B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
+				return "#" + (0x1000000 + R*0x10000 + G*0x100 + B).toString(16).slice(1);
+			}
+
+			// Compute slice angles (starting from -90 deg / 12 o'clock)
+			let currentAngle = -Math.PI / 2;
+			const slices = items.map((item, idx) => {
+				const span = (item.value / total) * 2 * Math.PI;
+				const start = currentAngle;
+				const end = currentAngle + span;
+				const mid = (start + end) / 2;
+				currentAngle = end;
+				return {
+					...item,
+					index: idx,
+					startAngle: start,
+					endAngle: end,
+					midAngle: mid,
+					span: span,
+					percentage: ((item.value / total) * 100).toFixed(1)
+				};
+			});
+
+			// Sort slices back-to-front by sin(midAngle) so front slices naturally occlude back slices
+			const sortedSlices = [...slices].sort((a, b) => Math.sin(a.midAngle) - Math.sin(b.midAngle));
+
+			let svgHtml = `
+			<svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
+				<defs>
+					${slices.map(s => `
+						<linearGradient id="topGrad_${s.index}" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" stop-color="${shade(s.color, 28)}" />
+							<stop offset="50%" stop-color="${s.color}" />
+							<stop offset="100%" stop-color="${shade(s.color, -16)}" />
+						</linearGradient>
+						<linearGradient id="radialGrad_${s.index}" x1="0%" y1="0%" x2="100%" y2="0%">
+							<stop offset="0%" stop-color="${shade(s.color, -15)}" />
+							<stop offset="100%" stop-color="${shade(s.color, -42)}" />
+						</linearGradient>
+					`).join('')}
+				</defs>
+
+				<!-- Soft 3D Drop Shadow under entire pie -->
+				<ellipse cx="${centerX}" cy="${centerY + depth + 16}" rx="${radiusX * 1.06}" ry="${radiusY * 1.06}" fill="rgba(0,0,0,0.45)" style="filter: blur(12px);" />
+			`;
+
+			sortedSlices.forEach(s => {
+				const ox = Math.cos(s.midAngle) * explodeDist;
+				const oy = Math.sin(s.midAngle) * explodeDist * tilt;
+				const cx = centerX + ox;
+				const cy = centerY + oy;
+
+				const x1 = cx + radiusX * Math.cos(s.startAngle);
+				const y1 = cy + radiusY * Math.sin(s.startAngle);
+				const x2 = cx + radiusX * Math.cos(s.endAngle);
+				const y2 = cy + radiusY * Math.sin(s.endAngle);
+
+				const largeArc = s.span > Math.PI ? 1 : 0;
+
+				let sliceSvg = `<g class="pie-slice-group" id="slice_${s.index}" data-index="${s.index}">`;
+
+				// 1. Radial Wall at start angle (visible if cos(startAngle) < 0.05)
+				if (Math.cos(s.startAngle) < 0.05) {
+					sliceSvg += `
+						<path class="pie-wall" d="M ${cx},${cy} L ${x1},${y1} L ${x1},${y1 + depth} L ${cx},${cy + depth} Z"
+							  fill="url(#radialGrad_${s.index})" />
+					`;
+				}
+
+				// 2. Radial Wall at end angle (visible if cos(endAngle) > -0.05)
+				if (Math.cos(s.endAngle) > -0.05) {
+					sliceSvg += `
+						<path class="pie-wall" d="M ${cx},${cy} L ${x2},${y2} L ${x2},${y2 + depth} L ${cx},${cy + depth} Z"
+							  fill="url(#radialGrad_${s.index})" />
+					`;
+				}
+
+				// 3. Cylinder Outer Rim (curved front wall between angles facing viewer where sin > 0)
+				const numSteps = 45;
+				let arcSteps = [];
+				for (let i = 0; i <= numSteps; i++) {
+					const a = s.startAngle + (s.span * i) / numSteps;
+					arcSteps.push({
+						a: a,
+						x: cx + radiusX * Math.cos(a),
+						y: cy + radiusY * Math.sin(a),
+						sin: Math.sin(a)
+					});
+				}
+
+				for (let i = 0; i < numSteps; i++) {
+					const p1 = arcSteps[i];
+					const p2 = arcSteps[i+1];
+					const midA = (p1.a + p2.a) / 2;
+
+					if (Math.sin(midA) > -0.02) {
+						// Light calculation from top-left
+						const light = Math.sin(midA) * 0.4 + Math.cos(midA) * 0.2;
+						const segShade = shade(s.color, -30 + light * 25);
+						sliceSvg += `
+							<polygon class="pie-wall" points="${p1.x},${p1.y} ${p2.x},${p2.y} ${p2.x},${p2.y + depth} ${p1.x},${p1.y + depth}"
+									 fill="${segShade}" stroke="${segShade}" stroke-width="0.6" />
+						`;
 					}
 				}
+
+				// 4. Top Elliptical Face (tanpa teks apapun di dalam grafik)
+				sliceSvg += `
+					<path class="pie-top-face"
+						  d="M ${cx},${cy} L ${x1},${y1} A ${radiusX},${radiusY} 0 ${largeArc},1 ${x2},${y2} Z"
+						  fill="url(#topGrad_${s.index})" />
+				`;
+
+				sliceSvg += `</g>`;
+				svgHtml += sliceSvg;
+			});
+
+			svgHtml += `</svg>`;
+			container.innerHTML = svgHtml;
+
+			// Render Legend di Bawah Grafik
+			if (legendEl) {
+				legendEl.innerHTML = slices.map(s => `
+					<div class="pie-legend-card" id="legendItem_${s.index}" data-index="${s.index}">
+						<div class="legend-color-pill" style="background: linear-gradient(180deg, ${s.color} 0%, ${shade(s.color, -32)} 100%); box-shadow: 0 0 10px ${s.color}66;"></div>
+						<div class="legend-meta">
+							<span class="legend-name">${s.label}</span>
+							<div class="legend-val-row">
+								<span class="legend-nominal" style="color: ${s.color};">Rp ${s.value.toLocaleString('id-ID')}</span>
+								<span class="legend-percent">${s.percentage}%</span>
+							</div>
+						</div>
+					</div>
+				`).join('');
+
+				// Interaktivitas hover sinkron antara legend dan 3D slice
+				slices.forEach(s => {
+					const sliceEl = document.getElementById(`slice_${s.index}`);
+					const legEl = document.getElementById(`legendItem_${s.index}`);
+
+					if (sliceEl && legEl) {
+						legEl.addEventListener('mouseenter', () => {
+							sliceEl.classList.add('active');
+							legEl.classList.add('active');
+						});
+						legEl.addEventListener('mouseleave', () => {
+							sliceEl.classList.remove('active');
+							legEl.classList.remove('active');
+						});
+						sliceEl.addEventListener('mouseenter', () => {
+							sliceEl.classList.add('active');
+							legEl.classList.add('active');
+						});
+						sliceEl.addEventListener('mouseleave', () => {
+							sliceEl.classList.remove('active');
+							legEl.classList.remove('active');
+						});
+					}
+				});
 			}
-		});
+		}
+
+		// Inisialisasi Grafik 3D dengan Data Pemasukan & Pengeluaran
+		render3DPieChart('chart3dContainer', 'pieLegendGrid', [
+			{ label: 'Pemasukan', value: {{ $totalPemasukan ?? 0 }}, color: '#00e676' },
+			{ label: 'Pengeluaran', value: {{ $totalPengeluaran ?? 0 }}, color: '#ff4757' }
+		]);
 	</script>
 	<!-- SCRIPT UNTUK BACKGROUND SLIDESHOW (VERSI SUPER KUAT) -->
 	<script>
