@@ -392,8 +392,8 @@
 		}
 
 		/* Proporsi Lebar Kolom yang Ideal & Seimbang (Bebas Tumpuk) */
-		.keuangan th:nth-child(1), .keuangan td:nth-child(1) { width: 14%; text-align: center; white-space: nowrap !important; } /* Tanggal */
-		.keuangan th:nth-child(2), .keuangan td:nth-child(2) { width: 28%; text-align: left; } /* Deskripsi */
+		.keuangan th:nth-child(1), .keuangan td:nth-child(1) { width: 13%; text-align: center; white-space: nowrap !important; } /* Tanggal */
+		.keuangan th:nth-child(2), .keuangan td:nth-child(2) { width: 29%; text-align: left; } /* Deskripsi */
 		.keuangan th:nth-child(3), .keuangan td:nth-child(3) { width: 16%; text-align: right; white-space: nowrap !important; } /* Penerimaan */
 		.keuangan th:nth-child(4), .keuangan td:nth-child(4) { width: 16%; text-align: right; white-space: nowrap !important; } /* Pengeluaran */
 		.keuangan th:nth-child(5), .keuangan td:nth-child(5) { width: 16%; text-align: right; white-space: nowrap !important; } /* Saldo */
@@ -607,7 +607,7 @@
 							@else
 								@foreach ($keuangan as $item)
 									<tr class="{{ $item->pemasukan > 0 ? 'income' : 'expense' }}">
-										<td class="col-tanggal">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
+										<td class="col-tanggal">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat("d M 'y") }}</td>
 										<td class="col-deskripsi">
 											<i class="fas {{ $item->pemasukan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}" style="color: {{ $item->pemasukan > 0 ? '#00e676' : '#ff6b6b' }}; margin-right: 8px;"></i>
 											{{ $item->deskripsi }}
