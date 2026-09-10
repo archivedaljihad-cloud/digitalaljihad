@@ -45,7 +45,7 @@
 				</div>
 
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Imam</label>
 							<input type="text" name="imam" class="form-control @error('imam') is-invalid @enderror" 
@@ -55,7 +55,7 @@
 							@enderror
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Khatib</label>
 							<input type="text" name="khatib" class="form-control @error('khatib') is-invalid @enderror" 
@@ -65,12 +65,22 @@
 							@enderror
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label>Muadzin</label>
 							<input type="text" name="muadzin" class="form-control @error('muadzin') is-invalid @enderror" 
 							value="{{ old('muadzin', $idulAdha->muadzin) }}">
 							@error('muadzin')
+							<div class="invalid-feedback">{{ $message }}</div>
+							@enderror
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Bilal</label>
+							<input type="text" name="bilal" class="form-control @error('bilal') is-invalid @enderror" 
+							value="{{ old('bilal', $idulAdha->bilal) }}">
+							@error('bilal')
 							<div class="invalid-feedback">{{ $message }}</div>
 							@enderror
 						</div>

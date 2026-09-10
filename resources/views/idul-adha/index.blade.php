@@ -30,6 +30,7 @@
 							<th>Imam</th>
 							<th>Khatib</th>
 							<th>Muadzin</th>
+							<th>Bilal</th>
 							<th>Waktu</th>
 							<th>Aksi</th>
 						</tr>
@@ -42,6 +43,7 @@
 							<td>{{ $item->imam ?? '-' }}</td>
 							<td>{{ $item->khatib ?? '-' }}</td>
 							<td>{{ $item->muadzin ?? '-' }}</td>
+							<td>{{ $item->bilal ?? '-' }}</td>
 							<td>{{ $item->waktu ? \Carbon\Carbon::parse($item->waktu)->format('H:i') : '07:00' }} WIB</td>
 							<td>
 								<a href="{{ route('idul-adha.edit', $item) }}" class="btn btn-warning btn-sm">
@@ -58,7 +60,7 @@
 						</tr>
 						@empty
 						<tr>
-							<td colspan="7" class="text-center">Belum ada data jadwal Idul Adha</td>
+							<td colspan="8" class="text-center">Belum ada data jadwal Idul Adha</td>
 						</tr>
 						@endforelse
 					</tbody>

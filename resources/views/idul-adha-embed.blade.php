@@ -419,13 +419,13 @@
 				<div class="imam-photo-frame">
 					<img src="{{ !empty($idulAdha->foto_imam) ? asset('storage/' . $idulAdha->foto_imam) : asset('image/display/default_imam.jpg') }}" alt="Foto Imam" class="imam-photo">
 					<div class="imam-badge-overlay">
-						<span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam Sholat</span>
-						<span class="badge-name">{{ $idulAdha->imam ?? 'Ustd. Imam Sholat' }}</span>
+						<span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam & Khotib</span>
+						<span class="badge-name">{{ $idulAdha->imam ?? $idulAdha->khatib ?? 'Ustd. Imam & Khotib' }}</span>
 					</div>
 				</div>
 			</div>
 
-			<!-- KANAN: INFO ROWS (TANGGAL, WAKTU, IMAM, KHATIB, MUADZIN) -->
+			<!-- KANAN: INFO ROWS (TANGGAL, WAKTU, IMAM & KHOTIB, MUADZIN, BILAL) -->
 			<div class="info-stack">
 				<!-- Row 1: Tanggal -->
 				<div class="info-row">
@@ -453,33 +453,48 @@
 					</div>
 				</div>
 
-				<!-- Row 3: Imam -->
+				<!-- Row 3: Imam & Khotib (1 Kolom) -->
 				<div class="info-row">
 					<div class="info-box-label">
-						<i class="fas fa-user-tie"></i> Imam
+						<i class="fas fa-user-tie"></i> Imam & Khotib
 					</div>
 					<div class="info-box-value">
-						<span class="value">{{ $idulAdha->imam ?? 'Belum Ditetapkan' }}</span>
+						<span class="value">
+							@if(!empty($idulAdha->imam) && !empty($idulAdha->khatib) && $idulAdha->imam !== $idulAdha->khatib)
+								{{ $idulAdha->imam }} / {{ $idulAdha->khatib }}
+							@else
+								{{ $idulAdha->imam ?? $idulAdha->khatib ?? 'Belum Ditetapkan' }}
+							@endif
+						</span>
 					</div>
 				</div>
 
-				<!-- Row 4: Khatib -->
+				@php
+					$muadzinAdha = $idulAdha->muadzin ?? null;
+					$bilalAdha = $idulAdha->bilal ?? null;
+					if (empty($bilalAdha) && !empty($muadzinAdha) && stripos($muadzinAdha, 'bilal') !== false) {
+						$bilalAdha = $muadzinAdha;
+						$muadzinAdha = 'Belum Ditetapkan';
+					}
+				@endphp
+
+				<!-- Row 4: Muadzin (Kolom Tersendiri) -->
 				<div class="info-row">
 					<div class="info-box-label">
-						<i class="fas fa-book-reader"></i> Khatib
+						<i class="fas fa-microphone-alt"></i> Muadzin
 					</div>
 					<div class="info-box-value">
-						<span class="value">{{ $idulAdha->khatib ?? 'Belum Ditetapkan' }}</span>
+						<span class="value">{{ !empty($muadzinAdha) ? $muadzinAdha : 'Belum Ditetapkan' }}</span>
 					</div>
 				</div>
 
-				<!-- Row 5: Muadzin / Bilal -->
+				<!-- Row 5: Bilal (Kolom Tersendiri) -->
 				<div class="info-row">
 					<div class="info-box-label">
-						<i class="fas fa-microphone-alt"></i> Bilal / Muadzin
+						<i class="fas fa-bullhorn"></i> Bilal
 					</div>
 					<div class="info-box-value">
-						<span class="value">{{ $idulAdha->muadzin ?? 'Belum Ditetapkan' }}</span>
+						<span class="value">{{ !empty($bilalAdha) ? $bilalAdha : 'Belum Ditetapkan' }}</span>
 					</div>
 				</div>
 			</div>

@@ -27,6 +27,7 @@ class SholatIdulAdhaController extends Controller
             'imam'       => 'nullable|string|max:255',
             'khatib'     => 'nullable|string|max:255',
             'muadzin'    => 'nullable|string|max:255',
+            'bilal'      => 'nullable|string|max:255',
             'waktu'      => 'nullable|date_format:H:i',
             'keterangan' => 'nullable|string|max:255',
         ]);
@@ -51,6 +52,7 @@ class SholatIdulAdhaController extends Controller
             'imam'       => 'nullable|string|max:255',
             'khatib'     => 'nullable|string|max:255',
             'muadzin'    => 'nullable|string|max:255',
+            'bilal'      => 'nullable|string|max:255',
             'waktu'      => 'nullable|date_format:H:i',
             'keterangan' => 'nullable|string|max:255',
         ]);

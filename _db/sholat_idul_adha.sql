@@ -34,6 +34,7 @@ CREATE TABLE `sholat_idul_adha` (
   `imam` varchar(255) DEFAULT NULL,
   `khatib` varchar(255) DEFAULT NULL,
   `muadzin` varchar(255) DEFAULT NULL,
+  `bilal` varchar(255) DEFAULT NULL,
   `waktu` time DEFAULT '07:00:00',
   `keterangan` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -44,8 +45,8 @@ CREATE TABLE `sholat_idul_adha` (
 -- Dumping data untuk tabel `sholat_idul_adha`
 --
 
-INSERT INTO `sholat_idul_adha` (`id`, `tahun`, `tanggal`, `imam`, `khatib`, `muadzin`, `waktu`, `keterangan`, `created_at`, `updated_at`) VALUES
-(1, '2026', '2026-05-27', 'Prof. Dr. H. Nur Kholis, MA', 'Ustadz Fauzan Akbar', 'Bilal', '06:30:00', '10 Dzulhijjah 1446 H', NULL, '2026-05-14 08:47:11');
+INSERT INTO `sholat_idul_adha` (`id`, `tahun`, `tanggal`, `imam`, `khatib`, `muadzin`, `bilal`, `waktu`, `keterangan`, `created_at`, `updated_at`) VALUES
+(1, '2026', '2026-05-27', 'Prof. Dr. H. Nur Kholis, MA', 'Ustadz Fauzan Akbar', NULL, 'Bilal', '06:30:00', '10 Dzulhijjah 1446 H', NULL, '2026-05-14 08:47:11');
 
 --
 -- Indexes for dumped tables

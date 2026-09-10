@@ -19,6 +19,7 @@ class SholatIdulAdha extends Model
         'imam',
         'khatib',
         'muadzin',
+        'bilal',
         'waktu',
         'keterangan',
     ];
