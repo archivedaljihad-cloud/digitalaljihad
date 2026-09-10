@@ -190,39 +190,153 @@
 			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
 
-		.summary {
-			display: flex;
-			justify-content: space-around;
-			align-items: center;
-			margin-bottom: 14px;
-			padding: 12px 18px;
-			background: rgba(0, 0, 0, 0.4);
-			border-radius: 12px;
-			border: 1px solid rgba(255, 215, 0, 0.3);
+		/* 3 KARTU METRIK RINGKASAN KEUANGAN (KPI CARDS) - ANTI TUMPUK */
+		.summary-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 16px;
+			margin-bottom: 16px;
+			width: 100%;
 		}
 
-		.summary p {
-			margin: 0;
-			font-size: 1.35rem;
-			font-weight: 700;
+		.kpi-card {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			padding: 12px 20px;
+			border-radius: 16px;
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.kpi-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 3px;
+		}
+
+		.kpi-card.kpi-income {
+			background: linear-gradient(135deg, rgba(0, 36, 18, 0.82) 0%, rgba(2, 22, 14, 0.85) 100%);
+			border: 1.5px solid rgba(0, 230, 118, 0.45);
+		}
+		.kpi-card.kpi-income::before {
+			background: #00e676;
+			box-shadow: 0 0 10px #00e676;
+		}
+
+		.kpi-card.kpi-expense {
+			background: linear-gradient(135deg, rgba(45, 10, 15, 0.82) 0%, rgba(24, 4, 9, 0.85) 100%);
+			border: 1.5px solid rgba(255, 107, 107, 0.45);
+		}
+		.kpi-card.kpi-expense::before {
+			background: #ff6b6b;
+			box-shadow: 0 0 10px #ff6b6b;
+		}
+
+		.kpi-card.kpi-balance {
+			background: linear-gradient(135deg, rgba(42, 32, 4, 0.85) 0%, rgba(22, 16, 2, 0.88) 100%);
+			border: 1.5px solid rgba(255, 215, 0, 0.6);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 215, 0, 0.18);
+		}
+		.kpi-card.kpi-balance::before {
+			background: #ffd700;
+			box-shadow: 0 0 12px #ffd700;
+		}
+
+		.kpi-icon {
+			width: 46px;
+			height: 46px;
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.4rem;
+			flex-shrink: 0;
+		}
+
+		.kpi-card.kpi-income .kpi-icon {
+			background: rgba(0, 230, 118, 0.15);
+			color: #00e676;
+			border: 1px solid rgba(0, 230, 118, 0.35);
+		}
+
+		.kpi-card.kpi-expense .kpi-icon {
+			background: rgba(255, 107, 107, 0.15);
+			color: #ff6b6b;
+			border: 1px solid rgba(255, 107, 107, 0.35);
+		}
+
+		.kpi-card.kpi-balance .kpi-icon {
+			background: rgba(255, 215, 0, 0.18);
+			color: #ffd700;
+			border: 1px solid rgba(255, 215, 0, 0.45);
+		}
+
+		.kpi-body {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+
+		.kpi-title {
+			font-size: 0.85rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+			opacity: 0.9;
+			margin-bottom: 2px;
+		}
+
+		.kpi-card.kpi-income .kpi-title { color: #a7f3d0; }
+		.kpi-card.kpi-expense .kpi-title { color: #fecaca; }
+		.kpi-card.kpi-balance .kpi-title { color: #fef08a; }
+
+		.kpi-amount {
+			display: flex;
+			align-items: baseline;
+			gap: 4px;
+			white-space: nowrap !important;
+			line-height: 1.1;
+		}
+
+		.kpi-rp {
+			font-size: 1.05rem;
+			font-weight: 600;
+			opacity: 0.9;
+		}
+
+		.kpi-card.kpi-income .kpi-rp { color: #00e676; }
+		.kpi-card.kpi-expense .kpi-rp { color: #ff6b6b; }
+		.kpi-card.kpi-balance .kpi-rp { color: #ffd700; }
+
+		.kpi-num {
+			font-size: 1.6rem;
+			font-weight: 800;
+			font-family: 'Poppins', sans-serif;
+			font-variant-numeric: tabular-nums;
+			white-space: nowrap;
 			letter-spacing: 0.5px;
 		}
 
-		.summary p i {
-			margin-right: 8px;
-			color: var(--secondary-color);
-		}
-
-		.summary .income {
+		.kpi-card.kpi-income .kpi-num {
 			color: #00e676;
+			text-shadow: 0 0 12px rgba(0, 230, 118, 0.35);
 		}
 
-		.summary .expense {
+		.kpi-card.kpi-expense .kpi-num {
 			color: #ff6b6b;
+			text-shadow: 0 0 12px rgba(255, 107, 107, 0.35);
 		}
 
-		.summary .balance {
+		.kpi-card.kpi-balance .kpi-num {
 			color: #ffd700;
+			text-shadow: 0 0 15px rgba(255, 215, 0, 0.45);
 		}
 
 		.table-wrapper {
@@ -230,16 +344,16 @@
 			min-height: 380px;
 			overflow: hidden;
 			position: relative;
-			border-radius: 12px;
-			border: 1px solid rgba(255, 215, 0, 0.25);
-			background: rgba(0, 0, 0, 0.2);
-			box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+			border-radius: 14px;
+			border: 1.5px solid rgba(255, 215, 0, 0.35);
+			background: rgba(0, 0, 0, 0.3);
+			box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.5);
 		}
 
 		.keuangan table {
 			width: 100%;
 			border-collapse: collapse;
-			font-size: 1.18rem;
+			font-size: 1.12rem;
 			table-layout: fixed;
 		}
 
@@ -261,6 +375,7 @@
 
 		.keuangan tbody.can-scroll {
 			will-change: transform;
+			/* Kecepatan dibuat sangat smooth & tenang: dihitung otomatis per baris atau fallback 85 detik */
 			animation: scrollUp var(--scroll-duration, 85s) linear infinite; 
 		}
 
@@ -272,31 +387,35 @@
 
 		.keuangan th,
 		.keuangan td {
-			padding: 10px 14px;
-			text-align: left;
-			word-wrap: break-word;
+			padding: 11px 14px;
 			vertical-align: middle;
 		}
 
-		/* Proporsi Lebar Kolom yang Ideal & Seimbang */
-		.keuangan th:nth-child(1), .keuangan td:nth-child(1) { width: 14%; } /* Tanggal */
-		.keuangan th:nth-child(2), .keuangan td:nth-child(2) { width: 32%; } /* Deskripsi */
-		.keuangan th:nth-child(3), .keuangan td:nth-child(3) { width: 14%; text-align: right; } /* Pemasukan */
-		.keuangan th:nth-child(4), .keuangan td:nth-child(4) { width: 14%; text-align: right; } /* Pengeluaran */
-		.keuangan th:nth-child(5), .keuangan td:nth-child(5) { width: 14%; text-align: right; } /* Saldo */
-		.keuangan th:nth-child(6), .keuangan td:nth-child(6) { width: 12%; text-align: center; } /* Kategori */
+		/* Proporsi Lebar Kolom yang Ideal & Seimbang (Bebas Tumpuk) */
+		.keuangan th:nth-child(1), .keuangan td:nth-child(1) { width: 14%; text-align: center; white-space: nowrap !important; } /* Tanggal */
+		.keuangan th:nth-child(2), .keuangan td:nth-child(2) { width: 28%; text-align: left; } /* Deskripsi */
+		.keuangan th:nth-child(3), .keuangan td:nth-child(3) { width: 16%; text-align: right; white-space: nowrap !important; } /* Penerimaan */
+		.keuangan th:nth-child(4), .keuangan td:nth-child(4) { width: 16%; text-align: right; white-space: nowrap !important; } /* Pengeluaran */
+		.keuangan th:nth-child(5), .keuangan td:nth-child(5) { width: 16%; text-align: right; white-space: nowrap !important; } /* Saldo */
+		.keuangan th:nth-child(6), .keuangan td:nth-child(6) { width: 10%; text-align: center; } /* Kategori */
 
 		.keuangan th {
-			background: linear-gradient(180deg, #0f3d2e 0%, #09261c 100%) !important;
+			background: linear-gradient(180deg, #0d3829 0%, #08241a 100%) !important;
 			color: #ffd700;
 			font-weight: 700;
-			font-size: 1.22rem;
+			font-size: 1.15rem;
 			letter-spacing: 0.5px;
 			position: sticky;
 			top: 0;
 			z-index: 5;
 			border-bottom: 2px solid rgba(255, 215, 0, 0.7);
 			box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+		}
+
+		.keuangan th i {
+			color: #ffd700;
+			margin-right: 6px;
+			font-size: 1.05rem;
 		}
 
 		.keuangan tbody:hover {
@@ -309,47 +428,84 @@
 		}
 
 		.keuangan tr.income {
-			background: rgba(0, 230, 118, 0.07);
+			background: rgba(0, 230, 118, 0.05);
 		}
 
 		.keuangan tr.expense {
-			background: rgba(255, 107, 107, 0.07);
+			background: rgba(255, 107, 107, 0.05);
 		}
 
 		.keuangan tr:hover {
-			background: rgba(255, 215, 0, 0.22);
+			background: rgba(255, 215, 0, 0.18);
 		}
 
-		.keuangan td i {
-			margin-right: 8px;
-			color: var(--secondary-color);
+		.keuangan td.col-tanggal {
+			font-size: 1.05rem;
+			font-weight: 500;
+			color: #f1f5f9;
+			white-space: nowrap !important;
 		}
 
-		.keuangan td.amount-income {
+		.keuangan td.col-deskripsi {
+			font-size: 1.08rem;
+			font-weight: 500;
+			color: #ffffff;
+			word-wrap: break-word;
+		}
+
+		.keuangan td.amount-income,
+		.keuangan td.amount-expense,
+		.keuangan td.amount-saldo {
+			white-space: nowrap !important;
+			font-family: 'Poppins', monospace;
+			font-variant-numeric: tabular-nums;
+			letter-spacing: 0.3px;
+		}
+
+		.keuangan td.amount-income .nominal-val {
 			color: #00e676;
 			font-weight: 700;
-			font-family: 'Poppins', monospace;
-			letter-spacing: 0.3px;
+			font-size: 1.15rem;
 		}
 
-		.keuangan td.amount-expense {
+		.keuangan td.amount-expense .nominal-val {
 			color: #ff6b6b;
 			font-weight: 700;
-			font-family: 'Poppins', monospace;
-			letter-spacing: 0.3px;
+			font-size: 1.15rem;
 		}
 
-		.keuangan td.amount-saldo {
+		.keuangan td.amount-saldo .nominal-val {
 			color: #ffd700;
-			font-weight: 700;
-			font-family: 'Poppins', monospace;
-			letter-spacing: 0.3px;
+			font-weight: 800;
+			font-size: 1.20rem;
+			text-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
 		}
 
-		.keuangan td.badge-kategori {
-			font-size: 0.92rem;
-			color: #ffffff;
-			opacity: 0.9;
+		.rp-prefix {
+			font-size: 0.82em;
+			font-weight: 600;
+			margin-right: 4px;
+			opacity: 0.85;
+			display: inline-block;
+		}
+
+		.dash-empty {
+			color: rgba(255, 255, 255, 0.28);
+			font-size: 1.25rem;
+			font-weight: 700;
+			display: inline-block;
+		}
+
+		.badge-kategori-pill {
+			display: inline-block;
+			padding: 3px 12px;
+			border-radius: 20px;
+			font-size: 0.86rem;
+			font-weight: 600;
+			background: rgba(255, 255, 255, 0.08);
+			color: #f1f5f9;
+			border: 1px solid rgba(255, 215, 0, 0.3);
+			letter-spacing: 0.3px;
 		}
 
 		.no-data {
@@ -365,10 +521,9 @@
 		}
 
 		@media (max-width: 1024px) {
-			.summary {
-				flex-direction: column;
-				gap: 4px;
-				text-align: center;
+			.summary-grid {
+				grid-template-columns: 1fr;
+				gap: 10px;
 			}
 		}
 	</style>
@@ -393,21 +548,51 @@
 					<span>Rincian Keuangan Kas Ambulance</span>
 					<i class="fas fa-ambulance"></i>
 				</h2>
-				<div class="summary">
-					<p class="income"><i class="fas fa-coins"></i> Total Penerimaan: Rp {{ number_format($totalPemasukan, 2, ',', '.') }}</p>
-					<p class="expense"><i class="fas fa-coins"></i> Total Pengeluaran: Rp {{ number_format($totalPengeluaran, 2, ',', '.') }}</p>
-					<p class="balance"><i class="fas fa-coins"></i> Saldo: Rp {{ number_format($saldo, 2, ',', '.') }}</p>
+				
+				<!-- KPI SUMMARY CARDS: BERSIH, MEWAH & BEBAS TUMPUK -->
+				<div class="summary-grid">
+					<div class="kpi-card kpi-income">
+						<div class="kpi-icon"><i class="fas fa-arrow-circle-down"></i></div>
+						<div class="kpi-body">
+							<span class="kpi-title">Total Penerimaan</span>
+							<div class="kpi-amount">
+								<span class="kpi-rp">Rp</span>
+								<span class="kpi-num">{{ ($totalPemasukan == round($totalPemasukan)) ? number_format($totalPemasukan, 0, ',', '.') : number_format($totalPemasukan, 2, ',', '.') }}</span>
+							</div>
+						</div>
+					</div>
+					<div class="kpi-card kpi-expense">
+						<div class="kpi-icon"><i class="fas fa-arrow-circle-up"></i></div>
+						<div class="kpi-body">
+							<span class="kpi-title">Total Pengeluaran</span>
+							<div class="kpi-amount">
+								<span class="kpi-rp">Rp</span>
+								<span class="kpi-num">{{ ($totalPengeluaran == round($totalPengeluaran)) ? number_format($totalPengeluaran, 0, ',', '.') : number_format($totalPengeluaran, 2, ',', '.') }}</span>
+							</div>
+						</div>
+					</div>
+					<div class="kpi-card kpi-balance">
+						<div class="kpi-icon"><i class="fas fa-wallet"></i></div>
+						<div class="kpi-body">
+							<span class="kpi-title">Sisa Saldo Kas</span>
+							<div class="kpi-amount">
+								<span class="kpi-rp">Rp</span>
+								<span class="kpi-num">{{ ($saldo == round($saldo)) ? number_format($saldo, 0, ',', '.') : number_format($saldo, 2, ',', '.') }}</span>
+							</div>
+						</div>
+					</div>
 				</div>
+
 				<div class="table-wrapper">
 					<table id="keuangan-table">
 						<thead>
 							<tr>
-								<th>Tanggal</th>
-								<th>Deskripsi</th>
-								<th>Penerimaan</th>
-								<th>Pengeluaran</th>
-								<th>Saldo</th>
-								<th class="kategori">Kategori</th>
+								<th><i class="fas fa-calendar-alt"></i> Tanggal</th>
+								<th><i class="fas fa-file-invoice"></i> Deskripsi Transaksi</th>
+								<th><i class="fas fa-arrow-circle-down"></i> Penerimaan</th>
+								<th><i class="fas fa-arrow-circle-up"></i> Pengeluaran</th>
+								<th><i class="fas fa-wallet"></i> Saldo Kas</th>
+								<th class="kategori"><i class="fas fa-tag"></i> Kategori</th>
 							</tr>
 						</thead>
 						@php
@@ -422,16 +607,31 @@
 							@else
 								@foreach ($keuangan as $item)
 									<tr class="{{ $item->pemasukan > 0 ? 'income' : 'expense' }}">
-										<td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
-										<td><i class="fas {{ $item->pemasukan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}"></i> {{ $item->deskripsi }}</td>
-										<td class="amount-income" style="{{ $item->pemasukan > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
-											Rp {{ number_format($item->pemasukan, 2, ',', '.') }}
+										<td class="col-tanggal">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
+										<td class="col-deskripsi">
+											<i class="fas {{ $item->pemasukan > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}" style="color: {{ $item->pemasukan > 0 ? '#00e676' : '#ff6b6b' }}; margin-right: 8px;"></i>
+											{{ $item->deskripsi }}
 										</td>
-										<td class="amount-expense" style="{{ $item->pengeluaran > 0 ? '' : 'opacity: 0.35; font-weight: normal;' }}">
-											Rp {{ number_format($item->pengeluaran, 2, ',', '.') }}
+										<td class="amount-income">
+											@if($item->pemasukan > 0)
+												<span class="rp-prefix">Rp</span><span class="nominal-val">{{ ($item->pemasukan == round($item->pemasukan)) ? number_format($item->pemasukan, 0, ',', '.') : number_format($item->pemasukan, 2, ',', '.') }}</span>
+											@else
+												<span class="dash-empty">-</span>
+											@endif
 										</td>
-										<td class="amount-saldo">Rp {{ number_format($item->saldo, 2, ',', '.') }}</td>
-										<td class="badge-kategori">{{ $item->kategori ?? '-' }}</td>
+										<td class="amount-expense">
+											@if($item->pengeluaran > 0)
+												<span class="rp-prefix">Rp</span><span class="nominal-val">{{ ($item->pengeluaran == round($item->pengeluaran)) ? number_format($item->pengeluaran, 0, ',', '.') : number_format($item->pengeluaran, 2, ',', '.') }}</span>
+											@else
+												<span class="dash-empty">-</span>
+											@endif
+										</td>
+										<td class="amount-saldo">
+											<span class="rp-prefix">Rp</span><span class="nominal-val">{{ ($item->saldo == round($item->saldo)) ? number_format($item->saldo, 0, ',', '.') : number_format($item->saldo, 2, ',', '.') }}</span>
+										</td>
+										<td class="col-kategori">
+											<span class="badge-kategori-pill">{{ $item->kategori ?? '-' }}</span>
+										</td>
 									</tr>
 								@endforeach
 							@endif
