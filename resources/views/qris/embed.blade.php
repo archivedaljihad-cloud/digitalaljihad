@@ -71,7 +71,7 @@
 		.header {
 			text-align: center;
 			margin-top: 0;
-			margin-bottom: 12px;
+			margin-bottom: 22px;
 			flex-shrink: 0;
 			position: relative;
 		}
@@ -146,7 +146,7 @@
 			justify-content: center;
 			align-items: center;
 			min-height: 0;
-			padding: 6px 0 10px 0;
+			padding: 4px 0 10px 0;
 		}
 
 		/* QRIS Card - Layout 2 Kolom */
@@ -158,7 +158,7 @@
 			border: 1.5px solid rgba(255, 215, 0, 0.45);
 			box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
 			width: 100%;
-			max-width: 1320px;
+			max-width: 1280px;
 			overflow: hidden;
 			transition: transform 0.3s ease, box-shadow 0.3s ease;
 			animation: fadeInUp 0.6s ease-out;
@@ -167,7 +167,7 @@
 		/* Header Card - Judul Center di Tengah */
 		.qris-header {
 			background: linear-gradient(135deg, rgba(0, 0, 0, 0.45), rgba(4, 25, 18, 0.6));
-			padding: 13px 28px;
+			padding: 10px 24px;
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -176,10 +176,10 @@
 		}
 
 		.qris-header h2 {
-			font-size: 2.1rem;
+			font-size: 1.65rem;
 			font-weight: 800;
 			color: #ffffff !important;
-			letter-spacing: 2px;
+			letter-spacing: 1.8px;
 			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 			white-space: nowrap !important;
 			margin: 0 auto;
@@ -190,7 +190,8 @@
 
 		.qris-header h2 i {
 			color: #ffd700;
-			margin-right: 12px;
+			font-size: 1.65rem;
+			margin-right: 10px;
 			animation: pulse 2s ease infinite;
 			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
@@ -209,9 +210,9 @@
 
 		/* Body Card - Layout 2 Kolom */
 		.qris-body {
-			padding: 18px 30px 16px 30px;
+			padding: 15px 28px 12px 28px;
 			display: flex;
-			gap: 30px;
+			gap: 25px;
 			flex-wrap: nowrap;
 			align-items: center;
 		}
@@ -229,18 +230,18 @@
 			background: rgba(3, 22, 16, 0.75);
 			border: 1.5px solid rgba(255, 215, 0, 0.4);
 			border-radius: 16px;
-			padding: 14px 18px;
-			margin-bottom: 14px;
+			padding: 12px 18px;
+			margin-bottom: 11px;
 			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 			backdrop-filter: blur(8px);
 			-webkit-backdrop-filter: blur(8px);
 		}
 
 		.qris-main-instruction {
-			font-size: 1.08rem;
-			line-height: 1.5;
+			font-size: 1.02rem;
+			line-height: 1.45;
 			color: #ffffff;
-			margin-bottom: 10px;
+			margin-bottom: 8px;
 			text-align: justify;
 			letter-spacing: 0.3px;
 		}
@@ -249,8 +250,8 @@
 			background: linear-gradient(135deg, rgba(255, 170, 0, 0.16), rgba(255, 82, 82, 0.18));
 			border-left: 4px solid #ffd700;
 			border-radius: 10px;
-			padding: 8px 12px;
-			margin-bottom: 8px;
+			padding: 6px 12px;
+			margin-bottom: 6px;
 			display: flex;
 			align-items: center;
 			gap: 10px;
@@ -258,14 +259,14 @@
 
 		.qris-warning-icon {
 			color: #ffd700;
-			font-size: 1.3rem;
+			font-size: 1.2rem;
 			flex-shrink: 0;
 			animation: pulse 2s infinite;
 		}
 
 		.qris-warning-text {
-			font-size: 1.02rem;
-			line-height: 1.45;
+			font-size: 0.96rem;
+			line-height: 1.4;
 			color: #ffffff;
 		}
 
@@ -279,7 +280,7 @@
 		.qris-warning-name {
 			color: #ffd700;
 			font-weight: 800;
-			font-size: 1.1rem;
+			font-size: 1.02rem;
 			letter-spacing: 0.5px;
 			text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
 			display: inline-block;
@@ -293,11 +294,11 @@
 
 		.qris-gratitude {
 			text-align: center;
-			margin-top: 4px;
-			padding-top: 6px;
+			margin-top: 3px;
+			padding-top: 4px;
 			border-top: 1px dashed rgba(255, 215, 0, 0.3);
 			font-family: 'Poppins', sans-serif;
-			font-size: 1.15rem;
+			font-size: 1.05rem;
 			font-weight: 700;
 			font-style: italic;
 			color: #ffd700;
@@ -309,29 +310,29 @@
 		.bank-info {
 			background: rgba(0, 0, 0, 0.35);
 			border-radius: 14px;
-			padding: 14px 18px;
+			padding: 10px 16px;
 			text-align: left;
 			border-left: 5px solid #ffd700;
-			margin-bottom: 14px;
+			margin-bottom: 11px;
 		}
 
 		.bank-info h4 {
 			color: #ffd700;
-			margin-bottom: 10px;
-			font-size: 0.98rem;
+			margin-bottom: 6px;
+			font-size: 0.94rem;
 			display: flex;
 			align-items: center;
 			gap: 10px;
 		}
 
 		.bank-info p {
-			margin: 6px 0;
+			margin: 3px 0;
 			color: rgba(255, 255, 255, 0.9);
-			font-size: 0.88rem;
+			font-size: 0.86rem;
 			display: flex;
 			align-items: center;
 			gap: 12px;
-			padding: 4px 0;
+			padding: 2px 0;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 		}
 
@@ -355,9 +356,9 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 8px;
-			padding: 7px 20px;
+			padding: 5px 18px;
 			border-radius: 30px;
-			font-size: 0.82rem;
+			font-size: 0.80rem;
 			font-weight: 600;
 			background: rgba(0, 230, 118, 0.2);
 			color: #00e676;
@@ -396,7 +397,7 @@
 		}
 
 		.qris-image img {
-			max-width: 305px;
+			max-width: 280px;
 			width: 100%;
 			height: auto;
 			border-radius: 18px;
@@ -415,8 +416,8 @@
 		}
 
 		.scan-hint {
-			margin-top: 10px;
-			font-size: 0.98rem;
+			margin-top: 8px;
+			font-size: 0.90rem;
 			font-weight: 500;
 			color: #ffd700;
 			display: flex;
