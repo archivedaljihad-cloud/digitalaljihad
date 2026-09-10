@@ -301,13 +301,11 @@
 		}
 
 		.pie-top-face {
-			stroke: rgba(255, 255, 255, 0.5);
-			stroke-width: 1.2;
+			stroke: none;
 		}
 
 		.pie-wall {
-			stroke: rgba(0, 0, 0, 0.3);
-			stroke-width: 0.5;
+			stroke: none;
 		}
 
 		/* LEGEND KEUANGAN 3D (BAWAH GRAFIK) */
@@ -631,6 +629,31 @@
 				return "#" + (0x1000000 + R*0x10000 + G*0x100 + B).toString(16).slice(1);
 			}
 
+			// Helper to find intervals of [startA, endA] where sin(angle) >= 0 (Front Hemisphere)
+			function getFrontIntervals(startA, endA) {
+				const kMin = Math.ceil(startA / Math.PI);
+				const kMax = Math.floor(endA / Math.PI);
+				const points = [startA];
+				for (let k = kMin; k <= kMax; k++) {
+					const p = k * Math.PI;
+					if (p > startA && p < endA) {
+						points.push(p);
+					}
+				}
+				points.push(endA);
+
+				const intervals = [];
+				for (let i = 0; i < points.length - 1; i++) {
+					const a1 = points[i];
+					const a2 = points[i + 1];
+					const mid = (a1 + a2) / 2;
+					if (Math.sin(mid) > 0.0001) {
+						intervals.push({ start: a1, end: a2 });
+					}
+				}
+				return intervals;
+			}
+
 			// Compute slice angles (starting from -90 deg / 12 o'clock)
 			let currentAngle = -Math.PI / 2;
 			const slices = items.map((item, idx) => {
@@ -656,21 +679,40 @@
 			let svgHtml = `
 			<svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">
 				<defs>
+					<filter id="pieSoftShadowFilter" x="-20%" y="-20%" width="140%" height="140%">
+						<feGaussianBlur in="SourceGraphic" stdDeviation="12" />
+					</filter>
 					${slices.map(s => `
+						<!-- Top Face Gradient: Smooth specular illumination, no harsh lines -->
 						<linearGradient id="topGrad_${s.index}" x1="0%" y1="0%" x2="100%" y2="100%">
-							<stop offset="0%" stop-color="${shade(s.color, 28)}" />
+							<stop offset="0%" stop-color="${shade(s.color, 24)}" />
 							<stop offset="50%" stop-color="${s.color}" />
-							<stop offset="100%" stop-color="${shade(s.color, -16)}" />
+							<stop offset="100%" stop-color="${shade(s.color, -10)}" />
 						</linearGradient>
-						<linearGradient id="radialGrad_${s.index}" x1="0%" y1="0%" x2="100%" y2="0%">
+
+						<!-- Front Curved Rim Gradient: Seamless cylindrical 3D lighting without lines -->
+						<linearGradient id="rimGrad_${s.index}" x1="0%" y1="0%" x2="100%" y2="0%">
+							<stop offset="0%" stop-color="${shade(s.color, -12)}" />
+							<stop offset="35%" stop-color="${shade(s.color, +8)}" />
+							<stop offset="70%" stop-color="${shade(s.color, -18)}" />
+							<stop offset="100%" stop-color="${shade(s.color, -38)}" />
+						</linearGradient>
+
+						<!-- Radial Cut Wall Gradients (Start & End Walls) -->
+						<linearGradient id="cutGradStart_${s.index}" x1="0%" y1="0%" x2="0%" y2="100%">
 							<stop offset="0%" stop-color="${shade(s.color, -15)}" />
-							<stop offset="100%" stop-color="${shade(s.color, -42)}" />
+							<stop offset="100%" stop-color="${shade(s.color, -35)}" />
+						</linearGradient>
+						<linearGradient id="cutGradEnd_${s.index}" x1="0%" y1="0%" x2="0%" y2="100%">
+							<stop offset="0%" stop-color="${shade(s.color, -18)}" />
+							<stop offset="100%" stop-color="${shade(s.color, -38)}" />
 						</linearGradient>
 					`).join('')}
 				</defs>
 
 				<!-- Soft 3D Drop Shadow under entire pie -->
-				<ellipse cx="${centerX}" cy="${centerY + depth + 16}" rx="${radiusX * 1.06}" ry="${radiusY * 1.06}" fill="rgba(0,0,0,0.45)" style="filter: blur(12px);" />
+				<ellipse cx="${centerX}" cy="${centerY + depth + 14}" rx="${radiusX * 1.05}" ry="${radiusY * 1.05}"
+						 fill="rgba(0,0,0,0.5)" filter="url(#pieSoftShadowFilter)" />
 			`;
 
 			sortedSlices.forEach(s => {
@@ -688,50 +730,41 @@
 
 				let sliceSvg = `<g class="pie-slice-group" id="slice_${s.index}" data-index="${s.index}">`;
 
-				// 1. Radial Wall at start angle (visible if cos(startAngle) < 0.05)
+				// 1. Radial Cut Wall at start angle (visible if cos(startAngle) < 0.05)
 				if (Math.cos(s.startAngle) < 0.05) {
 					sliceSvg += `
 						<path class="pie-wall" d="M ${cx},${cy} L ${x1},${y1} L ${x1},${y1 + depth} L ${cx},${cy + depth} Z"
-							  fill="url(#radialGrad_${s.index})" />
+							  fill="url(#cutGradStart_${s.index})" />
 					`;
 				}
 
-				// 2. Radial Wall at end angle (visible if cos(endAngle) > -0.05)
+				// 2. Radial Cut Wall at end angle (visible if cos(endAngle) > -0.05)
 				if (Math.cos(s.endAngle) > -0.05) {
 					sliceSvg += `
 						<path class="pie-wall" d="M ${cx},${cy} L ${x2},${y2} L ${x2},${y2 + depth} L ${cx},${cy + depth} Z"
-							  fill="url(#radialGrad_${s.index})" />
+							  fill="url(#cutGradEnd_${s.index})" />
 					`;
 				}
 
-				// 3. Cylinder Outer Rim (curved front wall between angles facing viewer where sin > 0)
-				const numSteps = 45;
-				let arcSteps = [];
-				for (let i = 0; i <= numSteps; i++) {
-					const a = s.startAngle + (s.span * i) / numSteps;
-					arcSteps.push({
-						a: a,
-						x: cx + radiusX * Math.cos(a),
-						y: cy + radiusY * Math.sin(a),
-						sin: Math.sin(a)
-					});
-				}
+				// 3. PURE SMOOTH CURVED OUTER CYLINDER RIM (Single continuous path per front arc - ZERO lines!)
+				const frontArcs = getFrontIntervals(s.startAngle, s.endAngle);
+				frontArcs.forEach(arc => {
+					if (arc.end - arc.start < 0.005) return;
+					const ax1 = cx + radiusX * Math.cos(arc.start);
+					const ay1 = cy + radiusY * Math.sin(arc.start);
+					const ax2 = cx + radiusX * Math.cos(arc.end);
+					const ay2 = cy + radiusY * Math.sin(arc.end);
 
-				for (let i = 0; i < numSteps; i++) {
-					const p1 = arcSteps[i];
-					const p2 = arcSteps[i+1];
-					const midA = (p1.a + p2.a) / 2;
-
-					if (Math.sin(midA) > -0.02) {
-						// Light calculation from top-left
-						const light = Math.sin(midA) * 0.4 + Math.cos(midA) * 0.2;
-						const segShade = shade(s.color, -30 + light * 25);
-						sliceSvg += `
-							<polygon class="pie-wall" points="${p1.x},${p1.y} ${p2.x},${p2.y} ${p2.x},${p2.y + depth} ${p1.x},${p1.y + depth}"
-									 fill="${segShade}" stroke="${segShade}" stroke-width="0.6" />
-						`;
-					}
-				}
+					sliceSvg += `
+						<path class="pie-wall"
+							  d="M ${ax1},${ay1} 
+							     A ${radiusX},${radiusY} 0 0,1 ${ax2},${ay2} 
+							     L ${ax2},${ay2 + depth} 
+							     A ${radiusX},${radiusY} 0 0,0 ${ax1},${ay1 + depth} 
+							     Z"
+							  fill="url(#rimGrad_${s.index})" />
+					`;
+				});
 
 				// 4. Top Elliptical Face (tanpa teks apapun di dalam grafik)
 				sliceSvg += `
