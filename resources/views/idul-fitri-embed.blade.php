@@ -185,8 +185,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 24px;
-			max-width: 1080px;
+			gap: 22px;
+			max-width: 1000px;
 			width: 100%;
 			margin: 0 auto;
 			flex: 1;
