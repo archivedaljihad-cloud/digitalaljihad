@@ -160,35 +160,34 @@
 		}
 
 		.keuangan h2 {
-			font-size: 2.05rem;
-			margin-bottom: 12px;
-			padding-bottom: 8px;
-			position: relative;
-			color: var(--secondary-color);
+			font-size: 1.85rem;
+			font-weight: 700;
+			letter-spacing: 1.5px;
+			margin: 0 auto 16px auto;
+			padding: 7px 32px;
+			color: #ffffff !important;
 			text-align: center;
-			text-shadow: 0 2px 5px rgba(0,0,0,0.6);
-			display: flex;
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+			display: inline-flex;
 			align-items: center;
 			justify-content: center;
 			gap: 16px;
+			align-self: center;
+			background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+			border: 1.5px solid rgba(255, 215, 0, 0.65);
+			border-radius: 35px;
+			box-shadow: 
+				0 8px 25px rgba(0, 0, 0, 0.65),
+				0 0 20px rgba(255, 215, 0, 0.25),
+				inset 0 1px 1px rgba(255, 255, 255, 0.2);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
 		}
 
 		.keuangan h2 i.fa-ambulance {
 			color: #ffd700;
-			font-size: 1.85rem;
-			filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.75));
-		}
-
-		.keuangan h2:after {
-			content: '';
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
-			bottom: 0;
-			width: 560px;
-			height: 3px;
-			background: var(--secondary-color);
-			border-radius: 3px;
+			font-size: 1.65rem;
+			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
 
 		.summary {

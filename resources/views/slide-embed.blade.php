@@ -277,23 +277,25 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(0, 230, 118, 0.22));
-            border: 1px solid rgba(255, 215, 0, 0.5);
-            color: #ffd700;
-            padding: 7px 22px;
-            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            color: #ffffff !important;
+            padding: 7px 24px;
+            border-radius: 35px;
             font-size: 0.95rem;
             font-weight: 700;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 18px;
             align-self: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.25);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
         }
 
         .slide-badge i {
             color: #ffd700;
             font-size: 0.95rem;
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.65));
         }
 
         .card-text-wrapper {

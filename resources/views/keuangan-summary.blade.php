@@ -236,13 +236,29 @@
 			flex-direction: column;
 		}
 
+		.chart-container h3,
+		.transactions-container h3 {
+			font-size: 1.1rem;
+			font-weight: 700;
+			letter-spacing: 1px;
+			margin-bottom: 8px;
+			color: #ffffff !important;
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
 		.chart-container h3 {
 			text-align: left;
-			padding-left: 10px;
-			font-size: 0.9rem;
-			margin-bottom: 8px;
+			padding-left: 8px;
+		}
+
+		.chart-container h3 i,
+		.transactions-container h3 i {
 			color: #ffd700;
-			flex-shrink: 0;
+			filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
 		}
 
 		.chart-wrapper {
@@ -261,7 +277,6 @@
 			max-height: 100% !important;
 		}
 
-
 		.transactions-container {
 			background: rgba(0, 0, 0, 0.35);
 			backdrop-filter: blur(10px);
@@ -270,13 +285,6 @@
 			border: 1px solid rgba(255, 215, 0, 0.2);
 			display: flex;
 			flex-direction: column;
-		}
-
-		.transactions-container h3 {
-			font-size: 0.9rem;
-			margin-bottom: 8px;
-			color: #ffd700;
-			flex-shrink: 0;
 		}
 
 		.transaction-list {

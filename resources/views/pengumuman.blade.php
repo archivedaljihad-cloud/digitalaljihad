@@ -169,28 +169,28 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 12px;
-			background: linear-gradient(135deg, rgba(255, 215, 0, 0.28), rgba(0, 230, 118, 0.22));
-			padding: 8px 24px;
-			border-radius: 30px;
-			border: 1.5px solid rgba(255, 215, 0, 0.6);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-			backdrop-filter: blur(8px);
-			-webkit-backdrop-filter: blur(8px);
+			background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+			padding: 8px 26px;
+			border-radius: 35px;
+			border: 1.5px solid rgba(255, 215, 0, 0.65);
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.25);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
 		}
 
 		.page-title-badge i {
 			font-size: 1.38rem;
-			color: #ffffff;
-			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+			color: #ffd700;
+			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
 
 		.page-title-badge span {
 			font-size: 1.38rem;
 			font-weight: 700;
 			color: #ffffff !important;
-			letter-spacing: 1.2px;
+			letter-spacing: 1.5px;
 			text-transform: uppercase;
-			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 		}
 
 		.date-badge {
@@ -300,7 +300,7 @@
 			font-size: 2.7rem;
 			font-weight: 800;
 			line-height: 1.25;
-			color: #ffd700;
+			color: #ffffff !important;
 			text-shadow: 
 				0 2px 4px rgba(0, 0, 0, 1),
 				0 4px 14px rgba(0, 0, 0, 0.95),

@@ -128,45 +128,56 @@
 			align-items: center;
 			justify-content: center;
 			gap: 22px;
+			background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+			border: 1.5px solid rgba(255, 215, 0, 0.65);
+			border-radius: 40px;
+			padding: 8px 30px;
+			box-shadow: 
+				0 8px 25px rgba(0, 0, 0, 0.65),
+				0 0 20px rgba(255, 215, 0, 0.25),
+				inset 0 1px 1px rgba(255, 255, 255, 0.2);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
 		}
 
 		.title-icon-badge {
-			width: 64px;
-			height: 64px;
+			width: 60px;
+			height: 60px;
 			border-radius: 50%;
-			background: rgba(4, 25, 18, 0.78);
-			border: 1.5px solid rgba(255, 215, 0, 0.55);
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.25);
+			background: rgba(4, 25, 18, 0.9);
+			border: 1.5px solid rgba(255, 215, 0, 0.6);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.25);
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			backdrop-filter: blur(8px);
-			-webkit-backdrop-filter: blur(8px);
 			flex-shrink: 0;
 		}
 
 		.title-icon-badge img {
-			width: 42px;
-			height: 42px;
+			width: 40px;
+			height: 40px;
 			object-fit: contain;
-			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
 
 		.title-text-wrap h2 {
-			font-size: 2.2rem;
-			color: #ffd700;
-			letter-spacing: 1.5px;
+			font-size: 2.1rem;
+			color: #ffffff !important;
+			letter-spacing: 2px;
 			font-weight: 700;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 			margin: 0;
 			line-height: 1.15;
 		}
 
 		.title-text-wrap p {
-			font-size: 1.05rem;
-			color: rgba(255, 255, 255, 0.88);
+			font-size: 1rem;
+			color: #ffd700;
+			letter-spacing: 0.5px;
+			font-weight: 500;
 			margin-top: 3px;
 			margin-bottom: 0;
+			text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 		}
 
 		/* LAYOUT KONTEN: FOTO IMAM DI KIRI (KOTAK NO 3) & INFO DI KANAN */

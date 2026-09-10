@@ -225,9 +225,9 @@
 		.qris-header h2 {
 			font-size: 2rem;
 			font-weight: 700;
-			color: #ffd700;
+			color: #ffffff !important;
 			letter-spacing: 1.5px;
-			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 			white-space: nowrap !important;
 			margin: 0;
 			display: flex;
@@ -235,8 +235,10 @@
 		}
 
 		.qris-header h2 i {
+			color: #ffd700;
 			margin-right: 12px;
 			animation: pulse 2s ease infinite;
+			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
 
 		@keyframes pulse {

@@ -206,15 +206,16 @@
             margin-bottom: 15px;
             padding-bottom: 8px;
             position: relative;
-            color: var(--secondary-color);
+            color: #ffffff !important;
             display: flex;
             align-items: center;
             gap: 10px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
         }
 
         .panel h2 i {
-            animation: spin 5s linear infinite;
+            color: #ffd700;
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.65));
         }
 
         @keyframes spin {
