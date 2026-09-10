@@ -358,14 +358,15 @@
 		th {
 			position: sticky;
 			top: 0;
-			z-index: 10;
-			background: rgba(3, 20, 15, 0.95);
+			z-index: 20;
+			background: #03140f !important;
 			color: #ffd700;
 			font-size: 1.15rem;
 			font-weight: 700;
 			letter-spacing: 1px;
 			padding: 10px 14px;
-			border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+			border-bottom: 2px solid rgba(255, 215, 0, 0.65);
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 		}
 
@@ -578,22 +579,32 @@
 		updateDateTime();
 	</script>
 
-	<!-- Script Infinite Seamless Vertical Auto-Scroll -->
+	<!-- Script Infinite Seamless Vertical Auto-Scroll (Hanya Berjalan Jika Data Melebihi Layar) -->
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			const container = document.getElementById('scrollContainer');
 			const tbody = document.getElementById('tableBody');
 			if (!container || !tbody) return;
 
-			// Jika baris donatur mencukupi, gandakan baris untuk loop tak terhingga
-			const originalRows = tbody.querySelectorAll('tr');
-			if (originalRows.length > 5) {
+			function initAutoScroll() {
+				// Cek apakah data melebihi tinggi area pandang tabel (overflow)
+				// Jika data donatur masih muat (seperti 6 donatur saat ini), JANGAN di-scroll dan JANGAN digandakan!
+				const isOverflowing = tbody.scrollHeight > (container.clientHeight + 10);
+				if (!isOverflowing) {
+					container.scrollTop = 0;
+					return;
+				}
+
+				// HANYA jika data panjang dan melebihi batas layar, gandakan untuk loop animasi yang mulus
+				const originalRows = Array.from(tbody.querySelectorAll('tr'));
+				if (originalRows.length <= 1) return;
+
 				originalRows.forEach(row => {
 					const clone = row.cloneNode(true);
 					tbody.appendChild(clone);
 				});
 
-				let scrollSpeed = 0.6; // Kecepatan scroll tenang & mudah dibaca jamaah
+				let scrollSpeed = 0.5; // Kecepatan scroll sangat tenang & mudah dibaca jamaah
 				let isPaused = false;
 
 				container.addEventListener('mouseenter', () => isPaused = true);
@@ -603,7 +614,7 @@
 					if (!isPaused) {
 						container.scrollTop += scrollSpeed;
 						// Bila telah mencapai setengah konten (batas clone)
-						if (container.scrollTop >= (tbody.offsetHeight / 2)) {
+						if (container.scrollTop >= (tbody.scrollHeight / 2)) {
 							container.scrollTop = 0;
 						}
 					}
@@ -611,6 +622,9 @@
 				}
 				requestAnimationFrame(autoScroll);
 			}
+
+			// Beri jeda sejenak agar rendering layout & font selesai sempurna sebelum menghitung tinggi elemen
+			setTimeout(initAutoScroll, 350);
 		});
 	</script>
 
