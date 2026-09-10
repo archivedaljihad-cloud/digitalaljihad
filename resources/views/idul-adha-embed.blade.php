@@ -185,8 +185,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 24px;
-			max-width: 1080px;
+			gap: 22px;
+			max-width: 1000px;
 			width: 100%;
 			margin: 0 auto;
 			flex: 1;
@@ -373,9 +373,9 @@
 			color: #ffffff;
 		}
 
-		/* Custom Theme Background Spesifik Sholat Idul Adha */
+		/* Custom Theme Background Spesifik Sholat Idul Adha (Flipped: Hewan di Kanan, Masjid di Kiri) */
 		.display-background {
-			background-image: url('{{ asset("image/display/background/bg_idul_adha.jpg") }}') !important;
+			background-image: url('{{ asset("image/display/background/bg_idul_adha.jpg") }}?v={{ time() }}') !important;
 			background-position: center center !important;
 			background-repeat: no-repeat !important;
 			background-size: cover !important;
@@ -547,11 +547,11 @@
 		setInterval(updateDateTime, 1000);
 	</script>
 
-	<!-- Script Background Khusus Idul Adha (Gambar Pilihan DKM) -->
+	<!-- Script Background Khusus Idul Adha (Gambar Pilihan DKM - Hewan di Kanan) -->
 	<script>
 		const bgElement = document.querySelector('.display-background') || document.body;
 		if (bgElement) {
-			bgElement.style.setProperty('background-image', "url('{{ asset('image/display/background/bg_idul_adha.jpg') }}')", 'important');
+			bgElement.style.setProperty('background-image', "url('{{ asset('image/display/background/bg_idul_adha.jpg') }}?v={{ time() }}')", 'important');
 			bgElement.style.setProperty('background-size', 'cover', 'important');
 			bgElement.style.setProperty('background-position', 'center center', 'important');
 			bgElement.style.setProperty('background-repeat', 'no-repeat', 'important');

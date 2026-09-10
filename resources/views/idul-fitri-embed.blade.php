@@ -375,7 +375,7 @@
 
 		/* Custom Theme Background Spesifik Sholat Idul Fitri */
 		.display-background {
-			background-image: url('{{ asset("image/display/background/bg_idul_fitri.jpg") }}') !important;
+			background-image: url('{{ asset("image/display/background/bg_idul_fitri.jpg") }}?v={{ time() }}') !important;
 			background-position: center center !important;
 			background-repeat: no-repeat !important;
 			background-size: cover !important;
@@ -551,7 +551,7 @@
 	<script>
 		const bgElement = document.querySelector('.display-background') || document.body;
 		if (bgElement) {
-			bgElement.style.setProperty('background-image', "url('{{ asset('image/display/background/bg_idul_fitri.jpg') }}')", 'important');
+			bgElement.style.setProperty('background-image', "url('{{ asset('image/display/background/bg_idul_fitri.jpg') }}?v={{ time() }}')", 'important');
 			bgElement.style.setProperty('background-size', 'cover', 'important');
 			bgElement.style.setProperty('background-position', 'center center', 'important');
 			bgElement.style.setProperty('background-repeat', 'no-repeat', 'important');
