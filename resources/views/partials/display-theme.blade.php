@@ -259,11 +259,9 @@ h2.sub-header {
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
 }
 
-/* Penataan khusus datetime di dalam Header Card (QRIS, Idul Fitri, Idul Adha) */
-.qris-header .datetime,
+/* Penataan khusus datetime di dalam Header Card (Idul Fitri, Idul Adha) */
 .idul-header .datetime,
 .header-clock .datetime,
-.qris-card .datetime,
 .idul-card .datetime {
     display: inline-flex !important;
     flex-direction: column !important;
@@ -280,10 +278,8 @@ h2.sub-header {
     flex-shrink: 0 !important;
 }
 
-.qris-header .datetime .dt-date-row,
 .idul-header .datetime .dt-date-row,
 .header-clock .datetime .dt-date-row,
-.qris-card .datetime .dt-date-row,
 .idul-card .datetime .dt-date-row {
     display: inline-flex !important;
     align-items: center !important;
@@ -292,18 +288,14 @@ h2.sub-header {
     font-weight: 600 !important;
 }
 
-.qris-header .datetime .dt-sep-time,
 .idul-header .datetime .dt-sep-time,
 .header-clock .datetime .dt-sep-time,
-.qris-card .datetime .dt-sep-time,
 .idul-card .datetime .dt-sep-time {
     display: none !important;
 }
 
-.qris-header .datetime .dt-time-row,
 .idul-header .datetime .dt-time-row,
 .header-clock .datetime .dt-time-row,
-.qris-card .datetime .dt-time-row,
 .idul-card .datetime .dt-time-row {
     display: inline-flex !important;
     align-items: center !important;
@@ -316,7 +308,6 @@ h2.sub-header {
     text-align: right !important;
 }
 
-.qris-header .datetime .dt-time-row::before,
 .idul-header .datetime .dt-time-row::before,
 .header-clock .datetime .dt-time-row::before {
     content: "\f017";

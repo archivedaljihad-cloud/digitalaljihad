@@ -12,23 +12,6 @@
 	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}">
 	@include('partials.display-theme')
 	<style>
-		/* Mengecilkan tinggi dan jarak padding pada container utama QRIS */
-		.container,
-		.main-card,
-		.card,
-		.content-wrapper {
-			padding-top: 0px !important;
-			padding-bottom: 0px !important;
-			margin-top: 0px !important;
-		}
-
-		/* Jika kontainer QRIS memiliki kelas spesifik */
-		.qris-container,
-		.panel-qris {
-			padding: 0px !important;
-			margin-top: 25px !important;
-		}
-
 		* {
 			margin: 0;
 			padding: 0;
@@ -69,19 +52,22 @@
 			left: 30px;
 		}
 
-		/* Container Utama - Fullscreen */
+		/* Container Utama - Fullscreen & Pixel-Locked */
 		.container {
 			position: relative;
 			z-index: 1;
 			height: 100vh;
 			width: 100%;
+			max-width: 1600px;
+			margin: 0 auto;
 			display: flex;
 			flex-direction: column;
+			justify-content: space-between;
 			padding: 10px 25px 85px 25px;
 			box-sizing: border-box;
 		}
 
-		/* Header - Hanya Nama Masjid di atas */
+		/* Header - Master Header Bersama (Pixel-Locked) */
 		.header {
 			text-align: center;
 			margin-top: 0;
@@ -135,56 +121,22 @@
 			padding: 0 !important;
 		}
 
-		/* Tampilan Jam & Tanggal Hijriah Card Header */
+		/* Tampilan Jam & Tanggal Standar Layar TV (Pixel-Locked Bersama) */
 		.datetime {
-			font-size: 1.05rem !important;
-			background: rgba(3, 20, 15, 0.72) !important;
-			padding: 6px 18px !important;
-			border-radius: 14px !important;
-			border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
-			color: #ffffff !important;
-			font-weight: 500;
-			display: inline-flex !important;
-			flex-direction: column !important;
-			align-items: flex-end !important;
-			justify-content: center !important;
-			text-align: right !important;
-			line-height: 1.35 !important;
+			font-size: 1.55rem;
+			margin-top: 4px;
+			background: rgba(3, 20, 15, 0.65);
+			display: inline-block;
+			padding: 5px 28px;
+			border-radius: 35px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			color: #ffffff;
 			white-space: nowrap !important;
-			flex-shrink: 0 !important;
-		}
-
-		.datetime .dt-date-row {
-			display: inline-flex !important;
-			align-items: center !important;
-			justify-content: flex-end !important;
-			font-size: 1.05rem !important;
-			font-weight: 600 !important;
-		}
-
-		.datetime .dt-sep-time {
-			display: none !important;
-		}
-
-		.datetime .dt-time-row {
-			display: inline-flex !important;
-			align-items: center !important;
-			justify-content: flex-end !important;
-			gap: 6px !important;
-			font-size: 1.02rem !important;
-			color: #ffffff !important;
-			margin-top: 2px !important;
-			font-weight: 700 !important;
-			text-align: right !important;
-		}
-
-		.datetime .dt-time-row::before {
-			content: "\f017";
-			font-family: "Font Awesome 5 Free";
-			font-weight: 900;
-			color: #ffd700;
-			font-size: 0.95rem;
 		}
 
 		/* Main Content - Area konten utama */
@@ -194,7 +146,7 @@
 			justify-content: center;
 			align-items: center;
 			min-height: 0;
-			padding: 10px 0;
+			padding: 6px 0 10px 0;
 		}
 
 		/* QRIS Card - Layout 2 Kolom */
@@ -212,26 +164,28 @@
 			animation: fadeInUp 0.6s ease-out;
 		}
 
-		/* Header Card */
+		/* Header Card - Judul Center di Tengah */
 		.qris-header {
 			background: linear-gradient(135deg, rgba(0, 0, 0, 0.45), rgba(4, 25, 18, 0.6));
-			padding: 14px 28px;
+			padding: 13px 28px;
 			display: flex;
-			justify-content: space-between;
+			justify-content: center;
 			align-items: center;
+			text-align: center;
 			border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
 		}
 
 		.qris-header h2 {
-			font-size: 2rem;
-			font-weight: 700;
+			font-size: 2.1rem;
+			font-weight: 800;
 			color: #ffffff !important;
-			letter-spacing: 1.5px;
+			letter-spacing: 2px;
 			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 			white-space: nowrap !important;
-			margin: 0;
-			display: flex;
+			margin: 0 auto;
+			display: inline-flex;
 			align-items: center;
+			justify-content: center;
 		}
 
 		.qris-header h2 i {
@@ -255,9 +209,9 @@
 
 		/* Body Card - Layout 2 Kolom */
 		.qris-body {
-			padding: 20px 32px 18px 32px;
+			padding: 18px 30px 16px 30px;
 			display: flex;
-			gap: 32px;
+			gap: 30px;
 			flex-wrap: nowrap;
 			align-items: center;
 		}
@@ -549,21 +503,21 @@
 		@include('partials.medallion-header')
 
 		<div class="container" id="mainContainer">
-			<!-- Header Atas (Hanya Nama Masjid) -->
+			<!-- Header Standar Bersama (Pixel-Locked) -->
 			<div class="header">
-				<h1>{{ $settings['nama_aplikasi'] ?? 'Masjid Al-Jihad' }}</h1>
+				<h1>{{ $settings['nama_aplikasi'] ?? "MASJID JAMI' AL JIHAD" }}</h1>
 				<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
+				<div class="datetime" id="datetime"></div>
 			</div>
 
 			<div class="main-content">
 				<div class="qris-card">
-					<!-- Header Card dengan Judul & Jam -->
+					<!-- Header Card dengan Judul Ditengah (Center) -->
 					<div class="qris-header">
 						<h2>
 							<i class="fas fa-qrcode"></i>
 							QRIS INFAQ DAN SEDEKAH
 						</h2>
-						<div class="datetime" id="datetime"></div>
 					</div>
 
 					<div class="qris-body">
