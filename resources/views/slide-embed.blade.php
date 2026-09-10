@@ -111,7 +111,7 @@
             height: 100%;
         }
 
-        /* --- KOLOM KIRI: 3D TILE FLIP / MOSAIC GRID BOARD (EFEK KOTAK-KOTAK BERATURAN) --- */
+        /* --- KOLOM KIRI: 3D FLIP CARD UTUH (FOTO TAMPAK UTUH & TANPA BINGKAI) --- */
         .slide-left-col {
             flex: 1.5;
             height: 100%;
@@ -123,7 +123,7 @@
             min-width: 0;
         }
 
-        .mosaic-wrapper {
+        .slide-image-wrapper {
             position: relative;
             display: flex;
             align-items: center;
@@ -133,111 +133,101 @@
             max-height: 66vh;
         }
 
-        .mosaic-backdrop {
+        .image-backdrop {
             position: absolute;
             inset: -14px;
             background-size: cover;
             background-position: center;
-            filter: blur(28px);
-            opacity: 0.45;
-            border-radius: 24px;
-            transform: scale(1.03);
+            filter: blur(32px);
+            opacity: 0.35;
+            border-radius: 20px;
+            transform: scale(1.02);
             z-index: 1;
             pointer-events: none;
             transition: background-image 0.8s ease, opacity 0.8s ease;
         }
 
-        .mosaic-board {
+        .card-3d-container {
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 100%;
             height: 65vh;
-            border-radius: 20px;
-            background: #020e0a;
-            border: 2px solid rgba(255, 215, 0, 0.55);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 215, 0, 0.2);
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(6, 1fr);
-            gap: 2px;
-            padding: 2px;
-            box-sizing: border-box;
-            background-color: rgba(255, 215, 0, 0.18); /* Garis batas grid kotak bernuansa emas */
-            perspective: 1400px;
+            perspective: 1500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Murni tanpa bingkai */
+            background: transparent;
+            border: none;
+            box-shadow: none;
         }
 
-        .mosaic-tile {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            perspective: 800px;
-            transform-style: preserve-3d;
-        }
-
-        .tile-flipper {
+        .card-3d-flipper {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
             transform-origin: center center;
             will-change: transform;
+            transition: transform 0.85s cubic-bezier(0.35, 0.0, 0.15, 1.0);
         }
 
-        .tile-flipper.animate-flip {
-            transition: transform 0.65s cubic-bezier(0.35, 0.0, 0.15, 1.0);
+        .card-3d-flipper.animate-flip {
             transform: rotateY(-180deg);
         }
 
-        .tile-face {
+        .card-3d-face {
             position: absolute;
             inset: 0;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
             overflow: hidden;
-            background: #020e0a;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+            background: transparent;
+            /* Efek bayangan jatuh natural (frameless float) */
+            filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
         }
 
-        .tile-face.front {
+        .card-3d-face.front {
             transform: rotateY(0deg);
         }
 
-        .tile-face.back {
+        .card-3d-face.back {
             transform: rotateY(180deg);
         }
 
-        .tile-slice {
-            position: absolute;
-            width: 800%;  /* 8 kolom = 800% */
-            height: 600%; /* 6 baris = 600% */
-            pointer-events: none;
-        }
-
-        .tile-slice img {
-            width: 100%;
-            height: 100%;
+        .card-3d-face img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
             object-fit: contain;
             object-position: center;
             display: block;
+            border-radius: 16px;
+            /* Murni gambar tanpa bingkai */
+            border: none;
+            outline: none;
         }
 
-        .tile-shadow {
+        .card-3d-sheen {
             position: absolute;
             inset: 0;
             pointer-events: none;
-            background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.9) 100%);
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(0, 0, 0, 0.5) 100%);
             opacity: 0;
-            transition: opacity 0.65s cubic-bezier(0.35, 0.0, 0.15, 1.0);
-            transition-delay: inherit;
+            transition: opacity 0.85s cubic-bezier(0.35, 0.0, 0.15, 1.0);
         }
 
-        .tile-flipper.animate-flip .tile-face.front .tile-shadow {
-            opacity: 0.75;
+        .card-3d-flipper.animate-flip .card-3d-face.front .card-3d-sheen {
+            opacity: 0.5;
         }
 
-        .tile-flipper.animate-flip .tile-face.back .tile-shadow {
+        .card-3d-flipper.animate-flip .card-3d-face.back .card-3d-sheen {
             opacity: 0;
         }
 
@@ -270,32 +260,6 @@
             flex-direction: column;
             justify-content: center;
             position: relative;
-        }
-
-        .slide-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.65);
-            color: #ffffff !important;
-            padding: 7px 24px;
-            border-radius: 35px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 18px;
-            align-self: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.25);
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
-        }
-
-        .slide-badge i {
-            color: #ffd700;
-            font-size: 0.95rem;
-            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.65));
         }
 
         .card-text-wrapper {
@@ -413,42 +377,29 @@
             <div class="slide-layout">
                 
                 {{-- Kolom Kiri: 3D Tile Flip / Mosaic Grid Board (48 Kotak: 8 Kolom x 6 Baris) --}}
+                {{-- Kolom Kiri: Foto/Gambar Slide 3D Flip Utuh (Tanpa Kotak-Kotak & Tanpa Bingkai) --}}
                 <div class="slide-left-col">
-                    <div class="mosaic-wrapper">
-                        <div class="mosaic-backdrop" id="mosaicBackdrop" style="background-image: url('{{ $firstImg }}');"></div>
+                    <div class="slide-image-wrapper">
+                        <div class="image-backdrop" id="imageBackdrop" style="background-image: url('{{ $firstImg }}');"></div>
                         
-                        <div class="mosaic-board" id="mosaicBoard">
-                            @for($r = 0; $r < 6; $r++)
-                                @for($c = 0; $c < 8; $c++)
-                                <div class="mosaic-tile" data-col="{{ $c }}" data-row="{{ $r }}">
-                                    <div class="tile-flipper">
-                                        <div class="tile-face front">
-                                            <div class="tile-slice" style="left: -{{ $c * 100 }}%; top: -{{ $r * 100 }}%;">
-                                                <img src="{{ $firstImg }}" alt="{{ $firstSlide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
-                                            </div>
-                                            <div class="tile-shadow"></div>
-                                        </div>
-                                        <div class="tile-face back">
-                                            <div class="tile-slice" style="left: -{{ $c * 100 }}%; top: -{{ $r * 100 }}%;">
-                                                <img src="{{ $secondImg }}" alt="" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
-                                            </div>
-                                            <div class="tile-shadow"></div>
-                                        </div>
-                                    </div>
+                        <div class="card-3d-container" id="card3DContainer">
+                            <div class="card-3d-flipper" id="card3DFlipper">
+                                <div class="card-3d-face front">
+                                    <img id="frontSlideImg" src="{{ $firstImg }}" alt="{{ $firstSlide->judul }}" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                                    <div class="card-3d-sheen"></div>
                                 </div>
-                                @endfor
-                            @endfor
+                                <div class="card-3d-face back">
+                                    <img id="backSlideImg" src="{{ $secondImg }}" alt="" onerror="this.onerror=null; this.src='{{ asset('storage/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp') }}';">
+                                    <div class="card-3d-sheen"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Kolom Kanan: Kartu Informasi Elegan (Glassmorphism) dengan Transisi Sinkron --}}
+                {{-- Kolom Kanan: Kartu Informasi Elegan (Glassmorphism) Tanpa Kapsul "INFORMASI KEGIATAN" --}}
                 <div class="slide-right-col">
                     <div class="slide-card">
-                        <div class="slide-badge">
-                            <i class="fas fa-bullhorn"></i>
-                            <span>Informasi Kegiatan</span>
-                        </div>
                         <div class="card-text-wrapper" id="cardText">
                             <div class="judul" id="slideJudul">
                                 {{ $firstSlide->judul }}
@@ -592,7 +543,7 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // Kontroller 3D Tile Flip / Mosaic Grid Wave untuk Pergantian Gambar & Konten Slide
+        // Kontroller 3D Flip Card Utuh untuk Pergantian Gambar & Konten Slide
         document.addEventListener('DOMContentLoaded', function () {
             const dataElement = document.getElementById('slides-data');
             if (!dataElement) return;
@@ -606,43 +557,18 @@
 
             if (!slides || slides.length <= 1) return;
 
-            const STAGGER_STEP = 0.04; // 40ms jeda per gelombang diagonal kotak
             let currentIdx = 0;
             let isTransitioning = false;
             let slideTimer = null;
 
-            const board = document.getElementById('mosaicBoard');
-            const backdrop = document.getElementById('mosaicBackdrop');
+            const flipper = document.getElementById('card3DFlipper');
+            const frontImg = document.getElementById('frontSlideImg');
+            const backImg = document.getElementById('backSlideImg');
+            const backdrop = document.getElementById('imageBackdrop');
             const cardText = document.getElementById('cardText');
             const slideJudul = document.getElementById('slideJudul');
             const slideDeskripsi = document.getElementById('slideDeskripsi');
             const indicatorDots = document.querySelectorAll('.indicator-dot');
-
-            // Kumpulkan referensi 48 kotak kecil (tiles)
-            const tileElements = board.querySelectorAll('.mosaic-tile');
-            const tiles = [];
-            let maxDiagonal = 0;
-
-            tileElements.forEach(tile => {
-                const c = parseInt(tile.getAttribute('data-col'), 10) || 0;
-                const r = parseInt(tile.getAttribute('data-row'), 10) || 0;
-                const diagonal = c + r;
-                if (diagonal > maxDiagonal) maxDiagonal = diagonal;
-
-                const flipper = tile.querySelector('.tile-flipper');
-                const frontFace = tile.querySelector('.tile-face.front');
-                const backFace = tile.querySelector('.tile-face.back');
-
-                tiles.push({
-                    c, r,
-                    diagonal,
-                    flipper,
-                    frontImg: frontFace.querySelector('img'),
-                    backImg: backFace.querySelector('img'),
-                    frontShadow: frontFace.querySelector('.tile-shadow'),
-                    backShadow: backFace.querySelector('.tile-shadow')
-                });
-            });
 
             function flipToNextSlide() {
                 if (isTransitioning) return;
@@ -651,27 +577,24 @@
                 const nextIdx = (currentIdx + 1) % slides.length;
                 const nextSlide = slides[nextIdx];
 
-                // 1. Siapkan gambar berikutnya pada sisi belakang setiap kotak
-                tiles.forEach(t => {
-                    t.backImg.src = nextSlide.gambar_url;
-                    t.backShadow.style.opacity = '0.75';
-                    t.frontShadow.style.opacity = '0';
-                });
+                // 1. Siapkan gambar berikutnya pada sisi belakang kartu utuh
+                if (backImg) {
+                    backImg.src = nextSlide.gambar_url;
+                }
 
-                // 2. Putar balik kotak-kotak secara bergelombang teratur (diagonal wave cascade)
-                tiles.forEach(t => {
-                    t.flipper.style.transitionDelay = `${t.diagonal * STAGGER_STEP}s`;
-                    t.flipper.classList.add('animate-flip');
-                });
+                // 2. Putar balik kartu gambar 3D secara utuh (smooth 3D flip)
+                if (flipper) {
+                    flipper.classList.add('animate-flip');
+                }
 
-                // 3. Sinkronkan kilauan ambient backdrop di belakang frame
+                // 3. Sinkronkan kilauan ambient backdrop di belakang gambar
                 setTimeout(() => {
                     if (backdrop) {
                         backdrop.style.backgroundImage = `url('${nextSlide.gambar_url}')`;
                     }
                 }, 250);
 
-                // 4. Sinkronkan teks kartu informasi kanan saat gelombang kotak mencapai tengah
+                // 4. Sinkronkan teks kartu informasi kanan saat flip mencapai 90 derajat
                 setTimeout(() => {
                     if (cardText) {
                         cardText.classList.remove('flip-in');
@@ -684,29 +607,27 @@
                             cardText.classList.add('flip-in');
                         }, 220);
                     }
-                }, 220);
+                }, 250);
 
                 // Update titik indikator slide
                 indicatorDots.forEach((dot, idx) => {
                     dot.classList.toggle('active', idx === nextIdx);
                 });
 
-                // 5. Reset instan & mulus setelah seluruh 48 kotak mendarat rata (0 flicker)
-                const totalWaveDuration = maxDiagonal * STAGGER_STEP + 0.65 + 0.08;
+                // 5. Reset posisi flipper setelah animasi flip selesai (850ms)
                 setTimeout(() => {
-                    tiles.forEach(t => {
-                        t.flipper.style.transition = 'none';
-                        t.flipper.style.transitionDelay = '0s';
-                        t.flipper.classList.remove('animate-flip');
-                        t.frontImg.src = nextSlide.gambar_url;
-                        void t.flipper.offsetWidth; // Force reflow
-                        t.flipper.style.transition = '';
-                    });
+                    if (flipper && frontImg) {
+                        flipper.style.transition = 'none';
+                        flipper.classList.remove('animate-flip');
+                        frontImg.src = nextSlide.gambar_url;
+                        void flipper.offsetWidth; // Force reflow
+                        flipper.style.transition = '';
+                    }
 
                     currentIdx = nextIdx;
                     isTransitioning = false;
                     scheduleNextSlide();
-                }, totalWaveDuration * 1000);
+                }, 900);
             }
 
             function scheduleNextSlide() {
