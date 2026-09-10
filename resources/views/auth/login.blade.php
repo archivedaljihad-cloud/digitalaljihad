@@ -99,7 +99,7 @@
 
     .login-box-stack {
         width: 100%;
-        max-width: 530px;
+        max-width: 460px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -108,41 +108,41 @@
     /* KALIGRAFI ARAB SALAM & BISMILLAH */
     .arabic-greeting-wrap {
         text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         width: 100%;
     }
 
     .arabic-salam-text {
         font-family: 'Amiri', 'Scheherazade New', serif;
-        font-size: 2.15rem;
+        font-size: 2.1rem;
         line-height: 1.35;
         font-weight: 700;
         color: #ffd700;
         text-shadow: 
             0 0 12px rgba(255, 215, 0, 0.65),
             0 2px 10px rgba(0, 0, 0, 0.95);
-        margin-bottom: 4px;
+        margin-bottom: 3px;
         letter-spacing: 0.5px;
         direction: rtl;
     }
 
     .arabic-bismillah-text {
         font-family: 'Amiri', 'Scheherazade New', serif;
-        font-size: 1.95rem;
+        font-size: 1.9rem;
         line-height: 1.35;
         font-weight: 700;
         color: #ffd700;
         text-shadow: 
             0 0 12px rgba(255, 215, 0, 0.65),
             0 2px 10px rgba(0, 0, 0, 0.95);
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         letter-spacing: 0.5px;
         direction: rtl;
     }
 
     /* UCAPAN SELAMAT DATANG & JUDUL SISTEM */
     .welcome-login-title {
-        font-size: 1.28rem;
+        font-size: 1.22rem;
         font-weight: 700;
         color: #ffffff;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
@@ -152,11 +152,11 @@
     }
 
     .welcome-login-subtitle {
-        font-size: 1.05rem;
+        font-size: 0.98rem;
         font-weight: 800;
         color: #ffffff;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-        margin-bottom: 18px;
+        margin-bottom: 14px;
         text-align: center;
         letter-spacing: 1px;
         text-transform: uppercase;
@@ -167,61 +167,61 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
         width: 100%;
-        padding: 9px 18px;
+        padding: 7px 16px;
         background: rgba(4, 40, 24, 0.85);
         border: 1px solid rgba(0, 230, 118, 0.45);
         border-radius: 25px;
         color: #e0f2fe;
-        font-size: 0.88rem;
+        font-size: 0.84rem;
         font-weight: 500;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-        margin-bottom: 18px;
+        margin-bottom: 13px;
         backdrop-filter: blur(6px);
     }
 
     .credential-guide-pill i {
         color: #ffd700;
-        font-size: 1.05rem;
+        font-size: 0.98rem;
     }
 
-    /* CARD FORMULIR LOGIN */
+    /* CARD FORMULIR LOGIN - RAMPING & PRESISI */
     .login-form-card {
         width: 100%;
         background: rgba(3, 26, 17, 0.72);
         border: 1px solid rgba(0, 230, 118, 0.35);
-        border-radius: 18px;
-        padding: 24px 26px 20px 26px;
+        border-radius: 14px;
+        padding: 18px 22px 14px 22px;
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         box-shadow: 
             0 15px 35px rgba(0, 0, 0, 0.75),
             0 0 25px rgba(0, 230, 118, 0.15),
             inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        margin-bottom: 22px;
+        margin-bottom: 14px;
     }
 
-    /* FORM INPUT FIELDS */
+    /* FORM INPUT FIELDS - LEBIH RAMPING */
     .login-field-row {
-        margin-bottom: 16px;
+        margin-bottom: 11px;
         width: 100%;
     }
 
     .login-field-label {
         display: flex;
         align-items: center;
-        gap: 7px;
-        font-size: 0.86rem;
+        gap: 6px;
+        font-size: 0.82rem;
         font-weight: 600;
         color: #f1f5f9;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
         letter-spacing: 0.3px;
     }
 
     .login-field-label i {
         color: #ffd700;
-        font-size: 0.95rem;
+        font-size: 0.88rem;
     }
 
     .login-input-container {
@@ -233,53 +233,54 @@
 
     .login-input-icon-lead {
         position: absolute;
-        left: 14px;
+        left: 12px;
         color: #f59e0b;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         pointer-events: none;
         z-index: 2;
     }
 
     .login-input-control {
         width: 100%;
+        height: 38px;
         background: #ffffff !important;
         border: 2px solid transparent;
-        border-radius: 10px;
-        padding: 10px 42px 10px 42px;
-        font-size: 0.92rem;
+        border-radius: 8px;
+        padding: 6px 36px 6px 36px;
+        font-size: 0.88rem;
         color: #1e293b;
         font-weight: 500;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         transition: all 0.25s ease;
         outline: none;
     }
 
     .login-input-control::placeholder {
         color: #94a3b8;
-        font-size: 0.88rem;
+        font-size: 0.84rem;
     }
 
     .login-input-control:focus {
         border-color: #ffd700;
         box-shadow: 
             0 0 0 3px rgba(255, 215, 0, 0.35),
-            0 4px 14px rgba(0, 0, 0, 0.45);
+            0 3px 10px rgba(0, 0, 0, 0.45);
         background: #ffffff !important;
         color: #0f172a;
     }
 
     .pwd-visibility-btn {
         position: absolute;
-        right: 12px;
+        right: 10px;
         background: transparent;
         border: none;
         color: #d97706;
         cursor: pointer;
-        padding: 6px;
+        padding: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         transition: color 0.2s, transform 0.15s;
         z-index: 3;
     }
@@ -294,15 +295,15 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 10px;
-        margin-bottom: 18px;
-        font-size: 0.83rem;
+        margin-top: 8px;
+        margin-bottom: 13px;
+        font-size: 0.80rem;
     }
 
     .remember-check-label {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
+        gap: 6px;
         color: #cbd5e1;
         cursor: pointer;
         user-select: none;
@@ -311,8 +312,8 @@
     }
 
     .remember-check-input {
-        width: 16px;
-        height: 16px;
+        width: 15px;
+        height: 15px;
         accent-color: #059669;
         cursor: pointer;
         border-radius: 4px;
@@ -324,7 +325,7 @@
         font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
         transition: all 0.2s ease;
     }
 
@@ -334,25 +335,26 @@
         text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
     }
 
-    /* TOMBOL MASUK KE DASHBOARD */
+    /* TOMBOL MASUK KE DASHBOARD - LEBIH KECIL & RAMPING */
     .btn-submit-dashboard {
         width: 100%;
+        height: 38px;
         background: linear-gradient(135deg, #056e3b 0%, #034825 100%);
         border: 1px solid #10b981;
-        border-radius: 9px;
-        padding: 11px 20px;
+        border-radius: 8px;
+        padding: 8px 18px;
         color: #ffffff;
-        font-size: 0.98rem;
+        font-size: 0.90rem;
         font-weight: 700;
         letter-spacing: 0.5px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
         box-shadow: 
-            0 6px 18px rgba(0, 0, 0, 0.6),
-            0 0 15px rgba(16, 185, 129, 0.25);
+            0 4px 14px rgba(0, 0, 0, 0.5),
+            0 0 12px rgba(16, 185, 129, 0.22);
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
@@ -374,8 +376,8 @@
         border-color: #ffd700;
         transform: translateY(-2px);
         box-shadow: 
-            0 10px 25px rgba(0, 0, 0, 0.75),
-            0 0 25px rgba(255, 215, 0, 0.45);
+            0 8px 20px rgba(0, 0, 0, 0.7),
+            0 0 20px rgba(255, 215, 0, 0.4);
     }
 
     .btn-submit-dashboard:hover::before {
@@ -384,7 +386,7 @@
 
     .btn-submit-dashboard i {
         color: #ffd700;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         transition: transform 0.2s;
     }
 
@@ -397,26 +399,26 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 15px;
-        padding-top: 12px;
+        margin-top: 11px;
+        padding-top: 9px;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
         width: 100%;
     }
 
     .link-return-disp {
         color: #cbd5e1;
-        font-size: 0.84rem;
+        font-size: 0.80rem;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 7px;
+        gap: 6px;
         font-weight: 500;
         transition: color 0.2s;
     }
 
     .link-return-disp i {
         color: #ffd700;
-        font-size: 0.95rem;
+        font-size: 0.88rem;
     }
 
     .link-return-disp:hover {
@@ -427,13 +429,13 @@
     .btn-help-wa {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
         background: rgba(5, 150, 105, 0.2);
         border: 1px solid rgba(16, 185, 129, 0.4);
-        padding: 5px 12px;
-        border-radius: 7px;
+        padding: 4px 10px;
+        border-radius: 6px;
         color: #e2e8f0;
-        font-size: 0.82rem;
+        font-size: 0.78rem;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.25s;
@@ -441,7 +443,7 @@
 
     .btn-help-wa i.fab.fa-whatsapp {
         color: #25d366;
-        font-size: 1rem;
+        font-size: 0.92rem;
     }
 
     .btn-help-wa:hover {
@@ -449,62 +451,66 @@
         border-color: #25d366;
         color: #ffffff;
         text-decoration: none;
-        box-shadow: 0 0 12px rgba(37, 211, 102, 0.4);
+        box-shadow: 0 0 10px rgba(37, 211, 102, 0.35);
     }
 
-    /* CARD FOOTER IDENTITAS DEVELOPER (BAWAH) */
+    /* CARD FOOTER IDENTITAS DEVELOPER (BAWAH) - LEBIH RAMPING */
     .developer-attribution-card {
         width: 100%;
+        max-width: 410px;
         background: rgba(2, 28, 14, 0.85);
-        border: 1px solid rgba(0, 230, 118, 0.4);
-        border-radius: 12px;
-        padding: 12px 20px;
+        border: 1px solid rgba(0, 230, 118, 0.35);
+        border-radius: 10px;
+        padding: 7px 16px;
         text-align: center;
         backdrop-filter: blur(8px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+        gap: 2px;
     }
 
     .attribution-intro {
-        font-size: 0.76rem;
+        font-size: 0.70rem;
         color: #cbd5e1;
         font-weight: 400;
+        line-height: 1.2;
     }
 
     .attribution-brand {
-        font-size: 0.96rem;
-        font-weight: 800;
+        font-size: 0.88rem;
+        font-weight: 700;
         color: #ffffff;
         letter-spacing: 0.5px;
+        line-height: 1.2;
     }
 
     .attribution-version-badge {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
         background: #f59e0b;
         color: #000000;
-        font-size: 0.72rem;
+        font-size: 0.65rem;
         font-weight: 800;
-        padding: 3px 14px;
-        border-radius: 20px;
-        letter-spacing: 0.5px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-        margin: 3px 0;
+        padding: 2px 10px;
+        border-radius: 15px;
+        letter-spacing: 0.4px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        margin: 1px 0;
     }
 
     .attribution-copyright {
-        font-size: 0.72rem;
+        font-size: 0.66rem;
         color: #cbd5e1;
         font-weight: 600;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.4px;
         text-transform: uppercase;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
+        line-height: 1.2;
     }
 
     .attribution-copyright strong {
@@ -595,10 +601,10 @@
                 <!-- 1. Kaligrafi Arab Salam & Bismillah (Kuning Emas) -->
                 <div class="arabic-greeting-wrap">
                     <div class="arabic-salam-text">
-                        السلام عليكم ورحمة الله وبركاته
+                        ٱلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ وَبَرَكَاتُهُ
                     </div>
                     <div class="arabic-bismillah-text">
-                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                        بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
                     </div>
                 </div>
 
