@@ -372,6 +372,29 @@
 			font-size: 1.25rem;
 			color: #ffffff;
 		}
+
+		/* Custom Theme Background Spesifik Sholat Idul Adha */
+		.display-background {
+			background-image: url('{{ asset("image/display/background/bg_idul_adha.jpg") }}') !important;
+			background-position: center center !important;
+			background-repeat: no-repeat !important;
+			background-size: cover !important;
+			filter: brightness(0.96) contrast(1.05) saturate(1.05) !important;
+		}
+
+		/* Overlay Penyejuk Elegan: Menjaga Keterbacaan Teks Sekaligus Menonjolkan Nuansa Hewan Qurban & Masjid */
+		.display-overlay {
+			background: 
+				radial-gradient(ellipse at 50% 50%, rgba(2, 14, 10, 0.04) 0%, rgba(1, 15, 10, 0.38) 100%),
+				linear-gradient(180deg, 
+					rgba(2, 16, 11, 0.72) 0%, 
+					rgba(2, 16, 11, 0.35) 15%, 
+					rgba(2, 16, 11, 0.06) 35%, 
+					rgba(2, 16, 11, 0.06) 70%, 
+					rgba(2, 16, 11, 0.45) 88%, 
+					rgba(2, 16, 11, 0.75) 100%
+				) !important;
+		}
 	</style>
 </head>
 
@@ -524,40 +547,14 @@
 		setInterval(updateDateTime, 1000);
 	</script>
 
-	<!-- Script Background Slideshow -->
+	<!-- Script Background Khusus Idul Adha (Gambar Pilihan DKM) -->
 	<script>
-		const backgroundImages = [
-			"{{ asset('image/display/background/BG1.png') }}",
-			"{{ asset('image/display/background/BG2.png') }}",
-			"{{ asset('image/display/background/BG3.png') }}",
-			"{{ asset('image/display/background/BG4.png') }}",
-			"{{ asset('image/display/background/BG5.png') }}",
-			"{{ asset('image/display/background/BG6.png') }}",
-			"{{ asset('image/display/background/BG7.png') }}",
-			"{{ asset('image/display/background/BG8.png') }}",
-			"{{ asset('image/display/background/BG9.png') }}",
-			"{{ asset('image/display/background/BG10.png') }}",
-			"{{ asset('image/display/background/BG11.png') }}"
-		];
-
-		let currentBgIndex = 0;
 		const bgElement = document.querySelector('.display-background') || document.body;
-
-		if (backgroundImages.length > 0 && bgElement) {
-			bgElement.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+		if (bgElement) {
+			bgElement.style.setProperty('background-image', "url('{{ asset('image/display/background/bg_idul_adha.jpg') }}')", 'important');
 			bgElement.style.setProperty('background-size', 'cover', 'important');
-			bgElement.style.setProperty('background-position', 'center', 'important');
+			bgElement.style.setProperty('background-position', 'center center', 'important');
 			bgElement.style.setProperty('background-repeat', 'no-repeat', 'important');
-
-			function changeBackground() {
-				currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
-				const nextImg = new Image();
-				nextImg.src = backgroundImages[currentBgIndex];
-				nextImg.onload = function () {
-					bgElement.style.backgroundImage = `url('${backgroundImages[currentBgIndex]}')`;
-				};
-			}
-			setInterval(changeBackground, 15000);
 		}
 	</script>
 </body>
