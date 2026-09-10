@@ -353,6 +353,7 @@
 		table {
 			width: 100%;
 			border-collapse: collapse;
+			table-layout: fixed;
 		}
 
 		th {
@@ -386,11 +387,11 @@
 			background: rgba(255, 215, 0, 0.1);
 		}
 
-		.col-no { width: 8%; text-align: center; }
-		.col-tanggal { width: 16%; text-align: center; }
-		.col-nama { width: 44%; text-align: left; }
-		.col-nominal { width: 22%; text-align: right; }
-		.col-ket { width: 10%; text-align: center; }
+		.col-no { width: 5%; text-align: center; white-space: nowrap; }
+		.col-tanggal { width: 12%; text-align: center; white-space: nowrap; }
+		.col-nama { width: 46%; text-align: left; }
+		.col-nominal { width: 21%; text-align: right; white-space: nowrap; }
+		.col-ket { width: 16%; text-align: center; }
 
 		.badge-hamba-allah {
 			background: linear-gradient(135deg, rgba(0, 230, 118, 0.25), rgba(0, 180, 216, 0.25));
