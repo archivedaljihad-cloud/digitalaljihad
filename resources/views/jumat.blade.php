@@ -184,8 +184,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 24px;
-			max-width: 1080px;
+			gap: 22px;
+			max-width: 1000px;
 			width: 100%;
 			margin: 0 auto;
 			flex: 1;
@@ -365,12 +365,238 @@
 			font-size: 1.25rem;
 			color: #ffffff;
 		}
+
+		/* Custom Theme Background Spesifik Sholat Jumat (Kemegahan Interior Raudhah Masjid Nabawi) */
+		.display-background {
+			background-image: url('{{ asset("image/display/background/bg_jumat.jpg") }}?v={{ time() }}') !important;
+			background-position: center center !important;
+			background-repeat: no-repeat !important;
+			background-size: cover !important;
+			filter: brightness(0.95) contrast(1.05) saturate(1.05) !important;
+		}
+
+		/* Overlay Penyejuk Syahdu & Khusyuk */
+		.display-overlay {
+			background: 
+				radial-gradient(ellipse at 50% 45%, rgba(2, 14, 10, 0.04) 0%, rgba(1, 15, 10, 0.38) 100%),
+				linear-gradient(180deg, 
+					rgba(2, 16, 11, 0.72) 0%, 
+					rgba(2, 16, 11, 0.35) 15%, 
+					rgba(2, 16, 11, 0.06) 35%, 
+					rgba(2, 16, 11, 0.06) 70%, 
+					rgba(2, 16, 11, 0.45) 88%, 
+					rgba(2, 16, 11, 0.75) 100%
+				) !important;
+		}
+
+		/* =====================================================
+		   FESTIVE & SACRED ANIMATIONS (THE RAUDHAH SANCTUARY)
+		   ===================================================== */
+		/* 1. Partikel Kilau Nur Jum'at (Floating Sacred Stardust) */
+		.festive-particles {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 1;
+			overflow: hidden;
+		}
+
+		.stardust-particle {
+			position: absolute;
+			bottom: -20px;
+			border-radius: 50%;
+			background: radial-gradient(circle, #ffffff 0%, #fff7b2 35%, #ffd700 70%, transparent 100%);
+			box-shadow: 0 0 8px #ffd700, 0 0 16px rgba(255, 215, 0, 0.7);
+			will-change: transform, opacity;
+			animation: floatUpStardust linear infinite;
+		}
+
+		@keyframes floatUpStardust {
+			0% {
+				transform: translateY(0) translateX(0) scale(0.6);
+				opacity: 0;
+			}
+			15% {
+				opacity: 0.9;
+				transform: translateY(-15vh) translateX(12px) scale(1);
+			}
+			50% {
+				opacity: 0.75;
+				transform: translateY(-50vh) translateX(-14px) scale(1.15);
+			}
+			85% {
+				opacity: 0.85;
+				transform: translateY(-85vh) translateX(10px) scale(0.9);
+			}
+			100% {
+				transform: translateY(-105vh) translateX(-6px) scale(0.4);
+				opacity: 0;
+			}
+		}
+
+		/* 2. Pendaran Cahaya Lampu Kubah Raudhah */
+		.lantern-glow-ambient {
+			position: fixed;
+			top: -40px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 480px;
+			height: 280px;
+			border-radius: 50%;
+			background: radial-gradient(ellipse, rgba(255, 230, 130, 0.28) 0%, rgba(255, 180, 0, 0.12) 45%, rgba(255, 140, 0, 0.03) 70%, transparent 85%);
+			pointer-events: none;
+			z-index: 0;
+			filter: blur(25px);
+			animation: divineChandelierGlow 5s infinite alternate ease-in-out;
+		}
+
+		@keyframes divineChandelierGlow {
+			0% {
+				opacity: 0.55;
+				transform: translateX(-50%) scale(0.95);
+			}
+			100% {
+				opacity: 0.95;
+				transform: translateX(-50%) scale(1.05);
+				filter: blur(30px);
+			}
+		}
+
+		/* 3. Aura Medali Kaligrafi 3D Emas Menyala */
+		.kaligrafi-medallion {
+			animation: medallionAuraPulse 4.5s infinite alternate ease-in-out;
+		}
+		.kaligrafi-muhammad {
+			animation-delay: 0.5s;
+		}
+		@keyframes medallionAuraPulse {
+			0% {
+				filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.65));
+			}
+			100% {
+				filter: drop-shadow(0 0 22px rgba(255, 230, 100, 0.95)) drop-shadow(0 0 35px rgba(255, 175, 0, 0.5));
+			}
+		}
+
+		/* 4. Sapuan Kilau Emas pada Judul (Metallic Shimmer Sweep) */
+		.title-with-icons {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.title-with-icons::after {
+			content: '';
+			position: absolute;
+			top: -60%;
+			left: -130%;
+			width: 60%;
+			height: 220%;
+			background: linear-gradient(
+				115deg,
+				transparent 35%,
+				rgba(255, 255, 255, 0.2) 45%,
+				rgba(255, 245, 180, 0.75) 50%,
+				rgba(255, 255, 255, 0.95) 53%,
+				rgba(255, 245, 180, 0.75) 56%,
+				rgba(255, 255, 255, 0.2) 65%,
+				transparent 75%
+			);
+			transform: rotate(25deg);
+			animation: goldShimmerSweep 7s infinite ease-in-out;
+			pointer-events: none;
+		}
+
+		@keyframes goldShimmerSweep {
+			0%, 20% {
+				left: -130%;
+				opacity: 0;
+			}
+			32% {
+				opacity: 1;
+			}
+			48%, 100% {
+				left: 210%;
+				opacity: 0;
+			}
+		}
+
+		/* 5. Efek Pendaran Emas pada Border Kartu (Luxury Sheen) */
+		.imam-card-box,
+		.info-box-label,
+		.info-box-value {
+			animation: goldenBorderSheen 6s infinite ease-in-out;
+		}
+		.info-box-value {
+			animation-delay: 0.7s;
+		}
+
+		@keyframes goldenBorderSheen {
+			0%, 100% {
+				border-color: rgba(255, 215, 0, 0.45);
+				box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35), 0 0 10px rgba(255, 215, 0, 0.1);
+			}
+			50% {
+				border-color: rgba(255, 235, 120, 0.85);
+				box-shadow: 0 8px 28px rgba(0, 0, 0, 0.42), 0 0 18px rgba(255, 215, 0, 0.32);
+			}
+		}
+
+		/* 6. Kaligrafi Sholawat Nabi Berpendar Emas */
+		.sholawat-greeting {
+			font-family: 'Amiri', serif;
+			font-size: 1.28rem;
+			color: #fff4b8;
+			text-shadow: 0 0 12px rgba(255, 215, 0, 0.85), 0 2px 6px rgba(0, 0, 0, 0.9);
+			margin-top: 3px;
+			letter-spacing: 1px;
+			line-height: 1.2;
+		}
+
+		/* 7. Pita Mutiara Sunnah Jum'at & Dzikir Mustajab */
+		.jumat-hadits-box {
+			margin: 10px auto 0 auto;
+			max-width: 1000px;
+			width: 100%;
+			background: linear-gradient(135deg, rgba(2, 25, 17, 0.88) 0%, rgba(4, 40, 26, 0.88) 100%);
+			border: 1.2px solid rgba(255, 215, 0, 0.55);
+			border-radius: 30px;
+			padding: 7px 25px;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.2);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 15px;
+			text-align: center;
+		}
+
+		.jumat-hadits-box i {
+			color: #ffd700;
+			font-size: 1.2rem;
+			filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
+			flex-shrink: 0;
+		}
+
+		.jumat-hadits-text {
+			font-size: 1.05rem;
+			font-weight: 500;
+			color: #ffffff;
+			letter-spacing: 0.3px;
+			transition: opacity 0.5s ease-in-out;
+		}
+
+		.jumat-hadits-text strong {
+			color: #ffd700;
+		}
 	</style>
 </head>
 
 <body>
 	<div class="display-background"></div>
 	<div class="display-overlay"></div>
+	<div class="lantern-glow-ambient"></div>
+	<div class="festive-particles" id="festiveParticles"></div>
 	@include('partials.medallion-header')
 
 	<div class="container">
@@ -390,6 +616,7 @@
 				<div class="title-text-wrap">
 					<h2>Jadwal Sholat Jumat</h2>
 					<p>Informasi Imam, Khotib, Muadzin & Bilal</p>
+					<div class="sholawat-greeting">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِ سَيِّدِنَا مُحَمَّدٍ</div>
 				</div>
 				<div class="title-icon-badge right-icon" title="Ka'bah">
 					<i class="fas fa-kaaba"></i>
@@ -502,6 +729,15 @@
 		</div>
 		@endif
 
+		<!-- Pita Mutiara Sunnah Jum'at (Dzikir & Do'a Mustajab) -->
+		<div class="jumat-hadits-box">
+			<i class="fas fa-quran"></i>
+			<div class="jumat-hadits-text" id="jumatHaditsRotator">
+				<strong>Keutamaan Hari Jum'at:</strong> "Perbanyaklah shalawat kepadaku di hari Jum'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)
+			</div>
+			<i class="fas fa-hands-praying"></i>
+		</div>
+
 		@include('partials.bottom-section')
 	</div>
 
@@ -522,41 +758,84 @@
 		}
 	</script>
 
-	<!-- Script Background Slideshow -->
+	<!-- Script Tema Raudhah Nabawi, Floating Stardust & Dzikir Rotator -->
 	<script>
-		const backgroundImages = [
-			"{{ asset('image/display/background/BG1.png') }}",
-			"{{ asset('image/display/background/BG2.png') }}",
-			"{{ asset('image/display/background/BG3.png') }}",
-			"{{ asset('image/display/background/BG4.png') }}",
-			"{{ asset('image/display/background/BG5.png') }}",
-			"{{ asset('image/display/background/BG6.png') }}",
-			"{{ asset('image/display/background/BG7.png') }}",
-			"{{ asset('image/display/background/BG8.png') }}",
-			"{{ asset('image/display/background/BG9.png') }}",
-			"{{ asset('image/display/background/BG10.png') }}",
-			"{{ asset('image/display/background/BG11.png') }}"
-		];
-
-		let currentBgIndex = 0;
-		const bgElement = document.querySelector('.display-background') || document.body;
-
-		if (backgroundImages.length > 0 && bgElement) {
-			bgElement.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
-			bgElement.style.setProperty('background-size', 'cover', 'important');
-			bgElement.style.setProperty('background-position', 'center', 'important');
-			bgElement.style.setProperty('background-repeat', 'no-repeat', 'important');
-
-			function changeBackground() {
-				currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
-				const nextImg = new Image();
-				nextImg.src = backgroundImages[currentBgIndex];
-				nextImg.onload = function () {
-					bgElement.style.backgroundImage = `url('${backgroundImages[currentBgIndex]}')`;
+		document.addEventListener('DOMContentLoaded', function () {
+			// 1. Set Background Interior Raudhah Nabawi dengan Cache-Buster
+			const bgElement = document.querySelector('.display-background') || document.body;
+			if (bgElement) {
+				const raudhahBg = new Image();
+				raudhahBg.src = "{{ asset('image/display/background/bg_jumat.jpg') }}?v={{ time() }}";
+				raudhahBg.onload = function () {
+					bgElement.style.backgroundImage = `url('${raudhahBg.src}')`;
+					bgElement.style.opacity = '1';
 				};
 			}
-			setInterval(changeBackground, 15000);
-		}
+
+			// 2. Generator Butiran Debu Cahaya Emas / Nur Jum'at (Floating Stardust Particles)
+			const particleContainer = document.getElementById('festiveParticles');
+			if (particleContainer) {
+				const particleCount = 28;
+				for (let i = 0; i < particleCount; i++) {
+					const p = document.createElement('div');
+					p.className = 'stardust-particle';
+					
+					const size = Math.random() * 4 + 2; // 2px - 6px
+					const left = Math.random() * 100; // 0% - 100%
+					const duration = Math.random() * 8 + 7; // 7s - 15s
+					const delay = Math.random() * 10; // 0s - 10s
+					const opacity = Math.random() * 0.5 + 0.45; // 0.45 - 0.95
+
+					p.style.width = `${size}px`;
+					p.style.height = `${size}px`;
+					p.style.left = `${left}%`;
+					p.style.animationDuration = `${duration}s`;
+					p.style.animationDelay = `${delay}s`;
+					p.style.opacity = opacity;
+
+					particleContainer.appendChild(p);
+				}
+			}
+
+			// 3. Rotator Mutiara Sunnah Jum'at, Dzikir & Do'a Mustajab
+			const haditsList = [
+				{
+					topic: "Keutamaan Shalawat:",
+					text: '"Perbanyaklah shalawat kepadaku di hari Jum\'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)'
+				},
+				{
+					topic: "Sayyidul Ayyam (Rajanya Hari):",
+					text: '"Sebaik-baik hari di mana matahari terbit adalah hari Jum\'at; padanya Adam diciptakan dan padanya ia dimasukkan ke surga." (HR. Muslim)'
+				},
+				{
+					topic: "Waktu Mustajab Berdo'a:",
+					text: '"Di hari Jum\'at ada satu waktu, tidaklah seorang hamba muslim memohon kebaikan kepada Allah melainkan pasti dikabulkan." (HR. Bukhari & Muslim)'
+				},
+				{
+					topic: "Cahaya Surat Al-Kahfi:",
+					text: '"Barangsiapa membaca Surat Al-Kahfi pada hari Jum\'at, maka akan dipancarkan cahaya baginya di antara dua Jum\'at." (HR. An-Nasa\'i & Al-Hakim)'
+				},
+				{
+					topic: "Dzikir & Penghapus Dosa:",
+					text: '"Shalat lima waktu dan shalat Jum\'at ke Jum\'at berikutnya adalah penggugur dosa di antara keduanya selama dosa besar dijauhi." (HR. Muslim)'
+				}
+			];
+
+			let currentHaditsIndex = 0;
+			const haditsRotatorEl = document.getElementById('jumatHaditsRotator');
+
+			if (haditsRotatorEl && haditsList.length > 0) {
+				setInterval(function () {
+					haditsRotatorEl.style.opacity = '0';
+					setTimeout(function () {
+						currentHaditsIndex = (currentHaditsIndex + 1) % haditsList.length;
+						const item = haditsList[currentHaditsIndex];
+						haditsRotatorEl.innerHTML = `<strong>${item.topic}</strong> ${item.text}`;
+						haditsRotatorEl.style.opacity = '1';
+					}, 500);
+				}, 9000);
+			}
+		});
 	</script>
 </body>
 
