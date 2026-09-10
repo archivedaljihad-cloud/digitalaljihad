@@ -395,12 +395,192 @@
 					rgba(2, 16, 11, 0.75) 100%
 				) !important;
 		}
+
+		/* =====================================================
+		   FESTIVE LUXURY ANIMATIONS (THE GOLDEN TRIO)
+		   ===================================================== */
+		/* 1. Partikel Kilau Emas Mengambang (Floating Stardust) */
+		.festive-particles {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 1;
+			overflow: hidden;
+		}
+
+		.stardust-particle {
+			position: absolute;
+			bottom: -20px;
+			border-radius: 50%;
+			background: radial-gradient(circle, #ffffff 0%, #fff7b2 35%, #ffd700 70%, transparent 100%);
+			box-shadow: 0 0 8px #ffd700, 0 0 16px rgba(255, 215, 0, 0.7);
+			will-change: transform, opacity;
+			animation: floatUpStardust linear infinite;
+		}
+
+		@keyframes floatUpStardust {
+			0% {
+				transform: translateY(0) translateX(0) scale(0.6);
+				opacity: 0;
+			}
+			15% {
+				opacity: 0.9;
+				transform: translateY(-15vh) translateX(12px) scale(1);
+			}
+			50% {
+				opacity: 0.75;
+				transform: translateY(-50vh) translateX(-14px) scale(1.15);
+			}
+			85% {
+				opacity: 0.85;
+				transform: translateY(-85vh) translateX(10px) scale(0.9);
+			}
+			100% {
+				transform: translateY(-105vh) translateX(-6px) scale(0.4);
+				opacity: 0;
+			}
+		}
+
+		/* 2. Pendaran Hangat Lentera Kanan Atas */
+		.lantern-glow-ambient {
+			position: fixed;
+			top: -40px;
+			right: 30px;
+			width: 320px;
+			height: 320px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(255, 215, 0, 0.32) 0%, rgba(255, 160, 0, 0.16) 45%, rgba(255, 140, 0, 0.04) 68%, transparent 80%);
+			pointer-events: none;
+			z-index: 0;
+			filter: blur(18px);
+			animation: lanternBreath 4s infinite alternate ease-in-out;
+		}
+
+		@keyframes lanternBreath {
+			0% {
+				opacity: 0.55;
+				transform: scale(0.94);
+			}
+			100% {
+				opacity: 0.95;
+				transform: scale(1.06);
+				filter: blur(24px);
+			}
+		}
+
+		/* 3. Aura Medali Kaligrafi 3D Emas Menyala */
+		.kaligrafi-medallion {
+			animation: medallionAuraPulse 4.5s infinite alternate ease-in-out;
+		}
+		.kaligrafi-muhammad {
+			animation-delay: 0.5s;
+		}
+		@keyframes medallionAuraPulse {
+			0% {
+				filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.65));
+			}
+			100% {
+				filter: drop-shadow(0 0 22px rgba(255, 230, 100, 0.95)) drop-shadow(0 0 35px rgba(255, 175, 0, 0.5));
+			}
+		}
+
+		/* 4. Sapuan Kilau Emas pada Judul (Metallic Shimmer Sweep) */
+		.title-with-icons {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.title-with-icons::after {
+			content: '';
+			position: absolute;
+			top: -60%;
+			left: -130%;
+			width: 60%;
+			height: 220%;
+			background: linear-gradient(
+				115deg,
+				transparent 35%,
+				rgba(255, 255, 255, 0.2) 45%,
+				rgba(255, 245, 180, 0.75) 50%,
+				rgba(255, 255, 255, 0.95) 53%,
+				rgba(255, 245, 180, 0.75) 56%,
+				rgba(255, 255, 255, 0.2) 65%,
+				transparent 75%
+			);
+			transform: rotate(25deg);
+			animation: goldShimmerSweep 7s infinite ease-in-out;
+			pointer-events: none;
+		}
+
+		@keyframes goldShimmerSweep {
+			0%, 20% {
+				left: -130%;
+				opacity: 0;
+			}
+			32% {
+				opacity: 1;
+			}
+			48%, 100% {
+				left: 210%;
+				opacity: 0;
+			}
+		}
+
+		/* 5. Efek Pendaran Emas pada Border Kartu (Luxury Sheen) */
+		.imam-card-box,
+		.info-box-label,
+		.info-box-value {
+			animation: goldenBorderSheen 6s infinite ease-in-out;
+		}
+		.info-box-value {
+			animation-delay: 0.7s;
+		}
+
+		@keyframes goldenBorderSheen {
+			0%, 100% {
+				border-color: rgba(255, 215, 0, 0.45);
+				box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35), 0 0 10px rgba(255, 215, 0, 0.1);
+			}
+			50% {
+				border-color: rgba(255, 235, 120, 0.85);
+				box-shadow: 0 8px 28px rgba(0, 0, 0, 0.42), 0 0 18px rgba(255, 215, 0, 0.32);
+			}
+		}
+
+		/* 6. Animasi Ikon Hewan Qurban */
+		.title-icon-badge img {
+			animation: festiveIconPulse 3.5s infinite ease-in-out;
+		}
+
+		@keyframes festiveIconPulse {
+			0%, 100% {
+				filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
+				transform: scale(1);
+			}
+			50% {
+				filter: drop-shadow(0 0 18px rgba(255, 240, 140, 0.98));
+				transform: scale(1.05);
+			}
+		}
+
+		/* 7. Ucapan Selamat Hari Raya Kaligrafi Emas */
+		.festive-greeting {
+			font-family: 'Amiri', serif;
+			font-size: 1.25rem;
+			color: #fff4b8;
+			text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 2px 5px rgba(0, 0, 0, 0.9);
+			margin-top: 3px;
+			letter-spacing: 1px;
+			line-height: 1.2;
+		}
 	</style>
 </head>
 
 <body>
 	<div class="display-background"></div>
 	<div class="display-overlay"></div>
+	<div class="lantern-glow-ambient"></div>
+	<div class="festive-particles" id="festiveParticles"></div>
 	@include('partials.medallion-header')
 
 	<div class="container">
@@ -420,6 +600,7 @@
 				<div class="title-text-wrap">
 					<h2>Sholat Idul Adha</h2>
 					<p>{{ $idulAdha->tahun ?? now()->year }} M / {{ isset($idulAdha->tahun) ? $idulAdha->tahun - 1 : now()->year - 1 }} H • 10 Dzulhijjah</p>
+					<div class="festive-greeting">عِيدٌ مُبَارَكٌ • تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</div>
 				</div>
 				<div class="title-icon-badge right-icon" title="Hewan Qurban Kambing">
 					<img src="{{ asset('image/icons/kambing.svg') }}" alt="Kambing">
@@ -556,6 +737,26 @@
 			bgElement.style.setProperty('background-position', 'center center', 'important');
 			bgElement.style.setProperty('background-repeat', 'no-repeat', 'important');
 		}
+	</script>
+
+	<!-- Generator Partikel Kilau Emas Mengambang (Floating Golden Stardust) -->
+	<script>
+		(function initFestiveParticles() {
+			const container = document.getElementById('festiveParticles');
+			if (!container) return;
+			const particleCount = 28;
+			for (let i = 0; i < particleCount; i++) {
+				const p = document.createElement('div');
+				p.className = 'stardust-particle';
+				const size = (Math.random() * 3.5 + 2.5).toFixed(1);
+				p.style.width = size + 'px';
+				p.style.height = size + 'px';
+				p.style.left = (Math.random() * 100).toFixed(2) + '%';
+				p.style.animationDuration = (Math.random() * 8 + 8).toFixed(1) + 's';
+				p.style.animationDelay = (Math.random() * 10).toFixed(1) + 's';
+				container.appendChild(p);
+			}
+		})();
 	</script>
 </body>
 
