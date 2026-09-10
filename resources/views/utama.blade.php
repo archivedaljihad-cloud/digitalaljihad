@@ -151,43 +151,49 @@
 		}
 
 		.jadwal-sholat-title {
-			font-size: 2.1rem;
+			font-size: 1.85rem;
 			font-weight: 700 !important;
-			letter-spacing: 2px;
-			margin-bottom: 12px;
-			padding-bottom: 5px;
+			letter-spacing: 2.5px;
+			margin-bottom: 14px;
+			padding: 7px 30px;
 			position: relative;
-			color: var(--secondary-color);
-			display: flex;
+			color: #ffffff !important;
+			display: inline-flex;
 			align-items: center;
-			gap: 10px;
-			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+			justify-content: center;
+			gap: 12px;
+			background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+			border: 1.5px solid rgba(255, 215, 0, 0.65);
+			border-radius: 35px;
+			box-shadow: 
+				0 8px 25px rgba(0, 0, 0, 0.65),
+				0 0 20px rgba(255, 215, 0, 0.25),
+				inset 0 1px 1px rgba(255, 255, 255, 0.2);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
 		}
 
 		.jadwal-sholat-title i {
-			animation: spin 5s linear infinite;
+			color: #ffd700;
+			font-size: 1.65rem;
+			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
+			animation: pulseMosque 3s ease-in-out infinite;
 		}
 
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
+		@keyframes pulseMosque {
+			0%, 100% {
+				transform: scale(1);
+				filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5));
 			}
-
-			100% {
-				transform: rotate(360deg);
+			50% {
+				transform: scale(1.08);
+				filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.9));
 			}
 		}
 
 		.jadwal-sholat-title:after {
-			content: '';
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
-			bottom: 0;
-			width: 150px;
-			height: 3px;
-			background: var(--secondary-color);
-			border-radius: 3px;
+			display: none;
 		}
 
 		.sholat-list {
