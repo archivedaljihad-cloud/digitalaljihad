@@ -321,6 +321,7 @@
 			font-weight: 700;
 			color: #ffffff;
 			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+			white-space: nowrap;
 		}
 
 		.jadwal-mendatang-badge {
@@ -336,6 +337,8 @@
 			letter-spacing: 0.5px;
 			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 			border: 1px solid rgba(255, 255, 255, 0.4);
+			white-space: nowrap;
+			flex-shrink: 0;
 		}
 
 		.jadwal-mendatang-badge.badge-hari-ini {
@@ -637,22 +640,22 @@
 
 			$hariMap = [
 				'Sunday' => 'Ahad', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
-				'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+				'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => "Jum'at", 'Saturday' => 'Sabtu'
 			];
 			$bulanMap = [
-				'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret',
-				'April' => 'April', 'May' => 'Mei', 'June' => 'Juni',
-				'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September',
-				'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
+				'Jan' => 'Jan', 'Feb' => 'Feb', 'Mar' => 'Mar',
+				'Apr' => 'Apr', 'May' => 'Mei', 'Jun' => 'Jun',
+				'Jul' => 'Jul', 'Aug' => 'Agu', 'Sep' => 'Sep',
+				'Oct' => 'Okt', 'Nov' => 'Nov', 'Dec' => 'Des'
 			];
 
 			$hariInggris = $tanggalObj->format('l');
 			$hari = isset($hariMap[$hariInggris]) ? $hariMap[$hariInggris] : $hariInggris;
 			$tanggal = $tanggalObj->format('j');
-			$bulanInggris = $tanggalObj->format('F');
+			$bulanInggris = $tanggalObj->format('M');
 			$bulan = isset($bulanMap[$bulanInggris]) ? $bulanMap[$bulanInggris] : $bulanInggris;
-			$tahun = $tanggalObj->format('Y');
-			$formattedDate = "$hari, $tanggal $bulan $tahun";
+			$tahun = $tanggalObj->format('y');
+			$formattedDate = "$hari, $tanggal $bulan '$tahun";
 		@endphp
 
 		<!-- LAYOUT UTAMA: KOTAK NO 3 (FOTO IMAM) DI KIRI & INFO ROWS DI KANAN -->
