@@ -162,6 +162,13 @@
 
 		.stat-card.income .stat-value {
 			color: #00e676;
+			-webkit-text-stroke: 0.35px #ffffff;
+			text-shadow:
+				-1px -1px 0 #ffffff,
+				 1px -1px 0 #ffffff,
+				-1px  1px 0 #ffffff,
+				 1px  1px 0 #ffffff,
+				 0 2px 10px rgba(0, 0, 0, 0.9);
 		}
 
 		.stat-card.expense {
@@ -459,7 +466,13 @@
 
 		.transaction-amount.income {
 			color: #00e676;
-			text-shadow: 0 0 2px rgba(0, 230, 118, 0.3);
+			-webkit-text-stroke: 0.25px #ffffff;
+			text-shadow:
+				-1px -1px 0 #ffffff,
+				 1px -1px 0 #ffffff,
+				-1px  1px 0 #ffffff,
+				 1px  1px 0 #ffffff,
+				 0 2px 6px rgba(0, 0, 0, 0.9);
 		}
 
 		.transaction-amount.expense {
