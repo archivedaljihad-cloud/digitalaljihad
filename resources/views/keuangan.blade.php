@@ -308,13 +308,12 @@
 
 		.kpi-card.kpi-income .kpi-rp {
 			color: #00e676;
-			-webkit-text-stroke: 0.25px #ffffff;
+			-webkit-text-stroke: 0.2px #ffffff;
 			text-shadow:
-				-1px -1px 0 #ffffff,
-				 1px -1px 0 #ffffff,
-				-1px  1px 0 #ffffff,
-				 1px  1px 0 #ffffff,
-				 0 2px 6px rgba(0, 0, 0, 0.9);
+				-1px -1px 0 rgba(255,255,255,0.5),
+				 1px -1px 0 rgba(255,255,255,0.5),
+				-1px  1px 0 rgba(255,255,255,0.5),
+				 1px  1px 0 rgba(255,255,255,0.5);
 		}
 		.kpi-card.kpi-expense .kpi-rp { color: #ff6b6b; }
 		.kpi-card.kpi-balance .kpi-rp { color: #ffd700; }
@@ -330,13 +329,12 @@
 
 		.kpi-card.kpi-income .kpi-num {
 			color: #00e676;
-			-webkit-text-stroke: 0.35px #ffffff;
+			-webkit-text-stroke: 0.2px #ffffff;
 			text-shadow:
-				-1px -1px 0 #ffffff,
-				 1px -1px 0 #ffffff,
-				-1px  1px 0 #ffffff,
-				 1px  1px 0 #ffffff,
-				 0 2px 10px rgba(0, 0, 0, 0.9);
+				-1px -1px 0 rgba(255,255,255,0.5),
+				 1px -1px 0 rgba(255,255,255,0.5),
+				-1px  1px 0 rgba(255,255,255,0.5),
+				 1px  1px 0 rgba(255,255,255,0.5);
 		}
 
 		.kpi-card.kpi-expense .kpi-num {
@@ -476,13 +474,12 @@
 			color: #00e676;
 			font-weight: 700;
 			font-size: 1.15rem;
-			-webkit-text-stroke: 0.35px #ffffff;
+			-webkit-text-stroke: 0.2px #ffffff;
 			text-shadow:
-				-1px -1px 0 #ffffff,
-				 1px -1px 0 #ffffff,
-				-1px  1px 0 #ffffff,
-				 1px  1px 0 #ffffff,
-				 0 2px 8px rgba(0, 0, 0, 0.9);
+				-1px -1px 0 rgba(255,255,255,0.5),
+				 1px -1px 0 rgba(255,255,255,0.5),
+				-1px  1px 0 rgba(255,255,255,0.5),
+				 1px  1px 0 rgba(255,255,255,0.5);
 		}
 
 		.keuangan td.amount-expense .nominal-val {

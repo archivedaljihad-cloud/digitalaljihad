@@ -276,13 +276,12 @@
 		.stat-pill.target .stat-value { color: #00b4d8; }
 		.stat-pill.terkumpul .stat-value {
 			color: #00e676;
-			-webkit-text-stroke: 0.35px #ffffff;
+			-webkit-text-stroke: 0.2px #ffffff;
 			text-shadow:
-				-1px -1px 0 #ffffff,
-				 1px -1px 0 #ffffff,
-				-1px  1px 0 #ffffff,
-				 1px  1px 0 #ffffff,
-				 0 2px 8px rgba(0, 0, 0, 0.9);
+				-1px -1px 0 rgba(255,255,255,0.5),
+				 1px -1px 0 rgba(255,255,255,0.5),
+				-1px  1px 0 rgba(255,255,255,0.5),
+				 1px  1px 0 rgba(255,255,255,0.5);
 		}
 		.stat-pill.kekurangan .stat-value { color: #ff5252; }
 		.stat-pill.donatur .stat-value { color: #ffd700; }
@@ -420,13 +419,12 @@
 			color: #00e676;
 			font-weight: 800;
 			font-size: 1.15rem;
-			-webkit-text-stroke: 0.35px #ffffff;
+			-webkit-text-stroke: 0.2px #ffffff;
 			text-shadow:
-				-1px -1px 0 #ffffff,
-				 1px -1px 0 #ffffff,
-				-1px  1px 0 #ffffff,
-				 1px  1px 0 #ffffff,
-				 0 2px 8px rgba(0, 0, 0, 0.9);
+				-1px -1px 0 rgba(255,255,255,0.5),
+				 1px -1px 0 rgba(255,255,255,0.5),
+				-1px  1px 0 rgba(255,255,255,0.5),
+				 1px  1px 0 rgba(255,255,255,0.5);
 		}
 
 		.empty-notice {
