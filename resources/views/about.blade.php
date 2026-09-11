@@ -299,7 +299,7 @@
                                     <div id="collapseOne" class="collapse show" data-parent="#usageGuide">
                                         <div class="card-body small">
                                             1. Buka browser di perangkat yang terhubung ke TV<br>
-                                            2. Akses alamat aplikasi (contoh: http://masjidanda.tv)<br>
+                                            2. Akses alamat aplikasi (contoh: http://digital-aljihad.onrender.com)<br>
                                             3. Tekan F11 untuk mode layar penuh<br>
                                             4. Atur resolusi sesuai dengan layar TV<br>
                                             5. Sistem akan menampilkan informasi secara otomatis
@@ -316,11 +316,12 @@
                                     </div>
                                     <div id="collapseTwo" class="collapse" data-parent="#usageGuide">
                                         <div class="card-body small">
-                                            1. Login sebagai admin<br>
-                                            2. Akses menu Jadwal Sholat<br>
-                                            3. Input waktu sholat sesuai lokasi masjid<br>
-                                            4. Atur jadwal imam dan muadzin<br>
-                                            5. Sistem akan update otomatis di tampilan TV
+                                            1. Akses login user dkm atau petugas adalah :<br>
+                                            2. Bisa mengatur semua Jadwal Sholat<br>
+                                            3. Bisa mengatur waktu jadwal sholat<br>
+                                            4. Bisa mengatur imam,Bilal, Muadzin pada sholat Jum'at, Sholat Idul Fitri dan Sholat Idul Adha<br>
+											5. Bisa mengatur isi pengumuman, agenda kajian,Rotasi halaman yang tampil di TV<br>
+                                            6. Sistem akan update otomatis di tampilan TV
                                         </div>
                                     </div>
                                 </div>

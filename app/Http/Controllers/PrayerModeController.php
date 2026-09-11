@@ -101,6 +101,8 @@ class PrayerModeController extends Controller
                 'currentPrayer' => $item,
                 'remaining' => max(0, $remaining),
                 'theme' => $theme,
+                'bgOpacity' => 80,
+                'displayMessage' => '',
             ];
         }
 
@@ -108,11 +110,13 @@ class PrayerModeController extends Controller
             'active' => false,
             'phase' => self::PHASE_INACTIVE,
             'setting' => $setting,
+            'bgOpacity' => 80,
+            'displayMessage' => '',
         ];
     }
 
     /**
-     * Menampilkan halaman Mode Sholat.[cite: 6]
+     * Menampilkan halaman Mode Sholat.
      */
     public function index()
     {
@@ -132,7 +136,7 @@ class PrayerModeController extends Controller
             }
             $debugPhase = request()->query('phase', $state['active'] ? $state['phase'] : self::PHASE_COUNTDOWN);
             $debugPrayer = request()->query('prayer', $state['active'] ? (is_object($state['currentPrayer']) ? $state['currentPrayer']->nama_sholat : $state['currentPrayer']) : 'ASHAR');
-            $debugRemaining = request()->has('remaining') ? (int) request()->query('remaining') : ($state['active'] ? $state['remaining'] : 18);
+            $debugRemaining = request()->has('remaining') ? (int) request()->query('remaining') : ($state['active'] ? $state['remaining'] : ($debugPhase == 'adzan' ? 180 : ($debugPhase == 'iqamah' ? 300 : 18)));
 
             $state = [
                 'active' => true,
@@ -144,6 +148,8 @@ class PrayerModeController extends Controller
                 ],
                 'remaining' => $debugRemaining,
                 'theme' => request()->query('theme', $setting?->prayer_mode_theme ?? 'gold'),
+                'bgOpacity' => 80,
+                'displayMessage' => '',
             ];
         }
 
@@ -163,10 +169,42 @@ class PrayerModeController extends Controller
 
     /**
      * Endpoint AJAX
-     * Mengembalikan status Mode Sholat.[cite: 6]
+     * Mengembalikan status Mode Sholat.
      */
     public function status()
     {
-        return response()->json($this->getPrayerState());
+        $debugMode = request()->boolean('debug');
+
+        if ($debugMode) {
+            $state = $this->getPrayerState();
+            try {
+                $setting = $state['setting'] ?? AppSetting::first();
+            } catch (\Throwable $e) {
+                $setting = null;
+            }
+            $debugPhase = request()->query('phase', $state['active'] ? $state['phase'] : self::PHASE_COUNTDOWN);
+            $debugPrayer = request()->query('prayer', $state['active'] ? (is_object($state['currentPrayer']) ? $state['currentPrayer']->nama_sholat : $state['currentPrayer']) : 'ASHAR');
+            $debugRemaining = request()->has('remaining') ? (int) request()->query('remaining') : ($state['active'] ? $state['remaining'] : ($debugPhase == 'adzan' ? 180 : ($debugPhase == 'iqamah' ? 300 : 18)));
+
+            return response()->json([
+                'active' => true,
+                'setting' => $setting,
+                'phase' => $debugPhase,
+                'prayer' => strtoupper($debugPrayer),
+                'currentPrayer' => (object) [
+                    'nama_sholat' => strtoupper($debugPrayer),
+                    'waktu' => '15:30:00',
+                ],
+                'remaining' => $debugRemaining,
+                'theme' => request()->query('theme', $setting?->prayer_mode_theme ?? 'gold'),
+                'bgOpacity' => 80,
+                'displayMessage' => '',
+            ]);
+        }
+
+        $state = $this->getPrayerState();
+        $state['bgOpacity'] = $state['bgOpacity'] ?? 80;
+        $state['displayMessage'] = $state['displayMessage'] ?? '';
+        return response()->json($state);
     }
 }

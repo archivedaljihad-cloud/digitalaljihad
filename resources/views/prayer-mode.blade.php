@@ -951,12 +951,16 @@
     <script>
         let remaining = parseInt(document.getElementById('countdown')?.dataset?.seconds || 0);
         let hasPlayedTarhim = false;
+        let isTransitioning = false;
+        let countdownTimer = null;
 
         function formatTwoDigits(num) {
             return String(Math.max(0, num)).padStart(2, '0');
         }
 
         function updateCountdown() {
+            if (isTransitioning) return;
+
             const elHidden = document.getElementById('countdown');
             const elMinutes = document.getElementById('timerMinutes');
             const elSeconds = document.getElementById('timerSeconds');
@@ -999,20 +1003,71 @@
             if (remaining > 0) {
                 remaining--;
             } else {
-                setTimeout(function () {
-                    location.reload();
-                }, 1000);
+                // Countdown mencapai 00:00! Kunci proses agar tidak memicu reload berulang
+                isTransitioning = true;
+                if (countdownTimer) {
+                    clearInterval(countdownTimer);
+                    countdownTimer = null;
+                }
+                triggerPhaseTransition();
             }
+        }
+
+        function triggerPhaseTransition() {
+            let attempts = 0;
+            const checkNextPhase = setInterval(function () {
+                attempts++;
+                const debugParam = new URLSearchParams(window.location.search).get('debug');
+                const statusUrl = '/prayer-mode/status?_=' + Date.now() + (debugParam ? '&debug=' + debugParam : '');
+
+                fetch(statusUrl)
+                    .then(response => response.json())
+                    .then(function (data) {
+                        if (!data.active) {
+                            clearInterval(checkNextPhase);
+                            if (window !== window.parent) {
+                                // Parent rotator mengurus
+                            } else {
+                                window.location.href = "/";
+                            }
+                        } else if (data.phase !== '{{ $phase }}') {
+                            // Server telah resmi masuk fase berikutnya!
+                            clearInterval(checkNextPhase);
+                            if (debugParam) {
+                                const currentUrl = new URL(window.location.href);
+                                currentUrl.searchParams.set('phase', data.phase);
+                                currentUrl.searchParams.delete('remaining');
+                                window.location.href = currentUrl.toString();
+                            } else {
+                                window.location.reload();
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log("Transisi fase polling error:", error);
+                    });
+
+                // Failsafe: jika dalam 5 detik server belum berganti, reload sekali
+                if (attempts >= 5) {
+                    clearInterval(checkNextPhase);
+                    window.location.reload();
+                }
+            }, 1000);
         }
 
         @if($phase != 'prayer')
             updateCountdown();
-            setInterval(updateCountdown, 1000);
+            countdownTimer = setInterval(updateCountdown, 1000);
         @endif
 
-        /* Status polling */
+        /* Status polling (HANYA reload jika server menyatakan fase sholat telah berubah) */
         setInterval(function () {
-            fetch('/prayer-mode/status')
+            if (isTransitioning) return;
+
+            const debugParam = new URLSearchParams(window.location.search).get('debug');
+            const statusUrl = '/prayer-mode/status?_=' + Date.now() + (debugParam ? '&debug=' + debugParam : '');
+
+            fetch(statusUrl)
                 .then(response => response.json())
                 .then(function (data) {
                     if (!data.active) {
@@ -1022,17 +1077,21 @@
                             window.location.href = "/";
                         }
                     } else if (data.phase !== '{{ $phase }}') {
-                        window.location.reload();
-                    }
-
-                    if (data.theme !== '{{ $theme }}' || data.displayMessage !== @json($displayMessage) || data.bgOpacity !== {{ $bgOpacity }}) {
-                        window.location.reload();
+                        // Fase sholat berganti dari server, reload untuk merender fase baru
+                        if (debugParam) {
+                            const currentUrl = new URL(window.location.href);
+                            currentUrl.searchParams.set('phase', data.phase);
+                            currentUrl.searchParams.delete('remaining');
+                            window.location.href = currentUrl.toString();
+                        } else {
+                            window.location.reload();
+                        }
                     }
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    console.log("Status polling error:", error);
                 });
-        }, 5000);
+        }, 3000);
     </script>
 
     <!-- ELEMEN AUDIO TERSEMBUNYI -->
