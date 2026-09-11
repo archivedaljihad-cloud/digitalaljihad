@@ -244,7 +244,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="card shadow-sm" style="border-radius: 10px;">
                                 <div class="card-body text-center">
-                                    <img src="https://laravel.com/img/logomark.min.svg" alt="Laravel" style="height: 40px;" class="mb-2">
+                                    <img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" style="height: 40px;" class="mb-2">
                                     <h6 class="font-weight-bold" style="color: #1e5a3a;">Laravel 12</h6>
                                     <p class="small">Framework PHP untuk backend</p>
                                 </div>
@@ -253,7 +253,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="card shadow-sm" style="border-radius: 10px;">
                                 <div class="card-body text-center">
-                                    <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="Bootstrap" style="height: 40px;" class="mb-2">
+                                    <img src="https://cdn.simpleicons.org/bootstrap/7952B3" alt="Bootstrap" style="height: 40px;" class="mb-2">
                                     <h6 class="font-weight-bold" style="color: #1e5a3a;">Bootstrap 5</h6>
                                     <p class="small">Framework CSS untuk frontend</p>
                                 </div>
@@ -262,7 +262,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="card shadow-sm" style="border-radius: 10px;">
                                 <div class="card-body text-center">
-                                    <img src="https://jquery.com/jquery-wp-content/themes/jquery/img/logo-jquery.png" alt="jQuery" style="height: 40px;" class="mb-2">
+                                    <img src="{{ asset('img/jquery.svg') }}" alt="jQuery" style="height: 40px;" class="mb-2">
                                     <h6 class="font-weight-bold" style="color: #1e5a3a;">jQuery & AJAX</h6>
                                     <p class="small">Untuk update data real-time tanpa refresh</p>
                                 </div>
@@ -271,7 +271,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="card shadow-sm" style="border-radius: 10px;">
                                 <div class="card-body text-center">
-                                    <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" alt="MySQL" style="height: 40px;" class="mb-2">
+                                    <img src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL" style="height: 40px;" class="mb-2">
                                     <h6 class="font-weight-bold" style="color: #1e5a3a;">MySQL</h6>
                                     <p class="small">Database management system</p>
                                 </div>
