@@ -313,12 +313,6 @@
 
 		.kpi-card.kpi-income .kpi-rp {
 			color: #00e676;
-			-webkit-text-stroke: 0.2px #ffffff;
-			text-shadow:
-				-1px -1px 0 rgba(255,255,255,0.5),
-				 1px -1px 0 rgba(255,255,255,0.5),
-				-1px  1px 0 rgba(255,255,255,0.5),
-				 1px  1px 0 rgba(255,255,255,0.5);
 		}
 		.kpi-card.kpi-expense .kpi-rp { color: #ff6b6b; }
 		.kpi-card.kpi-balance .kpi-rp { color: #ffd700; }
@@ -334,12 +328,7 @@
 
 		.kpi-card.kpi-income .kpi-num {
 			color: #00e676;
-			-webkit-text-stroke: 0.2px #ffffff;
-			text-shadow:
-				-1px -1px 0 rgba(255,255,255,0.5),
-				 1px -1px 0 rgba(255,255,255,0.5),
-				-1px  1px 0 rgba(255,255,255,0.5),
-				 1px  1px 0 rgba(255,255,255,0.5);
+			text-shadow: 0 0 12px rgba(0, 230, 118, 0.35);
 		}
 
 		.kpi-card.kpi-expense .kpi-num {
@@ -479,12 +468,7 @@
 			color: #00e676;
 			font-weight: 700;
 			font-size: 1.15rem;
-			-webkit-text-stroke: 0.2px #ffffff;
-			text-shadow:
-				-1px -1px 0 rgba(255,255,255,0.5),
-				 1px -1px 0 rgba(255,255,255,0.5),
-				-1px  1px 0 rgba(255,255,255,0.5),
-				 1px  1px 0 rgba(255,255,255,0.5);
+			text-shadow: 0 0 10px rgba(0, 230, 118, 0.25);
 		}
 
 		.keuangan td.amount-expense .nominal-val {
