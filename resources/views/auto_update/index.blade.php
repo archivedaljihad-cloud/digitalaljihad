@@ -88,11 +88,11 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="auto_update_city">Kota</label>
+										<label for="auto_update_city">Kota / Kabupaten</label>
 										<input type="text" class="form-control" id="auto_update_city" 
-										name="auto_update_city" value="{{ old('auto_update_city', $setting->auto_update_city ?? 'Jakarta') }}"
-										placeholder="Contoh: Cilegon, Jakarta, Bandung" required>
-										<small class="text-muted">Current value: {{ $setting->auto_update_city ?? 'Jakarta' }}</small>
+										name="auto_update_city" value="{{ old('auto_update_city', $setting->auto_update_city ?? 'Kabupaten Bekasi') }}"
+										placeholder="Contoh: Kabupaten Bekasi, Jakarta, Bandung" required>
+										<small class="text-muted">Nilai saat ini: {{ $setting->auto_update_city ?? 'Kabupaten Bekasi' }}</small>
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -106,32 +106,32 @@
 							</div>
 
 							<div class="form-group">
-								<label for="auto_update_method">Metode Perhitungan</label>
+								<label for="auto_update_method">Metode Perhitungan / Sumber Data</label>
 								<select class="form-control" id="auto_update_method" name="auto_update_method">
-									<option value="11" {{ ($setting->auto_update_method ?? 11) == 11 ? 'selected' : '' }}>
+									<option value="20" {{ ($setting->auto_update_method ?? 20) == 20 ? 'selected' : '' }}>
+										⭐ Bimas Islam Kemenag RI (Resmi bimasislam.kemenag.go.id)
+									</option>
+									<option value="11" {{ ($setting->auto_update_method ?? 20) == 11 ? 'selected' : '' }}>
 										Kementerian Agama RI (Metode 11)
 									</option>
-									<option value="20" {{ ($setting->auto_update_method ?? 11) == 20 ? 'selected' : '' }}>
-										Kementerian Agama RI (Metode 20)
-									</option>
-									<option value="1" {{ ($setting->auto_update_method ?? 11) == 1 ? 'selected' : '' }}>
+									<option value="1" {{ ($setting->auto_update_method ?? 20) == 1 ? 'selected' : '' }}>
 										University of Islamic Sciences, Karachi
 									</option>
-									<option value="2" {{ ($setting->auto_update_method ?? 11) == 2 ? 'selected' : '' }}>
+									<option value="2" {{ ($setting->auto_update_method ?? 20) == 2 ? 'selected' : '' }}>
 										Islamic Society of North America
 									</option>
-									<option value="3" {{ ($setting->auto_update_method ?? 11) == 3 ? 'selected' : '' }}>
+									<option value="3" {{ ($setting->auto_update_method ?? 20) == 3 ? 'selected' : '' }}>
 										Muslim World League
 									</option>
-									<option value="4" {{ ($setting->auto_update_method ?? 11) == 4 ? 'selected' : '' }}>
+									<option value="4" {{ ($setting->auto_update_method ?? 20) == 4 ? 'selected' : '' }}>
 										Umm Al-Qura University, Makkah
 									</option>
-									<option value="5" {{ ($setting->auto_update_method ?? 11) == 5 ? 'selected' : '' }}>
+									<option value="5" {{ ($setting->auto_update_method ?? 20) == 5 ? 'selected' : '' }}>
 										Egyptian General Authority of Survey
 									</option>
 								</select>
 								<small class="form-text text-muted">
-									Metode perhitungan waktu sholat yang digunakan
+									Disinkronkan langsung dengan tabel resmi Bimas Islam Kementerian Agama Republik Indonesia
 								</small>
 							</div>
 

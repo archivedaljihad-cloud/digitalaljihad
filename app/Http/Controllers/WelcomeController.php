@@ -88,6 +88,7 @@ class WelcomeController extends Controller
                 ])
             ]);
         }
+        $this->syncJadwalSholatHariIni($settings);
         return view('rotator', [
             'rotationInterval' => $settings->getRotationInterval(),
             'rotationEnabled'  => $settings->isRotationEnabled(),
@@ -103,10 +104,12 @@ class WelcomeController extends Controller
                 'footer'              => '',
                 'running_text'        => '',
                 'auto_update_jadwal'  => true,
-                'auto_update_city'    => 'Jakarta',
+                'auto_update_city'    => 'Kabupaten Bekasi',
                 'auto_update_country' => 'Indonesia',
+                'auto_update_method'  => 20,
             ]);
         }
+        $this->syncJadwalSholatHariIni($settings);
         $jadwalSholat = JadwalSholat::urutkan()->get();
         $today = Carbon::today('Asia/Jakarta');
         $sholatJumat = SholatJumat::where('tanggal', '>=', $today)
@@ -141,6 +144,7 @@ class WelcomeController extends Controller
     public function utamaEmbed()
     {
         $settings = AppSetting::first();
+        $this->syncJadwalSholatHariIni($settings);
         $jadwalSholat = JadwalSholat::urutkan()->get();
         return view(
             'utama',
@@ -149,6 +153,22 @@ class WelcomeController extends Controller
                 'jadwalSholat'
             )
         );
+    }
+
+    private function syncJadwalSholatHariIni($settings)
+    {
+        if ($settings && $settings->auto_update_jadwal) {
+            $today = Carbon::today('Asia/Jakarta');
+            $lastUpdate = $settings->last_auto_update ? Carbon::parse($settings->last_auto_update)->timezone('Asia/Jakarta')->startOfDay() : null;
+            
+            if (!$lastUpdate || $lastUpdate->lt($today)) {
+                try {
+                    app(\App\Services\JadwalSholatAutoUpdateService::class)->updateFromAPI();
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('Auto-sync Kemenag on TV load: ' . $e->getMessage());
+                }
+            }
+        }
     }
     public function keuanganEmbed()
     {

@@ -26,12 +26,12 @@ class AutoUpdateController extends Controller
 		if (!$setting) {
 			$setting = AppSetting::create([
 				'nama_aplikasi' => 'MASJID AL-IKHLAS',
-				'auto_update_jadwal' => false,
+				'auto_update_jadwal' => true,
 				'auto_update_frequency' => 'daily',
 				'auto_update_time' => '00:00:00',
-				'auto_update_city' => 'Jakarta',
+				'auto_update_city' => 'Kabupaten Bekasi',
 				'auto_update_country' => 'Indonesia',
-				'auto_update_method' => 11,
+				'auto_update_method' => 20,
 			]);
 		}
 		
@@ -60,9 +60,9 @@ class AutoUpdateController extends Controller
 
 			$setting->auto_update_jadwal = $request->has('auto_update_jadwal') ? true : false;
 			$setting->auto_update_frequency = $request->auto_update_frequency ?? 'daily';
-			$setting->auto_update_city = $request->auto_update_city ?? 'Jakarta';
+			$setting->auto_update_city = $request->auto_update_city ?? 'Kabupaten Bekasi';
 			$setting->auto_update_country = $request->auto_update_country ?? 'Indonesia';
-			$setting->auto_update_method = $request->auto_update_method ?? 11;
+			$setting->auto_update_method = $request->auto_update_method ?? 20;
 			
 			if ($request->has('auto_update_time') && !empty($request->auto_update_time)) {
 				$setting->auto_update_time = $request->auto_update_time . ':00';
