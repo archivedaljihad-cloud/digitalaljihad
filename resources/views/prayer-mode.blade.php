@@ -951,11 +951,55 @@
     <script>
         let remaining = parseInt(document.getElementById('countdown')?.dataset?.seconds || 0);
         let hasPlayedTarhim = false;
+        let hasPlayedAdzan = false;
         let isTransitioning = false;
         let countdownTimer = null;
 
         function formatTwoDigits(num) {
             return String(Math.max(0, num)).padStart(2, '0');
+        }
+
+        function playTarhimAudio() {
+            if (hasPlayedTarhim) return;
+            const tarhimAudio = document.getElementById('audioTarhim');
+            if (!tarhimAudio) return;
+
+            tarhimAudio.play().then(function () {
+                hasPlayedTarhim = true;
+                console.log("Audio tarhim berhasil berputar saat masuk fase menuju adzan.");
+            }).catch(function (error) {
+                console.log("Autoplay audio tarhim tertahan browser:", error);
+                const unlockAudio = function () {
+                    tarhimAudio.play().then(function () {
+                        hasPlayedTarhim = true;
+                    }).catch(function () {});
+                    document.removeEventListener('click', unlockAudio);
+                    document.removeEventListener('touchstart', unlockAudio);
+                };
+                document.addEventListener('click', unlockAudio, { once: true });
+                document.addEventListener('touchstart', unlockAudio, { once: true });
+            });
+        }
+
+        function stopTarhimAudio() {
+            const tarhimAudio = document.getElementById('audioTarhim');
+            if (tarhimAudio) {
+                tarhimAudio.pause();
+                tarhimAudio.currentTime = 0;
+            }
+        }
+
+        function playAdzanAudio() {
+            if (hasPlayedAdzan) return;
+            const adzanAudio = document.getElementById('audioAdzan');
+            if (adzanAudio) {
+                adzanAudio.play().then(function () {
+                    hasPlayedAdzan = true;
+                    console.log("Audio adzan berputar.");
+                }).catch(function (error) {
+                    console.log("Autoplay audio adzan tertahan browser:", error);
+                });
+            }
         }
 
         function updateCountdown() {
@@ -976,34 +1020,25 @@
             if (elSeconds) elSeconds.textContent = secStr;
             if (elHidden) elHidden.textContent = minStr + ':' + secStr;
 
-            // AUDIO TARHIM (Countdown phase <= trigger seconds, default 300)
+            // AUDIO TARHIM (Menuju Adzan / Countdown phase)
             @if($phase == 'countdown')
                 if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 300 }} && !hasPlayedTarhim) {
-                    const tarhimAudio = document.getElementById('audioTarhim');
-                    if (tarhimAudio) {
-                        tarhimAudio.play().catch(function(error) {
-                            console.log("Audio tarhim diblokir browser:", error);
-                        });
-                    }
-                    hasPlayedTarhim = true;
+                    playTarhimAudio();
                 }
             @endif
 
             // AUDIO ADZAN (Adzan phase)
             @if($phase == 'adzan')
-                const adzanAudio = document.getElementById('audioAdzan');
-                if (adzanAudio && !hasPlayedTarhim) {
-                    adzanAudio.play().catch(function(error) {
-                        console.log("Audio adzan diblokir browser:", error);
-                    });
-                    hasPlayedTarhim = true;
-                }
+                playAdzanAudio();
             @endif
 
             if (remaining > 0) {
                 remaining--;
             } else {
-                // Countdown mencapai 00:00! Kunci proses agar tidak memicu reload berulang
+                // Countdown mencapai 00:00! Waktu adzan tiba:
+                // Hentikan audio tarhim seketika agar tidak bertabrakan dengan adzan
+                stopTarhimAudio();
+
                 isTransitioning = true;
                 if (countdownTimer) {
                     clearInterval(countdownTimer);
@@ -1060,6 +1095,16 @@
             countdownTimer = setInterval(updateCountdown, 1000);
         @endif
 
+        // Inisialisasi Audio saat halaman pertama kali termuat
+        @if($phase == 'countdown')
+            if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 300 }}) {
+                playTarhimAudio();
+            }
+        @elseif($phase == 'adzan')
+            stopTarhimAudio();
+            playAdzanAudio();
+        @endif
+
         /* Status polling (HANYA reload jika server menyatakan fase sholat telah berubah) */
         setInterval(function () {
             if (isTransitioning) return;
@@ -1097,41 +1142,51 @@
     <!-- ELEMEN AUDIO TERSEMBUNYI -->
     @php
         $namaSholatRaw = $currentPrayer ? (is_object($currentPrayer) ? ($currentPrayer->nama_sholat ?? '') : $currentPrayer) : '';
+        $namaSholatClean = ucwords(strtolower(trim($namaSholatRaw)));
         $isSubuh = strtolower(trim($namaSholatRaw)) === 'subuh';
 
+        // 1. Tentukan sumber audio Tarhim (Diputar di fase COUNTDOWN / Menuju Adzan)
         if ($isSubuh) {
-            if (!empty($setting->tarhim_audio_subuh)) {
+            if (!empty($setting->tarhim_audio_subuh) && file_exists(public_path('storage/' . $setting->tarhim_audio_subuh))) {
                 $tarhimSource = asset('storage/' . $setting->tarhim_audio_subuh);
-            } elseif (!empty($setting->tarhim_audio)) {
+            } elseif (!empty($setting->tarhim_audio) && file_exists(public_path('storage/' . $setting->tarhim_audio))) {
                 $tarhimSource = asset('storage/' . $setting->tarhim_audio);
             } elseif (file_exists(public_path('audio/Subuh.mp3'))) {
                 $tarhimSource = asset('audio/Subuh.mp3');
             } else {
-                $tarhimSource = asset('audio/tarhim2.mp3');
+                $tarhimSource = asset('audio/Isya.mp3');
             }
         } else {
-            if (!empty($setting->tarhim_audio_reguler)) {
+            if (!empty($setting->tarhim_audio_reguler) && file_exists(public_path('storage/' . $setting->tarhim_audio_reguler))) {
                 $tarhimSource = asset('storage/' . $setting->tarhim_audio_reguler);
-            } elseif (!empty($setting->tarhim_audio)) {
+            } elseif (!empty($setting->tarhim_audio) && file_exists(public_path('storage/' . $setting->tarhim_audio))) {
                 $tarhimSource = asset('storage/' . $setting->tarhim_audio);
+            } elseif (file_exists(public_path('audio/' . $namaSholatClean . '.mp3'))) {
+                // Audio tarhim reguler sesuai nama sholat (Dzuhur.mp3, Ashar.mp3, Maghrib.mp3, Isya.mp3)
+                $tarhimSource = asset('audio/' . $namaSholatClean . '.mp3');
+            } elseif (file_exists(public_path('audio/Isya.mp3'))) {
+                $tarhimSource = asset('audio/Isya.mp3');
             } else {
-                $tarhimSource = asset('audio/tarhim2.mp3');
+                $tarhimSource = asset('audio/Dzuhur.mp3');
             }
         }
+
+        // 2. Tentukan sumber audio Adzan (HANYA diputar jika ada file adzan sebenarnya)
+        $adzanSource = null;
+        if (file_exists(public_path('audio/adzan_' . strtolower($namaSholatClean) . '.mp3'))) {
+            $adzanSource = asset('audio/adzan_' . strtolower($namaSholatClean) . '.mp3');
+        } elseif (file_exists(public_path('audio/adzan.mp3'))) {
+            $adzanSource = asset('audio/adzan.mp3');
+        }
     @endphp
-    <audio id="audioTarhim">
+    <audio id="audioTarhim" preload="auto">
         <source src="{{ $tarhimSource }}" type="audio/mpeg">
     </audio>
-    <audio id="audioAdzan">
-        @php
-            $namaSholatClean = ucwords(strtolower(trim($namaSholatRaw)));
-            $audioFile = 'adzan.mp3?v=2';
-            if (in_array($namaSholatClean, ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'])) {
-                $audioFile = $namaSholatClean . '.mp3';
-            }
-        @endphp
-        <source src="{{ asset('audio/' . $audioFile) }}" type="audio/mpeg">
+    @if(!empty($adzanSource))
+    <audio id="audioAdzan" preload="auto">
+        <source src="{{ $adzanSource }}" type="audio/mpeg">
     </audio>
+    @endif
 </body>
 
 </html>
