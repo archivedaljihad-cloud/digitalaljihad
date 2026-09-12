@@ -1,5 +1,7 @@
 # 📖 DOKUMENTASI & PANDUAN PENGGUNAAN SISTEM INFORMASI DISPLAY MASJID
 ## Masjid Jami' Al-Jihad (Digital Display & Management System v3.04)
+**Alamat:** Perumahan Graha Asri, Ds. Simpangan, Cikarang Utara, Kabupaten Bekasi, Jawa Barat  
+*Dokumen Resmi Dewan Kemakmuran Masjid (DKM)*
 
 ---
 
