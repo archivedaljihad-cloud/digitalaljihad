@@ -83,43 +83,91 @@ class AppSetting extends Model
     }
 
     /**
-     * Daftar halaman rotasi default.
+     * Daftar halaman rotasi default lengkap (14 Halaman).
+     */
+    public function getDefaultRotationPagesList(): array
+    {
+        return [
+            [
+                'url' => 'welcome-embed',
+                'name' => 'Dashboard Lengkap',
+                'active' => false
+            ],
+            [
+                'url' => 'utama-embed',
+                'name' => 'Jadwal Sholat',
+                'active' => true
+            ],
+            [
+                'url' => 'keuangan-embed',
+                'name' => 'Rincian Keuangan',
+                'active' => true
+            ],
+            [
+                'url' => 'jumat-embed',
+                'name' => 'Jadwal Sholat Jumat',
+                'active' => true
+            ],
+            [
+                'url' => 'pengumuman-embed',
+                'name' => 'Pengumuman',
+                'active' => true
+            ],
+            [
+                'url' => 'keuangan-summary-embed',
+                'name' => 'Ringkasan Keuangan',
+                'active' => true
+            ],
+            [
+                'url' => 'qris-embed',
+                'name' => 'QRIS Donasi',
+                'active' => true
+            ],
+            [
+                'url' => 'slide-embed',
+                'name' => 'Slide Informasi',
+                'active' => true
+            ],
+            [
+                'url' => 'idul-fitri-embed',
+                'name' => 'Idul Fitri',
+                'active' => true
+            ],
+            [
+                'url' => 'idul-adha-embed',
+                'name' => 'Idul Adha',
+                'active' => true
+            ],
+            [
+                'url' => 'ambulance-embed',
+                'name' => 'Rincian Kas Ambulance',
+                'active' => true
+            ],
+            [
+                'url' => 'infaq-embed',
+                'name' => 'Penggalangan Infaq',
+                'active' => true
+            ],
+            [
+                'url' => 'live-mekah-embed',
+                'name' => 'Live TV Mekah (Masjidil Haram)',
+                'active' => true
+            ],
+            [
+                'url' => 'live-madinah-embed',
+                'name' => 'Live TV Madinah (Masjid Nabawi)',
+                'active' => true
+            ]
+        ];
+    }
+
+    /**
+     * Daftar halaman rotasi yang sedang aktif dan tersimpan.
      */
     public function getRotationPagesList()
     {
         if (empty($this->rotation_pages)) {
-            return [
-                [
-                    'url' => 'welcome-embed',
-                    'name' => 'Dashboard Lengkap',
-                    'active' => false
-                ],
-                [
-                    'url' => 'utama-embed',
-                    'name' => 'Jadwal Sholat',
-                    'active' => true
-                ],
-                [
-                    'url' => 'keuangan-embed',
-                    'name' => 'Rincian Keuangan',
-                    'active' => true
-                ],
-                [
-                    'url' => 'jumat-embed',
-                    'name' => 'Jadwal Sholat Jumat',
-                    'active' => true
-                ],
-                [
-                    'url' => 'pengumuman-embed',
-                    'name' => 'Pengumuman',
-                    'active' => true
-                ],
-                [
-                    'url' => 'keuangan-summary-embed',
-                    'name' => 'Ringkasan Keuangan',
-                    'active' => true
-                ]
-            ];
+            return $this->getDefaultRotationPagesList();
         }
 
         $data = is_string($this->rotation_pages)
@@ -127,88 +175,21 @@ class AppSetting extends Model
             : $this->rotation_pages;
 
         if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
-            return [
-                [
-                    'url' => 'welcome-embed',
-                    'name' => 'Dashboard Lengkap',
-                    'active' => false
-                ],
-                [
-                    'url' => 'utama-embed',
-                    'name' => 'Jadwal Sholat',
-                    'active' => true
-                ],
-                [
-                    'url' => 'keuangan-embed',
-                    'name' => 'Rincian Keuangan',
-                    'active' => true
-                ],
-                [
-                    'url' => 'jumat-embed',
-                    'name' => 'Jadwal Sholat Jumat',
-                    'active' => true
-                ],
-                [
-                    'url' => 'pengumuman-embed',
-                    'name' => 'Pengumuman',
-                    'active' => true
-                ],
-                [
-                    'url' => 'keuangan-summary-embed',
-                    'name' => 'Ringkasan Keuangan',
-                    'active' => true
-                ]
-            ];
+            return $this->getDefaultRotationPagesList();
         }
 
-        $hasAmbulance = false;
-        $hasInfaq = false;
+        // Cek halaman canonical yang mungkin belum ada di $data, tambahkan di akhir
+        $existingUrls = [];
         foreach ($data as $item) {
-            if (isset($item['url']) && $item['url'] === 'ambulance-embed') {
-                $hasAmbulance = true;
+            if (isset($item['url'])) {
+                $existingUrls[] = $item['url'];
             }
-            if (isset($item['url']) && $item['url'] === 'infaq-embed') {
-                $hasInfaq = true;
-            }
-        }
-        if (!$hasAmbulance) {
-            $data[] = [
-                'url' => 'ambulance-embed',
-                'name' => 'Rincian Kas Ambulance',
-                'active' => true,
-            ];
-        }
-        if (!$hasInfaq) {
-            $data[] = [
-                'url' => 'infaq-embed',
-                'name' => 'Penggalangan Infaq',
-                'active' => true,
-            ];
         }
 
-        $hasLiveMakkah = false;
-        $hasLiveMadinah = false;
-        foreach ($data as $item) {
-            if (isset($item['url']) && $item['url'] === 'live-mekah-embed') {
-                $hasLiveMakkah = true;
+        foreach ($this->getDefaultRotationPagesList() as $defaultPage) {
+            if (!in_array($defaultPage['url'], $existingUrls)) {
+                $data[] = $defaultPage;
             }
-            if (isset($item['url']) && $item['url'] === 'live-madinah-embed') {
-                $hasLiveMadinah = true;
-            }
-        }
-        if (!$hasLiveMakkah) {
-            $data[] = [
-                'url' => 'live-mekah-embed',
-                'name' => 'Live TV Mekah (Masjidil Haram)',
-                'active' => true,
-            ];
-        }
-        if (!$hasLiveMadinah) {
-            $data[] = [
-                'url' => 'live-madinah-embed',
-                'name' => 'Live TV Madinah (Masjid Nabawi)',
-                'active' => true,
-            ];
         }
 
         return $data;
