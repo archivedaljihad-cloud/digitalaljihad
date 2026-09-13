@@ -169,31 +169,37 @@ class AppSettingController extends Controller
             );
     }
     public function updatePrayerSettings(Request $request)
-{
-    $validated = $request->validate([
-        'rotation_interval'             => 'required|integer|min:1|max:3600',
-        'prayer_mode_duration'          => 'required|integer|min:1|max:120',
-        'prayer_mode_before_adzan'      => 'required|integer|min:0|max:60',
-        'prayer_mode_adzan_duration'    => 'required|integer|min:1|max:60',
-        'prayer_mode_iqamah_duration'   => 'required|integer|min:1|max:60',
-        'prayer_mode_after_prayer'      => 'required|integer|min:0|max:60',
-    ]);
+    {
+        $validated = $request->validate([
+            'rotation_interval'             => 'required|integer|min:1|max:3600',
+            'prayer_mode_duration'          => 'required|integer|min:1|max:120',
+            'prayer_mode_before_adzan'      => 'required|integer|min:0|max:60',
+            'prayer_mode_adzan_duration'    => 'required|integer|min:1|max:60',
+            'prayer_mode_iqamah_duration'   => 'required|integer|min:1|max:60',
+            'prayer_mode_after_prayer'      => 'required|integer|min:0|max:60',
+            'tarhim_trigger_seconds'        => 'nullable|integer|min:0|max:3600',
+        ]);
 
-    $setting = $this->getOrCreateSetting();
+        $setting = $this->getOrCreateSetting();
 
-    $setting->rotation_interval = $validated['rotation_interval'];
-    $setting->prayer_mode_duration = $validated['prayer_mode_duration'];
-    $setting->prayer_mode_before_adzan = $validated['prayer_mode_before_adzan'];
-    $setting->prayer_mode_adzan_duration = $validated['prayer_mode_adzan_duration'];
-    $setting->prayer_mode_iqamah_duration = $validated['prayer_mode_iqamah_duration'];
-    $setting->prayer_mode_after_prayer = $validated['prayer_mode_after_prayer'];
+        $setting->rotation_interval = $validated['rotation_interval'];
+        $setting->prayer_mode_duration = $validated['prayer_mode_duration'];
+        $setting->prayer_mode_before_adzan = $validated['prayer_mode_before_adzan'];
+        $setting->prayer_mode_adzan_duration = $validated['prayer_mode_adzan_duration'];
+        $setting->prayer_mode_iqamah_duration = $validated['prayer_mode_iqamah_duration'];
+        $setting->prayer_mode_after_prayer = $validated['prayer_mode_after_prayer'];
+        if ($request->filled('tarhim_trigger_seconds')) {
+            $setting->tarhim_trigger_seconds = (int) $request->input('tarhim_trigger_seconds');
+        }
 
-    $setting->save();
+        $setting->save();
 
-    return redirect()
-        ->route('jadwal_sholat.index')
-        ->with('success', 'Pengaturan waktu sistem berhasil diperbarui.');
-}
+        \Illuminate\Support\Facades\Cache::forget('data_timestamp');
+
+        return redirect()
+            ->route('jadwal_sholat.index')
+            ->with('success', 'Pengaturan waktu sistem berhasil diperbarui.');
+    }
 
     /**
      * Menangani upload file pengaturan.

@@ -203,8 +203,8 @@
         const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
         const parseBool = (val) => val === true || val === 1 || val === "1" || String(val).toLowerCase() === "true";
 
-        let rotationInterval = parseInt({{ $rotationInterval ?? 15 }});
-        if (isNaN(rotationInterval) || rotationInterval < 10) rotationInterval = 15;
+        let rotationInterval = parseInt({{ $rotationInterval ?? 20 }});
+        if (isNaN(rotationInterval) || rotationInterval < 5) rotationInterval = 20;
         let rotationEnabled = parseBool("{{ $rotationEnabled ?? true }}");
 
         @php
@@ -305,7 +305,14 @@
                 }
             }, 6000);
 
-            resetCountdown();
+            // Jangan kurangi detik saat iframe masih proses muat konten.
+            // Countdown akan berjalan utuh saat onFrameLoad selesai menampilkan transisi.
+            if (countdownIntervalId) {
+                clearInterval(countdownIntervalId);
+                countdownIntervalId = null;
+            }
+            countdown = rotationInterval;
+            updateCountdownDisplay();
         }
 
         function resetCountdown() {
@@ -370,7 +377,10 @@
 
         async function checkPrayerModeAPI() {
             try {
-                const response = await fetch('/prayer-mode/status?_=' + Date.now());
+                const response = await fetch('/prayer-mode/status?_=' + Date.now(), {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+                });
                 const data = await response.json();
                 
                 if (data.active) {
@@ -416,17 +426,24 @@
 
         async function fetchLatestSettings() {
             try {
-                const response = await fetch('/rotation-settings?_=' + Date.now());
+                const response = await fetch('/rotation-settings?_=' + Date.now(), {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+                });
                 const data = await response.json();
-                let hasChanges = false;
 
                 let apiIntervalRaw = data.interval !== undefined ? data.interval : data.rotation_interval;
                 if (apiIntervalRaw !== undefined) {
                     let apiInterval = parseInt(apiIntervalRaw);
-                    if (!isNaN(apiInterval) && apiInterval >= 1 && apiInterval !== rotationInterval) {
+                    if (!isNaN(apiInterval) && apiInterval >= 5 && apiInterval !== rotationInterval) {
                         rotationInterval = apiInterval;
-                        hasChanges = true;
-                        showNotification(`Interval berubah menjadi ${rotationInterval} detik`);
+                        showNotification(`Interval rotasi diperbarui: ${rotationInterval} detik`);
+                        if (!isLoading && rotationEnabled && activePages.length > 1) {
+                            resetCountdown();
+                        } else {
+                            countdown = rotationInterval;
+                            updateCountdownDisplay();
+                        }
                     }
                 }
 
@@ -435,8 +452,13 @@
                     let apiEnabled = parseBool(apiEnabledRaw);
                     if (apiEnabled !== rotationEnabled) {
                         rotationEnabled = apiEnabled;
-                        hasChanges = true;
                         showNotification(rotationEnabled ? 'Rotasi diaktifkan' : 'Rotasi dinonaktifkan');
+                        if (rotationEnabled && !isLoading) {
+                            resetCountdown();
+                        } else if (!rotationEnabled && countdownIntervalId) {
+                            clearInterval(countdownIntervalId);
+                            countdownIntervalId = null;
+                        }
                     }
                 }
 
@@ -467,21 +489,12 @@
                     if (oldActiveUrls !== newActiveUrls) {
                         pages = newPages;
                         activePages = newActivePages;
-                        hasChanges = true;
                         if (currentIndex >= activePages.length) currentIndex = 0;
-                        showNotification(`Halaman yang ditampilkan diperbarui`);
+                        showNotification(`Daftar halaman diperbarui`);
+                        if (!isLoading) {
+                            loadPage(currentIndex);
+                        }
                     }
-                }
-
-                if (hasChanges && !isLoading) {
-                    if (countdownIntervalId) clearInterval(countdownIntervalId);
-                    if (activePages.length > 0 && currentIndex < activePages.length) {
-                        loadPage(currentIndex);
-                    } else if (activePages.length > 0) {
-                        currentIndex = 0;
-                        loadPage(0);
-                    }
-                    resetCountdown();
                 }
             } catch (error) {
                 console.error('Error fetching rotation settings:', error);

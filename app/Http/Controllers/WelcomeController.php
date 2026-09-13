@@ -256,7 +256,7 @@ class WelcomeController extends Controller
         $settings = AppSetting::first();
         return response()->json([
             'interval' => $settings
-                ? $settings->getRotationInterval()
+                ? (int) $settings->getRotationInterval()
                 : 10,
             'enabled' => $settings
                 ? $settings->isRotationEnabled()
@@ -264,7 +264,9 @@ class WelcomeController extends Controller
             'pages' => $settings
                 ? $settings->getRotationPagesList()
                 : [],
-        ]);
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+          ->header('Pragma', 'no-cache')
+          ->header('Expires', 'Sat, 01 Jan 2000 00:00:00 GMT');
     }
     public function getDataTimestamp()
     {
