@@ -43,12 +43,19 @@ class AppSetting extends Model
         'tarhim_audio_subuh',
         'tarhim_audio_reguler',
         'tarhim_trigger_seconds',
+        // ===== Live Streaming =====
+        'live_makkah_url',
+        'live_madinah_url',
+        'live_stream_audio',
+        'live_stream_overlay',
     ];
 
     protected $casts = [
         'auto_update_jadwal' => 'boolean',
         'rotation_enabled' => 'boolean',
         'prayer_mode_enabled' => 'boolean',
+        'live_stream_audio' => 'boolean',
+        'live_stream_overlay' => 'boolean',
         'last_auto_update' => 'datetime',
         'auto_update_time' => 'datetime:H:i:s',
         // ===== TAMBAHAN PENGATURAN AUDIO =====
@@ -174,6 +181,31 @@ class AppSetting extends Model
             ];
         }
 
+        $hasLiveMakkah = false;
+        $hasLiveMadinah = false;
+        foreach ($data as $item) {
+            if (isset($item['url']) && $item['url'] === 'live-mekah-embed') {
+                $hasLiveMakkah = true;
+            }
+            if (isset($item['url']) && $item['url'] === 'live-madinah-embed') {
+                $hasLiveMadinah = true;
+            }
+        }
+        if (!$hasLiveMakkah) {
+            $data[] = [
+                'url' => 'live-mekah-embed',
+                'name' => 'Live TV Mekah (Masjidil Haram)',
+                'active' => true,
+            ];
+        }
+        if (!$hasLiveMadinah) {
+            $data[] = [
+                'url' => 'live-madinah-embed',
+                'name' => 'Live TV Madinah (Masjid Nabawi)',
+                'active' => true,
+            ];
+        }
+
         return $data;
     }
 
@@ -238,5 +270,34 @@ class AppSetting extends Model
     public function getFridayPrayerDuration()
     {
         return $this->prayer_mode_jumat_duration ?? 50;
+    }
+
+    /**
+     * ==============================
+     * LIVE STREAMING TV
+     * ==============================
+     */
+    public function getLiveMakkahUrl(): string
+    {
+        return !empty($this->live_makkah_url) 
+            ? $this->live_makkah_url 
+            : 'https://www.youtube.com/watch?v=live_stream?channel=UCr_yW_8sC_Yg_U9b_wH5Npg';
+    }
+
+    public function getLiveMadinahUrl(): string
+    {
+        return !empty($this->live_madinah_url) 
+            ? $this->live_madinah_url 
+            : 'https://www.youtube.com/watch?v=live_stream?channel=UCaT_20Vp2Zq0FzXp3m4bVrg';
+    }
+
+    public function isLiveStreamAudioEnabled(): bool
+    {
+        return (bool) ($this->live_stream_audio ?? false);
+    }
+
+    public function isLiveStreamOverlayEnabled(): bool
+    {
+        return (bool) ($this->live_stream_overlay ?? true);
     }
 }

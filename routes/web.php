@@ -22,6 +22,7 @@ use App\Http\Controllers\AgendaKajianController;
 use App\Http\Controllers\PrayerModeController;
 use App\Http\Controllers\KeuanganAmbulanceController;
 use App\Http\Controllers\ProgramInfaqController;
+use App\Http\Controllers\LiveStreamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,10 @@ Route::get('/ambulance-embed', [KeuanganAmbulanceController::class, 'embed'])
     ->name('ambulance.embed');
 Route::get('/infaq-embed', [ProgramInfaqController::class, 'embed'])
     ->name('infaq.embed');
+Route::get('/live-mekah-embed', [LiveStreamController::class, 'mekahEmbed'])
+    ->name('live-mekah.embed');
+Route::get('/live-madinah-embed', [LiveStreamController::class, 'madinahEmbed'])
+    ->name('live-madinah.embed');
 Route::get('/data-timestamp', [WelcomeController::class, 'getDataTimestamp'])
     ->name('data.timestamp');
 Route::get('/rotation-settings', [WelcomeController::class, 'getRotationSettings'])

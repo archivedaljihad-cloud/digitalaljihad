@@ -108,6 +108,10 @@ class AppSettingController extends Controller
             'auto_update_city'       => 'required_if:auto_update_jadwal,1|string|max:255',
             'auto_update_country'    => 'required_if:auto_update_jadwal,1|string|max:255',
             'auto_update_method'     => 'required_if:auto_update_jadwal,1|integer|between:1,21',
+            'live_makkah_url'        => 'nullable|string|max:500',
+            'live_madinah_url'       => 'nullable|string|max:500',
+            'live_stream_audio'      => 'sometimes|boolean',
+            'live_stream_overlay'    => 'sometimes|boolean',
         ]);
 
         $setting = $this->getOrCreateSetting();
@@ -131,6 +135,18 @@ class AppSettingController extends Controller
         if (!empty($validated['auto_update_time'])) {
             $setting->auto_update_time = $validated['auto_update_time'] . ':00';
         }
+
+        // ==================================================
+        // LIVE STREAMING SETTINGS
+        // ==================================================
+        if ($request->has('live_makkah_url')) {
+            $setting->live_makkah_url = $request->input('live_makkah_url');
+        }
+        if ($request->has('live_madinah_url')) {
+            $setting->live_madinah_url = $request->input('live_madinah_url');
+        }
+        $setting->live_stream_audio = $request->boolean('live_stream_audio');
+        $setting->live_stream_overlay = $request->boolean('live_stream_overlay');
 
         // ==================================================
         // PRAYER MODE SETTINGS

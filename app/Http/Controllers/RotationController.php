@@ -75,6 +75,21 @@ class RotationController extends Controller
                         'name'   => 'Rincian Kas Ambulance',
                         'active' => true,
                     ],
+                    [
+                        'url'    => 'infaq-embed',
+                        'name'   => 'Penggalangan Infaq',
+                        'active' => true,
+                    ],
+                    [
+                        'url'    => 'live-mekah-embed',
+                        'name'   => 'Live TV Mekah (Masjidil Haram)',
+                        'active' => true,
+                    ],
+                    [
+                        'url'    => 'live-madinah-embed',
+                        'name'   => 'Live TV Madinah (Masjid Nabawi)',
+                        'active' => true,
+                    ],
                 ])
             ]);
         }
@@ -141,6 +156,21 @@ class RotationController extends Controller
                 'url'    => 'ambulance-embed',
                 'name'   => 'Rincian Kas Ambulance',
                 'active' => in_array('ambulance-embed', $activePages),
+            ],
+            [
+                'url'    => 'infaq-embed',
+                'name'   => 'Penggalangan Infaq',
+                'active' => in_array('infaq-embed', $activePages),
+            ],
+            [
+                'url'    => 'live-mekah-embed',
+                'name'   => 'Live TV Mekah (Masjidil Haram)',
+                'active' => in_array('live-mekah-embed', $activePages),
+            ],
+            [
+                'url'    => 'live-madinah-embed',
+                'name'   => 'Live TV Madinah (Masjid Nabawi)',
+                'active' => in_array('live-madinah-embed', $activePages),
             ],
         ];
         DB::table('app_settings')->update([

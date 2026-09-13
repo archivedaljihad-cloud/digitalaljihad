@@ -49,6 +49,11 @@
 							@endif
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="livetv-tab" data-toggle="tab" href="#livetv" role="tab" style="color: #ffd700;">
+							<i class="fas fa-video" style="color: #ffd700;"></i> Live TV Streaming
+						</a>
+					</li>
 				</ul>
 			</div>
 			<div class="card-body">
@@ -426,6 +431,105 @@
 												{{ $setting->auto_update_country ?? 'Indonesia' }}</p>
 											<hr>
 											<p class="mb-0"><small>Data diambil dari API Aladhan.com</small></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{{-- TAB LIVE TV STREAMING --}}
+						<div class="tab-pane fade" id="livetv" role="tabpanel">
+							<div class="row">
+								<div class="col-lg-8">
+									<div class="alert alert-info">
+										<i class="fas fa-info-circle"></i>
+										<strong>Informasi Live TV:</strong> Anda dapat menampilkan siaran langsung suasana Masjidil Haram (Makkah) dan Masjid Nabawi (Madinah) 24 jam nonstop pada rotasi layar TV. Anda juga dapat mengganti link YouTube live jika memiliki saluran siaran sendiri.
+									</div>
+
+									<div class="card shadow-sm mb-4">
+										<div class="card-header bg-dark text-warning font-weight-bold">
+											<i class="fas fa-kaaba mr-1"></i> Siaran Langsung Makkah (Masjidil Haram)
+										</div>
+										<div class="card-body">
+											<div class="form-group">
+												<label for="live_makkah_url"><strong>URL / Video ID YouTube Live Makkah</strong></label>
+												<input type="text" class="form-control" id="live_makkah_url" name="live_makkah_url"
+													value="{{ old('live_makkah_url', $setting->live_makkah_url ?? '') }}"
+													placeholder="Contoh: https://www.youtube.com/watch?v=live_stream?channel=UCr_yW_8sC_Yg_U9b_wH5Npg">
+												<small class="text-muted">Biarkan kosong untuk menggunakan saluran resmi default Saudi Quran TV.</small>
+											</div>
+										</div>
+									</div>
+
+									<div class="card shadow-sm mb-4">
+										<div class="card-header bg-dark text-success font-weight-bold">
+											<i class="fas fa-mosque mr-1"></i> Siaran Langsung Madinah (Masjid Nabawi)
+										</div>
+										<div class="card-body">
+											<div class="form-group">
+												<label for="live_madinah_url"><strong>URL / Video ID YouTube Live Madinah</strong></label>
+												<input type="text" class="form-control" id="live_madinah_url" name="live_madinah_url"
+													value="{{ old('live_madinah_url', $setting->live_madinah_url ?? '') }}"
+													placeholder="Contoh: https://www.youtube.com/watch?v=live_stream?channel=UCaT_20Vp2Zq0FzXp3m4bVrg">
+												<small class="text-muted">Biarkan kosong untuk menggunakan saluran resmi default Saudi Sunnah TV.</small>
+											</div>
+										</div>
+									</div>
+
+									<div class="card shadow-sm mb-4">
+										<div class="card-header bg-light font-weight-bold">
+											<i class="fas fa-sliders-h mr-1"></i> Pengaturan Tampilan Layar Live
+										</div>
+										<div class="card-body">
+											<div class="form-group mb-3">
+												<label class="font-weight-bold d-block">Overlay Smart Mosque (Jam, Jadwal Sholat & Running Text)</label>
+												<label class="switch">
+													<input type="checkbox" name="live_stream_overlay" value="1" {{ ($setting->live_stream_overlay ?? true) ? 'checked' : '' }}>
+													<span class="slider round"></span>
+												</label>
+												<small class="form-text text-muted">Jika aktif, siaran video live akan dihiasi jam digital, jadwal sholat, dan teks berjalan masjid yang elegan.</small>
+											</div>
+
+											<div class="form-group mb-0">
+												<label class="font-weight-bold d-block">Suara Siaran Live (Audio)</label>
+												<label class="switch">
+													<input type="checkbox" name="live_stream_audio" value="1" {{ ($setting->live_stream_audio ?? false) ? 'checked' : '' }}>
+													<span class="slider round"></span>
+												</label>
+												<small class="form-text text-muted">Secara default suara dimatikan (Mute) agar suasana masjid tetap hening dan tidak mengganggu pengumuman lokal.</small>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-4">
+									<div class="card shadow-sm border-left-warning mb-4">
+										<div class="card-header bg-warning text-dark font-weight-bold">
+											<i class="fas fa-tv mr-1"></i> Cara Menampilkan di TV
+										</div>
+										<div class="card-body">
+											<p class="small text-muted">Agar siaran live ini muncul di layar TV masjid:</p>
+											<ol class="small pl-3 text-muted">
+												<li>Buka menu <strong>Rotasi Halaman</strong> di sidebar.</li>
+												<li>Centang <strong>Live TV Mekah</strong> atau <strong>Live TV Madinah</strong>.</li>
+												<li>Klik tombol <strong>Simpan Perubahan</strong>.</li>
+											</ol>
+											<div class="text-center mt-3">
+												<a href="{{ route('rotation.index') }}" class="btn btn-sm btn-outline-primary">
+													<i class="fas fa-exchange-alt mr-1"></i> Buka Menu Rotasi
+												</a>
+											</div>
+										</div>
+									</div>
+
+									<div class="card shadow-sm border-left-info">
+										<div class="card-header bg-info text-white font-weight-bold">
+											<i class="fas fa-wifi mr-1"></i> Kebutuhan Internet
+										</div>
+										<div class="card-body">
+											<p class="small text-muted mb-0">
+												Siaran live streaming YouTube memerlukan koneksi internet stabil (minimal 2 Mbps). Jika internet masjid sedang terputus, sistem secara otomatis akan melewati (*skip*) siaran live ke slide berikutnya dengan aman.
+											</p>
 										</div>
 									</div>
 								</div>
