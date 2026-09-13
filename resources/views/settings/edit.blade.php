@@ -54,6 +54,14 @@
 							<i class="fas fa-video" style="color: #ffd700;"></i> Live TV Streaming
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="cctvmimbar-tab" data-toggle="tab" href="#cctvmimbar" role="tab" style="color: #10b981;">
+							<i class="fas fa-camera text-success"></i> CCTV Mimbar & TV Luar
+							@if($setting->cctv_mimbar_enabled ?? false)
+								<span class="badge badge-success ml-1">AKTIF</span>
+							@endif
+						</a>
+					</li>
 				</ul>
 			</div>
 			<div class="card-body">
@@ -576,6 +584,109 @@
 										<div class="card-body">
 											<p class="small text-muted mb-0">
 												Siaran live streaming YouTube memerlukan koneksi internet stabil (minimal 2 Mbps). Jika internet masjid sedang terputus, sistem secara otomatis akan melewati (*skip*) siaran live ke slide berikutnya dengan aman.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{{-- TAB CCTV MIMBAR & TV LUAR --}}
+						<div class="tab-pane fade" id="cctvmimbar" role="tabpanel">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="alert alert-success border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, rgba(30, 90, 58, 0.15), rgba(16, 185, 129, 0.1)); border-left: 5px solid #10b981 !important;">
+										<h5 class="font-weight-bold text-success mb-1">
+											<i class="fas fa-camera mr-2"></i> Integrasi CCTV Mimbar Masjid ke TV Luar (Serambi)
+										</h5>
+										<p class="mb-0 text-muted">
+											Hubungkan kamera CCTV mimbar yang sudah ada (kabel BNC via DVR lokal atau IP Camera) agar dapat disiarkan langsung ke TV di serambi/halaman masjid saat Sholat Jum'at, Idul Fitri, dan Idul Adha.
+										</p>
+									</div>
+								</div>
+
+								<div class="col-lg-8">
+									<div class="card shadow-sm mb-4 border-0">
+										<div class="card-header font-weight-bold text-white" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
+											<i class="fas fa-toggle-on text-warning mr-2"></i> Status & Otomatisasi Siaran CCTV
+										</div>
+										<div class="card-body">
+											<div class="form-group mb-4">
+												<label class="font-weight-bold d-block text-gray-800">Aktifkan Fitur CCTV Mimbar</label>
+												<label class="switch">
+													<input type="checkbox" name="cctv_mimbar_enabled" value="1" {{ ($setting->cctv_mimbar_enabled ?? false) ? 'checked' : '' }}>
+													<span class="slider round"></span>
+												</label>
+												<small class="form-text text-muted">Centang untuk mengizinkan sistem menyajikan siaran live kamera mimbar ke TV luar.</small>
+											</div>
+
+											<div class="form-group mb-0">
+												<label class="font-weight-bold d-block text-gray-800">Otomatis Beralih ke Kamera Mimbar saat Khutbah Jum'at & Sholat Hari Raya</label>
+												<label class="switch">
+													<input type="checkbox" name="cctv_auto_switch_khutbah" value="1" {{ ($setting->cctv_auto_switch_khutbah ?? true) ? 'checked' : '' }}>
+													<span class="slider round"></span>
+												</label>
+												<small class="form-text text-muted">Jika aktif, TV di luar masjid otomatis berhenti berotasi dan langsung beralih menyiarkan wajah khatib di mimbar begitu waktu khutbah dimulai.</small>
+											</div>
+										</div>
+									</div>
+
+									<div class="card shadow-sm mb-4 border-0">
+										<div class="card-header font-weight-bold text-white bg-dark">
+											<i class="fas fa-network-wired text-info mr-2"></i> Alamat Stream Kamera Mimbar (DVR / Converter / IP Cam)
+										</div>
+										<div class="card-body">
+											<div class="form-group mb-3">
+												<label for="cctv_mimbar_url" class="font-weight-bold text-gray-800">URL Stream Kamera Mimbar</label>
+												<input type="text" class="form-control" id="cctv_mimbar_url" name="cctv_mimbar_url"
+													value="{{ old('cctv_mimbar_url', $setting->cctv_mimbar_url ?? '') }}"
+													placeholder="Contoh: http://192.168.1.100:1984/stream.html?src=mimbar atau rtsp://admin:pass@192.168.1.50:554/ch1">
+												<small class="form-text text-muted mt-2">
+													<i class="fas fa-info-circle text-primary"></i> <strong>Format yang Didukung:</strong>
+													<ul class="pl-3 mt-1 mb-0">
+														<li><strong>WebRTC / HLS Lokal (Disarankan - Nol Delay):</strong> <code>http://[IP-Komputer-Server]:1984/stream.html?src=mimbar</code></li>
+														<li><strong>RTSP Langsung dari DVR Masjid:</strong> <code>rtsp://admin:password@[IP-DVR]:554/Streaming/Channels/101</code></li>
+														<li><strong>YouTube Live / RTMP:</strong> <code>https://www.youtube.com/watch?v=xxxx</code></li>
+													</ul>
+												</small>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-4">
+									<div class="card shadow-sm border-left-success mb-4">
+										<div class="card-header bg-success text-white font-weight-bold">
+											<i class="fas fa-tv mr-2"></i> Cara Pasang di TV Luar
+										</div>
+										<div class="card-body">
+											<p class="small text-muted mb-2">Pada TV serambi/luar masjid (Smart TV atau Android TV Box), buka browser dan ketik alamat:</p>
+											<div class="bg-light p-2 rounded border mb-3 text-center">
+												<code class="font-weight-bold text-success" style="font-size: 0.95rem;">
+													http://[IP-SERVER]:8000/tv-outdoor
+												</code>
+											</div>
+											<p class="small text-muted mb-3">
+												TV luar akan memutar rotasi display jadwal sholat biasa pada hari biasa, dan otomatis beralih menampilkan kamera mimbar saat khutbah berlangsung.
+											</p>
+											<div class="d-flex flex-column gap-2">
+												<a href="{{ route('rotator.outdoor') }}" class="btn btn-outline-success btn-sm mb-2" target="_blank">
+													<i class="fas fa-external-link-alt mr-1"></i> Preview Layar TV Luar
+												</a>
+												<a href="{{ route('live-mimbar.embed') }}" class="btn btn-outline-primary btn-sm" target="_blank">
+													<i class="fas fa-video mr-1"></i> Preview Siaran Mimbar Saja
+												</a>
+											</div>
+										</div>
+									</div>
+
+									<div class="card shadow-sm border-left-warning">
+										<div class="card-header bg-warning text-dark font-weight-bold">
+											<i class="fas fa-book-open mr-2"></i> Panduan DVR Kabel BNC
+										</div>
+										<div class="card-body">
+											<p class="small text-muted mb-0">
+												Untuk kamera analog BNC, cukup colok kabel LAN dari DVR ke router masjid. Mesin DVR otomatis memancarkan video channel kamera mimbar ke jaringan lokal tanpa perlu beli kamera baru. Panduan lengkap tersedia di file <a href="#" class="font-weight-bold">TUTORIAL_CCTV_MIMBAR_TV_LUAR.md</a>.
 											</p>
 										</div>
 									</div>

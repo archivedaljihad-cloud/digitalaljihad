@@ -97,6 +97,37 @@ class WelcomeController extends Controller
             'jadwalSholat'     => JadwalSholat::urutkan()->get(),
         ]);
     }
+
+    /**
+     * Tampilan Khusus TV Luar / Serambi Masjid (Auto Switch ke CCTV Mimbar saat Khutbah)
+     */
+    public function rotatorOutdoor()
+    {
+        $settings = AppSetting::first();
+        if (!$settings) {
+            $settings = AppSetting::create([
+                'nama_aplikasi'       => 'MASJID AL-IKHLAS',
+                'footer'              => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System',
+                'running_text'        => 'Selamat datang di Masjid',
+                'auto_update_jadwal' => true,
+                'rotation_interval'  => 10,
+                'rotation_enabled'   => true,
+            ]);
+        }
+        $this->syncJadwalSholatHariIni($settings);
+
+        return view('rotator-outdoor', [
+            'settings'         => $settings,
+            'rotationInterval' => $settings->getRotationInterval(),
+            'rotationEnabled'  => $settings->isRotationEnabled(),
+            'rotationPages'    => $settings->getRotationPagesList(),
+            'jadwalSholat'     => JadwalSholat::urutkan()->get(),
+            'cctvEnabled'      => $settings->isCctvMimbarEnabled(),
+            'cctvUrl'          => $settings->getCctvMimbarUrl(),
+            'cctvAutoSwitch'   => $settings->isCctvAutoSwitchKhutbah(),
+        ]);
+    }
+
     public function welcomeEmbed()
     {
         $settings = AppSetting::first();

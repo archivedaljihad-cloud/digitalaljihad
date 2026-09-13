@@ -68,6 +68,10 @@ Route::get('/live-mekah-embed', [LiveStreamController::class, 'mekahEmbed'])
     ->name('live-mekah.embed');
 Route::get('/live-madinah-embed', [LiveStreamController::class, 'madinahEmbed'])
     ->name('live-madinah.embed');
+Route::get('/live-mimbar-embed', [LiveStreamController::class, 'mimbarEmbed'])
+    ->name('live-mimbar.embed');
+Route::get('/tv-outdoor', [WelcomeController::class, 'rotatorOutdoor'])
+    ->name('rotator.outdoor');
 Route::get('/data-timestamp', [WelcomeController::class, 'getDataTimestamp'])
     ->name('data.timestamp');
 Route::get('/rotation-settings', [WelcomeController::class, 'getRotationSettings'])

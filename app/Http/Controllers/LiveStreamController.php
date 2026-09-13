@@ -7,8 +7,73 @@ use App\Models\JadwalSholat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use App\Models\SholatJumat;
+use App\Models\SholatIdulFitri;
+use App\Models\SholatIdulAdha;
+
 class LiveStreamController extends Controller
 {
+    /**
+     * Tampilan Siaran Langsung Mimbar / Khutbah (CCTV Masjid)
+     */
+    public function mimbarEmbed(Request $request)
+    {
+        $settings = AppSetting::first();
+        $cctvUrl = $settings ? $settings->getCctvMimbarUrl() : '';
+        $jadwalSholat = JadwalSholat::urutkan()->get();
+        
+        $sholatJumat = SholatJumat::first();
+        $sholatIdulFitri = SholatIdulFitri::first();
+        $sholatIdulAdha = SholatIdulAdha::first();
+
+        // Tentukan petugas berdasarkan hari atau parameter
+        $now = Carbon::now();
+        $officers = [
+            'type'    => 'SHOLAT JUM\'AT',
+            'khatib'  => $sholatJumat->khatib ?? 'Ustadz / Khatib',
+            'imam'    => $sholatJumat->imam ?? 'Imam Masjid',
+            'muadzin' => $sholatJumat->muadzin ?? 'Muadzin Masjid',
+            'bilal'   => $sholatJumat->bilal ?? 'Bilal Masjid',
+        ];
+
+        if ($request->get('event') === 'idul_fitri' || ($now->month == 10 && $now->day <= 3)) {
+            $officers['type'] = 'SHOLAT IDUL FITRI';
+            if ($sholatIdulFitri) {
+                $officers['khatib'] = $sholatIdulFitri->khatib ?? $officers['khatib'];
+                $officers['imam'] = $sholatIdulFitri->imam ?? $officers['imam'];
+            }
+        } elseif ($request->get('event') === 'idul_adha' || ($now->month == 12 && $now->day >= 10 && $now->day <= 13)) {
+            $officers['type'] = 'SHOLAT IDUL ADHA';
+            if ($sholatIdulAdha) {
+                $officers['khatib'] = $sholatIdulAdha->khatib ?? $officers['khatib'];
+                $officers['imam'] = $sholatIdulAdha->imam ?? $officers['imam'];
+            }
+        }
+
+        // Tentukan tipe stream (YouTube, WebRTC/HLS/Iframe/Video)
+        $isYouTube = false;
+        $isIframe = false;
+        $streamUrl = $cctvUrl;
+
+        if (!empty($cctvUrl)) {
+            if (str_contains($cctvUrl, 'youtube.com') || str_contains($cctvUrl, 'youtu.be')) {
+                $isYouTube = true;
+                $streamUrl = $this->buildEmbedUrl($cctvUrl, true);
+            } elseif (str_starts_with($cctvUrl, 'http://') || str_starts_with($cctvUrl, 'https://')) {
+                $isIframe = true;
+            }
+        }
+
+        return view('live-stream.mimbar-embed', [
+            'settings'        => $settings,
+            'cctvUrl'         => $cctvUrl,
+            'streamUrl'       => $streamUrl,
+            'isYouTube'       => $isYouTube,
+            'isIframe'        => $isIframe,
+            'officers'        => $officers,
+            'jadwalSholat'    => $jadwalSholat,
+        ]);
+    }
     /**
      * Tampilan Siaran Langsung Makkah (Masjidil Haram)
      */

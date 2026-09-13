@@ -48,6 +48,10 @@ class AppSetting extends Model
         'live_madinah_url',
         'live_stream_audio',
         'live_stream_overlay',
+        // ===== CCTV Mimbar & TV Luar =====
+        'cctv_mimbar_url',
+        'cctv_mimbar_enabled',
+        'cctv_auto_switch_khutbah',
         // ===== Visual Kemewahan & Ambient =====
         'enable_dynamic_theme',
         'enable_next_prayer_bar',
@@ -59,6 +63,8 @@ class AppSetting extends Model
         'prayer_mode_enabled' => 'boolean',
         'live_stream_audio' => 'boolean',
         'live_stream_overlay' => 'boolean',
+        'cctv_mimbar_enabled' => 'boolean',
+        'cctv_auto_switch_khutbah' => 'boolean',
         'enable_dynamic_theme' => 'boolean',
         'enable_next_prayer_bar' => 'boolean',
         'last_auto_update' => 'datetime',
@@ -300,5 +306,25 @@ class AppSetting extends Model
     public function isNextPrayerBarEnabled(): bool
     {
         return (bool) ($this->enable_next_prayer_bar ?? true);
+    }
+
+    /**
+     * ==============================
+     * CCTV MIMBAR & TV OUTDOOR
+     * ==============================
+     */
+    public function getCctvMimbarUrl(): string
+    {
+        return (string) ($this->cctv_mimbar_url ?? '');
+    }
+
+    public function isCctvMimbarEnabled(): bool
+    {
+        return (bool) ($this->cctv_mimbar_enabled ?? false);
+    }
+
+    public function isCctvAutoSwitchKhutbah(): bool
+    {
+        return (bool) ($this->cctv_auto_switch_khutbah ?? true);
     }
 }

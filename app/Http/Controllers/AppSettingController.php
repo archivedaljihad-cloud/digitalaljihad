@@ -151,6 +151,15 @@ class AppSettingController extends Controller
         $setting->live_stream_overlay = $request->boolean('live_stream_overlay');
 
         // ==================================================
+        // CCTV MIMBAR & TV OUTDOOR SETTINGS
+        // ==================================================
+        if ($request->has('cctv_mimbar_url')) {
+            $setting->cctv_mimbar_url = $request->input('cctv_mimbar_url');
+        }
+        $setting->cctv_mimbar_enabled = $request->boolean('cctv_mimbar_enabled');
+        $setting->cctv_auto_switch_khutbah = $request->boolean('cctv_auto_switch_khutbah');
+
+        // ==================================================
         // VISUAL & AMBIENT SETTINGS
         // ==================================================
         $setting->enable_dynamic_theme = $request->boolean('enable_dynamic_theme');
