@@ -41,6 +41,97 @@
 
 body {
     background-color: var(--display-bg) !important;
+    transition: background-color 2.5s ease !important;
+}
+
+/* =====================================================
+   DYNAMIC AMBIENT THEMES BY PRAYER TIME (Siklus Suasana Waktu Sholat)
+   ===================================================== */
+body.theme-subuh {
+    --display-bg: #051321 !important;
+    --ambient-orb-1: rgba(56, 189, 248, 0.22);
+    --ambient-orb-2: rgba(251, 191, 36, 0.16);
+    --ambient-accent: #38bdf8;
+}
+
+body.theme-dhuha {
+    --display-bg: #032018 !important;
+    --ambient-orb-1: rgba(250, 204, 21, 0.22);
+    --ambient-orb-2: rgba(16, 185, 129, 0.20);
+    --ambient-accent: #facc15;
+}
+
+body.theme-dzuhur {
+    --display-bg: #062b2b !important;
+    --ambient-orb-1: rgba(5, 150, 105, 0.25);
+    --ambient-orb-2: rgba(255, 215, 0, 0.22);
+    --ambient-accent: #ffd700;
+}
+
+body.theme-ashar {
+    --display-bg: #211608 !important;
+    --ambient-orb-1: rgba(249, 115, 22, 0.22);
+    --ambient-orb-2: rgba(217, 119, 6, 0.22);
+    --ambient-accent: #f97316;
+}
+
+body.theme-maghrib {
+    --display-bg: #1f0b18 !important;
+    --ambient-orb-1: rgba(225, 29, 72, 0.22);
+    --ambient-orb-2: rgba(139, 92, 246, 0.20);
+    --ambient-accent: #e11d48;
+}
+
+body.theme-isya {
+    --display-bg: #050e24 !important;
+    --ambient-orb-1: rgba(59, 130, 246, 0.22);
+    --ambient-orb-2: rgba(212, 175, 55, 0.20);
+    --ambient-accent: #3b82f6;
+}
+
+/* Lapisan Pencahayaan Halus Ambient Orb */
+.ambient-glow-layer {
+    position: fixed !important;
+    inset: 0;
+    pointer-events: none;
+    z-index: -8 !important;
+    overflow: hidden;
+}
+
+.ambient-orb-top {
+    position: absolute;
+    width: 45vw;
+    height: 45vw;
+    top: -15vw;
+    left: -10vw;
+    border-radius: 50%;
+    filter: blur(85px);
+    background: radial-gradient(circle, var(--ambient-orb-1, rgba(255,215,0,0.18)) 0%, rgba(0,0,0,0) 70%);
+    animation: orbFloatingA 16s ease-in-out infinite alternate;
+}
+
+.ambient-orb-bottom {
+    position: absolute;
+    width: 45vw;
+    height: 45vw;
+    bottom: -15vw;
+    right: -10vw;
+    border-radius: 50%;
+    filter: blur(85px);
+    background: radial-gradient(circle, var(--ambient-orb-2, rgba(13,110,110,0.22)) 0%, rgba(0,0,0,0) 70%);
+    animation: orbFloatingB 18s ease-in-out infinite alternate;
+}
+
+@keyframes orbFloatingA {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    50% { transform: translate(3vw, 4vh) scale(1.1); opacity: 0.8; }
+    100% { transform: translate(-2vw, -2vh) scale(0.95); opacity: 0.6; }
+}
+
+@keyframes orbFloatingB {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    50% { transform: translate(-4vw, -3vh) scale(1.1); opacity: 0.8; }
+    100% { transform: translate(2vw, 3vh) scale(0.95); opacity: 0.6; }
 }
 
 /* =====================================================
@@ -631,6 +722,63 @@ function getStandardMasjidDateTime(now = new Date(), asHtml = true) {
     } else {
         refreshClock();
         setInterval(refreshClock, 1000);
+    }
+})();
+
+// Auto-inject and run Dynamic Ambient Lighting by Prayer Time
+(function initDynamicAmbientLighting() {
+    function applyDynamicTheme() {
+        const now = new Date();
+        const totalMins = now.getHours() * 60 + now.getMinutes();
+
+        // 03:30 (210) - 06:00 (360) : Subuh
+        // 06:00 (360) - 11:30 (690) : Dhuha / Pagi
+        // 11:30 (690) - 15:00 (900) : Dzuhur
+        // 15:00 (900) - 17:45 (1065): Ashar
+        // 17:45 (1065) - 19:15 (1155): Maghrib
+        // 19:15 (1155) - 03:30 (210) : Isya & Malam
+        let targetTheme = 'theme-isya';
+        if (totalMins >= 210 && totalMins < 360) {
+            targetTheme = 'theme-subuh';
+        } else if (totalMins >= 360 && totalMins < 690) {
+            targetTheme = 'theme-dhuha';
+        } else if (totalMins >= 690 && totalMins < 900) {
+            targetTheme = 'theme-dzuhur';
+        } else if (totalMins >= 900 && totalMins < 1065) {
+            targetTheme = 'theme-ashar';
+        } else if (totalMins >= 1065 && totalMins < 1155) {
+            targetTheme = 'theme-maghrib';
+        }
+
+        const themeClasses = ['theme-subuh', 'theme-dhuha', 'theme-dzuhur', 'theme-ashar', 'theme-maghrib', 'theme-isya'];
+        if (document.body) {
+            themeClasses.forEach(c => {
+                if (c === targetTheme) {
+                    document.body.classList.add(c);
+                } else {
+                    document.body.classList.remove(c);
+                }
+            });
+        }
+
+        // Pastikan ambient-glow-layer ada di dalam body
+        if (!document.getElementById('ambientGlowLayer') && document.body) {
+            const glowLayer = document.createElement('div');
+            glowLayer.id = 'ambientGlowLayer';
+            glowLayer.className = 'ambient-glow-layer';
+            glowLayer.innerHTML = '<div class="ambient-orb-top"></div><div class="ambient-orb-bottom"></div>';
+            document.body.appendChild(glowLayer);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            applyDynamicTheme();
+            setInterval(applyDynamicTheme, 30000);
+        });
+    } else {
+        applyDynamicTheme();
+        setInterval(applyDynamicTheme, 30000);
     }
 })();
 </script>

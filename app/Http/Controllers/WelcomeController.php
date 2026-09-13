@@ -90,9 +90,11 @@ class WelcomeController extends Controller
         }
         $this->syncJadwalSholatHariIni($settings);
         return view('rotator', [
+            'settings'         => $settings,
             'rotationInterval' => $settings->getRotationInterval(),
             'rotationEnabled'  => $settings->isRotationEnabled(),
-            'rotationPages'    => $settings->getRotationPagesList()
+            'rotationPages'    => $settings->getRotationPagesList(),
+            'jadwalSholat'     => JadwalSholat::urutkan()->get(),
         ]);
     }
     public function welcomeEmbed()

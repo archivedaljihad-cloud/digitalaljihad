@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Informasi Masjid - Rotating Display</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         @font-face {
@@ -174,10 +175,228 @@
                 font-size: 0.75rem;
             }
         }
+
+        /* =====================================================
+           FLOATING SMART NEXT PRAYER BAR (Kapsul Mewah Sholat Berikutnya)
+           ===================================================== */
+        .next-prayer-bar-wrapper {
+            position: fixed;
+            top: 18px;
+            right: 28px;
+            z-index: 999;
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .next-prayer-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(6, 26, 17, 0.90) 0%, rgba(2, 14, 9, 0.96) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.5);
+            border-radius: 35px;
+            padding: 7px 18px 7px 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 18px rgba(212, 175, 55, 0.22), inset 0 1px 0 rgba(255, 238, 170, 0.3);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .npb-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+            transform: skewX(-20deg);
+            animation: npbShimmer 6s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes npbShimmer {
+            0%, 80% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .npb-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD700;
+            font-size: 16px;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+            flex-shrink: 0;
+        }
+
+        .npb-content {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .npb-label-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .npb-badge {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #10B981;
+            background: rgba(16, 185, 129, 0.18);
+            border: 0.5px solid rgba(16, 185, 129, 0.4);
+            padding: 1px 6px;
+            border-radius: 10px;
+        }
+
+        .npb-prayer-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: #FFD700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .npb-time-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .npb-schedule-time {
+            font-size: 11px;
+            color: #CBD5E1;
+            font-weight: 600;
+        }
+
+        .npb-sep {
+            color: rgba(212, 175, 55, 0.6);
+            font-size: 10px;
+        }
+
+        .npb-countdown {
+            font-size: 13px;
+            font-weight: 800;
+            color: #FFFFFF;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .npb-pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10B981;
+            box-shadow: 0 0 10px #10B981;
+            animation: npbPulse 1.5s infinite ease-in-out;
+            margin-left: 4px;
+            flex-shrink: 0;
+        }
+
+        @keyframes npbPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        /* =====================================================
+           DYNAMIC AMBIENT THEMES IN ROTATOR
+           ===================================================== */
+        body.theme-subuh { --ambient-orb-1: rgba(56, 189, 248, 0.22); --ambient-orb-2: rgba(251, 191, 36, 0.16); }
+        body.theme-dhuha { --ambient-orb-1: rgba(250, 204, 21, 0.22); --ambient-orb-2: rgba(16, 185, 129, 0.20); }
+        body.theme-dzuhur { --ambient-orb-1: rgba(5, 150, 105, 0.25); --ambient-orb-2: rgba(255, 215, 0, 0.22); }
+        body.theme-ashar { --ambient-orb-1: rgba(249, 115, 22, 0.22); --ambient-orb-2: rgba(217, 119, 6, 0.22); }
+        body.theme-maghrib { --ambient-orb-1: rgba(225, 29, 72, 0.22); --ambient-orb-2: rgba(139, 92, 246, 0.20); }
+        body.theme-isya { --ambient-orb-1: rgba(59, 130, 246, 0.22); --ambient-orb-2: rgba(212, 175, 55, 0.20); }
+
+        .ambient-lighting-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .ambient-orb-top {
+            position: absolute;
+            width: 45vw;
+            height: 45vw;
+            top: -15vw;
+            left: -10vw;
+            border-radius: 50%;
+            filter: blur(85px);
+            background: radial-gradient(circle, var(--ambient-orb-1, rgba(255,215,0,0.18)) 0%, rgba(0,0,0,0) 70%);
+            animation: orbFloatingA 16s ease-in-out infinite alternate;
+        }
+
+        .ambient-orb-bottom {
+            position: absolute;
+            width: 45vw;
+            height: 45vw;
+            bottom: -15vw;
+            right: -10vw;
+            border-radius: 50%;
+            filter: blur(85px);
+            background: radial-gradient(circle, var(--ambient-orb-2, rgba(13,110,110,0.22)) 0%, rgba(0,0,0,0) 70%);
+            animation: orbFloatingB 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes orbFloatingA {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(3vw, 4vh) scale(1.1); opacity: 0.8; }
+            100% { transform: translate(-2vw, -2vh) scale(0.95); opacity: 0.6; }
+        }
+
+        @keyframes orbFloatingB {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(-4vw, -3vh) scale(1.1); opacity: 0.8; }
+            100% { transform: translate(2vw, 3vh) scale(0.95); opacity: 0.6; }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- DYNAMIC AMBIENT LIGHTING ORBS LAYER -->
+    <div class="ambient-lighting-layer" id="ambientLighting">
+        <div class="ambient-orb-top"></div>
+        <div class="ambient-orb-bottom"></div>
+    </div>
+
+    <!-- FLOATING SMART NEXT PRAYER BAR (Kapsul Mewah Sholat Berikutnya) -->
+    @if(!isset($settings) || $settings->isNextPrayerBarEnabled())
+    <div class="next-prayer-bar-wrapper" id="nextPrayerBarWrapper">
+        <div class="next-prayer-bar" id="nextPrayerBar">
+            <div class="npb-shimmer"></div>
+            <div class="npb-icon">
+                <i class="fa-solid fa-mosque"></i>
+            </div>
+            <div class="npb-content">
+                <div class="npb-label-row">
+                    <span class="npb-badge">SELANJUTNYA</span>
+                    <span class="npb-prayer-name" id="npbPrayerName">MEMUAT...</span>
+                </div>
+                <div class="npb-time-row">
+                    <span class="npb-schedule-time" id="npbScheduleTime">--:--</span>
+                    <span class="npb-sep">•</span>
+                    <span class="npb-countdown" id="npbCountdown">-00:00:00</span>
+                </div>
+            </div>
+            <div class="npb-pulse-dot"></div>
+        </div>
+    </div>
+    @endif
 
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
@@ -587,6 +806,118 @@
         } else {
             document.getElementById('pageName').textContent = 'Tidak ada halaman (Sistem Error)';
         }
+
+        /* =====================================================
+           FLOATING SMART NEXT PRAYER COUNTDOWN ENGINE
+           ===================================================== */
+        @php
+        $prayerData = [];
+        if (isset($jadwalSholat) && count($jadwalSholat) > 0) {
+            foreach ($jadwalSholat as $js) {
+                $prayerData[] = [
+                    'name' => strtoupper($js->nama_sholat),
+                    'time' => substr($js->waktu, 0, 5),
+                ];
+            }
+        }
+        @endphp
+
+        const prayerList = {!! json_encode($prayerData) !!};
+
+        function updateNextPrayerBar() {
+            const barWrapper = document.getElementById('nextPrayerBarWrapper');
+            if (!barWrapper) return;
+
+            // Sembunyikan otomatis jika prayer mode sedang aktif
+            if (localStorage.getItem('lockPageRotation') === 'true') {
+                barWrapper.style.opacity = '0';
+                barWrapper.style.pointerEvents = 'none';
+                return;
+            } else {
+                barWrapper.style.opacity = '1';
+            }
+
+            if (!prayerList || prayerList.length === 0) return;
+
+            const now = new Date();
+            const currentSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+            let nextPrayer = null;
+            let minDiff = Infinity;
+
+            prayerList.forEach(p => {
+                const parts = p.time.split(':');
+                if (parts.length >= 2) {
+                    const prayerSeconds = parseInt(parts[0], 10) * 3600 + parseInt(parts[1], 10) * 60;
+                    let diff = prayerSeconds - currentSeconds;
+                    if (diff > 0 && diff < minDiff) {
+                        minDiff = diff;
+                        nextPrayer = p;
+                    }
+                }
+            });
+
+            // Jika seluruh waktu sholat hari ini sudah lewat, target sholat pertama besok (Subuh)
+            if (!nextPrayer && prayerList.length > 0) {
+                nextPrayer = prayerList[0];
+                const parts = nextPrayer.time.split(':');
+                const prayerSeconds = parseInt(parts[0], 10) * 3600 + parseInt(parts[1], 10) * 60;
+                minDiff = (86400 - currentSeconds) + prayerSeconds;
+            }
+
+            if (nextPrayer) {
+                const elName = document.getElementById('npbPrayerName');
+                const elTime = document.getElementById('npbScheduleTime');
+                const elCd = document.getElementById('npbCountdown');
+
+                if (elName) elName.textContent = nextPrayer.name;
+                if (elTime) elTime.textContent = nextPrayer.time + ' WIB';
+
+                const h = Math.floor(minDiff / 3600);
+                const m = Math.floor((minDiff % 3600) / 60);
+                const s = minDiff % 60;
+
+                const pad = (n) => String(n).padStart(2, '0');
+                if (elCd) {
+                    elCd.textContent = `-${pad(h)}:${pad(m)}:${pad(s)}`;
+                }
+            }
+        }
+
+        setInterval(updateNextPrayerBar, 1000);
+        updateNextPrayerBar();
+
+        /* =====================================================
+           DYNAMIC AMBIENT THEMES IN ROTATOR
+           ===================================================== */
+        function applyRotatorAmbientTheme() {
+            const now = new Date();
+            const totalMins = now.getHours() * 60 + now.getMinutes();
+
+            let targetTheme = 'theme-isya';
+            if (totalMins >= 210 && totalMins < 360) {
+                targetTheme = 'theme-subuh';
+            } else if (totalMins >= 360 && totalMins < 690) {
+                targetTheme = 'theme-dhuha';
+            } else if (totalMins >= 690 && totalMins < 900) {
+                targetTheme = 'theme-dzuhur';
+            } else if (totalMins >= 900 && totalMins < 1065) {
+                targetTheme = 'theme-ashar';
+            } else if (totalMins >= 1065 && totalMins < 1155) {
+                targetTheme = 'theme-maghrib';
+            }
+
+            const themeClasses = ['theme-subuh', 'theme-dhuha', 'theme-dzuhur', 'theme-ashar', 'theme-maghrib', 'theme-isya'];
+            themeClasses.forEach(c => {
+                if (c === targetTheme) {
+                    document.body.classList.add(c);
+                } else {
+                    document.body.classList.remove(c);
+                }
+            });
+        }
+        applyRotatorAmbientTheme();
+        setInterval(applyRotatorAmbientTheme, 30000);
     </script>
 </body>
 </html>

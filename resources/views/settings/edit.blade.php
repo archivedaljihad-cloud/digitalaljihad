@@ -152,6 +152,53 @@
 									</div>
 								</div>
 							</div>
+
+							<hr class="my-4">
+
+							{{-- PENGATURAN TAMPILAN MEWAH & AMBIENT (SMART DISPLAY) --}}
+							<div class="row">
+								<div class="col-md-12">
+									<h5 class="mb-3 text-primary font-weight-bold">
+										<i class="fas fa-gem text-warning mr-1"></i> Tampilan Visual Mewah & Interaktif (Smart Display)
+									</h5>
+								</div>
+
+								<div class="col-md-6">
+									<div class="card bg-light border-0 shadow-sm mb-3">
+										<div class="card-body">
+											<div class="custom-control custom-switch">
+												<input type="hidden" name="enable_dynamic_theme" value="0">
+												<input type="checkbox" class="custom-control-input" id="enable_dynamic_theme"
+													name="enable_dynamic_theme" value="1" {{ old('enable_dynamic_theme', $setting->enable_dynamic_theme ?? 1) ? 'checked' : '' }}>
+												<label class="custom-control-label font-weight-bold" for="enable_dynamic_theme">
+													<i class="fas fa-palette text-info mr-1"></i> Dynamic Ambient Theme Sesuai Waktu Sholat
+												</label>
+											</div>
+											<small class="text-muted d-block mt-2">
+												Warna latar belakang dan pencahayaan pendaran aura (ambient orbs) berubah dinamis dan halus mengikuti siklus 6 waktu sholat: Subuh (Biru Fajar & Emas), Dhuha (Hijau Emerald Segar), Dzuhur (Radiant Teal), Ashar (Amber Keemasan), Maghrib (Violet Twilight Senja), dan Isya (Midnight Sapphire).
+											</small>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="card bg-light border-0 shadow-sm mb-3">
+										<div class="card-body">
+											<div class="custom-control custom-switch">
+												<input type="hidden" name="enable_next_prayer_bar" value="0">
+												<input type="checkbox" class="custom-control-input" id="enable_next_prayer_bar"
+													name="enable_next_prayer_bar" value="1" {{ old('enable_next_prayer_bar', $setting->enable_next_prayer_bar ?? 1) ? 'checked' : '' }}>
+												<label class="custom-control-label font-weight-bold" for="enable_next_prayer_bar">
+													<i class="fas fa-stopwatch text-warning mr-1"></i> Floating Smart Next Prayer Bar
+												</label>
+											</div>
+											<small class="text-muted d-block mt-2">
+												Menampilkan kapsul kaca mewah mengambang (glassmorphic floating widget) di pojok kanan atas layar TV yang menghitung mundur waktu menuju sholat berikutnya secara detik-demi-detik, dan otomatis sembunyi saat mode sholat berlangsung.
+											</small>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 
 						{{-- TAB PRAYER MODE --}}

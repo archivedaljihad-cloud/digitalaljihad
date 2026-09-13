@@ -112,6 +112,8 @@ class AppSettingController extends Controller
             'live_madinah_url'       => 'nullable|string|max:500',
             'live_stream_audio'      => 'sometimes|boolean',
             'live_stream_overlay'    => 'sometimes|boolean',
+            'enable_dynamic_theme'   => 'sometimes|boolean',
+            'enable_next_prayer_bar' => 'sometimes|boolean',
         ]);
 
         $setting = $this->getOrCreateSetting();
@@ -147,6 +149,12 @@ class AppSettingController extends Controller
         }
         $setting->live_stream_audio = $request->boolean('live_stream_audio');
         $setting->live_stream_overlay = $request->boolean('live_stream_overlay');
+
+        // ==================================================
+        // VISUAL & AMBIENT SETTINGS
+        // ==================================================
+        $setting->enable_dynamic_theme = $request->boolean('enable_dynamic_theme');
+        $setting->enable_next_prayer_bar = $request->boolean('enable_next_prayer_bar');
 
         // ==================================================
         // PRAYER MODE SETTINGS

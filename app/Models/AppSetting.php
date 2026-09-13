@@ -48,6 +48,9 @@ class AppSetting extends Model
         'live_madinah_url',
         'live_stream_audio',
         'live_stream_overlay',
+        // ===== Visual Kemewahan & Ambient =====
+        'enable_dynamic_theme',
+        'enable_next_prayer_bar',
     ];
 
     protected $casts = [
@@ -56,6 +59,8 @@ class AppSetting extends Model
         'prayer_mode_enabled' => 'boolean',
         'live_stream_audio' => 'boolean',
         'live_stream_overlay' => 'boolean',
+        'enable_dynamic_theme' => 'boolean',
+        'enable_next_prayer_bar' => 'boolean',
         'last_auto_update' => 'datetime',
         'auto_update_time' => 'datetime:H:i:s',
         // ===== TAMBAHAN PENGATURAN AUDIO =====
@@ -299,5 +304,20 @@ class AppSetting extends Model
     public function isLiveStreamOverlayEnabled(): bool
     {
         return (bool) ($this->live_stream_overlay ?? true);
+    }
+
+    /**
+     * ==============================
+     * AMBIENT THEME & NEXT PRAYER BAR
+     * ==============================
+     */
+    public function isDynamicThemeEnabled(): bool
+    {
+        return (bool) ($this->enable_dynamic_theme ?? true);
+    }
+
+    public function isNextPrayerBarEnabled(): bool
+    {
+        return (bool) ($this->enable_next_prayer_bar ?? true);
     }
 }
