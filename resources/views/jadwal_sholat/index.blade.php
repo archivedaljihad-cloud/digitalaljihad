@@ -267,6 +267,27 @@
 					</div>
 
 					<div class="row">
+						<!-- Durasi Sholat Jumat -->
+						<div class="col-md-4">
+							<div class="form-group mb-3">
+								<label for="prayer_mode_jumat_duration" class="form-label font-weight-bold text-success">
+									<i class="fas fa-mosque mr-1"></i> Durasi Sholat Jum'at (Khutbah & Sholat)
+								</label>
+								<div class="input-group">
+									<input type="number" 
+										   name="prayer_mode_jumat_duration" 
+										   id="prayer_mode_jumat_duration" 
+										   class="form-control" 
+										   value="{{ old('prayer_mode_jumat_duration', $setting->prayer_mode_jumat_duration ?? 50) }}" 
+										   min="10" max="180">
+									<div class="input-group-append">
+										<span class="input-group-text">menit</span>
+									</div>
+								</div>
+								<small class="text-muted">Durasi khusus hari Jum'at di waktu Dzuhur (TV terkunci tenang selama khutbah & sholat).</small>
+							</div>
+						</div>
+
 						<!-- Input Pengaturan Detik Audio Tarhim -->
 						<div class="col-md-4">
 							<div class="form-group mb-3">
@@ -277,8 +298,8 @@
 									   name="tarhim_trigger_seconds" 
 									   id="tarhim_trigger_seconds" 
 									   class="form-control" 
-									   value="{{ old('tarhim_trigger_seconds', $setting->tarhim_trigger_seconds ?? 60) }}" 
-									   placeholder="Contoh: 60">
+									   value="{{ old('tarhim_trigger_seconds', $setting->tarhim_trigger_seconds ?? 300) }}" 
+									   placeholder="Contoh: 300">
 								<small class="text-muted">Audio tarhim otomatis berbunyi sekian detik sebelum adzan.</small>
 							</div>
 						</div>

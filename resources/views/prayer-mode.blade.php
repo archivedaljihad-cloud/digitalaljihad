@@ -699,6 +699,53 @@
         }
 
         /* =====================================================
+           TAMPILAN KHUSUS PETUGAS JUMAT & KHUTBAH
+           ===================================================== */
+        .jumat-officers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            width: 100%;
+            max-width: 1050px;
+            margin: 10px auto;
+        }
+
+        .officer-card {
+            background: linear-gradient(180deg, rgba(8, 48, 28, 0.85) 0%, rgba(2, 20, 11, 0.95) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.4);
+            border-radius: 18px;
+            padding: 12px 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 238, 170, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .officer-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #D4AF37;
+            background: rgba(212, 175, 55, 0.15);
+            padding: 3px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 6px;
+        }
+
+        .officer-name {
+            font-size: clamp(16px, 1.6vw, 22px);
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* =====================================================
            RESPONSIVE TWEAKS (Full HD, Laptop & Tablet)
            ===================================================== */
         @media (max-height: 800px) {
@@ -731,6 +778,13 @@
             }
             .hadith-body {
                 font-size: 16px;
+            }
+            .jumat-officers-grid {
+                margin: 6px auto;
+                gap: 10px;
+            }
+            .officer-card {
+                padding: 8px 14px;
             }
         }
     </style>
@@ -777,6 +831,8 @@
                     Menuju waktu sholat
                 @elseif($phase == 'iqamah')
                     Menunggu Waktu Iqamah
+                @elseif($phase == 'khutbah')
+                    Khutbah & Sholat Jum'at Berjamaah
                 @elseif($phase == 'prayer')
                     Sholat Sedang Berlangsung
                 @else
@@ -788,7 +844,9 @@
                 <div class="prayer-badge">
                     <span class="badge-gem"></span>
                     <span class="prayer-name">
-                        @if($currentPrayer)
+                        @if($phase == 'khutbah')
+                            SHOLAT JUM'AT
+                        @elseif($currentPrayer)
                             {{ strtoupper(is_object($currentPrayer) ? $currentPrayer->nama_sholat : $currentPrayer) }}
                         @else
                             WAKTU SHOLAT
@@ -799,8 +857,48 @@
             </div>
         </div>
 
-        <!-- 3. COUNTDOWN TIMER (SPLIT DUAL-TILE) -->
-        @if($phase != 'prayer')
+        <!-- 3. COUNTDOWN TIMER (SPLIT DUAL-TILE) / JUMAT OFFICERS GRID -->
+        @if($phase == 'khutbah')
+            <div class="jumat-officers-grid">
+                <div class="officer-card">
+                    <div class="officer-badge">
+                        <i class="fa-solid fa-microphone"></i> KHATIB
+                    </div>
+                    <div class="officer-name">
+                        {{ !empty($jumatPetugas->khatib) ? $jumatPetugas->khatib : 'Ustadz / Khatib Jum\'at' }}
+                    </div>
+                </div>
+
+                <div class="officer-card">
+                    <div class="officer-badge">
+                        <i class="fa-solid fa-user-tie"></i> IMAM
+                    </div>
+                    <div class="officer-name">
+                        {{ !empty($jumatPetugas->imam) ? $jumatPetugas->imam : 'Imam Rawatib / Jum\'at' }}
+                    </div>
+                </div>
+
+                <div class="officer-card">
+                    <div class="officer-badge">
+                        <i class="fa-solid fa-bullhorn"></i> MUADZIN
+                    </div>
+                    <div class="officer-name">
+                        {{ !empty($jumatPetugas->muadzin) ? $jumatPetugas->muadzin : 'Muadzin' }}
+                    </div>
+                </div>
+
+                <div class="officer-card">
+                    <div class="officer-badge">
+                        <i class="fa-solid fa-hand-holding-hand"></i> BILAL
+                    </div>
+                    <div class="officer-name">
+                        {{ !empty($jumatPetugas->bilal) ? $jumatPetugas->bilal : 'Bilal Jum\'at' }}
+                    </div>
+                </div>
+            </div>
+            <!-- Elemen tersembunyi untuk kompatibilitas script -->
+            <div class="countdown" id="countdown" data-seconds="{{ $remainingSeconds }}" style="display:none;">00:00</div>
+        @elseif($phase != 'prayer')
             <div class="countdown-section">
                 <!-- Badge Interaktif Menuju Adzan / Fase (Tanpa Kapsul Waktu Sekarang) -->
                 <div class="timer-badge">
@@ -857,6 +955,8 @@
                     $displayMessage = 'Mohon untuk menonaktifkan/silent alat komunikasi';
                 } elseif ($phase == 'iqamah') {
                     $displayMessage = $setting->Hitung_Mundur_Iqamah ?? 'Menuju Waktu Iqamah';
+                } elseif ($phase == 'khutbah') {
+                    $displayMessage = "Sedang Berlangsung Khutbah & Sholat Jum'at Berjamaah.\nHarap Tenang, Dengarkan Khutbah & Nonaktifkan Nada Dering HP";
                 } elseif ($phase == 'prayer') {
                     $displayMessage = 'Iqamah Segera Dikumandangkan. Mari Bersiap Mengisi Shaf Terdepan Yang Masih Kosong, Luruskan dan Rapatkan shaf sholat';
                 } else {
@@ -864,7 +964,18 @@
                 }
             @endphp
 
-            @if($phase == 'prayer')
+            @if($phase == 'khutbah')
+                <div class="prayer-mode-box">
+                    <div class="icons-row">
+                        <i class="fa-solid fa-volume-xmark" title="Matikan Suara HP"></i>
+                        <i class="fa-solid fa-ear-listen" title="Dengarkan Khutbah"></i>
+                        <i class="fa-solid fa-people-arrows" title="Rapatkan Shaf"></i>
+                    </div>
+                    <div class="message-text">
+                        {!! nl2br(e($displayMessage)) !!}
+                    </div>
+                </div>
+            @elseif($phase == 'prayer')
                 <div class="prayer-mode-box">
                     <div class="icons-row">
                         <i class="fa-solid fa-volume-xmark" title="Matikan Suara HP"></i>
@@ -897,7 +1008,21 @@
         <div class="hadith-plakat">
             <span class="quote-watermark quote-left">“</span>
 
-            @if($phase == 'countdown')
+            @if($phase == 'khutbah')
+                <div class="adab-notice">
+                    <i class="fa-solid fa-ear-listen"></i>
+                    <span>Adab Khutbah Jum'at: Diam, Dengarkan dan Simak Khutbah</span>
+                </div>
+                <div class="hadith-header">
+                    Rasulullah <span class="saw-symbol">ﷺ</span> bersabda:
+                </div>
+                <div class="hadith-body">
+                    "Jika engkau berkata kepada sahabatmu pada hari Jum'at: 'Diamlah!' ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia (pahalanya gugur)."
+                </div>
+                <div class="hadith-source">
+                    (HR. Bukhari no. 934 & Muslim no. 851)
+                </div>
+            @elseif($phase == 'countdown')
                 <div class="adab-notice">
                     <i class="fa-solid fa-person-praying"></i>
                     <span>Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.</span>
@@ -1090,7 +1215,7 @@
             }, 1000);
         }
 
-        @if($phase != 'prayer')
+        @if($phase != 'prayer' && $phase != 'khutbah')
             updateCountdown();
             countdownTimer = setInterval(updateCountdown, 1000);
         @endif

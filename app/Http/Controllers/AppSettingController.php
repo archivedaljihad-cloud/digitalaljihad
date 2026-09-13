@@ -177,6 +177,7 @@ class AppSettingController extends Controller
             'prayer_mode_adzan_duration'    => 'required|integer|min:1|max:60',
             'prayer_mode_iqamah_duration'   => 'required|integer|min:1|max:60',
             'prayer_mode_after_prayer'      => 'required|integer|min:0|max:60',
+            'prayer_mode_jumat_duration'    => 'nullable|integer|min:10|max:180',
             'tarhim_trigger_seconds'        => 'nullable|integer|min:0|max:3600',
         ]);
 
@@ -188,6 +189,9 @@ class AppSettingController extends Controller
         $setting->prayer_mode_adzan_duration = $validated['prayer_mode_adzan_duration'];
         $setting->prayer_mode_iqamah_duration = $validated['prayer_mode_iqamah_duration'];
         $setting->prayer_mode_after_prayer = $validated['prayer_mode_after_prayer'];
+        if ($request->filled('prayer_mode_jumat_duration')) {
+            $setting->prayer_mode_jumat_duration = (int) $request->input('prayer_mode_jumat_duration');
+        }
         if ($request->filled('tarhim_trigger_seconds')) {
             $setting->tarhim_trigger_seconds = (int) $request->input('tarhim_trigger_seconds');
         }

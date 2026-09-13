@@ -37,6 +37,7 @@ class AppSetting extends Model
         'prayer_mode_iqamah_duration',
         'prayer_mode_after_prayer',
         'prayer_mode_theme',
+        'prayer_mode_jumat_duration',
         'audio_tarhim',
         'tarhim_audio',
         'tarhim_audio_subuh',
@@ -232,5 +233,10 @@ class AppSetting extends Model
     public function getPrayerTheme()
     {
         return $this->prayer_mode_theme ?? 'gold';
+    }
+
+    public function getFridayPrayerDuration()
+    {
+        return $this->prayer_mode_jumat_duration ?? 50;
     }
 }
