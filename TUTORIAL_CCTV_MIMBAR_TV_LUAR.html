@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Panduan Praktis Menghubungkan CCTV Live Mimbar ke TV Luar Masjid</title>
+    <style>
+        @page {
+            margin: 15mm 15mm 15mm 15mm;
+            size: A4 portrait;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.5;
+            color: #1a202c;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-box {
+            border-bottom: 3px double #1e5a3a;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #1e5a3a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 4px 0;
+        }
+
+        .header-subtitle {
+            font-size: 11pt;
+            color: #b45309;
+            font-weight: bold;
+            margin: 0 0 6px 0;
+        }
+
+        .header-desc {
+            font-size: 9pt;
+            color: #4b5563;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 12pt;
+            color: #ffffff;
+            background-color: #1e5a3a;
+            padding: 6px 12px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            font-size: 11pt;
+            color: #1e5a3a;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 3px;
+        }
+
+        p, ul, ol {
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        li {
+            margin-bottom: 4px;
+        }
+
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #1e5a3a;
+            padding: 10px 14px;
+            margin: 12px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9pt;
+            line-height: 1.35;
+            color: #0f172a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 14px 0;
+            font-size: 9pt;
+        }
+
+        table th {
+            background-color: #1e5a3a;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: left;
+            padding: 7px 10px;
+            border: 1px solid #164e2e;
+        }
+
+        table td {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            vertical-align: middle;
+        }
+
+        table tr:nth-child(even) td {
+            background-color: #f9fafb;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f1f5f9;
+            color: #0f766e;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 8.5pt;
+        }
+
+        .note-box {
+            background-color: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 8px 12px;
+            margin: 10px 0;
+            font-size: 9pt;
+            color: #92400e;
+        }
+
+        .highlight-box {
+            background-color: #f0fdf4;
+            border: 1px solid #dcfce7;
+            border-left: 4px solid #10b981;
+            padding: 8px 12px;
+            margin: 10px 0;
+            font-size: 9pt;
+            color: #065f46;
+        }
+
+        .footer-note {
+            margin-top: 25px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 8px;
+            font-size: 8pt;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .print-button-container {
+            display: none;
+        }
+
+        @media screen {
+            body {
+                max-width: 800px;
+                margin: 30px auto;
+                padding: 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                border-radius: 8px;
+            }
+            .print-button-container {
+                display: block;
+                text-align: right;
+                margin-bottom: 20px;
+            }
+            .btn-print {
+                background: linear-gradient(135deg, #1e5a3a, #0a2e1f);
+                color: #ffffff;
+                border: 1px solid #ffd700;
+                padding: 10px 20px;
+                font-size: 13px;
+                font-weight: bold;
+                border-radius: 6px;
+                cursor: pointer;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            }
+            .btn-print:hover {
+                background: #ffd700;
+                color: #0a2e1f;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="print-button-container">
+        <button class="btn-print" onclick="window.print()">
+            🖨️ Cetak / Simpan ke PDF Sekarang
+        </button>
+    </div>
+
+    <div class="header-box">
+        <div class="header-title">Buku Panduan Teknis Sistem Display Masjid</div>
+        <div class="header-subtitle">Menghubungkan CCTV Live Mimbar (Kabel BNC via DVR) ke TV Luar Masjid</div>
+        <div class="header-desc">Panduan Resmi Operasional Display Masjid Digital &bull; Sholat Jum'at, Idul Fitri & Idul Adha</div>
+    </div>
+
+    <h2>1. Gambaran Alur Sistem (Arsitektur Jaringan)</h2>
+    <p>Sistem ini memanfaatkan kamera CCTV analog kabel BNC yang sudah ada di mimbar/mihrab tanpa perlu membeli kamera baru. DVR bertindak sebagai encoder digital lokal.</p>
+
+    <div class="diagram-box">
+[ Kamera Mimbar (Kabel BNC) ]
+         │ (Kabel Coaxial BNC ke DVR Masjid)
+         ▼
+    [ DVR CCTV Masjid ] ──(Kabel LAN RJ45)──▶ [ Router Wi-Fi Masjid ]
+                                                     │
+                                                     ├──▶ [ Laptop / PC Server Masjid ] (Laravel)
+                                                     │
+                                                     └──▶ [ Smart TV / TV Box di Luar ] (/tv-outdoor)
+    </div>
+
+    <h2>2. Langkah 1: Sambungkan DVR ke Router Masjid</h2>
+    <ol>
+        <li>Ambil kabel jaringan LAN (kabel RJ45 standar).</li>
+        <li>Tancapkan ujung satu ke port <strong>LAN / Network</strong> di bagian belakang mesin DVR CCTV.</li>
+        <li>Tancapkan ujung lainnya ke port LAN pada <strong>Router Wi-Fi Masjid</strong> (atau Switch Hub).</li>
+        <li>Pastikan lampu LED port LAN di belakang DVR menyala/berkedip hijau atau oranye.</li>
+    </ol>
+
+    <h2>3. Langkah 2: Cari Tahu Alamat IP DVR Masjid</h2>
+    <ol>
+        <li>Di layar monitor CCTV masjid, buka menu: <strong>Main Menu &gt; Configuration &gt; Network (Jaringan)</strong>.</li>
+        <li>Catat <strong>IP Address</strong> DVR Anda (Contoh: <code>192.168.1.100</code> atau <code>192.168.1.50</code>).</li>
+        <li>Catat <strong>Username</strong> (biasanya <code>admin</code>) dan <strong>Password</strong> DVR Anda.</li>
+        <li>Perhatikan kamera mimbar tercolok di port nomor berapa (misal: <strong>Channel 1</strong>).</li>
+    </ol>
+
+    <h2>4. Langkah 3: Format Alamat Stream RTSP Lokal</h2>
+    <p>DVR CCTV modern otomatis menyediakan siaran RTSP untuk setiap channel kamera:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th width="28%">Merk DVR CCTV</th>
+                <th width="48%">Format URL RTSP Lokal</th>
+                <th width="24%">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Hikvision / Hilook</strong></td>
+                <td><code>rtsp://admin:Pass@192.168.1.100:554/Streaming/Channels/101</code></td>
+                <td>Channel 1 Resolusi Utama (HD)</td>
+            </tr>
+            <tr>
+                <td><strong>Dahua / IMOU</strong></td>
+                <td><code>rtsp://admin:Pass@192.168.1.100:554/cam/realmonitor?channel=1&amp;subtype=0</code></td>
+                <td>Channel 1 Resolusi Utama</td>
+            </tr>
+            <tr>
+                <td><strong>XMeye / SPC / OEM</strong></td>
+                <td><code>rtsp://admin:Pass@192.168.1.100:554/user=admin_password=Pass_channel=1_stream=0.sdp</code></td>
+                <td>Channel 1 Main Stream</td>
+            </tr>
+            <tr>
+                <td><strong>Avtech</strong></td>
+                <td><code>rtsp://admin:Pass@192.168.1.100:554/live/ch0</code></td>
+                <td>Channel 1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>Catatan:</strong> Ganti <code>admin</code>, <code>Pass</code>, dan <code>192.168.1.100</code> dengan username, password, dan IP DVR asli masjid Anda.
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>5. Langkah 4: Menjalankan RTSP-to-Web Converter di Laptop Server (0 Delay)</h2>
+    <p>Agar browser di TV dapat memutar RTSP tanpa delay dan tanpa kuota internet, gunakan software gratis dan sangat ringan bernama <strong>go2rtc</strong> (tanpa instalasi):</p>
+
+    <ol>
+        <li><strong>Download go2rtc</strong> dari tautan: <code>https://github.com/AlexxIT/go2rtc/releases</code> (pilih <code>go2rtc_win64.zip</code>).</li>
+        <li>Ekstrak foldernya (contoh: di <code>C:\go2rtc\</code>).</li>
+        <li>Buat file teks bernama <code>go2rtc.yaml</code> di folder yang sama, lalu isi:
+            <div class="diagram-box">
+streams:
+  mimbar: rtsp://admin:Password123@192.168.1.100:554/Streaming/Channels/101
+            </div>
+        </li>
+        <li>Klik dua kali file <code>go2rtc.exe</code> untuk menjalankannya.</li>
+        <li>Siaran kamera mimbar kini sudah aktif di alamat web lokal:
+            <br><code>http://[IP-Laptop-Server]:1984/stream.html?src=mimbar</code>
+        </li>
+    </ol>
+
+    <h2>6. Langkah 5: Masukkan Pengaturan di Dashboard Admin Masjid</h2>
+    <ol>
+        <li>Buka dashboard admin masjid: <code>http://localhost:8000/settings</code></li>
+        <li>Klik tab <strong>CCTV Mimbar &amp; TV Luar</strong>.</li>
+        <li>Geser saklar <strong>Aktifkan Fitur CCTV Mimbar</strong> ke posisi <strong>AKTIF</strong>.</li>
+        <li>Geser saklar <strong>Otomatis Beralih saat Khutbah</strong> ke posisi <strong>AKTIF</strong>.</li>
+        <li>Masukkan URL stream di kolom: <code>http://[IP-Laptop-Server]:1984/stream.html?src=mimbar</code></li>
+        <li>Klik tombol <strong>Simpan Semua Perubahan</strong>.</li>
+    </ol>
+
+    <h2>7. Langkah 6: Cara Menyalakan TV di Luar Masjid</h2>
+    <ol>
+        <li>Nyalakan Smart TV atau Android TV Box di serambi / halaman luar masjid.</li>
+        <li>Pastikan TV terhubung ke Wi-Fi / kabel LAN yang sama dengan laptop server.</li>
+        <li>Buka aplikasi Browser di TV, lalu ketik alamat:
+            <br><strong style="font-size: 11pt; color: #1e5a3a;"><code>http://[IP-Laptop-Server]:8000/tv-outdoor</code></strong>
+        </li>
+        <li>Tekan tombol Layar Penuh (Fullscreen / F11).</li>
+    </ol>
+
+    <div class="highlight-box">
+        <strong>Perilaku Otomatis TV Luar:</strong>
+        <ul>
+            <li><strong>Hari &amp; Jam Biasa:</strong> TV luar memutar rotasi display jadwal sholat, pengumuman, keuangan, dan slide infaq secara bergantian.</li>
+            <li><strong>Saat Khutbah Jum'at / Sholat Ied:</strong> TV luar secara <strong>otomatis langsung beralih</strong> menyiarkan wajah khatib di mimbar lengkap dengan nama khatib, jam digital, dan hadits larangan berbicara saat khutbah!</li>
+            <li><strong>Setelah Sholat Selesai:</strong> TV luar otomatis kembali memutar informasi display masjid normal.</li>
+        </ul>
+    </div>
+
+    <h2>8. Tips Uji Coba Cepat (Simulasi)</h2>
+    <p>Anda bisa menguji tampilan siaran mimbar di TV luar kapan saja tanpa harus menunggu hari Jum'at tiba dengan membuka:</p>
+    <p><code>http://localhost:8000/tv-outdoor?mimbar=1</code></p>
+
+    <div class="footer-note">
+        Dokumen ini diterbitkan oleh Sistem Informasi Masjid Digital &bull; Disimpan di: TUTORIAL_CCTV_MIMBAR_TV_LUAR.pdf
+    </div>
+
+</body>
+</html>
