@@ -1,99 +1,204 @@
 <!-- resources/views/about.blade.php -->
 @extends('layouts.admin')
-@section('title', 'Tentang Aplikasi')
+@section('title', 'Tentang Aplikasi & Panduan Sistem')
 @section('main-content')
 
 <div class="row justify-content-center">
-    <div class="col-lg-10">
+    <div class="col-xl-11 col-lg-12">
         <!-- Main Card -->
-        <div class="card shadow mb-4" style="border-left: 4px solid var(--islamic-gold, #c9a03d); border-radius: 15px;">
-            <!-- Card Header with Logo -->
-            <div class="card-header py-3 text-center" style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white; border-radius: 15px 15px 0 0;">
-                <img src="{{ isset($setting['logo']) ? asset('storage/' . $setting['logo']) : asset('img/default-logo.png') }}"
-                alt="Logo Aplikasi"
-                class="img-fluid mb-3"
-                style="max-width: 80px; border-radius: 50%; border: 3px solid #c9a03d; padding: 5px; background: white;">
-                <h4 class="m-0 font-weight-bold" style="font-family: 'Amiri', serif;">{{ $setting->nama_aplikasi ?? 'Sistem Informasi Masjid Digital' }}</h4>
-                <p class="mb-0 small" style="opacity: 0.9;">Solusi Digital untuk Manajemen Masjid dengan Tampilan TV Dinamis</p>
+        <div class="card shadow-lg mb-4" style="border: none; border-radius: 20px; overflow: hidden; background: #ffffff;">
+            
+            <!-- Hero Header with Premium Islamic Gradient & Hex Pattern -->
+            <div class="card-header py-4 px-4 text-center position-relative" style="background: linear-gradient(135deg, #071a10 0%, #0e3521 50%, #1a5235 100%); color: white; border-bottom: 3px solid #c9a03d;">
+                <div class="d-flex justify-content-center mb-3">
+                    <div style="position: relative;">
+                        <img src="{{ isset($setting->logo) && $setting->logo ? asset('storage/' . $setting->logo) : asset('img/default-logo.png') }}"
+                             alt="Logo Aplikasi"
+                             class="img-fluid"
+                             style="max-width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #c9a03d; padding: 4px; background: #ffffff; box-shadow: 0 8px 25px rgba(0,0,0,0.3);">
+                        <span class="badge position-absolute" style="bottom: 0; right: -10px; background: #c9a03d; color: #071a10; font-weight: 700; font-size: 11px; padding: 4px 8px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                            v4.0
+                        </span>
+                    </div>
+                </div>
+
+                <h3 class="font-weight-bold mb-1" style="font-family: 'Amiri', serif; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                    {{ $setting->nama_aplikasi ?? 'Sistem Informasi Masjid Digital' }}
+                </h3>
+                <p class="mb-2" style="font-size: 15px; color: rgba(255,255,255,0.85); font-weight: 400;">
+                    Platform Digital Signage Masjid Terintegrasi & Smart Prayer Display System
+                </p>
+                
+                <!-- Quick Status Badges -->
+                <div class="d-flex flex-wrap justify-content-center align-items-center mt-3" style="gap: 8px;">
+                    <span class="badge px-3 py-2" style="background: rgba(201, 160, 61, 0.2); color: #ffd700; border: 1px solid rgba(201, 160, 61, 0.4); border-radius: 20px; font-weight: 500;">
+                        <i class="fas fa-code-branch mr-1"></i> Versi 4.0 (Update Sep 2026)
+                    </span>
+                    <span class="badge px-3 py-2" style="background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; font-weight: 500;">
+                        <i class="fab fa-laravel mr-1" style="color: #ff2d20;"></i> Laravel 13 & PHP 8.3
+                    </span>
+                    @if($setting->rotation_enabled ?? false)
+                    <span class="badge px-3 py-2" style="background: rgba(40, 167, 69, 0.25); color: #a3e635; border: 1px solid rgba(40, 167, 69, 0.5); border-radius: 20px; font-weight: 500;">
+                        <i class="fas fa-play-circle mr-1"></i> Rotasi TV: AKTIF ({{ $setting->rotation_interval ?? 10 }}s)
+                    </span>
+                    @else
+                    <span class="badge px-3 py-2" style="background: rgba(108, 117, 125, 0.25); color: #cbd5e1; border: 1px solid rgba(108, 117, 125, 0.4); border-radius: 20px; font-weight: 500;">
+                        <i class="fas fa-pause-circle mr-1"></i> Rotasi TV: NONAKTIF
+                    </span>
+                    @endif
+                    <a href="{{ url('/rotator') }}" target="_blank" class="badge px-3 py-2 text-decoration-none" style="background: #c9a03d; color: #071a10; font-weight: 600; border-radius: 20px; transition: transform 0.2s ease;">
+                        <i class="fas fa-external-link-alt mr-1"></i> Buka Display TV
+                    </a>
+                </div>
             </div>
 
             <!-- Card Body -->
-            <div class="card-body">
-                <!-- Introduction -->
+            <div class="card-body p-4 p-md-5">
+
+                <!-- 1. INTRODUKSI SISTEM -->
                 <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-info-circle mr-2" style="color: #c9a03d;"></i>Tentang Aplikasi Ini
-                    </h5>
-                    <p class="text-justify">
-                        <strong>{{ $setting->nama_aplikasi ?? 'Sistem Informasi Masjid Digital' }}</strong> adalah solusi terintegrasi berbasis web untuk manajemen masjid modern yang dibangun dengan Laravel 12. Aplikasi ini menampilkan informasi masjid secara real-time pada layar TV digital dengan desain yang dinamis dan responsif.
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h4 class="font-weight-bold m-0" style="color: #0e3521;">Tentang Sistem Digital Masjid</h4>
+                    </div>
+                    <p class="text-justify" style="color: #4b5563; line-height: 1.8; font-size: 15px;">
+                        <strong>{{ $setting->nama_aplikasi ?? 'Sistem Informasi Masjid Digital' }}</strong> adalah platform digital signage dan sistem otomasi masjid modern yang dirancang khusus untuk memenuhi kebutuhan syiar, transparansi kas, serta ketertiban ibadah. Aplikasi ini berjalan dengan arsitektur <em>Dual Engine Rotator</em> (Layar TV Utama & Layar TV Luar/Serambi), serta terintegrasi penuh dengan <em>Prayer Mode Otomatis</em> dan <em>CCTV Mimbar Live Stream</em>.
                     </p>
-                    <p class="text-justify">
-                        Sistem ini dirancang khusus untuk menampilkan jadwal sholat, pengumuman, informasi keuangan, dan kegiatan masjid secara digital dengan tampilan yang elegan dan mudah dibaca dari jarak jauh. Dilengkapi dengan antarmuka admin yang lengkap untuk mengelola semua konten yang ditampilkan.
+                    <p class="text-justify" style="color: #4b5563; line-height: 1.8; font-size: 15px;">
+                        Sistem ini mengedepankan performa tinggi dengan teknologi murni <strong>Vanilla JS & GPU-Accelerated CSS</strong> sehingga mampu menampilkan visual yang sangat mewah, halus (*60 FPS tanpa jeda kedip*), dan ramah terhadap perangkat TV box berdaya rendah tanpa membebani memori.
                     </p>
                 </section>
 
-                <!-- Main Features -->
+                <!-- 2. FITUR TAMPILAN TV MUTAKHIR (YANG DIPERBARUI TOTAL) -->
                 <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-star-of-life mr-2" style="color: #c9a03d;"></i>Fitur Utama
-                    </h5>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm" style="border-left: 4px solid #1e5a3a; border-radius: 10px;">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;"><i class="fas fa-tv mr-2" style="color: #c9a03d;"></i>Tampilan TV Dinamis</h6>
-                                    <p class="small text-justify">
-                                        Menampilkan informasi masjid secara real-time pada layar TV dengan desain modern dan animasi yang menarik.
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(201,160,61,0.15); color: #c9a03d; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-weight-bold m-0" style="color: #0e3521;">Fitur Tampilan TV Mutakhir</h4>
+                            <p class="small text-muted mb-0">Teknologi visual canggih yang tampil di layar TV masjid Anda</p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <!-- TV Fitur 1 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: #ffd700; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(30,90,58,0.25);">
+                                        <i class="fas fa-clone"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Dual Engine Crossfade</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Arsitektur dual-iframe cerdas. Pergantian antar slide berlangsung mulus tanpa layar berkedip hitam (<em>zero-flicker transitions</em>).
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm" style="border-left: 4px solid #1e5a3a; border-radius: 10px;">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;"><i class="fas fa-clock mr-2" style="color: #c9a03d;"></i>Jadwal Sholat Otomatis</h6>
-                                    <p class="small text-justify">
-                                        Menampilkan jadwal sholat dengan waktu yang akurat dan update otomatis sesuai lokasi masjid.
+
+                        <!-- TV Fitur 2 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #c9a03d, #8f6c18); color: #ffffff; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(201,160,61,0.25);">
+                                        <i class="fas fa-hourglass-half"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Smart Next Prayer Bar</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Kapsul kaca transparan (<em>glassmorphism</em>) di pojok atas yang menghitung mundur waktu sholat berikutnya detik-demi-detik.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm" style="border-left: 4px solid #1e5a3a; border-radius: 10px;">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;"><i class="fas fa-hand-holding-heart mr-2" style="color: #c9a03d;"></i>Laporan Keuangan</h6>
-                                    <p class="small text-justify">
-                                        Menampilkan informasi keuangan masjid secara transparan dengan grafik dan detail pemasukan/pengeluaran.
+
+                        <!-- TV Fitur 3 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #0e3521, #1a5235); color: #5eead4; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(14,53,33,0.25);">
+                                        <i class="fas fa-palette"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Dynamic Ambient Theme</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Pendaran aura cahaya latar layar (<em>floating ambient orbs</em>) yang otomatis berganti warna mengikuti 6 siklus waktu sholat.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm" style="border-left: 4px solid #1e5a3a; border-radius: 10px;">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;"><i class="fas fa-bullhorn mr-2" style="color: #c9a03d;"></i>Pengumuman Digital</h6>
-                                    <p class="small text-justify">
-                                        Menampilkan pengumuman penting masjid secara bergulir dengan efek animasi yang menarik.
+
+                        <!-- TV Fitur 4 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #1e5a3a, #071a10); color: #fef08a; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(30,90,58,0.25);">
+                                        <i class="fas fa-mosque"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Prayer & Khutbah Engine</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Otomasi 5 fase ibadah: Audio Tarhim, Adzan, Hitung Mundur Iqamah, Layar Gelap Sholat Khusyuk, serta Mode Khutbah Jum'at.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm" style="border-left: 4px solid #1e5a3a; border-radius: 10px;">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;"><i class="fas fa-sync-alt mr-2" style="color: #c9a03d;"></i>Auto-Update Jadwal</h6>
-                                    <p class="small text-justify">
-                                        Jadwal sholat diperbarui secara otomatis melalui API eksternal sesuai lokasi yang ditentukan.
+
+                        <!-- TV Fitur 5 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #b91c1c, #7f1d1d); color: #ffffff; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(185,28,28,0.25);">
+                                        <i class="fas fa-video"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">CCTV Mimbar Otomatis</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        TV Luar/Serambi otomatis beralih menampilkan siaran langsung kamera mimbar saat Khutbah Jum'at atau Sholat Ied dimulai.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm" style="border-left: 4px solid #1e5a3a; border-radius: 10px;">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;"><i class="fas fa-exchange-alt mr-2" style="color: #c9a03d;"></i>Rotasi Halaman Dinamis</h6>
-                                    <p class="small text-justify">
-                                        Halaman tampilan TV berganti secara otomatis dengan interval yang dapat diatur sesuai kebutuhan.
+
+                        <!-- TV Fitur 6 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(2,132,199,0.25);">
+                                        <i class="fas fa-kaaba"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Live Makkah & Madinah</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Siaran langsung 24 jam Masjidil Haram dan Masjid Nabawi dilengkapi Smart Mosque Overlay (jam & jadwal sholat transparan).
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TV Fitur 7 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color: #ffffff; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(79,70,229,0.25);">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Smart Running Text</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Pengumuman teks berjalan (*marquee*) yang super halus, kecepatan dapat disesuaikan, dan terintegrasi pesan dinamis masjid.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TV Fitur 8 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(30,90,58,0.1); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #059669, #047857); color: #ffffff; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(5,150,105,0.25);">
+                                        <i class="fas fa-images"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Slide Poster & Brosur</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Penayangan brosur kajian, laporan donasi, dan poster dakwah beresolusi tinggi dengan sistem auto-scaling ke layar TV.
                                     </p>
                                 </div>
                             </div>
@@ -101,455 +206,447 @@
                     </div>
                 </section>
 
-                <!-- TV Display Features -->
+                <!-- 3. FITUR ROTASI HALAMAN DINAMIS & SALURAN DISPLAY (YANG DIPERBARUI TOTAL) -->
                 <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-tv mr-2" style="color: #c9a03d;"></i>Fitur Tampilan TV
-                    </h5>
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm h-100" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <div style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white; border-radius: 50%; width: 50px; height: 50px; line-height: 50px; font-size: 20px; margin: 0 auto 15px;">1</div>
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">Tampilan Waktu</h6>
-                                    <p class="small">Menampilkan waktu sholat, tanggal Hijriah & Masehi secara real-time</p>
-                                </div>
-                            </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-exchange-alt"></i>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm h-100" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <div style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white; border-radius: 50%; width: 50px; height: 50px; line-height: 50px; font-size: 20px; margin: 0 auto 15px;">2</div>
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">Running Text</h6>
-                                    <p class="small">Pengumuman bergulir dengan kecepatan yang dapat disesuaikan</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm h-100" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <div style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white; border-radius: 50%; width: 50px; height: 50px; line-height: 50px; font-size: 20px; margin: 0 auto 15px;">3</div>
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">Animasi Kaligrafi</h6>
-                                    <p class="small">Elemen kaligrafi Islami dengan efek visual yang indah</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm h-100" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <div style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white; border-radius: 50%; width: 50px; height: 50px; line-height: 50px; font-size: 20px; margin: 0 auto 15px;">4</div>
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">Rotasi Otomatis</h6>
-                                    <p class="small">Halaman berganti otomatis dengan interval yang dapat diatur</p>
-                                </div>
-                            </div>
+                        <div>
+                            <h4 class="font-weight-bold m-0" style="color: #0e3521;">Fitur Rotasi Halaman Dinamis</h4>
+                            <p class="small text-muted mb-0">Manajemen urutan siaran, multi-saluran, dan kontrol akses cerdas</p>
                         </div>
                     </div>
-                </section>
 
-                <!-- New Feature: Rotation Display -->
-                <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-exchange-alt mr-2" style="color: #c9a03d;"></i>Fitur Rotasi Halaman Dinamis
-                    </h5>
-                    <div class="card shadow-sm" style="border-left: 4px solid #c9a03d; border-radius: 10px;">
-                        <div class="card-body">
+                    <div class="card shadow-sm border-0 mt-3" style="border-radius: 16px; background: #fafdfb; border: 1px solid rgba(30,90,58,0.12) !important;">
+                        <div class="card-body p-4">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">Apa itu Rotasi Halaman?</h6>
-                                    <p class="small">
-                                        Fitur ini memungkinkan tampilan TV untuk berganti secara otomatis antara beberapa halaman yang berbeda. 
-                                        Anda dapat mengatur halaman mana saja yang ingin ditampilkan dan berapa lama waktu pergantiannya.
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 16px;">
+                                        <i class="fas fa-question-circle mr-2" style="color: #c9a03d;"></i>Apa itu Sistem Rotasi Halaman?
+                                    </h6>
+                                    <p class="small text-muted text-justify" style="line-height: 1.8;">
+                                        Sistem rotasi halaman adalah mesin display yang mengatur pergantian berbagai informasi masjid di layar TV secara otomatis. Layar TV akan memutar slide secara bergantian sesuai interval waktu (contoh: 10–20 detik per halaman) yang telah ditentukan oleh pengurus.
                                     </p>
-                                    <h6 class="font-weight-bold mt-3" style="color: #1e5a3a;">Keuntungan:</h6>
-                                    <ul class="small">
-                                        <li>Informasi lebih lengkap dan bervariasi</li>
-                                        <li>Tampilan tidak monoton</li>
-                                        <li>Dapat menampilkan lebih banyak informasi</li>
-                                        <li>Mudah diatur melalui panel admin</li>
+                                    
+                                    <h6 class="font-weight-bold mt-3" style="color: #0e3521; font-size: 15px;">
+                                        <i class="fas fa-sort-amount-down mr-2" style="color: #c9a03d;"></i>Fitur Baru: Pengaturan Urutan Prioritas
+                                    </h6>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li><strong>Super Admin:</strong> Dapat menggeser urutan prioritas slide dengan tombol <strong>Naik (▲)</strong> dan <strong>Turun (▼)</strong> sesuai agenda prioritas masjid.</li>
+                                        <li><strong>Operator / Petugas:</strong> Urutan halaman dikunci demi keamanan penayangan, namun tetap dapat mengaktifkan atau menonaktifkan slide tertentu.</li>
+                                        <li><strong>Sinkronisasi Instan:</strong> Perubahan rotasi langsung diterapkan ke layar TV tanpa perlu menyentuh atau me-refresh TV secara manual.</li>
                                     </ul>
                                 </div>
-                                <div class="col-md-6">
-                                    <div style="background: linear-gradient(135deg, rgba(30,90,58,0.05), rgba(201,160,61,0.05); padding: 15px; border-radius: 10px;">
-                                        <h6 class="font-weight-bold" style="color: #1e5a3a;">Cara Mengatur:</h6>
-                                        <ol class="small">
-                                            <li>Buka menu <strong>Rotasi Halaman</strong> di sidebar</li>
-                                            <li>Aktifkan fitur rotasi dengan toggle switch</li>
-                                            <li>Atur interval waktu pergantian (1-3600 detik)</li>
-                                            <li>Pilih halaman yang ingin ditampilkan</li>
-                                            <li>Klik Simpan Pengaturan</li>
-                                            <li>Buka halaman utama untuk melihat hasilnya</li>
+
+                                <div class="col-lg-6">
+                                    <div class="p-4 rounded-lg" style="background: #ffffff; border: 1px solid rgba(30,90,58,0.12); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                                        <h6 class="font-weight-bold mb-3" style="color: #0e3521;">
+                                            <i class="fas fa-sliders-h mr-2" style="color: #c9a03d;"></i>Langkah Pengaturan Rotasi:
+                                        </h6>
+                                        <ol class="small text-muted pl-3 mb-3" style="line-height: 1.9;">
+                                            <li>Buka menu <strong>Rotasi Halaman</strong> pada panel navigasi admin.</li>
+                                            <li>Pastikan toggle switch <strong>Status Rotasi</strong> dalam posisi Aktif.</li>
+                                            <li>Tentukan <strong>Interval Rotasi</strong> (waktu tampil per slide, rekomendasi: 12–20 detik).</li>
+                                            <li>Gunakan tombol <strong>▲ Naik</strong> atau <strong>▼ Turun</strong> untuk menentukan urutan tayang.</li>
+                                            <li>Centang slide yang ingin ditayangkan di TV, lalu klik <strong>Simpan Pengaturan</strong>.</li>
                                         </ol>
-                                        <div class="alert mt-2 mb-0" style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white; border-radius: 10px;">
-                                            <i class="fas fa-info-circle"></i> <strong>Info:</strong> Perubahan pengaturan akan langsung diterapkan tanpa perlu refresh browser!
+                                        <div class="d-flex align-items-center p-3 rounded" style="background: rgba(201,160,61,0.1); border-left: 4px solid #c9a03d;">
+                                            <i class="fas fa-bolt mr-3" style="color: #c9a03d; font-size: 20px;"></i>
+                                            <span class="small" style="color: #6b5012; font-weight: 500;">
+                                                Perubahan langsung aktif secara *real-time* di layar TV tanpa perlu me-reload perangkat TV!
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <hr class="my-3">
-                            <div class="row text-center">
-                                <div class="col-4">
-                                    <span class="badge p-2" style="background: #1e5a3a; color: white;">Dashboard Lengkap</span>
+
+                            <hr class="my-4" style="border-color: rgba(30,90,58,0.1);">
+
+                            <!-- 13 Saluran Slide Mutakhir -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+                                    <h6 class="font-weight-bold m-0" style="color: #0e3521;">
+                                        <i class="fas fa-th-large mr-2" style="color: #c9a03d;"></i>Daftar 13 Saluran Slide Display Aktif:
+                                    </h6>
+                                    <span class="small text-muted">Klik salah satu saluran untuk melihat pratinjau langsung:</span>
                                 </div>
-                                <div class="col-4">
-                                    <span class="badge p-2" style="background: #c9a03d; color: #1e5a3a;">Jadwal Sholat</span>
-                                </div>
-                                <div class="col-4">
-                                    <span class="badge p-2" style="background: #1e5a3a; color: white;">Rincian Keuangan</span>
+
+                                <div class="row" style="gap: 0px;">
+                                    @php
+                                        $slides = [
+                                            ['url' => 'utama-embed', 'name' => 'Jadwal Sholat 5 Waktu', 'icon' => 'fa-clock', 'color' => '#1e5a3a'],
+                                            ['url' => 'keuangan-embed', 'name' => 'Rincian Kas Utama', 'icon' => 'fa-wallet', 'color' => '#0e3521'],
+                                            ['url' => 'keuangan-summary-embed', 'name' => 'Grafik Arus Kas', 'icon' => 'fa-chart-pie', 'color' => '#0284c7'],
+                                            ['url' => 'ambulance-embed', 'name' => 'Kas Mobil Ambulance', 'icon' => 'fa-ambulance', 'color' => '#b91c1c'],
+                                            ['url' => 'infaq-embed', 'name' => 'Program Donasi & Infaq', 'icon' => 'fa-hand-holding-usd', 'color' => '#059669'],
+                                            ['url' => 'jumat-embed', 'name' => 'Petugas Sholat Jum\'at', 'icon' => 'fa-users', 'color' => '#c9a03d'],
+                                            ['url' => 'pengumuman-embed', 'name' => 'Daftar Pengumuman', 'icon' => 'fa-bullhorn', 'color' => '#4f46e5'],
+                                            ['url' => 'slide-embed', 'name' => 'Slide Poster Informasi', 'icon' => 'fa-images', 'color' => '#d97706'],
+                                            ['url' => 'qris-embed', 'name' => 'QRIS Infaq Digital', 'icon' => 'fa-qrcode', 'color' => '#0f172a'],
+                                            ['url' => 'live-mekah-embed', 'name' => 'Live TV Makkah (Ka\'bah)', 'icon' => 'fa-kaaba', 'color' => '#7c3aed'],
+                                            ['url' => 'live-madinah-embed', 'name' => 'Live TV Madinah (Nabawi)', 'icon' => 'fa-mosque', 'color' => '#16a34a'],
+                                            ['url' => 'idul-fitri-embed', 'name' => 'Petugas Idul Fitri', 'icon' => 'fa-star-and-crescent', 'color' => '#c9a03d'],
+                                            ['url' => 'idul-adha-embed', 'name' => 'Petugas Idul Adha', 'icon' => 'fa-moon', 'color' => '#1e5a3a'],
+                                        ];
+                                    @endphp
+
+                                    @foreach($slides as $s)
+                                    <div class="col-md-4 col-sm-6 mb-2">
+                                        <a href="{{ url($s['url']) }}" target="_blank" class="d-flex align-items-center p-2 rounded text-decoration-none slide-pill" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.08); transition: all 0.2s ease;">
+                                            <div style="width: 32px; height: 32px; border-radius: 8px; background: {{ $s['color'] }}15; color: {{ $s['color'] }}; display: flex; align-items: center; justify-content: center; font-size: 14px; margin-right: 10px; flex-shrink: 0;">
+                                                <i class="fas {{ $s['icon'] }}"></i>
+                                            </div>
+                                            <div class="overflow-hidden" style="flex: 1;">
+                                                <div class="small font-weight-bold text-truncate" style="color: #1f2937;">{{ $s['name'] }}</div>
+                                                <div style="font-size: 10px; color: #6b7280;">/{{ $s['url'] }}</div>
+                                            </div>
+                                            <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                        </a>
+                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- User Roles & Access -->
+                <!-- 4. PEMBAGIAN HAK AKSES PENGGUNA (RBAC) -->
                 <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-users-cog mr-2" style="color: #c9a03d;"></i>Pembagian Hak Akses Pengguna
-                    </h5>
-                    <div class="card shadow-sm" style="border-radius: 10px;">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6 mb-3 mb-md-0">
-                                    <div class="p-3 h-100 rounded" style="background: rgba(30,90,58,0.04); border-left: 4px solid #1e5a3a;">
-                                        <h6 class="font-weight-bold" style="color: #1e5a3a;">
-                                            <i class="fas fa-user-edit mr-2" style="color: #c9a03d;"></i>Hak Akses: Petugas / Operator Masjid
-                                        </h6>
-                                        <p class="small text-muted mb-2">Bertanggung jawab atas manajemen konten operasional dan tampilan display masjid:</p>
-                                        <ul class="small mb-0 pl-3">
-                                            <li>Pengaturan waktu dan penyesuaian jadwal sholat 5 waktu</li>
-                                            <li>Pengisian data petugas Sholat Jum'at, Idul Fitri, dan Idul Adha (Khatib, Imam, Muadzin, Bilal)</li>
-                                            <li>Pengelolaan pengumuman teks berjalan (*running text*) dan agenda kajian rutin</li>
-                                            <li>Upload slide gambar dan poster brosur kegiatan dakwah masjid</li>
-                                            <li>Pemilihan halaman yang aktif pada putaran rotasi layar TV</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="p-3 h-100 rounded" style="background: rgba(201,160,61,0.06); border-left: 4px solid #c9a03d;">
-                                        <h6 class="font-weight-bold" style="color: #1e5a3a;">
-                                            <i class="fas fa-wallet mr-2" style="color: #c9a03d;"></i>Hak Akses: Bendahara Masjid
-                                        </h6>
-                                        <p class="small text-muted mb-2">Bertanggung jawab atas transparansi dan akuntabilitas keuangan masjid:</p>
-                                        <ul class="small mb-0 pl-3">
-                                            <li>Pencatatan buku kas utama (pemasukan infaq/shodaqoh & pengeluaran operasional)</li>
-                                            <li>Pencatatan kas operasional dan pemeliharaan mobil ambulance masjid</li>
-                                            <li>Pengelolaan program penggalangan dana / infaq pembangunan khusus</li>
-                                            <li>Pemantauan grafik ringkasan keuangan dan ekspor laporan kas untuk jamaah</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-weight-bold m-0" style="color: #0e3521;">Pembagian Hak Akses Pengguna (RBAC)</h4>
+                            <p class="small text-muted mb-0">Keamanan data terstruktur sesuai bidang tugas kepengurusan DKM</p>
                         </div>
                     </div>
-                </section>
 
-                <!-- Technologies Used -->
-                <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-microchip mr-2" style="color: #c9a03d;"></i>Teknologi yang Digunakan
-                    </h5>
                     <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" style="height: 40px;" class="mb-2">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">Laravel 12</h6>
-                                    <p class="small">Framework PHP untuk backend</p>
+                        <!-- Super Admin -->
+                        <div class="col-lg-4 mb-3">
+                            <div class="card h-100 shadow-sm" style="border-radius: 16px; border-top: 4px solid #1e5a3a; border-left: none; border-right: none; border-bottom: none;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 10px;">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold m-0" style="color: #0e3521;">Administrator</h6>
+                                            <span class="badge badge-success" style="font-size: 10px;">Akses Penuh (Full Control)</span>
+                                        </div>
+                                    </div>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li>Kelola akun pengguna & pembagian peran (RBAC)</li>
+                                        <li>Pengaturan urutan putaran slide TV (Naik/Turun)</li>
+                                        <li>Konfigurasi identitas masjid, logo, & audio tarhim</li>
+                                        <li>Integrasi link Live Makkah, Madinah, & CCTV Mimbar</li>
+                                        <li>Tombol 1-klik sinkronisasi database server (`/settings/migrate`)</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <img src="https://cdn.simpleicons.org/bootstrap/7952B3" alt="Bootstrap" style="height: 40px;" class="mb-2">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">Bootstrap 5</h6>
-                                    <p class="small">Framework CSS untuk frontend</p>
+
+                        <!-- Petugas Operator -->
+                        <div class="col-lg-4 mb-3">
+                            <div class="card h-100 shadow-sm" style="border-radius: 16px; border-top: 4px solid #c9a03d; border-left: none; border-right: none; border-bottom: none;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(201,160,61,0.15); color: #c9a03d; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 10px;">
+                                            <i class="fas fa-user-edit"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold m-0" style="color: #0e3521;">Petugas / Operator</h6>
+                                            <span class="badge badge-warning" style="font-size: 10px; color: #1e5a3a;">Operasional Harian</span>
+                                        </div>
+                                    </div>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li>Penyesuaian jadwal sholat & waktu jeda iqamah</li>
+                                        <li>Petugas Sholat Jum'at, Idul Fitri, & Idul Adha</li>
+                                        <li>Pengumuman teks berjalan & jadwal agenda taklim</li>
+                                        <li>Upload poster & brosur kegiatan dakwah masjid</li>
+                                        <li>Aktif/nonaktifkan slide TV (urutan terproteksi)</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <img src="{{ asset('img/jquery.svg') }}" alt="jQuery" style="height: 40px;" class="mb-2">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">jQuery & AJAX</h6>
-                                    <p class="small">Untuk update data real-time tanpa refresh</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="card shadow-sm" style="border-radius: 10px;">
-                                <div class="card-body text-center">
-                                    <img src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL" style="height: 40px;" class="mb-2">
-                                    <h6 class="font-weight-bold" style="color: #1e5a3a;">MySQL</h6>
-                                    <p class="small">Database management system</p>
+
+                        <!-- Bendahara -->
+                        <div class="col-lg-4 mb-3">
+                            <div class="card h-100 shadow-sm" style="border-radius: 16px; border-top: 4px solid #0284c7; border-left: none; border-right: none; border-bottom: none;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(2,132,199,0.1); color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 10px;">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold m-0" style="color: #0e3521;">Bendahara</h6>
+                                            <span class="badge badge-info" style="font-size: 10px;">Manajemen Keuangan</span>
+                                        </div>
+                                    </div>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li>Pencatatan Buku Kas Utama (infaq tromol & operasional)</li>
+                                        <li>Pencatatan Kas Operasional Mobil Ambulance Masjid</li>
+                                        <li>Program penggalangan donasi & target infaq terarah</li>
+                                        <li>Pemantauan grafik ringkasan keuangan di TV</li>
+                                        <li>Ekspor pembukuan kas resmi ke format PDF & Excel</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Quick Guide -->
+                <!-- 5. ARSITEKTUR TEKNOLOGI -->
                 <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-book-open mr-2" style="color: #c9a03d;"></i>Panduan Penggunaan
-                    </h5>
-                    <div class="card shadow-sm" style="border-radius: 10px;">
-                        <div class="card-body">
-                            <div class="accordion" id="usageGuide">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h4 class="font-weight-bold m-0" style="color: #0e3521;">Teknologi & Standar Kinerja</h4>
+                    </div>
 
-                                <!-- Panduan 1: Display TV -->
-                                <div class="card shadow-none border mb-2" style="border-radius: 8px;">
-                                    <div class="card-header py-2" id="headingOne" style="background: rgba(30,90,58,0.03);">
-                                        <h6 class="mb-0">
-                                            <button class="btn btn-link w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseOne" style="color: #1e5a3a; text-decoration: none; font-weight: 600;">
-                                                <span><i class="fas fa-tv mr-2" style="color: #c9a03d;"></i>1. Menampilkan Sistem di Layar TV (Display TV)</span>
-                                                <i class="fas fa-chevron-down small text-muted"></i>
-                                            </button>
-                                        </h6>
-                                    </div>
-                                    <div id="collapseOne" class="collapse show" data-parent="#usageGuide">
-                                        <div class="card-body small" style="line-height: 1.8; color: #374151;">
-                                            <p class="mb-2"><strong>A. Layar TV Utama (Di Dalam Masjid):</strong></p>
-                                            <ol class="pl-3 mb-3">
-                                                <li>Buka aplikasi browser (Chrome / Edge / Browser TV) pada perangkat Smart TV atau Mini PC yang terhubung ke TV.</li>
-                                                <li>Ketikkan alamat website utama masjid (contoh: <code>https://digital-aljihad.onrender.com/</code>).</li>
-                                                <li>Tekan tombol <strong>F11</strong> pada keyboard (atau aktifkan mode <em>Fullscreen / Kiosk</em> di browser TV) untuk menyembunyikan address bar.</li>
-                                                <li>Layar akan otomatis berputar menampilkan jadwal sholat, pengumuman, dan laporan keuangan secara bergantian.</li>
-                                            </ol>
-                                            <p class="mb-2"><strong>B. Layar TV Luar / Serambi Masjid:</strong></p>
-                                            <ol class="pl-3 mb-0">
-                                                <li>Gunakan alamat khusus TV Luar: <code>https://digital-aljihad.onrender.com/tv-outdoor</code>.</li>
-                                                <li>Pada hari dan jam biasa, layar TV luar berputar menampilkan informasi umum seperti TV utama.</li>
-                                                <li>Saat waktu Khutbah Jum'at atau Sholat Ied tiba, layar TV luar akan <strong>otomatis beralih</strong> menampilkan siaran langsung CCTV Mimbar agar jamaah di luar dapat menyimak khutbah dengan jelas.</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Panduan 2: Panduan Operator -->
-                                <div class="card shadow-none border mb-2" style="border-radius: 8px;">
-                                    <div class="card-header py-2" id="headingTwo" style="background: rgba(30,90,58,0.03);">
-                                        <h6 class="mb-0">
-                                            <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseTwo" style="color: #1e5a3a; text-decoration: none; font-weight: 600;">
-                                                <span><i class="fas fa-user-edit mr-2" style="color: #c9a03d;"></i>2. Panduan Operasional Petugas / Operator Masjid</span>
-                                                <i class="fas fa-chevron-down small text-muted"></i>
-                                            </button>
-                                        </h6>
-                                    </div>
-                                    <div id="collapseTwo" class="collapse" data-parent="#usageGuide">
-                                        <div class="card-body small" style="line-height: 1.8; color: #374151;">
-                                            <ul class="pl-3 mb-0">
-                                                <li class="mb-2"><strong>Mengatur Jadwal Sholat:</strong> Buka menu <em>Jadwal Sholat</em> untuk menyesuaikan waktu sholat 5 waktu, waktu syuruq, serta durasi jeda hitung mundur iqamah tiap sholat.</li>
-                                                <li class="mb-2"><strong>Petugas Sholat Jum'at & Hari Raya:</strong> Buka menu <em>Sholat Jum'at</em>, <em>Idul Fitri</em>, atau <em>Idul Adha</em> untuk memperbarui nama Khatib, Imam, Muadzin, dan Bilal yang bertugas setiap minggunya.</li>
-                                                <li class="mb-2"><strong>Membuat Pengumuman:</strong> Buka menu <em>Pengumuman</em> untuk menambah pesan teks penting. Pengumuman aktif akan otomatis muncul pada teks berjalan (*running text*) di bagian bawah layar TV.</li>
-                                                <li class="mb-2"><strong>Agenda Kajian & Taklim:</strong> Buka menu <em>Agenda Kajian</em> untuk mencantumkan jadwal pengajian rutin, nama pemateri / ustadz, dan tema kajian.</li>
-                                                <li><strong>Slide Poster Informasi:</strong> Buka menu <em>Slide Informasi</em> untuk mengunggah poster kegiatan atau brosur infaq dalam format gambar (.jpg / .png) untuk ditampilkan di TV.</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Panduan 3: Panduan Bendahara -->
-                                <div class="card shadow-none border mb-2" style="border-radius: 8px;">
-                                    <div class="card-header py-2" id="headingThree" style="background: rgba(30,90,58,0.03);">
-                                        <h6 class="mb-0">
-                                            <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseThree" style="color: #1e5a3a; text-decoration: none; font-weight: 600;">
-                                                <span><i class="fas fa-hand-holding-usd mr-2" style="color: #c9a03d;"></i>3. Panduan Pengelolaan Keuangan (Khusus Bendahara)</span>
-                                                <i class="fas fa-chevron-down small text-muted"></i>
-                                            </button>
-                                        </h6>
-                                    </div>
-                                    <div id="collapseThree" class="collapse" data-parent="#usageGuide">
-                                        <div class="card-body small" style="line-height: 1.8; color: #374151;">
-                                            <ul class="pl-3 mb-0">
-                                                <li class="mb-2"><strong>Kas Utama Masjid:</strong> Buka menu <em>Keuangan</em> untuk mencatat setiap transaksi pemasukan (infaq tromol Jum'at, transfer bank, donatur tetap) dan pengeluaran operasional (listrik, air, kebersihan, insentif). Saldo akhir akan otomatis terhitung dan tersaji di layar TV.</li>
-                                                <li class="mb-2"><strong>Kas Operasional Ambulance:</strong> Buka menu <em>Kas Ambulance</em> untuk mencatat sedekah ambulance dan pengeluaran biaya perawatan mobil, bahan bakar, dan honor pengemudi.</li>
-                                                <li class="mb-2"><strong>Program Penggalangan Donasi/Infaq:</strong> Buka menu <em>Program Infaq</em> untuk membuat program donasi terarah (misal: Renovasi Kubah, Santunan Yatim, Karpet Baru). Masukkan target dana, dan layar TV akan menampilkan progress bar capaian donasi secara transparan.</li>
-                                                <li><strong>Cetak Laporan Keuangan:</strong> Gunakan tombol <em>Ekspor / Cetak</em> pada masing-masing menu keuangan untuk mengunduh rekapitulasi pembukuan dalam format PDF atau Excel.</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Panduan 4: Rotasi Halaman TV -->
-                                <div class="card shadow-none border mb-2" style="border-radius: 8px;">
-                                    <div class="card-header py-2" id="headingFour" style="background: rgba(30,90,58,0.03);">
-                                        <h6 class="mb-0">
-                                            <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseFour" style="color: #1e5a3a; text-decoration: none; font-weight: 600;">
-                                                <span><i class="fas fa-exchange-alt mr-2" style="color: #c9a03d;"></i>4. Mengatur Rotasi Slide Halaman TV</span>
-                                                <i class="fas fa-chevron-down small text-muted"></i>
-                                            </button>
-                                        </h6>
-                                    </div>
-                                    <div id="collapseFour" class="collapse" data-parent="#usageGuide">
-                                        <div class="card-body small" style="line-height: 1.8; color: #374151;">
-                                            <ol class="pl-3 mb-0">
-                                                <li class="mb-2">Buka menu <strong>Rotasi Halaman</strong> pada sidebar panel admin.</li>
-                                                <li class="mb-2">Pastikan toggle <strong>Status Rotasi</strong> dalam posisi aktif.</li>
-                                                <li class="mb-2">Atur <strong>Interval Rotasi</strong> (waktu tampil tiap slide, rekomendasi: 10–20 detik).</li>
-                                                <li class="mb-2">Centang slide yang ingin ditampilkan (misal: Jadwal Sholat, Rincian Keuangan, Pengumuman, Live Mekah/Madinah), atau hilangkan centang jika slide sedang tidak diperlukan.</li>
-                                                <li class="mb-2">Klik tombol <strong>Simpan Perubahan</strong>. Pengaturan akan langsung diterapkan di layar TV tanpa perlu me-reload browser TV.</li>
-                                                <li>Gunakan tombol <strong>Preview Rotasi</strong> di pojok kanan atas untuk melihat pratinjau tampilan rotasi secara langsung di layar komputer Anda.</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Panduan 5: Prayer Mode -->
-                                <div class="card shadow-none border" style="border-radius: 8px;">
-                                    <div class="card-header py-2" id="headingFive" style="background: rgba(30,90,58,0.03);">
-                                        <h6 class="mb-0">
-                                            <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseFive" style="color: #1e5a3a; text-decoration: none; font-weight: 600;">
-                                                <span><i class="fas fa-mosque mr-2" style="color: #c9a03d;"></i>5. Alur Otomatis Mode Sholat (Prayer Mode)</span>
-                                                <i class="fas fa-chevron-down small text-muted"></i>
-                                            </button>
-                                        </h6>
-                                    </div>
-                                    <div id="collapseFive" class="collapse" data-parent="#usageGuide">
-                                        <div class="card-body small" style="line-height: 1.8; color: #374151;">
-                                            <p class="mb-2">Sistem bekerja secara otomatis mengunci dan menyesuaikan layar saat memasuki waktu ibadah:</p>
-                                            <ol class="pl-3 mb-0">
-                                                <li class="mb-2"><strong>Fase Menjelang Adzan (Tarhim):</strong> Beberapa menit sebelum adzan tiba, audio tarhim/murottal dapat berputar otomatis untuk mengingatkan jamaah bersiap.</li>
-                                                <li class="mb-2"><strong>Fase Adzan:</strong> Saat waktu sholat masuk, layar menghentikan perputaran slide dan menampilkan pengumuman waktu adzan berkumandang.</li>
-                                                <li class="mb-2"><strong>Fase Iqamah:</strong> Menampilkan hitungan mundur waktu jeda sholat sunnah hingga iqamah dikumandangkan.</li>
-                                                <li class="mb-2"><strong>Fase Sholat Berjamaah:</strong> Layar TV otomatis menjadi gelap syahdu bertuliskan pesan adab <em>"Luruskan dan Rapatkan Shaf Anda"</em> agar tidak mengganggu kekhusyukan sholat jamaah.</li>
-                                                <li class="mb-2"><strong>Khusus Sholat Jum'at:</strong> Layar menampilkan kartu petugas resmi (Khatib, Imam, Bilal) dan plakat adab mendengarkan khutbah selama durasi khutbah berlangsung.</li>
-                                                <li><strong>Selesai Sholat:</strong> Setelah waktu sholat usai, layar TV akan otomatis kembali berotasi menampilkan informasi masjid seperti semula.</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
+                                <div class="mb-2" style="font-size: 32px; color: #ff2d20;"><i class="fab fa-laravel"></i></div>
+                                <h6 class="font-weight-bold mb-1" style="color: #0e3521;">Laravel 13 & PHP 8.3</h6>
+                                <p class="small text-muted mb-0">Backend handal, aman, & responsif dengan arsitektur MVC modern</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
+                                <div class="mb-2" style="font-size: 32px; color: #1e5a3a;"><i class="fas fa-gem"></i></div>
+                                <h6 class="font-weight-bold mb-1" style="color: #0e3521;">Islamic Material Design 3</h6>
+                                <p class="small text-muted mb-0">Antarmuka mewah terinspirasi Google Material You & estetika Islami</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
+                                <div class="mb-2" style="font-size: 32px; color: #0284c7;"><i class="fas fa-bolt"></i></div>
+                                <h6 class="font-weight-bold mb-1" style="color: #0e3521;">GPU Accelerated Engine</h6>
+                                <p class="small text-muted mb-0">Animasi 60 FPS diproses oleh GPU, sangat ramah pada Android TV Box</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
+                                <div class="mb-2" style="font-size: 32px; color: #4479a1;"><i class="fas fa-database"></i></div>
+                                <h6 class="font-weight-bold mb-1" style="color: #0e3521;">MySQL / MariaDB</h6>
+                                <p class="small text-muted mb-0">Penyimpanan basis data relasional dengan perlindungan migrasi otomatis</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Version History -->
+                <!-- 6. PANDUAN PENGGUNAAN LENGKAP -->
                 <section class="mb-5">
-                    <h5 class="font-weight-bold mb-3" style="color: #1e5a3a; border-left: 4px solid #c9a03d; padding-left: 15px;">
-                        <i class="fas fa-history mr-2" style="color: #c9a03d;"></i>Riwayat Versi
-                    </h5>
-                    <div class="card shadow-sm" style="border-radius: 10px;">
-                        <div class="card-body">
-                            <ul class="small mb-0" style="line-height: 1.8;">
-                                <li class="mb-3">
-                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.4 (September 2026)</strong>
-                                    <ul>
-                                        <li>Penambahan Laporan Kas Ambulance</li>
-                                        <li>Penambahan Penggalangan Donasi/Infaq</li>
-                                        <li>Penambahan pengaturan urutan rotasi halaman</li>
-                                        <li>Penambahan fitur Live streaming dari Mekah dan Madinah</li>
-                                        <li>Penambahan fitur prayer mode khus hari Jum'at</li>
-                                        <li>Perubahan posisi pemutaran audio tarhim</li>
-                                        <li>Penambahan fitur untuk TV di luar masjid dengan CCTV Live mimbar (jika nanti dipakai)</li>
-                                        <li>Penambahan sinkronisasi jadwal sholat dengan jadwal sholat KEMENAG RI</li>
-                                        <li>Sudah lupa penambahan-penambahan yang lainnya...</li>
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h4 class="font-weight-bold m-0" style="color: #0e3521;">Panduan Pengoperasian Sistem</h4>
+                    </div>
+
+                    <div class="accordion" id="usageGuide">
+                        <!-- Panduan 1: Display TV -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
+                            <div class="card-header py-3" id="headingOne" style="background: rgba(30,90,58,0.03);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseOne" style="color: #0e3521; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-tv mr-2" style="color: #c9a03d;"></i>1. Menampilkan Sistem di Layar TV (Display TV Dalam & Luar)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseOne" class="collapse show" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2"><strong>A. Layar TV Utama (Di Dalam Masjid):</strong></p>
+                                    <ol class="pl-3 mb-3">
+                                        <li>Buka aplikasi browser (Chrome / Edge / Browser TV) pada perangkat Smart TV atau Android Box yang terhubung ke TV.</li>
+                                        <li>Ketikkan alamat website utama masjid (contoh: <code>{{ url('/') }}</code> atau <code>{{ url('/rotator') }}</code>).</li>
+                                        <li>Tekan tombol <strong>F11</strong> pada keyboard (atau aktifkan mode <em>Fullscreen / Kiosk</em> di browser TV) untuk menyembunyikan address bar.</li>
+                                        <li>Layar akan otomatis berputar menampilkan jadwal sholat, pengumuman, siaran live, dan laporan keuangan secara bergantian.</li>
+                                    </ol>
+                                    <p class="mb-2"><strong>B. Layar TV Luar / Serambi Masjid:</strong></p>
+                                    <ol class="pl-3 mb-0">
+                                        <li>Gunakan alamat khusus TV Luar: <code>{{ url('/tv-outdoor') }}</code>.</li>
+                                        <li>Pada hari dan jam biasa, layar TV luar berputar menampilkan informasi umum seperti TV utama.</li>
+                                        <li>Saat waktu Khutbah Jum'at atau Sholat Ied tiba, layar TV luar akan <strong>secara otomatis beralih</strong> menampilkan siaran langsung CCTV Mimbar agar jamaah di luar dapat menyimak khutbah dengan jelas.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 2: Mode Sholat Otomatis -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
+                            <div class="card-header py-3" id="headingTwo" style="background: rgba(30,90,58,0.03);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseTwo" style="color: #0e3521; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-mosque mr-2" style="color: #c9a03d;"></i>2. Alur Kerja Otomatis Mode Sholat (Prayer Mode & Khutbah)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseTwo" class="collapse" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2">Sistem bekerja mandiri mengunci rotasi TV saat masuk waktu ibadah:</p>
+                                    <ol class="pl-3 mb-0">
+                                        <li class="mb-2"><strong>Fase Menjelang Adzan (Tarhim):</strong> Audio tarhim/murottal dapat berputar otomatis beberapa menit sebelum adzan sebagai pengingat jamaah.</li>
+                                        <li class="mb-2"><strong>Fase Adzan:</strong> Layar menghentikan perputaran slide dan menampilkan pengingat adzan berkumandang.</li>
+                                        <li class="mb-2"><strong>Fase Iqamah:</strong> Menampilkan hitungan mundur jeda sholat sunnah hingga iqamah ditegakkan.</li>
+                                        <li class="mb-2"><strong>Fase Sholat Berjamaah:</strong> Layar TV otomatis menjadi gelap syahdu bertuliskan <em>"Luruskan dan Rapatkan Shaf Anda"</em> agar tidak mengganggu kekhusyukan jamaah.</li>
+                                        <li class="mb-2"><strong>Khusus Sholat Jum'at:</strong> Layar menampilkan 4 kartu petugas resmi (Khatib, Imam, Muadzin, Bilal) serta plakat hadits adab mendengarkan khutbah selama durasi khutbah berlangsung.</li>
+                                        <li><strong>Selesai Sholat:</strong> Setelah waktu ibadah usai, layar TV otomatis kembali berotasi menampilkan informasi masjid seperti semula.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 3: Sinkronisasi Database -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
+                            <div class="card-header py-3" id="headingThree" style="background: rgba(30,90,58,0.03);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseThree" style="color: #0e3521; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-sync-alt mr-2" style="color: #c9a03d;"></i>3. Pemeliharaan & Sinkronisasi Database 1-Klik (`/settings/migrate`)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseThree" class="collapse" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2">Saat sistem mendapatkan pembaruan fitur (misal: kolom durasi Jum'at baru, pengaturan CCTV, dll.), administrator tidak perlu membuka terminal SSH atau hosting:</p>
+                                    <ul class="pl-3 mb-0">
+                                        <li class="mb-2">Buka menu <strong>Pengaturan Aplikasi</strong> di sidebar.</li>
+                                        <li class="mb-2">Klik tombol <strong>"Sinkronkan Database (Migrate)"</strong> di pojok kanan atas halaman.</li>
+                                        <li>Sistem akan mengeksekusi migrasi database secara otomatis dan menampilkan notifikasi sukses tanpa risiko kehilangan data yang sudah tersimpan.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. RIWAYAT VERSI (CHANGELOG RESMI) -->
+                <section class="mb-5">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h4 class="font-weight-bold m-0" style="color: #0e3521;">Riwayat Pembaruan Sistem</h4>
+                    </div>
+
+                    <div class="card shadow-sm border-0" style="border-radius: 16px; background: #ffffff; border: 1px solid rgba(0,0,0,0.08) !important;">
+                        <div class="card-body p-4">
+                            <ul class="small mb-0" style="line-height: 1.8; list-style: none; padding-left: 0;">
+                                
+                                <!-- Versi 4.0.0 -->
+                                <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #1e5a3a;">
+                                    <div class="d-flex align-items-center mb-2 flex-wrap">
+                                        <span class="badge px-3 py-1 mr-2" style="background: #1e5a3a; color: #ffd700; font-weight: 700; font-size: 12px; border-radius: 8px;">
+                                            Versi 4.0.0 (Terbaru)
+                                        </span>
+                                        <span class="text-muted font-weight-bold">14 September 2026</span>
+                                    </div>
+                                    <p class="font-weight-bold mb-1" style="color: #0e3521;">Grand Redesign: Islamic Material Design 3 & Total Feature Sync</p>
+                                    <ul class="pl-3 mb-0 text-muted">
+                                        <li>Redesain panel admin dengan filosofi Islamic Material Design 3 (Sidebar 260px, Islamic Hex Pattern, Nav Icon Chips).</li>
+                                        <li>Penambahan <strong>Live Digital Clock Widget</strong> & <strong>Realtime Prayer Pill</strong> pada header admin topbar.</li>
+                                        <li>Pembaruan menyeluruh modul <strong>Tentang Aplikasi</strong> agar 100% selaras dengan 13 saluran slide, TV Luar & CCTV mimbar.</li>
+                                        <li>Perlindungan performa GPU 60 FPS murni tanpa tambahan library pihak ketiga (Zero New Heavy Libraries).</li>
                                     </ul>
                                 </li>
-                                <li class="mb-3">
-                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.3 (Agustus 2026)</strong>
-                                    <p class="mb-1">Perubahan tampilan dan penambahan beberapa fitur:</p>
-                                    <ul>
-                                        <li>Penambahan prayer mode</li>
-                                        <li>Penambahan timer saat prayer mode</li>
-                                        <li>Pembuatan dan implementasi proyer mode</li>
-                                        <li>Penambahan fitur tarhim saat prayer mode ON</li>
+
+                                <!-- Versi 3.0.4 -->
+                                <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #c9a03d;">
+                                    <div class="d-flex align-items-center mb-2 flex-wrap">
+                                        <span class="badge px-3 py-1 mr-2" style="background: #c9a03d; color: #071a10; font-weight: 700; font-size: 12px; border-radius: 8px;">
+                                            Versi 3.0.4
+                                        </span>
+                                        <span class="text-muted font-weight-bold">September 2026</span>
+                                    </div>
+                                    <p class="font-weight-bold mb-1" style="color: #0e3521;">Fitur TV Luar, CCTV Mimbar & Sinkronisasi Hosting</p>
+                                    <ul class="pl-3 mb-0 text-muted">
+                                        <li>Penambahan Laporan Kas Ambulance & Program Penggalangan Infaq Pembangunan.</li>
+                                        <li>Penambahan fitur Reorder Urutan Rotasi Halaman (Tombol Naik/Turun) berbasis RBAC.</li>
+                                        <li>Penambahan Live Streaming Makkah & Madinah dengan Smart Overlay jam & jadwal sholat.</li>
+                                        <li>Penambahan mode khusus Sholat Jum'at (`phase: khutbah`) dengan kartu 4 petugas & hadits adab khutbah.</li>
+                                        <li>Integrasi CCTV Mimbar untuk Layar TV Luar/Serambi saat khutbah.</li>
+                                        <li>Sistem tombol sinkronisasi migrasi database 1-klik di panel admin (`/settings/migrate`).</li>
                                     </ul>
-                                    <div class="p-2 mt-2 mb-2 rounded bg-light border" style="font-size: 12px; color: #4b5563; line-height: 1.6;">
-                                        <strong>TGL : 25 Agustus 2026 :</strong> NDILALAH TV sudah terbeli dan diserahkan lagi (programer abal-bal mumet lagi)<br>
-                                        <strong>Kamis, 3 Sept 2026 :</strong> diajak pasang bracket TV dulu kemudian dilanjut di<br>
-                                        <strong>Sabtu malam minggu 5 Sept '26 :</strong> TV bener-bener dipasang.<br>
-                                        langsung GAZZZ beli SamSoe 3 slop, trus lanjut ke versi 3.04
+                                </li>
+
+                                <!-- Versi 3.0.3 -->
+                                <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #6b7280;">
+                                    <div class="d-flex align-items-center mb-2 flex-wrap">
+                                        <span class="badge px-3 py-1 mr-2" style="background: #6b7280; color: #ffffff; font-weight: 700; font-size: 12px; border-radius: 8px;">
+                                            Versi 3.0.3
+                                        </span>
+                                        <span class="text-muted font-weight-bold">Agustus 2026</span>
+                                    </div>
+                                    <ul class="pl-3 mb-2 text-muted">
+                                        <li>Implementasi awal Prayer Mode & timer hitung mundur iqamah.</li>
+                                        <li>Penambahan integrasi pemutaran audio tarhim sebelum adzan.</li>
+                                    </ul>
+                                    <div class="p-3 rounded bg-light border" style="font-size: 12px; color: #4b5563; line-height: 1.6;">
+                                        <strong>Catatan Sejarah:</strong> NDILALAH TV masjid terbeli dan diserahkan lagi. Bracket dipasang Sabtu malam minggu 5 Sept '26, langsung GAZZZ beli SamSoe 3 slop, trus lanjut ke versi 3.0.4!
                                     </div>
                                 </li>
-                                <li class="mb-3">
-                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.2 (Agustus 2026)</strong>
-                                    <ul>
-                                        <li>Perubahan tampilan</li>
-                                        <li>Penambahan beberapa efek background di web</li>
-                                        <li>Sudah lupa ada penambahan apa lagi</li>
-                                        <li>Re layout total design web aplikasi dari versi 1.0.0</li>
-                                    </ul>
-                                </li>
-                                <li class="mb-3">
-                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.1 (Agustus 2026)</strong>
-                                    <ul>
-                                        <li>Mulai ngoding, dan test tampilan</li>
-                                        <li>Laptop ngadat, harus install ulang</li>
-                                        <li>Programer abal-abal MUMET karena bahan-bahan project sebelumnya rusak dan banyak error</li>
-                                        <li>Pokoknya sedih banget dah kalo dicertain....</li>
-                                        <li>Akhirnya GAZZ beli aja SamSoe 2 slop, trus lanjut ke Versi 3.0.2</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 1.0.0 (Juli 2026)</strong>
-                                    <p class="mb-0">Request konsep dasar program dan tampilan</p>
+
+                                <!-- Versi 3.0.2 - 1.0.0 -->
+                                <li class="position-relative pl-4" style="border-left: 3px solid #cbd5e1;">
+                                    <span class="text-muted font-weight-bold">Versi 1.0.0 – 3.0.2 (Juli – Agustus 2026)</span>
+                                    <p class="text-muted mb-0">Inisiasi konsep dasar, pengembangan tampilan awal, transisi layout modern, dan penyusunan modul kas & jadwal sholat.</p>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </section>
 
-                <!-- Developer Info -->
+                <!-- 8. DEVELOPER & FOOTER INFO -->
                 <section class="text-center">
-                    <div class="card shadow-sm" style="border-radius: 10px; background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white;">
-                        <div class="card-body">
-                            {!! $setting->footer ?? '<p class="small mb-0">Copyright &copy; 2026 Masjid Al-Jihad Dev. System</p>' !!}
-                            <p class="small mt-2 mb-0">Versi Aplikasi: 3.0.4 (Update: {{ now()->format('d F Y') }})</p>
-                            <p class="small mt-2 mb-0">
-                                <i class="fas fa-exchange-alt" style="color: #c9a03d;"></i> Fitur Rotasi Halaman: 
-                                @if($setting->rotation_enabled ?? false)
-                                <span class="badge" style="background: #c9a03d; color: #1e5a3a;">AKTIF</span> (Interval: {{ $setting->rotation_interval ?? 10 }} detik)
-                                @else
-                                <span class="badge" style="background: #6c757d; color: white;">NONAKTIF</span>
-                                @endif
-                            </p>
+                    <div class="card shadow-sm border-0" style="border-radius: 16px; background: linear-gradient(135deg, #071a10 0%, #0e3521 100%); color: white;">
+                        <div class="card-body py-4 px-3">
+                            <div class="mb-2">
+                                <i class="fas fa-mosque" style="font-size: 28px; color: #c9a03d;"></i>
+                            </div>
+                            <h6 class="font-weight-bold mb-1" style="font-family: 'Amiri', serif; font-size: 18px; color: #ffd700;">
+                                {{ $setting->nama_aplikasi ?? 'Sistem Informasi Masjid Digital' }}
+                            </h6>
+                            {!! $setting->footer ?? '<p class="small mb-0 text-light opacity-80">Copyright &copy; 2026 Pengurus Masjid. All Rights Reserved.</p>' !!}
+                            <div class="mt-3 pt-2 border-top border-secondary small text-muted d-flex justify-content-center flex-wrap" style="gap: 15px;">
+                                <span><i class="fas fa-shield-alt text-success mr-1"></i> Status Sistem: Aktif</span>
+                                <span><i class="fas fa-server text-info mr-1"></i> PHP 8.3 & Laravel 13</span>
+                                <span><i class="fas fa-check-circle text-warning mr-1"></i> Teruji di Tampilan TV 1080p / 4K</span>
+                            </div>
                         </div>
                     </div>
                 </section>
+
             </div>
         </div>
     </div>
 </div>
 
-<!-- Custom CSS -->
+<!-- Custom Page Styling -->
 <style>
-    .card-header button.btn-link:focus {
-        text-decoration: none;
+    .feature-box {
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .feature-box:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(14, 53, 33, 0.12) !important;
+        border-color: rgba(201, 160, 61, 0.4) !important;
+    }
+    .slide-pill:hover {
+        background: #f4fbf7 !important;
+        border-color: #1e5a3a !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(30,90,58,0.08);
+    }
+    .accordion .btn-link:focus {
         outline: none;
-    }
-    
-    .accordion .card {
-        border: 1px solid rgba(30,90,58,0.1);
-    }
-    
-    .accordion .card-header {
-        border-bottom: 1px solid rgba(30,90,58,0.1);
-    }
-    
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    
-    section {
-        animation: fadeInUp 0.5s ease-out;
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        box-shadow: none;
     }
 </style>
 

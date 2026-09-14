@@ -216,23 +216,47 @@ Redesain premium dashboard admin panel dengan filosofi **Islamic Material Design
 
 ---
 
-## 📝 10. PEMBARUAN HALAMAN ABOUT (`/about`)
+## 📝 10. PEMBARUAN BESAR HALAMAN TENTANG APLIKASI (`/about`) — v4.0
 
-Halaman Tentang Aplikasi (`/about`) telah diselaraskan dan ditingkatkan secara profesional:
-1. **Catatan Riwayat Versi Perjalanan Pengembangan:**
-   - **Versi 3.0.4 (September 2026):** Laporan Kas Ambulance, Donasi/Infaq, Pengurutan Rotasi, Live Streaming Mekah/Madinah, Prayer Mode Khutbah Jum'at, Posisi Audio Tarhim, CCTV Live Mimbar TV Luar, Sinkronisasi KEMENAG RI.
-   - **Versi 3.0.3 (Agustus 2026):** Prayer mode & timer, integrasi tarhim, pemasangan bracket & TV fisik masjid.
-   - **Versi 3.0.2 (Agustus 2026):** Efek background, perombakan layout total web aplikasi.
-   - **Versi 3.0.1 (Agustus 2026):** Mulai pengkodean awal & recovery laptop instal ulang.
-   - **Versi 1.0.0 (Juli 2026):** Konsep dasar program & tampilan awal.
-2. **Panduan Penggunaan & Pembagian Hak Akses Pengguna:**
-   - Menyajikan pembagian tugas yang jelas untuk **Petugas / Operator Masjid** (Jadwal Sholat, Petugas Jum'at/Ied, Pengumuman, Agenda Kajian, Slide Brosur, Rotasi Halaman) dan **Bendahara Masjid** (Kas Utama, Kas Ambulance, Program Infaq Pembangunan, Ekspor Pembukuan).
-   - Panduan operasional layar TV Utama & TV Luar (CCTV Mimbar otomatis), alur kerja Prayer Mode, serta pengaturan rotasi slide.
-   - Bersih dari penyebutan kredensial (username/password) dan tidak menampilkan hak akses Super Admin demi menjaga privasi & keamanan sistem.
+**Tanggal:** 14 September 2026 | **File:** `resources/views/about.blade.php`
+
+Halaman **Tentang Aplikasi (`/about`)** diperbarui total 100% selaras dengan kondisi riil aplikasi saat ini:
+1. **Hero Header Islamic Material Design 3:**
+   - Kartu header elegan dengan gradasi hijau islami `#071a10 → #0e3521 → #1a5235` dan aksen emas `#c9a03d`.
+   - Menampilkan badge status langsung: Versi 4.0, Laravel 13 & PHP 8.3, status rotasi TV (`rotation_enabled`), interval, serta tombol pintas pratinjau display TV.
+2. **Pembaruan Fitur Tampilan TV Mutakhir (Menggantikan 4 card dasar lama):**
+   - **Dual Engine Crossfade:** Transisi 60 FPS tanpa jeda hitam/kedip (*zero-flicker*).
+   - **Smart Next Prayer Bar:** Kapsul kaca *glassmorphism* hitung mundur sholat berikutnya.
+   - **Dynamic Ambient Theme:** Pendaran aura warna latar otomatis sesuai 6 waktu sholat.
+   - **Prayer & Khutbah Engine:** Otomasi 5 fase ibadah dan penguncian layar khutbah Jum'at 50 menit.
+   - **CCTV Mimbar Otomatis:** TV luar beralih ke kamera mimbar secara mandiri saat khutbah dimulai.
+   - **Live TV Makkah & Madinah:** Siaran langsung 24 jam dengan Smart Mosque Overlay transparan.
+   - **Smart Running Text & Slide Poster:** Pengumuman berjalan halus & brosur dakwah beresolusi tinggi.
+3. **Pembaruan Fitur Rotasi Halaman Dinamis:**
+   - Penjelasan fitur baru Reorder Prioritas Urutan (Tombol Naik ▲ dan Turun ▼) untuk Super Admin & kunci proteksi untuk Operator.
+   - Menampilkan **13 Saluran Slide Display Aktif** lengkap dengan ikon, path embed, warna tematik, dan tautan pratinjau langsung:
+     - `/utama-embed` (Jadwal Sholat 5 Waktu)
+     - `/keuangan-embed` (Rincian Kas Utama)
+     - `/keuangan-summary-embed` (Grafik Arus Kas)
+     - `/ambulance-embed` (Kas Mobil Ambulance)
+     - `/infaq-embed` (Program Donasi & Infaq)
+     - `/jumat-embed` (Petugas Sholat Jum'at)
+     - `/pengumuman-embed` (Daftar Pengumuman)
+     - `/slide-embed` (Slide Poster Informasi)
+     - `/qris-embed` (QRIS Infaq Digital)
+     - `/live-mekah-embed` (Live TV Makkah)
+     - `/live-madinah-embed` (Live TV Madinah)
+     - `/idul-fitri-embed` (Petugas Idul Fitri)
+     - `/idul-adha-embed` (Petugas Idul Adha)
+4. **Pembaruan Hak Akses Pengguna (RBAC):**
+   - Menegaskan peran Administrator (Full Control & Reorder), Petugas/Operator (Operasional & Konten), dan Bendahara (Kas Utama, Ambulance, Donasi & Ekspor).
+5. **Pembaruan Panduan Pengoperasian & Riwayat Versi:**
+   - Menambahkan panduan TV Luar & CCTV Mimbar, Prayer Mode otomatis, serta tombol 1-klik sinkronisasi database server (`/settings/migrate`).
+   - Riwayat versi mencantumkan **Versi 4.0.0 (September 2026)** dengan tetap menjaga catatan sejarah asli proyek sebelumnya.
 
 ---
 
-## 🔒 10. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🔒 11. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -240,4 +264,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 14 September 2026 (Redesain Dashboard Admin — Islamic Material Design 3 v4.0: Sidebar Pill, User Panel, Live Clock Topbar, Prayer Pill, Icon Chip) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 14 September 2026 (Grand Redesign Islamic Material Design 3 v4.0 & Sinkronisasi Total Halaman Tentang Aplikasi `about.blade.php`) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
