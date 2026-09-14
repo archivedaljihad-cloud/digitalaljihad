@@ -184,7 +184,20 @@ Untuk mencegah error `1054 Unknown column` (seperti saat menyimpan URL Live Makk
 
 ---
 
-## 🔒 8. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+---
+
+## 📝 9. PEMBARUAN HALAMAN RIWAYAT VERSI (`/about`)
+
+Halaman Tentang Aplikasi (`/about`) telah diselaraskan dengan catatan rilis perjalanan pengembangan:
+- **Versi 3.0.4 (September 2026):** Laporan Kas Ambulance, Donasi/Infaq, Pengurutan Rotasi, Live Streaming Mekah/Madinah, Prayer Mode Khutbah Jum'at, Posisi Audio Tarhim, CCTV Live Mimbar TV Luar, Sinkronisasi KEMENAG RI.
+- **Versi 3.0.3 (Agustus 2026):** Prayer mode & timer, integrasi tarhim, pemasangan bracket & TV fisik masjid.
+- **Versi 3.0.2 (Agustus 2026):** Efek background, perombakan layout total web aplikasi.
+- **Versi 3.0.1 (Agustus 2026):** Mulai pengkodean awal & recovery laptop instal ulang.
+- **Versi 1.0.0 (Juli 2026):** Konsep dasar program & tampilan awal.
+
+---
+
+## 🔒 10. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -192,4 +205,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 14 September 2026 (Fitur Auto-Migrate & Tombol Sinkronisasi Database Web) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 14 September 2026 (Sinkronisasi Riwayat Versi 1.0.0 s/d 3.0.4 di /about) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*

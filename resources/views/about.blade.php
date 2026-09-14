@@ -374,23 +374,60 @@
                     </h5>
                     <div class="card shadow-sm" style="border-radius: 10px;">
                         <div class="card-body">
-                            <ul class="small">
-                                <li><strong style="color: #1e5a3a;">Versi 2.1.0</strong> ({{ now()->format('d F Y') }}) - <span style="color: #c9a03d;">Fitur Baru: Rotasi Halaman Dinamis</span>
+                            <ul class="small mb-0" style="line-height: 1.8;">
+                                <li class="mb-3">
+                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.4 (September 2026)</strong>
                                     <ul>
-                                        <li>Penambahan fitur rotasi halaman otomatis</li>
-                                        <li>Interval rotasi dapat diatur (1-3600 detik)</li>
-                                        <li>Pemilihan halaman yang akan dirotasi</li>
-                                        <li>Update pengaturan real-time tanpa refresh</li>
+                                        <li>Penambahan Laporan Kas Ambulance</li>
+                                        <li>Penambahan Penggalangan Donasi/Infaq</li>
+                                        <li>Penambahan pengaturan urutan rotasi halaman</li>
+                                        <li>Penambahan fitur Live streaming dari Mekah dan Madinah</li>
+                                        <li>Penambahan fitur prayer mode khus hari Jum'at</li>
+                                        <li>Perubahan posisi pemutaran audio tarhim</li>
+                                        <li>Penambahan fitur untuk TV di luar masjid dengan CCTV Live mimbar (jika nanti dipakai)</li>
+                                        <li>Penambahan sinkronisasi jadwal sholat dengan jadwal sholat KEMENAG RI</li>
+                                        <li>Sudah lupa penambahan-penambahan yang lainnya...</li>
                                     </ul>
                                 </li>
-                                <li><strong style="color: #1e5a3a;">Versi 2.0.0</strong> (Januari 2025) - Rilis Utama
+                                <li class="mb-3">
+                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.3 (Agustus 2026)</strong>
+                                    <p class="mb-1">Perubahan tampilan dan penambahan beberapa fitur:</p>
                                     <ul>
-                                        <li>Penambahan fitur auto-update jadwal sholat</li>
-                                        <li>Peningkatan tampilan TV responsif</li>
-                                        <li>Penambahan laporan keuangan</li>
+                                        <li>Penambahan prayer mode</li>
+                                        <li>Penambahan timer saat prayer mode</li>
+                                        <li>Pembuatan dan implementasi proyer mode</li>
+                                        <li>Penambahan fitur tarhim saat prayer mode ON</li>
+                                    </ul>
+                                    <div class="p-2 mt-2 mb-2 rounded bg-light border" style="font-size: 12px; color: #4b5563; line-height: 1.6;">
+                                        <strong>TGL : 25 Agustus 2026 :</strong> NDILALAH TV sudah terbeli dan diserahkan lagi (programer abal-bal mumet lagi)<br>
+                                        <strong>Kamis, 3 Sept 2026 :</strong> diajak pasang bracket TV dulu kemudian dilanjut di<br>
+                                        <strong>Sabtu malam minggu 5 Sept '26 :</strong> TV bener-bener dipasang.<br>
+                                        langsung GAZZZ beli SamSoe 3 slop, trus lanjut ke versi 3.04
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.2 (Agustus 2026)</strong>
+                                    <ul>
+                                        <li>Perubahan tampilan</li>
+                                        <li>Penambahan beberapa efek background di web</li>
+                                        <li>Sudah lupa ada penambahan apa lagi</li>
+                                        <li>Re layout total design web aplikasi dari versi 1.0.0</li>
                                     </ul>
                                 </li>
-                                <li><strong style="color: #1e5a3a;">Versi 1.0.0</strong> (Oktober 2024) - Rilis Awal</li>
+                                <li class="mb-3">
+                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 3.0.1 (Agustus 2026)</strong>
+                                    <ul>
+                                        <li>Mulai ngoding, dan test tampilan</li>
+                                        <li>Laptop ngadat, harus install ulang</li>
+                                        <li>Programer abal-abal MUMET karena bahan-bahan project sebelumnya rusak dan banyak error</li>
+                                        <li>Pokoknya sedih banget dah kalo dicertain....</li>
+                                        <li>Akhirnya GAZZ beli aja SamSoe 2 slop, trus lanjut ke Versi 3.0.2</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong style="color: #1e5a3a; font-size: 14px;">Versi 1.0.0 (Juli 2026)</strong>
+                                    <p class="mb-0">Request konsep dasar program dan tampilan</p>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -401,7 +438,7 @@
                     <div class="card shadow-sm" style="border-radius: 10px; background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: white;">
                         <div class="card-body">
                             {!! $setting->footer ?? '<p class="small mb-0">Copyright &copy; 2026 Masjid Al-Jihad Dev. System</p>' !!}
-                            <p class="small mt-2 mb-0">Versi Aplikasi: 2.1.0 (Update: {{ now()->format('d F Y') }})</p>
+                            <p class="small mt-2 mb-0">Versi Aplikasi: 3.0.4 (Update: {{ now()->format('d F Y') }})</p>
                             <p class="small mt-2 mb-0">
                                 <i class="fas fa-exchange-alt" style="color: #c9a03d;"></i> Fitur Rotasi Halaman: 
                                 @if($setting->rotation_enabled ?? false)
