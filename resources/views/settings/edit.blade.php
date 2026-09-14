@@ -5,11 +5,23 @@
 	<div class="container-fluid">
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
 			<h1 class="h3 mb-0 text-gray-800">Pengaturan Aplikasi</h1>
+			<a href="{{ route('settings.migrate') }}" class="btn btn-sm btn-info shadow-sm" onclick="return confirm('Jalankan migrasi database sekarang untuk menyinkronkan seluruh tabel & kolom terbaru?')">
+				<i class="fas fa-database fa-sm text-white-50 mr-1"></i> Sinkronkan Database (Migrate)
+			</a>
 		</div>
 
 		@if (session('success'))
 			<div class="alert alert-success alert-dismissible fade show" role="alert">
 				{{ session('success') }}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+		@endif
+
+		@if (session('error'))
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				{{ session('error') }}
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">×</span>
 				</button>

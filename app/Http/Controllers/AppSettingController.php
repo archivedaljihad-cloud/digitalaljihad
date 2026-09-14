@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\AppSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class AppSettingController extends Controller
 {
@@ -139,47 +142,94 @@ class AppSettingController extends Controller
         }
 
         // ==================================================
+        // AUTO-MIGRATE FALLBACK (JIKA KOLOM BELUM ADA DI DATABASE HOSTING)
+        // ==================================================
+        if (!Schema::hasColumn('app_settings', 'live_makkah_url') || !Schema::hasColumn('app_settings', 'cctv_mimbar_url')) {
+            try {
+                Artisan::call('migrate', ['--force' => true]);
+            } catch (\Throwable $e) {
+                Log::warning('Auto migrate in AppSettingController failed: ' . $e->getMessage());
+            }
+        }
+
+        // ==================================================
         // LIVE STREAMING SETTINGS
         // ==================================================
-        if ($request->has('live_makkah_url')) {
+        if (Schema::hasColumn('app_settings', 'live_makkah_url') && $request->has('live_makkah_url')) {
             $setting->live_makkah_url = $request->input('live_makkah_url');
         }
-        if ($request->has('live_madinah_url')) {
+        if (Schema::hasColumn('app_settings', 'live_madinah_url') && $request->has('live_madinah_url')) {
             $setting->live_madinah_url = $request->input('live_madinah_url');
         }
-        $setting->live_stream_audio = $request->boolean('live_stream_audio');
-        $setting->live_stream_overlay = $request->boolean('live_stream_overlay');
+        if (Schema::hasColumn('app_settings', 'live_stream_audio')) {
+            $setting->live_stream_audio = $request->boolean('live_stream_audio');
+        }
+        if (Schema::hasColumn('app_settings', 'live_stream_overlay')) {
+            $setting->live_stream_overlay = $request->boolean('live_stream_overlay');
+        }
 
         // ==================================================
         // CCTV MIMBAR & TV OUTDOOR SETTINGS
         // ==================================================
-        if ($request->has('cctv_mimbar_url')) {
+        if (Schema::hasColumn('app_settings', 'cctv_mimbar_url') && $request->has('cctv_mimbar_url')) {
             $setting->cctv_mimbar_url = $request->input('cctv_mimbar_url');
         }
-        $setting->cctv_mimbar_enabled = $request->boolean('cctv_mimbar_enabled');
-        $setting->cctv_auto_switch_khutbah = $request->boolean('cctv_auto_switch_khutbah');
+        if (Schema::hasColumn('app_settings', 'cctv_mimbar_enabled')) {
+            $setting->cctv_mimbar_enabled = $request->boolean('cctv_mimbar_enabled');
+        }
+        if (Schema::hasColumn('app_settings', 'cctv_auto_switch_khutbah')) {
+            $setting->cctv_auto_switch_khutbah = $request->boolean('cctv_auto_switch_khutbah');
+        }
 
         // ==================================================
         // VISUAL & AMBIENT SETTINGS
         // ==================================================
-        $setting->enable_dynamic_theme = $request->boolean('enable_dynamic_theme');
-        $setting->enable_next_prayer_bar = $request->boolean('enable_next_prayer_bar');
+        if (Schema::hasColumn('app_settings', 'enable_dynamic_theme')) {
+            $setting->enable_dynamic_theme = $request->boolean('enable_dynamic_theme');
+        }
+        if (Schema::hasColumn('app_settings', 'enable_next_prayer_bar')) {
+            $setting->enable_next_prayer_bar = $request->boolean('enable_next_prayer_bar');
+        }
 
         // ==================================================
         // PRAYER MODE SETTINGS
         // ==================================================
-        $setting->prayer_mode_enabled = $request->boolean('prayer_mode_enabled');
-        if ($request->has('prayer_mode_duration')) $setting->prayer_mode_duration = $request->input('prayer_mode_duration');
-        if ($request->has('countdown_adzan_duration')) $setting->prayer_mode_before_adzan = $request->input('countdown_adzan_duration');
-        if ($request->has('iqamah_duration')) $setting->prayer_mode_iqamah_duration = $request->input('iqamah_duration');
-        if ($request->has('tarhim_trigger_seconds')) $setting->tarhim_trigger_seconds = $request->input('tarhim_trigger_seconds');
-        if ($request->has('prayer_theme')) $setting->prayer_mode_theme = $request->input('prayer_theme');
-        if ($request->has('prayer_bg_opacity')) $setting->prayer_bg_opacity = $request->input('prayer_bg_opacity');
-        if ($request->has('msg_countdown')) $setting->msg_countdown = $request->input('msg_countdown');
-        if ($request->has('msg_adzan')) $setting->msg_adzan = $request->input('msg_adzan');
-        if ($request->has('msg_iqamah')) $setting->msg_iqamah = $request->input('msg_iqamah');
-        if ($request->has('msg_shalat')) $setting->msg_shalat = $request->input('msg_shalat');
-        if ($request->has('prayer_mode_message')) $setting->prayer_mode_message = $request->input('prayer_mode_message');
+        if (Schema::hasColumn('app_settings', 'prayer_mode_enabled')) {
+            $setting->prayer_mode_enabled = $request->boolean('prayer_mode_enabled');
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_mode_duration') && $request->has('prayer_mode_duration')) {
+            $setting->prayer_mode_duration = $request->input('prayer_mode_duration');
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_mode_before_adzan') && $request->has('countdown_adzan_duration')) {
+            $setting->prayer_mode_before_adzan = $request->input('countdown_adzan_duration');
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_mode_iqamah_duration') && $request->has('iqamah_duration')) {
+            $setting->prayer_mode_iqamah_duration = $request->input('iqamah_duration');
+        }
+        if (Schema::hasColumn('app_settings', 'tarhim_trigger_seconds') && $request->has('tarhim_trigger_seconds')) {
+            $setting->tarhim_trigger_seconds = $request->input('tarhim_trigger_seconds');
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_mode_theme') && $request->has('prayer_theme')) {
+            $setting->prayer_mode_theme = $request->input('prayer_theme');
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_bg_opacity') && $request->has('prayer_bg_opacity')) {
+            $setting->prayer_bg_opacity = $request->input('prayer_bg_opacity');
+        }
+        if (Schema::hasColumn('app_settings', 'msg_countdown') && $request->has('msg_countdown')) {
+            $setting->msg_countdown = $request->input('msg_countdown');
+        }
+        if (Schema::hasColumn('app_settings', 'msg_adzan') && $request->has('msg_adzan')) {
+            $setting->msg_adzan = $request->input('msg_adzan');
+        }
+        if (Schema::hasColumn('app_settings', 'msg_iqamah') && $request->has('msg_iqamah')) {
+            $setting->msg_iqamah = $request->input('msg_iqamah');
+        }
+        if (Schema::hasColumn('app_settings', 'msg_shalat') && $request->has('msg_shalat')) {
+            $setting->msg_shalat = $request->input('msg_shalat');
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_mode_message') && $request->has('prayer_mode_message')) {
+            $setting->prayer_mode_message = $request->input('prayer_mode_message');
+        }
 
         // ==================================================
         // UPLOAD FILE
@@ -222,10 +272,10 @@ class AppSettingController extends Controller
         $setting->prayer_mode_adzan_duration = $validated['prayer_mode_adzan_duration'];
         $setting->prayer_mode_iqamah_duration = $validated['prayer_mode_iqamah_duration'];
         $setting->prayer_mode_after_prayer = $validated['prayer_mode_after_prayer'];
-        if ($request->filled('prayer_mode_jumat_duration')) {
+        if ($request->filled('prayer_mode_jumat_duration') && Schema::hasColumn('app_settings', 'prayer_mode_jumat_duration')) {
             $setting->prayer_mode_jumat_duration = (int) $request->input('prayer_mode_jumat_duration');
         }
-        if ($request->filled('tarhim_trigger_seconds')) {
+        if ($request->filled('tarhim_trigger_seconds') && Schema::hasColumn('app_settings', 'tarhim_trigger_seconds')) {
             $setting->tarhim_trigger_seconds = (int) $request->input('tarhim_trigger_seconds');
         }
 
@@ -257,6 +307,24 @@ class AppSettingController extends Controller
             $setting->$fieldName = $request
                 ->file($fieldName)
                 ->store('settings', 'public');
+        }
+    }
+
+    /**
+     * Menjalankan migrasi database via aksi admin web (berguna untuk hosting Render/cPanel tanpa terminal SSH).
+     */
+    public function runMigration()
+    {
+        try {
+            Artisan::call('migrate', ['--force' => true]);
+            $output = Artisan::output();
+            return redirect()
+                ->route('settings.edit')
+                ->with('success', 'Migrasi database berhasil dijalankan! ' . (trim($output) ?: 'Database sudah sinkron dengan versi migrasi terbaru.'));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('settings.edit')
+                ->with('error', 'Gagal menjalankan migrasi database: ' . $e->getMessage());
         }
     }
 }

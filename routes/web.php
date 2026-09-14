@@ -190,6 +190,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/prayer-settings', [AppSettingController::class, 'updatePrayerSettings'])
             ->name('settings.prayer.update');
 
+        Route::get('/migrate', [AppSettingController::class, 'runMigration'])
+            ->name('settings.migrate');
+
     });
    
     /*

@@ -91,6 +91,7 @@
 | `/jadwal_sholat` | `JadwalSholatController` | Kelola jadwal sholat 5 waktu & durasi Jum'at |
 | `/rotation` | `RotationController` | Kelola urutan & halaman aktif rotasi TV |
 | `/settings` | `AppSettingController` | Pengaturan umum, prayer mode, live stream, CCTV mimbar |
+| `/settings/migrate` | `AppSettingController` | Tombol 1-klik jalankan migrasi database di server |
 | `/users` | `UserController` | Kelola akun administrator & operator |
 | `/keuangan` | `KeuanganController` | Pencatatan arus kas pemasukan/pengeluaran |
 | `/ambulance` | `KeuanganAmbulanceController`| Kas operasional mobil ambulance masjid |
@@ -171,12 +172,24 @@ Untuk menghubungkan kamera analog kabel BNC yang sudah ada di mimbar:
 
 ---
 
-## 🔒 7. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🛠️ 7. SISTEM SINKRONISASI MIGRASI DATABASE (HOSTING / RENDER / TIDB)
+
+Untuk mencegah error `1054 Unknown column` (seperti saat menyimpan URL Live Makkah/Madinah atau CCTV Mimbar di server hosting seperti Render.com):
+1. **Auto-Migrate Fallback:**
+   - Di `AppSettingController@update`, sistem secara otomatis mendeteksi ketiadaan kolom baru dan memicu `Artisan::call('migrate', ['--force' => true])`.
+   - Seluruh penugasan atribut dilindungi oleh pengecekan `Schema::hasColumn('app_settings', ...)` sehingga aplikasi tidak akan pernah mengalami crash HTTP 500 jika kolom baru belum dieksekusi di database.
+2. **Tombol Sinkronisasi Web 1-Klik:**
+   - Rute: `GET /settings/migrate` (nama: `settings.migrate`).
+   - Tombol **"Sinkronkan Database (Migrate)"** tersedia di pojok kanan atas halaman Pengaturan Aplikasi (`/settings`). Cukup klik tombol tersebut, Laravel di server hosting akan menjalankan migrasi database secara instan tanpa perlu akses terminal SSH.
+
+---
+
+## 🔒 8. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
-1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database lokal user.
+1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
 2. **Sinkronisasi Git Otomatis:** Setelah menyelesaikan modifikasi atau perbaikan, **WAJIB langsung melakukan commit dan push ke branch `main` GitHub**.
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 14 September 2026 &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 14 September 2026 (Fitur Auto-Migrate & Tombol Sinkronisasi Database Web) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
