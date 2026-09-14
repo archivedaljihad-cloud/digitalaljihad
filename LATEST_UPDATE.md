@@ -364,7 +364,40 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 13. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+---
+
+## 🕌 13. PERBAIKAN BUG: PENGECUALIAN SYURUK & IMSAK DARI MODE SHOLAT (v4.2.1)
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.1
+
+### Akar Masalah:
+- Di `PrayerModeController.php`, filter jadwal sholat sebelumnya hanya mengecualikan `['imsak', 'terbit']`.
+- Pada database dan layanan auto-update resmi aplikasi (`jadwal_sholat`), nama waktu terbit matahari tersimpan sebagai **`Syuruk`**.
+- Akibatnya, sistem menganggap waktu `Syuruk` sebagai salah satu sholat fardhu berjamaah sehingga memicu:
+  - Fase Countdown / Tarhim (menjelang Syuruk).
+  - Fase Adzan Syuruk.
+  - Fase Iqamah Syuruk ("MENUNGGU WAKTU IQAMAH • SYURUK • MENUJU IQAMAH").
+  - Fase Sholat Syuruk ("Luruskan dan Rapatkan Shaf").
+- Secara syariat Islam, **Syuruk (terbit matahari)** dan **Imsak (penanda menahan diri sebelum fajar)** bukanlah sholat fardhu, tidak memiliki adzan maupun iqamah, dan saat terbit matahari justru merupakan waktu yang dilarang/makruh tahrim untuk mendirikan sholat hingga matahari meninggi (waktu Dhuha).
+
+### Solusi & Perubahan:
+1. **Pengecualian Komprehensif di `PrayerModeController.php`:**
+   - Variasi penamaan non-sholat fardhu kini diekspansi secara ketat:
+     `$nonPrayerTimes = ['imsak', 'imsyak', 'terbit', 'syuruk', 'shuruk', 'sunrise', 'dhuha', 'duha'];`
+   - Hanya 5 waktu sholat fardhu (Subuh, Dzuhur / Sholat Jum'at, Ashar, Maghrib, Isya) yang dapat memicu Prayer Mode otomatis di layar TV.
+2. **Kalkulasi & Return `next_prayer` untuk Admin Topbar & Widget:**
+   - Menambahkan kalkulasi sholat fardhu berikutnya (`next_prayer`) pada status respon JSON `/prayer-mode/status` agar widget kapsul "Sholat [Nama]" pada topbar admin terisi akurat.
+3. **Penyelarasan Floating Smart Next Prayer Bar di `rotator.blade.php`:**
+   - Menambahkan filter `$nonPrayerTimes` pada array `prayerList` di rotator utama display TV sehingga bar hitung mundur melayang di pojok kanan atas tidak akan pernah menghitung mundur menuju Syuruk atau Imsak sebagai "sholat".
+
+### Berkas yang Dimodifikasi:
+- `app/Http/Controllers/PrayerModeController.php`
+- `resources/views/rotator.blade.php`
+- `LATEST_UPDATE.md`
+
+---
+
+## 🔒 14. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -372,4 +405,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Fitur Teks Berjalan Khusus Per Halaman Display Opsi 3 & Integrasi Slide Hadits TV v4.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Perbaikan Pengecualian Syuruk & Imsak dari Mode Sholat TV v4.2.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*

@@ -36,10 +36,11 @@ class PrayerModeController extends Controller
 
         $now = Carbon::now(config('app.timezone'));
         
-        // Mengambil jadwal dan mengecualikan Imsak & Terbit dari Prayer Mode
-        $jadwal = JadwalSholat::urutkan()->get()->filter(function ($item) {
+        // Mengambil jadwal dan mengecualikan jadwal non-sholat fardhu (Imsak, Syuruk/Terbit, Dhuha) dari Prayer Mode
+        $nonPrayerTimes = ['imsak', 'imsyak', 'terbit', 'syuruk', 'shuruk', 'sunrise', 'dhuha', 'duha'];
+        $jadwal = JadwalSholat::urutkan()->get()->filter(function ($item) use ($nonPrayerTimes) {
             $nama = strtolower(trim($item->nama_sholat));
-            return !in_array($nama, ['imsak', 'terbit']);
+            return !in_array($nama, $nonPrayerTimes);
         });
 
         if ($jadwal->isEmpty()) {
@@ -47,6 +48,7 @@ class PrayerModeController extends Controller
                 'active' => false,
                 'phase' => self::PHASE_INACTIVE,
                 'setting' => $setting,
+                'next_prayer' => null,
             ];
         }
 
@@ -116,6 +118,11 @@ class PrayerModeController extends Controller
                     'theme' => $theme,
                     'bgOpacity' => 80,
                     'displayMessage' => '',
+                    'next_prayer' => [
+                        'name' => "JUM'AT",
+                        'time' => substr($item->waktu, 0, 5),
+                        'remaining' => max(0, $remaining),
+                    ],
                 ];
             } else {
                 // Hari biasa & sholat harian reguler
@@ -152,8 +159,41 @@ class PrayerModeController extends Controller
                     'theme' => $theme,
                     'bgOpacity' => 80,
                     'displayMessage' => '',
+                    'next_prayer' => [
+                        'name' => strtoupper($item->nama_sholat),
+                        'time' => substr($item->waktu, 0, 5),
+                        'remaining' => max(0, $remaining),
+                    ],
                 ];
             }
+        }
+
+        // Hitung sholat fardhu berikutnya (next prayer) untuk topbar admin & widget
+        $nextPrayer = null;
+        $minDiff = PHP_INT_MAX;
+        foreach ($jadwal as $pItem) {
+            if (empty($pItem->waktu)) continue;
+            $pTime = Carbon::parse($now->format('Y-m-d') . ' ' . $pItem->waktu, config('app.timezone'));
+            $diff = $pTime->timestamp - $now->timestamp;
+            if ($diff > 0 && $diff < $minDiff) {
+                $minDiff = $diff;
+                $pClean = strtolower(trim($pItem->nama_sholat));
+                $isFridayDzuhur = $isFriday && in_array($pClean, ['dzuhur', 'zuhur', 'dhuhur', "jum'at", 'jumat']);
+                $nextPrayer = [
+                    'name' => $isFridayDzuhur ? "JUM'AT" : strtoupper($pItem->nama_sholat),
+                    'time' => substr($pItem->waktu, 0, 5),
+                    'remaining' => $diff,
+                ];
+            }
+        }
+        if (!$nextPrayer && $jadwal->isNotEmpty()) {
+            $first = $jadwal->first();
+            $pTime = Carbon::parse($now->copy()->addDay()->format('Y-m-d') . ' ' . $first->waktu, config('app.timezone'));
+            $nextPrayer = [
+                'name' => strtoupper($first->nama_sholat),
+                'time' => substr($first->waktu, 0, 5),
+                'remaining' => $pTime->timestamp - $now->timestamp,
+            ];
         }
 
         return [
@@ -164,6 +204,7 @@ class PrayerModeController extends Controller
             'jumatPetugas' => null,
             'bgOpacity' => 80,
             'displayMessage' => '',
+            'next_prayer' => $nextPrayer,
         ];
     }
 

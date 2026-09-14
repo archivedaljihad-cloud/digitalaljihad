@@ -812,8 +812,12 @@
            ===================================================== */
         @php
         $prayerData = [];
+        $nonPrayerTimes = ['imsak', 'imsyak', 'terbit', 'syuruk', 'shuruk', 'sunrise', 'dhuha', 'duha'];
         if (isset($jadwalSholat) && count($jadwalSholat) > 0) {
             foreach ($jadwalSholat as $js) {
+                if (in_array(strtolower(trim($js->nama_sholat)), $nonPrayerTimes)) {
+                    continue;
+                }
                 $prayerData[] = [
                     'name' => strtoupper($js->nama_sholat),
                     'time' => substr($js->waktu, 0, 5),
