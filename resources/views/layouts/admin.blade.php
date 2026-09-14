@@ -417,6 +417,364 @@
                 font-size: 0.9rem;
             }
         }
+
+        /* =====================================================
+           🕌 ISLAMIC MATERIAL DESIGN 3 — Redesain v4.0
+           DIGITALv304 Admin Panel Enhancement Layer
+           ===================================================== */
+
+        /* === SIDEBAR: Width Override (260px) === */
+        .sidebar {
+            width: 260px !important;
+        }
+
+        /* === SIDEBAR: Deeper Dark Gradient === */
+        .bg-gradient-primary {
+            background: linear-gradient(180deg, #071a10 0%, #0e3521 45%, #1a5235 100%) !important;
+        }
+
+        /* === SIDEBAR: Enhanced Geometric Pattern === */
+        .bg-gradient-primary::after {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpolygon points='30,3 55,16 55,44 30,57 5,44 5,16' fill='none' stroke='rgba(201,160,61,0.14)' stroke-width='0.8'/%3E%3Ccircle cx='30' cy='30' r='7' fill='none' stroke='rgba(201,160,61,0.08)' stroke-width='0.8'/%3E%3C/svg%3E") !important;
+            background-size: 60px !important;
+        }
+
+        /* === SIDEBAR: Brand Refinement === */
+        .sidebar-brand {
+            background: rgba(0, 0, 0, 0.22) !important;
+            border-bottom: 1px solid rgba(201, 160, 61, 0.28) !important;
+            padding: 18px 16px 14px !important;
+        }
+
+        /* === SIDEBAR: USER PANEL (new component) === */
+        .sidebar-user-panel {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            z-index: 1;
+        }
+
+        .sup-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--islamic-gold), #f0c040);
+            color: var(--islamic-dark);
+            font-weight: 800;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(201, 160, 61, 0.4);
+        }
+
+        .sup-info {
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .sup-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sup-role {
+            font-size: 0.62rem;
+            color: var(--islamic-gold);
+            font-weight: 500;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sup-role-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #4ade80;
+            flex-shrink: 0;
+            animation: agy-pulse-dot 2.5s infinite;
+        }
+
+        @keyframes agy-pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        /* === SIDEBAR NAV: PILL STYLE (override SB Admin 2) === */
+        .sidebar .nav-item .nav-link {
+            display: flex !important;
+            align-items: center !important;
+            color: rgba(255, 255, 255, 0.75) !important;
+            padding: 9px 12px !important;
+            margin: 2px 10px !important;
+            border-radius: 10px !important;
+            border-left: none !important;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            font-size: 0.83rem !important;
+            font-weight: 500 !important;
+            position: relative;
+        }
+
+        .sidebar .nav-item .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: none !important;
+            border-left-color: transparent !important;
+        }
+
+        .sidebar .nav-item.active .nav-link {
+            color: #ffffff !important;
+            background: linear-gradient(135deg, rgba(255,255,255,0.17), rgba(255,255,255,0.07)) !important;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+            font-weight: 700 !important;
+            border-left-color: transparent !important;
+        }
+
+        /* Gold dot indicator for active item */
+        .sidebar .nav-item.active .nav-link::after {
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--islamic-gold);
+            box-shadow: 0 0 6px rgba(201, 160, 61, 0.6);
+        }
+
+        /* === NAV ICON CHIP (injected by JS) === */
+        .nav-icon-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            margin-right: 10px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar .nav-item .nav-link:hover .nav-icon-chip {
+            background: rgba(255, 255, 255, 0.18);
+            transform: scale(1.08);
+        }
+
+        .sidebar .nav-item.active .nav-link .nav-icon-chip {
+            background: linear-gradient(135deg, rgba(201,160,61,0.28), rgba(201,160,61,0.12));
+        }
+
+        .sidebar .nav-item .nav-link .nav-icon-chip i {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-size: 0.73rem;
+            transition: color 0.22s ease;
+        }
+
+        .sidebar .nav-item.active .nav-link .nav-icon-chip i {
+            color: var(--islamic-gold) !important;
+        }
+
+        /* === SIDEBAR HEADING: Enhanced === */
+        .sidebar-heading {
+            color: rgba(201, 160, 61, 0.7) !important;
+            font-size: 0.6rem !important;
+            letter-spacing: 2.5px !important;
+            padding: 14px 20px 5px !important;
+        }
+
+        .sidebar-heading i {
+            color: rgba(201, 160, 61, 0.5) !important;
+            font-size: 0.55rem !important;
+        }
+
+        /* === SIDEBAR DIVIDER: Subtler === */
+        .sidebar-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+            margin: 4px 16px !important;
+        }
+
+        /* === SIDEBAR BADGES: Smaller, rounder === */
+        .sidebar .badge {
+            font-size: 0.55rem !important;
+            padding: 2px 6px !important;
+            border-radius: 20px;
+        }
+
+        .sidebar .badge-secondary {
+            background: rgba(255,255,255,0.13) !important;
+            color: rgba(255,255,255,0.5) !important;
+        }
+
+        /* === TOPBAR: Premium white clean look === */
+        .topbar {
+            background: #ffffff !important;
+            border-bottom: 1.5px solid rgba(201, 160, 61, 0.18) !important;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        /* === TOPBAR: Live Clock Widget === */
+        .topbar-clock-widget {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 5px 12px;
+            background: linear-gradient(135deg, rgba(30,90,58,0.06), rgba(10,46,31,0.03));
+            border-radius: 10px;
+            border: 1px solid rgba(30, 90, 58, 0.12);
+            margin-right: 12px;
+            cursor: default;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .topbar-clock-time {
+            font-size: 1.0rem;
+            font-weight: 800;
+            color: var(--islamic-green);
+            line-height: 1.15;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.5px;
+        }
+
+        .topbar-clock-date {
+            font-size: 0.56rem;
+            color: #a0a0a0;
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        /* === TOPBAR: Search Pill Shape === */
+        .navbar-search .form-control {
+            border-radius: 20px 0 0 20px !important;
+            border: 1.5px solid rgba(30, 90, 58, 0.15) !important;
+            background: #f5f7f5 !important;
+            transition: all 0.25s ease;
+            font-size: 0.83rem;
+        }
+
+        .navbar-search .form-control:focus {
+            border-color: rgba(30, 90, 58, 0.4) !important;
+            background: #fff !important;
+            box-shadow: 0 0 0 3px rgba(30, 90, 58, 0.07) !important;
+        }
+
+        .navbar-search .btn-primary {
+            border-radius: 0 20px 20px 0 !important;
+        }
+
+        /* === TOPBAR: Prayer Time Pill === */
+        .topbar-prayer-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: linear-gradient(135deg, var(--islamic-dark), var(--islamic-green));
+            color: #fff;
+            border-radius: 20px;
+            padding: 5px 13px 5px 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(30, 90, 58, 0.28);
+            cursor: default;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .topbar-prayer-pill .pill-icon {
+            width: 22px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.62rem;
+            flex-shrink: 0;
+        }
+
+        .topbar-prayer-pill .pill-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.59rem;
+            font-weight: 400;
+        }
+
+        .topbar-prayer-pill .pill-time {
+            color: var(--islamic-gold);
+            font-weight: 700;
+        }
+
+        /* === TOPBAR: User Avatar Hover === */
+        .topbar .img-profile {
+            box-shadow: 0 2px 8px rgba(201, 160, 61, 0.35) !important;
+            transition: transform 0.22s ease, box-shadow 0.22s ease !important;
+        }
+
+        .topbar .img-profile:hover {
+            transform: scale(1.08) !important;
+            box-shadow: 0 4px 14px rgba(201, 160, 61, 0.5) !important;
+        }
+
+        /* === DROPDOWN MENUS: Rounded, elevated === */
+        .dropdown-menu {
+            border-radius: 14px !important;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12) !important;
+            border: 1px solid rgba(0,0,0,0.06) !important;
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            margin: 1px 4px;
+            padding: 8px 12px !important;
+            font-size: 0.85rem !important;
+        }
+
+        .dropdown-list .dropdown-item .icon-circle {
+            border-radius: 50%;
+        }
+
+        /* === CARDS: Smoother elevation === */
+        .card {
+            border-radius: 16px !important;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease !important;
+        }
+
+        .card:hover {
+            transform: translateY(-4px) !important;
+        }
+
+        .card-header {
+            border-radius: 16px 16px 0 0 !important;
+        }
+
+        /* === MODAL: More rounded === */
+        .modal-content {
+            border-radius: 18px !important;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18) !important;
+        }
+
+        .modal-header {
+            border-radius: 18px 18px 0 0 !important;
+        }
+
+        /* === RESPONSIVE: Hide topbar extras on mobile === */
+        @media (max-width: 767px) {
+            .topbar-clock-widget,
+            .topbar-prayer-pill { display: none !important; }
+        }
     </style>
 
     <!-- Additional CSS -->
@@ -465,6 +823,26 @@
                 }
             }
             @endphp
+
+            {{-- ============================================
+                 SIDEBAR USER PANEL — Islamic Material Design 3
+                 ============================================ --}}
+            <div class="sidebar-user-panel">
+                <div class="sup-avatar">
+                    {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                </div>
+                <div class="sup-info">
+                    <div class="sup-name">{{ Auth::user()->name ?? 'Pengguna' }}</div>
+                    <div class="sup-role">
+                        <span class="sup-role-dot"></span>
+                        @if($roleName === 'admin') ⚙ Administrator
+                        @elseif($roleName === 'petugas') 👤 Operator
+                        @elseif($roleName === 'bendahara') 💰 Bendahara
+                        @else {{ ucfirst($roleName ?: 'Pengguna') }}
+                        @endif
+                    </div>
+                </div>
+            </div>
 
             @if ($roleName === 'admin')
             <!-- Divider -->
@@ -835,6 +1213,14 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
+                    <!-- ==========================================
+                         Live Clock Widget — Islamic Material Design 3
+                         ========================================== -->
+                    <div class="topbar-clock-widget d-none d-sm-flex" id="topbarClockWidget" title="Jam & Tanggal">
+                        <div class="topbar-clock-time" id="liveClockTime">--:--:--</div>
+                        <div class="topbar-clock-date" id="liveClockDate">Memuat tanggal...</div>
+                    </div>
+
                     <!-- Topbar Search -->
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -851,6 +1237,19 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+
+                        <!-- ==============================
+                             Prayer Time Pill (Desktop)
+                             ============================== -->
+                        <li class="nav-item d-none d-lg-flex align-items-center">
+                            <div class="topbar-prayer-pill" id="topbarPrayerPill" title="Waktu Sholat Berikutnya">
+                                <span class="pill-icon"><i class="fas fa-mosque"></i></span>
+                                <span>
+                                    <span class="pill-label">Sholat </span>
+                                    <span class="pill-time" id="topbarPrayerName">–</span>
+                                </span>
+                            </div>
+                        </li>
 
                         <!-- Nav Item - Search Dropdown -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -1029,6 +1428,76 @@
 
     <!-- Custom Scripts -->
     <script>
+        /* ================================================
+           🕌 LIVE CLOCK — Topbar Widget
+           ================================================ */
+        (function() {
+            var DAYS   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            var MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+            function updateClock() {
+                var now = new Date();
+                var hh  = String(now.getHours()).padStart(2, '0');
+                var mm  = String(now.getMinutes()).padStart(2, '0');
+                var ss  = String(now.getSeconds()).padStart(2, '0');
+                var timeEl = document.getElementById('liveClockTime');
+                var dateEl = document.getElementById('liveClockDate');
+                if (timeEl) timeEl.textContent = hh + ':' + mm + ':' + ss;
+                if (dateEl) dateEl.textContent  = DAYS[now.getDay()] + ', ' + now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+            }
+
+            updateClock();
+            setInterval(updateClock, 1000);
+        })();
+
+        /* ================================================
+           🕌 ICON CHIP — Auto-Wrap Sidebar Icons
+           Membungkus <i> dalam .nav-icon-chip secara otomatis
+           ================================================ */
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.sidebar .nav-item .nav-link').forEach(function(link) {
+                var icon = link.querySelector(':scope > i.fas, :scope > i.far, :scope > i.fab');
+                if (icon) {
+                    var chip = document.createElement('span');
+                    chip.className = 'nav-icon-chip';
+                    link.insertBefore(chip, icon);
+                    chip.appendChild(icon);
+                }
+            });
+        });
+
+        /* ================================================
+           🕌 PRAYER PILL — Fetch sholat berikutnya
+           ================================================ */
+        (function() {
+            function updatePrayerPill() {
+                if (typeof $ === 'undefined') return;
+                $.ajax({
+                    url: '/prayer-mode/status',
+                    method: 'GET',
+                    timeout: 5000,
+                    success: function(data) {
+                        var nameEl = document.getElementById('topbarPrayerName');
+                        if (!nameEl || !data) return;
+                        // Support berbagai format response
+                        var name = (data.next_prayer  && data.next_prayer.name)
+                                || (data.nextPrayer   && data.nextPrayer.name)
+                                || null;
+                        if (name) nameEl.textContent = name;
+                    },
+                    error: function() { /* silent fail — tidak ganggu UX */ }
+                });
+            }
+
+            // Delay 4 detik agar tidak ganggu page load awal
+            setTimeout(function() {
+                if (document.getElementById('topbarPrayerName')) {
+                    updatePrayerPill();
+                    setInterval(updatePrayerPill, 60000);
+                }
+            }, 4000);
+        })();
+
         // Auto-hide alert setelah 5 detik
         $(document).ready(function() {
             setTimeout(function() {
