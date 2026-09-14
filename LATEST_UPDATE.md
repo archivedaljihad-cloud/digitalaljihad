@@ -253,6 +253,8 @@ Halaman **Tentang Aplikasi (`/about`)** diperbarui total 100% selaras dengan kon
 5. **Pembaruan Panduan Pengoperasian & Riwayat Versi:**
    - Menambahkan panduan TV Luar & CCTV Mimbar, Prayer Mode otomatis, serta tombol 1-klik sinkronisasi database server (`/settings/migrate`).
    - Riwayat versi mencantumkan **Versi 4.0.0 (September 2026)** dengan tetap menjaga catatan sejarah asli proyek sebelumnya.
+6. **Integrasi Smart Hardware & Full Auto Self-Running:**
+   - Menambahkan dokumentasi integrasi **Smart Breaker** dan **Smart IR Remote Control** demi efisiensi konsumsi daya listrik serta kepraktisan waktu pengoperasian TV masjid secara mandiri tanpa campur tangan manual marbot (*full auto self running*).
 
 ---
 

@@ -67,7 +67,7 @@
                         <strong>{{ $setting->nama_aplikasi ?? 'Sistem Informasi Masjid Digital' }}</strong> adalah platform digital signage dan sistem otomasi masjid modern yang dirancang khusus untuk memenuhi kebutuhan syiar, transparansi kas, serta ketertiban ibadah. Aplikasi ini berjalan dengan arsitektur <em>Dual Engine Rotator</em> (Layar TV Utama & Layar TV Luar/Serambi), serta terintegrasi penuh dengan <em>Prayer Mode Otomatis</em> dan <em>CCTV Mimbar Live Stream</em>.
                     </p>
                     <p class="text-justify" style="color: #4b5563; line-height: 1.8; font-size: 15px;">
-                        Sistem ini mengedepankan performa tinggi dengan teknologi murni <strong>Vanilla JS & GPU-Accelerated CSS</strong> sehingga mampu menampilkan visual yang sangat mewah, halus (*60 FPS tanpa jeda kedip*), dan ramah terhadap perangkat TV box berdaya rendah tanpa membebani memori.
+                        Sistem ini mengedepankan performa tinggi dengan teknologi murni <strong>Vanilla JS & GPU-Accelerated CSS</strong> sehingga mampu menampilkan visual yang sangat mewah, halus (*60 FPS tanpa jeda kedip*), dan ramah terhadap perangkat TV box berdaya rendah tanpa membebani memori. Demi efisiensi daya dan waktu pengoperasian, sistem TV ini juga dilengkapi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong> sehingga beroperasi penuh secara mandiri (<em>full auto self running</em>).
                     </p>
                 </section>
 
@@ -199,6 +199,32 @@
                                     <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Slide Poster & Brosur</h6>
                                     <p class="small text-muted mb-0" style="line-height: 1.6;">
                                         Penayangan brosur kajian, laporan donasi, dan poster dakwah beresolusi tinggi dengan sistem auto-scaling ke layar TV.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Smart Breaker & IR Remote Control Banner -->
+                    <div class="card mt-2 mb-2 border-0 shadow-sm" style="border-radius: 16px; background: linear-gradient(135deg, rgba(30,90,58,0.06) 0%, rgba(201,160,61,0.08) 100%); border: 1px solid rgba(201,160,61,0.25) !important;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center flex-wrap flex-md-nowrap">
+                                <div class="mr-md-4 mb-3 mb-md-0 text-center" style="flex-shrink: 0;">
+                                    <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(135deg, #0e3521, #1e5a3a); color: #ffd700; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 14px rgba(14,53,33,0.25); margin: 0 auto;">
+                                        <i class="fas fa-power-off"></i>
+                                    </div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div class="d-flex align-items-center mb-1 flex-wrap">
+                                        <h6 class="font-weight-bold m-0 mr-2" style="color: #0e3521; font-size: 16px;">
+                                            Efisiensi Daya & Otomasi Mandiri (Full Auto Self-Running)
+                                        </h6>
+                                        <span class="badge px-2 py-1 mt-1 mt-md-0" style="background: #c9a03d; color: #071a10; font-weight: 700; font-size: 11px; border-radius: 8px;">
+                                            <i class="fas fa-microchip mr-1"></i> Smart Hardware
+                                        </span>
+                                    </div>
+                                    <p class="small mb-0 text-muted text-justify" style="line-height: 1.7;">
+                                        Demi efisiensi daya dan waktu pengoperasian, TV ini dilengkapi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong> sehingga beroperasi penuh secara mandiri (<em>full auto self running</em>). Seluruh rangkaian TV display dapat menyala dan mati secara otomatis dan terjadwal tanpa memerlukan campur tangan manual dari pengurus setiap hari.
                                     </p>
                                 </div>
                             </div>
@@ -469,11 +495,15 @@
                                         <li>Layar akan otomatis berputar menampilkan jadwal sholat, pengumuman, siaran live, dan laporan keuangan secara bergantian.</li>
                                     </ol>
                                     <p class="mb-2"><strong>B. Layar TV Luar / Serambi Masjid:</strong></p>
-                                    <ol class="pl-3 mb-0">
+                                    <ol class="pl-3 mb-3">
                                         <li>Gunakan alamat khusus TV Luar: <code>{{ url('/tv-outdoor') }}</code>.</li>
                                         <li>Pada hari dan jam biasa, layar TV luar berputar menampilkan informasi umum seperti TV utama.</li>
                                         <li>Saat waktu Khutbah Jum'at atau Sholat Ied tiba, layar TV luar akan <strong>secara otomatis beralih</strong> menampilkan siaran langsung CCTV Mimbar agar jamaah di luar dapat menyimak khutbah dengan jelas.</li>
                                     </ol>
+                                    <p class="mb-2"><strong>C. Otomasi Mandiri Hemat Daya (Full Auto Self-Running):</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Demi efisiensi konsumsi daya listrik serta kepraktisan waktu pengoperasian, rangkaian TV ini telah terintegrasi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong>. Sistem TV dapat menyala (<em>power ON</em>) dan mati/standby (<em>power OFF</em>) secara otomatis dan terjadwal, sehingga beroperasi penuh secara mandiri (*full auto self running*) tanpa perlu campur tangan manual marbot atau pengurus setiap hari.
+                                    </p>
                                 </div>
                             </div>
                         </div>
