@@ -186,14 +186,19 @@ Untuk mencegah error `1054 Unknown column` (seperti saat menyimpan URL Live Makk
 
 ---
 
-## 📝 9. PEMBARUAN HALAMAN RIWAYAT VERSI (`/about`)
+## 📝 9. PEMBARUAN HALAMAN ABOUT (`/about`)
 
-Halaman Tentang Aplikasi (`/about`) telah diselaraskan dengan catatan rilis perjalanan pengembangan:
-- **Versi 3.0.4 (September 2026):** Laporan Kas Ambulance, Donasi/Infaq, Pengurutan Rotasi, Live Streaming Mekah/Madinah, Prayer Mode Khutbah Jum'at, Posisi Audio Tarhim, CCTV Live Mimbar TV Luar, Sinkronisasi KEMENAG RI.
-- **Versi 3.0.3 (Agustus 2026):** Prayer mode & timer, integrasi tarhim, pemasangan bracket & TV fisik masjid.
-- **Versi 3.0.2 (Agustus 2026):** Efek background, perombakan layout total web aplikasi.
-- **Versi 3.0.1 (Agustus 2026):** Mulai pengkodean awal & recovery laptop instal ulang.
-- **Versi 1.0.0 (Juli 2026):** Konsep dasar program & tampilan awal.
+Halaman Tentang Aplikasi (`/about`) telah diselaraskan dan ditingkatkan secara profesional:
+1. **Catatan Riwayat Versi Perjalanan Pengembangan:**
+   - **Versi 3.0.4 (September 2026):** Laporan Kas Ambulance, Donasi/Infaq, Pengurutan Rotasi, Live Streaming Mekah/Madinah, Prayer Mode Khutbah Jum'at, Posisi Audio Tarhim, CCTV Live Mimbar TV Luar, Sinkronisasi KEMENAG RI.
+   - **Versi 3.0.3 (Agustus 2026):** Prayer mode & timer, integrasi tarhim, pemasangan bracket & TV fisik masjid.
+   - **Versi 3.0.2 (Agustus 2026):** Efek background, perombakan layout total web aplikasi.
+   - **Versi 3.0.1 (Agustus 2026):** Mulai pengkodean awal & recovery laptop instal ulang.
+   - **Versi 1.0.0 (Juli 2026):** Konsep dasar program & tampilan awal.
+2. **Panduan Penggunaan & Pembagian Hak Akses Pengguna:**
+   - Menyajikan pembagian tugas yang jelas untuk **Petugas / Operator Masjid** (Jadwal Sholat, Petugas Jum'at/Ied, Pengumuman, Agenda Kajian, Slide Brosur, Rotasi Halaman) dan **Bendahara Masjid** (Kas Utama, Kas Ambulance, Program Infaq Pembangunan, Ekspor Pembukuan).
+   - Panduan operasional layar TV Utama & TV Luar (CCTV Mimbar otomatis), alur kerja Prayer Mode, serta pengaturan rotasi slide.
+   - Bersih dari penyebutan kredensial (username/password) dan tidak menampilkan hak akses Super Admin demi menjaga privasi & keamanan sistem.
 
 ---
 
@@ -205,4 +210,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 14 September 2026 (Sinkronisasi Riwayat Versi 1.0.0 s/d 3.0.4 di /about) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 14 September 2026 (Pembaruan Panduan Penggunaan & Hak Akses Profesional di /about) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
