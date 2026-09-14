@@ -55,6 +55,11 @@ class AppSetting extends Model
         // ===== Visual Kemewahan & Ambient =====
         'enable_dynamic_theme',
         'enable_next_prayer_bar',
+        // ===== Google Gemini AI & Daily Hikmah =====
+        'gemini_api_key',
+        'gemini_model',
+        'daily_hikmah_cache',
+        'daily_hikmah_date',
     ];
 
     protected $casts = [
@@ -162,6 +167,11 @@ class AppSetting extends Model
             [
                 'url' => 'live-madinah-embed',
                 'name' => 'Live TV Madinah (Masjid Nabawi)',
+                'active' => true
+            ],
+            [
+                'url' => 'hikmah-embed',
+                'name' => 'Mutiara Hadits & Hikmah',
                 'active' => true
             ]
         ];

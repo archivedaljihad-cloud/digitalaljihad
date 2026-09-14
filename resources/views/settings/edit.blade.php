@@ -74,6 +74,16 @@
 							@endif
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="ai-tab" data-toggle="tab" href="#ai" role="tab" style="color: #4f46e5;">
+							<i class="fas fa-magic" style="color: #ffd700;"></i> Google Gemini AI
+							@if(!empty($setting->gemini_api_key))
+								<span class="badge badge-success ml-1">AKTIF</span>
+							@else
+								<span class="badge badge-warning ml-1">KUNCI BELUM DIISI</span>
+							@endif
+						</a>
+					</li>
 				</ul>
 			</div>
 			<div class="card-body">
@@ -705,6 +715,107 @@
 								</div>
 							</div>
 						</div>
+
+						{{-- TAB GOOGLE GEMINI AI --}}
+						<div class="tab-pane fade" id="ai" role="tabpanel">
+							<div class="row">
+								<div class="col-lg-7">
+									<div class="card shadow-sm border-0 mb-4" style="border-radius: 14px; border: 1px solid rgba(79,70,229,0.2) !important;">
+										<div class="card-header py-3" style="background: linear-gradient(135deg, rgba(79,70,229,0.08), rgba(30,90,58,0.05));">
+											<h6 class="m-0 font-weight-bold" style="color: #0e3521;">
+												<i class="fas fa-key text-warning mr-2"></i> Konfigurasi API Google Gemini
+											</h6>
+										</div>
+										<div class="card-body">
+											<div class="form-group">
+												<label for="gemini_api_key"><strong>Gemini API Key</strong></label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text"><i class="fas fa-lock text-primary"></i></span>
+													</div>
+													<input type="password" class="form-control font-monospace" id="gemini_api_key" name="gemini_api_key"
+														value="{{ old('gemini_api_key', $setting->gemini_api_key ?? '') }}"
+														placeholder="AIzaSy...">
+													<div class="input-group-append">
+														<button class="btn btn-outline-secondary" type="button" id="toggleApiKey">
+															<i class="fas fa-eye" id="eyeIcon"></i>
+														</button>
+													</div>
+												</div>
+												<small class="form-text text-muted">
+													API Key didapatkan gratis dari <a href="https://aistudio.google.com/app/apikey" target="_blank" class="font-weight-bold text-primary">Google AI Studio <i class="fas fa-external-link-alt small"></i></a>. Disimpan aman pada database aplikasi.
+												</small>
+											</div>
+
+											<div class="form-group">
+												<label for="gemini_model"><strong>Model AI Gemini</strong></label>
+												<select class="form-control" id="gemini_model" name="gemini_model">
+													<option value="gemini-1.5-flash" {{ ($setting->gemini_model ?? 'gemini-1.5-flash') == 'gemini-1.5-flash' ? 'selected' : '' }}>
+														gemini-1.5-flash (Direkomendasikan - Cepat & Kuota Gratis Melimpah)
+													</option>
+													<option value="gemini-2.0-flash" {{ ($setting->gemini_model ?? '') == 'gemini-2.0-flash' ? 'selected' : '' }}>
+														gemini-2.0-flash (Generasi 2 Terbaru)
+													</option>
+													<option value="gemini-1.5-pro" {{ ($setting->gemini_model ?? '') == 'gemini-1.5-pro' ? 'selected' : '' }}>
+														gemini-1.5-pro (Penalaran Tinggi)
+													</option>
+												</select>
+											</div>
+
+											<div class="d-flex flex-wrap align-items-center mt-4" style="gap: 10px;">
+												<button type="button" id="btnTestGemini" class="btn btn-info btn-sm px-3 shadow-sm" style="border-radius: 8px;">
+													<i class="fas fa-vial mr-1"></i> Uji Koneksi API Sekarang
+												</button>
+
+												<button type="button" id="btnRefreshHikmah" class="btn btn-success btn-sm px-3 shadow-sm" style="border-radius: 8px; background: #1e5a3a; border-color: #1e5a3a;">
+													<i class="fas fa-sync-alt mr-1"></i> 🔄 Refresh Hadits Hari Ini dengan AI
+												</button>
+											</div>
+
+											<!-- Test Result Box -->
+											<div id="testResultBox" class="mt-3 d-none">
+												<div id="testResultAlert" class="alert mb-0" style="border-radius: 10px;"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Kolom Kanan: Panduan & Status -->
+								<div class="col-lg-5">
+									<div class="card shadow-sm border-left-info mb-4">
+										<div class="card-header bg-light font-weight-bold" style="color: #0e3521;">
+											<i class="fas fa-info-circle text-info mr-2"></i> Cara Mendapatkan API Key Gratis:
+										</div>
+										<div class="card-body small" style="line-height: 1.8;">
+											<ol class="pl-3 mb-2">
+												<li>Kunjungi situs resmi <a href="https://aistudio.google.com/app/apikey" target="_blank" class="font-weight-bold">Google AI Studio</a>.</li>
+												<li>Login menggunakan akun Google (Gmail).</li>
+												<li>Klik tombol biru <strong>"Create API Key"</strong>.</li>
+												<li>Salin (*copy*) kunci API yang diawali <code>AIzaSy...</code>.</li>
+												<li>Tempelkan (*paste*) pada kolom di samping kiri, lalu klik <strong>Simpan Semua Perubahan</strong>.</li>
+											</ol>
+											<div class="p-2 rounded bg-light border text-muted">
+												<i class="fas fa-shield-alt text-success mr-1"></i> <strong>Aman & Gratis:</strong> Kuota gratis Google AI Studio cukup untuk ribuan generate pengumuman dan mutiara hadits per bulan tanpa biaya.
+											</div>
+										</div>
+									</div>
+
+									<div class="card shadow-sm border-left-success">
+										<div class="card-header bg-light font-weight-bold" style="color: #0e3521;">
+											<i class="fas fa-tv text-success mr-2"></i> Pratinjau Slide Mutiara Hikmah TV
+										</div>
+										<div class="card-body small">
+											<p class="text-muted mb-3">
+												Slide ini otomatis aktif di layar TV masjid (durasi default rotasi), menampilkan hadits tematik harian yang berganti secara mandiri.
+											</p>
+											<a href="{{ route('hikmah.embed') }}" class="btn btn-outline-success btn-sm btn-block" target="_blank" style="border-radius: 8px;">
+												<i class="fas fa-external-link-alt mr-1"></i> Buka Tampilan Slide TV (/hikmah-embed)
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 
 					<hr class="my-4">
@@ -763,5 +874,101 @@
 				$('#autoupdate-tab').tab('show');
 			@endif
 		});
+
+		// Toggle API Key visibility
+		const btnToggleApiKey = document.getElementById('toggleApiKey');
+		if (btnToggleApiKey) {
+			btnToggleApiKey.addEventListener('click', function () {
+				const input = document.getElementById('gemini_api_key');
+				const icon = document.getElementById('eyeIcon');
+				if (input.type === 'password') {
+					input.type = 'text';
+					icon.className = 'fas fa-eye-slash';
+				} else {
+					input.type = 'password';
+					icon.className = 'fas fa-eye';
+				}
+			});
+		}
+
+		// Test Gemini Connection
+		const btnTestGemini = document.getElementById('btnTestGemini');
+		if (btnTestGemini) {
+			btnTestGemini.addEventListener('click', function () {
+				const box = document.getElementById('testResultBox');
+				const alertEl = document.getElementById('testResultAlert');
+				btnTestGemini.disabled = true;
+				btnTestGemini.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menguji koneksi...';
+				box.classList.remove('d-none');
+				alertEl.className = 'alert alert-info';
+				alertEl.textContent = 'Menghubungkan ke Google Gemini API...';
+
+				fetch("{{ route('ai.test-connection') }}", {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN': '{{ csrf_token() }}'
+					}
+				})
+				.then(r => r.json())
+				.then(res => {
+					btnTestGemini.disabled = false;
+					btnTestGemini.innerHTML = '<i class="fas fa-vial mr-1"></i> Uji Koneksi API Sekarang';
+					if (res.success) {
+						alertEl.className = 'alert alert-success';
+						alertEl.innerHTML = '<i class="fas fa-check-circle mr-1"></i> ' + res.message;
+					} else {
+						alertEl.className = 'alert alert-danger';
+						alertEl.innerHTML = '<i class="fas fa-times-circle mr-1"></i> ' + res.message;
+					}
+				})
+				.catch(err => {
+					btnTestGemini.disabled = false;
+					btnTestGemini.innerHTML = '<i class="fas fa-vial mr-1"></i> Uji Koneksi API Sekarang';
+					alertEl.className = 'alert alert-danger';
+					alertEl.textContent = 'Kesalahan jaringan: ' + err.message;
+				});
+			});
+		}
+
+		// Refresh Hikmah
+		const btnRefreshHikmah = document.getElementById('btnRefreshHikmah');
+		if (btnRefreshHikmah) {
+			btnRefreshHikmah.addEventListener('click', function () {
+				const box = document.getElementById('testResultBox');
+				const alertEl = document.getElementById('testResultAlert');
+				btnRefreshHikmah.disabled = true;
+				btnRefreshHikmah.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memperbarui Hadits...';
+				box.classList.remove('d-none');
+				alertEl.className = 'alert alert-info';
+				alertEl.textContent = 'Menghasilkan hadits dan hikmah baru hari ini dengan AI...';
+
+				fetch("{{ route('ai.refresh-hikmah') }}", {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN': '{{ csrf_token() }}'
+					}
+				})
+				.then(r => r.json())
+				.then(res => {
+					btnRefreshHikmah.disabled = false;
+					btnRefreshHikmah.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> 🔄 Refresh Hadits Hari Ini dengan AI';
+					if (res.success) {
+						alertEl.className = 'alert alert-success';
+						alertEl.innerHTML = '<i class="fas fa-check-circle mr-1"></i> ' + res.message + '<br><small class="font-weight-bold">"' + (res.data ? res.data.tema : '') + '"</small>';
+					} else {
+						alertEl.className = 'alert alert-danger';
+						alertEl.textContent = res.message || 'Gagal memperbarui hadits.';
+					}
+				})
+				.catch(err => {
+					btnRefreshHikmah.disabled = false;
+					btnRefreshHikmah.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> 🔄 Refresh Hadits Hari Ini dengan AI';
+					alertEl.className = 'alert alert-danger';
+					alertEl.textContent = 'Kesalahan jaringan: ' + err.message;
+				});
+			});
+		}
 	</script>
 @endpush

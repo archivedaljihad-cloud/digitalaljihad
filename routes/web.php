@@ -23,6 +23,7 @@ use App\Http\Controllers\PrayerModeController;
 use App\Http\Controllers\KeuanganAmbulanceController;
 use App\Http\Controllers\ProgramInfaqController;
 use App\Http\Controllers\LiveStreamController;
+use App\Http\Controllers\AiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,8 @@ Route::get('/live-madinah-embed', [LiveStreamController::class, 'madinahEmbed'])
     ->name('live-madinah.embed');
 Route::get('/live-mimbar-embed', [LiveStreamController::class, 'mimbarEmbed'])
     ->name('live-mimbar.embed');
+Route::get('/hikmah-embed', [AiController::class, 'hikmahEmbed'])
+    ->name('hikmah.embed');
 Route::get('/tv-outdoor', [WelcomeController::class, 'rotatorOutdoor'])
     ->name('rotator.outdoor');
 Route::get('/data-timestamp', [WelcomeController::class, 'getDataTimestamp'])
@@ -208,6 +211,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('pengumuman', PengumumanController::class);
         Route::resource('slides', SlideController::class);
         Route::resource('agenda_kajian', AgendaKajianController::class);
+
+        // AI Assistant (Google Gemini)
+        Route::prefix('ai')->name('ai.')->group(function () {
+            Route::post('/generate-pengumuman', [AiController::class, 'generatePengumuman'])->name('generate-pengumuman');
+            Route::post('/refresh-hikmah', [AiController::class, 'refreshHikmah'])->name('refresh-hikmah');
+            Route::post('/test-connection', [AiController::class, 'testConnection'])->name('test-connection');
+        });
 
         Route::prefix('rotation')->name('rotation.')->group(function () {
             Route::get('/', [RotationController::class, 'index'])->name('index');

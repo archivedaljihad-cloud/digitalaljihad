@@ -117,6 +117,8 @@ class AppSettingController extends Controller
             'live_stream_overlay'    => 'sometimes|boolean',
             'enable_dynamic_theme'   => 'sometimes|boolean',
             'enable_next_prayer_bar' => 'sometimes|boolean',
+            'gemini_api_key'         => 'nullable|string|max:255',
+            'gemini_model'           => 'nullable|string|max:100',
         ]);
 
         $setting = $this->getOrCreateSetting();
@@ -189,6 +191,16 @@ class AppSettingController extends Controller
         }
         if (Schema::hasColumn('app_settings', 'enable_next_prayer_bar')) {
             $setting->enable_next_prayer_bar = $request->boolean('enable_next_prayer_bar');
+        }
+
+        // ==================================================
+        // GOOGLE GEMINI AI SETTINGS
+        // ==================================================
+        if (Schema::hasColumn('app_settings', 'gemini_api_key') && $request->has('gemini_api_key')) {
+            $setting->gemini_api_key = $request->input('gemini_api_key');
+        }
+        if (Schema::hasColumn('app_settings', 'gemini_model') && $request->has('gemini_model')) {
+            $setting->gemini_model = $request->input('gemini_model', 'gemini-1.5-flash');
         }
 
         // ==================================================

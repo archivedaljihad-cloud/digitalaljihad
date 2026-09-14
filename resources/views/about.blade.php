@@ -332,11 +332,11 @@
 
                             <hr class="my-4" style="border-color: rgba(30,90,58,0.1);">
 
-                            <!-- 13 Saluran Slide Mutakhir -->
+                            <!-- 14 Saluran Slide Mutakhir -->
                             <div>
                                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
                                     <h6 class="font-weight-bold m-0" style="color: #0e3521;">
-                                        <i class="fas fa-th-large mr-2" style="color: #c9a03d;"></i>Daftar 13 Saluran Slide Display Aktif:
+                                        <i class="fas fa-th-large mr-2" style="color: #c9a03d;"></i>Daftar 14 Saluran Slide Display Aktif:
                                     </h6>
                                     <span class="small text-muted">Klik salah satu saluran untuk melihat pratinjau langsung:</span>
                                 </div>
@@ -345,6 +345,7 @@
                                     @php
                                         $slides = [
                                             ['url' => 'utama-embed', 'name' => 'Jadwal Sholat 5 Waktu', 'icon' => 'fa-clock', 'color' => '#1e5a3a'],
+                                            ['url' => 'hikmah-embed', 'name' => 'Mutiara Hadits & Hikmah (AI)', 'icon' => 'fa-star-and-crescent', 'color' => '#d97706'],
                                             ['url' => 'keuangan-embed', 'name' => 'Rincian Kas Utama', 'icon' => 'fa-wallet', 'color' => '#0e3521'],
                                             ['url' => 'keuangan-summary-embed', 'name' => 'Grafik Arus Kas', 'icon' => 'fa-chart-pie', 'color' => '#0284c7'],
                                             ['url' => 'ambulance-embed', 'name' => 'Kas Mobil Ambulance', 'icon' => 'fa-ambulance', 'color' => '#b91c1c'],

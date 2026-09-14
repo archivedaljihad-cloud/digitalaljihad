@@ -16,10 +16,13 @@
 	<div class="row">
 		<div class="col-lg-10 mx-auto">
 			<div class="card shadow mb-4">
-				<div class="card-header py-3 bg-gradient-primary text-white">
+				<div class="card-header py-3 bg-gradient-primary text-white d-flex justify-content-between align-items-center flex-wrap">
 					<h6 class="m-0 font-weight-bold">
 						<i class="fas fa-calendar-alt mr-1"></i> Form Rincian Kegiatan & Kajian Masjid
 					</h6>
+					<button type="button" class="btn btn-warning btn-sm font-weight-bold shadow-sm mt-1 mt-md-0" data-toggle="modal" data-target="#aiModal" style="color: #071a10; border-radius: 20px; border: 1px solid #ffd700;">
+						<i class="fas fa-magic mr-1"></i> ✨ Susun dengan AI
+					</button>
 				</div>
 				<div class="card-body">
 					<form action="{{ route('pengumuman.store') }}" method="POST" enctype="multipart/form-data" id="createForm">
@@ -177,4 +180,6 @@
 		charCount.textContent = this.value.length;
 	});
 </script>
+
+@include('pengumuman.partials.ai-modal')
 @endsection

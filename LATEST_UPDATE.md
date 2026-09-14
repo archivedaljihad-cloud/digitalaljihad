@@ -260,7 +260,64 @@ Halaman **Tentang Aplikasi (`/about`)** diperbarui total 100% selaras dengan kon
 
 ---
 
-## 🔒 11. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🤖 11. INTEGRASI GOOGLE GEMINI AI (PENGUMUMAN & MUTIARA HADITS TV) — v4.1
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.1.0
+
+Fitur kecerdasan buatan (*Artificial Intelligence*) resmi diintegrasikan ke dalam Sistem Display Masjid menggunakan Google Gemini API via official endpoint REST Google AI Studio dengan prinsip **zero heavy vendor library** (memanfaatkan HTTP Client bawaan Laravel `Illuminate\Support\Facades\Http`).
+
+### Fitur AI yang Diimplementasikan:
+1. **AI One-Click Copywriter Pengumuman & Running Text:**
+   - DKM cukup mengetikkan poin-poin mentah sederhana (contoh: *"kajian ahad subuh ustadz fulan bawa infaq terbaik"*).
+   - Gemini AI menyusunnya menjadi:
+     - Judul pengumuman resmi islami yang menarik dan santun.
+     - Redaksi isi pengumuman lengkap dengan salam, basmalah, dalil ringkas, waktu & tempat, serta penutup doa.
+     - Teks ringkasan *running text* siap tayang (maks. 150 karakter) untuk teks berjalan TV.
+   - Tersedia tombol **✨ Susun dengan AI** di form pembuatan dan edit pengumuman (`resources/views/pengumuman/create.blade.php` dan `edit.blade.php`) yang membuka modal interaktif (`resources/views/pengumuman/partials/ai-modal.blade.php`).
+   - Tombol "Terapkan ke Formulir" otomatis mengisikan judul, isi, dan teks ringkasan ke form utama.
+
+2. **AI Generator Hadits & Mutiara Hikmah Harian Display TV (`/hikmah-embed`):**
+   - Saluran slide baru berlayar penuh (*full-screen*) yang dirancang khusus untuk rotasi display TV masjid.
+   - **Desain Mewah Islamic Material Design 3:**
+     - Matan hadits berbahasa Arab berharakat lengkap dengan kaligrafi font *Amiri* berukuran besar dan **rata tengah (*center*)**.
+     - Terjemahan bahasa Indonesia yang puitis dan menggetarkan hati.
+     - Sanad perawi shahih (mis. HR. Bukhari, Muslim, Abu Dawud, At-Tirmidzi).
+     - Sari hikmah praktis untuk diamalkan jamaah sehari-hari.
+     - Kapsul tanggal Hijriyah & Masehi, ornamen sudut islami emas (*gold Islamic corners*), serta aura pendaran latar (*ambient glow*).
+   - **Efisiensi TV & Cache Harian 24 Jam:**
+     - TV tidak memanggil API AI secara berulang. AI dieksekusi di backend server dan disimpan di kolom database `daily_hikmah_cache` selama 24 jam (`daily_hikmah_date`).
+     - Display TV hanya memuat HTML/CSS biasa (100% GPU accelerated, 60 FPS, tidak memberatkan perangkat TV Stick / Android TV).
+   - **Fallback Offline Cerdas (7 Koleksi Hadits Otentik):**
+     - Jika API Key belum diisi atau server kehilangan koneksi internet, sistem otomatis menampilkan hadits shahih otentik bergilir sesuai hari (Senin s/d Ahad) tanpa error atau jeda.
+   - Terdaftar sebagai **Saluran Slide ke-14** pada sistem rotasi display TV masjid.
+
+3. **Panel Konfigurasi Google Gemini AI di Admin Settings (`/settings`):**
+   - Tab baru **Google Gemini AI** di halaman Pengaturan Aplikasi (`resources/views/settings/edit.blade.php`):
+     - Form input API Key (tipe password dengan tombol intip/toggle intip sandi).
+     - Pemilihan Model AI: `gemini-1.5-flash` (Rekomendasi Cepat & Gratis), `gemini-1.5-pro`, dan `gemini-2.0-flash`.
+     - Tombol **Uji Koneksi AI**: Mengetes langsung keabsahan API Key ke server Google.
+     - Tombol **Generate Hadits Hari Ini Sekarang**: Untuk memaksa pembaruan konten slide TV seketika.
+     - Panduan 3 langkah mudah mendapatkan Google AI Studio API Key 100% Gratis.
+
+### Struktur Database & Berkas Baru:
+- **Migration:** `database/migrations/2026_09_15_000001_add_gemini_ai_settings_to_app_settings.php`
+  - Kolom baru pada tabel `app_settings`: `gemini_api_key`, `gemini_model`, `daily_hikmah_cache`, `daily_hikmah_date`.
+- **Model:** `app/Models/AppSetting.php`
+  - Ditambahkan `$fillable`, casts JSON, dan mendaftarkan `hikmah-embed` ke `getDefaultRotationPagesList()`.
+- **Service:** `app/Services/GeminiService.php`
+  - Logika pemanggilan Gemini REST API, prompt engineering islami ketat, caching hadits 24 jam, dan 7 template hadits fallback offline.
+- **Controller:** `app/Http/Controllers/AiController.php`
+  - Rute publik: `GET /hikmah-embed`
+  - Rute terproteksi auth: `POST /ai/generate-pengumuman`, `POST /ai/refresh-hikmah`, `POST /ai/test-connection`.
+- **Blade Views:**
+  - `resources/views/hikmah-embed.blade.php` (Slide display TV Hadits Mutiara Hikmah).
+  - `resources/views/pengumuman/partials/ai-modal.blade.php` (Modal AI Copywriter).
+- **Environment:**
+  - `.env.example` ditambahkan `GEMINI_API_KEY=` dan `GEMINI_MODEL=gemini-1.5-flash`.
+
+---
+
+## 🔒 12. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -268,4 +325,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 14 September 2026 (Grand Redesign Islamic Material Design 3 v4.0 & Sinkronisasi Total Halaman Tentang Aplikasi `about.blade.php`) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Integrasi Fitur AI Copywriter Pengumuman & Slide TV Mutiara Hadits Harian v4.1 via Google Gemini API) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
