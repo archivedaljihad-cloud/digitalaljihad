@@ -133,7 +133,7 @@ class LiveStreamController extends Controller
     }
 
     /**
-     * Helper mengubah berbagai format link YouTube menjadi Embed Iframe URL yang aman
+     * Helper mengubah berbagai format link YouTube menjadi Embed Iframe URL yang aman dan kompatibel
      */
     private function buildEmbedUrl(string $url, bool $audioEnabled = false): string
     {
@@ -142,40 +142,42 @@ class LiveStreamController extends Controller
 
         // 1. Jika sudah berupa embed URL
         if (str_contains($url, 'youtube.com/embed') || str_contains($url, 'youtube-nocookie.com/embed')) {
-            $separator = str_contains($url, '?') ? '&' : '?';
-            return $url . $separator . "autoplay=1&mute={$muteParam}&controls=0&showinfo=0&rel=0&loop=1&enablejsapi=1";
+            $cleanUrl = preg_replace('/(\?|&)(autoplay|mute|loop|playlist|controls)=[^&]*/', '', $url);
+            $cleanUrl = str_replace('youtube-nocookie.com', 'youtube.com', $cleanUrl);
+            $separator = str_contains($cleanUrl, '?') ? '&' : '?';
+            return $cleanUrl . $separator . "autoplay=1&mute={$muteParam}&controls=0&rel=0&playsinline=1";
         }
 
         // 2. Channel live stream (e.g. channel=UCxxxx atau live_stream?channel=UCxxxx)
         if (preg_match('/channel[=\/]([a-zA-Z0-9_-]+)/', $url, $matches)) {
             $channelId = $matches[1];
-            return "https://www.youtube-nocookie.com/embed/live_stream?channel={$channelId}&autoplay=1&mute={$muteParam}&controls=0&showinfo=0&rel=0&loop=1&enablejsapi=1";
+            return "https://www.youtube.com/embed/live_stream?channel={$channelId}&autoplay=1&mute={$muteParam}&controls=0&rel=0&playsinline=1";
         }
 
         // 3. Format /live/VIDEO_ID
         if (preg_match('/youtube\.com\/live\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
             $videoId = $matches[1];
-            return "https://www.youtube-nocookie.com/embed/{$videoId}?autoplay=1&mute={$muteParam}&controls=0&showinfo=0&rel=0&loop=1&playlist={$videoId}&enablejsapi=1";
+            return "https://www.youtube.com/embed/{$videoId}?autoplay=1&mute={$muteParam}&controls=0&rel=0&playsinline=1";
         }
 
         // 4. Format watch?v=VIDEO_ID
         if (preg_match('/[?&]v=([a-zA-Z0-9_-]+)/', $url, $matches)) {
             $videoId = $matches[1];
-            return "https://www.youtube-nocookie.com/embed/{$videoId}?autoplay=1&mute={$muteParam}&controls=0&showinfo=0&rel=0&loop=1&playlist={$videoId}&enablejsapi=1";
+            return "https://www.youtube.com/embed/{$videoId}?autoplay=1&mute={$muteParam}&controls=0&rel=0&playsinline=1";
         }
 
         // 5. Format youtu.be/VIDEO_ID
         if (preg_match('/youtu\.be\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
             $videoId = $matches[1];
-            return "https://www.youtube-nocookie.com/embed/{$videoId}?autoplay=1&mute={$muteParam}&controls=0&showinfo=0&rel=0&loop=1&playlist={$videoId}&enablejsapi=1";
+            return "https://www.youtube.com/embed/{$videoId}?autoplay=1&mute={$muteParam}&controls=0&rel=0&playsinline=1";
         }
 
         // 6. Jika pengguna hanya memasukkan 11-digit Video ID secara langsung
         if (preg_match('/^[a-zA-Z0-9_-]{11}$/', $url)) {
-            return "https://www.youtube-nocookie.com/embed/{$url}?autoplay=1&mute={$muteParam}&controls=0&showinfo=0&rel=0&loop=1&playlist={$url}&enablejsapi=1";
+            return "https://www.youtube.com/embed/{$url}?autoplay=1&mute={$muteParam}&controls=0&rel=0&playsinline=1";
         }
 
         // Fallback default
-        return "https://www.youtube-nocookie.com/embed/live_stream?channel=UCr_yW_8sC_Yg_U9b_wH5Npg&autoplay=1&mute={$muteParam}&controls=0&showinfo=0&rel=0&loop=1&enablejsapi=1";
+        return "https://www.youtube.com/embed/live_stream?channel=UCr_yW_8sC_Yg_U9b_wH5Npg&autoplay=1&mute={$muteParam}&controls=0&rel=0&playsinline=1";
     }
 }

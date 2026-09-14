@@ -166,9 +166,9 @@ Jika proyek ini di-*clone* ke komputer atau laptop baru:
 Untuk menghubungkan kamera analog kabel BNC yang sudah ada di mimbar:
 1. Hubungkan port LAN di belakang mesin DVR CCTV ke router Wi-Fi masjid via kabel LAN.
 2. Baca panduan lengkap operasional yang sudah kami siapkan di:
-   - File Markdown: [`TUTORIAL_CCTV_MIMBAR_TV_LUAR.md`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/TUTORIAL_CCTV_MIMBAR_TV_LUAR.md)
-   - File PDF Resmi: [`TUTORIAL_CCTV_MIMBAR_TV_LUAR.pdf`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/TUTORIAL_CCTV_MIMBAR_TV_LUAR.pdf)
-   - File HTML Cetak: [`TUTORIAL_CCTV_MIMBAR_TV_LUAR.html`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/TUTORIAL_CCTV_MIMBAR_TV_LUAR.html)
+    - File Markdown: [`USER GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.md`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/USER%20GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.md)
+    - File PDF Resmi: [`USER GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.pdf`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/USER%20GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.pdf)
+    - File HTML Cetak: [`USER GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.html`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/USER%20GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.html)
 
 ---
 
