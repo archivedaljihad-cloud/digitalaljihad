@@ -84,7 +84,7 @@
                         </p>
 
                         <p class="text-justify mb-3">
-                            Jujur, dalam proses pembuatannya, saya sangat menyadari segala keterbatasan dan kekurangan kemampuan yang saya miliki. Namun, hanya atas izin, petunjuk, dan pertolongan dari Allah SWT belaka (<em>Laa haula wa laa quwwata illa billah</em>), niat baik ini akhirnya dapat terwujud.
+                            Jujur, dalam proses pembuatannya, saya sangat menyadari segala keterbatasan dan kekurangan kemampuan yang saya miliki. Namun, hanya atas izin, petunjuk, dan pertolongan dari Allah SWT belaka (<span style="font-family: 'Amiri', serif; font-size: 17px; color: #1e5a3a; font-weight: 600;">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ</span>), niat baik ini akhirnya dapat terwujud.
                         </p>
 
                         <p class="text-justify mb-3">
