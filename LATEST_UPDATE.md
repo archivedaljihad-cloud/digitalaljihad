@@ -186,7 +186,37 @@ Untuk mencegah error `1054 Unknown column` (seperti saat menyimpan URL Live Makk
 
 ---
 
-## 📝 9. PEMBARUAN HALAMAN ABOUT (`/about`)
+## 🎨 9. REDESAIN DASHBOARD ADMIN (Islamic Material Design 3 — v4.0)
+
+**Tanggal:** 14 September 2026 | **File:** `resources/views/layouts/admin.blade.php`
+
+Redesain premium dashboard admin panel dengan filosofi **Islamic Material Design 3** — terinspirasi Google Material You, dikombinasikan identitas visual islami. **Nol library baru ditambahkan.**
+
+### Perubahan yang Diterapkan
+
+| Komponen | Perubahan |
+|:---|:---|
+| **Sidebar Lebar** | 224px → **260px** (lebih lega, teks tidak terpotong) |
+| **Sidebar Gradient** | Lebih gelap dan elegan: `#071a10` → `#0e3521` → `#1a5235` |
+| **Sidebar Pattern** | Hexagonal geometric SVG pattern emas (opacity 14%) |
+| **Nav Links** | Border-left lama → **Pill-style** rounded (border-radius 10px) |
+| **Active State** | `background highlight` + **gold dot indicator** (`::after`) kanan |
+| **Nav Icon Chip** | Icon dibungkus chip 28×28px via **JS auto-wrap** (tanpa ubah HTML) |
+| **User Panel** | Panel baru bawah logo: avatar emas + nama + role + **pulse dot hijau** |
+| **Topbar: Live Clock** | Widget jam detik-per-detik + tanggal lengkap (Vanilla JS `setInterval`) |
+| **Topbar: Prayer Pill** | Kapsul "Sholat [Nama]" fetch dari `/prayer-mode/status` tiap 1 menit |
+| **Topbar: Search** | Border-radius pill `20px`, subtle green border on focus |
+| **Dropdown/Modal/Card** | `border-radius` 14–18px, `box-shadow` lebih soft dan elevated |
+| **Responsive** | Clock & prayer pill hilang otomatis di `max-width: 767px` |
+
+### Teknik Implementasi
+- **CSS Override Layer**: Ditambahkan setelah block CSS lama, menggunakan `!important` untuk override SB Admin 2
+- **JS DOMContentLoaded**: Icon chip di-inject saat DOM siap (tidak perlu ubah setiap `nav-link`)
+- **PHP/Blade Logic**: Tidak ada perubahan — semua RBAC, fallback `??`, dan rute tetap utuh
+
+---
+
+## 📝 10. PEMBARUAN HALAMAN ABOUT (`/about`)
 
 Halaman Tentang Aplikasi (`/about`) telah diselaraskan dan ditingkatkan secara profesional:
 1. **Catatan Riwayat Versi Perjalanan Pengembangan:**
@@ -210,4 +240,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 14 September 2026 (Pembaruan Panduan Penggunaan & Hak Akses Profesional di /about) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 14 September 2026 (Redesain Dashboard Admin — Islamic Material Design 3 v4.0: Sidebar Pill, User Panel, Live Clock Topbar, Prayer Pill, Icon Chip) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
