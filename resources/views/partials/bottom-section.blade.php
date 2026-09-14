@@ -6,26 +6,39 @@
             $settings = \App\Models\AppSetting::first() ?? cache('settings');
         }
 
-        $rawText = $settings['running_text'] ?? ($settings->running_text ?? null);
-        if (empty($rawText)) {
-            $rawText = \App\Models\AppSetting::value('running_text');
-        }
-
         $footerText = $settings['footer'] ?? ($settings->footer ?? null);
         if (empty($footerText)) {
             $footerText = \App\Models\AppSetting::value('footer');
         }
 
+        // Opsi 3: Deteksi halaman saat ini (misal: 'utama-embed', 'keuangan-embed', dll.)
+        $currentPath = trim(request()->path(), '/');
+
         $runningTextList = [];
-        if (!empty($rawText)) {
-            $lines = preg_split('/\r\n|\r|\n/', $rawText);
-            foreach ($lines as $line) {
-                $trimmed = trim($line);
-                if (!empty($trimmed)) {
-                    $runningTextList[] = $trimmed;
+        if ($settings instanceof \App\Models\AppSetting && method_exists($settings, 'getRunningTextForPage')) {
+            $runningTextList = $settings->getRunningTextForPage($currentPath);
+        } else {
+            // Fallback jika array atau method belum ada
+            $pagesMap = $settings['running_text_pages'] ?? ($settings->running_text_pages ?? []);
+            if (is_string($pagesMap)) {
+                $pagesMap = json_decode($pagesMap, true) ?? [];
+            }
+            $rawText = $pagesMap[$currentPath] ?? ($pagesMap['default'] ?? ($settings['running_text'] ?? ($settings->running_text ?? null)));
+            if (empty($rawText)) {
+                $rawText = \App\Models\AppSetting::value('running_text');
+            }
+
+            if (!empty($rawText)) {
+                $lines = preg_split('/\r\n|\r|\n/', $rawText);
+                foreach ($lines as $line) {
+                    $trimmed = trim($line);
+                    if (!empty($trimmed)) {
+                        $runningTextList[] = $trimmed;
+                    }
                 }
             }
         }
+
         if (empty($runningTextList)) {
             $runningTextList = [
                 "🌙 \"Luruskan dan rapatkan shaf, karena lurusnya shaf merupakan kesempurnaan sholat.\" (HR. Bukhari & Muslim)",
@@ -103,6 +116,7 @@
             let currentIndex = 0;
 
             function startNextMessage(index) {
+                if (!messages[index]) return;
                 content.innerHTML = messages[index];
 
                 requestAnimationFrame(() => {
@@ -123,11 +137,18 @@
 
                         const handleEnd = () => {
                             el.removeEventListener('transitionend', handleEnd);
-                            // Lanjut ke pesan berikutnya (Model A: satu per satu bergantian)
-                            currentIndex = (currentIndex + 1) % messages.length;
-                            setTimeout(() => {
-                                startNextMessage(currentIndex);
-                            }, 600);
+                            // Jika di halaman ini terdapat lebih dari 1 pesan (Enter), lanjutkan bergantian
+                            if (messages.length > 1) {
+                                currentIndex = (currentIndex + 1) % messages.length;
+                                setTimeout(() => {
+                                    startNextMessage(currentIndex);
+                                }, 500);
+                            } else {
+                                // Jika hanya 1 pesan dan halaman masih tayang, ulangi kembali setelah jeda
+                                setTimeout(() => {
+                                    startNextMessage(0);
+                                }, 600);
+                            }
                         };
 
                         el.addEventListener('transitionend', handleEnd, { once: true });
@@ -135,6 +156,7 @@
                 });
             }
 
+            // Mulai animasi dengan kalimat pertama khusus halaman ini
             startNextMessage(0);
         })();
     </script>

@@ -109,13 +109,102 @@
 										<small class="text-muted">HTML diperbolehkan</small>
 									</div>
 
+									@php
+										$runningTextPages = method_exists($setting, 'getRunningTextPages') ? $setting->getRunningTextPages() : ($setting->running_text_pages ?? []);
+										if (is_string($runningTextPages)) {
+											$runningTextPages = json_decode($runningTextPages, true) ?? [];
+										}
+										$pageCatalog = \App\Models\AppSetting::getDisplayPageCatalog();
+									@endphp
+
 									<div class="form-group">
-										<label for="running_text"><strong>Teks Berjalan (Bisa Banyak Pesan Bergantian)</strong></label>
+										<label for="running_text" class="d-flex justify-content-between align-items-center">
+											<strong><i class="fas fa-bullhorn text-warning mr-1"></i> Teks Berjalan Utama / Default (Semua Halaman)</strong>
+											<span class="badge badge-primary px-2 py-1"><i class="fas fa-globe mr-1"></i> Global Default</span>
+										</label>
 										<textarea class="form-control" id="running_text" name="running_text"
-											rows="7" placeholder="Tuliskan teks berjalan. Tekan ENTER untuk membuat pesan berikutnya (1 baris = 1 pesan bergantian)...">{{ old('running_text', $setting->running_text ?? '') }}</textarea>
+											rows="5" placeholder="Tuliskan teks berjalan default di sini. Tekan ENTER untuk membuat pesan berikutnya (1 baris = 1 pesan bergantian)...">{{ old('running_text', $setting->running_text ?? '') }}</textarea>
 										<small class="text-muted d-block mt-1">
-											<i class="fas fa-info-circle text-primary"></i> <strong>Model Bergantian (Model A):</strong> Setiap baris kalimat baru (Enter) akan otomatis ditampilkan bergantian satu per satu di layar TV. Anda bisa memasukkan 6 s/d 11 pesan hadits, doa, atau himbauan jamaah.
+											<i class="fas fa-info-circle text-primary"></i> Teks ini otomatis tayang di seluruh halaman display TV yang <strong>tidak</strong> memiliki teks kustom khusus di bawah.
 										</small>
+									</div>
+								</div>
+
+								<div class="col-md-12">
+									{{-- ======================================================== --}}
+									{{-- PANEL PEMETAAN TEKS BERJALAN KHUSUS TIAP HALAMAN (OPSI 3) --}}
+									{{-- ======================================================== --}}
+									<div class="card border-0 shadow-sm mt-3 mb-4" style="background: linear-gradient(135deg, rgba(7,26,16,0.03) 0%, rgba(14,53,33,0.07) 100%); border: 1.5px solid rgba(26,82,53,0.2) !important; border-radius: 14px;">
+										<div class="card-body p-4">
+											<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom">
+												<div>
+													<h6 class="font-weight-bold text-success mb-1" style="font-size: 1.05rem;">
+														<i class="fas fa-layer-group text-warning mr-2"></i> Pengaturan Teks Berjalan Khusus Tiap Halaman Display (Opsi 3)
+													</h6>
+													<small class="text-muted">
+														Atur kalimat teks berjalan yang spesifik dan selaras untuk masing-masing slide halaman TV (contoh: teks adab khutbah di layar Jumat, teks infaq di layar QRIS/Keuangan). Halaman yang dikosongkan otomatis memakai teks default di atas.
+													</small>
+												</div>
+												<div class="mt-2 mt-md-0">
+													<button type="button" class="btn btn-sm btn-outline-success font-weight-bold" id="btnToggleAllRunningPages">
+														<i class="fas fa-expand-arrows-alt mr-1"></i> Buka / Tutup Semua Panel
+													</button>
+												</div>
+											</div>
+
+											<div class="accordion" id="accordionRunningPages">
+												@foreach($pageCatalog as $pageSlug => $pageMeta)
+													@php
+														$pageVal = old("running_text_pages.{$pageSlug}", $runningTextPages[$pageSlug] ?? '');
+														$hasCustom = !empty(trim($pageVal));
+														$collapseId = 'collapse_' . str_replace(['-', '.'], '_', $pageSlug);
+													@endphp
+													<div class="card mb-2 shadow-sm" style="border-radius: 10px; overflow: hidden; border-left: 4px solid {{ $hasCustom ? '#28a745' : '#6c757d' }};">
+														<div class="card-header py-2 px-3 bg-white d-flex justify-content-between align-items-center" 
+															style="cursor: pointer; user-select: none;" 
+															data-toggle="collapse" 
+															data-target="#{{ $collapseId }}">
+															<div class="d-flex align-items-center">
+																<span class="btn btn-circle btn-sm {{ $hasCustom ? 'btn-success' : 'btn-light text-muted border' }} mr-3" style="width: 34px; height: 34px; line-height: 34px; padding: 0;">
+																	<i class="{{ $pageMeta['icon'] ?? 'fas fa-tv' }}"></i>
+																</span>
+																<div>
+																	<strong class="text-dark font-weight-bold" style="font-size: 0.95rem;">{{ $pageMeta['name'] }}</strong>
+																	<span class="badge badge-light border text-muted ml-2 font-weight-normal">/{{ $pageSlug }}</span>
+																	<small class="text-muted d-block" style="font-size: 0.8rem;">{{ $pageMeta['desc'] }}</small>
+																</div>
+															</div>
+															<div>
+																@if($hasCustom)
+																	<span class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> Kustom Aktif</span>
+																@else
+																	<span class="badge badge-secondary px-2 py-1"><i class="fas fa-globe mr-1"></i> Default Umum</span>
+																@endif
+																<i class="fas fa-chevron-down text-muted ml-2"></i>
+															</div>
+														</div>
+
+														<div id="{{ $collapseId }}" class="collapse {{ $hasCustom ? 'show' : '' }}">
+															<div class="card-body py-3 px-4 bg-light border-top">
+																<div class="form-group mb-0">
+																	<label class="small font-weight-bold text-dark d-flex justify-content-between">
+																		<span>Kalimat Teks Berjalan Khusus untuk Layar <strong>{{ $pageMeta['name'] }}</strong>:</span>
+																		<span class="text-muted font-weight-normal"><i class="fas fa-level-down-alt fa-rotate-90"></i> 1 baris = 1 pesan bergantian</span>
+																	</label>
+																	<textarea class="form-control" 
+																		name="running_text_pages[{{ $pageSlug }}]" 
+																		rows="2" 
+																		placeholder="{{ $pageMeta['placeholder'] }}">{{ $pageVal }}</textarea>
+																	<small class="text-muted d-block mt-1">
+																		<i class="fas fa-lightbulb text-warning"></i> Kosongkan kolom ini jika ingin halaman ini otomatis mengikuti Teks Berjalan Utama di atas.
+																	</small>
+																</div>
+															</div>
+														</div>
+													</div>
+												@endforeach
+											</div>
+										</div>
 									</div>
 								</div>
 
@@ -968,6 +1057,19 @@
 					alertEl.className = 'alert alert-danger';
 					alertEl.textContent = 'Kesalahan jaringan: ' + err.message;
 				});
+			});
+		}
+
+		// Toggle Semua Accordion Teks Berjalan Halaman (Opsi 3)
+		const btnToggleAll = document.getElementById('btnToggleAllRunningPages');
+		if (btnToggleAll) {
+			let isAllExpanded = false;
+			btnToggleAll.addEventListener('click', function () {
+				isAllExpanded = !isAllExpanded;
+				$('#accordionRunningPages .collapse').collapse(isAllExpanded ? 'show' : 'hide');
+				btnToggleAll.innerHTML = isAllExpanded 
+					? '<i class="fas fa-compress-arrows-alt mr-1"></i> Tutup Semua Panel'
+					: '<i class="fas fa-expand-arrows-alt mr-1"></i> Buka / Tutup Semua Panel';
 			});
 		}
 	</script>

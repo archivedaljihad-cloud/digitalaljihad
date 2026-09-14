@@ -317,7 +317,54 @@ Fitur kecerdasan buatan (*Artificial Intelligence*) resmi diintegrasikan ke dala
 
 ---
 
-## 🔒 12. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 📢 12. FITUR TEKS BERJALAN KHUSUS TIAP HALAMAN DISPLAY (OPSI 3) — v4.2
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.0
+
+Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapkan **Opsi 3: Panel Pemetaan 1-Tempat Terpusat (*Dedicated Mapping Accordion*)**. Masalah overlap kalimat antar rotasi halaman di TV teratasi tuntas karena setiap halaman kini dapat menampilkan pesan yang berbeda dan selaras dengan konten yang sedang tayang.
+
+### Fitur & Cara Kerja:
+1. **Panel Input Terpusat di Menu Pengaturan (`/settings`):**
+   - **Teks Berjalan Utama / Default:** Tetap tersedia di kolom atas untuk pesan global. Halaman yang tidak memiliki teks kustom akan otomatis memakai teks ini (*fallback*).
+   - **Accordion Pemetaan Khusus 15 Halaman Display:**
+     - Tersedia daftar lipat (*accordion*) interaktif untuk seluruh halaman TV:
+       - `/utama-embed` (Jadwal Sholat 5 Waktu)
+       - `/keuangan-embed` (Rincian Kas Utama)
+       - `/keuangan-summary-embed` (Ringkasan Grafik Kas)
+       - `/jumat-embed` (Petugas Sholat Jumat)
+       - `/pengumuman-embed` (Pengumuman DKM)
+       - `/qris-embed` (QRIS Infaq Digital)
+       - `/slide-embed` (Slide Poster Informasi)
+       - `/ambulance-embed` (Kas Layanan Ambulance)
+       - `/infaq-embed` (Program Donasi & Infaq)
+       - `/hikmah-embed` (Mutiara Hadits & Hikmah)
+       - `/live-mekah-embed` (Live TV Mekah)
+       - `/live-madinah-embed` (Live TV Madinah)
+       - `/idul-fitri-embed` (Petugas Idul Fitri)
+       - `/idul-adha-embed` (Petugas Idul Adha)
+       - `/welcome-embed` (Dashboard Lengkap)
+     - Setiap item dilengkapi icon tematik, badge status (hijau *"Kustom Aktif"* jika terisi, abu-abu *"Default Umum"* jika kosong), dan contoh placeholder teks yang relevan.
+     - Dilengkapi tombol **Buka / Tutup Semua Panel** untuk kepraktisan admin.
+2. **Dukungan Multi-Pesan (Enter) Per Halaman:**
+   - Di masing-masing halaman kustom, admin tetap bisa menekan **Enter** untuk memasukkan lebih dari satu pesan.
+   - Pesan akan ditampilkan bergantian satu per satu secara berkesinambungan di halaman tersebut.
+3. **Penyelarasan Tampilan TV (`partials/bottom-section.blade.php`):**
+   - Sistem secara otomatis mendeteksi URL halaman embed yang sedang aktif (`request()->path()`).
+   - Mengambil teks spesifik milik halaman tersebut via helper `AppSetting::getRunningTextForPage($currentPath)`.
+   - Menambahkan `@include('partials.bottom-section')` pada slide baru `/hikmah-embed` sehingga seluruh 14 saluran display TV masjid memiliki footer running text yang seragam, mewah, dan bebas kedip.
+
+### Struktur Database & Berkas Terkait:
+- **Migration:** `database/migrations/2026_09_15_000002_add_running_text_pages_to_app_settings.php` (menambahkan kolom `running_text_pages` bertipe `JSON`).
+- **Model:** `app/Models/AppSetting.php` (menambahkan fillable, casts `array`, helper `getRunningTextPages()`, `getRunningTextForPage()`, dan `getDisplayPageCatalog()`).
+- **Controller:** `app/Http/Controllers/AppSettingController.php` (validasi & sanitasi array `running_text_pages`) dan `RotationController.php`.
+- **Views:**
+  - `resources/views/settings/edit.blade.php` (UI Accordion 15 Halaman & tombol Expand/Collapse).
+  - `resources/views/partials/bottom-section.blade.php` (Logika seleksi pesan per halaman & animasi mulus).
+  - `resources/views/hikmah-embed.blade.php` (Integrasi partial bottom section).
+
+---
+
+## 🔒 13. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -325,4 +372,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Integrasi Fitur AI Copywriter Pengumuman & Slide TV Mutiara Hadits Harian v4.1 via Google Gemini API) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Fitur Teks Berjalan Khusus Per Halaman Display Opsi 3 & Integrasi Slide Hadits TV v4.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*

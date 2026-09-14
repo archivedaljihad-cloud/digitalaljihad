@@ -119,16 +119,38 @@ class AppSettingController extends Controller
             'enable_next_prayer_bar' => 'sometimes|boolean',
             'gemini_api_key'         => 'nullable|string|max:255',
             'gemini_model'           => 'nullable|string|max:100',
+            'running_text_pages'     => 'nullable|array',
         ]);
 
         $setting = $this->getOrCreateSetting();
 
         // ==================================================
-        // PENGATURAN UMUM
+        // PENGATURAN UMUM & RUNNING TEXT PER HALAMAN
         // ==================================================
         $setting->nama_aplikasi = $validated['nama_aplikasi'];
         $setting->footer = $validated['footer'] ?? null;
-        $setting->running_text = $validated['running_text'] ?? null;
+        
+        $runningTextPages = $request->input('running_text_pages', []);
+        if (is_array($runningTextPages)) {
+            // Bersihkan string kosong berlebih
+            $sanitizedPages = [];
+            foreach ($runningTextPages as $key => $val) {
+                if (is_string($val)) {
+                    $sanitizedPages[$key] = trim($val);
+                }
+            }
+            if (\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'running_text_pages')) {
+                $setting->running_text_pages = $sanitizedPages;
+            }
+            // Sinkronkan teks default ke running_text umum
+            if (!empty($sanitizedPages['default'])) {
+                $setting->running_text = $sanitizedPages['default'];
+            } else {
+                $setting->running_text = $validated['running_text'] ?? null;
+            }
+        } else {
+            $setting->running_text = $validated['running_text'] ?? null;
+        }
 
         // ==================================================
         // AUTO UPDATE JADWAL

@@ -70,6 +70,10 @@ class RotationController extends Controller
                 'name' => 'Live TV Madinah (Masjid Nabawi)',
                 'desc' => 'Siaran langsung 24 jam Masjid Nabawi Madinah Al-Munawwarah',
             ],
+            'hikmah-embed' => [
+                'name' => 'Mutiara Hadits & Hikmah',
+                'desc' => 'Hadits shahih tematik & tadabbur mutiara hikmah harian dengan AI',
+            ],
         ];
     }
 

@@ -339,6 +339,9 @@
 		setInterval(updateClock, 1000);
 		updateClock();
 	</script>
+
+	{{-- Fixed Bottom Running Text & Footer --}}
+	@include('partials.bottom-section')
 </body>
 
 </html>
