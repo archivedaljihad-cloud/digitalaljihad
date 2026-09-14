@@ -255,6 +255,8 @@ Halaman **Tentang Aplikasi (`/about`)** diperbarui total 100% selaras dengan kon
    - Riwayat versi mencantumkan **Versi 4.0.0 (September 2026)** dengan tetap menjaga catatan sejarah asli proyek sebelumnya.
 6. **Integrasi Smart Hardware & Full Auto Self-Running:**
    - Menambahkan dokumentasi integrasi **Smart Breaker** dan **Smart IR Remote Control** demi efisiensi konsumsi daya listrik serta kepraktisan waktu pengoperasian TV masjid secara mandiri tanpa campur tangan manual marbot (*full auto self running*).
+7. **Teks Sambutan & Ungkapan Rasa Syukur Pengembang:**
+   - Bagian awal pengantar sistem disempurnakan dengan doa basmalah, salam pembuka, tahmid dan shalawat berbahasa Arab berformat **rata tengah (*center*)**, diikuti ungkapan rasa syukur, ikhtiar dedikasi untuk Masjid Al-Jihad, permohonan maaf atas kekurangan, serta doa keberkahan amal jariyah bagi seluruh pengurus masjid dan jamaah.
 
 ---
 

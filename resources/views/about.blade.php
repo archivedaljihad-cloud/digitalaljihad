@@ -55,7 +55,7 @@
             <!-- Card Body -->
             <div class="card-body p-4 p-md-5">
 
-                <!-- 1. INTRODUKSI SISTEM -->
+                <!-- 1. INTRODUKSI SISTEM & UNGKAPAN RASA SYUKUR -->
                 <section class="mb-5">
                     <div class="d-flex align-items-center mb-3">
                         <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
@@ -63,12 +63,55 @@
                         </div>
                         <h4 class="font-weight-bold m-0" style="color: #0e3521;">Tentang Sistem Digital Masjid</h4>
                     </div>
-                    <p class="text-justify" style="color: #4b5563; line-height: 1.8; font-size: 15px;">
-                        <strong>{{ $setting->nama_aplikasi ?? 'Sistem Informasi Masjid Digital' }}</strong> adalah platform digital signage dan sistem otomasi masjid modern yang dirancang khusus untuk memenuhi kebutuhan syiar, transparansi kas, serta ketertiban ibadah. Aplikasi ini berjalan dengan arsitektur <em>Dual Engine Rotator</em> (Layar TV Utama & Layar TV Luar/Serambi), serta terintegrasi penuh dengan <em>Prayer Mode Otomatis</em> dan <em>CCTV Mimbar Live Stream</em>.
-                    </p>
-                    <p class="text-justify" style="color: #4b5563; line-height: 1.8; font-size: 15px;">
-                        Sistem ini mengedepankan performa tinggi dengan teknologi murni <strong>Vanilla JS & GPU-Accelerated CSS</strong> sehingga mampu menampilkan visual yang sangat mewah, halus (*60 FPS tanpa jeda kedip*), dan ramah terhadap perangkat TV box berdaya rendah tanpa membebani memori. Demi efisiensi daya dan waktu pengoperasian, sistem TV ini juga dilengkapi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong> sehingga beroperasi penuh secara mandiri (<em>full auto self running</em>).
-                    </p>
+
+                    <!-- Mukaddimah Arab (Semua Huruf Arab Center Tengah) -->
+                    <div class="p-4 rounded mb-4" style="background: linear-gradient(135deg, rgba(30,90,58,0.04) 0%, rgba(201,160,61,0.06) 100%); border-top: 2px solid #c9a03d; border-bottom: 2px solid #c9a03d; border-radius: 16px !important;">
+                        <div class="text-center mb-3" style="font-family: 'Amiri', serif; font-size: 26px; font-weight: 700; color: #1e5a3a; line-height: 1.8;">
+                            بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+                        </div>
+                        <div class="text-center mb-3" style="font-family: 'Amiri', serif; font-size: 22px; font-weight: 600; color: #0e3521; line-height: 1.8;">
+                            السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ
+                        </div>
+                        <div class="text-center px-md-4" style="font-family: 'Amiri', serif; font-size: 20px; color: #1a5235; line-height: 2.2; direction: rtl;">
+                            الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ، وَبِهِ نَسْتَعِينُ عَلَى أُمُورِ الدُّنْيَا وَالدِّينِ. أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ. اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ أَجْمَعِينَ.
+                        </div>
+                    </div>
+
+                    <!-- Isi Sambutan & Penjelasan Sistem -->
+                    <div style="color: #374151; line-height: 1.9; font-size: 15px;">
+                        <p class="text-justify mb-3">
+                            Puji dan syukur marilah kita panjatkan ke hadirat Allah SWT, yang telah memberikan kita nikmat kesehatan, kemudahan, serta kesempatan sehingga pada hari yang penuh berkah ini, aplikasi web untuk Masjid Al-Jihad dapat diselesaikan dan siap untuk dipergunakan.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Jujur, dalam proses pembuatannya, saya sangat menyadari segala keterbatasan dan kekurangan kemampuan yang saya miliki. Namun, hanya atas izin, petunjuk, dan pertolongan dari Allah SWT belaka (<em>Laa haula wa laa quwwata illa billah</em>), niat baik ini akhirnya dapat terwujud.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Hadirnya sistem aplikasi web ini tidak lain hanyalah sebuah sarana ikhtiar kecil yang dapat saya persembahkan untuk membantu merapikan administrasi, meningkatkan transparansi, serta memudahkan pelayanan ibadah dan pengelolaan kegiatan di Masjid Al-Jihad yang kita cintai ini.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            <strong>{{ $setting->nama_aplikasi ?? "MASJID JAMI' AL JIHAD" }}</strong> adalah platform digital signage dan sistem otomasi masjid modern yang dirancang khusus untuk memenuhi kebutuhan syiar, transparansi kas, serta ketertiban ibadah. Aplikasi ini berjalan dengan arsitektur <em>Dual Engine Rotator</em> (Layar TV Utama & Layar TV Luar/Serambi), serta terintegrasi penuh dengan <em>Prayer Mode Otomatis</em> dan <em>CCTV Mimbar Live Stream</em>.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Sistem ini mengedepankan performa tinggi dengan teknologi murni <strong>Vanilla JS & GPU-Accelerated CSS</strong> sehingga mampu menampilkan visual yang sangat mewah, halus (*60 FPS tanpa jeda kedip*), dan ramah terhadap perangkat TV box berdaya rendah tanpa membebani memori. Demi efisiensi daya dan waktu pengoperasian, sistem TV ini juga dilengkapi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong> sehingga beroperasi penuh secara mandiri (<em>full auto self running</em>).
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Besar harapan saya, platform ini dapat memberikan manfaat yang nyata bagi pengurus maupun seluruh jama'ah. Sekali lagi saya mohon ma'af jika dalam menyelesaikan web aplikasi ini ada keterlambatan dan masih banyak kekurangan.
+                        </p>
+
+                        <p class="text-justify mb-4">
+                            Terima kasih yang sebesar-besarnya saya sampaikan kepada seluruh pihak dan pengurus Masjid Al-Jihad yang telah memberikan kepercayaan, dukungan, serta doa selama proses pembuatan. Semoga setiap usaha dan ikhtiar kita ini dicatat oleh Allah SWT sebagai amal jariyah yang pahalanya terus mengalir. Aamiin Ya Rabbal 'Alamin.
+                        </p>
+
+                        <!-- Penutup Salam Arab (Center Tengah) -->
+                        <div class="text-center my-4 py-3" style="font-family: 'Amiri', serif; font-size: 22px; font-weight: 600; color: #0e3521; border-top: 1px dashed rgba(201,160,61,0.4); border-bottom: 1px dashed rgba(201,160,61,0.4);">
+                            وَالسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ
+                        </div>
+                    </div>
                 </section>
 
                 <!-- 2. FITUR TAMPILAN TV MUTAKHIR (YANG DIPERBARUI TOTAL) -->
