@@ -680,7 +680,29 @@ Untuk menjaga konsistensi identitas visual dan branding resmi masjid, elemen gra
 
 ---
 
-## 🔒 23. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🧹 23. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.3.1): PENYEMBUNYIAN KOLOM IDENTITAS MASJID & MEDIA UNTUK OPERATOR (ANTARMUKA BERSIH & FOKUS 100%)
+
+### Latar Belakang & Masukan Pengguna:
+Alih-alih sekadar menampilkan kolom nonaktif dengan ikon gembok yang berpotensi membingungkan atau mengganggu pandangan (*visual clutter*), kolom **Nama Aplikasi**, **Footer Text**, **Favicon**, **Logo Aplikasi**, dan **Background Sidebar** diputuskan untuk disembunyikan seutuhnya dari antarmuka akun Operator / Petugas.
+
+### Solusi & Implementasi Teknis:
+1. **Pembersihan Antarmuka Form (`resources/views/settings/edit.blade.php`):**
+   - **Nama Aplikasi & Footer Text:** Dibungkus dalam kondisi `@if($isAdmin)...@else...`. Bagi akun operator, kedua kolom ini disembunyikan dari layar dan digantikan dengan elemen `<input type="hidden">`, menjamin nilai asli nama masjid dan footer tetap terkirim dengan aman tanpa mengganggu pemandangan operator.
+   - **Media & Gambar (Favicon, Logo, Background Sidebar):** Seluruh baris upload dan pratinjau media dibungkus dalam `@if($isAdmin)...@endif`. Operator tidak lagi melihat kolom upload gambar yang tidak relevan dengan tugas harian mereka.
+   - **Tampilan Operator yang Bebas Gangguan:** Begitu operator membuka tab pengaturan, layar langsung menyajikan panel **Pengaturan Teks Berjalan Tiap Halaman Display TV** di urutan teratas, diikuti oleh switch tampilan visual cerdas (Dynamic Theme & Next Prayer Bar).
+2. **Fleksibilitas Validasi Backend Controller (`app/Http/Controllers/AppSettingController.php`):**
+   - Aturan validasi `nama_aplikasi` disesuaikan: `'required|string|max:255'` khusus untuk Super Admin, dan `'nullable|string|max:255'` untuk operator (dengan fallback nilai tersimpan sebelumnya: `$validated['nama_aplikasi'] ?? $setting->nama_aplikasi`).
+   - Mencegah terjadinya error validasi form saat operator menekan tombol simpan.
+   - Menjaga hak akses penuh tetap eksklusif hanya untuk Administrator saat login.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/settings/edit.blade.php` (Penyembunyian Nama Aplikasi, Footer, Favicon, Logo, Background Sidebar untuk operator)
+- `app/Http/Controllers/AppSettingController.php` (Penyelarasan validasi nama_aplikasi dan pengamanan nilai simpan)
+- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.3.1)
+
+---
+
+## 🔒 24. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -688,6 +710,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 16 September 2026 (Proteksi Penguncian Favicon, Logo Aplikasi, & Background Sidebar untuk Operator v4.3.0) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 16 September 2026 (Penyembunyian Kolom Identitas & Media untuk Operator v4.3.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

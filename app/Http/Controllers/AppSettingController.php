@@ -98,8 +98,10 @@ class AppSettingController extends Controller
      */
     public function update(Request $request)
     {
+        $isSuperAdmin = auth()->check() && auth()->user()->hasRole('admin');
+
         $validated = $request->validate([
-            'nama_aplikasi'          => 'required|string|max:255',
+            'nama_aplikasi'          => $isSuperAdmin ? 'required|string|max:255' : 'nullable|string|max:255',
             'favicon'                => 'nullable|image|mimes:jpeg,png,jpg,gif,ico|max:2048',
             'background'             => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'logo'                   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -127,9 +129,8 @@ class AppSettingController extends Controller
         // ==================================================
         // PENGATURAN UMUM & RUNNING TEXT PER HALAMAN
         // ==================================================
-        $isSuperAdmin = auth()->check() && auth()->user()->hasRole('admin');
         if ($isSuperAdmin) {
-            $setting->nama_aplikasi = $validated['nama_aplikasi'];
+            $setting->nama_aplikasi = $validated['nama_aplikasi'] ?? $setting->nama_aplikasi;
             $setting->footer = $validated['footer'] ?? null;
         }
         
