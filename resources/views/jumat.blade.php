@@ -118,21 +118,26 @@
 		}
 
 		/* SECTION JUDUL DENGAN DUA IKON (NO 1 = ICON 1, NO 2 = ICON 2) */
+		/* SECTION JUDUL DENGAN DUA IKON (NO 1 = ICON 1, NO 2 = ICON 2) */
 		.schedule-header-section {
 			text-align: center;
 			flex-shrink: 0;
-			margin: 2px 0 10px 0;
+			margin-top: 10px;
+			margin-bottom: 0;
+			display: flex;
+			justify-content: center;
+			width: 100%;
 		}
 
 		.title-with-icons {
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			gap: 22px;
+			gap: 18px;
 			background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
 			border: 1.5px solid rgba(255, 215, 0, 0.65);
-			border-radius: 40px;
-			padding: 8px 30px;
+			border-radius: 35px;
+			padding: 6px 26px;
 			box-shadow: 
 				0 8px 25px rgba(0, 0, 0, 0.65),
 				0 0 20px rgba(255, 215, 0, 0.25),
@@ -142,8 +147,8 @@
 		}
 
 		.title-icon-badge {
-			width: 60px;
-			height: 60px;
+			width: 50px;
+			height: 50px;
 			border-radius: 50%;
 			background: rgba(4, 25, 18, 0.9);
 			border: 1.5px solid rgba(255, 215, 0, 0.6);
@@ -156,15 +161,15 @@
 
 		.title-icon-badge i,
 		.title-icon-badge svg {
-			font-size: 1.85rem;
-			width: 1.85rem;
-			height: 1.85rem;
+			font-size: 1.55rem;
+			width: 1.55rem;
+			height: 1.55rem;
 			color: #ffd700;
 			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
 
 		.title-text-wrap h2 {
-			font-size: 2.1rem;
+			font-size: 1.75rem;
 			color: #ffffff !important;
 			letter-spacing: 2px;
 			font-weight: 700;
@@ -174,11 +179,11 @@
 		}
 
 		.title-text-wrap p {
-			font-size: 1rem;
+			font-size: 0.92rem;
 			color: #ffd700;
 			letter-spacing: 0.5px;
 			font-weight: 500;
-			margin-top: 3px;
+			margin-top: 2px;
 			margin-bottom: 0;
 			text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 		}
@@ -620,21 +625,21 @@
 			<h1>{{ $settings['nama_aplikasi'] ?? 'MASJID JAMI\' AL JIHAD' }}</h1>
 			<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
 			<div class="datetime" id="datetime"></div>
-		</div>
 
-		<!-- SECTION JUDUL: NO 1 (MASJID) DI KIRI, NO 2 (KA'BAH) DI KANAN -->
-		<div class="schedule-header-section">
-			<div class="title-with-icons">
-				<div class="title-icon-badge left-icon" title="Masjid">
-					<i class="fas fa-mosque"></i>
-				</div>
-				<div class="title-text-wrap">
-					<h2>Jadwal Sholat Jumat</h2>
-					<p>Informasi Imam, Khotib, Muadzin & Bilal</p>
-					<div class="sholawat-greeting">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِ سَيِّدِنَا مُحَمَّدٍ</div>
-				</div>
-				<div class="title-icon-badge right-icon" title="Ka'bah">
-					<i class="fas fa-kaaba"></i>
+			<!-- SECTION JUDUL: NO 1 (MASJID) DI KIRI, NO 2 (KA'BAH) DI KANAN (TEPAT DI BAWAH KAPSUL TANGGAL) -->
+			<div class="schedule-header-section">
+				<div class="title-with-icons">
+					<div class="title-icon-badge left-icon" title="Masjid">
+						<i class="fas fa-mosque"></i>
+					</div>
+					<div class="title-text-wrap">
+						<h2>Jadwal Sholat Jumat</h2>
+						<p>Informasi Imam, Khotib, Muadzin & Bilal</p>
+						<div class="sholawat-greeting">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِ سَيِّدِنَا مُحَمَّدٍ</div>
+					</div>
+					<div class="title-icon-badge right-icon" title="Ka'bah">
+						<i class="fas fa-kaaba"></i>
+					</div>
 				</div>
 			</div>
 		</div>

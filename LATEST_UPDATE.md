@@ -625,9 +625,10 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `resources/views/partials/display-theme.blade.php` (Perbesaran dimensi kaligrafi 125px, penambahan aura backlight emas `::before`, animasi pendaran aura)
 - `public/css/display-theme.css` (Sinkronisasi aturan `.kaligrafi-medallion` dan efek pendaran)
 - `resources/views/utama.blade.php` (Perbesaran `.npb-pulse-dot` ke 14px, gradien putih-kuning bersinar, animasi pendaran neon)
+- `resources/views/jumat.blade.php` (Reposisi kapsul Jadwal Sholat Jumat ke atas tepat di bawah kapsul tanggal/jam dan perampingan kapsul agar background mihrab/interior terlihat luas)
 - `public/image/display/background/BG3.png` (Gambar background baru resmi pengganti BG3 lama)
 - `public/image/display/background/BG3.jpg` (Aset gambar background baru resolusi tinggi)
-- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.8 & penghapusan file background lama)
+- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.8 & reposisi kapsul Jumat)
 
 ---
 
@@ -639,6 +640,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 16 September 2026 (Pembaruan Aset Background BG3.jpg & BG3.png ke Web Server) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 16 September 2026 (Reposisi Kapsul Jadwal Sholat Jumat ke Atas & BG3 Baru) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
