@@ -484,7 +484,35 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 17. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🎨 17. PENATAAN ULANG FORM PENGATURAN UMUM & TEKS BERJALAN (v4.2.5)
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.5
+
+### Latar Belakang & Kebutuhan Pengguna:
+- Menghilangkan kesan kaku dan potensi prasangka antar pengurus/operator terkait tulisan gembok "(Terkunci Super Admin)" dan keterangan teks yang menyebutkan pembatasan Super Admin.
+- Mengefisiensikan ruang tata letak form: mengecilkan kolom **Footer Text** menjadi 1 baris (*single-line input*) sejajar di sebelah kanan **Nama Aplikasi** (`col-md-6` + `col-md-6`).
+- Melebarkan kotak isian **Teks Berjalan Utama / Default (Semua Halaman)** menjadi membentang penuh (*full width* `col-12`) dari ujung kiri hingga ujung kanan agar operator dapat melihat teks berjalan panjang secara leluasa dan nyaman saat menginput pesan.
+
+### Perubahan yang Diterapkan:
+1. **Penghapusan Badge & Teks Pembatasan Provokatif:**
+   - Menghapus badge `<span class="badge badge-secondary"><i class="fas fa-lock mr-1"></i> Terkunci (Super Admin)</span>` pada label Nama Aplikasi dan Footer Text.
+   - Menghapus teks informasi *"Nama aplikasi hanya dapat diubah oleh Super Admin"* dan *"Teks footer hanya dapat diubah oleh Super Admin"*.
+   - Proteksi keamanan tetap aktif 100%: untuk operator/non-admin, kedua kolom tetap berstatus `readonly` dengan warna netral yang elegan (`#f8fafc`), dan sisi controller backend tetap mengunci pembaruan nilainya hanya untuk Super Admin.
+2. **Kompensasi Tata Letak 1 Baris Sejajar (Nama Aplikasi & Footer Text):**
+   - Mengubah kolom `footer` dari `<textarea>` menjadi `<input type="text">` satu baris.
+   - Mengatur posisi **Nama Aplikasi** di kolom kiri (`col-md-6`) dan **Footer Text** di kolom kanan (`col-md-6`).
+3. **Pelebaran Penuh Kotak Teks Berjalan Utama (`col-12` Full Width):**
+   - Menempatkan kotak **Teks Berjalan Utama / Default (Semua Halaman)** membentang penuh horizontal (`col-12`) dengan `rows="4"`, sehingga teks berjalan panjang dapat terbaca jelas tanpa terpotong sempit.
+4. **Perapihan Kolom Media (Favicon, Logo, Background):**
+   - Menata ulang input upload Favicon, Logo Aplikasi, dan Background Sidebar menjadi sejajar simetris dalam satu baris (`col-md-4`, `col-md-4`, `col-md-4`).
+
+### Berkas yang Dimodifikasi:
+- `resources/views/settings/edit.blade.php` (Penataan ulang grid layout tab general, single-line footer text, col-12 running text, dan penghapusan teks gembok)
+- `LATEST_UPDATE.md` (Pencatatan riwayat pembaruan v4.2.5)
+
+---
+
+## 🔒 18. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -492,4 +520,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Proteksi Penguncian Nama Aplikasi & Footer Text untuk Operator v4.2.4) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Penataan Ulang Form Pengaturan Umum & Running Text Memanjang v4.2.5) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*

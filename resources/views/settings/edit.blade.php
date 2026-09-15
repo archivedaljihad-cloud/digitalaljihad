@@ -109,50 +109,40 @@
 					<div class="tab-content" id="settingsTabContent">
 						{{-- TAB UMUM --}}
 						<div class="tab-pane fade show active" id="general" role="tabpanel">
-							<div class="row">
-								<div class="col-md-6">
-									@php
-										$isAdmin = auth()->check() && auth()->user()->hasRole('admin');
-									@endphp
+							@php
+								$isAdmin = auth()->check() && auth()->user()->hasRole('admin');
+							@endphp
 
+							<div class="row">
+								{{-- NAMA APLIKASI (KOLOM KIRI) --}}
+								<div class="col-md-6">
 									<div class="form-group">
-										<label for="nama_aplikasi" class="d-flex justify-content-between align-items-center">
-											<span>Nama Aplikasi <span class="text-danger">*</span></span>
-											@if(!$isAdmin)
-												<span class="badge badge-secondary" style="font-size: 0.75rem;"><i class="fas fa-lock mr-1"></i> Terkunci (Super Admin)</span>
-											@endif
+										<label for="nama_aplikasi" class="font-weight-bold">
+											Nama Aplikasi <span class="text-danger">*</span>
 										</label>
 										<input type="text" class="form-control" id="nama_aplikasi" name="nama_aplikasi"
 											value="{{ old('nama_aplikasi', $setting->nama_aplikasi ?? '') }}" 
 											{{ !$isAdmin ? 'readonly' : 'required' }}
-											style="{{ !$isAdmin ? 'background-color: #f1f5f9; cursor: not-allowed; border-color: #cbd5e1; color: #475569; font-weight: 500;' : '' }}">
-										@if(!$isAdmin)
-											<small class="text-muted d-block mt-1">
-												<i class="fas fa-info-circle text-info"></i> Nama aplikasi hanya dapat diubah oleh Super Admin.
-											</small>
-										@endif
+											style="{{ !$isAdmin ? 'background-color: #f8fafc; border-color: #cbd5e1; color: #334155; font-weight: 500;' : '' }}">
 									</div>
+								</div>
 
+								{{-- FOOTER TEXT (KOLOM KANAN - 1 LINE SEJAJAR) --}}
+								<div class="col-md-6">
 									<div class="form-group">
-										<label for="footer" class="d-flex justify-content-between align-items-center">
-											<span>Footer Text</span>
-											@if(!$isAdmin)
-												<span class="badge badge-secondary" style="font-size: 0.75rem;"><i class="fas fa-lock mr-1"></i> Terkunci (Super Admin)</span>
-											@endif
+										<label for="footer" class="font-weight-bold">
+											Footer Text
 										</label>
-										<textarea class="form-control" id="footer" name="footer"
-											rows="3"
+										<input type="text" class="form-control" id="footer" name="footer"
+											value="{{ old('footer', $setting->footer ?? '') }}"
+											placeholder="Contoh: © 2026 Powered by DKM AL JIHAD"
 											{{ !$isAdmin ? 'readonly' : '' }}
-											style="{{ !$isAdmin ? 'background-color: #f1f5f9; cursor: not-allowed; border-color: #cbd5e1; color: #475569;' : '' }}">{{ old('footer', $setting->footer ?? '') }}</textarea>
-										@if($isAdmin)
-											<small class="text-muted">HTML diperbolehkan</small>
-										@else
-											<small class="text-muted d-block mt-1">
-												<i class="fas fa-info-circle text-info"></i> Teks footer hanya dapat diubah oleh Super Admin.
-											</small>
-										@endif
+											style="{{ !$isAdmin ? 'background-color: #f8fafc; border-color: #cbd5e1; color: #334155;' : '' }}">
 									</div>
+								</div>
 
+								{{-- TEKS BERJALAN UTAMA / DEFAULT (MEMANJANG PENUH DARI AWAL KOTAK NAMA APLIKASI SAMPAI UJUNG FOOTER) --}}
+								<div class="col-12 mt-1">
 									@php
 										$runningTextPages = method_exists($setting, 'getRunningTextPages') ? $setting->getRunningTextPages() : ($setting->running_text_pages ?? []);
 										if (is_string($runningTextPages)) {
@@ -163,18 +153,20 @@
 
 									<div class="form-group">
 										<label for="running_text" class="d-flex justify-content-between align-items-center">
-											<strong><i class="fas fa-bullhorn text-warning mr-1"></i> Teks Berjalan Utama / Default (Semua Halaman)</strong>
+											<span class="font-weight-bold" style="font-size: 0.98rem;">
+												<i class="fas fa-bullhorn text-warning mr-1"></i> Teks Berjalan Utama / Default (Semua Halaman)
+											</span>
 											<span class="badge badge-primary px-2 py-1"><i class="fas fa-globe mr-1"></i> Global Default</span>
 										</label>
 										<textarea class="form-control" id="running_text" name="running_text"
-											rows="5" placeholder="Tuliskan teks berjalan default di sini. Tekan ENTER untuk membuat pesan berikutnya (1 baris = 1 pesan bergantian)...">{{ old('running_text', $setting->running_text ?? '') }}</textarea>
+											rows="4" placeholder="Tuliskan teks berjalan default di sini. Tekan ENTER untuk membuat pesan berikutnya (1 baris = 1 pesan bergantian)...">{{ old('running_text', $setting->running_text ?? '') }}</textarea>
 										<small class="text-muted d-block mt-1">
 											<i class="fas fa-info-circle text-primary"></i> Teks ini otomatis tayang di seluruh halaman display TV yang <strong>tidak</strong> memiliki teks kustom khusus di bawah.
 										</small>
 									</div>
 								</div>
 
-								<div class="col-md-12">
+								<div class="col-12">
 									{{-- ======================================================== --}}
 									{{-- PANEL PEMETAAN TEKS BERJALAN KHUSUS TIAP HALAMAN (OPSI 3) --}}
 									{{-- ======================================================== --}}
@@ -254,10 +246,15 @@
 										</div>
 									</div>
 								</div>
+							</div>
 
-								<div class="col-md-6">
+							<hr class="my-4">
+
+							{{-- MEDIA & GAMBAR (FAVICON, LOGO, BACKGROUND) TERTATA RAPI SEJAJAR --}}
+							<div class="row">
+								<div class="col-md-4">
 									<div class="form-group">
-										<label for="favicon">Favicon</label>
+										<label for="favicon" class="font-weight-bold">Favicon</label>
 										<div class="custom-file">
 											<input type="file" class="custom-file-input" id="favicon" name="favicon"
 												accept=".ico,.png,.jpg,.jpeg,.gif">
@@ -265,22 +262,18 @@
 										</div>
 										@if($setting->favicon)
 											<div class="mt-3">
-												<p class="mb-1">Favicon Saat Ini:</p>
-												<img src="{{ asset('storage/' . $setting->favicon) }}" width="64" height="64"
+												<p class="mb-1 small font-weight-bold">Favicon Saat Ini:</p>
+												<img src="{{ asset('storage/' . $setting->favicon) }}" width="48" height="48"
 													class="img-thumbnail d-block">
-												<small class="text-muted">Rekomendasi: 64x64 px (format .ico atau .png)</small>
+												<small class="text-muted">Rekomendasi: 64x64 px (.ico / .png)</small>
 											</div>
 										@endif
 									</div>
 								</div>
-							</div>
 
-							<hr class="my-4">
-
-							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div class="form-group">
-										<label for="logo">Logo Aplikasi</label>
+										<label for="logo" class="font-weight-bold">Logo Aplikasi</label>
 										<div class="custom-file">
 											<input type="file" class="custom-file-input" id="logo" name="logo"
 												accept=".png,.jpg,.jpeg,.gif,.svg">
@@ -288,19 +281,18 @@
 										</div>
 										@if($setting->logo)
 											<div class="mt-3">
-												<p class="mb-1">Logo Saat Ini:</p>
+												<p class="mb-1 small font-weight-bold">Logo Saat Ini:</p>
 												<img src="{{ asset('storage/' . $setting->logo) }}" class="img-thumbnail"
-													style="max-height: 150px; width: auto;">
-												<small class="text-muted">Rekomendasi: maksimal 300x150 px (format .png dengan
-													background transparan)</small>
+													style="max-height: 120px; width: auto;">
+												<small class="text-muted d-block">Rekomendasi: maks 300x150 px (.png)</small>
 											</div>
 										@endif
 									</div>
 								</div>
 
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div class="form-group">
-										<label for="background">Background Sidebar</label>
+										<label for="background" class="font-weight-bold">Background Sidebar</label>
 										<div class="custom-file">
 											<input type="file" class="custom-file-input" id="background" name="background"
 												accept=".jpg,.jpeg,.png,.gif">
@@ -308,11 +300,10 @@
 										</div>
 										@if($setting->background)
 											<div class="mt-3">
-												<p class="mb-1">Background Saat Ini:</p>
+												<p class="mb-1 small font-weight-bold">Background Saat Ini:</p>
 												<img src="{{ asset('storage/' . $setting->background) }}" class="img-thumbnail"
-													style="max-height: 150px; width: 100%; object-fit: cover;">
-												<small class="text-muted">Rekomendasi: 1920x1080 px (format .jpg atau
-													.png)</small>
+													style="max-height: 120px; width: 100%; object-fit: cover;">
+												<small class="text-muted d-block">Rekomendasi: 1920x1080 px</small>
 											</div>
 										@endif
 									</div>
