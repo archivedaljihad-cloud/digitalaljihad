@@ -397,7 +397,36 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 14. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🧭 14. RELOKASI BADGE KAPSUL SHOLAT BERIKUTNYA & HEADER JADWAL SHOLAT (v4.2.2)
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.2
+
+### Latar Belakang & Masukan Pengguna:
+- Keberadaan badge kapsul melayang (*Floating Smart Next Prayer Bar*) di pojok kanan atas layar rotator TV (`rotator.blade.php`) terasa mengganggu pandangan karena selalu muncul menutupi sudut atas di seluruh halaman display yang berputar (seperti Keuangan, Pengumuman, QRIS, Hadits Hikmah, Live TV, dll.).
+- Pengguna menghendaki:
+  1. Badge kapsul hitung mundur sholat berikutnya **hanya muncul di halaman Jadwal Sholat (`utama.blade.php`)**.
+  2. Header badge **"Jadwal Sholat"** dipindahkan ke atas, tepat di bawah kotak kapsul tanggal & jam (*"hari, tgl, bln, tahun, jam"*).
+  3. Badge kapsul hitung mundur sholat berikutnya ditempatkan **pas di tengah-tengah** (*centered*) secara horizontal dan vertikal di antara header "Jadwal Sholat" (atas) dan deretan kotak-kotak sholat 7 waktu (bawah).
+
+### Perubahan yang Diterapkan:
+1. **Pembersihan di Layar Induk Rotator (`resources/views/rotator.blade.php`):**
+   - Menghapus elemen HTML `#nextPrayerBarWrapper` dan seluruh CSS serta skrip JS hitung mundurnya dari file rotator utama.
+   - Hasilnya: Pojok kanan atas di seluruh 14 halaman display kini bersih, lega, dan bebas dari tumpukan elemen mengambang.
+2. **Penataan Ulang Tata Letak di `resources/views/utama.blade.php`:**
+   - **Header Jadwal Sholat (`.jadwal-sholat-title`):** Dipindahkan ke dalam `.header-section`, bersanding rapi tepat di bawah kapsul tanggal/jam (`.datetime`) dengan pembungkus flex `.jadwal-sholat-title-wrap`.
+   - **Badge Kapsul Sholat Berikutnya (`.next-prayer-center-container`):** Ditempatkan di tengah layar (`margin: auto 0; width: 100%; justify-content: center;`) di antara `.header-section` dan `.bottom-section`. Dilengkapi ikon masjid emas berdenyut, badge `SELANJUTNYA`, nama sholat bersinar, waktu sholat, dan countdown jam-menit-detik secara *real-time*.
+   - **Kotak-Kotak Sholat (`.sholat-list`):** Tetap berada di `.bottom-section` pada bagian bawah layar display di atas running text footer.
+3. **Engine Hitung Mundur Khusus Halaman Sholat:**
+   - Memindahkan logika countdown JS mandiri langsung ke dalam `utama.blade.php`, memfilter nama non-fardhu (Imsak, Syuruk, Terbit), dan otomatis menyesuaikan nama "DZUHUR" menjadi "SHOLAT JUM'AT" khusus di hari Jum'at.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/rotator.blade.php`
+- `resources/views/utama.blade.php`
+- `LATEST_UPDATE.md`
+
+---
+
+## 🔒 15. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -405,4 +434,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Perbaikan Pengecualian Syuruk & Imsak dari Mode Sholat TV v4.2.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Relokasi Badge Kapsul Sholat Berikutnya & Header Jadwal Sholat v4.2.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*

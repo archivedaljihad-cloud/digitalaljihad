@@ -150,12 +150,19 @@
 			margin-bottom: 10px;
 		}
 
+		.jadwal-sholat-title-wrap {
+			margin-top: 10px;
+			display: flex;
+			justify-content: center;
+			width: 100%;
+		}
+
 		.jadwal-sholat-title {
-			font-size: 1.85rem;
+			font-size: 1.65rem;
 			font-weight: 700 !important;
 			letter-spacing: 2.5px;
-			margin-bottom: 14px;
-			padding: 7px 30px;
+			margin-bottom: 0;
+			padding: 5px 28px;
 			position: relative;
 			color: #ffffff !important;
 			display: inline-flex;
@@ -176,7 +183,7 @@
 
 		.jadwal-sholat-title i {
 			color: #ffd700;
-			font-size: 1.65rem;
+			font-size: 1.5rem;
 			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
 			animation: pulseMosque 3s ease-in-out infinite;
 		}
@@ -194,6 +201,140 @@
 
 		.jadwal-sholat-title:after {
 			display: none;
+		}
+
+		/* =====================================================
+		   SMART NEXT PRAYER BADGE (PAS DI TENGAH-TENGAH)
+		   ===================================================== */
+		.next-prayer-center-container {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: auto 0;
+			z-index: 10;
+		}
+
+		.next-prayer-bar {
+			display: inline-flex;
+			align-items: center;
+			gap: 14px;
+			background: linear-gradient(135deg, rgba(6, 26, 17, 0.92) 0%, rgba(2, 14, 9, 0.96) 100%);
+			border: 1.5px solid rgba(212, 175, 55, 0.55);
+			border-radius: 40px;
+			padding: 8px 26px 8px 14px;
+			box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), 0 0 22px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(255, 238, 170, 0.3);
+			backdrop-filter: blur(14px);
+			-webkit-backdrop-filter: blur(14px);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.npb-shimmer {
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 60%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+			transform: skewX(-20deg);
+			animation: npbShimmer 6s infinite;
+			pointer-events: none;
+		}
+
+		@keyframes npbShimmer {
+			0%, 80% { left: -100%; }
+			100% { left: 200%; }
+		}
+
+		.npb-icon {
+			width: 44px;
+			height: 44px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.05) 100%);
+			border: 1px solid rgba(212, 175, 55, 0.6);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #FFD700;
+			font-size: 19px;
+			box-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
+			flex-shrink: 0;
+		}
+
+		.npb-content {
+			display: flex;
+			flex-direction: column;
+			line-height: 1.15;
+		}
+
+		.npb-label-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.npb-badge {
+			font-size: 10px;
+			font-weight: 800;
+			letter-spacing: 1.2px;
+			color: #10B981;
+			background: rgba(16, 185, 129, 0.18);
+			border: 0.5px solid rgba(16, 185, 129, 0.4);
+			padding: 2px 7px;
+			border-radius: 10px;
+		}
+
+		.npb-prayer-name {
+			font-size: 15px;
+			font-weight: 800;
+			color: #FFD700;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+		}
+
+		.npb-time-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-top: 3px;
+		}
+
+		.npb-schedule-time {
+			font-size: 13px;
+			color: #CBD5E1;
+			font-weight: 600;
+		}
+
+		.npb-sep {
+			color: rgba(212, 175, 55, 0.6);
+			font-size: 11px;
+		}
+
+		.npb-countdown {
+			font-size: 16px;
+			font-weight: 800;
+			color: #FFFFFF;
+			font-family: monospace;
+			letter-spacing: 1px;
+			text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+		}
+
+		.npb-pulse-dot {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background-color: #10B981;
+			box-shadow: 0 0 12px #10B981;
+			animation: npbPulse 1.5s infinite ease-in-out;
+			margin-left: 6px;
+			flex-shrink: 0;
+		}
+
+		@keyframes npbPulse {
+			0%, 100% { opacity: 1; transform: scale(1); }
+			50% { opacity: 0.3; transform: scale(0.7); }
 		}
 
 		.sholat-list {
@@ -367,11 +508,36 @@
 			<h1 id="nama-masjid">{{ $settings['nama_aplikasi'] ?? ($settings->nama_aplikasi ?? 'Masjid Al-Jihad') }}</h1>
 			<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
 			<div class="datetime" id="datetime"></div>
+			<div class="jadwal-sholat-title-wrap">
+				<div class="jadwal-sholat-title"><i class="fas fa-mosque"></i> Jadwal Sholat</div>
+			</div>
 		</div>
 
-		<div class="bottom-section">
-			<div class="jadwal-sholat-title"><i class="fas fa-mosque"></i> Jadwal Sholat</div>
+		<!-- BADGE KAPSUL SHOLAT BERIKUTNYA (PAS DI TENGAH-TENGAH) -->
+		@if(!isset($settings) || $settings->isNextPrayerBarEnabled())
+		<div class="next-prayer-center-container">
+			<div class="next-prayer-bar" id="nextPrayerBar">
+				<div class="npb-shimmer"></div>
+				<div class="npb-icon">
+					<i class="fa-solid fa-mosque"></i>
+				</div>
+				<div class="npb-content">
+					<div class="npb-label-row">
+						<span class="npb-badge">SELANJUTNYA</span>
+						<span class="npb-prayer-name" id="npbPrayerName">MEMUAT...</span>
+					</div>
+					<div class="npb-time-row">
+						<span class="npb-schedule-time" id="npbScheduleTime">--:--</span>
+						<span class="npb-sep">•</span>
+						<span class="npb-countdown" id="npbCountdown">-00:00:00</span>
+					</div>
+				</div>
+				<div class="npb-pulse-dot"></div>
+			</div>
+		</div>
+		@endif
 
+		<div class="bottom-section">
 			<div class="sholat-list">
 				@php
 				$now = \Carbon\Carbon::now('Asia/Jakarta');
@@ -452,6 +618,85 @@
 
 		updateDateTime();
 		setInterval(updateDateTime, 1000);
+
+		/* =====================================================
+		   SMART NEXT PRAYER COUNTDOWN ENGINE
+		   ===================================================== */
+		@php
+		$prayerData = [];
+		$nonPrayerTimes = ['imsak', 'imsyak', 'terbit', 'syuruk', 'shuruk', 'sunrise', 'dhuha', 'duha'];
+		if (isset($jadwalSholat) && count($jadwalSholat) > 0) {
+			foreach ($jadwalSholat as $js) {
+				if (in_array(strtolower(trim($js->nama_sholat)), $nonPrayerTimes)) {
+					continue;
+				}
+				$prayerData[] = [
+					'name' => strtoupper($js->nama_sholat),
+					'time' => substr($js->waktu, 0, 5),
+				];
+			}
+		}
+		@endphp
+
+		const prayerList = {!! json_encode($prayerData) !!};
+
+		function updateNextPrayerBar() {
+			const barEl = document.getElementById('nextPrayerBar');
+			if (!barEl) return;
+
+			if (!prayerList || prayerList.length === 0) return;
+
+			const now = new Date();
+			const currentSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+			let nextPrayer = null;
+			let minDiff = Infinity;
+
+			prayerList.forEach(p => {
+				const parts = p.time.split(':');
+				if (parts.length >= 2) {
+					const prayerSeconds = parseInt(parts[0], 10) * 3600 + parseInt(parts[1], 10) * 60;
+					let diff = prayerSeconds - currentSeconds;
+					if (diff > 0 && diff < minDiff) {
+						minDiff = diff;
+						nextPrayer = p;
+					}
+				}
+			});
+
+			if (!nextPrayer && prayerList.length > 0) {
+				nextPrayer = prayerList[0];
+				const parts = nextPrayer.time.split(':');
+				const prayerSeconds = parseInt(parts[0], 10) * 3600 + parseInt(parts[1], 10) * 60;
+				minDiff = (86400 - currentSeconds) + prayerSeconds;
+			}
+
+			if (nextPrayer) {
+				const elName = document.getElementById('npbPrayerName');
+				const elTime = document.getElementById('npbScheduleTime');
+				const elCd = document.getElementById('npbCountdown');
+
+				let displayName = nextPrayer.name;
+				if (now.getDay() === 5 && displayName === 'DZUHUR') {
+					displayName = "SHOLAT JUM'AT";
+				}
+
+				if (elName) elName.textContent = displayName;
+				if (elTime) elTime.textContent = nextPrayer.time + ' WIB';
+
+				const h = Math.floor(minDiff / 3600);
+				const m = Math.floor((minDiff % 3600) / 60);
+				const s = minDiff % 60;
+
+				const pad = (n) => String(n).padStart(2, '0');
+				if (elCd) {
+					elCd.textContent = `-${pad(h)}:${pad(m)}:${pad(s)}`;
+				}
+			}
+		}
+
+		setInterval(updateNextPrayerBar, 1000);
+		updateNextPrayerBar();
 
 		document.addEventListener('DOMContentLoaded', function() {
 			let lastTimestamp = null;
