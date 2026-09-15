@@ -657,7 +657,30 @@ Pengurus/operator masjid memerlukan kejelasan dan kesederhanaan dalam mengelola 
 
 ---
 
-## 🔒 22. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🔒 22. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.3.0): PROTEKSI PENGUNCIAN FAVICON, LOGO APLIKASI, & BACKGROUND SIDEBAR UNTUK OPERATOR/PETUGAS
+
+### Latar Belakang & Permintaan Pengguna:
+Untuk menjaga konsistensi identitas visual dan branding resmi masjid, elemen grafis inti sistem seperti **Favicon**, **Logo Aplikasi**, dan **Background Sidebar** tidak boleh diubah sembarangan oleh akun `operator`/`petugas`. Bagian ini dikhususkan hanya untuk Administrator / Super Admin, sehingga operator dapat tetap fokus mengelola pesan hadits/teks berjalan dan operasional harian display TV.
+
+### Solusi & Implementasi Teknis:
+1. **Proteksi Tampilan Antarmuka (`resources/views/settings/edit.blade.php`):**
+   - Kolom input file `favicon`, `logo`, dan `background` dinonaktifkan (`disabled`) secara otomatis jika pengguna yang masuk bukan Administrator (`!$isAdmin`).
+   - Ditambahkan lencana status gembok yang rapi pada judul label: `<span class="badge badge-light text-muted border"><i class="fas fa-lock text-muted mr-1"></i> Terkunci</span>`.
+   - Teks label input file berubah informatif menjadi: *"Terkunci untuk Operator"*.
+   - Tombol *"Browse"* dan kotak input diberikan gaya visual tidak aktif (`cursor: not-allowed`, latar `#f8fafc`, teks `#94a3b8`, tombol `#e2e8f0`) sehingga jelas terlihat dan tidak dapat diklik.
+   - Area pratinjau gambar aktif (*Favicon Saat Ini*, *Logo Saat Ini*, *Background Saat Ini*) tetap ditampilkan agar operator tetap dapat melihat aset yang sedang digunakan tanpa bisa menggantinya.
+2. **Proteksi Backend Controller (`app/Http/Controllers/AppSettingController.php`):**
+   - Pemrosesan unggah berkas fisik (`$this->handleFileUpload`) untuk `favicon`, `background`, dan `logo` dibungkus dalam pengecekan ketat `if ($isSuperAdmin)`.
+   - Menggagalkan dan mengabaikan upaya modifikasi atau injeksi file favicon/logo/background oleh akun selain Administrator.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/settings/edit.blade.php` (Penambahan atribut disabled, lencana status gembok, teks terkunci, dan styling cursor not-allowed untuk operator)
+- `app/Http/Controllers/AppSettingController.php` (Penguncian backend upload file favicon, logo, dan background khusus Super Admin)
+- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.3.0)
+
+---
+
+## 🔒 23. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -665,6 +688,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 16 September 2026 (Pemusatan Pengaturan Teks Berjalan Tiap Halaman Display TV v4.2.9) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 16 September 2026 (Proteksi Penguncian Favicon, Logo Aplikasi, & Background Sidebar untuk Operator v4.3.0) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

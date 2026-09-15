@@ -274,9 +274,12 @@ class AppSettingController extends Controller
         // ==================================================
         // UPLOAD FILE
         // ==================================================
-        $this->handleFileUpload($request, 'favicon', $setting);
-        $this->handleFileUpload($request, 'background', $setting);
-        $this->handleFileUpload($request, 'logo', $setting);
+        // Favicon, Background Sidebar, dan Logo Aplikasi dikunci khusus untuk Super Admin
+        if ($isSuperAdmin) {
+            $this->handleFileUpload($request, 'favicon', $setting);
+            $this->handleFileUpload($request, 'background', $setting);
+            $this->handleFileUpload($request, 'logo', $setting);
+        }
         $this->handleFileUpload($request, 'prayer_bg_image', $setting);
         $this->handleFileUpload($request, 'tarhim_audio', $setting);
         $this->handleFileUpload($request, 'tarhim_audio_subuh', $setting);

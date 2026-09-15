@@ -234,15 +234,39 @@
 
 							<hr class="my-4">
 
-							{{-- MEDIA & GAMBAR (FAVICON, LOGO, BACKGROUND) TERTATA RAPI SEJAJAR --}}
+							{{-- MEDIA & GAMBAR (FAVICON, LOGO, BACKGROUND) TERTATA RAPI SEJAJAR (DIKUNCI UNTUK OPERATOR) --}}
+							@if(!$isAdmin)
+							<style>
+								.custom-file-input:disabled ~ .custom-file-label {
+									background-color: #f8fafc !important;
+									color: #94a3b8 !important;
+									cursor: not-allowed !important;
+									border-color: #cbd5e1 !important;
+								}
+								.custom-file-input:disabled ~ .custom-file-label::after {
+									background-color: #e2e8f0 !important;
+									color: #94a3b8 !important;
+									cursor: not-allowed !important;
+								}
+							</style>
+							@endif
 							<div class="row">
 								<div class="col-md-4">
 									<div class="form-group">
-										<label for="favicon" class="font-weight-bold">Favicon</label>
+										<label for="favicon" class="font-weight-bold d-flex justify-content-between align-items-center">
+											<span>Favicon</span>
+											@if(!$isAdmin)
+												<span class="badge badge-light text-muted border font-weight-normal" style="font-size: 0.78rem;">
+													<i class="fas fa-lock text-muted mr-1"></i> Terkunci
+												</span>
+											@endif
+										</label>
 										<div class="custom-file">
 											<input type="file" class="custom-file-input" id="favicon" name="favicon"
-												accept=".ico,.png,.jpg,.jpeg,.gif">
-											<label class="custom-file-label" for="favicon">Pilih file favicon</label>
+												accept=".ico,.png,.jpg,.jpeg,.gif" {{ !$isAdmin ? 'disabled' : '' }}>
+											<label class="custom-file-label" for="favicon">
+												{{ !$isAdmin ? 'Terkunci untuk Operator' : 'Pilih file favicon' }}
+											</label>
 										</div>
 										@if($setting->favicon)
 											<div class="mt-3">
@@ -257,11 +281,20 @@
 
 								<div class="col-md-4">
 									<div class="form-group">
-										<label for="logo" class="font-weight-bold">Logo Aplikasi</label>
+										<label for="logo" class="font-weight-bold d-flex justify-content-between align-items-center">
+											<span>Logo Aplikasi</span>
+											@if(!$isAdmin)
+												<span class="badge badge-light text-muted border font-weight-normal" style="font-size: 0.78rem;">
+													<i class="fas fa-lock text-muted mr-1"></i> Terkunci
+												</span>
+											@endif
+										</label>
 										<div class="custom-file">
 											<input type="file" class="custom-file-input" id="logo" name="logo"
-												accept=".png,.jpg,.jpeg,.gif,.svg">
-											<label class="custom-file-label" for="logo">Pilih file logo</label>
+												accept=".png,.jpg,.jpeg,.gif,.svg" {{ !$isAdmin ? 'disabled' : '' }}>
+											<label class="custom-file-label" for="logo">
+												{{ !$isAdmin ? 'Terkunci untuk Operator' : 'Pilih file logo' }}
+											</label>
 										</div>
 										@if($setting->logo)
 											<div class="mt-3">
@@ -276,11 +309,20 @@
 
 								<div class="col-md-4">
 									<div class="form-group">
-										<label for="background" class="font-weight-bold">Background Sidebar</label>
+										<label for="background" class="font-weight-bold d-flex justify-content-between align-items-center">
+											<span>Background Sidebar</span>
+											@if(!$isAdmin)
+												<span class="badge badge-light text-muted border font-weight-normal" style="font-size: 0.78rem;">
+													<i class="fas fa-lock text-muted mr-1"></i> Terkunci
+												</span>
+											@endif
+										</label>
 										<div class="custom-file">
 											<input type="file" class="custom-file-input" id="background" name="background"
-												accept=".jpg,.jpeg,.png,.gif">
-											<label class="custom-file-label" for="background">Pilih file background</label>
+												accept=".jpg,.jpeg,.png,.gif" {{ !$isAdmin ? 'disabled' : '' }}>
+											<label class="custom-file-label" for="background">
+												{{ !$isAdmin ? 'Terkunci untuk Operator' : 'Pilih file background' }}
+											</label>
 										</div>
 										@if($setting->background)
 											<div class="mt-3">
