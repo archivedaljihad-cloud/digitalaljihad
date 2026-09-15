@@ -457,7 +457,34 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 16. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🔒 16. PROTEKSI PENGUNCIAN 'NAMA APLIKASI' & 'FOOTER TEXT' UNTUK OPERATOR (v4.2.4)
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.4
+
+### Latar Belakang & Kebutuhan Pengguna:
+- Untuk menjaga integritas identitas resmi masjid, kolom **Nama Aplikasi** dan **Footer Text** tidak boleh sembarangan diubah oleh akun operator/petugas.
+- Kedua kolom ini harus dikunci (*locked/readonly*) bagi operator sehingga hanya Super Admin (`admin`) yang berhak memperbaruinya.
+
+### Perubahan yang Diterapkan:
+1. **Antarmuka Pengguna (*Frontend Blade Protection*):**
+   - Pada `resources/views/settings/edit.blade.php`, jika akun yang login bukan `admin`:
+     - Kolom `nama_aplikasi` dan `footer` secara otomatis diberi atribut `readonly`.
+     - Diberi tampilan visual terkunci: latar belakang abu-abu halus (`#f1f5f9`), kursor tanda larang (`cursor: not-allowed`), teks abu-abu gelap, serta badge gembok eksplisit: `<span class="badge badge-secondary"><i class="fas fa-lock mr-1"></i> Terkunci (Super Admin)</span>`.
+     - Keterangan bantuan di bawah kolom: *"Nama aplikasi / teks footer hanya dapat diubah oleh Super Admin."*
+2. **Keamanan Sisi Server (*Backend Controller Protection*):**
+   - Pada `app/Http/Controllers/AppSettingController.php` method `update()`:
+     - Ditambahkan pengecekan peran pengguna: `$isSuperAdmin = auth()->check() && auth()->user()->hasRole('admin');`.
+     - Kolom `nama_aplikasi` dan `footer` hanya diperbarui ke database jika user terverifikasi sebagai Super Admin.
+     - Jika operator melakukan submit form (misalnya saat menyimpan perubahan teks berjalan), sistem backend menolak menimpa nilai `nama_aplikasi` dan `footer` yang sudah ditetapkan sebelumnya.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/settings/edit.blade.php`
+- `app/Http/Controllers/AppSettingController.php`
+- `LATEST_UPDATE.md`
+
+---
+
+## 🔒 17. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -465,4 +492,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Hak Akses Teks Berjalan Operator & Perbaikan Kontras Panel Accordion v4.2.3) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Proteksi Penguncian Nama Aplikasi & Footer Text untuk Operator v4.2.4) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*

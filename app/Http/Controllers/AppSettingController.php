@@ -127,8 +127,11 @@ class AppSettingController extends Controller
         // ==================================================
         // PENGATURAN UMUM & RUNNING TEXT PER HALAMAN
         // ==================================================
-        $setting->nama_aplikasi = $validated['nama_aplikasi'];
-        $setting->footer = $validated['footer'] ?? null;
+        $isSuperAdmin = auth()->check() && auth()->user()->hasRole('admin');
+        if ($isSuperAdmin) {
+            $setting->nama_aplikasi = $validated['nama_aplikasi'];
+            $setting->footer = $validated['footer'] ?? null;
+        }
         
         $runningTextPages = $request->input('running_text_pages', []);
         if (is_array($runningTextPages)) {

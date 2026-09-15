@@ -111,17 +111,46 @@
 						<div class="tab-pane fade show active" id="general" role="tabpanel">
 							<div class="row">
 								<div class="col-md-6">
+									@php
+										$isAdmin = auth()->check() && auth()->user()->hasRole('admin');
+									@endphp
+
 									<div class="form-group">
-										<label for="nama_aplikasi">Nama Aplikasi <span class="text-danger">*</span></label>
+										<label for="nama_aplikasi" class="d-flex justify-content-between align-items-center">
+											<span>Nama Aplikasi <span class="text-danger">*</span></span>
+											@if(!$isAdmin)
+												<span class="badge badge-secondary" style="font-size: 0.75rem;"><i class="fas fa-lock mr-1"></i> Terkunci (Super Admin)</span>
+											@endif
+										</label>
 										<input type="text" class="form-control" id="nama_aplikasi" name="nama_aplikasi"
-											value="{{ old('nama_aplikasi', $setting->nama_aplikasi ?? '') }}" required>
+											value="{{ old('nama_aplikasi', $setting->nama_aplikasi ?? '') }}" 
+											{{ !$isAdmin ? 'readonly' : 'required' }}
+											style="{{ !$isAdmin ? 'background-color: #f1f5f9; cursor: not-allowed; border-color: #cbd5e1; color: #475569; font-weight: 500;' : '' }}">
+										@if(!$isAdmin)
+											<small class="text-muted d-block mt-1">
+												<i class="fas fa-info-circle text-info"></i> Nama aplikasi hanya dapat diubah oleh Super Admin.
+											</small>
+										@endif
 									</div>
 
 									<div class="form-group">
-										<label for="footer">Footer Text</label>
+										<label for="footer" class="d-flex justify-content-between align-items-center">
+											<span>Footer Text</span>
+											@if(!$isAdmin)
+												<span class="badge badge-secondary" style="font-size: 0.75rem;"><i class="fas fa-lock mr-1"></i> Terkunci (Super Admin)</span>
+											@endif
+										</label>
 										<textarea class="form-control" id="footer" name="footer"
-											rows="3">{{ old('footer', $setting->footer ?? '') }}</textarea>
-										<small class="text-muted">HTML diperbolehkan</small>
+											rows="3"
+											{{ !$isAdmin ? 'readonly' : '' }}
+											style="{{ !$isAdmin ? 'background-color: #f1f5f9; cursor: not-allowed; border-color: #cbd5e1; color: #475569;' : '' }}">{{ old('footer', $setting->footer ?? '') }}</textarea>
+										@if($isAdmin)
+											<small class="text-muted">HTML diperbolehkan</small>
+										@else
+											<small class="text-muted d-block mt-1">
+												<i class="fas fa-info-circle text-info"></i> Teks footer hanya dapat diubah oleh Super Admin.
+											</small>
+										@endif
 									</div>
 
 									@php
