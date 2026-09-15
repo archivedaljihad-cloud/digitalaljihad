@@ -702,7 +702,28 @@ Alih-alih sekadar menampilkan kolom nonaktif dengan ikon gembok yang berpotensi 
 
 ---
 
-## 🔒 24. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🛠️ 24. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.3.2): PERBAIKAN STRUKTUR HTML FOOTER KEMBALI KE POSISI BAWAH LAYAR
+
+### Akar Masalah (*Root Cause*):
+Pada halaman pengaturan saat diakses oleh akun Operator, elemen `<footer class="sticky-footer">` tiba-tiba terdorong ke samping kanan layar menyerupai kolom vertikal. Setelah dianalisis secara mendalam, ditemukan adanya ketidakseimbangan penutup tag `</div>` pada view `settings/edit.blade.php`:
+- Ketika elemen `Nama Aplikasi` dan `Footer Text` dibungkus kondisi `@if($isAdmin)`, tag pembuka `<div class="row">` sebelumnya tidak dieksekusi untuk akun non-admin. Namun tag penutup `</div>` di bawahnya tetap dieksekusi, sehingga terjadi kelebihan satu tag penutup (`</div>`).
+- Kelebihan tag penutup ini menutup kontainer `#content-wrapper` secara prematur sebelum waktunya, sehingga elemen `<footer>` terlempar keluar dari alur vertikal dan menjadi anak sejajar (*flex sibling*) dari kontainer utama `#wrapper`, menyebabkannya tampil di sisi kanan layar.
+
+### Solusi & Implementasi Teknis:
+1. **Penyeimbangan Struktur Tag HTML (`resources/views/settings/edit.blade.php`):**
+   - Menambahkan tag pembuka `<div class="row">` mandiri sebelum blok kontainer panel accordion `Pengaturan Teks Berjalan Tiap Halaman Display TV` (`col-12 mt-2`).
+   - Memastikan rasio tag pembuka dan penutup `<div>` seimbang 100% (*Diff: 0*) baik saat dibuka oleh akun Administrator maupun Operator.
+2. **Hasil Visual:**
+   - Elemen footer aplikasi masjid (`© 2026 Powered by DKM AL JIHAD` dan ikon ornamen Islami) kini **kembali duduk dengan sempurna di bagian paling bawah halaman (*bottom footer*)**, membentang horizontal secara elegan seperti sedia kala.
+   - Kolom anomali di sebelah kanan layar otomatis hilang seutuhnya.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/settings/edit.blade.php` (Penyeimbangan kontainer row dan tag div untuk alur layout SB Admin 2)
+- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis perbaikan layout v4.3.2)
+
+---
+
+## 🔒 25. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -710,6 +731,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 16 September 2026 (Penyembunyian Kolom Identitas & Media untuk Operator v4.3.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 16 September 2026 (Perbaikan Struktur Layout Footer ke Bawah Layar v4.3.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

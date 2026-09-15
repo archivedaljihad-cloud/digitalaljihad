@@ -144,15 +144,18 @@
 								<input type="hidden" name="footer" value="{{ $setting->footer ?? '' }}">
 							@endif
 
-								{{-- TEKS BERJALAN UTAMA / DEFAULT (MEMANJANG PENUH DARI AWAL KOTAK NAMA APLIKASI SAMPAI UJUNG FOOTER) --}}
-								@php
-									$runningTextPages = method_exists($setting, 'getRunningTextPages') ? $setting->getRunningTextPages() : ($setting->running_text_pages ?? []);
-									if (is_string($runningTextPages)) {
-										$runningTextPages = json_decode($runningTextPages, true) ?? [];
-									}
-									$pageCatalog = \App\Models\AppSetting::getDisplayPageCatalog();
-								@endphp
+							{{-- ======================================================== --}}
+							{{-- PANEL PENGATURAN TEKS BERJALAN TIAP HALAMAN DISPLAY TV --}}
+							{{-- ======================================================== --}}
+							@php
+								$runningTextPages = method_exists($setting, 'getRunningTextPages') ? $setting->getRunningTextPages() : ($setting->running_text_pages ?? []);
+								if (is_string($runningTextPages)) {
+									$runningTextPages = json_decode($runningTextPages, true) ?? [];
+								}
+								$pageCatalog = \App\Models\AppSetting::getDisplayPageCatalog();
+							@endphp
 
+							<div class="row">
 								<div class="col-12 mt-2">
 									{{-- ======================================================== --}}
 									{{-- PANEL PENGATURAN TEKS BERJALAN TIAP HALAMAN DISPLAY TV --}}
