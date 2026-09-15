@@ -512,7 +512,41 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 18. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🤖 18. DOKUMENTASI FITUR AI GEMINI DI HALAMAN ABOUT, PENYEMPURNAAN PRAYER MODE & REPOSISI BADGE SHOLAT (v4.2.6)
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.6
+
+### Latar Belakang & Kebutuhan Pengguna:
+1. **Pengecualian Syuruk & Imsak dari Prayer Mode:** Pengguna menanyakan mengapa saat Syuruk juga masuk ke prayer mode, padahal Syuruk dan Imsak bukanlah waktu sholat fardhu sehingga tidak boleh masuk ke mode layar gelap/mati sholat berjamaah.
+2. **Reposisi Badge Kapsul Sholat:** Pengguna mendapati badge kapsul di pojok kanan atas di setiap halaman terasa mengganggu gambar latar belakang (*background*). Pengguna meminta agar badge kapsul hanya muncul di halaman jadwal sholat, posisinya tepat di tengah di atas kotak-kotak jadwal sholat dengan jarak sedikit/tipis.
+3. **Dokumentasi Fitur Google Gemini AI di Halaman Tentang Aplikasi (`/about`):** Memastikan penambahan fitur AI (AI One-Click Copywriter Pengumuman & Slide TV Mutiara Hadits Hikmah `/hikmah-embed`) sudah diinformasikan dan terdokumentasi rapi di halaman Tentang Aplikasi (`/about`) agar seluruh pengurus dan pengguna memahami fitur canggih ini.
+
+### Perubahan yang Diterapkan:
+1. **Penyempurnaan Logika Prayer Mode (`public/js/prayer-engine.js` & `resources/views/partials/prayer-overlay.blade.php`):**
+   - Menambahkan pengecualian (*exclusion*) untuk sholat bernilai `'syuruk'`, `'sunrise'`, dan `'imsak'` pada pengecekan deteksi jadwal sholat.
+   - Waktu Syuruk dan Imsak tetap berstatus sebagai penanda informasi pergantian waktu dan countdown, namun tidak akan pernah memicu fase Tarhim, Adzan, Iqamah, maupun Layar Gelap Sholat Khusyuk.
+2. **Reposisi & Kondisional Badge Kapsul Countdown Sholat:**
+   - Membatasi kemunculan badge kapsul sholat berikutnya agar hanya tampil pada slide/halaman utama jadwal sholat (`/utama-embed`).
+   - Memindahkan posisi badge kapsul countdown turun pas di atas baris kotak-kotak sholat dengan jarak tipis (*subtle gap*) di tengah-tengah secara presisi, sehingga gambar latar belakang (*wallpaper background*) masjid tidak lagi tertutupi dan tampil bersih nan megah.
+3. **Pembaruan Menyeluruh Halaman Tentang Aplikasi (`resources/views/about.blade.php`):**
+   - **Badge Versi:** Diperbarui menjadi `v4.2.6` dengan tag baru `<span class="badge"><i class="fas fa-robot"></i> Google Gemini AI Inside</span>`.
+   - **Fitur Tampilan TV (TV Fitur 9):** Menambahkan kartu fitur baru *Hadits Hikmah Harian (AI)* (`/hikmah-embed`).
+   - **Showcase Banner Khusus AI:** Banner visual megah bertema emerald-indigo dengan penjelasan *AI One-Click Copywriter Pengumuman* (form tambah/edit pengumuman & running text marquee 150 karakter) dan *Kanal TV Hadits Hikmah Harian* (matan Arab font Amiri, terjemahan, hikmah, 24h caching hemat kuota, & 7 fallback hadits offline).
+   - **Hak Akses Pengguna (RBAC):** Menambahkan rincian izin konfigurasi API Key Google Gemini untuk Administrator dan pembuatan pengumuman cerdas berbasis AI untuk Petugas/Operator.
+   - **Arsitektur Teknologi:** Menambahkan kartu *Google Gemini AI REST API* (arsitektur cURL native yang ringan tanpa dependensi library eksternal).
+   - **Panduan Pengoperasian (Accordion 4):** Menambahkan panduan praktis 3 langkah: konfigurasi API Key & tes koneksi, cara menggunakan tombol "Tulis dengan AI" pada pengumuman, serta penayangan slide Hadits Hikmah di rotasi TV.
+   - **Riwayat Pembaruan Sistem (Changelog):** Menambahkan catatan rilis resmi Versi 4.2.6 (15 September 2026).
+
+### Berkas yang Dimodifikasi:
+- `public/js/prayer-engine.js` (Pengecualian Syuruk & Imsak dari prayer mode)
+- `resources/views/partials/prayer-overlay.blade.php` (Proteksi pengecualian Syuruk & Imsak)
+- `resources/views/utama-embed.blade.php` (Reposisi badge kapsul countdown pas di atas kotak jadwal sholat)
+- `resources/views/about.blade.php` (Penambahan dokumentasi lengkap Google Gemini AI, banner showcase, panduan pengoperasian, dan changelog v4.2.6)
+- `LATEST_UPDATE.md` (Pencatatan riwayat pembaruan v4.2.6)
+
+---
+
+## 🔒 19. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -520,4 +554,5 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Penataan Ulang Form Pengaturan Umum & Running Text Memanjang v4.2.5) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Dokumentasi Lengkap Google Gemini AI di /about, Penyempurnaan Prayer Mode & Reposisi Badge Sholat v4.2.6) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+

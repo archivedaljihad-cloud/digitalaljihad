@@ -17,7 +17,7 @@
                              class="img-fluid"
                              style="max-width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #c9a03d; padding: 4px; background: #ffffff; box-shadow: 0 8px 25px rgba(0,0,0,0.3);">
                         <span class="badge position-absolute" style="bottom: 0; right: -10px; background: #c9a03d; color: #071a10; font-weight: 700; font-size: 11px; padding: 4px 8px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-                            v4.0
+                            v4.2.6
                         </span>
                     </div>
                 </div>
@@ -32,7 +32,10 @@
                 <!-- Quick Status Badges -->
                 <div class="d-flex flex-wrap justify-content-center align-items-center mt-3" style="gap: 8px;">
                     <span class="badge px-3 py-2" style="background: rgba(201, 160, 61, 0.2); color: #ffd700; border: 1px solid rgba(201, 160, 61, 0.4); border-radius: 20px; font-weight: 500;">
-                        <i class="fas fa-code-branch mr-1"></i> Versi 4.0 (Update Sep 2026)
+                        <i class="fas fa-code-branch mr-1"></i> Versi 4.2.6 (Update Sep 2026)
+                    </span>
+                    <span class="badge px-3 py-2" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 20px; font-weight: 500;">
+                        <i class="fas fa-robot mr-1" style="color: #c084fc;"></i> Google Gemini AI Inside
                     </span>
                     <span class="badge px-3 py-2" style="background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; font-weight: 500;">
                         <i class="fab fa-laravel mr-1" style="color: #ff2d20;"></i> Laravel 13 & PHP 8.3
@@ -246,6 +249,81 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- TV Fitur 9 (Baru: AI Mutiara Hadits & Hikmah) -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm feature-box" style="border-radius: 16px; border: 1px solid rgba(217,119,6,0.2); background: #ffffff;">
+                                <div class="card-body p-4 text-center">
+                                    <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #d97706, #92400e); color: #ffd700; width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto; box-shadow: 0 4px 12px rgba(217,119,6,0.25);">
+                                        <i class="fas fa-star-and-crescent"></i>
+                                    </div>
+                                    <h6 class="font-weight-bold" style="color: #0e3521; font-size: 15px;">Hadits Hikmah Harian (AI)</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.6;">
+                                        Slide mutiara hadits shahih tematik berganti otomatis setiap 24 jam dengan kaligrafi Arab, terjemahan, dan pesan hikmah mendalam.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Showcase Banner (Google Gemini Integration) -->
+                    <div class="card mt-2 mb-4 border-0 shadow-sm" style="border-radius: 16px; background: linear-gradient(135deg, #071a10 0%, #0e3521 40%, #1e1b4b 100%); color: #ffffff; border: 1px solid rgba(168,85,247,0.3) !important; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -30px; right: -30px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(168,85,247,0.25) 0%, rgba(0,0,0,0) 70%); border-radius: 50%;"></div>
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3 flex-wrap">
+                                <div class="mr-3 mb-2 mb-md-0">
+                                    <div style="width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #a855f7, #6366f1); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 15px rgba(168,85,247,0.4);">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                                        <h5 class="font-weight-bold m-0" style="color: #ffd700; font-family: 'Amiri', serif; font-size: 20px;">
+                                            Kecerdasan Buatan Terintegrasi (Google Gemini AI)
+                                        </h5>
+                                        <span class="badge px-2 py-1" style="background: rgba(168,85,247,0.35); color: #e9d5ff; border: 1px solid rgba(168,85,247,0.5); border-radius: 8px; font-size: 11px;">
+                                            <i class="fas fa-sparkles mr-1"></i> Fitur Generasi Cerdas v4.2+
+                                        </span>
+                                    </div>
+                                    <p class="small mb-0 text-light opacity-90">
+                                        Asisten pintar berbasis AI pertama untuk digital signage masjid, membantu DKM dalam produksi konten dakwah & pengumuman
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                                        <h6 class="font-weight-bold mb-2" style="color: #a7f3d0; font-size: 14px;">
+                                            <i class="fas fa-feather-alt mr-2" style="color: #ffd700;"></i>1. AI One-Click Copywriter Pengumuman
+                                        </h6>
+                                        <p class="small text-light mb-0" style="line-height: 1.7; opacity: 0.88;">
+                                            Pada form pembuatan pengumuman, pengurus cukup menulis tema ringkas (contoh: <em>"Kajian Ahad Subuh Pembahasan Riyadhus Shalihin"</em>). Sekali klik tombol <strong>"Tulis dengan AI"</strong>, Google Gemini langsung menyusun:
+                                        </p>
+                                        <ul class="small text-light mb-0 pl-3 mt-1" style="line-height: 1.6; opacity: 0.85;">
+                                            <li>Judul pengumuman yang santun dan memikat jamaah.</li>
+                                            <li>Teks detail terstruktur (Waktu, Tempat, Pemateri, Ajakan).</li>
+                                            <li><strong>Running Text Marquee</strong> ringkas & efektif (maksimal 150 karakter) siap siar di TV.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                                        <h6 class="font-weight-bold mb-2" style="color: #fed7aa; font-size: 14px;">
+                                            <i class="fas fa-book-reader mr-2" style="color: #ffd700;"></i>2. Kanal TV Hadits & Hikmah Harian (<a href="{{ url('/hikmah-embed') }}" target="_blank" class="text-warning text-decoration-none font-weight-bold">/hikmah-embed</a>)
+                                        </h6>
+                                        <p class="small text-light mb-0" style="line-height: 1.7; opacity: 0.88;">
+                                            Kanal layar TV khusus yang menayangkan mutiara hadits shahih secara bergiliran dalam rotasi TV:
+                                        </p>
+                                        <ul class="small text-light mb-0 pl-3 mt-1" style="line-height: 1.6; opacity: 0.85;">
+                                            <li>Matan hadits berhuruf Arab harakat lengkap dengan font kaligrafi <em>Amiri</em>.</li>
+                                            <li>Terjemahan bahasa Indonesia, pelajaran hikmah praktis, dan sanad perawi shahih.</li>
+                                            <li><strong>Smart 24h Caching & Resiliensi Offline:</strong> Konten diperbarui 1 kali sehari sehingga kuota API sangat hemat, serta dilengkapi 7 hadits cadangan shahih otomatis jika koneksi internet terputus.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Smart Breaker & IR Remote Control Banner -->
@@ -411,6 +489,7 @@
                                         <li>Kelola akun pengguna & pembagian peran (RBAC)</li>
                                         <li>Pengaturan urutan putaran slide TV (Naik/Turun)</li>
                                         <li>Konfigurasi identitas masjid, logo, & audio tarhim</li>
+                                        <li>Konfigurasi API Key Google Gemini & pengujian koneksi AI</li>
                                         <li>Integrasi link Live Makkah, Madinah, & CCTV Mimbar</li>
                                         <li>Tombol 1-klik sinkronisasi database server (`/settings/migrate`)</li>
                                     </ul>
@@ -434,6 +513,7 @@
                                     <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
                                         <li>Penyesuaian jadwal sholat & waktu jeda iqamah</li>
                                         <li>Petugas Sholat Jum'at, Idul Fitri, & Idul Adha</li>
+                                        <li>Pembuatan pengumuman cerdas & running text dibantu AI</li>
                                         <li>Pengumuman teks berjalan & jadwal agenda taklim</li>
                                         <li>Upload poster & brosur kegiatan dakwah masjid</li>
                                         <li>Aktif/nonaktifkan slide TV (urutan terproteksi)</li>
@@ -478,28 +558,35 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="col-md-6 col-lg-4 mb-3">
                             <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
                                 <div class="mb-2" style="font-size: 32px; color: #ff2d20;"><i class="fab fa-laravel"></i></div>
                                 <h6 class="font-weight-bold mb-1" style="color: #0e3521;">Laravel 13 & PHP 8.3</h6>
                                 <p class="small text-muted mb-0">Backend handal, aman, & responsif dengan arsitektur MVC modern</p>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="col-md-6 col-lg-4 mb-3">
                             <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
                                 <div class="mb-2" style="font-size: 32px; color: #1e5a3a;"><i class="fas fa-gem"></i></div>
                                 <h6 class="font-weight-bold mb-1" style="color: #0e3521;">Islamic Material Design 3</h6>
                                 <p class="small text-muted mb-0">Antarmuka mewah terinspirasi Google Material You & estetika Islami</p>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
+                                <div class="mb-2" style="font-size: 32px; color: #9333ea;"><i class="fas fa-robot"></i></div>
+                                <h6 class="font-weight-bold mb-1" style="color: #0e3521;">Google Gemini AI REST API</h6>
+                                <p class="small text-muted mb-0">Otomasi hadits hikmah harian & asisten copywriter pengumuman via native cURL</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6 mb-3">
                             <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
                                 <div class="mb-2" style="font-size: 32px; color: #0284c7;"><i class="fas fa-bolt"></i></div>
                                 <h6 class="font-weight-bold mb-1" style="color: #0e3521;">GPU Accelerated Engine</h6>
                                 <p class="small text-muted mb-0">Animasi 60 FPS diproses oleh GPU, sangat ramah pada Android TV Box</p>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="col-md-6 col-lg-6 mb-3">
                             <div class="card shadow-sm h-100 text-center p-3" style="border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);">
                                 <div class="mb-2" style="font-size: 32px; color: #4479a1;"><i class="fas fa-database"></i></div>
                                 <h6 class="font-weight-bold mb-1" style="color: #0e3521;">MySQL / MariaDB</h6>
@@ -598,6 +685,42 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Panduan 4: Pemanfaatan Google Gemini AI -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(168,85,247,0.2); overflow: hidden;">
+                            <div class="card-header py-3" id="headingFour" style="background: rgba(168,85,247,0.04);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseFour" style="color: #581c87; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-robot mr-2" style="color: #9333ea;"></i>4. Panduan Pemanfaatan Asisten Google Gemini AI (Pengumuman & Hadits Hikmah)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseFour" class="collapse" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2"><strong>A. Konfigurasi API Key Google Gemini (Sekali di Awal):</strong></p>
+                                    <ol class="pl-3 mb-3">
+                                        <li>Dapatkan Gemini API Key gratis melalui Google AI Studio (<a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-primary font-weight-bold">aistudio.google.com</a>).</li>
+                                        <li>Buka menu <strong>Pengaturan Aplikasi</strong> &rarr; pilih tab <strong>"Integrasi Gemini AI"</strong>.</li>
+                                        <li>Tempelkan API Key, lalu klik tombol <strong>"Uji Koneksi AI"</strong> untuk memastikan token valid dan kuota aktif.</li>
+                                        <li>Klik <strong>"Simpan Pengaturan"</strong>. Fitur AI kini siap digunakan secara luas oleh sistem.</li>
+                                    </ol>
+
+                                    <p class="mb-2"><strong>B. Menggunakan AI Copywriter Pembuat Pengumuman & Running Text:</strong></p>
+                                    <ol class="pl-3 mb-3">
+                                        <li>Masuk ke menu <strong>Pengumuman</strong> &rarr; klik <strong>"Tambah Pengumuman"</strong>.</li>
+                                        <li>Klik tombol ungu <strong><i class="fas fa-robot mr-1"></i> "Tulis dengan AI"</strong> di sudut kanan atas formulir.</li>
+                                        <li>Ketikkan topik singkat dan pilih gaya bahasa (Formal Islami, Santun Mengajak, atau Ringkas Marquee).</li>
+                                        <li>Klik <strong>"Generate dengan Gemini"</strong>. Dalam 2-3 detik AI akan otomatis mengisi Judul, Isi Pengumuman, dan Teks Berjalan Running Text (maksimal 150 karakter) secara terstruktur.</li>
+                                    </ol>
+
+                                    <p class="mb-2"><strong>C. Menayangkan Slide Mutiara Hadits Hikmah di Layar TV:</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Kanal <code>/hikmah-embed</code> sudah terdaftar otomatis di daftar rotasi TV. Anda cukup memastikan slide <strong>"Mutiara Hadits & Hikmah (AI)"</strong> dicentang aktif di menu <strong>Rotasi Halaman</strong>. Konten hadits shahih tematik berganti otomatis setiap 24 jam dengan kaligrafi Arab, harakat lengkap, terjemahan, serta pelajaran hikmah.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -614,11 +737,28 @@
                         <div class="card-body p-4">
                             <ul class="small mb-0" style="line-height: 1.8; list-style: none; padding-left: 0;">
                                 
+                                <!-- Versi 4.2.6 -->
+                                <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #9333ea;">
+                                    <div class="d-flex align-items-center mb-2 flex-wrap">
+                                        <span class="badge px-3 py-1 mr-2" style="background: #9333ea; color: #ffffff; font-weight: 700; font-size: 12px; border-radius: 8px;">
+                                            Versi 4.2.6 (Terbaru)
+                                        </span>
+                                        <span class="text-muted font-weight-bold">15 September 2026</span>
+                                    </div>
+                                    <p class="font-weight-bold mb-1" style="color: #0e3521;">Integrasi Google Gemini AI & Penyempurnaan Prayer Mode</p>
+                                    <ul class="pl-3 mb-0 text-muted">
+                                        <li><strong>Integrasi Google Gemini AI:</strong> Penambahan asisten copywriter pengumuman 1-klik (judul, isi & marquee running text) serta kanal TV Slide Mutiara Hadits Hikmah harian (<code>/hikmah-embed</code>) dengan 24h caching dan 7 fallback hadits offline.</li>
+                                        <li><strong>Penyempurnaan Prayer Mode:</strong> Waktu Syuruk (terbit matahari) dan Imsak dipastikan tidak memicu layar gelap sholat sunyi karena bukan sholat fardhu.</li>
+                                        <li><strong>Reposisi Countdown Kapsul Sholat:</strong> Badge hitung mundur sholat diposisikan presisi di atas kartu-kartu jadwal sholat pada slide jadwal utama, sehingga gambar wallpaper latar TV tetap terlihat bersih dan megah.</li>
+                                        <li><strong>Pembaruan Dokumentasi:</strong> Sinkronisasi modul Tentang Aplikasi dengan panduan lengkap pemanfaatan Google Gemini AI.</li>
+                                    </ul>
+                                </li>
+
                                 <!-- Versi 4.0.0 -->
                                 <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #1e5a3a;">
                                     <div class="d-flex align-items-center mb-2 flex-wrap">
                                         <span class="badge px-3 py-1 mr-2" style="background: #1e5a3a; color: #ffd700; font-weight: 700; font-size: 12px; border-radius: 8px;">
-                                            Versi 4.0.0 (Terbaru)
+                                            Versi 4.0.0
                                         </span>
                                         <span class="text-muted font-weight-bold">14 September 2026</span>
                                     </div>
