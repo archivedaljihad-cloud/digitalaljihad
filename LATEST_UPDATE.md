@@ -600,7 +600,36 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 20. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 📺 20. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.2.8): PENINGKATAN VISUAL KALIGRAFI EMAS & DOT PULSE KAPSUL DI LAYAR TV
+
+### Ringkasan Permintaan Pengguna:
+1. Memperbesar kaligrafi Allah dan Muhammad di pojok atas kanan dan kiri serta menambahkan efek pendaran agar tampak jelas dan megah saat dilihat di layar TV.
+2. Memperbesar dot denyut di dalam kotak kapsul jadwal sholat berikutnya, serta mengganti warnanya dari hijau menjadi kuning/putih bersinar agar lebih kontras dan mudah terlihat di layar TV.
+
+### Solusi & Implementasi Teknis:
+1. **Peningkatan Dimensi & Posisi Medali Kaligrafi Allah & Muhammad (`.kaligrafi-medallion`):**
+   - Dimensi medali diperbesar secara proporsional dari **92px** menjadi **125px** (naik ~35%), sehingga sangat terbaca jelas dari jarak pandang jauh di ruang utama masjid.
+   - Posisi disetel presisi pada `top: 14px`, `left: 28px` (Muhammad), dan `right: 28px` (Allah) agar seimbang dan tidak bertabrakan dengan header utama.
+2. **Efek Pendaran Sakral & Ambient Backlight Emas:**
+   - Menambahkan pseudo-element `.kaligrafi-medallion::before` dengan gradien radial emas halus (`background: radial-gradient(...)`) dan blur 8px yang membentuk aura backlight bercahaya lembut di belakang medali kaligrafi.
+   - Mengintegrasikan animasi denyut aura ambient `medallionAuraPulse` berdurasi 4 detik secara bolak-balik (*infinite alternate*).
+   - Memperkuat filter multi-layer drop-shadow emas pada gambar kaligrafi (`drop-shadow(0 0 12px rgba(255, 220, 50, 0.95)) drop-shadow(0 0 28px rgba(255, 175, 0, 0.8)) drop-shadow(0 0 50px rgba(255, 140, 0, 0.5)) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.85))`) serta animasi pernafasan kilau emas `goldenMedallionGlow`.
+   - Diimplementasikan di `resources/views/partials/display-theme.blade.php` dan disinkronkan ke `public/css/display-theme.css`.
+3. **Pembaruan Dot Denyut Kapsul Sholat Berikutnya (`.npb-pulse-dot`):**
+   - Ukuran dot denyut diperbesar dari **10px** menjadi **14px** agar tidak tampak kecil di layar TV beresolusi tinggi (1080p/4K).
+   - Warna dot diubah dari hijau gelap menjadi kombinasi **putih dan kuning bersinar**: `radial-gradient(circle, #FFFFFF 25%, #FFF475 60%, #FFD700 100%)`.
+   - Pendaran neon diperkuat dengan 3 lapisan pendaran cahaya: `box-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.75)`.
+   - Animasi `@keyframes npbPulse` diperbarui sehingga saat berdenyut, titik putih-kuning memancarkan kilau neon yang sangat kontras di atas latar belakang gelap kapsul.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/partials/display-theme.blade.php` (Perbesaran dimensi kaligrafi 125px, penambahan aura backlight emas `::before`, animasi pendaran aura)
+- `public/css/display-theme.css` (Sinkronisasi aturan `.kaligrafi-medallion` dan efek pendaran)
+- `resources/views/utama.blade.php` (Perbesaran `.npb-pulse-dot` ke 14px, gradien putih-kuning bersinar, animasi pendaran neon)
+- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.8)
+
+---
+
+## 🔒 21. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -608,6 +637,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Perbaikan Kontras Tinggi Nominal Uang & Font Awesome Lokal/SVG Layar TV v4.2.7) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 16 September 2026 (Peningkatan Visual Kaligrafi Emas 3D & Dot Denyut Kapsul TV v4.2.8) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

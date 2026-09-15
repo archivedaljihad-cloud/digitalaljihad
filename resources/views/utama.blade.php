@@ -323,19 +323,27 @@
 		}
 
 		.npb-pulse-dot {
-			width: 10px;
-			height: 10px;
+			width: 14px;
+			height: 14px;
 			border-radius: 50%;
-			background-color: #10B981;
-			box-shadow: 0 0 12px #10B981;
+			background: radial-gradient(circle, #FFFFFF 25%, #FFF475 60%, #FFD700 100%);
+			box-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.75);
 			animation: npbPulse 1.5s infinite ease-in-out;
-			margin-left: 6px;
+			margin-left: 8px;
 			flex-shrink: 0;
 		}
 
 		@keyframes npbPulse {
-			0%, 100% { opacity: 1; transform: scale(1); }
-			50% { opacity: 0.3; transform: scale(0.7); }
+			0%, 100% {
+				opacity: 1;
+				transform: scale(1);
+				box-shadow: 0 0 10px #FFD700, 0 0 22px rgba(255, 215, 0, 0.95), 0 0 32px rgba(255, 255, 255, 0.85);
+			}
+			50% {
+				opacity: 0.45;
+				transform: scale(0.75);
+				box-shadow: 0 0 5px #FFD700, 0 0 10px rgba(255, 215, 0, 0.5);
+			}
 		}
 
 		.sholat-list {

@@ -198,3 +198,95 @@ h2.sub-header {
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
 }
+
+/* =====================================================
+   MEDALI KALIGRAFI 3D EMAS MENYALA (ALLAH & MUHAMMAD)
+   ===================================================== */
+.kaligrafi-medallion {
+    position: absolute !important;
+    top: 14px !important;
+    width: 125px !important;
+    height: 125px !important;
+    z-index: 10 !important;
+    user-select: none !important;
+    pointer-events: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.kaligrafi-medallion::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 110% !important;
+    height: 110% !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.45) 0%, rgba(255, 170, 0, 0.22) 48%, rgba(255, 140, 0, 0) 72%) !important;
+    filter: blur(8px) !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+    animation: medallionAuraPulse 4s ease-in-out infinite alternate !important;
+}
+
+.kaligrafi-medallion img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 0 12px rgba(255, 220, 50, 0.95)) 
+           drop-shadow(0 0 28px rgba(255, 175, 0, 0.8))
+           drop-shadow(0 0 50px rgba(255, 140, 0, 0.5))
+           drop-shadow(0 10px 20px rgba(0, 0, 0, 0.85)) !important;
+    animation: goldenMedallionGlow 3.5s ease-in-out infinite alternate !important;
+}
+
+.kaligrafi-medallion.kaligrafi-allah {
+    right: 28px !important;
+    left: auto !important;
+}
+
+.kaligrafi-medallion.kaligrafi-muhammad {
+    left: 28px !important;
+    right: auto !important;
+}
+
+@keyframes goldenMedallionGlow {
+    0% {
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.85)) 
+               drop-shadow(0 0 22px rgba(255, 160, 0, 0.6))
+               drop-shadow(0 0 40px rgba(255, 130, 0, 0.4))
+               drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 18px rgba(255, 240, 90, 1)) 
+               drop-shadow(0 0 38px rgba(255, 190, 0, 0.9))
+               drop-shadow(0 0 65px rgba(255, 150, 0, 0.6))
+               drop-shadow(0 10px 22px rgba(0, 0, 0, 0.9));
+        transform: scale(1.035);
+    }
+    100% {
+        filter: drop-shadow(0 0 12px rgba(255, 220, 50, 0.9)) 
+               drop-shadow(0 0 26px rgba(255, 170, 0, 0.7))
+               drop-shadow(0 0 45px rgba(255, 140, 0, 0.45))
+               drop-shadow(0 8px 18px rgba(0, 0, 0, 0.8));
+        transform: scale(1.01);
+    }
+}
+
+@keyframes medallionAuraPulse {
+    0% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.92);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.15);
+    }
+    100% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.92);
+    }
+}
