@@ -204,14 +204,14 @@
 		}
 
 		/* =====================================================
-		   SMART NEXT PRAYER BADGE (PAS DI TENGAH-TENGAH)
+		   SMART NEXT PRAYER BADGE (PAS DI ATAS KOTAK SHOLAT)
 		   ===================================================== */
 		.next-prayer-center-container {
 			width: 100%;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			margin: auto 0;
+			margin: 0 auto 10px auto;
 			z-index: 10;
 		}
 
@@ -513,31 +513,31 @@
 			</div>
 		</div>
 
-		<!-- BADGE KAPSUL SHOLAT BERIKUTNYA (PAS DI TENGAH-TENGAH) -->
-		@if(!isset($settings) || $settings->isNextPrayerBarEnabled())
-		<div class="next-prayer-center-container">
-			<div class="next-prayer-bar" id="nextPrayerBar">
-				<div class="npb-shimmer"></div>
-				<div class="npb-icon">
-					<i class="fa-solid fa-mosque"></i>
-				</div>
-				<div class="npb-content">
-					<div class="npb-label-row">
-						<span class="npb-badge">SELANJUTNYA</span>
-						<span class="npb-prayer-name" id="npbPrayerName">MEMUAT...</span>
-					</div>
-					<div class="npb-time-row">
-						<span class="npb-schedule-time" id="npbScheduleTime">--:--</span>
-						<span class="npb-sep">•</span>
-						<span class="npb-countdown" id="npbCountdown">-00:00:00</span>
-					</div>
-				</div>
-				<div class="npb-pulse-dot"></div>
-			</div>
-		</div>
-		@endif
-
 		<div class="bottom-section">
+			<!-- BADGE KAPSUL SHOLAT BERIKUTNYA (PAS DI ATAS KOTAK JADWAL SHOLAT DENGAN JARAK TIPIS) -->
+			@if(!isset($settings) || $settings->isNextPrayerBarEnabled())
+			<div class="next-prayer-center-container">
+				<div class="next-prayer-bar" id="nextPrayerBar">
+					<div class="npb-shimmer"></div>
+					<div class="npb-icon">
+						<i class="fa-solid fa-mosque"></i>
+					</div>
+					<div class="npb-content">
+						<div class="npb-label-row">
+							<span class="npb-badge">SELANJUTNYA</span>
+							<span class="npb-prayer-name" id="npbPrayerName">MEMUAT...</span>
+						</div>
+						<div class="npb-time-row">
+							<span class="npb-schedule-time" id="npbScheduleTime">--:--</span>
+							<span class="npb-sep">•</span>
+							<span class="npb-countdown" id="npbCountdown">-00:00:00</span>
+						</div>
+					</div>
+					<div class="npb-pulse-dot"></div>
+				</div>
+			</div>
+			@endif
+
 			<div class="sholat-list">
 				@php
 				$now = \Carbon\Carbon::now('Asia/Jakarta');

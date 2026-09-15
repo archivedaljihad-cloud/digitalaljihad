@@ -414,7 +414,8 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
    - Hasilnya: Pojok kanan atas di seluruh 14 halaman display kini bersih, lega, dan bebas dari tumpukan elemen mengambang.
 2. **Penataan Ulang Tata Letak di `resources/views/utama.blade.php`:**
    - **Header Jadwal Sholat (`.jadwal-sholat-title`):** Dipindahkan ke dalam `.header-section`, bersanding rapi tepat di bawah kapsul tanggal/jam (`.datetime`) dengan pembungkus flex `.jadwal-sholat-title-wrap`.
-   - **Badge Kapsul Sholat Berikutnya (`.next-prayer-center-container`):** Ditempatkan di tengah layar (`margin: auto 0; width: 100%; justify-content: center;`) di antara `.header-section` dan `.bottom-section`. Dilengkapi ikon masjid emas berdenyut, badge `SELANJUTNYA`, nama sholat bersinar, waktu sholat, dan countdown jam-menit-detik secara *real-time*.
+   - **Badge Kapsul Sholat Berikutnya (`.next-prayer-center-container`):** Diturunkan ke `.bottom-section` tepat di atas deretan kartu sholat (`.sholat-list`) dengan jarak tipis/sedikit (`margin: 0 auto 10px auto;`).
+   - **Pemandangan Latar Belakang Terbuka Utuh:** Area tengah layar TV (yang menampilkan kubah hijau dan menara Masjid Nabawi) kini menjadi 100% bebas hambatan, sangat memanjakan mata jamaah tanpa tertutup elemen apapun.
    - **Kotak-Kotak Sholat (`.sholat-list`):** Tetap berada di `.bottom-section` pada bagian bawah layar display di atas running text footer.
 3. **Engine Hitung Mundur Khusus Halaman Sholat:**
    - Memindahkan logika countdown JS mandiri langsung ke dalam `utama.blade.php`, memfilter nama non-fardhu (Imsak, Syuruk, Terbit), dan otomatis menyesuaikan nama "DZUHUR" menjadi "SHOLAT JUM'AT" khusus di hari Jum'at.
