@@ -142,43 +142,27 @@
 								</div>
 
 								{{-- TEKS BERJALAN UTAMA / DEFAULT (MEMANJANG PENUH DARI AWAL KOTAK NAMA APLIKASI SAMPAI UJUNG FOOTER) --}}
-								<div class="col-12 mt-1">
-									@php
-										$runningTextPages = method_exists($setting, 'getRunningTextPages') ? $setting->getRunningTextPages() : ($setting->running_text_pages ?? []);
-										if (is_string($runningTextPages)) {
-											$runningTextPages = json_decode($runningTextPages, true) ?? [];
-										}
-										$pageCatalog = \App\Models\AppSetting::getDisplayPageCatalog();
-									@endphp
+								@php
+									$runningTextPages = method_exists($setting, 'getRunningTextPages') ? $setting->getRunningTextPages() : ($setting->running_text_pages ?? []);
+									if (is_string($runningTextPages)) {
+										$runningTextPages = json_decode($runningTextPages, true) ?? [];
+									}
+									$pageCatalog = \App\Models\AppSetting::getDisplayPageCatalog();
+								@endphp
 
-									<div class="form-group">
-										<label for="running_text" class="d-flex justify-content-between align-items-center">
-											<span class="font-weight-bold" style="font-size: 0.98rem;">
-												<i class="fas fa-bullhorn text-warning mr-1"></i> Teks Berjalan Utama / Default (Semua Halaman)
-											</span>
-											<span class="badge badge-primary px-2 py-1"><i class="fas fa-globe mr-1"></i> Global Default</span>
-										</label>
-										<textarea class="form-control" id="running_text" name="running_text"
-											rows="4" placeholder="Tuliskan teks berjalan default di sini. Tekan ENTER untuk membuat pesan berikutnya (1 baris = 1 pesan bergantian)...">{{ old('running_text', $setting->running_text ?? '') }}</textarea>
-										<small class="text-muted d-block mt-1">
-											<i class="fas fa-info-circle text-primary"></i> Teks ini otomatis tayang di seluruh halaman display TV yang <strong>tidak</strong> memiliki teks kustom khusus di bawah.
-										</small>
-									</div>
-								</div>
-
-								<div class="col-12">
+								<div class="col-12 mt-2">
 									{{-- ======================================================== --}}
-									{{-- PANEL PEMETAAN TEKS BERJALAN KHUSUS TIAP HALAMAN (OPSI 3) --}}
+									{{-- PANEL PENGATURAN TEKS BERJALAN TIAP HALAMAN DISPLAY TV --}}
 									{{-- ======================================================== --}}
-									<div class="card border-0 shadow-sm mt-3 mb-4" style="background: linear-gradient(135deg, rgba(7,26,16,0.03) 0%, rgba(14,53,33,0.07) 100%); border: 1.5px solid rgba(26,82,53,0.2) !important; border-radius: 14px;">
+									<div class="card border-0 shadow-sm mt-1 mb-4" style="background: linear-gradient(135deg, rgba(7,26,16,0.03) 0%, rgba(14,53,33,0.07) 100%); border: 1.5px solid rgba(26,82,53,0.2) !important; border-radius: 14px;">
 										<div class="card-body p-4">
 											<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom">
 												<div>
-													<h6 class="font-weight-bold text-success mb-1" style="font-size: 1.05rem;">
-														<i class="fas fa-layer-group text-warning mr-2"></i> Pengaturan Teks Berjalan Khusus Tiap Halaman Display (Opsi 3)
+													<h6 class="font-weight-bold text-success mb-1" style="font-size: 1.08rem;">
+														<i class="fas fa-bullhorn text-warning mr-2"></i> Pengaturan Teks Berjalan Tiap Halaman Display TV
 													</h6>
 													<small class="text-muted">
-														Atur kalimat teks berjalan yang spesifik dan selaras untuk masing-masing slide halaman TV (contoh: teks adab khutbah di layar Jumat, teks infaq di layar QRIS/Keuangan). Halaman yang dikosongkan otomatis memakai teks default di atas.
+														Atur kalimat teks berjalan di bagian bawah layar yang spesifik dan selaras untuk masing-masing halaman display TV (hadits sholat, hadits sedekah, adab khutbah Jumat, dll). Tekan <strong>ENTER</strong> untuk membuat kalimat berikutnya bergantian. Halaman yang dikosongkan otomatis memakai teks hadits rekomendasi bawaan.
 													</small>
 												</div>
 												<div class="mt-2 mt-md-0">
@@ -214,9 +198,9 @@
 															</div>
 															<div class="d-flex align-items-center">
 																@if($hasCustom)
-																	<span class="badge px-2 py-1 mr-2" style="background: #10b981 !important; color: #ffffff !important; font-weight: 700; font-size: 0.8rem; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-check-circle mr-1"></i> Kustom Aktif</span>
+																	<span class="badge px-2 py-1 mr-2" style="background: #10b981 !important; color: #ffffff !important; font-weight: 700; font-size: 0.8rem; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-check-circle mr-1"></i> Teks Kustom</span>
 																@else
-																	<span class="badge px-2 py-1 mr-2" style="background: rgba(255, 255, 255, 0.14) !important; color: #f1f5f9 !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; font-weight: 600; font-size: 0.8rem;"><i class="fas fa-globe mr-1"></i> Default Umum</span>
+																	<span class="badge px-2 py-1 mr-2" style="background: rgba(255, 255, 255, 0.14) !important; color: #f1f5f9 !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; font-weight: 600; font-size: 0.8rem;"><i class="fas fa-book-open mr-1"></i> Rekomendasi Bawaan</span>
 																@endif
 																<i class="fas fa-chevron-down" style="color: #ffd700 !important; font-size: 0.95rem;"></i>
 															</div>
@@ -235,7 +219,7 @@
 																		style="background: #ffffff !important; color: #0f172a !important; border: 1.5px solid #cbd5e1 !important; font-size: 0.92rem; border-radius: 8px;"
 																		placeholder="{{ $pageMeta['placeholder'] }}">{{ $pageVal }}</textarea>
 																	<small class="text-muted d-block mt-1">
-																		<i class="fas fa-lightbulb text-warning"></i> Kosongkan kolom ini jika ingin halaman ini otomatis mengikuti Teks Berjalan Utama di atas.
+																		<i class="fas fa-lightbulb text-warning"></i> Kosongkan kolom ini jika ingin halaman ini otomatis memakai teks hadits rekomendasi bawaan.
 																	</small>
 																</div>
 															</div>

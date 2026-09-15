@@ -366,6 +366,7 @@ class AppSetting extends Model
     {
         $pages = $this->getRunningTextPages();
         $text = null;
+        $catalog = self::getDisplayPageCatalog();
 
         if ($pageKey) {
             $cleanKey = trim(str_replace('/', '', $pageKey));
@@ -374,7 +375,15 @@ class AppSetting extends Model
             }
         }
 
-        // Fallback ke default di running_text_pages atau running_text umum
+        // Jika halaman belum diisi kustom oleh operator, gunakan teks hadits rekomendasi dari katalog halaman tersebut
+        if (empty($text) && $pageKey) {
+            $cleanKey = trim(str_replace('/', '', $pageKey));
+            if (!empty($catalog[$cleanKey]['placeholder'])) {
+                $text = $catalog[$cleanKey]['placeholder'];
+            }
+        }
+
+        // Fallback jika masih kosong
         if (empty($text)) {
             $text = $pages['default'] ?? ($this->running_text ?? null);
         }

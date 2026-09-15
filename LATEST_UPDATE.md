@@ -632,7 +632,32 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 21. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 📢 21. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.2.9): PEMUSATAN & PENYEDERHANAAN PENGATURAN TEKS BERJALAN TIAP HALAMAN DISPLAY TV
+
+### Latar Belakang & Masukan Pengguna:
+Pengurus/operator masjid memerlukan kejelasan dan kesederhanaan dalam mengelola teks berjalan (*running text*). Mengingat warta pengumuman utama sudah memiliki halaman slide tersendiri (`/pengumuman-embed` dan `/slide-embed`), maka teks berjalan di bagian bawah TV difungsikan murni untuk pesan/hadits tematik yang spesifik untuk masing-masing slide (hadits sholat di slide jadwal sholat, adab khutbah di slide Jumat, hadits sedekah di slide kas/QRIS, kontak darurat di slide ambulance, dll). Oleh karena itu, kolom ganda *"Teks Berjalan Utama / Default (Semua Halaman)"* dihapus dari form dan dipusatkan seutuhnya ke pengaturan per halaman.
+
+### Solusi & Implementasi Teknis:
+1. **Penyederhanaan Antarmuka Form Pengaturan Operator (`settings/edit.blade.php`):**
+   - Menghapus kolom input ganda `Teks Berjalan Utama / Default (Semua Halaman)` yang sebelumnya memicu kebingungan operator.
+   - Memusatkan seluruh pengaturan teks berjalan ke panel **Pengaturan Teks Berjalan Tiap Halaman Display TV**.
+   - Setiap panel halaman dilengkapi teks hadits rekomendasi (*placeholder*) yang siap pakai serta indikator status yang jelas (`Teks Kustom` warna hijau jika telah diubah, atau `Rekomendasi Bawaan` jika belum diubah).
+2. **Perlindungan Otomatis (*Smart Contextual Fallback*) di Model `AppSetting.php`:**
+   - Metode `getRunningTextForPage($pageKey)` diperbarui: Jika operator mengosongkan teks berjalan pada halaman tertentu (misal: halaman Jum'at), sistem secara cerdas menyuplai teks hadits rekomendasi spesifik dari katalog halaman tersebut, bukan teks generik acak.
+   - Menjamin bahwa layar TV tidak akan pernah kosong melompong meskipun operator belum sempat mengisi seluruh 15 halaman display.
+3. **Preservasi Database di Controller `AppSettingController.php`:**
+   - Menyimpan seluruh array pemetaan ke kolom JSON `running_text_pages`.
+   - Di balik layar, sistem tetap menyinkronkan kolom `running_text` warisan dari halaman utama (`utama-embed`), sehingga fitur lain (seperti live streaming atau API luar) tetap berjalan 100% tanpa risiko *error*.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/settings/edit.blade.php` (Penyederhanaan form, penghapusan kolom default redundan, pemusatan per halaman)
+- `app/Models/AppSetting.php` (Smart contextual fallback hadits per halaman pada `getRunningTextForPage`)
+- `app/Http/Controllers/AppSettingController.php` (Sinkronisasi otomatis kolom `running_text` dari halaman utama)
+- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.9)
+
+---
+
+## 🔒 22. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -640,6 +665,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 16 September 2026 (Reposisi Kapsul Jadwal Sholat Jumat ke Atas & BG3 Baru) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 16 September 2026 (Pemusatan Pengaturan Teks Berjalan Tiap Halaman Display TV v4.2.9) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

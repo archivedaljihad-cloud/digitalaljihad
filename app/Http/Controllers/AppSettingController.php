@@ -145,14 +145,17 @@ class AppSettingController extends Controller
             if (\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'running_text_pages')) {
                 $setting->running_text_pages = $sanitizedPages;
             }
-            // Sinkronkan teks default ke running_text umum
-            if (!empty($sanitizedPages['default'])) {
+            // Sinkronkan running_text umum ke kolom running_text (dari utama-embed atau halaman terisi pertama)
+            if (!empty($sanitizedPages['utama-embed'])) {
+                $setting->running_text = $sanitizedPages['utama-embed'];
+            } elseif (!empty($sanitizedPages['default'])) {
                 $setting->running_text = $sanitizedPages['default'];
             } else {
-                $setting->running_text = $validated['running_text'] ?? null;
+                $firstNonEmpty = collect($sanitizedPages)->first(fn($v) => !empty($v));
+                if (!empty($firstNonEmpty)) {
+                    $setting->running_text = $firstNonEmpty;
+                }
             }
-        } else {
-            $setting->running_text = $validated['running_text'] ?? null;
         }
 
         // ==================================================
