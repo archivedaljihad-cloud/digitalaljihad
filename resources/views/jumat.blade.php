@@ -8,8 +8,9 @@
 	<title>Sistem Informasi Masjid - Jadwal Sholat Jumat</title>
 	<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v={{ time() }}">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+	<script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
 	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
 
 	@include('partials.display-theme')
@@ -153,8 +154,11 @@
 			flex-shrink: 0;
 		}
 
-		.title-icon-badge i {
+		.title-icon-badge i,
+		.title-icon-badge svg {
 			font-size: 1.85rem;
+			width: 1.85rem;
+			height: 1.85rem;
 			color: #ffd700;
 			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
@@ -295,10 +299,12 @@
 			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 		}
 
-		.info-box-label i {
+		.info-box-label i,
+		.info-box-label svg {
 			font-size: 1.35rem;
+			width: 1.35rem;
+			height: 1.35rem;
 			color: #ffd700;
-			width: 24px;
 			text-align: center;
 		}
 
@@ -358,8 +364,11 @@
 			width: 100%;
 		}
 
-		.no-data i {
-			font-size: 3rem;
+		.no-data i,
+		.no-data svg {
+			font-size: 3.2rem;
+			width: 3.2rem;
+			height: 3.2rem;
 			color: #ffd700;
 			margin-bottom: 12px;
 		}
@@ -574,9 +583,12 @@
 			text-align: center;
 		}
 
-		.jumat-hadits-box i {
+		.jumat-hadits-box i,
+		.jumat-hadits-box svg {
 			color: #ffd700;
 			font-size: 1.2rem;
+			width: 1.2rem;
+			height: 1.2rem;
 			filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
 			flex-shrink: 0;
 		}

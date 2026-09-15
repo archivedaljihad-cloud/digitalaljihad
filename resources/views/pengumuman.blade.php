@@ -8,9 +8,10 @@
 	<title>Sistem Informasi Masjid - Informasi Kegiatan & Kajian</title>
 	<link rel="icon" type="image/x-icon" href="{{ asset($settings['favicon'] ? 'storage/' . $settings['favicon'] : 'favicon.ico') }}?v={{ time() }}">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}">
+	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+	<script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
+	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
 	@include('partials.display-theme')
 
 	<style>
@@ -178,8 +179,11 @@
 			-webkit-backdrop-filter: blur(10px);
 		}
 
-		.page-title-badge i {
+		.page-title-badge i,
+		.page-title-badge svg {
 			font-size: 1.38rem;
+			width: 1.38rem;
+			height: 1.38rem;
 			color: #ffd700;
 			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
 		}
@@ -208,6 +212,13 @@
 			backdrop-filter: blur(8px);
 			-webkit-backdrop-filter: blur(8px);
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+		}
+
+		.date-badge i,
+		.date-badge svg {
+			font-size: 1.2rem;
+			width: 1.2rem;
+			height: 1.2rem;
 		}
 
 		/* Split Layout Body */
@@ -272,8 +283,11 @@
 			-webkit-backdrop-filter: blur(8px);
 		}
 
-		.speaker-avatar-fallback i {
+		.speaker-avatar-fallback i,
+		.speaker-avatar-fallback svg {
 			font-size: 5.8rem;
+			width: 5.8rem;
+			height: 5.8rem;
 			filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.8));
 		}
 
@@ -319,9 +333,12 @@
 			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 2px #000000;
 		}
 
-		.speaker-name-badge i {
+		.speaker-name-badge i,
+		.speaker-name-badge svg {
 			color: #00e676;
 			font-size: 1.35rem;
+			width: 1.35rem;
+			height: 1.35rem;
 			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 		}
 
@@ -349,13 +366,19 @@
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
 		}
 
-		.meta-pill i {
+		.meta-pill i,
+		.meta-pill svg {
 			font-size: 1.15rem;
+			width: 1.15rem;
+			height: 1.15rem;
 		}
 
-		.meta-pill.time-pill i { color: #ffd700; }
-		.meta-pill.location-pill i { color: #ff5252; }
-		.meta-pill.date-pill i { color: #00b4d8; }
+		.meta-pill.time-pill i,
+		.meta-pill.time-pill svg { color: #ffd700; }
+		.meta-pill.location-pill i,
+		.meta-pill.location-pill svg { color: #ff5252; }
+		.meta-pill.date-pill i,
+		.meta-pill.date-pill svg { color: #00b4d8; }
 
 		.meta-pill span.label {
 			color: rgba(255, 255, 255, 0.85);

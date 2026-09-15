@@ -10,7 +10,9 @@
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
 		rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+	<script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
 	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
 
 	@include('partials.display-theme')
@@ -180,9 +182,13 @@
 			-webkit-backdrop-filter: blur(10px);
 		}
 
-		.keuangan h2 i {
+		.keuangan h2 i,
+		.keuangan h2 svg {
 			color: #ffd700;
 			margin-right: 10px;
+			font-size: 1.65rem;
+			width: 1.65rem;
+			height: 1.65rem;
 		}
 
 		/* 3 KARTU METRIK RINGKASAN KEUANGAN (KPI CARDS) - ANTI TUMPUK */
@@ -255,6 +261,13 @@
 			flex-shrink: 0;
 		}
 
+		.kpi-icon i,
+		.kpi-icon svg {
+			font-size: 1.4rem;
+			width: 1.4rem;
+			height: 1.4rem;
+		}
+
 		.kpi-card.kpi-income .kpi-icon {
 			background: rgba(0, 230, 118, 0.15);
 			color: #00e676;
@@ -307,7 +320,10 @@
 		}
 
 		.kpi-card.kpi-income .kpi-rp {
-			color: #00e676;
+			color: #ffffff;
+			font-weight: 700;
+			opacity: 0.95;
+			text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 		}
 		.kpi-card.kpi-expense .kpi-rp { color: #ff6b6b; }
 		.kpi-card.kpi-balance .kpi-rp { color: #ffd700; }
@@ -322,8 +338,9 @@
 		}
 
 		.kpi-card.kpi-income .kpi-num {
-			color: #00e676;
-			text-shadow: 0 0 12px rgba(0, 230, 118, 0.35);
+			color: #ffffff;
+			font-weight: 800;
+			text-shadow: 0 0 14px rgba(255, 255, 255, 0.55), 0 2px 5px rgba(0, 0, 0, 0.85);
 		}
 
 		.kpi-card.kpi-expense .kpi-num {
@@ -409,10 +426,13 @@
 			box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 		}
 
-		.keuangan th i {
+		.keuangan th i,
+		.keuangan th svg {
 			color: #ffd700;
 			margin-right: 6px;
 			font-size: 1.05rem;
+			width: 1.05rem;
+			height: 1.05rem;
 		}
 
 		.keuangan tbody:hover {
@@ -460,10 +480,16 @@
 		}
 
 		.keuangan td.amount-income .nominal-val {
-			color: #00e676;
+			color: #ffffff;
+			font-weight: 800;
+			font-size: 1.18rem;
+			text-shadow: 0 0 12px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+		}
+
+		.keuangan td.amount-income .rp-prefix {
+			color: #ffffff;
 			font-weight: 700;
-			font-size: 1.15rem;
-			text-shadow: 0 0 10px rgba(0, 230, 118, 0.25);
+			opacity: 0.95;
 		}
 
 		.keuangan td.amount-expense .nominal-val {

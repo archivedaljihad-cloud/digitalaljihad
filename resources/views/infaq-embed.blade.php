@@ -8,8 +8,9 @@
 	<title>Sistem Informasi Masjid - Penggalangan Infaq & Donasi Khusus</title>
 	<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v={{ time() }}">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+	<script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
 	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
 
 	@include('partials.display-theme')
@@ -275,7 +276,8 @@
 
 		.stat-pill.target .stat-value { color: #00b4d8; }
 		.stat-pill.terkumpul .stat-value {
-			color: #00e676;
+			color: #ffffff;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 255, 255, 0.5);
 		}
 		.stat-pill.kekurangan .stat-value { color: #ff5252; }
 		.stat-pill.donatur .stat-value { color: #ffd700; }
@@ -410,10 +412,10 @@
 		}
 
 		.nominal-val {
-			color: #00e676;
+			color: #ffffff;
 			font-weight: 800;
-			font-size: 1.15rem;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 230, 118, 0.25);
+			font-size: 1.18rem;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 255, 255, 0.4);
 		}
 
 		.empty-notice {

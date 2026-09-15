@@ -51,8 +51,9 @@
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome (Local with CDN fallback) -->
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">

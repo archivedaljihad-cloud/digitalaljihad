@@ -78,8 +78,12 @@
             transform: translateX(100vw);
         }
 
-        .running-single-item i {
+        .running-single-item i,
+        .running-single-item svg {
             color: #ffd700;
+            font-size: 1.35rem;
+            width: 1.35rem;
+            height: 1.35rem;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9));
         }
 

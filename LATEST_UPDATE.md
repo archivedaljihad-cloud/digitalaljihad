@@ -546,7 +546,61 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 19. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+---
+
+## 📺 19. PERBAIKAN TAMPILAN MONITOR TV: WARNA KONTRAS TINGGI NOMINAL UANG & RESOLUSI IKON FONT AWESOME LOKAL/SVG (v4.2.7)
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.7
+
+### Latar Belakang & Masalah Tampilan TV:
+1. **Tulisan/Font Nominal Uang Berwarna Hijau Tidak Terbaca di Layar TV:**
+   - Pada slide keuangan (Kas Ambulance `/ambulance-embed`, Kas Masjid `/keuangan-embed`, `/keuangan-summary-embed`, dan Program Infaq `/infaq-embed`), angka nominal penerimaan/pemasukan sebelumnya menggunakan warna hijau (`#00e676`).
+   - Karena warna kartu dan tabel berlatar belakang hijau tua (*dark green* / *emerald*), dari jarak pandang jamaah di TV (5-10 meter) tulisan angka hijau tersebut membaur dengan latar belakang (*muddy / low contrast*), sehingga sangat sulit dibaca.
+2. **Ikon / Simbol Font Awesome Menjadi Kotak Silang / Tofu Box (`🗌`) di TV:**
+   - Di monitor TV (Android TV / WebOS / Tizen / Smart TV Browser), seluruh ikon Font Awesome (seperti ikon mobil ambulans di samping judul, panah transaksi, dompet, pengeras suara running text, kalender, penanda foto ustadz, dan hadits) berubah menjadi kotak segi empat bersilang atau kosong (*tofu character*).
+   - **Penyebab Utama:** Halaman-halaman embed TV sebelumnya hanya memanggil Font Awesome via CDN luar (`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css`). TV browser memblokir font cross-origin (`@font-face`) via aturan ketat CORS atau TV berada di jaringan LAN/hotspot tanpa akses terbuka ke Cloudflare CDN / masalah root certificate TLS pada Smart TV, sehingga font `.woff2` gagal dimuat dan karakter Private Unicode (`\uf0f9`, `\uf0a1`, dsb.) dirender sebagai karakter hilang (*tofu box*). Di PC tampil normal karena PC memiliki koneksi internet bebas dan cache browser modern.
+
+### Solusi & Perubahan yang Diterapkan:
+1. **Warna Kontras Tinggi untuk Seluruh Nominal Uang Penerimaan / Pemasukan:**
+   - Mengganti warna font nominal uang penerimaan (`.kpi-card.kpi-income .kpi-num`, `.kpi-card.kpi-income .kpi-rp`, `.keuangan td.amount-income .nominal-val`, `.stat-card.income .stat-value`, `.transaction-amount.income`, dan `.stat-pill.terkumpul .stat-value`) menjadi **Putih Bersih Kontras Tinggi (`#ffffff`)** dengan ketebalan ekstra (`font-weight: 800`) dan pendaran bayangan lembut (*crisp text-shadow*).
+   - Memberikan rasio kontras tinggi (>15:1) di atas panel kartu dan baris tabel hijau gelap, sehingga nominal uang langsung mencolok, tajam, dan sangat mudah dibaca oleh jamaah dari jarak jauh.
+2. **Implementasi Font Awesome Lokal & Dual-Engine (WebFont + SVG Fallback):**
+   - Menghubungkan aset lokal Font Awesome Free 6.5.1 yang sudah tersedia di repositori: `public/vendor/fontawesome-free/css/all.min.css` (beserta file webfonts `.woff2` dan `.ttf` lokal).
+   - Menambahkan `@import url('../vendor/fontawesome-free/css/all.min.css');` di baris paling atas `public/css/display-theme.css`.
+   - Mengunduh dan menyertakan `public/vendor/fontawesome-free/js/all.min.js` (Font Awesome SVG with JS Engine) dengan atribut `defer`.
+   - Memperbarui pemanggilan di semua file embed rotasi TV (`ambulance-embed`, `keuangan`, `keuangan-summary`, `jumat`, `pengumuman`, `infaq-embed`, `slide-embed`, `idul-fitri-embed`, `idul-adha-embed`, `utama`, `welcome`, `rotator`, `rotator-outdoor`, `prayer-mode`, `qris/embed`, `hikmah-embed`, dan `layouts/admin`):
+     - Prioritas 1: Aset lokal `asset('vendor/fontawesome-free/css/all.min.css')` (100% same-origin, bebas blokir CORS, tanpa perlu internet luar).
+     - Prioritas 2: CDN Fallback `cdnjs.cloudflare.com` dengan atribut `crossorigin="anonymous"`.
+     - Prioritas 3: Mesin vektor SVG lokal `asset('vendor/fontawesome-free/js/all.min.js')` yang secara otomatis mengganti tag `<i>` menjadi vektor path `<svg>`, sehingga dijamin 100% tampil tajam di browser TV apa pun tanpa pernah menampilkan tofu box.
+3. **Penyelarasan Selektor CSS untuk Tag `<i>` dan `<svg>`:**
+   - Memperbarui seluruh selektor CSS terkait ikon (misal: `.keuangan h2 i, .keuangan h2 svg`, `.kpi-icon i, .kpi-icon svg`, `.keuangan th i, .keuangan th svg`, `.title-icon-badge i, .title-icon-badge svg`, `.speaker-avatar-fallback i, .speaker-avatar-fallback svg`, `.meta-pill i, .meta-pill svg`, `.running-single-item i, .running-single-item svg`, `.no-data i, .no-data svg`, `.jumat-hadits-box i, .jumat-hadits-box svg`) dengan ukuran lebar dan tinggi eksplisit, sehingga tampilan ikon tetap proporsional dan sempurna baik dalam mode WebFont maupun mode SVG.
+
+### Berkas yang Dimodifikasi:
+- `public/css/display-theme.css` (Import lokal Font Awesome di baris pertama)
+- `public/vendor/fontawesome-free/js/all.min.js` (Penyediaan mesin vektor SVG lokal)
+- `resources/views/ambulance-embed.blade.php` (Pembaruan Font Awesome lokal/SVG, font nominal penerimaan putih kontras tinggi, styling selektor ikon)
+- `resources/views/keuangan.blade.php` (Pembaruan Font Awesome lokal/SVG, font nominal penerimaan putih kontras tinggi, styling selektor ikon)
+- `resources/views/keuangan-summary.blade.php` (Pembaruan Font Awesome lokal/SVG, nominal pemasukan putih kontras tinggi)
+- `resources/views/infaq-embed.blade.php` (Pembaruan Font Awesome lokal/SVG, nominal terkumpul & tabel donatur putih kontras tinggi)
+- `resources/views/jumat.blade.php` (Pembaruan Font Awesome lokal/SVG, selektor svg untuk badge judul, no-data, hadits)
+- `resources/views/pengumuman.blade.php` (Pembaruan Font Awesome lokal/SVG, selektor svg untuk avatar ustadz, meta-pills)
+- `resources/views/slide-embed.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/idul-fitri-embed.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/idul-adha-embed.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/utama.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/welcome.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/rotator.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/rotator-outdoor.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/prayer-mode.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/qris/embed.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/hikmah-embed.blade.php` (Pembaruan Font Awesome lokal/SVG)
+- `resources/views/layouts/admin.blade.php` (Pembaruan Font Awesome lokal)
+- `resources/views/partials/bottom-section.blade.php` (Penyelarasan selektor svg running text marquee)
+- `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.7)
+
+---
+
+## 🔒 20. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -554,5 +608,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Dokumentasi Lengkap Google Gemini AI di /about, Penyempurnaan Prayer Mode & Reposisi Badge Sholat v4.2.6) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Perbaikan Kontras Tinggi Nominal Uang & Font Awesome Lokal/SVG Layar TV v4.2.7) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+
 

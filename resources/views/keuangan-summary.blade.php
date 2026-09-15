@@ -8,9 +8,10 @@
 	<title>Sistem Informasi Masjid - Ringkasan Keuangan</title>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
 		rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}">
+	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+	<script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
+	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
 	@include('partials.display-theme')
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<style>
@@ -155,13 +156,16 @@
 			box-shadow: 0 0 20px rgba(0, 230, 118, 0.15);
 		}
 
-		.stat-card.income i {
+		.stat-card.income i,
+		.stat-card.income svg {
 			color: #00e676;
 			text-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
 		}
 
 		.stat-card.income .stat-value {
-			color: #00e676;
+			color: #ffffff;
+			font-weight: 800;
+			text-shadow: 0 0 14px rgba(255, 255, 255, 0.55), 0 2px 4px rgba(0, 0, 0, 0.85);
 		}
 
 		.stat-card.expense {
@@ -458,8 +462,9 @@
 		}
 
 		.transaction-amount.income {
-			color: #00e676;
-			text-shadow: 0 0 2px rgba(0, 230, 118, 0.3);
+			color: #ffffff;
+			font-weight: 800;
+			text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 		}
 
 		.transaction-amount.expense {

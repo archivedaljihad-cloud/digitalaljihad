@@ -10,8 +10,9 @@
     <link rel="icon" type="image/png" href="{{ !empty($setting['logo']) ? asset('storage/' . str_replace('storage/', '', $setting['logo'])) . '?v=' . time() : asset('img/logo.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
     <link rel="stylesheet" href="{{ asset('css/display-theme.css') }}">
 
     <!-- Memuat Tema & Background Nabawi -->
