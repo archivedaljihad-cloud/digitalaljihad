@@ -427,7 +427,37 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 
 ---
 
-## 🔒 15. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 👥 15. HAK AKSES TEKS BERJALAN UNTUK OPERATOR/PETUGAS & PERBAIKAN KONTRAS PANEL ACCORDION (v4.2.3)
+
+**Tanggal:** 15 September 2026 | **Versi:** 4.2.3
+
+### 1. Akses Pengaturan Teks Berjalan untuk Akun Operator / Petugas:
+- **Menu Sidebar Baru untuk Petugas:**
+  - Menambahkan menu **Teks Berjalan TV** berikon megafon emas (`fas fa-bullhorn`) di sidebar admin untuk akun role `petugas`.
+  - Operator/petugas kini dapat langsung membuka halaman pengaturan teks berjalan dengan satu kali klik tanpa harus meminta bantuan admin/superadmin.
+- **Penyelarasan Hak Akses & Proteksi Sistem:**
+  - Akun operator/petugas kini dapat mengubah **Teks Berjalan Utama (Default)** maupun **Teks Berjalan Khusus Tiap Halaman (Opsi 3)**.
+  - Tombol berbahaya tingkat teknis sistem seperti **Sinkronkan Database (Migrate)** diproteksi secara ketat sehingga hanya muncul bagi akun Super Admin (`admin`).
+  - Judul halaman secara dinamis menyesuaikan: *"Pengaturan Teks Berjalan & Tampilan TV"* lengkap dengan lencana badge informasi *"Akses Operator"*.
+
+### 2. Perbaikan Total Kontras & Kemewahan Panel Accordion Opsi 3:
+- **Masalah Visual Sebelumnya:** Header accordion pada tema gelap SB Admin Al-Jihad menampilkan teks judul halaman (`.text-dark`) dan badge yang gelap di atas latar belakang hijau tua `#0e3521`, sehingga sulit dibaca oleh pengguna.
+- **Penyempurnaan Desain Islamic Material Design 3:**
+  - **Judul Halaman Display:** Berubah menjadi **putih bersih mengkilap (`#ffffff`)**, cetak tebal (*bold*), dengan efek bayangan halus (*text-shadow*) yang sangat tajam dan kontras.
+  - **Badge Rute URL (`/utama-embed`, dll.):** Diberi gaya kapsul emas islami (`color: #ffd700`, latar belakang transparan dengan border emas).
+  - **Teks Deskripsi Halaman:** Dibuat dengan warna abu-abu terang kontras (`#cbd5e1`), sangat jelas dan nyaman dibaca.
+  - **Ikon Lingkaran Halaman:** Berpendar emas dengan lingkaran transparan saat default, dan hijau emerald saat kustom aktif.
+  - **Status Badge:** Tampil lebih tegas dan elegan (*Kustom Aktif* hijau cerah & *Default Umum* transparan perak berbingkai).
+  - **Form Textarea:** Menggunakan latar belakang putih bersih (`#ffffff`) dengan teks gelap kontras tinggi (`#0f172a`), border tegas, dan panduan multi-pesan (Enter).
+
+### Berkas yang Dimodifikasi:
+- `resources/views/layouts/admin.blade.php` (Penambahan menu Teks Berjalan TV untuk role petugas)
+- `resources/views/settings/edit.blade.php` (Perbaikan kontras header accordion, proteksi tombol migrate, dan judul ramah operator)
+- `LATEST_UPDATE.md` (Pencatatan riwayat pembaruan v4.2.3)
+
+---
+
+## 🔒 16. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -435,4 +465,4 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 15 September 2026 (Relokasi Badge Kapsul Sholat Berikutnya & Header Jadwal Sholat v4.2.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 15 September 2026 (Hak Akses Teks Berjalan Operator & Perbaikan Kontras Panel Accordion v4.2.3) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*

@@ -4,10 +4,25 @@
 @section('main-content')
 	<div class="container-fluid">
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
-			<h1 class="h3 mb-0 text-gray-800">Pengaturan Aplikasi</h1>
+			<div>
+				<h1 class="h3 mb-0 text-gray-800 font-weight-bold">
+					@if(auth()->check() && (auth()->user()->hasRole('petugas') || !auth()->user()->hasRole('admin')))
+						<i class="fas fa-bullhorn text-warning mr-2"></i> Pengaturan Teks Berjalan & Tampilan TV
+					@else
+						<i class="fas fa-cogs text-primary mr-2"></i> Pengaturan Aplikasi
+					@endif
+				</h1>
+				@if(auth()->check() && auth()->user()->hasRole('petugas'))
+					<small class="text-muted d-block mt-1">
+						<span class="badge badge-info mr-1">Akses Operator</span> Anda memiliki hak akses penuh untuk memperbarui teks berjalan utama dan teks berjalan khusus tiap halaman display TV.
+					</small>
+				@endif
+			</div>
+			@if(auth()->check() && auth()->user()->hasRole('admin'))
 			<a href="{{ route('settings.migrate') }}" class="btn btn-sm btn-info shadow-sm" onclick="return confirm('Jalankan migrasi database sekarang untuk menyinkronkan seluruh tabel & kolom terbaru?')">
 				<i class="fas fa-database fa-sm text-white-50 mr-1"></i> Sinkronkan Database (Migrate)
 			</a>
+			@endif
 		</div>
 
 		@if (session('success'))
@@ -159,41 +174,44 @@
 														$hasCustom = !empty(trim($pageVal));
 														$collapseId = 'collapse_' . str_replace(['-', '.'], '_', $pageSlug);
 													@endphp
-													<div class="card mb-2 shadow-sm" style="border-radius: 10px; overflow: hidden; border-left: 4px solid {{ $hasCustom ? '#28a745' : '#6c757d' }};">
-														<div class="card-header py-2 px-3 bg-white d-flex justify-content-between align-items-center" 
-															style="cursor: pointer; user-select: none;" 
+													<div class="card mb-2 shadow-sm" style="border-radius: 12px; overflow: hidden; border: 1.5px solid {{ $hasCustom ? '#10b981' : 'rgba(212,175,55,0.3)' }} !important;">
+														<div class="card-header py-2 px-3 d-flex justify-content-between align-items-center" 
+															style="cursor: pointer; user-select: none; background: linear-gradient(135deg, #071a10 0%, #0e3521 100%) !important; border-bottom: 1px solid rgba(255,255,255,0.08) !important;" 
 															data-toggle="collapse" 
 															data-target="#{{ $collapseId }}">
 															<div class="d-flex align-items-center">
-																<span class="btn btn-circle btn-sm {{ $hasCustom ? 'btn-success' : 'btn-light text-muted border' }} mr-3" style="width: 34px; height: 34px; line-height: 34px; padding: 0;">
+																<span style="width: 38px; height: 38px; min-width: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: {{ $hasCustom ? '#10b981' : 'rgba(255,255,255,0.12)' }} !important; color: {{ $hasCustom ? '#ffffff' : '#ffd700' }} !important; border: 1.5px solid {{ $hasCustom ? '#34d399' : 'rgba(255,255,255,0.25)' }} !important; font-size: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.3);" class="mr-3">
 																	<i class="{{ $pageMeta['icon'] ?? 'fas fa-tv' }}"></i>
 																</span>
 																<div>
-																	<strong class="text-dark font-weight-bold" style="font-size: 0.95rem;">{{ $pageMeta['name'] }}</strong>
-																	<span class="badge badge-light border text-muted ml-2 font-weight-normal">/{{ $pageSlug }}</span>
-																	<small class="text-muted d-block" style="font-size: 0.8rem;">{{ $pageMeta['desc'] }}</small>
+																	<div class="d-flex align-items-center flex-wrap">
+																		<strong style="color: #ffffff !important; font-size: 1.02rem; font-weight: 700; letter-spacing: 0.3px; text-shadow: 0 1px 2px rgba(0,0,0,0.6);">{{ $pageMeta['name'] }}</strong>
+																		<span class="badge ml-2" style="background: rgba(255, 215, 0, 0.18) !important; color: #ffd700 !important; border: 1px solid rgba(255, 215, 0, 0.45) !important; font-size: 0.76rem; font-family: monospace; font-weight: 600;">/{{ $pageSlug }}</span>
+																	</div>
+																	<small style="color: #cbd5e1 !important; font-size: 0.83rem; display: block; margin-top: 2px;">{{ $pageMeta['desc'] }}</small>
 																</div>
 															</div>
-															<div>
+															<div class="d-flex align-items-center">
 																@if($hasCustom)
-																	<span class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> Kustom Aktif</span>
+																	<span class="badge px-2 py-1 mr-2" style="background: #10b981 !important; color: #ffffff !important; font-weight: 700; font-size: 0.8rem; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"><i class="fas fa-check-circle mr-1"></i> Kustom Aktif</span>
 																@else
-																	<span class="badge badge-secondary px-2 py-1"><i class="fas fa-globe mr-1"></i> Default Umum</span>
+																	<span class="badge px-2 py-1 mr-2" style="background: rgba(255, 255, 255, 0.14) !important; color: #f1f5f9 !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; font-weight: 600; font-size: 0.8rem;"><i class="fas fa-globe mr-1"></i> Default Umum</span>
 																@endif
-																<i class="fas fa-chevron-down text-muted ml-2"></i>
+																<i class="fas fa-chevron-down" style="color: #ffd700 !important; font-size: 0.95rem;"></i>
 															</div>
 														</div>
 
 														<div id="{{ $collapseId }}" class="collapse {{ $hasCustom ? 'show' : '' }}">
-															<div class="card-body py-3 px-4 bg-light border-top">
+															<div class="card-body py-3 px-4" style="background: #ffffff !important; border-top: 1px solid #e2e8f0 !important;">
 																<div class="form-group mb-0">
-																	<label class="small font-weight-bold text-dark d-flex justify-content-between">
+																	<label class="small font-weight-bold d-flex justify-content-between" style="color: #0f172a !important; font-size: 0.9rem;">
 																		<span>Kalimat Teks Berjalan Khusus untuk Layar <strong>{{ $pageMeta['name'] }}</strong>:</span>
-																		<span class="text-muted font-weight-normal"><i class="fas fa-level-down-alt fa-rotate-90"></i> 1 baris = 1 pesan bergantian</span>
+																		<span class="text-muted font-weight-normal"><i class="fas fa-level-down-alt fa-rotate-90"></i> Tekan Enter = pesan berikutnya bergantian</span>
 																	</label>
 																	<textarea class="form-control" 
 																		name="running_text_pages[{{ $pageSlug }}]" 
 																		rows="2" 
+																		style="background: #ffffff !important; color: #0f172a !important; border: 1.5px solid #cbd5e1 !important; font-size: 0.92rem; border-radius: 8px;"
 																		placeholder="{{ $pageMeta['placeholder'] }}">{{ $pageVal }}</textarea>
 																	<small class="text-muted d-block mt-1">
 																		<i class="fas fa-lightbulb text-warning"></i> Kosongkan kolom ini jika ingin halaman ini otomatis mengikuti Teks Berjalan Utama di atas.

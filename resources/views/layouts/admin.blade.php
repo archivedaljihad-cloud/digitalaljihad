@@ -1110,6 +1110,14 @@
                     @endif
                 </a>
             </li>
+
+            <!-- Nav Item - Teks Berjalan TV (Petugas/Operator) -->
+            <li class="nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('settings.edit') }}">
+                    <i class="fas fa-fw fa-bullhorn" style="color: #ffd700;"></i>
+                    <span>Teks Berjalan TV</span>
+                </a>
+            </li>
             @endif
 
             @if ($roleName === 'bendahara')
