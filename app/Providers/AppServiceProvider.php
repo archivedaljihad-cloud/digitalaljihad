@@ -152,6 +152,15 @@ class AppServiceProvider extends ServiceProvider
                     if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'prayer_mode_message')) {
                         $table->text('prayer_mode_message')->nullable();
                     }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'yasin_mode_enabled')) {
+                        $table->boolean('yasin_mode_enabled')->nullable()->default(true);
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'yasin_start_time')) {
+                        $table->string('yasin_start_time', 10)->nullable()->default('18:30');
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'yasin_scroll_speed')) {
+                        $table->string('yasin_scroll_speed', 20)->nullable()->default('medium');
+                    }
                 });
             }
         } catch (\Throwable $e) {

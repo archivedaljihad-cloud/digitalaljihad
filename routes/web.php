@@ -57,6 +57,8 @@ Route::get('/qris-embed', [QrisController::class, 'embed'])
     ->name('qris.embed');
 Route::get('/slide-embed', [WelcomeController::class, 'slideEmbed'])
     ->name('slide.embed');
+Route::get('/yasin-embed', [WelcomeController::class, 'yasinEmbed'])
+    ->name('yasin.embed');
 Route::get('/idul-fitri-embed', [SholatIdulFitriController::class, 'embed'])
     ->name('idul-fitri.embed');
 Route::get('/idul-adha-embed', [SholatIdulAdhaController::class, 'embed'])

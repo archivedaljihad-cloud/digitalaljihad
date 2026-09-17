@@ -83,6 +83,7 @@
 | `/idul-adha-embed` | `idul-adha.embed` | Slide Petugas Sholat Idul Adha |
 | `/ambulance-embed` | `ambulance.embed` | Slide Rincian Kas Ambulance |
 | `/infaq-embed` | `infaq.embed` | Slide Program Penggalangan Infaq |
+| `/yasin-embed` | `yasin.embed` | Layar penuh Surat Yaasiin 83 ayat teks Arab auto-scroll |
 
 ### Rute Admin Dashboard (`/login`)
 | URL | Controller | Keterangan |
@@ -90,7 +91,7 @@
 | `/home` | `HomeController` | Dashboard utama statistik masjid |
 | `/jadwal_sholat` | `JadwalSholatController` | Kelola jadwal sholat 5 waktu & durasi Jum'at |
 | `/rotation` | `RotationController` | Kelola urutan & halaman aktif rotasi TV |
-| `/settings` | `AppSettingController` | Pengaturan umum, prayer mode, live stream, CCTV mimbar |
+| `/settings` | `AppSettingController` | Pengaturan umum, prayer mode, live stream, CCTV mimbar, agenda malam Jum'at |
 | `/settings/migrate` | `AppSettingController` | Tombol 1-klik jalankan migrasi database di server |
 | `/users` | `UserController` | Kelola akun administrator & operator |
 | `/keuangan` | `KeuanganController` | Pencatatan arus kas pemasukan/pengeluaran |
@@ -121,6 +122,9 @@ Tabel `app_settings` adalah konfigurasi pusat sistem. Kolom-kolom penting mutakh
 | `cctv_mimbar_url` | `string` | URL RTSP / Web stream kamera CCTV mimbar |
 | `cctv_mimbar_enabled` | `boolean` | Status aktif integrasi kamera CCTV mimbar |
 | `cctv_auto_switch_khutbah` | `boolean` | Otomatis alihkan TV luar ke CCTV saat khutbah dimulai |
+| `yasin_mode_enabled` | `boolean` | Saklar aktif agenda malam Jum'at Surat Yaasiin (default: 1) |
+| `yasin_start_time` | `string` | Jam mulai pembacaan Yaasiin tiap Kamis malam (default: '18:30') |
+| `yasin_scroll_speed` | `string` | Kecepatan gulir teks Arab: slow, medium, fast (default: 'medium') |
 
 ---
 
@@ -723,7 +727,53 @@ Pada halaman pengaturan saat diakses oleh akun Operator, elemen `<footer class="
 
 ---
 
-## 🔒 25. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 📖 25. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.0): FITUR AGENDA MALAM JUM'AT (PEMBACAAN SURAT YAASIIN AUTO-SCROLL FULL ARAB)
+
+### Latar Belakang Kebutuhan Jamaah:
+Setiap hari Kamis malam (malam Jum'at) ba'da Maghrib (pukul 18:30) hingga masuk waktu sholat Isya, di Masjid selalu diselenggarakan kegiatan rutin pembacaan Tahlil, Tahmid, dan Surat Yaasiin bersama jamaah. Jika layar TV terus berotasi menampilkan laporan kas atau pengumuman biasa, konsentrasi jamaah dapat terganggu. Pengguna memilih **OPSI B: Quiet Mode dengan Surat Yaasiin Lengkap 83 Ayat Bahasa Arab Tanpa Terjemahan bergulir otomatis (*smooth auto-scroll*)**, serta dilengkapi saklar ON/OFF darurat di Dashboard Operator.
+
+### Implementasi Fitur & Arsitektur Teknis:
+1. **Dataset Offline 83 Ayat Uthmani (`resources/data/surah_yasin.json`):**
+   - Berisi 83 ayat lengkap Surah Yaasiin teks Arab berharakat resmi mushaf Madinah/Kemenag.
+   - Disimpan 100% lokal di dalam proyek sehingga sistem bebas dari ketergantungan API pihak ketiga dan tetap berjalan normal tanpa koneksi internet.
+2. **Halaman Khidmat & Megah (`/yasin-embed` & `resources/views/yasin-embed.blade.php`):**
+   - **Tema Visual:** *Royal Emerald & Gold Mihrab* yang selaras dengan tema Prayer Mode masjid.
+   - **Tipografi:** Menggunakan font Arab kaligrafi *Amiri* dan *Scheherazade New* berukuran besar (`clamp(34px, 3.2vw, 50px)`) dengan nomor ayat ornamen lingkaran emas Islami.
+   - **Header Atas Minimalis:** Menampilkan nama masjid, badge `AGENDA MALAM JUM'AT`, jam digital, dan kapsul hitung mundur waktu Isya (`Menuju Isya: [MM:SS]`).
+   - **Continuous Smooth Auto-Scroll Engine:** Halaman bergulir secara otomatis dan sangat halus menggunakan `requestAnimationFrame` (pilihan kecepatan: *Santai*, *Normal*, *Cepat*). Dilengkapi jeda otomatis saat layar disentuh/di-scroll mouse oleh operator.
+   - **Safety Lock / Auto-Yield ke Mode Sholat:** Halaman secara berkala memonitor `/prayer-mode/status`. Begitu waktu Adzan Isya atau masa hitung mundur adzan Isya tiba, tampilan Yaasiin **langsung mengalah secara otomatis** dan beralih ke *Prayer Mode* Sholat Isya.
+3. **Integrasi Mesin Rotasi TV (`rotator.blade.php` & `rotator-outdoor.blade.php`):**
+   - Pada hari Kamis pukul 18:30 s/d Adzan Isya, sistem secara otomatis mendeteksi `yasin_active: true` dari status API.
+   - Layar TV otomatis mengunci putaran dan memuat `/yasin-embed`.
+   - Ketika sholat Isya selesai, TV otomatis kembali berputar normal seperti biasa.
+4. **Dashboard Operator (`resources/views/settings/edit.blade.php` & `AppSettingController.php`):**
+   - Menambahkan tab khusus **"Agenda Malam Jum'at"** di menu Pengaturan Aplikasi:
+     - Saklar *Toggle On/Off*: Aktifkan / Nonaktifkan agenda Yaasiin jika ada agenda mendadak/acara lain.
+     - Pilihan Jam Mulai: Default `18:30` (bisa diubah fleksibel).
+     - Pilihan Kecepatan Gulir: *Santai (~25 menit)*, *Normal (~18 menit)*, atau *Cepat (~12 menit)*.
+     - Tombol *Preview* cepat untuk menguji tampilan layar penuh di tab baru.
+5. **Cadangan Demo Standalone (`public/preview-yasin.html`):**
+   - File HTML mandiri yang dapat dibuka langsung di Google Chrome / Microsoft Edge tanpa perlu menyalakan server lokal.
+
+### Berkas Baru & Dimodifikasi:
+- `database/migrations/2026_09_17_000001_add_yasin_settings_to_app_settings.php` (Migrasi kolom `yasin_mode_enabled`, `yasin_start_time`, `yasin_scroll_speed`)
+- `resources/data/surah_yasin.json` (Dataset 83 ayat teks Arab Utsmani Surah Yaasiin)
+- `resources/views/yasin-embed.blade.php` (Tampilan layar penuh Surat Yaasiin smooth auto-scroll)
+- `public/preview-yasin.html` (Preview HTML mandiri)
+- `app/Models/AppSetting.php` (Fillable, casts, dan helper methods `isYasinModeEnabled()`, `getYasinStartTime()`, `getYasinScrollSpeed()`)
+- `app/Providers/AppServiceProvider.php` (Auto-provisioning kolom setting baru)
+- `app/Http/Controllers/WelcomeController.php` (Method `yasinEmbed()`)
+- `app/Http/Controllers/PrayerModeController.php` (Deteksi Kamis malam 18:30 - Isya & flag `yasin_active`)
+- `app/Http/Controllers/AppSettingController.php` (Penyimpanan konfigurasi agenda malam Jum'at)
+- `routes/web.php` (Rute publik `/yasin-embed`)
+- `resources/views/rotator.blade.php` (Otomasi peralihan ke mode Yaasiin di TV dalam)
+- `resources/views/rotator-outdoor.blade.php` (Otomasi peralihan ke mode Yaasiin di TV luar)
+- `resources/views/settings/edit.blade.php` (Tab & form pengaturan agenda malam Jum'at)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.0)
+
+---
+
+## 🔒 26. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -731,6 +781,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 16 September 2026 (Perbaikan Struktur Layout Footer ke Bawah Layar v4.3.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 17 September 2026 (Fitur Agenda Malam Jum'at Surat Yaasiin Auto-Scroll v4.4.0) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

@@ -99,6 +99,16 @@
 							@endif
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="yasin-tab" data-toggle="tab" href="#yasin" role="tab" style="color: #059669;">
+							<i class="fas fa-book-quran text-success"></i> Agenda Malam Jum'at
+							@if($setting->yasin_mode_enabled ?? true)
+								<span class="badge badge-success ml-1">AKTIF</span>
+							@else
+								<span class="badge badge-secondary ml-1">NONAKTIF</span>
+							@endif
+						</a>
+					</li>
 				</ul>
 			</div>
 			<div class="card-body">
@@ -930,6 +940,106 @@
 											<a href="{{ route('hikmah.embed') }}" class="btn btn-outline-success btn-sm btn-block" target="_blank" style="border-radius: 8px;">
 												<i class="fas fa-external-link-alt mr-1"></i> Buka Tampilan Slide TV (/hikmah-embed)
 											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{{-- TAB AGENDA MALAM JUMAT (SURAT YAASIIN) --}}
+						<div class="tab-pane fade" id="yasin" role="tabpanel">
+							<div class="row">
+								<div class="col-lg-7">
+									<div class="card shadow-sm mb-4 border-0">
+										<div class="card-header font-weight-bold text-white" style="background: linear-gradient(135deg, #0d4a2b 0%, #062616 100%);">
+											<i class="fas fa-book-quran text-warning mr-2"></i> Konfigurasi Agenda Rutin Malam Jum'at
+										</div>
+										<div class="card-body">
+											<div class="form-group mb-4">
+												<label class="font-weight-bold d-block text-gray-800">Aktifkan Agenda Malam Jum'at (Surat Yaasiin)</label>
+												<label class="switch">
+													<input type="checkbox" name="yasin_mode_enabled" value="1" {{ ($setting->yasin_mode_enabled ?? true) ? 'checked' : '' }}>
+													<span class="slider round"></span>
+												</label>
+												<small class="form-text text-muted">
+													Jika aktif, setiap Kamis malam mulai jam yang ditentukan hingga waktu Adzan Isya, layar TV masjid otomatis memutar pembacaan Surat Yaasiin 83 ayat secara penuh dengan gulir otomatis (*smooth scroll*). Jika suatu pekan acara ditiadakan karena hal mendesak, cukup nonaktifkan saklar ini.
+												</small>
+											</div>
+
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group mb-3">
+														<label for="yasin_start_time" class="font-weight-bold text-gray-800">
+															<i class="far fa-clock text-success mr-1"></i> Jam Mulai Dimulai (Kamis Malam)
+														</label>
+														<input type="time" class="form-control" id="yasin_start_time" name="yasin_start_time"
+															value="{{ old('yasin_start_time', $setting->yasin_start_time ?? '18:30') }}">
+														<small class="form-text text-muted">
+															Default: <strong>18:30</strong> (setelah zikir sholat Maghrib selesai).
+														</small>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group mb-3">
+														<label for="yasin_scroll_speed" class="font-weight-bold text-gray-800">
+															<i class="fas fa-gauge-high text-info mr-1"></i> Kecepatan Gulir Teks Arab
+														</label>
+														@php
+															$currentSpeed = old('yasin_scroll_speed', $setting->yasin_scroll_speed ?? 'medium');
+														@endphp
+														<select class="form-control" id="yasin_scroll_speed" name="yasin_scroll_speed">
+															<option value="slow" {{ $currentSpeed == 'slow' ? 'selected' : '' }}>Santai (Perlahan / ~22-25 Menit)</option>
+															<option value="medium" {{ $currentSpeed == 'medium' ? 'selected' : '' }}>Normal (Disarankan / ~16-18 Menit)</option>
+															<option value="fast" {{ $currentSpeed == 'fast' ? 'selected' : '' }}>Cepat (~10-12 Menit)</option>
+														</select>
+														<small class="form-text text-muted">
+															Kecepatan pergerakan ayat Arab ke atas di layar TV.
+														</small>
+													</div>
+												</div>
+											</div>
+
+											<div class="alert alert-info border-0 shadow-sm mb-0" style="background: rgba(13, 74, 43, 0.08); border-left: 4px solid #0d4a2b !important;">
+												<h6 class="font-weight-bold text-success mb-1">
+													<i class="fas fa-shield-alt mr-1"></i> Otomatisasi & Safety Lock Sholat Isya:
+												</h6>
+												<p class="small text-muted mb-0">
+													Begitu waktu hitung mundur Adzan Isya (atau waktu Adzan Isya) tiba, layar Surat Yaasiin <strong>secara otomatis langsung mengalah (*auto-yield*)</strong> dan beralih ke <strong>Prayer Mode Sholat Isya</strong>. Setelah sholat Isya selesai, TV kembali ke rotasi informasi normal.
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-5">
+									<div class="card shadow-sm border-left-success mb-4">
+										<div class="card-header bg-success text-white font-weight-bold">
+											<i class="fas fa-tv mr-2"></i> Pratinjau Tampilan TV Yaasiin
+										</div>
+										<div class="card-body">
+											<p class="small text-muted mb-3">
+												Anda dapat melihat langsung tampilan mushaf digital Surat Yaasiin tanpa harus menunggu hari Kamis malam tiba:
+											</p>
+											<div class="d-flex flex-column" style="gap: 10px;">
+												<a href="{{ route('yasin.embed') }}" class="btn btn-outline-success btn-sm shadow-sm" target="_blank" style="border-radius: 8px;">
+													<i class="fas fa-external-link-alt mr-1"></i> Buka Tampilan Layar Penuh (/yasin-embed)
+												</a>
+												<a href="/prayer-mode/status?debug=1&debug_yasin=1" class="btn btn-outline-secondary btn-sm shadow-sm" target="_blank" style="border-radius: 8px;">
+													<i class="fas fa-code mr-1"></i> Cek Status API JSON (/prayer-mode/status?debug_yasin=1)
+												</a>
+											</div>
+										</div>
+									</div>
+
+									<div class="card shadow-sm border-left-warning">
+										<div class="card-header bg-light font-weight-bold" style="color: #856404;">
+											<i class="fas fa-lightbulb text-warning mr-2"></i> Tips Pelaksanaan Jamaah:
+										</div>
+										<div class="card-body small" style="line-height: 1.8;">
+											<ul class="pl-3 mb-0 text-muted">
+												<li>Layar menggunakan font mushaf resmi Madinah/Kemenag ukuran besar sehingga jamaah di saf belakang tetap dapat membaca jelas.</li>
+												<li>Di pojok kanan bawah terdapat tombol kontrol diskret (*Play/Pause* & Ubah Kecepatan) yang dapat disentuh jika layar TV masjid berupa Touchscreen atau memiliki mouse pointer.</li>
+											</ul>
 										</div>
 									</div>
 								</div>

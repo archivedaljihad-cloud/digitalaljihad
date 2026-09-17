@@ -62,6 +62,10 @@ class AppSetting extends Model
         'daily_hikmah_date',
         // ===== Running Text Per Halaman (Opsi 3) =====
         'running_text_pages',
+        // ===== Agenda Malam Jum'at (Surat Yaasiin) =====
+        'yasin_mode_enabled',
+        'yasin_start_time',
+        'yasin_scroll_speed',
     ];
 
     protected $casts = [
@@ -74,6 +78,7 @@ class AppSetting extends Model
         'cctv_auto_switch_khutbah' => 'boolean',
         'enable_dynamic_theme' => 'boolean',
         'enable_next_prayer_bar' => 'boolean',
+        'yasin_mode_enabled' => 'boolean',
         'last_auto_update' => 'datetime',
         'auto_update_time' => 'datetime:H:i:s',
         'daily_hikmah_cache' => 'array',
@@ -340,6 +345,26 @@ class AppSetting extends Model
     public function isCctvAutoSwitchKhutbah(): bool
     {
         return (bool) ($this->cctv_auto_switch_khutbah ?? true);
+    }
+
+    /**
+     * ==============================
+     * AGENDA MALAM JUM'AT (SURAT YAASIIN)
+     * ==============================
+     */
+    public function isYasinModeEnabled(): bool
+    {
+        return (bool) ($this->yasin_mode_enabled ?? true);
+    }
+
+    public function getYasinStartTime(): string
+    {
+        return (string) ($this->yasin_start_time ?? '18:30');
+    }
+
+    public function getYasinScrollSpeed(): string
+    {
+        return (string) ($this->yasin_scroll_speed ?? 'medium');
     }
 
     /**

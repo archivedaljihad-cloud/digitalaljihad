@@ -472,8 +472,31 @@
                         frames.next.className = 'standby';
                         frames.next.src = '/prayer-mode';
                     }
+                } else if (data.yasin_active) {
+                    if (localStorage.getItem('lockPageRotation') !== 'yasin') {
+                        localStorage.setItem('lockPageRotation', 'yasin');
+                        if (countdownIntervalId) {
+                            clearInterval(countdownIntervalId);
+                            countdownIntervalId = null;
+                        }
+                        clearTimeout(failsafeTimeout);
+                        isLoading = false;
+
+                        const pageName = document.getElementById('pageName');
+                        if (pageName) {
+                            pageName.textContent = "Agenda Malam Jum'at (Surat Yaasiin)";
+                        }
+                        const countdownEl = document.getElementById('countdown');
+                        if (countdownEl) {
+                            countdownEl.textContent = 'Yaasiin';
+                        }
+
+                        const frames = getFrames();
+                        frames.next.className = 'standby';
+                        frames.next.src = '/yasin-embed';
+                    }
                 } else {
-                    if (localStorage.getItem('lockPageRotation') === 'true') {
+                    if (localStorage.getItem('lockPageRotation') === 'true' || localStorage.getItem('lockPageRotation') === 'yasin') {
                         localStorage.setItem('lockPageRotation', 'false');
                         // Resume normal rotation seketika saat waktu sholat selesai
                         currentIndex = 0; // Kembalikan ke halaman pertama / utama

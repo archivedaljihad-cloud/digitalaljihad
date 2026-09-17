@@ -283,6 +283,37 @@ class WelcomeController extends Controller
             'slide-embed',
             compact('slides', 'settings')
         );
+    }
+
+    public function yasinEmbed()
+    {
+        $settings = AppSetting::first();
+        $yasinPath = resource_path('data/surah_yasin.json');
+        $ayahs = [];
+        if (file_exists($yasinPath)) {
+            $ayahs = json_decode(file_get_contents($yasinPath), true) ?? [];
+        }
+
+        $now = Carbon::now(config('app.timezone'));
+        $isyaJadwal = JadwalSholat::urutkan()->get()->first(function ($it) {
+            return in_array(strtolower(trim($it->nama_sholat)), ['isya', "'isya", 'isya`']);
+        });
+
+        $isyaTime = '19:15';
+        $isyaRemainingSeconds = 0;
+        if ($isyaJadwal && !empty($isyaJadwal->waktu)) {
+            $isyaDateTime = Carbon::parse($now->format('Y-m-d') . ' ' . $isyaJadwal->waktu, config('app.timezone'));
+            $isyaTime = substr($isyaJadwal->waktu, 0, 5);
+            $isyaRemainingSeconds = max(0, $isyaDateTime->timestamp - $now->timestamp);
+        }
+
+        return view('yasin-embed', [
+            'settings' => $settings,
+            'ayahs' => $ayahs,
+            'isyaTime' => $isyaTime,
+            'isyaRemainingSeconds' => $isyaRemainingSeconds,
+            'scrollSpeed' => $settings?->getYasinScrollSpeed() ?? 'medium',
+        ]);
     }                        
     public function getRotationSettings()
     {

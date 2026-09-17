@@ -233,6 +233,19 @@ class AppSettingController extends Controller
         }
 
         // ==================================================
+        // AGENDA MALAM JUM'AT (SURAT YAASIIN)
+        // ==================================================
+        if (Schema::hasColumn('app_settings', 'yasin_mode_enabled')) {
+            $setting->yasin_mode_enabled = $request->boolean('yasin_mode_enabled');
+        }
+        if (Schema::hasColumn('app_settings', 'yasin_start_time') && $request->has('yasin_start_time')) {
+            $setting->yasin_start_time = $request->input('yasin_start_time', '18:30');
+        }
+        if (Schema::hasColumn('app_settings', 'yasin_scroll_speed') && $request->has('yasin_scroll_speed')) {
+            $setting->yasin_scroll_speed = $request->input('yasin_scroll_speed', 'medium');
+        }
+
+        // ==================================================
         // PRAYER MODE SETTINGS
         // ==================================================
         if (Schema::hasColumn('app_settings', 'prayer_mode_enabled')) {

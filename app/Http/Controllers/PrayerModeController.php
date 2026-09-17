@@ -196,6 +196,31 @@ class PrayerModeController extends Controller
             ];
         }
 
+        // Deteksi Agenda Rutin Malam Jum'at (Surat Yaasiin)
+        $isThursday = $now->isThursday();
+        $yasinActive = false;
+        if ($isThursday && ($setting?->isYasinModeEnabled() ?? true)) {
+            $yasinStartTimeStr = $setting?->getYasinStartTime() ?? '18:30';
+            try {
+                $yasinStart = Carbon::parse($now->format('Y-m-d') . ' ' . $yasinStartTimeStr, config('app.timezone'));
+                $isyaItem = $jadwal->first(function ($it) {
+                    return in_array(strtolower(trim($it->nama_sholat)), ['isya', "'isya", 'isya`']);
+                });
+
+                if ($isyaItem && !empty($isyaItem->waktu)) {
+                    $isyaAdzan = Carbon::parse($now->format('Y-m-d') . ' ' . $isyaItem->waktu, config('app.timezone'));
+                    $beforeAdzan = $setting->prayer_mode_before_adzan ?? 5;
+                    $isyaCountdownStart = (clone $isyaAdzan)->subMinutes($beforeAdzan);
+
+                    if ($now->gte($yasinStart) && $now->lt($isyaCountdownStart)) {
+                        $yasinActive = true;
+                    }
+                }
+            } catch (\Throwable $e) {
+                $yasinActive = false;
+            }
+        }
+
         return [
             'active' => false,
             'isFriday' => false,
@@ -205,6 +230,7 @@ class PrayerModeController extends Controller
             'bgOpacity' => 80,
             'displayMessage' => '',
             'next_prayer' => $nextPrayer,
+            'yasin_active' => $yasinActive,
         ];
     }
 
@@ -295,11 +321,13 @@ class PrayerModeController extends Controller
                 $debugPetugas = SholatJumat::latest('tanggal')->first();
             }
 
+            $debugYasin = request()->boolean('debug_yasin') || request()->query('phase') === 'yasin';
+
             return response()->json([
-                'active' => true,
+                'active' => $debugYasin ? false : true,
                 'isFriday' => $isDebugFriday,
                 'setting' => $setting,
-                'phase' => $debugPhase,
+                'phase' => $debugYasin ? 'yasin' : $debugPhase,
                 'prayer' => strtoupper($debugPrayer),
                 'currentPrayer' => (object) [
                     'nama_sholat' => strtoupper($debugPrayer),
@@ -310,12 +338,14 @@ class PrayerModeController extends Controller
                 'theme' => request()->query('theme', $setting?->prayer_mode_theme ?? 'gold'),
                 'bgOpacity' => 80,
                 'displayMessage' => '',
+                'yasin_active' => $debugYasin,
             ]);
         }
 
         $state = $this->getPrayerState();
         $state['bgOpacity'] = $state['bgOpacity'] ?? 80;
         $state['displayMessage'] = $state['displayMessage'] ?? '';
+        $state['yasin_active'] = $state['yasin_active'] ?? false;
         return response()->json($state);
     }
 }

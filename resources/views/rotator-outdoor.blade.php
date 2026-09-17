@@ -282,7 +282,8 @@
         }
 
         function isPrayerActive() {
-            return localStorage.getItem('lockPageRotationOutdoor') === 'true';
+            const lock = localStorage.getItem('lockPageRotationOutdoor');
+            return lock === 'true' || lock === 'yasin';
         }
 
         function loadPage(index) {
@@ -428,13 +429,22 @@
                 if (isKhutbahPhase && cctvAutoSwitch) {
                     switchToMimbarLive(data.prayer || 'KHUTBAH');
                 } else if (data.active) {
-                    // Jika sholat reguler biasa (Subuh, Dzuhur, dll)
-                    if (!isPrayerActive()) {
+                    // Jika sholat reguler biasa (Subuh, Dzuhur, Isya, dll)
+                    if (localStorage.getItem('lockPageRotationOutdoor') !== 'true') {
                         localStorage.setItem('lockPageRotationOutdoor', 'true');
                         if (countdownIntervalId) clearInterval(countdownIntervalId);
                         const frames = getFrames();
                         frames.next.className = 'standby';
                         frames.next.src = '/prayer-mode';
+                    }
+                } else if (data.yasin_active) {
+                    // Agenda Malam Jum'at Surat Yaasiin
+                    if (localStorage.getItem('lockPageRotationOutdoor') !== 'yasin') {
+                        localStorage.setItem('lockPageRotationOutdoor', 'yasin');
+                        if (countdownIntervalId) clearInterval(countdownIntervalId);
+                        const frames = getFrames();
+                        frames.next.className = 'standby';
+                        frames.next.src = '/yasin-embed';
                     }
                 } else {
                     if (isBroadcastingMimbar) {
