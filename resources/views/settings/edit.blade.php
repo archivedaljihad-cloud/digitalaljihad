@@ -63,7 +63,7 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" id="prayermode-tab" data-toggle="tab" href="#prayermode" role="tab" style="color: #ffd700;">
-							<i class="fas fa-mosque" style="color: #ffd700;"></i> Prayer Mode
+							<i class="fas fa-mosque" style="color: #ffd700;"></i> Jum'at Prayer Mode
 						</a>					
 					</li>
 					<li class="nav-item">
@@ -360,13 +360,13 @@
 							</div>
 						</div>
 
-						{{-- TAB PRAYER MODE --}}
+						{{-- TAB PRAYER MODE (JUM'AT & REGULER) --}}
 						<div class="tab-pane fade" id="prayermode" role="tabpanel">
 							<div class="row">
 								<div class="col-md-12">
-									<div class="alert alert-info">
-										<i class="fas fa-info-circle"></i>
-										<strong>Pengaturan Prayer Mode:</strong> Atur durasi hitung mundur, pesan, dan tampilan layar saat masuk waktu sholat.
+									<div class="alert alert-info border-left-info shadow-sm">
+										<i class="fas fa-info-circle mr-1"></i>
+										<strong>Pengaturan Terpusat Jum'at Prayer Mode:</strong> Atur aktivasi mode sholat otomatis, durasi hitung mundur adzan, durasi adzan, durasi iqamah, durasi sholat fardhu, durasi khusus Sholat Jum'at, audio tarhim, serta pesan-pesan layar TV.
 									</div>
 								</div>
 
@@ -377,26 +377,51 @@
 											<input type="checkbox" class="custom-control-input" id="prayer_mode_enabled"
 												name="prayer_mode_enabled" value="1" {{ old('prayer_mode_enabled', $setting->prayer_mode_enabled ?? 1) ? 'checked' : '' }}>
 											<label class="custom-control-label" for="prayer_mode_enabled">
-												<strong>Aktifkan Prayer Mode</strong>
+												<strong>Aktifkan Prayer Mode Otomatis</strong>
 											</label>
 										</div>
 									</div>
 
-									<h6 class="font-weight-bold text-success mb-3 border-bottom pb-2">Pengaturan Waktu & Durasi</h6>
+									<h6 class="font-weight-bold text-success mb-3 border-bottom pb-2">
+										<i class="fas fa-stopwatch mr-1"></i> Pengaturan Waktu & Durasi Mode Sholat
+									</h6>
 									
 									<div class="form-group">
-										<label>Durasi Sholat Keseluruhan (Menit)</label>
+										<label class="font-weight-bold">Durasi Countdown Sebelum Adzan (Menit)</label>
+										<input type="number" name="prayer_mode_before_adzan" class="form-control" value="{{ old('prayer_mode_before_adzan', $setting->prayer_mode_before_adzan ?? 5) }}" min="1">
+										<small class="text-muted">Layar TV mulai menghitung mundur sekian menit sebelum adzan tiba.</small>
+									</div>
+
+									<div class="form-group">
+										<label class="font-weight-bold">Durasi Adzan (Menit)</label>
+										<input type="number" name="prayer_mode_adzan_duration" class="form-control" value="{{ old('prayer_mode_adzan_duration', $setting->prayer_mode_adzan_duration ?? 4) }}" min="1">
+										<small class="text-muted">Durasi tampilan saat adzan berkumandang.</small>
+									</div>
+
+									<div class="form-group">
+										<label class="font-weight-bold">Durasi Iqamah (Menit)</label>
+										<input type="number" name="prayer_mode_iqamah_duration" class="form-control" value="{{ old('prayer_mode_iqamah_duration', $setting->prayer_mode_iqamah_duration ?? 10) }}" min="1">
+										<small class="text-muted">Hitung mundur iqamah menuju sholat berjamaah.</small>
+									</div>
+
+									<div class="form-group">
+										<label class="font-weight-bold">Durasi Sholat Keseluruhan / Reguler (Menit)</label>
 										<input type="number" name="prayer_mode_duration" class="form-control" value="{{ old('prayer_mode_duration', $setting->prayer_mode_duration ?? 10) }}" min="1">
+										<small class="text-muted">Durasi layar TV terkunci hening saat sholat 5 waktu berlangsung.</small>
 									</div>
 
-									<div class="form-group">
-										<label>Durasi Countdown Sebelum Adzan (Menit)</label>
-										<input type="number" name="countdown_adzan_duration" class="form-control" value="{{ old('countdown_adzan_duration', $setting->countdown_adzan_duration ?? 5) }}" min="1">
-									</div>
-
-									<div class="form-group">
-										<label>Durasi Iqamah (Menit)</label>
-										<input type="number" name="iqamah_duration" class="form-control" value="{{ old('iqamah_duration', $setting->iqamah_duration ?? 10) }}" min="1">
+									{{-- DURASI KHUSUS HARI JUMAT --}}
+									<div class="form-group bg-light p-3 rounded border border-success mb-3">
+										<label class="font-weight-bold text-success mb-1">
+											<i class="fas fa-mosque mr-1"></i> Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
+										</label>
+										<div class="input-group">
+											<input type="number" name="prayer_mode_jumat_duration" class="form-control" value="{{ old('prayer_mode_jumat_duration', $setting->prayer_mode_jumat_duration ?? 50) }}" min="10" max="180">
+											<div class="input-group-append">
+												<span class="input-group-text">menit</span>
+											</div>
+										</div>
+										<small class="text-muted d-block mt-1">Durasi khusus hari Jum'at di waktu Dzuhur (TV terkunci tenang menampilkan kartu petugas & hadits adab khutbah).</small>
 									</div>
 
 									<div class="form-group">
@@ -1211,6 +1236,11 @@
 					? '<i class="fas fa-compress-arrows-alt mr-1"></i> Tutup Semua Panel'
 					: '<i class="fas fa-expand-arrows-alt mr-1"></i> Buka / Tutup Semua Panel';
 			});
+		}
+
+		// Auto-buka tab sesuai hash URL (misal #prayermode)
+		if (window.location.hash) {
+			$('#settingsTab a[href="' + window.location.hash + '"]').tab('show');
 		}
 	</script>
 @endpush

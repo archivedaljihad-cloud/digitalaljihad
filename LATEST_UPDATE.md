@@ -830,7 +830,42 @@ Saat layar TV masjid pertama kali dinyalakan (*TV ON* / startup boot) atau memua
 
 ---
 
-## 🔒 28. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🕌 28. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.3): SENTRALISASI PENGATURAN WAKTU & MODE SHOLAT KE "JUM'AT PRAYER MODE" (OPSI A)
+
+### Masalah & Latar Belakang:
+Operator/petugas masjid melaporkan kebingungan akibat adanya duplikasi kolom pengaturan durasi waktu di dua menu yang berbeda:
+1. Menu **"Kelola Jadwal Sholat"** (`/jadwal_sholat`): Terdapat card *"Pengaturan Waktu Sistem"* yang memuat Countdown Sebelum Adzan, Durasi Iqamah, Prayer Mode, Durasi Adzan, Durasi Sholat Jum'at, dan Audio Tarhim.
+2. Menu **"Teks Berjalan TV / Pengaturan Aplikasi"** (`/settings` &rarr; Tab **Prayer Mode**): Terdapat pula Durasi Countdown Sebelum Adzan, Durasi Iqamah, Durasi Sholat Keseluruhan, dan Pemicu Audio Tarhim.
+3. Terjadi **bug silent desync & overwrite**: Di form pengaturan TV, input membaca field `$setting->countdown_adzan_duration` dan `$setting->iqamah_duration` yang tidak ada di database (kolom aslinya adalah `prayer_mode_before_adzan` dan `prayer_mode_iqamah_duration`), sehingga form selalu menampilkan default 5 & 10 menit dan berpotensi menimpa data yang telah diatur operator di menu jadwal sholat.
+
+### Solusi yang Diterapkan (OPSI A):
+1. **Sentralisasi Penuh ke Tab "Jum'at Prayer Mode" ([resources/views/settings/edit.blade.php](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/resources/views/settings/edit.blade.php)):**
+   - Mengubah nama tab dari *"Prayer Mode"* menjadi **"Jum'at Prayer Mode"** agar operator dapat dengan mudah membedakan fungsinya dibanding menu operasional lainnya.
+   - Memperbaiki binding nama kolom database menjadi:
+     - `prayer_mode_before_adzan` (Durasi Countdown Sebelum Adzan)
+     - `prayer_mode_adzan_duration` (Durasi Adzan)
+     - `prayer_mode_iqamah_duration` (Durasi Iqamah)
+     - `prayer_mode_duration` (Durasi Sholat Keseluruhan / Reguler)
+     - `prayer_mode_jumat_duration` (Durasi Khusus Sholat Jum'at: Khutbah & Sholat Berjamaah)
+     - `tarhim_trigger_minutes` / `tarhim_trigger_seconds` (Waktu Mulai Audio Tarhim)
+   - Ditambahkan script auto-tab switch bila URL memuat hash `#prayermode`.
+2. **Pembersihan Halaman Jadwal Sholat ([resources/views/jadwal_sholat/index.blade.php](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/resources/views/jadwal_sholat/index.blade.php)):**
+   - Menghapus card duplikat *"Pengaturan Waktu Sistem"*.
+   - Halaman `jadwal_sholat.index` kini **fokus 100% pada manajemen tabel jam sholat 5 waktu**.
+   - Menambahkan banner informatif elegan berwarna hijau dengan tombol pintas:  
+     `[ ⚙️ Buka Jum'at Prayer Mode ]` yang langsung membuka tab Jum'at Prayer Mode.
+3. **Penyempurnaan Controller ([app/Http/Controllers/AppSettingController.php](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/app/Http/Controllers/AppSettingController.php)):**
+   - Method `update()` kini mendukung penuh penyimpanan `prayer_mode_before_adzan`, `prayer_mode_adzan_duration`, `prayer_mode_iqamah_duration`, `prayer_mode_duration`, dan `prayer_mode_jumat_duration` dengan fallback legacy input yang aman.
+
+### Berkas yang Dimodifikasi:
+- `resources/views/settings/edit.blade.php` (Penggantian nama tab menjadi Jum'at Prayer Mode & penataan form durasi lengkap)
+- `resources/views/jadwal_sholat/index.blade.php` (Penghapusan card duplikat & penambahan banner tautan terpusat)
+- `app/Http/Controllers/AppSettingController.php` (Penyempurnaan penyimpanan parameter waktu sholat)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.3)
+
+---
+
+## 🔒 29. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -838,7 +873,8 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 17 September 2026 (Splash Loading Screen TV Hijau Zamrud & Logo Masjid Al-Jihad v4.4.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 17 September 2026 (Sentralisasi Pengaturan Waktu ke Jum'at Prayer Mode v4.4.3) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+
 
 
 

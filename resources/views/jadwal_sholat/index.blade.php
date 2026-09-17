@@ -165,160 +165,22 @@
 			</div>
 		</div>
 
-		<!-- Pengaturan Waktu Sistem -->
-		<div class="card shadow mb-4">
-			<div class="card-header py-3">
-				<h6 class="m-0 font-weight-bold text-white">
-					<i class="fas fa-stopwatch mr-2"></i>
-					Pengaturan Waktu Sistem
-				</h6>
-			</div>
-
-			<div class="card-body">
-
-				<form action="{{ route('settings.prayer.update') }}" method="POST">
-					@csrf
-					@method('PUT')
-
-					<div class="row">
-
-						<div class="col-md-4">
-							<div class="form-group">
-								<label>Rotation Interval</label>
-								<div class="input-group">
-									<input type="number" name="rotation_interval" class="form-control"
-										value="{{ old('rotation_interval', $setting->rotation_interval) }}">
-									<div class="input-group-append">
-										<span class="input-group-text">detik</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-md-4">
-							<div class="form-group">
-								<label>Prayer Mode</label>
-								<div class="input-group">
-									<input type="number" name="prayer_mode_duration" class="form-control"
-										value="{{ old('prayer_mode_duration', $setting->prayer_mode_duration) }}">
-									<div class="input-group-append">
-										<span class="input-group-text">menit</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-md-4">
-							<div class="form-group">
-								<label>Countdown Sebelum Adzan</label>
-								<div class="input-group">
-									<input type="number" name="prayer_mode_before_adzan" class="form-control"
-										value="{{ old('prayer_mode_before_adzan', $setting->prayer_mode_before_adzan) }}">
-									<div class="input-group-append">
-										<span class="input-group-text">menit</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="row">
-
-						<div class="col-md-4">
-							<div class="form-group">
-								<label>Durasi Adzan</label>
-								<div class="input-group">
-									<input type="number" name="prayer_mode_adzan_duration" class="form-control"
-										value="{{ old('prayer_mode_adzan_duration', $setting->prayer_mode_adzan_duration) }}">
-									<div class="input-group-append">
-										<span class="input-group-text">menit</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-md-4">
-							<div class="form-group">
-								<label>Durasi Iqamah</label>
-								<div class="input-group">
-									<input type="number" name="prayer_mode_iqamah_duration" class="form-control"
-										value="{{ old('prayer_mode_iqamah_duration', $setting->prayer_mode_iqamah_duration) }}">
-									<div class="input-group-append">
-										<span class="input-group-text">menit</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-md-4">
-							<div class="form-group">
-								<label>Durasi Setelah Sholat</label>
-								<div class="input-group">
-									<input type="number" name="prayer_mode_after_prayer" class="form-control"
-										value="{{ old('prayer_mode_after_prayer', $setting->prayer_mode_after_prayer) }}">
-									<div class="input-group-append">
-										<span class="input-group-text">menit</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="row">
-						<!-- Durasi Sholat Jumat -->
-						<div class="col-md-4">
-							<div class="form-group mb-3">
-								<label for="prayer_mode_jumat_duration" class="form-label font-weight-bold text-success">
-									<i class="fas fa-mosque mr-1"></i> Durasi Sholat Jum'at (Khutbah & Sholat)
-								</label>
-								<div class="input-group">
-									<input type="number" 
-										   name="prayer_mode_jumat_duration" 
-										   id="prayer_mode_jumat_duration" 
-										   class="form-control" 
-										   value="{{ old('prayer_mode_jumat_duration', $setting->prayer_mode_jumat_duration ?? 50) }}" 
-										   min="10" max="180">
-									<div class="input-group-append">
-										<span class="input-group-text">menit</span>
-									</div>
-								</div>
-								<small class="text-muted">Durasi khusus hari Jum'at di waktu Dzuhur (TV terkunci tenang selama khutbah & sholat).</small>
-							</div>
-						</div>
-
-						<!-- Input Pengaturan Detik Audio Tarhim -->
-						<div class="col-md-4">
-							<div class="form-group mb-3">
-								<label for="tarhim_trigger_seconds" class="form-label font-weight-bold">
-									Audio Tarhim (Detik Sebelum Adzan)
-								</label>
-								<input type="number" 
-									   name="tarhim_trigger_seconds" 
-									   id="tarhim_trigger_seconds" 
-									   class="form-control" 
-									   value="{{ old('tarhim_trigger_seconds', $setting->tarhim_trigger_seconds ?? 300) }}" 
-									   placeholder="Contoh: 300">
-								<small class="text-muted">Audio tarhim otomatis berbunyi sekian detik sebelum adzan.</small>
-							</div>
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="text-right mt-3">
-						<button type="submit" class="btn btn-primary">
-							<i class="fas fa-save"></i> Simpan Pengaturan
-						</button>
-
-						<button type="reset" class="btn btn-warning text-dark ml-2">
-							<i class="fas fa-undo"></i> Reset
-						</button>
-					</div>
-
-				</form>
-
+		<!-- Info Sentralisasi Pengaturan Waktu & Mode Sholat -->
+		<div class="card bg-white border-left-success shadow mb-4">
+			<div class="card-body py-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+				<div class="mr-md-3 mb-3 mb-md-0">
+					<h5 class="font-weight-bold text-success mb-1">
+						<i class="fas fa-mosque mr-2"></i> Pengaturan Durasi Sholat, Iqamah, Tarhim & Sholat Jum'at
+					</h5>
+					<p class="text-muted mb-0 small">
+						Seluruh pengaturan durasi hitung mundur adzan, durasi adzan, durasi iqamah, durasi sholat fardhu, durasi Sholat Jum'at, serta audio tarhim kini telah dipusatkan di menu <strong>Jum'at Prayer Mode</strong> agar terpadu dan tidak membingungkan operator.
+					</p>
+				</div>
+				<div class="text-nowrap">
+					<a href="{{ route('settings.edit') }}#prayermode" class="btn btn-success font-weight-bold shadow-sm px-3 py-2">
+						<i class="fas fa-sliders-h mr-1"></i> Buka Jum'at Prayer Mode <i class="fas fa-arrow-right ml-1"></i>
+					</a>
+				</div>
 			</div>
 		</div>
 

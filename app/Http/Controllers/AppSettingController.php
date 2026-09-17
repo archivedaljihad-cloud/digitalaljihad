@@ -246,19 +246,33 @@ class AppSettingController extends Controller
         }
 
         // ==================================================
-        // PRAYER MODE SETTINGS
+        // PRAYER MODE SETTINGS (JUM'AT & REGULER)
         // ==================================================
         if (Schema::hasColumn('app_settings', 'prayer_mode_enabled')) {
             $setting->prayer_mode_enabled = $request->boolean('prayer_mode_enabled');
         }
         if (Schema::hasColumn('app_settings', 'prayer_mode_duration') && $request->has('prayer_mode_duration')) {
-            $setting->prayer_mode_duration = $request->input('prayer_mode_duration');
+            $setting->prayer_mode_duration = (int) $request->input('prayer_mode_duration');
         }
-        if (Schema::hasColumn('app_settings', 'prayer_mode_before_adzan') && $request->has('countdown_adzan_duration')) {
-            $setting->prayer_mode_before_adzan = $request->input('countdown_adzan_duration');
+        if (Schema::hasColumn('app_settings', 'prayer_mode_before_adzan')) {
+            if ($request->has('prayer_mode_before_adzan')) {
+                $setting->prayer_mode_before_adzan = (int) $request->input('prayer_mode_before_adzan');
+            } elseif ($request->has('countdown_adzan_duration')) {
+                $setting->prayer_mode_before_adzan = (int) $request->input('countdown_adzan_duration');
+            }
         }
-        if (Schema::hasColumn('app_settings', 'prayer_mode_iqamah_duration') && $request->has('iqamah_duration')) {
-            $setting->prayer_mode_iqamah_duration = $request->input('iqamah_duration');
+        if (Schema::hasColumn('app_settings', 'prayer_mode_adzan_duration') && $request->has('prayer_mode_adzan_duration')) {
+            $setting->prayer_mode_adzan_duration = (int) $request->input('prayer_mode_adzan_duration');
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_mode_iqamah_duration')) {
+            if ($request->has('prayer_mode_iqamah_duration')) {
+                $setting->prayer_mode_iqamah_duration = (int) $request->input('prayer_mode_iqamah_duration');
+            } elseif ($request->has('iqamah_duration')) {
+                $setting->prayer_mode_iqamah_duration = (int) $request->input('iqamah_duration');
+            }
+        }
+        if (Schema::hasColumn('app_settings', 'prayer_mode_jumat_duration') && $request->has('prayer_mode_jumat_duration')) {
+            $setting->prayer_mode_jumat_duration = (int) $request->input('prayer_mode_jumat_duration');
         }
         if (Schema::hasColumn('app_settings', 'tarhim_trigger_seconds') && $request->has('tarhim_trigger_seconds')) {
             $setting->tarhim_trigger_seconds = $request->input('tarhim_trigger_seconds');
