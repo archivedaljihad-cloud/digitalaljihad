@@ -798,7 +798,39 @@ Pada tampilan **Mode Sholat (*Prayer Mode*)**, tulisan nama sholat di dalam kota
 
 ---
 
-## 🔒 27. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 💎 27. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.2): TAMPILAN AWAL STARTUP/SPLASH TV HIJAU ZAMRUD GELAP & LOGO MASJID AL-JIHAD
+
+### Masalah / Kebutuhan Pengguna:
+Saat layar TV masjid pertama kali dinyalakan (*TV ON* / startup boot) atau memuat ulang halaman, sistem menampilkan layar pemuatan (*loading overlay*) dengan latar belakang warna cyan/teal polos (`linear-gradient(135deg, #0a4d68, #088395)`) beserta spinner lingkaran abu-abu/kuning kecil di tengah. Pengguna menginginkan warna dasar tersebut diganti menjadi **warna hijau zamrud yang agak gelap (*deep royal emerald*)**, dan di bagian tengahnya disematkan **Logo Masjid Jami' Al-Jihad** agar nuansa TV sejak detik pertama menyala sudah terasa agung, islami, dan prestisius.
+
+### Solusi Desain & Implementasi:
+1. **Latar Belakang Gradien Hijau Zamrud Gelap (*Deep Royal Emerald Radial Gradient*):**
+   - Mengganti latar belakang `.loading-overlay` dari cyan/teal menjadi radial gradient mewah:
+     `background: radial-gradient(ellipse at center, #0d4a2b 0%, #052917 55%, #01140b 100%);`
+   - Memberikan ilusi kedalaman pendaran cahaya dari tengah layar dengan nuansa hijau kubah/mihrab masjid.
+2. **Logo Masjid Al-Jihad di Tengah Layar dengan Efek Berdenyut (*Pulsing Gold Glow*):**
+   - Menempatkan logo resmi Masjid Al-Jihad (`public/img/logo-aljihad-transparent.png` dengan fallback logo dinamis dari `AppSetting`) persis di tengah layar.
+   - Dilengkapi drop-shadow bercahaya emas (`filter: drop-shadow(0 0 22px rgba(255, 215, 0, 0.5)) drop-shadow(0 6px 16px rgba(0,0,0,0.7))`).
+   - Animasi berdenyut lembut (`@keyframes splashLogoPulse 3s ease-in-out infinite alternate`).
+3. **Cincin Putar Emas Elegan (*Golden Rotating Orbit Ring*):**
+   - Mengelilingi logo dengan cincin loading putar halus beraksen emas (`border-top: 3px solid #FFD700; border-right: 3px solid rgba(255, 215, 0, 0.6)`) yang berputar kontinu (`@keyframes splashSpin 1.4s linear infinite`).
+4. **Tipografi & Indikator Status Memuat (*Glass Pill Indicator*):**
+   - Menampilkan nama masjid: `MASJID JAMI' AL JIHAD` (dinamis dari `$settings->nama_aplikasi`) berfont tebal *Poppins* dengan bayangan emas.
+   - Kapsul kaca hitam transparan (`.splash-loading-pill`) bertuliskan *"MEMUAT TAMPILAN..."* lengkap dengan titik emas berdenyut (`.splash-dot`).
+5. **Diterapkan Serentak pada Dual-Engine Rotator:**
+   - [`resources/views/rotator.blade.php`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/resources/views/rotator.blade.php) (Layar TV Utama Dalam Masjid)
+   - [`resources/views/rotator-outdoor.blade.php`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/resources/views/rotator-outdoor.blade.php) (Layar TV Serambi/Luar Masjid)
+   - Tetap kompatibel 100% dengan mekanisme JavaScript penghilangan otomatis `#loadingOverlay` saat iframe pertama berhasil dimuat (`onFrameLoad`).
+
+### Berkas yang Dimodifikasi:
+- `resources/views/rotator.blade.php` (CSS & markup HTML splash loading emerald + logo)
+- `resources/views/rotator-outdoor.blade.php` (CSS & markup HTML splash loading emerald + logo)
+- `scratch/preview_splash.html` (Pratinjau HTML mandiri)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.2)
+
+---
+
+## 🔒 28. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -806,6 +838,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 17 September 2026 (Peningkatan Visibilitas Kapsul Prayer Mode v4.4.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 17 September 2026 (Splash Loading Screen TV Hijau Zamrud & Logo Masjid Al-Jihad v4.4.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+
 
 

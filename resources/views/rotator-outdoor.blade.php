@@ -73,32 +73,114 @@
             pointer-events: none !important;
         }
 
+        /* =====================================================
+           ELEGANT ROYAL EMERALD SPLASH LOADING OVERLAY
+           ===================================================== */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0a4d68, #088395);
+            background: radial-gradient(ellipse at center, #0d4a2b 0%, #052917 55%, #01140b 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #ffd700;
+        .splash-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: splashFadeIn 0.8s ease-out;
+        }
+
+        @keyframes splashFadeIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .splash-logo-wrapper {
+            position: relative;
+            width: clamp(140px, 14vw, 190px);
+            height: clamp(140px, 14vw, 190px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .splash-spinner-ring {
+            position: absolute;
+            inset: -14px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            border: 3px solid rgba(212, 175, 55, 0.15);
+            border-top: 3px solid #FFD700;
+            border-right: 3px solid rgba(255, 215, 0, 0.6);
+            animation: splashSpin 1.4s linear infinite;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
         }
 
-        @keyframes spin {
+        @keyframes splashSpin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .splash-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 22px rgba(255, 215, 0, 0.5)) drop-shadow(0 6px 16px rgba(0,0,0,0.7));
+            animation: splashLogoPulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes splashLogoPulse {
+            0% { transform: scale(0.97); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.35)); }
+            100% { transform: scale(1.03); filter: drop-shadow(0 0 28px rgba(255, 215, 0, 0.65)); }
+        }
+
+        .splash-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(22px, 2.2vw, 34px);
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.4);
+            margin-bottom: 14px;
+        }
+
+        .splash-loading-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 22px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            font-size: clamp(11px, 1vw, 14px);
+            color: #E2E8F0;
+            letter-spacing: 2px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .splash-dot {
+            width: 8px;
+            height: 8px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #FFD700;
+            animation: splashDotPulse 1.2s infinite alternate;
+        }
+
+        @keyframes splashDotPulse {
+            0% { opacity: 0.4; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
         }
 
         .page-indicator {
@@ -218,7 +300,20 @@
     </div>
 
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+        <div class="splash-card">
+            <div class="splash-logo-wrapper">
+                <div class="splash-spinner-ring"></div>
+                <img src="{{ !empty($settings->logo) ? asset('storage/' . str_replace(['storage/', 'public/'], '', $settings->logo)) : asset('img/logo-aljihad-transparent.png') }}"
+                     alt="Logo Masjid Al-Jihad"
+                     class="splash-logo-img"
+                     onerror="this.onerror=null; this.src='{{ asset('img/logo-aljihad-transparent.png') }}';">
+            </div>
+            <h2 class="splash-title">{{ $settings->nama_aplikasi ?? "MASJID JAMI' AL JIHAD" }}</h2>
+            <div class="splash-loading-pill">
+                <span class="splash-dot"></span>
+                <span>MEMUAT TAMPILAN...</span>
+            </div>
+        </div>
     </div>
 
     <div class="page-indicator" id="pageIndicator">
