@@ -773,7 +773,32 @@ Setiap hari Kamis malam (malam Jum'at) ba'da Maghrib (pukul 18:30) hingga masuk 
 
 ---
 
-## 🔒 26. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🎨 26. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.1): PENINGKATAN VISIBILITAS KAPSUL PRAYER MODE (EFEK DENYUT EMAS & NAMA SHOLAT PUTIH KONTRAST TINGGI)
+
+### Masalah Visual Sebelumnya:
+Pada tampilan **Mode Sholat (*Prayer Mode*)**, tulisan nama sholat di dalam kotak kapsul (`.prayer-name`) sebelumnya menggunakan gradien emas-putih transparan (`-webkit-background-clip: text; background: linear-gradient(...)`). Karena latar belakang kapsul bernuansa hijau-emas redup, warna gradien teks tersebut memudar (*washout*) dan menyatu dengan background, sehingga nama sholat (misal: "ASHAR", "MAGHRIB", "SHOLAT JUM'AT") sulit terbaca dari jarak jauh oleh jamaah masjid.
+
+### Solusi & Peningkatan Estetika:
+1. **Tulisan Nama Sholat Putih Solid Kontras Tinggi (`color: #FFFFFF`):**
+   - Mengubah warna font `.prayer-name` menjadi **putih murni (`#FFFFFF`) solid** dengan ketebalan ekstra (`font-weight: 900`).
+   - Ditambahkan efek bayangan teks berlapis (*multi-layer text shadow*): bayangan gelap pekat (`0 2px 4px rgba(0,0,0,0.9)` dan `0 4px 14px rgba(0,0,0,0.8)`) serta pendaran lembut putih (`0 0 12px rgba(255,255,255,0.4)`).
+   - Rasio kontras melonjak drastis sehingga nama sholat dapat terbaca dengan sangat tajam bahkan dari jarak 15–20 meter.
+2. **Efek Denyut Pendaran Emas (*Breathing Golden Pulse*):**
+   - Kapsul sholat (`.prayer-badge`) kini dilengkapi animasi denyut bernapas lembut (`@keyframes prayerBadgePulse 2.8s ease-in-out infinite`).
+   - Pendaran aura kuning emas (`box-shadow: 0 0 40px rgba(255, 215, 0, 0.85)`) berdenyut perlahan memancarkan kesan sakral, hidup, dan mewah tanpa menyilaukan mata jamaah.
+   - Latar belakang dalam kapsul dipertajam menjadi hijau zamrud pekat (`rgba(8, 48, 28, 0.94)` ke `rgba(2, 22, 12, 0.98)`) dengan bingkai emas 2px dan batu permata emas kiri-kanan (`#FFD700`) yang ikut berpendar.
+3. **Penyelarasan Berkas:**
+   - Diterapkan pada file utama [`resources/views/prayer-mode.blade.php`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/resources/views/prayer-mode.blade.php).
+   - Diterapkan pada file demo offline [`public/preview-prayer-mode.html`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/public/preview-prayer-mode.html).
+
+### Berkas yang Dimodifikasi:
+- `resources/views/prayer-mode.blade.php` (Peningkatan styling CSS kapsul denyut emas & teks putih)
+- `public/preview-prayer-mode.html` (Penyelarasan demo offline)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.1)
+
+---
+
+## 🔒 27. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -781,6 +806,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 17 September 2026 (Fitur Agenda Malam Jum'at Surat Yaasiin Auto-Scroll v4.4.0) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 17 September 2026 (Peningkatan Visibilitas Kapsul Prayer Mode v4.4.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

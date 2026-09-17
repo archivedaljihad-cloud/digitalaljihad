@@ -13,9 +13,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap"
-    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-    <script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
+    <script src="vendor/fontawesome-free/js/all.min.js" defer></script>
     <style>
         :root {
             --gold-light: #FFF8E1;
@@ -101,19 +101,19 @@
 
         /* Gradient Dasar */
         .bg-gradient {
-            @if($theme == 'dark')
+            
                 background: radial-gradient(circle at 50% 20%, #16181d 0%, #0c0d10 50%, #000000 100%);
-            @elseif($theme == 'light')
+            
                 background: radial-gradient(circle at 50% 20%, #f7f9fc 0%, #e8edf3 50%, #d5dde6 100%);
-            @else
+            
                 /* Royal Emerald & Obsidian */
                 background: radial-gradient(circle at 50% 15%, #064024 0%, #032716 42%, #01150c 80%, #000c06 100%);
-            @endif
+            
         }
 
         /* Islamic Geometric Pattern */
         .bg-pattern {
-            background-image: url('{{ asset("storage/background/islamic.png") }}');
+            background-image: url('');
             background-repeat: repeat;
             background-position: center;
             background-size: 260px;
@@ -123,7 +123,7 @@
 
         /* Ka'bah Watermark Vignette */
         .bg-kaabah {
-            background-image: url('{{ asset("img/Kaabah.png") }}');
+            background-image: url('');
             background-size: contain;
             background-position: center 85%;
             background-repeat: no-repeat;
@@ -184,14 +184,14 @@
             text-align: center;
 
             /* Luxury Glassmorphism */
-            @if($theme == 'dark')
+            
                 background: radial-gradient(120% 120% at 50% 0%, rgba(25, 27, 34, 0.78) 0%, rgba(12, 13, 17, 0.92) 100%);
-            @elseif($theme == 'light')
+            
                 background: radial-gradient(120% 120% at 50% 0%, rgba(255, 255, 255, 0.85) 0%, rgba(240, 244, 248, 0.94) 100%);
                 color: #222222;
-            @else
+            
                 background: radial-gradient(120% 120% at 50% 0%, rgba(5, 45, 25, 0.75) 0%, rgba(2, 20, 11, 0.89) 100%);
-            @endif
+            
 
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
@@ -313,12 +313,12 @@
             font-weight: 700;
             letter-spacing: 6px;
             text-transform: uppercase;
-            @if($theme == 'light')
+            
                 color: #1a202c;
-            @else
+            
                 color: #ffffff;
                 text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-            @endif
+            
             margin-bottom: 12px;
         }
 
@@ -853,32 +853,32 @@
         <!-- 2. JUDUL FASE & BADGE NAMA SHOLAT -->
         <div class="phase-section">
             <div class="phase-title">
-                @if($phase == 'countdown')
+                
                     Menjelang Waktu Sholat
-                @elseif($phase == 'adzan')
+                
                     Menuju waktu sholat
-                @elseif($phase == 'iqamah')
+                
                     Menunggu Waktu Iqamah
-                @elseif($phase == 'khutbah')
+                
                     Khutbah & Sholat Jum'at Berjamaah
-                @elseif($phase == 'prayer')
+                
                     Sholat Sedang Berlangsung
-                @else
+                
                     Mode Sholat
-                @endif
+                
             </div>
 
             <div class="prayer-badge-wrapper">
                 <div class="prayer-badge">
                     <span class="badge-gem"></span>
                     <span class="prayer-name">
-                        @if($phase == 'khutbah')
+                        
                             SHOLAT JUM'AT
-                        @elseif($currentPrayer)
-                            {{ strtoupper(is_object($currentPrayer) ? $currentPrayer->nama_sholat : $currentPrayer) }}
-                        @else
+                        
+                            ASHAR
+                        
                             WAKTU SHOLAT
-                        @endif
+                        
                     </span>
                     <span class="badge-gem"></span>
                 </div>
@@ -886,14 +886,14 @@
         </div>
 
         <!-- 3. COUNTDOWN TIMER (SPLIT DUAL-TILE) / JUMAT OFFICERS GRID -->
-        @if($phase == 'khutbah')
+        
             <div class="jumat-officers-grid">
                 <div class="officer-card">
                     <div class="officer-badge">
                         <i class="fa-solid fa-microphone"></i> KHATIB
                     </div>
                     <div class="officer-name">
-                        {{ !empty($jumatPetugas->khatib) ? $jumatPetugas->khatib : 'Ustadz / Khatib Jum\'at' }}
+                        
                     </div>
                 </div>
 
@@ -902,7 +902,7 @@
                         <i class="fa-solid fa-user-tie"></i> IMAM
                     </div>
                     <div class="officer-name">
-                        {{ !empty($jumatPetugas->imam) ? $jumatPetugas->imam : 'Imam Rawatib / Jum\'at' }}
+                        
                     </div>
                 </div>
 
@@ -911,7 +911,7 @@
                         <i class="fa-solid fa-bullhorn"></i> MUADZIN
                     </div>
                     <div class="officer-name">
-                        {{ !empty($jumatPetugas->muadzin) ? $jumatPetugas->muadzin : 'Muadzin' }}
+                        
                     </div>
                 </div>
 
@@ -920,28 +920,28 @@
                         <i class="fa-solid fa-hand-holding-hand"></i> BILAL
                     </div>
                     <div class="officer-name">
-                        {{ !empty($jumatPetugas->bilal) ? $jumatPetugas->bilal : 'Bilal Jum\'at' }}
+                        
                     </div>
                 </div>
             </div>
             <!-- Elemen tersembunyi untuk kompatibilitas script -->
-            <div class="countdown" id="countdown" data-seconds="{{ $remainingSeconds }}" style="display:none;">00:00</div>
-        @elseif($phase != 'prayer')
+            <div class="countdown" id="countdown" data-seconds="" style="display:none;">00:00</div>
+        
             <div class="countdown-section">
                 <!-- Badge Interaktif Menuju Adzan / Fase (Tanpa Kapsul Waktu Sekarang) -->
                 <div class="timer-badge">
                     <div class="badge-shimmer"></div>
                     <i class="fa-regular fa-clock clock-pulse-icon"></i>
                     <span class="badge-text">
-                        @if($phase == 'countdown')
+                        
                             Menuju Adzan
-                        @elseif($phase == 'adzan')
+                        
                             Adzan sedang di Kumandangkan
-                        @elseif($phase == 'iqamah')
+                        
                             Menuju Iqamah
-                        @else
+                        
                             Sisa Waktu
-                        @endif
+                        
                     </span>
                     <span class="pulse-indicator-dot"></span>
                 </div>
@@ -969,9 +969,9 @@
                 </div>
 
                 <!-- Elemen tersembunyi untuk kompatibilitas script -->
-                <div class="countdown" id="countdown" data-seconds="{{ $remainingSeconds }}" style="display:none;">00:00</div>
+                <div class="countdown" id="countdown" data-seconds="" style="display:none;">00:00</div>
             </div>
-        @endif
+        
 
         <!-- 4. PESAN MASJID DINAMIS -->
         <div class="message-section">
@@ -992,7 +992,7 @@
                 }
             @endphp
 
-            @if($phase == 'khutbah')
+            
                 <div class="prayer-mode-box">
                     <div class="icons-row">
                         <i class="fa-solid fa-volume-xmark" title="Matikan Suara HP"></i>
@@ -1003,7 +1003,7 @@
                         {!! nl2br(e($displayMessage)) !!}
                     </div>
                 </div>
-            @elseif($phase == 'prayer')
+            
                 <div class="prayer-mode-box">
                     <div class="icons-row">
                         <i class="fa-solid fa-volume-xmark" title="Matikan Suara HP"></i>
@@ -1014,7 +1014,7 @@
                         {!! nl2br(e($displayMessage)) !!}
                     </div>
                 </div>
-            @elseif($phase == 'adzan')
+            
                 <div class="message-banner">
                     <i class="fa-solid fa-volume-xmark message-icon"></i>
                     <span class="message-text">
@@ -1022,21 +1022,21 @@
                     </span>
                     <i class="fa-solid fa-volume-xmark message-icon"></i>
                 </div>
-            @else
+            
                 <div class="message-banner">
                     <i class="fa-solid fa-mosque message-icon"></i>
                     <span class="message-text">
                         {!! nl2br(e($displayMessage)) !!}
                     </span>
                 </div>
-            @endif
+            
         </div>
 
         <!-- 5. PLAKAT PESAN & HADITS SHOLAT -->
         <div class="hadith-plakat">
             <span class="quote-watermark quote-left">“</span>
 
-            @if($phase == 'khutbah')
+            
                 <div class="adab-notice">
                     <i class="fa-solid fa-ear-listen"></i>
                     <span>Adab Khutbah Jum'at: Diam, Dengarkan dan Simak Khutbah</span>
@@ -1050,7 +1050,7 @@
                 <div class="hadith-source">
                     (HR. Bukhari no. 934 & Muslim no. 851)
                 </div>
-            @elseif($phase == 'countdown')
+            
                 <div class="adab-notice">
                     <i class="fa-solid fa-person-praying"></i>
                     <span>Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.</span>
@@ -1064,16 +1064,16 @@
                 <div class="hadith-source">
                     (HR. Bukhari dan Muslim)
                 </div>
-            @elseif($phase == 'adzan')
+            
                 <div class="hadith-body phase-quote">
                     "Adzan Sedang Dikumandangkan. Dengarkanlah, Jawablah, Dan Raih Pahala Kesempurnaannya."
                 </div>
-            @elseif($phase == 'iqamah')
+            
                 <div class="hadith-body phase-quote">
                     "Adzan Telah selesai, Mari Gunakan Waktu Yang Tersedia Untuk Berdoa. Doa Antara Adzan & Iqamah Tidak Ditolak."
                 </div>
-            @else
-                {{-- prayer phase --}}
+            
+                
                 <div class="hadith-header">
                     Rasulullah <span class="saw-symbol">ﷺ</span> bersabda:
                 </div>
@@ -1083,7 +1083,7 @@
                 <div class="hadith-source">
                     (HR. Bukhari dan Muslim)
                 </div>
-            @endif
+            
 
             <span class="quote-watermark quote-right">”</span>
         </div>
@@ -1174,16 +1174,16 @@
             if (elHidden) elHidden.textContent = minStr + ':' + secStr;
 
             // AUDIO TARHIM (Menuju Adzan / Countdown phase)
-            @if($phase == 'countdown')
-                if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 300 }} && !hasPlayedTarhim) {
+            
+                if (remaining <=  && !hasPlayedTarhim) {
                     playTarhimAudio();
                 }
-            @endif
+            
 
             // AUDIO ADZAN (Adzan phase)
-            @if($phase == 'adzan')
+            
                 playAdzanAudio();
-            @endif
+            
 
             if (remaining > 0) {
                 remaining--;
@@ -1218,7 +1218,7 @@
                             } else {
                                 window.location.href = "/";
                             }
-                        } else if (data.phase !== '{{ $phase }}') {
+                        } else if (data.phase !== '') {
                             // Server telah resmi masuk fase berikutnya!
                             clearInterval(checkNextPhase);
                             if (debugParam) {
@@ -1243,20 +1243,20 @@
             }, 1000);
         }
 
-        @if($phase != 'prayer' && $phase != 'khutbah')
+        
             updateCountdown();
             countdownTimer = setInterval(updateCountdown, 1000);
-        @endif
+        
 
         // Inisialisasi Audio saat halaman pertama kali termuat
-        @if($phase == 'countdown')
-            if (remaining <= {{ $setting->tarhim_trigger_seconds ?? 300 }}) {
+        
+            if (remaining <= ) {
                 playTarhimAudio();
             }
-        @elseif($phase == 'adzan')
+        
             stopTarhimAudio();
             playAdzanAudio();
-        @endif
+        
 
         /* Status polling (HANYA reload jika server menyatakan fase sholat telah berubah) */
         setInterval(function () {
@@ -1274,7 +1274,7 @@
                         } else {
                             window.location.href = "/";
                         }
-                    } else if (data.phase !== '{{ $phase }}') {
+                    } else if (data.phase !== '') {
                         // Fase sholat berganti dari server, reload untuk merender fase baru
                         if (debugParam) {
                             const currentUrl = new URL(window.location.href);
@@ -1333,13 +1333,13 @@
         }
     @endphp
     <audio id="audioTarhim" preload="auto">
-        <source src="{{ $tarhimSource }}" type="audio/mpeg">
+        <source src="" type="audio/mpeg">
     </audio>
-    @if(!empty($adzanSource))
+    )
     <audio id="audioAdzan" preload="auto">
-        <source src="{{ $adzanSource }}" type="audio/mpeg">
+        <source src="" type="audio/mpeg">
     </audio>
-    @endif
+    
 </body>
 
 </html>
