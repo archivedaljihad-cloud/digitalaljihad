@@ -308,3 +308,8 @@ Route::get('/reset-admin-password/{new_password}', function ($new_password) {
 Route::fallback(function () {
     return redirect()->route('rotator');
 });
+
+Route::get('/ping', function () {
+    return response('OK', 200)
+           ->header('Content-Type', 'text/plain');
+});

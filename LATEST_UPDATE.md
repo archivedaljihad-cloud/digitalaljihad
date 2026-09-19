@@ -865,7 +865,24 @@ Operator/petugas masjid melaporkan kebingungan akibat adanya duplikasi kolom pen
 
 ---
 
-## 🔒 29. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## ⚡ 29. CATATAN PEMBARUAN TERAKHIR (20 SEPTEMBER 2026 - v4.4.4): PENAMBAHAN ROUTE PING UNTUK OPTIMASI BANDWIDTH UPTIME ROBOT
+
+### Masalah & Kebutuhan Pengguna:
+Monitoring uptime server (misalnya melalui layanan Uptime Robot atau monitor kesehatan lainnya) yang menembak langsung ke halaman utama (`/` atau `/rotator`) menghabiskan bandwidth yang signifikan karena harus memuat DOM penuh, CSS, JS, dan query database jadwal sholat/pengaturan berulang kali dalam interval beberapa menit. Pengguna membutuhkan endpoint ringan khusus yang hanya mengembalikan status HTTP 200 dan respons teks polos singkat tanpa overhead query database atau rendering view.
+
+### Solusi & Implementasi:
+1. **Endpoint Khusus `/ping` ([routes/web.php](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/routes/web.php)):**
+   - Menambahkan route `GET /ping` di baris paling bawah `routes/web.php`.
+   - Mengembalikan teks mentah `'OK'` dengan status code `200` dan header `Content-Type: text/plain`.
+   - Sangat hemat bandwidth (hanya beberapa byte transfer data per ping) dan tidak membebani database ataupun alokasi memori server.
+
+### Berkas yang Dimodifikasi:
+- `routes/web.php` (Penambahan route `/ping`)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.4)
+
+---
+
+## 🔒 30. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -873,7 +890,8 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 17 September 2026 (Sentralisasi Pengaturan Waktu ke Jum'at Prayer Mode v4.4.3) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 20 September 2026 (Penambahan Route Ping Optimasi Uptime Robot v4.4.4) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+
 
 
 
