@@ -10,10 +10,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('app_settings') || !Schema::hasColumn('app_settings', 'rotation_pages')) {
+            return;
+        }
+
         $settings = DB::table('app_settings')->get();
 
         foreach ($settings as $setting) {
-            $raw = $setting->rotation_pages;
+            $raw = $setting->rotation_pages ?? null;
             if (empty($raw)) {
                 continue;
             }

@@ -898,9 +898,32 @@ Repositori sebelumnya berada di akun GitHub lama (`mydowndrive-ops`). Pengguna i
 ### Berkas yang Dimodifikasi:
 - `LATEST_UPDATE.md` (Pencatatan migrasi repositori v4.4.5)
 
+## ⚡ 31. CATATAN PEMBARUAN TERAKHIR (22 SEPTEMBER 2026 - v4.4.6): INTEGRASI DATABASE SUPABASE (POSTGRESQL) & MIGRATION BASELINE
+
+### Masalah & Kebutuhan Pengguna:
+Pengguna ingin menghubungkan database aplikasi Laravel ini ke cloud database **Supabase** (PostgreSQL). Proyek ini sebelumnya menggunakan database MySQL/MariaDB lokal yang diinisialisasi melalui dump SQL (`_db/masjidv2.sql`), sehingga migrasi bawaan belum mencakup pembuatan tabel-tabel pondasi (`sholat_jumat`, `sholat_idul_fitri`, `sholat_idul_adha`, `jadwal_sholat`, `keuangan`, `pengumuman`, `qris`) dan kolom esensial `app_settings`.
+
+### Solusi & Implementasi:
+1. **Konfigurasi Driver Database PostgreSQL Supabase:**
+   - Mengonfigurasi file `.env` ke Supabase Session Pooler IPv4 (`aws-0-ap-south-1.pooler.supabase.com:5432`).
+   - Menyertakan kredensial user `postgres.jhukhvxpgezbfbxgdgbc`, SSL mode `require`, dan database `postgres`.
+2. **Pembuatan Baseline Migration (`2026_09_09_999999_create_missing_base_tables.php`):**
+   - Membuat migrasi otomatis untuk tabel-tabel utama yang sebelumnya hanya ada di dump SQL: `jadwal_sholat`, `keuangan`, `pengumuman`, `qris`, `sholat_jumat`, `sholat_idul_fitri`, `sholat_idul_adha`.
+   - Mengisi data default waktu sholat 5 waktu dan pengaturan awal `app_settings`.
+3. **Hardening & Safe Checks Migrasi:**
+   - Memperbaiki `2026_09_08_000003_deactivate_welcome_embed_in_rotation_pages.php` dengan pengecekan `Schema::hasTable()` dan `Schema::hasColumn()` agar tidak memicu *fatal error* pada database baru.
+4. **Eksekusi Migrasi & Akun Administrator:**
+   - Menjalankan seluruh 33 file migrasi Laravel hingga 100% selesai (*all ran*).
+   - Menginisialisasi akun administrator default (`adminsholeh@admin.com` / `password`) agar sistem langsung siap digunakan untuk login admin.
+
+### Berkas yang Dimodifikasi / Dibuat:
+- `database/migrations/2026_09_09_999999_create_missing_base_tables.php` (Migrasi baseline tabel masjid untuk PostgreSQL)
+- `database/migrations/2026_09_08_000003_deactivate_welcome_embed_in_rotation_pages.php` (Penambahan safe check Schema)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.6)
+
 ---
 
-## 🔒 31. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🔒 32. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -908,7 +931,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Migrasi Remote GitHub ke archivedaljihad-cloud v4.4.5) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Integrasi Database Supabase PostgreSQL v4.4.6) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
 
