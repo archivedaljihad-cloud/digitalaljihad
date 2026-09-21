@@ -1,5 +1,20 @@
 <?php
 
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        http_response_code(500);
+        header('Content-Type: text/html');
+        echo "<h1>Fatal PHP Error on Vercel</h1>";
+        echo "<p><strong>Error:</strong> " . htmlspecialchars($error['message']) . "</p>";
+        echo "<p><strong>File:</strong> " . htmlspecialchars($error['file']) . " on line " . $error['line'] . "</p>";
+    }
+});
+
 // 1. Prepare writable storage and bootstrap cache in /tmp for Vercel
 $storageDirs = [
     '/tmp/storage/app',
@@ -30,8 +45,9 @@ try {
     require __DIR__ . '/../public/index.php';
 } catch (\Throwable $e) {
     http_response_code(500);
+    header('Content-Type: text/html');
     echo "<h1>Application Error</h1>";
     echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
     echo "<p><strong>File:</strong> " . htmlspecialchars($e->getFile()) . " on line " . $e->getLine() . "</p>";
     echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
-}
+}
