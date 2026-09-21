@@ -18,9 +18,11 @@
     }
   ],
   "env": {
+    "APP_NAME": "DISPLAY MASJID",
     "APP_ENV": "production",
     "APP_DEBUG": "false",
     "APP_KEY": "base64:TUI/rs1egTQjO+U3V3hMZYeY8Me8J4TzahQt6iZpcto=",
+    "APP_TIMEZONE": "Asia/Jakarta",
     "VERCEL": "1",
     "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
     "CACHE_DRIVER": "array",
@@ -31,6 +33,7 @@
     "DB_PORT": "5432",
     "DB_DATABASE": "postgres",
     "DB_USERNAME": "postgres.jhukhvxpgezbfbxgdgbc",
+    "DB_PASSWORD": "KMGbi.KH!-A7V@G",
     "DB_SSLMODE": "require"
   }
 }
