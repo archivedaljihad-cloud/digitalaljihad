@@ -921,9 +921,28 @@ Pengguna ingin menghubungkan database aplikasi Laravel ini ke cloud database **S
 - `database/migrations/2026_09_08_000003_deactivate_welcome_embed_in_rotation_pages.php` (Penambahan safe check Schema)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.6)
 
+## ⚡ 32. CATATAN PEMBARUAN TERAKHIR (22 SEPTEMBER 2026 - v4.4.7): PERSIAPAN DEPLOYMENT VERCEL DENGAN DATABASE SUPABASE
+
+### Masalah & Kebutuhan Pengguna:
+Pengguna ingin mendeploy repositori GitHub yang sudah terhubung ke database Supabase ke platform serverless hosting **Vercel** (`vercel.com`). Sebelumnya, file `vercel.json` masih berisi konfigurasi sisa ke database TiDB MySQL.
+
+### Solusi & Implementasi:
+1. **Pembaruan Konfigurasi `vercel.json`:**
+   - Mengubah `DB_CONNECTION` dari `mysql` menjadi `pgsql`.
+   - Mengarahkan `DB_HOST` ke Supabase Session Pooler IPv4 (`aws-0-ap-south-1.pooler.supabase.com`).
+   - Menyertakan port `5432`, database `postgres`, username `postgres.jhukhvxpgezbfbxgdgbc`, dan `DB_SSLMODE: require`.
+   - Menonaktifkan mode debug (`APP_DEBUG: false`) demi performa dan keamanan lingkungan produksi.
+2. **Fleksibilitas SSL Mode di `config/database.php`:**
+   - Memperbarui `config/database.php` agar membaca `DB_SSLMODE` dari environment variable (`env('DB_SSLMODE', 'prefer')`).
+
+### Berkas yang Dimodifikasi:
+- `vercel.json` (Pembaruan environment variables database Supabase untuk Vercel)
+- `config/database.php` (Dukungan dinamis SSL mode pgsql)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.7)
+
 ---
 
-## 🔒 32. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🔒 33. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -931,7 +950,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Integrasi Database Supabase PostgreSQL v4.4.6) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Persiapan Deploy Vercel dengan Supabase v4.4.7) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
 

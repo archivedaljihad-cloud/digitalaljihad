@@ -19,18 +19,18 @@
   ],
   "env": {
     "APP_ENV": "production",
-    "APP_DEBUG": "true",
+    "APP_DEBUG": "false",
     "APP_KEY": "base64:TUI/rs1egTQjO+U3V3hMZYeY8Me8J4TzahQt6iZpcto=",
     "VERCEL": "1",
     "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
     "CACHE_DRIVER": "array",
     "SESSION_DRIVER": "cookie",
     "LOG_CHANNEL": "stderr",
-    "DB_CONNECTION": "mysql",
-    "DB_HOST": "gateway01.ap-southeast-1.prod.aws.tidbcloud.com",
-    "DB_PORT": "4000",
-    "DB_DATABASE": "digitalv304",
-    "DB_USERNAME": "Fjc45gFUNDbWiTq.root",
-    "MYSQL_ATTR_SSL_CA": "/etc/pki/tls/certs/ca-bundle.crt"
+    "DB_CONNECTION": "pgsql",
+    "DB_HOST": "aws-0-ap-south-1.pooler.supabase.com",
+    "DB_PORT": "5432",
+    "DB_DATABASE": "postgres",
+    "DB_USERNAME": "postgres.jhukhvxpgezbfbxgdgbc",
+    "DB_SSLMODE": "require"
   }
 }
