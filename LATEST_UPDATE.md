@@ -938,11 +938,51 @@ Pengguna ingin mendeploy repositori GitHub yang sudah terhubung ke database Supa
 ### Berkas yang Dimodifikasi:
 - `vercel.json` (Pembaruan environment variables database Supabase untuk Vercel)
 - `config/database.php` (Dukungan dinamis SSL mode pgsql)
-- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.7)
+## ⚡ 33. CATATAN PEMBARUAN TERAKHIR (22 SEPTEMBER 2026 - v4.4.8): RESOLUSI VERCEL CRASH VIA DOCKERFILE.VERCEL (FRANKENPHP 8.3 CONTAINER RUNTIME)
+
+### Masalah & Gejala (Vercel Runtime Crash):
+Ketika aplikasi di-deploy ke Vercel dan diakses melalui browser, Vercel memicu `500 FUNCTION_INVOCATION_FAILED` dengan log fatal:
+```text
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/var/task/launcher.launcher'
+  imported from /opt/rust/nodejs.js
+Application exited with code 1.
+```
+
+### Analisis Akar Masalah (Root Cause):
+- Pada Agustus 2026, Vercel memperbarui sistem bootstrap serverless internalnya menjadi berbasis Rust (`/opt/rust/nodejs.js`).
+- Bootstrap baru tersebut menginterpretasikan string handler Lambda (`launcher.launcher`) sebagai path file ESM harfiah bukannya mengekstrak fungsi `launcher` dari `launcher.js`.
+- Perubahan platform Vercel ini merusak secara menyeluruh paket runtime komunitas `vercel-php` di seluruh dunia (tercatat resmi di GitHub `vercel-community/php` Issue #650).
+- Selain itu, bootstrap baru tidak lagi mengoper variabel `LAMBDA_TASK_ROOT` dan payload POST dikirimkan sebagai byte array mentah yang menyebabkan kegagalan 502 pada seluruh form submit (login, simpan pengaturan, dll.).
+
+### Solusi & Implementasi:
+Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Vercel Official Container Deployment (`Dockerfile.vercel`)** menggunakan **FrankenPHP (PHP 8.3 + Caddy Server)**:
+1. **Pembuatan `Dockerfile.vercel`:**
+   - Menggunakan base image resmi `dunglas/frankenphp:1-php8.3-bookworm`.
+   - Menginstal ekstensi esensial PHP untuk Laravel dan Supabase PostgreSQL: `pdo_pgsql`, `pgsql`, `gd`, `zip`, `bcmath`, `intl`, `opcache`.
+   - Menjalankan `composer install --no-dev --optimize-autoloader`.
+   - Menyiapkan folder penyimpanan dan cache (`storage/framework/cache/data`, `storage/framework/sessions`, `storage/framework/views`, `storage/logs`, `bootstrap/cache`) dengan izin tulis `chmod -R 777`.
+   - Mengarahkan command start ke `frankenphp run --config /etc/caddy/Caddyfile`.
+2. **Pembuatan `Caddyfile`:**
+   - Mengaktifkan modul `frankenphp`.
+   - Mengikat port dinamis Vercel `:{$PORT:80}`.
+   - Mengarahkan web root ke `/app/public`.
+   - Mengaktifkan kompresi `zstd gzip` dan front-controller routing otomatis `php_server`.
+3. **Pembuatan `.dockerignore`:**
+   - Mengecualikan `.git`, `node_modules`, dan testing cache agar image build bersih, cepat, dan ringan.
+4. **Pembersihan `vercel.json`:**
+   - Menghapus blok `functions` dan `routes` lama yang memicu `vercel-php`.
+   - Mempertahankan blok environment variables lengkap untuk Supabase PostgreSQL (`DB_CONNECTION: pgsql`, `DB_HOST: aws-0-ap-south-1.pooler.supabase.com`, dll.).
+
+### Berkas yang Dimodifikasi / Dibuat:
+- `Dockerfile.vercel` (Container build definition dengan FrankenPHP PHP 8.3)
+- `Caddyfile` (Konfigurasi web server Caddy untuk port dinamis Vercel)
+- `.dockerignore` (Pengecualian direktori lokal dari image build)
+- `vercel.json` (Pembersihan runtime serverless lama & preservasi env vars)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.8)
 
 ---
 
-## 🔒 33. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🔒 34. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -950,7 +990,8 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Persiapan Deploy Vercel dengan Supabase v4.4.7) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Resolusi Vercel Crash via Dockerfile.vercel FrankenPHP 8.3 v4.4.8) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+
 
 
 

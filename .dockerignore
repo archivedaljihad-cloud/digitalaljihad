@@ -2,7 +2,8 @@
 .github
 node_modules
 tests
+.phpunit.cache
+.env
+.env.local
+.env.backup
 *.sql
-*.md
-.env*
-!Dockerfile
