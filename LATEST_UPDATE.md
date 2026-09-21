@@ -973,11 +973,14 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 4. **Konfigurasi `services` di `vercel.json`:**
    - Menambahkan blok `services` dengan `"runtime": "container"`, `"entrypoint": "Dockerfile.vercel"`, dan `"root": "."`.
    - Menambahkan `rewrites` publik ke service `app` agar Vercel tidak memperlakukan repositori sebagai situs statis (yang sebelumnya menyebabkan file `index.php` disajikan sebagai teks biasa).
-   - Mempertahankan blok environment variables lengkap untuk Supabase PostgreSQL (`DB_CONNECTION: pgsql`, `DB_HOST: aws-0-ap-south-1.pooler.supabase.com`, dll.).
+5. **Perbaikan Storage Path (`bootstrap/app.php`):**
+   - Mengubah pengecekan storage path di `bootstrap/app.php` agar tidak memaksakan `/tmp/storage` yang belum tentu ada di container Docker, melainkan menggunakan direktori `/app/storage` standar dengan fallback aman jika `/tmp/storage/framework/views` memang tersedia.
+   - Menyiapkan izin 777 untuk kedua direktori di `Dockerfile.vercel` sehingga proses kompilasi Blade view dan session file berjalan tanpa *permission denied*.
 
 ### Berkas yang Dimodifikasi / Dibuat:
-- `Dockerfile.vercel` (Container build definition dengan FrankenPHP PHP 8.3)
+- `Dockerfile.vercel` (Container build definition dengan FrankenPHP PHP 8.3 & dual storage permissions)
 - `Caddyfile` (Konfigurasi web server Caddy untuk port dinamis Vercel)
+- `bootstrap/app.php` (Safe check storage path untuk lingkungan container)
 - `.dockerignore` (Pengecualian direktori lokal dari image build)
 - `vercel.json` (Deklarasi services container runtime & preservasi env vars)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.8)

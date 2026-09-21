@@ -30,7 +30,11 @@ RUN mkdir -p storage/framework/cache/data \
     storage/framework/views \
     storage/logs \
     bootstrap/cache \
-    && chmod -R 777 storage bootstrap/cache
+    /tmp/storage/framework/cache/data \
+    /tmp/storage/framework/sessions \
+    /tmp/storage/framework/views \
+    /tmp/storage/logs \
+    && chmod -R 777 storage bootstrap/cache /tmp/storage
 
 # Configure default port and environment
 ENV PORT=80 \
