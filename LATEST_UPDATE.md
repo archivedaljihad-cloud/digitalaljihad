@@ -1059,7 +1059,38 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 
 ---
 
-## 🔒 36. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🚀 36. UPDATE v4.4.11: RESOLUSI EXCEPTION 'BCRYPT HASHING NOT SUPPORTED' PADA LOGIN
+
+### Analisis Akar Masalah (Root Cause):
+- Saat pengguna berhasil memasukkan kredensial login yang valid (`adminsholeh@admin.com` / `password`), Laravel memverifikasi password dan secara otomatis memicu metode *needsRehash* atau *rehash* pada `Illuminate\Hashing\BcryptHasher`.
+- Di `BcryptHasher::make()`, Laravel menjalankan:
+  ```php
+  $hash = password_hash($value, PASSWORD_BCRYPT, [
+      'cost' => $this->cost($options),
+  ]);
+  ```
+- Nilai `cost` diambil dari `config('hashing.bcrypt.rounds')` yang sebelumnya membaca `env('BCRYPT_ROUNDS', 10)`.
+- Karena variabel environment `BCRYPT_ROUNDS` di Vercel bernilai string kosong `""`, fungsi `password_hash()` di PHP 8.3 melemparkan `ValueError: password_hash(): Argument #3 ($options) contains invalid "cost" value ""`.
+- Blok `try-catch (\Error)` di `BcryptHasher` menangkap `ValueError` tersebut dan mengubahnya menjadi pesan umum: `RuntimeException: Bcrypt hashing not supported.`.
+
+### Solusi & Implementasi:
+1. **Pengecoran Numerik `(int)` dan Fallback Non-Empty di `config/hashing.php`:**
+   - Mengubah konfigurasi rounds menjadi:
+     ```php
+     'rounds' => (int) (!empty(env('BCRYPT_ROUNDS')) ? env('BCRYPT_ROUNDS') : 12),
+     ```
+   - Menambahkan pengecoran serupa untuk driver dan konfigurasi argon.
+2. **Deklarasi Eksplisit di `vercel.json`:**
+   - Menambahkan `"BCRYPT_ROUNDS": "12"` ke dalam blok environment di `vercel.json`.
+
+### Berkas yang Dimodifikasi:
+- `config/hashing.php` (Proteksi tipe integer untuk work factor Bcrypt)
+- `vercel.json` (Penetapan eksplisit BCRYPT_ROUNDS: "12")
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.11)
+
+---
+
+## 🔒 37. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -1067,7 +1098,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Resolusi session lifetime string * int v4.4.10) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Resolusi Bcrypt hashing not supported v4.4.11) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
 

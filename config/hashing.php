@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => 'bcrypt',
+    'driver' => (!empty(env('HASH_DRIVER')) ? env('HASH_DRIVER') : 'bcrypt'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,8 @@ return [
     */
 
     'bcrypt' => [
-        'rounds' => env('BCRYPT_ROUNDS', 10),
+        'rounds' => (int) (!empty(env('BCRYPT_ROUNDS')) ? env('BCRYPT_ROUNDS') : 12),
+        'verify' => true,
     ],
 
     /*
@@ -44,9 +45,10 @@ return [
     */
 
     'argon' => [
-        'memory' => 1024,
-        'threads' => 2,
-        'time' => 2,
+        'memory' => (int) (!empty(env('ARGON_MEMORY')) ? env('ARGON_MEMORY') : 1024),
+        'threads' => (int) (!empty(env('ARGON_THREADS')) ? env('ARGON_THREADS') : 2),
+        'time' => (int) (!empty(env('ARGON_TIME')) ? env('ARGON_TIME') : 2),
+        'verify' => true,
     ],
 
 ];
