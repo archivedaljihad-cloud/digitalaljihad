@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => (int) (!empty(env('SESSION_LIFETIME')) ? env('SESSION_LIFETIME') : 120),
 
     'expire_on_close' => false,
 
@@ -124,10 +124,7 @@ return [
     |
     */
 
-    'cookie' => env(
-        'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
-    ),
+    'cookie' => (!empty(env('SESSION_COOKIE')) ? env('SESSION_COOKIE') : (Str::slug(!empty(env('APP_NAME')) ? env('APP_NAME') : 'laravel', '_').'_session')),
 
     /*
     |--------------------------------------------------------------------------
@@ -153,7 +150,7 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN', null),
+    'domain' => (!empty(env('SESSION_DOMAIN')) ? env('SESSION_DOMAIN') : null),
 
     /*
     |--------------------------------------------------------------------------

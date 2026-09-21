@@ -1034,7 +1034,32 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 
 ---
 
-## 🔒 35. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🚀 35. UPDATE v4.4.10: RESOLUSI TYPE ERROR 'UNSUPPORTED OPERAND TYPES: STRING * INT' PADA SESSION MIDDLEWARE
+
+### Analisis Akar Masalah (Root Cause):
+- Setelah eksepsi `createDriver()` teratasi, aplikasi berhasil melewati global middleware dan masuk ke pipeline web middleware `\Illuminate\Session\Middleware\StartSession`.
+- Di `StartSession.php:259`, terdapat kalkulasi durasi session:
+  ```php
+  return ($this->manager->getSessionConfig()['lifetime'] ?? null) * 60;
+  ```
+- Karena variabel environment `SESSION_LIFETIME` di Vercel bernilai string kosong `""`, ekspresi `env('SESSION_LIFETIME', 120)` mengembalikan `""`.
+- Di PHP 8.0+, perkalian string non-numerik dengan integer (`"" * 60`) memicu `TypeError: Unsupported operand types: string * int`.
+
+### Solusi & Implementasi:
+1. **Pengecoran Numerik Eksplisit di `config/session.php`:**
+   - Mengubah `'lifetime'` menjadi `(int) (!empty(env('SESSION_LIFETIME')) ? env('SESSION_LIFETIME') : 120)`.
+   - Mengamankan `'cookie'` dan `'domain'` agar tidak mengevaluasi string kosong jika `SESSION_COOKIE` atau `SESSION_DOMAIN` kosong.
+2. **Deklarasi Eksplisit di `vercel.json`:**
+   - Menambahkan `"SESSION_LIFETIME": "120"` di blok `env` pada `vercel.json`.
+
+### Berkas yang Dimodifikasi:
+- `config/session.php` (Pengecoran integer aman untuk lifetime session)
+- `vercel.json` (Penetapan SESSION_LIFETIME: "120")
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.10)
+
+---
+
+## 🔒 36. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -1042,7 +1067,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Resolusi createDriver 0 Arguments Exception v4.4.9) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Resolusi session lifetime string * int v4.4.10) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
 

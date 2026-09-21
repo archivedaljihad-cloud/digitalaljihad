@@ -23,6 +23,7 @@
     "APP_TIMEZONE": "Asia/Jakarta",
     "CACHE_DRIVER": "array",
     "SESSION_DRIVER": "cookie",
+    "SESSION_LIFETIME": "120",
     "APP_MAINTENANCE_DRIVER": "file",
     "QUEUE_CONNECTION": "sync",
     "FILESYSTEM_DISK": "local",
