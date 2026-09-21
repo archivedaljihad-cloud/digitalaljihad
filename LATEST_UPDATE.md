@@ -8,7 +8,7 @@
 ## 📌 1. INFORMASI UMUM PROYEK
 
 - **Nama Aplikasi:** Sistem Informasi Display Masjid (Digital Signage Masjid)
-- **Repositori GitHub:** `https://github.com/mydowndrive-ops/digitalaljihad001.git`
+- **Repositori GitHub:** `https://github.com/archivedaljihad-cloud/digitalaljihad.git`
 - **Branch Utama:** `main`
 - **Lingkungan Teknologi:**
   - **Framework Backend:** Laravel 13 (PHP 8.3)
@@ -882,7 +882,25 @@ Monitoring uptime server (misalnya melalui layanan Uptime Robot atau monitor kes
 
 ---
 
-## 🔒 30. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## ⚡ 30. CATATAN PEMBARUAN TERAKHIR (22 SEPTEMBER 2026 - v4.4.5): MIGRASI REMOTE GITHUB KE AKUN BARU
+
+### Masalah & Kebutuhan Pengguna:
+Repositori sebelumnya berada di akun GitHub lama (`mydowndrive-ops`). Pengguna ingin memindahkan/mendeploy seluruh codebase dan riwayat commit ke akun GitHub baru (`archivedaljihad-cloud/digitalaljihad`).
+
+### Solusi & Implementasi:
+1. **Migrasi Remote Origin:**
+   - Memperbarui remote `origin` ke `https://github.com/archivedaljihad-cloud/digitalaljihad.git`.
+   - Melakukan konfigurasi autentikasi Personal Access Token (PAT) untuk akun baru.
+   - Melakukan push seluruh branch `main` ke repositori baru dan mengaktifkan tracking (`git push -u origin main`).
+2. **Sinkronisasi Dokumentasi:**
+   - Memperbarui metadata repositori di `LATEST_UPDATE.md` agar mengarah ke repositori aktif baru.
+
+### Berkas yang Dimodifikasi:
+- `LATEST_UPDATE.md` (Pencatatan migrasi repositori v4.4.5)
+
+---
+
+## 🔒 31. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -890,7 +908,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 20 September 2026 (Penambahan Route Ping Optimasi Uptime Robot v4.4.4) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Migrasi Remote GitHub ke archivedaljihad-cloud v4.4.5) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
 
