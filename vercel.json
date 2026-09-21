@@ -18,7 +18,7 @@
   "env": {
     "APP_NAME": "DISPLAY MASJID",
     "APP_ENV": "production",
-    "APP_DEBUG": "true",
+    "APP_DEBUG": "false",
     "APP_KEY": "base64:TUI/rs1egTQjO+U3V3hMZYeY8Me8J4TzahQt6iZpcto=",
     "APP_TIMEZONE": "Asia/Jakarta",
     "CACHE_DRIVER": "array",

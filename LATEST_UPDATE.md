@@ -1088,6 +1088,12 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `vercel.json` (Penetapan eksplisit BCRYPT_ROUNDS: "12")
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.11)
 
+### Hasil Pengujian End-to-End Login Live di Vercel:
+- **`GET /login`**: HTTP 200 (Form login, CSRF token, dan session cookies berhasil dimuat).
+- **`POST /login`**: HTTP 302 (Kredensial `adminsholeh@admin.com` berhasil diverifikasi, hashing password lolos, dan di-redirect ke `https://digitalaljihad.vercel.app/home`).
+- **`GET /home`**: HTTP 200 (Dashboard Admin `MASJID JAMI' AL JIHAD - Panel Admin` berhasil diakses secara penuh).
+- **Hardening Keamanan**: Nilai `APP_DEBUG` pada `vercel.json` telah dikembalikan ke `"false"` untuk standar produksi.
+
 ---
 
 ## 🔒 37. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
@@ -1098,7 +1104,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Resolusi Bcrypt hashing not supported v4.4.11) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Verifikasi Sukses Autentikasi Login & Akses Dashboard Admin Live di Vercel) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
 
