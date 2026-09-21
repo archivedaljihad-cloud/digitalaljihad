@@ -1,5 +1,8 @@
 FROM dunglas/frankenphp:1-php8.3-bookworm
 
+# Install Composer from official Composer image
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 # Install PHP extensions required for Laravel & PostgreSQL
 RUN install-php-extensions \
     pdo_pgsql \
@@ -19,7 +22,7 @@ COPY . /app
 COPY Caddyfile /etc/caddy/Caddyfile
 
 # Install PHP production dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
 # Prepare storage and cache directories
 RUN mkdir -p storage/framework/cache/data \

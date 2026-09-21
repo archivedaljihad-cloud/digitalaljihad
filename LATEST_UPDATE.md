@@ -959,7 +959,8 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 1. **Pembuatan `Dockerfile.vercel`:**
    - Menggunakan base image resmi `dunglas/frankenphp:1-php8.3-bookworm`.
    - Menginstal ekstensi esensial PHP untuk Laravel dan Supabase PostgreSQL: `pdo_pgsql`, `pgsql`, `gd`, `zip`, `bcmath`, `intl`, `opcache`.
-   - Menjalankan `composer install --no-dev --optimize-autoloader`.
+   - Menyalin binary Composer resmi via `COPY --from=composer:latest /usr/bin/composer /usr/bin/composer`.
+   - Menjalankan `composer install --no-dev --optimize-autoloader --no-scripts --no-interaction`.
    - Menyiapkan folder penyimpanan dan cache (`storage/framework/cache/data`, `storage/framework/sessions`, `storage/framework/views`, `storage/logs`, `bootstrap/cache`) dengan izin tulis `chmod -R 777`.
    - Mengarahkan command start ke `frankenphp run --config /etc/caddy/Caddyfile`.
 2. **Pembuatan `Caddyfile`:**
