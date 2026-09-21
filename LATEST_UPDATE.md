@@ -969,15 +969,16 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
    - Mengaktifkan kompresi `zstd gzip` dan front-controller routing otomatis `php_server`.
 3. **Pembuatan `.dockerignore`:**
    - Mengecualikan `.git`, `node_modules`, dan testing cache agar image build bersih, cepat, dan ringan.
-4. **Pembersihan `vercel.json`:**
-   - Menghapus blok `functions` dan `routes` lama yang memicu `vercel-php`.
+4. **Konfigurasi `services` di `vercel.json`:**
+   - Menambahkan blok `services` dengan `"runtime": "container"`, `"entrypoint": "Dockerfile.vercel"`, dan `"root": "."`.
+   - Menambahkan `rewrites` publik ke service `app` agar Vercel tidak memperlakukan repositori sebagai situs statis (yang sebelumnya menyebabkan file `index.php` disajikan sebagai teks biasa).
    - Mempertahankan blok environment variables lengkap untuk Supabase PostgreSQL (`DB_CONNECTION: pgsql`, `DB_HOST: aws-0-ap-south-1.pooler.supabase.com`, dll.).
 
 ### Berkas yang Dimodifikasi / Dibuat:
 - `Dockerfile.vercel` (Container build definition dengan FrankenPHP PHP 8.3)
 - `Caddyfile` (Konfigurasi web server Caddy untuk port dinamis Vercel)
 - `.dockerignore` (Pengecualian direktori lokal dari image build)
-- `vercel.json` (Pembersihan runtime serverless lama & preservasi env vars)
+- `vercel.json` (Deklarasi services container runtime & preservasi env vars)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.8)
 
 ---

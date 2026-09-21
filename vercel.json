@@ -1,5 +1,20 @@
 {
   "version": 2,
+  "services": {
+    "app": {
+      "root": ".",
+      "entrypoint": "Dockerfile.vercel",
+      "runtime": "container"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "app"
+      }
+    }
+  ],
   "env": {
     "APP_NAME": "DISPLAY MASJID",
     "APP_ENV": "production",
