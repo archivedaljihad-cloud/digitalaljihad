@@ -987,7 +987,54 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 
 ---
 
-## 🔒 34. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🚀 34. UPDATE v4.4.9: RESOLUSI EXCEPTION 'TOO FEW ARGUMENTS TO FUNCTION CREATE DRIVER' PADA CONTAINER VERCEL
+
+### Analisis Akar Masalah (Root Cause):
+1. **Pemicu Eror:**
+   - Eror `ArgumentCountError: Too few arguments to function Illuminate\Support\Manager::createDriver(), 0 passed in ... Manager.php on line 105 and exactly 1 expected` terjadi ketika sebuah turunan dari `Illuminate\Support\Manager` mencoba memanggil `createDriver($driver)`.
+   - Di method `createDriver($driver)` pada `Manager.php`:
+     ```php
+     $method = 'create'.Str::studly($driver).'Driver';
+     if (method_exists($this, $method)) {
+         return $this->$method();
+     }
+     ```
+   - Ketika `$driver` bernilai string kosong `""`, ekspresi `Str::studly("")` menghasilkan `""`. Maka `$method` dievaluasi menjadi `'create' . '' . 'Driver' = 'createDriver'`.
+   - Karena method `protected function createDriver($driver)` memang ada pada class `Manager` (namun membutuhkan 1 parameter), pemanggilan dinamis `$this->$method()` mengeksekusi `$this->createDriver()` dengan **0 parameter**, yang langsung memicu `ArgumentCountError` di PHP 8.3.
+2. **Komponen yang Memanggil:**
+   - Stack trace dari Vercel menunjukkan bahwa pemanggilan berasal dari global middleware `PreventRequestsDuringMaintenance` yang menyelesaikan `MaintenanceModeContract`, yang memanggil `MaintenanceModeManager->driver()`.
+   - Di `MaintenanceModeManager::getDefaultDriver()`, sistem membaca `config('app.maintenance.driver', 'file')`.
+   - Apabila di environment Vercel terdapat variabel kosong atau `env('APP_MAINTENANCE_DRIVER', 'file')` menghasilkan string kosong `""` (karena fungsi `env()` bawaan Laravel hanya memakai nilai fallback jika variabel bernilai `null`, bukan `""`), maka `config('app.maintenance.driver')` bernilai `""`.
+3. **Penerbitan Konfigurasi Excel:**
+   - Paket `maatwebsite/excel` juga memiliki `TransactionManager` yang bergantung pada `config('excel.transactions.handler')`. File `config/excel.php` sebelumnya belum dipublikasikan ke dalam direktori `config/`, sehingga berpotensi memicu kegagalan serupa.
+
+### Solusi & Implementasi:
+1. **Fallback Non-Empty pada Seluruh Konfigurasi Inti (`config/app.php`, `config/session.php`, `config/cache.php`, dll.):**
+   - Mengubah pembacaan `env()` menggunakan ternary non-empty: `(!empty(env('APP_MAINTENANCE_DRIVER')) ? env('APP_MAINTENANCE_DRIVER') : 'file')` dan `(!empty(env('SESSION_DRIVER')) ? env('SESSION_DRIVER') : 'cookie')`, `cache.default`, `database.default`, `queue.default`, `filesystems.default`.
+   - Dengan demikian, jika ada variabel environment di Vercel yang disetel kosong `""`, sistem akan secara otomatis dan aman kembali ke driver default yang valid.
+2. **Safeguard di `AppServiceProvider::register()`:**
+   - Meng-override `MaintenanceModeManager::class` di container Laravel sehingga `getDefaultDriver()` selalu memeriksa `!empty($driver) ? $driver : 'file'`.
+3. **Penerbitan dan Pelengkapan `config/excel.php`:**
+   - Mempublikasikan aset konfigurasi `config/excel.php` dari `Maatwebsite\Excel\ExcelServiceProvider`.
+   - Menambahkan blok konfigurasi `'transactions' => ['handler' => 'db', 'db' => ['connection' => null]]` secara eksplisit.
+4. **Deklarasi Eksplisit di `vercel.json`:**
+   - Menambahkan `"APP_MAINTENANCE_DRIVER": "file"`, `"QUEUE_CONNECTION": "sync"`, `"FILESYSTEM_DISK": "local"` ke dalam blok `env` di `vercel.json`.
+
+### Berkas yang Dimodifikasi / Dibuat:
+- `config/app.php` (Fallback aman untuk maintenance driver)
+- `config/session.php` (Fallback aman untuk session driver)
+- `config/cache.php` (Fallback aman untuk cache driver/store)
+- `config/database.php` (Fallback aman untuk database connection)
+- `config/filesystems.php` (Fallback aman untuk filesystem disk)
+- `config/queue.php` (Fallback aman untuk queue connection)
+- `config/excel.php` (Konfigurasi excel & transaksi database)
+- `app/Providers/AppServiceProvider.php` (Proteksi MaintenanceModeManager di container)
+- `vercel.json` (Penambahan default env drivers)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.9)
+
+---
+
+## 🔒 35. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
@@ -995,7 +1042,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Resolusi Vercel Crash via Dockerfile.vercel FrankenPHP 8.3 v4.4.8) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Resolusi createDriver 0 Arguments Exception v4.4.9) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
 

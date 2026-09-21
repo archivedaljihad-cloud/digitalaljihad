@@ -16,7 +16,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Guard MaintenanceModeManager against empty or null driver strings
+        $this->app->singleton(\Illuminate\Foundation\MaintenanceModeManager::class, function ($app) {
+            return new class($app) extends \Illuminate\Foundation\MaintenanceModeManager {
+                public function getDefaultDriver(): string
+                {
+                    $driver = $this->config->get('app.maintenance.driver');
+                    return !empty($driver) ? $driver : 'file';
+                }
+            };
+        });
     }
 
     /**

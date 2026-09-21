@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_DRIVER', 'file'),
+    'default' => (!empty(env('CACHE_DRIVER')) ? env('CACHE_DRIVER') : (!empty(env('CACHE_STORE')) ? env('CACHE_STORE') : 'array')),
 
     /*
     |--------------------------------------------------------------------------
