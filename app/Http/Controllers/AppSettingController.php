@@ -343,6 +343,9 @@ class AppSettingController extends Controller
         $setting->prayer_mode_adzan_duration = $validated['prayer_mode_adzan_duration'];
         $setting->prayer_mode_iqamah_duration = $validated['prayer_mode_iqamah_duration'];
         $setting->prayer_mode_after_prayer = $validated['prayer_mode_after_prayer'];
+        if ($request->has('prayer_mode_enabled') && Schema::hasColumn('app_settings', 'prayer_mode_enabled')) {
+            $setting->prayer_mode_enabled = $request->boolean('prayer_mode_enabled');
+        }
         if ($request->filled('prayer_mode_jumat_duration') && Schema::hasColumn('app_settings', 'prayer_mode_jumat_duration')) {
             $setting->prayer_mode_jumat_duration = (int) $request->input('prayer_mode_jumat_duration');
         }
@@ -352,11 +355,12 @@ class AppSettingController extends Controller
 
         $setting->save();
 
+        AppSetting::clearCache();
         \Illuminate\Support\Facades\Cache::forget('data_timestamp');
 
         return redirect()
             ->route('jadwal_sholat.index')
-            ->with('success', 'Pengaturan waktu sistem berhasil diperbarui.');
+            ->with('success', 'Pengaturan durasi sholat dan waktu sistem berhasil diperbarui.');
     }
 
     /**

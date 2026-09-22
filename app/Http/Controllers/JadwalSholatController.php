@@ -20,7 +20,7 @@ class JadwalSholatController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->setting = AppSetting::first();
+        $this->setting = AppSetting::getCached() ?? new AppSetting();
         view()->share('setting', $this->setting);
     }
     /**
@@ -29,7 +29,8 @@ class JadwalSholatController extends Controller
     public function index()
     {
         $jadwal = JadwalSholat::urutkan()->get();
-        return view('jadwal_sholat.index', compact('jadwal'));
+        $setting = $this->setting ?? AppSetting::getCached() ?? new AppSetting();
+        return view('jadwal_sholat.index', compact('jadwal', 'setting'));
     }
     /**
      * Menampilkan form tambah jadwal sholat.

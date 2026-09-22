@@ -1341,7 +1341,42 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 
 ---
 
-## 🔒 43. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🕌 44. PEMULIHAN & PENYEMPURNAAN FORM PENGATURAN DURASI ADZAN, IQAMAH, SHOLAT & WAKTU SISTEM PADA HALAMAN JADWAL SHOLAT (`/jadwal_sholat`) (22 September 2026)
+
+### Latar Belakang Masalah:
+- Pada halaman **Kelola Jadwal Sholat** (`/jadwal_sholat`), form pengaturan durasi sistem sebelumnya sempat tergantikan oleh banner tautan ke `settings.edit#prayermode`.
+- Akibatnya:
+  1. Pengguna atau Petugas / Operator mengeluhkan hilangnya pengaturan durasi (seperti hitung mundur sebelum adzan, durasi saat adzan, durasi iqamah, durasi sholat fardhu, durasi sholat jum'at, dan audio tarhim).
+  2. Pengguna dengan role **Petugas / Operator** tidak memiliki akses ke rute Pengaturan Aplikasi (`/settings`), sehingga mereka sama sekali tidak dapat mengatur durasi sholat jika pengaturan tersebut hanya berada di menu Pengaturan Aplikasi.
+
+### Solusi & Implementasi:
+1. **Pemulihan & Penataan Ulang Form Durasi di `jadwal_sholat/index.blade.php`:**
+   - Menghadirkan kembali form lengkap pengaturan durasi dengan tampilan modern, responsif, dan elegan:
+     - **Aktifkan Prayer Mode Otomatis:** Sakelar switch untuk menghidupkan/mematikan mode sholat otomatis di layar TV.
+     - **Interval Rotasi Halaman TV:** Input durasi detik pergantian slide TV.
+     - **Countdown Sebelum Adzan:** Durasi hitung mundur sekian menit sebelum adzan tiba.
+     - **Durasi Saat Adzan:** Durasi tampilan layar saat adzan berkumandang.
+     - **Durasi Iqamah:** Durasi hitung mundur iqamah menuju pelaksanaan sholat berjamaah.
+     - **Durasi Sholat (Layar Hening):** Durasi layar TV terkunci hening/gelap saat sholat fardhu berlangsung.
+     - **Durasi Setelah Sholat:** Durasi pesan setelah sholat sebelum TV kembali berotasi normal.
+     - **Waktu Mulai Audio Tarhim:** Pilihan praktis 3, 5, 10, atau 15 menit sebelum adzan tiba.
+     - **Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah):** Input durasi menit khusus hari Jum'at di waktu Dzuhur (TV terkunci tenang menampilkan kartu petugas & hadits adab khutbah).
+2. **Pembaruan `AppSettingController::updatePrayerSettings()`:**
+   - Menambahkan penanganan input `prayer_mode_enabled` (boolean).
+   - Memastikan `AppSetting::clearCache()` dipanggil setelah data disimpan agar display TV dan seluruh rute segera menerima nilai durasi baru tanpa jeda.
+3. **Pembaruan `JadwalSholatController`:**
+   - Mengambil data pengaturan menggunakan `AppSetting::getCached() ?? new AppSetting()`.
+   - Mengirimkan variabel `$setting` secara eksplisit ke view `jadwal_sholat.index` agar form selalu terisi dengan data mutakhir dan aman dari error null.
+
+### Berkas yang Terkait:
+- `resources/views/jadwal_sholat/index.blade.php` (Pemulihan & styling form pengaturan durasi lengkap)
+- `app/Http/Controllers/AppSettingController.php` (Dukungan prayer_mode_enabled dan pembersihan cache otomatis)
+- `app/Http/Controllers/JadwalSholatController.php` (Penggunaan AppSetting::getCached() & passing $setting ke view)
+- `LATEST_UPDATE.md` (Pencatatan pembaruan v4.5.1)
+
+---
+
+## 🔒 45. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **DILARANG Menaruh Query DDL / Database di `AppServiceProvider::boot()`:** Jangan pernah menaruh `Schema::hasTable`, `Schema::hasColumn`, atau query Eloquent massal di dalam `boot()` karena akan dieksekusi di SETIAP request HTTP dan melumpuhkan kecepatan aplikasi.
@@ -1352,6 +1387,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 6. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Audit Menyeluruh & Optimasi Performa Skala Penuh v4.5.0) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Pemulihan Form Pengaturan Durasi Sholat pada Jadwal Sholat v4.5.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 
