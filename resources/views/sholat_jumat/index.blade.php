@@ -108,7 +108,7 @@
 								@if(!empty($item->foto_imam))
 								<img src="{{ asset('storage/' . $item->foto_imam) }}" alt="Foto" style="width: 42px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; border: 2px solid #28a745; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" data-toggle="tooltip" title="Foto Khusus Aktif">
 								@else
-								<img src="{{ asset('image/display/default_imam.jpg') }}" alt="Default" style="width: 42px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; border: 1px solid #ced4da; opacity: 0.85;" data-toggle="tooltip" title="Foto Bawaan (Default)">
+								<img src="{{ asset('image/display/default_imam.jpg') }}?v=3.0.4" alt="Default Logo" style="width: 42px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; border: 1px solid #ced4da; opacity: 0.9;" data-toggle="tooltip" title="Logo Bawaan (Default Al-Jihad)">
 								@endif
 							</td>
 							<td class="text-nowrap">

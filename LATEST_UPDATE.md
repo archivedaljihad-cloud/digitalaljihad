@@ -1423,7 +1423,46 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 
 ---
 
-## 🔒 46. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🕌 46. PEMBARUAN FOTO DEFAULT JADWAL SHOLAT JUM'AT MENJADI LOGO MASJID AL-JIHAD (v4.5.3 - 23 September 2026)
+
+### Latar Belakang & Kebutuhan:
+- Pengguna meminta agar foto default pada halaman Sholat Jum'at diganti menggunakan Logo Resmi Masjid Al-Jihad (lingkaran hijau dengan gambar kubah, menara, bulan bintang, dan tulisan "AL-JIHAD").
+- Sebelumnya, sistem menggunakan foto stock/placeholder seorang ustadz (`default_imam.jpg`) yang menampilkan papan informasi nama masjid lain ("MASJID AN-NUR").
+
+### Solusi & Implementasi:
+1. **Pembuatan Aset Gambar Rasio Kunci 4:5 Beresolusi Tinggi (800 x 1000 px):**
+   - Logo lingkaran Al-Jihad yang dikirimkan pengguna dikomposisikan secara presisi ke dalam kanvas berasio 4:5 (`800 x 1000 px`) menggunakan gradasi *Luxury Emerald Green* (`#032115` ke `#010f09`) yang identik dengan tema TV Raudhah Sholat Jum'at.
+   - Dilengkapi *Soft Golden Radial Aura* (`#ffd700`) di sekeliling lingkaran logo serta bingkai ganda beraksen emas (*luxury Islamic border*).
+   - Penempatan logo difokuskan pada area tengah-atas (`centerY = 405px`), sehingga area bawah kartu tetap bersih dan tidak terpotong saat plakat nama (*badge overlay*) Imam & Khotib muncul di layar TV.
+   - Foto lama dicadangkan secara aman ke `public/image/display/default_imam_backup_ustadz.jpg`.
+2. **Pembaruan Aset Publik & File Mentah:**
+   - `public/image/display/default_imam.jpg` (Aset default utama rasio 4:5 dengan logo Al-Jihad).
+   - `public/image/display/default_imam_aljihad.jpg` (Salinan arsip logo 4:5).
+   - `public/image/display/logo_aljihad.png` & `public/img/logo-aljihad-circle.png` (Logo mentah PNG transparan resolusi tinggi).
+3. **Penyempurnaan Tampilan di Blade Views & Cache-Busting:**
+   - **Layar TV Sholat Jum'at (`resources/views/jumat.blade.php`):** Menambahkan cache-busting `?v=3.0.4` pada tag gambar dan fallback `onerror`.
+   - **Form Tambah Sholat Jum'at (`resources/views/sholat_jumat/create.blade.php`):** Menampilkan preview logo baru dengan keterangan informatif *"Foto Default Aktif (Logo Resmi Masjid Al-Jihad)"*.
+   - **Form Edit Sholat Jum'at (`resources/views/sholat_jumat/edit.blade.php`):** Memperbarui sumber preview gambar dan label interaktif saat checkbox *"Hapus foto ini & gunakan default"* dicentang.
+   - **Tabel Daftar Sholat Jum'at (`resources/views/sholat_jumat/index.blade.php`):** Memperbarui thumbnail bawaan dengan tooltip *"Logo Bawaan (Default Al-Jihad)"*.
+   - **Layar Sholat Hari Raya (`idul-fitri-embed.blade.php` & `idul-adha-embed.blade.php`):** Menyelaraskan fallback gambar default agar turut menikmati logo resmi Al-Jihad.
+
+### Berkas yang Terkait:
+- `public/image/display/default_imam.jpg`
+- `public/image/display/default_imam_aljihad.jpg`
+- `public/image/display/default_imam_backup_ustadz.jpg`
+- `public/image/display/logo_aljihad.png`
+- `public/img/logo-aljihad-circle.png`
+- `resources/views/jumat.blade.php`
+- `resources/views/sholat_jumat/create.blade.php`
+- `resources/views/sholat_jumat/edit.blade.php`
+- `resources/views/sholat_jumat/index.blade.php`
+- `resources/views/idul-fitri-embed.blade.php`
+- `resources/views/idul-adha-embed.blade.php`
+- `LATEST_UPDATE.md`
+
+---
+
+## 🔒 47. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **DILARANG Menaruh Query DDL / Database di `AppServiceProvider::boot()`:** Jangan pernah menaruh `Schema::hasTable`, `Schema::hasColumn`, atau query Eloquent massal di dalam `boot()` karena akan dieksekusi di SETIAP request HTTP dan melumpuhkan kecepatan aplikasi.
@@ -1434,5 +1473,5 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 6. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Perbaikan Ambang Batas Durasi Interval Rotasi TV v4.5.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 23 September 2026 (Pembaruan Foto Default Sholat Jum'at Logo Masjid Al-Jihad v4.5.3) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 

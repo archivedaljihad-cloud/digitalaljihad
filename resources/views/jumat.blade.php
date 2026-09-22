@@ -680,7 +680,7 @@
 			<!-- KOTAK NO 3: FOTO IMAM -->
 			<div class="imam-card-box">
 				<div class="imam-photo-frame">
-					<img src="{{ !empty($sholatJumat->foto_imam) ? asset('storage/' . $sholatJumat->foto_imam) : asset('image/display/default_imam.jpg') }}" alt="Foto Imam" class="imam-photo" onerror="this.onerror=null;this.src='{{ asset('image/display/default_imam.jpg') }}';">
+					<img src="{{ !empty($sholatJumat->foto_imam) ? asset('storage/' . $sholatJumat->foto_imam) : asset('image/display/default_imam.jpg') . '?v=3.0.4' }}" alt="Foto Imam" class="imam-photo" onerror="this.onerror=null;this.src='{{ asset('image/display/default_imam.jpg') }}?v=3.0.4';">
 					<div class="imam-badge-overlay">
 						<span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam & Khotib</span>
 						<span class="badge-name">{{ $sholatJumat->imam ?? $sholatJumat->khatib ?? 'Ustd. Imam & Khotib' }}</span>

@@ -141,9 +141,10 @@
 									</div>
 
 									<div id="noPreviewText" class="text-muted p-4">
-										<img src="{{ asset('image/display/default_imam.jpg') }}" alt="Default" style="width: 140px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
+										<img src="{{ asset('image/display/default_imam.jpg') }}?v=3.0.4" alt="Default Logo Masjid Al-Jihad" style="width: 140px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; border: 1.5px solid #28a745; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.18);">
 										<div class="font-weight-bold text-dark">Foto Default Aktif</div>
-										<small class="text-secondary">(Akan menggunakan foto ini jika tidak mengunggah foto baru)</small>
+										<small class="text-success font-weight-bold d-block">(Logo Resmi Masjid Al-Jihad)</small>
+										<small class="text-muted d-block mt-1">Otomatis menggunakan logo ini jika tidak mengunggah foto khusus</small>
 									</div>
 								</div>
 							</div>

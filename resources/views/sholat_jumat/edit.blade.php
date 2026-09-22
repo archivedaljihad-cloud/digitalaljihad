@@ -139,11 +139,11 @@
 									<div id="previewContainer" style="width: 200px; aspect-ratio: 4 / 5; border-radius: 10px; overflow: hidden; position: relative; background: #02120b; border: 1.5px solid #ffd700; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 										@php
 											$hasCustomPhoto = !empty($sholat_jumat->foto_imam);
-											$imgSrc = $hasCustomPhoto ? asset('storage/' . $sholat_jumat->foto_imam) : asset('image/display/default_imam.jpg');
+											$imgSrc = $hasCustomPhoto ? asset('storage/' . $sholat_jumat->foto_imam) : asset('image/display/default_imam.jpg') . '?v=3.0.4';
 										@endphp
-										<img id="imgPreview" src="{{ $imgSrc }}" alt="Foto Imam" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
+										<img id="imgPreview" src="{{ $imgSrc }}" alt="Foto Imam / Logo Al-Jihad" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
 										<div id="previewLabel" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(0deg, rgba(2,16,11,0.95), transparent); padding: 8px 4px 4px; color: #ffd700; font-size: 11px; font-weight: bold;">
-											{{ $hasCustomPhoto ? 'FOTO AKTIF (4:5)' : 'FOTO DEFAULT (4:5)' }}
+											{{ $hasCustomPhoto ? 'FOTO AKTIF (4:5)' : 'LOGO DEFAULT AL-JIHAD (4:5)' }}
 										</div>
 									</div>
 
@@ -211,15 +211,15 @@
 		if (hapusCheckbox) {
 			hapusCheckbox.addEventListener('change', function(e) {
 				if (e.target.checked) {
-					imgPreview.src = "{{ asset('image/display/default_imam.jpg') }}";
+					imgPreview.src = "{{ asset('image/display/default_imam.jpg') }}?v=3.0.4";
 					if (previewLabel) {
-						previewLabel.textContent = 'AKAN KEMBALI KE DEFAULT';
+						previewLabel.textContent = 'AKAN KEMBALI KE LOGO AL-JIHAD';
 						previewLabel.style.color = '#ff9999';
 					}
 				} else {
-					imgPreview.src = "{{ !empty($sholat_jumat->foto_imam) ? asset('storage/' . $sholat_jumat->foto_imam) : asset('image/display/default_imam.jpg') }}";
+					imgPreview.src = "{{ !empty($sholat_jumat->foto_imam) ? asset('storage/' . $sholat_jumat->foto_imam) : asset('image/display/default_imam.jpg') . '?v=3.0.4' }}";
 					if (previewLabel) {
-						previewLabel.textContent = 'FOTO AKTIF (4:5)';
+						previewLabel.textContent = "{{ !empty($sholat_jumat->foto_imam) ? 'FOTO AKTIF (4:5)' : 'LOGO DEFAULT AL-JIHAD (4:5)' }}";
 						previewLabel.style.color = '#ffd700';
 					}
 				}
