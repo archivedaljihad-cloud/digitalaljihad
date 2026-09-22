@@ -205,7 +205,7 @@ Route::middleware(['auth'])->group(function () {
     | MENU OPERASIONAL MASJID (ADMIN & PETUGAS / OPERATOR)
     |--------------------------------------------------------------------------
     */
-    Route::middleware(['role:admin,petugas'])->group(function () {
+    Route::middleware(['role:admin,petugas,operator'])->group(function () {
         Route::resource('jadwal_sholat', JadwalSholatController::class);
         Route::resource('sholat_jumat', SholatJumatController::class);
         Route::resource('idul-fitri', SholatIdulFitriController::class);

@@ -16,11 +16,16 @@
         </button>
         @php
         $currentRole = strtolower(trim(optional(auth()->user()->role)->name ?? ''));
-        if ($currentRole !== 'bendahara' && $currentRole !== 'admin') {
+        if ($currentRole === 'operator') {
+            $currentRole = 'petugas';
+        }
+        if ($currentRole !== 'bendahara' && $currentRole !== 'admin' && $currentRole !== 'petugas') {
             $uEmail = strtolower(auth()->user()->email ?? '');
             $uName = strtolower(auth()->user()->name ?? '');
             if (str_contains($uEmail, 'bendahara') || str_contains($uName, 'bendahara')) {
                 $currentRole = 'bendahara';
+            } elseif (str_contains($uEmail, 'petugas') || str_contains($uName, 'petugas') || str_contains($uEmail, 'operator') || str_contains($uName, 'operator')) {
+                $currentRole = 'petugas';
             }
         }
         @endphp
@@ -447,7 +452,7 @@
     </div>
 </div>
 
-@elseif ($currentRole === 'petugas')
+@elseif (in_array($currentRole, ['petugas', 'operator']))
 <!-- Petugas Dashboard -->
 <div class="row">
     <!-- Jadwal Sholat -->

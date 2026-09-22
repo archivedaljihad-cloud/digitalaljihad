@@ -1184,7 +1184,54 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 
 ---
 
-## 🔒 40. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 👥 40. PENJAMINAN & PENAMPILAN LENGKAP ROLE PETUGAS / OPERATOR PADA FORM TAMBAH & EDIT AKUN (22 September 2026)
+
+### Latar Belakang Masalah:
+- Saat Administrator membuka form **Tambah Akun** (`/users/create`), opsi pilihan di dropdown **Role** hanya menampilkan dua pilihan: **Admin** dan **Bendahara**.
+- Pilihan untuk **Petugas / Operator** tidak muncul.
+- **Akar Penyebab Teknis:**
+  - Di `UserController::create()` dan `edit()`, logika sebelumnya menggunakan kondisi `if ($roles->isEmpty())`.
+  - Pada database cloud Supabase, tabel `roles` sudah memiliki 2 baris data sebelumnya (`admin` dan `bendahara`).
+  - Akibatnya, kondisi `$roles->isEmpty()` bernilai `false`, dan kode seeding `Role::firstOrCreate(['name' => 'petugas'])` tidak pernah tereksekusi.
+
+### Solusi & Implementasi:
+1. **Migrasi Baru Penjamin Role Petugas (`2026_09_22_000001_ensure_petugas_role_exists.php`):**
+   - Menambahkan migrasi Laravel resmi yang mengecek dan mendaftarkan role `petugas` ke tabel `roles`.
+   - Menautkan akun pengguna yang belum memiliki `role_id` namun email/namanya mengandung kata `petugas` atau `operator`.
+   - Telah berhasil dieksekusi ke database produksi via `php artisan migrate --force`.
+2. **Pembaruan `UserController::create()` dan `edit()`:**
+   - Logika pembuatan role tidak lagi bergantung pada `$roles->isEmpty()`. Controller kini memastikan ketiga role inti (`admin`, `petugas`, `bendahara`) selalu dipastikan ada (`firstOrCreate`) dan diurutkan secara tertib:
+     1. Admin (Administrator)
+     2. Petugas / Operator
+     3. Bendahara
+3. **Penyempurnaan Tampilan Dropdown di Blade View (`users/create.blade.php` & `users/edit.blade.php`):**
+   - Mengubah teks opsi dropdown agar sangat informatif dan ramah pengguna:
+     - `Admin (Administrator)`
+     - `Petugas / Operator`
+     - `Bendahara`
+   - Menambahkan catatan panduan di bawah dropdown:
+     *Admin (akses penuh), Petugas / Operator (jadwal sholat, kajian, pengumuman & slide TV), Bendahara (pembukuan kas masjid & kas ambulance).*
+4. **Dukungan Alias Saling Terhubung (`petugas` ⇄ `operator`):**
+   - Di `app/Models/User.php`: Metode `hasRole()` kini mengenali `petugas` dan `operator` sebagai alias yang setara.
+   - Di `routes/web.php`: Rute grup operasional diperbarui menjadi `Route::middleware(['role:admin,petugas,operator'])`.
+   - Di `resources/views/layouts/admin.blade.php` dan `resources/views/home.blade.php`: Normalisasi `$roleName` dan `$currentRole` sehingga akun operator/petugas selalu mendapatkan sidebar dan dashboard operasional secara presisi.
+   - Di `resources/views/users/index.blade.php`: Badge role menampilkan badge biru elegan berlabel `Petugas / Operator`.
+
+### Berkas yang Terkait:
+- `database/migrations/2026_09_22_000001_ensure_petugas_role_exists.php` (Migrasi baru penjamin role petugas di database)
+- `app/Http/Controllers/UserController.php` (Penjaminan ketersediaan role & urutan rapi di create & edit)
+- `app/Models/User.php` (Dukungan alias petugas & operator pada hasRole)
+- `resources/views/users/create.blade.php` (Dropdown role dengan label Petugas / Operator yang jelas)
+- `resources/views/users/edit.blade.php` (Dropdown role sinkron pada form edit akun)
+- `resources/views/users/index.blade.php` (Badge role Petugas / Operator)
+- `resources/views/layouts/admin.blade.php` (Normalisasi role petugas/operator pada sidebar admin)
+- `resources/views/home.blade.php` (Normalisasi role petugas/operator pada dashboard utama)
+- `routes/web.php` (Pemberian izin akses middleware role:admin,petugas,operator)
+- `LATEST_UPDATE.md` (Dokumentasi pembaruan)
+
+---
+
+## 🔒 41. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **DILARANG Menaruh Query DDL / Database di `AppServiceProvider::boot()`:** Jangan pernah menaruh `Schema::hasTable`, `Schema::hasColumn`, atau query Eloquent massal di dalam `boot()` karena akan dieksekusi di SETIAP request HTTP dan melumpuhkan kecepatan aplikasi.
@@ -1193,5 +1240,6 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 4. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Optimasi Drastis Kecepatan Boot & Performa Login Web) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Penjaminan & Penampilan Lengkap Role Petugas / Operator) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+
 

@@ -815,12 +815,19 @@
             $rawRole = optional(auth()->user()->role)->name ?? '';
             $roleName = strtolower(trim($rawRole));
 
-            // Fallback jika akun bendahara di database masih terpasang role_id lama
-            if ($roleName !== 'bendahara' && $roleName !== 'admin') {
+            // Normalisasi alias operator -> petugas
+            if ($roleName === 'operator') {
+                $roleName = 'petugas';
+            }
+
+            // Fallback jika akun bendahara atau petugas/operator di database masih terpasang role_id lama
+            if ($roleName !== 'bendahara' && $roleName !== 'admin' && $roleName !== 'petugas') {
                 $userEmail = strtolower(auth()->user()->email ?? '');
                 $userName = strtolower(auth()->user()->name ?? '');
                 if (str_contains($userEmail, 'bendahara') || str_contains($userName, 'bendahara')) {
                     $roleName = 'bendahara';
+                } elseif (str_contains($userEmail, 'petugas') || str_contains($userName, 'petugas') || str_contains($userEmail, 'operator') || str_contains($userName, 'operator')) {
+                    $roleName = 'petugas';
                 }
             }
             @endphp
@@ -837,7 +844,7 @@
                     <div class="sup-role">
                         <span class="sup-role-dot"></span>
                         @if($roleName === 'admin') ⚙ Administrator
-                        @elseif($roleName === 'petugas') 👤 Operator
+                        @elseif(in_array($roleName, ['petugas', 'operator'])) 👤 Operator
                         @elseif($roleName === 'bendahara') 💰 Bendahara
                         @else {{ ucfirst($roleName ?: 'Pengguna') }}
                         @endif
@@ -1034,7 +1041,7 @@
 
             @endif
 
-            @if ($roleName === 'petugas')
+            @if ($roleName === 'petugas' || $roleName === 'operator')
             <!-- Divider -->
             <hr class="sidebar-divider">
 

@@ -76,7 +76,7 @@
 								<span class="badge badge-success px-3 py-2">
 									<i class="fas fa-wallet"></i> Bendahara
 								</span>
-								@elseif($user->role->name == 'petugas')
+								@elseif(in_array(strtolower($user->role->name), ['petugas', 'operator']))
 								<span class="badge badge-info px-3 py-2">
 									<i class="fas fa-user-clock"></i> Petugas / Operator
 								</span>

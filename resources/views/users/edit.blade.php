@@ -69,7 +69,7 @@
 						</div>
 
 						<div class="form-group">
-							<label for="role_id">Role <span class="text-danger">*</span></label>
+							<label for="role_id">Role / Hak Akses <span class="text-danger">*</span></label>
 							<div class="input-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text"><i class="fas fa-tag"></i></span>
@@ -77,15 +77,26 @@
 								<select name="role_id" id="role_id" class="form-control @error('role_id') is-invalid @enderror" required>
 									@forelse($roles ?? [] as $role)
 									<option value="{{ $role->id }}" {{ ($user->role_id ?? null) == $role->id ? 'selected' : '' }}>
-										{{ ucfirst($role->name) }}
+                                        @if(in_array(strtolower($role->name), ['petugas', 'operator']))
+                                            Petugas / Operator
+                                        @elseif(strtolower($role->name) === 'admin')
+                                            Admin (Administrator)
+                                        @elseif(strtolower($role->name) === 'bendahara')
+                                            Bendahara
+                                        @else
+                                            {{ ucfirst($role->name) }}
+                                        @endif
 									</option>
 									@empty
-									<option value="1" {{ ($user->role_id ?? null) == 1 ? 'selected' : '' }}>Admin</option>
-									<option value="2" {{ ($user->role_id ?? null) == 2 ? 'selected' : '' }}>Petugas</option>
-									<option value="3" {{ ($user->role_id ?? null) == 3 ? 'selected' : '' }}>Bendahara</option>
+									<option value="2" {{ ($user->role_id ?? null) == 2 ? 'selected' : '' }}>Admin (Administrator)</option>
+									<option value="3" {{ ($user->role_id ?? null) == 3 ? 'selected' : '' }}>Petugas / Operator</option>
+									<option value="1" {{ ($user->role_id ?? null) == 1 ? 'selected' : '' }}>Bendahara</option>
 									@endforelse
 								</select>
 							</div>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle"></i> <strong>Admin</strong> (akses penuh), <strong>Petugas / Operator</strong> (jadwal sholat, kajian, pengumuman & slide TV), <strong>Bendahara</strong> (pembukuan kas masjid & kas ambulance).
+                            </small>
 							@error('role_id')
 							<small class="text-danger">{{ $message }}</small>
 							@enderror

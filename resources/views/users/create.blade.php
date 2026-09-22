@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="role_id">Role <span class="text-danger">*</span></label>
+                            <label for="role_id">Role / Hak Akses <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-tag"></i></span>
@@ -77,17 +77,25 @@
                                     <option value="">-- Pilih Role --</option>
                                     @forelse($roles ?? [] as $role)
                                     <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
-                                        {{ ucfirst($role->name) }}
+                                        @if(in_array(strtolower($role->name), ['petugas', 'operator']))
+                                            Petugas / Operator
+                                        @elseif(strtolower($role->name) === 'admin')
+                                            Admin (Administrator)
+                                        @elseif(strtolower($role->name) === 'bendahara')
+                                            Bendahara
+                                        @else
+                                            {{ ucfirst($role->name) }}
+                                        @endif
                                     </option>
                                     @empty
-                                    <option value="1">Admin</option>
-                                    <option value="2">Petugas</option>
-                                    <option value="3">Bendahara</option>
+                                    <option value="2">Admin (Administrator)</option>
+                                    <option value="3">Petugas / Operator</option>
+                                    <option value="1">Bendahara</option>
                                     @endforelse
                                 </select>
                             </div>
                             <small class="form-text text-muted">
-                                <i class="fas fa-info-circle"></i> Administrator memiliki akses penuh ke semua fitur
+                                <i class="fas fa-info-circle"></i> <strong>Admin</strong> (akses penuh), <strong>Petugas / Operator</strong> (jadwal sholat, kajian, pengumuman & slide TV), <strong>Bendahara</strong> (pembukuan kas masjid & kas ambulance).
                             </small>
                             @error('role_id')
                             <small class="text-danger">{{ $message }}</small>

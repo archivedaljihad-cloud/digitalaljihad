@@ -23,15 +23,18 @@ class UserController extends Controller
     public function create()
     {
         try {
-            $roles = Role::orderBy('name')->get();
-            if ($roles->isEmpty()) {
-                foreach (['admin', 'petugas', 'bendahara', 'user'] as $roleName) {
-                    Role::firstOrCreate(['name' => $roleName]);
-                }
-                $roles = Role::orderBy('name')->get();
+            foreach (['admin', 'petugas', 'bendahara'] as $roleName) {
+                Role::firstOrCreate(['name' => $roleName]);
             }
+            $roleOrder = ['admin' => 1, 'petugas' => 2, 'bendahara' => 3];
+            $roles = Role::all()->sortBy(function ($r) use ($roleOrder) {
+                return $roleOrder[strtolower($r->name)] ?? 99;
+            })->values();
         } catch (\Throwable $e) {
-            $roles = collect();
+            $roles = Role::all();
+            if ($roles->isEmpty()) {
+                $roles = collect();
+            }
         }
 
         $setting = AppSetting::first();
@@ -42,21 +45,25 @@ class UserController extends Controller
     public function edit(User $user)
     {
         try {
-            $roles = Role::orderBy('name')->get();
-            if ($roles->isEmpty()) {
-                foreach (['admin', 'petugas', 'bendahara', 'user'] as $roleName) {
-                    Role::firstOrCreate(['name' => $roleName]);
-                }
-                $roles = Role::orderBy('name')->get();
+            foreach (['admin', 'petugas', 'bendahara'] as $roleName) {
+                Role::firstOrCreate(['name' => $roleName]);
             }
+            $roleOrder = ['admin' => 1, 'petugas' => 2, 'bendahara' => 3];
+            $roles = Role::all()->sortBy(function ($r) use ($roleOrder) {
+                return $roleOrder[strtolower($r->name)] ?? 99;
+            })->values();
         } catch (\Throwable $e) {
-            $roles = collect();
+            $roles = Role::all();
+            if ($roles->isEmpty()) {
+                $roles = collect();
+            }
         }
 
         $setting = AppSetting::first();
 
         return view('users.edit', compact('user', 'roles', 'setting'));
     }
+
 
     public function store(Request $request)
     {

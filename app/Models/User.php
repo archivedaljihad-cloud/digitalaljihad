@@ -89,8 +89,21 @@ class User extends Authenticatable
             }
         }
 
+        // Fallback cerdas jika user petugas/operator belum termigrasi role_id nya
+        if (in_array($checkRole, ['petugas', 'operator']) && !in_array($roleName, ['petugas', 'operator'])) {
+            $email = strtolower($this->email ?? '');
+            $name = strtolower($this->name ?? '');
+            if (str_contains($email, 'petugas') || str_contains($name, 'petugas') || str_contains($email, 'operator') || str_contains($name, 'operator')) {
+                return true;
+            }
+        }
+
         if (in_array($checkRole, ['admin', 'superadmin'])) {
             return in_array($roleName, ['admin', 'superadmin']);
+        }
+
+        if (in_array($checkRole, ['petugas', 'operator'])) {
+            return in_array($roleName, ['petugas', 'operator']);
         }
 
         return $roleName === $checkRole;
