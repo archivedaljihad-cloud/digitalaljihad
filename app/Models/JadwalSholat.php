@@ -26,6 +26,37 @@ class JadwalSholat extends Model
                 $model->id = $maxId + 1;
             }
         });
+
+        static::saved(function () {
+            static::clearCache();
+        });
+
+        static::deleted(function () {
+            static::clearCache();
+        });
+    }
+
+    public static function getCachedUrutan()
+    {
+        try {
+            return \Illuminate\Support\Facades\Cache::remember('jadwal_sholat_urutkan', 3600, function () {
+                return static::urutkan()->get();
+            });
+        } catch (\Throwable $e) {
+            return static::urutkan()->get();
+        }
+    }
+
+    public static function clearCache(): void
+    {
+        try {
+            \Illuminate\Support\Facades\Cache::forget('jadwal_sholat_urutkan');
+            \Illuminate\Support\Facades\Cache::forget('jadwal_sholat_active');
+            \Illuminate\Support\Facades\Cache::forget('prayer_mode_state');
+            \Illuminate\Support\Facades\Cache::forget('prayer_mode_state_api');
+        } catch (\Throwable $e) {
+            // ignore
+        }
     }
 
     /**

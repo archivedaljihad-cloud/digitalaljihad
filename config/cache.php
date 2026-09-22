@@ -50,7 +50,7 @@ return [
 
         'file' => [
             'driver' => 'file',
-            'path' => storage_path('framework/cache/data'),
+            'path' => env('CACHE_PATH', (is_dir('/tmp') && !@is_writable(storage_path('framework/cache')) ? '/tmp/storage/framework/cache/data' : storage_path('framework/cache/data'))),
         ],
 
         'memcached' => [

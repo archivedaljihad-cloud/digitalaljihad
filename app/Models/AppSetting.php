@@ -12,6 +12,39 @@ class AppSetting extends Model
 
     protected $table = 'app_settings';
 
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            static::clearCache();
+        });
+        static::deleted(function () {
+            static::clearCache();
+        });
+    }
+
+    public static function getCached(): ?self
+    {
+        try {
+            return \Illuminate\Support\Facades\Cache::remember('app_settings_global', 3600, function () {
+                return static::first();
+            });
+        } catch (\Throwable $e) {
+            return static::first();
+        }
+    }
+
+    public static function clearCache(): void
+    {
+        try {
+            \Illuminate\Support\Facades\Cache::forget('app_settings_global');
+            \Illuminate\Support\Facades\Cache::forget('rotation_settings_api');
+            \Illuminate\Support\Facades\Cache::forget('prayer_mode_state');
+            \Illuminate\Support\Facades\Cache::forget('prayer_mode_state_api');
+        } catch (\Throwable $e) {
+            // ignore
+        }
+    }
+
     protected $fillable = [
         'nama_aplikasi',
         'favicon',

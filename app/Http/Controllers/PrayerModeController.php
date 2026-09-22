@@ -21,7 +21,7 @@ class PrayerModeController extends Controller
     private function getPrayerState()
     {
         try {
-            $setting = AppSetting::first();
+            $setting = AppSetting::getCached() ?? AppSetting::first();
         } catch (\Throwable $e) {
             $setting = null;
         }
@@ -38,7 +38,7 @@ class PrayerModeController extends Controller
         
         // Mengambil jadwal dan mengecualikan jadwal non-sholat fardhu (Imsak, Syuruk/Terbit, Dhuha) dari Prayer Mode
         $nonPrayerTimes = ['imsak', 'imsyak', 'terbit', 'syuruk', 'shuruk', 'sunrise', 'dhuha', 'duha'];
-        $jadwal = JadwalSholat::urutkan()->get()->filter(function ($item) use ($nonPrayerTimes) {
+        $jadwal = (JadwalSholat::getCachedUrutan() ?? collect())->filter(function ($item) use ($nonPrayerTimes) {
             $nama = strtolower(trim($item->nama_sholat));
             return !in_array($nama, $nonPrayerTimes);
         });
@@ -346,6 +346,7 @@ class PrayerModeController extends Controller
         $state['bgOpacity'] = $state['bgOpacity'] ?? 80;
         $state['displayMessage'] = $state['displayMessage'] ?? '';
         $state['yasin_active'] = $state['yasin_active'] ?? false;
-        return response()->json($state);
+        return response()->json($state)
+            ->header('Cache-Control', 'public, max-age=1, stale-while-revalidate=2');
     }
 }

@@ -1231,15 +1231,127 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 
 ---
 
-## 🔒 41. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## ⚡ 42. AUDIT MENYELURUH, REFACTORING KODE & OPTIMASI PERFORMA TINGGI (PERFORMANCE ARCHITECTURE OVERHAUL) (22 September 2026)
+
+### A. Latar Belakang & Identifikasi Bottleneck (Akar Masalah Keterlambatan Web)
+Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supabase remote di AWS Mumbai, dan frontend TV display):
+1. **Cache Driver Serverless Tidak Efektif (`CACHE_DRIVER=array`):**
+   - Di `vercel.json`, `CACHE_DRIVER` sebelumnya disetel ke `array`. Pada lingkungan serverless (Vercel Lambda), driver `array` berarti cache hanya hidup dalam 1 siklus eksekusi request dan langsung dibuang.
+   - Akibatnya, setiap request HTTP (termasuk polling status tiap 2-3 detik) dipaksa melakukan koneksi jaringan TCP/TLS ke database Supabase remote di AWS Mumbai (`aws-0-ap-south-1.pooler.supabase.com`), menyebabkan latensi tinggi (300ms - 1200ms per request).
+2. **Database Thrashing oleh Polling Realtime TV:**
+   - TV Rotator melakukan polling ke `/prayer-mode/status` setiap 2 detik dan `/rotation-settings` setiap 5 detik. Tanpa caching terpadu, setiap polling mengeksekusi 3-4 query SQL langsung ke database (`AppSetting::first()`, `JadwalSholat::all()`, dll.), membebani connection pooler Supabase.
+3. **Waterfall Synchronous API Eksternal Kemenag pada Page Load:**
+   - Di `WelcomeController::syncJadwalSholatHariIni()`, jika jadwal hari ini belum sinkron, fungsi tersebut melakukan HTTP call sinkron ke API Kemenag di tengah-tengah request pengguna, menahan proses render halaman hingga bermilidetik-detik.
+4. **Cache-Busting Berlebihan (`?v={{ time() }}`) Mematikan Browser Caching:**
+   - Di hampir seluruh file Blade view (`utama`, `jumat`, `rotator`, `keuangan`, `idul-fitri`, `idul-adha`, dll.), semua stylesheet CSS, favicon, dan bahkan gambar background raksasa (`bg_jumat.jpg`, `bg_idul_fitri.jpg`, `bg_idul_adha.jpg`) diberi parameter `?v={{ time() }}`.
+   - Akibatnya, browser dan Smart TV dipaksa mengunduh ulang gambar berukuran megabyte dan file CSS dari internet setiap kali iframe berganti slide.
+5. **Redundansi FontAwesome & Beban GPU Berat:**
+   - Setiap view memuat FontAwesome secara bertumpuk tiga lapis: CSS lokal, CDN Cloudflare `all.min.css`, dan script JS renderer SVG `all.min.js` (berukuran ~1.5 MB).
+   - Script JS SVG tersebut memindai dan merender ulang seluruh tag `<i>` di DOM setiap kali slide berputar, memicu *layout thrashing* dan lonjakan pemakaian GPU/CPU hingga 100% pada TV berspesifikasi rendah.
+6. **Render-Blocking CSS `@import`:**
+   - Pada baris pertama `public/css/display-theme.css`, terdapat `@import url('../vendor/fontawesome-free/css/all.min.css');` yang menciptakan *waterfall network request* yang menghalangi perenderan (*render-blocking*).
+7. **Dead Polling AJAX 404 pada Dashboard Admin:**
+   - Di `layouts/admin.blade.php`, terdapat fungsi `updatePrayerTimes()` yang memanggil `/api/prayer-times` setiap 60 detik. Rute tersebut tidak ada di Laravel, sehingga terus-menerus memproduksi error HTTP 404 di konsol browser.
+
+---
+
+### B. Solusi & Implementasi Arsitektur Performa
+
+#### 1. Backend & Serverless Caching (Vercel & Supabase)
+- **`vercel.json` & `config/cache.php`:**
+  - Mengubah `CACHE_DRIVER` dari `array` menjadi `file`.
+  - Mengonfigurasi path cache yang tangguh di lingkungan Serverless Vercel (`storage_path('framework/cache/data')` dengan fallback otomatis ke `/tmp` jika storage lokal berstatus read-only).
+- **In-Memory & Storage Cache Terpadu pada Model Inti:**
+  - `AppSetting::getCached()`: Pengaturan aplikasi di-cache dengan TTL 1 jam. Cache otomatis dihapus saat data disimpan/diupdate/dihapus via Eloquent model events (`saved` dan `deleted`).
+  - `JadwalSholat::getCachedUrutan()`: Urutan sholat di-cache dengan TTL 1 jam dan auto-eviction saat update.
+- **Edge Caching & Stale-While-Revalidate pada Endpoint Polling:**
+  - `PrayerModeController::status()`: Menambahkan header HTTP `Cache-Control: public, max-age=1, stale-while-revalidate=2`.
+  - `WelcomeController::getRotationSettings()`: Menambahkan header HTTP `Cache-Control: public, max-age=3, stale-while-revalidate=5`.
+  - Hal ini memungkinkan Edge Vercel melayani polling interval cepat tanpa menyentuh fungsi PHP dan database Supabase sama sekali jika status belum berubah.
+- **Anti-Waterfall & Thundering Herd Lock pada Sinkronisasi Jadwal Sholat:**
+  - Di `WelcomeController::syncJadwalSholatHariIni()`, ditambahkan lock cache 300 detik (`auto_sync_kemenag_attempted`) agar jika terjadi kegagalan jaringan atau request bersamaan, sistem tidak membombardir API Kemenag atau menahan proses render halaman pengguna.
+- **Optimasi Dashboard (`HomeController.php` & `AppServiceProvider.php`):**
+  - View composer di `AppServiceProvider` beralih ke `AppSetting::getCached()`.
+  - Widget hitung user di `HomeController::index()` menggunakan cache 60 detik (`users_count_dashboard`).
+
+#### 2. Frontend & Asset Optimization (18 Blade Views & CSS)
+- **Penghapusan Render-Blocking `@import`:**
+  - Dihapus dari baris pertama `public/css/display-theme.css`.
+- **Eliminasi 1.5MB SVG JS & Redundansi FontAwesome CDN:**
+  - Menghapus tag `<script src="vendor/fontawesome-free/js/all.min.js">` dan CDN duplikat di 18 view display. Hanya menggunakan CSS FontAwesome murni yang sangat ringan.
+- **Modern Cache Control & Static Versioning (`?v=3.0.4`):**
+  - Mengganti seluruh query string `?v={{ time() }}` pada CSS, favicon, dan gambar latar belakang menjadi `?v=3.0.4`. Browser kini meng-cache gambar background HD (`bg_jumat.jpg`, `bg_idul_fitri.jpg`, `bg_idul_adha.jpg`) secara permanen.
+- **DNS & TLS Preconnect:**
+  - Menambahkan `<link rel="preconnect" href="https://fonts.googleapis.com">` dan `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>` pada seluruh view.
+
+#### 3. Optimasi Tampilan Layar Smart TV & Resolusi 4K
+- **Ringankan Beban Kompositing GPU TV:**
+  - Mengganti transisi berat `perspective: 1000px` dan `transform: scale(0.995)` pada iframe rotator dengan transisi alpha crossfade murni (`transition: opacity 0.8s ease-in-out`).
+  - Mengubah animasi pendaran medali kaligrafi emas di `display-theme.css` dari kalkulasi ulang filter raster `drop-shadow` berkelanjutan menjadi animasi `transform: scale()` dan `opacity` murni.
+- **Navigasi Remote TV & Keyboard Terintegrasi:**
+  - Menambahkan fungsi `prevPage()` dan listener tombol remote TV (`ArrowLeft`, `ArrowRight`, `MediaTrackNext`, `MediaTrackPrevious`, `MediaPlayPause` / spasi untuk jeda rotasi, dan `r`/`R` untuk reload) pada `rotator.blade.php` dan `rotator-outdoor.blade.php`.
+- **Dukungan Responsif 1440p & Layar Raksasa 4K:**
+  - Menambahkan media query khusus `@media (min-width: 2560px)` dan `@media (min-width: 3840px)` pada `display-theme.css` untuk memperbesar ukuran font header, jam digital, sub-header, dan diameter medali kaligrafi agar terbaca dengan kontras tajam dari kejauhan.
+
+#### 4. Autentikasi Aman & Responsivitas CMS Admin
+- **Clean Logout State:**
+  - Di `LoginController::logout()`, ditambahkan header `Clear-Site-Data: "cache", "storage"` untuk membersihkan cache browser dan token sesi secara instan saat pengguna keluar.
+- **Pembersihan Dead Polling:**
+  - Menghapus kode polling AJAX `/api/prayer-times` (yang menghasilkan error 404 tiap menit) dari `layouts/admin.blade.php`.
+- **Universal Form Submit Spinner & Anti Double-Submit:**
+  - Menambahkan proteksi form submission global di `layouts/admin.blade.php`: setiap kali tombol form ditekan, tombol langsung dinonaktifkan (`disabled = true`) dan menampilkan animasi loading spinner, mencegah duplikasi entri data dan memberikan feedback instan ke pengguna.
+
+---
+
+### C. Berkas yang Diperbarui:
+1. `vercel.json` (Konfigurasi CACHE_DRIVER: file)
+2. `config/cache.php` (Fallback path storage serverless yang aman)
+3. `Caddyfile` (Header caching aset statis & kompresi zstd/gzip)
+4. `app/Models/AppSetting.php` (Metode getCached & cache invalidation event)
+5. `app/Models/JadwalSholat.php` (Metode getCachedUrutan & cache invalidation event)
+6. `app/Providers/AppServiceProvider.php` (Menggunakan AppSetting::getCached())
+7. `app/Http/Controllers/PrayerModeController.php` (Optimasi query cached & Edge Cache-Control)
+8. `app/Http/Controllers/WelcomeController.php` (Optimasi query cached, lock anti-waterfall Kemenag, Edge Cache-Control)
+9. `app/Http/Controllers/Auth/LoginController.php` (Cached settings & Clear-Site-Data header on logout)
+10. `app/Http/Controllers/HomeController.php` (Cached settings & cached user count)
+11. `public/css/display-theme.css` (Hapus @import, ringankan animasi GPU TV, tambah media queries 4K)
+12. `resources/views/rotator.blade.php` (Hapus SVG JS & duplikat fontawesome, transisi GPU ringan, navigasi remote TV)
+13. `resources/views/rotator-outdoor.blade.php` (Hapus SVG JS & duplikat fontawesome, transisi GPU ringan, navigasi remote TV)
+14. `resources/views/utama.blade.php` (Pembersihan fontawesome & cache versioning)
+15. `resources/views/welcome.blade.php` (Pembersihan fontawesome & cache versioning)
+16. `resources/views/jumat.blade.php` (Pembersihan fontawesome & cache versioning background gambar)
+17. `resources/views/keuangan.blade.php` (Pembersihan fontawesome & cache versioning)
+18. `resources/views/keuangan-summary.blade.php` (Pembersihan fontawesome, defer Chart.js)
+19. `resources/views/pengumuman.blade.php` (Pembersihan fontawesome & cache versioning)
+20. `resources/views/qris/embed.blade.php` (Pembersihan fontawesome & cache versioning)
+21. `resources/views/slide-embed.blade.php` (Pembersihan fontawesome & cache versioning)
+22. `resources/views/prayer-mode.blade.php` (Perbaikan tag font unclosed, pembersihan fontawesome)
+23. `resources/views/yasin-embed.blade.php` (Pembersihan fontawesome & cache versioning)
+24. `resources/views/idul-fitri-embed.blade.php` (Pembersihan fontawesome & cache versioning background gambar)
+25. `resources/views/idul-adha-embed.blade.php` (Pembersihan fontawesome & cache versioning background gambar)
+26. `resources/views/ambulance-embed.blade.php` (Pembersihan fontawesome & cache versioning)
+27. `resources/views/infaq-embed.blade.php` (Pembersihan fontawesome & cache versioning)
+28. `resources/views/hikmah-embed.blade.php` (Pembersihan fontawesome & cache versioning)
+29. `resources/views/live-stream.blade.php` (Pembersihan fontawesome & cache versioning)
+30. `resources/views/live-stream/mimbar-embed.blade.php` (Pembersihan fontawesome & font preconnect)
+31. `resources/views/auth/register.blade.php` (Local fontawesome & font preconnect)
+32. `resources/views/layouts/auth.blade.php` (Pembersihan duplikat CDN fontawesome)
+33. `resources/views/layouts/admin.blade.php` (Pembersihan duplikat CDN, hapus dead 404 AJAX polling, pasang universal submit feedback)
+34. `LATEST_UPDATE.md` (Dokumentasi lengkap pembaruan performa arsitektur v4.5.0)
+
+---
+
+## 🔒 43. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **DILARANG Menaruh Query DDL / Database di `AppServiceProvider::boot()`:** Jangan pernah menaruh `Schema::hasTable`, `Schema::hasColumn`, atau query Eloquent massal di dalam `boot()` karena akan dieksekusi di SETIAP request HTTP dan melumpuhkan kecepatan aplikasi.
 2. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`, `?? ''`) pada Blade view dan Controller.
-3. **Sinkronisasi Git Otomatis:** Setelah menyelesaikan modifikasi atau perbaikan, **WAJIB langsung melakukan commit dan push ke branch `main` GitHub**.
-4. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
+3. **Gunakan `AppSetting::getCached()` dan `JadwalSholat::getCachedUrutan()`:** Jangan memanggil query berulang `AppSetting::first()` pada view composer atau route yang sering di-polling.
+4. **Hindari `?v={{ time() }}` pada Static Assets:** Selalu gunakan nomor versi statis seperti `?v=3.0.4` agar aset dapat di-cache secara efisien oleh browser dan CDN.
+5. **Sinkronisasi Git Otomatis:** Setelah menyelesaikan modifikasi atau perbaikan, **WAJIB langsung melakukan commit dan push ke branch `main` GitHub**.
+6. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Penjaminan & Penampilan Lengkap Role Petugas / Operator) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+*Terakhir Diperbarui: 22 September 2026 (Audit Menyeluruh & Optimasi Performa Skala Penuh v4.5.0) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
 

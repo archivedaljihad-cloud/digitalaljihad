@@ -6,10 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }} - {{ $settings->nama_aplikasi ?? 'Display Masjid' }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v={{ time() }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v=3.0.4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v=3.0.4">
+    <link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v=3.0.4">
 
     <style>
         * {

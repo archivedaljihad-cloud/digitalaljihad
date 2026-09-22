@@ -13,7 +13,7 @@ class WelcomeController extends Controller
 {
     public function rotator()
     {
-        $settings = AppSetting::first();
+        $settings = AppSetting::getCached() ?? AppSetting::first();
         if (!$settings) {
             $settings = AppSetting::create([
                 'nama_aplikasi'       => 'MASJID AL-IKHLAS',
@@ -91,10 +91,10 @@ class WelcomeController extends Controller
         $this->syncJadwalSholatHariIni($settings);
         return view('rotator', [
             'settings'         => $settings,
-            'rotationInterval' => $settings->getRotationInterval(),
-            'rotationEnabled'  => $settings->isRotationEnabled(),
-            'rotationPages'    => $settings->getRotationPagesList(),
-            'jadwalSholat'     => JadwalSholat::urutkan()->get(),
+            'rotationInterval' => $settings ? $settings->getRotationInterval() : 10,
+            'rotationEnabled'  => $settings ? $settings->isRotationEnabled() : true,
+            'rotationPages'    => $settings ? $settings->getRotationPagesList() : [],
+            'jadwalSholat'     => JadwalSholat::getCachedUrutan(),
         ]);
     }
 
@@ -103,7 +103,7 @@ class WelcomeController extends Controller
      */
     public function rotatorOutdoor()
     {
-        $settings = AppSetting::first();
+        $settings = AppSetting::getCached() ?? AppSetting::first();
         if (!$settings) {
             $settings = AppSetting::create([
                 'nama_aplikasi'       => 'MASJID AL-IKHLAS',
@@ -118,13 +118,13 @@ class WelcomeController extends Controller
 
         return view('rotator-outdoor', [
             'settings'         => $settings,
-            'rotationInterval' => $settings->getRotationInterval(),
-            'rotationEnabled'  => $settings->isRotationEnabled(),
-            'rotationPages'    => $settings->getRotationPagesList(),
-            'jadwalSholat'     => JadwalSholat::urutkan()->get(),
-            'cctvEnabled'      => $settings->isCctvMimbarEnabled(),
-            'cctvUrl'          => $settings->getCctvMimbarUrl(),
-            'cctvAutoSwitch'   => $settings->isCctvAutoSwitchKhutbah(),
+            'rotationInterval' => $settings ? $settings->getRotationInterval() : 10,
+            'rotationEnabled'  => $settings ? $settings->isRotationEnabled() : true,
+            'rotationPages'    => $settings ? $settings->getRotationPagesList() : [],
+            'jadwalSholat'     => JadwalSholat::getCachedUrutan(),
+            'cctvEnabled'      => $settings ? $settings->isCctvMimbarEnabled() : false,
+            'cctvUrl'          => $settings ? $settings->getCctvMimbarUrl() : '',
+            'cctvAutoSwitch'   => $settings ? $settings->isCctvAutoSwitchKhutbah() : false,
         ]);
     }
 
@@ -176,9 +176,9 @@ class WelcomeController extends Controller
     }                          
     public function utamaEmbed()
     {
-        $settings = AppSetting::first();
+        $settings = AppSetting::getCached() ?? AppSetting::first();
         $this->syncJadwalSholatHariIni($settings);
-        $jadwalSholat = JadwalSholat::urutkan()->get();
+        $jadwalSholat = JadwalSholat::getCachedUrutan();
         return view(
             'utama',
             compact(
@@ -195,10 +195,13 @@ class WelcomeController extends Controller
             $lastUpdate = $settings->last_auto_update ? Carbon::parse($settings->last_auto_update)->timezone('Asia/Jakarta')->startOfDay() : null;
             
             if (!$lastUpdate || $lastUpdate->lt($today)) {
-                try {
-                    app(\App\Services\JadwalSholatAutoUpdateService::class)->updateFromAPI();
-                } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::warning('Auto-sync Kemenag on TV load: ' . $e->getMessage());
+                if (!Cache::has('auto_sync_kemenag_attempted')) {
+                    Cache::put('auto_sync_kemenag_attempted', true, 300);
+                    try {
+                        app(\App\Services\JadwalSholatAutoUpdateService::class)->updateFromAPI();
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::warning('Auto-sync Kemenag on TV load: ' . $e->getMessage());
+                    }
                 }
             }
         }
@@ -317,7 +320,7 @@ class WelcomeController extends Controller
     }                        
     public function getRotationSettings()
     {
-        $settings = AppSetting::first();
+        $settings = AppSetting::getCached() ?? AppSetting::first();
         return response()->json([
             'interval' => $settings
                 ? (int) $settings->getRotationInterval()
@@ -328,9 +331,7 @@ class WelcomeController extends Controller
             'pages' => $settings
                 ? $settings->getRotationPagesList()
                 : [],
-        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-          ->header('Pragma', 'no-cache')
-          ->header('Expires', 'Sat, 01 Jan 2000 00:00:00 GMT');
+        ])->header('Cache-Control', 'public, max-age=3, stale-while-revalidate=5');
     }
     public function getDataTimestamp()
     {

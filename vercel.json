@@ -21,7 +21,7 @@
     "APP_DEBUG": "false",
     "APP_KEY": "base64:TUI/rs1egTQjO+U3V3hMZYeY8Me8J4TzahQt6iZpcto=",
     "APP_TIMEZONE": "Asia/Jakarta",
-    "CACHE_DRIVER": "array",
+    "CACHE_DRIVER": "file",
     "SESSION_DRIVER": "cookie",
     "SESSION_LIFETIME": "120",
     "BCRYPT_ROUNDS": "10",

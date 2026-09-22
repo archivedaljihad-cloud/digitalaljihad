@@ -23,7 +23,7 @@ class HomeController extends Controller
         $this->middleware('auth');
 
         // Ambil atau gunakan fallback pengaturan aplikasi
-        $this->setting = AppSetting::first() ?? new AppSetting([
+        $this->setting = AppSetting::getCached() ?? new AppSetting([
             'nama_aplikasi' => "MASJID JAMI' AL JIHAD",
             'footer' => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System',
         ]);
@@ -40,7 +40,9 @@ class HomeController extends Controller
     public function index()
     {
         $widget = [
-            'users' => User::count()
+            'users' => \Illuminate\Support\Facades\Cache::remember('users_count_dashboard', 60, function () {
+                return User::count();
+            })
         ];
 
         return view('home', compact('widget'));

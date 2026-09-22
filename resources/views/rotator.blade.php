@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
-    <script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v=3.0.4">
 
     <style>
         @font-face {
@@ -48,37 +48,31 @@
             height: 100%;
             border: none;
             background-color: #050505;
-            will-change: opacity, transform;
-            backface-visibility: hidden;
-            perspective: 1000px;
+            will-change: opacity;
             pointer-events: none;
             opacity: 0;
-            transform: scale(0.995);
-            /* Transisi cross-fade siaran TV: sangat halus tanpa pergeseran horizontal */
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Transisi cross-fade TV performa tinggi: ringan di GPU tanpa 3D perspective / scale jitter */
+            transition: opacity 0.8s ease-in-out;
         }
         
         iframe.active {
             opacity: 1;
-            transform: scale(1);
             z-index: 2;
             pointer-events: auto;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.8s ease-in-out;
         }
 
         iframe.outgoing {
             opacity: 0;
-            transform: scale(1.005);
             z-index: 1;
             pointer-events: none;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.8s ease-in-out;
         }
 
         /* Mode standby instan tanpa animasi saat memuat halaman berikutnya */
         iframe.standby {
             transition: none !important;
             opacity: 0 !important;
-            transform: scale(0.995) !important;
             z-index: 1 !important;
             pointer-events: none !important;
         }
@@ -517,6 +511,13 @@
             loadPage(currentIndex);
         }
 
+        function prevPage() {
+            if (isPrayerActive()) return;
+            if (isLoading || !rotationEnabled || activePages.length <= 1) return;
+            currentIndex = (currentIndex - 1 + activePages.length) % activePages.length;
+            loadPage(currentIndex);
+        }
+
         function skipToNext() {
             if (isPrayerActive()) return;
             if (isLoading || !rotationEnabled || activePages.length <= 1) return;
@@ -752,9 +753,11 @@
         document.getElementById('frame2').addEventListener('error', function() { onFrameError(this); });
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight') nextPage();
-            else if (e.key === ' ' || e.key === 'Space') { e.preventDefault(); skipToNext(); }
+            if (e.key === 'ArrowRight' || e.key === 'MediaTrackNext') nextPage();
+            else if (e.key === 'ArrowLeft' || e.key === 'MediaTrackPrevious') prevPage();
+            else if (e.key === ' ' || e.key === 'Space' || e.key === 'MediaPlayPause') { e.preventDefault(); skipToNext(); }
             else if (e.key === 's' || e.key === 'S') openSettings();
+            else if (e.key === 'r' || e.key === 'R') window.location.reload();
         });
 
         applyDebugVisibility();

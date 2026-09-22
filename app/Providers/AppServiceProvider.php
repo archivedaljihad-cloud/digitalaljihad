@@ -55,7 +55,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Membuat variabel $setting otomatis ada di layouts.admin
         View::composer('layouts.admin', function ($view) {
-            $view->with('setting', AppSetting::first());
+            $view->with('setting', AppSetting::getCached());
         });
 
         // Standarisasi nama masjid ke MASJID JAMI' AL JIHAD untuk seluruh tampilan layar

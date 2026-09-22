@@ -51,9 +51,8 @@
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
-    <!-- Font Awesome (Local with CDN fallback) -->
-    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Font Awesome (Local) -->
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v=3.0.4" rel="stylesheet">
 
     <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -62,8 +61,8 @@
     <!-- Flatpickr (24-Hour System Timepicker) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <!-- Favicon (Diperbarui dengan Cache Busting) -->
-    <link rel="icon" href="{{ $faviconUrl }}?v={{ time() }}" type="image/x-icon">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ $faviconUrl }}?v=3.0.4" type="image/x-icon">
 
     <!-- Islamic Admin Custom Styles -->
     <style>
@@ -1587,25 +1586,26 @@
             });
         }
 
-        // Update waktu sholat real-time
-        function updatePrayerTimes() {
-            $.ajax({
-                url: '/api/prayer-times',
-                method: 'GET',
-                success: function(data) {
-                    if (data.nextPrayer) {
-                        $('#nextPrayerName').text(data.nextPrayer.name);
-                        $('#nextPrayerTime').text(data.nextPrayer.time);
-                        $('#countdown').text(data.countdown);
-                    }
+        // Universal form submit feedback & double-submission prevention
+        $(document).on('submit', 'form', function(e) {
+            const form = $(this);
+            if (form.data('no-spinner')) return;
+            const submitBtn = form.find('button[type="submit"], input[type="submit"]').first();
+            if (submitBtn.length && !submitBtn.prop('disabled')) {
+                const originalHtml = submitBtn.html();
+                submitBtn.data('original-html', originalHtml);
+                submitBtn.prop('disabled', true);
+                if (submitBtn.is('button')) {
+                    submitBtn.html('<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...');
                 }
-            });
-        }
-
-        // Update every minute
-        if (typeof updatePrayerTimes === 'function') {
-            setInterval(updatePrayerTimes, 60000);
-        }
+                setTimeout(function() {
+                    submitBtn.prop('disabled', false);
+                    if (submitBtn.is('button')) {
+                        submitBtn.html(originalHtml);
+                    }
+                }, 8000);
+            }
+        });
     </script>
 
     <!-- Flatpickr JS (Sistem 24 Jam) -->

@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
-    <script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v=3.0.4">
 
     <style>
         * {
@@ -40,29 +40,26 @@
             height: 100%;
             border: none;
             background-color: #050505;
-            will-change: opacity, transform;
+            will-change: opacity;
             backface-visibility: hidden;
-            perspective: 1000px;
             pointer-events: none;
             opacity: 0;
-            transform: scale(0.995);
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.8s ease-in-out;
         }
         
         iframe.active {
             opacity: 1;
-            transform: scale(1);
             z-index: 2;
             pointer-events: auto;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.8s ease-in-out;
         }
 
         iframe.outgoing {
             opacity: 0;
-            transform: scale(1.005);
             z-index: 1;
             pointer-events: none;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.8s ease-in-out;
+        }
         }
 
         iframe.standby {
@@ -460,6 +457,13 @@
             loadPage(currentIndex);
         }
 
+        function prevPage() {
+            if (isPrayerActive() || isBroadcastingMimbar) return;
+            if (isLoading || !rotationEnabled || activePages.length <= 1) return;
+            currentIndex = (currentIndex - 1 + activePages.length) % activePages.length;
+            loadPage(currentIndex);
+        }
+
         function showNotification(message) {
             const notification = document.getElementById('notification');
             notification.innerHTML = `<i class="fas fa-sync-alt fa-spin"></i> ${message}`;
@@ -595,6 +599,22 @@
 
         setInterval(checkPrayerModeAPI, 3000);
         checkPrayerModeAPI();
+
+        // Keyboard / Remote TV navigation support
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'MediaTrackNext') {
+                nextPage();
+            } else if (e.key === 'ArrowLeft' || e.key === 'MediaTrackPrevious') {
+                prevPage();
+            } else if (e.key === ' ' || e.key === 'MediaPlayPause') {
+                e.preventDefault();
+                rotationEnabled = !rotationEnabled;
+                showNotification(rotationEnabled ? 'Rotasi Dilanjutkan' : 'Rotasi Dijeda');
+                if (rotationEnabled) resetCountdown();
+            } else if (e.key === 'r' || e.key === 'R') {
+                window.location.reload();
+            }
+        });
 
         loadPage(0);
     </script>

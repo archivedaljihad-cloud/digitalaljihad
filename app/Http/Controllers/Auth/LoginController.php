@@ -22,7 +22,7 @@ class LoginController extends Controller
     // Menampilkan form login dengan setting aplikasi
     public function showLoginForm()
     {
-        $settingRecord = AppSetting::first();
+        $settingRecord = AppSetting::getCached() ?? AppSetting::first();
         $setting = $settingRecord ? $settingRecord->toArray() : [];
         return view('auth.login', compact('setting'));
     }
@@ -41,6 +41,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'Anda telah logout.');
+        return redirect('/')->with('success', 'Anda telah berhasil logout.')
+            ->header('Clear-Site-Data', '"cache", "storage"');
     }
 }

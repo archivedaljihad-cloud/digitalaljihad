@@ -6,12 +6,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Sistem Informasi Masjid - Jadwal Sholat Jumat</title>
-	<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v={{ time() }}">
+	<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v=3.0.4">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v={{ time() }}">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-	<script src="{{ asset('vendor/fontawesome-free/js/all.min.js') }}?v={{ time() }}" defer></script>
-	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v={{ time() }}">
+	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v=3.0.4">
+	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v=3.0.4">
 
 	@include('partials.display-theme')
 
@@ -385,7 +385,7 @@
 
 		/* Custom Theme Background Spesifik Sholat Jumat (Kemegahan Interior Raudhah Masjid Nabawi) */
 		.display-background {
-			background-image: url('{{ asset("image/display/background/bg_jumat.jpg") }}?v={{ time() }}') !important;
+			background-image: url('{{ asset("image/display/background/bg_jumat.jpg") }}?v=3.0.4') !important;
 			background-position: center center !important;
 			background-repeat: no-repeat !important;
 			background-size: cover !important;
@@ -785,7 +785,7 @@
 			const bgElement = document.querySelector('.display-background') || document.body;
 			if (bgElement) {
 				const raudhahBg = new Image();
-				raudhahBg.src = "{{ asset('image/display/background/bg_jumat.jpg') }}?v={{ time() }}";
+				raudhahBg.src = "{{ asset('image/display/background/bg_jumat.jpg') }}?v=3.0.4";
 				raudhahBg.onload = function () {
 					bgElement.style.backgroundImage = `url('${raudhahBg.src}')`;
 					bgElement.style.opacity = '1';

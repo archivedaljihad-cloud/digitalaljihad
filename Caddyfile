@@ -5,5 +5,17 @@
 :{$PORT:80} {
     root * /app/public
     encode zstd gzip
+
+    @static {
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.webp *.avif *.woff *.woff2 *.ttf *.otf
+    }
+    header @static Cache-Control "public, max-age=2592000, immutable"
+
+    header {
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
     php_server
 }
