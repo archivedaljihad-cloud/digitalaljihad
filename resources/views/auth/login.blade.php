@@ -774,5 +774,15 @@
             icon.classList.add('fa-eye');
         }
     }
+
+    document.getElementById('loginForm')?.addEventListener('submit', function() {
+        const btn = document.getElementById('btnSubmitDashboard');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span>Memverifikasi Kredensial...</span> <i class="fas fa-spinner fa-spin ml-2"></i>';
+            btn.style.opacity = '0.85';
+            btn.style.cursor = 'wait';
+        }
+    });
 </script>
 @endsection

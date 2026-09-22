@@ -1177,6 +1177,7 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `app/Http/Controllers/AppSettingController.php` (Sentralisasi auto-provisioning ke runMigration)
 - `app/Http/Controllers/Auth/LoginController.php` (Optimasi query setting tunggal)
 - `app/Http/Controllers/HomeController.php` (Penggunaan memory fallback pada setting)
+- `resources/views/auth/login.blade.php` (Penambahan animasi loading spinner instan pada tombol submit login)
 - `config/hashing.php` (Penyesuaian rounds Bcrypt default ke 10)
 - `vercel.json` (Penyesuaian BCRYPT_ROUNDS: "10")
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.13)
