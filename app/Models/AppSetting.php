@@ -84,8 +84,8 @@ class AppSetting extends Model
         'daily_hikmah_cache' => 'array',
         'running_text_pages' => 'array',
         // ===== TAMBAHAN PENGATURAN AUDIO =====
-        'audio_tarhim',
-        'tarhim_trigger_seconds',
+        'audio_tarhim' => 'boolean',
+        'tarhim_trigger_seconds' => 'integer',
     ];
 
     public $timestamps = true;

@@ -75,11 +75,15 @@
                                 </div>
                                 <select name="role_id" id="role_id" class="form-control @error('role_id') is-invalid @enderror" required>
                                     <option value="">-- Pilih Role --</option>
-                                    @foreach($roles as $role)
+                                    @forelse($roles ?? [] as $role)
                                     <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
                                         {{ ucfirst($role->name) }}
                                     </option>
-                                    @endforeach
+                                    @empty
+                                    <option value="1">Admin</option>
+                                    <option value="2">Petugas</option>
+                                    <option value="3">Bendahara</option>
+                                    @endforelse
                                 </select>
                             </div>
                             <small class="form-text text-muted">

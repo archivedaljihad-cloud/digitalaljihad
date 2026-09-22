@@ -75,11 +75,15 @@
 									<span class="input-group-text"><i class="fas fa-tag"></i></span>
 								</div>
 								<select name="role_id" id="role_id" class="form-control @error('role_id') is-invalid @enderror" required>
-									@foreach($roles as $role)
-									<option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+									@forelse($roles ?? [] as $role)
+									<option value="{{ $role->id }}" {{ ($user->role_id ?? null) == $role->id ? 'selected' : '' }}>
 										{{ ucfirst($role->name) }}
 									</option>
-									@endforeach
+									@empty
+									<option value="1" {{ ($user->role_id ?? null) == 1 ? 'selected' : '' }}>Admin</option>
+									<option value="2" {{ ($user->role_id ?? null) == 2 ? 'selected' : '' }}>Petugas</option>
+									<option value="3" {{ ($user->role_id ?? null) == 3 ? 'selected' : '' }}>Bendahara</option>
+									@endforelse
 								</select>
 							</div>
 							@error('role_id')

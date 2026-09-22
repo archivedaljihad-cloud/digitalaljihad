@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\AppSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -16,38 +17,43 @@ class UserController extends Controller
         $users = User::with('role')->orderBy('name')->get();
         $setting = AppSetting::first();
 
-        if (!$setting) {
-            $setting = AppSetting::create([
-                'nama_aplikasi' => 'Masjid Al-Ikhlas',
-                'footer' => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System'
-            ]);
-        }
-
         return view('users.index', compact('users', 'setting'));
     }
 
     public function create()
     {
-        $roles = Role::all();
-        $setting = AppSetting::firstOrCreate([
-            'nama_aplikasi' => 'Masjid Al-Ikhlas',
-            'footer' => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System'
-        ]);
+        try {
+            $roles = Role::orderBy('name')->get();
+            if ($roles->isEmpty()) {
+                foreach (['admin', 'petugas', 'bendahara', 'user'] as $roleName) {
+                    Role::firstOrCreate(['name' => $roleName]);
+                }
+                $roles = Role::orderBy('name')->get();
+            }
+        } catch (\Throwable $e) {
+            $roles = collect();
+        }
+
+        $setting = AppSetting::first();
 
         return view('users.create', compact('roles', 'setting'));
     }
 
     public function edit(User $user)
     {
-        $roles = Role::all();
-        $setting = AppSetting::first();
-        
-        if (!$setting) {
-            $setting = AppSetting::create([
-                'nama_aplikasi' => 'Masjid Al-Ikhlas',
-                'footer' => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System'
-            ]);
+        try {
+            $roles = Role::orderBy('name')->get();
+            if ($roles->isEmpty()) {
+                foreach (['admin', 'petugas', 'bendahara', 'user'] as $roleName) {
+                    Role::firstOrCreate(['name' => $roleName]);
+                }
+                $roles = Role::orderBy('name')->get();
+            }
+        } catch (\Throwable $e) {
+            $roles = collect();
         }
+
+        $setting = AppSetting::first();
 
         return view('users.edit', compact('user', 'roles', 'setting'));
     }
@@ -64,10 +70,10 @@ class UserController extends Controller
 
         User::create([
             'name' => $request->name,
-            'last_name' => $request->last_name,
+            'last_name' => $request->last_name ?? '',
             'email' => $request->email,
             'role_id' => $request->role_id,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
         ]);
 
         return redirect()->route('users.index')->with('success', 'Akun berhasil ditambahkan.');
@@ -83,10 +89,11 @@ class UserController extends Controller
             'password' => 'nullable|confirmed|min:6',
         ]);
 
-        $data = $request->only(['name', 'last_name', 'email', 'role_id']);
+        $data = $request->only(['name', 'email', 'role_id']);
+        $data['last_name'] = $request->last_name ?? '';
 
         if ($request->filled('password')) {
-            $data['password'] = $request->password;
+            $data['password'] = Hash::make($request->password);
         }
 
         $user->update($data);
@@ -100,7 +107,7 @@ class UserController extends Controller
         // Admin tidak bisa menghapus akun sendiri
         // Hanya petugas yang bisa dihapus
         
-        if ($user->role && $user->role->name == 'admin') {
+        if ($user->role && in_array(strtolower($user->role->name), ['admin', 'superadmin'])) {
             return redirect()->route('users.index')->with('error', 'Tidak dapat menghapus akun Administrator!');
         }
         

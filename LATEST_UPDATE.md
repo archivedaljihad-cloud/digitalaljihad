@@ -1096,18 +1096,56 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 
 ---
 
-## 🔒 37. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🚀 38. UPDATE v4.4.12: RESOLUSI 500 SERVER ERROR PADA PEMBUATAN AKUN (`/users/create`)
 
-Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
-1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
-2. **Sinkronisasi Git Otomatis:** Setelah menyelesaikan modifikasi atau perbaikan, **WAJIB langsung melakukan commit dan push ke branch `main` GitHub**.
-3. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
+### Analisis Akar Masalah (Root Cause):
+1. **Query `firstOrCreate` dengan Parameter Kaku di `UserController::create()`:**
+   - Pada metode `create()`, kode lama mengeksekusi:
+     ```php
+     $setting = AppSetting::firstOrCreate([
+         'nama_aplikasi' => 'Masjid Al-Ikhlas',
+         'footer' => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System'
+     ]);
+     ```
+   - Di database produksi (Vercel / PostgreSQL / MySQL), data pengaturan telah disesuaikan menjadi `"MASJID JAMI' AL JIHAD"` atau `"DISPLAY MASJID"`.
+   - Akibatnya, query pencarian `where('nama_aplikasi', 'Masjid Al-Ikhlas')` mengembalikan `null`, lalu Eloquent mencoba melakukan `INSERT` baris baru ke tabel `app_settings`.
+   - Operasi `INSERT` tersebut gagal dengan `500 Server Error` (PDOException) karena melanggar batasan constraint tabel PostgreSQL (misal `key` NOT NULL atau sequence primary key `id`).
+2. **Ketiadaan Data Role Otomatis (Empty Roles):**
+   - Jika tabel `roles` belum terisi pada database tertentu, dropdown pemilihan role di form `users/create` menjadi kosong dan tidak dapat dipilih.
+3. **Kolom `last_name` NOT NULL pada Schema Database `users`:**
+   - Pada migrasi awal `0001_01_01_000000_create_users_table.php`, kolom `last_name` bertipe `NOT NULL`, sedangkan di form input bertanda opsional (`nullable`). Jika pengguna mengosongkan nama belakang, database melempar error *not-null constraint violation*.
+4. **Kesalahan Deklarasi `$casts` di `AppSetting.php`:**
+   - Atribut `'audio_tarhim'` dan `'tarhim_trigger_seconds'` dideklarasikan tanpa tipe nilai (indeks numerik array), yang dapat mengganggu serialisasi atribut model.
+
+### Solusi & Implementasi:
+1. **Pembersihan Query Pengaturan di `UserController`:**
+   - Mengubah pengambilan `$setting` di `UserController::create()`, `index()`, dan `edit()` menjadi murni pembacaan aman `$setting = AppSetting::first();` tanpa melakukan operasi `INSERT` liar saat permintaan HTTP GET.
+2. **Auto-Provisioning Fallback Role:**
+   - Menambahkan mekanisme fallback cerdas di `create()` dan `edit()`: jika tabel `roles` kosong, sistem otomatis mendaftarkan role standar (`admin`, `petugas`, `bendahara`, `user`).
+3. **Penanganan Nilai Default `last_name` & Password Hashing:**
+   - Di metode `store()` dan `update()`, nilai `last_name` diberi fallback aman `''` (`$request->last_name ?? ''`) agar tidak melanggar batasan `NOT NULL`.
+   - Menggunakan `Hash::make($request->password)` secara eksplisit untuk menjamin konsistensi hashing Bcrypt di seluruh lingkungan.
+4. **Perbaikan `$casts` di `AppSetting.php`:**
+   - Memperbaiki deklarasi menjadi `'audio_tarhim' => 'boolean'` dan `'tarhim_trigger_seconds' => 'integer'`.
+5. **Peningkatan Ketahanan Blade View (`users/create.blade.php` & `users/edit.blade.php`):**
+   - Menggunakan directive `@forelse($roles ?? [] as $role)` dengan opsi cadangan statis jika koleksi role kosong.
+
+### Berkas yang Dimodifikasi:
+- `app/Http/Controllers/UserController.php` (Resolusi query setting, auto-seeding roles, proteksi last_name dan password hash)
+- `app/Models/AppSetting.php` (Perbaikan array casts audio_tarhim dan tarhim_trigger_seconds)
+- `resources/views/users/create.blade.php` (Proteksi `@forelse` dropdown role pada form tambah akun)
+- `resources/views/users/edit.blade.php` (Proteksi `@forelse` dropdown role pada form edit akun)
+- `LATEST_UPDATE.md` (Pencatatan rilis v4.4.12)
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Verifikasi Sukses Autentikasi Login & Akses Dashboard Admin Live di Vercel) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 
+## 🔒 39. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
+Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
+1. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`, `?? ''`) pada Blade view dan Controller, serta perlindungan `Schema::hasColumn()` agar aplikasi tidak pernah *crash* jika kolom baru belum dimigrasi di database hosting/lokal.
+2. **Hindari DB Write pada GET Request:** Jangan pernah memicu `create()` atau `firstOrCreate()` dengan parameter atribut kaku di dalam Controller saat melayani request GET / halaman tampilan.
+3. **Sinkronisasi Git Otomatis:** Setelah menyelesaikan modifikasi atau perbaikan, **WAJIB langsung melakukan commit dan push ke branch `main` GitHub**.
+4. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
-
-
-
+---
+*Terakhir Diperbarui: 22 September 2026 (Resolusi Sukses 500 Server Error Halaman Tambah Akun `/users/create`) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
