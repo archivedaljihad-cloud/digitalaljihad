@@ -22,11 +22,10 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
 
-        // Ambil atau buat pengaturan aplikasi
-        $this->setting = AppSetting::first() ?? AppSetting::create([
-            'nama_aplikasi' => 'Masjid Al-Ikhlas',
+        // Ambil atau gunakan fallback pengaturan aplikasi
+        $this->setting = AppSetting::first() ?? new AppSetting([
+            'nama_aplikasi' => "MASJID JAMI' AL JIHAD",
             'footer' => 'Copyright &copy; 2026 Masjid Al-Jihad Dev. System',
-            'favicon' => 'path/to/default-favicon.ico'
         ]);
 
         // Share ke semua view secara otomatis

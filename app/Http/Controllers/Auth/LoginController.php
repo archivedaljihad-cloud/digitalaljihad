@@ -22,7 +22,8 @@ class LoginController extends Controller
     // Menampilkan form login dengan setting aplikasi
     public function showLoginForm()
     {
-        $setting = AppSetting::first() ? AppSetting::first()->toArray() : [];
+        $settingRecord = AppSetting::first();
+        $setting = $settingRecord ? $settingRecord->toArray() : [];
         return view('auth.login', compact('setting'));
     }
 

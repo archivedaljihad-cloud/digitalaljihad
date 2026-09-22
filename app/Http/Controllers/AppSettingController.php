@@ -389,6 +389,9 @@ class AppSettingController extends Controller
         try {
             Artisan::call('migrate', ['--force' => true]);
             $output = Artisan::output();
+
+            $this->autoProvisionMissingSchema();
+
             return redirect()
                 ->route('settings.edit')
                 ->with('success', 'Migrasi database berhasil dijalankan! ' . (trim($output) ?: 'Database sudah sinkron dengan versi migrasi terbaru.'));
@@ -396,6 +399,133 @@ class AppSettingController extends Controller
             return redirect()
                 ->route('settings.edit')
                 ->with('error', 'Gagal menjalankan migrasi database: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Auto-provision tabel & kolom pelengkap secara terpusat (hanya saat tombol migrasi diklik).
+     */
+    protected function autoProvisionMissingSchema()
+    {
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('keuangan_ambulance')) {
+                \Illuminate\Support\Facades\Schema::create('keuangan_ambulance', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    $table->id();
+                    $table->date('tanggal');
+                    $table->string('deskripsi');
+                    $table->decimal('pemasukan', 15, 2)->default(0.00);
+                    $table->decimal('pengeluaran', 15, 2)->default(0.00);
+                    $table->decimal('saldo', 15, 2)->default(0.00);
+                    $table->string('kategori', 100)->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            if (!\Illuminate\Support\Facades\Schema::hasTable('program_infaq')) {
+                \Illuminate\Support\Facades\Schema::create('program_infaq', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    $table->id();
+                    $table->string('nama_program');
+                    $table->text('keterangan')->nullable();
+                    $table->decimal('target_dana', 15, 2)->default(0.00);
+                    $table->date('tanggal_mulai')->nullable();
+                    $table->date('tanggal_selesai')->nullable();
+                    $table->boolean('is_active')->default(true);
+                    $table->timestamps();
+                });
+            }
+
+            if (!\Illuminate\Support\Facades\Schema::hasTable('donasi_infaq')) {
+                \Illuminate\Support\Facades\Schema::create('donasi_infaq', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    $table->id();
+                    $table->unsignedBigInteger('program_infaq_id');
+                    $table->string('nama_donatur')->default('Hamba Allah');
+                    $table->boolean('is_anonim')->default(false);
+                    $table->decimal('nominal', 15, 2)->default(0.00);
+                    $table->date('tanggal');
+                    $table->string('keterangan')->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('app_settings')) {
+                \Illuminate\Support\Facades\Schema::table('app_settings', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_trigger_seconds')) {
+                        $table->integer('tarhim_trigger_seconds')->nullable()->default(300);
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_audio')) {
+                        $table->string('tarhim_audio')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_audio_subuh')) {
+                        $table->string('tarhim_audio_subuh')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'tarhim_audio_reguler')) {
+                        $table->string('tarhim_audio_reguler')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'prayer_bg_image')) {
+                        $table->string('prayer_bg_image')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'prayer_bg_opacity')) {
+                        $table->integer('prayer_bg_opacity')->nullable()->default(80);
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_countdown')) {
+                        $table->text('msg_countdown')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_adzan')) {
+                        $table->text('msg_adzan')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_iqamah')) {
+                        $table->text('msg_iqamah')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'msg_shalat')) {
+                        $table->text('msg_shalat')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'prayer_mode_message')) {
+                        $table->text('prayer_mode_message')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'yasin_mode_enabled')) {
+                        $table->boolean('yasin_mode_enabled')->nullable()->default(true);
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'yasin_start_time')) {
+                        $table->string('yasin_start_time', 10)->nullable()->default('18:30');
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('app_settings', 'yasin_scroll_speed')) {
+                        $table->string('yasin_scroll_speed', 20)->nullable()->default('medium');
+                    }
+                });
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('pengumuman')) {
+                \Illuminate\Support\Facades\Schema::table('pengumuman', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'judul')) {
+                        $table->string('judul')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'pemateri')) {
+                        $table->string('pemateri')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'foto')) {
+                        $table->string('foto')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'waktu')) {
+                        $table->string('waktu')->nullable();
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('pengumuman', 'tempat')) {
+                        $table->string('tempat')->nullable();
+                    }
+                });
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('sholat_jumat')) {
+                \Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
+                        $table->string('bilal')->nullable()->after('muadzin');
+                    }
+                    if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
+                        $table->string('foto_imam')->nullable()->after('bilal');
+                    }
+                });
+            }
+        } catch (\Throwable $e) {
+            // Abaikan dan lanjutkan
         }
     }
 }
