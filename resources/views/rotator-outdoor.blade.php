@@ -333,8 +333,8 @@
         const FORCE_MIMBAR = new URLSearchParams(window.location.search).get('mimbar') === '1';
         const parseBool = (val) => val === true || val === 1 || val === "1" || String(val).toLowerCase() === "true";
 
-        let rotationInterval = parseInt({{ $rotationInterval ?? 20 }});
-        if (isNaN(rotationInterval) || rotationInterval < 5) rotationInterval = 20;
+        let rotationInterval = parseInt({{ $rotationInterval ?? 10 }});
+        if (isNaN(rotationInterval) || rotationInterval < 1) rotationInterval = 10;
         let rotationEnabled = parseBool("{{ $rotationEnabled ?? true }}");
         let cctvAutoSwitch = parseBool("{{ $cctvAutoSwitch ? 'true' : 'false' }}");
 
@@ -597,7 +597,88 @@
         document.getElementById('frame1').addEventListener('load', function() { onFrameLoad(this); });
         document.getElementById('frame2').addEventListener('load', function() { onFrameLoad(this); });
 
+        function showNotification(msg) {
+            console.log('[Outdoor Rotator]', msg);
+        }
+
+        async function fetchLatestSettings() {
+            try {
+                const response = await fetch('/rotation-settings?_=' + Date.now(), {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+                });
+                const data = await response.json();
+
+                let apiIntervalRaw = data.interval !== undefined ? data.interval : data.rotation_interval;
+                if (apiIntervalRaw !== undefined) {
+                    let apiInterval = parseInt(apiIntervalRaw);
+                    if (!isNaN(apiInterval) && apiInterval >= 1 && apiInterval !== rotationInterval) {
+                        rotationInterval = apiInterval;
+                        showNotification(`Interval rotasi outdoor diperbarui: ${rotationInterval} detik`);
+                        if (!isLoading && !isBroadcastingMimbar && rotationEnabled && activePages.length > 1) {
+                            resetCountdown();
+                        } else {
+                            countdown = rotationInterval;
+                            updateCountdownDisplay();
+                        }
+                    }
+                }
+
+                let apiEnabledRaw = data.enabled !== undefined ? data.enabled : data.rotation_enabled;
+                if (apiEnabledRaw !== undefined) {
+                    let apiEnabled = parseBool(apiEnabledRaw);
+                    if (apiEnabled !== rotationEnabled) {
+                        rotationEnabled = apiEnabled;
+                        showNotification(rotationEnabled ? 'Rotasi outdoor diaktifkan' : 'Rotasi outdoor dinonaktifkan');
+                        if (rotationEnabled && !isLoading && !isBroadcastingMimbar) {
+                            resetCountdown();
+                        } else if (!rotationEnabled && countdownIntervalId) {
+                            clearInterval(countdownIntervalId);
+                            countdownIntervalId = null;
+                        }
+                    }
+                }
+
+                let apiPagesRaw = data.pages !== undefined ? data.pages : data.rotation_pages;
+                if (apiPagesRaw !== undefined) {
+                    let newPages = [];
+                    if (typeof apiPagesRaw === 'string') {
+                        try {
+                            newPages = JSON.parse(apiPagesRaw);
+                            if (typeof newPages === 'string') newPages = JSON.parse(newPages);
+                        } catch (e) {
+                            console.error('Parse JSON Halaman API Error:', e);
+                        }
+                    } else {
+                        newPages = apiPagesRaw;
+                    }
+
+                    if (!Array.isArray(newPages)) newPages = [];
+                    let newActivePages = newPages.filter(page => parseBool(page.active));
+
+                    if (newActivePages.length === 0) {
+                        newActivePages = [{ url: '/utama-embed', name: 'Jadwal Sholat', active: true }];
+                    }
+
+                    const oldActiveUrls = activePages.map(p => p.url).sort().join(',');
+                    const newActiveUrls = newActivePages.map(p => p.url).sort().join(',');
+
+                    if (oldActiveUrls !== newActiveUrls) {
+                        pages = newPages;
+                        activePages = newActivePages;
+                        if (currentIndex >= activePages.length) currentIndex = 0;
+                        if (!isLoading && !isBroadcastingMimbar) {
+                            loadPage(currentIndex);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching outdoor rotation settings:', error);
+            }
+        }
+
         setInterval(checkPrayerModeAPI, 3000);
+        setInterval(fetchLatestSettings, 5000);
         checkPrayerModeAPI();
 
         // Keyboard / Remote TV navigation support

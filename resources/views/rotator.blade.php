@@ -356,8 +356,8 @@
         const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
         const parseBool = (val) => val === true || val === 1 || val === "1" || String(val).toLowerCase() === "true";
 
-        let rotationInterval = parseInt({{ $rotationInterval ?? 20 }});
-        if (isNaN(rotationInterval) || rotationInterval < 5) rotationInterval = 20;
+        let rotationInterval = parseInt({{ $rotationInterval ?? 10 }});
+        if (isNaN(rotationInterval) || rotationInterval < 1) rotationInterval = 10;
         let rotationEnabled = parseBool("{{ $rotationEnabled ?? true }}");
 
         @php
@@ -618,7 +618,7 @@
                 let apiIntervalRaw = data.interval !== undefined ? data.interval : data.rotation_interval;
                 if (apiIntervalRaw !== undefined) {
                     let apiInterval = parseInt(apiIntervalRaw);
-                    if (!isNaN(apiInterval) && apiInterval >= 5 && apiInterval !== rotationInterval) {
+                    if (!isNaN(apiInterval) && apiInterval >= 1 && apiInterval !== rotationInterval) {
                         rotationInterval = apiInterval;
                         showNotification(`Interval rotasi diperbarui: ${rotationInterval} detik`);
                         if (!isLoading && rotationEnabled && activePages.length > 1) {

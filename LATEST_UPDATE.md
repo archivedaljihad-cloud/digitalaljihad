@@ -1376,7 +1376,54 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 
 ---
 
-## 🔒 45. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 🚀 45. PERBAIKAN AMBANG BATAS DURASI INTERVAL ROTASI TV (v4.5.2 - 22 September 2026)
+
+### Latar Belakang & Masalah:
+- Pengguna melaporkan bahwa saat durasi interval rotasi TV diisi dengan angka kecil (misalnya `2` detik) di halaman pengaturan atau jadwal sholat, rotasi halaman di layar TV aktualnya tetap berjalan selama `20` detik.
+- Pemeriksaan mendalam pada database menunjukkan bahwa nilai `rotation_interval = 2` sudah tersimpan dengan benar di tabel `app_settings` dan `AppSetting::getCached()`.
+- **Akar Masalah (Root Cause):**
+  1. Pada script frontend `rotator.blade.php` (baris 360) dan `rotator-outdoor.blade.php` (baris 337), terdapat validasi hardcoded:
+     ```javascript
+     let rotationInterval = parseInt({{ $rotationInterval ?? 20 }});
+     if (isNaN(rotationInterval) || rotationInterval < 5) rotationInterval = 20;
+     ```
+     Ketika pengguna memasukkan angka `2`, kondisi `rotationInterval < 5` bernilai `true`, sehingga sistem JavaScript langsung menimpa nilainya kembali ke `20` detik secara sepihak.
+  2. Pada fungsi polling latar belakang `fetchLatestSettings()` di `rotator.blade.php` (baris 621):
+     ```javascript
+     if (!isNaN(apiInterval) && apiInterval >= 5 && apiInterval !== rotationInterval)
+     ```
+     Karena kondisi `apiInterval >= 5` bernilai `false` untuk angka `2`, pembaruan interval secara real-time dari API `/rotation-settings` juga diabaikan.
+  3. Pada `rotator-outdoor.blade.php`, fungsi `fetchLatestSettings()` sebelumnya belum diterapkan, sehingga perubahan interval di dashboard tidak langsung tersinkron ke layar outdoor tanpa refresh manual.
+  4. Response header API `/rotation-settings` di `WelcomeController` sebelumnya memakai `Cache-Control: public, max-age=3, stale-while-revalidate=5` yang berpotensi menyajikan data usang sesaat.
+
+### Solusi & Implementasi:
+1. **Penurunan Ambang Batas Minimal Rotasi ke 1 Detik di `rotator.blade.php`:**
+   - Mengubah inisialisasi:
+     ```javascript
+     let rotationInterval = parseInt({{ $rotationInterval ?? 10 }});
+     if (isNaN(rotationInterval) || rotationInterval < 1) rotationInterval = 10;
+     ```
+   - Mengubah polling `fetchLatestSettings()`:
+     ```javascript
+     if (!isNaN(apiInterval) && apiInterval >= 1 && apiInterval !== rotationInterval)
+     ```
+   - Sekarang durasi 1 detik, 2 detik, atau berapapun angka positif (>= 1 detik) akan dijalankan secara presisi sesuai input pengguna.
+2. **Pembaruan Layar TV Outdoor di `rotator-outdoor.blade.php`:**
+   - Menyelaraskan ambang batas interval minimal menjadi `< 1 -> 10`.
+   - Menambahkan fungsi `fetchLatestSettings()` dan interval polling setiap 5 detik agar layar TV outdoor juga langsung menerapkan perubahan durasi dan daftar halaman tanpa perlu me-reload browser TV.
+   - Menambahkan pengaman fungsi `showNotification()` untuk mencegah potensi error JavaScript.
+3. **Optimasi Cache Header di `WelcomeController::getRotationSettings()`:**
+   - Mengubah header respons menjadi `Cache-Control: no-store, no-cache, must-revalidate, max-age=0` agar perubahan durasi interval langsung diterima oleh klien TV tanpa latency caching.
+
+### Berkas yang Terkait:
+- `resources/views/rotator.blade.php` (Penurunan batas validasi interval dari `< 5` menjadi `< 1`)
+- `resources/views/rotator-outdoor.blade.php` (Penurunan batas validasi interval `< 1` & penambahan polling fetchLatestSettings)
+- `app/Http/Controllers/WelcomeController.php` (Header no-store pada getRotationSettings)
+- `LATEST_UPDATE.md` (Pencatatan pembaruan v4.5.2)
+
+---
+
+## 🔒 46. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **DILARANG Menaruh Query DDL / Database di `AppServiceProvider::boot()`:** Jangan pernah menaruh `Schema::hasTable`, `Schema::hasColumn`, atau query Eloquent massal di dalam `boot()` karena akan dieksekusi di SETIAP request HTTP dan melumpuhkan kecepatan aplikasi.
@@ -1387,6 +1434,5 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 6. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
 
 ---
-*Terakhir Diperbarui: 22 September 2026 (Pemulihan Form Pengaturan Durasi Sholat pada Jadwal Sholat v4.5.1) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
-
+*Terakhir Diperbarui: 22 September 2026 (Perbaikan Ambang Batas Durasi Interval Rotasi TV v4.5.2) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
 

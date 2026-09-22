@@ -331,7 +331,7 @@ class WelcomeController extends Controller
             'pages' => $settings
                 ? $settings->getRotationPagesList()
                 : [],
-        ])->header('Cache-Control', 'public, max-age=3, stale-while-revalidate=5');
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     }
     public function getDataTimestamp()
     {
