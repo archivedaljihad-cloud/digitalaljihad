@@ -1605,5 +1605,7 @@ Pengguna memutuskan untuk menyatukan kontrol proyek ke dalam **1 akun terpadu**:
    - Menyelaraskan seluruh riwayat komit fitur terbaru (v5.0.0 Web Statis) langsung di atas commit HEAD remote (`429de71`) tanpa menyertakan artefak workflow Render lama yang tidak relevan, sehingga push berhasil 100% tanpa kendala *Personal Access Token (PAT) scope*.
 3. **Verifikasi Sinkronisasi 100%:**
    - Cabang lokal `main` telah melacak `origin/main` (`archivedaljihad-cloud/digitalaljihad`) secara penuh.
+4. **Integrasi Cloudflare `wrangler.toml` (Workers Static Assets):**
+   - Menambahkan berkas konfigurasi `wrangler.toml` dengan direktori asset `./web-statis` agar sistem deployment wizard terbaru Cloudflare (`npx wrangler deploy`) dapat langsung men-deploy website display secara otomatis dengan sekali klik tombol **Deploy**.
 
 
