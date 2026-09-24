@@ -1482,7 +1482,13 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 4. **Penegasan Aturan Tetap Sinkronisasi Proyek (SOP Wajib):**
    - Menambahkan butir aturan ke-7 pada Bab Prinsip Pengembangan: Selalu memperbarui `LATEST_UPDATE.md` dan langsung mengeksekusi sinkronisasi Git (commit & push) setiap kali perbaikan selesai agar repositori GitHub dan folder lokal selalu 100% identik.
 
+5. **Klarifikasi Label Tab Prayer Mode di Pengaturan TV (`resources/views/settings/edit.blade.php`):**
+   - Sebelumnya nama tab tertulis *"Jum'at Prayer Mode"*, yang menimbulkan kesan bahwa pengaturan durasi di dalamnya hanya berlaku saat hari Jum'at.
+   - Label tab kini diperjelas menjadi **`Prayer Mode (5 Waktu & Jum'at)`**, dan deskripsi alert diperbarui menjadi *"Pengaturan Terpusat Prayer Mode (Sholat 5 Waktu & Jum'at)"*.
+   - Di tab ini tersedia pengaturan durasi countdown sebelum adzan, durasi saat adzan, durasi iqamah, dan durasi sholat fardhu reguler (5 waktu), serta durasi khusus hari Jum'at.
+
 ### Berkas yang Terkait:
+- `resources/views/settings/edit.blade.php`
 - `resources/views/rotation/index.blade.php`
 - `resources/views/jadwal_sholat/index.blade.php`
 - `LATEST_UPDATE.md`

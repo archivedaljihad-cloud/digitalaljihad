@@ -63,7 +63,7 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" id="prayermode-tab" data-toggle="tab" href="#prayermode" role="tab" style="color: #ffd700;">
-							<i class="fas fa-mosque" style="color: #ffd700;"></i> Jum'at Prayer Mode
+							<i class="fas fa-mosque" style="color: #ffd700;"></i> Prayer Mode (5 Waktu & Jum'at)
 						</a>					
 					</li>
 					<li class="nav-item">
@@ -366,7 +366,7 @@
 								<div class="col-md-12">
 									<div class="alert alert-info border-left-info shadow-sm">
 										<i class="fas fa-info-circle mr-1"></i>
-										<strong>Pengaturan Terpusat Jum'at Prayer Mode:</strong> Atur aktivasi mode sholat otomatis, durasi hitung mundur adzan, durasi adzan, durasi iqamah, durasi sholat fardhu, durasi khusus Sholat Jum'at, audio tarhim, serta pesan-pesan layar TV.
+										<strong>Pengaturan Terpusat Prayer Mode (Sholat 5 Waktu & Jum'at):</strong> Atur aktivasi mode sholat otomatis, durasi hitung mundur sebelum adzan, durasi saat adzan, durasi iqamah, durasi sholat fardhu 5 waktu, durasi khusus Sholat Jum'at, audio tarhim, serta pesan-pesan layar TV.
 									</div>
 								</div>
 
