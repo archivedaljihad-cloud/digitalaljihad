@@ -1607,5 +1607,8 @@ Pengguna memutuskan untuk menyatukan kontrol proyek ke dalam **1 akun terpadu**:
    - Cabang lokal `main` telah melacak `origin/main` (`archivedaljihad-cloud/digitalaljihad`) secara penuh.
 4. **Integrasi Cloudflare `wrangler.toml` (Workers Static Assets):**
    - Menambahkan berkas konfigurasi `wrangler.toml` dengan direktori asset `./web-statis` agar sistem deployment wizard terbaru Cloudflare (`npx wrangler deploy`) dapat langsung men-deploy website display secara otomatis dengan sekali klik tombol **Deploy**.
+5. **Penyalinan ke Folder Khusus Mandiri (`C:\Users\anthu\Documents\【Digital WebSTATIS】`):**
+   - Seluruh isi `web-statis/` telah disalin secara lengkap ke folder mandiri khusus `C:\Users\anthu\Documents\【Digital WebSTATIS】` dengan file `index.html` langsung di root folder agar pengguna mudah mengontrol dan membuka project tanpa tercampur dengan file backend Laravel.
+
 
 
