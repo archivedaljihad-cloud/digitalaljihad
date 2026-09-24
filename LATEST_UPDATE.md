@@ -1527,3 +1527,31 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 ---
 
 ## 49. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+
+---
+
+## ⚡ 50. RENCANA STRATEGIS ARSITEKTUR: KONVERSI WEB STATIS (CLOUDFLARE PAGES + SUPABASE REALTIME)
+
+**Tanggal:** 25 September 2026 | **Status:** Persiapan & Siap Eksekusi di Sesi Percakapan Baru
+
+### Latar Belakang & Alasan Strategis Pengguna:
+1. **Bebas Biaya Hosting Selamanya (Efisiensi Kas Masjid):**
+   - Hosting Laravel membutuhkan server PHP 8.3 & RAM aktif 24 jam yang mahal dan sering bermasalah jika memakai tier gratisan (seperti *cold-start* atau *suspend*).
+   - Pengguna memutuskan mengonversi frontend tampilan display TV menjadi **Web Statis (HTML + CSS + Vanilla JS)** yang akan di-hosting di **Cloudflare Pages (100% Gratis Selamanya, Unlimited Bandwidth, Server Edge Jakarta/Indonesia)**.
+2. **Update Real-time Instan (Zero Polling / Zero Delay):**
+   - Layar TV sebelumnya mengandalkan polling HTTP berulang-ulang yang boros kuota dan membebani server.
+   - Dengan beralih ke Supabase WebSockets di web statis, pembaruan konten dari HP pengurus akan langsung tercermin di TV dalam hitungan milidetik secara *real-time*.
+3. **Kemudahan Deploy:**
+   - Tidak butuh konfigurasi runtime PHP atau database serverless container yang rumit. Cukup koneksikan repositori GitHub ke Cloudflare Pages.
+
+### Arsitektur yang Disepakati:
+- **Folder Khusus:** `web-statis/` (dibuat terpisah di dalam repositori agar tidak mengganggu atau merusak aplikasi Laravel yang sudah ada).
+- **Backend / BaaS:** Menggunakan **Supabase** (`https://jhukhvxpgezbfbxgdgbc.supabase.co`) yang saat ini sudah menyimpan seluruh data dan skema tabel aplikasi (`app_settings`, `jadwal_sholat`, `keuangan`, `pengumuman`, dll.).
+- **Platform Hosting Statis:** **Cloudflare Pages** (Pengguna sudah menyiapkan akun Cloudflare).
+  - Framework Preset: `None`
+  - Build Command: *(Kosong)*
+  - Build Output Directory: `web-statis`
+- **Langkah Lanjutan di Sesi Baru:**
+  - Pengguna akan menyalin dan memberikan **`anon` / `public` API Key** dari dashboard Supabase.
+  - Membangun struktur file `web-statis/` (`index.html`, `js/supabase-client.js`, `js/prayer-engine.js`, `css/`, dll.).
+  - Melakukan commit & push ke GitHub `main` untuk penayangan otomatis pertama di Cloudflare Pages.
