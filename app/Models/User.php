@@ -79,31 +79,22 @@ class User extends Authenticatable
     {
         $roleName = strtolower(trim(optional($this->role)->name ?? ''));
         $checkRole = strtolower(trim($role));
+        $email = strtolower($this->email ?? '');
+        $name = strtolower($this->name ?? '');
 
-        // Fallback cerdas jika user bendahara belum termigrasi role_id nya
-        if ($checkRole === 'bendahara' && $roleName !== 'bendahara') {
-            $email = strtolower($this->email ?? '');
-            $name = strtolower($this->name ?? '');
-            if (str_contains($email, 'bendahara') || str_contains($name, 'bendahara')) {
-                return true;
-            }
+        // 1. Akun Bendahara: jika nama/email mengandung bendahara atau role bendahara
+        if ($roleName === 'bendahara' || str_contains($email, 'bendahara') || str_contains($name, 'bendahara')) {
+            return $checkRole === 'bendahara';
         }
 
-        // Fallback cerdas jika user petugas/operator belum termigrasi role_id nya
-        if (in_array($checkRole, ['petugas', 'operator']) && !in_array($roleName, ['petugas', 'operator'])) {
-            $email = strtolower($this->email ?? '');
-            $name = strtolower($this->name ?? '');
-            if (str_contains($email, 'petugas') || str_contains($name, 'petugas') || str_contains($email, 'operator') || str_contains($name, 'operator')) {
-                return true;
-            }
-        }
-
+        // 2. Akun Admin:
         if (in_array($checkRole, ['admin', 'superadmin'])) {
-            return in_array($roleName, ['admin', 'superadmin']);
+            return in_array($roleName, ['admin', 'superadmin']) || str_contains($email, 'admin') || str_contains($name, 'admin');
         }
 
+        // 3. Akun Petugas / Operator:
         if (in_array($checkRole, ['petugas', 'operator'])) {
-            return in_array($roleName, ['petugas', 'operator']);
+            return in_array($roleName, ['petugas', 'operator']) || str_contains($email, 'petugas') || str_contains($name, 'petugas') || str_contains($email, 'operator') || str_contains($name, 'operator') || str_contains($email, 'dkm');
         }
 
         return $roleName === $checkRole;

@@ -1495,16 +1495,35 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 
 ---
 
-## 48. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 48. PERBAIKAN TOTAL ISOLASI PERAN BENDAHARA VS OPERATOR & AUTO-CORRECTION DATABASE (v4.5.5 - 24 September 2026)
 
-Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
-1. **DILARANG Menaruh Query DDL / Database di `AppServiceProvider::boot()`:** Jangan pernah menaruh `Schema::hasTable`, `Schema::hasColumn`, atau query Eloquent massal di dalam `boot()` karena akan dieksekusi di SETIAP request HTTP dan melumpuhkan kecepatan aplikasi.
-2. **Preservasi Nilai Default & Fallback Aman:** Selalu sertakan operator *null coalescing* (`?? true`, `?? 50`, `?? ''`) pada Blade view dan Controller.
-3. **Gunakan `AppSetting::getCached()` dan `JadwalSholat::getCachedUrutan()`:** Jangan memanggil query berulang `AppSetting::first()` pada view composer atau route yang sering di-polling.
-4. **Hindari `?v={{ time() }}` pada Static Assets:** Selalu gunakan nomor versi statis seperti `?v=3.0.4` agar aset dapat di-cache secara efisien oleh browser dan CDN.
-5. **Sinkronisasi Git Otomatis:** Setelah menyelesaikan modifikasi atau perbaikan, **WAJIB langsung melakukan commit dan push ke branch `main` GitHub**.
-6. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
-7. **Pembaruan `LATEST_UPDATE.md` & Sinkronisasi Tanpa Menunggu Perintah:** Setiap seluruh perbaikan selesai, **SELALU perbarui file `LATEST_UPDATE.md` lalu sinkronisasi (commit & push) ke repositori GitHub dan folder lokal** secara otomatis tanpa menunggu perintah konfirmasi dari pengguna, agar seluruh file selalu 100% sama dan mutakhir.
+### Latar Belakang & Analisa Masalah:
+- Pengguna melaporkan bahwa saat login sebagai akun **Bendahara** (`bendahara@aljihad.com`), tampilan dashboard dan sidebar menu yang muncul persis sama dengan akun **Petugas / Operator** (`dkm@aljihad.com`) (keduanya menampilkan menu jadwal sholat, sholat jumat, kajian, dll, serta berlabel *• Operator*).
+- **Akar Masalah Teknis:**
+  1. Pada database server (TiDB Cloud / Render), akun `bendahara@aljihad.com` memiliki asosiasi `role_id` lama yang mengarah ke id peran petugas/operator.
+  2. Pada logika Blade sebelumnya (`admin.blade.php` & `home.blade.php`), pengecekan fallback email bendahara ditaruh di dalam blok `if ($roleName !== 'petugas')`. Karena database mengembalikan nama role `'petugas'`, blok fallback dilewati sehingga akun bendahara secara keliru dipaksa menjadi operator.
+  3. Method `hasRole()` pada model `User.php` belum memberikan prioritas absolut pada identitas akun bendahara.
+
+### Solusi & Implementasi:
+1. **Prioritas Absolut Deteksi Peran (Role Resolution):**
+   - **`resources/views/layouts/admin.blade.php`:** Mengubah urutan deteksi peran menjadi Prioritas 1 untuk akun Bendahara (jika role `'bendahara'` ATAU nama/email mengandung `'bendahara'`), Prioritas 2 untuk Admin, dan Prioritas 3 untuk Petugas/Operator.
+   - **`resources/views/home.blade.php`:** Menerapkan logika prioritas yang sama pada dashboard cards dan quick actions.
+   - **`app/Models/User.php`:** Menyempurnakan method `hasRole()` agar akun dengan nama/email bendahara secara absolut diakui sebagai bendahara murni dan menolak izin operator.
+2. **Auto-Correction Database Migration:**
+   - Dibuat migrasi [`database/migrations/2026_09_24_000001_fix_user_roles_assignment.php`](database/migrations/2026_09_24_000001_fix_user_roles_assignment.php) yang secara otomatis menata ulang dan mengunci `role_id` di database:
+     * User dengan email/nama `bendahara` otomatis diarahkan ke role `bendahara`.
+     * User dengan email/nama `dkm` / `petugas` / `operator` otomatis diarahkan ke role `petugas`.
+3. **Hasil:**
+   - Akun **Bendahara** kini 100% terkunci menampilkan Menu Bendahara (Buku Kas & Transaksi, Kas Ambulance, Infaq, Laporan & Rekap Kas, Export Excel) dan Dashboard Keuangan (Saldo Kas, Pemasukan, Pengeluaran, Kas Ambulance).
+   - Akun **Operator** kini 100% terkunci menampilkan Menu Operasional TV Masjid (Jadwal Sholat, Jumat, Idul Fitri/Adha, Kajian, Pengumuman, Slide, Rotasi TV).
+
+### Berkas yang Terkait:
+- `app/Models/User.php`
+- `resources/views/layouts/admin.blade.php`
+- `resources/views/home.blade.php`
+- `database/migrations/2026_09_24_000001_fix_user_roles_assignment.php`
+- `LATEST_UPDATE.md`
 
 ---
-*Terakhir Diperbarui: 24 September 2026 (Penyempurnaan UI Rotasi Layar & Pintasan Pengaturan Durasi Prayer Mode v4.5.4) • Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
+
+## 49. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)

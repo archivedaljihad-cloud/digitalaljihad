@@ -15,18 +15,19 @@
             <i class="fas fa-bolt"></i> Aksi Cepat
         </button>
         @php
-        $currentRole = strtolower(trim(optional(auth()->user()->role)->name ?? ''));
-        if ($currentRole === 'operator') {
+        $rawRole = strtolower(trim(optional(auth()->user()->role)->name ?? ''));
+        $uEmail = strtolower(auth()->user()->email ?? '');
+        $uName = strtolower(auth()->user()->name ?? '');
+
+        // Prioritas 1: Bendahara
+        if ($rawRole === 'bendahara' || str_contains($uEmail, 'bendahara') || str_contains($uName, 'bendahara')) {
+            $currentRole = 'bendahara';
+        // Prioritas 2: Admin
+        } elseif ($rawRole === 'admin' || $rawRole === 'superadmin' || str_contains($uEmail, 'admin') || str_contains($uName, 'admin')) {
+            $currentRole = 'admin';
+        // Prioritas 3: Petugas / Operator
+        } else {
             $currentRole = 'petugas';
-        }
-        if ($currentRole !== 'bendahara' && $currentRole !== 'admin' && $currentRole !== 'petugas') {
-            $uEmail = strtolower(auth()->user()->email ?? '');
-            $uName = strtolower(auth()->user()->name ?? '');
-            if (str_contains($uEmail, 'bendahara') || str_contains($uName, 'bendahara')) {
-                $currentRole = 'bendahara';
-            } elseif (str_contains($uEmail, 'petugas') || str_contains($uName, 'petugas') || str_contains($uEmail, 'operator') || str_contains($uName, 'operator')) {
-                $currentRole = 'petugas';
-            }
         }
         @endphp
         <div class="dropdown-menu dropdown-menu-right">

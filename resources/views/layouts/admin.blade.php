@@ -811,23 +811,19 @@
 
             @auth
             @php
-            $rawRole = optional(auth()->user()->role)->name ?? '';
-            $roleName = strtolower(trim($rawRole));
+            $rawRole = strtolower(trim(optional(auth()->user()->role)->name ?? ''));
+            $userEmail = strtolower(auth()->user()->email ?? '');
+            $userName = strtolower(auth()->user()->name ?? '');
 
-            // Normalisasi alias operator -> petugas
-            if ($roleName === 'operator') {
+            // Prioritas 1: Bendahara (Cek nama/email/role secara pasti)
+            if ($rawRole === 'bendahara' || str_contains($userEmail, 'bendahara') || str_contains($userName, 'bendahara')) {
+                $roleName = 'bendahara';
+            // Prioritas 2: Admin
+            } elseif ($rawRole === 'admin' || $rawRole === 'superadmin' || str_contains($userEmail, 'admin') || str_contains($userName, 'admin')) {
+                $roleName = 'admin';
+            // Prioritas 3: Petugas / Operator
+            } else {
                 $roleName = 'petugas';
-            }
-
-            // Fallback jika akun bendahara atau petugas/operator di database masih terpasang role_id lama
-            if ($roleName !== 'bendahara' && $roleName !== 'admin' && $roleName !== 'petugas') {
-                $userEmail = strtolower(auth()->user()->email ?? '');
-                $userName = strtolower(auth()->user()->name ?? '');
-                if (str_contains($userEmail, 'bendahara') || str_contains($userName, 'bendahara')) {
-                    $roleName = 'bendahara';
-                } elseif (str_contains($userEmail, 'petugas') || str_contains($userName, 'petugas') || str_contains($userEmail, 'operator') || str_contains($userName, 'operator')) {
-                    $roleName = 'petugas';
-                }
             }
             @endphp
 
