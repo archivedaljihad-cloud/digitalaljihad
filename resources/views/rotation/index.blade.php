@@ -15,10 +15,7 @@
 				<span class="badge badge-warning px-3 py-2 mr-2 font-weight-bold shadow-sm" style="font-size: 0.85rem; background: linear-gradient(135deg, #ffd700, #ffae00); color: #212529;">
 					<i class="fas fa-crown mr-1"></i> Mode Super Admin: Atur Urutan Aktif
 				</span>
-			@else
-				<span class="badge badge-secondary px-3 py-2 mr-2 font-weight-bold shadow-sm" style="font-size: 0.85rem;">
-					<i class="fas fa-lock mr-1"></i> Mode Operator: Urutan Terkunci
-				</span>
+			
 			@endif
 			<a href="{{ route('rotator') }}" class="btn btn-success shadow-sm" target="_blank">
 				<i class="fas fa-tv mr-1"></i> Lihat Layar TV (Rotator)
@@ -34,6 +31,28 @@
 		</button>
 	</div>
 	@endif
+
+		<!-- Banner Pintasan Pengaturan Durasi Prayer Mode -->
+	<div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); border-left: 5px solid #0284c7 !important; border-radius: 10px;">
+		<div class="card-body p-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+			<div class="d-flex align-items-center mb-3 mb-md-0">
+				<div class="rounded-circle d-flex align-items-center justify-content-center mr-3 shadow-sm" style="width: 44px; height: 44px; background: #0284c7; color: #fff; min-width: 44px;">
+					<i class="fas fa-stopwatch fa-lg"></i>
+				</div>
+				<div>
+					<h6 class="font-weight-bold text-dark mb-1">
+						Pengaturan Durasi Countdown Sebelum Adzan, Adzan, Iqamah & Sholat
+					</h6>
+					<p class="text-muted small mb-0">
+						Durasi hitung mundur sebelum adzan, lama adzan, iqamah, mode sholat, dan audio tarhim diatur melalui menu <strong>Jadwal Sholat</strong>.
+					</p>
+				</div>
+			</div>
+			<a href="{{ route('jadwal_sholat.index') }}#durasi-sholat" class="btn btn-info font-weight-bold text-nowrap shadow-sm ml-md-3">
+				<i class="fas fa-clock mr-1"></i> Buka Pengaturan Prayer Mode &rarr;
+			</a>
+		</div>
+	</div>
 
 	<div class="card shadow mb-4 border-0">
 		<div class="card-header py-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">

@@ -166,7 +166,7 @@
 		</div>
 
 		<!-- Pengaturan Waktu Sistem & Durasi Prayer Mode -->
-		<div class="card shadow mb-4 border-left-success">
+		<div class="card shadow mb-4 border-left-success" id="durasi-sholat">
 			<div class="card-header py-3 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center" style="background: linear-gradient(135deg, #0b4629 0%, #13653b 100%);">
 				<h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
 					<i class="fas fa-stopwatch mr-2"></i> Pengaturan Durasi Sholat, Adzan, Iqamah & Waktu Sistem
