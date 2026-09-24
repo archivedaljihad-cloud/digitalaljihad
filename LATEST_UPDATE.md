@@ -1609,6 +1609,32 @@ Pengguna memutuskan untuk menyatukan kontrol proyek ke dalam **1 akun terpadu**:
    - Menambahkan berkas konfigurasi `wrangler.toml` dengan direktori asset `./web-statis` agar sistem deployment wizard terbaru Cloudflare (`npx wrangler deploy`) dapat langsung men-deploy website display secara otomatis dengan sekali klik tombol **Deploy**.
 5. **Penyalinan ke Folder Khusus Mandiri (`C:\Users\anthu\Documents\【Digital WebSTATIS】`):**
    - Seluruh isi `web-statis/` telah disalin secara lengkap ke folder mandiri khusus `C:\Users\anthu\Documents\【Digital WebSTATIS】` dengan file `index.html` langsung di root folder agar pengguna mudah mengontrol dan membuka project tanpa tercampur dengan file backend Laravel.
+6. **Status Live Deployment:**
+   - Website Display TV resmi mengudara (*LIVE*) di: `https://digitalaljihad.archived-aljihad.workers.dev` dengan status stabil, cepat (Edge Jakarta), dan terhubung ke Supabase.
+
+---
+
+## 📋 52. CATATAN HANDOVER SESI BERIKUTNYA: PANEL ADMIN STATIS (v5.1.0)
+
+**Target Sesi Berikutnya:** Membangun Halaman Login & Dashboard Admin Statis dengan Sistem Hak Akses 3 Peran (Super Admin, Bendahara, Operator).
+
+### Poin Kunci yang Telah Siap:
+1. **URL Live Display TV:** `https://digitalaljihad.archived-aljihad.workers.dev`
+2. **Database Supabase Aktif:** `https://xskusfacwsclbgdtgier.supabase.co` (Publishable Key: `sb_publishable_lsUgbFcTmwuwiiV70rzSWQ_V0JUR-mX`).
+3. **Repositori GitHub Tunggal:** `https://github.com/archivedaljihad-cloud/digitalaljihad.git` (Branch `main`).
+4. **Folder Lokal Terpisah:** `C:\Users\anthu\Documents\【Digital WebSTATIS】` dan `web-statis/` di repositori.
+5. **Struktur Peran Database:**
+   - `role_id: 1` $\rightarrow$ Bendahara (Khusus Kas, Transaksi, Ambulance, Rekapitulasi).
+   - `role_id: 2` $\rightarrow$ Petugas / Operator (Khusus Jadwal Sholat, Petugas Jum'at, Pengumuman, Running Text).
+   - `role_id: 3` $\rightarrow$ Super Admin (Akses Penuh 100%).
+
+### Rencana Eksekusi Sesi Berikutnya:
+1. Membuat `login.html`: Desain Emerald Gold Islamic Split-layout persis seperti `resources/views/auth/login.blade.php`.
+2. Membuat `admin.html`: Dashboard SB Admin 2 modern dengan sidebar nav, topbar profil, dan card metrik.
+3. Membuat `js/admin-auth.js`: Verifikasi kredensial login, penyimpanan sesi token, dan proteksi rute halaman.
+4. Menerapkan RBAC (Role-Based Access Control) dinamis untuk 3 peran.
+5. Menghubungkan form edit data langsung ke Supabase REST API (otomatis realtime ke TV).
+
 
 
 
