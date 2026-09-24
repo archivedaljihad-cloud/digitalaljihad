@@ -1,0 +1,368 @@
+/* =====================================================
+   DISPLAY THEME STYLES (Optimized without @import waterfall)
+   ===================================================== */
+   CUSTOM FONTS (Masking Renta, Aloevera, Sabiyah)
+   ===================================================== */
+@font-face {
+    font-family: 'Masking Renta';
+    src: url('../fonts/MaskingRenta.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Aloevera';
+    src: url('../fonts/Aloevera.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sabiyah';
+    src: url('../fonts/Sabiyah.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* =====================================================
+       WARNA UTAMA & TEKS
+       ===================================================== */
+    --primary-color: #0d6e6e;
+    --secondary-color: #ffd700;
+    --accent-color: #0a4d68;
+
+    --text-light: #ffffff;
+    --text-dark: #333333;
+
+    /* =====================================================
+       BACKGROUND & PANEL
+       ===================================================== */
+    --bg-gradient: linear-gradient(135deg, #0a4d68, #088395);
+
+    --income-bg: rgba(0, 255, 127, 0.15);
+    --expense-bg: rgba(255, 99, 71, 0.15);
+
+    /* Base gelap agar gambar transparan terlihat elegan */
+    --display-bg: #062b2b; 
+}
+
+/* Base Body untuk melandasi gambar yang transparan */
+body {
+    background-color: var(--display-bg);
+}
+
+/* =====================================================
+   DISPLAY THEME (v1.0)
+   ===================================================== */
+
+/* =====================================================
+   DISPLAY BACKGROUND (Cerah, Tajam, Jelas Seperti Gambar Aslinya)
+   ===================================================== */
+.display-background {
+    position: fixed !important;
+    inset: 0;
+    z-index: -10 !important;
+    background-image: url('../image/display/background/BG1.png');
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    opacity: 1 !important; 
+    filter: brightness(0.96) contrast(1.06) saturate(1.08) !important;
+}
+
+/* =====================================================
+   DISPLAY OVERLAY (Lapisan Penyejuk Adem, Anti-Silau & Pelindung Teks)
+   Menjaga seluruh teks tetap super kontras dan mudah dibaca
+   tanpa menutupi keindahan, ketajaman & kecerahan foto masjid
+   ===================================================== */
+.display-overlay {
+    position: fixed !important;
+    inset: 0;
+    pointer-events: none;
+    z-index: -9 !important;
+    background: 
+        /* Vignette lembut sudut luar layar untuk keteduhan visual & bebas silau */
+        radial-gradient(ellipse at 50% 50%, rgba(2, 14, 10, 0.04) 0%, rgba(1, 12, 8, 0.32) 100%),
+        /* Gradasi vertikal penopang kontras Header atas dan Running Text bawah */
+        linear-gradient(180deg, 
+            rgba(2, 16, 11, 0.78) 0%, 
+            rgba(2, 16, 11, 0.50) 15%, 
+            rgba(2, 16, 11, 0.20) 28%, 
+            rgba(2, 16, 11, 0.12) 50%, 
+            rgba(2, 16, 11, 0.18) 75%, 
+            rgba(2, 16, 11, 0.52) 88%, 
+            rgba(2, 16, 11, 0.75) 100%
+        ) !important;
+}
+
+/* Display Content Layer */
+.display-content {
+    position: relative !important;
+    z-index: 1 !important;
+}
+/* Menghilangkan kotak background di semua halaman */
+.running-text, 
+.running-text-container, 
+.marquee-wrapper,
+.bottom-section,
+.footer {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+/* =====================================================
+   MASTER UNIFIED HEADER (H1, SUB-HEADER, DATETIME)
+   ===================================================== */
+.header,
+.header-section {
+    text-align: center !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+}
+
+.header h1,
+.header-section h1 {
+    font-family: 'Masking Renta', sans-serif !important;
+    font-size: 3.2rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: 5px !important;
+    text-transform: uppercase !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: #085a2b !important;
+    color: #085a2b !important;
+    text-shadow:
+        1px 1px 0 #ffd700,
+        -1px 1px 0 #ffd700,
+        1px -1px 0 #ffd700,
+        -1px -1px 0 #ffd700,
+        2px 2px 0 #000000,
+        -2px 2px 0 #000000,
+        2px -2px 0 #000000,
+        -2px -2px 0 #000000,
+        3px 3px 0 #000000,
+        -3px 3px 0 #000000,
+        3px -3px 0 #000000,
+        -3px -3px 0 #000000,
+        0 5px 12px rgba(0, 0, 0, 0.95),
+        0 0 20px rgba(255, 215, 0, 0.65) !important;
+    filter: none !important;
+    margin: 0 0 -15px 0 !important;
+    padding: 0 !important;
+}
+
+.header h2.sub-header,
+.header h3.sub-header,
+.header .sub-header,
+.header-section h2.sub-header,
+.header-section h3.sub-header,
+.header-section .sub-header,
+h3.sub-header,
+h2.sub-header {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 4px !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    opacity: 0.95 !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important;
+    margin-top: 10px !important;
+    margin-bottom: 6px !important;
+    padding: 0 !important;
+}
+
+.header .datetime,
+.header-section .datetime {
+    font-size: 1.55rem !important;
+    background: rgba(3, 20, 15, 0.65) !important;
+    display: inline-block !important;
+    padding: 5px 28px !important;
+    border-radius: 35px !important;
+    margin-top: 4px !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* =====================================================
+   MEDALI KALIGRAFI 3D EMAS MENYALA (ALLAH & MUHAMMAD)
+   ===================================================== */
+.kaligrafi-medallion {
+    position: absolute !important;
+    top: 14px !important;
+    width: 125px !important;
+    height: 125px !important;
+    z-index: 10 !important;
+    user-select: none !important;
+    pointer-events: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.kaligrafi-medallion::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 110% !important;
+    height: 110% !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.45) 0%, rgba(255, 170, 0, 0.22) 48%, rgba(255, 140, 0, 0) 72%) !important;
+    filter: blur(8px) !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+    animation: medallionAuraPulse 4s ease-in-out infinite alternate !important;
+}
+
+.kaligrafi-medallion img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 0 12px rgba(255, 220, 50, 0.95)) 
+           drop-shadow(0 0 28px rgba(255, 175, 0, 0.8))
+           drop-shadow(0 0 50px rgba(255, 140, 0, 0.5))
+           drop-shadow(0 10px 20px rgba(0, 0, 0, 0.85)) !important;
+    animation: goldenMedallionGlow 3.5s ease-in-out infinite alternate !important;
+}
+
+.kaligrafi-medallion.kaligrafi-allah {
+    right: 28px !important;
+    left: auto !important;
+}
+
+.kaligrafi-medallion.kaligrafi-muhammad {
+    left: 28px !important;
+    right: auto !important;
+}
+
+@keyframes goldenMedallionGlow {
+    0% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.025);
+    }
+    100% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+}
+
+@keyframes medallionAuraPulse {
+    0% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.08);
+    }
+    100% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+}
+
+/* =====================================================
+   4K & LARGE SCREEN SMART TV RESPONSIVE SCALING (1440p - 4K)
+   ===================================================== */
+@media (min-width: 2560px) {
+    .header h1.main-header,
+    .header-section h1.main-header,
+    h1.main-header {
+        font-size: 3.2rem !important;
+        letter-spacing: 3px !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: 1.8rem !important;
+        letter-spacing: 6px !important;
+    }
+
+    .header .datetime,
+    .header-section .datetime {
+        font-size: 2.2rem !important;
+        padding: 8px 42px !important;
+        border-radius: 45px !important;
+    }
+
+    .kaligrafi-medallion {
+        width: 175px !important;
+        height: 175px !important;
+        top: 24px !important;
+    }
+
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 42px !important;
+    }
+
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 42px !important;
+    }
+}
+
+@media (min-width: 3840px) {
+    .header h1.main-header,
+    .header-section h1.main-header,
+    h1.main-header {
+        font-size: 4.5rem !important;
+        letter-spacing: 5px !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: 2.6rem !important;
+        letter-spacing: 8px !important;
+    }
+
+    .header .datetime,
+    .header-section .datetime {
+        font-size: 3.2rem !important;
+        padding: 12px 60px !important;
+        border-radius: 60px !important;
+    }
+
+    .kaligrafi-medallion {
+        width: 250px !important;
+        height: 250px !important;
+        top: 36px !important;
+    }
+
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 60px !important;
+    }
+
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 60px !important;
+    }
+}

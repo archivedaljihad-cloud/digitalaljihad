@@ -1530,9 +1530,9 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 
 ---
 
-## ⚡ 50. RENCANA STRATEGIS ARSITEKTUR: KONVERSI WEB STATIS (CLOUDFLARE PAGES + SUPABASE REALTIME)
+## ⚡ 50. IMPLEMENTASI ARSITEKTUR: KONVERSI WEB STATIS (CLOUDFLARE PAGES + SUPABASE REALTIME) — FASE 1 (v5.0.0 - 25 September 2026)
 
-**Tanggal:** 25 September 2026 | **Status:** Persiapan & Siap Eksekusi di Sesi Percakapan Baru
+**Tanggal:** 25 September 2026 | **Versi:** 5.0.0 | **Status:** ✅ Fase 1 Selesai & Berhasil Diuji
 
 ### Latar Belakang & Alasan Strategis Pengguna:
 1. **Bebas Biaya Hosting Selamanya (Efisiensi Kas Masjid):**
@@ -1544,14 +1544,46 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 3. **Kemudahan Deploy:**
    - Tidak butuh konfigurasi runtime PHP atau database serverless container yang rumit. Cukup koneksikan repositori GitHub ke Cloudflare Pages.
 
-### Arsitektur yang Disepakati:
-- **Folder Khusus:** `web-statis/` (dibuat terpisah di dalam repositori agar tidak mengganggu atau merusak aplikasi Laravel yang sudah ada).
-- **Backend / BaaS:** Menggunakan **Supabase** (`https://jhukhvxpgezbfbxgdgbc.supabase.co`) yang saat ini sudah menyimpan seluruh data dan skema tabel aplikasi (`app_settings`, `jadwal_sholat`, `keuangan`, `pengumuman`, dll.).
-- **Platform Hosting Statis:** **Cloudflare Pages** (Pengguna sudah menyiapkan akun Cloudflare).
-  - Framework Preset: `None`
-  - Build Command: *(Kosong)*
-  - Build Output Directory: `web-statis`
-- **Langkah Lanjutan di Sesi Baru:**
-  - Pengguna akan menyalin dan memberikan **`anon` / `public` API Key** dari dashboard Supabase.
-  - Membangun struktur file `web-statis/` (`index.html`, `js/supabase-client.js`, `js/prayer-engine.js`, `css/`, dll.).
-  - Melakukan commit & push ke GitHub `main` untuk penayangan otomatis pertama di Cloudflare Pages.
+### Detail Arsitektur & Kredensial BaaS yang Diterapkan:
+- **Folder Khusus:** `web-statis/` (terisolasi 100% di dalam repositori, aplikasi Laravel yang sudah ada tetap aman dan berfungsi utuh).
+- **Supabase Target:** `https://xskusfacwsclbgdtgier.supabase.co`
+- **Publishable / Client API Key:** `sb_publishable_lsUgbFcTmwuwiiV70rzSWQ_V0JUR-mX` (Telah berhasil diuji koneksinya via cURL/REST API dan merespon HTTP 200 dengan seluruh tabel masjid yang ada: `app_settings`, `jadwal_sholat`, `keuangan`, `pengumuman`, `sholat_jumat`, dll.).
+
+### Berkas-Berkas yang Dibuat di `web-statis/`:
+1. **`web-statis/index.html` (Master TV Display Rotator):**
+   - Menggunakan engine 2 iframe bergantian (*dual-iframe crossfade scaling 0.8s*) bebas kedip (*zero flicker*).
+   - Dilengkapi *Royal Emerald Splash Loading Screen* dengan logo Al-Jihad dan ring pemutar emas.
+   - Dilengkapi kontrol navigasi remote TV (`ArrowLeft`, `ArrowRight`, spasi untuk jeda, dan `R` untuk reload).
+   - Terintegrasi pemantau mode sholat otomatis (*Prayer Mode Watcher*) yang mengunci layar saat adzan/sholat tiba.
+   - Terintegrasi pendengar *Supabase Realtime WebSocket* untuk menyinkronkan rotasi dan interval secara instan.
+2. **`web-statis/slides/utama.html` (Jadwal Sholat 5 Waktu):**
+   - Menampilkan jam digital detik-per-detik, tanggal Masehi, dan tanggal Hijriyah akurat.
+   - Badge melayang *Floating Next Prayer Bar* berpusat di atas deretan kartu sholat.
+   - Kartu sholat menyala otomatis (*active glow*) saat waktu sholat aktif tiba (5 menit sebelum s/d 30 menit sesudah).
+   - Teks berjalan dinamis spesifik halaman (`running_text_pages`) membaca langsung dari Supabase.
+3. **`web-statis/slides/jumat.html` (Petugas Sholat Jum'at):**
+   - Menampilkan layout 2 kolom mewah bertema Raudhah Nabawi (`bg_jumat.jpg`): foto Imam/Khotib rasio 4:5 dengan logo resmi Masjid Al-Jihad, tanggal Jum'at ("Hari Ini" / "Jumat Mendatang"), 4 kartu petugas (Khotib, Imam, Muadzin, Bilal), dan rotasi hadits keutamaan Jum'at.
+4. **`web-statis/prayer-mode.html` (Mode Sholat Otomatis):**
+   - 5 Fase terintegrasi: Tarhim, Adzan, Hitung Mundur Iqamah, Layar Gelap Sholat Khusyuk ("Luruskan dan Rapatkan Shaf"), dan Khutbah Jum'at (4 kartu petugas resmi).
+5. **`web-statis/js/supabase-config.js`:** Konfigurasi terpusat URL dan API Key Supabase.
+6. **`web-statis/js/supabase-db.js`:** Library penghubung Supabase JS v2, caching localStorage saat offline, dan pendengar WebSocket Realtime.
+7. **`web-statis/js/prayer-engine.js`:** Mesin kalkulasi sholat astronomis lokal dan pendeteksi fase Prayer Mode sisi browser (tanpa perlu beban polling server).
+8. **`web-statis/js/display-clock-ambient.js`:** Modul jam digital, kalender Hijriyah Ummul Qura, dan aura pendaran warna dinamis 6 siklus waktu sholat (*Dynamic Ambient Lighting*).
+9. **`web-statis/css/partials-theme.css` & `display-theme.css`:** Styling komprehensif Islamic Material Design 3 bebas error sintaks.
+10. **Aset Mandiri:** `fonts/`, `image/`, `audio/`, `vendor/` Font Awesome Free lokal yang siap tayang di CDN Cloudflare Pages.
+
+### Hasil Pengujian Server Lokal:
+- `GET /index.html` -> **HTTP 200 OK** (17,326 bytes)
+- `GET /slides/utama.html` -> **HTTP 200 OK** (21,303 bytes)
+- `GET /slides/jumat.html` -> **HTTP 200 OK** (18,798 bytes)
+- `GET /prayer-mode.html` -> **HTTP 200 OK** (13,076 bytes)
+
+### Panduan Deploy di Cloudflare Pages:
+1. Buka dashboard Cloudflare: **[dash.cloudflare.com](https://dash.cloudflare.com)** $\rightarrow$ **Workers & Pages** $\rightarrow$ **Create application** $\rightarrow$ **Pages** $\rightarrow$ **Connect to Git**.
+2. Pilih repositori: `digitalaljihad001` (Branch: `main`).
+3. Konfigurasi Build:
+   - **Framework preset:** `None`
+   - **Build command:** *(Kosongkan)*
+   - **Build output directory:** `web-statis`
+4. Klik **Save and Deploy**. Web akan online dalam hitungan detik dan gratis selamanya!
+

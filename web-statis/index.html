@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Masjid - Layar TV Utama</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="css/display-theme.css">
+    <link rel="stylesheet" href="css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background-color: #050505;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #050505;
+            will-change: opacity;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        iframe.active {
+            opacity: 1;
+            z-index: 2;
+            pointer-events: auto;
+        }
+
+        iframe.outgoing {
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Prayer Mode Fullscreen Overlay Frame */
+        #prayerFrame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 500;
+            border: none;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        #prayerFrame.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Royal Emerald Splash Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #0d4a2b 0%, #052917 55%, #01140b 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.6s ease;
+        }
+
+        .splash-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: splashFadeIn 0.8s ease-out;
+        }
+
+        @keyframes splashFadeIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .splash-logo-wrapper {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .splash-spinner-ring {
+            position: absolute;
+            inset: -14px;
+            border-radius: 50%;
+            border: 3px solid rgba(212, 175, 55, 0.15);
+            border-top: 3px solid #FFD700;
+            border-right: 3px solid rgba(255, 215, 0, 0.6);
+            animation: splashSpin 1.4s linear infinite;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+        }
+
+        @keyframes splashSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .splash-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+        }
+
+        .splash-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.4);
+            margin-bottom: 14px;
+        }
+
+        .splash-loading-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 22px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            font-size: 0.95rem;
+            color: #E2E8F0;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .splash-dot {
+            width: 8px;
+            height: 8px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #FFD700;
+            animation: splashDotPulse 1.2s infinite alternate;
+        }
+
+        @keyframes splashDotPulse {
+            0% { opacity: 0.4; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Remote TV Control OSD Notification */
+        .tv-osd {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1.5px solid #ffd700;
+            padding: 8px 18px;
+            border-radius: 25px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 900;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .tv-osd.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen Awal -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="splash-card">
+            <div class="splash-logo-wrapper">
+                <div class="splash-spinner-ring"></div>
+                <img src="image/display/logo_aljihad.png" alt="Logo Masjid" class="splash-logo-img" onerror="this.onerror=null;this.src='img/logo-aljihad-circle.png';">
+            </div>
+            <div class="splash-title" id="splashTitle">MASJID JAMI' AL JIHAD</div>
+            <div class="splash-loading-pill">
+                <span class="splash-dot"></span>
+                <span id="splashStatus">MENGHUBUNGKAN CLOUD...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- OSD Notifikasi Remote TV -->
+    <div class="tv-osd" id="tvOsd">Slide 1/2</div>
+
+    <!-- Dual Iframe Crossfade Engine -->
+    <div class="iframe-container">
+        <iframe id="frame1" class="active" src="about:blank"></iframe>
+        <iframe id="frame2" class="outgoing" src="about:blank"></iframe>
+    </div>
+
+    <!-- Prayer Mode Frame (Diaktifkan Otomatis Saat Waktu Sholat) -->
+    <iframe id="prayerFrame" src="prayer-mode.html"></iframe>
+
+    <!-- SUPABASE & CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-db.js"></script>
+    <script src="js/prayer-engine.js"></script>
+
+    <script>
+        // Pemetaan rute canonical ke path file statis
+        const PATH_MAPPING = {
+            '/utama-embed': 'slides/utama.html',
+            '/jumat-embed': 'slides/jumat.html',
+            '/keuangan-embed': 'slides/keuangan.html',
+            '/pengumuman-embed': 'slides/pengumuman.html',
+            '/keuangan-summary-embed': 'slides/keuangan-summary.html',
+            '/qris-embed': 'slides/qris.html',
+            '/slide-embed': 'slides/slide.html',
+            '/ambulance-embed': 'slides/ambulance.html',
+            '/infaq-embed': 'slides/infaq.html',
+            '/hikmah-embed': 'slides/hikmah.html',
+            '/yasin-embed': 'slides/yasin.html',
+            '/live-mekah-embed': 'slides/live-mekah.html',
+            '/live-madinah-embed': 'slides/live-madinah.html',
+            '/live-mimbar-embed': 'slides/live-mimbar.html',
+            '/idul-fitri-embed': 'slides/idul-fitri.html',
+            '/idul-adha-embed': 'slides/idul-adha.html'
+        };
+
+        // Default rotation pages jika database belum memiliki susunan
+        const DEFAULT_PAGES = [
+            'slides/utama.html',
+            'slides/jumat.html'
+        ];
+
+        let activePages = [];
+        let currentIndex = 0;
+        let rotationTimer = null;
+        let rotationInterval = 10000;
+        let isPaused = false;
+        let currentFrame = 1;
+        let isPrayerModeActive = false;
+
+        let settings = null;
+        let jadwalList = [];
+        let jumatPetugas = null;
+
+        function showOsd(text) {
+            const el = document.getElementById('tvOsd');
+            if (!el) return;
+            el.textContent = text;
+            el.classList.add('show');
+            clearTimeout(el.hideTimeout);
+            el.hideTimeout = setTimeout(() => {
+                el.classList.remove('show');
+            }, 2000);
+        }
+
+        // Resolusi daftar slide aktif dari settings
+        function resolveActivePages(appSettings) {
+            const list = [];
+            if (appSettings && Array.isArray(appSettings.rotation_pages)) {
+                appSettings.rotation_pages.forEach(p => {
+                    if (p.active !== false) {
+                        const localPath = PATH_MAPPING[p.page] || p.path || p.page;
+                        if (localPath && !list.includes(localPath)) {
+                            list.push(localPath);
+                        }
+                    }
+                });
+            }
+
+            if (list.length === 0) {
+                return DEFAULT_PAGES;
+            }
+            return list;
+        }
+
+        // Pergantian slide TV dengan crossfade mulus
+        function switchSlide(targetIndex) {
+            if (activePages.length === 0 || isPrayerModeActive) return;
+
+            currentIndex = (targetIndex + activePages.length) % activePages.length;
+            const nextUrl = activePages[currentIndex];
+
+            const frontFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
+            const backFrame = currentFrame === 1 ? document.getElementById('frame2') : document.getElementById('frame1');
+
+            // Muat URL di frame latar belakang
+            backFrame.src = nextUrl;
+
+            backFrame.onload = function() {
+                // Crossfade
+                backFrame.className = 'active';
+                frontFrame.className = 'outgoing';
+
+                currentFrame = currentFrame === 1 ? 2 : 1;
+                showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);
+            };
+        }
+
+        function nextPage() {
+            switchSlide(currentIndex + 1);
+        }
+
+        function prevPage() {
+            switchSlide(currentIndex - 1);
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            showOsd(isPaused ? '⏸ Rotasi Dijeda' : '▶ Rotasi Dilanjutkan');
+            if (!isPaused) {
+                scheduleNextRotation();
+            } else {
+                clearTimeout(rotationTimer);
+            }
+        }
+
+        function scheduleNextRotation() {
+            clearTimeout(rotationTimer);
+            if (isPaused || isPrayerModeActive || activePages.length <= 1) return;
+
+            rotationTimer = setTimeout(() => {
+                nextPage();
+                scheduleNextRotation();
+            }, rotationInterval);
+        }
+
+        // Pantau waktu sholat (Prayer Mode Engine)
+        function checkPrayerMode() {
+            if (!window.PrayerEngine) return;
+            const now = new Date();
+            const state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+
+            const prayerFrame = document.getElementById('prayerFrame');
+
+            if (state.active) {
+                if (!isPrayerModeActive) {
+                    console.log('🕌 Memasuki Mode Sholat:', state.phase, state.prayer);
+                    isPrayerModeActive = true;
+                    clearTimeout(rotationTimer);
+                    prayerFrame.classList.add('active');
+                }
+            } else {
+                if (isPrayerModeActive) {
+                    console.log('✅ Mode Sholat selesai. Kembali ke rotasi TV.');
+                    isPrayerModeActive = false;
+                    prayerFrame.classList.remove('active');
+                    scheduleNextRotation();
+                }
+            }
+        }
+
+        // Callback ketika prayer-mode.html selesai
+        window.onPrayerModeEnd = function() {
+            isPrayerModeActive = false;
+            document.getElementById('prayerFrame').classList.remove('active');
+            scheduleNextRotation();
+        };
+
+        // Inisialisasi Utama
+        async function initDisplay() {
+            const statusEl = document.getElementById('splashStatus');
+            try {
+                if (statusEl) statusEl.textContent = 'MEMUAT DATA SUPABASE...';
+
+                // 1. Ambil settings
+                settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) {
+                        document.getElementById('splashTitle').textContent = settings.nama_aplikasi;
+                        document.title = settings.nama_aplikasi + ' - Display TV';
+                    }
+                    if (settings.rotation_interval) {
+                        rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
+                    }
+                    activePages = resolveActivePages(settings);
+                }
+
+                // 2. Ambil jadwal & petugas Jumat
+                jadwalList = await SupabaseDB.getJadwalSholat();
+                jumatPetugas = await SupabaseDB.getSholatJumat();
+
+                // 3. Muat slide pertama
+                if (activePages.length > 0) {
+                    document.getElementById('frame1').src = activePages[0];
+                    currentIndex = 0;
+                }
+
+                // 4. Sembunyikan splash screen
+                setTimeout(() => {
+                    const overlay = document.getElementById('loadingOverlay');
+                    if (overlay) {
+                        overlay.style.opacity = '0';
+                        setTimeout(() => overlay.style.display = 'none', 600);
+                    }
+                    scheduleNextRotation();
+                }, 1200);
+
+            } catch (err) {
+                console.error('Inisialisasi gagal:', err);
+                if (statusEl) statusEl.textContent = 'MEMUAT MODE CADANGAN...';
+                activePages = DEFAULT_PAGES;
+                document.getElementById('frame1').src = activePages[0];
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    scheduleNextRotation();
+                }, 1000);
+            }
+        }
+
+        // Listener Keyboard / Remote TV
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowRight':
+                case 'MediaTrackNext':
+                    nextPage();
+                    scheduleNextRotation();
+                    break;
+                case 'ArrowLeft':
+                case 'MediaTrackPrevious':
+                    prevPage();
+                    scheduleNextRotation();
+                    break;
+                case ' ':
+                case 'MediaPlayPause':
+                    e.preventDefault();
+                    togglePause();
+                    break;
+                case 'r':
+                case 'R':
+                    location.reload();
+                    break;
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDisplay();
+            setInterval(checkPrayerMode, 1000);
+
+            // Pasang Realtime WebSocket Listener Supabase
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    console.log('⚡ [Realtime Index] Perubahan terdeteksi:', payload.table);
+                    if (payload.table === 'app_settings') {
+                        SupabaseDB.getSettings().then(newSettings => {
+                            settings = newSettings;
+                            if (settings.rotation_interval) {
+                                rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
+                            }
+                            activePages = resolveActivePages(settings);
+                            showOsd('⚡ Pengaturan Diperbarui (Realtime)');
+                        });
+                    } else if (payload.table === 'jadwal_sholat') {
+                        SupabaseDB.getJadwalSholat().then(list => jadwalList = list);
+                    } else if (payload.table === 'sholat_jumat') {
+                        SupabaseDB.getSholatJumat().then(petugas => jumatPetugas = petugas);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

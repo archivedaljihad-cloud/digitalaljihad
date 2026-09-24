@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Anyaman Ketupat Utama (Diamond Shape) -->
+  <polygon points="32,6 54,28 32,50 10,28" fill="#ffd700" fill-opacity="0.25" stroke="#ffd700" stroke-width="3" stroke-linejoin="round"/>
+  
+  <!-- Garis Anyaman Daun Kelapa -->
+  <!-- Diagonal Kiri Atas ke Kanan Bawah -->
+  <line x1="21" y1="17" x2="43" y2="39" stroke="#ffd700" stroke-width="2"/>
+  <line x1="16" y1="22" x2="38" y2="44" stroke="#ffd700" stroke-width="2"/>
+  <line x1="26" y1="12" x2="48" y2="34" stroke="#ffd700" stroke-width="2"/>
+  
+  <!-- Diagonal Kanan Atas ke Kiri Bawah -->
+  <line x1="43" y1="17" x2="21" y2="39" stroke="#ffd700" stroke-width="2"/>
+  <line x1="48" y1="22" x2="26" y2="44" stroke="#ffd700" stroke-width="2"/>
+  <line x1="38" y1="12" x2="16" y2="34" stroke="#ffd700" stroke-width="2"/>
+  
+  <!-- Tali Gantungan Atas -->
+  <path d="M32 6 C 32 1, 26 2, 26 6" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Janur / Pita Daun Menjuntai Bawah -->
+  <path d="M30 50 C 26 55, 24 59, 20 62" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M34 50 C 36 56, 40 59, 44 62" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M32 50 C 31 55, 33 58, 32 63" stroke="#ffd700" stroke-width="2" stroke-linecap="round"/>
+</svg>

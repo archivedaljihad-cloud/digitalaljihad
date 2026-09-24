@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Bedug Stand (Kaki Penyangga) -->
+  <path d="M14 56 L24 38 L30 56" stroke="#ffd700" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 56 L40 38 L34 56" stroke="#ffd700" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 50 L46 50" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Bedug Drum Body (Silinder) -->
+  <path d="M16 18 C 22 14, 42 14, 48 18 L 48 38 C 42 42, 22 42, 16 38 Z" fill="#ffd700" fill-opacity="0.25" stroke="#ffd700" stroke-width="3" stroke-linejoin="round"/>
+  
+  <!-- Drum Front Rim & Skin (Muka Kulit Bedug Kiri) -->
+  <ellipse cx="16" cy="28" rx="5" ry="10" fill="#ffd700" stroke="#ffd700" stroke-width="2"/>
+  <!-- Paku/Paku keliling bedug -->
+  <circle cx="16" cy="20" r="1" fill="#000"/>
+  <circle cx="16" cy="28" r="1" fill="#000"/>
+  <circle cx="16" cy="36" r="1" fill="#000"/>
+  
+  <!-- Drum Rear Rim (Muka Kulit Kanan) -->
+  <path d="M48 18 C 51 21, 51 35, 48 38" stroke="#ffd700" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Bedug Rib / Cincin Kayu Tengah -->
+  <path d="M32 15 C 34 21, 34 35, 32 41" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Pemukul Bedug (Stick) -->
+  <line x1="6" y1="44" x2="14" y2="30" stroke="#ffd700" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="14" cy="30" r="3.5" fill="#ffd700"/>
+</svg>

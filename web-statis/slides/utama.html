@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Sholat - Display Masjid</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        :root {
+            --primary-color: #0d6e6e;
+            --secondary-color: #ffd700;
+            --accent-color: #0a4d68;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .kaligrafi {
+            position: absolute;
+            top: 15px;
+            font-family: 'Amiri', serif;
+            font-size: 4.5rem;
+            z-index: 10;
+            user-select: none;
+            background: linear-gradient(to right, #ffd700, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4), 6px 6px 0 rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+        }
+        .kaligrafi-allah { right: 35px; }
+        .kaligrafi-muhammad { left: 35px; }
+
+        .page-layout {
+            position: relative;
+            width: 100%;
+            max-width: 1800px;
+            margin: 0 auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            box-sizing: border-box;
+            z-index: 5;
+        }
+
+        .jadwal-sholat-title-wrap {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .jadwal-sholat-title {
+            font-size: 1.65rem;
+            font-weight: 700 !important;
+            letter-spacing: 2.5px;
+            margin-bottom: 0;
+            padding: 5px 28px;
+            position: relative;
+            color: #ffffff !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            border-radius: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+        }
+
+        .jadwal-sholat-title i {
+            color: #ffd700;
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
+            animation: pulseMosque 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseMosque {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.9)); }
+        }
+
+        /* Next Prayer Capsule Badge */
+        .next-prayer-center-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 10px auto;
+            z-index: 10;
+        }
+
+        .next-prayer-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, rgba(6, 26, 17, 0.92) 0%, rgba(2, 14, 9, 0.96) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.55);
+            border-radius: 40px;
+            padding: 8px 26px 8px 14px;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), 0 0 22px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(255, 238, 170, 0.3);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .npb-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+            transform: skewX(-20deg);
+            animation: npbShimmer 6s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes npbShimmer {
+            0%, 80% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .npb-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD700;
+            font-size: 19px;
+            box-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
+            flex-shrink: 0;
+        }
+
+        .npb-content { display: flex; flex-direction: column; line-height: 1.15; }
+        .npb-label-row { display: flex; align-items: center; gap: 8px; }
+        .npb-badge {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: #10B981;
+            background: rgba(16, 185, 129, 0.18);
+            border: 0.5px solid rgba(16, 185, 129, 0.4);
+            padding: 2px 7px;
+            border-radius: 10px;
+        }
+        .npb-prayer-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #FFD700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+        .npb-time-row { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+        .npb-schedule-time { font-size: 13px; color: #CBD5E1; font-weight: 600; }
+        .npb-sep { color: rgba(212, 175, 55, 0.6); font-size: 11px; }
+        .npb-countdown {
+            font-size: 16px;
+            font-weight: 800;
+            color: #FFFFFF;
+            font-family: monospace;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .npb-pulse-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #FFFFFF 25%, #FFF475 60%, #FFD700 100%);
+            box-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255, 215, 0, 0.9);
+            animation: npbPulse 1.5s infinite ease-in-out;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+        @keyframes npbPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.75); }
+        }
+
+        /* Sholat Cards Row */
+        .bottom-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .sholat-list {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            width: 100%;
+            max-width: 1720px;
+            margin: 0 auto;
+        }
+
+        .sholat-card {
+            background: rgba(4, 25, 18, 0.72);
+            border-radius: 16px;
+            padding: 12px 10px 10px 10px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            flex: 1;
+            max-width: 225px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sholat-card.active {
+            background: radial-gradient(circle at center, rgba(255, 213, 79, 0.45) 0%, rgba(6, 42, 28, 0.95) 100%);
+            border: 2.5px solid #FFD54F;
+            box-shadow: 0 0 35px rgba(255, 213, 79, 0.55), 0 12px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-6px) scale(1.04);
+        }
+
+        .sholat-card.khusus-imsak-terbit {
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
+            background: rgba(15, 30, 25, 0.65);
+        }
+        .sholat-card.khusus-imsak-terbit i { color: #ffffff; }
+
+        .sholat-card i {
+            font-size: 1.35rem;
+            color: var(--secondary-color);
+            margin-bottom: 4px;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .sholat-card .nama-sholat {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .sholat-card .waktu-sholat {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #ffd700;
+            font-family: monospace;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Fixed Running Text at Bottom */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .running-text-container {
+            padding: 8px 20px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+        }
+
+        .running-text i { color: #ffd700; margin: 0 10px; }
+
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="kaligrafi kaligrafi-muhammad">مُحَمَّد</div>
+    <div class="kaligrafi kaligrafi-allah">الله</div>
+
+    <div class="page-layout">
+        <div class="header-section">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime"></div>
+            <div class="jadwal-sholat-title-wrap">
+                <div class="jadwal-sholat-title"><i class="fas fa-mosque"></i> Jadwal Sholat</div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <!-- BADGE KAPSUL SHOLAT BERIKUTNYA -->
+            <div class="next-prayer-center-container">
+                <div class="next-prayer-bar" id="nextPrayerBar">
+                    <div class="npb-shimmer"></div>
+                    <div class="npb-icon"><i class="fa-solid fa-mosque"></i></div>
+                    <div class="npb-content">
+                        <div class="npb-label-row">
+                            <span class="npb-badge">SELANJUTNYA</span>
+                            <span class="npb-prayer-name" id="npbPrayerName">MEMUAT...</span>
+                        </div>
+                        <div class="npb-time-row">
+                            <span class="npb-schedule-time" id="npbScheduleTime">--:-- WIB</span>
+                            <span class="npb-sep">•</span>
+                            <span class="npb-countdown" id="npbCountdown">-00:00:00</span>
+                        </div>
+                    </div>
+                    <div class="npb-pulse-dot"></div>
+                </div>
+            </div>
+
+            <!-- DERETAN KOTAK SHOLAT -->
+            <div class="sholat-list" id="sholatList">
+                <!-- Fallback / Initial Cards -->
+                <div class="sholat-card khusus-imsak-terbit" data-nama="Imsak" data-waktu="04:25">
+                    <i class="fas fa-utensils"></i>
+                    <div class="nama-sholat">Imsak</div>
+                    <div class="waktu-sholat">04:25</div>
+                </div>
+                <div class="sholat-card" data-nama="Subuh" data-waktu="04:35">
+                    <i class="fas fa-mosque"></i>
+                    <div class="nama-sholat">Subuh</div>
+                    <div class="waktu-sholat">04:35</div>
+                </div>
+                <div class="sholat-card khusus-imsak-terbit" data-nama="Syuruk" data-waktu="05:50">
+                    <i class="fas fa-sun"></i>
+                    <div class="nama-sholat">Syuruk</div>
+                    <div class="waktu-sholat">05:50</div>
+                </div>
+                <div class="sholat-card" data-nama="Dzuhur" data-waktu="11:55">
+                    <i class="fas fa-mosque"></i>
+                    <div class="nama-sholat">Dzuhur</div>
+                    <div class="waktu-sholat">11:55</div>
+                </div>
+                <div class="sholat-card" data-nama="Ashar" data-waktu="15:10">
+                    <i class="fas fa-mosque"></i>
+                    <div class="nama-sholat">Ashar</div>
+                    <div class="waktu-sholat">15:10</div>
+                </div>
+                <div class="sholat-card" data-nama="Maghrib" data-waktu="17:58">
+                    <i class="fas fa-mosque"></i>
+                    <div class="nama-sholat">Maghrib</div>
+                    <div class="waktu-sholat">17:58</div>
+                </div>
+                <div class="sholat-card" data-nama="Isya" data-waktu="19:08">
+                    <i class="fas fa-mosque"></i>
+                    <div class="nama-sholat">Isya</div>
+                    <div class="waktu-sholat">19:08</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RUNNING TEKS MARQUEE BAWAH -->
+    <div class="bottom-running-wrap">
+        <div class="running-text-container">
+            <div class="running-text" id="runningText">
+                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">Selamat Datang di Masjid Jami' Al-Jihad. Luruskan dan rapatkan shaf saat sholat berjamaah. Jagalah kebersihan dan kesucian masjid.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUPABASE & CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/prayer-engine.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        let currentJadwal = [];
+        let currentSettings = null;
+
+        // Render data jadwal sholat ke kartu
+        function renderJadwalCards(jadwalList) {
+            if (!jadwalList || jadwalList.length === 0) return;
+            currentJadwal = jadwalList;
+
+            const order = ['imsak', 'subuh', 'terbit', 'syuruk', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+            const sorted = [...jadwalList].sort((a, b) => {
+                const aName = (a.nama_sholat || '').toLowerCase().trim();
+                const bName = (b.nama_sholat || '').toLowerCase().trim();
+                let aIdx = order.indexOf(aName);
+                let bIdx = order.indexOf(bName);
+                if (aIdx === -1) aIdx = 99;
+                if (bIdx === -1) bIdx = 99;
+                return aIdx - bIdx;
+            });
+
+            const container = document.getElementById('sholatList');
+            if (!container) return;
+
+            container.innerHTML = sorted.map(item => {
+                const nama = item.nama_sholat || '';
+                const namaClean = nama.toLowerCase().trim();
+                const isSpecial = ['imsak', 'syuruk', 'terbit'].includes(namaClean);
+                const waktu = (item.waktu || '00:00').substring(0, 5);
+
+                let iconClass = 'fa-mosque';
+                if (namaClean === 'imsak') iconClass = 'fa-utensils';
+                else if (namaClean === 'syuruk' || namaClean === 'terbit') iconClass = 'fa-sun';
+
+                return `
+                    <div class="sholat-card ${isSpecial ? 'khusus-imsak-terbit' : ''}" data-nama="${nama}" data-waktu="${waktu}">
+                        <i class="fas ${iconClass}"></i>
+                        <div class="nama-sholat">${nama}</div>
+                        <div class="waktu-sholat">${waktu}</div>
+                    </div>
+                `;
+            }).join('');
+
+            updateCardsActiveState();
+        }
+
+        // Highlight kartu sholat aktif
+        function updateCardsActiveState() {
+            const now = new Date();
+            const currentMins = now.getHours() * 60 + now.getMinutes();
+
+            document.querySelectorAll('.sholat-card').forEach(card => {
+                const waktu = card.getAttribute('data-waktu');
+                if (!waktu) return;
+                const [h, m] = waktu.split(':').map(Number);
+                const jadwalMins = h * 60 + m;
+
+                // Aktif 5 menit sebelum hingga 30 menit setelah
+                if (currentMins >= (jadwalMins - 5) && currentMins <= (jadwalMins + 30)) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+        }
+
+        // Update badge kapsul sholat berikutnya
+        function updateCountdownBar() {
+            if (!window.PrayerEngine) return;
+            const now = new Date();
+            const next = window.PrayerEngine.calculateNextPrayer(currentJadwal, now);
+
+            const elName = document.getElementById('npbPrayerName');
+            const elTime = document.getElementById('npbScheduleTime');
+            const elCd = document.getElementById('npbCountdown');
+
+            if (next) {
+                if (elName) elName.textContent = next.name;
+                if (elTime) elTime.textContent = next.time + ' WIB';
+                if (elCd) {
+                    const diff = next.remaining;
+                    const h = Math.floor(diff / 3600);
+                    const m = Math.floor((diff % 3600) / 60);
+                    const s = diff % 60;
+                    const pad = n => String(n).padStart(2, '0');
+                    elCd.textContent = `-${pad(h)}:${pad(m)}:${pad(s)}`;
+                }
+            }
+        }
+
+        // Inisialisasi Data dari Supabase
+        async function loadData() {
+            try {
+                // 1. Settings
+                currentSettings = await SupabaseDB.getSettings();
+                if (currentSettings) {
+                    if (currentSettings.nama_aplikasi) {
+                        document.getElementById('nama-masjid').textContent = currentSettings.nama_aplikasi;
+                    }
+                    if (currentSettings.sub_header) {
+                        document.getElementById('sub-header').textContent = currentSettings.sub_header;
+                    }
+
+                    // Teks Berjalan spesifik untuk halaman ini (/utama-embed)
+                    const runningText = SupabaseDB.getRunningTextForPage('/utama-embed', currentSettings);
+                    if (runningText) {
+                        document.getElementById('runningTextContent').textContent = runningText;
+                    }
+                }
+
+                // 2. Jadwal Sholat
+                const jadwal = await SupabaseDB.getJadwalSholat();
+                if (jadwal && jadwal.length > 0) {
+                    renderJadwalCards(jadwal);
+                }
+            } catch (err) {
+                console.error('Gagal memuat data utama:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            setInterval(updateCountdownBar, 1000);
+            setInterval(updateCardsActiveState, 10000);
+
+            // Pasang Supabase Realtime WebSocket listener
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    console.log('⚡ Realtime update diterima di slide Utama:', payload.table);
+                    if (payload.table === 'app_settings' || payload.table === 'jadwal_sholat') {
+                        loadData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
