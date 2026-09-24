@@ -1462,7 +1462,34 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 
 ---
 
-## 🔒 47. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
+## 47. PENYEMPURNAAN UI ROTASI LAYAR & PINTASAN PENGATURAN DURASI PRAYER MODE (v4.5.4 - 24 September 2026)
+
+### Latar Belakang & Kebutuhan Pengguna:
+1. **Penyembunyian Badge "Mode Operator: Urutan Terkunci":** Pada halaman Pengaturan Rotasi Layar TV (`resources/views/rotation/index.blade.php`), pengguna meminta agar kotak badge abu-abu dan teks *"Mode Operator: Urutan Terkunci"* disembunyikan/dihilangkan agar tampilan header lebih bersih dan tidak membingungkan.
+2. **Klarifikasi & Aksesibilitas Pengaturan Durasi Prayer Mode:** Pengguna menanyakan keberadaan pengaturan durasi sebelum adzan, waktu adzan, durasi iqamah, prayer mode (durasi sholat hening), serta audio tarhim yang sebelumnya dikira berada di halaman rotasi layar TV.
+3. **Standar Operasional Sinkronisasi Otomatis:** Pengguna menetapkan SOP baku bahwa setiap kali perbaikan selesai, file `LATEST_UPDATE.md` **WAJIB selalu diperbarui** dan disinkronkan langsung (commit & push) ke repositori GitHub serta laptop tanpa menunggu perintah lanjutan, demi menjaga kondisi 100% konsisten dan identik di setiap perangkat.
+
+### Solusi & Implementasi:
+1. **Pembersihan Header Rotasi Layar TV (`resources/views/rotation/index.blade.php`):**
+   - Menghapus badge kondisi `@else` yang memunculkan kotak abu-abu *"Mode Operator: Urutan Terkunci"*.
+   - Header kini hanya berfokus pada tombol aksi utama *"Lihat Layar TV (Rotator)"* yang bersih dan rapi.
+2. **Penambahan Banner Navigasi Pintasan Cepat ke Jadwal Sholat:**
+   - Menambahkan banner informatif berwarna biru langit (*Sky Blue Gradient*) dengan ikon stopwatch elegan di atas panel konfigurasi rotasi layar TV.
+   - Banner tersebut menjelaskan secara gamblang bahwa durasi countdown sebelum adzan, waktu adzan, iqamah, mode sholat, dan audio tarhim berada di menu **Jadwal Sholat** (`/jadwal_sholat`).
+   - Menyertakan tombol pintas langsung `[ Buka Pengaturan Prayer Mode → ]` yang mengarahkan ke route `jadwal_sholat.index#durasi-sholat`.
+3. **Penyempurnaan Target Anchor pada Halaman Jadwal Sholat (`resources/views/jadwal_sholat/index.blade.php`):**
+   - Menambahkan atribut `id="durasi-sholat"` pada kartu formulir *"Pengaturan Durasi Sholat, Adzan, Iqamah & Waktu Sistem"*, sehingga saat tombol pintasan diklik, halaman otomatis meluncur (*smooth scroll*) tepat ke formulir durasi tersebut.
+4. **Penegasan Aturan Tetap Sinkronisasi Proyek (SOP Wajib):**
+   - Menambahkan butir aturan ke-7 pada Bab Prinsip Pengembangan: Selalu memperbarui `LATEST_UPDATE.md` dan langsung mengeksekusi sinkronisasi Git (commit & push) setiap kali perbaikan selesai agar repositori GitHub dan folder lokal selalu 100% identik.
+
+### Berkas yang Terkait:
+- `resources/views/rotation/index.blade.php`
+- `resources/views/jadwal_sholat/index.blade.php`
+- `LATEST_UPDATE.md`
+
+---
+
+## 48. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
 Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 1. **DILARANG Menaruh Query DDL / Database di `AppServiceProvider::boot()`:** Jangan pernah menaruh `Schema::hasTable`, `Schema::hasColumn`, atau query Eloquent massal di dalam `boot()` karena akan dieksekusi di SETIAP request HTTP dan melumpuhkan kecepatan aplikasi.
@@ -1471,7 +1498,7 @@ Setiap AI Agent atau pengembang yang bekerja pada proyek ini **WAJIB MEMATUHI**:
 4. **Hindari `?v={{ time() }}` pada Static Assets:** Selalu gunakan nomor versi statis seperti `?v=3.0.4` agar aset dapat di-cache secara efisien oleh browser dan CDN.
 5. **Sinkronisasi Git Otomatis:** Setelah menyelesaikan modifikasi atau perbaikan, **WAJIB langsung melakukan commit dan push ke branch `main` GitHub**.
 6. **Pembaruan Dokumen Ini:** Setiap kali ada fitur baru atau perubahan alur, perbarui file `LATEST_UPDATE.md` ini agar riwayat pekerjaan selalu berkesinambungan.
+7. **Pembaruan `LATEST_UPDATE.md` & Sinkronisasi Tanpa Menunggu Perintah:** Setiap seluruh perbaikan selesai, **SELALU perbarui file `LATEST_UPDATE.md` lalu sinkronisasi (commit & push) ke repositori GitHub dan folder lokal** secara otomatis tanpa menunggu perintah konfirmasi dari pengguna, agar seluruh file selalu 100% sama dan mutakhir.
 
 ---
-*Terakhir Diperbarui: 23 September 2026 (Pembaruan Foto Default Sholat Jum'at Logo Masjid Al-Jihad v4.5.3) &bull; Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
-
+*Terakhir Diperbarui: 24 September 2026 (Penyempurnaan UI Rotasi Layar & Pintasan Pengaturan Durasi Prayer Mode v4.5.4) • Komitmen: Sinkron Penuh dengan GitHub `origin/main`.*
