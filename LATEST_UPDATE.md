@@ -1580,10 +1580,30 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 
 ### Panduan Deploy di Cloudflare Pages:
 1. Buka dashboard Cloudflare: **[dash.cloudflare.com](https://dash.cloudflare.com)** $\rightarrow$ **Workers & Pages** $\rightarrow$ **Create application** $\rightarrow$ **Pages** $\rightarrow$ **Connect to Git**.
-2. Pilih repositori: `digitalaljihad001` (Branch: `main`).
+2. Pilih repositori: `archivedaljihad-cloud/digitalaljihad` (Branch: `main`).
 3. Konfigurasi Build:
    - **Framework preset:** `None`
    - **Build command:** *(Kosongkan)*
    - **Build output directory:** `web-statis`
 4. Klik **Save and Deploy**. Web akan online dalam hitungan detik dan gratis selamanya!
+
+---
+
+## 🚀 51. KONSOLIDASI AKUN TUNGGAL & MIGRASI REMOTE GITHUB (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Status:** ✅ Selesai & Terverifikasi
+
+### Latar Belakang:
+Pengguna memutuskan untuk menyatukan kontrol proyek ke dalam **1 akun terpadu**:
+1. **GitHub Repository Tunggal:** `https://github.com/archivedaljihad-cloud/digitalaljihad.git`
+2. **Supabase Project Tunggal:** `https://xskusfacwsclbgdtgier.supabase.co` dengan Publishable Key `sb_publishable_lsUgbFcTmwuwiiV70rzSWQ_V0JUR-mX`.
+
+### Tindakan yang Dilakukan:
+1. **Migrasi Remote Git:**
+   - Memperbarui remote `origin` dari repositori lama (`mydowndrive-ops/digitalaljihad001`) ke repositori resmi tunggal: `https://github.com/archivedaljihad-cloud/digitalaljihad.git`.
+2. **Penyelarasan Riwayat Komit (Clean Push):**
+   - Menyelaraskan seluruh riwayat komit fitur terbaru (v5.0.0 Web Statis) langsung di atas commit HEAD remote (`429de71`) tanpa menyertakan artefak workflow Render lama yang tidak relevan, sehingga push berhasil 100% tanpa kendala *Personal Access Token (PAT) scope*.
+3. **Verifikasi Sinkronisasi 100%:**
+   - Cabang lokal `main` telah melacak `origin/main` (`archivedaljihad-cloud/digitalaljihad`) secara penuh.
+
 
