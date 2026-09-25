@@ -2845,24 +2845,83 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
 
 ---
 
-### Berkas yang Terkait / Diperbarui:
-1. `web-statis/admin.html`
-   - Pembaruan CSS collapsible sidebar desktop.
-   - Pemasangan `onclick="toggleSidebarUniversal(event)"` pada tombol topbar dan sidebar.
-   - Implementasi fungsi global `window.toggleSidebarUniversal()`.
-   - Penyembunyian badge `#badgeRotasiRole` pada peran Operator/Petugas.
-   - Pembaruan teks `#descRotasiSubtitle`.
-2. Folder Mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`
-   - Sinkronisasi seluruh berkas web-statis termutakhir dan `LATEST_UPDATE.md`.
-3. `LATEST_UPDATE.md`
-   - Dokumentasi Bab 73.
+## 📌 BAB 74: PERBAIKAN TABEL KELOLA HAK AKSES PENGGUNA & RESTORASI IKON DROPDOWN TOPBAR DI SEMUA DASHBOARD
+
+### Latar Belakang & Masalah yang Ditemukan:
+1. **Daftar Tabel Kelola Hak Akses Pengguna Masih Kosong:**
+   - Pada Dashboard Administrator (Super Admin), ketika menu **Kelola 3 Hak Akses** (`view-users`) dibuka, tabel hanya menampilkan kepala tabel (*thead*), sedangkan isi tabel (*tbody*) kosong melompong putih tanpa baris data akun.
+   - **Akar Masalah:**
+     - Elemen `<tbody id="tbodyUsersManagement">` di markup statis `admin.html` tidak memiliki baris data awal (*placeholder/fallback*), hanya komentar JavaScript.
+     - `renderUsersTable()` mengandalkan variabel `currentUser` yang jika belum terinisialisasi secara sempurna dapat memicu misinterpretasi status otorisasi peran.
+     - Data pengguna di `localStorage` belum disanitasi secara defensif dan belum disinkronkan secara otomatis dengan tabel `users` di Supabase Cloud (`/rest/v1/users`).
+2. **Ikon Dropdown di Sebelah Inisial Akun Tidak Muncul di Semua Dashboard:**
+   - Pada topbar kanan di sebelah avatar inisial nama akun (contoh: `(A)` atau `(H)`), ikon panah bawah (*chevron*) tidak muncul atau hilang pada layar HP dan browser tertentu.
+   - **Akar Masalah:**
+     - Ikon menggunakan tag `<i class="fas fa-chevron-down ... d-none d-sm-inline"></i>`. Class `d-none` secara eksplisit menyembunyikan ikon pada resolusi mobile/HP (< 576px).
+     - Ketergantungan pada font webfont FontAwesome lokal dapat mengalami kendala render (*cross-origin security block*) saat file dibuka melalui protokol lokal (`file:///`).
 
 ---
 
-### Status Sinkronisasi:
-- Seluruh script inline lolos validasi JavaScript (`node -e`).
-- Berkas telah disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
-- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+### Solusi & Perubahan yang Diterapkan:
+
+#### 1. Perbaikan & Pengisian Tabel Kelola Hak Akses Pengguna:
+- **Markup Awal Fallback 3 Baris Resmi:**
+  Menambahkan 3 baris akun bawaan langsung ke dalam `<tbody id="tbodyUsersManagement">` di `web-statis/admin.html`:
+  1. **ID 3:** Administrator (Super Admin) - `admin@aljihad.com` - Akses Penuh 100% - Status Aktif - Tombol Edit Akun
+  2. **ID 1:** H. Sudirman (Bendahara) - `bendahara@aljihad.com` - Buku Kas & Transaksi - Status Aktif - Tombol Edit Akun
+  3. **ID 2:** Ust. Ahmad (Operator DKM) - `petugas@aljihad.com` - Display TV & Slide - Status Aktif - Tombol Edit Akun
+  *Hasil:* Sejak detik pertama halaman dimuat, tabel dijamin 100% terisi dan tidak pernah lagi mengalami kasus tabel kosong putih.
+- **Normalisasi Data & Try-Catch Tangguh di `renderUsersTable()`:**
+  - Melindungi seluruh fungsi dengan blok `try...catch`.
+  - Menggunakan resolusi `activeUser = (currentUser || AdminAuth.getCurrentUser())` sehingga deteksi peran Super Admin selalu akurat.
+  - Menormalisasi properti setiap akun (`name`, `email`, `username`, `role`, `color`) untuk mencegah *TypeError* akibat data null/undefined.
+  - Pada mode Super Admin: tombol **Edit Akun** aktif berwarna kuning keemasan, badge bertuliskan **Mode Super Admin: Akses Edit Aktif**.
+  - Pada mode Bendahara/Operator: tombol berstatus **Terkunci** (read-only), badge bertuliskan **Mode Read-Only (Hanya Super Admin)**.
+- **Sinkronisasi Otomatis dengan Supabase Cloud:**
+  - Menambahkan pemanggilan API `/rest/v1/users?select=*` di dalam `loadAllSupabaseData()` untuk memuat akun live dari Supabase dan menggabungkannya ke daftar pengguna tanpa menduplikasi data yang sudah ada.
+- **Pembaruan `AdminAuth.getUsers()` di `web-statis/js/admin-auth.js`:**
+  - Menambahkan sanitasi array untuk memfilter entri kosong/rusak.
+  - Menambahkan try-catch saat penyimpanan ke `localStorage` guna mencegah error pada mode penjelajahan privat (*Private/Incognito Browsing*).
+
+#### 2. Restorasi Ikon Dropdown Akun Topbar:
+- **Penggantian dengan SVG Inline Murni:**
+  Mengganti glyph FontAwesome dengan inline SVG modern di `web-statis/admin.html`:
+  ```html
+  <svg class="user-chevron ml-2" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"></polyline>
+  </svg>
+  ```
+- **Tampil di Semua Layar & Semua Dashboard:**
+  - Menghapus class pembatas `d-none d-sm-inline` sehingga ikon chevron muncul di SEMUA resolusi (ponsel cerdas, tablet, laptop, monitor TV).
+  - Berlaku merata di ketiga mode peran: **Super Admin, Bendahara, maupun Petugas**.
+- **Animasi Rotasi & Kontras Warna Modern:**
+  - Warna default `#64748b` (slate gray), berubah menjadi `#0f172a` saat hover, dan hijau `#10b981` saat menu terbuka.
+  - Transisi rotasi 180 derajat ke atas yang mulus saat dropdown dibuka (`.user-profile-card[aria-expanded="true"] .user-chevron`).
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html`
+   - Penambahan 3 baris fallback default di `<tbody id="tbodyUsersManagement">`.
+   - Refactoring fungsi `renderUsersTable()` dan `bukaModalEditUser()` dengan resolusi peran `activeUser`.
+   - Integrasi sinkronisasi live tabel `users` Supabase di `loadAllSupabaseData()`.
+   - Penggantian icon `fas fa-chevron-down` dengan SVG inline `.user-chevron` dan pembaruan CSS animasinya.
+2. `web-statis/js/admin-auth.js`
+   - Peningkatan sanitasi defensif dan penanganan error pada `AdminAuth.getUsers()`.
+3. Folder Mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`
+   - Sinkronisasi file `admin.html` dan `js/admin-auth.js`.
+4. `LATEST_UPDATE.md`
+   - Dokumentasi lengkap Bab 74.
+
+---
+
+### Status Pengujian:
+- ✅ Sintaks JavaScript `admin-auth.js` dan inline script `admin.html` lolos validasi `node -e` (0 syntax error).
+- ✅ Uji simulasi render baris tabel hak akses: Berhasil me-render 3 baris akun lengkap beserta badge dan tombol aksi sesuai peran aktif.
+- ✅ Uji deteksi Super Admin: Tombol Edit Akun aktif berfungsi dengan modal edit kredensial.
+- ✅ Uji SVG ikon chevron: Terverifikasi hadir tanpa `d-none` dan siap ditampilkan di semua dashboard.
+- ✅ Repositori lokal disinkronkan ke folder mandiri dan di-push ke GitHub remote `main`.
+
 
 
 

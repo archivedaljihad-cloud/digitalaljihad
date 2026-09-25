@@ -433,11 +433,19 @@
             display: block;
         }
         .user-chevron {
-            transition: transform 0.2s ease;
-            font-size: 0.72rem;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease, stroke 0.2s ease;
+            color: #64748b;
+            stroke: currentColor;
+            display: inline-block !important;
+            flex-shrink: 0;
+            vertical-align: middle;
+        }
+        .user-profile-card:hover .user-chevron {
+            color: #0f172a;
         }
         .user-profile-card[aria-expanded="true"] .user-chevron {
             transform: rotate(180deg);
+            color: var(--islamic-green);
         }
 
         /* DROPDOWN MENU KANAN ATAS (ANTI-CLIPPING 100% IN VIEWPORT) */
@@ -1180,7 +1188,9 @@
                                     <span class="auth-user-role-label user-display-role">Petugas</span>
                                 </div>
                                 <div class="sup-avatar auth-user-initial" style="width: 36px; height: 36px; font-size: 0.95rem;">A</div>
-                                <i class="fas fa-chevron-down ml-2 small text-muted user-chevron d-none d-sm-inline"></i>
+                                <svg class="user-chevron ml-2" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right user-dropdown-panel shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -2128,7 +2138,72 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyUsersManagement">
-                                        <!-- Di-render dinamis oleh renderUsersTable() -->
+                                        <tr>
+                                            <td class="font-weight-bold">3</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:#ffd700; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                                        A
+                                                    </div>
+                                                    <div>
+                                                        <strong class="text-gray-900">Administrator</strong>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><code>admin@aljihad.com</code></td>
+                                            <td><span class="badge badge-warning font-weight-bold px-2 py-1"><i class="fas fa-crown mr-1"></i> Super Admin</span></td>
+                                            <td><small class="text-muted">Akses Penuh 100% (Display TV, Reorder Slide ▲/▼, Keuangan, Pengguna, Sistem)</small></td>
+                                            <td><span class="badge badge-success">Aktif</span></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(3)" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px;">
+                                                    <i class="fas fa-user-edit mr-1"></i> Edit Akun
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">1</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:#10b981; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                                        H
+                                                    </div>
+                                                    <div>
+                                                        <strong class="text-gray-900">H. Sudirman (Bendahara)</strong>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><code>bendahara@aljihad.com</code></td>
+                                            <td><span class="badge badge-success font-weight-bold px-2 py-1"><i class="fas fa-wallet mr-1"></i> Bendahara</span></td>
+                                            <td><small class="text-muted">Buku Kas Utama, Kas Ambulance, Infaq, Laporan Kas & Export Excel</small></td>
+                                            <td><span class="badge badge-success">Aktif</span></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(1)" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px;">
+                                                    <i class="fas fa-user-edit mr-1"></i> Edit Akun
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">2</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:#38bdf8; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                                        U
+                                                    </div>
+                                                    <div>
+                                                        <strong class="text-gray-900">Ust. Ahmad (Operator DKM)</strong>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><code>petugas@aljihad.com</code></td>
+                                            <td><span class="badge badge-info font-weight-bold px-2 py-1"><i class="fas fa-tv mr-1"></i> Operator TV</span></td>
+                                            <td><small class="text-muted">Jadwal Sholat, Petugas Jum'at, Pengumuman, Teks Berjalan, Slide TV (Urutan Terkunci)</small></td>
+                                            <td><span class="badge badge-success">Aktif</span></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(2)" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px;">
+                                                    <i class="fas fa-user-edit mr-1"></i> Edit Akun
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -2678,6 +2753,7 @@
                 cachedRotationPages = JSON.parse(JSON.stringify(MASTER_ROTATION_PAGES));
             }
             renderRotationTable(cachedRotationPages);
+            renderUsersTable();
 
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
@@ -2919,96 +2995,135 @@
         }
 
         function renderUsersTable() {
-            const tbody = document.getElementById('tbodyUsersManagement');
-            if (!tbody) return;
+            try {
+                const tbody = document.getElementById('tbodyUsersManagement');
+                if (!tbody) return;
 
-            const isSuperAdmin = (currentUser && (currentUser.role === 'admin' || currentUser.role_id === 3));
-            const alertNonAdmin = document.getElementById('alertNonSuperAdminUsers');
-            const badgeIndicator = document.getElementById('badgeSuperAdminOnlyIndicator');
+                const activeUser = (currentUser || (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getCurrentUser === 'function' ? AdminAuth.getCurrentUser() : null));
+                const isSuperAdmin = (activeUser && (activeUser.role === 'admin' || activeUser.role_id === 3));
+                const alertNonAdmin = document.getElementById('alertNonSuperAdminUsers');
+                const badgeIndicator = document.getElementById('badgeSuperAdminOnlyIndicator');
 
-            if (alertNonAdmin) {
-                if (isSuperAdmin) {
-                    alertNonAdmin.classList.add('d-none');
-                } else {
-                    alertNonAdmin.classList.remove('d-none');
-                }
-            }
-
-            if (badgeIndicator) {
-                if (isSuperAdmin) {
-                    badgeIndicator.className = 'badge badge-warning font-weight-bold px-3 py-2';
-                    badgeIndicator.innerHTML = '<i class="fas fa-shield-alt mr-1"></i> Mode Super Admin: Akses Edit Aktif';
-                } else {
-                    badgeIndicator.className = 'badge badge-secondary font-weight-bold px-3 py-2';
-                    badgeIndicator.innerHTML = '<i class="fas fa-lock mr-1"></i> Mode Read-Only (Hanya Super Admin)';
-                }
-            }
-
-            const users = (typeof AdminAuth !== 'undefined') ? AdminAuth.getUsers() : DEFAULT_AUTH_USERS;
-
-            const badgeCount = document.getElementById('badgeTotalUsersCount');
-            if (badgeCount) badgeCount.textContent = `${users.length} Akun Terdaftar`;
-
-            tbody.innerHTML = '';
-
-            users.forEach((u, idx) => {
-                const tr = document.createElement('tr');
-
-                // Role badge
-                let roleBadge = '';
-                let scopeDesc = '';
-                if (u.role === 'admin') {
-                    roleBadge = '<span class="badge badge-warning font-weight-bold px-2 py-1"><i class="fas fa-crown mr-1"></i> Super Admin</span>';
-                    scopeDesc = 'Akses Penuh 100% (Display TV, Reorder Slide ▲/▼, Keuangan, Pengguna, Sistem)';
-                } else if (u.role === 'bendahara') {
-                    roleBadge = '<span class="badge badge-success font-weight-bold px-2 py-1"><i class="fas fa-wallet mr-1"></i> Bendahara</span>';
-                    scopeDesc = 'Buku Kas Utama, Kas Ambulance, Infaq, Laporan Kas & Export Excel';
-                } else {
-                    roleBadge = '<span class="badge badge-info font-weight-bold px-2 py-1"><i class="fas fa-tv mr-1"></i> Operator TV</span>';
-                    scopeDesc = 'Jadwal Sholat, Petugas Jum\'at, Pengumuman, Teks Berjalan, Slide TV (Urutan Terkunci)';
+                if (alertNonAdmin) {
+                    if (isSuperAdmin) {
+                        alertNonAdmin.classList.add('d-none');
+                    } else {
+                        alertNonAdmin.classList.remove('d-none');
+                    }
                 }
 
-                // Edit button
-                let editBtnHtml = '';
-                if (isSuperAdmin) {
-                    editBtnHtml = `
-                        <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(${u.id})" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px;">
-                            <i class="fas fa-user-edit mr-1"></i> Edit Akun
-                        </button>
-                    `;
-                } else {
-                    editBtnHtml = `
-                        <button class="btn btn-sm btn-secondary disabled" disabled title="Hanya Super Admin yang berhak mengedit" style="cursor: not-allowed; opacity: 0.5; border-radius: 6px;">
-                            <i class="fas fa-lock mr-1"></i> Terkunci
-                        </button>
-                    `;
+                if (badgeIndicator) {
+                    if (isSuperAdmin) {
+                        badgeIndicator.className = 'badge badge-warning font-weight-bold px-3 py-2';
+                        badgeIndicator.innerHTML = '<i class="fas fa-shield-alt mr-1"></i> Mode Super Admin: Akses Edit Aktif';
+                    } else {
+                        badgeIndicator.className = 'badge badge-secondary font-weight-bold px-3 py-2';
+                        badgeIndicator.innerHTML = '<i class="fas fa-lock mr-1"></i> Mode Read-Only (Hanya Super Admin)';
+                    }
                 }
 
-                tr.innerHTML = `
-                    <td class="font-weight-bold">${u.id || (idx + 1)}</td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:${u.color || '#ffd700'}; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                ${(u.name || 'U').charAt(0).toUpperCase()}
+                let rawUsers = [];
+                if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getUsers === 'function') {
+                    try {
+                        rawUsers = AdminAuth.getUsers();
+                    } catch (e) {
+                        console.warn('Gagal memanggil AdminAuth.getUsers:', e);
+                    }
+                }
+                if (!Array.isArray(rawUsers) || rawUsers.length === 0) {
+                    rawUsers = (typeof DEFAULT_AUTH_USERS !== 'undefined') ? DEFAULT_AUTH_USERS : [];
+                }
+
+                // Normalisasi dan sanitasi setiap akun pengguna
+                const users = [];
+                rawUsers.forEach((u, idx) => {
+                    if (!u || typeof u !== 'object') return;
+                    users.push({
+                        id: u.id || (idx + 1),
+                        name: u.name || 'Pengguna',
+                        email: u.email || 'user@aljihad.com',
+                        username: u.username || (u.email ? u.email.split('@')[0] : 'user'),
+                        role: u.role || (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas')),
+                        role_id: u.role_id || (u.role === 'admin' ? 3 : (u.role === 'bendahara' ? 1 : 2)),
+                        role_label: u.role_label || (u.role === 'admin' ? 'Super Admin' : (u.role === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator')),
+                        color: u.color || (u.role === 'admin' ? '#ffd700' : (u.role === 'bendahara' ? '#10b981' : '#38bdf8'))
+                    });
+                });
+
+                // Jika setelah disanitasi kosong, fallback ke DEFAULT_AUTH_USERS
+                if (users.length === 0 && typeof DEFAULT_AUTH_USERS !== 'undefined') {
+                    DEFAULT_AUTH_USERS.forEach(d => users.push(Object.assign({}, d)));
+                }
+
+                const badgeCount = document.getElementById('badgeTotalUsersCount');
+                if (badgeCount) badgeCount.textContent = `${users.length} Akun Terdaftar`;
+
+                tbody.innerHTML = '';
+
+                users.forEach((u, idx) => {
+                    const tr = document.createElement('tr');
+
+                    // Role badge & deskripsi hak akses
+                    let roleBadge = '';
+                    let scopeDesc = '';
+                    if (u.role === 'admin') {
+                        roleBadge = '<span class="badge badge-warning font-weight-bold px-2 py-1"><i class="fas fa-crown mr-1"></i> Super Admin</span>';
+                        scopeDesc = 'Akses Penuh 100% (Display TV, Reorder Slide ▲/▼, Keuangan, Pengguna, Sistem)';
+                    } else if (u.role === 'bendahara') {
+                        roleBadge = '<span class="badge badge-success font-weight-bold px-2 py-1"><i class="fas fa-wallet mr-1"></i> Bendahara</span>';
+                        scopeDesc = 'Buku Kas Utama, Kas Ambulance, Infaq, Laporan Kas & Export Excel';
+                    } else {
+                        roleBadge = '<span class="badge badge-info font-weight-bold px-2 py-1"><i class="fas fa-tv mr-1"></i> Operator TV</span>';
+                        scopeDesc = 'Jadwal Sholat, Petugas Jum\'at, Pengumuman, Teks Berjalan, Slide TV (Urutan Terkunci)';
+                    }
+
+                    // Tombol aksi Edit Akun
+                    let editBtnHtml = '';
+                    if (isSuperAdmin) {
+                        editBtnHtml = `
+                            <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(${u.id})" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px;">
+                                <i class="fas fa-user-edit mr-1"></i> Edit Akun
+                            </button>
+                        `;
+                    } else {
+                        editBtnHtml = `
+                            <button class="btn btn-sm btn-secondary disabled" disabled title="Hanya Super Admin yang berhak mengedit" style="cursor: not-allowed; opacity: 0.5; border-radius: 6px;">
+                                <i class="fas fa-lock mr-1"></i> Terkunci
+                            </button>
+                        `;
+                    }
+
+                    const initialLetter = (u.name || 'U').trim().charAt(0).toUpperCase();
+
+                    tr.innerHTML = `
+                        <td class="font-weight-bold">${u.id || (idx + 1)}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:${u.color || '#ffd700'}; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                    ${initialLetter}
+                                </div>
+                                <div>
+                                    <strong class="text-gray-900">${escapeHtml(u.name || '-')}</strong>
+                                </div>
                             </div>
-                            <div>
-                                <strong class="text-gray-900">${escapeHtml(u.name || '-')}</strong>
-                            </div>
-                        </div>
-                    </td>
-                    <td><code>${escapeHtml(u.email || '-')}</code></td>
-                    <td>${roleBadge}</td>
-                    <td><small class="text-muted">${scopeDesc}</small></td>
-                    <td><span class="badge badge-success">Aktif</span></td>
-                    <td class="text-center">${editBtnHtml}</td>
-                `;
+                        </td>
+                        <td><code>${escapeHtml(u.email || '-')}</code></td>
+                        <td>${roleBadge}</td>
+                        <td><small class="text-muted">${scopeDesc}</small></td>
+                        <td><span class="badge badge-success">Aktif</span></td>
+                        <td class="text-center">${editBtnHtml}</td>
+                    `;
 
-                tbody.appendChild(tr);
-            });
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error('Error saat renderUsersTable:', err);
+            }
         }
 
         function bukaModalEditUser(userId) {
-            if (!currentUser || (currentUser.role !== 'admin' && currentUser.role_id !== 3)) {
+            const activeUser = (currentUser || (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getCurrentUser === 'function' ? AdminAuth.getCurrentUser() : null));
+            if (!activeUser || (activeUser.role !== 'admin' && activeUser.role_id !== 3)) {
                 alert('Akses Ditolak: Hanya Super Admin yang berhak mengedit akun pengguna!');
                 return;
             }
@@ -3312,6 +3427,47 @@
             } catch (err) {
                 console.warn('Gagal memuat app_settings:', err);
                 renderAdminQurbanTable(DEFAULT_ADMIN_QURBAN_DATA);
+            }
+
+            // F. Muat Akun Pengguna dari Supabase jika ada & sinkronkan
+            try {
+                const resUsers = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=*`, { headers });
+                if (resUsers.ok) {
+                    const sbUsers = await resUsers.json();
+                    if (Array.isArray(sbUsers) && sbUsers.length > 0) {
+                        let currentUsers = (typeof AdminAuth !== 'undefined') ? AdminAuth.getUsers() : [...DEFAULT_AUTH_USERS];
+                        sbUsers.forEach(sbu => {
+                            if (!sbu || !sbu.email) return;
+                            const exists = currentUsers.find(u => u && u.email && u.email.toLowerCase() === sbu.email.toLowerCase());
+                            if (!exists) {
+                                let r = 'petugas';
+                                let rl = 'Petugas / Operator';
+                                let c = '#38bdf8';
+                                if (sbu.role_id === 1 || String(sbu.email).includes('bendahara')) {
+                                    r = 'bendahara'; rl = 'Bendahara Kas'; c = '#10b981';
+                                } else if (sbu.role_id === 3 || String(sbu.email).includes('admin') || (sbu.name && sbu.name.toLowerCase().includes('admin'))) {
+                                    r = 'admin'; rl = 'Super Admin'; c = '#ffd700';
+                                }
+                                currentUsers.push({
+                                    id: sbu.id || (currentUsers.length + 1),
+                                    name: sbu.name || (sbu.last_name ? `Admin ${sbu.last_name}` : 'Pengurus Masjid'),
+                                    email: sbu.email,
+                                    username: sbu.email.split('@')[0],
+                                    role: r,
+                                    role_id: sbu.role_id || (r === 'admin' ? 3 : (r === 'bendahara' ? 1 : 2)),
+                                    role_label: rl,
+                                    color: c
+                                });
+                            }
+                        });
+                        try {
+                            localStorage.setItem('aljihad_users_list', JSON.stringify(currentUsers));
+                        } catch (e) {}
+                        renderUsersTable();
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal memuat users dari Supabase:', err);
             }
         }
 

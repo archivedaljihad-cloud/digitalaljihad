@@ -61,14 +61,30 @@ const AdminAuth = {
             if (raw) {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed;
+                    const sanitized = parsed.filter(u => u && typeof u === 'object' && (u.name || u.email));
+                    if (sanitized.length > 0) {
+                        return sanitized.map(u => ({
+                            id: u.id || 1,
+                            name: u.name || 'Pengguna',
+                            email: u.email || 'user@aljihad.com',
+                            username: u.username || (u.email ? u.email.split('@')[0] : 'user'),
+                            password: u.password || 'admin123',
+                            role: u.role || (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas')),
+                            role_id: u.role_id || (u.role === 'admin' ? 3 : (u.role === 'bendahara' ? 1 : 2)),
+                            role_label: u.role_label || (u.role === 'admin' ? 'Super Admin' : (u.role === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator')),
+                            role_icon: u.role_icon || (u.role === 'admin' ? 'fa-shield-alt' : (u.role === 'bendahara' ? 'fa-wallet' : 'fa-tv')),
+                            color: u.color || (u.role === 'admin' ? '#ffd700' : (u.role === 'bendahara' ? '#10b981' : '#38bdf8'))
+                        }));
+                    }
                 }
             }
         } catch (e) {
             console.warn('Gagal membaca users dari localStorage:', e);
         }
-        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(DEFAULT_AUTH_USERS));
-        return [...DEFAULT_AUTH_USERS];
+        try {
+            localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(DEFAULT_AUTH_USERS));
+        } catch (e) {}
+        return JSON.parse(JSON.stringify(DEFAULT_AUTH_USERS));
     },
 
     /**
