@@ -3067,6 +3067,51 @@ Berdasarkan arahan pengguna untuk membuat tampilan halaman login lebih bersih (*
 - ✅ Markup HTML bersih dan struktur kartu login terverifikasi proporsional.
 - ✅ Sinkronisasi otomatis ke lokal mandiri, Git remote `main`, dan live deployment Cloudflare.
 
+---
+
+## 🔧 BAB 78: PERBAIKAN BUG MODAL EDIT AKUN FREEZE: RESTORASI PENUTUP TAG MODAL QURBAN & ISOLASI MODAL EDIT USER DENGAN Z-INDEX 1060
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Antigravity AI UI/UX Specialist
+
+---
+
+### Gejala Masalah:
+Saat Super Admin mengklik tombol **"Edit Akun"** berwarna kuning pada tabel **Kelola Hak Akses Pengguna** (`view-users`), halaman mendadak membeku (*freeze*), layar tertutup lapisan transparan gelap, dan tidak muncul dialog apapun sehingga seluruh klik menjadi tidak merespons.
+
+---
+
+### Akar Masalah (*Root Cause*):
+1. **Kurangnya Tag Penutup `</div>` pada Modal Sebelumnya:**
+   - Elemen `#modalTambahQurban` (Modal Penerimaan Qurban) kehilangan 1 tag penutup `</div>` level terluar.
+   - Akibatnya, elemen `#modalEditUser` (Modal Edit Pengguna) secara tidak sengaja ter-sarang (*nested*) di dalam kontainer `#modalTambahQurban`.
+2. **Konflik Visibilitas Bootstrap Modal:**
+   - Kontainer `#modalTambahQurban` dalam keadaan default memiliki CSS `display: none`.
+   - Ketika JavaScript memanggil `$('#modalEditUser').modal('show')`, Bootstrap menambahkan elemen `.modal-backdrop` berlapisan gelap ke `<body>`.
+   - Namun, karena elemen dialog `#modalEditUser` terkurung di dalam elemen induk yang berstatus `display: none`, dialog tidak dapat tampil ke layar.
+   - Layar pengguna pun tertutup backdrop gelap tanpa ada tombol yang bisa diklik untuk menutupnya (*halaman tampak membeku / freeze*).
+
+---
+
+### Solusi & Perbaikan yang Diterapkan:
+1. **Penambahan Penutup `</div>` pada `#modalTambahQurban`:**
+   - Menutup seluruh hierarki kontainer modal qurban secara presisi (`modal-content` -> `modal-dialog` -> `modal`).
+   - Telah divalidasi dengan Node.js AST validator: 15 tag pembuka `<div>` diimbangi tepat oleh 15 tag penutup `</div>`.
+2. **Isolasi Penuh `#modalEditUser`:**
+   - Elemen `#modalEditUser` kini berdiri independen di root dokumen.
+   - Ditambahkan properti inline `style="z-index: 1060;"` untuk menjamin dialog modal selalu tampil di atas backdrop hitam Bootstrap (`z-index: 1040`).
+3. **Pengujian Fungsionalitas:**
+   - Ketika tombol "Edit Akun" diklik, modal edit kredensial (Nama, Email, Password Baru, Role) muncul seketika di tengah layar dengan animasi halus dan latar belakang *Islamic Gold & Dark Green*.
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Restorasi penutup `</div>` dan penyesuaian z-index `#modalEditUser`).
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 78).
+3. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html`.
+4. Cloudflare Deployment & Git Remote Repository (`digitalaljihad.my.id`).
+
+
 
 
 
