@@ -45,9 +45,14 @@
                 { page: '/slide-embed', path: 'slides/slide.html', name: 'Poster & Brosur Slide', active: true, order: 7 },
                 { page: '/ambulance-embed', path: 'slides/ambulance.html', name: 'Kas Mobil Ambulance', active: true, order: 8 },
                 { page: '/infaq-embed', path: 'slides/infaq.html', name: 'Program Donasi Infaq', active: true, order: 9 },
-                { page: '/hikmah-embed', path: 'slides/hikmah.html', name: 'Mutiara Hadits Hikmah', active: true, order: 10 },
-                { page: '/yasin-embed', path: 'slides/yasin.html', name: 'Surat Yaasiin 83 Ayat', active: true, order: 11 },
-                { page: '/qurban-embed', path: 'slides/qurban.html', name: 'Penerimaan Hewan Qurban', active: true, order: 12 }
+                { page: '/hikmah-embed', path: 'slides/hikmah.html', name: 'Mutiara Hadits & Hikmah', active: true, order: 10 },
+                { page: '/qurban-embed', path: 'slides/qurban.html', name: 'Penerimaan Hewan Qurban', active: true, order: 11 },
+                { page: '/yasin-embed', path: 'slides/yasin.html', name: 'Surat Yaasiin 83 Ayat', active: true, order: 12 },
+                { page: '/live-mekah-embed', path: 'slides/live-mekah.html', name: 'Live TV Makkah (Masjidil Haram)', active: true, order: 13 },
+                { page: '/live-madinah-embed', path: 'slides/live-madinah.html', name: 'Live TV Madinah (Masjid Nabawi)', active: true, order: 14 },
+                { page: '/live-mimbar-embed', path: 'slides/live-mimbar.html', name: 'Live CCTV Mimbar Khutbah', active: true, order: 15 },
+                { page: '/idul-fitri-embed', path: 'slides/idul-fitri.html', name: 'Petugas Sholat Idul Fitri', active: false, order: 16 },
+                { page: '/idul-adha-embed', path: 'slides/idul-adha.html', name: 'Petugas Sholat Idul Adha', active: false, order: 17 }
             ]
         },
 

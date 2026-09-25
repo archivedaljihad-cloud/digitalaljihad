@@ -1499,27 +1499,41 @@
 
 
                     <!-- ==========================================
-                         VIEW 4: ROTASI TV & REORDER PRIORITAS (Bab 47 & 52)
+                         VIEW 4: ROTASI TV & REORDER PRIORITAS (17 Halaman Lengkap)
                          ========================================== -->
                     <div id="view-rotasi-tv" class="section-view">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div>
-                                <h4 class="font-weight-bold text-gray-800 mb-0">
+                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4">
+                            <div class="mb-3 mb-md-0">
+                                <h4 class="font-weight-bold text-gray-800 mb-1">
                                     <i class="fas fa-exchange-alt text-success mr-2"></i> Rotasi Halaman Display TV
                                 </h4>
-                                <small class="text-muted">Urutan tayang slide TV. Super Admin dapat memindah urutan (▲/▼), Operator hanya aktif/nonaktif.</small>
+                                <small class="text-muted">Kelola urutan dan status aktif seluruh 17 halaman tayang slide TV. Super Admin dapat memindah urutan (▲/▼), Operator hanya aktif/nonaktif.</small>
                             </div>
-                            <button class="btn btn-success" onclick="simpanRotasiTV()">
-                                <i class="fas fa-save mr-1"></i> Simpan Rotasi
-                            </button>
+                            <div class="d-flex flex-wrap align-items-center">
+                                <button class="btn btn-outline-secondary btn-sm mr-2 mb-1" onclick="resetRotationPagesToDefault()" title="Kembalikan urutan ke default">
+                                    <i class="fas fa-undo mr-1"></i> Reset Default
+                                </button>
+                                <button class="btn btn-outline-success btn-sm mr-2 mb-1" onclick="setAllRotationPagesActive(true)" title="Aktifkan seluruh halaman">
+                                    <i class="fas fa-check-double mr-1"></i> Aktifkan Semua
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm mr-2 mb-1" onclick="setAllRotationPagesActive(false)" title="Nonaktifkan seluruh halaman">
+                                    <i class="fas fa-ban mr-1"></i> Matikan Semua
+                                </button>
+                                <button class="btn btn-success btn-sm mb-1 font-weight-bold px-3" onclick="simpanRotasiTV()">
+                                    <i class="fas fa-save mr-1"></i> Simpan Rotasi
+                                </button>
+                            </div>
                         </div>
 
                         <div class="content-card">
-                            <div class="content-card-header">
-                                <h6 class="content-card-title">
-                                    <i class="fas fa-list-ol"></i> Daftar Halaman Layar Display TV
-                                </h6>
-                                <span class="badge badge-info" id="badgeRotasiRole">Mode: Super Admin (Reorder Aktif)</span>
+                            <div class="content-card-header d-flex flex-wrap align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="content-card-title mb-0 mr-3">
+                                        <i class="fas fa-list-ol text-success mr-1"></i> Daftar Seluruh 17 Halaman Layar Display TV
+                                    </h6>
+                                    <span class="badge badge-success font-weight-bold px-3 py-2" id="badgeRotasiActiveCount">15 dari 17 Halaman Aktif</span>
+                                </div>
+                                <span class="badge badge-info mt-2 mt-md-0" id="badgeRotasiRole">Mode: Super Admin (Reorder Aktif)</span>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-custom table-hover">
@@ -1529,34 +1543,12 @@
                                             <th>Nama Halaman Slide</th>
                                             <th>Berkas Slide</th>
                                             <th style="width: 175px;" class="text-center">Pratinjau Layar TV</th>
-                                            <th style="width: 120px;" class="text-center">Status Aktif</th>
+                                            <th style="width: 130px;" class="text-center">Status Aktif</th>
                                             <th style="width: 130px;" class="text-center">Aksi Reorder</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rotationTableBody">
-                                        <tr data-index="1">
-                                            <td class="font-weight-bold text-center">1</td>
-                                            <td><strong>Jadwal Sholat 5 Waktu</strong></td>
-                                            <td><code>slides/utama.html</code></td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-info font-weight-bold mr-1" onclick="bukaPreviewSlide('slides/utama.html', 'Jadwal Sholat 5 Waktu')">
-                                                    <i class="fas fa-desktop mr-1"></i> Preview
-                                                </button>
-                                                <a href="slides/utama.html" target="_blank" class="btn btn-sm btn-outline-secondary" title="Buka Tab Baru">
-                                                    <i class="fas fa-external-link-alt"></i>
-                                                </a>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="custom-control custom-switch d-inline-block">
-                                                    <input type="checkbox" class="custom-control-input" id="rotCheck1" checked>
-                                                    <label class="custom-control-label font-weight-bold text-success" for="rotCheck1">Aktif</label>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(1, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(1, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
-                                            </td>
-                                        </tr>
+                                        <!-- Baris di-render secara dinamis oleh JavaScript -->
                                     </tbody>
                                 </table>
                             </div>
@@ -2441,6 +2433,86 @@
         let cachedRotationPages = [];
         let cachedQurbanData = [];
 
+        // Master List Resmi Seluruh 17 Halaman Layar Display TV Masjid Jami' Al-Jihad
+        const MASTER_ROTATION_PAGES = [
+            { order: 1, name: 'Jadwal Sholat 5 Waktu', path: 'slides/utama.html', url: 'slides/utama.html', page: '/utama-embed', category: 'Utama / Sholat', category_color: 'primary', active: true },
+            { order: 2, name: 'Laporan Kas Masjid', path: 'slides/keuangan.html', url: 'slides/keuangan.html', page: '/keuangan-embed', category: 'Keuangan', category_color: 'success', active: true },
+            { order: 3, name: 'Petugas Sholat Jum\'at', path: 'slides/jumat.html', url: 'slides/jumat.html', page: '/jumat-embed', category: 'Jum\'at', category_color: 'warning text-dark', active: true },
+            { order: 4, name: 'Pengumuman DKM', path: 'slides/pengumuman.html', url: 'slides/pengumuman.html', page: '/pengumuman-embed', category: 'Informasi', category_color: 'info', active: true },
+            { order: 5, name: 'Grafik Arus Kas', path: 'slides/keuangan-summary.html', url: 'slides/keuangan-summary.html', page: '/keuangan-summary-embed', category: 'Keuangan', category_color: 'success', active: true },
+            { order: 6, name: 'QRIS Donasi & Infaq', path: 'slides/qris.html', url: 'slides/qris.html', page: '/qris-embed', category: 'Donasi', category_color: 'danger', active: true },
+            { order: 7, name: 'Poster & Brosur Slide', path: 'slides/slide.html', url: 'slides/slide.html', page: '/slide-embed', category: 'Media', category_color: 'secondary', active: true },
+            { order: 8, name: 'Kas Layanan Ambulance', path: 'slides/ambulance.html', url: 'slides/ambulance.html', page: '/ambulance-embed', category: 'Ambulance', category_color: 'danger', active: true },
+            { order: 9, name: 'Program Donasi Infaq', path: 'slides/infaq.html', url: 'slides/infaq.html', page: '/infaq-embed', category: 'Infaq', category_color: 'success', active: true },
+            { order: 10, name: 'Mutiara Hadits & Hikmah', path: 'slides/hikmah.html', url: 'slides/hikmah.html', page: '/hikmah-embed', category: 'Dakwah AI', category_color: 'dark', active: true },
+            { order: 11, name: 'Penerimaan Hewan Qurban', path: 'slides/qurban.html', url: 'slides/qurban.html', page: '/qurban-embed', category: 'Idul Adha', category_color: 'warning text-dark', active: true },
+            { order: 12, name: 'Surat Yaasiin 83 Ayat', path: 'slides/yasin.html', url: 'slides/yasin.html', page: '/yasin-embed', category: 'Ibadah', category_color: 'primary', active: true },
+            { order: 13, name: 'Live TV Makkah (Masjidil Haram)', path: 'slides/live-mekah.html', url: 'slides/live-mekah.html', page: '/live-mekah-embed', category: 'Live TV', category_color: 'danger', active: true },
+            { order: 14, name: 'Live TV Madinah (Masjid Nabawi)', path: 'slides/live-madinah.html', url: 'slides/live-madinah.html', page: '/live-madinah-embed', category: 'Live TV', category_color: 'success', active: true },
+            { order: 15, name: 'Live CCTV Mimbar Khutbah', path: 'slides/live-mimbar.html', url: 'slides/live-mimbar.html', page: '/live-mimbar-embed', category: 'CCTV Mimbar', category_color: 'warning text-dark', active: true },
+            { order: 16, name: 'Petugas Sholat Idul Fitri', path: 'slides/idul-fitri.html', url: 'slides/idul-fitri.html', page: '/idul-fitri-embed', category: 'Hari Raya', category_color: 'info', active: false },
+            { order: 17, name: 'Petugas Sholat Idul Adha', path: 'slides/idul-adha.html', url: 'slides/idul-adha.html', page: '/idul-adha-embed', category: 'Hari Raya', category_color: 'info', active: false }
+        ];
+
+        // Normalisasi array rotasi agar ke-17 halaman dijamin 100% selalu ada
+        function normalizeRotationPages(input) {
+            let list = input;
+            if (typeof list === 'string') {
+                try { list = JSON.parse(list); } catch (e) { list = null; }
+            }
+            if (!Array.isArray(list) || list.length === 0) {
+                return JSON.parse(JSON.stringify(MASTER_ROTATION_PAGES));
+            }
+
+            const result = [];
+            const handledMasterUrls = new Set();
+
+            // 1. Masukkan item tersimpan yang cocok dengan master
+            list.forEach((item, idx) => {
+                const itemUrl = (item.path || item.url || item.page || '').trim();
+                const matchedMaster = MASTER_ROTATION_PAGES.find(m => {
+                    const mUrl = m.url.toLowerCase();
+                    const mPage = m.page.toLowerCase();
+                    const iUrl = itemUrl.toLowerCase();
+                    return mUrl === iUrl || mPage === iUrl || iUrl.includes(mUrl.replace('slides/', '').replace('.html', ''));
+                });
+
+                if (matchedMaster) {
+                    handledMasterUrls.add(matchedMaster.url);
+                    result.push({
+                        order: idx + 1,
+                        name: item.name || item.title || matchedMaster.name,
+                        title: item.name || item.title || matchedMaster.name,
+                        path: matchedMaster.url,
+                        url: matchedMaster.url,
+                        page: matchedMaster.page,
+                        category: matchedMaster.category,
+                        category_color: matchedMaster.category_color,
+                        active: (item.active !== false)
+                    });
+                }
+            });
+
+            // 2. Tambahkan sisa halaman master yang belum ada
+            MASTER_ROTATION_PAGES.forEach(m => {
+                if (!handledMasterUrls.has(m.url)) {
+                    result.push({
+                        order: result.length + 1,
+                        name: m.name,
+                        title: m.name,
+                        path: m.url,
+                        url: m.url,
+                        page: m.page,
+                        category: m.category,
+                        category_color: m.category_color,
+                        active: m.active
+                    });
+                }
+            });
+
+            return result;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof AdminAuth !== 'undefined') {
                 currentUser = AdminAuth.requireAuth('login.html');
@@ -2453,6 +2525,19 @@
             startTopbarClock();
             initDateInputs();
             initSidebarToggle();
+
+            // Inisialisasi awal tabel rotasi (langsung dari cache lokal atau master 17 halaman)
+            try {
+                const localRot = localStorage.getItem('cached_rotation_pages');
+                if (localRot) {
+                    cachedRotationPages = normalizeRotationPages(localRot);
+                } else {
+                    cachedRotationPages = JSON.parse(JSON.stringify(MASTER_ROTATION_PAGES));
+                }
+            } catch (e) {
+                cachedRotationPages = JSON.parse(JSON.stringify(MASTER_ROTATION_PAGES));
+            }
+            renderRotationTable(cachedRotationPages);
 
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
@@ -2602,6 +2687,8 @@
 
             if (sectionName === 'users') {
                 renderUsersTable();
+            } else if (sectionName === 'rotasi-tv') {
+                renderRotationTable(cachedRotationPages);
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2970,13 +3057,20 @@
                             }
                         }
 
-                        // Rotasi TV Count & Render Tabel Rotasi
-                        if (s.rotation_pages && Array.isArray(s.rotation_pages)) {
-                            cachedRotationPages = s.rotation_pages;
-                            renderRotationTable(s.rotation_pages);
-                            const activeCount = s.rotation_pages.filter(p => p.active !== false).length;
-                            if (document.getElementById('statStatusTV')) document.getElementById('statStatusTV').textContent = `${activeCount} Halaman Aktif`;
+                        // Rotasi TV Count & Render Seluruh 17 Tabel Rotasi
+                        let rotPages = s.rotation_pages;
+                        if (typeof rotPages === 'string') {
+                            try { rotPages = JSON.parse(rotPages); } catch (e) {}
                         }
+                        if (rotPages) {
+                            cachedRotationPages = normalizeRotationPages(rotPages);
+                        } else {
+                            cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
+                        }
+                        localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
+                        renderRotationTable(cachedRotationPages);
+                        const activeCount = cachedRotationPages.filter(p => p.active !== false).length;
+                        if (document.getElementById('statStatusTV')) document.getElementById('statStatusTV').textContent = `${activeCount} Halaman Aktif`;
 
                         // Data Qurban Idul Adha
                         if (s.qurban_jam_sembelih && document.getElementById('inputQurbanJam')) {
@@ -3179,39 +3273,32 @@
             }
         }
 
-        // Render Rotation Table
+        // Render Rotation Table (Menampilkan seluruh 17 halaman display TV)
         function renderRotationTable(pages) {
-            if (!pages || !Array.isArray(pages) || pages.length === 0) return;
             const tbody = document.getElementById('rotationTableBody');
             if (!tbody) return;
 
-            // Pastikan slide Qurban ada di list
-            const hasQurban = pages.some(p => {
-                const url = p.path || p.url || p.page || '';
-                return url.includes('qurban');
-            });
-            if (!hasQurban) {
-                pages.push({
-                    name: 'Penerimaan Hewan Qurban',
-                    title: 'Penerimaan Hewan Qurban',
-                    path: 'slides/qurban.html',
-                    url: 'slides/qurban.html',
-                    page: '/qurban-embed',
-                    active: true,
-                    order: pages.length + 1
-                });
-            }
+            const normalized = normalizeRotationPages(pages);
+            cachedRotationPages = normalized;
 
-            tbody.innerHTML = pages.map((p, idx) => {
+            tbody.innerHTML = normalized.map((p, idx) => {
                 const isChecked = (p.active !== false) ? 'checked' : '';
-                const title = p.name || p.title || p.nama || `Slide ${idx + 1}`;
-                const url = p.path || p.url || p.page || `slides/slide${idx + 1}.html`;
+                const title = p.name || p.title || `Slide ${idx + 1}`;
+                const url = p.path || p.url || `slides/slide${idx + 1}.html`;
+                const cat = p.category || 'Display';
+                const catColor = p.category_color || 'secondary';
+
                 return `
                     <tr data-index="${idx + 1}">
-                        <td class="font-weight-bold text-center">${idx + 1}</td>
-                        <td><strong>${title}</strong></td>
-                        <td><code>${url}</code></td>
-                        <td class="text-center">
+                        <td class="font-weight-bold text-center align-middle">${idx + 1}</td>
+                        <td class="align-middle">
+                            <div class="d-flex align-items-center">
+                                <span class="badge badge-${catColor} font-weight-bold mr-2 badge-slide-category" style="font-size: 11px; min-width: 80px; text-align: center;">${cat}</span>
+                                <strong class="text-gray-900">${title}</strong>
+                            </div>
+                        </td>
+                        <td class="align-middle"><code class="text-muted font-weight-bold">${url}</code></td>
+                        <td class="text-center align-middle">
                             <button class="btn btn-sm btn-outline-info font-weight-bold mr-1" onclick="bukaPreviewSlide('${url}', '${title.replace(/'/g, "\\'")}')" title="Pratinjau Layar TV di Modal">
                                 <i class="fas fa-desktop mr-1"></i> Preview
                             </button>
@@ -3219,28 +3306,30 @@
                                 <i class="fas fa-external-link-alt"></i>
                             </a>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center align-middle">
                             <div class="custom-control custom-switch d-inline-block">
-                                <input type="checkbox" class="custom-control-input" id="rotCheck${idx + 1}" ${isChecked}>
-                                <label class="custom-control-label font-weight-bold text-success" for="rotCheck${idx + 1}">Aktif</label>
+                                <input type="checkbox" class="custom-control-input" id="rotCheck${idx + 1}" ${isChecked} onchange="handleRotationSwitchChange(this)">
+                                <label class="custom-control-label font-weight-bold ${p.active !== false ? 'text-success' : 'text-muted'}" for="rotCheck${idx + 1}">${p.active !== false ? 'Aktif' : 'Nonaktif'}</label>
                             </div>
                         </td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(${idx + 1}, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
-                            <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(${idx + 1}, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
+                        <td class="text-center align-middle">
+                            <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up mr-1" onclick="reorderSlide(this, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
+                            <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(this, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
                         </td>
                     </tr>
                 `;
             }).join('');
 
-            // Terapkan kembali hak akses reorder
+            updateActiveRotationCountBadge();
+
+            // Terapkan hak akses reorder Super Admin
             if (currentUser) {
-                const isSuperAdmin = (currentUser.role === 'admin');
+                const isSuperAdmin = (currentUser.role === 'admin' || currentUser.role_id === 3);
                 document.querySelectorAll('.btn-reorder').forEach(btn => {
                     btn.disabled = !isSuperAdmin;
                     if (!isSuperAdmin) {
                         btn.classList.add('disabled');
-                        btn.style.opacity = '0.4';
+                        btn.style.opacity = '0.35';
                         btn.style.cursor = 'not-allowed';
                     } else {
                         btn.classList.remove('disabled');
@@ -3248,7 +3337,75 @@
                         btn.style.cursor = 'pointer';
                     }
                 });
+
+                const roleBadge = document.getElementById('badgeRotasiRole');
+                if (roleBadge) {
+                    if (isSuperAdmin) {
+                        roleBadge.className = 'badge badge-warning font-weight-bold px-3 py-2';
+                        roleBadge.innerHTML = '<i class="fas fa-shield-alt mr-1"></i> Mode Super Admin (Reorder ▲/▼ Aktif)';
+                    } else {
+                        roleBadge.className = 'badge badge-secondary font-weight-bold px-3 py-2';
+                        roleBadge.innerHTML = '<i class="fas fa-lock mr-1"></i> Mode Operator (Urutan Terkunci)';
+                    }
+                }
             }
+        }
+
+        // Event handler switch aktif/nonaktif baris
+        function handleRotationSwitchChange(input) {
+            const label = input.nextElementSibling;
+            if (label) {
+                label.textContent = input.checked ? 'Aktif' : 'Nonaktif';
+                label.className = input.checked ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-muted';
+            }
+            updateActiveRotationCountBadge();
+        }
+
+        // Perbarui badge jumlah total slide yang aktif
+        function updateActiveRotationCountBadge() {
+            const allChecks = document.querySelectorAll('#rotationTableBody input[type="checkbox"]');
+            const activeChecks = document.querySelectorAll('#rotationTableBody input[type="checkbox"]:checked');
+            const badge = document.getElementById('badgeRotasiActiveCount');
+            if (badge) {
+                badge.textContent = `${activeChecks.length} dari ${allChecks.length} Halaman Aktif di TV`;
+                badge.className = activeChecks.length > 0 ? 'badge badge-success font-weight-bold px-3 py-2' : 'badge badge-danger font-weight-bold px-3 py-2';
+            }
+            const statTv = document.getElementById('statStatusTV');
+            if (statTv) {
+                statTv.textContent = `${activeChecks.length} Halaman Aktif`;
+            }
+        }
+
+        // Aktifkan / Matikan semua halaman sekaligus (Khusus Super Admin)
+        function setAllRotationPagesActive(isActive) {
+            const isSuperAdmin = (currentUser && (currentUser.role === 'admin' || currentUser.role_id === 3));
+            if (!isSuperAdmin) {
+                alert('Akses Dibatasi: Hanya Super Admin yang berhak mengubah status rotasi massal.');
+                return;
+            }
+            const allChecks = document.querySelectorAll('#rotationTableBody input[type="checkbox"]');
+            allChecks.forEach(ch => {
+                ch.checked = isActive;
+                const label = ch.nextElementSibling;
+                if (label) {
+                    label.textContent = isActive ? 'Aktif' : 'Nonaktif';
+                    label.className = isActive ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-muted';
+                }
+            });
+            updateActiveRotationCountBadge();
+        }
+
+        // Reset Urutan dan Status Halaman ke Standar Master
+        function resetRotationPagesToDefault() {
+            const isSuperAdmin = (currentUser && (currentUser.role === 'admin' || currentUser.role_id === 3));
+            if (!isSuperAdmin) {
+                alert('Akses Dibatasi: Hanya Super Admin yang berhak mereset susunan rotasi.');
+                return;
+            }
+            if (!confirm('Kembalikan urutan rotasi seluruh 17 slide ke susunan standar awal masjid?')) return;
+            cachedRotationPages = JSON.parse(JSON.stringify(MASTER_ROTATION_PAGES));
+            renderRotationTable(cachedRotationPages);
+            alert('Susunan rotasi telah direset ke 17 halaman standar. Silakan klik "Simpan Rotasi" untuk menerapkan ke layar display TV.');
         }
 
         // Buka Modal Live Preview TV
@@ -3749,23 +3906,31 @@
             }
         }
 
-        // Simpan Susunan Rotasi TV ke Supabase
+        // Simpan Susunan Rotasi TV ke Supabase (Khusus Super Admin)
         async function simpanRotasiTV() {
+            const isSuperAdmin = (currentUser && (currentUser.role === 'admin' || currentUser.role_id === 3));
+            if (!isSuperAdmin) {
+                alert('Akses Dibatasi: Hanya Super Admin yang berhak menyimpan perubahan urutan rotasi display TV.');
+                return;
+            }
+
             const rows = document.querySelectorAll('#rotationTableBody tr');
             const updatedPages = [];
             rows.forEach((r, idx) => {
                 const title = r.querySelector('strong')?.textContent.trim();
                 const url = r.querySelector('code')?.textContent.trim();
                 const active = r.querySelector('input[type="checkbox"]')?.checked ?? true;
+                const badge = r.querySelector('.badge-slide-category')?.textContent.trim() || 'Display';
                 if (title && url) {
                     updatedPages.push({
+                        order: idx + 1,
                         name: title,
                         title: title,
                         path: url,
                         url: url,
                         page: url.replace('slides/', '/').replace('.html', '-embed'),
-                        active: active,
-                        order: idx + 1
+                        category: badge,
+                        active: active
                     });
                 }
             });
@@ -3776,6 +3941,10 @@
             }
 
             try {
+                cachedRotationPages = updatedPages;
+                localStorage.setItem('cached_rotation_pages', JSON.stringify(updatedPages));
+                updateActiveRotationCountBadge();
+
                 const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
@@ -3785,8 +3954,8 @@
                 });
 
                 if (res.ok) {
-                    alert('Alhamdulillah! Susunan rotasi TV berhasil disimpan ke Supabase dan seketika diterapkan pada TV display.');
-                    cachedRotationPages = updatedPages;
+                    alert('Alhamdulillah! Susunan rotasi seluruh ' + updatedPages.length + ' halaman slide TV berhasil disimpan ke Supabase Cloud dan seketika aktif pada layar display TV.');
+                    
                     // Update status badge di panel Qurban jika ada
                     const qPage = updatedPages.find(p => (p.url || p.path || '').includes('qurban'));
                     if (qPage && document.getElementById('adminStatusRotasiQurban')) {
@@ -3796,10 +3965,10 @@
                     }
                     await loadAllSupabaseData();
                 } else {
-                    alert('Gagal menyimpan susunan rotasi TV ke Supabase.');
+                    alert('Tersimpan di cache lokal browser. (Koneksi Supabase: ' + res.statusText + ')');
                 }
             } catch (err) {
-                alert('Tersimpan di sesi lokal: ' + err.message);
+                alert('Tersimpan di cache lokal browser: ' + err.message);
             }
         }
 
@@ -3972,13 +4141,19 @@
         }
 
         // Reorder Slide (Super Admin Only)
-        function reorderSlide(rowIndex, direction) {
-            if (currentUser && currentUser.role !== 'admin') {
+        function reorderSlide(elementOrIndex, direction) {
+            const isSuperAdmin = (currentUser && (currentUser.role === 'admin' || currentUser.role_id === 3));
+            if (!isSuperAdmin) {
                 alert('Akses Dibatasi: Hanya Super Admin yang berhak memindah urutan siaran TV.');
                 return;
             }
 
-            const row = document.querySelector(`tr[data-index="${rowIndex}"]`);
+            let row = null;
+            if (elementOrIndex && typeof elementOrIndex === 'object' && elementOrIndex.closest) {
+                row = elementOrIndex.closest('tr');
+            } else if (elementOrIndex) {
+                row = document.querySelector(`tr[data-index="${elementOrIndex}"]`);
+            }
             if (!row) return;
 
             if (direction === 'up' && row.previousElementSibling) {
@@ -3987,12 +4162,14 @@
                 row.parentNode.insertBefore(row.nextElementSibling, row);
             }
 
-            // Perbarui nomor urut tampilan
+            // Perbarui nomor urut tampilan & data-index
             const allRows = document.querySelectorAll('#rotationTableBody tr');
             allRows.forEach((r, idx) => {
+                r.setAttribute('data-index', idx + 1);
                 const tdNum = r.querySelector('td:first-child');
                 if (tdNum) tdNum.textContent = (idx + 1);
             });
+            updateActiveRotationCountBadge();
         }
 
         // Export Kas ke Format Excel / CSV

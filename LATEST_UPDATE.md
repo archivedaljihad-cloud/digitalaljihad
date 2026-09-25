@@ -2519,4 +2519,67 @@ Sesuai permintaan pengguna, telah ditambahkan fitur manajemen akun pengguna di D
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 📺 70. PENAMPILAN LENGKAP SELURUH 17 HALAMAN ROTASI TV DI DASHBOARD SUPER ADMIN
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Senior JAMstack Architect & AI Specialist
+
+---
+
+### Ringkasan Pembaruan:
+Menjawab kendala di mana menu **Rotasi TV & Reorder** di Dashboard Admin sebelumnya hanya menampilkan 1 baris statis (*Jadwal Sholat 5 Waktu*), telah dilakukan pembaruan arsitektur pada mesin manajemen rotasi display TV (`web-statis/admin.html` dan `web-statis/js/supabase-db.js`). Kini **seluruh 17 halaman display TV ditampilkan secara lengkap, detail, dan interaktif** di tabel manajemen rotasi untuk diatur susunan urutannya (▲/▼) maupun saklar aktif/nonaktifnya oleh Super Admin.
+
+### Rincian Implementasi & Solusi Masalah:
+1. **Akar Masalah Sebelumnya:**
+   - Elemen `<tbody id="rotationTableBody">` pada markup HTML awal hanya memuat 1 baris contoh statis.
+   - Kolom `rotation_pages` di Supabase sebelumnya bernilai `null` atau bertipe `string` JSON yang belum ter-parse, sehingga pengecekan `Array.isArray(s.rotation_pages)` bernilai `false` dan fungsi render tidak pernah dijalankan.
+2. **Definisi Master List 17 Halaman (`MASTER_ROTATION_PAGES`):**
+   - Menetapkan katalog resmi seluruh 17 slide layar display TV lengkap dengan rute, berkas slide, kategori tematik, dan status default:
+     1. `slides/utama.html` - Jadwal Sholat 5 Waktu (Kategori: *Utama / Sholat*, Aktif)
+     2. `slides/keuangan.html` - Laporan Kas Masjid (Kategori: *Keuangan*, Aktif)
+     3. `slides/jumat.html` - Petugas Sholat Jum'at (Kategori: *Jum'at*, Aktif)
+     4. `slides/pengumuman.html` - Pengumuman DKM (Kategori: *Informasi*, Aktif)
+     5. `slides/keuangan-summary.html` - Grafik Arus Kas (Kategori: *Keuangan*, Aktif)
+     6. `slides/qris.html` - QRIS Donasi & Infaq (Kategori: *Donasi*, Aktif)
+     7. `slides/slide.html` - Poster & Brosur Slide (Kategori: *Media*, Aktif)
+     8. `slides/ambulance.html` - Kas Layanan Ambulance (Kategori: *Ambulance*, Aktif)
+     9. `slides/infaq.html` - Program Donasi Infaq (Kategori: *Infaq*, Aktif)
+     10. `slides/hikmah.html` - Mutiara Hadits & Hikmah (Kategori: *Dakwah AI*, Aktif)
+     11. `slides/qurban.html` - Penerimaan Hewan Qurban (Kategori: *Idul Adha*, Aktif)
+     12. `slides/yasin.html` - Surat Yaasiin 83 Ayat (Kategori: *Ibadah*, Aktif)
+     13. `slides/live-mekah.html` - Live TV Makkah / Ka'bah (Kategori: *Live TV*, Aktif)
+     14. `slides/live-madinah.html` - Live TV Madinah / Nabawi (Kategori: *Live TV*, Aktif)
+     15. `slides/live-mimbar.html` - Live CCTV Mimbar Khutbah (Kategori: *CCTV Mimbar*, Aktif)
+     16. `slides/idul-fitri.html` - Petugas Sholat Idul Fitri (Kategori: *Hari Raya*, Standby)
+     17. `slides/idul-adha.html` - Petugas Sholat Idul Adha (Kategori: *Hari Raya*, Standby)
+3. **Fungsi Normalisasi Cerdas (`normalizeRotationPages`):**
+   - Menggabungkan data tersimpan dari Supabase / localStorage dengan ke-17 daftar master secara aman. Jika ada halaman yang belum pernah tersimpan, sistem otomatis menambahkannya ke dalam tabel sehingga tidak ada satu pun halaman yang hilang.
+4. **Fitur Tombol Aksi Massal & Badge Status:**
+   - Tombol **"Aktifkan Semua"**: Mengaktifkan seluruh 17 slide dengan 1 klik.
+   - Tombol **"Matikan Semua"**: Menonaktifkan seluruh slide sekaligus.
+   - Tombol **"Reset Default"**: Mengembalikan susunan 17 slide ke urutan standar rekomendasi masjid.
+   - Badge Status Dinamis: `#badgeRotasiActiveCount` yang menampilkan jumlah halaman aktif secara realtime (misal: *"15 dari 17 Halaman Aktif di TV"*).
+   - Tombol Reorder ▲ / ▼ disempurnakan menggunakan referensi baris elemen (`this.closest('tr')`) yang menjamin presisi perpindahan urutan.
+5. **Sinkronisasi Tiga Arah (Lokal, GitHub, Supabase Cloud):**
+   - Cloud Supabase: Kolom `rotation_pages` di tabel `app_settings` berhasil disinkronkan secara langsung dengan 17 slide terstruktur.
+   - Folder Lokal Mandiri: `C:\Users\anthu\Documents\【Digital WebSTATIS】` telah dimutakhirkan.
+   - GitHub Remote: Telah disinkronkan ke branch `main`.
+
+---
+
+### Berkas yang Dibuat / Diperbarui:
+1. `web-statis/admin.html` (Master list 17 slide, normalisasi, tombol aksi massal, reorder presisi).
+2. `web-statis/js/supabase-db.js` (Penyelarasan default `rotation_pages` 17 halaman).
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】` (Sinkronisasi berkas mandiri).
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 70).
+
+---
+
+### Status Sinkronisasi:
+- Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+- Cloud Supabase database `app_settings` tabel ID 1 telah disinkronkan langsung via REST API PATCH.
+
 
