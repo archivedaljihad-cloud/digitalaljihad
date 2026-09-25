@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mode Sholat - Display Masjid</title>
+    <title>Mode Sholat - Display Digital Masjid</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
 
     <style>
         :root {
-            --gold-primary: #D4AF37;
             --gold-light: #FFF8E1;
-            --gold-glow: rgba(212, 175, 55, 0.45);
+            --gold-primary: #D4AF37;
+            --gold-dark: #9A7514;
+            --gold-glow: rgba(212, 175, 55, 0.35);
+            --gold-gradient: linear-gradient(180deg, #FFFDF0 0%, #F5DC8C 28%, #D4AF37 58%, #9E7416 88%, #F7DE88 100%);
+            --gold-border: rgba(212, 175, 55, 0.45);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,8 +31,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
+        /* BACKGROUND LAYERS */
         .bg-layer {
             position: fixed;
             inset: 0;
@@ -45,215 +50,595 @@
             background: radial-gradient(ellipse at center, rgba(1, 19, 10, 0.15) 0%, rgba(1, 12, 7, 0.75) 75%, rgba(0, 5, 2, 0.95) 100%);
         }
 
+        .bg-kaabah {
+            background-image: url('img/Kaabah.png');
+            background-size: contain;
+            background-position: center 85%;
+            background-repeat: no-repeat;
+            opacity: 0.18;
+            mix-blend-mode: luminosity;
+            filter: contrast(1.15) brightness(0.9);
+            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
+            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
+        }
+
+        /* CONTAINER UTAMA */
         .prayer-container {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 1100px;
-            padding: 30px;
+            max-width: 1200px;
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             align-items: center;
             text-align: center;
+            padding: 24px 20px 20px 20px;
+            box-sizing: border-box;
         }
 
-        .mosque-icon-circle {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, rgba(3, 39, 22, 0.8) 100%);
-            border: 2px solid var(--gold-primary);
-            box-shadow: 0 0 30px var(--gold-glow);
+        /* 1. HEADER MASJID */
+        .masjid-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.4rem;
-            color: #ffd700;
-            margin-bottom: 20px;
-            animation: pulseIcon 3s infinite ease-in-out;
+            gap: 15px;
+            margin-bottom: 6px;
         }
 
-        @keyframes pulseIcon {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 25px var(--gold-glow); }
-            50% { transform: scale(1.06); box-shadow: 0 0 45px rgba(255, 215, 0, 0.7); }
+        .masjid-icon {
+            font-size: 26px;
+            color: #D4AF37;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
         }
 
-        .phase-badge {
-            display: inline-block;
-            padding: 6px 24px;
-            border-radius: 30px;
-            background: rgba(4, 30, 18, 0.8);
-            border: 1.5px solid var(--gold-primary);
-            color: #ffd700;
-            font-weight: 700;
-            letter-spacing: 2px;
-            font-size: 1.05rem;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        .prayer-title {
-            font-size: 3.2rem;
+        .masjid-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(22px, 2.4vw, 34px);
             font-weight: 800;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #ffffff;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.9), 0 0 20px var(--gold-glow);
-            margin-bottom: 10px;
-        }
-
-        .arabic-calligraphy {
-            font-family: 'Amiri', serif;
-            font-size: 2.8rem;
-            color: #fff2a3;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-            margin-bottom: 25px;
-        }
-
-        .countdown-timer {
-            font-family: monospace;
-            font-size: 5.5rem;
-            font-weight: 900;
             letter-spacing: 4px;
-            color: #ffd700;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.95), 0 0 30px rgba(255, 215, 0, 0.6);
-            margin-bottom: 25px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.3);
         }
 
-        .prayer-subtext {
-            font-size: 1.35rem;
-            color: #e2e8f0;
-            max-width: 800px;
-            line-height: 1.6;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+        /* 2. FASE TITLE & PRAYER BADGE */
+        .phase-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
-        /* Mode Sholat Hening (Gelap Syahdu) */
-        .sholat-hening-wrap {
-            display: none;
+        .phase-title {
+            font-size: clamp(16px, 1.6vw, 22px);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #FFF3BD;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .prayer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            padding: 8px 38px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 215, 0, 0.75);
+            background: linear-gradient(135deg, rgba(8, 48, 28, 0.94) 0%, rgba(2, 22, 12, 0.98) 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 245, 190, 0.5);
+            backdrop-filter: blur(12px);
+        }
+
+        .badge-gem {
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #FFD700;
+            animation: pulseGlow 2s infinite;
+        }
+
+        .prayer-name {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(26px, 2.8vw, 40px);
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #FFFFFF;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+        }
+
+        /* 3. DUAL-TILE FLIP COUNTDOWN */
+        .countdown-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 4px 0;
+        }
+
+        .timer-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 7px 28px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.24) 0%, rgba(3, 33, 18, 0.88) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.65);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #FFF5CC;
+            text-transform: uppercase;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .badge-shimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+            pointer-events: none;
+            animation: lightSweep 2.8s ease-in-out infinite;
+        }
+
+        @keyframes lightSweep {
+            0% { transform: translateX(-150%) skewX(-22deg); }
+            35%, 100% { transform: translateX(250%) skewX(-22deg); }
+        }
+
+        .countdown-tiles-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .countdown-tile {
+            display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .sholat-hening-wrap.active { display: flex; }
 
-        .sholat-hening-title {
-            font-size: 3.8rem;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.95);
-            margin-bottom: 15px;
+        .tile-face {
+            position: relative;
+            width: clamp(130px, 13vw, 190px);
+            height: clamp(90px, 9vw, 130px);
+            background: linear-gradient(180deg, rgba(8, 48, 28, 0.92) 0%, rgba(2, 20, 11, 0.98) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.45);
+            border-radius: 20px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 28px rgba(212, 175, 55, 0.16), inset 0 2px 0 rgba(255, 240, 185, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .sholat-hening-desc {
-            font-size: 1.5rem;
-            color: #ffd700;
-            letter-spacing: 1px;
+        .tile-number {
+            font-family: 'Cinzel', monospace;
+            font-size: clamp(52px, 5.8vw, 84px);
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #FFFFFF;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .tile-crease {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1.5px;
+            background: rgba(0, 0, 0, 0.55);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
+            z-index: 3;
+        }
+
+        .tile-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #D4AF37;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
+        .countdown-separator {
+            font-family: 'Cinzel', monospace;
+            font-size: clamp(48px, 5.5vw, 80px);
+            font-weight: 900;
+            color: #D4AF37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            margin-bottom: 24px;
+            animation: pulseGlow 1.5s infinite;
+        }
+
+        /* 4. PESAN MASJID & MODE HENING */
+        .message-section {
+            width: 100%;
+            max-width: 1050px;
+            margin: 4px auto;
+        }
+
+        .message-banner {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 9px 32px;
+            border-radius: 16px;
+            background: rgba(1, 16, 8, 0.65);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .message-icon {
+            color: #D4AF37;
+            font-size: 22px;
+        }
+
+        .message-text {
+            font-size: clamp(18px, 1.8vw, 26px);
+            font-weight: 600;
+            line-height: 1.35;
+            color: #FFFFFF;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .prayer-mode-box {
+            display: none;
+            padding: 22px 40px;
+            background: linear-gradient(135deg, rgba(8, 48, 28, 0.95), rgba(2, 20, 11, 0.98));
+            border: 2px solid #D4AF37;
+            border-radius: 26px;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.35);
+            animation: pulseGlow 4s infinite;
+        }
+
+        .prayer-mode-box.active {
+            display: block;
+        }
+
+        .prayer-mode-box .icons-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 12px;
+            color: #D4AF37;
+            font-size: 32px;
+        }
+
+        /* 5. HADITH VIGNETTE PLAKAT */
+        .hadith-plakat {
+            position: relative;
+            width: 100%;
+            max-width: 1100px;
+            margin: 4px auto 2px;
+            padding: 12px 48px;
+            border-radius: 20px;
+            background: rgba(1, 18, 9, 0.7);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            box-shadow: inset 0 1px 0 rgba(255, 238, 170, 0.15), 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .quote-watermark {
+            position: absolute;
+            font-family: 'Cinzel', serif;
+            font-size: 75px;
+            color: #D4AF37;
+            opacity: 0.15;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .quote-left { top: 2px; left: 16px; }
+        .quote-right { bottom: -20px; right: 16px; }
+
+        .adab-notice {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 6px 24px;
+            margin-bottom: 8px;
+            border-radius: 50px;
+            background: rgba(212, 175, 55, 0.16);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            color: #FFF3BD;
+            font-size: clamp(13px, 1.25vw, 17px);
             font-weight: 600;
         }
 
-        /* Khutbah Jumat 4 Cards */
-        .khutbah-grid {
+        .hadith-header {
+            font-size: clamp(14px, 1.35vw, 17px);
+            font-weight: 500;
+            color: #F0DEAA;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+
+        .saw-symbol {
+            font-family: 'Amiri', serif;
+            font-weight: bold;
+            color: #D4AF37;
+            font-size: 1.15em;
+        }
+
+        .hadith-body {
+            font-size: clamp(15px, 1.55vw, 22px);
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #F8FAFC;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+            margin-bottom: 3px;
+        }
+
+        .hadith-source {
+            font-size: clamp(12px, 1.1vw, 14px);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: #D4AF37;
+        }
+
+        /* 6. JUMAT OFFICERS GRID */
+        .jumat-officers-grid {
             display: none;
             grid-template-columns: repeat(4, 1fr);
             gap: 16px;
             width: 100%;
-            margin-top: 25px;
+            max-width: 1050px;
+            margin: 10px auto;
         }
-        .khutbah-grid.active { display: grid; }
 
-        .khutbah-card {
-            background: rgba(3, 25, 15, 0.85);
-            border: 1.5px solid var(--gold-primary);
-            border-radius: 16px;
-            padding: 16px 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+        .jumat-officers-grid.active {
+            display: grid;
         }
-        .khutbah-role {
-            font-size: 0.9rem;
+
+        .officer-card {
+            background: linear-gradient(180deg, rgba(8, 48, 28, 0.88) 0%, rgba(2, 20, 11, 0.96) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.45);
+            border-radius: 18px;
+            padding: 12px 16px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .officer-badge {
+            font-size: 13px;
             font-weight: 700;
-            color: #ffd700;
+            letter-spacing: 2px;
+            color: #D4AF37;
             text-transform: uppercase;
             margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        .khutbah-name {
-            font-size: 1.2rem;
+
+        .officer-name {
+            font-size: clamp(16px, 1.5vw, 20px);
             font-weight: 700;
-            color: #ffffff;
+            color: #FFFFFF;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+
+        /* 7. FOOTER MASJID */
+        .masjid-footer {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: rgba(212, 175, 55, 0.75);
+            text-transform: uppercase;
+            padding-bottom: 2px;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(1.03); }
         }
     </style>
 </head>
+
 <body>
     <div class="bg-layer bg-gradient"></div>
     <div class="bg-layer bg-vignette"></div>
+    <div class="bg-layer bg-kaabah"></div>
 
-    <div class="prayer-container" id="prayerContainer">
-        <div class="mosque-icon-circle"><i class="fas fa-mosque"></i></div>
-        <div class="phase-badge" id="phaseBadge">MENUJU ADZAN</div>
-        <div class="prayer-title" id="prayerTitle">SHOLAT SUBUH</div>
-        <div class="arabic-calligraphy" id="arabicCalligraphy">حَيَّ عَلَى الصَّلَاةِ • حَيَّ عَلَى الْفَلَاحِ</div>
-
-        <!-- Timer Countdown -->
-        <div class="countdown-timer" id="countdownTimer">00:00</div>
-
-        <!-- Pesan Subtext -->
-        <div class="prayer-subtext" id="prayerSubtext">
-            Mempersiapkan diri menyambut seruan adzan dan mendirikan sholat fardhu berjamaah.
+    <div class="prayer-container">
+        <!-- 1. HEADER MASJID -->
+        <div class="masjid-header">
+            <i class="fas fa-mosque masjid-icon"></i>
+            <div class="masjid-title" id="masjidTitle">MASJID JAMI' AL JIHAD</div>
+            <i class="fas fa-mosque masjid-icon"></i>
         </div>
 
-        <!-- Tampilan Hening Saat Sholat -->
-        <div class="sholat-hening-wrap" id="sholatHeningWrap">
-            <div class="sholat-hening-title">Luruskan dan Rapatkan Shaf</div>
-            <div class="sholat-hening-desc">"Sesungguhnya lurusnya shaf termasuk kesempurnaan shalat." (HR. Bukhari & Muslim)</div>
+        <!-- 2. FASE TITLE & PRAYER BADGE -->
+        <div class="phase-section">
+            <div class="phase-title" id="phaseTitle">Menjelang Waktu Sholat</div>
+            <div class="prayer-badge">
+                <span class="badge-gem"></span>
+                <span class="prayer-name" id="prayerName">SHOLAT FARDHU</span>
+                <span class="badge-gem"></span>
+            </div>
         </div>
 
-        <!-- 4 Kartu Petugas Khusus Sholat Jumat -->
-        <div class="khutbah-grid" id="khutbahGrid">
-            <div class="khutbah-card">
-                <div class="khutbah-role">Khotib</div>
-                <div class="khutbah-name" id="khutbahKhatib">Ustd. Khotib</div>
+        <!-- 3. COUNTDOWN TIMER (SPLIT DUAL-TILE) -->
+        <div class="countdown-section" id="countdownSection">
+            <div class="timer-badge">
+                <div class="badge-shimmer"></div>
+                <i class="far fa-clock clock-pulse-icon"></i>
+                <span class="badge-text" id="timerBadgeText">Menuju Adzan</span>
+                <span class="pulse-indicator-dot"></span>
             </div>
-            <div class="khutbah-card">
-                <div class="khutbah-role">Imam</div>
-                <div class="khutbah-name" id="khutbahImam">Ustd. Imam</div>
+
+            <div class="countdown-tiles-wrapper">
+                <div class="countdown-tile">
+                    <div class="tile-face">
+                        <span class="tile-number" id="timerMinutes">00</span>
+                        <div class="tile-crease"></div>
+                    </div>
+                    <div class="tile-label">MENIT</div>
+                </div>
+
+                <div class="countdown-separator">:</div>
+
+                <div class="countdown-tile">
+                    <div class="tile-face">
+                        <span class="tile-number" id="timerSeconds">00</span>
+                        <div class="tile-crease"></div>
+                    </div>
+                    <div class="tile-label">DETIK</div>
+                </div>
             </div>
-            <div class="khutbah-card">
-                <div class="khutbah-role">Muadzin</div>
-                <div class="khutbah-name" id="khutbahMuadzin">Muadzin</div>
+        </div>
+
+        <!-- 3B. KHUSUS JUMAT: 4 KARTU PETUGAS JUMAT -->
+        <div class="jumat-officers-grid" id="jumatOfficersGrid">
+            <div class="officer-card">
+                <div class="officer-badge"><i class="fas fa-microphone"></i> KHATIB</div>
+                <div class="officer-name" id="officerKhatib">Ustd. Khatib</div>
             </div>
-            <div class="khutbah-card">
-                <div class="khutbah-role">Bilal</div>
-                <div class="khutbah-name" id="khutbahBilal">Bilal</div>
+            <div class="officer-card">
+                <div class="officer-badge"><i class="fas fa-user-tie"></i> IMAM</div>
+                <div class="officer-name" id="officerImam">Ustd. Imam</div>
             </div>
+            <div class="officer-card">
+                <div class="officer-badge"><i class="fas fa-bullhorn"></i> MUADZIN</div>
+                <div class="officer-name" id="officerMuadzin">Muadzin</div>
+            </div>
+            <div class="officer-card">
+                <div class="officer-badge"><i class="fas fa-hands-praying"></i> BILAL</div>
+                <div class="officer-name" id="officerBilal">Bilal</div>
+            </div>
+        </div>
+
+        <!-- 4. PESAN MASJID & MODE HENING -->
+        <div class="message-section">
+            <div class="message-banner" id="messageBanner">
+                <i class="fas fa-mosque message-icon" id="messageIcon"></i>
+                <span class="message-text" id="messageText">Bersiap Masuk Waktu Sholat</span>
+            </div>
+
+            <div class="prayer-mode-box" id="prayerModeBox">
+                <div class="icons-row">
+                    <i class="fas fa-volume-xmark" title="Matikan HP"></i>
+                    <i class="fas fa-people-arrows" title="Rapatkan Shaf"></i>
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <div class="message-text" id="prayerModeText">
+                    Luruskan dan Rapatkan Shaf Sholat Berjamaah. Mohon Menghormati Kekhusyukan Ibadah.
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. HADITH VIGNETTE PLAKAT -->
+        <div class="hadith-plakat" id="hadithPlakat">
+            <span class="quote-watermark quote-left">“</span>
+
+            <div class="adab-notice" id="adabNotice">
+                <i class="fas fa-person-praying"></i>
+                <span id="adabNoticeText">Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.</span>
+            </div>
+
+            <div class="hadith-header" id="hadithHeader">
+                Rasulullah <span class="saw-symbol">ﷺ</span> bersabda:
+            </div>
+            <div class="hadith-body" id="hadithBody">
+                "Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."
+            </div>
+            <div class="hadith-source" id="hadithSource">
+                (HR. Bukhari dan Muslim)
+            </div>
+
+            <span class="quote-watermark quote-right">”</span>
+        </div>
+
+        <!-- 6. FOOTER MASJID -->
+        <div class="masjid-footer" id="masjidFooter">
+            © SISTEM INFORMASI DIGITAL MASJID JAMI' AL JIHAD
         </div>
     </div>
 
-    <!-- AUDIO ELEMENTS -->
+    <!-- ELEMEN AUDIO -->
     <audio id="audioTarhim" preload="auto"></audio>
-    <audio id="audioBeep" preload="auto"></audio>
+    <audio id="audioAdzan" preload="auto"></audio>
 
-    <!-- SUPABASE & SCRIPTS -->
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/supabase-db.js"></script>
     <script src="js/prayer-engine.js"></script>
 
     <script>
-        let currentSettings = null;
-        let currentJadwal = [];
-        let currentJumat = null;
+        let settings = null;
+        let jadwalList = [];
+        let jumatPetugas = null;
+        let currentPrayerAudio = '';
+        let hasPlayedTarhim = false;
+        let hasPlayedAdzan = false;
 
-        function pad(n) { return String(n).padStart(2, '0'); }
+        function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
 
+        // Audio Handler
+        function handleAudio(phase, prayerName) {
+            const tarhimAudio = document.getElementById('audioTarhim');
+            const cleanPrayer = prayerName.toLowerCase().replace(/[^a-z]/g, '');
+
+            // Pilih file audio sesuai waktu sholat
+            let audioFile = 'audio/Dzuhur.mp3';
+            if (cleanPrayer.includes('subuh')) audioFile = 'audio/Subuh.mp3';
+            else if (cleanPrayer.includes('ashar')) audioFile = 'audio/Ashar.mp3';
+            else if (cleanPrayer.includes('maghrib')) audioFile = 'audio/Maghrib.mp3';
+            else if (cleanPrayer.includes('isya')) audioFile = 'audio/Isya.mp3';
+
+            if (phase === PrayerEngine.PHASES.COUNTDOWN) {
+                if (!hasPlayedTarhim && tarhimAudio) {
+                    tarhimAudio.src = audioFile;
+                    tarhimAudio.play().then(() => {
+                        hasPlayedTarhim = true;
+                        console.log('🎵 Audio Tarhim diputar:', audioFile);
+                    }).catch(e => {
+                        console.log('Audio autoplay prevented:', e);
+                        // Listener unlock pada interaksi
+                        const unlock = () => {
+                            tarhimAudio.play();
+                            hasPlayedTarhim = true;
+                            document.removeEventListener('click', unlock);
+                        };
+                        document.addEventListener('click', unlock, { once: true });
+                    });
+                }
+            } else {
+                if (tarhimAudio && !tarhimAudio.paused) {
+                    tarhimAudio.pause();
+                    tarhimAudio.currentTime = 0;
+                }
+            }
+        }
+
+        // Render UI
         function updatePrayerUI() {
             if (!window.PrayerEngine) return;
             const now = new Date();
-            const state = window.PrayerEngine.getPrayerState(currentSettings, currentJadwal, currentJumat, now);
+            const state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
 
             if (!state.active) {
-                // Selesai sholat -> kirim sinyal ke parent window atau kembali ke rotator
+                // Selesai Prayer Mode -> kembalikan ke rotasi utama
                 if (window.parent && window.parent.onPrayerModeEnd) {
                     window.parent.onPrayerModeEnd();
                 } else {
@@ -262,75 +647,134 @@
                 return;
             }
 
-            const badgeEl = document.getElementById('phaseBadge');
-            const titleEl = document.getElementById('prayerTitle');
-            const timerEl = document.getElementById('countdownTimer');
-            const subtextEl = document.getElementById('prayerSubtext');
-            const heningEl = document.getElementById('sholatHeningWrap');
-            const khutbahEl = document.getElementById('khutbahGrid');
-            const calligEl = document.getElementById('arabicCalligraphy');
+            // Audio trigger
+            handleAudio(state.phase, state.prayer || '');
 
-            titleEl.textContent = state.prayer || 'SHOLAT FARDHU';
+            // Elements
+            const phaseTitleEl = document.getElementById('phaseTitle');
+            const prayerNameEl = document.getElementById('prayerName');
+            const countdownSectionEl = document.getElementById('countdownSection');
+            const timerBadgeTextEl = document.getElementById('timerBadgeText');
+            const timerMinutesEl = document.getElementById('timerMinutes');
+            const timerSecondsEl = document.getElementById('timerSeconds');
+            const jumatGridEl = document.getElementById('jumatOfficersGrid');
+            const messageBannerEl = document.getElementById('messageBanner');
+            const messageTextEl = document.getElementById('messageText');
+            const prayerModeBoxEl = document.getElementById('prayerModeBox');
+            const prayerModeTextEl = document.getElementById('prayerModeText');
+            const hadithPlakatEl = document.getElementById('hadithPlakat');
+            const adabNoticeEl = document.getElementById('adabNotice');
+            const adabNoticeTextEl = document.getElementById('adabNoticeText');
+            const hadithHeaderEl = document.getElementById('hadithHeader');
+            const hadithBodyEl = document.getElementById('hadithBody');
+            const hadithSourceEl = document.getElementById('hadithSource');
 
-            const remaining = state.remaining;
+            prayerNameEl.textContent = state.prayer ? state.prayer.toUpperCase() : 'WAKTU SHOLAT';
+
+            const remaining = state.remaining || 0;
             const m = Math.floor(remaining / 60);
             const s = remaining % 60;
-            timerEl.textContent = `${pad(m)}:${pad(s)}`;
+            timerMinutesEl.textContent = pad(m);
+            timerSecondsEl.textContent = pad(s);
 
+            // LOGIKA FASE SHOLAT
             if (state.phase === PrayerEngine.PHASES.COUNTDOWN) {
-                badgeEl.textContent = 'MENUJU ADZAN';
-                subtextEl.textContent = 'Waktu adzan segera tiba. Mari bersiap menyucikan diri dan mengambil wudhu.';
-                timerEl.style.display = 'block';
-                heningEl.classList.remove('active');
-                khutbahEl.classList.remove('active');
-                calligEl.style.display = 'block';
+                phaseTitleEl.textContent = 'Menjelang Waktu Sholat';
+                timerBadgeTextEl.textContent = 'Menuju Adzan';
+                countdownSectionEl.style.display = 'flex';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'inline-flex';
+                prayerModeBoxEl.classList.remove('active');
+                messageTextEl.textContent = (settings && settings.Countdown_Adzan) || 'Bersiap Masuk Waktu Sholat';
+
+                adabNoticeEl.style.display = 'inline-flex';
+                adabNoticeTextEl.textContent = 'Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.';
+                hadithHeaderEl.style.display = 'block';
+                hadithBodyEl.textContent = '"Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."';
+                hadithSourceEl.textContent = '(HR. Bukhari dan Muslim)';
+
             } else if (state.phase === PrayerEngine.PHASES.ADZAN) {
-                badgeEl.textContent = 'WAKTU ADZAN';
-                subtextEl.textContent = 'Adzan sedang berkumandang. Dengarkan dan jawablah seruan muadzin dengan khusyuk.';
-                timerEl.style.display = 'block';
-                heningEl.classList.remove('active');
-                khutbahEl.classList.remove('active');
-                calligEl.style.display = 'block';
+                phaseTitleEl.textContent = 'Waktu Sholat Telah Tiba';
+                timerBadgeTextEl.textContent = 'Adzan Sedang Berkumandang';
+                countdownSectionEl.style.display = 'flex';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'inline-flex';
+                prayerModeBoxEl.classList.remove('active');
+                messageTextEl.textContent = 'Mohon untuk menonaktifkan / silent alat komunikasi';
+
+                adabNoticeEl.style.display = 'none';
+                hadithHeaderEl.style.display = 'none';
+                hadithBodyEl.textContent = '"Adzan Sedang Dikumandangkan. Dengarkanlah, Jawablah, Dan Raih Pahala Kesempurnaannya."';
+                hadithSourceEl.textContent = '';
+
             } else if (state.phase === PrayerEngine.PHASES.IQAMAH) {
-                badgeEl.textContent = 'HITUNG MUNDUR IQAMAH';
-                subtextEl.textContent = 'Segera merapatkan shaf dan menonaktifkan nada dering handphone.';
-                timerEl.style.display = 'block';
-                heningEl.classList.remove('active');
-                khutbahEl.classList.remove('active');
-                calligEl.style.display = 'block';
+                phaseTitleEl.textContent = 'Menunggu Waktu Iqamah';
+                timerBadgeTextEl.textContent = 'Menuju Iqamah';
+                countdownSectionEl.style.display = 'flex';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'inline-flex';
+                prayerModeBoxEl.classList.remove('active');
+                messageTextEl.textContent = (settings && settings.Hitung_Mundur_Iqamah) || 'Menuju Waktu Iqamah';
+
+                adabNoticeEl.style.display = 'none';
+                hadithHeaderEl.style.display = 'none';
+                hadithBodyEl.textContent = '"Adzan Telah selesai, Mari Gunakan Waktu Yang Tersedia Untuk Berdoa. Doa Antara Adzan & Iqamah Tidak Ditolak."';
+                hadithSourceEl.textContent = '(HR. Abu Daud & Tirmidzi)';
+
             } else if (state.phase === PrayerEngine.PHASES.PRAYER) {
-                badgeEl.textContent = 'SHOLAT BERJAMAAH';
-                timerEl.style.display = 'none';
-                subtextEl.style.display = 'none';
-                calligEl.style.display = 'none';
-                heningEl.classList.add('active');
-                khutbahEl.classList.remove('active');
+                phaseTitleEl.textContent = 'Sholat Berjamaah Sedang Berlangsung';
+                countdownSectionEl.style.display = 'none';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'none';
+                prayerModeBoxEl.classList.add('active');
+                prayerModeTextEl.textContent = 'Iqamah Segera Dikumandangkan. Mari Bersiap Mengisi Shaf Terdepan, Luruskan dan Rapatkan Shaf.';
+
+                adabNoticeEl.style.display = 'inline-flex';
+                adabNoticeTextEl.textContent = 'Luruskan dan Rapatkan Shaf Sholat Berjamaah';
+                hadithHeaderEl.style.display = 'block';
+                hadithBodyEl.textContent = '"Luruskan shaf-shaf kalian, karena meluruskan shaf adalah bagian dari kesempurnaan sholat."';
+                hadithSourceEl.textContent = '(HR. Bukhari no. 723 & Muslim no. 433)';
+
             } else if (state.phase === PrayerEngine.PHASES.KHUTBAH) {
-                badgeEl.textContent = 'KHUTBAH JUM\'AT';
-                subtextEl.textContent = 'Dengarkan khutbah dengan tenang. Dilarang berbicara saat khatib sedang berkhutbah.';
-                timerEl.style.display = 'none';
-                heningEl.classList.remove('active');
-                khutbahEl.classList.add('active');
-                calligEl.style.display = 'block';
+                phaseTitleEl.textContent = 'Khutbah & Sholat Jum\'at Berjamaah';
+                countdownSectionEl.style.display = 'none';
+                jumatGridEl.classList.add('active');
+                messageBannerEl.style.display = 'none';
+                prayerModeBoxEl.classList.add('active');
+                prayerModeTextEl.textContent = 'Sedang Berlangsung Khutbah & Sholat Jum\'at Berjamaah. Harap Tenang, Dengarkan Khutbah & Nonaktifkan Nada Dering HP.';
 
                 if (state.jumatPetugas) {
-                    document.getElementById('khutbahKhatib').textContent = state.jumatPetugas.khatib || '-';
-                    document.getElementById('khutbahImam').textContent = state.jumatPetugas.imam || '-';
-                    document.getElementById('khutbahMuadzin').textContent = state.jumatPetugas.muadzin || '-';
-                    document.getElementById('khutbahBilal').textContent = state.jumatPetugas.bilal || '-';
+                    document.getElementById('officerKhatib').textContent = state.jumatPetugas.khatib || 'Ustd. Khatib';
+                    document.getElementById('officerImam').textContent = state.jumatPetugas.imam || 'Ustd. Imam';
+                    document.getElementById('officerMuadzin').textContent = state.jumatPetugas.muadzin || 'Muadzin';
+                    document.getElementById('officerBilal').textContent = state.jumatPetugas.bilal || 'Bilal';
                 }
+
+                adabNoticeEl.style.display = 'inline-flex';
+                adabNoticeTextEl.textContent = 'Adab Khutbah Jum\'at: Diam, Dengarkan dan Simak Khutbah';
+                hadithHeaderEl.style.display = 'block';
+                hadithBodyEl.textContent = '"Jika engkau berkata kepada sahabatmu pada hari Jum\'at: \'Diamlah!\' ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."';
+                hadithSourceEl.textContent = '(HR. Bukhari no. 934 & Muslim no. 851)';
             }
         }
 
         async function init() {
             try {
-                currentSettings = await SupabaseDB.getSettings();
-                currentJadwal = await SupabaseDB.getJadwalSholat();
-                currentJumat = await SupabaseDB.getSholatJumat();
+                if (window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                    jadwalList = await SupabaseDB.getJadwalSholat();
+                    jumatPetugas = await SupabaseDB.getSholatJumat();
+
+                    if (settings && settings.nama_aplikasi) {
+                        document.getElementById('masjidTitle').textContent = settings.nama_aplikasi.toUpperCase();
+                        document.getElementById('masjidFooter').textContent = '© ' + settings.nama_aplikasi.toUpperCase();
+                    }
+                }
+
                 updatePrayerUI();
                 setInterval(updatePrayerUI, 1000);
-            } catch (e) {
-                console.error('Error init prayer mode:', e);
+            } catch (err) {
+                console.warn('Gagal inisialisasi prayer mode:', err);
             }
         }
 
