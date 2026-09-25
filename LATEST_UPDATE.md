@@ -1904,6 +1904,51 @@ Sistem **Mode Sholat (Prayer Mode)** pada web statis (`web-statis/prayer-mode.ht
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 📖 58. IMPLEMENTASI OTOMATISASI AGENDA MALAM JUM'AT (SURAT YAASIIN) PADA ROTATOR TV DISPLAY STATIS (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 5.5.0 | **Status:** ✅ 100% Selesai, Teruji, & Sinkron
+
+### Ringkasan Pencapaian:
+Fitur **Mode Malam Jum'at (Penampilan Otomatis Surat Yaasiin)** telah diintegrasikan secara cerdas pada sistem display TV mandiri (`web-statis/index.html` dan `web-statis/js/prayer-engine.js`). Logika penayangan diselaraskan persis dengan fungsionalitas Laravel terdahulu (`PrayerModeController.php` & `rotator.blade.php`), di mana sistem secara otomatis mengunci rotasi slide TV dan menampilkan pembacaan 83 ayat Surat Yaasiin setiap malam Jum'at.
+
+---
+
+### Alur Kerja & Mekanisme Otomatisasi:
+1. **Pendeteksian Hari & Waktu:**
+   - **Hari:** Terpicu otomatis setiap hari **Kamis malam** (`now.getDay() === 4`), yang merupakan malam Jum'at dalam kalender Islam.
+   - **Jam Mulai:** Berdasarkan pengaturan `yasin_start_time` (default: **18:30 WIB** / ba'da Maghrib).
+   - **Jam Selesai:** Berakhir otomatis saat waktu countdown adzan Isya tiba (`waktuIsya - prayer_mode_before_adzan menit`, misal 5–10 menit sebelum adzan Isya).
+2. **Penguncian Rotasi Slide TV (`index.html`):**
+   - Saat status `yasin_active` aktif, sistem menghentikan timer pergantian slide normal (`clearTimeout(rotationTimer)`).
+   - Layar langsung diarahkan dan dikunci ke `slides/yasin.html` (`/yasin-embed`) dengan notifikasi OSD: *"📖 Agenda Malam Jum'at: Surat Yaasiin"*.
+3. **Pengalihan Otomatis ke Prayer Mode Isya:**
+   - Begitu waktu hitung mundur menjelang adzan Isya tiba, sistem memberikan prioritas tertinggi ke **Prayer Mode** (`#prayerFrame` aktif).
+   - Layar Yaasiin ditutup secara mulus tanpa intervensi manual oleh DKM.
+4. **Pemulihan Pasca Sholat Isya:**
+   - Setelah waktu sholat Isya selesai, status penguncian rotasi dilepas (`localStorage.removeItem('lockPageRotation')`), dan display TV kembali memutar slide-slide informasi secara bergantian seperti semula.
+5. **Fitur Layar Surat Yaasiin (`slides/yasin.html`):**
+   - Menampilkan 83 ayat lengkap Mushaf Al-Qur'an (teks Arab Madinah, transliterasi Latin, dan terjemahan Indonesia).
+   - Auto-scroll vertikal halus dengan floating controls (play/pause/pengatur kecepatan lambat-sedang-cepat).
+   - Hitung mundur waktu Isya realtime di bilah atas.
+   - Membaca data mandiri lokal `web-statis/data/surah_yasin.json` (100% offline-ready).
+
+---
+
+### Pengujian Teknis (Simulasi Node.js):
+- **Uji Hari Kamis 18:45 (Malam Jum'at ba'da Maghrib):** Hasil evaluasi `PrayerEngine.isYasinActive(...)` mengembalikan `true` (Surat Yaasiin otomatis mengunci layar).
+- **Uji Hari Kamis 19:18 (Menjelang Adzan Isya):** Hasil evaluasi mengembalikan `false` (Prioritas beralih ke Prayer Mode Isya).
+- **Uji Hari Biasa (Rabu 18:45):** Hasil evaluasi mengembalikan `false` (Rotasi slide TV berjalan normal).
+
+---
+
+### Sinkronisasi Berkas:
+- Berkas `web-statis/js/prayer-engine.js`, `web-statis/index.html`, dan `web-statis/slides/yasin.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+
 
 
 

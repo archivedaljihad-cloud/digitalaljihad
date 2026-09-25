@@ -143,11 +143,59 @@
                 }
             }
 
+            const yasinActive = this.isYasinActive(setting, jadwalList, now);
+
             return {
                 active: false,
                 phase: PHASES.INACTIVE,
-                next_prayer: this.calculateNextPrayer(jadwalList, now)
+                next_prayer: this.calculateNextPrayer(jadwalList, now),
+                yasin_active: yasinActive
             };
+        },
+
+        /**
+         * Deteksi apakah saat ini sedang dalam Agenda Malam Jum'at (Surat Yaasiin)
+         * Hari Kamis malam (day === 4), mulai yasin_start_time (default 18:30) sampai menjelang adzan Isya
+         */
+        isYasinActive(settings, jadwalList, customNow) {
+            const now = customNow || new Date();
+            const setting = settings || {};
+
+            // Cek apakah mode yasin diaktifkan (default true)
+            if (setting.yasin_mode_enabled === false) return false;
+
+            // Cek apakah hari Kamis (Malam Jum'at dalam kalender Islam)
+            const isThursday = now.getDay() === 4;
+            if (!isThursday) return false;
+
+            if (!jadwalList || jadwalList.length === 0) return false;
+
+            try {
+                // Waktu mulai (default 18:30)
+                const startTimeStr = setting.yasin_start_time || '18:30';
+                const [startH, startM] = startTimeStr.split(':');
+                const yasinStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(startH), parseInt(startM), 0);
+
+                // Cari jadwal Isya
+                const isyaItem = jadwalList.find(item => {
+                    if (!item || !item.nama_sholat || !item.waktu) return false;
+                    const clean = item.nama_sholat.toLowerCase().trim();
+                    return clean.includes('isya');
+                });
+
+                if (!isyaItem) return false;
+
+                const [isyaH, isyaM] = isyaItem.waktu.split(':');
+                const isyaAdzan = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(isyaH), parseInt(isyaM), 0);
+                const beforeAdzan = parseInt(setting.prayer_mode_before_adzan) || 5;
+                const isyaCountdownStart = new Date(isyaAdzan.getTime() - beforeAdzan * 60 * 1000);
+
+                // Aktif jika jam sekarang sudah >= yasinStart dan < isyaCountdownStart
+                return now >= yasinStart && now < isyaCountdownStart;
+            } catch (err) {
+                console.warn('Gagal evaluasi waktu yaasiin:', err);
+                return false;
+            }
         },
 
         /**

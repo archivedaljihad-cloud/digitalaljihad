@@ -363,6 +363,7 @@
 
             const prayerFrame = document.getElementById('prayerFrame');
 
+            // 1. Prioritas Utama: Prayer Mode (Adzan / Iqamah / Sholat Berjamaah)
             if (state.active) {
                 if (!isPrayerModeActive) {
                     console.log('🕌 Memasuki Mode Sholat:', state.phase, state.prayer);
@@ -370,6 +371,7 @@
                     clearTimeout(rotationTimer);
                     prayerFrame.classList.add('active');
                 }
+                return;
             } else {
                 if (isPrayerModeActive) {
                     console.log('✅ Mode Sholat selesai. Kembali ke rotasi TV.');
@@ -377,6 +379,22 @@
                     prayerFrame.classList.remove('active');
                     scheduleNextRotation();
                 }
+            }
+
+            // 2. Prioritas Kedua: Agenda Malam Jum'at (Surat Yaasiin ba'da Maghrib s/d Isya)
+            if (state.yasin_active) {
+                if (localStorage.getItem('lockPageRotation') !== 'yasin') {
+                    console.log('📖 Agenda Malam Jum\'at Aktif: Mengunci layar pada Surat Yaasiin.');
+                    localStorage.setItem('lockPageRotation', 'yasin');
+                    const targetFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
+                    targetFrame.src = 'slides/yasin.html';
+                    clearTimeout(rotationTimer);
+                    showOsd('📖 Agenda Malam Jum\'at: Surat Yaasiin');
+                }
+            } else if (localStorage.getItem('lockPageRotation') === 'yasin') {
+                console.log('✅ Agenda Malam Jum\'at selesai. Mengembalikan rotasi normal.');
+                localStorage.removeItem('lockPageRotation');
+                scheduleNextRotation();
             }
         }
 
