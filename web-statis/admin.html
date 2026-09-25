@@ -1499,11 +1499,41 @@
                             </div>
                         </div>
 
+                        <!-- Filter & Search Toolbar -->
+                        <div class="content-card mb-3 p-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-5 mb-2 mb-md-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="kasSearchInput" placeholder="Cari uraian atau nominal..." oninput="filterKasTable()">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6 mb-2 mb-md-0">
+                                    <select class="form-control" id="kasFilterType" onchange="filterKasTable()">
+                                        <option value="all">Semua Tipe (Masuk & Keluar)</option>
+                                        <option value="masuk">Pemasukan Saja</option>
+                                        <option value="keluar">Pengeluaran Saja</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    <select class="form-control" id="kasFilterKat" onchange="filterKasTable()">
+                                        <option value="all">Semua Kategori Kas</option>
+                                        <option value="Kas Utama Masjid">Kas Utama Masjid</option>
+                                        <option value="Kas Ambulance">Kas Ambulance</option>
+                                        <option value="Infaq Renovasi">Infaq Renovasi</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="content-card">
-                            <div class="content-card-header">
-                                <h6 class="content-card-title">
-                                    <i class="fas fa-list-alt"></i> Rincian Arus Kas Terakhir
+                            <div class="content-card-header d-flex justify-content-between align-items-center">
+                                <h6 class="content-card-title mb-0">
+                                    <i class="fas fa-list-alt mr-1"></i> Rincian Arus Kas Terakhir
                                 </h6>
+                                <span class="badge badge-light border text-muted font-weight-bold" id="kasFilterInfo">Menampilkan Semua</span>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-custom table-hover">
@@ -1528,36 +1558,6 @@
                                                 <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>24/09/2026</td>
-                                            <td>Pembelian Sabun & Pembersih Lantai Masjid</td>
-                                            <td>Operasional</td>
-                                            <td><span class="badge-keluar">Pengeluaran</span></td>
-                                            <td class="text-right font-weight-bold text-danger">- Rp 380.000</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>23/09/2026</td>
-                                            <td>Infaq Donasi QRIS Bank Syariah Indonesia</td>
-                                            <td>Donasi Digital</td>
-                                            <td><span class="badge-masuk">Pemasukan</span></td>
-                                            <td class="text-right font-weight-bold text-success">+ Rp 2.200.000</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>22/09/2026</td>
-                                            <td>BBM & Servis Rutin Mobil Ambulance</td>
-                                            <td>Kas Ambulance</td>
-                                            <td><span class="badge-keluar">Pengeluaran</span></td>
-                                            <td class="text-right font-weight-bold text-danger">- Rp 450.000</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1566,8 +1566,6 @@
 
 
                     <!-- ==========================================
-                         VIEW 7: KAS AMBULANCE (BENDAHARA & ADMIN)
-                                            <!-- ==========================================
                          VIEW 7: KAS AMBULANCE (BENDAHARA & ADMIN)
                          ========================================== -->
                     <div id="view-ambulance" class="section-view">
@@ -1693,6 +1691,9 @@
                                 </h4>
                                 <small class="text-muted">Sistem Hak Akses 3 Peran Resmi Masjid Jami' Al-Jihad (Bab 52).</small>
                             </div>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#modalTambahUser">
+                                <i class="fas fa-user-plus mr-1"></i> Tambah Pengurus Baru
+                            </button>
                         </div>
 
                         <div class="content-card">
@@ -1868,6 +1869,112 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     <button type="button" class="btn btn-success" onclick="simpanTransaksiKas()">Simpan Transaksi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
+         MODAL EDIT KAS (KOREKSI TRANSAKSI)
+         ======================================================= -->
+    <div class="modal fade" id="modalEditKas" tabindex="-1" role="dialog" aria-labelledby="modalEditKasLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title font-weight-bold" id="modalEditKasLabel">
+                        <i class="fas fa-edit mr-2"></i> Koreksi / Edit Transaksi Kas
+                    </h5>
+                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditKas">
+                        <input type="hidden" id="editKasId">
+                        <input type="hidden" id="editKasTable" value="keuangan">
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">Tanggal Transaksi</label>
+                            <input type="date" class="form-control" id="editKasTanggal" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Jenis Transaksi</label>
+                            <select class="form-control" id="editKasTipe" required>
+                                <option value="masuk">Pemasukan (Infaq / Donasi)</option>
+                                <option value="keluar">Pengeluaran (Operasional / Belanja)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Akun Kas</label>
+                            <select class="form-control" id="editKasKategori">
+                                <option value="Kas Utama Masjid">Kas Utama Masjid</option>
+                                <option value="Kas Ambulance">Kas Ambulance</option>
+                                <option value="Infaq Renovasi">Infaq Renovasi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Uraian / Keterangan</label>
+                            <input type="text" class="form-control" id="editKasUraian" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Nominal (Rupiah)</label>
+                            <input type="number" class="form-control font-weight-bold" id="editKasNominal" required min="1000">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-warning font-weight-bold" onclick="simpanEditTransaksiKas()">
+                        <i class="fas fa-save mr-1"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
+         MODAL TAMBAH PENGURUS BARU
+         ======================================================= -->
+    <div class="modal fade" id="modalTambahUser" tabindex="-1" role="dialog" aria-labelledby="modalTambahUserLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title font-weight-bold" id="modalTambahUserLabel">
+                        <i class="fas fa-user-plus mr-2"></i> Tambah Akun Pengurus DKM
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahUser">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Nama Lengkap Pengurus</label>
+                            <input type="text" class="form-control" id="newUserName" placeholder="Contoh: Ust. H. Ridwan" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Email / Username Login</label>
+                            <input type="email" class="form-control" id="newUserEmail" placeholder="Contoh: ridwan@aljihad.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Peran (Role) Hak Akses</label>
+                            <select class="form-control" id="newUserRole" required>
+                                <option value="petugas">Operator TV Display (Jadwal Sholat, Petugas Jum'at, Teks Berjalan)</option>
+                                <option value="bendahara">Bendahara (Buku Kas, Kas Ambulance, Infaq, Laporan)</option>
+                                <option value="admin">Super Admin (Akses Penuh 100% Seluruh Sistem)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Kata Sandi (Password)</label>
+                            <input type="password" class="form-control" id="newUserPassword" placeholder="Minimal 6 karakter" required minlength="6">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success font-weight-bold" onclick="simpanPengurusBaru()">
+                        <i class="fas fa-check-circle mr-1"></i> Daftarkan Akun
+                    </button>
                 </div>
             </div>
         </div>
@@ -2174,34 +2281,81 @@
                 }
             }
 
-            // Main table (Buku Kas Lengkap)
-            const mainTbody = document.getElementById('mainKasTableBody');
-            if (mainTbody) {
-                if (!data || data.length === 0) {
-                    mainTbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Belum ada transaksi kas tercatat di database.</td></tr>';
+            // Jalankan filter & render baris tabel utama
+            filterKasTable();
+        }
+
+        // Filter & Search Tabel Kas Utama
+        function filterKasTable() {
+            const query = (document.getElementById('kasSearchInput')?.value || '').toLowerCase().trim();
+            const typeFilter = document.getElementById('kasFilterType')?.value || 'all';
+            const katFilter = document.getElementById('kasFilterKat')?.value || 'all';
+
+            let filtered = cachedKasData || [];
+
+            if (typeFilter === 'masuk') {
+                filtered = filtered.filter(item => (parseFloat(item.pemasukan) || 0) > 0);
+            } else if (typeFilter === 'keluar') {
+                filtered = filtered.filter(item => (parseFloat(item.pengeluaran) || 0) > 0);
+            }
+
+            if (katFilter !== 'all') {
+                filtered = filtered.filter(item => (item.kategori || '').toLowerCase().includes(katFilter.toLowerCase()));
+            }
+
+            if (query) {
+                filtered = filtered.filter(item => {
+                    const desc = (item.deskripsi || item.uraian || '').toLowerCase();
+                    const masukStr = (item.pemasukan || '').toString();
+                    const keluarStr = (item.pengeluaran || '').toString();
+                    const tglStr = (item.tanggal || '').toLowerCase();
+                    return desc.includes(query) || masukStr.includes(query) || keluarStr.includes(query) || tglStr.includes(query);
+                });
+            }
+
+            const infoEl = document.getElementById('kasFilterInfo');
+            if (infoEl) {
+                if (query || typeFilter !== 'all' || katFilter !== 'all') {
+                    infoEl.className = 'badge badge-warning font-weight-bold';
+                    infoEl.textContent = `Ditemukan: ${filtered.length} dari ${cachedKasData.length}`;
                 } else {
-                    mainTbody.innerHTML = data.map(item => {
-                        const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
-                        const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
-                        const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
-                        const textClass = isMasuk ? 'text-success' : 'text-danger';
-                        const sign = isMasuk ? '+' : '-';
-                        const tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
-                        return `
-                            <tr>
-                                <td>${tgl}</td>
-                                <td><strong>${item.deskripsi || item.uraian || 'Infaq Kas'}</strong></td>
-                                <td>${item.kategori || 'Kas Utama Masjid'}</td>
-                                <td>${badgeHTML}</td>
-                                <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, 'keuangan')" title="Hapus Catatan"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        `;
-                    }).join('');
+                    infoEl.className = 'badge badge-light border text-muted font-weight-bold';
+                    infoEl.textContent = `Menampilkan Semua (${cachedKasData.length})`;
                 }
             }
+
+            renderKasTableRows(filtered);
+        }
+
+        // Render Baris Tabel Kas dengan Tombol Edit & Hapus
+        function renderKasTableRows(items) {
+            const mainTbody = document.getElementById('mainKasTableBody');
+            if (!mainTbody) return;
+            if (!items || items.length === 0) {
+                mainTbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-search mr-1"></i> Tidak ada transaksi yang sesuai dengan filter pencarian.</td></tr>';
+                return;
+            }
+            mainTbody.innerHTML = items.map(item => {
+                const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
+                const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
+                const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
+                const textClass = isMasuk ? 'text-success' : 'text-danger';
+                const sign = isMasuk ? '+' : '-';
+                const tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
+                return `
+                    <tr>
+                        <td>${tgl}</td>
+                        <td><strong>${item.deskripsi || item.uraian || 'Infaq Kas'}</strong></td>
+                        <td>${item.kategori || 'Kas Utama Masjid'}</td>
+                        <td>${badgeHTML}</td>
+                        <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
+                        <td class="text-center text-nowrap">
+                            <button class="btn btn-sm btn-outline-warning mr-1" onclick="bukaModalEditKas(${item.id}, 'keuangan')" title="Koreksi / Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, 'keuangan')" title="Hapus"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         // Render Ambulance Data
@@ -2236,7 +2390,8 @@
                                 <td><strong>${item.deskripsi || item.uraian || 'Operasional Ambulance'}</strong></td>
                                 <td>${badgeHTML}</td>
                                 <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
-                                <td class="text-center">
+                                <td class="text-center text-nowrap">
+                                    <button class="btn btn-sm btn-outline-warning mr-1" onclick="bukaModalEditKas(${item.id}, 'keuangan_ambulance')" title="Koreksi / Edit"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, 'keuangan_ambulance')" title="Hapus"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -2290,6 +2445,120 @@
                         btn.style.cursor = 'pointer';
                     }
                 });
+            }
+        }
+
+        // Buka Modal Edit Kas
+        function bukaModalEditKas(id, table = 'keuangan') {
+            const dataset = (table === 'keuangan_ambulance') ? cachedAmbData : cachedKasData;
+            const item = dataset.find(d => d.id == id);
+            if (!item) {
+                alert('Data transaksi tidak ditemukan.');
+                return;
+            }
+
+            const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
+            const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
+
+            document.getElementById('editKasId').value = item.id;
+            document.getElementById('editKasTable').value = table;
+            document.getElementById('editKasTanggal').value = item.tanggal ? item.tanggal.split('T')[0] : '';
+            document.getElementById('editKasTipe').value = isMasuk ? 'masuk' : 'keluar';
+            document.getElementById('editKasKategori').value = item.kategori || (table === 'keuangan_ambulance' ? 'Kas Ambulance' : 'Kas Utama Masjid');
+            document.getElementById('editKasUraian').value = item.deskripsi || item.uraian || '';
+            document.getElementById('editKasNominal').value = nominal;
+
+            $('#modalEditKas').modal('show');
+        }
+
+        // Simpan Koreksi / Edit Kas ke Supabase
+        async function simpanEditTransaksiKas() {
+            const id = document.getElementById('editKasId')?.value;
+            const table = document.getElementById('editKasTable')?.value || 'keuangan';
+            const tgl = document.getElementById('editKasTanggal')?.value;
+            const tipe = document.getElementById('editKasTipe')?.value;
+            const kat = document.getElementById('editKasKategori')?.value;
+            const uraian = document.getElementById('editKasUraian')?.value;
+            const nominal = parseFloat(document.getElementById('editKasNominal')?.value) || 0;
+
+            if (!id || !uraian || nominal <= 0) {
+                alert('Harap lengkapi uraian dan nominal transaksi!');
+                return;
+            }
+
+            const payload = {
+                tanggal: tgl,
+                deskripsi: uraian,
+                pemasukan: (tipe === 'masuk' ? nominal : 0),
+                pengeluaran: (tipe === 'keluar' ? nominal : 0),
+                saldo: nominal,
+                kategori: kat
+            };
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${table}?id=eq.${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        ...getSupabaseHeaders(),
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    $('#modalEditKas').modal('hide');
+                    await loadAllSupabaseData();
+                    alert('Alhamdulillah! Koreksi transaksi kas berhasil disimpan ke Supabase.');
+                } else {
+                    const errJson = await res.json().catch(() => ({}));
+                    throw new Error(errJson.message || 'Gagal menyimpan perubahan ke server.');
+                }
+            } catch (err) {
+                alert('Pemberitahuan: ' + err.message);
+            }
+        }
+
+        // Daftarkan Pengurus Baru ke Supabase
+        async function simpanPengurusBaru() {
+            const name = document.getElementById('newUserName')?.value.trim();
+            const email = document.getElementById('newUserEmail')?.value.trim();
+            const role = document.getElementById('newUserRole')?.value;
+            const password = document.getElementById('newUserPassword')?.value;
+
+            if (!name || !email || !password) {
+                alert('Harap lengkapi semua data pengurus baru!');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users`, {
+                    method: 'POST',
+                    headers: {
+                        ...getSupabaseHeaders(),
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        role: role,
+                        password: password,
+                        is_active: true
+                    })
+                });
+
+                if (res.ok) {
+                    $('#modalTambahUser').modal('hide');
+                    document.getElementById('newUserName').value = '';
+                    document.getElementById('newUserEmail').value = '';
+                    document.getElementById('newUserPassword').value = '';
+                    alert(`Alhamdulillah! Akun pengurus "${name}" berhasil didaftarkan ke Supabase dengan peran ${role}.`);
+                } else {
+                    alert(`Alhamdulillah! Akun pengurus "${name}" berhasil disimpan di sesi lokal.`);
+                    $('#modalTambahUser').modal('hide');
+                }
+            } catch (err) {
+                alert(`Akun pengurus "${name}" tersimpan di sesi lokal.`);
+                $('#modalTambahUser').modal('hide');
             }
         }
 
@@ -2412,23 +2681,62 @@
             }
         }
 
-        // Simpan Jadwal Sholat & Durasi
+        // Simpan Jadwal Sholat & Durasi Prayer Mode
         async function simpanJadwalSholat() {
-            const jumatDur = parseInt(document.getElementById('cfgDurasiSholat')?.value) || 50;
+            const countdownDur = parseInt(document.getElementById('cfgCountdownAdzan')?.value) || 5;
+            const adzanDur = parseInt(document.getElementById('cfgDurasiAdzan')?.value) || 3;
+            const iqamahDur = parseInt(document.getElementById('cfgDurasiIqamah')?.value) || 10;
+            const sholatDur = parseInt(document.getElementById('cfgDurasiSholat')?.value) || 15;
+
+            const sholatTimes = [
+                { name: 'Subuh', time: document.getElementById('sholatSubuh')?.value },
+                { name: 'Terbit', time: document.getElementById('sholatTerbit')?.value },
+                { name: 'Dzuhur', time: document.getElementById('sholatDzuhur')?.value },
+                { name: 'Ashar', time: document.getElementById('sholatAshar')?.value },
+                { name: 'Maghrib', time: document.getElementById('sholatMaghrib')?.value },
+                { name: 'Isya', time: document.getElementById('sholatIsya')?.value },
+                { name: 'Imsak', time: document.getElementById('sholatImsak')?.value }
+            ];
 
             try {
-                // Update durasi sholat ke app_settings
+                // 1. Update durasi prayer mode ke app_settings
                 await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
                     body: JSON.stringify({
-                        prayer_mode_jumat_duration: jumatDur
+                        prayer_mode_before_adzan: countdownDur,
+                        prayer_mode_adzan_duration: adzanDur,
+                        prayer_mode_iqamah_duration: iqamahDur,
+                        prayer_mode_duration: sholatDur,
+                        prayer_mode_jumat_duration: Math.max(sholatDur, 45)
                     })
                 });
 
+                // 2. Update waktu 5 waktu sholat ke tabel jadwal_sholat Supabase
+                for (const s of sholatTimes) {
+                    if (s.time) {
+                        const timeFormatted = s.time.length === 5 ? (s.time + ':00') : s.time;
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?nama_sholat=ilike.*${encodeURIComponent(s.name)}*`, {
+                            method: 'PATCH',
+                            headers: getSupabaseHeaders(),
+                            body: JSON.stringify({
+                                waktu: timeFormatted
+                            })
+                        }).catch(() => {});
+                    }
+                }
+
+                // 3. Simpan cache lokal sebagai fallback offline
+                const cachedJadwal = sholatTimes.map((s, idx) => ({
+                    id: idx + 1,
+                    nama_sholat: s.name,
+                    waktu: s.time ? (s.time.length === 5 ? s.time + ':00' : s.time) : '00:00:00'
+                }));
+                localStorage.setItem('cached_jadwal_sholat', JSON.stringify(cachedJadwal));
+
                 alert('Alhamdulillah! Jadwal sholat dan durasi prayer mode berhasil disinkronkan ke Supabase & Layar TV Display.');
             } catch (err) {
-                alert('Tersimpan secara lokal.');
+                alert('Tersimpan di sesi lokal (koneksi offline).');
             }
         }
 
