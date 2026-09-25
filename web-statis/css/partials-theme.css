@@ -565,3 +565,166 @@ h2.sub-header {
         transform: translateY(0);
     }
 }
+
+/* =====================================================
+   RESPONSIVE DESIGN OVERRIDES UNTUK PARTIALS THEME
+   Menjamin tampilan di Tablet & Layar Ponsel (HP) Rapi,
+   Proporsional, Elegan, dan Bebas Tumpang Tindih
+   ===================================================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .header,
+    .header-section {
+        padding: 0 90px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .header h1,
+    .header-section h1 {
+        font-size: clamp(1.8rem, 3.8vw, 2.4rem) !important;
+        letter-spacing: 3px !important;
+        margin: 0 0 2px 0 !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    .header-section .sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: clamp(0.85rem, 1.8vw, 1.05rem) !important;
+        letter-spacing: 2px !important;
+        margin-top: 2px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .header .datetime,
+    .header-section .datetime {
+        font-size: 1.15rem !important;
+        padding: 4px 20px !important;
+    }
+
+    .kaligrafi-medallion {
+        width: 75px !important;
+        height: 75px !important;
+        top: 10px !important;
+    }
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 14px !important;
+    }
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 14px !important;
+    }
+}
+
+/* Smartphone / HP (< 768px) */
+@media (max-width: 767px) {
+    .header,
+    .header-section {
+        padding: 0 54px !important; /* Memberi jarak aman agar judul tidak bertabrakan dengan medali */
+        margin-top: 0 !important;
+        margin-bottom: 6px !important;
+        position: relative !important;
+        z-index: 5 !important;
+    }
+
+    .header h1,
+    .header-section h1 {
+        font-size: clamp(1.15rem, 4.8vw, 1.55rem) !important;
+        letter-spacing: 1.2px !important;
+        line-height: 1.2 !important;
+        margin: 0 0 2px 0 !important; /* Hapus margin minus -15px agar tidak menumpuk ke elemen bawah */
+        text-shadow:
+            1px 1px 0 #ffd700,
+            -1px 1px 0 #ffd700,
+            1px -1px 0 #ffd700,
+            -1px -1px 0 #ffd700,
+            1px 1px 4px rgba(0, 0, 0, 0.9),
+            0 0 10px rgba(255, 215, 0, 0.5) !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    .header-section .sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: clamp(0.65rem, 2.5vw, 0.78rem) !important;
+        letter-spacing: 0.8px !important;
+        line-height: 1.25 !important;
+        margin-top: 1px !important;
+        margin-bottom: 6px !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        opacity: 0.9 !important;
+    }
+
+    .header .datetime,
+    .header-section .datetime {
+        font-size: 0.82rem !important;
+        padding: 3px 14px !important;
+        border-radius: 20px !important;
+        margin-top: 2px !important;
+        margin-bottom: 4px !important;
+    }
+
+    /* Medali kaligrafi di HP: disesuaikan agar proporsional dan tidak menutupi layar */
+    .kaligrafi-medallion {
+        width: 48px !important;
+        height: 48px !important;
+        top: 6px !important;
+        z-index: 10 !important;
+    }
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 6px !important;
+        left: auto !important;
+    }
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 6px !important;
+        right: auto !important;
+    }
+    .kaligrafi-medallion::before {
+        width: 105% !important;
+        height: 105% !important;
+        filter: blur(6px) !important;
+    }
+}
+
+/* Smartphone Layar Kecil (< 380px) */
+@media (max-width: 380px) {
+    .header,
+    .header-section {
+        padding: 0 46px !important;
+    }
+    .header h1,
+    .header-section h1 {
+        font-size: 1.1rem !important;
+        letter-spacing: 0.8px !important;
+    }
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    .header-section .sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: 0.62rem !important;
+    }
+    .kaligrafi-medallion {
+        width: 42px !important;
+        height: 42px !important;
+        top: 6px !important;
+    }
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 4px !important;
+    }
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 4px !important;
+    }
+}

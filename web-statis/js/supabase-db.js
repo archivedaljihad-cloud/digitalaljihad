@@ -20,8 +20,8 @@
     const SupabaseDB = {
         // Fallback default settings jika offline atau database belum terhubung
         defaultSettings: {
-            nama_aplikasi: 'MASJID JAMI\' AL JIHAD',
-            sub_header: 'Jl. Melati No. 12, Kebon Jeruk, Jakarta Barat',
+            nama_aplikasi: 'MASJID JAMI\' AL-JIHAD',
+            sub_header: 'Graha Asri, Cikarang Utara, Bekasi',
             rotation_interval: 10,
             rotation_enabled: true,
             prayer_mode_enabled: true,
@@ -63,10 +63,10 @@
             try {
                 const client = getClient();
                 if (client) {
-                    const { data, error } = await client.from('app_settings').select('*').limit(5);
+                    const { data, error } = await client.from('app_settings').select('*').order('id', { ascending: true }).limit(5);
                     if (!error && data && data.length > 0) {
-                        // Gunakan baris pertama atau gabungkan baris
-                        const row = data[0];
+                        // Prioritaskan baris id 1 jika ada
+                        const row = data.find(r => r.id === 1) || data[0];
                         const settings = Object.assign({}, this.defaultSettings, row);
                         
                         // Parse JSON fields jika bertipe string
@@ -75,6 +75,14 @@
                         }
                         if (typeof settings.running_text_pages === 'string') {
                             try { settings.running_text_pages = JSON.parse(settings.running_text_pages); } catch (e) {}
+                        }
+
+                        // Sanitasi nama masjid & sub header agar tidak ada nilai dummy lama
+                        if (!settings.nama_aplikasi || settings.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || settings.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
+                            settings.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';
+                        }
+                        if (!settings.sub_header || settings.sub_header.includes('Kebon Jeruk') || settings.sub_header.includes('Melati')) {
+                            settings.sub_header = 'Graha Asri, Cikarang Utara, Bekasi';
                         }
 
                         // Simpan ke cache lokal browser
@@ -89,7 +97,18 @@
             // Fallback ke localStorage atau default
             const cached = localStorage.getItem('cached_app_settings');
             if (cached) {
-                try { return JSON.parse(cached); } catch (e) {}
+                try {
+                    const parsed = JSON.parse(cached);
+                    // Sanitasi cache browser lama
+                    if (!parsed.nama_aplikasi || parsed.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || parsed.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
+                        parsed.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';
+                    }
+                    if (!parsed.sub_header || parsed.sub_header.includes('Kebon Jeruk') || parsed.sub_header.includes('Melati')) {
+                        parsed.sub_header = 'Graha Asri, Cikarang Utara, Bekasi';
+                    }
+                    localStorage.setItem('cached_app_settings', JSON.stringify(parsed));
+                    return parsed;
+                } catch (e) {}
             }
             return this.defaultSettings;
         },

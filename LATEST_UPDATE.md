@@ -2694,4 +2694,92 @@ Pembaruan ini menjawab tiga permintaan penting dari pengguna untuk kenyamanan op
 - Berkas telah disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 🚀 BAB 72: PERBAIKAN TEKS ALAMAT DUMMY (KEBON JERUK) & OPTIMASI RESPONSIVITAS HEADER LAYAR HP (MOBILE)
+
+### Tanggal Pembaruan: 25 September 2026
+### Konteks Pembaruan:
+Pengguna melaporkan bahwa saat web display dibuka di layar ponsel (HP), muncul teks yang tampak seperti teks latar belakang / watermark bertuliskan:
+`"JL.MELATI NO.12 KEBON JERUK, JAKARTA BARAT"` dan `"DISPLAY MASJID"`, yang bertumpukan di belakang kapsul tanggal dan kartu jadwal sholat.
+
+---
+
+### Analisis Akar Masalah (Root Cause Analysis):
+1. **Sumber Teks Dummy:**
+   - Di `web-statis/js/supabase-db.js` baris 24, fallback `defaultSettings.sub_header` masih berisi string dummy bawaan awal: `'Jl. Melati No. 12, Kebon Jeruk, Jakarta Barat'`.
+   - Di database Supabase Cloud tabel `app_settings`, kolom `sub_header` tidak didefinisikan (hanya kolom pengaturan sistem umum). Ketika `SupabaseDB.getSettings()` melakukan query `select('*')`, `Object.assign({}, this.defaultSettings, row)` mempertahankan nilai default string dummy tersebut.
+   - Selain itu, di Supabase Cloud pada tabel `app_settings` row ID 3 bernilai `nama_aplikasi: "DISPLAY MASJID"`.
+2. **Penyebab Teks Menumpuk Seperti "Background" di HP:**
+   - Di `web-statis/css/partials-theme.css` baris 253-282:
+     - `.header h1, .header-section h1` dipaksa `font-size: 3.2rem !important;` dan **`margin: 0 0 -15px 0 !important;`** (margin negatif).
+     - `.sub-header` dipaksa `font-size: 1.25rem !important; letter-spacing: 4px !important;`.
+     - `.kaligrafi-medallion` dipaksa `width: 125px !important; height: 125px !important;`.
+   - Karena `partials-theme.css` dimuat setelah `display-theme.css` dan menggunakan `!important` **tanpa adanya media query responsif mobile**, aturan desktop raksasa ini menimpa seluruh styling di smartphone (< 768px).
+   - Pada layar smartphone berlebar 360–412px, dua medali raksasa (125px kiri dan kanan) menjepit teks judul dan alamat. Ditambah dengan margin negatif `-15px`, kapsul tanggal (`.datetime`) dan kartu jadwal sholat tertarik ke atas dan menimpa teks alamat tersebut dari depan, sehingga teks dummy tampak bocor di baliknya layaknya watermark / background text.
+
+---
+
+### Solusi Komprehensif yang Diterapkan:
+
+#### 1. Perbaikan Fallback & Sanitasi Otomatis di `web-statis/js/supabase-db.js`:
+- Mengubah `defaultSettings`:
+  - `nama_aplikasi: "MASJID JAMI' AL-JIHAD"`
+  - `sub_header: "Graha Asri, Cikarang Utara, Bekasi"`
+- Menambahkan **Self-Healing Data Sanitization** pada `getSettings()`:
+  - Mengurutkan query `.order('id', { ascending: true })` dan memprioritaskan baris ID 1.
+  - Jika `nama_aplikasi` bernilai dummy (`'DISPLAY MASJID'`, `'NAMA MASJID'`, atau kosong), otomatis disanitasi menjadi `"MASJID JAMI' AL-JIHAD"`.
+  - Jika `sub_header` mengandung `'Kebon Jeruk'`, `'Melati'`, atau kosong, otomatis digantikan dengan identitas resmi: `"Graha Asri, Cikarang Utara, Bekasi"`.
+  - Sanitasi otomatis juga diterapkan pada pembacaan `localStorage.getItem('cached_app_settings')` dan langsung disimpan kembali ke `localStorage`, sehingga cache lama pada browser smartphone pengguna langsung bersih seketika tanpa perlu clear cache manual.
+
+#### 2. Sinkronisasi Data Supabase Cloud:
+- Mengirim REST API PATCH ke Supabase Cloud untuk seluruh baris tabel `app_settings` (ID 1, 2, dan 3):
+  - Memperbarui kolom `nama_aplikasi` menjadi `"MASJID JAMI' AL-JIHAD"` (HTTP 200 OK).
+
+#### 3. Optimasi Responsivitas Mobile di `web-statis/css/partials-theme.css`:
+- Menambahkan blok responsivitas mobile dan tablet yang komprehensif di akhir `partials-theme.css`:
+  - **Tablet (`@media (max-width: 1024px)`):**
+    - Padding aman `.header-section`: `0 90px !important`.
+    - H1: `clamp(1.8rem, 3.8vw, 2.4rem) !important`, margin `0 0 2px 0 !important`.
+    - Sub-header: `clamp(0.85rem, 1.8vw, 1.05rem) !important`.
+    - Medali kaligrafi: `75px x 75px !important`.
+  - **Smartphone / HP (`@media (max-width: 767px)`):**
+    - Padding samping `.header-section`: `0 54px !important` agar teks judul leluasa di tengah dan tidak berbenturan dengan medali.
+    - H1: `clamp(1.15rem, 4.8vw, 1.55rem) !important`, line-height `1.2 !important`, dan **margin negatif dihapus menjadi `margin: 0 0 2px 0 !important;`**.
+    - Sub-header: `clamp(0.65rem, 2.5vw, 0.78rem) !important`, letter-spacing `0.8px !important`, margin `0 0 6px 0 !important`.
+    - Medali kaligrafi: diperkecil proporsional menjadi `48px x 48px !important`, top `6px !important`, aura lembut tanpa silau.
+    - Kapsul tanggal (`.datetime`): ukuran font `0.82rem !important;`, margin rapi.
+  - **Smartphone Layar Kecil (`@media (max-width: 380px)`):**
+    - Padding samping `46px`, H1 `1.1rem`, sub-header `0.62rem`, medali `42px`.
+
+#### 4. Penyesuaian Fallback Markup di `web-statis/slides/utama.html`:
+- Menyeragamkan elemen HTML default sebelum Supabase dimuat:
+  - `<h1 id="nama-masjid">MASJID JAMI' AL-JIHAD</h1>`
+  - `<h3 class="sub-header" id="sub-header">Graha Asri, Cikarang Utara, Bekasi</h3>`
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/js/supabase-db.js`
+   - Pembaruan `defaultSettings` nama masjid & alamat resmi Cikarang Bekasi.
+   - Pemasangan sanitasi otomatis data & cache pada `getSettings()`.
+2. `web-statis/css/partials-theme.css`
+   - Penambahan media queries `@media (max-width: 1024px)`, `@media (max-width: 767px)`, dan `@media (max-width: 380px)` untuk medali, header H1, sub-header, dan datetime.
+3. `web-statis/slides/utama.html`
+   - Penggantian fallback HTML nama masjid dan sub-header ke identitas resmi.
+4. Database Supabase Cloud (`app_settings` ID 1, 2, 3)
+   - Sinkronisasi `nama_aplikasi` ke `"MASJID JAMI' AL-JIHAD"`.
+5. Folder Mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`
+   - Mirroring berkas web statis termutakhir.
+6. `LATEST_UPDATE.md`
+   - Dokumentasi Bab 72.
+
+---
+
+### Hasil Akhir:
+- Teks dummy `"JL. MELATI NO. 12, KEBON JERUK, JAKARTA BARAT"` telah dihapus 100% dari seluruh sistem.
+- Alamat resmi `"Graha Asri, Cikarang Utara, Bekasi"` dan nama `"MASJID JAMI' AL-JIHAD"` kini tampil konsisten dan elegan di semua perangkat.
+- Pada tampilan ponsel (HP), header masjid tertata sangat rapi dan proporsional: medali kaligrafi berukuran pas di sudut atas, judul dan alamat berada di tengah dengan ukuran seimbang, dan tidak ada lagi elemen yang saling bertumpuk ataupun menyerupai background text bocor.
+
+
 
