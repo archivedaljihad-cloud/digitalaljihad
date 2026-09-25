@@ -1943,10 +1943,45 @@ Fitur **Mode Malam Jum'at (Penampilan Otomatis Surat Yaasiin)** telah diintegras
 
 ---
 
-### Sinkronisasi Berkas:
 - Berkas `web-statis/js/prayer-engine.js`, `web-statis/index.html`, dan `web-statis/slides/yasin.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+---
+
+## 🎵 59. PENYELARASAN FITUR AUDIO TARHIM OTOMATIS BERDASARKAN WAKTU SHOLAT & DURASI TRIGGER (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 5.6.0 | **Status:** ✅ 100% Selesai, Teruji, & Sinkron
+
+### Ringkasan Pencapaian:
+Fitur **Audio Tarhim Otomatis** pada sistem display TV statis (`web-statis/prayer-mode.html`) telah disempurnakan dan diselaraskan persis dengan fungsionalitas Laravel terdahulu (`prayer-mode.blade.php`). Audio tarhim berputar secara cerdas menyesuaikan waktu sholat fardhu yang bersangkutan, menghormati konfigurasi trigger countdown detik di database, serta otomatis berhenti begitu waktu adzan tiba.
+
+---
+
+### Alur Kerja & Mekanisme Audio Tarhim:
+1. **Pendeteksian Waktu Sholat & Pemilihan Berkas Audio:**
+   - **Subuh:** Memutar berkas audio khusus `audio/Subuh.mp3` (atau audio custom dari setting `tarhim_audio_subuh`).
+   - **Dzuhur & Sholat Jum'at:** Memutar `audio/Dzuhur.mp3`.
+   - **Ashar:** Memutar `audio/Ashar.mp3`.
+   - **Maghrib:** Memutar `audio/Maghrib.mp3`.
+   - **Isya:** Memutar `audio/Isya.mp3`.
+2. **Pemicu Durasi Sisa Detik (`tarhim_trigger_seconds`):**
+   - Audio Tarhim hanya mulai diputar ketika sisa waktu menuju adzan (`remainingSeconds`) bernilai `<= tarhim_trigger_seconds` (default: **300 detik** / 5 menit sebelum adzan).
+   - Jika durasi countdown disetel 10 menit, audio tarhim tidak langsung berputar di menit ke-10, melainkan menunggu hingga sisa 5 menit terakhir sesuai preferensi DKM.
+3. **Pemberhentian Otomatis Saat Masuk Adzan:**
+   - Tepat saat hitung mundur mencapai `00:00` dan fase berganti ke `ADZAN`, audio tarhim **langsung dihentikan seketika (`pause() & currentTime = 0`)** sehingga tidak pernah bertabrakan dengan kumandang adzan.
+4. **Fitur Pengaktifan/Penonaktifan DKM (`audio_tarhim`):**
+   - Jika pengurus masjid menonaktifkan fitur audio tarhim melalui pengaturan (`audio_tarhim: false`), sistem tidak akan memutar suara apapun selama countdown dan tetap hening.
+5. **Penanganan Autoplay Policy Browser (Fail-Safe Unlock):**
+   - Jika browser TV/PC menahan pemutaran otomatis (*autoplay policy*), sistem memasang *one-time event listener* pada interaksi pertama (klik/sentuh) untuk membuka kunci audio secara transparan.
+
+---
+
+### Sinkronisasi Berkas:
+- Berkas `web-statis/prayer-mode.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\prayer-mode.html`.
+- Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
 
 
 

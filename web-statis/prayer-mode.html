@@ -595,38 +595,59 @@
         function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
 
         // Audio Handler
-        function handleAudio(phase, prayerName) {
+        function handleAudio(phase, prayerName, remainingSeconds) {
             const tarhimAudio = document.getElementById('audioTarhim');
-            const cleanPrayer = prayerName.toLowerCase().replace(/[^a-z]/g, '');
+            const cleanPrayer = (prayerName || '').toLowerCase().replace(/[^a-z]/g, '');
 
-            // Pilih file audio sesuai waktu sholat
+            // 1. Cek apakah Audio Tarhim diaktifkan di pengaturan (default: true)
+            const isTarhimEnabled = settings ? (settings.audio_tarhim !== false) : true;
+            const triggerSeconds = (settings && parseInt(settings.tarhim_trigger_seconds)) || 300; // default 5 menit
+
+            // 2. Tentukan berkas audio tarhim berdasarkan waktu sholat
             let audioFile = 'audio/Dzuhur.mp3';
-            if (cleanPrayer.includes('subuh')) audioFile = 'audio/Subuh.mp3';
-            else if (cleanPrayer.includes('ashar')) audioFile = 'audio/Ashar.mp3';
-            else if (cleanPrayer.includes('maghrib')) audioFile = 'audio/Maghrib.mp3';
-            else if (cleanPrayer.includes('isya')) audioFile = 'audio/Isya.mp3';
+            if (cleanPrayer.includes('subuh')) {
+                audioFile = (settings && settings.tarhim_audio_subuh) ? settings.tarhim_audio_subuh : 'audio/Subuh.mp3';
+            } else if (cleanPrayer.includes('ashar')) {
+                audioFile = 'audio/Ashar.mp3';
+            } else if (cleanPrayer.includes('maghrib')) {
+                audioFile = 'audio/Maghrib.mp3';
+            } else if (cleanPrayer.includes('isya')) {
+                audioFile = 'audio/Isya.mp3';
+            } else if (cleanPrayer.includes('jumat')) {
+                audioFile = 'audio/Dzuhur.mp3';
+            }
 
-            if (phase === PrayerEngine.PHASES.COUNTDOWN) {
-                if (!hasPlayedTarhim && tarhimAudio) {
+            // Jika ada file custom reguler dari settings
+            if (!cleanPrayer.includes('subuh') && settings && settings.tarhim_audio_reguler) {
+                audioFile = settings.tarhim_audio_reguler;
+            }
+
+            // 3. Logika Pemutaran
+            if (phase === PrayerEngine.PHASES.COUNTDOWN && isTarhimEnabled) {
+                // Hanya putar jika sisa waktu menuju adzan sudah <= triggerSeconds
+                if (remainingSeconds <= triggerSeconds && !hasPlayedTarhim && tarhimAudio) {
                     tarhimAudio.src = audioFile;
                     tarhimAudio.play().then(() => {
                         hasPlayedTarhim = true;
-                        console.log('🎵 Audio Tarhim diputar:', audioFile);
+                        console.log('🎵 Audio Tarhim mulai diputar:', audioFile, 'pada sisa detik:', remainingSeconds);
                     }).catch(e => {
-                        console.log('Audio autoplay prevented:', e);
-                        // Listener unlock pada interaksi
+                        console.log('Audio autoplay prevented by browser:', e);
                         const unlock = () => {
                             tarhimAudio.play();
                             hasPlayedTarhim = true;
                             document.removeEventListener('click', unlock);
+                            document.removeEventListener('touchstart', unlock);
                         };
                         document.addEventListener('click', unlock, { once: true });
+                        document.addEventListener('touchstart', unlock, { once: true });
                     });
                 }
             } else {
+                // Di luar fase countdown (misal masuk adzan / iqamah / sholat), hentikan tarhim seketika
                 if (tarhimAudio && !tarhimAudio.paused) {
                     tarhimAudio.pause();
                     tarhimAudio.currentTime = 0;
+                    console.log('⏹️ Audio Tarhim dihentikan.');
                 }
             }
         }
@@ -647,8 +668,8 @@
                 return;
             }
 
-            // Audio trigger
-            handleAudio(state.phase, state.prayer || '');
+            // Audio trigger (fase, nama sholat, dan sisa detik)
+            handleAudio(state.phase, state.prayer || '', state.remaining || 0);
 
             // Elements
             const phaseTitleEl = document.getElementById('phaseTitle');
