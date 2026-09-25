@@ -1423,11 +1423,12 @@
                                 <table class="table table-custom table-hover">
                                     <thead>
                                         <tr>
-                                            <th style="width: 70px;">Urutan</th>
+                                            <th style="width: 70px;" class="text-center">Urutan</th>
                                             <th>Nama Halaman Slide</th>
-                                            <th>URL Embed</th>
-                                            <th style="width: 130px;">Status Aktif</th>
-                                            <th style="width: 140px;" class="text-center">Aksi Reorder</th>
+                                            <th>Berkas Slide</th>
+                                            <th style="width: 175px;" class="text-center">Pratinjau Layar TV</th>
+                                            <th style="width: 120px;" class="text-center">Status Aktif</th>
+                                            <th style="width: 130px;" class="text-center">Aksi Reorder</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rotationTableBody">
@@ -1435,60 +1436,23 @@
                                             <td class="font-weight-bold text-center">1</td>
                                             <td><strong>Jadwal Sholat 5 Waktu</strong></td>
                                             <td><code>slides/utama.html</code></td>
-                                            <td>
-                                                <div class="custom-control custom-switch">
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-info font-weight-bold mr-1" onclick="bukaPreviewSlide('slides/utama.html', 'Jadwal Sholat 5 Waktu')">
+                                                    <i class="fas fa-desktop mr-1"></i> Preview
+                                                </button>
+                                                <a href="slides/utama.html" target="_blank" class="btn btn-sm btn-outline-secondary" title="Buka Tab Baru">
+                                                    <i class="fas fa-external-link-alt"></i>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="custom-control custom-switch d-inline-block">
                                                     <input type="checkbox" class="custom-control-input" id="rotCheck1" checked>
-                                                    <label class="custom-control-label" for="rotCheck1">Aktif</label>
+                                                    <label class="custom-control-label font-weight-bold text-success" for="rotCheck1">Aktif</label>
                                                 </div>
                                             </td>
                                             <td class="text-center">
                                                 <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(1, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
                                                 <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(1, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr data-index="2">
-                                            <td class="font-weight-bold text-center">2</td>
-                                            <td><strong>Petugas Sholat Jum'at</strong></td>
-                                            <td><code>slides/jumat.html</code></td>
-                                            <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="rotCheck2" checked>
-                                                    <label class="custom-control-label" for="rotCheck2">Aktif</label>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(2, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(2, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr data-index="3">
-                                            <td class="font-weight-bold text-center">3</td>
-                                            <td><strong>Rincian Keuangan Masjid</strong></td>
-                                            <td><code>slides/keuangan.html</code></td>
-                                            <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="rotCheck3" checked>
-                                                    <label class="custom-control-label" for="rotCheck3">Aktif</label>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(3, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(3, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr data-index="4">
-                                            <td class="font-weight-bold text-center">4</td>
-                                            <td><strong>QRIS Infaq & Donasi</strong></td>
-                                            <td><code>slides/qris.html</code></td>
-                                            <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="rotCheck4" checked>
-                                                    <label class="custom-control-label" for="rotCheck4">Aktif</label>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(4, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
-                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(4, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -2247,6 +2211,51 @@
         </div>
     </div>
 
+    <!-- MODAL LIVE TV PREVIEW (MONITOR SIMULATOR) -->
+    <div class="modal fade" id="modalPreviewTV" tabindex="-1" role="dialog" aria-labelledby="modalPreviewTVLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document" style="max-width: 94vw;">
+            <div class="modal-content" style="background: #061e14; border: 2px solid #ffd700; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.85);">
+                <div class="modal-header d-flex align-items-center justify-content-between py-2 px-3" style="background: linear-gradient(135deg, #04261a 0%, #03150e 100%); border-bottom: 1px solid rgba(255,215,0,0.3);">
+                    <div class="d-flex align-items-center" style="gap: 10px;">
+                        <span class="badge badge-warning font-weight-bold px-2 py-1" style="font-size: 11px;">
+                            <i class="fas fa-tv mr-1"></i> LIVE MONITOR TV
+                        </span>
+                        <h5 class="modal-title font-weight-bold text-white mb-0" id="modalPreviewTVLabel" style="font-size: 1.05rem;">
+                            Pratinjau Layar TV Display
+                        </h5>
+                        <code class="text-warning ml-2 d-none d-md-inline" id="previewUrlLabel" style="background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 6px; font-size: 12px;">slides/utama.html</code>
+                    </div>
+                    <div class="d-flex align-items-center" style="gap: 8px;">
+                        <button type="button" class="btn btn-sm btn-outline-warning font-weight-bold" onclick="refreshPreviewIframe()" title="Muat Ulang Tampilan">
+                            <i class="fas fa-sync-alt mr-1"></i> Reload
+                        </button>
+                        <a href="#" id="btnPreviewNewTab" target="_blank" class="btn btn-sm btn-outline-light font-weight-bold" title="Buka Satu Layar Penuh di Tab Baru">
+                            <i class="fas fa-external-link-alt mr-1"></i> Tab Baru
+                        </a>
+                        <button type="button" class="btn btn-sm btn-outline-success font-weight-bold" onclick="fullscreenPreviewIframe()" title="Tampilkan Layar Penuh (Fullscreen)">
+                            <i class="fas fa-expand mr-1"></i> Fullscreen
+                        </button>
+                        <button type="button" class="close text-white ml-2" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body p-2" style="background: #020c08;">
+                    <div style="position: relative; width: 100%; height: 72vh; min-height: 520px; border-radius: 10px; overflow: hidden; background: #000; box-shadow: inset 0 0 25px rgba(0,0,0,0.9); border: 2px solid rgba(255,215,0,0.2);">
+                        <iframe id="framePreviewTV" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer py-2 px-3 d-flex justify-content-between align-items-center" style="background: #04261a; border-top: 1px solid rgba(255,215,0,0.2);">
+                    <small class="text-white-50">
+                        <i class="fas fa-info-circle text-warning mr-1"></i>
+                        Pratinjau ini identik 100% dengan tampilan yang sedang/akan tayang di TV Display Masjid.
+                    </small>
+                    <button type="button" class="btn btn-secondary btn-sm px-4" data-dismiss="modal">Tutup Pratinjau</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- =======================================================
          SCRIPTS: VENDOR & SUPABASE REALTIME ENGINE
@@ -2746,10 +2755,18 @@
                         <td class="font-weight-bold text-center">${idx + 1}</td>
                         <td><strong>${title}</strong></td>
                         <td><code>${url}</code></td>
-                        <td>
-                            <div class="custom-control custom-switch">
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-info font-weight-bold mr-1" onclick="bukaPreviewSlide('${url}', '${title.replace(/'/g, "\\'")}')" title="Pratinjau Layar TV di Modal">
+                                <i class="fas fa-desktop mr-1"></i> Preview
+                            </button>
+                            <a href="${url}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Buka Tab Baru">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <div class="custom-control custom-switch d-inline-block">
                                 <input type="checkbox" class="custom-control-input" id="rotCheck${idx + 1}" ${isChecked}>
-                                <label class="custom-control-label" for="rotCheck${idx + 1}">Aktif</label>
+                                <label class="custom-control-label font-weight-bold text-success" for="rotCheck${idx + 1}">Aktif</label>
                             </div>
                         </td>
                         <td class="text-center">
@@ -2777,6 +2794,52 @@
                 });
             }
         }
+
+        // Buka Modal Live Preview TV
+        function bukaPreviewSlide(url, title) {
+            const frame = document.getElementById('framePreviewTV');
+            const labelTitle = document.getElementById('modalPreviewTVLabel');
+            const labelUrl = document.getElementById('previewUrlLabel');
+            const btnNewTab = document.getElementById('btnPreviewNewTab');
+
+            if (!frame) return;
+
+            if (labelTitle) labelTitle.textContent = title || 'Pratinjau Layar TV Display';
+            if (labelUrl) labelUrl.textContent = url || '';
+            if (btnNewTab) btnNewTab.href = url || '#';
+
+            frame.src = url || 'about:blank';
+            $('#modalPreviewTV').modal('show');
+        }
+
+        // Muat Ulang Live Preview Iframe
+        function refreshPreviewIframe() {
+            const frame = document.getElementById('framePreviewTV');
+            if (frame && frame.src) {
+                frame.src = frame.src;
+            }
+        }
+
+        // Fullscreen Live Preview
+        function fullscreenPreviewIframe() {
+            const frame = document.getElementById('framePreviewTV');
+            if (!frame) return;
+            if (frame.requestFullscreen) {
+                frame.requestFullscreen();
+            } else if (frame.webkitRequestFullscreen) {
+                frame.webkitRequestFullscreen();
+            } else if (frame.msRequestFullscreen) {
+                frame.msRequestFullscreen();
+            }
+        }
+
+        // Reset iframe src saat modal ditutup agar animasi / audio berhenti
+        $(document).ready(function() {
+            $('#modalPreviewTV').on('hidden.bs.modal', function () {
+                const frame = document.getElementById('framePreviewTV');
+                if (frame) frame.src = '';
+            });
+        });
 
         // Buka Modal Edit Kas
         function bukaModalEditKas(id, table = 'keuangan') {

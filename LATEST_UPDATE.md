@@ -2177,6 +2177,56 @@ Telah dihubungkan dan disinkronkan secara resmi jadwal sholat display masjid den
 - Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 📺 64. FITUR LIVE TV PREVIEW & SIMULATOR MONITOR PADA TABEL ROTASI SLIDE PANEL ADMIN (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 6.1.0 | **Status:** ✅ 100% Selesai, Teruji, & Sinkron
+
+### Ringkasan Pencapaian:
+Telah dibuatkan fitur **Live TV Monitor Preview** langsung di dalam **Panel Admin (`web-statis/admin.html`)** pada menu **"Rotasi Slide TV"**. Pengurus masjid kini dapat melihat pratinjau setiap slide secara instan sebelum tayang di TV, baik melalui modal simulator monitor TV interaktif maupun membukanya langsung di tab baru secara fullscreen.
+
+---
+
+### Cara Mengakses Pratinjau (Preview) Halaman:
+1. **Di Panel Admin (Menu "Rotasi Slide TV"):**
+   - Buka menu **Rotasi Slide TV** di Panel Admin.
+   - Pada kolom **"Pratinjau Layar TV"**, setiap baris slide dilengkapi dengan 2 tombol:
+     - 👁️ **Tombol "Preview":** Membuka dialog modal **Live Monitor TV 16:9** berbingkai emas islami tanpa meninggalkan panel admin. Dilengkapi tombol **Reload**, **Fullscreen**, dan **Buka Tab Baru**.
+     - ↗️ **Tombol "Tab Baru":** Membuka langsung halaman slide tersebut di tab baru browser untuk melihatnya dalam ukuran penuh monitor/laptop.
+2. **Di Bilah Atas Navbar Admin:**
+   - Tombol **"Lihat Display"** (`index.html`) untuk melihat rotasi TV secara live.
+3. **Akses Langsung Melalui File Browser:**
+   - Jadwal Sholat Utama: `web-statis/slides/utama.html`
+   - Petugas Sholat Jum'at: `web-statis/slides/jumat.html`
+   - Keuangan Masjid: `web-statis/slides/keuangan.html`
+   - QRIS Donasi: `web-statis/slides/qris.html`
+   - Penerimaan Hewan Qurban: `web-statis/slides/qurban.html`
+   - Layanan Ambulance: `web-statis/slides/ambulance.html`
+   - Program Infaq & Donatur: `web-statis/slides/infaq.html`
+   - Surah Yaasiin: `web-statis/slides/yasin.html`
+   - Informasi & Kajian: `web-statis/slides/slide.html`
+   - Pengumuman DKM: `web-statis/slides/pengumuman.html`
+   - Sholat Idul Fitri: `web-statis/slides/idul-fitri.html`
+   - Sholat Idul Adha: `web-statis/slides/idul-adha.html`
+   - Prayer Mode (Adzan & Sholat): `web-statis/prayer-mode.html`
+
+---
+
+### Berkas yang Diperbarui:
+1. `web-statis/admin.html`:
+   - Penambahan kolom *Pratinjau Layar TV* di tabel rotasi slide.
+   - Penambahan modal simulator monitor `#modalPreviewTV`.
+   - Penambahan fungsi kontrol: `bukaPreviewSlide()`, `refreshPreviewIframe()`, dan `fullscreenPreviewIframe()`.
+2. `LATEST_UPDATE.md`: Pencatatan dokumentasi Bab 64.
+
+---
+
+### Sinkronisasi Berkas:
+- Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+
 
 
 
