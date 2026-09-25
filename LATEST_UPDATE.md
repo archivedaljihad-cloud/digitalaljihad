@@ -3031,6 +3031,43 @@ Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian infor
    - **Subdomain Workers.dev:** `https://digitalaljihad.archived-aljihad.workers.dev` (Status HTTP 200 OK)
    - **Kesimpulan Domain:** Pengguna **TIDAK PERLU** merubah settingan apapun pada registrar domain karena rute domain `digitalaljihad.my.id` sudah terhubung dan melayani seluruh aset statis Pages dengan optimal.
 
+---
+
+## 🧹 BAB 77: PERAPIAN ANTARMUKA HALAMAN LOGIN: PENGHILANGAN KOTAK KAPSUL PERAN (SUPER ADMIN, BENDAHARA, OPERATOR) & ELIMINASI TEKS CLOUDFLARE PAGES DI BADGE ORANGE FOOTER
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Antigravity AI UI/UX Specialist
+
+---
+
+### Ringkasan & Permintaan Pengguna:
+Berdasarkan arahan pengguna untuk membuat tampilan halaman login lebih bersih (*clean*), privat, dan bebas dari elemen demo yang tidak diperlukan dalam lingkungan produksi:
+1. **Penghilangan Kotak Kapsul Pilihan Peran Cepat:**
+   - Menghapus 3 tombol kapsul demo (*Quick Role Presets*) bertuliskan:
+     - `Super Admin` (ikon perisai kuning)
+     - `Bendahara` (ikon dompet hijau)
+     - `Operator` (ikon monitor biru)
+   - Tampilan kini langsung menyajikan petunjuk kredensial dan form input (Email/Username & Kata Sandi) yang bersih dan profesional tanpa mengekspos daftar peran kepada publik/pengguna umum.
+2. **Pembersihan Teks Badge Orange Dekat Footer:**
+   - Menghapus teks `• CLOUDFLARE PAGES` dari kotak badge orange (`.attribution-version-badge`) di bagian bawah dekat footer.
+   - Badge kini hanya menampilkan versi sistem yang rapi: `⚡ WEB STATIS v5.1.0`.
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/login.html` (Penghapusan elemen `quick-role-picker` dan penyelarasan badge `.attribution-version-badge`).
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 77).
+3. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+4. Cloudflare Deployment & Git Remote Repository (`digitalaljihad.my.id`).
+
+---
+
+### Status Pengujian:
+- ✅ Sintaks JavaScript `login.html` terverifikasi valid (0 syntax error).
+- ✅ Markup HTML bersih dan struktur kartu login terverifikasi proporsional.
+- ✅ Sinkronisasi otomatis ke lokal mandiri, Git remote `main`, dan live deployment Cloudflare.
+
+
 
 
 
