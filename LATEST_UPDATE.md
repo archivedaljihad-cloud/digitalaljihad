@@ -2781,5 +2781,89 @@ Pengguna melaporkan bahwa saat web display dibuka di layar ponsel (HP), muncul t
 - Alamat resmi `"Graha Asri, Cikarang Utara, Bekasi"` dan nama `"MASJID JAMI' AL-JIHAD"` kini tampil konsisten dan elegan di semua perangkat.
 - Pada tampilan ponsel (HP), header masjid tertata sangat rapi dan proporsional: medali kaligrafi berukuran pas di sudut atas, judul dan alamat berada di tengah dengan ukuran seimbang, dan tidak ada lagi elemen yang saling bertumpuk ataupun menyerupai background text bocor.
 
+---
+
+## 🚀 BAB 73: PENYEMPURNAAN DASHBOARD PETUGAS & AKTIVASI FUNGSI SHOW / HIDE SIDEBAR UNIVERSAL
+
+### Tanggal Pembaruan: 25 September 2026
+### Konteks Pembaruan:
+Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rotasi TV:
+1. Sembunyikan / hilangkan kotak badge dan teks *"Mode Operator (Urutan Terkunci)"*.
+2. Tombol Show/Hide Sidebar belum aktif / belum bisa toggle sidebar.
+3. Ganti teks subtitle rotasi *"Kelola urutan dan status aktif seluruh 17 halaman tayang slide TV. Super Admin dapat memindah urutan (▲/▼), Operator hanya aktif/nonaktif"* menjadi *"Untuk mengelola/mengatur urutan halaman rotasi, silakan menghubungi Admin"*.
+
+---
+
+### Solusi Komprehensif yang Diterapkan:
+
+#### 1. Penyembunyian Badge Kotak "Mode Operator (Urutan Terkunci)":
+- **File Terkait:** `web-statis/admin.html`
+- **Tindakan:**
+  - Pada markup HTML awal (baris 1676), badge `#badgeRotasiRole` langsung diberi `style="display: none;"`.
+  - Pada fungsi `applyCurrentUserState(user)` dan `renderRotationTable()`, dilakukan pengecekan peran: jika bukan Super Admin (`!isSuperAdmin`), elemen `#badgeRotasiRole` langsung dipaksa `style.display = 'none'` dan `innerHTML = ''`.
+  - Badge hanya akan muncul (`badge-warning`) jika pengguna yang aktif adalah Super Admin (`isSuperAdmin = true`).
+  - **Hasil:** Pada dashboard Petugas / Operator, header tabel rotasi tampil bersih tanpa kotak badge gembok abu-abu yang membingungkan.
+
+#### 2. Perubahan Teks Subtitle Halaman Rotasi Display TV:
+- **File Terkait:** `web-statis/admin.html`
+- **Tindakan:**
+  - Teks deskripsi di bawah judul *Rotasi Halaman Display TV* (`#descRotasiSubtitle`) diperbarui pada markup HTML awal (baris 1650) menjadi:
+    `"Untuk mengelola/mengatur urutan halaman rotasi, silakan menghubungi Admin."`
+  - Pada logika JavaScript (`applyCurrentUserState` dan `renderRotationTable`), subtitle disinkronkan secara dinamis: jika pengguna adalah Super Admin, tampil panduan reorder ▲/▼; jika Operator/Petugas, tampil pesan resmi untuk menghubungi Admin.
+
+#### 3. Perbaikan & Aktivasi Tombol Show / Hide Sidebar Universal:
+- **Analisis Masalah:**
+  - Sebelumnya selektor CSS desktop menggunakan `.sidebar.toggled` secara terpisah dari `body.sidebar-toggled`. Apabila kelas `toggled` tertinggal pada elemen `#accordionSidebar` karena persistensi status atau skrip pihak ketiga, sidebar terkunci pada posisi `margin-left: -260px` dan tidak dapat dibuka kembali.
+  - Tombol `#sidebarToggleTop` di topbar dan `#sidebarToggle` di sidebar belum memiliki penanganan `onclick` inline langsung, sehingga jika ada hambatan pada siklus `DOMContentLoaded`, tombol tidak merespon klik pengguna.
+- **Tindakan yang Diterapkan:**
+  - **CSS Anti-Kunci (*Single Source of Truth*):**
+    ```css
+    @media (min-width: 769px) {
+        body.sidebar-toggled #accordionSidebar,
+        body.sidebar-toggled .sidebar {
+            margin-left: calc(-1 * var(--sidebar-width)) !important;
+        }
+        body:not(.sidebar-toggled) #accordionSidebar,
+        body:not(.sidebar-toggled) .sidebar {
+            margin-left: 0 !important;
+        }
+        #content-wrapper {
+            width: 100% !important;
+            min-width: 0 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    }
+    ```
+  - **Fungsi Global `window.toggleSidebarUniversal(event)`:**
+    Didefinisikan secara global sehingga dapat dipanggil kapan saja tanpa hambatan:
+    - Di desktop (>= 769px): Melakukan toggle `body.classList.toggle('sidebar-toggled')`, memperbarui atribut `title` tombol topbar, dan menyimpan preferensi ke `localStorage.setItem('aljihad_sidebar_collapsed', ...)`.
+    - Di mobile (<= 768px): Membuka/menutup drawer off-canvas dengan backdrop transparan dan pencegahan scroll latar belakang.
+  - **Pemasangan Atribut Inline:**
+    - `#sidebarToggleTop`: `onclick="toggleSidebarUniversal(event)"`
+    - `#sidebarToggle`: `onclick="toggleSidebarUniversal(event)"`
+  - **Shortcut Keyboard Universal:** Mendukung tombol pintas `Ctrl+B` (atau `Cmd+B`).
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html`
+   - Pembaruan CSS collapsible sidebar desktop.
+   - Pemasangan `onclick="toggleSidebarUniversal(event)"` pada tombol topbar dan sidebar.
+   - Implementasi fungsi global `window.toggleSidebarUniversal()`.
+   - Penyembunyian badge `#badgeRotasiRole` pada peran Operator/Petugas.
+   - Pembaruan teks `#descRotasiSubtitle`.
+2. Folder Mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`
+   - Sinkronisasi seluruh berkas web-statis termutakhir dan `LATEST_UPDATE.md`.
+3. `LATEST_UPDATE.md`
+   - Dokumentasi Bab 73.
+
+---
+
+### Status Sinkronisasi:
+- Seluruh script inline lolos validasi JavaScript (`node -e`).
+- Berkas telah disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+
 
 
