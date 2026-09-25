@@ -1031,6 +1031,13 @@
                         <span>Penerimaan Qurban</span>
                     </a>
                 </li>
+
+                <li class="nav-item" id="nav-ramadhan">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('ramadhan')">
+                        <i class="fas fa-fw fa-star-and-crescent" style="color: #ffd700;"></i>
+                        <span>Agenda & Infaq Ramadhan</span>
+                    </a>
+                </li>
             </div>
 
             <!-- ==============================================
@@ -2212,6 +2219,222 @@
 
 
                     <!-- ==========================================
+                         VIEW: AGENDA & KAS TROMOL RAMADHAN
+                         ========================================== -->
+                    <div id="view-ramadhan" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap" style="gap: 12px;">
+                            <div>
+                                <h4 class="font-weight-bold text-gray-800 mb-0">
+                                    <i class="fas fa-star-and-crescent text-warning mr-2"></i> Semarak Ramadhan & Sholat Tarawih
+                                </h4>
+                                <small class="text-muted">Kelola Petugas Tarawih & Kultum Malam Ini serta Pencatatan Transparansi Kas Tromol Infaq Ramadhan.</small>
+                            </div>
+                            <div class="d-flex align-items-center" style="gap: 10px;">
+                                <div class="custom-control custom-switch bg-white px-3 py-2 border rounded-pill shadow-sm">
+                                    <input type="checkbox" class="custom-control-input" id="switchModeRamadhanTV" onchange="toggleModeRamadhanTV(this.checked)">
+                                    <label class="custom-control-label font-weight-bold text-success" for="switchModeRamadhanTV" id="lblSwitchRamadhan">
+                                        Mode Ramadhan TV Aktif
+                                    </label>
+                                </div>
+                                <a href="slides/ramadhan.html" target="_blank" class="btn btn-warning font-weight-bold" style="box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35); border-radius: 8px;">
+                                    <i class="fas fa-tv mr-1"></i> Preview Layar Ramadhan
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 3 KARTU METRIK KAS TROMOL RAMADHAN (PENDAPATAN, PENGELUARAN, SALDO) -->
+                        <div class="row mb-4">
+                            <div class="col-xl-4 col-md-6 mb-3">
+                                <div class="card border-left-success shadow-sm h-100 py-2" style="border-radius: 12px;">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Total Pendapatan / Tromol Ramadhan
+                                                </div>
+                                                <div class="h4 mb-0 font-weight-bold text-gray-900" id="cardRamadhanTotalMasuk">Rp 0</div>
+                                                <small class="text-muted">Akumulasi infaq tromol tarawih & donasi sahur/ta'jil</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-arrow-circle-down fa-2x text-success"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 mb-3">
+                                <div class="card border-left-danger shadow-sm h-100 py-2" style="border-radius: 12px;">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                    Total Pengeluaran Ramadhan
+                                                </div>
+                                                <div class="h4 mb-0 font-weight-bold text-gray-900" id="cardRamadhanTotalKeluar">Rp 0</div>
+                                                <small class="text-muted">Honor penceramah, ta'jil, konsumsi & operasional</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-arrow-circle-up fa-2x text-danger"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-12 mb-3">
+                                <div class="card border-left-warning shadow-sm h-100 py-2" style="border-radius: 12px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="color: #b45309 !important;">
+                                                    Sisa Saldo Kas Ramadhan
+                                                </div>
+                                                <div class="h4 mb-0 font-weight-bold text-gray-900" id="cardRamadhanSaldo" style="color: #92400e !important;">Rp 0</div>
+                                                <small class="text-muted">Sisa saldo siap dilaporkan tiap malam di layar TV</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-wallet fa-2x text-warning"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DUA FORMULIR UTAMA: PETUGAS & TRANSAKSI TROMOL -->
+                        <div class="row">
+                            <!-- FORMULIR PETUGAS MALAM INI -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="content-card h-100">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-user-tie text-warning mr-1"></i> Petugas Tarawih & Kultum Malam Ini
+                                        </h6>
+                                        <span class="badge badge-warning text-dark font-weight-bold px-2 py-1">Tampil di Layar TV</span>
+                                    </div>
+                                    <div class="p-3">
+                                        <form id="formPetugasRamadhan" onsubmit="simpanPetugasRamadhan(event)">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold text-gray-700">Malam Ke- (Judul Badge)</label>
+                                                <input type="text" class="form-control" id="inputRamadhanMalamKe" value="Malam Ke-15 Ramadhan 1448 H" placeholder="Contoh: Malam Ke-1 Ramadhan 1448 H" required>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label class="font-weight-bold text-gray-700">Imam Sholat Isya & Tarawih</label>
+                                                    <input type="text" class="form-control" id="inputRamadhanImam" value="Ust. H. Ahmad Fauzi, Lc." placeholder="Nama Imam Tarawih" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="font-weight-bold text-gray-700">Muadzin Sholat Isya</label>
+                                                    <input type="text" class="form-control" id="inputRamadhanMuadzin" value="Bpk. Dedi Supriyadi" placeholder="Nama Muadzin">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="font-weight-bold text-gray-700">Penceramah Kultum (Tausiyah Ba'da Isya)</label>
+                                                <input type="text" class="form-control" id="inputRamadhanKultum" value="Drs. KH. Syarifuddin, M.Ag." placeholder="Nama Ustadz / Penceramah Kultum" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="font-weight-bold text-gray-700 d-flex justify-content-between align-items-center">
+                                                    <span>Tema Kultum</span>
+                                                    <span class="badge badge-light border text-muted">Opsional (Boleh Dikosongkan)</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="inputRamadhanTema" value="Meraih Keberkahan di Pintu Ar-Rayyan" placeholder="Masukkan judul tema kultum (jika ada)">
+                                                <small class="text-muted">Jika dikosongkan, layar TV akan otomatis menampilkan label umum 'Kultum & Tausiyah Ba'da Isya'.</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="font-weight-bold text-gray-700">Bilal Sholat Tarawih & Witir</label>
+                                                <input type="text" class="form-control" id="inputRamadhanBilal" value="Ust. Muhammad Ridwan" placeholder="Nama Bilal Tarawih">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="font-weight-bold text-gray-700">Mutiara Hadits Ramadhan</label>
+                                                <textarea class="form-control" id="inputRamadhanHadits" rows="2" placeholder="Hadits keutamaan puasa atau sholat malam">"Barangsiapa mendirikan sholat malam di bulan Ramadhan karena iman dan mengharap pahala dari Allah, niscaya diampuni dosa-dosanya yang telah lalu." (HR. Bukhari & Muslim)</textarea>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-warning btn-block font-weight-bold text-dark py-2" id="btnSimpanPetugasRamadhan" style="box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35); border-radius: 8px;">
+                                                <i class="fas fa-save mr-1"></i> Simpan Petugas Malam Ini
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PENCATATAN & TABEL MUTASI KAS TROMOL RAMADHAN -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="content-card h-100">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-hand-holding-usd text-success mr-1"></i> Catat Transaksi Infaq / Tromol
+                                        </h6>
+                                        <span class="badge badge-success px-2 py-1">Tromol Ramadhan</span>
+                                    </div>
+                                    <div class="p-3">
+                                        <form id="formTromolRamadhan" onsubmit="tambahTransaksiTromol(event)">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label class="font-weight-bold text-gray-700">Tanggal Transaksi</label>
+                                                    <input type="date" class="form-control" id="inputTromolTanggal" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="font-weight-bold text-gray-700">Jenis Transaksi</label>
+                                                    <select class="form-control" id="inputTromolJenis" required>
+                                                        <option value="masuk">Penerimaan / Kotak Tromol Masuk (+)</option>
+                                                        <option value="keluar">Pengeluaran Operasional / Ta'jil (-)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group col-md-7">
+                                                    <label class="font-weight-bold text-gray-700">Uraian / Keterangan Pos</label>
+                                                    <input type="text" class="form-control" id="inputTromolUraian" placeholder="Contoh: Kotak Tromol Tarawih Malam ke-15" required>
+                                                </div>
+                                                <div class="form-group col-md-5">
+                                                    <label class="font-weight-bold text-gray-700">Nominal (Rp)</label>
+                                                    <input type="number" class="form-control" id="inputTromolNominal" placeholder="Contoh: 2500000" min="1000" required>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-success btn-block font-weight-bold py-2 mb-3" style="border-radius: 8px;">
+                                                <i class="fas fa-plus-circle mr-1"></i> Tambah Catatan Kas Tromol
+                                            </button>
+                                        </form>
+
+                                        <hr>
+
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <h6 class="font-weight-bold text-gray-800 mb-0">Riwayat Mutasi Infaq Ramadhan</h6>
+                                            <small class="text-muted">Tampil di slide TV malam ini</small>
+                                        </div>
+
+                                        <div class="table-responsive" style="max-height: 270px; overflow-y: auto;">
+                                            <table class="table table-sm table-hover table-striped">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th>Tgl</th>
+                                                        <th>Uraian</th>
+                                                        <th>Jenis</th>
+                                                        <th class="text-right">Nominal</th>
+                                                        <th class="text-center" style="width: 50px;">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="adminTbodyTromolRamadhan">
+                                                    <!-- Di-render dinamis -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
                          VIEW 10: PENGATURAN APLIKASI (SUPER ADMIN)
                          ========================================== -->
                     <div id="view-settings" class="section-view">
@@ -2648,7 +2871,7 @@
         let cachedRotationPages = [];
         let cachedQurbanData = [];
 
-        // Master List Resmi Seluruh 17 Halaman Layar Display TV Masjid Jami' Al-Jihad
+        // Master List Resmi Seluruh 18 Halaman Layar Display TV Masjid Jami' Al-Jihad
         const MASTER_ROTATION_PAGES = [
             { order: 1, name: 'Jadwal Sholat 5 Waktu', path: 'slides/utama.html', url: 'slides/utama.html', page: '/utama-embed', category: 'Utama / Sholat', category_color: 'primary', active: true },
             { order: 2, name: 'Laporan Kas Masjid', path: 'slides/keuangan.html', url: 'slides/keuangan.html', page: '/keuangan-embed', category: 'Keuangan', category_color: 'success', active: true },
@@ -2666,10 +2889,11 @@
             { order: 14, name: 'Live TV Madinah (Masjid Nabawi)', path: 'slides/live-madinah.html', url: 'slides/live-madinah.html', page: '/live-madinah-embed', category: 'Live TV', category_color: 'success', active: true },
             { order: 15, name: 'Live CCTV Mimbar Khutbah', path: 'slides/live-mimbar.html', url: 'slides/live-mimbar.html', page: '/live-mimbar-embed', category: 'CCTV Mimbar', category_color: 'warning text-dark', active: true },
             { order: 16, name: 'Petugas Sholat Idul Fitri', path: 'slides/idul-fitri.html', url: 'slides/idul-fitri.html', page: '/idul-fitri-embed', category: 'Hari Raya', category_color: 'info', active: false },
-            { order: 17, name: 'Petugas Sholat Idul Adha', path: 'slides/idul-adha.html', url: 'slides/idul-adha.html', page: '/idul-adha-embed', category: 'Hari Raya', category_color: 'info', active: false }
+            { order: 17, name: 'Petugas Sholat Idul Adha', path: 'slides/idul-adha.html', url: 'slides/idul-adha.html', page: '/idul-adha-embed', category: 'Hari Raya', category_color: 'info', active: false },
+            { order: 18, name: 'Semarak Ramadhan & Kas Tromol', path: 'slides/ramadhan.html', url: 'slides/ramadhan.html', page: '/ramadhan-embed', category: 'Ramadhan', category_color: 'warning text-dark', active: true }
         ];
 
-        // Normalisasi array rotasi agar ke-17 halaman dijamin 100% selalu ada
+        // Normalisasi array rotasi agar ke-18 halaman dijamin 100% selalu ada
         function normalizeRotationPages(input) {
             let list = input;
             if (typeof list === 'string') {
@@ -2754,6 +2978,7 @@
             }
             renderRotationTable(cachedRotationPages);
             renderUsersTable();
+            renderAdminRamadhanView();
 
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
@@ -2976,6 +3201,8 @@
                 renderUsersTable();
             } else if (sectionName === 'rotasi-tv') {
                 renderRotationTable(cachedRotationPages);
+            } else if (sectionName === 'ramadhan') {
+                renderAdminRamadhanView();
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3421,7 +3648,27 @@
                         } else {
                             cachedQurbanData = DEFAULT_ADMIN_QURBAN_DATA;
                         }
-                        renderAdminQurbanTable(cachedQurbanData);
+                        // Data Agenda & Kas Tromol Ramadhan
+                        let rPetugas = s.ramadhan_petugas;
+                        if (typeof rPetugas === 'string') {
+                            try { rPetugas = JSON.parse(rPetugas); } catch (e) {}
+                        }
+                        if (rPetugas && typeof rPetugas === 'object') {
+                            cachedRamadhanPetugas = rPetugas;
+                            localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(rPetugas));
+                        }
+
+                        let rInfaq = s.ramadhan_infaq;
+                        if (typeof rInfaq === 'string') {
+                            try { rInfaq = JSON.parse(rInfaq); } catch (e) {}
+                        }
+                        if (rInfaq && Array.isArray(rInfaq)) {
+                            cachedRamadhanInfaq = rInfaq;
+                            localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(rInfaq));
+                        }
+                        if (typeof renderAdminRamadhanView === 'function') {
+                            renderAdminRamadhanView();
+                        }
                     }
                 }
             } catch (err) {
@@ -4516,6 +4763,288 @@
             } catch (err) {
                 alert('Tersimpan di cache lokal: ' + err.message);
             }
+        }
+
+        // =======================================================
+        // 9. MODUL RAMADHAN: AGENDA TARAWIH & KAS TROMOL INFAQ
+        // =======================================================
+        const DEFAULT_ADMIN_RAMADHAN_PETUGAS = {
+            malam_ke: 'Malam Ke-15 Ramadhan 1448 H',
+            imam: 'Ust. H. Ahmad Fauzi, Lc.',
+            muadzin: 'Bpk. Dedi Supriyadi',
+            kultum_penceramah: 'Drs. KH. Syarifuddin, M.Ag.',
+            kultum_tema: '', // Opsional
+            bilal: 'Ust. Muhammad Ridwan',
+            hadits: '"Barangsiapa mendirikan sholat malam di bulan Ramadhan karena iman dan mengharap pahala dari Allah, niscaya diampuni dosa-dosanya yang telah lalu." (HR. Bukhari & Muslim)'
+        };
+
+        const DEFAULT_ADMIN_RAMADHAN_INFAQ = [
+            { id: 1, tanggal: '2026-03-01', uraian: 'Kotak Tromol Tarawih Malam 1', jenis: 'masuk', nominal: 2450000 },
+            { id: 2, tanggal: '2026-03-02', uraian: 'Konsumsi Takjil & Air Mineral Jamaah', jenis: 'keluar', nominal: 650000 },
+            { id: 3, tanggal: '2026-03-02', uraian: 'Kotak Tromol Tarawih Malam 2', jenis: 'masuk', nominal: 2850000 }
+        ];
+
+        let cachedRamadhanPetugas = null;
+        let cachedRamadhanInfaq = null;
+
+        // Render Seluruh Tampilan Modul Ramadhan di Panel Admin
+        function renderAdminRamadhanView() {
+            // 1. Muat Cache Petugas jika belum ada
+            if (!cachedRamadhanPetugas) {
+                const localPet = localStorage.getItem('cached_ramadhan_petugas');
+                if (localPet) {
+                    try { cachedRamadhanPetugas = JSON.parse(localPet); } catch (e) {}
+                }
+                if (!cachedRamadhanPetugas) cachedRamadhanPetugas = { ...DEFAULT_ADMIN_RAMADHAN_PETUGAS };
+            }
+
+            // Isi nilai form Petugas
+            if (document.getElementById('inputRamadhanMalamKe')) document.getElementById('inputRamadhanMalamKe').value = cachedRamadhanPetugas.malam_ke || '';
+            if (document.getElementById('inputRamadhanImam')) document.getElementById('inputRamadhanImam').value = cachedRamadhanPetugas.imam || '';
+            if (document.getElementById('inputRamadhanMuadzin')) document.getElementById('inputRamadhanMuadzin').value = cachedRamadhanPetugas.muadzin || '';
+            if (document.getElementById('inputRamadhanKultum')) document.getElementById('inputRamadhanKultum').value = cachedRamadhanPetugas.kultum_penceramah || '';
+            if (document.getElementById('inputRamadhanTema')) document.getElementById('inputRamadhanTema').value = cachedRamadhanPetugas.kultum_tema || ''; // Tema Kultum Bersifat Opsional
+            if (document.getElementById('inputRamadhanBilal')) document.getElementById('inputRamadhanBilal').value = cachedRamadhanPetugas.bilal || '';
+            if (document.getElementById('inputRamadhanHadits')) document.getElementById('inputRamadhanHadits').value = cachedRamadhanPetugas.hadits || '';
+
+            // 2. Muat Cache Infaq jika belum ada
+            if (!cachedRamadhanInfaq) {
+                const localInf = localStorage.getItem('cached_ramadhan_infaq');
+                if (localInf) {
+                    try { cachedRamadhanInfaq = JSON.parse(localInf); } catch (e) {}
+                }
+                if (!cachedRamadhanInfaq || !Array.isArray(cachedRamadhanInfaq)) cachedRamadhanInfaq = [...DEFAULT_ADMIN_RAMADHAN_INFAQ];
+            }
+
+            // Hitung 3 Metrik: Total Pendapatan (+), Total Pengeluaran (-), Saldo Tromol (=)
+            let totalMasuk = 0;
+            let totalKeluar = 0;
+            cachedRamadhanInfaq.forEach(item => {
+                const nom = parseFloat(item.nominal) || 0;
+                if (item.jenis === 'keluar') {
+                    totalKeluar += nom;
+                } else {
+                    totalMasuk += nom;
+                }
+            });
+            const saldo = totalMasuk - totalKeluar;
+
+            if (document.getElementById('cardRamadhanTotalMasuk')) {
+                document.getElementById('cardRamadhanTotalMasuk').textContent = `Rp ${totalMasuk.toLocaleString('id-ID')}`;
+            }
+            if (document.getElementById('cardRamadhanTotalKeluar')) {
+                document.getElementById('cardRamadhanTotalKeluar').textContent = `Rp ${totalKeluar.toLocaleString('id-ID')}`;
+            }
+            if (document.getElementById('cardRamadhanSaldo')) {
+                document.getElementById('cardRamadhanSaldo').textContent = `Rp ${saldo.toLocaleString('id-ID')}`;
+            }
+
+            // Render Tabel Mutasi Tromol Ramadhan
+            const tbody = document.getElementById('adminTbodyTromolRamadhan');
+            if (tbody) {
+                if (cachedRamadhanInfaq.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Belum ada pencatatan infaq tromol Ramadhan.</td></tr>`;
+                } else {
+                    tbody.innerHTML = cachedRamadhanInfaq.map((it, idx) => {
+                        const isKeluar = it.jenis === 'keluar';
+                        const badge = isKeluar ? '<span class="badge badge-danger">Pengeluaran</span>' : '<span class="badge badge-success">Penerimaan</span>';
+                        const sign = isKeluar ? '-' : '+';
+                        const colorClass = isKeluar ? 'text-danger' : 'text-success';
+                        const tgl = it.tanggal ? it.tanggal : '-';
+                        const nom = (parseFloat(it.nominal) || 0).toLocaleString('id-ID');
+                        return `
+                            <tr>
+                                <td><small class="text-muted">${tgl}</small></td>
+                                <td><strong>${escapeHtml(it.uraian || 'Tromol Ramadhan')}</strong></td>
+                                <td>${badge}</td>
+                                <td class="text-right font-weight-bold ${colorClass}">${sign} Rp ${nom}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-danger py-0 px-1" title="Hapus catatan" onclick="hapusTransaksiTromol(${idx})">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Set default tanggal transaksi hari ini
+            if (document.getElementById('inputTromolTanggal') && !document.getElementById('inputTromolTanggal').value) {
+                document.getElementById('inputTromolTanggal').value = new Date().toISOString().split('T')[0];
+            }
+
+            // Update status switch mode TV
+            if (cachedRotationPages && cachedRotationPages.length > 0) {
+                const rPage = cachedRotationPages.find(p => (p.url || p.path || '').includes('ramadhan'));
+                const isActive = rPage ? (rPage.active !== false) : true;
+                if (document.getElementById('switchModeRamadhanTV')) {
+                    document.getElementById('switchModeRamadhanTV').checked = isActive;
+                }
+                if (document.getElementById('lblSwitchRamadhan')) {
+                    document.getElementById('lblSwitchRamadhan').textContent = isActive ? 'Mode Ramadhan TV Aktif' : 'Mode Ramadhan TV Nonaktif';
+                    document.getElementById('lblSwitchRamadhan').className = isActive ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-secondary';
+                }
+            }
+        }
+
+        // Simpan Petugas Ramadhan Malam Ini (Tema Kultum Bersifat Opsional)
+        async function simpanPetugasRamadhan(e) {
+            if (e) e.preventDefault();
+            const btn = document.getElementById('btnSimpanPetugasRamadhan');
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
+            }
+
+            const dataPetugas = {
+                malam_ke: document.getElementById('inputRamadhanMalamKe')?.value.trim() || 'Malam Ramadhan',
+                imam: document.getElementById('inputRamadhanImam')?.value.trim() || '-',
+                muadzin: document.getElementById('inputRamadhanMuadzin')?.value.trim() || '-',
+                kultum_penceramah: document.getElementById('inputRamadhanKultum')?.value.trim() || '-',
+                kultum_tema: document.getElementById('inputRamadhanTema')?.value.trim() || '', // Tema Kultum Bersifat Opsional
+                bilal: document.getElementById('inputRamadhanBilal')?.value.trim() || '-',
+                hadits: document.getElementById('inputRamadhanHadits')?.value.trim() || ''
+            };
+
+            cachedRamadhanPetugas = dataPetugas;
+            localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(dataPetugas));
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        ramadhan_petugas: dataPetugas
+                    })
+                });
+
+                if (res.ok) {
+                    alert('Alhamdulillah! Jadwal petugas tarawih & kultum Ramadhan berhasil disimpan dan langsung tayang di TV Display.');
+                } else {
+                    alert('Tersimpan di cache lokal browser (offline-ready).');
+                }
+            } catch (err) {
+                alert('Tersimpan di cache lokal: ' + err.message);
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+                renderAdminRamadhanView();
+            }
+        }
+
+        // Tambah Catatan Mutasi Kas Tromol Ramadhan
+        async function tambahTransaksiTromol(e) {
+            if (e) e.preventDefault();
+            const tgl = document.getElementById('inputTromolTanggal')?.value || new Date().toISOString().split('T')[0];
+            const jenis = document.getElementById('inputTromolJenis')?.value || 'masuk';
+            const uraian = document.getElementById('inputTromolUraian')?.value.trim();
+            const nominal = parseFloat(document.getElementById('inputTromolNominal')?.value) || 0;
+
+            if (!uraian || nominal <= 0) {
+                alert('Harap isi uraian dan nominal transaksi dengan benar!');
+                return;
+            }
+
+            if (!cachedRamadhanInfaq) cachedRamadhanInfaq = [];
+            const newTrans = {
+                id: Date.now(),
+                tanggal: tgl,
+                jenis: jenis,
+                uraian: uraian,
+                nominal: nominal
+            };
+
+            // Masukkan di urutan paling atas
+            cachedRamadhanInfaq.unshift(newTrans);
+            localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(cachedRamadhanInfaq));
+
+            try {
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        ramadhan_infaq: cachedRamadhanInfaq
+                    })
+                });
+            } catch (err) {
+                console.warn('Sync tromol Supabase dilewati:', err);
+            }
+
+            // Reset field formulir
+            if (document.getElementById('inputTromolUraian')) document.getElementById('inputTromolUraian').value = '';
+            if (document.getElementById('inputTromolNominal')) document.getElementById('inputTromolNominal').value = '';
+            renderAdminRamadhanView();
+            alert(`Catatan kas tromol "${uraian}" sebesar Rp ${nominal.toLocaleString('id-ID')} berhasil disimpan!`);
+        }
+
+        // Hapus Transaksi Kas Tromol
+        async function hapusTransaksiTromol(idx) {
+            if (!cachedRamadhanInfaq || idx < 0 || idx >= cachedRamadhanInfaq.length) return;
+            const target = cachedRamadhanInfaq[idx];
+            if (confirm(`Apakah Anda yakin ingin menghapus catatan "${target.uraian}" (Rp ${(target.nominal || 0).toLocaleString('id-ID')})?`)) {
+                cachedRamadhanInfaq.splice(idx, 1);
+                localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(cachedRamadhanInfaq));
+                try {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({
+                            ramadhan_infaq: cachedRamadhanInfaq
+                        })
+                    });
+                } catch (err) {
+                    console.warn('Sync hapus tromol Supabase:', err);
+                }
+                renderAdminRamadhanView();
+            }
+        }
+
+        // Switch Aktif/Nonaktif Layar Slide Ramadhan di TV
+        async function toggleModeRamadhanTV(isActive) {
+            if (!cachedRotationPages || cachedRotationPages.length === 0) {
+                cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
+            }
+
+            let rPage = cachedRotationPages.find(p => (p.url || p.path || '').includes('ramadhan'));
+            if (rPage) {
+                rPage.active = isActive;
+            } else {
+                cachedRotationPages.push({
+                    order: 18,
+                    name: 'Semarak Ramadhan & Kas Tromol',
+                    path: 'slides/ramadhan.html',
+                    url: 'slides/ramadhan.html',
+                    page: '/ramadhan-embed',
+                    category: 'Ramadhan',
+                    category_color: 'warning text-dark',
+                    active: isActive
+                });
+            }
+
+            localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
+            if (document.getElementById('lblSwitchRamadhan')) {
+                document.getElementById('lblSwitchRamadhan').textContent = isActive ? 'Mode Ramadhan TV Aktif' : 'Mode Ramadhan TV Nonaktif';
+                document.getElementById('lblSwitchRamadhan').className = isActive ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-secondary';
+            }
+
+            try {
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        rotation_pages: cachedRotationPages
+                    })
+                });
+            } catch (err) {
+                console.warn('Sync toggle rotasi ramadhan Supabase:', err);
+            }
+
+            renderRotationTable(cachedRotationPages);
+            alert(isActive ? 'Layar Semarak Ramadhan & Kas Tromol kini AKTIF di rotasi TV display.' : 'Layar Semarak Ramadhan dinonaktifkan dari rotasi TV.');
         }
 
         // Reorder Slide (Super Admin Only)

@@ -2922,6 +2922,93 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
 - ✅ Uji SVG ikon chevron: Terverifikasi hadir tanpa `d-none` dan siap ditampilkan di semua dashboard.
 - ✅ Repositori lokal disinkronkan ke folder mandiri dan di-push ke GitHub remote `main`.
 
+---
+
+## 🌙 BAB 75: FITUR KHUSUS BULAN SUCI RAMADHAN & SHOLAT TARAWIH: MANAJEMEN PETUGAS ISYA/TARAWIH/KULTUM (TEMA KULTUM OPSIONAL), TRANSPARANSI KAS TROMOL (PENDAPATAN, PENGELUARAN, SALDO), DAN SLIDE TV ISLAMIC GLASSMORPHISM
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Antigravity AI Senior Architect & Fullstack Specialist
+
+---
+
+### Ringkasan & Latar Belakang Pembaruan:
+Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian informasi ibadah malam yang terpadu dan transparan di layar TV Display Masjid. Tiga kebutuhan esensial yang dihadapi pengurus setiap malam Ramadhan:
+1. **Pengumuman Petugas Sholat Isya, Tarawih & Kultum:** Jamaah perlu mengetahui siapa Imam Tarawih, Muadzin Isya, Penceramah Kultum Ba'da Isya, serta Bilal Tarawih & Witir malam ini.
+2. **Fleksibilitas Tema Kultum (Opsional):** Dalam praktiknya, judul ceramah ustadz sering kali belum ditentukan sebelumnya atau bersifat bebas. Oleh karena itu, kolom **Tema Kultum dibuat bersifat opsional** (boleh dikosongkan oleh pengurus tanpa menghalangi penyimpanan data). Di layar TV, jika tema diisi maka ditampilkan dengan badge emas; jika dikosongkan, kartu penceramah tetap tampil anggun dan proporsional dengan label umum *"Kultum & Tausiyah Ba'da Sholat Isya"*.
+3. **Transparansi Kas Tromol Infaq Ramadhan (Pendapatan, Pengeluaran, Saldo):** Menjawab kebutuhan pengumuman infaq setiap malam, modul ini menyajikan 3 metrik keuangan tromol:
+   - **Total Pendapatan (+):** Akumulasi perolehan kotak tromol tarawih keliling, donasi ta'jil, dan infaq jamaah.
+   - **Total Pengeluaran (-):** Pengeluaran operasional sahur/buka puasa bersama, honor penceramah/bilal, dan kebersihan.
+   - **Sisa Saldo Kas Ramadhan (=):** Posisi saldo bersih riil yang siap dilaporkan secara transparan ke jamaah setiap malam.
+   - **Tabel Mutasi Transaksi Terkini:** Riwayat pos penerimaan/pengeluaran lengkap dengan tanggal, uraian, dan badge warna.
+
+---
+
+### Rincian Arsitektur & Fitur yang Diterapkan:
+
+#### 1. Slide Display TV Khusus Ramadhan (`web-statis/slides/ramadhan.html`):
+- **Palet Warna Mewah (Islamic Ambient Green & Gold Glassmorphism):**
+  - Gradien latar belakang *deep emerald night* (`#021209` ke `#0a4026`), dihiasi ornamen bulan sabit bercahaya animasi (*floating crescent moon*) dan efek *glassmorphism backdrop blur*.
+- **Smart Countdown Waktu Sahur vs Buka Puasa:**
+  - Secara cerdas menghitung mundur waktu menuju **Buka Puasa Maghrib** saat siang/sore hari, dan otomatis berganti menghitung mundur waktu menuju **Imsak / Sahur** saat malam hingga subuh.
+- **4 Kartu Petugas Malam Ini:**
+  - Imam Sholat Isya & Tarawih (Ikon Mihrab)
+  - Muadzin Sholat Isya (Ikon Menara Adzan)
+  - Penceramah Kultum Ba'da Isya (Ikon Mimbar) + Penanganan Elegan Tema Kultum Opsional
+  - Bilal Sholat Tarawih & Doa Witir (Ikon Tasbih)
+- **3 Kartu Metrik Keuangan Tromol Ramadhan:**
+  - Kartu Hijau: Total Pemasukan Tromol
+  - Kartu Merah: Total Pengeluaran Ramadhan
+  - Kartu Emas: Saldo Kas Ramadhan Terkini
+- **Tabel 6 Transaksi Terkini & Kutipan Doa Harian:**
+  - Tabel mutasi real-time dengan tanda plus/minus nominal Rupiah.
+  - Doa berbuka puasa dan doa niat puasa bergantian secara otomatis.
+
+#### 2. Modul Manajemen di Panel Admin (`web-statis/admin.html`):
+- **Menu Navigasi Sidebar:** Menu baru bertanda bintang-bulan sabit `#nav-ramadhan` (*Agenda & Infaq Ramadhan*).
+- **Formulir Petugas Tarawih:**
+  - Input Malam Ke- (Badge judul malam ini).
+  - Nama Imam, Muadzin, Penceramah Kultum, Bilal, dan Kutipan Hadits.
+  - **Input Tema Kultum (Opsional):** Dilengkapi badge petunjuk *"Opsional (Boleh Dikosongkan)"* dan tanpa atribut `required`.
+- **Formulir Pencatatan Transaksi Tromol:**
+  - Input tanggal, pilihan jenis (*Penerimaan / Kotak Tromol Masuk* vs *Pengeluaran Operasional / Ta'jil*), uraian pos, dan nominal (Rp).
+  - Validasi nominal dan penambahan instan ke riwayat mutasi.
+  - Tombol hapus catatan mutasi dengan konfirmasi keamanan.
+- **Saklar Mode Ramadhan TV (`#switchModeRamadhanTV`):**
+  - Switch on/off untuk menyertakan atau mengeluarkan slide Ramadhan dari rotasi layar TV display masjid.
+
+#### 3. Integrasi Rotasi TV Display & Pre-Caching PWA:
+- **Slide ke-18 Resmi (`MASTER_ROTATION_PAGES`):**
+  - Terdaftar sebagai halaman ke-18: `{ order: 18, name: 'Semarak Ramadhan & Kas Tromol', path: 'slides/ramadhan.html', url: 'slides/ramadhan.html', page: '/ramadhan-embed', category: 'Ramadhan', category_color: 'warning text-dark', active: true }`.
+- **Pemetaan Rute Canonical (`web-statis/index.html`):**
+  - Rute `'/ramadhan-embed': 'slides/ramadhan.html'` terdaftar di `PATH_MAPPING`.
+- **Database & Offline PWA Cache (`supabase-db.js` & `sw.js`):**
+  - Terdaftar di `DEFAULT_PAGES` konfigurasi Supabase dan daftar `STATIC_ASSETS` Service Worker untuk ketahanan offline (*offline resilience*).
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/slides/ramadhan.html` *(Berkas Baru)*: Slide display TV Semarak Ramadhan & Kas Tromol Infaq.
+2. `web-statis/admin.html`:
+   - Navigasi sidebar `#nav-ramadhan`.
+   - Tampilan antarmuka `#view-ramadhan` (3 kartu metrik tromol, form petugas, form transaksi, tabel riwayat).
+   - Penambahan slide Ramadhan ke `MASTER_ROTATION_PAGES` (total 18 halaman).
+   - Integrasi `switchAdminSection('ramadhan')` dan `loadAllSupabaseData()`.
+   - Modul logika JavaScript: `renderAdminRamadhanView()`, `simpanPetugasRamadhan()`, `tambahTransaksiTromol()`, `hapusTransaksiTromol()`, `toggleModeRamadhanTV()`.
+3. `web-statis/index.html`: Penambahan rute `/ramadhan-embed` pada `PATH_MAPPING`.
+4. `web-statis/js/supabase-db.js`: Penambahan slide Ramadhan ke daftar `DEFAULT_PAGES`.
+5. `web-statis/sw.js`: Penambahan `slides/ramadhan.html` ke dalam pre-cache Service Worker.
+6. `LATEST_UPDATE.md`: Dokumentasi Bab 75.
+
+---
+
+### Status Pengujian & Validasi Kualitas:
+- ✅ **Sintaks JavaScript (Node.js):** Seluruh file (`admin.html`, `slides/ramadhan.html`, `index.html`, `supabase-db.js`, `sw.js`) divalidasi dengan Node.js Compiler: **0 Syntax Error**.
+- ✅ **Verifikasi Elemen DOM:** 22 elemen ID Ramadhan di `admin.html` terverifikasi lengkap dan terpasang sesuai hierarki dokumen.
+- ✅ **Uji Tema Kultum Opsional:** Form berhasil disubmit baik saat kolom tema kultum diisi maupun saat dikosongkan.
+- ✅ **Uji Metrik Keuangan Tromol:** Total pemasukan, pengeluaran, dan saldo terhitung akurat sesuai formula matematis `saldo = pemasukan - pengeluaran`.
+- ✅ **SOP Sinkronisasi Otomatis:** Berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\`, di-commit dan di-push ke GitHub remote `main`, dan langsung aktif di domain live `https://digitalaljihad.my.id/`.
+
+
 
 
 

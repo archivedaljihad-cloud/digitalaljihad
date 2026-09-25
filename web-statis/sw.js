@@ -22,6 +22,7 @@ const STATIC_ASSETS = [
     'slides/qurban.html',
     'slides/keuangan.html',
     'slides/jumat.html',
+    'slides/ramadhan.html',
     'img/logo-aljihad-circle.png',
     'img/logo.png',
     'manifest.json'

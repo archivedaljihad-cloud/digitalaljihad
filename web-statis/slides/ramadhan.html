@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda & Infaq Ramadhan - Display Masjid Jami' Al-Jihad</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #021209 0%, #062b1a 50%, #0a4026 100%);
+        }
+
+        /* Ambient Glow & Ornamen Bintang Ramadhan */
+        .ramadhan-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(255, 215, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.18) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ramadhan-crescent {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            width: 90px;
+            height: 90px;
+            color: rgba(255, 215, 0, 0.22);
+            font-size: 5rem;
+            filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.35));
+            pointer-events: none;
+            z-index: 2;
+            animation: floatMoon 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatMoon {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1620px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 12px 30px 85px 30px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* HEADER SECTION */
+        .ramadhan-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, rgba(3, 28, 18, 0.88) 0%, rgba(5, 45, 29, 0.82) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.6);
+            border-radius: 25px;
+            padding: 10px 28px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            margin-bottom: 14px;
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            border: 2px solid #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffd700;
+            font-size: 1.55rem;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            flex-shrink: 0;
+        }
+
+        .header-text h1 {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin: 0;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-text p {
+            margin: 0;
+            font-size: 0.90rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .header-badges {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .night-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #b45309 100%);
+            color: #04261a;
+            font-weight: 800;
+            font-size: 0.95rem;
+            padding: 8px 18px;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .countdown-pill {
+            background: rgba(4, 25, 18, 0.9);
+            border: 1.5px solid rgba(16, 185, 129, 0.5);
+            color: #34d399;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* MAIN DUAL GRID CONTENT */
+        .ramadhan-main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 20px;
+            flex: 1;
+            align-items: stretch;
+            min-height: 0;
+        }
+
+        /* PANEL KIRI: PETUGAS TARAWIH & KULTUM */
+        .panel-glass {
+            background: rgba(3, 25, 16, 0.76);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            border-radius: 22px;
+            padding: 16px 20px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .panel-heading h2 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffd700;
+            letter-spacing: 0.8px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        /* 4 KARTU PETUGAS */
+        .petugas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .petugas-card {
+            background: linear-gradient(135deg, rgba(2, 20, 13, 0.85) 0%, rgba(5, 35, 23, 0.75) 100%);
+            border: 1.2px solid rgba(255, 215, 0, 0.35);
+            border-radius: 16px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .petugas-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(2, 25, 17, 0.9) 100%);
+            border-color: rgba(255, 215, 0, 0.65);
+        }
+
+        .petugas-role-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ffd700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 4px;
+        }
+
+        .petugas-name {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.25;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+        }
+
+        .kultum-theme-badge {
+            margin-top: 6px;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px dashed rgba(255, 215, 0, 0.6);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.80rem;
+            color: #fef08a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-style: italic;
+        }
+
+        /* HADITS KULTUM FOOTER DI PANEL KIRI */
+        .hadits-box {
+            margin-top: 12px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 12px;
+            border-left: 4px solid #ffd700;
+            padding: 8px 12px;
+            font-size: 0.78rem;
+            color: #e2e8f0;
+            line-height: 1.35;
+        }
+
+        /* PANEL KANAN: LAPORAN TROMOL & KAS RAMADHAN */
+        .tromol-metrics-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.15fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .tromol-metric-card {
+            border-radius: 16px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .metric-masuk {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.45) 0%, rgba(2, 44, 27, 0.85) 100%);
+            border: 1.5px solid rgba(16, 185, 129, 0.6);
+        }
+
+        .metric-keluar {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.35) 0%, rgba(45, 10, 10, 0.85) 100%);
+            border: 1.5px solid rgba(239, 68, 68, 0.6);
+        }
+
+        .metric-saldo {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.45) 0%, rgba(45, 26, 4, 0.9) 100%);
+            border: 1.8px solid #ffd700;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.25);
+        }
+
+        .metric-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 4px;
+        }
+        .metric-masuk .metric-label { color: #34d399; }
+        .metric-keluar .metric-label { color: #f87171; }
+        .metric-saldo .metric-label { color: #ffd700; }
+
+        .metric-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .metric-saldo .metric-value {
+            color: #ffd700;
+            font-size: 1.35rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        /* TABEL TRANSAKSI TROMOL KANAN */
+        .tromol-table-wrap {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tromol-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .tromol-table thead {
+            background: rgba(2, 20, 13, 0.9);
+            color: #ffd700;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .tromol-table th, .tromol-table td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .tromol-table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .tromol-table tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge-masuk {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid #10b981;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.70rem;
+        }
+
+        .badge-keluar {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #ef4444;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.70rem;
+        }
+
+        .doa-ramadhan-bar {
+            margin-top: 10px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.9) 0%, rgba(4, 35, 22, 0.9) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            border-radius: 12px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.80rem;
+        }
+
+        .doa-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.15rem;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* RESPONSIF */
+        @media (max-width: 1024px) {
+            .ramadhan-main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glow Effects -->
+    <div class="ramadhan-bg-overlay"></div>
+    <div class="ramadhan-crescent">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <div class="container">
+
+        <!-- HEADER AGENDA RAMADHAN -->
+        <header class="ramadhan-header">
+            <div class="header-title-box">
+                <div class="header-icon-badge">
+                    <i class="fas fa-star-and-crescent"></i>
+                </div>
+                <div class="header-text">
+                    <h1>
+                        <span>Semarak Amaliah Ramadhan 1448 H</span>
+                    </h1>
+                    <p>Masjid Jami' Al-Jihad Graha Asri • Sholat Tarawih, Kultum & Transparansi Infaq</p>
+                </div>
+            </div>
+
+            <div class="header-badges">
+                <div class="night-badge" id="dispMalamRamadhan">
+                    <i class="fas fa-moon"></i>
+                    <span>Malam Ke-15 Ramadhan</span>
+                </div>
+                <div class="countdown-pill" id="dispRamadhanCountdown">
+                    <i class="fas fa-clock"></i>
+                    <span id="txtCountdownLabel">Buka Puasa:</span>
+                    <strong id="valCountdownTime">--:--:--</strong>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN GRID: DUA PILAR RAMADHAN -->
+        <main class="ramadhan-main-grid">
+
+            <!-- PILAR 1: PETUGAS ISYA, TARAWIH & KULTUM -->
+            <section class="panel-glass">
+                <div class="panel-heading">
+                    <h2><i class="fas fa-user-tie"></i> Petugas Malam Ini</h2>
+                    <span class="badge badge-warning" style="background:#ffd700; color:#04261a; font-weight:800; padding:4px 10px; border-radius:12px; font-size:0.75rem;">
+                        Isya & Tarawih
+                    </span>
+                </div>
+
+                <div class="petugas-grid">
+                    <!-- Imam Sholat Isya & Tarawih -->
+                    <div class="petugas-card">
+                        <span class="petugas-role-badge">
+                            <i class="fas fa-user-check"></i> Imam Isya & Tarawih
+                        </span>
+                        <div class="petugas-name" id="dispImamTarawih">
+                            Ust. H. Ahmad Fauzi, Lc.
+                        </div>
+                    </div>
+
+                    <!-- Muadzin Isya -->
+                    <div class="petugas-card">
+                        <span class="petugas-role-badge">
+                            <i class="fas fa-microphone-alt"></i> Muadzin Isya
+                        </span>
+                        <div class="petugas-name" id="dispMuadzinIsya">
+                            Bpk. Dedi Supriyadi
+                        </div>
+                    </div>
+
+                    <!-- Penceramah Kultum Tarawih (Featured Card) -->
+                    <div class="petugas-card featured">
+                        <span class="petugas-role-badge">
+                            <i class="fas fa-podcast"></i> Penceramah Kultum (Tausiyah Ba'da Isya)
+                        </span>
+                        <div class="petugas-name" id="dispKultumPenceramah">
+                            Drs. KH. Syarifuddin, M.Ag.
+                        </div>
+                        <!-- Tema Kultum (Opsional) -->
+                        <div class="kultum-theme-badge" id="wrapKultumTema">
+                            <i class="fas fa-book-open"></i>
+                            <span id="dispKultumTema">Tema: Meraih Keberkahan di Pintu Ar-Rayyan</span>
+                        </div>
+                    </div>
+
+                    <!-- Bilal Sholat Tarawih & Witir -->
+                    <div class="petugas-card" style="grid-column: span 2;">
+                        <span class="petugas-role-badge">
+                            <i class="fas fa-bullhorn"></i> Bilal Tarawih & Witir
+                        </span>
+                        <div class="petugas-name" id="dispBilalTarawih">
+                            Ust. Muhammad Ridwan
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hadits Keutamaan Qiyam Ramadhan -->
+                <div class="hadits-box">
+                    <i class="fas fa-quote-left text-warning mr-1"></i>
+                    <strong>Keutamaan Qiyam Ramadhan:</strong> 
+                    <span id="dispHaditsRamadhan">"Barangsiapa mendirikan sholat malam di bulan Ramadhan karena iman dan mengharap pahala dari Allah, niscaya diampuni dosa-dosanya yang telah lalu." (HR. Bukhari & Muslim)</span>
+                </div>
+            </section>
+
+
+            <!-- PILAR 2: KAS TROMOL INFAQ RAMADHAN (PENDAPATAN, PENGELUARAN & SALDO) -->
+            <section class="panel-glass">
+                <div class="panel-heading">
+                    <h2><i class="fas fa-hand-holding-usd"></i> Kas Tromol Infaq Ramadhan</h2>
+                    <span class="badge" style="background:rgba(16, 185, 129, 0.2); color:#34d399; border:1px solid #10b981; font-weight:700; padding:4px 10px; border-radius:12px; font-size:0.75rem;">
+                        Transparan & Akuntabel
+                    </span>
+                </div>
+
+                <!-- 3 METRIK KAS: PENDAPATAN, PENGELUARAN, SALDO -->
+                <div class="tromol-metrics-row">
+                    <!-- 1. Total Pendapatan -->
+                    <div class="tromol-metric-card metric-masuk">
+                        <span class="metric-label">
+                            <i class="fas fa-arrow-down"></i> Pendapatan
+                        </span>
+                        <div class="metric-value" id="dispTotalMasukRamadhan">Rp 0</div>
+                    </div>
+
+                    <!-- 2. Total Pengeluaran -->
+                    <div class="tromol-metric-card metric-keluar">
+                        <span class="metric-label">
+                            <i class="fas fa-arrow-up"></i> Pengeluaran
+                        </span>
+                        <div class="metric-value" id="dispTotalKeluarRamadhan">Rp 0</div>
+                    </div>
+
+                    <!-- 3. Saldo Kas Ramadhan -->
+                    <div class="tromol-metric-card metric-saldo">
+                        <span class="metric-label">
+                            <i class="fas fa-wallet"></i> Saldo Kas
+                        </span>
+                        <div class="metric-value" id="dispSaldoRamadhan">Rp 0</div>
+                    </div>
+                </div>
+
+                <!-- TABEL MUTASI TROMOL INFAQ TERKINI -->
+                <div class="tromol-table-wrap">
+                    <table class="tromol-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 95px;">Tanggal</th>
+                                <th>Uraian / Pos Tromol</th>
+                                <th style="width: 80px;">Jenis</th>
+                                <th style="text-align: right; width: 130px;">Nominal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyTromolRamadhan">
+                            <!-- Diisi dinamis oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- DOA BUKA PUASA / SAHUR BAR -->
+                <div class="doa-ramadhan-bar">
+                    <div>
+                        <span class="text-warning font-weight-bold"><i class="fas fa-praying-hands mr-1"></i> Doa Berbuka Puasa:</span>
+                        <div class="small text-muted">Dzahabadh-dhama'u wabtallatil-'uruuqu wa tsabatal-ajru insyaa Allah</div>
+                    </div>
+                    <div class="doa-arabic">ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ</div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Script Data Engine Ramadhan -->
+    <script src="../js/supabase-config.js"></script>
+    <script>
+        // Data Default Petugas Ramadhan
+        const DEFAULT_RAMADHAN_PETUGAS = {
+            malam_ke: 'Malam Ke-15 Ramadhan 1448 H',
+            imam: 'Ust. H. Ahmad Fauzi, Lc.',
+            kultum_penceramah: 'Drs. KH. Syarifuddin, M.Ag.',
+            kultum_tema: 'Meraih Keberkahan di Pintu Ar-Rayyan', // Opsional
+            bilal: 'Ust. Muhammad Ridwan',
+            muadzin: 'Bpk. Dedi Supriyadi',
+            hadits: '"Barangsiapa mendirikan sholat malam di bulan Ramadhan karena iman dan mengharap pahala dari Allah, niscaya diampuni dosa-dosanya yang telah lalu." (HR. Bukhari & Muslim)'
+        };
+
+        // Data Default Mutasi Tromol Infaq Ramadhan
+        const DEFAULT_RAMADHAN_INFAQ = [
+            { tanggal: '2026-09-24', uraian: 'Kotak Tromol Tarawih Malam ke-14', jenis: 'masuk', nominal: 2850000 },
+            { tanggal: '2026-09-24', uraian: 'Infaq Buka Puasa Bersama & Ta\'jil', jenis: 'masuk', nominal: 1500000 },
+            { tanggal: '2026-09-24', uraian: 'Biaya Pengadaan Ta\'jil & Kurma Jamaah', jenis: 'keluar', nominal: 850000 },
+            { tanggal: '2026-09-23', uraian: 'Kotak Tromol Tarawih Malam ke-13', jenis: 'masuk', nominal: 3120000 },
+            { tanggal: '2026-09-23', uraian: 'Honorarium Penceramah & Transport', jenis: 'keluar', nominal: 500000 },
+            { tanggal: '2026-09-22', uraian: 'Sedekah Subuh & Kas Ramadhan', jenis: 'masuk', nominal: 1250000 }
+        ];
+
+        function formatRupiah(num) {
+            return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
+        }
+
+        // Render Data Petugas Malam Ramadhan
+        function renderPetugasRamadhan(data) {
+            const p = data || DEFAULT_RAMADHAN_PETUGAS;
+            if (document.getElementById('dispMalamRamadhan')) {
+                document.getElementById('dispMalamRamadhan').innerHTML = `<i class="fas fa-moon"></i> <span>${p.malam_ke || 'Malam Ramadhan'}</span>`;
+            }
+            if (document.getElementById('dispImamTarawih')) {
+                document.getElementById('dispImamTarawih').textContent = p.imam || '-';
+            }
+            if (document.getElementById('dispKultumPenceramah')) {
+                document.getElementById('dispKultumPenceramah').textContent = p.kultum_penceramah || '-';
+            }
+            if (document.getElementById('dispBilalTarawih')) {
+                document.getElementById('dispBilalTarawih').textContent = p.bilal || '-';
+            }
+            if (document.getElementById('dispMuadzinIsya')) {
+                document.getElementById('dispMuadzinIsya').textContent = p.muadzin || '-';
+            }
+            if (document.getElementById('dispHaditsRamadhan') && p.hadits) {
+                document.getElementById('dispHaditsRamadhan').textContent = p.hadits;
+            }
+
+            // Penanganan Tema Kultum Bersifat OPSIONAL
+            const wrapTema = document.getElementById('wrapKultumTema');
+            const dispTema = document.getElementById('dispKultumTema');
+            if (wrapTema && dispTema) {
+                const temaVal = (p.kultum_tema || '').trim();
+                if (temaVal) {
+                    wrapTema.style.display = 'flex';
+                    dispTema.textContent = `Tema: ${temaVal}`;
+                } else {
+                    // Jika kosong: tampilkan label umum atau sembunyikan secara elegan
+                    wrapTema.style.display = 'flex';
+                    dispTema.textContent = 'Kultum & Tausiyah Ba\'da Sholat Isya';
+                }
+            }
+        }
+
+        // Render Data Tromol Infaq Ramadhan (Pendapatan, Pengeluaran & Saldo)
+        function renderTromolInfaq(list) {
+            const items = (Array.isArray(list) && list.length > 0) ? list : DEFAULT_RAMADHAN_INFAQ;
+
+            let totalMasuk = 0;
+            let totalKeluar = 0;
+
+            items.forEach(it => {
+                const nom = parseFloat(it.nominal) || 0;
+                if (it.jenis === 'masuk') {
+                    totalMasuk += nom;
+                } else {
+                    totalKeluar += nom;
+                }
+            });
+
+            const saldo = totalMasuk - totalKeluar;
+
+            if (document.getElementById('dispTotalMasukRamadhan')) {
+                document.getElementById('dispTotalMasukRamadhan').textContent = formatRupiah(totalMasuk);
+            }
+            if (document.getElementById('dispTotalKeluarRamadhan')) {
+                document.getElementById('dispTotalKeluarRamadhan').textContent = formatRupiah(totalKeluar);
+            }
+            if (document.getElementById('dispSaldoRamadhan')) {
+                document.getElementById('dispSaldoRamadhan').textContent = formatRupiah(saldo);
+            }
+
+            const tbody = document.getElementById('tbodyTromolRamadhan');
+            if (tbody) {
+                tbody.innerHTML = items.slice(0, 6).map(it => {
+                    const isMasuk = (it.jenis === 'masuk');
+                    const badge = isMasuk ? '<span class="badge-masuk">Tromol / Masuk</span>' : '<span class="badge-keluar">Pengeluaran</span>';
+                    const sign = isMasuk ? '+' : '-';
+                    const colorClass = isMasuk ? 'text-success' : 'text-danger';
+                    const tgl = it.tanggal ? new Date(it.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }) : '-';
+                    return `
+                        <tr>
+                            <td><strong class="text-white-50">${tgl}</strong></td>
+                            <td><strong class="text-white">${it.uraian || 'Infaq Tromol'}</strong></td>
+                            <td>${badge}</td>
+                            <td style="text-align: right;" class="${colorClass} font-weight-bold">${sign} ${formatRupiah(it.nominal)}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Smart Countdown (Imsak vs Buka Puasa Maghrib)
+        function initRamadhanCountdown() {
+            function updateCountdown() {
+                const now = new Date();
+                const curHours = now.getHours();
+                const curMinutes = now.getMinutes();
+
+                // Perkiraan Maghrib ~ 18:05, Imsak ~ 04:30
+                let target = new Date();
+                let isBukaPuasa = true;
+
+                if (curHours >= 4 && curHours < 18) {
+                    // Siang menuju Maghrib (Buka Puasa)
+                    isBukaPuasa = true;
+                    target.setHours(18, 5, 0, 0);
+                } else {
+                    // Malam menuju Imsak
+                    isBukaPuasa = false;
+                    if (curHours >= 18) {
+                        target.setDate(target.getDate() + 1);
+                    }
+                    target.setHours(4, 30, 0, 0);
+                }
+
+                const diff = target - now;
+                if (diff > 0) {
+                    const h = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+                    const m = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
+                    const s = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+
+                    if (document.getElementById('txtCountdownLabel')) {
+                        document.getElementById('txtCountdownLabel').textContent = isBukaPuasa ? 'Buka Puasa:' : 'Imsak:';
+                    }
+                    if (document.getElementById('valCountdownTime')) {
+                        document.getElementById('valCountdownTime').textContent = `${h}:${m}:${s}`;
+                    }
+                }
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Muat Data dari LocalStorage atau Supabase jika Online
+        async function loadRamadhanData() {
+            // 1. Coba baca dari localStorage
+            try {
+                const localPetugas = localStorage.getItem('cached_ramadhan_petugas');
+                if (localPetugas) {
+                    renderPetugasRamadhan(JSON.parse(localPetugas));
+                } else {
+                    renderPetugasRamadhan(DEFAULT_RAMADHAN_PETUGAS);
+                }
+
+                const localInfaq = localStorage.getItem('cached_ramadhan_infaq');
+                if (localInfaq) {
+                    renderTromolInfaq(JSON.parse(localInfaq));
+                } else {
+                    renderTromolInfaq(DEFAULT_RAMADHAN_INFAQ);
+                }
+            } catch (e) {
+                renderPetugasRamadhan(DEFAULT_RAMADHAN_PETUGAS);
+                renderTromolInfaq(DEFAULT_RAMADHAN_INFAQ);
+            }
+
+            // 2. Coba fetch dari Supabase Cloud app_settings
+            if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+                try {
+                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        headers: {
+                            'apikey': SUPABASE_CONFIG.anonKey,
+                            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+                        }
+                    });
+                    if (res.ok) {
+                        const list = await res.json();
+                        if (list && list.length > 0) {
+                            const s = list[0];
+                            if (s.ramadhan_petugas) {
+                                const pet = (typeof s.ramadhan_petugas === 'string') ? JSON.parse(s.ramadhan_petugas) : s.ramadhan_petugas;
+                                renderPetugasRamadhan(pet);
+                                localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(pet));
+                            }
+                            if (s.ramadhan_infaq) {
+                                const inf = (typeof s.ramadhan_infaq === 'string') ? JSON.parse(s.ramadhan_infaq) : s.ramadhan_infaq;
+                                renderTromolInfaq(inf);
+                                localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(inf));
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Sync Ramadhan Supabase dilewati:', err);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRamadhanData();
+            initRamadhanCountdown();
+        });
+    </script>
+</body>
+</html>
