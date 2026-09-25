@@ -3414,6 +3414,49 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 4. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 84).
 
+---
+
+## 📌 PEMBARUAN TERAKHIR (BAB 85): PERBAIKAN KOTAK KAPSUL JAM AGAR 100% CENTER DI APLIKASI FULL APK & BROWSER HP
+
+**Tanggal:** 25 September 2026  
+**Status:** Sukses Diperbaiki & Disinkronkan  
+**Area Terkait:** Tampilan Layar Utama TV Display pada Smartphone (< 768px) & Aplikasi Android (.apk)  
+
+### Latar Belakang Masalah:
+- Saat pengguna membuka `digitalaljihad.my.id` melalui aplikasi Android (.apk) maupun Chrome Mobile browser di ponsel, kotak kapsul tanggal & jam digital (`.datetime`) terlihat tidak center / miring ke kanan dan terpotong di tepi kanan layar.
+- **Akar Penyebab Teknis:**
+  1. Pada viewport desktop/TV display, kapsul `.datetime` menyatukan tanggal Masehi, tanggal Hijriah, dan jam realtime dalam 1 baris panjang dengan `white-space: nowrap !important`. Total lebar teks mencapai >460px.
+  2. Pada layar ponsel (lebar 360px - 412px), wadah `.header-section` memiliki padding samping `0 54px` (atau `0 45px`). Elemen inline berukuran 460px dalam container yang sempit tersebut secara default meluap (*overflow*) ke arah kanan layar, sehingga border kanan kapsul dan teks jam digital (`• HH:mm:ss WIB`) terdorong keluar layar (*clipped/off-screen*), menyebabkan kapsul tampak miring/tidak simetris dan jam tidak terbaca.
+  3. `.header-section` belum menggunakan layout flex column centering yang kokoh untuk anak-anak elemennya di mode mobile.
+
+### Solusi & Rincian Perbaikan yang Diterapkan:
+1. **Pembaruan `web-statis/css/partials-theme.css`:**
+   - Menata `.header, .header-section` sebagai `display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; width: 100% !important;` agar semua elemen di dalamnya (Judul, Sub-judul, Kapsul Jam, Kapsul Jadwal Sholat) terpusat presisi di tengah layar secara otomatis.
+   - Pada layar mobile (`@media (max-width: 767px)`), padding `0 46px` dialihkan secara spesifik ke elemen teks judul (`h1`) dan sub-header (`sub-header`) untuk menjaga jarak aman dari medali kaligrafi emas 3D di sudut kiri dan kanan atas.
+   - Kapsul `.header .datetime, .header-section .datetime` dirombak secara responsif pada smartphone:
+     - `display: inline-flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; text-align: center !important; margin: 3px auto !important;`
+     - Lebar maksimal dibatasi `max-width: calc(100vw - 20px) !important;` dengan `overflow: hidden !important;` dan `white-space: normal !important;` agar tidak pernah keluar layar.
+     - **Baris 1 (Tanggal):** `.dt-date-row` menampilkan tanggal Masehi dan Hijriah berpadu rapi di tengah dengan pemisah titik emas (`•`).
+     - **Pemisah Waktu:** `.dt-sep-time` disembunyikan (`display: none !important;`) pada mode mobile.
+     - **Baris 2 (Jam Realtime):** `.dt-time-row` tampil sebagai baris kedua dengan font tebal menyala, angka jam realtime `HH:mm:ss WIB`, serta disempurnakan dengan ikon jam emas Font Awesome `<i class="fas fa-clock">` via pseudo-element `::before`.
+   - Mengoptimalkan ukuran font pada ponsel layar ekstra kecil (`@media (max-width: 380px)`) agar tetap anggun dan proporsional.
+2. **Pembaruan `web-statis/css/display-theme.css`:**
+   - Menyelaraskan aturan master `.header, .header-section` dan `.header .datetime, .header-section .datetime` dengan `partials-theme.css` sehingga konsisten di seluruh template.
+3. **Penyempurnaan `web-statis/slides/utama.html`:**
+   - Membungkus `<div class="datetime" id="datetime"></div>` dengan wadah khusus `<div class="datetime-wrap">` berfitur `width: 100%; display: flex; justify-content: center; align-items: center;` untuk menjamin kapsul jam selalu 100% berada di titik tengah horizontal di segala jenis Webview atau browser Android.
+4. **Penyelarasan Kode Blade Laravel (`resources/views/`):**
+   - Menyelaraskan `resources/views/partials/display-theme.blade.php` dan `resources/views/utama.blade.php` agar versi Laravel lokal memiliki perbaikan yang sama persis.
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/css/partials-theme.css` (Master style responsif kapsul jam & header mobile).
+2. `web-statis/css/display-theme.css` (Sinkronisasi display-theme mobile).
+3. `web-statis/slides/utama.html` (Penambahan wrapper flexbox `.datetime-wrap`).
+4. `resources/views/partials/display-theme.blade.php` (Sinkronisasi blade tema).
+5. `resources/views/utama.blade.php` (Sinkronisasi blade utama).
+6. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+7. `LATEST_UPDATE.md` (Dokumentasi Bab 85).
+
+
 
 
 

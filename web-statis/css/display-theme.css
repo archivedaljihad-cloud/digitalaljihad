@@ -129,6 +129,10 @@ body {
     padding: 0 !important;
     flex-shrink: 0 !important;
     position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .header h1,
@@ -187,16 +191,20 @@ h2.sub-header {
 .header-section .datetime {
     font-size: 1.55rem !important;
     background: rgba(3, 20, 15, 0.65) !important;
-    display: inline-block !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     padding: 5px 28px !important;
     border-radius: 35px !important;
-    margin-top: 4px !important;
+    margin: 4px auto 0 auto !important;
     font-weight: 600 !important;
     letter-spacing: 1px !important;
     border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
 }
 
 /* =====================================================
@@ -489,12 +497,21 @@ h2.sub-header {
     .header,
     .header-section {
         margin-bottom: 6px !important;
-        padding: 0 45px !important; /* Ruang aman untuk medali kaligrafi mini */
+        padding: 0 8px !important; /* Ruang aman samping agar kapsul leluasa di tengah */
         box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
     }
 
     .header h1,
     .header-section h1 {
+        padding: 0 46px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        text-align: center !important;
         font-size: clamp(1.35rem, 5.5vw, 1.85rem) !important;
         letter-spacing: 1.5px !important;
         margin: 0 0 2px 0 !important;
@@ -508,6 +525,10 @@ h2.sub-header {
     .header-section h3.sub-header,
     h3.sub-header,
     h2.sub-header {
+        padding: 0 46px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        text-align: center !important;
         font-size: 0.80rem !important;
         letter-spacing: 1px !important;
         margin-top: 2px !important;
@@ -516,11 +537,71 @@ h2.sub-header {
 
     .header .datetime,
     .header-section .datetime {
-        font-size: 0.90rem !important;
-        padding: 4px 14px !important;
-        border-radius: 20px !important;
-        display: inline-block !important;
-        margin-top: 2px !important;
+        display: inline-flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        margin: 3px auto !important;
+        padding: 5px 18px !important;
+        border-radius: 24px !important;
+        max-width: calc(100vw - 20px) !important;
+        width: auto !important;
+        box-sizing: border-box !important;
+        white-space: normal !important;
+        overflow: hidden !important;
+        border: 1.5px solid rgba(255, 215, 0, 0.6) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 14px rgba(255, 215, 0, 0.25) !important;
+        line-height: 1.2 !important;
+    }
+
+    .header .datetime .dt-date-row,
+    .header-section .datetime .dt-date-row {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 2px 6px !important;
+        font-size: clamp(0.70rem, 2.7vw, 0.82rem) !important;
+        line-height: 1.25 !important;
+        text-align: center !important;
+    }
+
+    .header .datetime .dt-sep-time,
+    .header-section .datetime .dt-sep-time {
+        display: none !important;
+    }
+
+    .header .datetime .dt-time-row,
+    .header-section .datetime .dt-time-row {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        font-size: clamp(0.92rem, 3.6vw, 1.08rem) !important;
+        color: #ffffff !important;
+        margin-top: 3px !important;
+        font-weight: 700 !important;
+        letter-spacing: 1.2px !important;
+        text-align: center !important;
+    }
+
+    .header .datetime .dt-time-row::before,
+    .header-section .datetime .dt-time-row::before {
+        content: "\f017" !important;
+        font-family: "Font Awesome 5 Free" !important;
+        font-weight: 900 !important;
+        color: #ffd700 !important;
+        font-size: 0.85rem !important;
+        filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7)) !important;
+    }
+
+    .header .datetime .dt-time-row .jam-time,
+    .header-section .datetime .dt-time-row .jam-time {
+        color: #ffffff !important;
+        font-variant-numeric: tabular-nums !important;
+        letter-spacing: 1px !important;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.4) !important;
     }
 
     /* Medali kaligrafi di mobile: diperkecil proporsional agar estetik dan bebas silau */

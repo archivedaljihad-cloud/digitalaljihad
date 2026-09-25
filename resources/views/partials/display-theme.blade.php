@@ -247,6 +247,10 @@ body.theme-isya {
     padding: 0 !important;
     flex-shrink: 0 !important;
     position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .header h1,
@@ -311,7 +315,7 @@ h2.sub-header {
     justify-content: center !important;
     padding: 5px 28px !important;
     border-radius: 35px !important;
-    margin-top: 4px !important;
+    margin: 4px auto 0 auto !important;
     font-weight: 600 !important;
     letter-spacing: 0.8px !important;
     border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
@@ -321,6 +325,7 @@ h2.sub-header {
     color: #ffffff !important;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
     white-space: nowrap !important;
+    box-sizing: border-box !important;
 }
 
 .datetime .masehi-date {
@@ -514,9 +519,238 @@ h2.sub-header {
         opacity: 0;
         transform: translateY(12px);
     }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
+/* =====================================================
+   MEDIA QUERIES RESPONSIF: TABLET & SMARTPHONE (< 768px)
+   ===================================================== */
+@media (max-width: 1199px) {
+    .header h1,
+    .header-section h1 {
+        font-size: clamp(1.8rem, 4vw, 2.5rem) !important;
+        letter-spacing: 3px !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: clamp(0.85rem, 1.8vw, 1.05rem) !important;
+        letter-spacing: 2px !important;
+    }
+
+    .header .datetime,
+    .header-section .datetime {
+        font-size: 1.15rem !important;
+        padding: 4px 20px !important;
+    }
+
+    .kaligrafi-medallion {
+        width: 75px !important;
+        height: 75px !important;
+        top: 10px !important;
+    }
+}
+
+/* Smartphone / HP (< 768px) */
+@media (max-width: 767px) {
+    .header,
+    .header-section {
+        padding: 0 8px !important;
+        margin-top: 0 !important;
+        margin-bottom: 6px !important;
+        position: relative !important;
+        z-index: 5 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .header h1,
+    .header-section h1 {
+        padding: 0 46px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        text-align: center !important;
+        font-size: clamp(1.15rem, 4.8vw, 1.55rem) !important;
+        letter-spacing: 1.2px !important;
+        line-height: 1.2 !important;
+        margin: 0 0 2px 0 !important;
+        text-shadow:
+            1px 1px 0 #d4af37,
+            -1px 1px 0 #d4af37,
+            1px -1px 0 #d4af37,
+            -1px -1px 0 #d4af37,
+            1px 1px 4px rgba(0, 0, 0, 0.9),
+            0 0 10px rgba(255, 215, 0, 0.5) !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    .header-section .sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        padding: 0 46px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        text-align: center !important;
+        font-size: clamp(0.65rem, 2.5vw, 0.78rem) !important;
+        letter-spacing: 0.8px !important;
+        line-height: 1.25 !important;
+        margin-top: 1px !important;
+        margin-bottom: 6px !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        opacity: 0.9 !important;
+    }
+
+    /* KAPSUL WAKTU & JAM RESPONSIVE MOBILE - 100% CENTER, ANTI-OVERFLOW, 2-BARIS MEWAH */
+    .header .datetime,
+    .header-section .datetime {
+        display: inline-flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        margin: 3px auto !important;
+        padding: 5px 18px !important;
+        border-radius: 24px !important;
+        max-width: calc(100vw - 20px) !important;
+        width: auto !important;
+        box-sizing: border-box !important;
+        white-space: normal !important;
+        overflow: hidden !important;
+        border: 1.5px solid rgba(255, 215, 0, 0.6) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 14px rgba(255, 215, 0, 0.25) !important;
+        line-height: 1.2 !important;
+    }
+
+    .header .datetime .dt-date-row,
+    .header-section .datetime .dt-date-row {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 2px 6px !important;
+        font-size: clamp(0.70rem, 2.7vw, 0.82rem) !important;
+        line-height: 1.25 !important;
+        text-align: center !important;
+    }
+
+    .header .datetime .dt-date-row .dt-sep,
+    .header-section .datetime .dt-date-row .dt-sep {
+        margin: 0 3px !important;
+        font-size: 0.70rem !important;
+    }
+
+    .header .datetime .dt-sep-time,
+    .header-section .datetime .dt-sep-time {
+        display: none !important;
+    }
+
+    .header .datetime .dt-time-row,
+    .header-section .datetime .dt-time-row {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        font-size: clamp(0.92rem, 3.6vw, 1.08rem) !important;
+        color: #ffffff !important;
+        margin-top: 3px !important;
+        font-weight: 700 !important;
+        letter-spacing: 1.2px !important;
+        text-align: center !important;
+    }
+
+    .header .datetime .dt-time-row::before,
+    .header-section .datetime .dt-time-row::before {
+        content: "\f017" !important;
+        font-family: "Font Awesome 5 Free" !important;
+        font-weight: 900 !important;
+        color: #ffd700 !important;
+        font-size: 0.85rem !important;
+        filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7)) !important;
+    }
+
+    .header .datetime .dt-time-row .jam-time,
+    .header-section .datetime .dt-time-row .jam-time {
+        color: #ffffff !important;
+        font-variant-numeric: tabular-nums !important;
+        letter-spacing: 1px !important;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.4) !important;
+    }
+
+    .kaligrafi-medallion {
+        width: 48px !important;
+        height: 48px !important;
+        top: 6px !important;
+        z-index: 10 !important;
+    }
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 6px !important;
+        left: auto !important;
+    }
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 6px !important;
+        right: auto !important;
+    }
+}
+
+/* Smartphone Layar Kecil (< 380px) */
+@media (max-width: 380px) {
+    .header,
+    .header-section {
+        padding: 0 4px !important;
+    }
+    .header h1,
+    .header-section h1 {
+        padding: 0 42px !important;
+        font-size: 1.1rem !important;
+        letter-spacing: 0.8px !important;
+    }
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    .header-section .sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        padding: 0 42px !important;
+        font-size: 0.62rem !important;
+    }
+    .header .datetime,
+    .header-section .datetime {
+        padding: 4px 12px !important;
+        border-radius: 20px !important;
+        max-width: calc(100vw - 10px) !important;
+    }
+    .header .datetime .dt-date-row,
+    .header-section .datetime .dt-date-row {
+        font-size: 0.66rem !important;
+        gap: 2px 4px !important;
+    }
+    .header .datetime .dt-time-row,
+    .header-section .datetime .dt-time-row {
+        font-size: 0.85rem !important;
+        letter-spacing: 0.8px !important;
+        margin-top: 2px !important;
+    }
+    .header .datetime .dt-time-row::before,
+    .header-section .datetime .dt-time-row::before {
+        font-size: 0.75rem !important;
+    }
+    .kaligrafi-medallion {
+        width: 42px !important;
+        height: 42px !important;
+        top: 6px !important;
     }
 }
 </style>

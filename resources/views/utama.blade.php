@@ -127,11 +127,21 @@
 			padding: 0 !important;
 		}
 
+		.datetime-wrap {
+			margin-top: 4px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+		}
+
 		.datetime {
 			font-size: 1.55rem;
-			margin-top: 4px;
+			margin: 4px auto 0 auto;
 			background: rgba(3, 20, 15, 0.65);
-			display: inline-block;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
 			padding: 5px 28px;
 			border-radius: 35px;
 			font-weight: 600;
@@ -635,7 +645,9 @@
 		<div class="header-section">
 			<h1 id="nama-masjid">{{ $settings['nama_aplikasi'] ?? ($settings->nama_aplikasi ?? 'Masjid Al-Jihad') }}</h1>
 			<h3 class="sub-header">SISTEM INFORMASI DIGITAL</h3>
-			<div class="datetime" id="datetime"></div>
+			<div class="datetime-wrap">
+				<div class="datetime" id="datetime"></div>
+			</div>
 			<div class="jadwal-sholat-title-wrap">
 				<div class="jadwal-sholat-title"><i class="fas fa-mosque"></i> Jadwal Sholat</div>
 			</div>
