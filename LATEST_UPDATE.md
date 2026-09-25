@@ -3008,6 +3008,30 @@ Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian infor
 - ✅ **Uji Metrik Keuangan Tromol:** Total pemasukan, pengeluaran, dan saldo terhitung akurat sesuai formula matematis `saldo = pemasukan - pengeluaran`.
 - ✅ **SOP Sinkronisasi Otomatis:** Berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\`, di-commit dan di-push ke GitHub remote `main`, dan langsung aktif di domain live `https://digitalaljihad.my.id/`.
 
+---
+
+## ☁️ BAB 76: OTORISASI REMOTE WRANGLER CLI & PENYELARASAN CLOUDFLARE PAGES / WORKERS STATIC ASSETS PADA DOMAIN DIGITALALJIHAD.MY.ID
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Antigravity AI Cloudflare Specialist
+
+---
+
+### Ringkasan & Hasil Integrasi:
+1. **Otorisasi Penuh Cloudflare Wrangler CLI:**
+   - Pengguna telah berhasil memberikan otorisasi akun Cloudflare (`archived.aljihad@gmail.com`, Account ID: `458f3137c3f5fcc3dfb7beb56e67c08d`).
+   - Token otorisasi kini tersimpan aman di sistem lokal dan memungkinkan AI Agent melakukan manajemen deployment, Pages, Workers, SSL certs, dan DNS secara mandiri dari terminal tanpa perlu meminta pengguna membuka dashboard Cloudflare.
+2. **Arsitektur Gabungan Cloudflare Pages & Workers Static Assets:**
+   - Platform terbaru Cloudflare kini menggabungkan Cloudflare Pages ke dalam payung arsitektur Cloudflare Workers (*Pages is now part of Cloudflare Workers with Static Assets*).
+   - Sebanyak 232 aset web statis (seluruh halaman slide, pustaka vendor Bootstrap/jQuery/FontAwesome, skrip engine jadwal sholat, konfigurasi Supabase, dan aset gambar) berhasil diunggah langsung ke infrastruktur Cloudflare.
+3. **Status Domain Utama & URL Pratinjau:**
+   - **Domain Utama Live:** `https://digitalaljihad.my.id/` (Status HTTP 200 OK)
+   - **Slide Ramadhan:** `https://digitalaljihad.my.id/slides/ramadhan.html` (Status HTTP 200 OK)
+   - **Panel Admin:** `https://digitalaljihad.my.id/admin` (Status HTTP 200 OK)
+   - **Subdomain Workers.dev:** `https://digitalaljihad.archived-aljihad.workers.dev` (Status HTTP 200 OK)
+   - **Kesimpulan Domain:** Pengguna **TIDAK PERLU** merubah settingan apapun pada registrar domain karena rute domain `digitalaljihad.my.id` sudah terhubung dan melayani seluruh aset statis Pages dengan optimal.
+
+
 
 
 
