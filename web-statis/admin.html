@@ -781,6 +781,13 @@
                         <span>Teks Berjalan TV</span>
                     </a>
                 </li>
+
+                <li class="nav-item" id="nav-qurban">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('qurban')">
+                        <i class="fas fa-fw fa-cow" style="color: #ffd700;"></i>
+                        <span>Penerimaan Qurban</span>
+                    </a>
+                </li>
             </div>
 
             <!-- ==============================================
@@ -1452,6 +1459,159 @@
 
 
                     <!-- ==========================================
+                         VIEW 4B: PENERIMAAN HEWAN QURBAN IDUL ADHA
+                         ========================================== -->
+                    <div id="view-qurban" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h4 class="font-weight-bold text-gray-800 mb-1">
+                                    <i class="fas fa-cow text-warning mr-2"></i> Penerimaan Hewan Qurban Idul Adha
+                                </h4>
+                                <span class="text-muted small">Kelola daftar shohibul qurban, rekap jenis hewan, infaq operasional, dan jadwal penyembelihan di layar TV display.</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <a href="slides/qurban.html" target="_blank" class="btn btn-outline-warning mr-2">
+                                    <i class="fas fa-tv mr-1"></i> Preview Layar TV
+                                </a>
+                                <button class="btn btn-success mr-2" data-toggle="modal" data-target="#modalTambahQurban">
+                                    <i class="fas fa-plus-circle mr-1"></i> Tambah Shohibul Qurban
+                                </button>
+                                <button class="btn btn-primary" onclick="simpanDataQurban()">
+                                    <i class="fas fa-save mr-1"></i> Simpan ke Supabase
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4 Kartu Metrik Ringkasan Qurban Admin -->
+                        <div class="row mb-4">
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Hewan Sapi</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="adminTotalSapi">0 Ekor</div>
+                                                <small class="text-muted" id="adminSubSapi">Otomatis terhitung</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-cow fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Kambing / Domba</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="adminTotalKambing">0 Ekor</div>
+                                                <small class="text-muted" id="adminSubKambing">Otomatis terhitung</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-paw fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Infaq Qurban</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="adminTotalInfaq">Rp 0</div>
+                                                <small class="text-muted">Kas Operasional Qurban</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-coins fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6 mb-3">
+                                <div class="card border-left-danger shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Status Rotasi TV</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="adminStatusRotasiQurban">Aktif di TV</div>
+                                                <small class="text-muted">Kelola on/off di menu Rotasi TV</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-broadcast-tower fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel Konfigurasi Jadwal Penyembelihan -->
+                        <div class="content-card mb-4">
+                            <div class="content-card-header">
+                                <h6 class="content-card-title">
+                                    <i class="fas fa-clock"></i> Pengaturan Jadwal & Lokasi Pelaksanaan Penyembelihan
+                                </h6>
+                            </div>
+                            <div class="p-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-2">
+                                            <label class="font-weight-bold text-gray-800 small">Waktu Pelaksanaan Penyembelihan</label>
+                                            <input type="text" class="form-control" id="inputQurbanJam" value="07:30 WIB s/d Selesai" placeholder="Contoh: 07:30 WIB s/d Selesai">
+                                            <small class="text-muted">Ditampilkan pada kartu jadwal layar TV.</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-2">
+                                            <label class="font-weight-bold text-gray-800 small">Hari & Tempat / Lokasi Penyembelihan</label>
+                                            <input type="text" class="form-control" id="inputQurbanLokasi" value="Hari H 10 Dzulhijjah • Halaman Belakang Masjid Jami' Al-Jihad" placeholder="Contoh: Hari H 10 Dzulhijjah • Halaman Masjid">
+                                            <small class="text-muted">Keterangan lokasi pelaksanaan kurban.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabel Daftar Shohibul Qurban -->
+                        <div class="content-card">
+                            <div class="content-card-header d-flex justify-content-between align-items-center">
+                                <h6 class="content-card-title">
+                                    <i class="fas fa-list"></i> Daftar Shohibul Qurban (Orang yang Berqurban)
+                                </h6>
+                                <span class="badge badge-success" id="badgeTotalShohibul">0 Orang Terdaftar</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px;" class="text-center">No</th>
+                                            <th>Nama Shohibul Qurban</th>
+                                            <th>Atas Nama / Keluarga / Bin</th>
+                                            <th style="width: 130px;" class="text-center">Jenis Hewan</th>
+                                            <th style="width: 100px;" class="text-center">Jumlah</th>
+                                            <th style="width: 160px;" class="text-right">Infaq Qurban</th>
+                                            <th style="width: 120px;" class="text-center">Status</th>
+                                            <th style="width: 90px;" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminQurbanTableBody">
+                                        <!-- Dimuat secara dinamis oleh JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
                          VIEW 5: TEKS BERJALAN TV (RUNNING TEXT)
                          ========================================== -->
                     <div id="view-running-text" class="section-view">
@@ -1980,6 +2140,73 @@
         </div>
     </div>
 
+    <!-- =======================================================
+         MODAL TAMBAH SHOHIBUL QURBAN BARU
+         ======================================================= -->
+    <div class="modal fade" id="modalTambahQurban" tabindex="-1" role="dialog" aria-labelledby="modalTambahQurbanLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title font-weight-bold" id="modalTambahQurbanLabel">
+                        <i class="fas fa-cow mr-2"></i> Tambah Data Shohibul Qurban
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahQurban">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Nama Shohibul Qurban (Pribadi / Perwakilan)</label>
+                            <input type="text" class="form-control" id="newQurbanNama" placeholder="Contoh: H. Bambang Sugiarto" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Keterangan / Atas Nama (Bin / Binti / Keluarga)</label>
+                            <input type="text" class="form-control" id="newQurbanBin" placeholder="Contoh: Sekeluarga (Kelompok Sapi A) / Bin H. Dahlan">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Jenis Hewan Qurban</label>
+                                    <select class="form-control" id="newQurbanJenis" required>
+                                        <option value="SAPI">SAPI</option>
+                                        <option value="KAMBING" selected>KAMBING</option>
+                                        <option value="DOMBA">DOMBA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Jumlah (Ekor / Bagian)</label>
+                                    <input type="number" class="form-control" id="newQurbanJumlah" value="1" min="1" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Infaq Operasional Qurban (Rupiah)</label>
+                            <input type="number" class="form-control font-weight-bold" id="newQurbanInfaq" value="350000" min="0" step="10000" placeholder="Contoh: 350000">
+                            <small class="text-muted">Biaya pemeliharaan, bumbu, besek, dan upah jagal.</small>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="font-weight-bold">Status Penerimaan</label>
+                            <select class="form-control" id="newQurbanStatus">
+                                <option value="Diterima" selected>Diterima (Terdaftar)</option>
+                                <option value="Siap Disembelih">Siap Disembelih</option>
+                                <option value="Selesai Disembelih">Selesai Disembelih</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success font-weight-bold" onclick="tambahShohibulQurban()">
+                        <i class="fas fa-plus-circle mr-1"></i> Tambahkan ke Daftar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- =======================================================
          SCRIPTS: VENDOR & SUPABASE REALTIME ENGINE
@@ -1995,6 +2222,7 @@
         let cachedKasData = [];
         let cachedAmbData = [];
         let cachedRotationPages = [];
+        let cachedQurbanData = [];
 
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof AdminAuth !== 'undefined') {
@@ -2225,10 +2453,36 @@
                             const activeCount = s.rotation_pages.filter(p => p.active !== false).length;
                             if (document.getElementById('statStatusTV')) document.getElementById('statStatusTV').textContent = `${activeCount} Halaman Aktif`;
                         }
+
+                        // Data Qurban Idul Adha
+                        if (s.qurban_jam_sembelih && document.getElementById('inputQurbanJam')) {
+                            document.getElementById('inputQurbanJam').value = s.qurban_jam_sembelih;
+                        }
+                        if (s.qurban_lokasi_sembelih && document.getElementById('inputQurbanLokasi')) {
+                            document.getElementById('inputQurbanLokasi').value = s.qurban_lokasi_sembelih;
+                        }
+
+                        let qData = s.qurban_data;
+                        if (typeof qData === 'string') {
+                            try { qData = JSON.parse(qData); } catch (e) {}
+                        }
+                        if (!qData || !Array.isArray(qData) || qData.length === 0) {
+                            const localQ = localStorage.getItem('cached_qurban_data');
+                            if (localQ) {
+                                try { qData = JSON.parse(localQ); } catch (e) {}
+                            }
+                        }
+                        if (qData && Array.isArray(qData) && qData.length > 0) {
+                            cachedQurbanData = qData;
+                        } else {
+                            cachedQurbanData = DEFAULT_ADMIN_QURBAN_DATA;
+                        }
+                        renderAdminQurbanTable(cachedQurbanData);
                     }
                 }
             } catch (err) {
                 console.warn('Gagal memuat app_settings:', err);
+                renderAdminQurbanTable(DEFAULT_ADMIN_QURBAN_DATA);
             }
         }
 
@@ -2407,10 +2661,27 @@
             const tbody = document.getElementById('rotationTableBody');
             if (!tbody) return;
 
+            // Pastikan slide Qurban ada di list
+            const hasQurban = pages.some(p => {
+                const url = p.path || p.url || p.page || '';
+                return url.includes('qurban');
+            });
+            if (!hasQurban) {
+                pages.push({
+                    name: 'Penerimaan Hewan Qurban',
+                    title: 'Penerimaan Hewan Qurban',
+                    path: 'slides/qurban.html',
+                    url: 'slides/qurban.html',
+                    page: '/qurban-embed',
+                    active: true,
+                    order: pages.length + 1
+                });
+            }
+
             tbody.innerHTML = pages.map((p, idx) => {
                 const isChecked = (p.active !== false) ? 'checked' : '';
-                const title = p.title || p.nama || `Slide ${idx + 1}`;
-                const url = p.url || `slides/slide${idx + 1}.html`;
+                const title = p.name || p.title || p.nama || `Slide ${idx + 1}`;
+                const url = p.path || p.url || p.page || `slides/slide${idx + 1}.html`;
                 return `
                     <tr data-index="${idx + 1}">
                         <td class="font-weight-bold text-center">${idx + 1}</td>
@@ -2800,12 +3071,20 @@
         async function simpanRotasiTV() {
             const rows = document.querySelectorAll('#rotationTableBody tr');
             const updatedPages = [];
-            rows.forEach(r => {
+            rows.forEach((r, idx) => {
                 const title = r.querySelector('strong')?.textContent.trim();
                 const url = r.querySelector('code')?.textContent.trim();
                 const active = r.querySelector('input[type="checkbox"]')?.checked ?? true;
                 if (title && url) {
-                    updatedPages.push({ title, url, active });
+                    updatedPages.push({
+                        name: title,
+                        title: title,
+                        path: url,
+                        url: url,
+                        page: url.replace('slides/', '/').replace('.html', '-embed'),
+                        active: active,
+                        order: idx + 1
+                    });
                 }
             });
 
@@ -2825,12 +3104,188 @@
 
                 if (res.ok) {
                     alert('Alhamdulillah! Susunan rotasi TV berhasil disimpan ke Supabase dan seketika diterapkan pada TV display.');
+                    cachedRotationPages = updatedPages;
+                    // Update status badge di panel Qurban jika ada
+                    const qPage = updatedPages.find(p => (p.url || p.path || '').includes('qurban'));
+                    if (qPage && document.getElementById('adminStatusRotasiQurban')) {
+                        const isActive = qPage.active !== false;
+                        document.getElementById('adminStatusRotasiQurban').textContent = isActive ? 'Aktif di TV' : 'Nonaktif di TV';
+                        document.getElementById('adminStatusRotasiQurban').className = isActive ? 'h5 mb-0 font-weight-bold text-success' : 'h5 mb-0 font-weight-bold text-danger';
+                    }
                     await loadAllSupabaseData();
                 } else {
                     alert('Gagal menyimpan susunan rotasi TV ke Supabase.');
                 }
             } catch (err) {
                 alert('Tersimpan di sesi lokal: ' + err.message);
+            }
+        }
+
+        // =======================================================
+        // 8. MANAJEMEN PENERIMAAN HEWAN QURBAN IDUL ADHA
+        // =======================================================
+
+        const DEFAULT_ADMIN_QURBAN_DATA = [
+            { id: 1, nama: "H. Bambang Sugiarto", bin: "Sekeluarga (Kelompok Sapi A)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 2, nama: "Ir. H. Muhammad Arifin", bin: "Sekeluarga (Kelompok Sapi A)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 3, nama: "Drs. H. Ahmad Fauzi", bin: "Sekeluarga (Kelompok Sapi B)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 4, nama: "Hj. Siti Rahmah", bin: "Binti H. Dahlan (Kelompok Sapi B)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 5, nama: "H. Hendra Gunawan", bin: "Sekeluarga (Sapi Mandiri)", jenis: "SAPI", jumlah: 1, infaq: 1000000, status: "Diterima" },
+            { id: 6, nama: "Dr. H. Sulaiman Hasan", bin: "Sekeluarga (Sapi Mandiri)", jenis: "SAPI", jumlah: 1, infaq: 1000000, status: "Diterima" },
+            { id: 7, nama: "H. Fachruddin", bin: "Sekeluarga (Sapi Mandiri)", jenis: "SAPI", jumlah: 1, infaq: 1000000, status: "Diterima" },
+            { id: 8, nama: "Ustadz H. Abdullah Syafi'i", bin: "Bin H. M. Nur", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 9, nama: "Bpk. Rahmat Hidayat", bin: "Bin Sastro Wardoyo", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 10, nama: "Bpk. Dedi Kurniawan", bin: "Sekeluarga", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 11, nama: "Ibu Fatimah Az-Zahra", bin: "Binti Syamsudin", jenis: "DOMBA", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 12, nama: "Bpk. Agus Setiawan", bin: "Bin H. Ridwan", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 13, nama: "Bpk. Ilham Pratama", bin: "Sekeluarga", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 14, nama: "Hj. Nurhayati", bin: "Binti H. Marzuki", jenis: "DOMBA", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 15, nama: "Bpk. Hendro Susilo", bin: "Bin Sudarsono", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 16, nama: "Bpk. Zainal Abidin", bin: "Sekeluarga", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 17, nama: "Bpk. Wahyu Nugroho", bin: "Bin Siswanto", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 18, nama: "Bpk. Tri Wibowo", bin: "Sekeluarga", jenis: "DOMBA", jumlah: 1, infaq: 350000, status: "Diterima" }
+        ];
+
+        // Render Tabel Shohibul Qurban di Admin
+        function renderAdminQurbanTable(data) {
+            cachedQurbanData = (data && Array.isArray(data) && data.length > 0) ? data : DEFAULT_ADMIN_QURBAN_DATA;
+
+            let totalSapi = 0;
+            let totalKambing = 0;
+            let totalDomba = 0;
+            let totalInfaq = 0;
+
+            const tbody = document.getElementById('adminQurbanTableBody');
+            if (tbody) {
+                tbody.innerHTML = cachedQurbanData.map((item, idx) => {
+                    const jns = (item.jenis || 'KAMBING').toUpperCase().trim();
+                    const jml = parseInt(item.jumlah) || 1;
+                    const inf = parseFloat(item.infaq) || 0;
+
+                    if (jns === 'SAPI') totalSapi += jml;
+                    else if (jns === 'DOMBA') { totalDomba += jml; totalKambing += jml; }
+                    else { totalKambing += jml; }
+
+                    totalInfaq += inf;
+
+                    let badgeHtml = '';
+                    if (jns === 'SAPI') {
+                        badgeHtml = '<span class="badge badge-warning font-weight-bold"><i class="fas fa-cow mr-1"></i> SAPI</span>';
+                    } else if (jns === 'DOMBA') {
+                        badgeHtml = '<span class="badge badge-info font-weight-bold"><i class="fas fa-paw mr-1"></i> DOMBA</span>';
+                    } else {
+                        badgeHtml = '<span class="badge badge-success font-weight-bold"><i class="fas fa-paw mr-1"></i> KAMBING</span>';
+                    }
+
+                    return `
+                        <tr>
+                            <td class="text-center font-weight-bold">${idx + 1}</td>
+                            <td><strong>${item.nama}</strong></td>
+                            <td class="text-muted small">${item.bin || '-'}</td>
+                            <td class="text-center">${badgeHtml}</td>
+                            <td class="text-center font-weight-bold">${jml} Ekor</td>
+                            <td class="text-right font-weight-bold text-success">${formatRupiah(inf)}</td>
+                            <td class="text-center"><span class="badge badge-light border text-success"><i class="fas fa-check mr-1"></i> ${item.status || 'Diterima'}</span></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger" onclick="hapusShohibulQurban(${idx})" title="Hapus Baris"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Update KPI Cards di Admin
+            if (document.getElementById('adminTotalSapi')) document.getElementById('adminTotalSapi').textContent = `${totalSapi} Ekor`;
+            if (document.getElementById('adminSubSapi')) document.getElementById('adminSubSapi').textContent = `Terkumpul dari shohibul qurban`;
+            if (document.getElementById('adminTotalKambing')) document.getElementById('adminTotalKambing').textContent = `${totalKambing} Ekor`;
+            if (document.getElementById('adminSubKambing')) document.getElementById('adminSubKambing').textContent = `${totalKambing - totalDomba} Kambing, ${totalDomba} Domba`;
+            if (document.getElementById('adminTotalInfaq')) document.getElementById('adminTotalInfaq').textContent = formatRupiah(totalInfaq);
+            if (document.getElementById('badgeTotalShohibul')) document.getElementById('badgeTotalShohibul').textContent = `${cachedQurbanData.length} Orang Terdaftar`;
+
+            // Cek status rotasi slide qurban
+            if (cachedRotationPages && cachedRotationPages.length > 0) {
+                const qPage = cachedRotationPages.find(p => (p.url || p.path || '').includes('qurban'));
+                if (qPage && document.getElementById('adminStatusRotasiQurban')) {
+                    const isActive = qPage.active !== false;
+                    document.getElementById('adminStatusRotasiQurban').textContent = isActive ? 'Aktif di TV' : 'Nonaktif di TV';
+                    document.getElementById('adminStatusRotasiQurban').className = isActive ? 'h5 mb-0 font-weight-bold text-success' : 'h5 mb-0 font-weight-bold text-danger';
+                }
+            }
+        }
+
+        // Tambah Shohibul Qurban Baru
+        function tambahShohibulQurban() {
+            const nama = document.getElementById('newQurbanNama')?.value.trim();
+            const bin = document.getElementById('newQurbanBin')?.value.trim();
+            const jenis = document.getElementById('newQurbanJenis')?.value;
+            const jumlah = parseInt(document.getElementById('newQurbanJumlah')?.value) || 1;
+            const infaq = parseFloat(document.getElementById('newQurbanInfaq')?.value) || 0;
+            const status = document.getElementById('newQurbanStatus')?.value || 'Diterima';
+
+            if (!nama) {
+                alert('Harap masukkan nama shohibul qurban!');
+                return;
+            }
+
+            const newItem = {
+                id: Date.now(),
+                nama: nama,
+                bin: bin || 'Atas Nama Shohibul Qurban',
+                jenis: jenis,
+                jumlah: jumlah,
+                infaq: infaq,
+                status: status
+            };
+
+            cachedQurbanData.push(newItem);
+            renderAdminQurbanTable(cachedQurbanData);
+
+            // Simpan sementara di local storage
+            localStorage.setItem('cached_qurban_data', JSON.stringify(cachedQurbanData));
+
+            $('#modalTambahQurban').modal('hide');
+            document.getElementById('formTambahQurban').reset();
+            alert(`Alhamdulillah! Shohibul qurban "${nama}" (${jenis}) berhasil ditambahkan ke daftar.`);
+        }
+
+        // Hapus Shohibul Qurban
+        function hapusShohibulQurban(idx) {
+            if (idx >= 0 && idx < cachedQurbanData.length) {
+                const target = cachedQurbanData[idx];
+                if (confirm(`Apakah Anda yakin ingin menghapus data shohibul qurban "${target.nama}"?`)) {
+                    cachedQurbanData.splice(idx, 1);
+                    renderAdminQurbanTable(cachedQurbanData);
+                    localStorage.setItem('cached_qurban_data', JSON.stringify(cachedQurbanData));
+                }
+            }
+        }
+
+        // Simpan Data Qurban & Jadwal Penyembelihan ke Supabase
+        async function simpanDataQurban() {
+            const jam = document.getElementById('inputQurbanJam')?.value.trim() || '07:30 WIB s/d Selesai';
+            const lokasi = document.getElementById('inputQurbanLokasi')?.value.trim() || 'Hari H 10 Dzulhijjah • Halaman Belakang Masjid Jami\' Al-Jihad';
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        qurban_data: cachedQurbanData,
+                        qurban_jam_sembelih: jam,
+                        qurban_lokasi_sembelih: lokasi
+                    })
+                });
+
+                // Simpan ke local storage
+                localStorage.setItem('cached_qurban_data', JSON.stringify(cachedQurbanData));
+
+                if (res.ok) {
+                    alert('Alhamdulillah! Seluruh data penerimaan hewan qurban dan jadwal penyembelihan berhasil disimpan ke Supabase & seketika tayang di layar TV display.');
+                } else {
+                    alert('Data qurban berhasil disimpan di cache lokal browser (offline-ready).');
+                }
+            } catch (err) {
+                alert('Tersimpan di cache lokal: ' + err.message);
             }
         }
 

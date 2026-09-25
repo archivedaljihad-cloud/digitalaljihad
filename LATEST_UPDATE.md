@@ -2036,6 +2036,72 @@ Fitur ini menghidupkan kembali dan melipatgandakan kualitas visual fitur di vers
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 🐂 61. SLIDE DISPLAY PENERIMAAN HEWAN QURBAN IDUL ADHA DENGAN AUTO-CALCULATED KPI & MODUL KENDALI ROTASI ADMIN (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 5.8.0 | **Status:** ✅ 100% Selesai, Teruji, & Sinkron
+
+### Ringkasan Pencapaian:
+Telah dibuat dan diintegrasikan satu halaman display TV baru khusus: **Penerimaan Hewan Qurban Idul Adha (`web-statis/slides/qurban.html`)** beserta modul manajemen lengkap di panel admin (`web-statis/admin.html`), registrasi rute rotasi (`web-statis/index.html`), dan default rotasi database (`web-statis/js/supabase-db.js`).
+
+Halaman ini didesain dengan visual **Royal Mosque Luxury** yang sangat mewah, berkelas, dan interaktif. Seluruh ringkasan jumlah hewan qurban (**Sapi**, **Kambing/Domba**) dan total infaq dihitung secara **otomatis (*auto-calculated*)** langsung dari daftar shohibul qurban tanpa perlu input manual ganda. Halaman ini juga dilengkapi tombol switch aktif/nonaktif di daftar rotasi TV sehingga pengurus masjid dapat menyalakannya saat musim Idul Adha dan menonaktifkannya di luar musim kurban.
+
+---
+
+### Fitur Unggulan Slide Qurban (`slides/qurban.html`):
+1. **Header Lock-Pixel Identik Display Utama:**
+   - Menyertakan plakat identitas `MASJID JAMI' AL JIHAD` dengan bingkai emas islami, jam digital akurat, tanggal Masehi & Hijriyah realtime, serta kaligrafi megah Allah & Muhammad.
+2. **Plakat Judul & Tema Idul Adha Mewah:**
+   - Banner kristal zamrud berpendar emas: `PENERIMAAN HEWAN QURBAN IDUL ADHA 1447 H / 2026 M`.
+   - Menggunakan ikon ornamen kepala sapi emas 3D SVG dan plakat dekoratif islami.
+3. **4 Kartu Ringkasan Cerdas (*Auto-Calculated KPI Cards*):**
+   - **Total Sapi:** Menghitung otomatis total ekor sapi dari daftar penerimaan, ditampilkan dengan angka emas raksasa dan lencana `EKOR`.
+   - **Total Kambing / Domba:** Menghitung otomatis total ekor kambing dan domba dengan lencana zamrud.
+   - **Infaq Operasional Qurban:** Menghitung akumulasi infaq rupiah (`Rp XXX.XXX`) yang diserahkan oleh para shohibul qurban.
+   - **Jadwal & Tempat Penyembelihan:** Menampilkan jam pelaksanaan (misal: `HARI H (10 DZULHIJJAH) - PUKUL 07.30 WIB S/D SELESAI`), lokasi pemotongan, serta lencana siaga `🟢 SIAGA PELAKSANAAN`.
+4. **Tabel Shohibul Qurban Mewah & Terstruktur:**
+   - Kolom: Nomor Urut Emas, Nama Shohibul Qurban (dengan sub-nama bin/keluarga), Jenis Hewan (Badge emas Sapi, badge zamrud Kambing, badge toska Domba), Jumlah Ekor/Bagian, Infaq Operasional (Rp format ribuan), dan Status Penerimaan (`Lunas & Diterima`).
+5. **Continuous Smooth Auto-Scroll:**
+   - Tabel dilengkapi auto-scroll vertikal terus-menerus yang sangat halus (*fluid continuous scrolling*).
+   - Jeda cerdas 3 detik di bagian atas dan 3 detik saat mencapai dasar sebelum kembali ke puncak (*seamless loop*), memastikan semua nama jamaah terbaca tuntas oleh jamaah di masjid.
+6. **Integrasi Supabase Realtime & Fallback Offline:**
+   - Sinkronisasi realtime melalui Supabase key `qurban_data`.
+   - Disertai 18 data shohibul qurban realistis bawaan (*fallback offline*) jika database belum terisi atau koneksi internet offline.
+
+---
+
+### Integrasi Manajemen di Panel Kendali Admin (`web-statis/admin.html`):
+1. **Menu Sidebar & Hak Akses:**
+   - Ditambahkan menu navigasi `Penerimaan Qurban` (`#nav-qurban`) dengan ikon sapi emas, dapat diakses oleh Admin maupun Petugas (`data-role="admin, petugas"`).
+2. **Section View `#view-qurban`:**
+   - 4 KPI cards real-time admin yang langsung berubah sesuai inputan.
+   - Panel Form Konfigurasi Waktu & Lokasi Penyembelihan.
+   - Lencana status rotasi TV (*Aktif dalam rotasi* vs *Dinonaktifkan*).
+3. **Modal Tambah Shohibul Qurban (`#modalTambahQurban`):**
+   - Input Nama Lengkap, Peruntukan (Bin / Atas Nama Keluarga), Jenis Hewan (Sapi / Kambing / Domba), Jumlah Ekor, Nominal Infaq Qurban (Rp), dan Status Penerimaan.
+4. **Tabel Manajemen Interaktif:**
+   - Dilengkapi tombol hapus shohibul qurban dengan konfirmasi aman dan update reaktif otomatis.
+5. **Kendali Rotasi TV Fleksibel:**
+   - Slide qurban terdaftar di tabel pengaturan rotasi TV display (`/qurban-embed` -> `slides/qurban.html`).
+   - Admin dapat menggeser switch toggle ON/OFF kapan saja tanpa perlu menyentuh kode. Perubahan disimpan permanen ke Supabase dan `localStorage`.
+
+---
+
+### Berkas yang Dibuat & Dimodifikasi:
+1. `web-statis/slides/qurban.html` (BERKAS BARU): Slide TV display penerimaan hewan qurban.
+2. `web-statis/index.html`: Penambahan rute `'/qurban-embed': 'slides/qurban.html'` pada `PATH_MAPPING`.
+3. `web-statis/js/supabase-db.js`: Penambahan entri default rotasi `/qurban-embed` pada `defaultSettings.rotation_pages`.
+4. `web-statis/admin.html`: Penambahan menu sidebar, view `#view-qurban`, modal tambah qurban, fungsi manajemen JavaScript, dan auto-detect slide qurban pada tabel rotasi.
+5. `LATEST_UPDATE.md`: Pencatatan dokumentasi komprehensif Bab 61.
+
+---
+
+### Sinkronisasi Berkas:
+- Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+
 
 
 

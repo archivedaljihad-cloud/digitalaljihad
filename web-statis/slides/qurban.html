@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penerimaan Hewan Qurban Idul Adha - Display TV</title>
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: #02120b;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1620px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.7rem;
+            line-height: 1.1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #085a2b;
+            text-shadow: 
+                1px 1px 0 #ffd700, -1px 1px 0 #ffd700, 1px -1px 0 #ffd700, -1px -1px 0 #ffd700,
+                2px 2px 0 #000000, -2px 2px 0 #000000, 2px -2px 0 #000000, -2px -2px 0 #000000,
+                0 5px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.65);
+            margin: 0 0 3px 0;
+            font-weight: 800;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            margin: 2px 0;
+            min-height: 0;
+        }
+
+        .panel {
+            background: rgba(4, 25, 18, 0.75);
+            border-radius: 18px;
+            padding: 14px 24px 12px 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            width: 100%;
+            max-width: 1560px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* PLAKAT JUDUL HALAMAN */
+        .qurban-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 0 auto 10px auto;
+            padding: 6px 32px;
+            color: #ffffff !important;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            align-self: center;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.9) 0%, rgba(5, 42, 28, 0.85) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.7);
+            border-radius: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 22px rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qurban-title i {
+            color: #ffd700;
+            font-size: 1.45rem;
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
+        }
+
+        /* 4 KARTU METRIK RINGKASAN QURBAN (SUMMARY KPI GRID) */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 10px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        .kpi-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 16px;
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        /* KPI SAPI */
+        .kpi-sapi {
+            background: linear-gradient(135deg, rgba(42, 32, 4, 0.88) 0%, rgba(20, 15, 2, 0.92) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+        }
+        .kpi-sapi::before {
+            background: #ffd700;
+            box-shadow: 0 0 12px #ffd700;
+        }
+
+        /* KPI KAMBING / DOMBA */
+        .kpi-kambing {
+            background: linear-gradient(135deg, rgba(3, 40, 22, 0.88) 0%, rgba(1, 24, 13, 0.92) 100%);
+            border: 1.5px solid rgba(52, 211, 153, 0.65);
+        }
+        .kpi-kambing::before {
+            background: #34d399;
+            box-shadow: 0 0 12px #34d399;
+        }
+
+        /* KPI INFAQ OPERASIONAL */
+        .kpi-infaq {
+            background: linear-gradient(135deg, rgba(14, 38, 48, 0.88) 0%, rgba(6, 20, 28, 0.92) 100%);
+            border: 1.5px solid rgba(56, 189, 248, 0.65);
+        }
+        .kpi-infaq::before {
+            background: #38bdf8;
+            box-shadow: 0 0 12px #38bdf8;
+        }
+
+        /* KPI JADWAL PELAKSANAAN */
+        .kpi-jadwal {
+            background: linear-gradient(135deg, rgba(38, 20, 48, 0.88) 0%, rgba(20, 8, 28, 0.92) 100%);
+            border: 1.5px solid rgba(216, 180, 254, 0.65);
+        }
+        .kpi-jadwal::before {
+            background: #c084fc;
+            box-shadow: 0 0 12px #c084fc;
+        }
+
+        .kpi-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .kpi-sapi .kpi-icon {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .kpi-kambing .kpi-icon {
+            background: rgba(52, 211, 153, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.5);
+        }
+
+        .kpi-infaq .kpi-icon {
+            background: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.5);
+        }
+
+        .kpi-jadwal .kpi-icon {
+            background: rgba(192, 132, 252, 0.2);
+            color: #c084fc;
+            border: 1px solid rgba(192, 132, 252, 0.5);
+        }
+
+        .kpi-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            line-height: 1.2;
+        }
+
+        .kpi-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #cbd5e1;
+            margin-bottom: 2px;
+        }
+
+        .kpi-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            white-space: nowrap;
+        }
+
+        .kpi-subtext {
+            font-size: 0.68rem;
+            color: #94a3b8;
+            margin-top: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* BADGE KECIL PADA KARTU JADWAL */
+        .live-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.25);
+            color: #34d399;
+            border: 0.5px solid rgba(52, 211, 153, 0.4);
+        }
+
+        /* WRAPPER TABEL SHOHIBUL QURBAN */
+        .table-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: rgba(2, 18, 12, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            border-radius: 14px;
+            min-height: 0;
+            position: relative;
+        }
+
+        .table-header-wrap {
+            background: linear-gradient(135deg, rgba(6, 38, 25, 0.95) 0%, rgba(2, 22, 14, 0.95) 100%);
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.4);
+            padding: 8px 16px;
+            display: grid;
+            grid-template-columns: 60px 1fr 140px 130px 160px 170px;
+            gap: 12px;
+            align-items: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #ffd700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .table-body-scroll {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 215, 0, 0.4) transparent;
+        }
+
+        .table-body-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .table-body-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.4);
+            border-radius: 4px;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 140px 130px 160px 170px;
+            gap: 12px;
+            align-items: center;
+            padding: 9px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.95rem;
+            transition: background 0.25s ease;
+        }
+
+        .table-row:nth-child(even) {
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .table-row:hover {
+            background: rgba(255, 215, 0, 0.08);
+        }
+
+        .col-no {
+            font-weight: 800;
+            color: #ffd700;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.05rem;
+        }
+
+        .col-nama {
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            line-height: 1.25;
+        }
+
+        .col-subnama {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-top: 1px;
+        }
+
+        /* BADGE JENIS HEWAN */
+        .animal-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .badge-sapi {
+            background: rgba(245, 158, 11, 0.22);
+            border: 1px solid #f59e0b;
+            color: #fde68a;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-kambing {
+            background: rgba(16, 185, 129, 0.22);
+            border: 1px solid #10b981;
+            color: #a7f3d0;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-domba {
+            background: rgba(56, 189, 248, 0.22);
+            border: 1px solid #38bdf8;
+            color: #bae6fd;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .col-jumlah {
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 1.05rem;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .col-infaq {
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 1.05rem;
+            color: #ffd700;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .col-status {
+            text-align: center;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            background: rgba(16, 185, 129, 0.2);
+            border: 0.8px solid rgba(52, 211, 153, 0.5);
+            color: #34d399;
+        }
+
+        /* FOOTER / RUNNING TEXT BAWAH */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .running-text-container {
+            padding: 8px 20px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+        }
+
+        .running-text i { color: #ffd700; margin: 0 10px; }
+
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="kaligrafi kaligrafi-muhammad">مُحَمَّد</div>
+    <div class="kaligrafi kaligrafi-allah">الله</div>
+
+    <div class="container">
+        <!-- HEADER IDENTIK SLIDE UTAMA -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="panel">
+                <!-- PLAKAT JUDUL BESAR -->
+                <div class="qurban-title">
+                    <i class="fa-solid fa-cow"></i>
+                    <span>PENERIMAAN HEWAN QURBAN IDUL ADHA 1447 H</span>
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                </div>
+
+                <!-- 4 KARTU METRIK RINGKASAN QURBAN OTOMATIS -->
+                <div class="summary-grid">
+                    <!-- KPI 1: SAPI -->
+                    <div class="kpi-card kpi-sapi">
+                        <div class="kpi-icon"><i class="fa-solid fa-cow"></i></div>
+                        <div class="kpi-content">
+                            <span class="kpi-label">TOTAL HEWAN SAPI</span>
+                            <span class="kpi-value" id="kpiTotalSapi">0 Ekor</span>
+                            <span class="kpi-subtext" id="kpiSubtextSapi">0 Kelompok Shohibul</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 2: KAMBING / DOMBA -->
+                    <div class="kpi-card kpi-kambing">
+                        <div class="kpi-icon"><i class="fa-solid fa-paw"></i></div>
+                        <div class="kpi-content">
+                            <span class="kpi-label">TOTAL KAMBING / DOMBA</span>
+                            <span class="kpi-value" id="kpiTotalKambing">0 Ekor</span>
+                            <span class="kpi-subtext" id="kpiSubtextKambing">Terkumpul dari Shohibul</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 3: INFAQ OPERASIONAL -->
+                    <div class="kpi-card kpi-infaq">
+                        <div class="kpi-icon"><i class="fa-solid fa-coins"></i></div>
+                        <div class="kpi-content">
+                            <span class="kpi-label">INFAQ OPERASIONAL</span>
+                            <span class="kpi-value" id="kpiTotalInfaq">Rp 0</span>
+                            <span class="kpi-subtext">Kas Operasional Qurban</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 4: JAM PELAKSANAAN PENYEMBELIHAN -->
+                    <div class="kpi-card kpi-jadwal">
+                        <div class="kpi-icon"><i class="fa-regular fa-clock"></i></div>
+                        <div class="kpi-content">
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span class="kpi-label">WAKTU PENYEMBELIHAN</span>
+                                <span class="live-tag"><i class="fa-solid fa-circle" style="font-size:5px;"></i> SIAGA</span>
+                            </div>
+                            <span class="kpi-value" id="kpiJamSembelih" style="font-size:1.15rem; color:#fdf4ff;">07:30 WIB s/d Selesai</span>
+                            <span class="kpi-subtext" id="kpiLokasiSembelih">Hari H 10 Dzulhijjah • Halaman Masjid</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABEL LIST SHOHIBUL QURBAN -->
+                <div class="table-section">
+                    <div class="table-header-wrap">
+                        <div style="text-align:center;">NO</div>
+                        <div>NAMA SHOHIBUL QURBAN (ATAS NAMA)</div>
+                        <div style="text-align:center;">JENIS HEWAN</div>
+                        <div style="text-align:center;">JUMLAH</div>
+                        <div style="text-align:right; padding-right:10px;">INFAQ QURBAN</div>
+                        <div style="text-align:center;">STATUS</div>
+                    </div>
+
+                    <div class="table-body-scroll" id="qurbanTableBody">
+                        <!-- Dimuat secara dinamis via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RUNNING TEKS MARQUEE BAWAH -->
+    <div class="bottom-running-wrap">
+        <div class="running-text-container">
+            <div class="running-text" id="runningText">
+                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">Panitia Penerimaan & Penyaluran Hewan Qurban Masjid Jami' Al-Jihad siap melayani ibadah qurban Anda. "Daging-daging unta dan darahnya itu sekali-kali tidak dapat mencapai (keridhaan) Allah, tetapi ketakwaan dari kamulah yang dapat mencapainya." (QS. Al-Hajj: 37). Hubungi Panitia Qurban DKM untuk pendaftaran qurban & infaq.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUPABASE & CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        // Data Bawaan Shohibul Qurban (Fallback Realistis)
+        const DEFAULT_QURBAN_DATA = [
+            { id: 1, nama: "H. Bambang Sugiarto", bin: "Sekeluarga (Kelompok Sapi A)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 2, nama: "Ir. H. Muhammad Arifin", bin: "Sekeluarga (Kelompok Sapi A)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 3, nama: "Drs. H. Ahmad Fauzi", bin: "Sekeluarga (Kelompok Sapi B)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 4, nama: "Hj. Siti Rahmah", bin: "Binti H. Dahlan (Kelompok Sapi B)", jenis: "SAPI", jumlah: 1, infaq: 500000, status: "Diterima" },
+            { id: 5, nama: "H. Hendra Gunawan", bin: "Sekeluarga (Sapi Mandiri)", jenis: "SAPI", jumlah: 1, infaq: 1000000, status: "Diterima" },
+            { id: 6, nama: "Dr. H. Sulaiman Hasan", bin: "Sekeluarga (Sapi Mandiri)", jenis: "SAPI", jumlah: 1, infaq: 1000000, status: "Diterima" },
+            { id: 7, nama: "H. Fachruddin", bin: "Sekeluarga (Sapi Mandiri)", jenis: "SAPI", jumlah: 1, infaq: 1000000, status: "Diterima" },
+            { id: 8, nama: "Ustadz H. Abdullah Syafi'i", bin: "Bin H. M. Nur", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 9, nama: "Bpk. Rahmat Hidayat", bin: "Bin Sastro Wardoyo", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 10, nama: "Bpk. Dedi Kurniawan", bin: "Sekeluarga", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 11, nama: "Ibu Fatimah Az-Zahra", bin: "Binti Syamsudin", jenis: "DOMBA", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 12, nama: "Bpk. Agus Setiawan", bin: "Bin H. Ridwan", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 13, nama: "Bpk. Ilham Pratama", bin: "Sekeluarga", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 14, nama: "Hj. Nurhayati", bin: "Binti H. Marzuki", jenis: "DOMBA", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 15, nama: "Bpk. Hendro Susilo", bin: "Bin Sudarsono", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 16, nama: "Bpk. Zainal Abidin", bin: "Sekeluarga", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 17, nama: "Bpk. Wahyu Nugroho", bin: "Bin Siswanto", jenis: "KAMBING", jumlah: 1, infaq: 350000, status: "Diterima" },
+            { id: 18, nama: "Bpk. Tri Wibowo", bin: "Sekeluarga", jenis: "DOMBA", jumlah: 1, infaq: 350000, status: "Diterima" }
+        ];
+
+        let qurbanList = [];
+        let autoScrollInterval = null;
+
+        function formatRupiah(num) {
+            return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
+        }
+
+        // Render data ke tabel dan kalkulasi metrik ringkasan otomatis
+        function renderQurbanData(data) {
+            qurbanList = (data && data.length > 0) ? data : DEFAULT_QURBAN_DATA;
+
+            let totalSapi = 0;
+            let totalKambing = 0;
+            let totalDomba = 0;
+            let totalInfaq = 0;
+
+            const tbody = document.getElementById('qurbanTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = qurbanList.map((item, idx) => {
+                const jns = (item.jenis || 'KAMBING').toUpperCase().trim();
+                const jml = parseInt(item.jumlah) || 1;
+                const inf = parseFloat(item.infaq) || 0;
+
+                if (jns === 'SAPI') totalSapi += jml;
+                else if (jns === 'DOMBA') { totalDomba += jml; totalKambing += jml; }
+                else { totalKambing += jml; }
+
+                totalInfaq += inf;
+
+                let badgeHtml = '';
+                if (jns === 'SAPI') {
+                    badgeHtml = `<span class="animal-badge badge-sapi"><i class="fa-solid fa-cow"></i> SAPI</span>`;
+                } else if (jns === 'DOMBA') {
+                    badgeHtml = `<span class="animal-badge badge-domba"><i class="fa-solid fa-paw"></i> DOMBA</span>`;
+                } else {
+                    badgeHtml = `<span class="animal-badge badge-kambing"><i class="fa-solid fa-paw"></i> KAMBING</span>`;
+                }
+
+                return `
+                    <div class="table-row">
+                        <div class="col-no">${idx + 1}</div>
+                        <div class="col-nama">
+                            <div>${item.nama}</div>
+                            <div class="col-subnama">${item.bin || 'Atas Nama Shohibul Qurban'}</div>
+                        </div>
+                        <div style="text-align:center;">${badgeHtml}</div>
+                        <div class="col-jumlah">${jml} Ekor</div>
+                        <div class="col-infaq">${formatRupiah(inf)}</div>
+                        <div class="col-status">
+                            <span class="status-badge"><i class="fa-solid fa-check-circle"></i> ${item.status || 'DITERIMA'}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Tampilkan hasil kalkulasi otomatis ke 4 KPI cards
+            const elSapi = document.getElementById('kpiTotalSapi');
+            const elSubSapi = document.getElementById('kpiSubtextSapi');
+            const elKambing = document.getElementById('kpiTotalKambing');
+            const elSubKambing = document.getElementById('kpiSubtextKambing');
+            const elInfaq = document.getElementById('kpiTotalInfaq');
+
+            if (elSapi) elSapi.textContent = `${totalSapi} Ekor`;
+            if (elSubSapi) elSubSapi.textContent = `Terkumpul dari Shohibul Qurban`;
+
+            if (elKambing) elKambing.textContent = `${totalKambing} Ekor`;
+            if (elSubKambing) elSubKambing.textContent = `${totalKambing - totalDomba} Kambing, ${totalDomba} Domba`;
+
+            if (elInfaq) elInfaq.textContent = formatRupiah(totalInfaq);
+
+            // Jalankan auto-scroll halus jika baris data melebihi tinggi layar
+            startAutoScroll();
+        }
+
+        // Auto-scroll halus agar seluruh daftar nama dapat terbaca di layar TV
+        function startAutoScroll() {
+            const container = document.getElementById('qurbanTableBody');
+            if (!container) return;
+
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+
+            // Tunggu layout selesai di-render
+            setTimeout(() => {
+                if (container.scrollHeight <= container.clientHeight) return;
+
+                let scrollStep = 1;
+                let delay = 50;
+                let isPaused = false;
+
+                autoScrollInterval = setInterval(() => {
+                    if (isPaused) return;
+
+                    container.scrollTop += scrollStep;
+
+                    // Jika sampai paling bawah, jeda sejenak lalu kembali ke atas
+                    if (container.scrollTop + container.clientHeight >= container.scrollHeight - 2) {
+                        isPaused = true;
+                        setTimeout(() => {
+                            container.scrollTo({ top: 0, behavior: 'smooth' });
+                            setTimeout(() => { isPaused = false; }, 2000);
+                        }, 3000);
+                    }
+                }, delay);
+            }, 1000);
+        }
+
+        // Muat Data dari Supabase / Local Storage
+        async function loadData() {
+            try {
+                // 1. Settings
+                const currentSettings = await SupabaseDB.getSettings();
+                if (currentSettings) {
+                    if (currentSettings.nama_aplikasi) {
+                        document.getElementById('nama-masjid').textContent = currentSettings.nama_aplikasi;
+                    }
+                    if (currentSettings.sub_header) {
+                        document.getElementById('sub-header').textContent = currentSettings.sub_header;
+                    }
+
+                    // Teks Berjalan spesifik untuk halaman ini (/qurban-embed)
+                    const runningText = SupabaseDB.getRunningTextForPage('/qurban-embed', currentSettings);
+                    if (runningText) {
+                        document.getElementById('runningTextContent').textContent = runningText;
+                    }
+
+                    // Pengaturan kustom jam & lokasi penyembelihan jika ada di database
+                    if (currentSettings.qurban_jam_sembelih) {
+                        document.getElementById('kpiJamSembelih').textContent = currentSettings.qurban_jam_sembelih;
+                    }
+                    if (currentSettings.qurban_lokasi_sembelih) {
+                        document.getElementById('kpiLokasiSembelih').textContent = currentSettings.qurban_lokasi_sembelih;
+                    }
+
+                    // Cek jika ada data list qurban tersimpan di app_settings
+                    if (currentSettings.qurban_data) {
+                        let parsed = currentSettings.qurban_data;
+                        if (typeof parsed === 'string') {
+                            try { parsed = JSON.parse(parsed); } catch (e) {}
+                        }
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            renderQurbanData(parsed);
+                            return;
+                        }
+                    }
+                }
+
+                // Cek cache lokal browser
+                const cached = localStorage.getItem('cached_qurban_data');
+                if (cached) {
+                    try {
+                        const parsedLocal = JSON.parse(cached);
+                        if (Array.isArray(parsedLocal) && parsedLocal.length > 0) {
+                            renderQurbanData(parsedLocal);
+                            return;
+                        }
+                    } catch (e) {}
+                }
+
+                // Jika belum ada data dari Supabase, gunakan default data
+                renderQurbanData(DEFAULT_QURBAN_DATA);
+
+            } catch (err) {
+                console.error('Gagal memuat data qurban:', err);
+                renderQurbanData(DEFAULT_QURBAN_DATA);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+
+            // Realtime WebSocket listener
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    console.log('⚡ Realtime update diterima di slide Qurban:', payload.table);
+                    if (payload.table === 'app_settings') {
+                        loadData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
