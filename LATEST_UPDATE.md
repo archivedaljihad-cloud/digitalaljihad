@@ -2465,3 +2465,58 @@ Atas permintaan pengguna untuk menghemat ruang pada *header section* layar displ
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 👤 69. FITUR EDIT PENGGUNA (NAMA, EMAIL, KATA SANDI) KHUSUS SUPER ADMIN
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Senior JAMstack Architect & AI Specialist
+
+---
+
+### Ringkasan Pembaruan:
+Sesuai permintaan pengguna, telah ditambahkan fitur manajemen akun pengguna di Dashboard Admin (`web-statis/admin.html`) dan perlindungan tingkat server (`app/Http/Controllers/UserController.php`) yang memungkinkan pengubahan **Nama Lengkap**, **Alamat Email**, dan **Kata Sandi (Password)** dengan aturan keamanan ketat: **HANYA BISA DIAKSES DAN DILAKUKAN OLEH SUPER ADMIN**.
+
+### Rincian Implementasi & Proteksi Keamanan:
+1. **Frontend Web Statis (`web-statis/js/admin-auth.js`):**
+   - **Penyimpanan Dinamis (`aljihad_users_list`):** Daftar pengguna dimuat dari `localStorage` dengan *safe fallback* ke `DEFAULT_AUTH_USERS`.
+   - **Metode `AdminAuth.isSuperAdmin()`:** Memvalidasi secara ketat apakah pengguna yang sedang login memiliki peran `role === 'admin'` atau `role_id === 3`.
+   - **Metode `AdminAuth.updateUser(userId, data)`:**
+     - Menolak eksekusi dan melempar *Error* jika pemanggil bukan Super Admin.
+     - Memvalidasi kelengkapan nama, format email, serta mencegah duplikasi email dengan akun lain.
+     - Memperbarui password baru jika diisi.
+     - Memperbarui peran (*role*) bila disesuaikan.
+     - Menyinkronkan pembaruan ke sesi aktif pengguna (`aljihad_auth_user`) jika Super Admin mengedit profil akunnya sendiri.
+     - Sinkronisasi asinkronus ke REST API Supabase (`PATCH /users`) jika terhubung daring.
+   - **Penyelarasan Login & Switch Role:** Fungsi `AdminAuth.login()` dan `AdminAuth.switchRole()` kini memprioritaskan data pengguna mutakhir dari `getUsers()` sehingga kredensial baru langsung aktif untuk autentikasi.
+
+2. **Antarmuka Pengguna Dashboard Admin (`web-statis/admin.html`):**
+   - **Tabel Pengguna Dinamis:** Menggantikan markup statis `#view-users` menjadi tabel yang di-render secara dinamis via `renderUsersTable()`.
+   - **Kolom Aksi Khusus Super Admin:**
+     - Jika login sebagai **Super Admin**: Tombol **"Edit Akun"** berwarna hijau emas aktif dan dapat diklik.
+     - Jika login sebagai **Operator / Bendahara**: Tombol edit dinonaktifkan (`disabled`), bergaya abu-abu redup dengan ikon gembok bertuliskan *"Terkunci"*, `cursor: not-allowed`, dan muncul banner peringatan bahwa hanya Super Admin yang berwenang mengelola pengguna.
+   - **Modal Interaktif Edit Pengguna (`#modalEditUser`):**
+     - Form isian: Nama Pengguna, Email, Kata Sandi Baru (dengan tombol intip/sembunyikan password 👁️ `toggleEditPasswordVisibility`), dan Pilihan Peran.
+     - Dilengkapi petunjuk bahwa kata sandi boleh dikosongkan jika tidak ingin diubah.
+
+3. **Backend Laravel (`app/Http/Controllers/UserController.php`):**
+   - Menambahkan konstruktor `__construct()` dengan perlindungan middleware otorisasi:
+     `if (!Auth::user()->hasRole('admin')) { abort(403, 'Akses Ditolak: Hanya Super Admin yang berhak mengelola data pengguna.'); }`
+   - Memastikan endpoint `/users` tidak dapat diakses atau dimanipulasi oleh peran selain Super Admin di level server Laravel.
+
+---
+
+### Berkas yang Dibuat / Diperbarui:
+1. `web-statis/js/admin-auth.js` (Logika `getUsers`, `isSuperAdmin`, `updateUser`, login dinamis).
+2. `web-statis/admin.html` (Render tabel pengguna dinamis, modal edit pengguna, proteksi tombol & banner).
+3. `app/Http/Controllers/UserController.php` (Middleware konstruktor guard Super Admin).
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】` (Sinkronisasi berkas web statis).
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 69).
+
+---
+
+### Status Sinkronisasi:
+- Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+

@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (!Auth::check() || !Auth::user()->hasRole('admin')) {
+                abort(403, 'Akses Ditolak: Fitur kelola dan edit akun pengguna (nama, email, password) hanya dapat dilakukan oleh Super Admin.');
+            }
+            return $next($request);
+        });
+    }
+
     public function index()
     {
         $users = User::with('role')->orderBy('name')->get();

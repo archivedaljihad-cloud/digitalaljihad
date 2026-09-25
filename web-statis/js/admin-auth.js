@@ -49,8 +49,131 @@ const DEFAULT_AUTH_USERS = [
 ];
 
 const AUTH_STORAGE_KEY = 'aljihad_auth_user';
+const USERS_LIST_STORAGE_KEY = 'aljihad_users_list';
 
 const AdminAuth = {
+    /**
+     * Mengambil daftar seluruh user (dari localStorage atau fallback DEFAULT_AUTH_USERS)
+     */
+    getUsers() {
+        try {
+            const raw = localStorage.getItem(USERS_LIST_STORAGE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    return parsed;
+                }
+            }
+        } catch (e) {
+            console.warn('Gagal membaca users dari localStorage:', e);
+        }
+        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(DEFAULT_AUTH_USERS));
+        return [...DEFAULT_AUTH_USERS];
+    },
+
+    /**
+     * Memeriksa apakah user yang sedang login adalah Super Admin
+     */
+    isSuperAdmin() {
+        const u = this.getCurrentUser();
+        return !!(u && (u.role === 'admin' || u.role_id === 3));
+    },
+
+    /**
+     * Update akun pengguna (nama, email, password, role)
+     * HANYA BISA DILAKUKAN OLEH SUPER ADMIN
+     */
+    async updateUser(userId, data) {
+        if (!this.isSuperAdmin()) {
+            throw new Error('Akses Ditolak: Hanya Super Admin yang berhak mengedit data pengguna!');
+        }
+
+        const users = this.getUsers();
+        const index = users.findIndex(u => String(u.id) === String(userId));
+        if (index === -1) {
+            throw new Error('Pengguna tidak ditemukan!');
+        }
+
+        const cleanName = (data.name || '').trim();
+        const cleanEmail = (data.email || '').trim().toLowerCase();
+
+        if (!cleanName) throw new Error('Nama pengguna wajib diisi!');
+        if (!cleanEmail) throw new Error('Alamat email wajib diisi!');
+
+        // Cek duplikasi email pada user lain
+        const duplicate = users.find(u => String(u.id) !== String(userId) && u.email.toLowerCase() === cleanEmail);
+        if (duplicate) {
+            throw new Error('Alamat email sudah digunakan oleh akun lain!');
+        }
+
+        users[index].name = cleanName;
+        users[index].email = cleanEmail;
+        users[index].username = cleanEmail.split('@')[0];
+
+        // Jika password diisi, update password baru
+        if (data.password && data.password.trim()) {
+            users[index].password = data.password.trim();
+        }
+
+        // Jika role diubah
+        if (data.role) {
+            users[index].role = data.role;
+            if (data.role === 'admin') {
+                users[index].role_id = 3;
+                users[index].role_label = 'Super Admin';
+                users[index].role_icon = 'fa-shield-alt';
+                users[index].color = '#ffd700';
+            } else if (data.role === 'bendahara') {
+                users[index].role_id = 1;
+                users[index].role_label = 'Bendahara Kas';
+                users[index].role_icon = 'fa-wallet';
+                users[index].color = '#10b981';
+            } else {
+                users[index].role_id = 2;
+                users[index].role_label = 'Petugas / Operator';
+                users[index].role_icon = 'fa-tv';
+                users[index].color = '#38bdf8';
+            }
+        }
+
+        // Simpan ke localStorage
+        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
+
+        // Jika user yang diedit adalah akun yang sedang aktif login, perbarui data sesinya juga
+        const currentActive = this.getCurrentUser();
+        if (currentActive && String(currentActive.id) === String(userId)) {
+            currentActive.name = users[index].name;
+            currentActive.email = users[index].email;
+            currentActive.username = users[index].username;
+            if (users[index].role) {
+                currentActive.role = users[index].role;
+                currentActive.role_label = users[index].role_label;
+            }
+            localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentActive));
+        }
+
+        // Update ke Supabase jika online & tabel users tersedia
+        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+            try {
+                const patchPayload = { name: cleanName, email: cleanEmail };
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?id=eq.${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(patchPayload)
+                });
+            } catch (err) {
+                console.warn('Sync user edit ke Supabase dilewati:', err);
+            }
+        }
+
+        return users[index];
+    },
+
     /**
      * Mengambil sesi login user saat ini dari localStorage
      */
@@ -104,21 +227,30 @@ const AdminAuth = {
             throw new Error('Email/Username dan kata sandi wajib diisi!');
         }
 
-        // 1. Cek pada akun default lokal
-        let matchedUser = DEFAULT_AUTH_USERS.find(u => 
+        // 1. Cek pada daftar akun lokal (yang bisa diupdate oleh Super Admin)
+        const usersList = this.getUsers();
+        let matchedUser = usersList.find(u => 
             (u.email.toLowerCase() === cleanId || u.username.toLowerCase() === cleanId) &&
             (u.password === cleanPwd || cleanPwd === 'admin' || cleanPwd === 'aljihad')
         );
+
+        // Fallback ke DEFAULT_AUTH_USERS jika belum ada di list
+        if (!matchedUser) {
+            matchedUser = DEFAULT_AUTH_USERS.find(u => 
+                (u.email.toLowerCase() === cleanId || u.username.toLowerCase() === cleanId) &&
+                (u.password === cleanPwd || cleanPwd === 'admin' || cleanPwd === 'aljihad')
+            );
+        }
 
         // Alias tambahan untuk fleksibilitas
         if (!matchedUser) {
             if (cleanId === 'dkm@aljihad.com' || cleanId === 'petugas') {
                 if (cleanPwd === 'operator123' || cleanPwd === 'petugas' || cleanPwd === 'admin') {
-                    matchedUser = DEFAULT_AUTH_USERS.find(u => u.role === 'petugas');
+                    matchedUser = usersList.find(u => u.role === 'petugas') || DEFAULT_AUTH_USERS.find(u => u.role === 'petugas');
                 }
             } else if (cleanId === 'adminsholeh@admin.com') {
                 if (cleanPwd === 'admin123' || cleanPwd === 'admin' || cleanPwd === 'sholeh123') {
-                    matchedUser = DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
+                    matchedUser = usersList.find(u => u.role === 'admin') || DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
                 }
             }
         }
@@ -207,7 +339,8 @@ const AdminAuth = {
      * Switch Role Cepat (Fitur Praktis untuk Pengurus & Pengujian)
      */
     switchRole(targetRole) {
-        const found = DEFAULT_AUTH_USERS.find(u => u.role === targetRole);
+        const users = this.getUsers();
+        const found = users.find(u => u.role === targetRole) || DEFAULT_AUTH_USERS.find(u => u.role === targetRole);
         if (found) {
             const sessionPayload = {
                 id: found.id,
