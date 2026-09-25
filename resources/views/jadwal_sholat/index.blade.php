@@ -337,28 +337,38 @@
 					<!-- Durasi Khusus Sholat Jumat -->
 					<div class="row">
 						<div class="col-md-12 mb-3">
-							<div class="card p-3 border-left-success" style="background: #fdfefe; border: 1px solid #d1e7dd;">
-								<div class="row align-items-center">
-									<div class="col-md-8">
-										<label for="prayer_mode_jumat_duration" class="form-label font-weight-bold text-success mb-1">
-											<i class="fas fa-mosque mr-1"></i> Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
-										</label>
-										<p class="text-muted small mb-0">
-											Khusus hari Jum'at pada waktu Dzuhur, TV otomatis beralih ke Mode Khutbah (menampilkan nama Khatib, Imam, Muadzin, Bilal, & Hadits adab khutbah). Layar akan terkunci tenang selama durasi ini.
+							<div class="card p-3 shadow-sm" style="background: #f0fdf4; border: 1.5px solid #86efac; border-left: 5px solid #10b981; border-radius: 16px;">
+								<div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 16px;">
+									<div style="flex: 1; min-width: 280px;">
+										<div class="d-flex align-items-center mb-1">
+											<i class="fas fa-mosque mr-2" style="font-size: 18px; color: #10b981;"></i>
+											<span class="font-weight-bold" style="font-size: 16px; color: #10b981;">
+												Durasi Sholat Jum'at <span style="font-weight: 700;">(Khutbah & Sholat)</span>
+											</span>
+										</div>
+										<p class="mb-2" style="font-size: 13.5px; color: #475569; line-height: 1.45;">
+											Khusus hari Jum'at waktu Dzuhur, TV otomatis masuk ke Mode Khutbah (nama Khatib, Imam, Muadzin, Bilal, hadits adab). Layar terkunci tenang selama durasi ini.
 										</p>
+										<div class="d-flex justify-content-end pr-md-4 mt-1">
+											<span class="badge shadow-sm" style="background: #10b981; color: #ffffff; border-radius: 20px; padding: 5px 14px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.2px;">
+												<i class="fas fa-user-edit mr-1"></i> Bebas Diedit oleh Operator / Petugas
+											</span>
+										</div>
 									</div>
-									<div class="col-md-4 mt-2 mt-md-0">
-										<div class="input-group">
+									<div class="d-flex flex-column align-items-center justify-content-center text-center ml-md-3" style="min-width: 145px;">
+										<div class="input-group shadow-sm" style="width: 145px; border: 1.5px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: #ffffff;">
 											<input type="number" 
 												   name="prayer_mode_jumat_duration" 
 												   id="prayer_mode_jumat_duration" 
-												   class="form-control form-control-lg font-weight-bold text-success text-center" 
+												   class="form-control text-center font-weight-bold" 
 												   value="{{ old('prayer_mode_jumat_duration', $setting->prayer_mode_jumat_duration ?? 50) }}" 
-												   min="10" max="180" required>
+												   min="10" max="180" required
+												   style="border: none; font-size: 18px; font-weight: 800; color: #10b981; height: 44px; box-shadow: none; padding-right: 0;">
 											<div class="input-group-append">
-												<span class="input-group-text font-weight-bold">menit</span>
+												<span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #e2e8f0; font-size: 14px; font-weight: 800; color: #10b981; padding: 0 12px;">menit</span>
 											</div>
 										</div>
+										<small class="mt-2 text-center font-weight-bold" style="font-size: 11.5px; color: #64748b; max-width: 155px; line-height: 1.3;">Bisa disesuaikan tiap pekan (35–60 mnt)</small>
 									</div>
 								</div>
 							</div>

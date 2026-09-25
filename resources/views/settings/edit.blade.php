@@ -411,17 +411,39 @@
 									</div>
 
 									{{-- DURASI KHUSUS HARI JUMAT --}}
-									<div class="form-group bg-light p-3 rounded border border-success mb-3">
-										<label class="font-weight-bold text-success mb-1">
-											<i class="fas fa-mosque mr-1"></i> Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
-										</label>
-										<div class="input-group">
-											<input type="number" name="prayer_mode_jumat_duration" class="form-control" value="{{ old('prayer_mode_jumat_duration', $setting->prayer_mode_jumat_duration ?? 50) }}" min="10" max="180">
-											<div class="input-group-append">
-												<span class="input-group-text">menit</span>
+									<div class="card p-3 shadow-sm mb-3" style="background: #f0fdf4; border: 1.5px solid #86efac; border-left: 5px solid #10b981; border-radius: 16px;">
+										<div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 16px;">
+											<div style="flex: 1; min-width: 260px;">
+												<div class="d-flex align-items-center mb-1">
+													<i class="fas fa-mosque mr-2" style="font-size: 18px; color: #10b981;"></i>
+													<span class="font-weight-bold" style="font-size: 15.5px; color: #10b981;">
+														Durasi Sholat Jum'at <span style="font-weight: 700;">(Khutbah & Sholat)</span>
+													</span>
+												</div>
+												<p class="mb-2" style="font-size: 13px; color: #475569; line-height: 1.45;">
+													Khusus hari Jum'at waktu Dzuhur, TV otomatis masuk ke Mode Khutbah (nama Khatib, Imam, Muadzin, Bilal, hadits adab). Layar terkunci tenang selama durasi ini.
+												</p>
+												<div class="d-flex justify-content-end pr-md-3 mt-1">
+													<span class="badge shadow-sm" style="background: #10b981; color: #ffffff; border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.2px;">
+														<i class="fas fa-user-edit mr-1"></i> Bebas Diedit oleh Operator / Petugas
+													</span>
+												</div>
+											</div>
+											<div class="d-flex flex-column align-items-center justify-content-center text-center ml-md-2" style="min-width: 140px;">
+												<div class="input-group shadow-sm" style="width: 140px; border: 1.5px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: #ffffff;">
+													<input type="number" 
+														   name="prayer_mode_jumat_duration" 
+														   class="form-control text-center font-weight-bold" 
+														   value="{{ old('prayer_mode_jumat_duration', $setting->prayer_mode_jumat_duration ?? 50) }}" 
+														   min="10" max="180"
+														   style="border: none; font-size: 17px; font-weight: 800; color: #10b981; height: 42px; box-shadow: none; padding-right: 0;">
+													<div class="input-group-append">
+														<span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #e2e8f0; font-size: 13.5px; font-weight: 800; color: #10b981; padding: 0 10px;">menit</span>
+													</div>
+												</div>
+												<small class="mt-2 text-center font-weight-bold" style="font-size: 11px; color: #64748b; max-width: 150px; line-height: 1.3;">Bisa disesuaikan tiap pekan (35–60 mnt)</small>
 											</div>
 										</div>
-										<small class="text-muted d-block mt-1">Durasi khusus hari Jum'at di waktu Dzuhur (TV terkunci tenang menampilkan kartu petugas & hadits adab khutbah).</small>
 									</div>
 
 									<div class="form-group">

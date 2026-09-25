@@ -3585,6 +3585,37 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 1. `web-statis/admin.html` (Penataan ulang grid layout kartu jadwal sholat & penyeragaman teks tombol Kemenag RI).
 2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 88).
 
+---
+
+## 🕌 BAB 89: REDESAIN TATA LETAK KARTU "DURASI SHOLAT JUM'AT (KHUTBAH & SHOLAT)" LEBIH LEGA & BERSIH
+
+**Tanggal:** 26 September 2026 | **Versi:** 4.4.2
+
+### 1. Kebutuhan Pengguna:
+- Pengguna meminta agar tata letak kartu **"Durasi Sholat Jum'at (Khutbah & Sholat)"** diganti agar lebih enak dilihat, lega, dan bersih persis seperti gambar ilustrasi yang dikirimkan.
+- Mengubah susunan elemen menjadi kartu terstruktur elegan dengan aksen hijau emerald di sisi kiri, deskripsi yang lega, badge petugas yang proporsional, serta kotak input durasi yang bersih dan terpadu.
+
+### 2. Rincian Implementasi:
+1. **Pembaruan Kartu Durasi Sholat Jum'at (`web-statis/admin.html`):**
+   - **Container Kartu:** Didesain dengan latar belakang hijau mint lembut (`background: #f0fdf4;`), sudut melengkung modern (`border-radius: 16px;`), border lembut (`1.5px solid #86efac;`), dan garis aksen tebal hijau emerald di sisi kiri (`border-left: 5px solid #10b981;`).
+   - **Sisi Kiri (Informasi & Badge):**
+     - Judul: `🕌 Durasi Sholat Jum'at (Khutbah & Sholat)` dalam warna hijau emerald tajam (`#10b981`) dan font tebal.
+     - Paragraf Penjelasan: *"Khusus hari Jum'at waktu Dzuhur, TV otomatis masuk ke Mode Khutbah (nama Khatib, Imam, Muadzin, Bilal, hadits adab). Layar terkunci tenang selama durasi ini."* dengan tipografi warna slate (`#475569`) yang nyaman dibaca.
+     - Badge Hak Akses: Badge pil hijau emerald (`#10b981`) dengan teks putih tebal `[ 👤 Bebas Diedit oleh Operator / Petugas ]` berposisi rapi di sudut bawah teks persis seperti pada ilustrasi.
+   - **Sisi Kanan (Input Angka & Panduan Durasi):**
+     - Input group rounded (`border-radius: 10px; border: 1.5px solid #cbd5e1; background: #ffffff;`) dengan angka durasi hijau bold (font size 18px) di kiri dan satuan `menit` bergaris pembatas halus di kanan.
+     - Teks panduan di bawah input: *"Bisa disesuaikan tiap pekan (35–60 mnt)"* dalam font bold abu-abu slate (`#64748b`).
+2. **Penyelarasan pada Seluruh Bagian & Blade View:**
+   - Diterapkan juga pada input durasi Jum'at pekan ini di tab Petugas Jum'at (`view-sholat-jumat`).
+   - Diterapkan juga pada view Laravel: `resources/views/jadwal_sholat/index.blade.php` dan `resources/views/settings/edit.blade.php`.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Pembaruan layout kartu Durasi Sholat Jum'at di tab Jadwal Sholat dan Petugas Jum'at).
+2. `resources/views/jadwal_sholat/index.blade.php` (Pembaruan kartu Durasi Sholat Jum'at).
+3. `resources/views/settings/edit.blade.php` (Pembaruan kartu Durasi Sholat Jum'at).
+4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 89).
+
+
 
 
 
