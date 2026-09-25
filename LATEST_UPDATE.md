@@ -3615,6 +3615,34 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 3. `resources/views/settings/edit.blade.php` (Pembaruan kartu Durasi Sholat Jum'at).
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 89).
 
+---
+
+## 🕌 BAB 90: REVISI PRESISI TATA LETAK SINKRONISASI WAKTU SHOLAT (2 BARIS HORIZONTAL PENUH)
+
+**Tanggal:** 26 September 2026 | **Versi:** 4.4.3
+
+### 1. Kebutuhan Pengguna:
+- Pengguna memberikan gambar instruksi perbandingan tegas (*SEKARANG* vs *MENJADI SEPERTI dibawah INI*).
+- Menata ulang elemen header kartu Waktu Sholat Hari Ini agar terbagi menjadi 2 baris horizontal penuh:
+  - **Baris 1:**
+    - **Sisi Kiri:** Judul bertingkat 2 baris: `Waktu Sholat` (atas) dan `Hari Ini` (bawah) berdampingan dengan ikon kalender hijau.
+    - **Sisi Kanan:** Dropdown pilihan lembaga hisab `[ Falakiyah NU (PBNU) ⬍ ]` / `[ Kemenag RI ⬍ ]`.
+  - **Baris 2:**
+    - **Sisi Kiri:** Tombol `[ 🔄 Kemenag RI ]` (warna pirus/turquoise) berdampingan langsung secara horizontal dengan tombol `[ 🌙⭐ Falakiyah NU ]` (warna hijau NU).
+    - **Sisi Kanan:** Dropdown pilihan kota `[ Kab. Bekasi ⬍ ]` terposisikan rata kanan (*right-aligned*) di bawah dropdown lembaga hisab.
+
+### 2. Rincian Implementasi:
+1. **Pembaruan Layout Header Kartu Waktu Sholat (`web-statis/admin.html`):**
+   - Mengubah struktur kartu header dari dua kolom vertikal bertumpuk menjadi dua baris independen dengan flexbox `justify-content-between`:
+     - Baris 1: `d-flex justify-content-between align-items-center mb-3`
+     - Baris 2: `d-flex justify-content-between align-items-center`
+   - Memastikan responsivitas tetap terjaga dengan `flex-wrap` dan `gap` yang proporsional sehingga di perangkat layar kecil tetap tertata rapi tanpa elemen yang terpotong.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Revisi tata letak presisi header kartu Waktu Sholat Hari Ini).
+2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 90).
+
+
 
 
 
