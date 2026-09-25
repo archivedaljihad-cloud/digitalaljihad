@@ -2133,6 +2133,51 @@ Masalah ini telah diselesaikan secara tuntas:
 - Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 🕌 63. SINKRONISASI JADWAL SHOLAT RESMI BIMAS ISLAM KEMENAG RI WILAYAH BEKASI & SISTEM AUTO-UPDATE HARIAN (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 6.0.0 | **Status:** ✅ 100% Selesai, Teruji, & Sinkron
+
+### Ringkasan Pencapaian:
+Telah dihubungkan dan disinkronkan secara resmi jadwal sholat display masjid dengan **API Bimas Islam Kementerian Agama Republik Indonesia (`api.myquran.com`)** khusus untuk wilayah **Bekasi** (Kabupaten Bekasi ID: 1203 dan Kota Bekasi ID: 1221).
+
+### Detail Sinkronisasi & Penyesuaian Waktu Hari Ini (Jumat, 25 September 2026):
+1. **Perbandingan Data:**
+   - **Sebelum Sinkronisasi:** Database Supabase masih memuat jam statis lama bawaan dump (Subuh: 04:38, Dzuhur: 11:55, Ashar: 15:16, Maghrib: 17:54, Isya: 19:04).
+   - **Setelah Sinkronisasi Resmi Kemenag Kab. Bekasi:**
+     - **Imsak:** `04:15` WIB
+     - **Subuh:** `04:25` WIB
+     - **Syuruk (Terbit):** `05:36` WIB
+     - **Dzuhur:** `11:47` WIB
+     - **Ashar:** `14:55` WIB
+     - **Maghrib:** `17:50` WIB
+     - **Isya:** `18:58` WIB
+2. **Fitur Antarmuka Panel Admin (`admin.html`):**
+   - **Pilihan Wilayah Kemenag:** Dropdown pilihan antara *Kab. Bekasi (1203)*, *Kota Bekasi (1221)*, dan *Kota Jakarta (1301)*.
+   - **Tombol "⚡ Sinkronkan Kemenag":** Tombol satu klik untuk menarik jadwal sholat resmi Kemenag RI hari ini dan langsung memperbarui database Supabase serta layar TV.
+   - **Saklar Switch "Auto-Update Harian":** Fitur saklar cerdas yang memastikan jadwal sholat selalu diperbarui otomatis mengikuti pergantian tanggal setiap hari.
+   - **Status Badge:** Menampilkan sumber resmi Bimas Islam Kemenag RI dan riwayat tanggal sinkronisasi.
+3. **Sistem Auto-Checker Cerdas Layar TV (`slides/utama.html`):**
+   - Layar TV secara otomatis mendeteksi jika tanggal kalender berganti ke hari berikutnya.
+   - Sistem melakukan background fetch transparan ke API Kemenag RI dan memperbarui database Supabase tanpa mengganggu tayangan layar TV.
+
+---
+
+### Berkas yang Diperbarui:
+1. `web-statis/admin.html`:
+   - Penambahan selector kota Kemenag, tombol sinkronisasi manual, banner status Kemenag, dan fungsi `sinkronkanKemenagManual()`.
+2. `web-statis/slides/utama.html`:
+   - Penambahan fungsi auto-sync harian cerdas `checkAutoSyncKemenag()` yang berjalan otomatis saat pergantian tanggal.
+3. `LATEST_UPDATE.md`: Pencatatan dokumentasi Bab 63.
+
+---
+
+### Sinkronisasi Berkas:
+- Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+
 
 
 

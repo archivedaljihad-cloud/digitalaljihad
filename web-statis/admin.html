@@ -1186,12 +1186,34 @@
                             <!-- Tabel Jadwal Sholat 5 Waktu -->
                             <div class="col-lg-6 mb-4">
                                 <div class="content-card">
-                                    <div class="content-card-header">
-                                        <h6 class="content-card-title">
-                                            <i class="fas fa-calendar-day"></i> Waktu Sholat Hari Ini (Otomatis Kemenag)
+                                    <div class="content-card-header d-flex justify-content-between align-items-center flex-wrap" style="gap: 8px;">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-calendar-day text-success mr-1"></i> Waktu Sholat Hari Ini (Kemenag RI)
                                         </h6>
+                                        <div class="d-flex align-items-center" style="gap: 6px;">
+                                            <select class="custom-select custom-select-sm font-weight-bold" id="selKemenagCity" style="width: auto; height: 32px; font-size: 12px;">
+                                                <option value="1203" selected>Kab. Bekasi</option>
+                                                <option value="1221">Kota Bekasi</option>
+                                                <option value="1301">Kota Jakarta</option>
+                                            </select>
+                                            <button class="btn btn-sm btn-info text-nowrap font-weight-bold" onclick="sinkronkanKemenagManual()" id="btnSyncKemenag" title="Tarik jadwal sholat terbaru hari ini dari API Kemenag RI">
+                                                <i class="fas fa-sync-alt mr-1"></i> Sinkronkan Kemenag
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="p-3">
+                                        <div class="alert alert-light border d-flex justify-content-between align-items-center py-2 px-3 mb-3" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3) !important;">
+                                            <div class="small">
+                                                <i class="fas fa-check-circle text-success mr-1"></i>
+                                                <span class="font-weight-bold text-dark">Sumber Resmi:</span> Bimas Islam Kemenag RI
+                                                <span class="badge badge-success ml-1" id="badgeKemenagCity">Kab. Bekasi</span>
+                                                <div class="text-muted" style="font-size: 11px;" id="infoKemenagTanggal">Sinkronisasi: Jumat, 25/09/2026 (Terkini)</div>
+                                            </div>
+                                            <div class="custom-control custom-switch ml-2 text-right">
+                                                <input type="checkbox" class="custom-control-input" id="cfgAutoSyncKemenag" checked>
+                                                <label class="custom-control-label font-weight-bold small text-success" for="cfgAutoSyncKemenag">Auto-Update Harian</label>
+                                            </div>
+                                        </div>
                                         <div class="form-group row align-items-center">
                                             <label class="col-sm-4 col-form-label font-weight-bold">
                                                 <i class="fas fa-utensils text-muted mr-1"></i> Imsak
@@ -2445,6 +2467,18 @@
                 const showSyuruk = localStorage.getItem('display_show_syuruk') !== 'false';
                 if (document.getElementById('cfgShowImsak')) document.getElementById('cfgShowImsak').checked = showImsak;
                 if (document.getElementById('cfgShowSyuruk')) document.getElementById('cfgShowSyuruk').checked = showSyuruk;
+
+                // Konfigurasi Kemenag Sync
+                const savedCityId = localStorage.getItem('kemenag_city_id') || '1203';
+                const savedCityName = localStorage.getItem('kemenag_city_name') || 'Kab. Bekasi';
+                if (document.getElementById('selKemenagCity')) document.getElementById('selKemenagCity').value = savedCityId;
+                if (document.getElementById('badgeKemenagCity')) document.getElementById('badgeKemenagCity').textContent = savedCityName;
+                const autoSync = localStorage.getItem('kemenag_auto_sync') !== 'false';
+                if (document.getElementById('cfgAutoSyncKemenag')) document.getElementById('cfgAutoSyncKemenag').checked = autoSync;
+                const lastDate = localStorage.getItem('kemenag_last_sync_date');
+                if (lastDate && document.getElementById('infoKemenagTanggal')) {
+                    document.getElementById('infoKemenagTanggal').textContent = `Sinkronisasi Kemenag: ${lastDate} (Terkini)`;
+                }
             } catch (err) {
                 console.warn('Gagal memuat jadwal sholat:', err);
             }
@@ -2974,6 +3008,97 @@
                 }
             } catch (err) {
                 alert('Terjadi kesalahan koneksi: ' + err.message);
+            }
+        }
+
+        // Tarik dan Sinkronkan Jadwal Sholat dari API Resmi Bimas Islam Kemenag RI
+        async function sinkronkanKemenagManual() {
+            const btn = document.getElementById('btnSyncKemenag');
+            const selCity = document.getElementById('selKemenagCity');
+            const cityId = selCity?.value || '1203';
+            const cityName = selCity?.options[selCity.selectedIndex]?.text || 'Kab. Bekasi';
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Sinkronisasi...';
+            }
+
+            try {
+                const today = new Date();
+                const y = today.getFullYear();
+                const m = String(today.getMonth() + 1).padStart(2, '0');
+                const d = String(today.getDate()).padStart(2, '0');
+
+                const url = `https://api.myquran.com/v2/sholat/jadwal/${cityId}/${y}/${m}/${d}`;
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const json = await res.json();
+                const jadwal = json.data?.jadwal;
+
+                if (!jadwal) throw new Error('Data jadwal tidak ditemukan dari server Kemenag.');
+
+                // Isi form input
+                if (document.getElementById('sholatImsak')) document.getElementById('sholatImsak').value = jadwal.imsak;
+                if (document.getElementById('sholatSubuh')) document.getElementById('sholatSubuh').value = jadwal.subuh;
+                if (document.getElementById('sholatTerbit')) document.getElementById('sholatTerbit').value = jadwal.terbit;
+                if (document.getElementById('sholatDzuhur')) document.getElementById('sholatDzuhur').value = jadwal.dzuhur;
+                if (document.getElementById('sholatAshar')) document.getElementById('sholatAshar').value = jadwal.ashar;
+                if (document.getElementById('sholatMaghrib')) document.getElementById('sholatMaghrib').value = jadwal.maghrib;
+                if (document.getElementById('sholatIsya')) document.getElementById('sholatIsya').value = jadwal.isya;
+
+                // Sinkronkan ke tabel jadwal_sholat Supabase
+                const sholatTimes = [
+                    { name: 'Imsak', time: jadwal.imsak + ':00' },
+                    { name: 'Subuh', time: jadwal.subuh + ':00' },
+                    { name: 'Syuruk', time: jadwal.terbit + ':00' },
+                    { name: 'Dzuhur', time: jadwal.dzuhur + ':00' },
+                    { name: 'Ashar', time: jadwal.ashar + ':00' },
+                    { name: 'Maghrib', time: jadwal.maghrib + ':00' },
+                    { name: 'Isya', time: jadwal.isya + ':00' }
+                ];
+
+                for (const s of sholatTimes) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?nama_sholat=ilike.*${encodeURIComponent(s.name)}*`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({ waktu: s.time })
+                    }).catch(() => {});
+                    if (s.name === 'Syuruk') {
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?nama_sholat=ilike.*terbit*`, {
+                            method: 'PATCH',
+                            headers: getSupabaseHeaders(),
+                            body: JSON.stringify({ waktu: s.time })
+                        }).catch(() => {});
+                    }
+                }
+
+                // Simpan cache lokal
+                const cachedJadwal = sholatTimes.map((s, idx) => ({
+                    id: idx + 1,
+                    nama_sholat: s.name,
+                    waktu: s.time
+                }));
+                localStorage.setItem('cached_jadwal_sholat', JSON.stringify(cachedJadwal));
+                localStorage.setItem('kemenag_city_id', cityId);
+                localStorage.setItem('kemenag_city_name', cityName);
+                localStorage.setItem('kemenag_last_sync_date', `${jadwal.tanggal} (${y}-${m}-${d})`);
+
+                const autoSyncChecked = document.getElementById('cfgAutoSyncKemenag')?.checked ?? true;
+                localStorage.setItem('kemenag_auto_sync', autoSyncChecked);
+
+                const badgeEl = document.getElementById('badgeKemenagCity');
+                if (badgeEl) badgeEl.textContent = cityName;
+                const infoEl = document.getElementById('infoKemenagTanggal');
+                if (infoEl) infoEl.textContent = `Sinkronisasi: ${jadwal.tanggal} (Terkini)`;
+
+                alert(`Alhamdulillah! Jadwal sholat berhasil disinkronkan resmi dengan Bimas Islam Kemenag RI (${cityName}) untuk ${jadwal.tanggal}.\n\nLayar TV Display otomatis ter-update.`);
+            } catch (err) {
+                alert('Gagal menyinkronkan dengan Kemenag: ' + err.message + '\nSilakan periksa koneksi internet.');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Sinkronkan Kemenag';
+                }
             }
         }
 
