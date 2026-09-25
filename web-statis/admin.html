@@ -1193,21 +1193,39 @@
                                     </div>
                                     <div class="p-3">
                                         <div class="form-group row align-items-center">
-                                            <label class="col-sm-4 col-form-label font-weight-bold">Imsak</label>
-                                            <div class="col-sm-8">
-                                                <input type="time" class="form-control font-weight-bold" id="sholatImsak" value="04:18">
+                                            <label class="col-sm-4 col-form-label font-weight-bold">
+                                                <i class="fas fa-utensils text-muted mr-1"></i> Imsak
+                                            </label>
+                                            <div class="col-sm-5">
+                                                <input type="time" class="form-control font-weight-bold" id="sholatImsak" value="04:28">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="cfgShowImsak" checked>
+                                                    <label class="custom-control-label font-weight-bold text-success" for="cfgShowImsak">Aktif</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row align-items-center">
-                                            <label class="col-sm-4 col-form-label font-weight-bold text-primary">Subuh</label>
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-primary">
+                                                <i class="fas fa-mosque mr-1"></i> Subuh
+                                            </label>
                                             <div class="col-sm-8">
-                                                <input type="time" class="form-control font-weight-bold text-primary" id="sholatSubuh" value="04:28">
+                                                <input type="time" class="form-control font-weight-bold text-primary" id="sholatSubuh" value="04:38">
                                             </div>
                                         </div>
                                         <div class="form-group row align-items-center">
-                                            <label class="col-sm-4 col-form-label font-weight-bold text-warning">Terbit (Syuruq)</label>
-                                            <div class="col-sm-8">
-                                                <input type="time" class="form-control font-weight-bold" id="sholatTerbit" value="05:42">
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-warning">
+                                                <i class="fas fa-sun mr-1"></i> Syuruk / Terbit
+                                            </label>
+                                            <div class="col-sm-5">
+                                                <input type="time" class="form-control font-weight-bold" id="sholatTerbit" value="05:50">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="cfgShowSyuruk" checked>
+                                                    <label class="custom-control-label font-weight-bold text-success" for="cfgShowSyuruk">Aktif</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row align-items-center">
@@ -2412,14 +2430,21 @@
                     sholatList.forEach(s => {
                         const name = (s.nama_sholat || s.nama || '').toLowerCase();
                         const timeVal = s.waktu ? s.waktu.substring(0, 5) : (s.jam || '');
+                        if (name.includes('imsak') && document.getElementById('sholatImsak')) document.getElementById('sholatImsak').value = timeVal;
                         if (name.includes('subuh') && document.getElementById('sholatSubuh')) document.getElementById('sholatSubuh').value = timeVal;
-                        if ((name.includes('syuruq') || name.includes('terbit')) && document.getElementById('sholatTerbit')) document.getElementById('sholatTerbit').value = timeVal;
+                        if ((name.includes('syuru') || name.includes('terbit')) && document.getElementById('sholatTerbit')) document.getElementById('sholatTerbit').value = timeVal;
                         if (name.includes('dzuhur') && document.getElementById('sholatDzuhur')) document.getElementById('sholatDzuhur').value = timeVal;
                         if (name.includes('ashar') && document.getElementById('sholatAshar')) document.getElementById('sholatAshar').value = timeVal;
                         if (name.includes('maghrib') && document.getElementById('sholatMaghrib')) document.getElementById('sholatMaghrib').value = timeVal;
                         if (name.includes('isya') && document.getElementById('sholatIsya')) document.getElementById('sholatIsya').value = timeVal;
                     });
                 }
+
+                // Status switch toggle Imsak & Syuruk
+                const showImsak = localStorage.getItem('display_show_imsak') !== 'false';
+                const showSyuruk = localStorage.getItem('display_show_syuruk') !== 'false';
+                if (document.getElementById('cfgShowImsak')) document.getElementById('cfgShowImsak').checked = showImsak;
+                if (document.getElementById('cfgShowSyuruk')) document.getElementById('cfgShowSyuruk').checked = showSyuruk;
             } catch (err) {
                 console.warn('Gagal memuat jadwal sholat:', err);
             }
@@ -2959,14 +2984,19 @@
             const iqamahDur = parseInt(document.getElementById('cfgDurasiIqamah')?.value) || 10;
             const sholatDur = parseInt(document.getElementById('cfgDurasiSholat')?.value) || 15;
 
+            const showImsak = document.getElementById('cfgShowImsak') ? document.getElementById('cfgShowImsak').checked : true;
+            const showSyuruk = document.getElementById('cfgShowSyuruk') ? document.getElementById('cfgShowSyuruk').checked : true;
+            localStorage.setItem('display_show_imsak', showImsak);
+            localStorage.setItem('display_show_syuruk', showSyuruk);
+
             const sholatTimes = [
+                { name: 'Imsak', time: document.getElementById('sholatImsak')?.value },
                 { name: 'Subuh', time: document.getElementById('sholatSubuh')?.value },
-                { name: 'Terbit', time: document.getElementById('sholatTerbit')?.value },
+                { name: 'Syuruk', time: document.getElementById('sholatTerbit')?.value },
                 { name: 'Dzuhur', time: document.getElementById('sholatDzuhur')?.value },
                 { name: 'Ashar', time: document.getElementById('sholatAshar')?.value },
                 { name: 'Maghrib', time: document.getElementById('sholatMaghrib')?.value },
-                { name: 'Isya', time: document.getElementById('sholatIsya')?.value },
-                { name: 'Imsak', time: document.getElementById('sholatImsak')?.value }
+                { name: 'Isya', time: document.getElementById('sholatIsya')?.value }
             ];
 
             try {
@@ -2983,7 +3013,7 @@
                     })
                 });
 
-                // 2. Update waktu 5 waktu sholat ke tabel jadwal_sholat Supabase
+                // 2. Update waktu sholat ke tabel jadwal_sholat Supabase
                 for (const s of sholatTimes) {
                     if (s.time) {
                         const timeFormatted = s.time.length === 5 ? (s.time + ':00') : s.time;
@@ -2994,6 +3024,14 @@
                                 waktu: timeFormatted
                             })
                         }).catch(() => {});
+                        // Fallback alias Syuruk / Terbit
+                        if (s.name === 'Syuruk') {
+                            await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?nama_sholat=ilike.*terbit*`, {
+                                method: 'PATCH',
+                                headers: getSupabaseHeaders(),
+                                body: JSON.stringify({ waktu: timeFormatted })
+                            }).catch(() => {});
+                        }
                     }
                 }
 

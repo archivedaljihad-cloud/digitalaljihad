@@ -2101,6 +2101,39 @@ Halaman ini didesain dengan visual **Royal Mosque Luxury** yang sangat mewah, be
 - Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## ⏰ 62. AKTIVASI KOTAK JADWAL IMSAK & SYURUK PADA SLIDE UTAMA DISPLAY TV BESERTA SWITCH KENDALI DI PANEL ADMIN (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 5.9.0 | **Status:** ✅ 100% Selesai, Teruji, & Sinkron
+
+### Ringkasan Masalah & Solusi:
+Sebelumnya, pada slide display utama (`web-statis/slides/utama.html`), kotak waktu Imsak dan Syuruk tidak muncul (hanya menampilkan 5 sholat fardhu: Subuh, Dzuhur, Ashar, Maghrib, Isya) karena di tabel database Supabase `jadwal_sholat` hanya terdapat 5 baris data (id 1 s/d 5) bawaan dump awal.
+
+Masalah ini telah diselesaikan secara tuntas:
+1. **Penambahan Data Resmi ke Supabase:** Telah di-insert data baris `Imsak` (`04:28:00`) dan `Syuruk` (`05:50:00`) ke tabel `jadwal_sholat` Supabase.
+2. **Deretan 7 Kartu Harmonis:** Slide utama kini otomatis menampilkan deretan lengkap 7 waktu sholat: **Imsak, Subuh, Syuruk, Dzuhur, Ashar, Maghrib, Isya**.
+3. **Switch Kendali di Panel Admin (`admin.html`):** Pengurus masjid kini diberikan kendali penuh melalui switch toggle **"Aktif"** di samping input waktu Imsak dan Syuruk. Pengurus dapat dengan mudah menampilkan atau menyembunyikan kotak Imsak/Syuruk kapan saja (misal: menyalakan Imsak saat Ramadhan atau menyembunyikannya sesuai preferensi).
+4. **Keamanan Filter Prayer Engine:** Waktu non-fardhu (Imsak dan Syuruk/Terbit) tetap terisolasi dengan aman pada `prayer-engine.js` dan tidak akan memicu countdown adzan/iqamah palsu, sehingga operasional sholat fardhu masjid tetap 100% akurat.
+
+---
+
+### Berkas yang Diperbarui:
+1. `web-statis/slides/utama.html`:
+   - Penambahan filter dinamis `display_show_imsak` dan `display_show_syuruk` pada fungsi `renderJadwalCards()`.
+   - Penyelarasan jam fallback kartu awal dengan database terkini.
+2. `web-statis/admin.html`:
+   - Penambahan custom switch toggle aktif/nonaktif di sebelah kolom input Imsak dan Syuruk.
+   - Peningkatan fungsi pemuatan data dan fungsi `simpanJadwalSholat()` agar menyinkronkan status toggle ke `localStorage` dan waktu ke Supabase.
+3. `LATEST_UPDATE.md`: Pencatatan dokumentasi Bab 62.
+
+---
+
+### Sinkronisasi Berkas:
+- Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+
 
 
 

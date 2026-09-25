@@ -481,17 +481,17 @@
             <!-- DERETAN KOTAK SHOLAT -->
             <div class="sholat-list" id="sholatList">
                 <!-- Fallback / Initial Cards -->
-                <div class="sholat-card khusus-imsak-terbit" data-nama="Imsak" data-waktu="04:25">
+                <div class="sholat-card khusus-imsak-terbit" data-nama="Imsak" data-waktu="04:28">
                     <div class="card-status-badge"></div>
                     <i class="fas fa-utensils"></i>
                     <div class="nama-sholat">Imsak</div>
-                    <div class="waktu-sholat">04:25</div>
+                    <div class="waktu-sholat">04:28</div>
                 </div>
-                <div class="sholat-card" data-nama="Subuh" data-waktu="04:35">
+                <div class="sholat-card" data-nama="Subuh" data-waktu="04:38">
                     <div class="card-status-badge"></div>
                     <i class="fas fa-mosque"></i>
                     <div class="nama-sholat">Subuh</div>
-                    <div class="waktu-sholat">04:35</div>
+                    <div class="waktu-sholat">04:38</div>
                 </div>
                 <div class="sholat-card khusus-imsak-terbit" data-nama="Syuruk" data-waktu="05:50">
                     <div class="card-status-badge"></div>
@@ -505,23 +505,23 @@
                     <div class="nama-sholat">Dzuhur</div>
                     <div class="waktu-sholat">11:55</div>
                 </div>
-                <div class="sholat-card" data-nama="Ashar" data-waktu="15:10">
+                <div class="sholat-card" data-nama="Ashar" data-waktu="15:16">
                     <div class="card-status-badge"></div>
                     <i class="fas fa-mosque"></i>
                     <div class="nama-sholat">Ashar</div>
-                    <div class="waktu-sholat">15:10</div>
+                    <div class="waktu-sholat">15:16</div>
                 </div>
-                <div class="sholat-card" data-nama="Maghrib" data-waktu="17:58">
+                <div class="sholat-card" data-nama="Maghrib" data-waktu="17:54">
                     <div class="card-status-badge"></div>
                     <i class="fas fa-mosque"></i>
                     <div class="nama-sholat">Maghrib</div>
-                    <div class="waktu-sholat">17:58</div>
+                    <div class="waktu-sholat">17:54</div>
                 </div>
-                <div class="sholat-card" data-nama="Isya" data-waktu="19:08">
+                <div class="sholat-card" data-nama="Isya" data-waktu="19:04">
                     <div class="card-status-badge"></div>
                     <i class="fas fa-mosque"></i>
                     <div class="nama-sholat">Isya</div>
-                    <div class="waktu-sholat">19:08</div>
+                    <div class="waktu-sholat">19:04</div>
                 </div>
             </div>
         </div>
@@ -552,8 +552,18 @@
             if (!jadwalList || jadwalList.length === 0) return;
             currentJadwal = jadwalList;
 
+            const showImsak = localStorage.getItem('display_show_imsak') !== 'false';
+            const showSyuruk = localStorage.getItem('display_show_syuruk') !== 'false';
+
+            const filtered = jadwalList.filter(item => {
+                const namaClean = (item.nama_sholat || '').toLowerCase().trim();
+                if (namaClean === 'imsak' && !showImsak) return false;
+                if ((namaClean === 'syuruk' || namaClean === 'terbit') && !showSyuruk) return false;
+                return true;
+            });
+
             const order = ['imsak', 'subuh', 'terbit', 'syuruk', 'dzuhur', 'ashar', 'maghrib', 'isya'];
-            const sorted = [...jadwalList].sort((a, b) => {
+            const sorted = [...filtered].sort((a, b) => {
                 const aName = (a.nama_sholat || '').toLowerCase().trim();
                 const bName = (b.nama_sholat || '').toLowerCase().trim();
                 let aIdx = order.indexOf(aName);
