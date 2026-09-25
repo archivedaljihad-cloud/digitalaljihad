@@ -202,6 +202,7 @@ h2.sub-header {
 
 /* =====================================================
    MEDALI KALIGRAFI 3D EMAS MENYALA (ALLAH & MUHAMMAD)
+   Efek Denyut Pelan Memancarkan Gelombang Cahaya Emas
    ===================================================== */
 .kaligrafi-medallion {
     position: absolute !important;
@@ -216,20 +217,39 @@ h2.sub-header {
     justify-content: center !important;
 }
 
+/* Gelombang Pendaran Cahaya Emas Luar (Aura Emas Utama) */
 .kaligrafi-medallion::before {
     content: '' !important;
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    width: 110% !important;
-    height: 110% !important;
+    width: 115% !important;
+    height: 115% !important;
     border-radius: 50% !important;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.45) 0%, rgba(255, 170, 0, 0.22) 48%, rgba(255, 140, 0, 0) 72%) !important;
-    filter: blur(8px) !important;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, rgba(255, 175, 0, 0.32) 48%, rgba(212, 175, 55, 0) 75%) !important;
+    filter: blur(10px) !important;
     z-index: -1 !important;
     pointer-events: none !important;
-    animation: medallionAuraPulse 4s ease-in-out infinite alternate !important;
+    animation: goldMedallionAuraWave 4.2s ease-in-out infinite alternate !important;
+}
+
+/* Gelombang Denyut Cincin Riak Emas yang Memancar Keluar */
+.kaligrafi-medallion::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) scale(0.85) !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% !important;
+    border: 2px solid rgba(255, 220, 80, 0.75) !important;
+    box-shadow: 0 0 22px rgba(255, 215, 0, 0.7), inset 0 0 15px rgba(255, 215, 0, 0.4) !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    animation: goldRippleRays 4.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite !important;
 }
 
 .kaligrafi-medallion img {
@@ -237,10 +257,10 @@ h2.sub-header {
     height: 100% !important;
     object-fit: contain !important;
     filter: drop-shadow(0 0 12px rgba(255, 220, 50, 0.95)) 
-           drop-shadow(0 0 28px rgba(255, 175, 0, 0.8))
+           drop-shadow(0 0 28px rgba(255, 180, 0, 0.8))
            drop-shadow(0 0 50px rgba(255, 140, 0, 0.5))
            drop-shadow(0 10px 20px rgba(0, 0, 0, 0.85)) !important;
-    animation: goldenMedallionGlow 3.5s ease-in-out infinite alternate !important;
+    animation: goldMedallionHeartbeat 4.2s ease-in-out infinite alternate !important;
 }
 
 .kaligrafi-medallion.kaligrafi-allah {
@@ -253,33 +273,67 @@ h2.sub-header {
     right: auto !important;
 }
 
-@keyframes goldenMedallionGlow {
+/* Animasi 1: Denyut Pelan Gambar Medali dengan Kilau Emas */
+@keyframes goldMedallionHeartbeat {
     0% {
-        opacity: 0.9;
-        transform: scale(1);
+        opacity: 0.92;
+        transform: scale(0.98);
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75))
+               drop-shadow(0 0 24px rgba(255, 170, 0, 0.6))
+               drop-shadow(0 0 45px rgba(255, 140, 0, 0.35))
+               drop-shadow(0 6px 15px rgba(0, 0, 0, 0.85)) !important;
     }
     50% {
         opacity: 1;
-        transform: scale(1.025);
+        transform: scale(1.045);
+        filter: drop-shadow(0 0 20px rgba(255, 245, 140, 1))
+               drop-shadow(0 0 42px rgba(255, 215, 0, 0.95))
+               drop-shadow(0 0 70px rgba(255, 160, 0, 0.7))
+               drop-shadow(0 10px 24px rgba(0, 0, 0, 0.9)) !important;
     }
     100% {
-        opacity: 0.9;
-        transform: scale(1);
+        opacity: 0.92;
+        transform: scale(0.98);
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75))
+               drop-shadow(0 0 24px rgba(255, 170, 0, 0.6))
+               drop-shadow(0 0 45px rgba(255, 140, 0, 0.35))
+               drop-shadow(0 6px 15px rgba(0, 0, 0, 0.85)) !important;
     }
 }
 
-@keyframes medallionAuraPulse {
+/* Animasi 2: Pancaran Aura Emas Mengembang Melingkar */
+@keyframes goldMedallionAuraWave {
     0% {
-        opacity: 0.7;
-        transform: translate(-50%, -50%) scale(0.95);
+        opacity: 0.65;
+        transform: translate(-50%, -50%) scale(0.92);
+        filter: blur(8px);
     }
     50% {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1.08);
+        transform: translate(-50%, -50%) scale(1.22);
+        filter: blur(14px);
     }
     100% {
-        opacity: 0.7;
-        transform: translate(-50%, -50%) scale(0.95);
+        opacity: 0.65;
+        transform: translate(-50%, -50%) scale(0.92);
+        filter: blur(8px);
+    }
+}
+
+/* Animasi 3: Gelombang Riak Cahaya Emas Memancar Keluar */
+@keyframes goldRippleRays {
+    0% {
+        transform: translate(-50%, -50%) scale(0.85);
+        opacity: 0.85;
+        border-color: rgba(255, 235, 100, 0.9);
+    }
+    50% {
+        opacity: 0.45;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.45);
+        opacity: 0;
+        border-color: rgba(255, 180, 0, 0);
     }
 }
 

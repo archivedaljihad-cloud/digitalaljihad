@@ -2308,3 +2308,55 @@ Sebagai Senior JAMstack Developer dengan pengalaman skala enterprise, dilakukan 
 ### Status Sinkronisasi:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` pada branch `main` disinkronkan 100%.
+
+---
+
+## 🌟 66. PENGGANTIAN MEDALI KALIGRAFI TEKS DENGAN GAMBAR PNG (MEDALI BINTANG 12 HIJAU-EMAS) & EFEK DENYUT PELAN MEMANCARKAN CAHAYA EMAS
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Senior JAMstack Architect & AI Specialist
+
+---
+
+### Ringkasan Pembaruan:
+Atas permintaan pengguna, teks kaligrafi biasa di sudut kiri atas (*Muhammad*) dan kanan atas (*Allah*) pada layar display TV telah digantikan dengan **Gambar Medali Bintang 12 Hijau-Emas 3D Asli** yang diunggah oleh pengguna, dilengkapi dengan sistem animasi denyut lembut (*slow royal pulse*) yang memancarkan pendaran gelombang cahaya emas memukau.
+
+#### 1. Penggantian Aset Gambar PNG:
+- **Medali Allah SWT:** Disimpan dan diperbarui di `web-statis/image/display/medallion/allah_3d.png`. Berbentuk medali bintang 12 ornamen hijau zamrud dengan kaligrafi lafadz Allah berlapis emas timbul 3D.
+- **Medali Muhammad SAW:** Disimpan dan diperbarui di `web-statis/image/display/medallion/muhammad_3d.png`. Berbentuk medali bintang 12 ornamen hijau zamrud dengan kaligrafi lafadz Muhammad berlapis emas timbul 3D.
+- Diterapkan pada seluruh slide utama: `slides/utama.html`, `slides/qurban.html`, `slides/keuangan.html`, dan `slides/jumat.html`.
+
+#### 2. Sistem Animasi Denyut Emas Berlapis (Multi-Layered Golden Pulse & Radiating Aura):
+Diimplementasikan di `css/display-theme.css` dan `css/partials-theme.css`:
+- **Lapisan 1 (Medallion Heartbeat Pulse):**
+  - Gambar medali berdenyut perlahan dengan siklus tenang `4.2s` (`transform: scale(0.98)` $\rightarrow$ `scale(1.045)`).
+  - Saat mengembang di puncak denyut, efek bayangan jatuh (*multi-stage drop-shadow*) berpendar terang dengan kombinasi warna emas murni (`#ffd700`, `#ffeb64`, dan `#ffa000`).
+- **Lapisan 2 (Aura Wave Mengembang `::before`):**
+  - Aura pendaran radial gradien emas di belakang medali mengembang melingkar hingga `scale(1.22)` dengan efek blur `14px`, memberikan kedalaman atmosfer layaknya cahaya ilahi.
+- **Lapisan 3 (Gelombang Riak Cahaya Emas Memancar `::after`):**
+  - Gelombang cincin riak emas (*expanding gold ripple ring*) yang memancar keluar dari batas tepi medali (`scale(0.85)` $\rightarrow$ `scale(1.45)`) lalu memudar halus secara berkala (*infinite ripple wave*).
+
+#### 3. Ketahanan Responsif:
+- Pada layar TV 4K / Monitor Besar: Medali tampil gagah dalam ukuran 125px (dan 250px pada layar 4K).
+- Pada tablet: Otomatis diskalakan menjadi 80px-85px.
+- Pada smartphone: Otomatis diskalakan menjadi 46px-50px dengan margin aman sehingga tidak pernah menabrak judul masjid.
+
+---
+
+### Berkas yang Diperbarui:
+1. `web-statis/image/display/medallion/allah_3d.png` (Diperbarui dengan gambar PNG unggahan pengguna).
+2. `web-statis/image/display/medallion/muhammad_3d.png` (Diperbarui dengan gambar PNG unggahan pengguna).
+3. `web-statis/css/display-theme.css` (Animasi `goldMedallionHeartbeat`, `goldMedallionAuraWave`, dan `goldRippleRays`).
+4. `web-statis/css/partials-theme.css` (Sinkronisasi animasi denyut pelan emas).
+5. `web-statis/slides/utama.html` (Penggantian elemen teks kaligrafi menjadi elemen gambar medali kaligrafi).
+6. `web-statis/slides/qurban.html` (Pemasangan elemen medali kaligrafi emas 3D).
+7. `web-statis/slides/keuangan.html` (Pemasangan elemen medali kaligrafi emas 3D).
+8. `web-statis/slides/jumat.html` (Pemasangan elemen medali kaligrafi emas 3D).
+9. `LATEST_UPDATE.md` (Dokumentasi Bab 66).
+
+---
+
+### Status Sinkronisasi:
+- Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
