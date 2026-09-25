@@ -1,0 +1,78 @@
+# ==============================================================================
+# CLOUDFLARE PAGES & WORKERS CACHING & SECURITY HEADERS
+# Tampilan Layar TV Display Digital Masjid Jami' Al-Jihad
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. GLOBAL SECURITY HEADERS
+# ------------------------------------------------------------------------------
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# ------------------------------------------------------------------------------
+# 2. DOKUMEN HTML & SLIDES (ZERO EDGE CACHE / INSTANT UPDATE)
+# TV & Pengunjung langsung mendapatkan pembaruan slide/konten baru tanpa tertahan cache
+# ------------------------------------------------------------------------------
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/slides/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# ------------------------------------------------------------------------------
+# 3. PWA SERVICE WORKER & MANIFEST
+# Service Worker tidak boleh di-cache agar deteksi rilis versi baru selalu cepat
+# ------------------------------------------------------------------------------
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/manifest.json
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# ------------------------------------------------------------------------------
+# 4. ASET STATIS BERAT (LONG-TERM CDN EDGE CACHING - 1 TAHUN)
+# Gambar medali kaligrafi, audio tarhim/adzan, stylesheet, fonts, dan library vendor
+# di-cache permanen di Cloudflare Edge Server (misal POP Jakarta) agar loading TV instan (0 detik)
+# ------------------------------------------------------------------------------
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/image/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/img/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/audio/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/favicon.ico
+  Cache-Control: public, max-age=604800, immutable
+
+# ------------------------------------------------------------------------------
+# 5. DATA JSON DINAMIS (LOCAL CACHE + STALE-WHILE-REVALIDATE)
+# ------------------------------------------------------------------------------
+/data/*
+  Cache-Control: public, max-age=60, stale-while-revalidate=600
+  Access-Control-Allow-Origin: *

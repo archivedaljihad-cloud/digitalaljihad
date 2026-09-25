@@ -2360,3 +2360,51 @@ Diimplementasikan di `css/display-theme.css` dan `css/partials-theme.css`:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## ⚡ 67. AKTIVASI & KONFIGURASI FITUR CACHING CLOUDFLARE PAGES & EDGE CDN HEADERS
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Senior JAMstack Architect & AI Specialist
+
+---
+
+### Ringkasan Pembaruan:
+Menjawab pertanyaan pengguna mengenai status aktivasi caching Cloudflare pada web statis, serta melakukan audit dan implementasi file konfigurasi `_headers` standar enterprise untuk **Cloudflare Pages / Cloudflare Workers Static Assets**.
+
+#### 1. Status Fitur Caching Web Statis:
+- **Di Sisi Client-Side / Browser (Lokal & TV Display):**
+  - **Service Worker (`sw.js`) & CacheStorage PWA:** Sudah aktif dengan strategi *Cache-First* untuk seluruh aset statis (CSS, JS, Fonts, Gambar medali 3D, Audio adzan/tarhim) dan *Network-First* dengan offline fallback untuk dokumen HTML.
+  - **Web Storage (`localStorage`):** Seluruh data dinamis jadwal sholat, pengaturan admin, pengumuman, qurban, dan keuangan di-cache lokal sehingga aplikasi dapat berjalan offline dan instan saat TV dinyalakan.
+- **Di Sisi Cloudflare CDN / Edge Server:**
+  - Sebelumnya, Cloudflare hanya menerapkan aturan default generik.
+  - Sekarang, telah ditambahkan berkas deklarasi eksplisit `web-statis/_headers` agar Cloudflare Edge Server (misal POP Jakarta - CGK) mengaktifkan caching jangka panjang untuk aset berat dan bypass cache untuk file dokumen agar pembaruan data/slide selalu instan.
+
+#### 2. Konfigurasi `web-statis/_headers` yang Diterapkan:
+- **Aset Statis Berat (Gambar, Font, Audio, CSS, JS Vendor):**
+  - Header: `Cache-Control: public, max-age=31536000, immutable`
+  - Memberikan kecepatan loading 0 detik (*instant load*) pada Smart TV dan pengunjung karena aset langsung disajikan dari RAM/SSD server edge Cloudflare terdekat tanpa menyentuh origin.
+- **Dokumen HTML & Slides (`index.html`, `admin.html`, `/slides/*`):**
+  - Header: `Cache-Control: public, max-age=0, must-revalidate`
+  - Memastikan pengurus masjid yang mengupdate konten/slide dapat langsung melihat perubahannya di TV tanpa terhalang cache basi (*stale cache*).
+- **Service Worker (`sw.js`):**
+  - Header: `Cache-Control: public, max-age=0, must-revalidate`
+  - Memastikan siklus update Service Worker PWA selalu terdeteksi otomatis saat ada rilis kode baru di GitHub.
+- **Security Headers:**
+  - `X-Content-Type-Options: nosniff`
+  - `X-Frame-Options: SAMEORIGIN`
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+
+---
+
+### Berkas yang Dibuat / Diperbarui:
+1. `web-statis/_headers` (Konfigurasi Cloudflare Pages caching rules & HTTP security headers).
+2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\_headers` (Sinkronisasi ke folder mandiri).
+3. `LATEST_UPDATE.md` (Dokumentasi Bab 67).
+
+---
+
+### Status Sinkronisasi:
+- Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
