@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengajian Rutin Malam Ahad - Display Masjid</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background-color: #041913;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1680px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .schedule-header-section {
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 6px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .title-with-icons {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.9) 0%, rgba(4, 40, 26, 0.85) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.7);
+            border-radius: 35px;
+            padding: 6px 26px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 215, 0, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .title-icon-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(3, 22, 15, 0.95);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffd700;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .title-text-wrap h2 {
+            font-size: 1.65rem;
+            color: #ffffff !important;
+            letter-spacing: 2px;
+            font-weight: 800;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .title-text-wrap p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #ffd700;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .sholawat-greeting {
+            font-family: 'Amiri', serif;
+            font-size: 1.15rem;
+            color: #fff4b8;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.75);
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 3-Column Layout */
+        .kajian-main-layout {
+            display: grid;
+            grid-template-columns: 360px 1fr 340px;
+            gap: 20px;
+            align-items: stretch;
+            width: 100%;
+            flex: 1;
+            margin: 8px auto 0 auto;
+        }
+
+        /* Glassmorphism Cards */
+        .kajian-card {
+            background: linear-gradient(135deg, rgba(6, 32, 22, 0.9) 0%, rgba(2, 18, 12, 0.94) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.55);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 238, 170, 0.25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kajian-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Kolom Kiri: Pemateri / Ustadz */
+        .ustadz-photo-container {
+            width: 100%;
+            height: 230px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.65);
+            position: relative;
+            background: #02130c;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            margin-bottom: 15px;
+        }
+        .ustadz-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.5s ease;
+        }
+        .ustadz-badge-floating {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(2, 20, 13, 0.92);
+            border: 1px solid #ffd700;
+            padding: 6px 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .ustadz-badge-role {
+            font-size: 0.75rem;
+            color: #ffd700;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+        .ustadz-name-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+        }
+        .ustadz-spec {
+            font-size: 0.85rem;
+            color: #86efac;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .waktu-kajian-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Kolom Tengah: Kitab & Tema */
+        .tema-badge-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .pekan-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+        }
+        .live-status-badge {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.6);
+            color: #fca5a5;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+            animation: blinkLive 1.5s infinite;
+        }
+        @keyframes blinkLive {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .kitab-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .kitab-icon {
+            font-size: 1.8rem;
+            color: #ffd700;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+        }
+        .kitab-label {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .kitab-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffd700;
+            line-height: 1.2;
+        }
+
+        .tema-box {
+            background: rgba(2, 28, 18, 0.7);
+            border-left: 4px solid #10b981;
+            border-radius: 0 14px 14px 0;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+        }
+        .tema-label {
+            font-size: 0.78rem;
+            color: #86efac;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .tema-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.3;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+        }
+
+        .hadits-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed rgba(255, 215, 0, 0.45);
+            border-radius: 14px;
+            padding: 12px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .hadits-arab {
+            font-family: 'Amiri', serif;
+            font-size: 1.25rem;
+            color: #fff4b8;
+            text-align: right;
+            direction: rtl;
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+        .hadits-arti {
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            line-height: 1.4;
+            font-style: italic;
+        }
+        .hadits-riwayat {
+            font-size: 0.75rem;
+            color: #ffd700;
+            font-weight: 700;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* Kolom Kanan: Tanya Jawab QR & Countdown Isya */
+        .countdown-isya-box {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(153, 27, 27, 0.3) 100%);
+            border: 1.5px solid rgba(248, 113, 113, 0.6);
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+        .cd-label {
+            font-size: 0.78rem;
+            color: #fca5a5;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .cd-time {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 3px;
+            font-family: monospace;
+            text-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+            line-height: 1;
+        }
+        .cd-sub {
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            margin-top: 4px;
+        }
+
+        .qa-card-box {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        .qa-badge {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            color: #ffd700;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .qa-qr-img {
+            width: 110px;
+            height: 110px;
+            background: #ffffff;
+            padding: 6px;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+            margin-bottom: 8px;
+        }
+        .qa-instruction {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.25;
+            margin-bottom: 4px;
+        }
+        .qa-subtext {
+            font-size: 0.72rem;
+            color: #cbd5e1;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 1200px) {
+            .kajian-main-layout {
+                grid-template-columns: 300px 1fr 280px;
+                gap: 15px;
+            }
+            .title-text-wrap h2 { font-size: 1.4rem; }
+            .tema-title { font-size: 1.2rem; }
+            .cd-time { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <!-- MEDALI KALIGRAFI EMAS 3D -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
+
+    <div class="container">
+        <!-- HEADER MASJID UNIFIED -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime"></div>
+
+            <div class="schedule-header-section">
+                <div class="title-with-icons">
+                    <div class="title-icon-badge left-icon"><i class="fas fa-book-reader"></i></div>
+                    <div class="title-text-wrap">
+                        <h2>Pengajian Rutin Malam Ahad</h2>
+                        <p><i class="fas fa-calendar-check mr-1"></i> Setiap Hari Sabtu • Ba'da Maghrib s/d Menjelang Isya</p>
+                        <div class="sholawat-greeting">مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ</div>
+                    </div>
+                    <div class="title-icon-badge right-icon"><i class="fas fa-graduation-cap"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3-COLUMN MAIN CONTENT -->
+        <div class="kajian-main-layout">
+            <!-- KOLOM 1: PROFIL PEMATERI -->
+            <div class="kajian-card">
+                <div>
+                    <div class="ustadz-photo-container">
+                        <img src="../image/display/default_imam.jpg" id="ustadzPhoto" class="ustadz-photo" alt="Ustadz Pemateri" onerror="this.onerror=null;this.src='../image/display/default_imam.jpg';">
+                        <div class="ustadz-badge-floating">
+                            <span class="ustadz-badge-role"><i class="fas fa-chalkboard-teacher mr-1"></i> Pemateri Kajian</span>
+                        </div>
+                    </div>
+                    <div class="ustadz-name-title" id="valUstadzName">Ust. H. Ahmad Sholeh Al-Hafidz</div>
+                    <div class="ustadz-spec" id="valUstadzSpec">Dewan Asatidz DKM Masjid Jami' Al-Jihad</div>
+                </div>
+
+                <div class="waktu-kajian-pill">
+                    <i class="fas fa-clock text-warning" style="font-size: 1.2rem;"></i>
+                    <div>
+                        <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase;">Waktu Pelaksanaan</div>
+                        <div style="font-weight: 700; color: #ffffff;" id="valWaktuPelaksanaan">Ba'da Sholat Maghrib s/d Isya</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KOLOM 2: KITAB & TEMA PEKAN INI -->
+            <div class="kajian-card">
+                <div>
+                    <div class="tema-badge-wrap">
+                        <span class="pekan-badge" id="badgePekanKajian"><i class="fas fa-calendar-week mr-1"></i> Pekan Ini</span>
+                        <span class="live-status-badge">
+                            <span class="live-dot"></span> MAJELIS ILMU TERBUKA UMUM
+                        </span>
+                    </div>
+
+                    <div class="kitab-box">
+                        <i class="fas fa-book-quran kitab-icon"></i>
+                        <div>
+                            <div class="kitab-label">Kitab Rujukan Utama</div>
+                            <div class="kitab-title" id="valKitabRujukan">Kitab Riyadhus Shalihin</div>
+                        </div>
+                    </div>
+
+                    <div class="tema-box">
+                        <div class="tema-label"><i class="fas fa-bookmark mr-1"></i> Tema Pembahasan Pekan Ini</div>
+                        <div class="tema-title" id="valTemaKajian">Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga</div>
+                    </div>
+                </div>
+
+                <div class="hadits-box">
+                    <div class="hadits-arab">مَا اجْتَمَعَ قَوْمٌ فِي بَيْتٍ مِنْ بُيُوتِ اللَّهِ يَتْلُونَ كِتَابَ اللَّهِ وَيَتَدَارَسُونَهُ بَيْنَهُمْ إِلَّا نَزَلَتْ عَلَيْهِمُ السَّكِينَةُ</div>
+                    <div class="hadits-arti">"Tidaklah suatu kaum berkumpul di salah satu rumah Allah membaca kitab-Nya dan saling mempelajarinya, melainkan turun kepada mereka sakinah (ketenteraman) dan dinaungi para malaikat."</div>
+                    <div class="hadits-riwayat">HR. Muslim no. 2699</div>
+                </div>
+            </div>
+
+            <!-- KOLOM 3: COUNTDOWN ISYA & TANYA JAWAB QR -->
+            <div class="kajian-card">
+                <!-- Countdown Isya -->
+                <div class="countdown-isya-box">
+                    <div class="cd-label">
+                        <i class="fas fa-hourglass-half"></i> Menuju Adzan Isya
+                    </div>
+                    <div class="cd-time" id="countdownIsyaDisplay">--:--:--</div>
+                    <div class="cd-sub" id="waktuIsyaLabel">Waktu Isya: 19:00 WIB</div>
+                </div>
+
+                <!-- Tanya Jawab QR Code -->
+                <div class="qa-card-box">
+                    <span class="qa-badge"><i class="fas fa-qrcode mr-1"></i> Tanya Jawab Digital</span>
+                    <!-- QR Code SVG Dinamis -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fdigitalaljihad.my.id%2Fkajian%23tanya" class="qa-qr-img" alt="QR Code Tanya Jawab" onerror="this.style.display='none'">
+                    <div class="qa-instruction">Scan untuk Mengajukan Pertanyaan</div>
+                    <div class="qa-subtext">Khusus jamaah yang ingin bertanya tanpa mikrofon (pertanyaan dibacakan moderator).</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT JAM, COUNTDOWN ISYA & SUPABASE INTEGRATION -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script>
+        // Default Data Kajian Malam Ahad
+        const DEFAULT_KAJIAN = {
+            ustadz_nama: "Ust. H. Ahmad Sholeh Al-Hafidz",
+            ustadz_gelar: "Dewan Asatidz DKM Masjid Jami' Al-Jihad",
+            kitab_rujukan: "Kitab Riyadhus Shalihin (Imam An-Nawawi)",
+            tema_kajian: "Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga",
+            pekan_label: "Pekan Ini",
+            waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya"
+        };
+
+        // Jam & Tanggal Header
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+
+            const dtEl = document.getElementById('datetime');
+            if (dtEl) {
+                dtEl.innerHTML = `<span class="date">${dayName}, ${date} ${monthName} ${year}</span> <span class="time">${h}:${m}:${s} WIB</span>`;
+            }
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Hitung Mundur Menuju Isya
+        let targetIsyaTime = null;
+        function updateCountdownIsya() {
+            const cdEl = document.getElementById('countdownIsyaDisplay');
+            if (!cdEl) return;
+
+            const now = new Date();
+            if (!targetIsyaTime) {
+                // Fallback default jam 19:00 jika jadwal belum dimuat
+                targetIsyaTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
+            }
+
+            const diff = targetIsyaTime - now;
+            if (diff > 0) {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const hStr = hours > 0 ? String(hours).padStart(2, '0') + ':' : '';
+                cdEl.textContent = `${hStr}${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            } else {
+                cdEl.textContent = "00:00:00";
+            }
+        }
+        setInterval(updateCountdownIsya, 1000);
+
+        // Ambil Data Kajian & Jadwal Isya dari Supabase
+        async function loadKajianData() {
+            try {
+                // 1. Ambil setting aplikasi & kajian
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) {
+                        const namaEl = document.getElementById('nama-masjid');
+                        if (namaEl) namaEl.textContent = settings.nama_aplikasi;
+                    }
+
+                    let kData = settings.kajian_sabtu_data;
+                    if (typeof kData === 'string') {
+                        try { kData = JSON.parse(kData); } catch (e) {}
+                    }
+                    if (kData) {
+                        applyKajianData(kData);
+                    } else {
+                        // Cek local cache
+                        const cached = localStorage.getItem('cached_kajian_sabtu');
+                        if (cached) {
+                            try { applyKajianData(JSON.parse(cached)); } catch (e) {}
+                        } else {
+                            applyKajianData(DEFAULT_KAJIAN);
+                        }
+                    }
+                }
+
+                // 2. Ambil jadwal Isya untuk countdown
+                const jadwalList = await SupabaseDB.getJadwalSholat();
+                if (jadwalList && jadwalList.length > 0) {
+                    const isya = jadwalList.find(j => j.nama_sholat && j.nama_sholat.toLowerCase().includes('isya'));
+                    if (isya && isya.waktu) {
+                        const [h, m, s] = isya.waktu.split(':');
+                        const now = new Date();
+                        targetIsyaTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(h), parseInt(m), parseInt(s || 0));
+                        const labelEl = document.getElementById('waktuIsyaLabel');
+                        if (labelEl) labelEl.textContent = `Waktu Isya: ${isya.waktu.substring(0, 5)} WIB`;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal memuat data kajian online:', err);
+                applyKajianData(DEFAULT_KAJIAN);
+            }
+        }
+
+        function applyKajianData(d) {
+            if (!d) return;
+            if (d.ustadz_nama && document.getElementById('valUstadzName')) document.getElementById('valUstadzName').textContent = d.ustadz_nama;
+            if (d.ustadz_gelar && document.getElementById('valUstadzSpec')) document.getElementById('valUstadzSpec').textContent = d.ustadz_gelar;
+            if (d.kitab_rujukan && document.getElementById('valKitabRujukan')) document.getElementById('valKitabRujukan').textContent = d.kitab_rujukan;
+            if (d.tema_kajian && document.getElementById('valTemaKajian')) document.getElementById('valTemaKajian').textContent = d.tema_kajian;
+            if (d.pekan_label && document.getElementById('badgePekanKajian')) document.getElementById('badgePekanKajian').innerHTML = `<i class="fas fa-calendar-week mr-1"></i> ${d.pekan_label}`;
+            if (d.waktu_pelaksanaan && document.getElementById('valWaktuPelaksanaan')) document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadKajianData);
+    </script>
+</body>
+</html>

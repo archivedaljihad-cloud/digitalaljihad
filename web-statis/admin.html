@@ -1011,6 +1011,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item" id="nav-kajian-sabtu">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('kajian-sabtu')">
+                        <i class="fas fa-fw fa-book-reader" style="color: #ffd700;"></i>
+                        <span>Kajian Malam Ahad</span>
+                    </a>
+                </li>
+
                 <li class="nav-item" id="nav-rotasi-tv">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('rotasi-tv')">
                         <i class="fas fa-fw fa-exchange-alt"></i>
@@ -1746,6 +1753,178 @@
                                                 <div class="jumat-officer-label">Imam Sholat</div>
                                                 <div class="jumat-officer-name" id="prevJumatImam">Ust. Ahmad Sholeh Al-Hafidz</div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 3B: PENGAJIAN RUTIN MALAM AHAD (SABTU MALAM)
+                         ========================================== -->
+                    <div id="view-kajian-sabtu" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-book-reader text-success mr-2"></i> Pengajian Rutin Malam Ahad
+                            </h4>
+                            <button class="btn btn-success font-weight-bold" onclick="simpanKajianSabtu()">
+                                <i class="fas fa-save mr-1"></i> Simpan Agenda Kajian
+                            </button>
+                        </div>
+
+                        <!-- Card Switch Otomatis Layar TV -->
+                        <div class="card p-3 mb-4 border-left-success shadow-sm" style="background: #f8fafc; border: 1.5px solid #d1e7dd; border-radius: 12px;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <label class="font-weight-bold mb-1 text-dark d-flex align-items-center" for="cfgKajianSabtuEnabled" style="font-size: 1rem; cursor: pointer;">
+                                        <i class="fas fa-tv text-success mr-2"></i> Aktifkan Mode Kajian Malam Ahad Otomatis di Layar TV
+                                    </label>
+                                    <small class="text-muted d-block">Jika aktif, setiap hari <strong>Sabtu Malam ba'da Maghrib s/d Adzan Isya</strong>, seluruh layar TV otomatis mengunci siaran ke <strong>Slide Kajian Rutin</strong> (nama Ustadz, tema, kitab, hadits, dan QR tanya jawab).</small>
+                                </div>
+                                <div class="custom-control custom-switch ml-3" style="transform: scale(1.35);">
+                                    <input type="checkbox" class="custom-control-input" id="cfgKajianSabtuEnabled" checked>
+                                    <label class="custom-control-label" for="cfgKajianSabtuEnabled" style="cursor: pointer;"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Kolom Kiri: Form Input Kajian Pekan Ini -->
+                            <div class="col-lg-7 mb-4">
+                                <div class="content-card">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-edit text-success mr-1"></i> Form Pengajian Malam Ahad Pekan Ini
+                                        </h6>
+                                        <span class="badge badge-success px-2 py-1"><i class="fas fa-user-edit mr-1"></i> Akses Petugas & Admin</span>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="font-weight-bold">Pekan Kajian</label>
+                                                <select class="form-control font-weight-bold" id="kajianPekanSelect" onchange="pilihPekanKajianPreset(this.value)">
+                                                    <option value="Pekan 1">Pekan ke-1 (Awal Bulan)</option>
+                                                    <option value="Pekan 2">Pekan ke-2</option>
+                                                    <option value="Pekan 3">Pekan ke-3</option>
+                                                    <option value="Pekan 4" selected>Pekan ke-4</option>
+                                                    <option value="Pekan 5">Pekan ke-5 (Tabligh Akbar / Tematik)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="font-weight-bold">Jam Mulai Kajian</label>
+                                                <div class="input-group">
+                                                    <input type="time" class="form-control font-weight-bold text-success" id="kajianJamMulai" value="18:25">
+                                                    <div class="input-group-append"><span class="input-group-text font-weight-bold">WIB</span></div>
+                                                </div>
+                                                <small class="text-muted">Mulai otomatis ba'da sholat Maghrib.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Nama Ustadz Pemateri <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control font-weight-bold" id="kajianUstadzNama" value="Ust. H. Ahmad Sholeh Al-Hafidz" placeholder="Contoh: Ust. Dr. Faisal, M.Ag" oninput="updateKajianPreview()">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Gelar / Bidang Keahlian Ustadz</label>
+                                            <input type="text" class="form-control" id="kajianUstadzGelar" value="Dewan Asatidz DKM Masjid Jami' Al-Jihad" placeholder="Contoh: Pakar Fiqih Muamalah / Dosen Pascasarjana" oninput="updateKajianPreview()">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Kitab Rujukan Utama</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-book-quran text-warning"></i></span></div>
+                                                <input type="text" class="form-control font-weight-bold" id="kajianKitabRujukan" value="Kitab Riyadhus Shalihin (Imam An-Nawawi)" placeholder="Contoh: Bulughul Maram / Tafsir Ibnu Katsir" oninput="updateKajianPreview()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Tema Pembahasan Pekan Ini <span class="text-danger">*</span></label>
+                                            <textarea class="form-control font-weight-bold" id="kajianTemaPembahasan" rows="2" placeholder="Contoh: Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga" oninput="updateKajianPreview()">Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga</textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Waktu & Catatan Pelaksanaan</label>
+                                            <input type="text" class="form-control" id="kajianWaktuPelaksanaan" value="Ba'da Sholat Maghrib s/d Menjelang Isya" oninput="updateKajianPreview()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kolom Kanan: Pratinjau Tampilan TV & Jadwal Siklus Pekanan -->
+                            <div class="col-lg-5 mb-4">
+                                <div class="content-card mb-4">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-eye text-primary mr-1"></i> Pratinjau Layar TV Kajian
+                                        </h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="jumat-preview-box text-center" style="background: linear-gradient(135deg, #021a11 0%, #032b1b 100%); border: 1.5px solid #d4af37; border-radius: 14px; padding: 16px; color: #fff;">
+                                            <span class="badge badge-success font-weight-bold px-3 py-1 mb-2" id="prevKajianPekanBadge">
+                                                <i class="fas fa-calendar-week mr-1"></i> PEKAN KE-4 (SABTU MALAM)
+                                            </span>
+                                            <div class="font-weight-bold text-white mb-1" id="prevKajianUstadz" style="font-size: 1.15rem;">Ust. H. Ahmad Sholeh Al-Hafidz</div>
+                                            <div class="text-warning small font-weight-bold mb-2" id="prevKajianKitab">Kitab Riyadhus Shalihin</div>
+                                            <div class="p-2 rounded mb-2" style="background: rgba(0,0,0,0.4); border-left: 3px solid #10b981; text-align: left;">
+                                                <div class="small text-muted font-weight-bold" style="font-size: 10px;">TEMA PEKAN INI:</div>
+                                                <div class="small font-weight-bold text-white" id="prevKajianTema">Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center text-muted small" style="font-size: 11px;">
+                                                <span><i class="fas fa-clock text-warning mr-1"></i> Ba'da Maghrib - Isya</span>
+                                                <span class="badge badge-warning text-dark font-weight-bold"><i class="fas fa-qrcode mr-1"></i> Tanya Jawab HP</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tabel Preset 4-5 Pekan Rutin -->
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-list-ol text-warning mr-1"></i> Siklus Kajian Bulanan (Pekan 1–5)
+                                        </h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered text-left" style="font-size: 11px;">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th>Pekan</th>
+                                                        <th>Fokus Kajian</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><strong>Pekan 1</strong></td>
+                                                        <td>Fiqih Ibadah & Muamalah</td>
+                                                        <td><button class="btn btn-xs btn-outline-success py-0 px-2 font-weight-bold" onclick="isiPresetPekan(1)">Pilih</button></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Pekan 2</strong></td>
+                                                        <td>Tafsir Tematik Al-Qur'an</td>
+                                                        <td><button class="btn btn-xs btn-outline-success py-0 px-2 font-weight-bold" onclick="isiPresetPekan(2)">Pilih</button></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Pekan 3</strong></td>
+                                                        <td>Tazkiyatun Nafs & Akhlak</td>
+                                                        <td><button class="btn btn-xs btn-outline-success py-0 px-2 font-weight-bold" onclick="isiPresetPekan(3)">Pilih</button></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Pekan 4</strong></td>
+                                                        <td>Hadits Riyadhus Shalihin</td>
+                                                        <td><button class="btn btn-xs btn-outline-success py-0 px-2 font-weight-bold" onclick="isiPresetPekan(4)">Pilih</button></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Pekan 5</strong></td>
+                                                        <td>Sirah Nabawiyah / Tematik</td>
+                                                        <td><button class="btn btn-xs btn-outline-success py-0 px-2 font-weight-bold" onclick="isiPresetPekan(5)">Pilih</button></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -2983,7 +3162,8 @@
             { order: 15, name: 'Live CCTV Mimbar Khutbah', path: 'slides/live-mimbar.html', url: 'slides/live-mimbar.html', page: '/live-mimbar-embed', category: 'CCTV Mimbar', category_color: 'warning text-dark', active: true },
             { order: 16, name: 'Petugas Sholat Idul Fitri', path: 'slides/idul-fitri.html', url: 'slides/idul-fitri.html', page: '/idul-fitri-embed', category: 'Hari Raya', category_color: 'info', active: false },
             { order: 17, name: 'Petugas Sholat Idul Adha', path: 'slides/idul-adha.html', url: 'slides/idul-adha.html', page: '/idul-adha-embed', category: 'Hari Raya', category_color: 'info', active: false },
-            { order: 18, name: 'Semarak Ramadhan & Kas Tromol', path: 'slides/ramadhan.html', url: 'slides/ramadhan.html', page: '/ramadhan-embed', category: 'Ramadhan', category_color: 'warning text-dark', active: true }
+            { order: 18, name: 'Semarak Ramadhan & Kas Tromol', path: 'slides/ramadhan.html', url: 'slides/ramadhan.html', page: '/ramadhan-embed', category: 'Ramadhan', category_color: 'warning text-dark', active: true },
+            { order: 19, name: 'Pengajian Rutin Malam Ahad', path: 'slides/kajian.html', url: 'slides/kajian.html', page: '/kajian-embed', category: 'Kajian', category_color: 'success', active: true }
         ];
 
         // Helper untuk ekstrak canonical key dari URL/Path/Page slide (contoh: 'slides/utama.html' -> 'utama')
@@ -2998,7 +3178,7 @@
                 .trim();
         }
 
-        // Normalisasi array rotasi agar ke-18 halaman dijamin 100% selalu ada & TIDAK AKAN PERNAH DUPLIKAT
+        // Normalisasi array rotasi agar ke-19 halaman dijamin 100% selalu ada & TIDAK AKAN PERNAH DUPLIKAT
         function normalizeRotationPages(input) {
             let list = input;
             if (typeof list === 'string') {
@@ -3813,6 +3993,30 @@
                         if (typeof renderAdminRamadhanView === 'function') {
                             renderAdminRamadhanView();
                         }
+
+                        // Data Pengajian Rutin Malam Ahad (Sabtu Malam)
+                        if (s.kajian_sabtu_enabled !== undefined) {
+                            if (document.getElementById('cfgKajianSabtuEnabled')) document.getElementById('cfgKajianSabtuEnabled').checked = (s.kajian_sabtu_enabled !== false);
+                        }
+                        if (s.kajian_sabtu_start_time && document.getElementById('kajianJamMulai')) {
+                            document.getElementById('kajianJamMulai').value = s.kajian_sabtu_start_time;
+                        }
+                        let kData = s.kajian_sabtu_data;
+                        if (typeof kData === 'string') {
+                            try { kData = JSON.parse(kData); } catch (e) {}
+                        }
+                        if (!kData) {
+                            try { kData = JSON.parse(localStorage.getItem('cached_kajian_sabtu')); } catch (e) {}
+                        }
+                        if (kData) {
+                            if (kData.pekan_label && document.getElementById('kajianPekanSelect')) document.getElementById('kajianPekanSelect').value = kData.pekan_label;
+                            if (kData.ustadz_nama && document.getElementById('kajianUstadzNama')) document.getElementById('kajianUstadzNama').value = kData.ustadz_nama;
+                            if (kData.ustadz_gelar && document.getElementById('kajianUstadzGelar')) document.getElementById('kajianUstadzGelar').value = kData.ustadz_gelar;
+                            if (kData.kitab_rujukan && document.getElementById('kajianKitabRujukan')) document.getElementById('kajianKitabRujukan').value = kData.kitab_rujukan;
+                            if (kData.tema_kajian && document.getElementById('kajianTemaPembahasan')) document.getElementById('kajianTemaPembahasan').value = kData.tema_kajian;
+                            if (kData.waktu_pelaksanaan && document.getElementById('kajianWaktuPelaksanaan')) document.getElementById('kajianWaktuPelaksanaan').value = kData.waktu_pelaksanaan;
+                            if (typeof updateKajianPreview === 'function') updateKajianPreview();
+                        }
                     }
                 }
             } catch (err) {
@@ -4469,6 +4673,130 @@
                 }
             } catch (err) {
                 alert('Terjadi kesalahan koneksi: ' + err.message);
+            }
+        }
+
+        // =======================================================
+        // PENGAJIAN RUTIN MALAM AHAD (SABTU MALAM)
+        // =======================================================
+        const KAJIAN_PRESETS = {
+            1: {
+                pekan: "Pekan 1",
+                ustadz: "Ust. H. Ahmad Sholeh Al-Hafidz",
+                gelar: "Dewan Asatidz DKM Masjid Jami' Al-Jihad",
+                kitab: "Kitab Bidayatul Hidayah (Imam Al-Ghazali)",
+                tema: "Kajian Fiqih Ibadah & Adab Keseharian Seorang Muslim"
+            },
+            2: {
+                pekan: "Pekan 2",
+                ustadz: "Ust. Dr. H. Faisal, M.Ag",
+                gelar: "Pakar Ilmu Al-Qur'an & Tafsir",
+                kitab: "Tafsir Al-Qur'an Al-'Azhim (Ibnu Katsir)",
+                tema: "Tafsir Tematik: Membangun Keluarga Sakinah & Berkah Qur'ani"
+            },
+            3: {
+                pekan: "Pekan 3",
+                ustadz: "Ust. M. Syahrul Ramadhan, Lc",
+                gelar: "Alumnus Al-Azhar Kairo / Dai Kamtibmas",
+                kitab: "Kitab Al-Adab Al-Mufrad (Imam Bukhari)",
+                tema: "Tazkiyatun Nafs: Menjaga Hati & Memperbaiki Akhlak Bermasyarakat"
+            },
+            4: {
+                pekan: "Pekan 4",
+                ustadz: "Ust. H. Ahmad Sholeh Al-Hafidz",
+                gelar: "Dewan Asatidz DKM Masjid Jami' Al-Jihad",
+                kitab: "Kitab Riyadhus Shalihin (Imam An-Nawawi)",
+                tema: "Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga"
+            },
+            5: {
+                pekan: "Pekan 5",
+                ustadz: "Dai Tamu / Asatidz Pilihan DKM",
+                gelar: "Tabligh Akbar Tematik Keummatan",
+                kitab: "Kajian Tematik Sirah Nabawiyah & Muamalah Kontemporer",
+                tema: "Meneladani Kepemimpinan Rasulullah SAW di Era Modern"
+            }
+        };
+
+        function isiPresetPekan(pekanNum) {
+            const p = KAJIAN_PRESETS[pekanNum];
+            if (!p) return;
+            if (document.getElementById('kajianPekanSelect')) document.getElementById('kajianPekanSelect').value = p.pekan;
+            if (document.getElementById('kajianUstadzNama')) document.getElementById('kajianUstadzNama').value = p.ustadz;
+            if (document.getElementById('kajianUstadzGelar')) document.getElementById('kajianUstadzGelar').value = p.gelar;
+            if (document.getElementById('kajianKitabRujukan')) document.getElementById('kajianKitabRujukan').value = p.kitab;
+            if (document.getElementById('kajianTemaPembahasan')) document.getElementById('kajianTemaPembahasan').value = p.tema;
+            updateKajianPreview();
+        }
+
+        function pilihPekanKajianPreset(val) {
+            const num = parseInt(val.replace(/\D/g, '')) || 1;
+            isiPresetPekan(num);
+        }
+
+        function updateKajianPreview() {
+            const pekan = document.getElementById('kajianPekanSelect')?.value || 'Pekan 4';
+            const ustadz = document.getElementById('kajianUstadzNama')?.value || 'Ust. H. Ahmad Sholeh Al-Hafidz';
+            const kitab = document.getElementById('kajianKitabRujukan')?.value || 'Kitab Riyadhus Shalihin';
+            const tema = document.getElementById('kajianTemaPembahasan')?.value || 'Keutamaan Menjaga Hak Sesama Muslim';
+
+            if (document.getElementById('prevKajianPekanBadge')) {
+                document.getElementById('prevKajianPekanBadge').innerHTML = `<i class="fas fa-calendar-week mr-1"></i> ${pekan.toUpperCase()} (SABTU MALAM)`;
+            }
+            if (document.getElementById('prevKajianUstadz')) document.getElementById('prevKajianUstadz').textContent = ustadz;
+            if (document.getElementById('prevKajianKitab')) document.getElementById('prevKajianKitab').textContent = kitab;
+            if (document.getElementById('prevKajianTema')) document.getElementById('prevKajianTema').textContent = tema;
+        }
+
+        async function simpanKajianSabtu() {
+            const enabled = document.getElementById('cfgKajianSabtuEnabled') ? document.getElementById('cfgKajianSabtuEnabled').checked : true;
+            const jamMulai = document.getElementById('kajianJamMulai')?.value || '18:25';
+            const pekan = document.getElementById('kajianPekanSelect')?.value || 'Pekan 4';
+            const ustadz = document.getElementById('kajianUstadzNama')?.value.trim() || '';
+            const gelar = document.getElementById('kajianUstadzGelar')?.value.trim() || '';
+            const kitab = document.getElementById('kajianKitabRujukan')?.value.trim() || '';
+            const tema = document.getElementById('kajianTemaPembahasan')?.value.trim() || '';
+            const waktu = document.getElementById('kajianWaktuPelaksanaan')?.value.trim() || "Ba'da Sholat Maghrib s/d Menjelang Isya";
+
+            if (!ustadz || !tema) {
+                alert('Harap lengkapi Nama Ustadz dan Tema Pembahasan!');
+                return;
+            }
+
+            const payloadData = {
+                pekan_label: pekan,
+                ustadz_nama: ustadz,
+                ustadz_gelar: gelar,
+                kitab_rujukan: kitab,
+                tema_kajian: tema,
+                waktu_pelaksanaan: waktu
+            };
+
+            // Simpan ke local cache
+            localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
+            localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
+            localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
+
+            try {
+                // Simpan ke app_settings Supabase
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        kajian_sabtu_enabled: enabled,
+                        kajian_sabtu_start_time: jamMulai,
+                        kajian_sabtu_data: JSON.stringify(payloadData)
+                    })
+                });
+
+                updateKajianPreview();
+
+                if (res.ok) {
+                    alert('Alhamdulillah! Agenda Pengajian Rutin Malam Ahad berhasil disimpan dan langsung terhubung ke Layar Display TV.');
+                } else {
+                    alert('Agenda tersimpan di sesi lokal (periksa koneksi Supabase).');
+                }
+            } catch (err) {
+                alert('Tersimpan di sesi lokal (koneksi offline).');
             }
         }
 

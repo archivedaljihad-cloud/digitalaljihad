@@ -259,7 +259,8 @@
             '/idul-fitri-embed': 'slides/idul-fitri.html',
             '/idul-adha-embed': 'slides/idul-adha.html',
             '/qurban-embed': 'slides/qurban.html',
-            '/ramadhan-embed': 'slides/ramadhan.html'
+            '/ramadhan-embed': 'slides/ramadhan.html',
+            '/kajian-embed': 'slides/kajian.html'
         };
 
         // Default rotation pages jika database belum memiliki susunan
@@ -400,6 +401,22 @@
                 }
             } else if (localStorage.getItem('lockPageRotation') === 'yasin') {
                 console.log('✅ Agenda Malam Jum\'at selesai. Mengembalikan rotasi normal.');
+                localStorage.removeItem('lockPageRotation');
+                scheduleNextRotation();
+            }
+
+            // 3. Prioritas Ketiga: Pengajian Rutin Malam Ahad (Kajian Sabtu Ba'da Maghrib s/d Isya)
+            if (state.kajian_active) {
+                if (localStorage.getItem('lockPageRotation') !== 'kajian') {
+                    console.log('🕌 Pengajian Rutin Malam Ahad Aktif: Mengunci layar pada Slide Kajian.');
+                    localStorage.setItem('lockPageRotation', 'kajian');
+                    const targetFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
+                    targetFrame.src = 'slides/kajian.html';
+                    clearTimeout(rotationTimer);
+                    showOsd('🕌 Pengajian Rutin Malam Ahad: Majelis Ilmu');
+                }
+            } else if (localStorage.getItem('lockPageRotation') === 'kajian') {
+                console.log('✅ Pengajian Rutin Malam Ahad selesai. Mengembalikan rotasi normal.');
                 localStorage.removeItem('lockPageRotation');
                 scheduleNextRotation();
             }

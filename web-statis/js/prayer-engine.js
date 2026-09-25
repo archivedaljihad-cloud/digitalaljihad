@@ -144,13 +144,60 @@
             }
 
             const yasinActive = this.isYasinActive(setting, jadwalList, now);
+            const kajianActive = this.isKajianActive(setting, jadwalList, now);
 
             return {
                 active: false,
                 phase: PHASES.INACTIVE,
                 next_prayer: this.calculateNextPrayer(jadwalList, now),
-                yasin_active: yasinActive
+                yasin_active: yasinActive,
+                kajian_active: kajianActive
             };
+        },
+
+        /**
+         * Deteksi apakah saat ini sedang dalam Pengajian Rutin Malam Ahad (Kajian Sabtu Malam)
+         * Hari Sabtu malam (day === 6), mulai kajian_sabtu_start_time (default 18:25) sampai menjelang adzan Isya
+         */
+        isKajianActive(settings, jadwalList, customNow) {
+            const now = customNow || new Date();
+            const setting = settings || {};
+
+            // Cek apakah mode kajian sabtu diaktifkan (default true)
+            if (setting.kajian_sabtu_enabled === false) return false;
+
+            // Cek apakah hari Sabtu (Malam Ahad dalam penanggalan Islam)
+            const isSaturday = now.getDay() === 6;
+            if (!isSaturday) return false;
+
+            if (!jadwalList || jadwalList.length === 0) return false;
+
+            try {
+                // Waktu mulai (default 18:25 atau waktu ba'da sholat Maghrib)
+                const startTimeStr = setting.kajian_sabtu_start_time || '18:25';
+                const [startH, startM] = startTimeStr.split(':');
+                const kajianStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(startH), parseInt(startM), 0);
+
+                // Cari jadwal Isya
+                const isyaItem = jadwalList.find(item => {
+                    if (!item || !item.nama_sholat || !item.waktu) return false;
+                    const clean = item.nama_sholat.toLowerCase().trim();
+                    return clean.includes('isya');
+                });
+
+                if (!isyaItem) return false;
+
+                const [isyaH, isyaM] = isyaItem.waktu.split(':');
+                const isyaAdzan = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(isyaH), parseInt(isyaM), 0);
+                const beforeAdzan = parseInt(setting.prayer_mode_before_adzan) || 5;
+                const isyaCountdownStart = new Date(isyaAdzan.getTime() - beforeAdzan * 60 * 1000);
+
+                // Aktif jika jam sekarang sudah >= kajianStart dan < isyaCountdownStart
+                return now >= kajianStart && now < isyaCountdownStart;
+            } catch (err) {
+                console.warn('Gagal evaluasi waktu kajian sabtu:', err);
+                return false;
+            }
         },
 
         /**

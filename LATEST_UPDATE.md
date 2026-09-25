@@ -3301,6 +3301,75 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 6. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
 7. `LATEST_UPDATE.md` (Dokumentasi Bab 82).
 
+---
+
+## 🕌 83. FITUR PENGAJIAN RUTIN MALAM AHAD (KAJIAN SABTU BA'DA MAGHRIB S/D ISYA) — AUTO-SWITCH TV & WEB ADMIN
+
+**Tanggal:** 25 September 2026  
+**Status:** Sukses & Tayang Penuh (*Live Production Ready*)  
+**Domain Live:** `https://digitalaljihad.my.id/`  
+**Rute Display TV:** `/kajian-embed` (`slides/kajian.html`)  
+**Menu Admin:** Sidebar > Pengaturan Konten > Pengajian Malam Ahad (`#view-kajian-sabtu`)
+
+### Latar Belakang & Kebutuhan Pengguna:
+- Setiap malam Ahad (Sabtu malam), dari ba'da Maghrib sampai sholat Isya, Masjid Jami' Al-Jihad rutin menyelenggarakan majelis ta'lim / pengajian dengan narasumber ustadz dan kitab/tema yang berbeda tiap pekannya.
+- Pengguna membutuhkan sistem terintegrasi yang:
+  1. Menampilkan poster digital dinamis nan megah di layar TV masjid yang memuat profil pemateri (Ustadz & Gelar), Kitab rujukan, Tema kajian, Hadits keutamaan menuntut ilmu, hitung mundur menuju adzan Isya, serta QR Code interaktif bagi jamaah yang ingin mengajukan pertanyaan via HP tanpa perlu mikrofon.
+  2. Beralih otomatis (*Auto-Switch*) ke layar kajian setiap hari Sabtu malam mulai jam 18:25 (ba'da Maghrib) hingga menjelang Isya tanpa perlu diklik manual oleh operator masjid.
+  3. Menyediakan menu khusus di Web Admin (`admin.html`) lengkap dengan preset siklus 1–5 pekan, form edit instan, pratinjau live TV, dan saklar auto-switch.
+  4. Terdaftar sebagai halaman ke-19 dalam rotasi TV display (`MASTER_ROTATION_PAGES`).
+
+---
+
+### Solusi & Rincian Arsitektur yang Diterapkan:
+
+#### 1. Slide Display TV Khusus (`web-statis/slides/kajian.html`):
+- **Desain Mewah Islamic Modern & Masking Renta:**
+  - Font judul header masjid menggunakan font kaligrafi *Masking Renta* dengan warna pekat *Deep Dark Emerald Forest Green* (`#01220e`), outline emas metalik (`#d4af37`), serta bayangan 3D tajam tanpa blur kabur (selaras dengan Bab 82).
+  - Skema warna kajian berbasis *Emerald, Deep Forest Green & Imperial Gold*.
+- **Grid Layout 3-Kolom Informatif:**
+  - **Kolom Kiri (Profil Pemateri & Kitab):** Avatar/ikon ustadz berbingkai emas bercahaya, badge pekan kajian (Pekan 1/2/3/4/5), nama ustadz lengkap dengan gelar, serta lencana kitab rujukan.
+  - **Kolom Tengah (Tema Kajian & Hadits):** Judul tema kajian ukuran besar yang mencolok, hadits keutamaan majelis ilmu (HR. Muslim no. 2699 teks Arab dan terjemahan), serta *Smart Countdown Banner* menuju waktu adzan Isya yang berdetak setiap detik.
+  - **Kolom Kanan (Waktu & Tanya Jawab Digital):** Kapsul jadwal waktu pelaksanaan (Sabtu Malam / Ba'da Maghrib s/d Isya), lencana masjid, dan kartu QR Code interaktif "Tanya Jawab Digital" yang memudahkan jamaah mengirimkan pertanyaan melalui smartphone tanpa mengganggu jalannya pengajian.
+- **Sinkronisasi Supabase Real-Time:** Slide membaca konfigurasi langsung dari tabel `app_settings` kolom `kajian_sabtu_data`, `kajian_sabtu_enabled`, dan `kajian_sabtu_start_time`.
+
+#### 2. Auto-Switch Cerdas pada Mesin Waktu Sholat (`web-statis/js/prayer-engine.js` & `index.html`):
+- **Deteksi Hari & Jam:**
+  - `isKajianActive(settings, jadwalList, customNow)` memeriksa apakah hari saat ini adalah hari Sabtu (`now.getDay() === 6`).
+  - Menghitung rentang waktu aktif: dimulai dari jam `kajian_sabtu_start_time` (default: `18:25`) hingga waktu sholat Isya dikurangi durasi tarhim/countdown Isya.
+  - Mengembalikan properti `kajian_active: true` di dalam `checkPrayerStatus()`.
+- **Penguncian Tampilan di Layar TV (`web-statis/index.html`):**
+  - Mendaftarkan rute mapping `'/kajian-embed': 'slides/kajian.html'`.
+  - Saat `state.kajian_active` bernilai `true`, TV secara otomatis mengunci rotasi ke slide kajian (`localStorage.setItem('lockPageRotation', 'kajian')`) dan menampilkan `slides/kajian.html`.
+  - Begitu waktu sholat Isya tiba, sistem otomatis beralih ke *Prayer Mode* (Tarhim, Adzan, Iqamah, Sholat), dan setelah sholat selesai kembali ke rotasi TV normal.
+
+#### 3. Panel Manajemen di Web Admin (`web-statis/admin.html`):
+- **Sidebar Navigasi Baru:** Menambahkan item menu `nav-kajian-sabtu` di bawah Sholat Jum'at lengkap dengan ikon buku (`fas fa-book-reader`) dan badge *"Malam Ahad"*.
+- **Formulir Pengaturan Interaktif:**
+  - Saklar auto-switch (*toggle switch*) untuk mengaktifkan/menonaktifkan pengalihan otomatis TV.
+  - Input jam mulai kajian (default: `18:25`).
+  - Pemilihan siklus pekan (Pekan ke-1 s/d Pekan ke-5).
+  - Form Nama Pemateri & Gelar, Kitab Rujukan, dan Tema Kajian.
+- **Preset Siklus 1–5 Pekan:**
+  - Tabel preset siklus pengajian 5 pekan yang dapat diisi dan langsung diterapkan ke formulir aktif hanya dengan 1 kali klik (*1-click populate*).
+- **Pratinjau Live TV Mini (*Live Preview Card*):**
+  - Kotak simulasi visual yang secara otomatis memperbarui nama ustadz, kitab, dan tema secara instan saat operator mengetik (*real-time typing update*).
+- **Penyimpanan Cloud Supabase & LocalStorage:**
+  - Fungsi `simpanKajianSabtu()` menyimpan data ke kolom `kajian_sabtu_enabled`, `kajian_sabtu_start_time`, dan `kajian_sabtu_data` (JSON) di Supabase `app_settings?id=eq.1`, serta menyimpannya ke `localStorage` sebagai fallback offline aman.
+- **Slide ke-19 pada Rotasi TV Display:**
+  - Terdaftar resmi dalam `MASTER_ROTATION_PAGES` dengan urutan 19 (`slides/kajian.html`, kategori: `Kajian`).
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/slides/kajian.html` (Slide display TV baru khusus kajian malam Ahad).
+2. `web-statis/js/prayer-engine.js` (Logika deteksi `isKajianActive` & auto-switch Sabtu malam).
+3. `web-statis/index.html` (Rute mapping `/kajian-embed` & penguncian rotasi TV kajian).
+4. `web-statis/admin.html` (Menu sidebar, form `#view-kajian-sabtu`, preset 5 pekan, dan slide ke-19).
+5. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+6. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
+7. `LATEST_UPDATE.md` (Dokumentasi Bab 83).
+
 
 
 
