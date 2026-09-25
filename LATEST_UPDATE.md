@@ -1614,69 +1614,68 @@ Pengguna memutuskan untuk menyatukan kontrol proyek ke dalam **1 akun terpadu**:
 
 ---
 
-## 🔐 53. PEMBANGUNAN HALAMAN LOGIN & DASHBOARD ADMIN STATIS DENGAN SISTEM 3 PERAN (v5.1.0 - 25 September 2026)
+## 📋 52. CATATAN HANDOVER SESI BERIKUTNYA: PANEL ADMIN STATIS (v5.1.0)
 
-**Tanggal:** 25 September 2026 | **Versi:** 5.1.0 | **Status:** ✅ Selesai, Diuji, & Tersinkronisasi
+**Target Sesi Berikutnya:** Membangun Halaman Login & Dashboard Admin Statis dengan Sistem Hak Akses 3 Peran (Super Admin, Bendahara, Operator).
 
-### Ringkasan Eksekusi:
-Sesuai arahan Bab 52, telah berhasil dibangun antarmuka autentikasi dan panel kendali manajemen masjid versi Web Statis (Cloudflare Pages + Supabase) dengan sistem kontrol hak akses berbasis peran (RBAC) 3 tingkat yang terisolasi secara ketat dan aman:
-1. **Super Admin (`role: admin`, `role_id: 3`):** Memiliki hak akses 100% penuh ke seluruh modul sistem (Jadwal Sholat, Sholat Jum'at, Idul Fitri & Adha, Pengumuman, Agenda Kajian, Slide TV, Buku Kas Masjid, Kas Ambulance, Infaq & QRIS, Kelola Akun User, dan Konfigurasi Display TV).
-2. **Bendahara (`role: bendahara`, `role_id: 1`):** Terkunci khusus mengelola keuangan umat (Buku Kas Masjid & Transaksi, Kas Layanan Mobil Ambulance, Program Penggalangan Infaq & Donasi, QRIS Digital, Laporan & Rekapitulasi Kas).
-3. **Petugas / Operator (`role: petugas` / `operator`, `role_id: 2`):** Terkunci khusus mengelola syiar display TV (Jadwal Sholat & Durasi Adzan/Iqamah, Petugas Sholat Jum'at & Foto Khotib/Imam, Pengumuman TV, Agenda Kajian, Slide Informasi TV, dan Teks Berjalan TV / Running Text).
+### Poin Kunci yang Telah Siap:
+1. **URL Live Display TV:** `https://digitalaljihad.archived-aljihad.workers.dev`
+2. **Database Supabase Aktif:** `https://xskusfacwsclbgdtgier.supabase.co` (Publishable Key: `sb_publishable_lsUgbFcTmwuwiiV70rzSWQ_V0JUR-mX`).
+3. **Repositori GitHub Tunggal:** `https://github.com/archivedaljihad-cloud/digitalaljihad.git` (Branch `main`).
+4. **Folder Lokal Terpisah:** `C:\Users\anthu\Documents\【Digital WebSTATIS】` dan `web-statis/` di repositori.
+5. **Struktur Peran Database:**
+   - `role_id: 1` $\rightarrow$ Bendahara (Khusus Kas, Transaksi, Ambulance, Rekapitulasi).
+   - `role_id: 2` $\rightarrow$ Petugas / Operator (Khusus Jadwal Sholat, Petugas Jum'at, Pengumuman, Running Text).
+   - `role_id: 3` $\rightarrow$ Super Admin (Akses Penuh 100%).
 
----
-
-### Berkas-Berkas yang Dibuat & Diperbarui:
-
-#### 1. `web-statis/js/admin-auth.js` (Engine Autentikasi & RBAC Dinamis)
-- **Kredensial Default Terpadu:**
-  - **Super Admin:** Email `admin@aljihad.com` (username `admin`) | Kata Sandi: `admin123` / `admin`
-  - **Bendahara:** Email `bendahara@aljihad.com` (username `bendahara`) | Kata Sandi: `bendahara123`
-  - **Petugas / Operator:** Email `petugas@aljihad.com` (username `operator` / `petugas`) | Kata Sandi: `operator123`
-- **Verifikasi Online Supabase:** Jika akun tidak ditemukan di daftar default lokal, sistem secara cerdas memeriksa tabel `users` di database Supabase cloud dan memetakan `role_id` secara otomatis.
-- **Penyimpanan Sesi:** Menggunakan `localStorage` (`aljihad_auth_user`) dengan payload terenkripsi ringan berisi token, identitas, role label, dan timestamp login.
-- **Proteksi Rute (`requireAuth` & `redirectIfLoggedIn`):** Mencegah akses liar ke `admin.html` tanpa autentikasi, serta otomatis mengarahkan ke dashboard jika user sudah login saat membuka `login.html`.
-- **RBAC Renderer (`applyRBAC`):** Membaca atribut `data-role` pada elemen DOM sidebar, kartu dashboard, dan menu aksi cepat untuk memfilter tampilan secara dinamis sesuai peran aktif.
-- **Fitur Switch Role Cepat (`switchRole`):** Memudahkan pengurus atau tester untuk berpindah simulasi peran (Super Admin ⇄ Bendahara ⇄ Operator) secara instan dari dropdown topbar tanpa harus logout.
-
-#### 2. `web-statis/login.html` (Halaman Login Emerald Gold Islamic Split-Layout)
-- **Desain Mewah Selaras Blade:** Mengadopsi tata letak split 2 kolom:
-  - Sisi kiri: Mandala emas dengan Logo Resmi Masjid Jami' Al-Jihad berpendar aura (`img/logo-aljihad-transparent.png`).
-  - Sisi kanan: Kaligrafi Arab Salam (*As-Salamu 'Alaikum*) dan Basmalah bercahaya kuning emas, judul resmi Sistem Informasi Digital Masjid, dan panduan kredensial.
-- **Quick Role Demo Selector (Pill 1-Klik):** Tersedia 3 tombol kapsul interaktif (*Super Admin*, *Bendahara*, *Operator*) yang otomatis mengisi form input email dan kata sandi tanpa perlu mengetik manual.
-- **Form Interaktif:** Input username/email, password dengan tombol intip sandi (`fa-eye`), checkbox ingatkan saya, alert notifikasi error/sukses beranimasi, tombol submit berspinner loading, navigasi pintas *"Kembali ke Display TV"* (`index.html`), serta tombol *"Butuh Bantuan WhatsApp"* resmi DKM.
-- **Attribution Card:** Identitas pengembang resmi Masjid Jami' Al-Jihad Graha Asri.
-
-#### 3. `web-statis/admin.html` (Dashboard Admin Islamic Material Design 3)
-- **Sidebar Navigasi Bernuansa Hijau Zamrud:**
-  - Latar belakang gradasi elegan `#071a10 → #0e3521 → #1a5235`.
-  - Brand header berlogo kubah Al-Jihad.
-  - **Sidebar User Panel:** Avatar inisial emas, nama pengurus aktif, dan role badge dengan indikator *pulsing green dot*.
-  - Menu terkelompok rapi dengan ikon chip modern dan terisolasi berdasarkan atribut `data-role` (Operasional Display TV untuk Petugas, Keuangan & Donasi untuk Bendahara, Pengaturan Sistem untuk Super Admin).
-- **Topbar Modern:**
-  - Tombol hamburger buka/tutup sidebar (responsif ponsel & desktop).
-  - Live Digital Clock: Jam, menit, dan detik realtime dengan tanggal Masehi & Hijriyah.
-  - Kapsul Sholat Berikutnya (*Next Prayer Pill*).
-  - Role switcher toolbar cepat.
-  - Tombol pintas pratinjau siaran display TV (`index.html`).
-  - Dropdown profil lengkap dengan modal konfirmasi logout yang ramah pengguna.
-- **Integrasi Data Realtime Supabase Cloud:**
-  - Mengambil data aktual via REST API Supabase:
-    - Saldo Kas Masjid (penjumlahan otomatis `pemasukan` - `pengeluaran` dari tabel `keuangan`).
-    - Saldo Kas Ambulance (dari tabel `ambulance`).
-    - Status Jadwal Sholat Hari Ini (dari tabel `jadwal_sholat`).
-    - Durasi Interval Rotasi TV (dari tabel `app_settings`).
-    - Tabel riwayat transaksi kas masjid, jadwal sholat, dan petugas sholat Jum'at terupdate.
-  - Fallback aman (*offline-safe*) sehingga panel tetap tampil memukau meskipun jaringan offline.
+### Rencana Eksekusi Sesi Berikutnya:
+1. Membuat `login.html`: Desain Emerald Gold Islamic Split-layout persis seperti `resources/views/auth/login.blade.php`.
+2. Membuat `admin.html`: Dashboard SB Admin 2 modern dengan sidebar nav, topbar profil, dan card metrik.
+3. Membuat `js/admin-auth.js`: Verifikasi kredensial login, penyimpanan sesi token, dan proteksi rute halaman.
+4. Menerapkan RBAC (Role-Based Access Control) dinamis untuk 3 peran.
+5. Menghubungkan form edit data langsung ke Supabase REST API (otomatis realtime ke TV).
 
 ---
 
-### Pengujian & Validasi Mutu:
-1. **Unit Testing JavaScript (Node.js):**
-   - Uji login Super Admin (`admin@aljihad.com`) $\rightarrow$ **PASS (Role: admin, RoleID: 3)**
-   - Uji login Bendahara (`bendahara@aljihad.com`) $\rightarrow$ **PASS (Role: bendahara, RoleID: 1)**
-   - Uji login Operator (`petugas@aljihad.com`) $\rightarrow$ **PASS (Role: petugas, RoleID: 2)**
-   - Uji proteksi sandi keliru $\rightarrow$ **PASS (Menolak login dengan pesan error informatif)**
-   - Uji penyimpanan sesi localStorage & Logout $\rightarrow$ **PASS (100% Success)**
-2. **Sinkronisasi Folder Mandiri:**
-   - Seluruh pembaruan telah disalin ke `C:\Users\anthu\Documents\【Digital WebSTATIS】` (`login.html`, `admin.html`, `js/admin-auth.js`).
+## 🚀 53. IMPLEMENTASI PANEL ADMIN STATIS (v5.1.0) - LOGIN & DASHBOARD RBAC 3 PERAN (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 5.1.0 | **Status:** ✅ Selesai, Teruji & Tersinkronisasi
+
+### Ringkasan Pencapaian:
+Telah berhasil dibangun antarmuka otentikasi dan panel kendali admin statis (*serverless client-side*) yang terintegrasi penuh dengan Supabase BaaS dan sistem hak akses berbasis 3 peran (RBAC):
+1. **Super Admin (`role_id: 3` / `admin`)**: Akses penuh ke seluruh fitur sistem, display TV, reorder susunan putaran siaran TV (tombol Naik ▲ dan Turun ▼ aktif), keuangan, dan manajemen pengguna.
+2. **Bendahara (`role_id: 1` / `bendahara`)**: Akses eksklusif terisolasi ke modul keuangan (Buku Kas & Transaksi, Kas Ambulance, Infaq, Laporan & Rekapitulasi Kas, serta Ekspor Excel). Menu operasional TV disembunyikan.
+3. **Petugas / Operator (`role_id: 2` / `petugas` / `operator`)**: Akses terisolasi ke modul operasional TV Display (Jadwal Sholat 5 Waktu & Durasi Prayer Mode, Petugas Jum'at, Rotasi TV dengan urutan terkunci *read-only* sesuai Bab 47 & Bab 52, dan Teks Berjalan TV). Menu keuangan disembunyikan.
+
+### Berkas yang Dibuat & Diperbarui:
+1. **`login.html` (Halaman Masuk Pengurus):**
+   - Mengusung tata letak *Islamic Split-Layout (Emerald & Gold)* identik dengan template asli `resources/views/auth/login.blade.php`.
+   - Sisi kiri memuat Mandala Emas bercahaya dengan Logo Resmi Masjid Al-Jihad (`img/logo-aljihad-circle.png`) beranimasi denyut lembut (*pulse glow*).
+   - Sisi kanan memuat kaligrafi salam & bismillah (`Amiri` font), judul sistem, panel seleksi cepat 3 peran demo (1-klik isi akun Super Admin, Bendahara, atau Operator), input email/username, password dengan fitur intip mata (*show/hide*), proteksi submit dengan spinner feedback, tautan kembali ke Display TV, serta bantuan WhatsApp admin.
+2. **`admin.html` (Dashboard Admin Islamic Material Design 3):**
+   - Mengadopsi styling SB Admin 2 lokal yang diperkaya dengan nuansa *Islamic Luxury Emerald Gradient* (`#071a10` ke `#0e3521` ke `#1a5235`) dan aksen emas (`#c9a03d`, `#ffd700`).
+   - Dilengkapi *Sidebar User Panel* dengan avatar inisial emas, nama akun, status dot, dan lencana peran aktif.
+   - Dilengkapi *Quick Role Switcher Pill* pada navbar topbar untuk pengujian/demonstrasi instan peralihan antara Super Admin, Bendahara, dan Operator tanpa perlu logout berulang kali.
+   - Dilengkapi widget Jam Digital Realtime detik-demi-detik dan kalender Masehi/Hijriyah lokal.
+   - Dilengkapi *Floating Next Prayer Bar* di topbar yang menghitung mundur sholat fardhu berikutnya.
+   - Memuat 6 modul manajemen interaktif:
+     - Dashboard Ringkasan & 4 Kartu Metrik Dinamis yang otomatis menyesuaikan peran aktif.
+     - Modul Jadwal Sholat 5 Waktu + Imsak + Syuruq & Formulir Durasi Prayer Mode lengkap (Bab 44).
+     - Modul Petugas Sholat Jum'at lengkap dengan live preview kartu TV Raudhah Al-Jihad 4:5.
+     - Modul Rotasi TV & Teks Berjalan dengan kontrol reorder khusus Super Admin.
+     - Modul Buku Kas & Transaksi Keuangan dengan modal pencatatan kas masuk/keluar dan ekspor Excel.
+     - Modul Kelola Pengguna 3 Peran.
+3. **`js/admin-auth.js`:**
+   - Logika autentikasi client-side, verifikasi kredensial lokal dan Supabase REST API `users`, persistensi sesi via `localStorage`, proteksi rute (`requireAuth`), dan engine RBAC dinamis (`applyRBAC`).
+4. **`css/sb-admin-2.min.css`:**
+   - Disediakan salinan lokal di folder `css/` agar dashboard mandiri 100% tanpa ketergantungan CDN eksternal.
+
+### Kredensial Akun Standar Bawaan (Offline & Demo):
+- **Super Admin:** Email `admin@aljihad.com` | Password `admin123`
+- **Bendahara:** Email `bendahara@aljihad.com` | Password `bendahara123`
+- **Operator:** Email `operator@aljihad.com` | Password `operator123`
+
+
+
+
+

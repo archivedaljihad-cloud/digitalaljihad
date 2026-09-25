@@ -1,151 +1,125 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin - Sistem Informasi Masjid Jami' Al-Jihad</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" href="img/logo-aljihad-circle.png" type="image/png">
-    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Panel Kontrol Admin - Masjid Jami' Al-Jihad</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Local & CDN Fallback -->
-    <link href="vendor/fontawesome-free/css/all.min.css?v=3.0.4" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;600;700&family=Nunito:wght@300;400;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Font Awesome (Local) -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS (Local SB Admin 2) -->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Islamic Material Design 3 Custom Dashboard Styles -->
     <style>
         :root {
             --islamic-dark: #071a10;
-            --islamic-darker: #04120b;
-            --islamic-mid: #0e3521;
+            --islamic-dark-med: #0e3521;
             --islamic-green: #1a5235;
-            --islamic-emerald: #10b981;
+            --islamic-green-bright: #10b981;
             --islamic-gold: #c9a03d;
-            --islamic-gold-light: #ffd700;
-            --islamic-surface: #f8fafc;
+            --islamic-gold-bright: #ffd700;
+            --islamic-light: #f8fafc;
             --sidebar-width: 260px;
-            --sidebar-collapsed-width: 80px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
             font-family: 'Poppins', 'Outfit', sans-serif;
             background-color: #f1f5f9;
             color: #1e293b;
-            min-height: 100vh;
-            display: flex;
             overflow-x: hidden;
         }
 
-        /* WRAPPER UTAMA */
-        #adminWrapper {
-            display: flex;
-            width: 100vw;
+        /* === SIDEBAR ISLAMIC MATERIAL DESIGN 3 === */
+        .sidebar {
+            width: var(--sidebar-width) !important;
             min-height: 100vh;
-        }
-
-        /* ================= SIDEBAR ================= */
-        .admin-sidebar {
-            width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--islamic-dark) 0%, var(--islamic-mid) 45%, var(--islamic-green) 100%);
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
+            background: linear-gradient(180deg, #071a10 0%, #0e3521 45%, #1a5235 100%) !important;
+            box-shadow: 4px 0 25px rgba(0, 0, 0, 0.25);
+            position: relative;
             z-index: 100;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
         }
 
-        .admin-sidebar::-webkit-scrollbar {
-            width: 5px;
-        }
-        .admin-sidebar::-webkit-scrollbar-thumb {
-            background: rgba(201, 160, 61, 0.3);
-            border-radius: 4px;
-        }
-
-        /* Sidebar Brand */
-        .sidebar-brand-box {
-            padding: 18px 16px 14px;
-            background: rgba(0, 0, 0, 0.25);
-            border-bottom: 1px solid rgba(201, 160, 61, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #ffffff;
+        .sidebar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpolygon points='30,3 55,16 55,44 30,57 5,44 5,16' fill='none' stroke='rgba(201,160,61,0.12)' stroke-width='0.8'/%3E%3Ccircle cx='30' cy='30' r='7' fill='none' stroke='rgba(201,160,61,0.06)' stroke-width='0.8'/%3E%3C/svg%3E");
+            background-size: 60px;
+            pointer-events: none;
+            opacity: 0.85;
         }
 
-        .sidebar-brand-logo {
-            width: 42px;
-            height: 42px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+        .sidebar-brand {
+            height: 4.5rem;
+            background: rgba(0, 0, 0, 0.25) !important;
+            border-bottom: 2px solid var(--islamic-gold) !important;
+            padding: 12px 16px !important;
+            position: relative;
+            z-index: 2;
         }
 
-        .sidebar-brand-title {
-            font-family: 'Amiri', serif;
-            font-size: 1.15rem;
+        .sidebar-brand-text {
+            font-family: 'Outfit', sans-serif;
             font-weight: 700;
             letter-spacing: 0.5px;
             color: #ffffff;
+            font-size: 0.95rem;
             line-height: 1.2;
         }
 
-        .sidebar-brand-subtitle {
+        .sidebar-brand-sub {
             font-size: 0.68rem;
-            color: var(--islamic-gold-light);
-            text-transform: uppercase;
+            color: var(--islamic-gold);
+            font-weight: 500;
             letter-spacing: 0.8px;
-            font-weight: 600;
+            text-transform: uppercase;
         }
 
-        /* Sidebar User Panel */
+        /* === USER PROFILE PANEL IN SIDEBAR === */
         .sidebar-user-panel {
-            padding: 14px 16px;
-            margin: 12px 14px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(201, 160, 61, 0.25);
-            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            backdrop-filter: blur(8px);
+            gap: 11px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 2;
         }
 
         .sup-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--islamic-gold), #ffd700);
-            color: var(--islamic-dark);
-            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--islamic-gold), #f59e0b);
+            color: #071a10;
+            font-weight: 800;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.15rem;
-            font-weight: 800;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(201, 160, 61, 0.4);
+            border: 2px solid #ffffff;
         }
 
         .sup-info {
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            flex: 1;
         }
 
         .sup-name {
@@ -153,612 +127,345 @@
             font-weight: 700;
             color: #ffffff;
             white-space: nowrap;
-            text-overflow: ellipsis;
             overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .sup-role {
-            font-size: 0.72rem;
-            display: flex;
+        .sup-role-badge {
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
-            color: var(--islamic-gold-light);
+            gap: 5px;
+            font-size: 0.70rem;
             font-weight: 600;
+            color: var(--islamic-gold-bright);
+            margin-top: 1px;
         }
 
         .sup-role-dot {
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            background: #10b981;
-            box-shadow: 0 0 8px #10b981;
-            display: inline-block;
-            animation: pulseDot 2s infinite;
+            background-color: var(--islamic-green-bright);
+            box-shadow: 0 0 6px var(--islamic-green-bright);
         }
 
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
+        /* === SIDEBAR NAV ITEMS === */
+        .sidebar .nav-item .nav-link {
+            padding: 10px 18px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid transparent;
+            transition: all 0.25s ease;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Sidebar Nav Links */
-        .sidebar-menu-list {
-            list-style: none;
-            padding: 8px 12px;
-            flex: 1;
+        .sidebar .nav-item .nav-link i {
+            font-size: 0.95rem;
+            width: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.75);
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .sidebar .nav-item .nav-link:hover,
+        .sidebar .nav-item.active .nav-link {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            border-left-color: var(--islamic-gold);
+        }
+
+        .sidebar .nav-item .nav-link:hover i,
+        .sidebar .nav-item.active .nav-link i {
+            color: var(--islamic-gold-bright);
+            transform: scale(1.1);
         }
 
         .sidebar-heading {
-            font-size: 0.65rem;
+            font-size: 0.68rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.45);
-            padding: 12px 14px 6px;
             font-weight: 700;
+            letter-spacing: 0.8px;
+            color: var(--islamic-gold);
+            padding: 14px 18px 6px;
+            position: relative;
+            z-index: 2;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .nav-item {
-            margin-bottom: 3px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: 10px;
-            color: rgba(255, 255, 255, 0.82);
-            text-decoration: none;
-            font-size: 0.84rem;
-            font-weight: 500;
-            transition: all 0.25s ease;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(3px);
-        }
-
-        .nav-link.active {
-            color: #ffffff;
-            background: linear-gradient(90deg, rgba(201, 160, 61, 0.35) 0%, rgba(16, 185, 129, 0.25) 100%);
-            border: 1px solid rgba(201, 160, 61, 0.4);
-            font-weight: 700;
-        }
-
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            right: 12px;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--islamic-gold-light);
-            box-shadow: 0 0 8px var(--islamic-gold-light);
-        }
-
-        .nav-icon-chip {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.88rem;
-            color: var(--islamic-gold-light);
-            flex-shrink: 0;
-            transition: all 0.25s;
-        }
-
-        .nav-link:hover .nav-icon-chip {
-            background: var(--islamic-gold);
-            color: var(--islamic-dark);
-        }
-
-        .nav-link.active .nav-icon-chip {
-            background: var(--islamic-gold-light);
-            color: var(--islamic-dark);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-        }
-
-        .badge-sidebar-pill {
-            margin-left: auto;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 12px;
-            background: rgba(16, 185, 129, 0.35);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.5);
-        }
-
-        /* Sidebar Footer */
-        .sidebar-footer-box {
-            padding: 14px;
+        .sidebar-divider {
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.72rem;
-            color: rgba(255, 255, 255, 0.5);
+            margin: 6px 0;
+            position: relative;
+            z-index: 2;
         }
 
-        /* ================= KONTEN UTAMA ================= */
-        .admin-main-wrap {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            background-color: #f8fafc;
-        }
-
-        /* TOPBAR */
-        .admin-topbar {
-            height: 70px;
-            background: #ffffff;
+        /* === TOPBAR WIDGETS === */
+        .topbar {
+            height: 4.5rem;
+            background: #ffffff !important;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
             border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            position: sticky;
-            top: 0;
-            z-index: 90;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            padding: 0 1.5rem;
         }
 
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .topbar-toggle-btn {
-            background: #f1f5f9;
-            border: none;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            color: var(--islamic-mid);
-            font-size: 1.05rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .topbar-toggle-btn:hover {
-            background: #e2e8f0;
-            color: var(--islamic-dark);
-        }
-
-        /* Widget Jam & Kalender */
         .topbar-clock-widget {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            padding: 6px 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-right: 12px;
         }
 
         .topbar-clock-time {
             font-size: 1rem;
             font-weight: 800;
-            color: var(--islamic-dark);
+            color: #0f172a;
             font-variant-numeric: tabular-nums;
             letter-spacing: 0.5px;
+            line-height: 1.1;
         }
 
         .topbar-clock-date {
-            font-size: 0.70rem;
+            font-size: 0.65rem;
             color: #64748b;
-            font-weight: 500;
+            font-weight: 600;
+            margin-top: 2px;
         }
 
-        /* Kapsul Sholat Berikutnya */
         .topbar-prayer-pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             background: linear-gradient(135deg, var(--islamic-dark), var(--islamic-green));
-            color: #ffffff;
-            border-radius: 20px;
-            padding: 6px 14px 6px 10px;
-            font-size: 0.75rem;
+            color: #fff;
+            border-radius: 25px;
+            padding: 6px 16px 6px 8px;
+            font-size: 0.76rem;
             font-weight: 600;
-            box-shadow: 0 2px 10px rgba(14, 53, 33, 0.25);
-            white-space: nowrap;
+            box-shadow: 0 3px 12px rgba(30, 90, 58, 0.25);
+            cursor: pointer;
+            margin-right: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.35);
         }
 
-        .pill-icon {
-            width: 22px;
-            height: 22px;
+        .topbar-prayer-pill .pill-icon {
+            width: 24px;
+            height: 24px;
             background: rgba(255, 255, 255, 0.18);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
-            color: var(--islamic-gold-light);
+            font-size: 0.72rem;
+            color: var(--islamic-gold-bright);
         }
 
-        .pill-time {
-            color: var(--islamic-gold-light);
+        .topbar-prayer-pill .pill-time {
+            color: var(--islamic-gold-bright);
             font-weight: 800;
         }
 
-        /* Topbar Right */
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        /* Tombol Preview TV */
-        .btn-preview-tv {
+        /* QUICK ROLE SWITCHER PILL IN TOPBAR */
+        .topbar-role-selector {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 7px 14px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 20px;
-            color: #059669;
-            font-size: 0.80rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.25s;
-        }
-
-        .btn-preview-tv:hover {
-            background: #10b981;
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Role Switcher Toolbar Cepat */
-        .role-switch-toolbar {
-            display: flex;
-            align-items: center;
             background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 25px;
             padding: 3px;
-            border-radius: 20px;
+            margin-right: 15px;
             gap: 2px;
         }
 
-        .btn-role-switcher {
+        .role-switch-btn {
             border: none;
             background: transparent;
-            padding: 5px 10px;
-            border-radius: 16px;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 0.72rem;
             font-weight: 600;
-            color: #64748b;
+            color: #475569;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-role-switcher:hover {
-            color: #0f172a;
-        }
-
-        .btn-role-switcher.active {
-            background: #ffffff;
-            color: #047857;
-            font-weight: 700;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Profile Dropdown Trigger */
-        .profile-trigger-wrap {
-            position: relative;
-        }
-
-        .profile-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: transparent;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .role-switch-btn:hover {
+            color: #0f172a;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .role-switch-btn.active {
+            background: linear-gradient(135deg, var(--islamic-dark), var(--islamic-green));
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .role-switch-btn.active i {
+            color: var(--islamic-gold-bright);
+        }
+
+        .btn-live-disp {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: #ffffff !important;
             border: none;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 30px;
-            transition: background 0.2s;
-        }
-
-        .profile-avatar-circle {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--islamic-gold), #ffd700);
-            color: var(--islamic-dark);
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            box-shadow: 0 2px 8px rgba(201, 160, 61, 0.4);
-        }
-
-        .profile-name-role {
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .profile-fullname {
-            font-size: 0.82rem;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.78rem;
             font-weight: 700;
-            color: #1e293b;
-            line-height: 1.2;
-        }
-
-        .profile-rolename {
-            font-size: 0.68rem;
-            color: #059669;
-            font-weight: 600;
-        }
-
-        /* Profile Dropdown Menu */
-        .profile-dropdown-menu {
-            position: absolute;
-            top: 52px;
-            right: 0;
-            width: 240px;
-            background: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
-            border: 1px solid #e2e8f0;
-            padding: 8px 6px;
-            display: none;
-            z-index: 1000;
-            animation: fadeIn 0.2s ease;
-        }
-
-        .profile-dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-header-info {
-            padding: 10px 14px;
-            border-bottom: 1px solid #f1f5f9;
-            margin-bottom: 6px;
-        }
-
-        .dropdown-header-info .name {
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .dropdown-header-info .email {
-            font-size: 0.74rem;
-            color: #64748b;
-        }
-
-        .dropdown-item-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            color: #334155;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dropdown-item-link:hover {
-            background: #f1f5f9;
-            color: #047857;
-        }
-
-        .dropdown-item-link.text-danger:hover {
-            background: #fef2f2;
-            color: #dc2626;
-        }
-
-        /* ================= BODY CONTENT ================= */
-        .admin-content-body {
-            padding: 24px;
-            flex: 1;
-        }
-
-        /* Page Header */
-        .page-header-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 22px;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-
-        .page-header-titles h1 {
-            font-size: 1.45rem;
-            font-weight: 800;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .page-header-titles p {
-            font-size: 0.84rem;
-            color: #64748b;
-            margin-top: 3px;
-        }
-
-        /* Role Badge Hero */
-        .role-badge-hero {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.76rem;
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            text-transform: uppercase;
-        }
-        .role-badge-admin {
-            background: rgba(245, 158, 11, 0.15);
-            color: #b45309;
-            border: 1px solid rgba(245, 158, 11, 0.4);
-        }
-        .role-badge-bendahara {
-            background: rgba(16, 185, 129, 0.15);
-            color: #047857;
-            border: 1px solid rgba(16, 185, 129, 0.4);
-        }
-        .role-badge-petugas {
-            background: rgba(56, 189, 248, 0.15);
-            color: #0284c7;
-            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+            text-decoration: none !important;
+            transition: transform 0.2s ease;
         }
 
-        /* WELCOME BANNER ISLAMIC */
+        .btn-live-disp:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+        }
+
+        /* === DASHBOARD HERO BANNER === */
         .welcome-hero-banner {
-            background: linear-gradient(135deg, #071a10 0%, #0e3521 50%, #1a5235 100%);
+            background: linear-gradient(135deg, #071a10 0%, #0e3521 60%, #164e30 100%);
             border-radius: 18px;
             padding: 24px 28px;
             color: #ffffff;
             margin-bottom: 24px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(7, 26, 16, 0.2);
-            border: 1px solid rgba(201, 160, 61, 0.3);
+            box-shadow: 0 10px 25px rgba(7, 26, 16, 0.25);
+            border: 1px solid rgba(201, 160, 61, 0.25);
         }
 
         .welcome-hero-banner::after {
-            content: "\f67b";
-            font-family: "Font Awesome 6 Free";
+            content: "\f663";
+            font-family: "Font Awesome 5 Free";
             font-weight: 900;
             position: absolute;
-            right: 25px;
+            right: 20px;
             bottom: -25px;
-            font-size: 160px;
-            opacity: 0.06;
-            color: #ffffff;
+            font-size: 140px;
+            color: rgba(255, 255, 255, 0.04);
             pointer-events: none;
         }
 
-        .welcome-hero-text h2 {
-            font-size: 1.35rem;
-            font-weight: 800;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .hero-arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            color: var(--islamic-gold-bright);
+            line-height: 1.2;
+            margin-bottom: 4px;
         }
 
-        .welcome-hero-text p {
+        .hero-main-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+        }
+
+        .hero-sub-desc {
             font-size: 0.88rem;
             color: #cbd5e1;
-            max-width: 720px;
+            max-width: 650px;
             line-height: 1.5;
         }
 
-        .welcome-meta-pills {
+        .hero-badges-row {
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
             gap: 10px;
-            margin-top: 16px;
+            margin-top: 14px;
+            flex-wrap: wrap;
         }
 
-        .w-pill {
+        .hero-badge-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 5px 12px;
             background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.76rem;
-            font-weight: 500;
+            font-weight: 600;
             color: #e2e8f0;
             backdrop-filter: blur(4px);
         }
 
-        .w-pill i {
-            color: var(--islamic-gold-light);
-        }
-
-        /* METRIC CARDS GRID */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: #ffffff;
+        /* === METRIC CARDS === */
+        .metric-card {
+            border: none;
             border-radius: 16px;
-            padding: 20px;
+            background: #ffffff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-            border: 1px solid #e2e8f0;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid var(--islamic-gold);
+            height: 100%;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .metric-card-green {
+            border-left-color: #10b981;
+        }
+
+        .metric-card-blue {
+            border-left-color: #3b82f6;
+        }
+
+        .metric-card-gold {
+            border-left-color: #f59e0b;
+        }
+
+        .metric-card-purple {
+            border-left-color: #8b5cf6;
+        }
+
+        .metric-card-body {
+            padding: 20px 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
         }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            border-color: rgba(201, 160, 61, 0.4);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            border-radius: 4px 0 0 4px;
-        }
-
-        .stat-card.green::before { background: #10b981; }
-        .stat-card.gold::before { background: #f59e0b; }
-        .stat-card.blue::before { background: #0284c7; }
-        .stat-card.red::before { background: #ef4444; }
-
-        .stat-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stat-label {
-            font-size: 0.74rem;
+        .metric-title {
+            font-size: 0.76rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
             color: #64748b;
             margin-bottom: 6px;
         }
 
-        .stat-value {
+        .metric-value {
             font-size: 1.45rem;
             font-weight: 800;
             color: #0f172a;
-            letter-spacing: -0.5px;
+            line-height: 1.2;
         }
 
-        .stat-sub {
+        .metric-sub {
             font-size: 0.72rem;
             color: #94a3b8;
             margin-top: 4px;
@@ -767,42 +474,49 @@
             gap: 4px;
         }
 
-        .stat-icon-wrap {
-            width: 50px;
-            height: 50px;
+        .metric-icon-box {
+            width: 52px;
+            height: 52px;
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             flex-shrink: 0;
         }
 
-        .stat-card.green .stat-icon-wrap { background: #ecfdf5; color: #059669; }
-        .stat-card.gold .stat-icon-wrap { background: #fffbeb; color: #d97706; }
-        .stat-card.blue .stat-icon-wrap { background: #f0f9ff; color: #0284c7; }
-        .stat-card.red .stat-icon-wrap { background: #fef2f2; color: #dc2626; }
-
-        /* DATA SECTIONS & TABLES */
-        .dashboard-row-split {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 24px;
+        .icon-box-green {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
         }
 
-        .content-card-box {
-            background: #ffffff;
+        .icon-box-blue {
+            background: rgba(59, 130, 246, 0.12);
+            color: #3b82f6;
+        }
+
+        .icon-box-gold {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+        }
+
+        .icon-box-purple {
+            background: rgba(139, 92, 246, 0.12);
+            color: #8b5cf6;
+        }
+
+        /* === CONTENT CARDS & TABLES === */
+        .content-card {
+            border: none;
             border-radius: 16px;
-            border: 1px solid #e2e8f0;
+            background: #ffffff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            margin-bottom: 24px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
-        .card-header-custom {
-            padding: 16px 20px;
+        .content-card-header {
+            padding: 16px 22px;
             background: #ffffff;
             border-bottom: 1px solid #f1f5f9;
             display: flex;
@@ -810,958 +524,1514 @@
             justify-content: space-between;
         }
 
-        .card-header-title {
-            font-size: 0.95rem;
+        .content-card-title {
+            font-size: 0.98rem;
             font-weight: 700;
             color: #0f172a;
+            margin-bottom: 0;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .card-header-title i {
+        .content-card-title i {
             color: var(--islamic-gold);
         }
 
-        .card-body-custom {
-            padding: 20px;
-            flex: 1;
+        .table-custom {
+            margin-bottom: 0;
+            font-size: 0.85rem;
         }
 
-        /* Table Clean */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .data-table-clean {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.84rem;
-        }
-
-        .data-table-clean th {
-            background: #f8fafc;
-            color: #475569;
+        .table-custom thead th {
+            background: linear-gradient(135deg, var(--islamic-dark), var(--islamic-green)) !important;
+            color: #ffffff !important;
+            border: none !important;
             font-weight: 700;
-            text-align: left;
-            padding: 10px 14px;
-            border-bottom: 1px solid #e2e8f0;
-            white-space: nowrap;
+            font-size: 0.82rem;
+            padding: 12px 16px;
+            letter-spacing: 0.3px;
         }
 
-        .data-table-clean td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #f1f5f9;
-            color: #334155;
+        .table-custom tbody td {
+            padding: 12px 16px;
             vertical-align: middle;
+            border-color: #f1f5f9;
         }
 
-        .data-table-clean tr:hover td {
-            background-color: #f8fafc;
+        .table-custom tbody tr:hover {
+            background-color: rgba(16, 185, 129, 0.04);
         }
 
-        /* Badges */
-        .status-badge {
+        /* === BADGES === */
+        .badge-masuk {
+            background: rgba(16, 185, 129, 0.15);
+            color: #047857;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+
+        .badge-keluar {
+            background: rgba(239, 68, 68, 0.15);
+            color: #b91c1c;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+
+        .badge-active-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: #065f46;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.70rem;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.72rem;
-            font-weight: 600;
         }
 
-        .status-badge.income { background: #dcfce7; color: #15803d; }
-        .status-badge.expense { background: #fee2e2; color: #b91c1c; }
-        .status-badge.active { background: #e0f2fe; color: #0369a1; }
-
-        /* Quick Action Grid in Sidebar/Dashboard */
-        .quick-actions-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .qa-item-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #1e293b;
-            font-size: 0.84rem;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .qa-item-btn:hover {
-            background: #ffffff;
-            border-color: var(--islamic-gold);
-            transform: translateX(3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .qa-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.95rem;
-        }
-
-        /* Modal Logout */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+        /* === SECTION VIEW SWITCHER === */
+        .section-view {
             display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
+            animation: fadeInView 0.3s ease-out forwards;
         }
 
-        .modal-card {
-            background: #ffffff;
-            border-radius: 18px;
-            width: 100%;
-            max-width: 400px;
-            padding: 24px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-            animation: zoomIn 0.25s ease;
+        .section-view.active {
+            display: block;
         }
 
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes fadeInView {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .modal-card .icon-logout {
-            width: 60px;
-            height: 60px;
-            background: #fef2f2;
-            color: #dc2626;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin: 0 auto 16px;
+        /* RAUDHAH CARD PREVIEW */
+        .jumat-preview-box {
+            background: linear-gradient(135deg, #032115 0%, #010f09 100%);
+            border-radius: 14px;
+            padding: 18px;
+            color: #ffffff;
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
 
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .btn-modal {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 0.85rem;
+        .jumat-badge-title {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--islamic-gold-bright);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.74rem;
             font-weight: 700;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
+            display: inline-block;
+            margin-bottom: 12px;
         }
 
-        .btn-modal-cancel {
-            background: #f1f5f9;
-            color: #475569;
+        .jumat-officer-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
         }
-        .btn-modal-cancel:hover { background: #e2e8f0; }
 
-        .btn-modal-confirm {
-            background: #dc2626;
+        .jumat-officer-label {
+            font-size: 0.70rem;
+            color: var(--islamic-gold);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .jumat-officer-name {
+            font-size: 0.95rem;
+            font-weight: 700;
             color: #ffffff;
         }
-        .btn-modal-confirm:hover { background: #b91c1c; }
+
+        /* TV ROTATION REORDER BUTTONS */
+        .btn-reorder {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin: 0 2px;
+        }
 
         /* FOOTER */
-        .admin-footer {
-            padding: 18px 24px;
+        footer.sticky-footer {
             background: #ffffff;
             border-top: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.78rem;
-            color: #64748b;
+            padding: 1.25rem 0;
+            margin-top: 30px;
         }
 
         /* RESPONSIVE */
-        @media (max-width: 991px) {
-            .admin-sidebar {
-                position: fixed;
-                left: -260px;
-                top: 0;
-                bottom: 0;
-                z-index: 1000;
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 6.5rem !important;
             }
-            .admin-sidebar.open {
-                left: 0;
+            .sidebar-user-panel,
+            .topbar-clock-widget,
+            .topbar-prayer-pill,
+            .topbar-role-selector {
+                display: none !important;
             }
-            .dashboard-row-split {
-                grid-template-columns: 1fr;
-            }
-            .role-switch-toolbar {
-                display: none;
-            }
-            .topbar-prayer-pill {
-                display: none;
+            .welcome-hero-banner {
+                padding: 18px 20px;
             }
         }
     </style>
 </head>
-<body>
 
-<div id="adminWrapper">
+<body id="page-top">
 
-    <!-- ================= SIDEBAR NAV ================= -->
-    <aside class="admin-sidebar" id="sidebarMenu">
-        
-        <!-- Brand Link -->
-        <a href="admin.html" class="sidebar-brand-box">
-            <img src="img/logo-aljihad-circle.png" alt="Logo" class="sidebar-brand-logo">
-            <div>
-                <div class="sidebar-brand-title">Al-Jihad Digital</div>
-                <div class="sidebar-brand-subtitle">Panel Pengurus Masjid</div>
-            </div>
-        </a>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-        <!-- Sidebar User Panel -->
-        <div class="sidebar-user-panel">
-            <div class="sup-avatar auth-user-initial">A</div>
-            <div class="sup-info">
-                <div class="sup-name auth-user-name">Memuat...</div>
-                <div class="sup-role">
-                    <span class="sup-role-dot"></span>
-                    <span class="auth-user-role-label">Super Admin</span>
+        <!-- =======================================================
+             1. SIDEBAR NAVIGATION (ISLAMIC MATERIAL DESIGN 3)
+             ======================================================= -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="javascript:void(0)" onclick="switchAdminSection('dashboard')">
+                <div class="sidebar-brand-icon">
+                    <img src="img/logo-aljihad-circle.png" 
+                         alt="Logo Masjid Al-Jihad" 
+                         style="width: 40px; height: 40px; object-fit: contain;"
+                         onerror="this.onerror=null; this.src='img/logo.png';">
+                </div>
+                <div class="sidebar-brand-text mx-2 text-left">
+                    <div>Masjid Jami' Al-Jihad</div>
+                    <div class="sidebar-brand-sub">Digital Signage v5.1</div>
+                </div>
+            </a>
+
+            <!-- Sidebar - User Profile Panel -->
+            <div class="sidebar-user-panel">
+                <div class="sup-avatar auth-user-initial">A</div>
+                <div class="sup-info">
+                    <div class="sup-name auth-user-name">Memuat Akun...</div>
+                    <div class="sup-role-badge">
+                        <span class="sup-role-dot"></span>
+                        <span class="auth-user-role-label">Super Admin</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Menu List -->
-        <ul class="sidebar-menu-list">
-            
-            <!-- Dashboard Utama -->
-            <li class="nav-item">
-                <a href="admin.html" class="nav-link active">
-                    <div class="nav-icon-chip"><i class="fas fa-tachometer-alt"></i></div>
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active" id="nav-dashboard">
+                <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('dashboard')">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard Utama</span>
                 </a>
             </li>
 
-            <!-- ================= MENU OPERATOR & ADMIN ================= -->
-            <div class="sidebar-heading" data-role="admin,petugas">
-                <i class="fas fa-tv"></i> Operasional Display TV
+            <!-- ==============================================
+                 2. MENU OPERATOR & SUPER ADMIN: DISPLAY TV
+                 ============================================== -->
+            <div data-role="admin, petugas">
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    <i class="fas fa-tv"></i> Operasional Display TV
+                </div>
+
+                <li class="nav-item" id="nav-jadwal-sholat">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('jadwal-sholat')">
+                        <i class="fas fa-fw fa-clock"></i>
+                        <span>Jadwal Sholat & Durasi</span>
+                    </a>
+                </li>
+
+                <li class="nav-item" id="nav-sholat-jumat">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('sholat-jumat')">
+                        <i class="fas fa-fw fa-calendar-alt"></i>
+                        <span>Petugas Sholat Jum'at</span>
+                    </a>
+                </li>
+
+                <li class="nav-item" id="nav-rotasi-tv">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('rotasi-tv')">
+                        <i class="fas fa-fw fa-exchange-alt"></i>
+                        <span>Rotasi TV & Reorder</span>
+                    </a>
+                </li>
+
+                <li class="nav-item" id="nav-running-text">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('running-text')">
+                        <i class="fas fa-fw fa-bullhorn" style="color: #ffd700;"></i>
+                        <span>Teks Berjalan TV</span>
+                    </a>
+                </li>
             </div>
 
-            <li class="nav-item" data-role="admin,petugas">
-                <a href="#jadwal-sholat" class="nav-link" onclick="scrollToSection('sectionJadwalSholat')">
-                    <div class="nav-icon-chip"><i class="fas fa-clock"></i></div>
-                    <span>Jadwal Sholat & Durasi</span>
-                </a>
-            </li>
+            <!-- ==============================================
+                 3. MENU BENDAHARA & SUPER ADMIN: KAS & KEUANGAN
+                 ============================================== -->
+            <div data-role="admin, bendahara">
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    <i class="fas fa-wallet"></i> Manajemen Keuangan
+                </div>
 
-            <li class="nav-item" data-role="admin,petugas">
-                <a href="#petugas-jumat" class="nav-link" onclick="scrollToSection('sectionJumat')">
-                    <div class="nav-icon-chip"><i class="fas fa-calendar-alt"></i></div>
-                    <span>Petugas Sholat Jum'at</span>
-                </a>
-            </li>
+                <li class="nav-item" id="nav-keuangan">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('keuangan')">
+                        <i class="fas fa-fw fa-hand-holding-heart"></i>
+                        <span>Buku Kas & Transaksi</span>
+                    </a>
+                </li>
 
-            <li class="nav-item" data-role="admin,petugas">
-                <a href="#pengumuman" class="nav-link" onclick="scrollToSection('sectionPengumuman')">
-                    <div class="nav-icon-chip"><i class="fas fa-bullhorn"></i></div>
-                    <span>Pengumuman & Mutiara</span>
-                </a>
-            </li>
+                <li class="nav-item" id="nav-ambulance">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('ambulance')">
+                        <i class="fas fa-fw fa-ambulance"></i>
+                        <span>Kas Ambulance</span>
+                    </a>
+                </li>
 
-            <li class="nav-item" data-role="admin,petugas">
-                <a href="index.html" target="_blank" class="nav-link">
-                    <div class="nav-icon-chip"><i class="fas fa-exchange-alt"></i></div>
-                    <span>Rotasi Halaman TV</span>
-                    <span class="badge-sidebar-pill">LIVE TV</span>
-                </a>
-            </li>
-
-            <!-- ================= MENU BENDAHARA & ADMIN ================= -->
-            <div class="sidebar-heading" data-role="admin,bendahara">
-                <i class="fas fa-wallet"></i> Keuangan & Donasi
+                <li class="nav-item" id="nav-infaq">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('infaq')">
+                        <i class="fas fa-fw fa-donate"></i>
+                        <span>Penggalangan Infaq</span>
+                    </a>
+                </li>
             </div>
 
-            <li class="nav-item" data-role="admin,bendahara">
-                <a href="#buku-kas" class="nav-link" onclick="scrollToSection('sectionKasMasjid')">
-                    <div class="nav-icon-chip"><i class="fas fa-hand-holding-heart"></i></div>
-                    <span>Buku Kas Masjid</span>
-                </a>
-            </li>
+            <!-- ==============================================
+                 4. MENU KHUSUS SUPER ADMIN: SISTEM & PENGGUNA
+                 ============================================== -->
+            <div data-role="admin">
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    <i class="fas fa-shield-alt"></i> Kontrol Super Admin
+                </div>
 
-            <li class="nav-item" data-role="admin,bendahara">
-                <a href="#kas-ambulance" class="nav-link" onclick="scrollToSection('sectionAmbulance')">
-                    <div class="nav-icon-chip"><i class="fas fa-ambulance"></i></div>
-                    <span>Kas Mobil Ambulance</span>
-                </a>
-            </li>
+                <li class="nav-item" id="nav-users">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('users')">
+                        <i class="fas fa-fw fa-users-cog"></i>
+                        <span>Kelola 3 Hak Akses</span>
+                    </a>
+                </li>
 
-            <li class="nav-item" data-role="admin,bendahara">
-                <a href="#laporan-rekap" class="nav-link" onclick="scrollToSection('sectionKasMasjid')">
-                    <div class="nav-icon-chip"><i class="fas fa-chart-line"></i></div>
-                    <span>Laporan & Rekapitulasi</span>
-                </a>
-            </li>
-
-            <!-- ================= MENU KHUSUS SUPER ADMIN ================= -->
-            <div class="sidebar-heading" data-role="admin">
-                <i class="fas fa-cog"></i> Pengaturan Sistem
+                <li class="nav-item" id="nav-settings">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('settings')">
+                        <i class="fas fa-fw fa-cogs"></i>
+                        <span>Pengaturan Sistem</span>
+                    </a>
+                </li>
             </div>
 
-            <li class="nav-item" data-role="admin">
-                <a href="#kelola-user" class="nav-link" onclick="scrollToSection('sectionUsers')">
-                    <div class="nav-icon-chip"><i class="fas fa-users-cog"></i></div>
-                    <span>Kelola Akun (3 Peran)</span>
+            <!-- ==============================================
+                 5. MENU UMUM: PROFIL & KELUAR
+                 ============================================== -->
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+                <i class="fas fa-user-circle"></i> Sesi Akun
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link text-warning" href="index.html" target="_blank">
+                    <i class="fas fa-fw fa-external-link-alt text-warning"></i>
+                    <span>Buka Layar TV Display</span>
                 </a>
             </li>
 
-            <li class="nav-item" data-role="admin">
-                <a href="#konfigurasi" class="nav-link" onclick="scrollToSection('sectionConfig')">
-                    <div class="nav-icon-chip"><i class="fas fa-sliders-h"></i></div>
-                    <span>Pengaturan Display TV</span>
+            <li class="nav-item">
+                <a class="nav-link text-danger" href="javascript:void(0)" onclick="confirmLogout()">
+                    <i class="fas fa-fw fa-sign-out-alt text-danger"></i>
+                    <span>Keluar (Logout)</span>
                 </a>
             </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
 
         </ul>
+        <!-- End of Sidebar -->
 
-        <!-- Sidebar Footer -->
-        <div class="sidebar-footer-box">
-            <span>Al-Jihad v5.1.0 Statis</span>
-            <a href="javascript:void(0)" onclick="openLogoutModal()" style="color: #ef4444; text-decoration: none;">
-                <i class="fas fa-sign-out-alt"></i> Keluar
-            </a>
-        </div>
-    </aside>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
-    <!-- ================= KONTEN UTAMA ================= -->
-    <main class="admin-main-wrap">
-        
-        <!-- TOPBAR -->
-        <header class="admin-topbar">
-            
-            <!-- Kiri: Toggle Sidebar & Jam Digital Live -->
-            <div class="topbar-left">
-                <button class="topbar-toggle-btn" onclick="toggleSidebar()" title="Buka/Tutup Menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+            <!-- Main Content -->
+            <div id="content">
 
-                <div class="topbar-clock-widget">
-                    <div class="topbar-clock-time" id="liveClockTime">00:00:00 WIB</div>
-                    <div class="topbar-clock-date" id="liveClockDate">Memuat Tanggal...</div>
-                </div>
+                <!-- =======================================================
+                     2. TOPBAR NAVBAR
+                     ======================================================= -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow-sm">
 
-                <!-- Kapsul Sholat Berikutnya -->
-                <div class="topbar-prayer-pill" id="topbarPrayerPill">
-                    <div class="pill-icon"><i class="fas fa-mosque"></i></div>
-                    <div>
-                        <span style="opacity: 0.75; font-size: 0.65rem;">Menuju</span>
-                        <span id="nextPrayerName" style="color: #fff; font-weight: 700;">Dzuhur</span>
-                        <span class="pill-time" id="nextPrayerTime">--:--</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kanan: Preview TV, Quick Switch Role & Profil -->
-            <div class="topbar-right">
-                
-                <!-- Quick Switch Role Selector (Toolbar Simulator Cepat) -->
-                <div class="role-switch-toolbar" title="Ganti tampilan peran secara instan">
-                    <button class="btn-role-switcher" data-switch-to="admin" onclick="AdminAuth.switchRole('admin')">Admin</button>
-                    <button class="btn-role-switcher" data-switch-to="bendahara" onclick="AdminAuth.switchRole('bendahara')">Bendahara</button>
-                    <button class="btn-role-switcher" data-switch-to="petugas" onclick="AdminAuth.switchRole('petugas')">Operator</button>
-                </div>
-
-                <!-- Tombol Buka Layar TV Rotator -->
-                <a href="index.html" target="_blank" class="btn-preview-tv" title="Lihat Tampilan Display TV Layar Penuh">
-                    <i class="fas fa-tv"></i>
-                    <span>Display TV</span>
-                </a>
-
-                <!-- Profil Trigger & Dropdown -->
-                <div class="profile-trigger-wrap">
-                    <button class="profile-btn" onclick="toggleProfileDropdown()">
-                        <div class="profile-avatar-circle auth-user-initial">A</div>
-                        <div class="profile-name-role">
-                            <span class="profile-fullname auth-user-name">Pengguna</span>
-                            <span class="profile-rolename auth-user-role-label">Role</span>
-                        </div>
-                        <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: #94a3b8;"></i>
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars text-success"></i>
                     </button>
 
-                    <!-- Dropdown Content -->
-                    <div class="profile-dropdown-menu" id="profileDropdown">
-                        <div class="dropdown-header-info">
-                            <div class="name auth-user-name">Pengguna</div>
-                            <div class="email auth-user-email">email@aljihad.com</div>
+                    <!-- Widget Jam Digital Realtime & Kalender -->
+                    <div class="topbar-clock-widget d-none d-sm-flex">
+                        <div class="topbar-clock-time" id="topbarClockTime">00:00:00</div>
+                        <div class="topbar-clock-date" id="topbarClockDate">Memuat Tanggal...</div>
+                    </div>
+
+                    <!-- Widget Pill Sholat Berikutnya -->
+                    <div class="topbar-prayer-pill d-none d-md-inline-flex" title="Waktu Sholat Berikutnya">
+                        <div class="pill-icon">
+                            <i class="fas fa-mosque"></i>
+                        </div>
+                        <span class="pill-label">Sholat Berikutnya:</span>
+                        <span class="pill-time" id="topbarNextPrayer">Dzuhur 12:00</span>
+                    </div>
+
+                    <!-- Topbar Navbar Right -->
+                    <ul class="navbar-nav ml-auto align-items-center">
+
+                        <!-- QUICK ROLE SWITCHER PILL (Praktis untuk Demo 3 Peran) -->
+                        <li class="nav-item d-none d-lg-block">
+                            <div class="topbar-role-selector" title="Ubah tampilan untuk menguji hak akses peran">
+                                <button type="button" class="role-switch-btn" id="btnSwitchAdmin" onclick="switchRoleDemo('admin')">
+                                    <i class="fas fa-crown"></i> Super Admin
+                                </button>
+                                <button type="button" class="role-switch-btn" id="btnSwitchBendahara" onclick="switchRoleDemo('bendahara')">
+                                    <i class="fas fa-wallet"></i> Bendahara
+                                </button>
+                                <button type="button" class="role-switch-btn" id="btnSwitchOperator" onclick="switchRoleDemo('petugas')">
+                                    <i class="fas fa-tv"></i> Operator
+                                </button>
+                            </div>
+                        </li>
+
+                        <!-- Tombol Pintas Layar TV -->
+                        <li class="nav-item mx-2">
+                            <a href="index.html" target="_blank" class="btn-live-disp">
+                                <i class="fas fa-tv"></i>
+                                <span>Lihat Display</span>
+                            </a>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- User Info Dropdown -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="d-flex flex-column text-right mr-2 d-none d-lg-inline">
+                                    <span class="text-gray-800 small font-weight-bold auth-user-name">Pengguna</span>
+                                    <span class="text-success small font-weight-bold auth-user-role-label">Role</span>
+                                </div>
+                                <div class="sup-avatar auth-user-initial" style="width: 38px; height: 38px;">A</div>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <div class="dropdown-header text-success">
+                                    <i class="fas fa-user-shield mr-1"></i> Akun Terautentikasi
+                                </div>
+                                <div class="px-3 py-1 small text-muted auth-user-email">email@aljihad.com</div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="switchAdminSection('dashboard')">
+                                    <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-gray-400"></i> Dashboard
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="confirmLogout()">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i> Keluar (Logout)
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- =======================================================
+                     3. MAIN CONTAINER
+                     ======================================================= -->
+                <div class="container-fluid px-4">
+
+                    <!-- ==========================================
+                         VIEW 1: DASHBOARD OVERVIEW
+                         ========================================== -->
+                    <div id="view-dashboard" class="section-view active">
+
+                        <!-- Welcome Hero Banner -->
+                        <div class="welcome-hero-banner">
+                            <div class="hero-arabic-title">
+                                أَهْلًا وَسَهْلًا • Ahlan Wa Sahlan
+                            </div>
+                            <div class="hero-main-title">
+                                Selamat Datang, <span class="auth-user-name text-warning">Administrator</span>!
+                            </div>
+                            <div class="hero-sub-desc">
+                                Panel Kontrol Web Statis Masjid Jami' Al-Jihad. Seluruh perubahan data akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display melalui Supabase BaaS.
+                            </div>
+                            <div class="hero-badges-row">
+                                <span class="hero-badge-pill">
+                                    <i class="fas fa-id-badge text-warning"></i>
+                                    Peran Aktif: <strong class="auth-user-role-label ml-1">Super Admin</strong>
+                                </span>
+                                <span class="hero-badge-pill">
+                                    <i class="fas fa-bolt text-success"></i>
+                                    Status Engine: <strong>Cloudflare Edge + Supabase Realtime</strong>
+                                </span>
+                                <span class="hero-badge-pill">
+                                    <i class="fas fa-tv text-info"></i>
+                                    Display TV: <strong class="text-success">ONLINE (60 FPS)</strong>
+                                </span>
+                            </div>
                         </div>
 
-                        <div style="padding: 4px 10px 2px; font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: #94a3b8;">
-                            Simulasi Peran
+                        <!-- Row Kartu Metrik Dinamis Berdasarkan Peran -->
+                        <div class="row mb-4">
+                            <!-- Card 1: Saldo Kas Utama (Admin & Bendahara) -->
+                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, bendahara">
+                                <div class="metric-card metric-card-green">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Saldo Kas Utama</div>
+                                            <div class="metric-value text-success" id="statKasUtama">Rp 128.450.000</div>
+                                            <div class="metric-sub text-success">
+                                                <i class="fas fa-arrow-up"></i> + Rp 12.500.000 bulan ini
+                                            </div>
+                                        </div>
+                                        <div class="metric-icon-box icon-box-green">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Kas Ambulance (Admin & Bendahara) -->
+                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, bendahara">
+                                <div class="metric-card metric-card-blue">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Kas Ambulance</div>
+                                            <div class="metric-value text-primary" id="statKasAmbulance">Rp 18.750.000</div>
+                                            <div class="metric-sub text-primary">
+                                                <i class="fas fa-gas-pump"></i> BBM & Pemeliharaan Siap
+                                            </div>
+                                        </div>
+                                        <div class="metric-icon-box icon-box-blue">
+                                            <i class="fas fa-ambulance"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Display TV & Sholat (Admin & Operator) -->
+                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, petugas">
+                                <div class="metric-card metric-card-gold">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Layar Display TV</div>
+                                            <div class="metric-value text-warning" id="statStatusTV">8 Halaman</div>
+                                            <div class="metric-sub text-success">
+                                                <i class="fas fa-check-circle"></i> Rotasi Berjalan Lancar
+                                            </div>
+                                        </div>
+                                        <div class="metric-icon-box icon-box-gold">
+                                            <i class="fas fa-tv"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Sholat Jum'at (Admin & Operator) -->
+                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, petugas">
+                                <div class="metric-card metric-card-purple">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Khotib Jum'at Ini</div>
+                                            <div class="metric-value" style="font-size: 1.15rem;" id="statKhotibJumat">Ust. Dr. H. Faisal, M.Ag</div>
+                                            <div class="metric-sub text-info">
+                                                <i class="fas fa-calendar-check"></i> Petugas Lengkap
+                                            </div>
+                                        </div>
+                                        <div class="metric-icon-box icon-box-purple">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button class="dropdown-item-link" onclick="AdminAuth.switchRole('admin')">
-                            <i class="fas fa-shield-alt text-warning"></i> Super Admin
-                        </button>
-                        <button class="dropdown-item-link" onclick="AdminAuth.switchRole('bendahara')">
-                            <i class="fas fa-wallet text-success"></i> Bendahara Kas
-                        </button>
-                        <button class="dropdown-item-link" onclick="AdminAuth.switchRole('petugas')">
-                            <i class="fas fa-tv text-info"></i> Petugas / Operator
-                        </button>
 
-                        <div style="border-top: 1px solid #f1f5f9; margin: 4px 0;"></div>
+                        <!-- Preview Cepat Tabel Sesuai Hak Akses -->
+                        <div class="row">
+                            <!-- Preview Keuangan (Admin & Bendahara) -->
+                            <div class="col-lg-7" data-role="admin, bendahara">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title">
+                                            <i class="fas fa-receipt"></i> Mutasi Kas Terbaru
+                                        </h6>
+                                        <button class="btn btn-sm btn-outline-success font-weight-bold" onclick="switchAdminSection('keuangan')">
+                                            Lihat Semua <i class="fas fa-arrow-right ml-1"></i>
+                                        </button>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-custom table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tanggal</th>
+                                                    <th>Uraian Transaksi</th>
+                                                    <th>Tipe</th>
+                                                    <th class="text-right">Nominal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="quickKasTableBody">
+                                                <tr>
+                                                    <td>25/09/2026</td>
+                                                    <td>Kotak Infaq Sholat Shubuh Berjamaah</td>
+                                                    <td><span class="badge-masuk">Pemasukan</span></td>
+                                                    <td class="text-right font-weight-bold text-success">+ Rp 1.450.000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>24/09/2026</td>
+                                                    <td>Pembelian Sabun & Pembersih Lantai Masjid</td>
+                                                    <td><span class="badge-keluar">Pengeluaran</span></td>
+                                                    <td class="text-right font-weight-bold text-danger">- Rp 380.000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23/09/2026</td>
+                                                    <td>Infaq Donasi QRIS Bank Syariah</td>
+                                                    <td><span class="badge-masuk">Pemasukan</span></td>
+                                                    <td class="text-right font-weight-bold text-success">+ Rp 2.200.000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <button class="dropdown-item-link text-danger" onclick="openLogoutModal()">
-                            <i class="fas fa-sign-out-alt"></i> Keluar (Logout)
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-        </header>
-
-        <!-- ISI KONTEN BODY -->
-        <div class="admin-content-body">
-            
-            <!-- Page Header -->
-            <div class="page-header-box">
-                <div class="page-header-titles">
-                    <h1>
-                        <i class="fas fa-tachometer-alt text-success"></i>
-                        <span>Dashboard Manajemen</span>
-                    </h1>
-                    <p>Selamat datang kembali, <strong class="auth-user-name">Pengurus</strong>! Pantau dan kelola operasional Masjid Al-Jihad.</p>
-                </div>
-                <div>
-                    <span id="roleBadgeIndicator" class="role-badge-hero role-badge-admin">
-                        <i class="fas fa-shield-alt"></i>
-                        <span class="auth-user-role-label">Super Admin</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- WELCOME HERO BANNER -->
-            <div class="welcome-hero-banner">
-                <div class="welcome-hero-text">
-                    <h2>
-                        <span>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
-                    </h2>
-                    <p>
-                        Sistem Informasi Digital Masjid Jami' Al-Jihad kini beroperasi dalam arsitektur <strong>Web Statis Cloudflare Pages</strong> terintegrasi <strong>Supabase Realtime Cloud BaaS</strong>. Setiap perubahan data yang disimpan akan langsung terpancar ke monitor TV masjid seketika tanpa perlu restart.
-                    </p>
-                    <div class="welcome-meta-pills">
-                        <div class="w-pill"><i class="fas fa-server"></i> Cloudflare Edge Jakarta</div>
-                        <div class="w-pill"><i class="fas fa-bolt"></i> Supabase WebSockets Realtime</div>
-                        <div class="w-pill"><i class="fas fa-tv"></i> Dual-Crossfade Display TV Engine</div>
-                        <div class="w-pill"><i class="fas fa-shield-alt"></i> Role-Based Access Control (RBAC)</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= METRIC CARDS (REALTIME DATA) ================= -->
-            <div class="metrics-grid">
-                
-                <!-- Kartu 1: Saldo Kas Utama Masjid -->
-                <div class="stat-card green" data-role="admin,bendahara">
-                    <div class="stat-info">
-                        <span class="stat-label">Saldo Kas Masjid</span>
-                        <span class="stat-value" id="cardSaldoKas">Rp --</span>
-                        <span class="stat-sub"><i class="fas fa-arrow-up text-success"></i> Terintegrasi Supabase</span>
-                    </div>
-                    <div class="stat-icon-wrap">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                </div>
-
-                <!-- Kartu 2: Saldo Kas Ambulance -->
-                <div class="stat-card red" data-role="admin,bendahara">
-                    <div class="stat-info">
-                        <span class="stat-label">Kas Mobil Ambulance</span>
-                        <span class="stat-value" id="cardSaldoAmbulance">Rp --</span>
-                        <span class="stat-sub"><i class="fas fa-ambulance"></i> Layanan Umat 24 Jam</span>
-                    </div>
-                    <div class="stat-icon-wrap">
-                        <i class="fas fa-ambulance"></i>
-                    </div>
-                </div>
-
-                <!-- Kartu 3: Status Jadwal Sholat -->
-                <div class="stat-card blue" data-role="admin,petugas">
-                    <div class="stat-info">
-                        <span class="stat-label">Jadwal Sholat Hari Ini</span>
-                        <span class="stat-value" id="cardJadwalSholatStatus">Aktif</span>
-                        <span class="stat-sub"><i class="fas fa-clock"></i> 5 Waktu & Syuruk Sinkron</span>
-                    </div>
-                    <div class="stat-icon-wrap">
-                        <i class="fas fa-mosque"></i>
-                    </div>
-                </div>
-
-                <!-- Kartu 4: Status TV Display Rotator -->
-                <div class="stat-card gold">
-                    <div class="stat-info">
-                        <span class="stat-label">Rotator Display TV</span>
-                        <span class="stat-value" id="cardRotatorInterval">20 Detik</span>
-                        <span class="stat-sub"><i class="fas fa-tv text-warning"></i> Status: Siap Tayang</span>
-                    </div>
-                    <div class="stat-icon-wrap">
-                        <i class="fas fa-broadcast-tower"></i>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- ================= ROW 2 KOLOM (TABEL DATA REALTIME & AKSI CEPAT) ================= -->
-            <div class="dashboard-row-split">
-                
-                <!-- Kolom Kiri: Tabel Data Supabase Realtime -->
-                <div class="content-card-box">
-                    <div class="card-header-custom">
-                        <div class="card-header-title">
-                            <i class="fas fa-list-alt"></i>
-                            <span id="mainTableTitle">Pusat Data Terkini</span>
+                            <!-- Preview Petugas Sholat Jum'at (Admin & Operator) -->
+                            <div class="col-lg-5" data-role="admin, petugas">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title">
+                                            <i class="fas fa-calendar-alt"></i> Petugas Sholat Jum'at
+                                        </h6>
+                                        <button class="btn btn-sm btn-outline-warning font-weight-bold" onclick="switchAdminSection('sholat-jumat')">
+                                            Ubah <i class="fas fa-edit ml-1"></i>
+                                        </button>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="jumat-preview-box">
+                                            <span class="jumat-badge-title">
+                                                <i class="fas fa-star mr-1"></i> TAMPILAN TV HARI JUM'AT
+                                            </span>
+                                            <div class="jumat-officer-item">
+                                                <div class="jumat-officer-label">Khatib</div>
+                                                <div class="jumat-officer-name">Ust. Dr. H. Faisal, M.Ag</div>
+                                            </div>
+                                            <div class="jumat-officer-item">
+                                                <div class="jumat-officer-label">Imam Sholat</div>
+                                                <div class="jumat-officer-name">Ust. Ahmad Sholeh Al-Hafidz</div>
+                                            </div>
+                                            <div class="jumat-officer-item">
+                                                <div class="jumat-officer-label">Muadzin</div>
+                                                <div class="jumat-officer-name">Bilal M. Ridwan</div>
+                                            </div>
+                                            <div class="jumat-officer-item mb-0">
+                                                <div class="jumat-officer-label">Bilal & Doa</div>
+                                                <div class="jumat-officer-name">Ust. Syahrul Ramadhan</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div style="font-size: 0.74rem; color: #64748b;">
-                            <span class="status-badge active"><i class="fas fa-wifi"></i> Terhubung Supabase</span>
-                        </div>
+
                     </div>
-                    <div class="card-body-custom">
-                        
-                        <!-- TABEL KAS MASJID (Admin & Bendahara) -->
-                        <div id="sectionKasMasjid" data-role="admin,bendahara">
-                            <h4 style="font-size: 0.92rem; margin-bottom: 12px; color: #047857; display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-hand-holding-usd"></i> Riwayat 5 Transaksi Kas Masjid Terakhir
+                    <!-- End of View Dashboard -->
+
+
+                    <!-- ==========================================
+                         VIEW 2: JADWAL SHOLAT & DURASI
+                         ========================================== -->
+                    <div id="view-jadwal-sholat" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-clock text-success mr-2"></i> Jadwal Sholat & Pengaturan Durasi
                             </h4>
+                            <button class="btn btn-success" onclick="simpanJadwalSholat()">
+                                <i class="fas fa-save mr-1"></i> Simpan Perubahan
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <!-- Tabel Jadwal Sholat 5 Waktu -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title">
+                                            <i class="fas fa-calendar-day"></i> Waktu Sholat Hari Ini (Otomatis Kemenag)
+                                        </h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-4 col-form-label font-weight-bold">Imsak</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control font-weight-bold" id="sholatImsak" value="04:18">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-primary">Subuh</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control font-weight-bold text-primary" id="sholatSubuh" value="04:28">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-warning">Terbit (Syuruq)</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control font-weight-bold" id="sholatTerbit" value="05:42">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-success">Dzuhur</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control font-weight-bold text-success" id="sholatDzuhur" value="11:49">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-info">Ashar</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control font-weight-bold text-info" id="sholatAshar" value="15:02">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-danger">Maghrib</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control font-weight-bold text-danger" id="sholatMaghrib" value="17:51">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-sm-4 col-form-label font-weight-bold text-dark">Isya</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control font-weight-bold" id="sholatIsya" value="19:00">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formulir Durasi Prayer Mode (Bab 44) -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title">
+                                            <i class="fas fa-hourglass-half"></i> Konfigurasi Durasi Prayer Mode (TV)
+                                        </h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Countdown Sebelum Adzan (Menit)</label>
+                                            <input type="number" class="form-control" id="cfgCountdownAdzan" value="5" min="1">
+                                            <small class="text-muted">Tampilan hitung mundur sebelum masuk waktu adzan.</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Durasi Layar Saat Adzan (Menit)</label>
+                                            <input type="number" class="form-control" id="cfgDurasiAdzan" value="3" min="1">
+                                            <small class="text-muted">Layar menampilkan kumandang adzan berkumandang.</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Durasi Hitung Mundur Iqamah (Menit)</label>
+                                            <input type="number" class="form-control" id="cfgDurasiIqamah" value="10" min="1">
+                                            <small class="text-muted">Waktu sholat sunnah & persiapan sholat berjamaah.</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Durasi Sholat Khusyuk / Layar Hening (Menit)</label>
+                                            <input type="number" class="form-control" id="cfgDurasiSholat" value="15" min="5">
+                                            <small class="text-muted">TV terkunci gelap syahdu: "Luruskan dan Rapatkan Shaf".</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Audio Tarhim Sebelum Adzan</label>
+                                            <select class="form-control" id="cfgAudioTarhim">
+                                                <option value="5" selected>5 Menit Sebelum Adzan</option>
+                                                <option value="10">10 Menit Sebelum Adzan</option>
+                                                <option value="15">15 Menit Sebelum Adzan</option>
+                                                <option value="0">Nonaktifkan Audio Tarhim</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 3: SHOLAT JUMAT
+                         ========================================== -->
+                    <div id="view-sholat-jumat" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-calendar-alt text-success mr-2"></i> Petugas Sholat Jum'at
+                            </h4>
+                            <button class="btn btn-success" onclick="simpanPetugasJumat()">
+                                <i class="fas fa-save mr-1"></i> Simpan Petugas Jum'at
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title">
+                                            <i class="fas fa-user-edit"></i> Form Petugas Jum'at Mendatang
+                                        </h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Tanggal Sholat Jum'at</label>
+                                            <input type="date" class="form-control" id="jumatTanggal" value="2026-09-25">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Khotib Jum'at</label>
+                                            <input type="text" class="form-control" id="jumatKhotib" value="Ust. Dr. H. Faisal, M.Ag">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Imam Sholat</label>
+                                            <input type="text" class="form-control" id="jumatImam" value="Ust. Ahmad Sholeh Al-Hafidz">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Muadzin</label>
+                                            <input type="text" class="form-control" id="jumatMuadzin" value="Bilal M. Ridwan">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Bilal / Pembaca Pengumuman</label>
+                                            <input type="text" class="form-control" id="jumatBilal" value="Ust. Syahrul Ramadhan">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title">
+                                            <i class="fas fa-eye"></i> Preview Tampilan Layar TV Raudhah
+                                        </h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="jumat-preview-box text-center">
+                                            <img src="img/logo-aljihad-circle.png" style="width: 90px; height: 90px; margin-bottom: 12px;" alt="Logo">
+                                            <div class="jumat-badge-title">MASJID JAMI' AL-JIHAD</div>
+                                            <div class="text-warning font-weight-bold mb-3" id="prevJumatTanggal">Jum'at, 25 September 2026</div>
+                                            <div class="jumat-officer-item text-left">
+                                                <div class="jumat-officer-label">Khatib</div>
+                                                <div class="jumat-officer-name" id="prevJumatKhotib">Ust. Dr. H. Faisal, M.Ag</div>
+                                            </div>
+                                            <div class="jumat-officer-item text-left">
+                                                <div class="jumat-officer-label">Imam Sholat</div>
+                                                <div class="jumat-officer-name" id="prevJumatImam">Ust. Ahmad Sholeh Al-Hafidz</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 4: ROTASI TV & REORDER PRIORITAS (Bab 47 & 52)
+                         ========================================== -->
+                    <div id="view-rotasi-tv" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h4 class="font-weight-bold text-gray-800 mb-0">
+                                    <i class="fas fa-exchange-alt text-success mr-2"></i> Rotasi Halaman Display TV
+                                </h4>
+                                <small class="text-muted">Urutan tayang slide TV. Super Admin dapat memindah urutan (▲/▼), Operator hanya aktif/nonaktif.</small>
+                            </div>
+                            <button class="btn btn-success" onclick="simpanRotasiTV()">
+                                <i class="fas fa-save mr-1"></i> Simpan Rotasi
+                            </button>
+                        </div>
+
+                        <div class="content-card">
+                            <div class="content-card-header">
+                                <h6 class="content-card-title">
+                                    <i class="fas fa-list-ol"></i> Daftar Halaman Layar Display TV
+                                </h6>
+                                <span class="badge badge-info" id="badgeRotasiRole">Mode: Super Admin (Reorder Aktif)</span>
+                            </div>
                             <div class="table-responsive">
-                                <table class="data-table-clean">
+                                <table class="table table-custom table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 70px;">Urutan</th>
+                                            <th>Nama Halaman Slide</th>
+                                            <th>URL Embed</th>
+                                            <th style="width: 130px;">Status Aktif</th>
+                                            <th style="width: 140px;" class="text-center">Aksi Reorder</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rotationTableBody">
+                                        <tr data-index="1">
+                                            <td class="font-weight-bold text-center">1</td>
+                                            <td><strong>Jadwal Sholat 5 Waktu</strong></td>
+                                            <td><code>slides/utama.html</code></td>
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="rotCheck1" checked>
+                                                    <label class="custom-control-label" for="rotCheck1">Aktif</label>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(1, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(1, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr data-index="2">
+                                            <td class="font-weight-bold text-center">2</td>
+                                            <td><strong>Petugas Sholat Jum'at</strong></td>
+                                            <td><code>slides/jumat.html</code></td>
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="rotCheck2" checked>
+                                                    <label class="custom-control-label" for="rotCheck2">Aktif</label>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(2, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(2, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr data-index="3">
+                                            <td class="font-weight-bold text-center">3</td>
+                                            <td><strong>Rincian Keuangan Masjid</strong></td>
+                                            <td><code>slides/keuangan.html</code></td>
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="rotCheck3" checked>
+                                                    <label class="custom-control-label" for="rotCheck3">Aktif</label>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(3, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(3, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr data-index="4">
+                                            <td class="font-weight-bold text-center">4</td>
+                                            <td><strong>QRIS Infaq & Donasi</strong></td>
+                                            <td><code>slides/qris.html</code></td>
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="rotCheck4" checked>
+                                                    <label class="custom-control-label" for="rotCheck4">Aktif</label>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(4, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(4, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 5: TEKS BERJALAN TV (RUNNING TEXT)
+                         ========================================== -->
+                    <div id="view-running-text" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-bullhorn text-warning mr-2"></i> Teks Berjalan TV (Running Text)
+                            </h4>
+                            <button class="btn btn-success" onclick="simpanRunningText()">
+                                <i class="fas fa-save mr-1"></i> Simpan Teks Berjalan
+                            </button>
+                        </div>
+
+                        <div class="content-card">
+                            <div class="content-card-header">
+                                <h6 class="content-card-title">
+                                    <i class="fas fa-edit"></i> Teks Berjalan Utama (Default Seluruh Halaman)
+                                </h6>
+                            </div>
+                            <div class="p-3">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Teks Berjalan Berita & Himbauan Masjid</label>
+                                    <textarea class="form-control font-weight-bold" id="inputRunningText" rows="4" style="font-size: 0.95rem; line-height: 1.6;">SELAMAT DATANG DI MASJID JAMI' AL-JIHAD • LURUSKAN DAN RAPATKAN SHAF SAAT SHOLAT BERJAMAAH • MOHON NONAKTIFKAN NADA DERING HP • KAJIAN RUTIN AHAD SUBUH BERSAMA USTADZ AHMAD SHOLEH • SALURKAN INFAQ DAN DONASI TERBAIK ANDA MELALUI QRIS MASJID AL-JIHAD</textarea>
+                                    <small class="text-muted">Gunakan tanda titik peluru ( • ) untuk memisahkan setiap bait pengumuman.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 6: BUKU KAS & KEUANGAN (BENDAHARA & ADMIN)
+                         ========================================== -->
+                    <div id="view-keuangan" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-wallet text-success mr-2"></i> Buku Kas & Transaksi Masjid
+                            </h4>
+                            <div>
+                                <button class="btn btn-outline-success mr-2" onclick="exportKasExcel()">
+                                    <i class="fas fa-file-excel mr-1"></i> Export Excel
+                                </button>
+                                <button class="btn btn-success" data-toggle="modal" data-target="#modalTambahKas">
+                                    <i class="fas fa-plus-circle mr-1"></i> Catat Transaksi Baru
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="content-card">
+                            <div class="content-card-header">
+                                <h6 class="content-card-title">
+                                    <i class="fas fa-list-alt"></i> Rincian Arus Kas Terakhir
+                                </h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom table-hover">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Uraian Transaksi</th>
-                                            <th>Jenis</th>
-                                            <th>Nominal</th>
+                                            <th>Kategori Kas</th>
+                                            <th>Tipe</th>
+                                            <th class="text-right">Nominal (Rp)</th>
+                                            <th class="text-center">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableKasBody">
-                                        <tr><td colspan="4" style="text-align: center; color: #94a3b8;">Memuat data kas dari Supabase...</td></tr>
+                                    <tbody id="mainKasTableBody">
+                                        <tr>
+                                            <td>25/09/2026</td>
+                                            <td>Infaq Kotak Sholat Subuh Berjamaah</td>
+                                            <td>Kas Utama Masjid</td>
+                                            <td><span class="badge-masuk">Pemasukan</span></td>
+                                            <td class="text-right font-weight-bold text-success">+ Rp 1.450.000</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>24/09/2026</td>
+                                            <td>Pembelian Sabun & Pembersih Lantai Masjid</td>
+                                            <td>Operasional</td>
+                                            <td><span class="badge-keluar">Pengeluaran</span></td>
+                                            <td class="text-right font-weight-bold text-danger">- Rp 380.000</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>23/09/2026</td>
+                                            <td>Infaq Donasi QRIS Bank Syariah Indonesia</td>
+                                            <td>Donasi Digital</td>
+                                            <td><span class="badge-masuk">Pemasukan</span></td>
+                                            <td class="text-right font-weight-bold text-success">+ Rp 2.200.000</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>22/09/2026</td>
+                                            <td>BBM & Servis Rutin Mobil Ambulance</td>
+                                            <td>Kas Ambulance</td>
+                                            <td><span class="badge-keluar">Pengeluaran</span></td>
+                                            <td class="text-right font-weight-bold text-danger">- Rp 450.000</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- TABEL JADWAL SHOLAT & PETUGAS JUMAT (Admin & Petugas) -->
-                        <div id="sectionJadwalSholat" data-role="admin,petugas" style="margin-top: 24px;">
-                            <h4 style="font-size: 0.92rem; margin-bottom: 12px; color: #0284c7; display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-clock"></i> Jadwal Sholat Fardhu Hari Ini
+
+                    <!-- ==========================================
+                         VIEW 7: KAS AMBULANCE (BENDAHARA & ADMIN)
+                         ========================================== -->
+                    <div id="view-ambulance" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-ambulance text-primary mr-2"></i> Kas Layanan Mobil Ambulance
                             </h4>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambahKas">
+                                <i class="fas fa-plus-circle mr-1"></i> Catat Transaksi Ambulance
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 mb-4">
+                                <div class="metric-card metric-card-blue">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Saldo Ambulance</div>
+                                            <div class="metric-value text-primary">Rp 18.750.000</div>
+                                            <div class="metric-sub text-success">Siap Operasional 24 Jam</div>
+                                        </div>
+                                        <div class="metric-icon-box icon-box-blue"><i class="fas fa-ambulance"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 mb-4">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title"><i class="fas fa-info-circle"></i> Info Operasional Ambulance</h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <p class="mb-1"><strong>Nomor Layanan Darurat Ambulance:</strong> 0877-5876-7000 (Siaga 24 Jam)</p>
+                                        <p class="mb-0 text-muted">Layanan antar-jemput pasien dan jenazah untuk warga jamaah dan dhuafa secara gratis / subsidi kas masjid.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 8: PENGGALANGAN INFAQ
+                         ========================================== -->
+                    <div id="view-infaq" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-donate text-warning mr-2"></i> Program Penggalangan Infaq & Donasi
+                            </h4>
+                        </div>
+                        <div class="content-card">
+                            <div class="content-card-header">
+                                <h6 class="content-card-title"><i class="fas fa-hand-holding-usd"></i> Program Aktif</h6>
+                            </div>
+                            <div class="p-4 text-center">
+                                <img src="img/QRIS.jpg" alt="QRIS Donasi" style="max-width: 200px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" class="mb-3">
+                                <h5>Infaq Pembebasan & Renovasi Lahan Masjid</h5>
+                                <p class="text-muted">Target: Rp 250.000.000 • Terkumpul: Rp 128.450.000 (51.3%)</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 9: KELOLA 3 HAK AKSES PENGGUNA (SUPER ADMIN)
+                         ========================================== -->
+                    <div id="view-users" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h4 class="font-weight-bold text-gray-800 mb-0">
+                                    <i class="fas fa-users-cog text-success mr-2"></i> Kelola Hak Akses Pengguna
+                                </h4>
+                                <small class="text-muted">Sistem Hak Akses 3 Peran Resmi Masjid Jami' Al-Jihad (Bab 52).</small>
+                            </div>
+                        </div>
+
+                        <div class="content-card">
+                            <div class="content-card-header">
+                                <h6 class="content-card-title">
+                                    <i class="fas fa-user-shield"></i> Daftar Pengguna & Hak Akses
+                                </h6>
+                            </div>
                             <div class="table-responsive">
-                                <table class="data-table-clean">
+                                <table class="table table-custom table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Waktu Sholat</th>
-                                            <th>Jam Tiba</th>
-                                            <th>Fase Adzan</th>
+                                            <th>ID</th>
+                                            <th>Nama Pengguna</th>
+                                            <th>Email / Username</th>
+                                            <th>Peran (Role)</th>
+                                            <th>Ruang Lingkup Hak Akses</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableSholatBody">
-                                        <tr><td colspan="4" style="text-align: center; color: #94a3b8;">Memuat jadwal sholat...</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- TABEL PETUGAS JUMAT (Admin & Petugas) -->
-                        <div id="sectionJumat" data-role="admin,petugas" style="margin-top: 24px;">
-                            <h4 style="font-size: 0.92rem; margin-bottom: 12px; color: #b45309; display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-calendar-check"></i> Petugas Sholat Jum'at Terdaftar
-                            </h4>
-                            <div class="table-responsive">
-                                <table class="data-table-clean">
-                                    <thead>
+                                    <tbody>
                                         <tr>
-                                            <th>Tanggal Jum'at</th>
-                                            <th>Khotib</th>
-                                            <th>Imam</th>
-                                            <th>Muadzin</th>
+                                            <td class="font-weight-bold">3</td>
+                                            <td><strong>Administrator Sholeh</strong></td>
+                                            <td><code>admin@aljihad.com</code></td>
+                                            <td><span class="badge badge-warning font-weight-bold"><i class="fas fa-crown mr-1"></i> Super Admin</span></td>
+                                            <td><small class="text-muted">Akses Penuh 100% (Display TV, Reorder Slide ▲/▼, Keuangan, Pengguna, Sistem)</small></td>
+                                            <td><span class="badge badge-success">Aktif</span></td>
                                         </tr>
-                                    </thead>
-                                    <tbody id="tableJumatBody">
-                                        <tr><td colspan="4" style="text-align: center; color: #94a3b8;">Memuat data petugas Jum'at...</td></tr>
+                                        <tr>
+                                            <td class="font-weight-bold">1</td>
+                                            <td><strong>H. Sudirman</strong></td>
+                                            <td><code>bendahara@aljihad.com</code></td>
+                                            <td><span class="badge badge-success font-weight-bold"><i class="fas fa-wallet mr-1"></i> Bendahara</span></td>
+                                            <td><small class="text-muted">Buku Kas Utama, Kas Ambulance, Infaq, Laporan Kas & Export Excel</small></td>
+                                            <td><span class="badge badge-success">Aktif</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold">2</td>
+                                            <td><strong>Ust. Ahmad DKM</strong></td>
+                                            <td><code>operator@aljihad.com</code></td>
+                                            <td><span class="badge badge-info font-weight-bold"><i class="fas fa-tv mr-1"></i> Operator TV</span></td>
+                                            <td><small class="text-muted">Jadwal Sholat, Petugas Jum'at, Pengumuman, Teks Berjalan, Slide TV (Urutan Terkunci)</small></td>
+                                            <td><span class="badge badge-success">Aktif</span></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
-                </div>
 
-                <!-- Kolom Kanan: Aksi Cepat Sesuai Hak Akses Peran -->
-                <div class="content-card-box">
-                    <div class="card-header-custom">
-                        <div class="card-header-title">
-                            <i class="fas fa-bolt"></i>
-                            <span>Aksi Cepat Peran</span>
+
+                    <!-- ==========================================
+                         VIEW 10: PENGATURAN APLIKASI (SUPER ADMIN)
+                         ========================================== -->
+                    <div id="view-settings" class="section-view">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h4 class="font-weight-bold text-gray-800 mb-0">
+                                <i class="fas fa-cogs text-success mr-2"></i> Pengaturan Sistem & Streaming
+                            </h4>
+                            <button class="btn btn-success" onclick="simpanPengaturanSistem()">
+                                <i class="fas fa-save mr-1"></i> Simpan Konfigurasi
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 mb-4">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title"><i class="fas fa-mosque"></i> Identitas Masjid</h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Nama Aplikasi / Masjid</label>
+                                            <input type="text" class="form-control" id="cfgNamaMasjid" value="Masjid Jami' Al-Jihad Graha Asri">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Interval Rotasi Layar TV (Detik)</label>
+                                            <input type="number" class="form-control" id="cfgIntervalTV" value="20" min="1">
+                                            <small class="text-muted">Ambang batas durasi pergantian antar halaman slide TV.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-4">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title"><i class="fas fa-video"></i> Saluran Live Streaming & CCTV Mimbar</h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">YouTube Live Ka'bah Makkah</label>
+                                            <input type="text" class="form-control" id="cfgLiveMekah" value="https://www.youtube.com/embed/live_stream?channel=UC4_H8f9YjE3n6Y3u-yA">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">RTSP / HTTP Stream CCTV Mimbar</label>
+                                            <input type="text" class="form-control" id="cfgCctvMimbar" value="http://192.168.1.100:8080/live">
+                                            <small class="text-muted">Digunakan TV Luar (Outdoor) otomatis saat Sholat Jum'at.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body-custom">
-                        <div class="quick-actions-list">
-                            
-                            <!-- Aksi Bendahara -->
-                            <div data-role="admin,bendahara">
-                                <div style="font-size: 0.70rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Operasional Keuangan</div>
-                                <a href="javascript:void(0)" onclick="alert('Fitur Form Tambah Kas Siap Diintegrasikan')" class="qa-item-btn">
-                                    <div class="qa-icon" style="background: #ecfdf5; color: #059669;"><i class="fas fa-plus-circle"></i></div>
-                                    <span>Input Transaksi Kas</span>
-                                </a>
-                                <a href="javascript:void(0)" onclick="alert('Fitur Form Kas Ambulance Siap Diintegrasikan')" class="qa-item-btn" style="margin-top: 6px;">
-                                    <div class="qa-icon" style="background: #fef2f2; color: #dc2626;"><i class="fas fa-ambulance"></i></div>
-                                    <span>Input Kas Ambulance</span>
-                                </a>
-                            </div>
 
-                            <!-- Aksi Operator -->
-                            <div data-role="admin,petugas" style="margin-top: 14px;">
-                                <div style="font-size: 0.70rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Operasional TV & Dakwah</div>
-                                <a href="javascript:void(0)" onclick="alert('Fitur Form Petugas Jumat Siap Diintegrasikan')" class="qa-item-btn">
-                                    <div class="qa-icon" style="background: #fffbeb; color: #d97706;"><i class="fas fa-user-edit"></i></div>
-                                    <span>Atur Petugas Sholat Jum'at</span>
-                                </a>
-                                <a href="javascript:void(0)" onclick="alert('Fitur Form Pengumuman & AI Siap Diintegrasikan')" class="qa-item-btn" style="margin-top: 6px;">
-                                    <div class="qa-icon" style="background: #f0f9ff; color: #0284c7;"><i class="fas fa-bullhorn"></i></div>
-                                    <span>Tulis Pengumuman TV</span>
-                                </a>
-                            </div>
-
-                            <!-- Aksi Umum Display TV -->
-                            <div style="margin-top: 14px;">
-                                <div style="font-size: 0.70rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Pratinjau TV Monitor</div>
-                                <a href="index.html" target="_blank" class="qa-item-btn">
-                                    <div class="qa-icon" style="background: #fdf4ff; color: #a855f7;"><i class="fas fa-tv"></i></div>
-                                    <span>Layar Display TV Utama</span>
-                                </a>
-                                <a href="prayer-mode.html" target="_blank" class="qa-item-btn" style="margin-top: 6px;">
-                                    <div class="qa-icon" style="background: #f5f3ff; color: #7c3aed;"><i class="fas fa-moon"></i></div>
-                                    <span>Simulasi Mode Sholat</span>
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
+                <!-- /.container-fluid -->
 
             </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span class="text-muted">Hak Cipta &copy; 2026 <strong>Masjid Jami' Al-Jihad</strong> • Digital Web Statis v5.1.0 (Cloudflare Edge)</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
 
         </div>
+        <!-- End of Content Wrapper -->
 
-        <!-- FOOTER -->
-        <footer class="admin-footer">
-            <div>
-                © 2026 <strong>Masjid Jami' Al Jihad</strong> Graha Asri • Sistem Informasi Digital Display
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- =======================================================
+         MODAL TAMBAH KAS
+         ======================================================= -->
+    <div class="modal fade" id="modalTambahKas" tabindex="-1" role="dialog" aria-labelledby="modalTambahKasLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold" id="modalTambahKasLabel">
+                        <i class="fas fa-plus-circle mr-2"></i> Catat Transaksi Kas
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahKas">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Tanggal Transaksi</label>
+                            <input type="date" class="form-control" id="kasTanggal" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Jenis Transaksi</label>
+                            <select class="form-control" id="kasTipe" required>
+                                <option value="masuk">Pemasukan (Infaq / Donasi)</option>
+                                <option value="keluar">Pengeluaran (Operasional / Belanja)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Akun Kas</label>
+                            <select class="form-control" id="kasKategori">
+                                <option value="Kas Utama Masjid">Kas Utama Masjid</option>
+                                <option value="Kas Ambulance">Kas Ambulance</option>
+                                <option value="Infaq Renovasi">Infaq Renovasi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Uraian / Keterangan</label>
+                            <input type="text" class="form-control" id="kasUraian" placeholder="Contoh: Infaq Kotak Amal Jum'at" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Nominal (Rupiah)</label>
+                            <input type="number" class="form-control font-weight-bold" id="kasNominal" placeholder="Contoh: 500000" required min="1000">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success" onclick="simpanTransaksiKas()">Simpan Transaksi</button>
+                </div>
             </div>
-            <div>
-                Versi 5.1.0 Statis (Cloudflare Pages + Supabase)
-            </div>
-        </footer>
-
-    </main>
-
-</div>
-
-<!-- ================= MODAL LOGOUT ================= -->
-<div class="modal-overlay" id="logoutModal">
-    <div class="modal-card">
-        <div class="icon-logout"><i class="fas fa-sign-out-alt"></i></div>
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Konfirmasi Keluar</h3>
-        <p style="font-size: 0.84rem; color: #64748b; line-height: 1.5;">Apakah Anda yakin ingin mengakhiri sesi login pengurus saat ini?</p>
-        <div class="modal-actions">
-            <button class="btn-modal btn-modal-cancel" onclick="closeLogoutModal()">Batal</button>
-            <button class="btn-modal btn-modal-confirm" onclick="AdminAuth.logout('login.html')">Ya, Keluar</button>
         </div>
     </div>
-</div>
 
-<!-- ================= SCRIPTS ================= -->
-<script src="js/supabase-config.js"></script>
-<script src="js/admin-auth.js"></script>
 
-<script>
-    // 1. Verifikasi Autentikasi Pengguna
-    const currentUser = AdminAuth.requireAuth('login.html');
-    if (currentUser) {
-        AdminAuth.applyRBAC(currentUser);
-        updateRoleBadge(currentUser.role);
-    }
+    <!-- =======================================================
+         SCRIPTS
+         ======================================================= -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/admin-auth.js"></script>
 
-    function updateRoleBadge(role) {
-        const badge = document.getElementById('roleBadgeIndicator');
-        if (!badge) return;
-        badge.className = 'role-badge-hero role-badge-' + role;
-        if (role === 'admin') {
-            badge.innerHTML = '<i class="fas fa-shield-alt"></i> <span>Super Admin</span>';
-        } else if (role === 'bendahara') {
-            badge.innerHTML = '<i class="fas fa-wallet"></i> <span>Bendahara Kas</span>';
-        } else {
-            badge.innerHTML = '<i class="fas fa-tv"></i> <span>Petugas / Operator</span>';
-        }
-    }
+    <script>
+        // 1. Verifikasi Autentikasi Pengguna saat halaman dimuat
+        let currentUser = null;
 
-    // 2. Toggle Sidebar & Dropdown
-    function toggleSidebar() {
-        document.getElementById('sidebarMenu').classList.toggle('open');
-    }
-
-    function toggleProfileDropdown() {
-        document.getElementById('profileDropdown').classList.toggle('show');
-    }
-
-    window.addEventListener('click', function(e) {
-        if (!e.target.closest('.profile-trigger-wrap')) {
-            document.getElementById('profileDropdown')?.classList.remove('show');
-        }
-    });
-
-    function openLogoutModal() {
-        document.getElementById('logoutModal').style.display = 'flex';
-        document.getElementById('profileDropdown')?.classList.remove('show');
-    }
-
-    function closeLogoutModal() {
-        document.getElementById('logoutModal').style.display = 'none';
-    }
-
-    function scrollToSection(id) {
-        const target = document.getElementById(id);
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        if (window.innerWidth < 992) {
-            document.getElementById('sidebarMenu').classList.remove('open');
-        }
-    }
-
-    // 3. Jam Live Detik & Kalender
-    function updateLiveClock() {
-        const now = new Date();
-        const hrs = String(now.getHours()).padStart(2, '0');
-        const mins = String(now.getMinutes()).padStart(2, '0');
-        const secs = String(now.getSeconds()).padStart(2, '0');
-        const clockEl = document.getElementById('liveClockTime');
-        if (clockEl) clockEl.textContent = `${hrs}:${mins}:${secs} WIB`;
-
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateStr = now.toLocaleDateString('id-ID', options);
-        const dateEl = document.getElementById('liveClockDate');
-        if (dateEl) dateEl.textContent = dateStr;
-    }
-    setInterval(updateLiveClock, 1000);
-    updateLiveClock();
-
-    // 4. Memuat Data Realtime dari Supabase
-    async function loadDashboardRealtimeData() {
-        if (typeof SUPABASE_CONFIG === 'undefined' || !SUPABASE_CONFIG.url) return;
-
-        const headers = {
-            'apikey': SUPABASE_CONFIG.anonKey,
-            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
-        };
-
-        // A. Ambil Kas Masjid
-        try {
-            const resKas = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?order=tanggal.desc,id.desc&limit=5`, { headers });
-            if (resKas.ok) {
-                const listKas = await resKas.json();
-                renderKasTable(listKas);
-            }
-
-            // Hitung Total Saldo Kas Masjid
-            const resTotal = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?select=pemasukan,pengeluaran`, { headers });
-            if (resTotal.ok) {
-                const allRows = await resTotal.json();
-                let saldo = 0;
-                allRows.forEach(r => {
-                    saldo += (parseFloat(r.pemasukan) || 0) - (parseFloat(r.pengeluaran) || 0);
-                });
-                document.getElementById('cardSaldoKas').textContent = formatRupiah(saldo);
-            }
-        } catch (e) {
-            console.warn('Gagal memuat kas:', e);
-            document.getElementById('cardSaldoKas').textContent = 'Rp 48.750.000';
-            renderKasFallback();
-        }
-
-        // B. Ambil Kas Ambulance
-        try {
-            const resAmb = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/ambulance?select=pemasukan,pengeluaran`, { headers });
-            if (resAmb.ok) {
-                const ambRows = await resAmb.json();
-                let saldoAmb = 0;
-                ambRows.forEach(r => {
-                    saldoAmb += (parseFloat(r.pemasukan) || 0) - (parseFloat(r.pengeluaran) || 0);
-                });
-                document.getElementById('cardSaldoAmbulance').textContent = formatRupiah(saldoAmb);
-            }
-        } catch (e) {
-            document.getElementById('cardSaldoAmbulance').textContent = 'Rp 14.200.000';
-        }
-
-        // C. Ambil Jadwal Sholat Hari Ini
-        try {
-            const resSholat = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers });
-            if (resSholat.ok) {
-                const sholatRows = await resSholat.json();
-                renderSholatTable(sholatRows);
-            }
-        } catch (e) {
-            renderSholatFallback();
-        }
-
-        // D. Ambil Petugas Jumat
-        try {
-            const resJumat = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc&limit=3`, { headers });
-            if (resJumat.ok) {
-                const jumatRows = await resJumat.json();
-                renderJumatTable(jumatRows);
-            }
-        } catch (e) {
-            renderJumatFallback();
-        }
-
-        // E. Ambil Interval Rotasi TV
-        try {
-            const resSet = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?select=rotation_interval,nama_aplikasi&limit=1`, { headers });
-            if (resSet.ok) {
-                const setRows = await resSet.json();
-                if (setRows && setRows[0]) {
-                    const sec = setRows[0].rotation_interval || 20;
-                    document.getElementById('cardRotatorInterval').textContent = `${sec} Detik`;
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AdminAuth !== 'undefined') {
+                currentUser = AdminAuth.requireAuth('login.html');
+                if (currentUser) {
+                    applyCurrentUserState(currentUser);
                 }
             }
-        } catch (e) {}
-    }
 
-    function formatRupiah(num) {
-        return 'Rp ' + Number(num).toLocaleString('id-ID');
-    }
+            // Inisialisasi Jam & Widget Topbar
+            startTopbarClock();
+            initDateInputs();
+        });
 
-    function renderKasTable(rows) {
-        const tbody = document.getElementById('tableKasBody');
-        if (!rows || rows.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #94a3b8;">Belum ada catatan kas terbaru.</td></tr>';
-            return;
+        // 2. Terapkan Sesi Pengguna & RBAC
+        function applyCurrentUserState(user) {
+            currentUser = user;
+            AdminAuth.applyRBAC(user);
+
+            // Perbarui tombol role switch aktif di topbar
+            document.querySelectorAll('.role-switch-btn').forEach(b => b.classList.remove('active'));
+            if (user.role === 'admin') {
+                document.getElementById('btnSwitchAdmin')?.classList.add('active');
+            } else if (user.role === 'bendahara') {
+                document.getElementById('btnSwitchBendahara')?.classList.add('active');
+            } else {
+                document.getElementById('btnSwitchOperator')?.classList.add('active');
+            }
+
+            // Atur Reorder Tombol di Tabel Rotasi TV (Super Admin vs Operator)
+            const isSuperAdmin = (user.role === 'admin');
+            document.querySelectorAll('.btn-reorder').forEach(btn => {
+                btn.disabled = !isSuperAdmin;
+                if (!isSuperAdmin) {
+                    btn.classList.add('disabled');
+                    btn.style.opacity = '0.4';
+                    btn.style.cursor = 'not-allowed';
+                } else {
+                    btn.classList.remove('disabled');
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                }
+            });
+
+            const badgeRot = document.getElementById('badgeRotasiRole');
+            if (badgeRot) {
+                if (isSuperAdmin) {
+                    badgeRot.className = 'badge badge-success';
+                    badgeRot.textContent = 'Super Admin: Akses Geser Urutan Aktif';
+                } else {
+                    badgeRot.className = 'badge badge-secondary';
+                    badgeRot.textContent = 'Operator: Urutan Terkunci (Read-Only)';
+                }
+            }
+
+            // Tentukan View default jika peran bendahara
+            if (user.role === 'bendahara') {
+                // Jika sedang di view yang tidak boleh diakses bendahara, pindah ke view-keuangan
+                const activeView = document.querySelector('.section-view.active');
+                if (activeView && (activeView.id === 'view-jadwal-sholat' || activeView.id === 'view-sholat-jumat' || activeView.id === 'view-rotasi-tv' || activeView.id === 'view-running-text' || activeView.id === 'view-users' || activeView.id === 'view-settings')) {
+                    switchAdminSection('keuangan');
+                }
+            }
         }
 
-        tbody.innerHTML = rows.map(r => {
-            const isIncome = (parseFloat(r.pemasukan) || 0) > 0;
-            const amount = isIncome ? r.pemasukan : r.pengeluaran;
-            const badgeClass = isIncome ? 'income' : 'expense';
-            const badgeText = isIncome ? '+ Masuk' : '- Keluar';
-            const dateStr = r.tanggal ? new Date(r.tanggal).toLocaleDateString('id-ID') : '-';
-            return `
-                <tr>
-                    <td><strong>${dateStr}</strong></td>
-                    <td>${r.uraian || 'Infaq / Kas Masjid'}</td>
-                    <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
-                    <td style="font-weight: 700; color: ${isIncome ? '#059669' : '#dc2626'};">${formatRupiah(amount)}</td>
-                </tr>
-            `;
-        }).join('');
-    }
-
-    function renderKasFallback() {
-        const dummy = [
-            { tanggal: '2026-09-24', uraian: 'Kotak Infaq Sholat Fardhu', pemasukan: 1250000, pengeluaran: 0 },
-            { tanggal: '2026-09-22', uraian: 'Biaya Kebersihan & Listrik', pemasukan: 0, pengeluaran: 450000 },
-            { tanggal: '2026-09-19', uraian: 'Infaq Jumat Berkah', pemasukan: 3800000, pengeluaran: 0 }
-        ];
-        renderKasTable(dummy);
-    }
-
-    function renderSholatTable(rows) {
-        const tbody = document.getElementById('tableSholatBody');
-        if (!rows || rows.length === 0) {
-            renderSholatFallback();
-            return;
+        // 3. Switch Role Instan (Demo Mode)
+        function switchRoleDemo(roleKey) {
+            AdminAuth.switchRole(roleKey);
         }
 
-        tbody.innerHTML = rows.map(r => {
-            const name = r.nama_sholat || r.nama || 'Sholat';
-            const jam = r.jam || r.waktu || '--:--';
-            return `
-                <tr>
-                    <td><strong>${name.toUpperCase()}</strong></td>
-                    <td style="font-weight: 700; color: #047857;">${jam} WIB</td>
-                    <td><span class="status-badge active"><i class="fas fa-volume-up"></i> Otomatis</span></td>
-                    <td><span class="status-badge active">Sinkron</span></td>
-                </tr>
-            `;
-        }).join('');
-    }
+        // 4. Navigasi Seksi Antara Menu
+        function switchAdminSection(sectionName) {
+            // Sembunyikan semua seksi
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            // Hapus status active di sidebar
+            document.querySelectorAll('#accordionSidebar .nav-item').forEach(el => el.classList.remove('active'));
 
-    function renderSholatFallback() {
-        const dummy = [
-            { nama: 'Subuh', jam: '04:32' },
-            { nama: 'Syuruk', jam: '05:46' },
-            { nama: 'Dzuhur', jam: '11:58' },
-            { nama: 'Ashar', jam: '15:10' },
-            { nama: 'Maghrib', jam: '18:02' },
-            { nama: 'Isya', jam: '19:12' }
-        ];
-        renderSholatTable(dummy);
-    }
+            const targetView = document.getElementById('view-' + sectionName);
+            const targetNav = document.getElementById('nav-' + sectionName);
 
-    function renderJumatTable(rows) {
-        const tbody = document.getElementById('tableJumatBody');
-        if (!rows || rows.length === 0) {
-            renderJumatFallback();
-            return;
+            if (targetView) targetView.classList.add('active');
+            if (targetNav) targetNav.classList.add('active');
+
+            // Scroll halus ke atas
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        tbody.innerHTML = rows.map(r => {
-            const dateStr = r.tanggal ? new Date(r.tanggal).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }) : '-';
-            return `
-                <tr>
-                    <td><strong>${dateStr}</strong></td>
-                    <td style="color: #047857; font-weight: 600;">${r.khotib || '-'}</td>
-                    <td style="font-weight: 600;">${r.imam || '-'}</td>
-                    <td>${r.muadzin || '-'}</td>
-                </tr>
-            `;
-        }).join('');
-    }
+        // 5. Inisialisasi Jam & Widget Topbar
+        function startTopbarClock() {
+            const timeEl = document.getElementById('topbarClockTime');
+            const dateEl = document.getElementById('topbarClockDate');
 
-    function renderJumatFallback() {
-        const dummy = [
-            { tanggal: '2026-09-25', khotib: 'Ust. H. Abdurrahman, Lc.', imam: 'Ust. H. Abdurrahman, Lc.', muadzin: 'Ust. Bilal Mansur' }
-        ];
-        renderJumatTable(dummy);
-    }
+            function updateTime() {
+                const now = new Date();
+                if (timeEl) {
+                    timeEl.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+                }
+                if (dateEl) {
+                    dateEl.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+                }
+            }
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
 
-    // Jalankan Load Realtime saat DOM siap
-    document.addEventListener('DOMContentLoaded', () => {
-        loadDashboardRealtimeData();
-    });
-</script>
+        function initDateInputs() {
+            const today = new Date().toISOString().split('T')[0];
+            const kasTgl = document.getElementById('kasTanggal');
+            if (kasTgl) kasTgl.value = today;
+        }
+
+        // 6. Action Functions (Simulasi & Supabase Handlers)
+        function simpanJadwalSholat() {
+            alert('Alhamdulillah! Jadwal sholat dan durasi prayer mode berhasil disimpan dan disinkronkan ke Layar TV Display.');
+        }
+
+        function simpanPetugasJumat() {
+            const khotib = document.getElementById('jumatKhotib')?.value;
+            const imam = document.getElementById('jumatImam')?.value;
+            if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotib;
+            if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = imam;
+            if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotib;
+            alert('Alhamdulillah! Petugas Sholat Jum\'at berhasil diperbarui dan tayang di Display TV.');
+        }
+
+        function simpanRotasiTV() {
+            alert('Alhamdulillah! Susunan rotasi halaman TV berhasil disimpan ke database.');
+        }
+
+        function simpanRunningText() {
+            alert('Alhamdulillah! Teks Berjalan TV berhasil disimpan dan tayang seketika di TV Display.');
+        }
+
+        function simpanPengaturanSistem() {
+            alert('Pengaturan sistem berhasil disimpan.');
+        }
+
+        function exportKasExcel() {
+            alert('Menghasilkan file Excel Laporan Kas Masjid Jami\' Al-Jihad... File siap diunduh.');
+        }
+
+        function hapusTransaksi(btn) {
+            if (confirm('Yakin ingin menghapus catatan transaksi ini?')) {
+                const tr = btn.closest('tr');
+                if (tr) tr.remove();
+            }
+        }
+
+        function simpanTransaksiKas() {
+            const tgl = document.getElementById('kasTanggal')?.value;
+            const tipe = document.getElementById('kasTipe')?.value;
+            const kat = document.getElementById('kasKategori')?.value;
+            const uraian = document.getElementById('kasUraian')?.value;
+            const nominal = document.getElementById('kasNominal')?.value;
+
+            if (!uraian || !nominal) {
+                alert('Harap lengkapi uraian dan nominal transaksi!');
+                return;
+            }
+
+            const formattedNominal = parseInt(nominal).toLocaleString('id-ID');
+            const isMasuk = (tipe === 'masuk');
+            const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
+            const textClass = isMasuk ? 'text-success' : 'text-danger';
+            const sign = isMasuk ? '+' : '-';
+
+            const tbody = document.getElementById('mainKasTableBody');
+            if (tbody) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${tgl}</td>
+                    <td>${uraian}</td>
+                    <td>${kat}</td>
+                    <td>${badgeHTML}</td>
+                    <td class="text-right font-weight-bold ${textClass}">${sign} Rp ${formattedNominal}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.prepend(tr);
+            }
+
+            $('#modalTambahKas').modal('hide');
+            alert('Alhamdulillah! Transaksi kas berhasil dicatat.');
+        }
+
+        function reorderSlide(rowIndex, direction) {
+            if (currentUser && currentUser.role !== 'admin') {
+                alert('Akses Dibatasi: Hanya Super Admin yang berhak memindah urutan siaran TV.');
+                return;
+            }
+            alert(`Slide baris ${rowIndex} digeser ${direction === 'up' ? 'NAIK' : 'TURUN'}.`);
+        }
+
+        function confirmLogout() {
+            if (confirm('Apakah Anda yakin ingin keluar dari Panel Admin?')) {
+                AdminAuth.logout('login.html');
+            }
+        }
+    </script>
 
 </body>
+
 </html>
