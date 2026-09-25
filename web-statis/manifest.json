@@ -1,0 +1,29 @@
+{
+  "name": "Masjid Jami' Al-Jihad Digital Signage",
+  "short_name": "Al-Jihad TV",
+  "description": "Sistem Informasi Digital & Jadwal Sholat TV Display Masjid Jami' Al-Jihad",
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#062b2b",
+  "theme_color": "#062b2b",
+  "icons": [
+    {
+      "src": "img/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "img/logo-aljihad-circle.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/logo-aljihad.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -401,6 +401,70 @@
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
+
+        /* =====================================================
+           RESPONSIVE VIEWPORT BREAKPOINTS (KEUANGAN.HTML)
+           Senior JAMstack Multi-Device Adaptation
+           ===================================================== */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 10px 16px 80px 16px;
+                max-width: 100%;
+            }
+            .keuangan-title {
+                font-size: 1.35rem;
+                padding: 5px 22px;
+            }
+            .summary-grid {
+                gap: 10px;
+            }
+            .kpi-card {
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px 12px 75px 12px;
+                justify-content: flex-start;
+                gap: 10px;
+            }
+            .main-content {
+                flex: none;
+                width: 100%;
+            }
+            .panel {
+                height: auto;
+                min-height: 520px;
+                padding: 12px 10px;
+                border-radius: 14px;
+            }
+            .keuangan-title {
+                font-size: 1.05rem;
+                padding: 4px 14px;
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+            .kpi-card {
+                padding: 8px 12px;
+            }
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                min-height: 280px;
+                max-height: 400px;
+            }
+            .keuangan-table {
+                min-width: 600px;
+            }
+        }
     </style>
 </head>
 

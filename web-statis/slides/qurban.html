@@ -493,6 +493,99 @@
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
+
+        /* =====================================================
+           RESPONSIVE VIEWPORT BREAKPOINTS (QURBAN.HTML)
+           Senior JAMstack Multi-Device Adaptation
+           ===================================================== */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 10px 16px 80px 16px;
+                max-width: 100%;
+            }
+            .qurban-title {
+                font-size: 1.35rem;
+                padding: 5px 24px;
+            }
+            .summary-grid {
+                gap: 10px;
+            }
+            .kpi-card {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+            .kpi-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            .kpi-val {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px 12px 75px 12px;
+                justify-content: flex-start;
+                gap: 10px;
+            }
+            .main-content {
+                flex: none;
+                width: 100%;
+            }
+            .panel {
+                height: auto;
+                min-height: 520px;
+                padding: 12px 10px;
+                border-radius: 14px;
+            }
+            .qurban-title {
+                font-size: 1.05rem;
+                padding: 5px 14px;
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+            .kpi-card {
+                padding: 8px 10px;
+                gap: 8px;
+                border-radius: 10px;
+            }
+            .kpi-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+                border-radius: 8px;
+            }
+            .kpi-label {
+                font-size: 0.62rem;
+                letter-spacing: 0.8px;
+            }
+            .kpi-val {
+                font-size: 1.05rem;
+            }
+            .kpi-sub {
+                font-size: 0.62rem;
+            }
+            .table-section {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                min-height: 280px;
+                max-height: 400px;
+            }
+            .table-header-wrap,
+            .table-row {
+                min-width: 620px;
+                padding: 8px 10px;
+            }
+        }
     </style>
 </head>
 <body>

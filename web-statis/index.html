@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Masjid - Layar TV Utama</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#062b2b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="img/logo-aljihad-circle.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -506,6 +511,46 @@
                     }
                 });
             }
+
+            // PWA Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').then((reg) => {
+                    console.log('✅ [PWA] Service Worker aktif:', reg.scope);
+                }).catch((err) => {
+                    console.log('ℹ️ [PWA] Service Worker info:', err);
+                });
+            }
+
+            // Network Connectivity Resilience Listener (Offline Toast Indicator)
+            window.addEventListener('offline', () => {
+                showOsd('📡 Mode Offline Aktif - Menggunakan Data Cache Lokal');
+            });
+            window.addEventListener('online', () => {
+                showOsd('⚡ Terhubung Kembali ke Internet');
+            });
+
+            // Touch Swipe Handler for Mobile & Tablet Devices (Swipe Left/Right to Switch Slides)
+            let touchStartX = 0;
+            let touchEndX = 0;
+            document.addEventListener('touchstart', (e) => {
+                if (e.changedTouches && e.changedTouches[0]) {
+                    touchStartX = e.changedTouches[0].screenX;
+                }
+            }, { passive: true });
+            document.addEventListener('touchend', (e) => {
+                if (e.changedTouches && e.changedTouches[0]) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    const diff = touchEndX - touchStartX;
+                    if (Math.abs(diff) > 60) {
+                        if (diff < 0) {
+                            nextPage();
+                        } else {
+                            prevPage();
+                        }
+                        scheduleNextRotation();
+                    }
+                }
+            }, { passive: true });
         });
     </script>
 </body>

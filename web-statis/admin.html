@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Panel Kontrol Admin - Masjid Jami' Al-Jihad</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#071a10">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="img/logo-aljihad-circle.png">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -680,19 +685,116 @@
             margin-top: 30px;
         }
 
-        /* RESPONSIVE */
+        /* =====================================================
+           RESPONSIVE DASHBOARD & MOBILE OFF-CANVAS DRAWER
+           ===================================================== */
         @media (max-width: 768px) {
             .sidebar {
-                width: 6.5rem !important;
+                position: fixed !important;
+                top: 0;
+                left: -280px;
+                bottom: 0;
+                width: 260px !important;
+                min-height: 100vh !important;
+                z-index: 1050;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
+
+            .sidebar.show-mobile {
+                left: 0 !important;
+                box-shadow: 10px 0 35px rgba(0, 0, 0, 0.6) !important;
+            }
+
+            .sidebar-backdrop {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.55);
+                backdrop-filter: blur(2px);
+                z-index: 1040;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .sidebar-backdrop.show {
+                display: block;
+                opacity: 1;
+            }
+
+            #content-wrapper {
+                width: 100% !important;
+                margin-left: 0 !important;
+                overflow-x: hidden;
+            }
+
+            .topbar {
+                padding: 0 0.85rem !important;
+                height: 4rem;
+            }
+
             .sidebar-user-panel,
             .topbar-clock-widget,
             .topbar-prayer-pill,
             .topbar-role-selector {
                 display: none !important;
             }
+
             .welcome-hero-banner {
-                padding: 18px 20px;
+                padding: 16px 18px !important;
+                border-radius: 14px !important;
+                margin-bottom: 16px !important;
+            }
+
+            .hero-arabic-title {
+                font-size: 1.3rem !important;
+            }
+            .hero-main-title {
+                font-size: 1.15rem !important;
+            }
+            .hero-sub-desc {
+                font-size: 0.8rem !important;
+            }
+
+            .metric-card-body {
+                padding: 14px 16px !important;
+            }
+            .metric-value {
+                font-size: 1.25rem !important;
+            }
+            .metric-icon-box {
+                width: 44px !important;
+                height: 44px !important;
+                font-size: 1.15rem !important;
+                border-radius: 10px !important;
+            }
+
+            /* Responsive Preview TV Modal on Mobile */
+            #modalPreviewTV .modal-dialog {
+                max-width: 98vw !important;
+                margin: 6px auto !important;
+            }
+            #modalPreviewTV .modal-body {
+                padding: 4px !important;
+            }
+            #modalPreviewTV .modal-body > div {
+                height: 50vh !important;
+                min-height: 220px !important;
+            }
+
+            .btn-live-disp span {
+                display: none;
+            }
+            .btn-live-disp {
+                padding: 6px 10px;
+                border-radius: 50%;
+                width: 34px;
+                height: 34px;
+                justify-content: center;
+            }
+            .btn-live-disp i {
+                margin: 0 !important;
             }
         }
     </style>
@@ -2284,10 +2386,84 @@
             // Inisialisasi Jam & Widget Topbar
             startTopbarClock();
             initDateInputs();
+            initSidebarToggle();
 
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
+
+            // PWA Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').then((reg) => {
+                    console.log('✅ [Admin PWA] Service Worker aktif:', reg.scope);
+                }).catch((err) => {
+                    console.log('ℹ️ [Admin PWA] SW info:', err);
+                });
+            }
         });
+
+        // Inisialisasi Mobile Off-Canvas Drawer & Sidebar Toggler
+        function initSidebarToggle() {
+            const sidebar = document.getElementById('accordionSidebar');
+            const toggleTop = document.getElementById('sidebarToggleTop');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            let backdrop = document.querySelector('.sidebar-backdrop');
+            if (!backdrop) {
+                backdrop = document.createElement('div');
+                backdrop.className = 'sidebar-backdrop';
+                document.body.appendChild(backdrop);
+            }
+
+            function toggleMobileSidebar() {
+                if (!sidebar) return;
+                const isOpen = sidebar.classList.toggle('show-mobile');
+                if (isOpen) {
+                    backdrop.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    backdrop.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            function closeMobileSidebar() {
+                if (sidebar && sidebar.classList.contains('show-mobile')) {
+                    sidebar.classList.remove('show-mobile');
+                    backdrop.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (toggleTop) {
+                toggleTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (window.innerWidth <= 768) {
+                        toggleMobileSidebar();
+                    } else {
+                        sidebar.classList.toggle('toggled');
+                    }
+                });
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sidebar.classList.toggle('toggled');
+                });
+            }
+
+            backdrop.addEventListener('click', closeMobileSidebar);
+
+            // Auto-close drawer saat item sidebar diklik di mobile
+            document.querySelectorAll('#accordionSidebar .nav-item .nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        closeMobileSidebar();
+                    }
+                });
+            });
+        }
 
         // 2. Terapkan Sesi Pengguna & RBAC
         function applyCurrentUserState(user) {

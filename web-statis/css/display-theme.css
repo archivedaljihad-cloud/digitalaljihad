@@ -1,6 +1,7 @@
 /* =====================================================
    DISPLAY THEME STYLES (Optimized without @import waterfall)
    ===================================================== */
+/* =====================================================
    CUSTOM FONTS (Masking Renta, Aloevera, Sabiyah)
    ===================================================== */
 @font-face {
@@ -364,5 +365,139 @@ h2.sub-header {
 
     .kaligrafi-medallion.kaligrafi-muhammad {
         left: 60px !important;
+    }
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN SYSTEM (MOBILE, TABLET, DESKTOP, TV)
+   Senior JAMstack Commercial Grade Fluid Adaptivity
+   ===================================================== */
+
+/* --- TABLET ADAPTIVE (768px - 1024px) --- */
+@media (max-width: 1024px) {
+    .header h1,
+    .header-section h1 {
+        font-size: clamp(1.8rem, 3.5vw, 2.4rem) !important;
+        letter-spacing: 3px !important;
+        margin: 0 0 -5px 0 !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: clamp(0.95rem, 1.8vw, 1.15rem) !important;
+        letter-spacing: 2.5px !important;
+    }
+
+    .header .datetime,
+    .header-section .datetime {
+        font-size: clamp(1.1rem, 2vw, 1.3rem) !important;
+        padding: 4px 20px !important;
+    }
+
+    .kaligrafi-medallion {
+        width: 80px !important;
+        height: 80px !important;
+        top: 10px !important;
+    }
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 16px !important;
+    }
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 16px !important;
+    }
+}
+
+/* --- MOBILE ADAPTIVE (Smartphone < 768px) --- */
+@media (max-width: 767px) {
+    /* Izinkan scrolling vertikal alami pada ponsel agar konten tidak terpotong */
+    body {
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .page-layout,
+    .container {
+        height: auto !important;
+        min-height: 100vh !important;
+        padding: 12px 14px 75px 14px !important;
+        box-sizing: border-box !important;
+        justify-content: flex-start !important;
+        gap: 12px !important;
+    }
+
+    .header,
+    .header-section {
+        margin-bottom: 6px !important;
+        padding: 0 45px !important; /* Ruang aman untuk medali kaligrafi mini */
+        box-sizing: border-box !important;
+    }
+
+    .header h1,
+    .header-section h1 {
+        font-size: clamp(1.35rem, 5.5vw, 1.85rem) !important;
+        letter-spacing: 1.5px !important;
+        margin: 0 0 2px 0 !important;
+        line-height: 1.15 !important;
+    }
+
+    .header h2.sub-header,
+    .header h3.sub-header,
+    .header .sub-header,
+    .header-section h2.sub-header,
+    .header-section h3.sub-header,
+    h3.sub-header,
+    h2.sub-header {
+        font-size: 0.80rem !important;
+        letter-spacing: 1px !important;
+        margin-top: 2px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .header .datetime,
+    .header-section .datetime {
+        font-size: 0.90rem !important;
+        padding: 4px 14px !important;
+        border-radius: 20px !important;
+        display: inline-block !important;
+        margin-top: 2px !important;
+    }
+
+    /* Medali kaligrafi di mobile: diperkecil proporsional agar estetik dan bebas silau */
+    .kaligrafi-medallion {
+        width: 46px !important;
+        height: 46px !important;
+        top: 8px !important;
+        opacity: 0.9 !important;
+    }
+    .kaligrafi-medallion.kaligrafi-allah {
+        right: 6px !important;
+    }
+    .kaligrafi-medallion.kaligrafi-muhammad {
+        left: 6px !important;
+    }
+
+    /* Kaligrafi teks di slide utama (Amiri font) jika ada */
+    .kaligrafi {
+        font-size: 2rem !important;
+        top: 6px !important;
+        opacity: 0.75 !important;
+    }
+    .kaligrafi-allah { right: 8px !important; }
+    .kaligrafi-muhammad { left: 8px !important; }
+
+    /* Running text mobile: font disesuaikan & touch-safe */
+    .running-text {
+        font-size: 0.92rem !important;
+    }
+    .running-text-container {
+        padding: 6px 10px !important;
     }
 }

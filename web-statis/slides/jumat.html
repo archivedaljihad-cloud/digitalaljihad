@@ -301,6 +301,74 @@
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
+
+        /* =====================================================
+           RESPONSIVE VIEWPORT BREAKPOINTS (JUMAT.HTML)
+           Senior JAMstack Multi-Device Adaptation
+           ===================================================== */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 10px 16px 80px 16px;
+                max-width: 100%;
+            }
+            .schedule-content-layout {
+                gap: 16px;
+            }
+            .imam-card-box {
+                flex: 0 0 220px;
+                width: 220px;
+            }
+            .title-with-icons {
+                padding: 6px 18px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px 12px 75px 12px;
+                justify-content: flex-start;
+                gap: 12px;
+            }
+            .schedule-content-layout {
+                flex-direction: column;
+                gap: 14px;
+                flex: none;
+                width: 100%;
+            }
+            .imam-card-box {
+                flex: none;
+                width: 180px;
+            }
+            .duty-list-box {
+                width: 100%;
+                gap: 8px;
+            }
+            .title-with-icons {
+                padding: 5px 14px;
+                gap: 10px;
+            }
+            .title-icon-badge {
+                width: 38px;
+                height: 38px;
+                font-size: 1.15rem;
+            }
+            .title-text-wrap h2 {
+                font-size: 1.25rem;
+            }
+            .title-text-wrap p {
+                font-size: 0.8rem;
+            }
+            .jumat-hadits-box {
+                padding: 6px 14px;
+                gap: 8px;
+                border-radius: 18px;
+            }
+            .jumat-hadits-text {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>

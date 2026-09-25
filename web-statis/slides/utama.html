@@ -438,6 +438,115 @@
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
+
+        /* =====================================================
+           RESPONSIVE VIEWPORT BREAKPOINTS (UTAMA.HTML)
+           Senior JAMstack Multi-Device Adaptation
+           ===================================================== */
+        @media (max-width: 1024px) {
+            .page-layout {
+                padding: 10px 16px 80px 16px;
+                max-width: 100%;
+            }
+            .jadwal-sholat-title {
+                font-size: 1.35rem;
+                padding: 5px 22px;
+            }
+            .sholat-list {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+            }
+            .sholat-card {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .page-layout {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px 12px 75px 12px;
+                justify-content: flex-start;
+                gap: 10px;
+            }
+            .jadwal-sholat-title-wrap {
+                margin-top: 4px;
+            }
+            .jadwal-sholat-title {
+                font-size: 1.05rem;
+                padding: 4px 14px;
+                gap: 6px;
+            }
+            .jadwal-sholat-title i {
+                font-size: 1.1rem;
+            }
+            .next-prayer-center-container {
+                margin: 0 auto 6px auto;
+            }
+            .next-prayer-bar {
+                padding: 5px 12px 5px 8px;
+                gap: 8px;
+                border-radius: 25px;
+                max-width: 100%;
+            }
+            .npb-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+            .npb-prayer-name {
+                font-size: 12px;
+                letter-spacing: 1px;
+            }
+            .npb-countdown {
+                font-size: 13px;
+            }
+            .npb-badge {
+                font-size: 9px;
+                padding: 1px 5px;
+            }
+            .npb-schedule-time {
+                font-size: 11px;
+            }
+            .sholat-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                max-width: 100%;
+            }
+            .sholat-card {
+                max-width: 100%;
+                padding: 12px 6px 8px 6px;
+                border-radius: 12px;
+            }
+            .sholat-card .nama-sholat {
+                font-size: 0.95rem;
+                margin-bottom: 2px;
+            }
+            .sholat-card .waktu-sholat {
+                font-size: 1.45rem;
+            }
+            .sholat-card i {
+                font-size: 1.1rem;
+                margin-bottom: 2px;
+            }
+            .card-status-badge {
+                font-size: 8px;
+                padding: 1px 5px;
+                top: 2px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .sholat-list {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .sholat-card .waktu-sholat {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
