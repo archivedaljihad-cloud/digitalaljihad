@@ -3554,6 +3554,38 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 2. `web-statis/slides/utama.html` (Penyempurnaan auto-sync harian multi-source di layar TV).
 3. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 87).
 
+---
+
+## 🕌 BAB 88: REDESAIN TATA LETAK SINKRONISASI JADWAL SHOLAT SESUAI ILUSTRASI & PENYERAGAMAN TOMBOL KEMENAG RI
+
+**Tanggal:** 26 September 2026 | **Versi:** 4.4.1
+
+### 1. Kebutuhan Pengguna:
+- Pengguna mengirimkan gambar rancangan/ilustrasi tata letak (*layout mockup*) untuk bagian sinkronisasi waktu sholat di Panel Admin.
+- Mengubah tata letak tombol dan dropdown menjadi susunan 2 baris yang rapi dan simetris:
+  - **Baris 1:** Dropdown Pilihan Lembaga Hisab di sisi kiri, berdampingan dengan Tombol Sinkronisasi Kemenag RI di sisi kanan.
+  - **Baris 2:** Dropdown Pilihan Kota (*Kab. Bekasi*) di sisi kiri, berdampingan dengan Tombol Sinkronisasi Falakiyah NU di sisi kanan.
+- Mengubah teks tombol sinkronisasi dari sebelumnya **"Kemenag"** menjadi **"Kemenag RI"** agar tampil seragam, berimbang, dan proporsional dengan tombol **"Falakiyah NU"**.
+
+### 2. Rincian Implementasi:
+1. **Pembaruan Layout Header Kartu Waktu Sholat (`web-statis/admin.html`):**
+   - Mengganti layout flex horizontal menjadi grid 2-kolom x 2-baris yang rapi dan responsif.
+   - **Judul Kartu:** Menampilkan `📅 Waktu Sholat Hari Ini` di baris tersendiri dengan ikon kalender hijau emerald.
+   - **Kolom Kiri:**
+     - Baris 1: `<select id="selPrayerSource">` dengan border biru lembut (`border: 2px solid #bfdbfe; border-radius: 9px;`) dan teks tebal.
+     - Baris 2: `<select id="selKemenagCity">` dengan border abu-abu bersih (`border: 1.5px solid #cbd5e1; border-radius: 9px; width: 155px;`) yang terposisikan sejajar rapi ke kanan (*right-aligned*) di bawah dropdown lembaga hisab persis seperti pada gambar ilustrasi.
+   - **Kolom Kanan:**
+     - Baris 1: Tombol `<button id="btnSyncKemenag">` dengan warna pirus/turquoise (`#22b0c4`), teks **"Kemenag RI"**, dan ikon `fas fa-sync-alt`.
+     - Baris 2: Tombol `<button id="btnSyncNU">` dengan warna hijau khas Nahdlatul Ulama (`#15803d`), teks **"Falakiyah NU"**, dan ikon `fas fa-star-and-crescent text-warning`.
+     - Kedua tombol memiliki tinggi (38px), lebar minimum (145px), dan sudut melengkung (9px) yang identik sehingga menghasilkan tampilan yang simetris dan elegan.
+2. **Penyelarasan Teks State JavaScript (`web-statis/admin.html`):**
+   - Pada fungsi `sinkronkanKemenagManual()`, blok `finally` diperbarui agar mereset teks tombol kembali menjadi `<i class="fas fa-sync-alt mr-1"></i> Kemenag RI` (sebelumnya hanya "Kemenag").
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Penataan ulang grid layout kartu jadwal sholat & penyeragaman teks tombol Kemenag RI).
+2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 88).
+
+
 
 
 
