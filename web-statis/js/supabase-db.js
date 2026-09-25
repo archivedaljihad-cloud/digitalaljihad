@@ -173,6 +173,106 @@
         },
 
         /**
+         * Ambil data transaksi kas mobil ambulance
+         */
+        async getKeuanganAmbulance() {
+            try {
+                const client = getClient();
+                if (client) {
+                    const { data, error } = await client.from('keuangan_ambulance').select('*').order('tanggal', { ascending: false });
+                    if (!error && data) {
+                        localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(data));
+                        return data;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca keuangan_ambulance:', err);
+            }
+            const cached = localStorage.getItem('cached_keuangan_ambulance');
+            return cached ? JSON.parse(cached) : [];
+        },
+
+        /**
+         * Ambil program infaq & target donasi
+         */
+        async getProgramInfaq() {
+            try {
+                const client = getClient();
+                if (client) {
+                    const { data, error } = await client.from('program_infaq').select('*').order('id', { ascending: false });
+                    if (!error && data) {
+                        localStorage.setItem('cached_program_infaq', JSON.stringify(data));
+                        return data;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca program_infaq:', err);
+            }
+            const cached = localStorage.getItem('cached_program_infaq');
+            return cached ? JSON.parse(cached) : [];
+        },
+
+        /**
+         * Ambil jadwal Sholat Idul Fitri terbaru
+         */
+        async getIdulFitri() {
+            try {
+                const client = getClient();
+                if (client) {
+                    const { data, error } = await client.from('sholat_idul_fitri').select('*').order('id', { ascending: false }).limit(1);
+                    if (!error && data && data.length > 0) {
+                        localStorage.setItem('cached_idul_fitri', JSON.stringify(data[0]));
+                        return data[0];
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca sholat_idul_fitri:', err);
+            }
+            const cached = localStorage.getItem('cached_idul_fitri');
+            return cached ? JSON.parse(cached) : null;
+        },
+
+        /**
+         * Ambil jadwal Sholat Idul Adha terbaru
+         */
+        async getIdulAdha() {
+            try {
+                const client = getClient();
+                if (client) {
+                    const { data, error } = await client.from('sholat_idul_adha').select('*').order('id', { ascending: false }).limit(1);
+                    if (!error && data && data.length > 0) {
+                        localStorage.setItem('cached_idul_adha', JSON.stringify(data[0]));
+                        return data[0];
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca sholat_idul_adha:', err);
+            }
+            const cached = localStorage.getItem('cached_idul_adha');
+            return cached ? JSON.parse(cached) : null;
+        },
+
+        /**
+         * Ambil poster slide informasi masjid
+         */
+        async getSlides() {
+            try {
+                const client = getClient();
+                if (client) {
+                    const { data, error } = await client.from('slides').select('*').order('urutan', { ascending: true });
+                    if (!error && data) {
+                        localStorage.setItem('cached_slides', JSON.stringify(data));
+                        return data;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca slides:', err);
+            }
+            const cached = localStorage.getItem('cached_slides');
+            return cached ? JSON.parse(cached) : [];
+        },
+
+        /**
          * Ambil teks berjalan untuk halaman tertentu (Opsi 3 Multi-Halaman)
          */
         getRunningTextForPage(pagePath, settings) {

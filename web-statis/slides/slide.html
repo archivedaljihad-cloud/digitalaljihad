@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Informasi & Poster Masjid - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #085a2b;
+            text-shadow: 
+                1px 1px 0 #ffd700, -1px 1px 0 #ffd700, 1px -1px 0 #ffd700, -1px -1px 0 #ffd700,
+                2px 2px 0 #000000, -2px 2px 0 #000000, 2px -2px 0 #000000, -2px -2px 0 #000000,
+                0 5px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.65);
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        /* STAGE UTAMA 2 KOLOM */
+        .slide-stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 36px;
+            min-height: 0;
+            width: 100%;
+        }
+
+        /* KOLOM KIRI: POSTER GAMBAR UTUH */
+        .slide-left-col {
+            flex: 1.3;
+            height: 64vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .poster-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65), 0 0 25px rgba(255, 215, 0, 0.2);
+            background: rgba(4, 25, 18, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .poster-frame img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 18px;
+            display: block;
+            transition: opacity 0.5s ease;
+        }
+
+        .poster-fallback {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: #ffd700;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .poster-fallback i { font-size: 5rem; }
+
+        /* KOLOM KANAN: PANEL PENJELASAN */
+        .slide-right-col {
+            flex: 1;
+            height: 64vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide-card {
+            background: rgba(4, 25, 18, 0.75);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            border-radius: 24px;
+            padding: 32px 36px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+        }
+
+        .slide-badge-title {
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            color: #ffd700;
+            padding: 6px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .slide-title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+        }
+
+        .slide-desc {
+            font-size: 1.15rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 14px 18px;
+            border-radius: 12px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .slide-dots-indicator {
+            position: absolute;
+            bottom: 16px;
+            right: 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot-pill {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .dot-pill.active {
+            background: #ffd700;
+            width: 26px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN SLIDE STAGE -->
+        <div class="slide-stage">
+            <!-- Kolom Kiri: Poster Gambar -->
+            <div class="slide-left-col">
+                <div class="poster-frame">
+                    <img id="posterImg" src="../image/display/default_imam.jpg" alt="Poster Informasi" style="display: none;" onerror="this.style.display='none'; document.getElementById('posterFallback').style.display='flex';">
+                    <div class="poster-fallback" id="posterFallback">
+                        <i class="fas fa-images"></i>
+                        <div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: #ffffff;">INFORMASI & DAKWAH</div>
+                            <div style="font-size: 0.95rem; color: #cbd5e1; margin-top: 4px;">Masjid Jami' Al-Jihad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Detail Slide -->
+            <div class="slide-right-col">
+                <div class="slide-card">
+                    <div class="slide-badge-title">
+                        <i class="fas fa-bullhorn"></i>
+                        <span id="slideCategory">Informasi Terkini</span>
+                    </div>
+                    <div class="slide-title" id="slideTitle">Warta & Pengumuman DKM Al-Jihad</div>
+                    <div class="slide-desc" id="slideDesc">
+                        Selamat datang di Masjid Jami' Al-Jihad. Ikuti terus kabar informasi agenda ibadah, kajian, dan kegiatan sosial keummatan di lingkungan masjid kita.
+                    </div>
+
+                    <div class="slide-dots-indicator" id="slideDots"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-star-and-crescent"></i> Informasi & Layanan Masjid Jami' Al-Jihad. Bersama Memakmurkan Rumah Allah SWT.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        // Background Rotator Islami
+        const backgroundImages = [
+            "../image/display/background/BG2.png",
+            "../image/display/background/BG10.png",
+            "../image/display/background/BG4.png",
+            "../image/display/background/BG7.png",
+            "../image/display/background/BG11.png",
+            "../image/display/background/BG6.png",
+            "../image/display/background/BG1.png",
+            "../image/display/background/BG9.png",
+            "../image/display/background/BG5.png",
+            "../image/display/background/BG8.png",
+            "../image/display/background/BG3.png"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            const dtEl = document.getElementById('datetime');
+            if (dtEl) {
+                dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        let slidesData = [];
+        let currentSlideIdx = 0;
+        let slideTimer = null;
+
+        function showSlide(item, index, total) {
+            if (!item) return;
+
+            document.getElementById('slideTitle').textContent = item.judul || item.title || 'Informasi Masjid';
+            document.getElementById('slideCategory').textContent = item.kategori || 'Warta DKM';
+            document.getElementById('slideDesc').textContent = item.deskripsi || item.description || item.konten || 'Terbuka untuk seluruh jamaah dan warga kaum muslimin.';
+
+            const posterImg = document.getElementById('posterImg');
+            const fallback = document.getElementById('posterFallback');
+            const url = item.gambar || item.image || item.file_path;
+
+            if (url) {
+                const resolvedUrl = url.startsWith('http') ? url : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${url}`;
+                posterImg.src = resolvedUrl;
+                posterImg.style.display = 'block';
+                fallback.style.display = 'none';
+            } else {
+                posterImg.style.display = 'none';
+                fallback.style.display = 'flex';
+            }
+
+            const dotsEl = document.getElementById('slideDots');
+            if (dotsEl && total > 1) {
+                dotsEl.innerHTML = Array.from({ length: total }).map((_, i) => `
+                    <div class="dot-pill ${i === index ? 'active' : ''}"></div>
+                `).join('');
+            } else if (dotsEl) {
+                dotsEl.innerHTML = '';
+            }
+        }
+
+        function startSlideRotation() {
+            if (slideTimer) clearInterval(slideTimer);
+            if (!slidesData || slidesData.length <= 1) return;
+
+            slideTimer = setInterval(() => {
+                currentSlideIdx = (currentSlideIdx + 1) % slidesData.length;
+                showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+            }, 10000);
+        }
+
+        // Load Slides
+        async function loadSlides() {
+            try {
+                // 1. Settings
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = SupabaseDB.getRunningTextForPage('/slide-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
+                }
+
+                // 2. Slides
+                const list = await SupabaseDB.getSlides();
+                if (list && list.length > 0) {
+                    slidesData = list;
+                    currentSlideIdx = 0;
+                    showSlide(slidesData[0], 0, slidesData.length);
+                    startSlideRotation();
+                }
+            } catch (err) {
+                console.error('Gagal memuat slides:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSlides();
+
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'slides' || payload.table === 'app_settings') {
+                        loadSlides();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

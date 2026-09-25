@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Malam Jum'at - Surat Yaasiin - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+
+    <style>
+        :root {
+            --emerald-deep: #01140b;
+            --emerald-dark: #032314;
+            --emerald-mid: #084026;
+            --gold-light: #FFF8E1;
+            --gold-primary: #D4AF37;
+            --gold-dark: #9A7514;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --gold-gradient: linear-gradient(180deg, #FFFDF0 0%, #F5DC8C 28%, #D4AF37 58%, #9E7416 88%, #F7DE88 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--emerald-deep);
+            color: #ffffff;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: radial-gradient(circle at 50% 15%, #083c23 0%, #031e11 50%, #010f08 100%);
+        }
+
+        /* Ornamen Islami Latar */
+        .bg-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px),
+                radial-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .mihrab-frame {
+            position: absolute;
+            inset: 12px;
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 24px;
+            pointer-events: none;
+            z-index: 2;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.9);
+        }
+
+        /* TOP HEADER */
+        .top-header-bar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 36px 12px 36px;
+            background: linear-gradient(180deg, rgba(1, 18, 10, 0.95) 0%, rgba(2, 28, 16, 0.85) 80%, rgba(2, 28, 16, 0) 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            backdrop-filter: blur(12px);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 14px; }
+        .mosque-icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-size: 20px;
+        }
+
+        .mosque-info h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mosque-info p {
+            font-size: 0.72rem;
+            color: var(--gold-light);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.9) 0%, rgba(4, 40, 26, 0.9) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.6);
+            padding: 6px 24px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .event-badge span {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #ffd700;
+            letter-spacing: 1.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .isya-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #ffffff;
+        }
+
+        .isya-pill .time-val { color: #ffd700; font-weight: 700; font-family: monospace; }
+        .isya-pill .countdown-val {
+            background: rgba(220, 38, 38, 0.35);
+            border: 1px solid rgba(248, 113, 113, 0.4);
+            color: #fca5a5;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.80rem;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        .live-clock {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffd700;
+            font-family: monospace;
+        }
+
+        /* MUSHAF SCROLLABLE */
+        .mushaf-scroll-wrapper {
+            flex: 1;
+            overflow-y: scroll;
+            position: relative;
+            z-index: 5;
+            padding: 20px 60px 80px 60px;
+            scroll-behavior: auto;
+            scrollbar-width: none;
+        }
+        .mushaf-scroll-wrapper::-webkit-scrollbar { display: none; }
+
+        .mushaf-inner-content {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .surah-header-banner {
+            text-align: center;
+            margin: 10px auto 30px auto;
+            padding: 20px 30px;
+            background: linear-gradient(180deg, rgba(8, 48, 28, 0.85) 0%, rgba(3, 24, 13, 0.95) 100%);
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 24px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .surah-title-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffd700;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .surah-subtitle-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.90rem;
+            color: var(--gold-light);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .bismillah-box {
+            text-align: center;
+            margin: 20px auto 35px auto;
+        }
+
+        .bismillah-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
+            line-height: 1.6;
+        }
+
+        .bismillah-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .divider-line {
+            height: 1px;
+            width: 140px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.7), transparent);
+        }
+
+        .divider-gem {
+            width: 8px;
+            height: 8px;
+            transform: rotate(45deg);
+            background: var(--gold-primary);
+        }
+
+        /* AYAT FLOW */
+        .ayat-flow-container {
+            text-align: justify;
+            text-justify: kashida;
+            direction: rtl;
+            line-height: 3;
+            padding: 10px 10px;
+        }
+
+        .ayah-segment {
+            display: inline;
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: 2.2rem;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .ayah-number-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            margin: 0 8px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, rgba(8, 48, 28, 0.8) 100%);
+            border: 1.5px solid var(--gold-primary);
+            border-radius: 50%;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffd700;
+            vertical-align: middle;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .khatam-box {
+            text-align: center;
+            margin: 50px auto 30px auto;
+            padding: 30px 40px;
+            background: rgba(4, 25, 18, 0.85);
+            border: 1.5px solid rgba(212, 175, 55, 0.45);
+            border-radius: 20px;
+        }
+
+        .khatam-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            color: #ffd700;
+            font-weight: 700;
+            margin-bottom: 12px;
+            direction: rtl;
+        }
+
+        .khatam-sub {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        /* FLOATING OPERATOR CONTROLS */
+        .floating-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 28px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(1, 18, 10, 0.88);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 30px;
+            padding: 6px 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            opacity: 0.35;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-controls:hover { opacity: 1; }
+
+        .control-btn {
+            background: transparent;
+            border: none;
+            color: var(--gold-light);
+            font-size: 13px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            color: #ffffff;
+        }
+
+        .speed-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold-primary);
+            font-weight: 700;
+        }
+
+        .pause-indicator {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 60;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-light);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .pause-indicator.show { display: flex; align-items: center; gap: 8px; }
+    </style>
+</head>
+
+<body>
+    <div class="bg-pattern"></div>
+    <div class="mihrab-frame"></div>
+
+    <div class="pause-indicator" id="pauseIndicator">
+        <i class="fas fa-pause-circle text-warning"></i>
+        <span>Gulir Otomatis Dijeda (Sentuh layar atau klik tombol untuk melanjutkan)</span>
+    </div>
+
+    <!-- TOP HEADER BAR -->
+    <header class="top-header-bar">
+        <div class="header-left">
+            <div class="mosque-icon-badge">
+                <i class="fas fa-mosque"></i>
+            </div>
+            <div class="mosque-info">
+                <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+                <p>Digital Signage System</p>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <div class="event-badge">
+                <i class="fas fa-moon"></i>
+                <span>AGENDA MALAM JUM'AT</span>
+                <i class="fas fa-star-and-crescent"></i>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="isya-pill">
+                <i class="far fa-clock"></i>
+                <span>Isya: <span class="time-val" id="isyaTimeDisplay">19:00 WIB</span></span>
+                <span class="countdown-val" id="isyaCountdownDisplay">--:--</span>
+            </div>
+            <div class="live-clock" id="liveClockDisplay">--:--:--</div>
+        </div>
+    </header>
+
+    <!-- MUSHAF SCROLL CONTAINER -->
+    <main class="mushaf-scroll-wrapper" id="yasinScrollContainer">
+        <div class="mushaf-inner-content">
+            <!-- Header Surat -->
+            <div class="surah-header-banner">
+                <h2 class="surah-title-arabic">سُورَةُ يسٓ</h2>
+                <div class="surah-subtitle-info">
+                    <span>Surah ke-36</span>
+                    <span style="color: #ffd700;">•</span>
+                    <span>83 Ayat</span>
+                    <span style="color: #ffd700;">•</span>
+                    <span>Makkiyyah</span>
+                </div>
+            </div>
+
+            <!-- Bismillah Header -->
+            <div class="bismillah-box">
+                <div class="bismillah-arabic">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+                <div class="bismillah-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-gem"></div>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+
+            <!-- Ayat Flow Container -->
+            <div class="ayat-flow-container" id="ayatFlowContainer">
+                <div style="text-align: center; color: #ffd700; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Memuat Ayat-Ayat Suci Surah Yaasiin...
+                </div>
+            </div>
+
+            <!-- Penutup Doa Khatam -->
+            <div class="khatam-box">
+                <div class="khatam-arabic">صَدَقَ اللهُ الْعَظِيْمُ وَبَلَّغَ رَسُوْلُهُ الْكَرِيْمُ</div>
+                <p class="khatam-sub">
+                    Semoga Allah SWT menerima pahala bacaan Surah Yaasiin kita semua, mengampuni dosa para pendahulu & orang tua kita, serta melimpahkan ketenteraman dan keberkahan bagi jamaah Masjid. Aamiin Yaa Rabbal 'Aalamiin.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- FLOATING CONTROLS -->
+    <div class="floating-controls">
+        <button class="control-btn" id="btnToggleScroll" title="Jeda / Lanjutkan Gulir">
+            <i class="fas fa-pause" id="iconToggleScroll"></i>
+            <span id="textToggleScroll">Jeda</span>
+        </button>
+        <button class="control-btn" id="btnSpeedToggle" title="Ganti Kecepatan Gulir">
+            <i class="fas fa-tachometer-alt"></i>
+            <span class="speed-badge" id="speedBadgeDisplay">MEDIUM</span>
+        </button>
+        <button class="control-btn" id="btnRestartScroll" title="Ulangi dari Awal">
+            <i class="fas fa-redo-alt"></i>
+            <span>Awal</span>
+        </button>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+
+    <script>
+        const SPEED_MAP = {
+            'slow': 0.38,
+            'medium': 0.68,
+            'fast': 1.15
+        };
+
+        let currentSpeedKey = 'medium';
+        let scrollSpeed = SPEED_MAP[currentSpeedKey];
+        let isPaused = false;
+        let isUserInteracting = false;
+        let interactionTimeout = null;
+
+        const scrollContainer = document.getElementById('yasinScrollContainer');
+        const pauseIndicator = document.getElementById('pauseIndicator');
+        const btnToggleScroll = document.getElementById('btnToggleScroll');
+        const iconToggleScroll = document.getElementById('iconToggleScroll');
+        const textToggleScroll = document.getElementById('textToggleScroll');
+        const btnSpeedToggle = document.getElementById('btnSpeedToggle');
+        const speedBadgeDisplay = document.getElementById('speedBadgeDisplay');
+        const btnRestartScroll = document.getElementById('btnRestartScroll');
+
+        let scrollPos = 0;
+
+        function smoothScrollLoop() {
+            if (!isPaused && !isUserInteracting && scrollContainer) {
+                const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+                if (maxScroll > 0) {
+                    scrollPos += scrollSpeed;
+                    if (scrollPos >= maxScroll) {
+                        scrollPos = maxScroll;
+                        scrollContainer.scrollTop = maxScroll;
+                        isPaused = true;
+                        setTimeout(() => {
+                            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                            setTimeout(() => {
+                                scrollPos = 0;
+                                isPaused = false;
+                            }, 3000);
+                        }, 10000);
+                    } else {
+                        scrollContainer.scrollTop = Math.floor(scrollPos);
+                    }
+                }
+            }
+            requestAnimationFrame(smoothScrollLoop);
+        }
+
+        requestAnimationFrame(smoothScrollLoop);
+
+        btnToggleScroll.addEventListener('click', () => {
+            isPaused = !isPaused;
+            updatePauseUI();
+        });
+
+        function updatePauseUI() {
+            if (isPaused) {
+                iconToggleScroll.className = 'fas fa-play';
+                textToggleScroll.textContent = 'Mulai';
+                pauseIndicator.classList.add('show');
+            } else {
+                iconToggleScroll.className = 'fas fa-pause';
+                textToggleScroll.textContent = 'Jeda';
+                pauseIndicator.classList.remove('show');
+                scrollPos = scrollContainer.scrollTop;
+            }
+        }
+
+        btnSpeedToggle.addEventListener('click', () => {
+            const keys = ['slow', 'medium', 'fast'];
+            let nextIndex = (keys.indexOf(currentSpeedKey) + 1) % keys.length;
+            currentSpeedKey = keys[nextIndex];
+            scrollSpeed = SPEED_MAP[currentSpeedKey];
+            speedBadgeDisplay.textContent = currentSpeedKey.toUpperCase();
+        });
+
+        btnRestartScroll.addEventListener('click', () => {
+            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => { scrollPos = 0; }, 800);
+        });
+
+        scrollContainer.addEventListener('wheel', () => {
+            isUserInteracting = true;
+            clearTimeout(interactionTimeout);
+            interactionTimeout = setTimeout(() => {
+                isUserInteracting = false;
+                scrollPos = scrollContainer.scrollTop;
+            }, 3500);
+        }, { passive: true });
+
+        // Jam & Countdown Isya
+        let isyaSecondsRemaining = 0;
+
+        function updateClockAndCountdown() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            const elClock = document.getElementById('liveClockDisplay');
+            if (elClock) elClock.textContent = `${h}:${m}:${s}`;
+
+            const elCd = document.getElementById('isyaCountdownDisplay');
+            if (isyaSecondsRemaining > 0) {
+                isyaSecondsRemaining--;
+                const mins = Math.floor(isyaSecondsRemaining / 60);
+                const secs = isyaSecondsRemaining % 60;
+                if (elCd) elCd.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            } else if (elCd) {
+                elCd.textContent = 'MASUK WAKTU ISYA';
+            }
+        }
+        setInterval(updateClockAndCountdown, 1000);
+
+        // Render Ayat-Ayat Yaasiin
+        async function loadSurahYasin() {
+            try {
+                const res = await fetch('../data/surah_yasin.json');
+                const ayahs = await res.json();
+                const container = document.getElementById('ayatFlowContainer');
+
+                if (Array.isArray(ayahs) && ayahs.length > 0) {
+                    container.innerHTML = ayahs.map(a => `
+                        <span class="ayah-segment" id="ayah-${a.number}">
+                            ${a.text}
+                            <span class="ayah-number-badge" title="Ayat ${a.number}">
+                                <span>${a.number}</span>
+                            </span>
+                        </span>
+                    `).join(' ');
+                }
+            } catch (err) {
+                console.error('Gagal memuat ayat Yaasiin:', err);
+            }
+        }
+
+        // Load Settings & Jadwal Isya
+        async function loadSettingsAndPrayer() {
+            try {
+                const settings = await SupabaseDB.getSettings();
+                if (settings && settings.nama_aplikasi) {
+                    document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                }
+
+                const jadwals = await SupabaseDB.getJadwalSholat();
+                if (jadwals && jadwals.length > 0) {
+                    const isya = jadwals.find(j => (j.nama_sholat || '').toLowerCase().includes('isya'));
+                    if (isya && isya.waktu) {
+                        const timeStr = isya.waktu.substring(0, 5);
+                        document.getElementById('isyaTimeDisplay').textContent = timeStr + ' WIB';
+
+                        const now = new Date();
+                        const [ih, im] = timeStr.split(':').map(Number);
+                        const isyaDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), ih, im, 0);
+                        const diffSec = Math.floor((isyaDate.getTime() - now.getTime()) / 1000);
+                        if (diffSec > 0) {
+                            isyaSecondsRemaining = diffSec;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Gagal memuat setting/jadwal:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSurahYasin();
+            loadSettingsAndPrayer();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutiara Hadits & Hikmah Harian - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #071a10 0%, #0e3521 50%, #1a5235 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #085a2b;
+            text-shadow: 
+                1px 1px 0 #ffd700, -1px 1px 0 #ffd700, 1px -1px 0 #ffd700, -1px -1px 0 #ffd700,
+                2px 2px 0 #000000, -2px 2px 0 #000000, 2px -2px 0 #000000, -2px -2px 0 #000000,
+                0 5px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.65);
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        /* MAIN HADITH CARD */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4px 0;
+            min-height: 0;
+        }
+
+        .hadith-card {
+            width: 100%;
+            max-width: 1420px;
+            height: 64vh;
+            background: rgba(4, 25, 18, 0.75);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(201, 160, 61, 0.45);
+            border-radius: 26px;
+            padding: 24px 45px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(201, 160, 61, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            animation: fadeInHadith 0.6s ease;
+        }
+
+        @keyframes fadeInHadith {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .theme-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 24px;
+            background: linear-gradient(135deg, rgba(201, 160, 61, 0.25), rgba(255, 215, 0, 0.15));
+            border: 1px solid rgba(201, 160, 61, 0.6);
+            border-radius: 30px;
+            color: #ffd700;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .matan-arab {
+            font-family: 'Amiri', serif;
+            font-size: 2.3rem;
+            line-height: 2.2;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            direction: rtl;
+            text-align: center;
+            padding: 0 20px;
+            flex-shrink: 0;
+        }
+
+        .divider-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 50%;
+            margin: 0 auto;
+            flex-shrink: 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(201, 160, 61, 0.6), transparent);
+        }
+
+        .terjemahan-text {
+            font-size: 1.22rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 1200px;
+            margin: 0 auto;
+            font-style: italic;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .perawi-tag {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffd700;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 4px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(201, 160, 61, 0.4);
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .hikmah-box {
+            background: rgba(7, 26, 16, 0.7);
+            border: 1px solid rgba(40, 167, 69, 0.4);
+            border-radius: 14px;
+            padding: 8px 24px;
+            max-width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .hikmah-box i { color: #ffd700; font-size: 1.1rem; }
+        .hikmah-box p { margin: 0; font-size: 0.98rem; color: #d1fae5; font-weight: 500; }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN HADITH CARD -->
+        <div class="main-content">
+            <div class="hadith-card" id="hadithCard">
+                <div class="theme-badge" id="hadithTheme">
+                    <i class="fas fa-gem"></i>
+                    <span id="themeTitle">MUTIARA HIKMAH SHOLAT</span>
+                </div>
+
+                <div class="matan-arab" id="hadithArab">
+                    مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ
+                </div>
+
+                <div class="divider-ornament">
+                    <div class="divider-line"></div>
+                    <i class="fas fa-star-and-crescent text-warning" style="font-size: 1.1rem;"></i>
+                    <div class="divider-line"></div>
+                </div>
+
+                <div class="terjemahan-text" id="hadithTerjemah">
+                    "Barangsiapa menempuh suatu jalan untuk mencari ilmu, maka Allah akan memudahkan baginya jalan menuju Surga."
+                </div>
+
+                <div class="perawi-tag" id="hadithPerawi">HR. Muslim no. 2699</div>
+
+                <div class="hikmah-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p id="hadithHikmah">Semoga Allah memberkahi langkah kaki kita menuju majelis ilmu dan sholat berjamaah.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-quran"></i> Mutiara Hadits & Nasihat Hikmah Harian Jamaah Masjid Jami' Al-Jihad.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        // Background Rotator Islami
+        const backgroundImages = [
+            "../image/display/background/BG2.png",
+            "../image/display/background/BG10.png",
+            "../image/display/background/BG4.png",
+            "../image/display/background/BG7.png",
+            "../image/display/background/BG11.png",
+            "../image/display/background/BG6.png",
+            "../image/display/background/BG1.png",
+            "../image/display/background/BG9.png",
+            "../image/display/background/BG5.png",
+            "../image/display/background/BG8.png",
+            "../image/display/background/BG3.png"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            const dtEl = document.getElementById('datetime');
+            if (dtEl) {
+                dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Koleksi Hadits Hikmah Terpilih
+        const hikmahCollection = [
+            {
+                tema: "KEUTAMAAN MENUNTUT ILMU",
+                arab: "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
+                terjemah: '"Barangsiapa menempuh suatu jalan untuk mencari ilmu, maka Allah akan memudahkan baginya jalan menuju Surga."',
+                perawi: "HR. Muslim no. 2699",
+                hikmah: "Menghadiri majelis taklim di masjid adalah jalan lapang menuju ampunan dan surga-Nya."
+            },
+            {
+                tema: "PAHALA SHOLAT BERJAMAAH",
+                arab: "صَلَاةُ الْجَمَاعَةِ تَفْضُلُ صَلَاةَ الْفَذِّ بِسَبْعٍ وَعِشْرِينَ دَرَجَةً",
+                terjemah: '"Sholat berjamaah itu lebih utama daripada sholat sendirian sebanyak dua puluh tujuh derajat."',
+                perawi: "HR. Bukhari no. 645 & Muslim no. 650",
+                hikmah: "Mari istiqomah memenuhi panggilan adzan di masjid demi meraih derajat tertinggi di sisi Allah SWT."
+            },
+            {
+                tema: "KEBERKAHAN SEDEKAH & INFAQ",
+                arab: "مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ وَمَا زَادَ اللَّهُ عَبْدًا بِعَفْوٍ إِلَّا عِزًّا",
+                terjemah: '"Sedekah itu tidak akan pernah mengurangi harta, dan tidaklah Allah menambah bagi seorang hamba yang memaafkan kecuali kemuliaan."',
+                perawi: "HR. Muslim no. 2588",
+                hikmah: "Harta yang diinfaqkan tidak berkurang, melainkan bertambah berkah dan menjadi saksi pembela di akhirat."
+            },
+            {
+                tema: "MEMAKMURKAN RUMAH ALLAH",
+                arab: "مَنْ بَنَى لِلَّهِ مَسْجِدًا وَلَوْ كَمَفْحَصِ قَطَاةٍ أَوْ أَصْغَرَ بَنَى اللَّهُ لَهُ بَيْتًا فِي الْجَنَّةِ",
+                terjemah: '"Barangsiapa membangun masjid karena Allah, meskipun hanya sebesar sarang burung atau lebih kecil, niscaya Allah bangunkan untuknya rumah di Surga."',
+                perawi: "HR. Ibnu Majah no. 738 (Shahih)",
+                hikmah: "Setiap butir bata dan infaq yang disumbangkan ke masjid akan abadi menjadi istana di surga kelak."
+            }
+        ];
+
+        let currentHikmahIdx = 0;
+
+        function showHikmah(idx) {
+            const item = hikmahCollection[idx];
+            if (!item) return;
+
+            document.getElementById('themeTitle').textContent = item.tema;
+            document.getElementById('hadithArab').textContent = item.arab;
+            document.getElementById('hadithTerjemah').textContent = item.terjemah;
+            document.getElementById('hadithPerawi').textContent = item.perawi;
+            document.getElementById('hadithHikmah').textContent = item.hikmah;
+        }
+
+        // Auto rotate hikmah tiap 14 detik
+        setInterval(() => {
+            currentHikmahIdx = (currentHikmahIdx + 1) % hikmahCollection.length;
+            showHikmah(currentHikmahIdx);
+        }, 14000);
+
+        // Load Settings
+        async function loadHikmahData() {
+            try {
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = SupabaseDB.getRunningTextForPage('/hikmah-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-quran"></i> ${rText}`;
+                }
+            } catch (err) {
+                console.error('Gagal memuat setting:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showHikmah(0);
+            loadHikmahData();
+
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'app_settings') {
+                        loadHikmahData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

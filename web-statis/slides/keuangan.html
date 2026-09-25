@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Keuangan Kas Masjid - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #085a2b;
+            text-shadow: 
+                1px 1px 0 #ffd700, -1px 1px 0 #ffd700, 1px -1px 0 #ffd700, -1px -1px 0 #ffd700,
+                2px 2px 0 #000000, -2px 2px 0 #000000, 2px -2px 0 #000000, -2px -2px 0 #000000,
+                0 5px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.65);
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            margin: 4px 0;
+            min-height: 0;
+        }
+
+        .panel {
+            background: rgba(4, 25, 18, 0.72);
+            border-radius: 18px;
+            padding: 16px 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            width: 100%;
+            max-width: 1420px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .keuangan-title {
+            font-size: 1.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 0 auto 12px auto;
+            padding: 6px 28px;
+            color: #ffffff !important;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            align-self: center;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            border-radius: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25);
+            backdrop-filter: blur(10px);
+        }
+
+        .keuangan-title i {
+            color: #ffd700;
+            font-size: 1.5rem;
+        }
+
+        /* 3 KARTU METRIK RINGKASAN KEUANGAN (KPI CARDS) */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 12px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        .kpi-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 18px;
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .kpi-card.kpi-income {
+            background: linear-gradient(135deg, rgba(0, 36, 18, 0.82) 0%, rgba(2, 22, 14, 0.85) 100%);
+            border: 1.5px solid rgba(0, 230, 118, 0.45);
+        }
+        .kpi-card.kpi-income::before {
+            background: #00e676;
+            box-shadow: 0 0 10px #00e676;
+        }
+
+        .kpi-card.kpi-expense {
+            background: linear-gradient(135deg, rgba(45, 10, 15, 0.82) 0%, rgba(24, 4, 9, 0.85) 100%);
+            border: 1.5px solid rgba(255, 107, 107, 0.45);
+        }
+        .kpi-card.kpi-expense::before {
+            background: #ff6b6b;
+            box-shadow: 0 0 10px #ff6b6b;
+        }
+
+        .kpi-card.kpi-balance {
+            background: linear-gradient(135deg, rgba(42, 32, 4, 0.85) 0%, rgba(22, 16, 2, 0.88) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 215, 0, 0.18);
+        }
+        .kpi-card.kpi-balance::before {
+            background: #ffd700;
+            box-shadow: 0 0 12px #ffd700;
+        }
+
+        .kpi-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+
+        .kpi-card.kpi-income .kpi-icon {
+            background: rgba(0, 230, 118, 0.15);
+            color: #00e676;
+            border: 1px solid rgba(0, 230, 118, 0.35);
+        }
+
+        .kpi-card.kpi-expense .kpi-icon {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.35);
+        }
+
+        .kpi-card.kpi-balance .kpi-icon {
+            background: rgba(255, 215, 0, 0.18);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.45);
+        }
+
+        .kpi-body {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.80rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.9;
+            margin-bottom: 2px;
+        }
+
+        .kpi-card.kpi-income .kpi-title { color: #a7f3d0; }
+        .kpi-card.kpi-expense .kpi-title { color: #fecaca; }
+        .kpi-card.kpi-balance .kpi-title { color: #fef08a; }
+
+        .kpi-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            white-space: nowrap !important;
+            line-height: 1.1;
+        }
+
+        .kpi-rp {
+            font-size: 1rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .kpi-card.kpi-income .kpi-rp { color: #ffffff; font-weight: 700; }
+        .kpi-card.kpi-expense .kpi-rp { color: #ff6b6b; }
+        .kpi-card.kpi-balance .kpi-rp { color: #ffd700; }
+
+        .kpi-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-card.kpi-income .kpi-num { color: #ffffff; font-weight: 800; text-shadow: 0 0 14px rgba(255, 255, 255, 0.55); }
+        .kpi-card.kpi-expense .kpi-num { color: #ff6b6b; text-shadow: 0 0 12px rgba(255, 107, 107, 0.35); }
+        .kpi-card.kpi-balance .kpi-num { color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.45); }
+
+        /* TABEL TRANSAKSI KAS */
+        .table-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            border-radius: 14px;
+            border: 1.5px solid rgba(255, 215, 0, 0.35);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .keuangan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.05rem;
+            table-layout: fixed;
+        }
+
+        .keuangan-table thead {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            background: linear-gradient(180deg, #0d3829 0%, #08241a 100%);
+            color: #ffd700;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.7);
+        }
+
+        .table-scroll-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .keuangan-table tbody {
+            display: block;
+            width: 100%;
+        }
+
+        .keuangan-table tbody.can-scroll {
+            will-change: transform;
+            animation: scrollUp var(--scroll-duration, 60s) linear infinite;
+        }
+
+        .keuangan-table tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background 0.2s ease;
+        }
+
+        .keuangan-table th,
+        .keuangan-table td {
+            padding: 9px 12px;
+            vertical-align: middle;
+        }
+
+        /* Kolom Proporsi Lebar */
+        .col-tgl { width: 13%; text-align: center; white-space: nowrap; }
+        .col-desc { width: 31%; text-align: left; }
+        .col-masuk { width: 15%; text-align: right; white-space: nowrap; }
+        .col-keluar { width: 15%; text-align: right; white-space: nowrap; }
+        .col-saldo { width: 15%; text-align: right; white-space: nowrap; }
+        .col-kat { width: 11%; text-align: center; }
+
+        .keuangan-table tbody:hover {
+            animation-play-state: paused;
+        }
+
+        .keuangan-table tr.income { background: rgba(0, 230, 118, 0.04); }
+        .keuangan-table tr.expense { background: rgba(255, 107, 107, 0.04); }
+        .keuangan-table tr:hover { background: rgba(255, 215, 0, 0.18); }
+
+        .amount-income-val { color: #ffffff; font-weight: 800; font-size: 1.08rem; text-shadow: 0 0 10px rgba(255, 255, 255, 0.35); }
+        .amount-expense-val { color: #ff6b6b; font-weight: 700; font-size: 1.08rem; }
+        .amount-saldo-val { color: #ffd700; font-weight: 800; font-size: 1.12rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.25); }
+
+        .rp-prefix { font-size: 0.82em; font-weight: 600; margin-right: 4px; opacity: 0.85; }
+        .dash-empty { color: rgba(255, 255, 255, 0.28); font-size: 1.25rem; font-weight: 700; }
+
+        .badge-kategori-pill {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.08);
+            color: #f1f5f9;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            white-space: nowrap;
+        }
+
+        @keyframes scrollUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN CONTENT PANEL -->
+        <div class="main-content">
+            <div class="panel">
+                <div class="keuangan-title">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Rincian Keuangan Kas Masjid</span>
+                </div>
+
+                <!-- 3 KARTU KPI RINGKASAN ARUS KAS -->
+                <div class="summary-grid">
+                    <div class="kpi-card kpi-income">
+                        <div class="kpi-icon"><i class="fas fa-arrow-circle-down"></i></div>
+                        <div class="kpi-body">
+                            <span class="kpi-title">Total Pemasukan</span>
+                            <div class="kpi-amount">
+                                <span class="kpi-rp">Rp</span>
+                                <span class="kpi-num" id="statPemasukan">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-expense">
+                        <div class="kpi-icon"><i class="fas fa-arrow-circle-up"></i></div>
+                        <div class="kpi-body">
+                            <span class="kpi-title">Total Pengeluaran</span>
+                            <div class="kpi-amount">
+                                <span class="kpi-rp">Rp</span>
+                                <span class="kpi-num" id="statPengeluaran">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kpi-card kpi-balance">
+                        <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="kpi-body">
+                            <span class="kpi-title">Sisa Saldo Kas Utama</span>
+                            <div class="kpi-amount">
+                                <span class="kpi-rp">Rp</span>
+                                <span class="kpi-num" id="statSaldo">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABEL LAPORAN KAS -->
+                <div class="table-wrapper">
+                    <table class="keuangan-table">
+                        <thead>
+                            <tr>
+                                <th class="col-tgl"><i class="fas fa-calendar-alt mr-1"></i> Tanggal</th>
+                                <th class="col-desc"><i class="fas fa-file-invoice mr-1"></i> Uraian / Transaksi</th>
+                                <th class="col-masuk"><i class="fas fa-arrow-circle-down mr-1"></i> Pemasukan</th>
+                                <th class="col-keluar"><i class="fas fa-arrow-circle-up mr-1"></i> Pengeluaran</th>
+                                <th class="col-saldo"><i class="fas fa-wallet mr-1"></i> Saldo Kas</th>
+                                <th class="col-kat"><i class="fas fa-tag mr-1"></i> Kategori</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="table-scroll-container">
+                        <table class="keuangan-table">
+                            <tbody id="keuangan-tbody">
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Menghubungkan ke Supabase...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-bullhorn"></i> Selamat Datang di Masjid Jami' Al-Jihad. Laporan Keuangan Transparan & Akuntabel. Mari Salurkan Infaq Terbaik Anda.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        // Format Angka Rupiah
+        function formatRupiah(num) {
+            const val = parseFloat(num) || 0;
+            return new Intl.NumberFormat('id-ID').format(val);
+        }
+
+        // Background Rotator Islami
+        const backgroundImages = [
+            "../image/display/background/BG2.png",
+            "../image/display/background/BG10.png",
+            "../image/display/background/BG4.png",
+            "../image/display/background/BG7.png",
+            "../image/display/background/BG11.png",
+            "../image/display/background/BG6.png",
+            "../image/display/background/BG1.png",
+            "../image/display/background/BG9.png",
+            "../image/display/background/BG5.png",
+            "../image/display/background/BG8.png",
+            "../image/display/background/BG3.png"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            const dtEl = document.getElementById('datetime');
+            if (dtEl) {
+                dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Render Data Keuangan ke UI
+        function renderKeuanganUI(data) {
+            const tbody = document.getElementById('keuangan-tbody');
+            if (!tbody) return;
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">Belum ada catatan transaksi kas masjid yang tercatat.</td></tr>';
+                document.getElementById('statPemasukan').textContent = '0';
+                document.getElementById('statPengeluaran').textContent = '0';
+                document.getElementById('statSaldo').textContent = '0';
+                return;
+            }
+
+            // Hitung akumulasi
+            let totMasuk = 0;
+            let totKeluar = 0;
+
+            // Sorting tanggal ascending untuk hitung saldo berjalan
+            const sortedAsc = [...data].sort((a, b) => new Date(a.tanggal || 0) - new Date(b.tanggal || 0));
+            let runningBalance = 0;
+            const computedRows = sortedAsc.map(item => {
+                const masuk = parseFloat(item.pemasukan) || 0;
+                const keluar = parseFloat(item.pengeluaran) || 0;
+                totMasuk += masuk;
+                totKeluar += keluar;
+                runningBalance += (masuk - keluar);
+                return {
+                    ...item,
+                    computedSaldo: runningBalance
+                };
+            });
+
+            // Tampilkan terbalik (terbaru di atas)
+            const displayRows = computedRows.reverse();
+            const totalSaldoKas = runningBalance;
+
+            // Update KPI cards
+            document.getElementById('statPemasukan').textContent = formatRupiah(totMasuk);
+            document.getElementById('statPengeluaran').textContent = formatRupiah(totKeluar);
+            document.getElementById('statSaldo').textContent = formatRupiah(totalSaldoKas);
+
+            // Render Rows
+            tbody.innerHTML = displayRows.map(item => {
+                const masuk = parseFloat(item.pemasukan) || 0;
+                const keluar = parseFloat(item.pengeluaran) || 0;
+                const isIncome = masuk > 0;
+                const rowClass = isIncome ? 'income' : 'expense';
+
+                let tglFormatted = '-';
+                if (item.tanggal) {
+                    const d = new Date(item.tanggal);
+                    const blnShort = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                    tglFormatted = `${d.getDate()} ${blnShort[d.getMonth()]} '${String(d.getFullYear()).slice(-2)}`;
+                }
+
+                return `
+                    <tr class="${rowClass}">
+                        <td class="col-tgl">${tglFormatted}</td>
+                        <td class="col-desc">
+                            <i class="fas ${isIncome ? 'fa-arrow-up' : 'fa-arrow-down'}" style="color: ${isIncome ? '#00e676' : '#ff6b6b'}; margin-right: 6px;"></i>
+                            <strong>${item.deskripsi || item.uraian || 'Infaq Kas'}</strong>
+                        </td>
+                        <td class="col-masuk">
+                            ${masuk > 0 ? `<span class="rp-prefix">Rp</span><span class="amount-income-val">${formatRupiah(masuk)}</span>` : '<span class="dash-empty">-</span>'}
+                        </td>
+                        <td class="col-keluar">
+                            ${keluar > 0 ? `<span class="rp-prefix">Rp</span><span class="amount-expense-val">${formatRupiah(keluar)}</span>` : '<span class="dash-empty">-</span>'}
+                        </td>
+                        <td class="col-saldo">
+                            <span class="rp-prefix">Rp</span><span class="amount-saldo-val">${formatRupiah(item.computedSaldo)}</span>
+                        </td>
+                        <td class="col-kat">
+                            <span class="badge-kategori-pill">${item.kategori || 'Kas Utama'}</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Atur durasi auto-scroll jika data melebihi tinggi container
+            const scrollContainer = document.querySelector('.table-scroll-container');
+            if (scrollContainer && tbody.scrollHeight > scrollContainer.clientHeight + 10) {
+                const originalChildren = Array.from(tbody.children);
+                originalChildren.forEach(child => {
+                    tbody.appendChild(child.cloneNode(true));
+                });
+                const duration = Math.max(50, displayRows.length * 4.5);
+                tbody.style.setProperty('--scroll-duration', `${duration}s`);
+                tbody.classList.add('can-scroll');
+            } else {
+                tbody.classList.remove('can-scroll');
+            }
+        }
+
+        // Load Seluruh Data Keuangan & Konfigurasi
+        async function loadKeuanganData() {
+            try {
+                // 1. Settings (Nama Masjid, Sub Header, Running Text)
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = SupabaseDB.getRunningTextForPage('/keuangan-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-bullhorn"></i> ${rText}`;
+                }
+
+                // 2. Transaksi Kas
+                const data = await SupabaseDB.getKeuangan();
+                renderKeuanganUI(data);
+            } catch (err) {
+                console.error('Gagal memuat data keuangan:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadKeuanganData();
+
+            // Dengarkan perubahan realtime Supabase
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'keuangan' || payload.table === 'app_settings') {
+                        loadKeuanganData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

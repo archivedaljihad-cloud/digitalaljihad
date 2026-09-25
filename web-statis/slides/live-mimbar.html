@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siaran Langsung CCTV Mimbar - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #010a05;
+            font-family: 'Poppins', sans-serif;
+            color: #FFFFFF;
+            user-select: none;
+        }
+
+        /* 1. LAYER VIDEO CCTV */
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-container iframe,
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: none;
+        }
+
+        .cctv-standby-screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: radial-gradient(circle at center, #072a19 0%, #02120b 100%);
+            color: #ffd700;
+            z-index: 1;
+        }
+
+        .cctv-standby-screen i { font-size: 5rem; animation: pulse 2.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.08); opacity: 0.6; } }
+
+        .vignette-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.65) 100%),
+                        linear-gradient(180deg, rgba(3, 15, 8, 0.85) 0%, rgba(0,0,0,0.1) 22%, rgba(0,0,0,0.1) 75%, rgba(2, 10, 5, 0.95) 100%);
+        }
+
+        /* 2. OVERLAY SMART MOSQUE */
+        .mosque-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 22px 36px 85px 36px;
+            pointer-events: none;
+        }
+
+        .overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .channel-info-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(8, 28, 18, 0.85);
+            border: 1.5px solid rgba(212, 175, 55, 0.55);
+            padding: 10px 22px;
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .live-pulse-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #E11D48;
+            color: #FFFFFF;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(225, 29, 72, 0.6);
+        }
+
+        .pulse-dot {
+            width: 9px;
+            height: 9px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            animation: pulseAnim 1.2s infinite ease-in-out;
+        }
+
+        @keyframes pulseAnim {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        .channel-text h2 {
+            font-size: 1.30rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+            line-height: 1.1;
+        }
+
+        .channel-text p {
+            font-size: 0.85rem;
+            color: #ffd700;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
+        .clock-box {
+            background: rgba(8, 28, 18, 0.85);
+            border: 1.5px solid rgba(212, 175, 55, 0.5);
+            padding: 8px 22px;
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            text-align: right;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .live-time {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: #ffd700;
+            letter-spacing: 1px;
+            font-family: monospace;
+            line-height: 1;
+        }
+
+        .live-date {
+            font-size: 0.80rem;
+            color: #e2e8f0;
+            margin-top: 4px;
+        }
+
+        /* HADITS KHUTBAH BANNER */
+        .khutbah-hadits-wrap {
+            margin: 0 auto;
+            max-width: 1100px;
+            background: rgba(3, 20, 15, 0.85);
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px;
+            padding: 10px 28px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .khutbah-hadits-text {
+            font-size: 1.05rem;
+            color: #ffffff;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .khutbah-hadits-source {
+            font-size: 0.85rem;
+            color: #ffd700;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* FOOTER RUNNING TEXT */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1. LAYER VIDEO STREAMING -->
+    <div class="video-container">
+        <div class="cctv-standby-screen" id="cctvStandby">
+            <i class="fas fa-video"></i>
+            <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff;">SIARAN KAMERA MIMBAR KHUTBAH</div>
+            <div style="font-size: 1rem; color: #cbd5e1;">Masjid Jami' Al-Jihad • Siaga Otomatis Saat Khutbah Dimulai</div>
+        </div>
+        <iframe id="cctvIframe" style="display: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <div class="vignette-overlay"></div>
+
+    <!-- 2. SMART MOSQUE OVERLAY -->
+    <div class="mosque-overlay">
+        <div class="overlay-header">
+            <div class="channel-info-box">
+                <div class="live-pulse-container">
+                    <span class="pulse-dot"></span>
+                    <span>LIVE</span>
+                </div>
+                <div class="channel-text">
+                    <h2>KAMERA MIMBAR UTAMA</h2>
+                    <p id="khatibNameDisplay">Khatib: Ust. H. Ahmad Dahlan, M.Ag</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="clock-box">
+                    <div class="live-time" id="clockDisplay">--:--:--</div>
+                    <div class="live-date" id="dateDisplay">Memuat Waktu...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAKAT ADAB KHUTBAH JUM'AT -->
+        <div class="khutbah-hadits-wrap">
+            <div class="khutbah-hadits-text">
+                "Jika engkau berkata kepada sahabatmu pada hari Jum'at: 'Diamlah!', saat imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."
+            </div>
+            <div class="khutbah-hadits-source">
+                (HR. Al-Bukhari no. 934 & Muslim no. 851)
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER RUNNING TEXT -->
+    <div class="bottom-running-wrap">
+        <div class="running-text-container">
+            <div class="running-text" id="runningTextContent">
+                <i class="fas fa-microphone-alt"></i> Siaran Langsung Mimbar Khutbah Masjid Jami' Al-Jihad. Harap Menjaga Ketenangan & Merapatkan Shaf Sholat.
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            document.getElementById('clockDisplay').textContent = timeStr;
+            document.getElementById('dateDisplay').textContent = `${dayName}, ${dateStr}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        async function loadCctvSettings() {
+            try {
+                // 1. Settings
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    const rText = SupabaseDB.getRunningTextForPage('/live-mimbar-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-microphone-alt"></i> ${rText}`;
+
+                    if (settings.cctv_mimbar_url) {
+                        const iframe = document.getElementById('cctvIframe');
+                        const standby = document.getElementById('cctvStandby');
+                        iframe.src = settings.cctv_mimbar_url;
+                        iframe.style.display = 'block';
+                        standby.style.display = 'none';
+                    }
+                }
+
+                // 2. Petugas Jum'at Terkini untuk nama Khatib
+                const jumat = await SupabaseDB.getSholatJumat();
+                if (jumat) {
+                    const khatib = jumat.khatib || jumat.khotib || jumat.imam || 'Asatidz DKM';
+                    document.getElementById('khatibNameDisplay').textContent = `Khatib: ${khatib}`;
+                }
+            } catch (err) {
+                console.error('Gagal memuat setting CCTV mimbar:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCctvSettings();
+
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'app_settings' || payload.table === 'sholat_jumat') {
+                        loadCctvSettings();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

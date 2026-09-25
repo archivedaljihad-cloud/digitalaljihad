@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Kegiatan & Pengumuman - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #085a2b;
+            text-shadow: 
+                1px 1px 0 #ffd700, -1px 1px 0 #ffd700, 1px -1px 0 #ffd700, -1px -1px 0 #ffd700,
+                2px 2px 0 #000000, -2px 2px 0 #000000, 2px -2px 0 #000000, -2px -2px 0 #000000,
+                0 5px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.65);
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        /* ANNOUNCEMENT CARD STAGE */
+        .announcement-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .announcement-card {
+            background: rgba(3, 20, 15, 0.65);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 24px 36px;
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            width: 100%;
+            max-width: 1420px;
+            height: 64vh;
+            display: flex;
+            flex-direction: column;
+            animation: cardFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+        }
+
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .card-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
+            flex-shrink: 0;
+        }
+
+        .page-title-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            padding: 6px 24px;
+            border-radius: 35px;
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.25);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .page-title-badge i { color: #ffd700; }
+
+        .date-badge {
+            background: rgba(2, 16, 11, 0.62);
+            color: #ffd700;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 2 KOLOM SPLIT */
+        .card-main-body {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .speaker-col {
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .speaker-frame {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(4, 25, 18, 0.5);
+        }
+
+        .speaker-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .speaker-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #ffd700;
+        }
+
+        .speaker-fallback i { font-size: 5rem; }
+
+        .details-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .announcement-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffd700;
+            line-height: 1.25;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .announcement-speaker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .announcement-speaker i { color: #00e676; }
+
+        .meta-badges-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .meta-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .meta-badge i { color: #ffd700; }
+
+        .announcement-desc {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+            line-height: 1.5;
+            margin-top: 6px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border-left: 4px solid #ffd700;
+        }
+
+        /* Indikator Slider dots */
+        .slider-dots-row {
+            position: absolute;
+            bottom: 12px;
+            right: 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot-pill {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .dot-pill.active {
+            background: #ffd700;
+            width: 28px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN ANNOUNCEMENT CONTAINER -->
+        <div class="announcement-container" id="announcementContainer">
+            <div class="announcement-card">
+                <div class="card-header-bar">
+                    <div class="page-title-badge">
+                        <i class="fas fa-bullhorn"></i>
+                        <span id="annBadgeTitle">Kajian & Informasi Kegiatan</span>
+                    </div>
+                    <div class="date-badge" id="annDateBadge">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="annDateText">Jadwal Mendatang</span>
+                    </div>
+                </div>
+
+                <div class="card-main-body">
+                    <!-- Kolom Kiri: Foto / Flyer -->
+                    <div class="speaker-col">
+                        <div class="speaker-frame">
+                            <img id="annPhoto" src="../image/display/default_imam.jpg" alt="Foto Pemateri" style="display: none;" onerror="this.style.display='none'; document.getElementById('annPhotoFallback').style.display='flex';">
+                            <div class="speaker-fallback" id="annPhotoFallback">
+                                <i class="fas fa-quran"></i>
+                                <span style="font-weight: 700; font-size: 1rem; color: #ffffff;">MAJELIS ILMU</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan: Detail Acara -->
+                    <div class="details-col">
+                        <div class="announcement-title" id="annTitle">Kajian Rutin Ba'da Maghrib & Shubuh Berjamaah</div>
+                        <div class="announcement-speaker" id="annSpeakerWrap">
+                            <i class="fas fa-user-graduate"></i>
+                            <span id="annSpeaker">Bersama Asatidz & DKM Al-Jihad</span>
+                        </div>
+                        <div class="meta-badges-row">
+                            <div class="meta-badge" id="annWaktuWrap">
+                                <i class="fas fa-clock"></i>
+                                <span id="annWaktu">Ba'da Sholat Fardhu</span>
+                            </div>
+                            <div class="meta-badge" id="annTempatWrap">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="annTempat">Ruang Utama Masjid Al-Jihad</span>
+                            </div>
+                        </div>
+                        <div class="announcement-desc" id="annDesc">
+                            Terbuka untuk umum, ikhwan dan akhwat. Mari ramaikan majelis ilmu dan raih keberkahan berjamaah di rumah Allah SWT.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indikator Slide Dots -->
+                <div class="slider-dots-row" id="sliderDotsRow"></div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-bullhorn"></i> Informasi Kegiatan & Kajian Ilmiah Masjid Jami' Al-Jihad. Menuntut Ilmu Adalah Kewajiban Bagi Setiap Muslim.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        // Background Rotator Islami
+        const backgroundImages = [
+            "../image/display/background/BG2.png",
+            "../image/display/background/BG10.png",
+            "../image/display/background/BG4.png",
+            "../image/display/background/BG7.png",
+            "../image/display/background/BG11.png",
+            "../image/display/background/BG6.png",
+            "../image/display/background/BG1.png",
+            "../image/display/background/BG9.png",
+            "../image/display/background/BG5.png",
+            "../image/display/background/BG8.png",
+            "../image/display/background/BG3.png"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            const dtEl = document.getElementById('datetime');
+            if (dtEl) {
+                dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        let pengumumanList = [];
+        let currentAnnIndex = 0;
+        let rotationTimer = null;
+
+        // Render Pengumuman Tertentu
+        function displayAnnouncement(item, index, total) {
+            if (!item) return;
+
+            // Judul & Badge
+            document.getElementById('annTitle').textContent = item.judul || item.tema || 'Kegiatan Masjid';
+            document.getElementById('annBadgeTitle').textContent = item.kategori || 'Kajian & Informasi Kegiatan';
+
+            // Tanggal
+            if (item.tanggal) {
+                const d = new Date(item.tanggal);
+                const bln = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                document.getElementById('annDateText').textContent = `${d.getDate()} ${bln[d.getMonth()]} ${d.getFullYear()}`;
+            } else {
+                document.getElementById('annDateText').textContent = 'Informasi Terkini';
+            }
+
+            // Pemateri
+            const speaker = item.pemateri || item.penceramah || item.narasumber;
+            if (speaker) {
+                document.getElementById('annSpeakerWrap').style.display = 'flex';
+                document.getElementById('annSpeaker').textContent = speaker;
+            } else {
+                document.getElementById('annSpeakerWrap').style.display = 'none';
+            }
+
+            // Waktu
+            const waktu = item.waktu || item.jam;
+            if (waktu) {
+                document.getElementById('annWaktuWrap').style.display = 'inline-flex';
+                document.getElementById('annWaktu').textContent = waktu;
+            } else {
+                document.getElementById('annWaktuWrap').style.display = 'none';
+            }
+
+            // Tempat
+            const tempat = item.lokasi || item.tempat;
+            if (tempat) {
+                document.getElementById('annTempatWrap').style.display = 'inline-flex';
+                document.getElementById('annTempat').textContent = tempat;
+            } else {
+                document.getElementById('annTempatWrap').style.display = 'inline-flex';
+                document.getElementById('annTempat').textContent = "Ruang Utama Masjid Al-Jihad";
+            }
+
+            // Uraian
+            document.getElementById('annDesc').textContent = item.isi || item.deskripsi || item.keterangan || "Terbuka untuk umum. Mari makmurkan masjid dan raih pahala berlipat ganda.";
+
+            // Foto
+            const photoEl = document.getElementById('annPhoto');
+            const fallbackEl = document.getElementById('annPhotoFallback');
+            const fotoUrl = item.foto || item.gambar || item.poster;
+
+            if (fotoUrl) {
+                const resolvedUrl = fotoUrl.startsWith('http') ? fotoUrl : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${fotoUrl}`;
+                photoEl.src = resolvedUrl;
+                photoEl.style.display = 'block';
+                fallbackEl.style.display = 'none';
+            } else {
+                photoEl.style.display = 'none';
+                fallbackEl.style.display = 'flex';
+            }
+
+            // Render Dots
+            const dotsRow = document.getElementById('sliderDotsRow');
+            if (dotsRow && total > 1) {
+                dotsRow.innerHTML = Array.from({ length: total }).map((_, i) => `
+                    <div class="dot-pill ${i === index ? 'active' : ''}"></div>
+                `).join('');
+            } else if (dotsRow) {
+                dotsRow.innerHTML = '';
+            }
+        }
+
+        function startAnnouncementRotation() {
+            if (rotationTimer) clearInterval(rotationTimer);
+            if (!pengumumanList || pengumumanList.length <= 1) return;
+
+            rotationTimer = setInterval(() => {
+                currentAnnIndex = (currentAnnIndex + 1) % pengumumanList.length;
+                displayAnnouncement(pengumumanList[currentAnnIndex], currentAnnIndex, pengumumanList.length);
+            }, 10000);
+        }
+
+        // Load Data Pengumuman
+        async function loadPengumumanData() {
+            try {
+                // 1. Settings
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = SupabaseDB.getRunningTextForPage('/pengumuman-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-bullhorn"></i> ${rText}`;
+                }
+
+                // 2. Data Pengumuman
+                const list = await SupabaseDB.getPengumuman();
+                if (list && list.length > 0) {
+                    pengumumanList = list;
+                    currentAnnIndex = 0;
+                    displayAnnouncement(pengumumanList[0], 0, pengumumanList.length);
+                    startAnnouncementRotation();
+                }
+            } catch (err) {
+                console.error('Gagal memuat pengumuman:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPengumumanData();
+
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'pengumuman' || payload.table === 'app_settings') {
+                        loadPengumumanData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

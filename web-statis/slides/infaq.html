@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Infaq & Donasi Khusus - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #085a2b;
+            text-shadow: 
+                1px 1px 0 #ffd700, -1px 1px 0 #ffd700, 1px -1px 0 #ffd700, -1px -1px 0 #ffd700,
+                2px 2px 0 #000000, -2px 2px 0 #000000, 2px -2px 0 #000000, -2px -2px 0 #000000,
+                0 5px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.65);
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        /* MAIN CONTENT PANEL */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            margin: 4px 0;
+            min-height: 0;
+        }
+
+        .panel {
+            background: rgba(4, 25, 18, 0.72);
+            border-radius: 18px;
+            padding: 16px 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            width: 100%;
+            max-width: 1420px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .infaq-title-wrap {
+            text-align: center;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .infaq-title-badge {
+            font-size: 1.60rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 6px 28px;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            border-radius: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25);
+        }
+
+        .infaq-title-badge i { color: #ffd700; font-size: 1.5rem; }
+
+        /* 4 STAT PILLS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .stat-pill {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 12px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-pill .icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .stat-pill.target .icon-box { background: rgba(0, 180, 216, 0.25); color: #00b4d8; border: 1px solid rgba(0, 180, 216, 0.4); }
+        .stat-pill.terkumpul .icon-box { background: rgba(0, 230, 118, 0.25); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.4); }
+        .stat-pill.kekurangan .icon-box { background: rgba(255, 82, 82, 0.25); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.4); }
+        .stat-pill.donatur .icon-box { background: rgba(255, 215, 0, 0.25); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.4); }
+
+        .stat-info { display: flex; flex-direction: column; min-width: 0; }
+        .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; color: rgba(255, 255, 255, 0.85); }
+        .stat-value { font-size: 1.15rem; font-weight: 800; font-family: monospace; white-space: nowrap; }
+        .stat-pill.target .stat-value { color: #00b4d8; }
+        .stat-pill.terkumpul .stat-value { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
+        .stat-pill.kekurangan .stat-value { color: #ff5252; }
+        .stat-pill.donatur .stat-value { color: #ffd700; }
+
+        /* PROGRESS BAR */
+        .progress-section {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 12px;
+            padding: 8px 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            flex-shrink: 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .progress-bar-bg {
+            height: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00e676 0%, #ffd700 100%);
+            border-radius: 10px;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+        }
+
+        /* 2 KOLOM BAWAH */
+        .bottom-split-row {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 14px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .donatur-box, .rek-box {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 14px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .box-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            padding-bottom: 4px;
+        }
+
+        .donatur-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .donatur-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.90rem;
+        }
+
+        .donatur-name { font-weight: 600; color: #ffffff; }
+        .donatur-val { font-weight: 700; color: #00e676; font-family: monospace; }
+
+        /* Rekening & QRIS */
+        .rek-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .rek-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.92rem;
+        }
+
+        .rek-num { font-weight: 800; color: #ffd700; font-family: monospace; font-size: 1.05rem; }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN PANEL -->
+        <div class="main-content">
+            <div class="panel">
+                <div class="infaq-title-wrap">
+                    <div class="infaq-title-badge">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span id="programName">Program Pembebasan Lahan & Renovasi Masjid</span>
+                    </div>
+                </div>
+
+                <!-- 4 KARTU STAT PILLS -->
+                <div class="summary-grid">
+                    <div class="stat-pill target">
+                        <div class="icon-box"><i class="fas fa-bullseye"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Target Dana</span>
+                            <span class="stat-value" id="valTarget">Rp 150.000.000</span>
+                        </div>
+                    </div>
+                    <div class="stat-pill terkumpul">
+                        <div class="icon-box"><i class="fas fa-coins"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Terkumpul</span>
+                            <span class="stat-value" id="valTerkumpul">Rp 98.450.000</span>
+                        </div>
+                    </div>
+                    <div class="stat-pill kekurangan">
+                        <div class="icon-box"><i class="fas fa-hourglass-half"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Kekurangan</span>
+                            <span class="stat-value" id="valKekurangan">Rp 51.550.000</span>
+                        </div>
+                    </div>
+                    <div class="stat-pill donatur">
+                        <div class="icon-box"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Donatur</span>
+                            <span class="stat-value" id="valDonatur">142 Muhsinin</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROGRESS BAR -->
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span style="color: #cbd5e1;">Pencapaian Target Donasi:</span>
+                        <span style="color: #ffd700;" id="progressPercent">65.6%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBarFill" style="width: 65.6%;"></div>
+                    </div>
+                </div>
+
+                <!-- 2 KOLOM BAWAH -->
+                <div class="bottom-split-row">
+                    <!-- Kolom Donatur Terbaru -->
+                    <div class="donatur-box">
+                        <div class="box-title">
+                            <i class="fas fa-heart"></i>
+                            <span>Daftar Donatur Terkini</span>
+                        </div>
+                        <div class="donatur-list" id="donaturList">
+                            <div class="donatur-item">
+                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah (Kel. H. Syahrul)</span>
+                                <span class="donatur-val">Rp 5.000.000</span>
+                            </div>
+                            <div class="donatur-item">
+                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah</span>
+                                <span class="donatur-val">Rp 2.500.000</span>
+                            </div>
+                            <div class="donatur-item">
+                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Bpk. Rahmat Hidayat</span>
+                                <span class="donatur-val">Rp 1.000.000</span>
+                            </div>
+                            <div class="donatur-item">
+                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah</span>
+                                <span class="donatur-val">Rp 500.000</span>
+                            </div>
+                            <div class="donatur-item">
+                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Majelis Taklim Ummahat</span>
+                                <span class="donatur-val">Rp 3.200.000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Informasi Transfer & Rekening -->
+                    <div class="rek-box">
+                        <div class="box-title">
+                            <i class="fas fa-university"></i>
+                            <span>Saluran Transfer Donasi</span>
+                        </div>
+                        <div class="rek-content">
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1;">Bank</span>
+                                <span style="font-weight: 700; color: #ffffff;">Bank Syariah Indonesia (BSI)</span>
+                            </div>
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1;">Nomor Rekening</span>
+                                <span class="rek-num">7123-456-789</span>
+                            </div>
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1;">Atas Nama</span>
+                                <span style="font-weight: 700; color: #ffd700;">Masjid Jami' Al-Jihad</span>
+                            </div>
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1;">Konfirmasi WhatsApp</span>
+                                <span class="rek-num" style="color: #00e676;">0877-5876-7000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-hand-holding-usd"></i> Program Penggalangan Infaq & Donasi Masjid Jami' Al-Jihad. "Perumpamaan orang yang menafkahkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh butir." (QS. Al-Baqarah: 261).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        function formatRupiah(num) {
+            const val = parseFloat(num) || 0;
+            return new Intl.NumberFormat('id-ID').format(val);
+        }
+
+        // Background Rotator Islami
+        const backgroundImages = [
+            "../image/display/background/BG2.png",
+            "../image/display/background/BG10.png",
+            "../image/display/background/BG4.png",
+            "../image/display/background/BG7.png",
+            "../image/display/background/BG11.png",
+            "../image/display/background/BG6.png",
+            "../image/display/background/BG1.png",
+            "../image/display/background/BG9.png",
+            "../image/display/background/BG5.png",
+            "../image/display/background/BG8.png",
+            "../image/display/background/BG3.png"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            const dtEl = document.getElementById('datetime');
+            if (dtEl) {
+                dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Load Program Infaq dari Supabase
+        async function loadProgramInfaqData() {
+            try {
+                // 1. Settings
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = SupabaseDB.getRunningTextForPage('/infaq-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-hand-holding-usd"></i> ${rText}`;
+                }
+
+                // 2. Program Infaq
+                const programs = await SupabaseDB.getProgramInfaq();
+                if (programs && programs.length > 0) {
+                    const prog = programs[0];
+                    if (prog.nama_program) document.getElementById('programName').textContent = prog.nama_program;
+
+                    const target = parseFloat(prog.target_dana) || 100000000;
+                    const terkumpul = parseFloat(prog.dana_terkumpul) || 0;
+                    const sisa = Math.max(0, target - terkumpul);
+                    const percent = target > 0 ? Math.min(100, (terkumpul / target) * 100).toFixed(1) : 0;
+
+                    document.getElementById('valTarget').textContent = 'Rp ' + formatRupiah(target);
+                    document.getElementById('valTerkumpul').textContent = 'Rp ' + formatRupiah(terkumpul);
+                    document.getElementById('valKekurangan').textContent = 'Rp ' + formatRupiah(sisa);
+                    if (prog.total_donatur) document.getElementById('valDonatur').textContent = prog.total_donatur + ' Muhsinin';
+
+                    document.getElementById('progressPercent').textContent = percent + '%';
+                    document.getElementById('progressBarFill').style.width = percent + '%';
+                }
+            } catch (err) {
+                console.error('Gagal memuat program infaq:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgramInfaqData();
+
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'program_infaq' || payload.table === 'app_settings') {
+                        loadProgramInfaqData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

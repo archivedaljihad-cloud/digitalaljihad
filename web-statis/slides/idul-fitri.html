@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sistem Informasi Masjid - Jadwal Sholat Idul Fitri</title>
+	<link rel="icon" type="image/png" href="../img/favicon.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="../css/display-theme.css">
+	<link rel="stylesheet" href="../css/partials-theme.css">
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Poppins', sans-serif;
+			color: var(--text-light, #ffffff);
+			height: 100vh;
+			width: 100vw;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			overflow: hidden;
+			background: #02120b;
+		}
+
+		.container {
+			width: 100%;
+			max-width: 1600px;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 10px 25px 85px 25px;
+			box-sizing: border-box;
+			position: relative;
+			z-index: 5;
+		}
+
+		.header {
+			text-align: center;
+			margin-top: 0;
+			margin-bottom: 8px;
+			flex-shrink: 0;
+			position: relative;
+		}
+
+		.header h1 {
+			font-size: 3.1rem;
+			font-weight: 800;
+			line-height: 1.1;
+			letter-spacing: 4px;
+			text-transform: uppercase;
+			color: #ffffff;
+			text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 215, 0, 0.4);
+			margin: 0 0 2px 0;
+		}
+
+		.header h3.sub-header {
+			font-size: 1.2rem;
+			font-weight: 500;
+			letter-spacing: 4px;
+			color: #ffd700;
+			text-transform: uppercase;
+			opacity: 0.95;
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+			margin: 0 0 6px 0;
+		}
+
+		.header .datetime {
+			font-size: 1.45rem;
+			color: #ffffff;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+			background: rgba(3, 20, 15, 0.75);
+			display: inline-block;
+			padding: 5px 28px;
+			border-radius: 35px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+		}
+
+		/* SECTION JUDUL DENGAN DUA IKON (BEDUG & KETUPAT) */
+		.schedule-header-section {
+			text-align: center;
+			flex-shrink: 0;
+			margin: 0 0 10px 0;
+		}
+
+		.title-with-icons {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 22px;
+			background: linear-gradient(135deg, rgba(2, 25, 17, 0.88) 0%, rgba(5, 42, 28, 0.82) 100%);
+			border: 1.5px solid rgba(255, 215, 0, 0.65);
+			border-radius: 40px;
+			padding: 8px 32px;
+			box-shadow: 
+				0 8px 25px rgba(0, 0, 0, 0.65),
+				0 0 20px rgba(255, 215, 0, 0.25),
+				inset 0 1px 1px rgba(255, 255, 255, 0.2);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.title-with-icons::after {
+			content: '';
+			position: absolute;
+			top: -60%;
+			left: -130%;
+			width: 60%;
+			height: 220%;
+			background: linear-gradient(
+				115deg,
+				transparent 35%,
+				rgba(255, 255, 255, 0.2) 45%,
+				rgba(255, 245, 180, 0.75) 50%,
+				rgba(255, 255, 255, 0.95) 53%,
+				rgba(255, 245, 180, 0.75) 56%,
+				rgba(255, 255, 255, 0.2) 65%,
+				transparent 75%
+			);
+			transform: rotate(25deg);
+			animation: goldShimmerSweep 7s infinite ease-in-out;
+			pointer-events: none;
+		}
+
+		@keyframes goldShimmerSweep {
+			0%, 20% { left: -130%; opacity: 0; }
+			32% { opacity: 1; }
+			48%, 100% { left: 210%; opacity: 0; }
+		}
+
+		.title-icon-badge {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background: rgba(4, 25, 18, 0.9);
+			border: 1.5px solid rgba(255, 215, 0, 0.6);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.25);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.title-icon-badge img {
+			width: 38px;
+			height: 38px;
+			object-fit: contain;
+			filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
+		}
+
+		.title-icon-badge.left-icon img {
+			animation: festiveSwayLeft 4.5s infinite ease-in-out;
+			transform-origin: top center;
+		}
+
+		.title-icon-badge.right-icon img {
+			animation: festiveSwayRight 4.2s infinite ease-in-out;
+			transform-origin: top center;
+		}
+
+		@keyframes festiveSwayLeft {
+			0%, 100% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65)); }
+			25% { transform: rotate(-3.5deg) scale(1.03); filter: drop-shadow(0 0 16px rgba(255, 235, 120, 0.9)); }
+			75% { transform: rotate(3.5deg) scale(0.98); }
+		}
+
+		@keyframes festiveSwayRight {
+			0%, 100% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65)); }
+			25% { transform: rotate(3.5deg) scale(1.03); filter: drop-shadow(0 0 16px rgba(255, 235, 120, 0.9)); }
+			75% { transform: rotate(-3.5deg) scale(0.98); }
+		}
+
+		.title-text-wrap h2 {
+			font-size: 2.1rem;
+			color: #ffffff;
+			letter-spacing: 2px;
+			font-weight: 700;
+			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+			margin: 0;
+			line-height: 1.15;
+		}
+
+		.title-text-wrap p {
+			font-size: 1rem;
+			color: #ffd700;
+			letter-spacing: 0.5px;
+			font-weight: 500;
+			margin-top: 3px;
+			margin-bottom: 0;
+			text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+		}
+
+		.festive-greeting {
+			font-family: 'Amiri', serif;
+			font-size: 1.25rem;
+			color: #fff4b8;
+			text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 2px 5px rgba(0, 0, 0, 0.9);
+			margin-top: 3px;
+			letter-spacing: 1px;
+			line-height: 1.2;
+		}
+
+		/* LAYOUT KONTEN: FOTO IMAM DI KIRI & INFO DI KANAN */
+		.schedule-content-layout {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 24px;
+			max-width: 1050px;
+			width: 100%;
+			margin: 0 auto;
+			flex: 1;
+		}
+
+		/* KOTAK FOTO IMAM (RASIO 4:5) */
+		.imam-card-box {
+			flex: 0 0 280px;
+			width: 280px;
+			background: rgba(4, 25, 18, 0.78);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-radius: 18px;
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+			padding: 8px;
+			display: flex;
+			flex-direction: column;
+			align-self: center;
+			box-sizing: border-box;
+			animation: goldenBorderSheen 6s infinite ease-in-out;
+		}
+
+		.imam-photo-frame {
+			position: relative;
+			width: 100%;
+			aspect-ratio: 4 / 5;
+			border-radius: 12px;
+			overflow: hidden;
+			border: 1px solid rgba(255, 215, 0, 0.3);
+			background: #02120b;
+		}
+
+		.imam-photo {
+			width: 100%;
+			height: 100%;
+			aspect-ratio: 4 / 5;
+			object-fit: cover;
+			object-position: center 15%;
+			display: block;
+		}
+
+		.imam-badge-overlay {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: linear-gradient(0deg, rgba(2, 16, 11, 0.96) 0%, rgba(2, 16, 11, 0.8) 70%, transparent 100%);
+			padding: 16px 10px 8px 10px;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			gap: 3px;
+			border-bottom-left-radius: 12px;
+			border-bottom-right-radius: 12px;
+		}
+
+		.imam-badge-overlay .badge-role {
+			font-size: 0.82rem;
+			font-weight: 700;
+			color: #ffd700;
+			letter-spacing: 1.2px;
+			text-transform: uppercase;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 5px;
+		}
+
+		.imam-badge-overlay .badge-name {
+			font-size: 1.05rem;
+			font-weight: 700;
+			color: #ffffff;
+			line-height: 1.25;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+			word-break: break-word;
+		}
+
+		/* KANAN: INFO ROWS STACK */
+		.info-stack {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			flex: 1;
+			justify-content: center;
+		}
+
+		.info-row {
+			display: flex;
+			gap: 12px;
+			width: 100%;
+		}
+
+		.info-box-label {
+			flex: 0 0 190px;
+			background: rgba(4, 25, 18, 0.76);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-radius: 14px;
+			padding: 9px 18px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			font-size: 1.12rem;
+			font-weight: 600;
+			color: #ffd700;
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+			animation: goldenBorderSheen 6s infinite ease-in-out;
+		}
+
+		.info-box-label i {
+			font-size: 1.25rem;
+			color: #ffd700;
+			width: 24px;
+			text-align: center;
+		}
+
+		.info-box-value {
+			flex: 1;
+			background: rgba(4, 25, 18, 0.76);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-radius: 14px;
+			padding: 9px 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border: 1.5px solid rgba(255, 215, 0, 0.45);
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+			animation: goldenBorderSheen 6s infinite ease-in-out;
+			animation-delay: 0.7s;
+		}
+
+		.info-box-value .value {
+			font-size: 1.35rem;
+			font-weight: 700;
+			color: #ffffff;
+			text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+		}
+
+		.jadwal-mendatang-badge {
+			background: #ffd700;
+			color: #000000 !important;
+			padding: 4px 12px;
+			border-radius: 20px;
+			font-size: 0.88rem;
+			font-weight: 800 !important;
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+			letter-spacing: 0.5px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+			border: 1px solid rgba(255, 255, 255, 0.4);
+		}
+
+		.jadwal-mendatang-badge.badge-hari-ini {
+			background: #28a745 !important;
+			color: #ffffff !important;
+		}
+
+		.jadwal-mendatang-badge.badge-hijriah {
+			background: linear-gradient(135deg, #0b6623, #15803d) !important;
+			color: #ffffff !important;
+			border: 1px solid rgba(255, 215, 0, 0.6);
+		}
+
+		@keyframes goldenBorderSheen {
+			0%, 100% {
+				border-color: rgba(255, 215, 0, 0.45);
+				box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35), 0 0 10px rgba(255, 215, 0, 0.1);
+			}
+			50% {
+				border-color: rgba(255, 235, 120, 0.85);
+				box-shadow: 0 8px 28px rgba(0, 0, 0, 0.42), 0 0 18px rgba(255, 215, 0, 0.32);
+			}
+		}
+
+		/* BACKGROUND KHUSUS IDUL FITRI */
+		.display-background {
+			position: fixed;
+			inset: 0;
+			background-image: url('../image/display/background/bg_idul_fitri.jpg'), url('../image/display/background/BG2.png');
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			filter: brightness(0.95) contrast(1.05);
+			z-index: 0;
+		}
+
+		.display-overlay {
+			position: fixed;
+			inset: 0;
+			background: 
+				radial-gradient(ellipse at 50% 50%, rgba(2, 14, 10, 0.05) 0%, rgba(1, 15, 10, 0.42) 100%),
+				linear-gradient(180deg, 
+					rgba(2, 16, 11, 0.72) 0%, 
+					rgba(2, 16, 11, 0.35) 15%, 
+					rgba(2, 16, 11, 0.1) 35%, 
+					rgba(2, 16, 11, 0.1) 70%, 
+					rgba(2, 16, 11, 0.45) 88%, 
+					rgba(2, 16, 11, 0.78) 100%
+				);
+			z-index: 1;
+		}
+
+		/* PENDARAN LENTERA */
+		.lantern-glow-ambient {
+			position: fixed;
+			top: -40px;
+			right: 30px;
+			width: 320px;
+			height: 320px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(255, 215, 0, 0.32) 0%, rgba(255, 160, 0, 0.16) 45%, rgba(255, 140, 0, 0.04) 68%, transparent 80%);
+			pointer-events: none;
+			z-index: 2;
+			filter: blur(20px);
+			animation: lanternBreath 4s infinite alternate ease-in-out;
+		}
+
+		@keyframes lanternBreath {
+			0% { opacity: 0.55; transform: scale(0.94); }
+			100% { opacity: 0.95; transform: scale(1.06); filter: blur(26px); }
+		}
+
+		/* FLOATING STARDUST */
+		.festive-particles {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 2;
+			overflow: hidden;
+		}
+
+		.stardust-particle {
+			position: absolute;
+			bottom: -20px;
+			border-radius: 50%;
+			background: radial-gradient(circle, #ffffff 0%, #fff7b2 35%, #ffd700 70%, transparent 100%);
+			box-shadow: 0 0 8px #ffd700, 0 0 16px rgba(255, 215, 0, 0.7);
+			will-change: transform, opacity;
+			animation: floatUpStardust linear infinite;
+		}
+
+		@keyframes floatUpStardust {
+			0% { transform: translateY(0) translateX(0) scale(0.6); opacity: 0; }
+			15% { opacity: 0.9; transform: translateY(-15vh) translateX(12px) scale(1); }
+			50% { opacity: 0.75; transform: translateY(-50vh) translateX(-14px) scale(1.15); }
+			85% { opacity: 0.85; transform: translateY(-85vh) translateX(10px) scale(0.9); }
+			100% { transform: translateY(-105vh) translateX(-6px) scale(0.4); opacity: 0; }
+		}
+
+		/* RUNNING TEXT BAR */
+		.bottom-running-wrap {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 52px;
+			background: linear-gradient(180deg, rgba(2, 20, 14, 0.92) 0%, rgba(1, 10, 7, 0.98) 100%);
+			border-top: 2px solid rgba(255, 215, 0, 0.6);
+			display: flex;
+			align-items: center;
+			z-index: 100;
+			box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
+			overflow: hidden;
+		}
+
+		.running-badge {
+			background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+			color: #000000;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			padding: 0 24px;
+			font-weight: 800;
+			font-size: 1rem;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			flex-shrink: 0;
+			border-right: 2px solid rgba(0, 0, 0, 0.3);
+			gap: 8px;
+		}
+
+		.marquee-container {
+			flex: 1;
+			overflow: hidden;
+			white-space: nowrap;
+			position: relative;
+		}
+
+		.marquee-text {
+			display: inline-block;
+			padding-left: 100%;
+			animation: marquee 30s linear infinite;
+			color: #ffffff;
+			font-size: 1.15rem;
+			font-weight: 500;
+		}
+
+		@keyframes marquee {
+			0% { transform: translate3d(0, 0, 0); }
+			100% { transform: translate3d(-100%, 0, 0); }
+		}
+	</style>
+</head>
+
+<body>
+	<div class="display-background"></div>
+	<div class="display-overlay"></div>
+	<div class="lantern-glow-ambient"></div>
+	<div class="festive-particles" id="festiveParticles"></div>
+
+	<div class="container">
+		<!-- HEADER MASJID -->
+		<div class="header">
+			<h1 id="masjidName">MASJID JAMI' AL JIHAD</h1>
+			<h3 class="sub-header" id="subHeader">SISTEM INFORMASI DIGITAL</h3>
+			<div class="datetime" id="datetime">Memuat waktu...</div>
+		</div>
+
+		<!-- SECTION JUDUL DENGAN IKON BEDUG & KETUPAT -->
+		<div class="schedule-header-section">
+			<div class="title-with-icons">
+				<div class="title-icon-badge left-icon" title="Bedug Takbiran">
+					<img src="../image/icons/bedug.svg" alt="Bedug" onerror="this.src='../assets/image/icons/bedug.svg';">
+				</div>
+				<div class="title-text-wrap">
+					<h2>Sholat Idul Fitri</h2>
+					<p id="hijriYearLabel">1448 H / 2026 M • 1 Syawal</p>
+					<div class="festive-greeting">عِيدٌ مُبَارَكٌ • كُلُّ عَامٍ وَأَنْتُمْ بِخَيْرٍ</div>
+				</div>
+				<div class="title-icon-badge right-icon" title="Ketupat Idul Fitri">
+					<img src="../image/icons/ketupat.svg" alt="Ketupat" onerror="this.src='../assets/image/icons/ketupat.svg';">
+				</div>
+			</div>
+		</div>
+
+		<!-- LAYOUT KONTEN: FOTO IMAM DI KIRI & INFO ROWS DI KANAN -->
+		<div class="schedule-content-layout">
+			<!-- FOTO IMAM -->
+			<div class="imam-card-box">
+				<div class="imam-photo-frame">
+					<img id="imamPhoto" src="../image/display/default_imam.jpg" alt="Foto Imam" class="imam-photo" onerror="this.src='../assets/image/display/default_imam.jpg';">
+					<div class="imam-badge-overlay">
+						<span class="badge-role"><i class="fas fa-quran"></i> Imam & Khotib</span>
+						<span class="badge-name" id="badgeImamName">Ustadz Pembina DKM</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- INFO ROWS -->
+			<div class="info-stack">
+				<!-- Row 1: Tanggal -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-calendar-alt"></i> Tanggal
+					</div>
+					<div class="info-box-value">
+						<span class="value" id="valTanggal">-</span>
+						<span class="jadwal-mendatang-badge badge-hijriah" id="badgeTanggalStatus"><i class="fas fa-star-and-crescent"></i> 1 Syawal</span>
+					</div>
+				</div>
+
+				<!-- Row 2: Waktu Pelaksanaan -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-clock"></i> Waktu
+					</div>
+					<div class="info-box-value">
+						<span class="value" id="valWaktu">06:30 WIB</span>
+						<span class="jadwal-mendatang-badge" style="background: #ffd700; color: #000000 !important;"><i class="fas fa-sun"></i> Pagi Hari</span>
+					</div>
+				</div>
+
+				<!-- Row 3: Imam & Khotib -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-user-tie"></i> Imam & Khotib
+					</div>
+					<div class="info-box-value">
+						<span class="value" id="valImamKhotib">Ustd. H. Ahmad Fauzi, Lc., M.Ag</span>
+					</div>
+				</div>
+
+				<!-- Row 4: Muadzin -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-microphone-alt"></i> Muadzin
+					</div>
+					<div class="info-box-value">
+						<span class="value" id="valMuadzin">Ustadz M. Syukron</span>
+					</div>
+				</div>
+
+				<!-- Row 5: Bilal -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-bullhorn"></i> Bilal
+					</div>
+					<div class="info-box-value">
+						<span class="value" id="valBilal">Ustadz Ridwan Hakim</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- BOTTOM RUNNING TEXT -->
+		<div class="bottom-running-wrap">
+			<div class="running-badge"><i class="fas fa-bullhorn"></i> Warta Idul Fitri</div>
+			<div class="marquee-container">
+				<div class="marquee-text" id="runningText">
+					Selamat Hari Raya Idul Fitri 1 Syawal • Taqabbalallahu minna wa minkum shiyamana wa shiyamakum • Mohon maaf lahir dan batin atas segala kekhilafan.
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Supabase JS & DB Helper -->
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<script src="../js/supabase-db.js"></script>
+
+	<script>
+		// Floating Stardust Particles Generator
+		(function initFestiveParticles() {
+			const container = document.getElementById('festiveParticles');
+			if (!container) return;
+			const particleCount = 28;
+			for (let i = 0; i < particleCount; i++) {
+				const p = document.createElement('div');
+				p.className = 'stardust-particle';
+				const size = (Math.random() * 3.5 + 2.5).toFixed(1);
+				p.style.width = size + 'px';
+				p.style.height = size + 'px';
+				p.style.left = (Math.random() * 100).toFixed(2) + '%';
+				p.style.animationDuration = (Math.random() * 8 + 8).toFixed(1) + 's';
+				p.style.animationDelay = (Math.random() * 10).toFixed(1) + 's';
+				container.appendChild(p);
+			}
+		})();
+
+		// Digital Clock & Hijri/Masehi Date
+		function updateDateTime() {
+			const now = new Date();
+			const dtEl = document.getElementById('datetime');
+			if (dtEl) {
+				const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+				const tglStr = now.toLocaleDateString('id-ID', options);
+				const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+				dtEl.innerHTML = `${tglStr} • <span style="color:#ffd700;font-weight:700;">${jamStr} WIB</span>`;
+			}
+		}
+		updateDateTime();
+		setInterval(updateDateTime, 1000);
+
+		// Format tanggal ID
+		function formatTanggalIndo(dateStr) {
+			if (!dateStr) return '-';
+			try {
+				const d = new Date(dateStr);
+				if (isNaN(d.getTime())) return dateStr;
+				return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+			} catch (e) {
+				return dateStr;
+			}
+		}
+
+		// Load data Idul Fitri & App Settings
+		async function loadData() {
+			try {
+				let settings = null;
+				if (window.SupabaseDB) {
+					settings = await SupabaseDB.getSettings();
+				}
+
+				if (settings) {
+					if (settings.nama_aplikasi) {
+						document.getElementById('masjidName').textContent = settings.nama_aplikasi.toUpperCase();
+					}
+					// Running Text spesifik untuk halaman ini
+					const rText = SupabaseDB.getRunningTextForPage('idul-fitri', settings);
+					if (rText) {
+						document.getElementById('runningText').textContent = rText;
+					}
+				}
+
+				let data = null;
+				if (window.SupabaseDB) {
+					data = await SupabaseDB.getIdulFitri();
+				}
+
+				if (data) {
+					const tahunM = data.tahun || new Date().getFullYear();
+					const tahunH = tahunM - 579; // Perkiraan konversi tahun Hijriyah jika tidak ada
+					document.getElementById('hijriYearLabel').textContent = `${tahunH} H / ${tahunM} M • 1 Syawal`;
+
+					// Tanggal
+					const tglVal = formatTanggalIndo(data.tanggal);
+					document.getElementById('valTanggal').textContent = tglVal;
+
+					// Waktu
+					let waktuVal = data.waktu || '06:30';
+					if (waktuVal.length > 5) waktuVal = waktuVal.substring(0, 5);
+					document.getElementById('valWaktu').textContent = `${waktuVal} WIB`;
+
+					// Imam & Khotib
+					let imamKhotib = '';
+					if (data.imam && data.khatib && data.imam !== data.khatib) {
+						imamKhotib = `${data.imam} / ${data.khatib}`;
+					} else {
+						imamKhotib = data.imam || data.khatib || 'Ustadz Pembina DKM';
+					}
+					document.getElementById('valImamKhotib').textContent = imamKhotib;
+					document.getElementById('badgeImamName').textContent = data.imam || data.khatib || 'Ustadz Pembina DKM';
+
+					// Muadzin & Bilal
+					document.getElementById('valMuadzin').textContent = data.muadzin || 'Ustadz Muadzin DKM';
+					document.getElementById('valBilal').textContent = data.bilal || 'Ustadz Bilal DKM';
+
+					// Foto Imam jika ada
+					if (data.foto_imam) {
+						document.getElementById('imamPhoto').src = data.foto_imam.startsWith('http')
+							? data.foto_imam
+							: `../storage/${data.foto_imam}`;
+					}
+				}
+			} catch (err) {
+				console.warn('Gagal memuat jadwal Idul Fitri:', err);
+			}
+		}
+
+		loadData();
+
+		// Supabase Realtime Listener
+		if (window.SupabaseDB) {
+			SupabaseDB.subscribeRealtime(() => {
+				loadData();
+			});
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infaq & Shodaqoh Digital (QRIS) - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
+    <link rel="stylesheet" href="../css/partials-theme.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #085a2b;
+            text-shadow: 
+                1px 1px 0 #ffd700, -1px 1px 0 #ffd700, 1px -1px 0 #ffd700, -1px -1px 0 #ffd700,
+                2px 2px 0 #000000, -2px 2px 0 #000000, 2px -2px 0 #000000, -2px -2px 0 #000000,
+                0 5px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.65);
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        /* MAIN CONTENT PANEL */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            margin: 4px 0;
+            min-height: 0;
+        }
+
+        .qris-card {
+            background: rgba(4, 25, 18, 0.72);
+            backdrop-filter: blur(14px);
+            border-radius: 20px;
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+            width: 100%;
+            max-width: 1260px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .qris-header {
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.35);
+        }
+
+        .qris-header h2 {
+            font-size: 1.60rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1.8px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .qris-header h2 i {
+            color: #ffd700;
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
+        }
+
+        /* BODY 2 KOLOM */
+        .qris-body {
+            padding: 20px 32px;
+            display: flex;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .info-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .qris-desc-box {
+            background: rgba(3, 22, 16, 0.75);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            border-radius: 14px;
+            padding: 14px 18px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .qris-instruction {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .qris-alert-box {
+            background: linear-gradient(135deg, rgba(255, 170, 0, 0.16), rgba(255, 82, 82, 0.18));
+            border-left: 4px solid #ffd700;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qris-alert-box i { color: #ffd700; font-size: 1.2rem; }
+        .qris-alert-text { font-size: 0.95rem; color: #ffffff; }
+
+        .bank-info-card {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 12px;
+            padding: 12px 18px;
+            border-left: 5px solid #ffd700;
+        }
+
+        .bank-title {
+            color: #ffd700;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bank-detail-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.92rem;
+        }
+
+        .bank-detail-row:last-child { border-bottom: none; }
+        .bank-label { color: #cbd5e1; }
+        .bank-val { font-weight: 700; color: #ffffff; font-family: monospace; font-size: 1.05rem; letter-spacing: 0.5px; }
+
+        .qris-gratitude {
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-style: italic;
+            color: #ffd700;
+            text-align: center;
+            padding-top: 6px;
+        }
+
+        /* KOLOM QRIS */
+        .qris-col {
+            flex: 0 0 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .qris-frame {
+            background: #ffffff;
+            padding: 14px;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+            border: 3px solid rgba(255, 215, 0, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .qris-frame img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .qris-brand-badge {
+            background: rgba(0, 230, 118, 0.2);
+            border: 1px solid rgba(0, 230, 118, 0.4);
+            color: #00e676;
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 45s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN QRIS CONTENT -->
+        <div class="main-content">
+            <div class="qris-card">
+                <div class="qris-header">
+                    <h2><i class="fas fa-qrcode"></i> Infaq & Shodaqoh Digital (QRIS)</h2>
+                </div>
+
+                <div class="qris-body">
+                    <!-- Kolom Informasi & Rekening -->
+                    <div class="info-col">
+                        <div class="qris-desc-box">
+                            <div class="qris-instruction">
+                                Salurkan infaq, shodaqoh, dan jariyah terbaik Anda secara cepat, mudah, dan aman menggunakan pemindaian kode QRIS Nasional.
+                            </div>
+                            <div class="qris-alert-box">
+                                <i class="fas fa-check-circle"></i>
+                                <div class="qris-alert-text">
+                                    Pastikan nama penerima tertera: <strong style="color: #ffd700;">MASJID JAMI' AL-JIHAD</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-info-card">
+                            <div class="bank-title">
+                                <i class="fas fa-university"></i>
+                                <span>Rekening Resmi Donasi Masjid</span>
+                            </div>
+                            <div class="bank-detail-row">
+                                <span class="bank-label">Bank Syariah Indonesia (BSI)</span>
+                                <span class="bank-val">7123-456-789</span>
+                            </div>
+                            <div class="bank-detail-row">
+                                <span class="bank-label">Atas Nama</span>
+                                <span class="bank-val" style="color: #ffd700;">Masjid Jami' Al-Jihad</span>
+                            </div>
+                        </div>
+
+                        <div class="qris-gratitude">
+                            "Jazakumullah Khairan Katsiran atas infaq dan shodaqoh Bapak/Ibu sekalian."
+                        </div>
+                    </div>
+
+                    <!-- Kolom Gambar QRIS -->
+                    <div class="qris-col">
+                        <div class="qris-frame">
+                            <img id="qrisImage" src="../image/qris.png" alt="QRIS Masjid Al-Jihad" onerror="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=00020101021126570014ID.LINKAJA.WWW0118936009110022340001021000000000000303UMI51440014ID.CO.QRIS.WWW0215ID10200234567890303UMI5204549953033605802ID5919MASJID+JAMI+AL+JIHAD6007BANDUNG61054012362070703A016304ABCD';">
+                        </div>
+                        <div class="qris-brand-badge">
+                            <i class="fas fa-shield-alt"></i> Mendukung Semua E-Wallet & M-Banking
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-hand-holding-heart"></i> Infaq & Shodaqoh Digital Masjid Jami' Al-Jihad. Membangun Ummat, Menabur Kebaikan, Menuai Berkah.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        // Background Rotator Islami
+        const backgroundImages = [
+            "../image/display/background/BG2.png",
+            "../image/display/background/BG10.png",
+            "../image/display/background/BG4.png",
+            "../image/display/background/BG7.png",
+            "../image/display/background/BG11.png",
+            "../image/display/background/BG6.png",
+            "../image/display/background/BG1.png",
+            "../image/display/background/BG9.png",
+            "../image/display/background/BG5.png",
+            "../image/display/background/BG8.png",
+            "../image/display/background/BG3.png"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            const dtEl = document.getElementById('datetime');
+            if (dtEl) {
+                dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Load QRIS & Konfigurasi
+        async function loadQrisData() {
+            try {
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = SupabaseDB.getRunningTextForPage('/qris-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-hand-holding-heart"></i> ${rText}`;
+
+                    // Update Gambar QRIS jika ada URL di app_settings
+                    if (settings.qris_image) {
+                        const imgUrl = settings.qris_image.startsWith('http') 
+                            ? settings.qris_image 
+                            : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${settings.qris_image}`;
+                        document.getElementById('qrisImage').src = imgUrl;
+                    }
+                }
+            } catch (err) {
+                console.error('Gagal memuat konfigurasi QRIS:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQrisData();
+
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'app_settings') {
+                        loadQrisData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
