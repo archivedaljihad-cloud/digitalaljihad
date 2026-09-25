@@ -503,7 +503,7 @@
                     if (jumat.tanggal) {
                         const d = new Date(jumat.tanggal);
                         const hariList = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
-                        const bulanList = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                        const bulanList = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
                         const str = `${hariList[d.getDay()]}, ${d.getDate()} ${bulanList[d.getMonth()]} '${String(d.getFullYear()).slice(-2)}`;
                         document.getElementById('valTanggal').textContent = str;
 

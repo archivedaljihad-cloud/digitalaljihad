@@ -2408,3 +2408,60 @@ Menjawab pertanyaan pengguna mengenai status aktivasi caching Cloudflare pada we
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 📅 68. PENYEDERHANAAN FORMAT HARI & BULAN MASEHI (MAKSIMAL 4 KARAKTER)
+
+### Tanggal Pembaruan: 25 September 2026
+### Pengembang: Senior JAMstack Architect & AI Specialist
+
+---
+
+### Ringkasan Pembaruan:
+Atas permintaan pengguna untuk menghemat ruang pada *header section* layar display TV masjid agar tidak memadati tampilan dan tidak terjadi *text-wrapping*, format penanggalan hari dan bulan Masehi disederhanakan dengan aturan:
+1. **Nama Hari:** Menggunakan format ringkas dan akurat (`Ahad`, `Senin`, `Selasa`, `Rabu`, `Kamis`, `Jum'at`, `Sabtu`).
+2. **Nama Bulan (Maksimal 4 Karakter):** Menggunakan singkatan baku Indonesia dengan batas $\le 4$ karakter:
+   - `Jan` (Januari)
+   - `Feb` (Februari)
+   - `Mar` (Maret)
+   - `Apr` (April)
+   - `Mei` (Mei)
+   - `Juni` (Juni - 4 karakter)
+   - `Juli` (Juli - 4 karakter)
+   - `Agst` (Agustus - 4 karakter)
+   - `Sept` (September - 4 karakter, sesuai permintaan: `Jum'at, 25 Sept 2026`)
+   - `Okt` (Oktober)
+   - `Nov` (November)
+   - `Des` (Desember)
+3. **Contoh Hasil Tampilan:**
+   - Sebelumnya: `Jumat, 25 September 2026 • 14 Rabiul Akhir 1448 H • 10:22:11 WIB`
+   - Sekarang: `Jum'at, 25 Sept 2026 • 14 Rabiul Akhir 1448 H • 10:22:11 WIB`
+   - Menghemat lebih dari 6-8 karakter per baris, memberikan ruang lega bagi ornamen kaligrafi medali dan judul masjid.
+
+---
+
+### Berkas yang Diperbarui:
+1. `web-statis/js/display-clock-ambient.js` (Fungsi utama `getStandardMasjidDateTime` disesuaikan dengan singkatan bulan 4 karakter).
+2. `web-statis/slides/ambulance.html` (Sinkronisasi fungsi `updateClock` & delegasi `getStandardMasjidDateTime`).
+3. `web-statis/slides/keuangan.html` (Sinkronisasi fungsi `updateClock` & delegasi `getStandardMasjidDateTime`).
+4. `web-statis/slides/infaq.html` (Sinkronisasi fungsi `updateClock` & delegasi `getStandardMasjidDateTime`).
+5. `web-statis/slides/keuangan-summary.html` (Sinkronisasi fungsi `updateClock` & delegasi `getStandardMasjidDateTime`).
+6. `web-statis/slides/qris.html` (Sinkronisasi fungsi `updateClock` & delegasi `getStandardMasjidDateTime`).
+7. `web-statis/slides/pengumuman.html` (Sinkronisasi fungsi `updateClock` & format tanggal pengumuman).
+8. `web-statis/slides/jumat.html` (Sinkronisasi array bulan 4 karakter `bulanList`).
+9. `web-statis/slides/slide.html` (Sinkronisasi fungsi `updateClock` & delegasi `getStandardMasjidDateTime`).
+10. `web-statis/slides/hikmah.html` (Sinkronisasi fungsi `updateClock` & delegasi `getStandardMasjidDateTime`).
+11. `web-statis/slides/live-mimbar.html` (Sinkronisasi fungsi `updateClock` dengan bulan 4 karakter).
+12. `web-statis/slides/live-mekah.html` (Sinkronisasi fungsi `updateClock` dengan bulan 4 karakter).
+13. `web-statis/slides/live-madinah.html` (Sinkronisasi fungsi `updateClock` dengan bulan 4 karakter).
+14. `web-statis/slides/idul-fitri.html` (Sinkronisasi fungsi `updateDateTime` & delegasi `getStandardMasjidDateTime`).
+15. `web-statis/slides/idul-adha.html` (Sinkronisasi fungsi `updateDateTime` & delegasi `getStandardMasjidDateTime`).
+16. `web-statis/admin.html` (Sinkronisasi placeholder tanggal preview Jum'at).
+17. `LATEST_UPDATE.md` (Dokumentasi Bab 68).
+
+---
+
+### Status Sinkronisasi:
+- Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+

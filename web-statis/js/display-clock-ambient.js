@@ -190,13 +190,18 @@ function computeKuwaitiHijri(date) {
 
 function getStandardMasjidDateTime(now = new Date(), asHtml = true) {
     try {
-        const masehi = new Intl.DateTimeFormat('id-ID', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            timeZone: 'Asia/Jakarta'
-        }).format(now);
+        const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+        const monthsShort = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni',
+            'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'
+        ];
+
+        const dayName = days[now.getDay()];
+        const dateNum = now.getDate();
+        const monthName = monthsShort[now.getMonth()];
+        const yearNum = now.getFullYear();
+
+        const masehi = `${dayName}, ${dateNum} ${monthName} ${yearNum}`;
 
         const hijri = getStandardHijriDate(now);
 

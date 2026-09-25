@@ -670,12 +670,16 @@
 		function updateDateTime() {
 			const now = new Date();
 			const dtEl = document.getElementById('datetime');
-			if (dtEl) {
-				const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-				const tglStr = now.toLocaleDateString('id-ID', options);
-				const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
-				dtEl.innerHTML = `${tglStr} • <span style="color:#ffd700;font-weight:700;">${jamStr} WIB</span>`;
+			if (!dtEl) return;
+			if (typeof getStandardMasjidDateTime === 'function') {
+				dtEl.innerHTML = getStandardMasjidDateTime(now, true);
+				return;
 			}
+			const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+			const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
+			const tglStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+			const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+			dtEl.innerHTML = `${tglStr} • <span style="color:#ffd700;font-weight:700;">${jamStr} WIB</span>`;
 		}
 		updateDateTime();
 		setInterval(updateDateTime, 1000);

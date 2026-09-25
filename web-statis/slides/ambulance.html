@@ -598,17 +598,20 @@
         // Jam & Tanggal Standar Masjid
         function updateClock() {
             const now = new Date();
+            const dtEl = document.getElementById('datetime');
+            if (!dtEl) return;
+            if (typeof getStandardMasjidDateTime === 'function') {
+                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
+                return;
+            }
             const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
             
             const dayName = days[now.getDay()];
             const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
             const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-            const dtEl = document.getElementById('datetime');
-            if (dtEl) {
-                dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
-            }
+            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
         }
         updateClock();
         setInterval(updateClock, 1000);
