@@ -3236,6 +3236,73 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 5. Cloudflare Pages / Static Assets Deployment (`digitalaljihad.my.id`).
 6. `LATEST_UPDATE.md` (Dokumentasi Bab 80).
 
+---
+
+## 🚀 81. PENGHAPUSAN DROPDOWN PERAN / TINGKAT AKSES (ROLE) PADA MODAL EDIT KREDENSIAL PENGGUNA
+
+**Tanggal:** 25 September 2026  
+**Status:** Sukses & Tayang Penuh (*Live Production Ready*)  
+**Domain Live:** `https://digitalaljihad.my.id/`
+
+### Kebutuhan Pengguna:
+- Pada popup modal **Edit Kredensial Pengguna** (`#modalEditUser`), hilangkan kolom dropdown dan label teks **"Peran / Tingkat Akses (Role)"**.
+- Pengguna hanya ingin mengedit informasi utama akun (Nama Lengkap, Alamat Email, dan Password Baru) tanpa menampilkan opsi pilihan peran tingkat akses di form tersebut.
+
+### Solusi & Rincian Teknis yang Diterapkan:
+1. **Pembaruan Modal HTML (`admin.html`):**
+   - Kolom dropdown `<select id="editUserRole">` beserta label `Peran / Tingkat Akses (Role)` dihapus dari tampilan modal.
+   - Digantikan dengan elemen `<input type="hidden" id="editUserRole">` sehingga antarmuka modal tampil lebih bersih, rapi, dan proporsional.
+2. **Preservasi Nilai Default & Fallback Aman (AGENTS.md):**
+   - Pada saat fungsi `bukaModalEditUser(userId)` dijalankan, nilai role asli pengguna tetap dimasukkan ke elemen tersembunyi `editUserRole`.
+   - Pada fungsi `simpanPerubahanUser()`, diterapkan pembacaan fallback aman:
+     `const role = document.getElementById('editUserRole')?.value || 'petugas';`
+   - Hal ini memastikan bahwa hak akses pengguna tidak berubah atau ter-reset ketika Super Admin memperbarui nama, email, atau password pengguna.
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Modal `#modalEditUser` dan fungsi `simpanPerubahanUser`).
+2. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html`.
+3. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 81).
+
+---
+
+## 🚀 82. PENINGKATAN KETAJAMAN & KONTRAST FONT HEADER "MASJID JAMI' AL JIHAD" (MENIADAKAN GLOW BIAS)
+
+**Tanggal:** 25 September 2026  
+**Status:** Sukses & Tayang Penuh (*Live Production Ready*)  
+**Domain Live:** `https://digitalaljihad.my.id/`
+
+### Kebutuhan Pengguna:
+- Warna font header "MASJID JAMI' AL JIHAD" sebelumnya dinilai masih kurang gelap, sehingga warnanya terlihat agak bias atau kurang terlihat tajam ketika dilihat dari jarak jauh pada layar TV display masjid.
+
+### Analisis Akar Masalah:
+1. **Warna Font Terlalu Terang:** Nilai warna sebelumnya `#085a2b` merupakan hijau rumput bernuansa medium (R:8, G:90, B:43) yang membaur dengan latar belakang ornamen saat terkena backlight layar TV.
+2. **Efek Glow Bias Blur:** Adanya aturan `text-shadow: ... 0 0 20px rgba(255, 215, 0, 0.65)` menciptakan pendaran kuning blur sebesar 20px di sekeliling dan di belakang teks huruf, sehingga tepi karakter menjadi kabur (*bias*) dan menurunkan ketajaman kontras tulisan.
+3. **Stroke Emas Terlalu Terang:** Stroke `#ffd700` berbaur dengan warna hijau medium sehingga memudarkan garis tepi huruf font kaligrafi *Masking Renta*.
+
+### Solusi & Rincian Teknis yang Diterapkan:
+1. **Penggelapan Warna Font (`#01220e`):**
+   - Mengubah warna font teks dari `#085a2b` menjadi **Deep Dark Emerald Forest Green (`#01220e`)**. Warna ini jauh lebih gelap, pekat, kokoh, dan berwibawa.
+2. **Peniadaan Glow Blur Kuning yang Membiaskan Huruf:**
+   - Menghapus efek `0 0 20px rgba(255, 215, 0, 0.65)`.
+3. **Penyempurnaan Outline Emas & Bayangan 3D yang Tajam:**
+   - Stroke outline diganti dengan warna emas metalik presisi (`#d4af37`).
+   - Ditambahkan bayangan gelap pekat berkedalaman tinggi `0 5px 14px rgba(0, 0, 0, 0.98)` sehingga huruf tampil berdiri tegak, terpisah jelas dari latar belakang, sangat tajam, dan tidak berkabut (*zero-bias*).
+4. **Pembaruan Menyeluruh di Seluruh Modul Tampilan TV:**
+   - Diperbarui di berkas master tema: `display-theme.css` dan `partials-theme.css`.
+   - Diperbarui di seluruh 11 slide display TV: `utama.html`, `ambulance.html`, `hikmah.html`, `infaq.html`, `keuangan-summary.html`, `keuangan.html`, `pengumuman.html`, `qris.html`, `qurban.html`, `slide.html`, dll.
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/css/display-theme.css` (Gaya header master TV).
+2. `web-statis/css/partials-theme.css` (Gaya header partials & embed).
+3. `web-statis/slides/*.html` (11 berkas slide tampilan TV).
+4. `web-statis/admin.html` (Modal `#modalEditUser` input role hidden).
+5. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+6. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
+7. `LATEST_UPDATE.md` (Dokumentasi Bab 82).
+
+
+
 
 
 

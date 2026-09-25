@@ -259,13 +259,13 @@ body.theme-isya {
     text-transform: uppercase !important;
     background: none !important;
     -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: #085a2b !important;
-    color: #085a2b !important;
+    -webkit-text-fill-color: #01220e !important;
+    color: #01220e !important;
     text-shadow:
-        1px 1px 0 #ffd700,
-        -1px 1px 0 #ffd700,
-        1px -1px 0 #ffd700,
-        -1px -1px 0 #ffd700,
+        1px 1px 0 #d4af37,
+        -1px 1px 0 #d4af37,
+        1px -1px 0 #d4af37,
+        -1px -1px 0 #d4af37,
         2px 2px 0 #000000,
         -2px 2px 0 #000000,
         2px -2px 0 #000000,
@@ -274,8 +274,7 @@ body.theme-isya {
         -3px 3px 0 #000000,
         3px -3px 0 #000000,
         -3px -3px 0 #000000,
-        0 5px 12px rgba(0, 0, 0, 0.95),
-        0 0 20px rgba(255, 215, 0, 0.65) !important;
+        0 5px 12px rgba(0, 0, 0, 0.95), 0 5px 14px rgba(0, 0, 0, 0.98) !important;
     filter: none !important;
     margin: 0 0 -15px 0 !important;
     padding: 0 !important;
@@ -638,10 +637,10 @@ h2.sub-header {
         line-height: 1.2 !important;
         margin: 0 0 2px 0 !important; /* Hapus margin minus -15px agar tidak menumpuk ke elemen bawah */
         text-shadow:
-            1px 1px 0 #ffd700,
-            -1px 1px 0 #ffd700,
-            1px -1px 0 #ffd700,
-            -1px -1px 0 #ffd700,
+            1px 1px 0 #d4af37,
+            -1px 1px 0 #d4af37,
+            1px -1px 0 #d4af37,
+            -1px -1px 0 #d4af37,
             1px 1px 4px rgba(0, 0, 0, 0.9),
             0 0 10px rgba(255, 215, 0, 0.5) !important;
     }
