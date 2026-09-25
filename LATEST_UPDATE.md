@@ -1982,6 +1982,60 @@ Fitur **Audio Tarhim Otomatis** pada sistem display TV statis (`web-statis/praye
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+---
+
+## 🕌 60. UPGRADE SISTEM ROYAL MOSQUE DUAL PULSE, OUTER GLOW & METALLIC SHIMMER PADA KARTU JADWAL SHOLAT (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 5.7.0 | **Status:** ✅ 100% Selesai, Teruji, & Sinkron
+
+### Ringkasan Pencapaian:
+Fitur kartu jadwal jam sholat pada slide display utama (`web-statis/slides/utama.html` dan `resources/views/utama.blade.php`) telah ditingkatkan secara masif dari sekadar penanda statis menjadi sistem interaktif visual kelas atas: **"The Royal Mosque Dual Pulse & Dynamic Outer Glow System"**. 
+
+Fitur ini menghidupkan kembali dan melipatgandakan kualitas visual fitur di versi lama ("web jadul"), menghadirkan efek denyutan berirama lembut (*breathing pulse*), pendaran luar neon emas-zamrud (*dynamic outer glow*), sapuan cahaya metalik (*crystal shimmer sweep*), serta lencana status mengambang dinamis (*floating status badge*).
+
+---
+
+### Inovasi & Keunggulan Desain Visual:
+1. **Sistem Deteksi 2-Fase Cerdas (*Dual-Stage State Machine*):**
+   - **Fase 1: MENJELANG SHOLAT (Approaching / Menit Kritis):**
+     - Aktif otomatis **10 menit sebelum waktu sholat tiba** hingga tepat sebelum adzan.
+     - Kelas: `.sholat-card.approaching`.
+     - **Visual:** Denyutan hangat keemasan (*Amber-Gold Breathing Pulse*), bayangan luar berpendar ritmis 2,2 detik (`box-shadow: 0 0 30px rgba(245, 158, 11, 0.85)`).
+     - **Lencana Mengambang:** Menampilkan badge pill di atas nama sholat: `⌛ SEGERA Xm` (menghitung mundur sisa menit dengan presisi).
+     - **Ikon Starlight:** Ikon masjid di kartu berdenyut dan berpendar keemasan (`filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.8))`).
+   - **Fase 2: WAKTU SHOLAT SEDANG BERLANGSUNG (Active / Ongoing):**
+     - Aktif otomatis **sejak menit adzan masuk hingga 30 menit setelahnya**.
+     - Kelas: `.sholat-card.active`.
+     - **Visual:** Pendaran ganda Royal Gold & Zamrud (`box-shadow: 0 0 45px rgba(255, 215, 0, 0.95), 0 0 80px rgba(16, 185, 129, 0.65)`), scale up megah (`1.055` s/d `1.075`), serta border emas cemerlang (`#FFD700`).
+     - **Lencana Mengambang:** Menampilkan badge pill zamrud menyala: `🟢 WAKTU SHOLAT` dengan denyutan dot hijau neon.
+     - **Ikon & Teks Angka:** Ikon masjid bersinar aura emas pekat, jam sholat menyala kristal putih gading dengan pendaran keemasan kontras tinggi (`text-shadow: 0 0 18px rgba(255, 215, 0, 0.95)`).
+
+2. **Sapuan Cahaya Emas Mengalir (*Metallic Gold Shimmer Sweep*):**
+   - Lapisan pseudo-elemen `::after` dengan sudut kemiringan 25 derajat menyapu permukaan kaca kartu aktif setiap 4 detik (`@keyframes cardGoldSweep`). Memberikan kesan kaca kristal istana masjid yang hidup dan mewah tanpa menyilaukan mata jamaah.
+
+3. **Perlindungan Kategori Waktu Khusus (Imsak & Syuruk/Terbit):**
+   - Waktu non-fardhu (Imsak, Terbit, Syuruk) tetap dipertahankan dengan gaya netral bersahaja dan tidak memicu status sholat fardhu agar tidak membingungkan jamaah di masjid.
+
+4. **Keterbacaan Jarak Jauh Optimal (TV 5-15 Meter):**
+   - Kontras warna telah diuji untuk keterbacaan sempurna dari jarak jauh di ruangan masjid yang luas.
+
+---
+
+### Berkas yang Diperbarui:
+1. `web-statis/slides/utama.html`:
+   - Penambahan keyframe animasi CSS `@keyframes royalPulseActive`, `@keyframes royalPulseApproaching`, `@keyframes cardGoldSweep`, `@keyframes iconPulseActive`, `@keyframes iconPulseApproaching`.
+   - Penyisipan `<div class="card-status-badge"></div>` pada kartu inisial dan template dinamis JavaScript.
+   - Peningkatan fungsi `updateCardsActiveState()` dengan kalkulasi dua fase dan penyesuaian interval 1 detik.
+2. `resources/views/utama.blade.php`:
+   - Penyelarasan identik CSS, markup Blade, dan fungsi JavaScript `updateDateTime()` pada versi Laravel.
+
+---
+
+### Sinkronisasi Berkas:
+- Berkas `web-statis/slides/utama.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\utama.html`.
+- Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
 
 
 

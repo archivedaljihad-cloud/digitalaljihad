@@ -356,10 +356,13 @@
 			margin-bottom: 0;
 		}
 
+		/* Royal Mosque Pulse & Outer Glow System */
 		.sholat-card {
+			position: relative;
+			overflow: hidden;
 			background: rgba(4, 25, 18, 0.72);
 			border-radius: 16px;
-			padding: 12px 10px 10px 10px;
+			padding: 16px 10px 10px 10px;
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
@@ -367,16 +370,132 @@
 			flex: 1;
 			max-width: 225px;
 			text-align: center;
-			transition: all 0.3s ease;
+			transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 		}
 
+		/* Lencana Status Mengambang Mewah */
+		.card-status-badge {
+			display: none;
+			position: absolute;
+			top: 4px;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 9px;
+			font-weight: 800;
+			letter-spacing: 0.8px;
+			padding: 1px 8px;
+			border-radius: 12px;
+			text-transform: uppercase;
+			white-space: nowrap;
+			z-index: 4;
+			line-height: 1.3;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+		}
+
+		/* Efek Sapuan Kilau Emas (Metallic Gold Shimmer Sweep) */
+		.sholat-card.active::after,
+		.sholat-card.approaching::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -150%;
+			width: 60%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), rgba(255, 215, 0, 0.4), transparent);
+			transform: skewX(-25deg);
+			animation: cardGoldSweep 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+			pointer-events: none;
+			z-index: 3;
+		}
+
+		@keyframes cardGoldSweep {
+			0%, 70% { left: -150%; }
+			100% { left: 200%; }
+		}
+
+		/* FASE 1: MENJELANG SHOLAT (APPROACHING / 10 MENIT SEBELUM) */
+		.sholat-card.approaching {
+			background: radial-gradient(circle at center, rgba(245, 158, 11, 0.35) 0%, rgba(6, 38, 25, 0.95) 100%);
+			border: 2px solid #FBBF24;
+			transform: translateY(-5px) scale(1.03);
+			animation: royalPulseApproaching 2.2s infinite ease-in-out;
+			z-index: 4;
+		}
+		.sholat-card.approaching .card-status-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			background: rgba(245, 158, 11, 0.28);
+			border: 0.8px solid #FBBF24;
+			color: #FEF3C7;
+			text-shadow: 0 0 6px rgba(245, 158, 11, 0.9);
+		}
+		.sholat-card.approaching i {
+			color: #FCD34D !important;
+			filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.8));
+			animation: iconPulseApproaching 2.2s infinite ease-in-out;
+		}
+
+		@keyframes royalPulseApproaching {
+			0%, 100% {
+				box-shadow: 0 0 16px rgba(245, 158, 11, 0.45), 0 0 35px rgba(217, 119, 6, 0.3), inset 0 0 10px rgba(251, 191, 36, 0.2);
+				border-color: rgba(251, 191, 36, 0.75);
+				transform: translateY(-5px) scale(1.03);
+			}
+			50% {
+				box-shadow: 0 0 30px rgba(245, 158, 11, 0.85), 0 0 55px rgba(217, 119, 6, 0.55), inset 0 0 18px rgba(251, 191, 36, 0.4);
+				border-color: #FDE68A;
+				transform: translateY(-7px) scale(1.045);
+			}
+		}
+		@keyframes iconPulseApproaching {
+			0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6)); }
+			50% { transform: scale(1.14); filter: drop-shadow(0 0 14px rgba(255, 215, 0, 1)); }
+		}
+
+		/* FASE 2: WAKTU SHOLAT SEDANG BERLANGSUNG (ACTIVE / ONGOING) */
 		.sholat-card.active {
-			background: radial-gradient(circle at center,
-					rgba(255, 213, 79, 0.45) 0%,
-					rgba(6, 42, 28, 0.95) 100%);
-			border: 2.5px solid #FFD54F;
-			box-shadow: 0 0 35px rgba(255, 213, 79, 0.55), 0 12px 30px rgba(0, 0, 0, 0.5);
-			transform: translateY(-6px) scale(1.04);
+			background: radial-gradient(circle at center, rgba(255, 215, 0, 0.45) 0%, rgba(5, 46, 30, 0.98) 100%);
+			border: 2.5px solid #FFD700;
+			transform: translateY(-8px) scale(1.055);
+			animation: royalPulseActive 2s infinite ease-in-out;
+			z-index: 5;
+		}
+		.sholat-card.active .card-status-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			background: linear-gradient(135deg, rgba(16, 185, 129, 0.45) 0%, rgba(5, 150, 105, 0.7) 100%);
+			border: 0.8px solid #34D399;
+			color: #FFFFFF;
+			text-shadow: 0 0 6px rgba(52, 211, 153, 0.9);
+			box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+		}
+		.sholat-card.active i {
+			color: #FFD700 !important;
+			filter: drop-shadow(0 0 14px #FFD700);
+			animation: iconPulseActive 2s infinite ease-in-out;
+		}
+		.sholat-card.active .waktu-sholat {
+			color: #FFFDF0;
+			text-shadow: 0 0 18px rgba(255, 215, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
+		}
+
+		@keyframes royalPulseActive {
+			0%, 100% {
+				box-shadow: 0 0 25px rgba(255, 215, 0, 0.65), 0 0 50px rgba(16, 185, 129, 0.35), 0 12px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 215, 0, 0.3);
+				border-color: #FFD700;
+				transform: translateY(-8px) scale(1.055);
+			}
+			50% {
+				box-shadow: 0 0 45px rgba(255, 215, 0, 0.95), 0 0 80px rgba(16, 185, 129, 0.65), 0 16px 36px rgba(0, 0, 0, 0.7), inset 0 0 25px rgba(255, 255, 255, 0.5);
+				border-color: #FFF9C4;
+				transform: translateY(-10px) scale(1.075);
+			}
+		}
+		@keyframes iconPulseActive {
+			0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px #FFD700); }
+			50% { transform: scale(1.2); filter: drop-shadow(0 0 18px #FFFFFF), drop-shadow(0 0 28px #FFD700); }
 		}
 
 		.sholat-card.khusus-imsak-terbit {
@@ -566,7 +685,8 @@
 				@endphp
 
 				<div
-					class="sholat-card {{ $isImsakOrTerbit ? 'khusus-imsak-terbit' : '' }}" data-waktu="{{ \Carbon\Carbon::parse($jadwal->waktu)->format('H:i') }}">
+					class="sholat-card {{ $isImsakOrTerbit ? 'khusus-imsak-terbit' : '' }}" data-nama="{{ $jadwal->nama_sholat }}" data-waktu="{{ \Carbon\Carbon::parse($jadwal->waktu)->format('H:i') }}">
+					<div class="card-status-badge"></div>
 					<i class="fas {{ in_array(strtolower(trim($jadwal->nama_sholat)), ['syuruk', 'terbit']) ? 'fa-sun' : (strtolower(trim($jadwal->nama_sholat)) == 'imsak' ? 'fa-utensils' : 'fa-mosque') }}"></i>
 					<div class="nama-sholat">{{ $jadwal->nama_sholat }}</div>
 					<div class="waktu-sholat">{{ \Carbon\Carbon::parse($jadwal->waktu)->format('H:i') }}</div>
@@ -600,9 +720,12 @@
 			document.querySelectorAll('.sholat-card').forEach(card => {
 				const waktuText = card.getAttribute('data-waktu');
 				const namaSholatEl = card.querySelector('.nama-sholat');
+				const badgeEl = card.querySelector('.card-status-badge');
 				if (!waktuText || !namaSholatEl) return;
 
 				const namaSholat = namaSholatEl.textContent.trim();
+				const namaClean = namaSholat.toLowerCase();
+				const isSpecial = ['imsak', 'syuruk', 'terbit'].includes(namaClean);
 				const [jadwalHours, jadwalMinutes] = waktuText.split(':').map(Number);
 				let jadwalTotalMinutes = (jadwalHours * 60) + jadwalMinutes;
 
@@ -612,15 +735,32 @@
 					time: waktuText
 				});
 
-				// Kotak menyala 5 menit sebelum hingga 30 menit sesudah
-				let startMinutes = jadwalTotalMinutes - 5;
-				let endMinutes = jadwalTotalMinutes + 30;
+				// Reset status kartu
+				card.classList.remove('active', 'approaching');
+				if (badgeEl) {
+					badgeEl.innerHTML = '';
+					badgeEl.style.display = 'none';
+				}
 
-				if (currentTotalMinutes >= startMinutes && currentTotalMinutes <= endMinutes) {
+				if (isSpecial) return;
+
+				// 1. WAKTU SHOLAT SEDANG BERLANGSUNG: Jam sholat s/d +30 menit
+				if (currentTotalMinutes >= jadwalTotalMinutes && currentTotalMinutes <= (jadwalTotalMinutes + 30)) {
 					card.classList.add('active');
 					activePrayerName = namaSholat;
-				} else {
-					card.classList.remove('active');
+					if (badgeEl) {
+						badgeEl.innerHTML = '<i class="fas fa-circle" style="font-size:6px; color:#34D399; animation: npbPulse 1.2s infinite;"></i> WAKTU SHOLAT';
+						badgeEl.style.display = 'inline-flex';
+					}
+				}
+				// 2. MENJELANG SHOLAT (SEGERA TIBA): 10 menit sebelum waktu sholat
+				else if (currentTotalMinutes >= (jadwalTotalMinutes - 10) && currentTotalMinutes < jadwalTotalMinutes) {
+					card.classList.add('approaching');
+					if (badgeEl) {
+						const sisaMenit = jadwalTotalMinutes - currentTotalMinutes;
+						badgeEl.innerHTML = `<i class="fas fa-hourglass-half" style="font-size:7px;"></i> SEGERA ${sisaMenit}m`;
+						badgeEl.style.display = 'inline-flex';
+					}
 				}
 			});
 		}
