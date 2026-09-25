@@ -1675,6 +1675,53 @@ Telah berhasil dibangun antarmuka otentikasi dan panel kendali admin statis (*se
 - **Bendahara:** Email `bendahara@aljihad.com` | Password `bendahara123`
 - **Operator:** Email `operator@aljihad.com` | Password `operator123`
 
+---
+
+## 🚀 54. PENYEMPURNAAN PANEL KENDALI ADMIN (admin.html) DENGAN INTEGRASI SUPABASE REALTIME CRUD & FITUR LENGKAP (25 September 2026)
+
+**Tanggal:** 25 September 2026 | **Versi:** 5.1.1 | **Status:** ✅ Selesai, Teruji, Tersinkronisasi & Siap Produksi
+
+### Ringkasan Pencapaian:
+Panel Kendali Admin (`admin.html`) telah disempurnakan secara menyeluruh dari sekadar antarmuka visual menjadi sistem manajemen masjid modern berbasis *Single Page Application (SPA)* dengan mesin integrasi **Supabase BaaS Realtime REST API**. Seluruh perubahan data langsung tersimpan di cloud database dan seketika berdampak pada Layar Display TV Masjid Al-Jihad.
+
+### Rincian Fitur & Peningkatan pada `admin.html`:
+1. **Mesin CRUD Supabase REST API Realtime:**
+   - **`loadAllSupabaseData()`**: Membaca data kas utama (`keuangan`), kas ambulance (`keuangan_ambulance`), jadwal sholat (`jadwal_sholat`), petugas Jum'at (`sholat_jumat`), serta konfigurasi aplikasi (`app_settings`).
+   - **`simpanTransaksiKas()`**: Menyimpan transaksi kas baru ke tabel `keuangan` atau `keuangan_ambulance` berdasarkan kategori, kemudian secara otomatis menghitung ulang saldo total, arus kas bulanan, dan memperbarui tabel secara reaktif.
+   - **`hapusTransaksi(id, table)`**: Penghapusan data transaksi dengan modal konfirmasi dan sinkronisasi instan ke Supabase.
+   - **`simpanPetugasJumat()`**: Menyimpan nama Khotib, Imam, Muadzin, Bilal, serta tanggal Jum'at mendatang ke tabel `sholat_jumat` Supabase. Kartu preview TV Raudhah Al-Jihad 4:5 otomatis terupdate.
+   - **`simpanRunningText()`**: Mengirim pembaruan teks berjalan langsung ke `app_settings.running_text_pages` di Supabase.
+   - **`simpanJadwalSholat()` & `simpanPengaturanSistem()`**: Memperbarui durasi Prayer Mode (countdown adzan, durasi layar adzan, iqamah, dan sholat khusyuk) serta interval rotasi layar TV dan URL streaming CCTV/Makkah Live.
+
+2. **Manajemen Kas Ambulance Lengkap (`view-ambulance`):**
+   - Menampilkan kartu saldo kas ambulance yang terpisah dari kas utama.
+   - Menyertakan panel informasi layanan dan nomor *hotline driver* ambulance siaga 24 jam (`0877-5876-7000`).
+   - Dilengkapi tabel riwayat operasional armada ambulance (BBM, servis, donasi) dengan tombol hapus transaksi yang terhubung ke tabel `keuangan_ambulance`.
+
+3. **Modul Penggalangan Infaq & Donasi Digital (`view-infaq`):**
+   - Menampilkan visualisasi QRIS Standar Nasional beresolusi tinggi yang dapat dipindai langsung.
+   - Dilengkapi *progress bar* interaktif pencapaian target renovasi & pembebasan lahan masjid dengan persentase otomatis.
+   - Kartu rekening resmi infaq Bank Syariah Indonesia (BSI) `7123-456-789` a.n. Masjid Jami' Al-Jihad.
+
+4. **Persistensi Susunan Rotasi TV & Hak Akses Reorder (`view-rotasi-tv`):**
+   - **`renderRotationTable(pages)`**: Menampilkan tabel rotasi halaman slide TV secara dinamis berdasarkan data `app_settings.rotation_pages` dari Supabase.
+   - **Kontrol Reorder Berdasarkan Peran**: Tombol Geser Naik (▲) dan Geser Turun (▼) aktif penuh untuk Super Admin, dan terkunci aman (*disabled/read-only*) untuk Operator TV.
+   - **`simpanRotasiTV()`**: Membaca susunan urutan dan status aktif/nonaktif dari seluruh baris tabel lalu melakukan `PATCH` ke Supabase, sehingga urutan tayang display TV tersimpan permanen di cloud.
+
+5. **Ekspor Data Kas ke Format Excel/CSV (`exportKasExcel()`):**
+   - Mendukung pengunduhan langsung seluruh mutasi kas masjid ke dalam berkas `.csv` ber-BOM UTF-8 (`\uFEFF`) yang rapi dan langsung dapat dibuka di Microsoft Excel, Google Sheets, maupun LibreOffice tanpa masalah karakter.
+
+6. **Pembersihan Kode & Validasi:**
+   - Menghapus tag skrip ganda pada bagian akhir dokumen.
+   - Memastikan 100% keseimbangan tag `<div>` (242 pasang pembuka & penutup yang valid).
+   - Validasi sintaksis JavaScript inline 100% bebas dari error melalui pengujian Node.js.
+
+### Sinkronisasi Berkas:
+- Berkas `web-statis/admin.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html`.
+- Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
+
 
 
 

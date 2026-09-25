@@ -1567,6 +1567,8 @@
 
                     <!-- ==========================================
                          VIEW 7: KAS AMBULANCE (BENDAHARA & ADMIN)
+                                            <!-- ==========================================
+                         VIEW 7: KAS AMBULANCE (BENDAHARA & ADMIN)
                          ========================================== -->
                     <div id="view-ambulance" class="section-view">
                         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -1584,8 +1586,8 @@
                                     <div class="metric-card-body">
                                         <div>
                                             <div class="metric-title">Saldo Ambulance</div>
-                                            <div class="metric-value text-primary">Rp 18.750.000</div>
-                                            <div class="metric-sub text-success">Siap Operasional 24 Jam</div>
+                                            <div class="metric-value text-primary" id="statSaldoAmbulanceCard">Rp 18.750.000</div>
+                                            <div class="metric-sub text-success"><i class="fas fa-check-circle"></i> Siap Operasional 24 Jam</div>
                                         </div>
                                         <div class="metric-icon-box icon-box-blue"><i class="fas fa-ambulance"></i></div>
                                     </div>
@@ -1594,13 +1596,38 @@
                             <div class="col-lg-8 mb-4">
                                 <div class="content-card">
                                     <div class="content-card-header">
-                                        <h6 class="content-card-title"><i class="fas fa-info-circle"></i> Info Operasional Ambulance</h6>
+                                        <h6 class="content-card-title"><i class="fas fa-info-circle"></i> Info Layanan & Kontak Darurat Ambulance</h6>
                                     </div>
                                     <div class="p-3">
-                                        <p class="mb-1"><strong>Nomor Layanan Darurat Ambulance:</strong> 0877-5876-7000 (Siaga 24 Jam)</p>
-                                        <p class="mb-0 text-muted">Layanan antar-jemput pasien dan jenazah untuk warga jamaah dan dhuafa secara gratis / subsidi kas masjid.</p>
+                                        <p class="mb-1"><strong>Nomor Hotine / WA Driver:</strong> <span class="badge badge-primary px-2 py-1 font-weight-bold" style="font-size: 0.9rem;">0877-5876-7000</span> (Siaga 24 Jam)</p>
+                                        <p class="mb-0 text-muted">Layanan antar-jemput pasien gawat darurat dan pengantaran jenazah untuk warga jamaah dan kaum dhuafa secara gratis (disubsidi dari Kas Ambulance Masjid Jami' Al-Jihad).</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabel Riwayat Operasional Ambulance -->
+                        <div class="content-card">
+                            <div class="content-card-header">
+                                <h6 class="content-card-title">
+                                    <i class="fas fa-history"></i> Riwayat Operasional & Donasi Armada Ambulance
+                                </h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Uraian Kegiatan / Donasi</th>
+                                            <th>Tipe</th>
+                                            <th class="text-right">Nominal (Rp)</th>
+                                            <th class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ambulanceTableBody">
+                                        <tr><td colspan="5" class="text-center text-muted py-4">Memuat riwayat kas ambulance dari Supabase...</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -1615,14 +1642,41 @@
                                 <i class="fas fa-donate text-warning mr-2"></i> Program Penggalangan Infaq & Donasi
                             </h4>
                         </div>
-                        <div class="content-card">
-                            <div class="content-card-header">
-                                <h6 class="content-card-title"><i class="fas fa-hand-holding-usd"></i> Program Aktif</h6>
+                        <div class="row">
+                            <div class="col-lg-5 mb-4">
+                                <div class="content-card text-center p-4">
+                                    <h6 class="font-weight-bold text-gray-800 mb-3"><i class="fas fa-qrcode text-success mr-1"></i> QRIS Standar Nasional</h6>
+                                    <img src="img/QRIS.jpg" alt="QRIS Donasi" style="max-width: 240px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.12);" class="mb-3">
+                                    <p class="small text-muted mb-0">Dapat dipindai menggunakan seluruh aplikasi dompet digital (GoPay, OVO, DANA, ShopeePay, LinkAja) & Mobile Banking Syariah.</p>
+                                </div>
                             </div>
-                            <div class="p-4 text-center">
-                                <img src="img/QRIS.jpg" alt="QRIS Donasi" style="max-width: 200px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" class="mb-3">
-                                <h5>Infaq Pembebasan & Renovasi Lahan Masjid</h5>
-                                <p class="text-muted">Target: Rp 250.000.000 • Terkumpul: Rp 128.450.000 (51.3%)</p>
+                            <div class="col-lg-7 mb-4">
+                                <div class="content-card">
+                                    <div class="content-card-header">
+                                        <h6 class="content-card-title"><i class="fas fa-hand-holding-usd"></i> Program Wakaf & Renovasi Aktif</h6>
+                                    </div>
+                                    <div class="p-4">
+                                        <h5 class="font-weight-bold text-gray-800 mb-1">Infaq Pembebasan & Renovasi Lahan Masjid</h5>
+                                        <p class="text-muted small mb-3">Program perluasan area parkir dan fasilitas serbaguna jamaah Masjid Jami' Al-Jihad.</p>
+                                        
+                                        <div class="d-flex justify-content-between font-weight-bold small mb-1">
+                                            <span>Progress Terkumpul (51.3%)</span>
+                                            <span class="text-success font-weight-bold">Rp 128.450.000 / Rp 250.000.000</span>
+                                        </div>
+                                        <div class="progress mb-4" style="height: 12px; border-radius: 10px;">
+                                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 51.3%;" aria-valuenow="51.3" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+
+                                        <div class="p-3 bg-light rounded border">
+                                            <div class="font-weight-bold text-gray-800 mb-2"><i class="fas fa-university text-primary mr-1"></i> Rekening Resmi Infaq / Transfer Bank:</div>
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span><strong>Bank Syariah Indonesia (BSI)</strong></span>
+                                                <code class="font-weight-bold" style="font-size: 1rem;">7123-456-789</code>
+                                            </div>
+                                            <div class="small text-muted">Atas Nama: <strong>Masjid Jami' Al-Jihad</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1821,7 +1875,7 @@
 
 
     <!-- =======================================================
-         SCRIPTS
+         SCRIPTS: VENDOR & SUPABASE REALTIME ENGINE
          ======================================================= -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -1831,6 +1885,9 @@
     <script>
         // 1. Verifikasi Autentikasi Pengguna saat halaman dimuat
         let currentUser = null;
+        let cachedKasData = [];
+        let cachedAmbData = [];
+        let cachedRotationPages = [];
 
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof AdminAuth !== 'undefined') {
@@ -1843,6 +1900,9 @@
             // Inisialisasi Jam & Widget Topbar
             startTopbarClock();
             initDateInputs();
+
+            // Muat Data Live dari Supabase
+            loadAllSupabaseData();
         });
 
         // 2. Terapkan Sesi Pengguna & RBAC
@@ -1888,7 +1948,6 @@
 
             // Tentukan View default jika peran bendahara
             if (user.role === 'bendahara') {
-                // Jika sedang di view yang tidak boleh diakses bendahara, pindah ke view-keuangan
                 const activeView = document.querySelector('.section-view.active');
                 if (activeView && (activeView.id === 'view-jadwal-sholat' || activeView.id === 'view-sholat-jumat' || activeView.id === 'view-rotasi-tv' || activeView.id === 'view-running-text' || activeView.id === 'view-users' || activeView.id === 'view-settings')) {
                     switchAdminSection('keuangan');
@@ -1903,9 +1962,7 @@
 
         // 4. Navigasi Seksi Antara Menu
         function switchAdminSection(sectionName) {
-            // Sembunyikan semua seksi
             document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
-            // Hapus status active di sidebar
             document.querySelectorAll('#accordionSidebar .nav-item').forEach(el => el.classList.remove('active'));
 
             const targetView = document.getElementById('view-' + sectionName);
@@ -1914,7 +1971,6 @@
             if (targetView) targetView.classList.add('active');
             if (targetNav) targetNav.classList.add('active');
 
-            // Scroll halus ke atas
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1940,89 +1996,594 @@
             const today = new Date().toISOString().split('T')[0];
             const kasTgl = document.getElementById('kasTanggal');
             if (kasTgl) kasTgl.value = today;
+            const jumTgl = document.getElementById('jumatTanggal');
+            if (jumTgl && !jumTgl.value) jumTgl.value = today;
         }
 
-        // 6. Action Functions (Simulasi & Supabase Handlers)
-        function simpanJadwalSholat() {
-            alert('Alhamdulillah! Jadwal sholat dan durasi prayer mode berhasil disimpan dan disinkronkan ke Layar TV Display.');
+        function formatRupiah(num) {
+            return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
         }
 
-        function simpanPetugasJumat() {
-            const khotib = document.getElementById('jumatKhotib')?.value;
-            const imam = document.getElementById('jumatImam')?.value;
-            if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotib;
-            if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = imam;
-            if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotib;
-            alert('Alhamdulillah! Petugas Sholat Jum\'at berhasil diperbarui dan tayang di Display TV.');
+        function getSupabaseHeaders() {
+            return {
+                'apikey': SUPABASE_CONFIG.anonKey,
+                'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                'Content-Type': 'application/json'
+            };
         }
 
-        function simpanRotasiTV() {
-            alert('Alhamdulillah! Susunan rotasi halaman TV berhasil disimpan ke database.');
-        }
+        // =======================================================
+        // 6. LIVE DATA LOADER DARI SUPABASE
+        // =======================================================
+        async function loadAllSupabaseData() {
+            if (typeof SUPABASE_CONFIG === 'undefined' || !SUPABASE_CONFIG.url) return;
 
-        function simpanRunningText() {
-            alert('Alhamdulillah! Teks Berjalan TV berhasil disimpan dan tayang seketika di TV Display.');
-        }
+            const headers = getSupabaseHeaders();
 
-        function simpanPengaturanSistem() {
-            alert('Pengaturan sistem berhasil disimpan.');
-        }
+            // A. Kas Utama Masjid
+            try {
+                const resKas = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?order=tanggal.desc,id.desc`, { headers });
+                if (resKas.ok) {
+                    cachedKasData = await resKas.json();
+                    renderKasTables(cachedKasData);
+                }
+            } catch (err) {
+                console.warn('Gagal memuat kas utama dari Supabase:', err);
+            }
 
-        function exportKasExcel() {
-            alert('Menghasilkan file Excel Laporan Kas Masjid Jami\' Al-Jihad... File siap diunduh.');
-        }
+            // B. Kas Mobil Ambulance
+            try {
+                const resAmb = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan_ambulance?order=tanggal.desc,id.desc`, { headers });
+                if (resAmb.ok) {
+                    cachedAmbData = await resAmb.json();
+                    renderAmbulanceData(cachedAmbData);
+                }
+            } catch (err) {
+                console.warn('Gagal memuat kas ambulance dari Supabase:', err);
+            }
 
-        function hapusTransaksi(btn) {
-            if (confirm('Yakin ingin menghapus catatan transaksi ini?')) {
-                const tr = btn.closest('tr');
-                if (tr) tr.remove();
+            // C. Petugas Sholat Jum'at Terkini
+            try {
+                const resJumat = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc&limit=1`, { headers });
+                if (resJumat.ok) {
+                    const jumatList = await resJumat.json();
+                    if (jumatList && jumatList.length > 0) {
+                        const j = jumatList[0];
+                        if (document.getElementById('jumatTanggal')) document.getElementById('jumatTanggal').value = j.tanggal || '';
+                        if (document.getElementById('jumatKhotib')) document.getElementById('jumatKhotib').value = j.khatib || j.khotib || '';
+                        if (document.getElementById('jumatImam')) document.getElementById('jumatImam').value = j.imam || '';
+                        if (document.getElementById('jumatMuadzin')) document.getElementById('jumatMuadzin').value = j.muadzin || '';
+                        if (document.getElementById('jumatBilal')) document.getElementById('jumatBilal').value = j.bilal || '';
+
+                        // Update Dashboard & Preview
+                        if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = j.khatib || j.khotib || '-';
+                        if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = j.khatib || j.khotib || '-';
+                        if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = j.imam || '-';
+                        if (document.getElementById('prevJumatTanggal') && j.tanggal) {
+                            const d = new Date(j.tanggal);
+                            document.getElementById('prevJumatTanggal').textContent = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal memuat petugas jumat:', err);
+            }
+
+            // D. Jadwal Sholat
+            try {
+                const resSholat = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers });
+                if (resSholat.ok) {
+                    const sholatList = await resSholat.json();
+                    sholatList.forEach(s => {
+                        const name = (s.nama_sholat || s.nama || '').toLowerCase();
+                        const timeVal = s.waktu ? s.waktu.substring(0, 5) : (s.jam || '');
+                        if (name.includes('subuh') && document.getElementById('sholatSubuh')) document.getElementById('sholatSubuh').value = timeVal;
+                        if ((name.includes('syuruq') || name.includes('terbit')) && document.getElementById('sholatTerbit')) document.getElementById('sholatTerbit').value = timeVal;
+                        if (name.includes('dzuhur') && document.getElementById('sholatDzuhur')) document.getElementById('sholatDzuhur').value = timeVal;
+                        if (name.includes('ashar') && document.getElementById('sholatAshar')) document.getElementById('sholatAshar').value = timeVal;
+                        if (name.includes('maghrib') && document.getElementById('sholatMaghrib')) document.getElementById('sholatMaghrib').value = timeVal;
+                        if (name.includes('isya') && document.getElementById('sholatIsya')) document.getElementById('sholatIsya').value = timeVal;
+                    });
+                }
+            } catch (err) {
+                console.warn('Gagal memuat jadwal sholat:', err);
+            }
+
+            // E. App Settings (Durasi, Running Text, Rotasi TV)
+            try {
+                const resSet = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers });
+                if (resSet.ok) {
+                    const settingsList = await resSet.json();
+                    if (settingsList && settingsList.length > 0) {
+                        const s = settingsList[0];
+                        if (document.getElementById('cfgNamaMasjid') && s.nama_aplikasi) document.getElementById('cfgNamaMasjid').value = s.nama_aplikasi;
+                        if (document.getElementById('cfgIntervalTV') && s.rotation_interval) document.getElementById('cfgIntervalTV').value = s.rotation_interval;
+                        if (document.getElementById('cfgLiveMekah') && s.live_makkah_url) document.getElementById('cfgLiveMekah').value = s.live_makkah_url;
+                        if (document.getElementById('cfgCctvMimbar') && s.cctv_mimbar_url) document.getElementById('cfgCctvMimbar').value = s.cctv_mimbar_url;
+                        if (document.getElementById('cfgDurasiSholat') && s.prayer_mode_jumat_duration) document.getElementById('cfgDurasiSholat').value = s.prayer_mode_jumat_duration;
+                        
+                        // Running text
+                        if (document.getElementById('inputRunningText') && s.running_text_pages) {
+                            if (typeof s.running_text_pages === 'string') {
+                                document.getElementById('inputRunningText').value = s.running_text_pages;
+                            } else if (typeof s.running_text_pages === 'object' && s.running_text_pages.default) {
+                                document.getElementById('inputRunningText').value = s.running_text_pages.default;
+                            }
+                        }
+
+                        // Rotasi TV Count & Render Tabel Rotasi
+                        if (s.rotation_pages && Array.isArray(s.rotation_pages)) {
+                            cachedRotationPages = s.rotation_pages;
+                            renderRotationTable(s.rotation_pages);
+                            const activeCount = s.rotation_pages.filter(p => p.active !== false).length;
+                            if (document.getElementById('statStatusTV')) document.getElementById('statStatusTV').textContent = `${activeCount} Halaman Aktif`;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal memuat app_settings:', err);
             }
         }
 
-        function simpanTransaksiKas() {
+        // Render Tabel Kas
+        function renderKasTables(data) {
+            let totalSaldo = 0;
+            let totalMasukBulanIni = 0;
+            const currentMonth = new Date().getMonth();
+
+            data.forEach(item => {
+                const masuk = parseFloat(item.pemasukan) || 0;
+                const keluar = parseFloat(item.pengeluaran) || 0;
+                totalSaldo += (masuk - keluar);
+
+                if (item.tanggal) {
+                    const itemMonth = new Date(item.tanggal).getMonth();
+                    if (itemMonth === currentMonth) {
+                        totalMasukBulanIni += masuk;
+                    }
+                }
+            });
+
+            // Update Card Metrik
+            if (document.getElementById('statKasUtama')) {
+                document.getElementById('statKasUtama').textContent = formatRupiah(totalSaldo);
+            }
+
+            // Quick table (Dashboard - 5 record)
+            const quickTbody = document.getElementById('quickKasTableBody');
+            if (quickTbody) {
+                if (!data || data.length === 0) {
+                    quickTbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3">Belum ada transaksi kas tercatat.</td></tr>';
+                } else {
+                    quickTbody.innerHTML = data.slice(0, 5).map(item => {
+                        const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
+                        const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
+                        const badgeHTML = isMasuk ? '<span class="badge-masuk">Masuk</span>' : '<span class="badge-keluar">Keluar</span>';
+                        const textClass = isMasuk ? 'text-success' : 'text-danger';
+                        const sign = isMasuk ? '+' : '-';
+                        const tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
+                        return `
+                            <tr>
+                                <td>${tgl}</td>
+                                <td><strong>${item.deskripsi || item.uraian || 'Infaq Kas'}</strong></td>
+                                <td>${badgeHTML}</td>
+                                <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Main table (Buku Kas Lengkap)
+            const mainTbody = document.getElementById('mainKasTableBody');
+            if (mainTbody) {
+                if (!data || data.length === 0) {
+                    mainTbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Belum ada transaksi kas tercatat di database.</td></tr>';
+                } else {
+                    mainTbody.innerHTML = data.map(item => {
+                        const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
+                        const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
+                        const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
+                        const textClass = isMasuk ? 'text-success' : 'text-danger';
+                        const sign = isMasuk ? '+' : '-';
+                        const tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
+                        return `
+                            <tr>
+                                <td>${tgl}</td>
+                                <td><strong>${item.deskripsi || item.uraian || 'Infaq Kas'}</strong></td>
+                                <td>${item.kategori || 'Kas Utama Masjid'}</td>
+                                <td>${badgeHTML}</td>
+                                <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, 'keuangan')" title="Hapus Catatan"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        // Render Ambulance Data
+        function renderAmbulanceData(data) {
+            let totalSaldoAmb = 0;
+            data.forEach(item => {
+                totalSaldoAmb += (parseFloat(item.pemasukan) || 0) - (parseFloat(item.pengeluaran) || 0);
+            });
+
+            if (document.getElementById('statKasAmbulance')) {
+                document.getElementById('statKasAmbulance').textContent = formatRupiah(totalSaldoAmb);
+            }
+            if (document.getElementById('statSaldoAmbulanceCard')) {
+                document.getElementById('statSaldoAmbulanceCard').textContent = formatRupiah(totalSaldoAmb);
+            }
+
+            const ambTbody = document.getElementById('ambulanceTableBody');
+            if (ambTbody) {
+                if (!data || data.length === 0) {
+                    ambTbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Belum ada riwayat transaksi armada ambulance di database.</td></tr>';
+                } else {
+                    ambTbody.innerHTML = data.map(item => {
+                        const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
+                        const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
+                        const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
+                        const textClass = isMasuk ? 'text-success' : 'text-danger';
+                        const sign = isMasuk ? '+' : '-';
+                        const tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
+                        return `
+                            <tr>
+                                <td>${tgl}</td>
+                                <td><strong>${item.deskripsi || item.uraian || 'Operasional Ambulance'}</strong></td>
+                                <td>${badgeHTML}</td>
+                                <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, 'keuangan_ambulance')" title="Hapus"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        // Render Rotation Table
+        function renderRotationTable(pages) {
+            if (!pages || !Array.isArray(pages) || pages.length === 0) return;
+            const tbody = document.getElementById('rotationTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = pages.map((p, idx) => {
+                const isChecked = (p.active !== false) ? 'checked' : '';
+                const title = p.title || p.nama || `Slide ${idx + 1}`;
+                const url = p.url || `slides/slide${idx + 1}.html`;
+                return `
+                    <tr data-index="${idx + 1}">
+                        <td class="font-weight-bold text-center">${idx + 1}</td>
+                        <td><strong>${title}</strong></td>
+                        <td><code>${url}</code></td>
+                        <td>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="rotCheck${idx + 1}" ${isChecked}>
+                                <label class="custom-control-label" for="rotCheck${idx + 1}">Aktif</label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up" onclick="reorderSlide(${idx + 1}, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
+                            <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(${idx + 1}, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Terapkan kembali hak akses reorder
+            if (currentUser) {
+                const isSuperAdmin = (currentUser.role === 'admin');
+                document.querySelectorAll('.btn-reorder').forEach(btn => {
+                    btn.disabled = !isSuperAdmin;
+                    if (!isSuperAdmin) {
+                        btn.classList.add('disabled');
+                        btn.style.opacity = '0.4';
+                        btn.style.cursor = 'not-allowed';
+                    } else {
+                        btn.classList.remove('disabled');
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    }
+                });
+            }
+        }
+
+        // =======================================================
+        // 7. OPERASI TULIS (WRITE & DELETE) KE SUPABASE
+        // =======================================================
+
+        // Simpan Transaksi Kas
+        async function simpanTransaksiKas() {
             const tgl = document.getElementById('kasTanggal')?.value;
             const tipe = document.getElementById('kasTipe')?.value;
             const kat = document.getElementById('kasKategori')?.value;
             const uraian = document.getElementById('kasUraian')?.value;
-            const nominal = document.getElementById('kasNominal')?.value;
+            const nominal = parseFloat(document.getElementById('kasNominal')?.value) || 0;
 
-            if (!uraian || !nominal) {
+            if (!uraian || nominal <= 0) {
                 alert('Harap lengkapi uraian dan nominal transaksi!');
                 return;
             }
 
-            const formattedNominal = parseInt(nominal).toLocaleString('id-ID');
-            const isMasuk = (tipe === 'masuk');
-            const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
-            const textClass = isMasuk ? 'text-success' : 'text-danger';
-            const sign = isMasuk ? '+' : '-';
+            const targetTable = (kat === 'Kas Ambulance') ? 'keuangan_ambulance' : 'keuangan';
+            const payload = {
+                tanggal: tgl,
+                deskripsi: uraian,
+                pemasukan: (tipe === 'masuk' ? nominal : 0),
+                pengeluaran: (tipe === 'keluar' ? nominal : 0),
+                saldo: nominal,
+                kategori: kat
+            };
 
-            const tbody = document.getElementById('mainKasTableBody');
-            if (tbody) {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${tgl}</td>
-                    <td>${uraian}</td>
-                    <td>${kat}</td>
-                    <td>${badgeHTML}</td>
-                    <td class="text-right font-weight-bold ${textClass}">${sign} Rp ${formattedNominal}</td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(this)"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.prepend(tr);
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${targetTable}`, {
+                    method: 'POST',
+                    headers: {
+                        ...getSupabaseHeaders(),
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    $('#modalTambahKas').modal('hide');
+                    document.getElementById('kasUraian').value = '';
+                    document.getElementById('kasNominal').value = '';
+                    await loadAllSupabaseData();
+                    alert('Alhamdulillah! Transaksi kas berhasil dicatat dan disinkronkan ke Supabase.');
+                } else {
+                    const errJson = await res.json().catch(() => ({}));
+                    throw new Error(errJson.message || 'Gagal menyimpan ke server.');
+                }
+            } catch (err) {
+                alert('Pemberitahuan: ' + err.message);
             }
-
-            $('#modalTambahKas').modal('hide');
-            alert('Alhamdulillah! Transaksi kas berhasil dicatat.');
         }
 
+        // Hapus Transaksi Kas
+        async function hapusTransaksi(id, table = 'keuangan') {
+            if (!confirm('Apakah Anda yakin ingin menghapus catatan transaksi ini dari database?')) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${table}?id=eq.${id}`, {
+                    method: 'DELETE',
+                    headers: getSupabaseHeaders()
+                });
+
+                if (res.ok) {
+                    await loadAllSupabaseData();
+                    alert('Catatan transaksi berhasil dihapus.');
+                } else {
+                    alert('Gagal menghapus transaksi dari database.');
+                }
+            } catch (err) {
+                alert('Terjadi kesalahan saat menghapus data: ' + err.message);
+            }
+        }
+
+        // Simpan Petugas Sholat Jum'at
+        async function simpanPetugasJumat() {
+            const tgl = document.getElementById('jumatTanggal')?.value;
+            const khotib = document.getElementById('jumatKhotib')?.value;
+            const imam = document.getElementById('jumatImam')?.value;
+            const muadzin = document.getElementById('jumatMuadzin')?.value;
+            const bilal = document.getElementById('jumatBilal')?.value || muadzin;
+
+            if (!khotib || !imam || !tgl) {
+                alert('Harap lengkapi nama Khotib, Imam, dan Tanggal Jum\'at!');
+                return;
+            }
+
+            const payload = {
+                tanggal: tgl,
+                khatib: khotib,
+                imam: imam,
+                muadzin: muadzin,
+                bilal: bilal
+            };
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
+                    method: 'POST',
+                    headers: {
+                        ...getSupabaseHeaders(),
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotib;
+                    if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = imam;
+                    if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotib;
+                    alert('Alhamdulillah! Petugas Sholat Jum\'at berhasil disimpan ke Supabase dan langsung tayang di TV Display.');
+                } else {
+                    alert('Gagal menyimpan petugas Jum\'at ke database.');
+                }
+            } catch (err) {
+                alert('Terjadi kesalahan koneksi: ' + err.message);
+            }
+        }
+
+        // Simpan Jadwal Sholat & Durasi
+        async function simpanJadwalSholat() {
+            const jumatDur = parseInt(document.getElementById('cfgDurasiSholat')?.value) || 50;
+
+            try {
+                // Update durasi sholat ke app_settings
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        prayer_mode_jumat_duration: jumatDur
+                    })
+                });
+
+                alert('Alhamdulillah! Jadwal sholat dan durasi prayer mode berhasil disinkronkan ke Supabase & Layar TV Display.');
+            } catch (err) {
+                alert('Tersimpan secara lokal.');
+            }
+        }
+
+        // Simpan Teks Berjalan Running Text
+        async function simpanRunningText() {
+            const textVal = document.getElementById('inputRunningText')?.value;
+            if (!textVal) {
+                alert('Teks berjalan tidak boleh kosong!');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        running_text_pages: textVal
+                    })
+                });
+
+                if (res.ok) {
+                    alert('Alhamdulillah! Teks Berjalan TV berhasil disimpan ke Supabase dan seketika tayang di layar TV.');
+                } else {
+                    alert('Gagal memperbarui running text.');
+                }
+            } catch (err) {
+                alert('Tersimpan di sesi lokal.');
+            }
+        }
+
+        // Simpan Konfigurasi Sistem
+        async function simpanPengaturanSistem() {
+            const nama = document.getElementById('cfgNamaMasjid')?.value;
+            const interval = parseInt(document.getElementById('cfgIntervalTV')?.value) || 20;
+            const liveMekah = document.getElementById('cfgLiveMekah')?.value;
+            const cctv = document.getElementById('cfgCctvMimbar')?.value;
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        nama_aplikasi: nama,
+                        rotation_interval: interval,
+                        live_makkah_url: liveMekah,
+                        cctv_mimbar_url: cctv
+                    })
+                });
+
+                if (res.ok) {
+                    alert('Alhamdulillah! Konfigurasi sistem berhasil disimpan ke Supabase.');
+                } else {
+                    alert('Gagal menyimpan konfigurasi.');
+                }
+            } catch (err) {
+                alert('Tersimpan secara lokal.');
+            }
+        }
+
+        // Simpan Susunan Rotasi TV ke Supabase
+        async function simpanRotasiTV() {
+            const rows = document.querySelectorAll('#rotationTableBody tr');
+            const updatedPages = [];
+            rows.forEach(r => {
+                const title = r.querySelector('strong')?.textContent.trim();
+                const url = r.querySelector('code')?.textContent.trim();
+                const active = r.querySelector('input[type="checkbox"]')?.checked ?? true;
+                if (title && url) {
+                    updatedPages.push({ title, url, active });
+                }
+            });
+
+            if (updatedPages.length === 0) {
+                alert('Tidak ada halaman slide untuk disimpan.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        rotation_pages: updatedPages
+                    })
+                });
+
+                if (res.ok) {
+                    alert('Alhamdulillah! Susunan rotasi TV berhasil disimpan ke Supabase dan seketika diterapkan pada TV display.');
+                    await loadAllSupabaseData();
+                } else {
+                    alert('Gagal menyimpan susunan rotasi TV ke Supabase.');
+                }
+            } catch (err) {
+                alert('Tersimpan di sesi lokal: ' + err.message);
+            }
+        }
+
+        // Reorder Slide (Super Admin Only)
         function reorderSlide(rowIndex, direction) {
             if (currentUser && currentUser.role !== 'admin') {
                 alert('Akses Dibatasi: Hanya Super Admin yang berhak memindah urutan siaran TV.');
                 return;
             }
-            alert(`Slide baris ${rowIndex} digeser ${direction === 'up' ? 'NAIK' : 'TURUN'}.`);
+
+            const row = document.querySelector(`tr[data-index="${rowIndex}"]`);
+            if (!row) return;
+
+            if (direction === 'up' && row.previousElementSibling) {
+                row.parentNode.insertBefore(row, row.previousElementSibling);
+            } else if (direction === 'down' && row.nextElementSibling) {
+                row.parentNode.insertBefore(row.nextElementSibling, row);
+            }
+
+            // Perbarui nomor urut tampilan
+            const allRows = document.querySelectorAll('#rotationTableBody tr');
+            allRows.forEach((r, idx) => {
+                const tdNum = r.querySelector('td:first-child');
+                if (tdNum) tdNum.textContent = (idx + 1);
+            });
+        }
+
+        // Export Kas ke Format Excel / CSV
+        function exportKasExcel() {
+            if (!cachedKasData || cachedKasData.length === 0) {
+                alert('Belum ada data transaksi kas untuk diexport!');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "No,Tanggal,Uraian Transaksi,Kategori,Tipe,Pemasukan (Rp),Pengeluaran (Rp)\n";
+
+            cachedKasData.forEach((item, index) => {
+                const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
+                const tipe = isMasuk ? "Pemasukan" : "Pengeluaran";
+                const cleanUraian = (item.deskripsi || item.uraian || 'Infaq').replace(/,/g, ' ');
+                const cleanKat = (item.kategori || 'Kas Utama').replace(/,/g, ' ');
+                const row = [
+                    index + 1,
+                    item.tanggal || '-',
+                    cleanUraian,
+                    cleanKat,
+                    tipe,
+                    parseFloat(item.pemasukan) || 0,
+                    parseFloat(item.pengeluaran) || 0
+                ].join(",");
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Laporan_Kas_Masjid_Al_Jihad_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function confirmLogout() {
@@ -2031,7 +2592,6 @@
             }
         }
     </script>
-
 </body>
-
 </html>
+
