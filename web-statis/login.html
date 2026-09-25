@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Pengurus - Sistem Informasi Digital Masjid Jami' Al-Jihad</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="img/logo-aljihad-circle.png" type="image/png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Outfit:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Local & CDN Fallback -->
+    <link href="vendor/fontawesome-free/css/all.min.css?v=3.0.4" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #020810 url('img/login-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #ffffff;
+            position: relative;
+        }
+
+        /* Overlay gelap transparan halus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(3, 26, 17, 0.45) 0%, rgba(2, 8, 16, 0.88) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* SPLIT LAYOUT 2-KOLOM */
+        .login-page-wrap {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-grid-split {
+            width: 100%;
+            max-width: 1320px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        /* SISI KIRI: MANDALA EMAS DENGAN LOGO MASJID AL-JIHAD */
+        .login-mandala-side {
+            flex: 0 0 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+        }
+
+        .mandala-logo-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: clamp(40px, 6vw, 100px);
+            animation: pulseLogoGlow 4s infinite alternate ease-in-out;
+        }
+
+        .mandala-logo-img {
+            width: 310px;
+            max-width: 95%;
+            height: auto;
+            object-fit: contain;
+            filter: 
+                drop-shadow(0 0 18px rgba(255, 255, 255, 0.95))
+                drop-shadow(0 0 40px rgba(0, 230, 118, 0.55))
+                drop-shadow(0 10px 30px rgba(0, 0, 0, 0.95));
+            transition: transform 0.35s ease, filter 0.35s ease;
+        }
+
+        .mandala-logo-img:hover {
+            transform: scale(1.05);
+            filter: 
+                drop-shadow(0 0 25px rgba(255, 255, 255, 1))
+                drop-shadow(0 0 55px rgba(0, 230, 118, 0.8))
+                drop-shadow(0 14px 35px rgba(0, 0, 0, 0.98));
+        }
+
+        @keyframes pulseLogoGlow {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.03); }
+        }
+
+        /* SISI KANAN: KONTEN LOGIN & FORM */
+        .login-content-side {
+            flex: 0 0 58%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+        }
+
+        .login-box-stack {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* KALIGRAFI ARAB SALAM & BISMILLAH */
+        .arabic-greeting-wrap {
+            text-align: center;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        .arabic-salam-text {
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: 2.1rem;
+            line-height: 1.35;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 
+                0 0 12px rgba(255, 215, 0, 0.65),
+                0 2px 10px rgba(0, 0, 0, 0.95);
+            margin-bottom: 3px;
+            letter-spacing: 0.5px;
+            direction: rtl;
+        }
+
+        .arabic-bismillah-text {
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: 1.85rem;
+            line-height: 1.35;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 
+                0 0 12px rgba(255, 215, 0, 0.65),
+                0 2px 10px rgba(0, 0, 0, 0.95);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            direction: rtl;
+        }
+
+        /* UCAPAN SELAMAT DATANG & JUDUL SISTEM */
+        .welcome-login-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+            margin-bottom: 4px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-login-subtitle {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+            margin-bottom: 12px;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* QUICK ROLE SELECTOR (PILIH ROLE CEPAT) */
+        .quick-role-picker {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .role-pill-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 7px 8px;
+            background: rgba(4, 40, 24, 0.75);
+            border: 1px solid rgba(0, 230, 118, 0.35);
+            border-radius: 20px;
+            color: #e0f2fe;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(6px);
+            user-select: none;
+        }
+
+        .role-pill-btn:hover {
+            background: rgba(0, 230, 118, 0.25);
+            border-color: #ffd700;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .role-pill-btn.active {
+            background: linear-gradient(135deg, rgba(201, 160, 61, 0.35), rgba(16, 185, 129, 0.45));
+            border-color: #ffd700;
+            color: #ffd700;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+        }
+
+        /* PILL PANDUAN KREDENSIAL */
+        .credential-guide-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 6px 14px;
+            background: rgba(4, 40, 24, 0.85);
+            border: 1px solid rgba(0, 230, 118, 0.45);
+            border-radius: 25px;
+            color: #e0f2fe;
+            font-size: 0.82rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 12px;
+            backdrop-filter: blur(6px);
+        }
+
+        .credential-guide-pill i {
+            color: #ffd700;
+            font-size: 0.95rem;
+        }
+
+        /* ALERT NOTIFIKASI */
+        .alert-box {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            margin-bottom: 12px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert-box.alert-danger {
+            background: rgba(180, 40, 40, 0.92);
+            color: #ffffff;
+            border: 1px solid #ff9999;
+        }
+
+        .alert-box.alert-success {
+            background: rgba(18, 128, 73, 0.92);
+            color: #ffffff;
+            border: 1px solid #ffd700;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARD FORMULIR LOGIN */
+        .login-form-card {
+            width: 100%;
+            background: rgba(3, 26, 17, 0.76);
+            border: 1px solid rgba(0, 230, 118, 0.35);
+            border-radius: 14px;
+            padding: 18px 22px 14px 22px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.75),
+                0 0 25px rgba(0, 230, 118, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            margin-bottom: 14px;
+        }
+
+        .login-field-row {
+            margin-bottom: 11px;
+            width: 100%;
+        }
+
+        .login-field-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        .login-field-label i {
+            color: #ffd700;
+            font-size: 0.88rem;
+        }
+
+        .login-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .login-input-icon-lead {
+            position: absolute;
+            left: 12px;
+            color: #f59e0b;
+            font-size: 0.95rem;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .login-input-control {
+            width: 100%;
+            height: 40px;
+            background: #ffffff !important;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 6px 38px 6px 36px;
+            font-size: 0.88rem;
+            color: #1e293b;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.25s ease;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .login-input-control::placeholder {
+            color: #94a3b8;
+            font-size: 0.84rem;
+        }
+
+        .login-input-control:focus {
+            border-color: #ffd700;
+            box-shadow: 
+                0 0 0 3px rgba(255, 215, 0, 0.35),
+                0 3px 10px rgba(0, 0, 0, 0.45);
+            color: #0f172a;
+        }
+
+        .pwd-visibility-btn {
+            position: absolute;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #d97706;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: color 0.2s, transform 0.15s;
+            z-index: 3;
+        }
+
+        .pwd-visibility-btn:hover {
+            color: #b45309;
+            transform: scale(1.15);
+        }
+
+        /* REMEMBER & HELP ROW */
+        .login-options-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            margin-bottom: 13px;
+            font-size: 0.80rem;
+        }
+
+        .remember-check-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #cbd5e1;
+            cursor: pointer;
+            user-select: none;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .remember-check-input {
+            width: 15px;
+            height: 15px;
+            accent-color: #059669;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* TOMBOL SUBMIT LOGIN */
+        .btn-submit-dashboard {
+            width: 100%;
+            height: 42px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+            border: none;
+            border-radius: 8px;
+            color: #000000;
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .btn-submit-dashboard:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+            color: #000000;
+        }
+
+        /* NAVIGASI SUB LINK */
+        .login-nav-sublinks {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 230, 118, 0.2);
+            width: 100%;
+        }
+
+        .link-return-disp {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #cbd5e1;
+            font-size: 0.80rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .link-return-disp:hover {
+            color: #ffd700;
+            transform: translateX(-2px);
+        }
+
+        .btn-help-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(16, 185, 129, 0.18);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 14px;
+            color: #34d399;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-help-wa:hover {
+            background: rgba(16, 185, 129, 0.35);
+            border-color: #25d366;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(37, 211, 102, 0.35);
+        }
+
+        /* CARD FOOTER ATTRIBUTION */
+        .developer-attribution-card {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(2, 28, 14, 0.85);
+            border: 1px solid rgba(0, 230, 118, 0.35);
+            border-radius: 10px;
+            padding: 8px 16px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .attribution-intro {
+            font-size: 0.70rem;
+            color: #cbd5e1;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .attribution-brand {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .attribution-version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f59e0b;
+            color: #000000;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 15px;
+            letter-spacing: 0.4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            margin: 2px 0;
+        }
+
+        .attribution-copyright {
+            font-size: 0.66rem;
+            color: #cbd5e1;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1.2;
+        }
+
+        .attribution-copyright strong {
+            color: #ffd700;
+            font-weight: 800;
+        }
+
+        /* RESPONSIVE LAYOUT */
+        @media (max-width: 991px) {
+            .login-grid-split {
+                flex-direction: column;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .login-mandala-side {
+                flex: 0 0 auto;
+                padding: 10px 0;
+            }
+
+            .mandala-logo-box {
+                margin-left: 0 !important;
+            }
+
+            .mandala-logo-img {
+                width: 200px;
+            }
+
+            .login-content-side {
+                flex: 0 0 100%;
+                width: 100%;
+                padding: 0;
+            }
+
+            .arabic-salam-text {
+                font-size: 1.8rem;
+            }
+
+            .arabic-bismillah-text {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .login-page-wrap {
+                padding: 20px 15px;
+            }
+
+            .mandala-logo-img {
+                width: 160px;
+            }
+
+            .arabic-salam-text {
+                font-size: 1.55rem;
+            }
+
+            .arabic-bismillah-text {
+                font-size: 1.4rem;
+            }
+
+            .welcome-login-title {
+                font-size: 1.15rem;
+            }
+
+            .welcome-login-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .login-form-card {
+                padding: 16px 14px;
+            }
+
+            .quick-role-picker {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-page-wrap">
+    <div class="login-grid-split">
+        
+        <!-- SISI KIRI: MANDALA EMAS DENGAN LOGO AL-JIHAD -->
+        <div class="login-mandala-side">
+            <div class="mandala-logo-box">
+                <img src="img/logo-aljihad-transparent.png" 
+                     alt="Logo Masjid Al-Jihad" 
+                     class="mandala-logo-img"
+                     onerror="this.onerror=null; this.src='img/logo-aljihad-circle.png';">
+            </div>
+        </div>
+
+        <!-- SISI KANAN: KONTEN LOGIN & FORM -->
+        <div class="login-content-side">
+            <div class="login-box-stack">
+                
+                <!-- 1. Kaligrafi Arab Salam & Bismillah (Kuning Emas) -->
+                <div class="arabic-greeting-wrap">
+                    <div class="arabic-salam-text">
+                        ٱلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ وَبَرَكَاتُهُ
+                    </div>
+                    <div class="arabic-bismillah-text">
+                        بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+                    </div>
+                </div>
+
+                <!-- 2. Ucapan Selamat Datang & Nama Sistem -->
+                <h1 class="welcome-login-title">Selamat datang di halaman LOGIN</h1>
+                <h2 class="welcome-login-subtitle">SYSTEM INFORMASI DIGITAL MASJID JAMI' AL JIHAD</h2>
+
+                <!-- 3. Pilihan Role Cepat (Quick Role Demo Fill) -->
+                <div class="quick-role-picker" title="Pilih peran untuk mengisi kredensial secara instan">
+                    <button type="button" class="role-pill-btn active" onclick="selectRolePreset('admin')">
+                        <i class="fas fa-shield-alt text-warning"></i>
+                        <span>Super Admin</span>
+                    </button>
+                    <button type="button" class="role-pill-btn" onclick="selectRolePreset('bendahara')">
+                        <i class="fas fa-wallet text-success"></i>
+                        <span>Bendahara</span>
+                    </button>
+                    <button type="button" class="role-pill-btn" onclick="selectRolePreset('petugas')">
+                        <i class="fas fa-tv text-info"></i>
+                        <span>Operator</span>
+                    </button>
+                </div>
+
+                <!-- 4. Pill Petunjuk Masukkan Kredensial -->
+                <div class="credential-guide-pill">
+                    <i class="fas fa-key"></i>
+                    <span>Masukkan kredensial untuk mengakses halaman dashboard</span>
+                </div>
+
+                <!-- Box Notifikasi Alert Error/Success -->
+                <div id="loginAlertBox" class="alert-box">
+                    <div id="loginAlertMessage" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Pesan notifikasi</span>
+                    </div>
+                    <span style="cursor: pointer; font-size: 1.1rem;" onclick="closeAlert()">&times;</span>
+                </div>
+
+                <!-- 5. Card Form Login -->
+                <div class="login-form-card">
+                    <form id="loginForm" onsubmit="handleFormSubmit(event)">
+                        
+                        <!-- Field Email / Username -->
+                        <div class="login-field-row">
+                            <label class="login-field-label">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Email / Username</span>
+                            </label>
+                            <div class="login-input-container">
+                                <i class="fas fa-envelope login-input-icon-lead"></i>
+                                <input type="text" 
+                                       class="login-input-control" 
+                                       id="loginIdentifier" 
+                                       required 
+                                       autocomplete="username" 
+                                       autofocus 
+                                       value="admin@aljihad.com"
+                                       placeholder="admin@aljihad.com">
+                            </div>
+                        </div>
+
+                        <!-- Field Kata Sandi -->
+                        <div class="login-field-row">
+                            <label class="login-field-label">
+                                <i class="fas fa-lock"></i>
+                                <span>Kata Sandi</span>
+                            </label>
+                            <div class="login-input-container">
+                                <i class="fas fa-shield-alt login-input-icon-lead"></i>
+                                <input type="password" 
+                                       class="login-input-control" 
+                                       id="loginPassword" 
+                                       required 
+                                       autocomplete="current-password" 
+                                       value="admin123"
+                                       placeholder="••••••••••••">
+                                <button type="button" 
+                                        class="pwd-visibility-btn" 
+                                        onclick="togglePasswordVisibility()" 
+                                        title="Tampilkan / Sembunyikan Kata Sandi">
+                                    <i class="fas fa-eye" id="pwdToggleIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Row Opsi Ingatkan Saya -->
+                        <div class="login-options-row">
+                            <label class="remember-check-label" for="rememberTick">
+                                <input type="checkbox" 
+                                       class="remember-check-input" 
+                                       id="rememberTick" 
+                                       checked>
+                                <span>Ingatkan saya</span>
+                            </label>
+                            <span style="color: #94a3b8; font-size: 0.76rem;">
+                                <i class="fas fa-lock mr-1 text-warning"></i> Sesi Aman
+                            </span>
+                        </div>
+
+                        <!-- Tombol Submit Masuk ke Dashboard -->
+                        <button type="submit" class="btn-submit-dashboard" id="btnSubmitDashboard">
+                            <span>Masuk ke Dashboard</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+
+                    <!-- Navigasi Bawah Form: Kembali ke Display & Butuh Bantuan WA -->
+                    <div class="login-nav-sublinks">
+                        <a href="index.html" class="link-return-disp">
+                            <i class="fas fa-tv"></i>
+                            <span>Kembali ke Display TV</span>
+                        </a>
+                        <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="btn-help-wa" 
+                           title="Hubungi Bantuan via WhatsApp 087758767000">
+                            <span>Butuh Bantuan</span>
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 6. Card Footer Identitas Developer & Versi -->
+                <div class="developer-attribution-card">
+                    <div class="attribution-intro">
+                        System Informasi Digital ini dibuat dan di kembangkan oleh :
+                    </div>
+                    <div class="attribution-brand">
+                        Masjid Jami' Al Jihad
+                    </div>
+                    <div>
+                        <span class="attribution-version-badge">
+                            <i class="fas fa-bolt"></i> WEB STATIS v5.1.0 • CLOUDFLARE PAGES
+                        </span>
+                    </div>
+                    <div class="attribution-copyright">
+                        <i class="far fa-copyright"></i> 2026 POWERED BY <strong>MASJID AL JIHAD GRAHA ASRI</strong>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Script BaaS & Auth -->
+<script src="js/supabase-config.js"></script>
+<script src="js/admin-auth.js"></script>
+
+<script>
+    // Cek jika sudah login, langsung alihkan ke admin.html
+    AdminAuth.redirectIfLoggedIn('admin.html');
+
+    // Cek pesan redirect dari sessionStorage
+    const redirectReason = sessionStorage.getItem('auth_redirect_reason');
+    if (redirectReason) {
+        showAlert(redirectReason, 'danger');
+        sessionStorage.removeItem('auth_redirect_reason');
+    }
+
+    // Role Presets
+    const ROLE_PRESETS = {
+        admin: {
+            identifier: 'admin@aljihad.com',
+            password: 'admin123'
+        },
+        bendahara: {
+            identifier: 'bendahara@aljihad.com',
+            password: 'bendahara123'
+        },
+        petugas: {
+            identifier: 'petugas@aljihad.com',
+            password: 'operator123'
+        }
+    };
+
+    function selectRolePreset(roleKey) {
+        document.querySelectorAll('.role-pill-btn').forEach(btn => btn.classList.remove('active'));
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        }
+
+        const preset = ROLE_PRESETS[roleKey];
+        if (preset) {
+            document.getElementById('loginIdentifier').value = preset.identifier;
+            document.getElementById('loginPassword').value = preset.password;
+        }
+    }
+
+    function togglePasswordVisibility() {
+        const input = document.getElementById('loginPassword');
+        const icon = document.getElementById('pwdToggleIcon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    function showAlert(message, type = 'danger') {
+        const box = document.getElementById('loginAlertBox');
+        const msg = document.getElementById('loginAlertMessage');
+        box.className = 'alert-box alert-' + type;
+        box.style.display = 'flex';
+        msg.innerHTML = (type === 'success' ? '<i class="fas fa-check-circle"></i> ' : '<i class="fas fa-exclamation-circle"></i> ') + message;
+    }
+
+    function closeAlert() {
+        document.getElementById('loginAlertBox').style.display = 'none';
+    }
+
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        closeAlert();
+
+        const btn = document.getElementById('btnSubmitDashboard');
+        const identifier = document.getElementById('loginIdentifier').value;
+        const password = document.getElementById('loginPassword').value;
+
+        btn.disabled = true;
+        btn.innerHTML = '<span>Memverifikasi Kredensial...</span> <i class="fas fa-spinner fa-spin"></i>';
+        btn.style.opacity = '0.85';
+        btn.style.cursor = 'wait';
+
+        try {
+            const user = await AdminAuth.login(identifier, password);
+            showAlert(`Alhamdulillah, Ahlan wa Sahlan <strong>${user.name}</strong> (${user.role_label})! Mengalihkan ke dashboard...`, 'success');
+            
+            setTimeout(() => {
+                window.location.replace('admin.html');
+            }, 800);
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Masuk ke Dashboard</span> <i class="fas fa-arrow-right"></i>';
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+            showAlert(err.message || 'Terjadi kesalahan saat memverifikasi akun.', 'danger');
+        }
+    }
+</script>
+
+</body>
+</html>
