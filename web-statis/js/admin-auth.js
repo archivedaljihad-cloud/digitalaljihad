@@ -406,6 +406,22 @@ const AdminAuth = {
                 btn.classList.remove('active');
             }
         });
+
+        // 4. Hilangkan teks/tombol Super Admin di dashboard Bendahara dan Petugas (menghindari kesan birokrasi)
+        if (typeof document !== 'undefined') {
+            document.body.setAttribute('data-role', currentRole);
+            document.body.classList.remove('role-admin', 'role-bendahara', 'role-petugas');
+            document.body.classList.add('role-' + currentRole);
+
+            const btnAdmin = document.getElementById('btnSwitchAdmin');
+            if (btnAdmin) {
+                if (currentRole === 'admin') {
+                    btnAdmin.style.display = 'inline-flex';
+                } else {
+                    btnAdmin.style.display = 'none'; // Sembunyikan total di peran Bendahara & Petugas
+                }
+            }
+        }
     }
 };
 

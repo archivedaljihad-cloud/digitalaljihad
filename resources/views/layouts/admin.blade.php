@@ -178,6 +178,46 @@
             font-weight: 700;
         }
 
+        /* Collapsible Sidebar Desktop & Tablet */
+        .btn-sidebar-toggle {
+            width: 38px;
+            height: 38px;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            color: var(--islamic-green) !important;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 0;
+            outline: none !important;
+        }
+        .btn-sidebar-toggle:hover {
+            background: var(--islamic-green);
+            color: #ffffff !important;
+            border-color: var(--islamic-green);
+            transform: scale(1.05);
+        }
+        .btn-sidebar-toggle:hover i {
+            color: #ffffff !important;
+        }
+
+        @media (min-width: 769px) {
+            .sidebar {
+                transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            }
+            body.sidebar-toggled .sidebar,
+            .sidebar.toggled {
+                margin-left: -14rem !important;
+            }
+            #content-wrapper {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+        }
+
         /* Topbar Style */
         .topbar {
             background: linear-gradient(135deg, #ffffff 0%, #fef9e6 100%);
@@ -1219,8 +1259,8 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                    <!-- Sidebar Toggle -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <!-- Sidebar Toggle (Desktop & Mobile) -->
+                    <button id="sidebarToggleTop" class="btn btn-sidebar-toggle rounded-circle mr-3" title="Tampilkan / Sembunyikan Menu Sidebar">
                         <i class="fa fa-bars"></i>
                     </button>
 
@@ -1601,6 +1641,22 @@
                     }
                 }, 8000);
             }
+        });
+
+        // Persistensi Status Show/Hide Sidebar Desktop
+        $(document).ready(function() {
+            var savedSidebar = localStorage.getItem('aljihad_blade_sidebar_collapsed');
+            if (savedSidebar === '1' && $(window).width() > 768) {
+                $('body').addClass('sidebar-toggled');
+                $('.sidebar').addClass('toggled');
+            }
+
+            $('#sidebarToggle, #sidebarToggleTop').on('click', function() {
+                setTimeout(function() {
+                    var isToggled = $('body').hasClass('sidebar-toggled');
+                    localStorage.setItem('aljihad_blade_sidebar_collapsed', isToggled ? '1' : '0');
+                }, 50);
+            });
         });
     </script>
 

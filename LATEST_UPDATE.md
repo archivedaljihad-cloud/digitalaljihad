@@ -2582,4 +2582,116 @@ Menjawab kendala di mana menu **Rotasi TV & Reorder** di Dashboard Admin sebelum
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 - Cloud Supabase database `app_settings` tabel ID 1 telah disinkronkan langsung via REST API PATCH.
 
+---
+
+## 🚀 BAB 71: ELIMINASI KESAN BIROKRASI (HILANGKAN TEKS SUPER ADMIN DI PERAN BENDAHARA & OPERATOR), PERBAIKAN DROPDOWN PROFIL ANTI-CLIPPING POJOK KANAN ATAS, SERTA FITUR SHOW / HIDE SIDEBAR UNIVERSAL DI SEMUA DASHBOARD
+
+### Tanggal Pembaruan: 25 September 2026
+
+### Ringkasan Pembaruan:
+Pembaruan ini menjawab tiga permintaan penting dari pengguna untuk kenyamanan operasional pengurus masjid:
+1. **Eliminasi Teks / Tombol "Super Admin" di Dashboard Bendahara & Petugas (Operator):** Menghilangkan saklar / teks "Super Admin" dari topbar saat peran Bendahara atau Petugas sedang aktif agar tidak menimbulkan kesan birokrasi, kesenjangan hirarki, atau kasta di antara pengurus masjid.
+2. **Perbaikan Tampilan Kotak/Menu Petugas di Pojok Kanan Atas (Anti-Clipping & Anti-Overflow):** Mengatasi masalah dropdown akun Petugas yang sebelumnya terpotong keluar layar (*clipped off-screen*) akibat barisan topbar yang terlalu padat dan ketiadaan pembatas lebar (*text truncation*).
+3. **Fitur Show / Hide Sidebar Universal di Semua Dashboard:** Menyediakan tombol hamburger toggle sidebar (`☰`) yang selalu aktif dan terlihat di semua ukuran layar (Desktop, Laptop, Tablet, Smartphone) baik pada antarmuka Web Statis (`web-statis/admin.html`) maupun Laravel Blade (`resources/views/layouts/admin.blade.php`), lengkap dengan penyimpanan preferensi di `localStorage` dan shortcut keyboard universal `Ctrl+B`.
+
+---
+
+### Rincian Implementasi & Solusi:
+
+#### 1. Penghapusan Teks & Tombol "Super Admin" pada Dashboard Non-Admin:
+- **Analisis & Masalah:** Pada topbar sebelumnya terdapat elemen `.topbar-role-selector` yang selalu menampilkan tombol `[ 👑 Super Admin ]`, `[ 👛 Bendahara ]`, dan `[ 🖥️ Operator ]` sekalipun yang login adalah Petugas atau Bendahara. Hal ini dirasa memunculkan kesan birokrasi dan memakan ruang horizontal navbar.
+- **Solusi yang Diterapkan:**
+  - Di `web-statis/admin.html` pada fungsi `applyCurrentUserState(user)` dan `web-statis/js/admin-auth.js` pada method `applyRBAC(user)`:
+    - Tombol `#btnSwitchAdmin` secara dinamis diperiksa: jika `user.role === 'admin'`, tombol berstatus `display: inline-flex`. Jika peran aktif adalah `bendahara` atau `petugas`, tombol `#btnSwitchAdmin` langsung diset `display: none !important;`.
+    - Menambahkan atribut penanda peran pada elemen `<body>`: `document.body.setAttribute('data-role', user.role);` dan class `role-[role]`.
+    - Di CSS `admin.html`:
+      ```css
+      body[data-role="bendahara"] #btnSwitchAdmin,
+      body[data-role="petugas"] #btnSwitchAdmin,
+      body.role-bendahara #btnSwitchAdmin,
+      body.role-petugas #btnSwitchAdmin {
+          display: none !important;
+      }
+      ```
+  - **Hasil:** Saat Petugas / Operator atau Bendahara membuka dashboard, teks dan tombol "Super Admin" sama sekali tidak muncul. Suasana kerja pengurus menjadi ramah, setara, dan bebas dari kesan birokrasi.
+
+#### 2. Perbaikan Menu Profil Petugas di Pojok Kanan Atas (Anti-Clipping & Kapsul Mewah):
+- **Analisis & Masalah:** Di layar laptop standar, nama akun panjang seperti `Ust. Ahmad (Operator DKM)` tanpa batas `max-width` mendorong elemen `#userDropdown` terlalu mepet ke tepi kanan layar monitor. Ketika diklik, dropdown menu Bootstrap default (`.dropdown-menu-right`) terpotong lebih dari 60% keluar dari batas kanan viewport browser.
+- **Solusi yang Diterapkan:**
+  - Mengubah tombol profil menjadi kapsul interaktif (`user-profile-card`):
+    - Avatar ringkas dengan inisial emas (36px).
+    - Wadah metadata user (`.user-meta-info`) dibatasi dengan `max-width: 125px; line-height: 1.2;`.
+    - Nama user (`.user-display-name`) dan label peran (`.user-display-role`) dilengkapi `white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;`.
+    - Indikator panah kecil (`.user-chevron`) yang berputar 180° secara halus saat dropdown terbuka.
+  - Menghilangkan tabrakan kelas Bootstrap (`d-none d-lg-inline` bercampur `d-flex`) yang merusak layout flexbox.
+  - Menerapkan styling Anti-Clipping pada panel dropdown (`.user-dropdown-panel`):
+    ```css
+    .user-dropdown-panel {
+        right: 0 !important;
+        left: auto !important;
+        top: 100% !important;
+        margin-top: 8px !important;
+        min-width: 235px !important;
+        max-width: calc(100vw - 24px) !important;
+        border-radius: 14px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.16) !important;
+        z-index: 1070 !important;
+        overflow: hidden;
+    }
+    ```
+  - **Hasil:** Kotak menu profil Petugas kini 100% terlihat utuh, rapi, sangat estetik, dan tidak akan pernah terpotong oleh tepi layar monitor pada semua resolusi layar.
+
+#### 3. Penambahan Fitur Show / Hide Sidebar Universal di Semua Dashboard:
+- **Analisis & Masalah:** Tombol `#sidebarToggleTop` sebelumnya dipasangi class `d-md-none` sehingga di layar laptop/desktop tombol hamburger tersebut disembunyikan. Selain itu, CSS `.sidebar` memaksakan `width: var(--sidebar-width) !important;` tanpa aturan collapse desktop yang tepat sehingga sidebar tidak bisa disembunyikan.
+- **Solusi yang Diterapkan:**
+  - **Di Web Statis (`web-statis/admin.html`):**
+    - Menghapus `d-md-none` pada `#sidebarToggleTop` dan menggantinya dengan class tombol khusus `.btn-sidebar-toggle` (lingkaran estetik warna hijau islami, efek hover & active lembut).
+    - Menambahkan aturan transisi dan collapsible desktop:
+      ```css
+      @media (min-width: 769px) {
+          body.sidebar-toggled .sidebar,
+          .sidebar.toggled {
+              margin-left: calc(-1 * var(--sidebar-width)) !important;
+          }
+          #content-wrapper {
+              width: 100% !important;
+              min-width: 0;
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+      }
+      ```
+    - Memutakhirkan fungsi `initSidebarToggle()`:
+      - Membaca preferensi dari `localStorage.getItem('aljihad_sidebar_collapsed')` saat awal load.
+      - Jika di desktop (> 768px): toggle `document.body.classList.toggle('sidebar-toggled')` dan simpan status ke `localStorage`.
+      - Jika di mobile (<= 768px): buka/tutup drawer mobile dengan backdrop semi-transparan.
+      - Menambahkan shortcut keyboard universal **`Ctrl+B`** (atau `Cmd+B`) untuk langsung menampilkan / menyembunyikan sidebar dengan mudah.
+  - **Di Laravel Blade (`resources/views/layouts/admin.blade.php`):**
+    - Menghapus `d-md-none` pada `#sidebarToggleTop` (baris 1262) dan memasang tombol `.btn-sidebar-toggle`.
+    - Menambahkan styling CSS collapse desktop (`margin-left: -14rem !important;` dan transisi 0.3s).
+    - Memasang listener jQuery dan persistensi `localStorage` (`aljihad_blade_sidebar_collapsed`) agar saat berpindah halaman Laravel status sidebar tetap tersimpan.
+
+---
+
+### Berkas yang Diperbarui:
+1. `web-statis/admin.html`
+   - CSS: Penambahan `.btn-sidebar-toggle`, collapse desktop `.sidebar.toggled`, `.user-profile-card`, text-truncate `.user-display-name`, `.user-dropdown-panel` anti-clipping, dan aturan sembunyikan `#btnSwitchAdmin`.
+   - HTML: Update `#sidebarToggleTop` (hapus `d-md-none`) dan restrukturisasi `#userDropdown` menjadi kapsul profil modern.
+   - JS: Update `initSidebarToggle()` (desktop collapse + localStorage + shortcut Ctrl+B) dan `applyCurrentUserState()` (sembunyikan tombol Super Admin pada mode non-admin).
+2. `web-statis/js/admin-auth.js`
+   - Method `applyRBAC()`: Otomatis sembunyikan `#btnSwitchAdmin` jika peran pengguna bukan `admin` dan pasang atribut `data-role` di `document.body`.
+3. `resources/views/layouts/admin.blade.php`
+   - HTML & CSS: Hapus `d-md-none` pada `#sidebarToggleTop`, pasang class `.btn-sidebar-toggle`, styling CSS collapse desktop, serta persistensi `localStorage`.
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】`
+   - Sinkronisasi seluruh berkas web-statis termutakhir ke folder mandiri lokal.
+5. `LATEST_UPDATE.md`
+   - Dokumentasi lengkap Bab 71.
+
+---
+
+### Status Sinkronisasi:
+- Seluruh perubahan telah lolos validasi sintaks JavaScript (`node -c`) dan PHP (`php -l`).
+- Berkas telah disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
+- Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
+
 
