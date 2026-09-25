@@ -1537,43 +1537,121 @@
                                 </div>
                             </div>
 
-                            <!-- Formulir Durasi Prayer Mode (Bab 44) -->
+                            <!-- Formulir Pengaturan Durasi Sholat, Adzan, Iqamah & Waktu Sistem -->
                             <div class="col-lg-6 mb-4">
                                 <div class="content-card">
-                                    <div class="content-card-header">
-                                        <h6 class="content-card-title">
-                                            <i class="fas fa-hourglass-half"></i> Konfigurasi Durasi Prayer Mode (TV)
+                                    <div class="content-card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-hourglass-half text-warning mr-1"></i> Pengaturan Durasi Sholat, Adzan, Iqamah & Waktu Sistem
                                         </h6>
+                                        <span class="badge badge-success px-2 py-1"><i class="fas fa-tv mr-1"></i> Terhubung ke Display TV</span>
                                     </div>
                                     <div class="p-3">
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Countdown Sebelum Adzan (Menit)</label>
-                                            <input type="number" class="form-control" id="cfgCountdownAdzan" value="5" min="1">
-                                            <small class="text-muted">Tampilan hitung mundur sebelum masuk waktu adzan.</small>
+                                        <!-- SWITCH PRAYER MODE OTOMATIS -->
+                                        <div class="card p-3 mb-3 border-left-success shadow-sm" style="background: #f8fafc; border: 1.5px solid #d1e7dd; border-radius: 12px;">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <label class="font-weight-bold mb-1 text-dark d-flex align-items-center" for="cfgPrayerModeEnabled" style="font-size: 1rem; cursor: pointer;">
+                                                        <i class="fas fa-power-off text-success mr-2"></i> Aktifkan Prayer Mode Otomatis di Layar TV
+                                                    </label>
+                                                    <small class="text-muted d-block">Jika aktif, layar TV otomatis masuk ke mode hitung mundur, kumandang adzan, iqamah, dan mode sholat hening saat waktu sholat tiba.</small>
+                                                </div>
+                                                <div class="custom-control custom-switch ml-3" style="transform: scale(1.35);">
+                                                    <input type="checkbox" class="custom-control-input" id="cfgPrayerModeEnabled" checked onchange="handlePrayerModeSwitch(this)">
+                                                    <label class="custom-control-label" for="cfgPrayerModeEnabled" style="cursor: pointer;"></label>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Durasi Layar Saat Adzan (Menit)</label>
-                                            <input type="number" class="form-control" id="cfgDurasiAdzan" value="3" min="1">
-                                            <small class="text-muted">Layar menampilkan kumandang adzan berkumandang.</small>
+
+                                        <!-- INTERVAL ROTASI TV & AUDIO TARHIM -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="font-weight-bold text-dark mb-1">
+                                                    <i class="fas fa-sync-alt text-primary mr-1"></i> Interval Rotasi Halaman TV
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control font-weight-bold text-center" id="cfgIntervalTV" value="20" min="5" max="300">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text font-weight-bold">detik</span>
+                                                    </div>
+                                                </div>
+                                                <small class="text-muted">Lama waktu tiap slide ditampilkan sebelum beralih.</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="font-weight-bold text-dark mb-1">
+                                                    <i class="fas fa-volume-up text-info mr-1"></i> Audio Tarhim Sebelum Adzan
+                                                </label>
+                                                <select class="form-control" id="cfgAudioTarhim">
+                                                    <option value="5" selected>5 Menit Sebelum Adzan (Standar)</option>
+                                                    <option value="10">10 Menit Sebelum Adzan</option>
+                                                    <option value="15">15 Menit Sebelum Adzan</option>
+                                                    <option value="0">Nonaktifkan Audio Tarhim</option>
+                                                </select>
+                                                <small class="text-muted">Pemberitahuan tarhim sebelum masuk waktu adzan.</small>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Durasi Hitung Mundur Iqamah (Menit)</label>
-                                            <input type="number" class="form-control" id="cfgDurasiIqamah" value="10" min="1">
-                                            <small class="text-muted">Waktu sholat sunnah & persiapan sholat berjamaah.</small>
+
+                                        <!-- DURASI FASE SHOLAT REGULER (5 WAKTU) -->
+                                        <div class="bg-light p-3 rounded mb-3 border">
+                                            <div class="font-weight-bold text-dark mb-2" style="font-size: 13px;">
+                                                <i class="fas fa-hourglass-start text-warning mr-1"></i> Durasi Fase Sholat Reguler (5 Waktu)
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 mb-2">
+                                                    <label class="small font-weight-bold mb-1">Countdown Sblm Adzan</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" class="form-control font-weight-bold text-center" id="cfgCountdownAdzan" value="5" min="1" max="60">
+                                                        <div class="input-group-append"><span class="input-group-text">menit</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 mb-2">
+                                                    <label class="small font-weight-bold mb-1">Durasi Saat Adzan</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" class="form-control font-weight-bold text-center" id="cfgDurasiAdzan" value="3" min="1" max="30">
+                                                        <div class="input-group-append"><span class="input-group-text">menit</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 mb-2">
+                                                    <label class="small font-weight-bold mb-1">Durasi Iqamah</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" class="form-control font-weight-bold text-center" id="cfgDurasiIqamah" value="10" min="1" max="60">
+                                                        <div class="input-group-append"><span class="input-group-text">menit</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 mb-2">
+                                                    <label class="small font-weight-bold mb-1">Sholat Hening Reguler</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" class="form-control font-weight-bold text-center" id="cfgDurasiSholat" value="15" min="5" max="60">
+                                                        <div class="input-group-append"><span class="input-group-text">menit</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Durasi Sholat Khusyuk / Layar Hening (Menit)</label>
-                                            <input type="number" class="form-control" id="cfgDurasiSholat" value="15" min="5">
-                                            <small class="text-muted">TV terkunci gelap syahdu: "Luruskan dan Rapatkan Shaf".</small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Audio Tarhim Sebelum Adzan</label>
-                                            <select class="form-control" id="cfgAudioTarhim">
-                                                <option value="5" selected>5 Menit Sebelum Adzan</option>
-                                                <option value="10">10 Menit Sebelum Adzan</option>
-                                                <option value="15">15 Menit Sebelum Adzan</option>
-                                                <option value="0">Nonaktifkan Audio Tarhim</option>
-                                            </select>
+
+                                        <!-- DURASI KHUSUS SHOLAT JUMAT (DAPAT DIEDIT PETUGAS/OPERATOR) -->
+                                        <div class="card p-3 border-left-success shadow-sm" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px;">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-7">
+                                                    <label for="cfgDurasiJumat" class="font-weight-bold text-success mb-1" style="font-size: 1rem;">
+                                                        <i class="fas fa-mosque mr-1"></i> Durasi Sholat Jum'at (Khutbah & Sholat)
+                                                    </label>
+                                                    <p class="text-muted small mb-1">
+                                                        Khusus hari Jum'at waktu Dzuhur, TV otomatis masuk ke Mode Khutbah (nama Khatib, Imam, Muadzin, Bilal, hadits adab). Layar terkunci tenang selama durasi ini.
+                                                    </p>
+                                                    <span class="badge badge-success px-2 py-1 font-weight-bold" style="font-size: 11px;">
+                                                        <i class="fas fa-user-edit mr-1"></i> Bebas Diedit oleh Operator / Petugas
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-5 mt-2 mt-md-0 text-center">
+                                                    <div class="input-group input-group-lg">
+                                                        <input type="number" id="cfgDurasiJumat" class="form-control form-control-lg font-weight-bold text-success text-center" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text font-weight-bold bg-white text-success">menit</span>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted d-block mt-1 font-weight-bold">Bisa disesuaikan tiap pekan (35–60 mnt)</small>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1624,6 +1702,24 @@
                                             <label class="font-weight-bold">Bilal / Pembaca Pengumuman</label>
                                             <input type="text" class="form-control" id="jumatBilal" value="Ust. Syahrul Ramadhan">
                                         </div>
+
+                                        <!-- INPUT DURASI SHOLAT JUMAT KHUSUS PEKAN INI -->
+                                        <div class="card p-3 border-left-success mt-3" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px;">
+                                            <label class="font-weight-bold text-success d-flex align-items-center justify-content-between mb-1">
+                                                <span><i class="fas fa-clock mr-1"></i> Durasi Sholat & Khutbah Jum'at Pekan Ini</span>
+                                                <span class="badge badge-success font-weight-bold px-2 py-1">Mode TV Dzuhur Jum'at</span>
+                                            </label>
+                                            <p class="text-muted small mb-2">
+                                                Dapat diubah oleh Operator/Petugas jika durasi khutbah & sholat pekan ini berbeda dari biasanya.
+                                            </p>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control form-control-lg font-weight-bold text-success text-center" id="jumatDurasiInput" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text font-weight-bold bg-white text-success">menit</span>
+                                                </div>
+                                            </div>
+                                            <small class="text-muted mt-1 d-block">Layar TV akan terkunci tenang selama durasi ini saat masuk waktu Dzuhur Jum'at.</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1638,7 +1734,10 @@
                                         <div class="jumat-preview-box text-center">
                                             <img src="img/logo-aljihad-circle.png" style="width: 90px; height: 90px; margin-bottom: 12px;" alt="Logo">
                                             <div class="jumat-badge-title">MASJID JAMI' AL-JIHAD</div>
-                                            <div class="text-warning font-weight-bold mb-3" id="prevJumatTanggal">Jum'at, 25 Sept 2026</div>
+                                            <div class="text-warning font-weight-bold mb-2" id="prevJumatTanggal">Jum'at, 25 Sept 2026</div>
+                                            <div class="badge badge-success px-3 py-1 font-weight-bold mb-3" id="prevJumatDurasiBadge" style="font-size: 11px;">
+                                                <i class="fas fa-hourglass-half mr-1"></i> Durasi TV: 50 Menit
+                                            </div>
                                             <div class="jumat-officer-item text-left">
                                                 <div class="jumat-officer-label">Khatib</div>
                                                 <div class="jumat-officer-name" id="prevJumatKhotib">Ust. Dr. H. Faisal, M.Ag</div>
@@ -3017,6 +3116,25 @@
         });
 
         // =======================================================
+        // HELPER SINKRONISASI PRAYER MODE & DURASI SHOLAT JUMAT
+        // =======================================================
+        function syncDurasiJumat(val) {
+            const num = Math.max(10, parseInt(val) || 50);
+            const cfgEl = document.getElementById('cfgDurasiJumat');
+            const jumatEl = document.getElementById('jumatDurasiInput');
+            const badgeEl = document.getElementById('prevJumatDurasiBadge');
+            if (cfgEl && cfgEl.value != num) cfgEl.value = num;
+            if (jumatEl && jumatEl.value != num) jumatEl.value = num;
+            if (badgeEl) badgeEl.innerHTML = `<i class="fas fa-hourglass-half mr-1"></i> Durasi TV: ${num} Menit`;
+            try { localStorage.setItem('cached_prayer_mode_jumat_duration', num); } catch (e) {}
+        }
+
+        function handlePrayerModeSwitch(input) {
+            const isChecked = input.checked;
+            try { localStorage.setItem('cached_prayer_mode_enabled', isChecked); } catch (e) {}
+        }
+
+        // =======================================================
         // TOGGLE SIDEBAR UNIVERSAL (DESKTOP COLLAPSIBLE & MOBILE DRAWER)
         // =======================================================
         function toggleSidebarUniversal(e) {
@@ -3622,7 +3740,18 @@
                         if (document.getElementById('cfgIntervalTV') && s.rotation_interval) document.getElementById('cfgIntervalTV').value = s.rotation_interval;
                         if (document.getElementById('cfgLiveMekah') && s.live_makkah_url) document.getElementById('cfgLiveMekah').value = s.live_makkah_url;
                         if (document.getElementById('cfgCctvMimbar') && s.cctv_mimbar_url) document.getElementById('cfgCctvMimbar').value = s.cctv_mimbar_url;
-                        if (document.getElementById('cfgDurasiSholat') && s.prayer_mode_jumat_duration) document.getElementById('cfgDurasiSholat').value = s.prayer_mode_jumat_duration;
+                        
+                        // Switch & Durasi Prayer Mode
+                        const prayerEnabled = (s.prayer_mode_enabled !== false && s.value != '0');
+                        if (document.getElementById('cfgPrayerModeEnabled')) document.getElementById('cfgPrayerModeEnabled').checked = prayerEnabled;
+                        if (document.getElementById('cfgCountdownAdzan') && s.prayer_mode_before_adzan) document.getElementById('cfgCountdownAdzan').value = s.prayer_mode_before_adzan;
+                        if (document.getElementById('cfgDurasiAdzan') && s.prayer_mode_adzan_duration) document.getElementById('cfgDurasiAdzan').value = s.prayer_mode_adzan_duration;
+                        if (document.getElementById('cfgDurasiIqamah') && s.prayer_mode_iqamah_duration) document.getElementById('cfgDurasiIqamah').value = s.prayer_mode_iqamah_duration;
+                        if (document.getElementById('cfgDurasiSholat') && s.prayer_mode_duration) document.getElementById('cfgDurasiSholat').value = s.prayer_mode_duration;
+                        
+                        // Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
+                        const jumatDur = parseInt(s.prayer_mode_jumat_duration) || 50;
+                        syncDurasiJumat(jumatDur);
                         
                         // Running text
                         if (document.getElementById('inputRunningText') && s.running_text_pages) {
@@ -4292,13 +4421,14 @@
             }
         }
 
-        // Simpan Petugas Sholat Jum'at
+        // Simpan Petugas Sholat Jum'at & Durasi Sholat Jum'at Khusus Pekan Ini
         async function simpanPetugasJumat() {
             const tgl = document.getElementById('jumatTanggal')?.value;
             const khotib = document.getElementById('jumatKhotib')?.value;
             const imam = document.getElementById('jumatImam')?.value;
             const muadzin = document.getElementById('jumatMuadzin')?.value;
             const bilal = document.getElementById('jumatBilal')?.value || muadzin;
+            const jumatDur = parseInt(document.getElementById('jumatDurasiInput')?.value) || 50;
 
             if (!khotib || !imam || !tgl) {
                 alert('Harap lengkapi nama Khotib, Imam, dan Tanggal Jum\'at!');
@@ -4314,6 +4444,7 @@
             };
 
             try {
+                // 1. Simpan petugas Jum'at ke Supabase
                 const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
                     method: 'POST',
                     headers: {
@@ -4323,13 +4454,26 @@
                     body: JSON.stringify(payload)
                 });
 
+                // 2. Simpan durasi sholat Jum'at ke app_settings
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        prayer_mode_jumat_duration: jumatDur
+                    })
+                }).catch(() => {});
+
+                // Sinkronkan ke UI dan local cache
+                syncDurasiJumat(jumatDur);
+                try { localStorage.setItem('cached_prayer_mode_jumat_duration', jumatDur); } catch (e) {}
+
                 if (res.ok) {
                     if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotib;
                     if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = imam;
                     if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotib;
-                    alert('Alhamdulillah! Petugas Sholat Jum\'at berhasil disimpan ke Supabase dan langsung tayang di TV Display.');
+                    alert(`Alhamdulillah! Petugas Sholat Jum'at dan durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
                 } else {
-                    alert('Gagal menyimpan petugas Jum\'at ke database.');
+                    alert(`Petugas Jum'at gagal disimpan ke database, namun durasi sholat (${jumatDur} menit) telah diperbarui.`);
                 }
             } catch (err) {
                 alert('Terjadi kesalahan koneksi: ' + err.message);
@@ -4427,17 +4571,24 @@
             }
         }
 
-        // Simpan Jadwal Sholat & Durasi Prayer Mode
+        // Simpan Jadwal Sholat, Pengaturan Prayer Mode TV & Durasi Sholat Jum'at
         async function simpanJadwalSholat() {
+            const prayerEnabled = document.getElementById('cfgPrayerModeEnabled') ? document.getElementById('cfgPrayerModeEnabled').checked : true;
+            const rotInterval = parseInt(document.getElementById('cfgIntervalTV')?.value) || 20;
             const countdownDur = parseInt(document.getElementById('cfgCountdownAdzan')?.value) || 5;
             const adzanDur = parseInt(document.getElementById('cfgDurasiAdzan')?.value) || 3;
             const iqamahDur = parseInt(document.getElementById('cfgDurasiIqamah')?.value) || 10;
             const sholatDur = parseInt(document.getElementById('cfgDurasiSholat')?.value) || 15;
+            const jumatDur = parseInt(document.getElementById('cfgDurasiJumat')?.value) || 50;
 
             const showImsak = document.getElementById('cfgShowImsak') ? document.getElementById('cfgShowImsak').checked : true;
             const showSyuruk = document.getElementById('cfgShowSyuruk') ? document.getElementById('cfgShowSyuruk').checked : true;
+            localStorage.setItem('display_prayer_mode_enabled', prayerEnabled);
+            localStorage.setItem('display_rotation_interval', rotInterval);
+            localStorage.setItem('display_prayer_mode_jumat_duration', jumatDur);
             localStorage.setItem('display_show_imsak', showImsak);
             localStorage.setItem('display_show_syuruk', showSyuruk);
+            syncDurasiJumat(jumatDur);
 
             const sholatTimes = [
                 { name: 'Imsak', time: document.getElementById('sholatImsak')?.value },
@@ -4450,16 +4601,18 @@
             ];
 
             try {
-                // 1. Update durasi prayer mode ke app_settings
+                // 1. Update pengaturan prayer mode & seluruh durasi ke app_settings
                 await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
                     body: JSON.stringify({
+                        prayer_mode_enabled: prayerEnabled,
+                        rotation_interval: rotInterval,
                         prayer_mode_before_adzan: countdownDur,
                         prayer_mode_adzan_duration: adzanDur,
                         prayer_mode_iqamah_duration: iqamahDur,
                         prayer_mode_duration: sholatDur,
-                        prayer_mode_jumat_duration: Math.max(sholatDur, 45)
+                        prayer_mode_jumat_duration: jumatDur
                     })
                 });
 
@@ -4493,7 +4646,7 @@
                 }));
                 localStorage.setItem('cached_jadwal_sholat', JSON.stringify(cachedJadwal));
 
-                alert('Alhamdulillah! Jadwal sholat dan durasi prayer mode berhasil disinkronkan ke Supabase & Layar TV Display.');
+                alert('Alhamdulillah! Jadwal sholat, switch prayer mode TV, dan durasi sholat (termasuk Sholat Jum\'at) berhasil disinkronkan ke Supabase & Layar TV Display.');
             } catch (err) {
                 alert('Tersimpan di sesi lokal (koneksi offline).');
             }

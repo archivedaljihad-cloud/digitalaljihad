@@ -3171,6 +3171,72 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 5. Cloudflare Pages / Workers Static Assets Deployment (`digitalaljihad.my.id`).
 6. `LATEST_UPDATE.md` (Dokumentasi Bab 79).
 
+---
+
+## 🚀 80. IMPLEMENTASI PENGATURAN PRAYER MODE OTOMATIS & DURASI SHOLAT JUM'AT DINAMIS OPERATOR (WEB STATIS & DISPLAY TV)
+
+**Tanggal:** 25 September 2026  
+**Status:** Sukses & Tayang Penuh (*Live Production Ready*)  
+**Domain Live:** `https://digitalaljihad.my.id/`
+
+### Latar Belakang & Kebutuhan Pengguna:
+1. **Fitur Pengaktifan Prayer Mode Otomatis:**
+   - Di web lama (Laravel Blade), terdapat opsi switch untuk mengaktifkan / menonaktifkan fitur *Prayer Mode* otomatis di layar TV masjid, pengaturan interval rotasi TV (detik), dan pengaturan audio tarhim sebelum adzan.
+   - Pengguna meminta agar switch pengaktifan otomatis Prayer Mode dan interval waktu rotasi TV dipasang di web statis admin (`admin.html`).
+2. **Durasi Sholat Jum'at yang Berbeda & Fleksibel:**
+   - Sholat Jum'at memiliki karakteristik durasi yang berbeda dari sholat 5 waktu biasa karena mencakup Khutbah Pertama, Khutbah Kedua, dan Sholat Berjamaah.
+   - Durasi khutbah Jum'at di masjid dapat bervariasi setiap pekannya tergantung tema khutbah dan khatib yang bertugas (misal: 35 menit, 45 menit, 50 menit, hingga 60 menit).
+   - Pengguna meminta agar durasi Sholat Jum'at dapat diedit secara bebas oleh **Petugas / Operator Masjid** tiap pekannya tanpa terhalang pembatasan izin hak akses.
+
+---
+
+### Solusi & Rincian Teknis yang Diterapkan:
+1. **Pemasangan Switch Prayer Mode & Interval Rotasi di `#view-jadwal-sholat` (`admin.html`):**
+   - **Switch Toggle:** `#cfgPrayerModeEnabled` (*Aktifkan Prayer Mode Otomatis di Layar TV*) lengkap dengan deskripsi dan animasi switch.
+   - **Interval Rotasi TV:** `#cfgIntervalTV` (input durasi detik per slide TV).
+   - **Durasi 4 Fase Sholat Reguler (5 Waktu):**
+     - Countdown Sebelum Adzan (`#cfgCountdownAdzan`, default 5 menit).
+     - Durasi Saat Adzan (`#cfgDurasiAdzan`, default 3 menit).
+     - Durasi Iqamah (`#cfgDurasiIqamah`, default 10 menit).
+     - Durasi Sholat Hening Reguler (`#cfgDurasiSholat`, default 15 menit).
+   - **Kartu Khusus Durasi Sholat Jum'at (`#cfgDurasiJumat`):**
+     - Kotak berwarna hijau raudhah berlatar lembut (`#f0fdf4`) bergaris tepi emerald.
+     - Dilengkapi badge akses: `Bebas Diedit oleh Operator / Petugas`.
+     - Input angka ukuran besar (menit) dengan batasan min 15 s/d 180 menit.
+
+2. **Integrasi Form Petugas Sholat Jum'at di `#view-sholat-jumat` (`admin.html`):**
+   - Ditambahkan input `#jumatDurasiInput` di dalam kartu Form Petugas Jum'at Mendatang.
+   - Ditambahkan badge preview real-time `#prevJumatDurasiBadge` di kartu pratinjau TV Jum'at (`Durasi TV: XX Menit`).
+   - Setiap kali petugas/operator mengetik angka durasi di form Sholat Jum'at ataupun di menu Jadwal Sholat, nilai langsung tersinkronisasi dua arah via fungsi helper `syncDurasiJumat(val)`.
+
+3. **Sinkronisasi Dua Arah & Persistensi Cloud Supabase BaaS:**
+   - **Fungsi `simpanPetugasJumat()`:**
+     - Menyimpan data tanggal, khatib, imam, muadzin, dan bilal ke tabel `sholat_jumat`.
+     - Secara otomatis mengirim request PATCH ke `app_settings?id=eq.1` untuk memperbarui field `prayer_mode_jumat_duration`.
+     - Memperbarui cache lokal `localStorage.cached_prayer_mode_jumat_duration`.
+   - **Fungsi `simpanJadwalSholat()`:**
+     - Membaca status switch `#cfgPrayerModeEnabled`, `#cfgIntervalTV`, 4 fase sholat reguler, serta `#cfgDurasiJumat`.
+     - Mengirim PATCH ke `app_settings?id=eq.1` dengan payload lengkap:
+       `{ prayer_mode_enabled, rotation_interval, prayer_mode_before_adzan, prayer_mode_adzan_duration, prayer_mode_iqamah_duration, prayer_mode_duration, prayer_mode_jumat_duration }`.
+     - Mengupdate waktu sholat 5 waktu ke tabel `jadwal_sholat`.
+   - **Fungsi `loadAllSupabaseData()`:**
+     - Otomatis memuat dan mengisi switch `#cfgPrayerModeEnabled`, `#cfgIntervalTV`, fase durasi sholat, dan memanggil `syncDurasiJumat(s.prayer_mode_jumat_duration || 50)`.
+
+4. **Kepatuhan Engine Layar TV (`web-statis/js/prayer-engine.js`):**
+   - Engine deteksi sholat di layar TV otomatis mengecek hari Jum'at (`now.getDay() === 5`) pada waktu Dzuhur.
+   - Layar TV langsung mengunci rotasi ke Mode Khutbah Jum'at (menampilkan nama Khatib, Imam, Muadzin, Bilal, hadits adab khutbah) selama durasi dinamis `prayer_mode_jumat_duration` yang telah diatur oleh petugas.
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Form `#view-jadwal-sholat`, Form `#view-sholat-jumat`, helper `syncDurasiJumat`, fungsi `simpanPetugasJumat`, fungsi `simpanJadwalSholat`, dan `loadAllSupabaseData`).
+2. `web-statis/js/prayer-engine.js` (Engine pembacaan `prayer_mode_jumat_duration` saat waktu Dzuhur Jum'at).
+3. Supabase Cloud Database (`app_settings` id=1 kolom `prayer_mode_enabled`, `rotation_interval`, `prayer_mode_jumat_duration`).
+4. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html`.
+5. Cloudflare Pages / Static Assets Deployment (`digitalaljihad.my.id`).
+6. `LATEST_UPDATE.md` (Dokumentasi Bab 80).
+
+
 
 
 
