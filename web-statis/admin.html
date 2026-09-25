@@ -1686,9 +1686,9 @@
                             <div class="content-card-header d-flex flex-wrap align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
                                     <h6 class="content-card-title mb-0 mr-3">
-                                        <i class="fas fa-list-ol text-success mr-1"></i> Daftar Seluruh 17 Halaman Layar Display TV
+                                        <i class="fas fa-list-ol text-success mr-1"></i> Daftar Seluruh 18 Halaman Layar Display TV
                                     </h6>
-                                    <span class="badge badge-success font-weight-bold px-3 py-2" id="badgeRotasiActiveCount">15 dari 17 Halaman Aktif</span>
+                                    <span class="badge badge-success font-weight-bold px-3 py-2" id="badgeRotasiActiveCount">16 dari 18 Halaman Aktif</span>
                                 </div>
                                 <span class="badge badge-warning font-weight-bold px-3 py-2 mt-2 mt-md-0" id="badgeRotasiRole" style="display: none;"></span>
                             </div>
@@ -2895,7 +2895,19 @@
             { order: 18, name: 'Semarak Ramadhan & Kas Tromol', path: 'slides/ramadhan.html', url: 'slides/ramadhan.html', page: '/ramadhan-embed', category: 'Ramadhan', category_color: 'warning text-dark', active: true }
         ];
 
-        // Normalisasi array rotasi agar ke-18 halaman dijamin 100% selalu ada
+        // Helper untuk ekstrak canonical key dari URL/Path/Page slide (contoh: 'slides/utama.html' -> 'utama')
+        function getCanonicalSlideKey(str) {
+            if (!str) return '';
+            return str.toLowerCase()
+                .replace(/^https?:\/\/[^\/]+/, '') // buang domain jika ada
+                .replace(/^\//, '')                 // buang leading slash
+                .replace(/^slides\//, '')           // buang folder slides/
+                .replace(/-embed$/, '')             // buang akhiran -embed
+                .replace(/\.html$/, '')             // buang akhiran .html
+                .trim();
+        }
+
+        // Normalisasi array rotasi agar ke-18 halaman dijamin 100% selalu ada & TIDAK AKAN PERNAH DUPLIKAT
         function normalizeRotationPages(input) {
             let list = input;
             if (typeof list === 'string') {
@@ -2906,37 +2918,40 @@
             }
 
             const result = [];
-            const handledMasterUrls = new Set();
+            const seenKeys = new Set();
 
-            // 1. Masukkan item tersimpan yang cocok dengan master
-            list.forEach((item, idx) => {
-                const itemUrl = (item.path || item.url || item.page || '').trim();
-                const matchedMaster = MASTER_ROTATION_PAGES.find(m => {
-                    const mUrl = m.url.toLowerCase();
-                    const mPage = m.page.toLowerCase();
-                    const iUrl = itemUrl.toLowerCase();
-                    return mUrl === iUrl || mPage === iUrl || iUrl.includes(mUrl.replace('slides/', '').replace('.html', ''));
+            // 1. Masukkan item dari input yang cocok dengan master (Hanya 1x per slide unik)
+            list.forEach(item => {
+                if (!item) return;
+                const rawKey = getCanonicalSlideKey(item.path || item.url || item.page || item.name || '');
+                const master = MASTER_ROTATION_PAGES.find(m => {
+                    return getCanonicalSlideKey(m.url) === rawKey || getCanonicalSlideKey(m.page) === rawKey;
                 });
 
-                if (matchedMaster) {
-                    handledMasterUrls.add(matchedMaster.url);
-                    result.push({
-                        order: idx + 1,
-                        name: item.name || item.title || matchedMaster.name,
-                        title: item.name || item.title || matchedMaster.name,
-                        path: matchedMaster.url,
-                        url: matchedMaster.url,
-                        page: matchedMaster.page,
-                        category: matchedMaster.category,
-                        category_color: matchedMaster.category_color,
-                        active: (item.active !== false)
-                    });
+                if (master) {
+                    const masterKey = getCanonicalSlideKey(master.url);
+                    if (!seenKeys.has(masterKey)) {
+                        seenKeys.add(masterKey);
+                        result.push({
+                            order: result.length + 1,
+                            name: master.name,
+                            title: master.name,
+                            path: master.url,
+                            url: master.url,
+                            page: master.page,
+                            category: master.category,
+                            category_color: master.category_color,
+                            active: (item.active !== false)
+                        });
+                    }
                 }
             });
 
-            // 2. Tambahkan sisa halaman master yang belum ada
+            // 2. Tambahkan sisa halaman master yang belum ada di input
             MASTER_ROTATION_PAGES.forEach(m => {
-                if (!handledMasterUrls.has(m.url)) {
+                const masterKey = getCanonicalSlideKey(m.url);
+                if (!seenKeys.has(masterKey)) {
+                    seenKeys.add(masterKey);
                     result.push({
                         order: result.length + 1,
                         name: m.name,
@@ -2951,7 +2966,11 @@
                 }
             });
 
-            return result;
+            // 3. Batasi dan beri nomor urut rapi tepat 1..18
+            return result.slice(0, MASTER_ROTATION_PAGES.length).map((item, idx) => {
+                item.order = idx + 1;
+                return item;
+            });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -2967,7 +2986,7 @@
             initDateInputs();
             initSidebarToggle();
 
-            // Inisialisasi awal tabel rotasi (langsung dari cache lokal atau master 17 halaman)
+            // Inisialisasi awal tabel rotasi (langsung dari cache lokal atau master 18 halaman)
             try {
                 const localRot = localStorage.getItem('cached_rotation_pages');
                 if (localRot) {
@@ -2978,6 +2997,8 @@
             } catch (e) {
                 cachedRotationPages = JSON.parse(JSON.stringify(MASTER_ROTATION_PAGES));
             }
+            // Simpan cache bersih kembali ke localStorage agar data kotor/duplikat langsung lenyap
+            localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
             renderRotationTable(cachedRotationPages);
             renderUsersTable();
             renderAdminRamadhanView();
@@ -3970,7 +3991,7 @@
                 const subTitleRot = document.getElementById('descRotasiSubtitle');
                 if (subTitleRot) {
                     if (isSuperAdmin) {
-                        subTitleRot.textContent = 'Kelola urutan dan status aktif seluruh 17 halaman tayang slide TV. Super Admin dapat memindah urutan (▲/▼).';
+                        subTitleRot.textContent = 'Kelola urutan dan status aktif seluruh 18 halaman tayang slide TV. Super Admin dapat memindah urutan (▲/▼).';
                     } else {
                         subTitleRot.textContent = 'Untuk mengelola/mengatur urutan halaman rotasi, silakan menghubungi Admin.';
                     }
@@ -4029,10 +4050,11 @@
                 alert('Akses Dibatasi: Hanya Super Admin yang berhak mereset susunan rotasi.');
                 return;
             }
-            if (!confirm('Kembalikan urutan rotasi seluruh 17 slide ke susunan standar awal masjid?')) return;
+            if (!confirm('Kembalikan urutan rotasi seluruh 18 slide ke susunan standar awal masjid?')) return;
             cachedRotationPages = JSON.parse(JSON.stringify(MASTER_ROTATION_PAGES));
+            localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
             renderRotationTable(cachedRotationPages);
-            alert('Susunan rotasi telah direset ke 17 halaman standar. Silakan klik "Simpan Rotasi" untuk menerapkan ke layar display TV.');
+            alert('Susunan rotasi telah direset ke 18 halaman standar. Silakan klik "Simpan Rotasi" untuk menerapkan ke layar display TV.');
         }
 
         // Buka Modal Live Preview TV
@@ -4567,16 +4589,19 @@
                 return;
             }
 
+            // Normalisasi ketat agar susunan dan integritas 18 slide terjamin bebas duplikat
+            const cleanPages = normalizeRotationPages(updatedPages);
+
             try {
-                cachedRotationPages = updatedPages;
-                localStorage.setItem('cached_rotation_pages', JSON.stringify(updatedPages));
-                updateActiveRotationCountBadge();
+                cachedRotationPages = cleanPages;
+                localStorage.setItem('cached_rotation_pages', JSON.stringify(cleanPages));
+                renderRotationTable(cleanPages);
 
                 const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
                     body: JSON.stringify({
-                        rotation_pages: updatedPages
+                        rotation_pages: cleanPages
                     })
                 });
 
@@ -5027,6 +5052,7 @@
                 });
             }
 
+            cachedRotationPages = normalizeRotationPages(cachedRotationPages);
             localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
             if (document.getElementById('lblSwitchRamadhan')) {
                 document.getElementById('lblSwitchRamadhan').textContent = isActive ? 'Mode Ramadhan TV Aktif' : 'Mode Ramadhan TV Nonaktif';

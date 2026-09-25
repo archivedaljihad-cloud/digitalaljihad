@@ -3111,6 +3111,66 @@ Saat Super Admin mengklik tombol **"Edit Akun"** berwarna kuning pada tabel **Ke
 3. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html`.
 4. Cloudflare Deployment & Git Remote Repository (`digitalaljihad.my.id`).
 
+---
+
+## 🚀 BAB 79: ELIMINASI DUPLIKASI ROTASI TV (ANTI-DUPLICATE & IDEMPOTENT 18 SLIDE MASTER)
+
+### Tanggal Pembaruan: 25 September 2026
+### Status: SELESAI (100% Tuntas & Live di Cloudflare)
+
+---
+
+### Gejala Masalah (*Problem Statement*):
+Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), jumlah halaman slide terdeteksi membengkak menjadi berlipat ganda:
+- Badge statistik menampilkan **"43 dari 53 Halaman Aktif di TV"** (padahal seharusnya hanya 18 halaman master display TV).
+- Daftar tabel memunculkan baris slide berulang kali, sehingga membingungkan Super Admin saat mengatur urutan tayang display TV.
+
+---
+
+### Akar Masalah (*Root Cause Analysis*):
+1. **Kecocokan Parsial (*Partial Substring Matching*) pada Fungsi Normalisasi:**
+   - Di fungsi `normalizeRotationPages(input)` sebelumnya, pencocokan URL master menggunakan operator:
+     `iUrl.includes(mUrl.replace('slides/', '').replace('.html', ''))`
+   - Akibatnya:
+     - `slides/keuangan-summary.html` mengandung kata `'keuangan'`, sehingga salah mencocokkan `slides/keuangan.html` (Laporan Kas Masjid).
+     - Hal ini menyebabkan slide `slides/keuangan-summary.html` tidak pernah masuk ke dalam Set `handledMasterUrls`.
+2. **Tidak Ada Deduplikasi pada Fase Pengisian Hasil:**
+   - Di dalam loop `list.forEach()`, tidak ada pengecekan apakah master slide bersangkutan sudah pernah dimasukkan ke dalam `result`.
+   - Pada fase berikutnya, sisa master slide yang belum tercatat di `handledMasterUrls` (termasuk yang gagal cocok karena substring match) ditambahkan lagi ke `result`.
+3. **Multiplier Efek (Eksponensial Tiap Load):**
+   - Setiap kali halaman di-refresh, data dari `localStorage` (atau Supabase) yang sudah terkontaminasi diproses ulang oleh `normalizeRotationPages()`, menambah 12 item baru di setiap iterasi:
+     - 17 item awal -> Iterasi 1: 29 item -> Iterasi 2: 41 item -> Iterasi 3: **53 item persis** seperti pada screenshot pengguna!
+
+---
+
+### Solusi & Perbaikan yang Diterapkan:
+1. **Helper Ekstraksi Canonical Key Presisi (`getCanonicalSlideKey`):**
+   - Dibuat fungsi penyeragaman identifier slide yang membuang domain, trailing slashes, folder `slides/`, akhiran `-embed`, dan ekstensi `.html`.
+   - Menghasilkan slug bersih: `'keuangan'` vs `'keuangan-summary'`, `'idul-fitri'` vs `'idul-adha'`.
+2. **Strict Deduplication & Idempotency (`seenKeys = new Set()`):**
+   - Input hanya boleh memasukkan 1 item per canonical key unik.
+   - Sisa master yang belum ada di input ditambahkan di akhir.
+   - Output dibatasi dan dinomori secara ketat tepat 1..18 (`MASTER_ROTATION_PAGES.length`).
+   - Telah diuji simulasi 10x iterasi dengan input kotor 72 item: hasil selalu konstan tepat **18 item unik** (*100% idempotent*).
+3. **Penyelarasan Teks UI & Default:**
+   - Header tabel diperbarui dari "17 Halaman" menjadi:
+     `<i class="fas fa-list-ol text-success mr-1"></i> Daftar Seluruh 18 Halaman Layar Display TV`
+   - Badge default: `16 dari 18 Halaman Aktif di TV` (16 halaman aktif, 2 nonaktif yaitu Idul Fitri & Idul Adha).
+   - Dialog Reset Default kini mengembalikan ke 18 halaman master standar.
+4. **Pembersihan Cache Lokal & Supabase BaaS Cloud:**
+   - Pada event `DOMContentLoaded`, cache lokal `localStorage.cached_rotation_pages` yang kotor otomatis difilter dan ditimpa dengan 18 item bersih.
+   - Database Supabase (`app_settings` id=1 kolom `rotation_pages`) telah di-update langsung menjadi 18 slide unik standar (termasuk slide ke-18 `slides/ramadhan.html`).
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Fungsi `getCanonicalSlideKey`, `normalizeRotationPages`, header card, reset dialog, dan sinkronisasi `cached_rotation_pages`).
+2. `.gitignore` (Penambahan folder `.wrangler/` agar tidak masuk repositori git).
+3. Supabase Cloud Database (`app_settings` id=1 kolom `rotation_pages` 18 item).
+4. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html`.
+5. Cloudflare Pages / Workers Static Assets Deployment (`digitalaljihad.my.id`).
+6. `LATEST_UPDATE.md` (Dokumentasi Bab 79).
+
 
 
 
