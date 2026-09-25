@@ -3508,6 +3508,53 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 3. `web-statis/slides/hikmah.html` (Penyematan hadits harian Gemini AI).
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 86).
 
+---
+
+## 🌙 BAB 87: INTEGRASI SINKRONISASI JADWAL SHOLAT LEMBAGA FALAKIYAH NAHDLATUL ULAMA (LF PBNU)
+
+**Tanggal Pembaruan:** 26 September 2026  
+**Status:** Sukses Diimplementasikan, Diuji, & Disinkronkan  
+**Area Terkait:** Panel Admin (`admin.html`), Slide Jadwal Sholat Utama (`slides/utama.html`), Engine Sinkronisasi Jadwal Sholat.
+
+### 1. Latar Belakang & Kebutuhan Fitur:
+- Pengguna meminta penambahan fitur sinkronisasi dengan **Jadwal Sholat NU (Nahdlatul Ulama / Lembaga Falakiyah PBNU)** pada bagian kartu Waktu Sholat Hari Ini.
+- Lembaga Falakiyah Nahdlatul Ulama (LF PBNU) memiliki metode hisab *tahqiqi kontemporer* yang diselaraskan dengan kriteria syar'i:
+  - Sudut Matahari Subuh: `-20°` (Fajar Shadiq).
+  - Sudut Matahari Isya: `-18°`.
+  - Waktu Ashar: Rasio bayangan `1` (Mazhab Syafi'i/Jumhur).
+  - Ihtiyath Syar'i: `+2 menit` pengaman masuk waktu sholat.
+  - Waktu Imsak: `10 menit` sebelum adzan Subuh.
+
+### 2. Rincian Implementasi:
+1. **Pembaruan Panel Admin (`web-statis/admin.html`):**
+   - **Selector Sumber Jadwal:** Menambahkan dropdown pilihan lembaga hisab:
+     - `Bimas Islam Kemenag RI`
+     - `Falakiyah NU (PBNU)`
+   - **Dual Action Button Sinkronisasi:**
+     - Tombol `Kemenag` (Warna Cyan/Info) untuk sinkronisasi Bimas Islam Kemenag RI.
+     - Tombol `Falakiyah NU` (Warna Hijau NU `#15803d` dengan ikon bulan bintang emas) untuk sinkronisasi hisab resmi Lembaga Falakiyah PBNU.
+   - **Fungsi `sinkronkanFalakiyahNU()`:**
+     - Mengambil jadwal hisab astronomis berdasarkan koordinat spesifik wilayah masjid (Kab. Bekasi: Lat -6.2415, Lng 107.1587, Elevasi 18m) dengan parameter hisab Falakiyah NU (Method 20 + Ihtiyath +2m).
+     - Otomatis mengisi form input (`sholatImsak`, `sholatSubuh`, `sholatTerbit`, `sholatDzuhur`, `sholatAshar`, `sholatMaghrib`, `sholatIsya`).
+     - Melakukan sinkronisasi langsung (*PATCH*) ke Supabase `jadwal_sholat`.
+     - Menyimpan status sumber aktif `sholat_source: 'nu'` di `localStorage`.
+   - **Badge Dinamis Sumber Aktif:**
+     - Menampilkan badge hijau khas Nahdlatul Ulama dengan ikon bulan bintang:
+       `<span class="badge ml-1" id="badgePrayerSource" style="background:#14532d;color:#86efac;border:1px solid #16a34a;"><i class="fas fa-star-and-crescent mr-1 text-warning"></i> Lembaga Falakiyah NU</span>`.
+
+2. **Pembaruan Slide Display TV Utama (`web-statis/slides/utama.html`):**
+   - Fungsi `checkAutoSyncKemenag()` diperbarui menjadi multi-source validator:
+     - Mendeteksi sumber aktif yang dipilih pengurus di `localStorage.getItem('sholat_source')`.
+     - Jika sumber aktif adalah `nu`, auto-update harian di layar TV otomatis menggunakan parameter hisab Lembaga Falakiyah NU.
+     - Jika `kemenag`, menggunakan API Bimas Islam Kemenag RI.
+     - Memperbarui tabel Supabase secara otomatis setiap pergantian hari (00:01 WIB).
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Penambahan selector, tombol Falakiyah NU, badge dinamis, dan fungsi sinkronisasi).
+2. `web-statis/slides/utama.html` (Penyempurnaan auto-sync harian multi-source di layar TV).
+3. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 87).
+
+
 
 
 
