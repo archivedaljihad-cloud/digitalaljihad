@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Sistem Digital Masjid & Panduan Lengkap - Masjid Jami' Al-Jihad</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="img/logo-aljihad-circle.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 4.6 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome (Local + CDN Fallback) -->
+    <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+
+    <style>
+        :root {
+            --islamic-green-dark: #071a10;
+            --islamic-green-deep: #0e3521;
+            --islamic-green: #1e5a3a;
+            --islamic-green-light: #2e8b57;
+            --islamic-green-bright: #10b981;
+            --islamic-gold: #c9a03d;
+            --islamic-gold-bright: #ffd700;
+            --islamic-gold-metallic: #d4af37;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* TOPBAR NAVBAR */
+        .site-navbar {
+            background: #ffffff;
+            border-bottom: 2px solid rgba(201, 160, 61, 0.4);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* HERO HEADER */
+        .hero-section {
+            background: linear-gradient(135deg, #071a10 0%, #0e3521 50%, #1a5235 100%);
+            color: #ffffff;
+            border-bottom: 4px solid var(--islamic-gold);
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(201, 160, 61, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .hero-logo-box {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-logo {
+            width: 105px;
+            height: 105px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3.5px solid var(--islamic-gold-bright);
+            padding: 4px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-badge-version {
+            position: absolute;
+            bottom: -5px;
+            right: -12px;
+            background: linear-gradient(135deg, #ffd700, #c9a03d);
+            color: #071a10;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1.5px solid #ffffff;
+        }
+
+        .hero-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .badge-pill-custom {
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* SECTION HEADERS */
+        .section-header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-icon-chip {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(30, 90, 58, 0.1);
+            color: var(--islamic-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .section-heading-text {
+            font-weight: 800;
+            color: var(--islamic-green-deep);
+            margin: 0;
+            font-size: 1.35rem;
+        }
+
+        /* ARABIC MUKADDIMAH */
+        .arabic-mukaddimah-box {
+            background: linear-gradient(135deg, rgba(30,90,58,0.05) 0%, rgba(201,160,61,0.08) 100%);
+            border-top: 2px solid var(--islamic-gold);
+            border-bottom: 2px solid var(--islamic-gold);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .arabic-text-large {
+            font-family: 'Amiri', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--islamic-green);
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .arabic-text-medium {
+            font-family: 'Amiri', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--islamic-green-deep);
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .arabic-text-body {
+            font-family: 'Amiri', serif;
+            font-size: 21px;
+            color: #1a5235;
+            line-height: 2.2;
+            direction: rtl;
+            text-align: center;
+        }
+
+        /* FEATURE BOXES */
+        .feature-box {
+            border-radius: 16px;
+            border: 1px solid rgba(30,90,58,0.12);
+            background: #ffffff;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            height: 100%;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(14, 53, 33, 0.12) !important;
+            border-color: rgba(201, 160, 61, 0.5) !important;
+        }
+
+        .feature-icon-circle {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin: 0 auto 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* SLIDE PILLS */
+        .slide-pill {
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            text-decoration: none !important;
+            transition: all 0.2s ease;
+            margin-bottom: 10px;
+        }
+
+        .slide-pill:hover {
+            background: #f4fbf7 !important;
+            border-color: var(--islamic-green) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30,90,58,0.1);
+        }
+
+        /* HEAD TO HEAD TABLE */
+        .table-h2h {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-h2h thead th {
+            background: linear-gradient(135deg, #071a10, #0e3521);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 14px 16px;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .table-h2h tbody td {
+            padding: 13px 16px;
+            vertical-align: middle;
+            font-size: 0.88rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .table-h2h tbody tr:nth-of-type(even) {
+            background-color: #fafbfc;
+        }
+
+        .table-h2h tbody tr:hover {
+            background-color: #f1f8f5;
+        }
+
+        .badge-winner {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.74rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+        }
+
+        /* ACCORDION */
+        .accordion-custom .card {
+            border-radius: 12px !important;
+            border: 1px solid rgba(30,90,58,0.12);
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-custom .card-header {
+            background: #ffffff;
+            padding: 0;
+            border: none;
+        }
+
+        .accordion-custom .btn-accordion {
+            width: 100%;
+            text-align: left;
+            padding: 16px 20px;
+            font-weight: 700;
+            color: var(--islamic-green-deep);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none !important;
+            background: #ffffff;
+            transition: background 0.2s;
+        }
+
+        .accordion-custom .btn-accordion:hover,
+        .accordion-custom .btn-accordion:not(.collapsed) {
+            background: #f8fafc;
+            color: var(--islamic-green);
+        }
+
+        /* TIMELINE */
+        .timeline-list {
+            list-style: none;
+            padding-left: 0;
+            position: relative;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 28px;
+            padding-bottom: 24px;
+            border-left: 3px solid #e2e8f0;
+        }
+
+        .timeline-item:last-child {
+            border-left-color: transparent;
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -8px;
+            top: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--islamic-gold);
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 2px var(--islamic-gold);
+        }
+
+        .timeline-item.active .timeline-dot {
+            background: var(--islamic-green-bright);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35);
+        }
+
+        /* FOOTER */
+        .about-footer {
+            background: linear-gradient(135deg, #071a10 0%, #0e3521 100%);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 3px solid var(--islamic-gold);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR HEADER -->
+    <header class="site-navbar py-2 px-3">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="img/logo-aljihad-circle.png" alt="Logo Al-Jihad" style="width: 38px; height: 38px; object-fit: contain; margin-right: 12px;">
+                <div>
+                    <div style="font-weight: 800; font-size: 1rem; color: #071a10; line-height: 1.2;">MASJID JAMI' AL JIHAD</div>
+                    <div style="font-size: 0.75rem; color: var(--islamic-green); font-weight: 600;">Sistem Informasi & Panduan Dokumentasi Digital</div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center" style="gap: 8px;">
+                <a href="index.html" target="_blank" class="btn btn-sm btn-outline-success font-weight-bold">
+                    <i class="fas fa-tv mr-1"></i> Buka Layar TV
+                </a>
+                <a href="admin.html" class="btn btn-sm btn-success font-weight-bold" style="background: var(--islamic-green); border-color: var(--islamic-green);">
+                    <i class="fas fa-tachometer-alt mr-1"></i> Dashboard Admin
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4 my-md-5">
+        <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden; background: #ffffff;">
+
+            <!-- ==========================================
+                 HERO HEADER
+                 ========================================== -->
+            <div class="hero-section py-5 px-4 text-center">
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="hero-logo-box">
+                        <img src="img/logo-aljihad-circle.png" alt="Logo Masjid Al-Jihad" class="hero-logo">
+                        <span class="hero-badge-version">v5.1.0</span>
+                    </div>
+                </div>
+
+                <h1 class="hero-title mb-2">MASJID JAMI' AL JIHAD</h1>
+                <p class="hero-subtitle mb-3">
+                    Platform Digital Signage Masjid Terintegrasi & Smart Prayer Display System
+                </p>
+
+                <div class="d-flex flex-wrap justify-content-center align-items-center mt-3" style="gap: 8px;">
+                    <span class="badge-pill-custom" style="background: rgba(201, 160, 61, 0.25); color: #ffd700; border: 1px solid rgba(201, 160, 61, 0.45);">
+                        <i class="fas fa-code-branch"></i> Versi 5.1.0 (Web Statis Modern)
+                    </span>
+                    <span class="badge-pill-custom" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.45);">
+                        <i class="fas fa-robot" style="color: #c084fc;"></i> Google Gemini AI Inside
+                    </span>
+                    <span class="badge-pill-custom" style="background: rgba(16, 185, 129, 0.25); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.45);">
+                        <i class="fas fa-bolt"></i> Zero Cold-Start & Offline Resilient
+                    </span>
+                    <span class="badge-pill-custom" style="background: rgba(59, 130, 246, 0.25); color: #bfdbfe; border: 1px solid rgba(59, 130, 246, 0.45);">
+                        <i class="fas fa-cloud"></i> Cloudflare Edge & Supabase
+                    </span>
+                    <a href="index.html" target="_blank" class="badge-pill-custom text-decoration-none" style="background: var(--islamic-gold-bright); color: #071a10; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
+                        <i class="fas fa-external-link-alt"></i> Pratinjau Display TV
+                    </a>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 CARD BODY CONTENT
+                 ========================================== -->
+            <div class="card-body p-4 p-md-5">
+
+                <!-- 1. INTRODUKSI SISTEM & UNGKAPAN RASA SYUKUR -->
+                <section class="mb-5">
+                    <div class="section-header-title">
+                        <div class="section-icon-chip"><i class="fas fa-info-circle"></i></div>
+                        <div>
+                            <h2 class="section-heading-text">Tentang Sistem Digital Masjid</h2>
+                            <p class="small text-muted mb-0">Catatan perjuangan, dedikasi, serta ungkapan rasa syukur pengembang</p>
+                        </div>
+                    </div>
+
+                    <!-- Mukaddimah Arab (Center Tengah) -->
+                    <div class="arabic-mukaddimah-box mb-4">
+                        <div class="arabic-text-large mb-2">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+                        <div class="arabic-text-medium mb-3">السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ</div>
+                        <div class="arabic-text-body px-md-3">
+                            الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ، وَبِهِ نَسْتَعِينُ عَلَى أُمُورِ الدُّنْيَا وَالدِّينِ. أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ. اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ أَجْمَعِينَ.
+                        </div>
+                    </div>
+
+                    <!-- Curahan Hati & Penjelasan Sistem -->
+                    <div style="color: #374151; font-size: 15.5px; line-height: 1.95;">
+                        <p class="text-justify mb-3">
+                            Puji dan syukur marilah kita panjatkan ke hadirat Allah SWT, yang telah memberikan kita nikmat kesehatan, kemudahan, serta kesempatan sehingga pada hari yang penuh berkah ini, aplikasi web untuk <strong>Masjid Jami' Al-Jihad</strong> dapat diselesaikan, berevolusi hingga tahap mutakhir, dan siap untuk dipergunakan.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Jujur, dalam proses pembuatannya, saya sangat menyadari segala keterbatasan dan kekurangan kemampuan yang saya miliki. Namun, hanya atas izin, petunjuk, dan pertolongan dari Allah SWT belaka (<span style="font-family: 'Amiri', serif; font-size: 19px; color: var(--islamic-green); font-weight: 700;">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ</span>), niat baik dan ikhtiar panjang ini akhirnya dapat terwujud secara nyata.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Hadirnya sistem aplikasi web ini tidak lain hanyalah sebuah sarana ikhtiar kecil yang dapat saya persembahkan untuk membantu merapikan administrasi, meningkatkan transparansi kas umat, serta memudahkan pelayanan ibadah dan pengelolaan kegiatan syiar dakwah di Masjid Al-Jihad yang kita cintai ini.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            <strong>MASJID JAMI' AL JIHAD Digital Signage</strong> adalah platform informasi visual dan sistem otomasi masjid modern. Aplikasi ini dirancang khusus untuk memenuhi kebutuhan syiar, transparansi kas, serta ketertiban ibadah. Berjalan dengan arsitektur <em>Dual Engine Crossfade Rotator</em> (Layar TV Utama & Layar TV Luar/Serambi), serta terintegrasi penuh dengan <em>Prayer Mode Otomatis</em>, <em>CCTV Mimbar Live Stream</em>, dan <em>Otomasi Pengajian Rutin Malam Ahad</em>.
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Sistem ini mengedepankan performa tinggi dengan teknologi murni <strong>Vanilla JS & GPU-Accelerated CSS</strong> sehingga mampu menampilkan visual yang sangat mewah, halus (<em>60 FPS tanpa jeda kedip</em>), dan ramah terhadap perangkat TV box berdaya rendah tanpa membebani memori. Demi efisiensi daya dan waktu pengoperasian, sistem TV ini juga dilengkapi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong> sehingga beroperasi penuh secara mandiri (<em>full auto self running</em>).
+                        </p>
+
+                        <p class="text-justify mb-3">
+                            Besar harapan saya, platform ini dapat memberikan manfaat yang nyata dan langgeng bagi pengurus maupun seluruh jama'ah. Sekali lagi saya mohon ma'af yang sedalam-dalamnya jika dalam menyelesaikan web aplikasi ini ada keterlambatan dan masih banyak kekurangan.
+                        </p>
+
+                        <p class="text-justify mb-4">
+                            Terima kasih yang sebesar-besarnya saya sampaikan kepada seluruh pihak dan pengurus Masjid Al-Jihad yang telah memberikan kepercayaan, dukungan, serta doa selama proses pembuatan. Semoga setiap usaha dan ikhtiar kita ini dicatat oleh Allah SWT sebagai amal jariyah yang pahalanya terus mengalir tiada putus. Aamiin Ya Rabbal 'Alamin.
+                        </p>
+
+                        <!-- Penutup Salam Arab (Center Tengah) -->
+                        <div class="text-center my-4 py-3" style="font-family: 'Amiri', serif; font-size: 24px; font-weight: 700; color: #0e3521; border-top: 1px dashed rgba(201,160,61,0.5); border-bottom: 1px dashed rgba(201,160,61,0.5);">
+                            وَالسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-5" style="border-color: rgba(30,90,58,0.12);">
+
+                <!-- 2. ANALISA SPESIAL: TABEL RINGKASAN KOMPARASI HEAD-TO-HEAD -->
+                <section class="mb-5">
+                    <div class="section-header-title">
+                        <div class="section-icon-chip" style="background: rgba(245, 158, 11, 0.15); color: #d97706;">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                                <h2 class="section-heading-text">Analisa Spesial: Tabel Ringkasan Komparasi Head-to-Head</h2>
+                                <span class="badge badge-warning font-weight-bold px-2 py-1" style="font-size: 11px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+                                    Studi Kasus Deploy Render
+                                </span>
+                            </div>
+                            <p class="small text-muted mb-0">Perbandingan teknis: Web Statis Modern vs Web Laravel Dinamis Lama (Jika sama-sama di-deploy di platform Render)</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mt-3 mb-4">
+                        <table class="table table-h2h w-100">
+                            <thead>
+                                <tr>
+                                    <th style="width: 24%;">Parameter / Aspek Kinerja</th>
+                                    <th style="width: 34%; background: linear-gradient(135deg, #1e293b, #334155);">Web Laravel Dinamis (Lama)</th>
+                                    <th style="width: 42%; background: linear-gradient(135deg, #071a10, #0e3521); border-left: 2px solid var(--islamic-gold);">Web Statis Modern (Saat Ini) 🏆</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Tipe Layanan di Render</td>
+                                    <td><span class="badge badge-secondary px-2 py-1">Web Service (Docker/PHP)</span></td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 Statis Menang</span>
+                                        <strong>Static Site (CDN Edge)</strong> — Gratis permanen tanpa batasan jam sewa.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Ukuran Web & Disk</td>
+                                    <td><span class="text-danger font-weight-bold">~450 MB – 1.2 GB</span> (Vendor PHP, framework, cache)</td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 Hemat 96%</span>
+                                        <strong>~25 MB – 45 MB</strong> (Murni aset statis HTML, CSS, JS, audio).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Waktu Build & Deploy</td>
+                                    <td><span class="text-danger font-weight-bold">4 – 8 Menit</span> (Composer install, migrate, optimize)</td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 16x Lebih Cepat</span>
+                                        <strong>10 – 30 Detik</strong> (Langsung publish tanpa kompilasi server).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Konsumsi RAM Server</td>
+                                    <td><span class="text-danger font-weight-bold">200 MB – 450 MB</span> (Rentan OOM di limit 512MB RAM)</td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 Nol Risiko</span>
+                                        <strong>0 MB</strong> (Serverless Edge, bebas crash Out-of-Memory).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Masalah Cold Start (Tidur)</td>
+                                    <td><span class="text-danger font-weight-bold">50 – 90 Detik</span> (Layar TV macet/loading saat bangun)</td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 Instant</span>
+                                        <strong>0 Detik (Nol Jeda)</strong> — Tidak pernah tidur 24 jam nonstop.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Kecepatan Respon (TTFB)</td>
+                                    <td><span class="text-warning font-weight-bold">600 ms – 2.500 ms</span> (Query database + render Blade)</td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 Super Kilat</span>
+                                        <strong>20 ms – 60 ms</strong> (Dihantarkan dari Cloudflare Edge Cache).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Ketahanan Internet Mati</td>
+                                    <td><span class="text-danger font-weight-bold">Layar Error / Putih</span> (Gagal request HTTP ke server)</td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 100% Mandiri</span>
+                                        <strong>Tetap Berjalan Normal</strong> via Cache LocalStorage & Client Engine.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold" style="color: #0f172a;">Beban Hardware TV Box</td>
+                                    <td>Sering jank/patah-patah akibat reload iframe berkala</td>
+                                    <td>
+                                        <span class="badge-winner mr-1">🏆 60 FPS GPU</span>
+                                        Sangat ringan, hardware TV Box dingin & awet bertahun-tahun.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Callout Hikmah Keputusan Teknis -->
+                    <div class="p-4 rounded" style="background: linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(201,160,61,0.08) 100%); border-left: 4px solid var(--islamic-green); border-radius: 12px;">
+                        <h6 class="font-weight-bold mb-2" style="color: var(--islamic-green-deep);">
+                            <i class="fas fa-lightbulb mr-2" style="color: #d97706;"></i>Kesimpulan Studi Perbandingan:
+                        </h6>
+                        <p class="small text-muted mb-0" style="line-height: 1.8;">
+                            Layar TV masjid adalah perangkat yang <strong>berjalan 24 jam nonstop</strong> di lingkungan jaringan yang terkadang fluktuatif. Memindahkan sistem display dari server PHP dinamis ke <strong>Web Statis Modern berbasis Client-Side Engine</strong> membuktikan bahwa kesederhanaan arsitektur (*simplicity*) justru menghasilkan keandalan tertinggi: biaya operasional Rp 0, waktu tanggap tanpa jeda, serta tampilan visual yang tak pernah mengecewakan jamaah.
+                        </p>
+                    </div>
+                </section>
+
+                <hr class="my-5" style="border-color: rgba(30,90,58,0.12);">
+
+                <!-- 3. FITUR TAMPILAN TV MUTAKHIR -->
+                <section class="mb-5">
+                    <div class="section-header-title">
+                        <div class="section-icon-chip" style="background: rgba(201,160,61,0.15); color: var(--islamic-gold);">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <div>
+                            <h2 class="section-heading-text">Fitur Tampilan TV Mutakhir</h2>
+                            <p class="small text-muted mb-0">Teknologi visual canggih yang tampil di layar TV Masjid Jami' Al-Jihad</p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <!-- Fitur 1 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #1e5a3a, #0a2e1f); color: #ffd700;">
+                                    <i class="fas fa-clone"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">Dual Engine Crossfade</h5>
+                                <p class="small text-muted mb-0">
+                                    Arsitektur dual-iframe cerdas. Pergantian slide 60 FPS berlangsung mulus tanpa kedip hitam (<em>zero-flicker transitions</em>).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 2 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #c9a03d, #8f6c18); color: #ffffff;">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">Smart Next Prayer Bar</h5>
+                                <p class="small text-muted mb-0">
+                                    Kapsul hitung mundur waktu sholat berikutnya detik-demi-detik yang diposisikan presisi di atas kotak jadwal sholat utama.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 3 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #0e3521, #1a5235); color: #5eead4;">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">Dynamic Ambient Theme</h5>
+                                <p class="small text-muted mb-0">
+                                    Pendaran aura cahaya latar layar (<em>ambient orbs</em>) yang otomatis berganti warna mengikuti 6 siklus waktu sholat.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 4 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #1e5a3a, #071a10); color: #fef08a;">
+                                    <i class="fas fa-mosque"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">Prayer & Khutbah Engine</h5>
+                                <p class="small text-muted mb-0">
+                                    Otomasi 5 fase ibadah: Audio Tarhim, Adzan, Hitung Iqamah, Layar Gelap Khusyuk, serta Mode Khutbah Jum'at 50 menit.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 5 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #b91c1c, #7f1d1d); color: #ffffff;">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">CCTV Mimbar Otomatis</h5>
+                                <p class="small text-muted mb-0">
+                                    TV Serambi Luar otomatis beralih menampilkan siaran langsung mimbar saat Khutbah Jum'at atau Sholat Ied dimulai.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 6 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff;">
+                                    <i class="fas fa-kaaba"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">Live Makkah & Madinah</h5>
+                                <p class="small text-muted mb-0">
+                                    Siaran langsung 24 jam Ka'bah Makkah dan Nabawi Madinah dilengkapi Smart Mosque Overlay (jam & jadwal sholat transparan).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 7 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #4f46e5, #3730a3); color: #ffffff;">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">Smart Running Text</h5>
+                                <p class="small text-muted mb-0">
+                                    Teks berjalan halus dengan dukungan multi-pesan (Enter) khusus per halaman yang selaras dengan tema yang tayang.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fitur 8 (Kajian Sabtu Malam Ahad) -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="feature-box p-4 text-center" style="border: 1.5px solid rgba(212,175,55,0.4);">
+                                <div class="feature-icon-circle" style="background: linear-gradient(135deg, #071a10, #1e5a3a); color: #ffd700;">
+                                    <i class="fas fa-book-reader"></i>
+                                </div>
+                                <h5 class="font-weight-bold mb-2" style="color: #0e3521; font-size: 15px;">Kajian Malam Ahad TV</h5>
+                                <p class="small text-muted mb-0">
+                                    Auto-switch pintar tiap Sabtu ba'da Maghrib s/d Isya: Pemateri, Kitab, Tema, Smart Countdown Isya & QR Tanya Jawab Digital.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI & Smart Hardware Showcase -->
+                    <div class="row mt-2">
+                        <!-- AI Box -->
+                        <div class="col-lg-7 mb-4">
+                            <div class="card h-100 border-0 shadow-sm" style="border-radius: 16px; background: linear-gradient(135deg, #071a10 0%, #0e3521 40%, #1e1b4b 100%); color: #ffffff; border: 1px solid rgba(168,85,247,0.3) !important;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #a855f7, #6366f1); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 14px;">
+                                            <i class="fas fa-robot"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-weight-bold m-0" style="color: #ffd700; font-family: 'Amiri', serif; font-size: 20px;">
+                                                Kecerdasan Buatan Terintegrasi (Google Gemini AI)
+                                            </h5>
+                                            <span class="small text-light opacity-90">Asisten cerdas DKM untuk konten dakwah & pengumuman TV</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6 mb-2">
+                                            <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                                                <h6 class="font-weight-bold mb-1" style="color: #a7f3d0; font-size: 13.5px;"><i class="fas fa-feather-alt mr-1 text-warning"></i> AI One-Click Copywriter</h6>
+                                                <p class="small text-light mb-0" style="line-height: 1.6; opacity: 0.85;">Menyusun pengumuman resmi islami, jadwal, dan running text marquee 150 karakter dalam 2 detik.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <div class="p-3 rounded h-100" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                                                <h6 class="font-weight-bold mb-1" style="color: #fed7aa; font-size: 13.5px;"><i class="fas fa-star-and-crescent mr-1 text-warning"></i> Hadits Hikmah Harian AI</h6>
+                                                <p class="small text-light mb-0" style="line-height: 1.6; opacity: 0.85;">Matan Arab berharakat font Amiri, terjemahan, dan sari hikmah dengan cache 24 jam hemat kuota.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hardware Box -->
+                        <div class="col-lg-5 mb-4">
+                            <div class="card h-100 border-0 shadow-sm" style="border-radius: 16px; background: linear-gradient(135deg, rgba(30,90,58,0.06) 0%, rgba(201,160,61,0.1) 100%); border: 1px solid rgba(201,160,61,0.3) !important;">
+                                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--islamic-green-deep); color: #ffd700; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 12px;">
+                                                <i class="fas fa-power-off"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="font-weight-bold m-0" style="color: #0e3521;">Otomasi Mandiri Hemat Daya</h6>
+                                                <span class="badge badge-warning" style="font-size: 10px; color: #071a10;">Full Auto Self-Running</span>
+                                            </div>
+                                        </div>
+                                        <p class="small text-muted text-justify mt-2 mb-0" style="line-height: 1.7;">
+                                            TV display telah terhubung dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong>. Seluruh TV menyala (<em>Power ON</em>) dan mati (<em>Power OFF</em>) otomatis terjadwal tanpa perlu repot dinyalakan manual oleh marbot setiap hari.
+                                        </p>
+                                    </div>
+                                    <div class="mt-3 pt-2 border-top text-muted small d-flex justify-content-between">
+                                        <span><i class="fas fa-clock text-success mr-1"></i> Jadwal On/Off Teratur</span>
+                                        <span><i class="fas fa-leaf text-success mr-1"></i> Hemat Listrik Masjid</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-5" style="border-color: rgba(30,90,58,0.12);">
+
+                <!-- 4. ROTASI HALAMAN & 19 SALURAN DISPLAY -->
+                <section class="mb-5">
+                    <div class="section-header-title">
+                        <div class="section-icon-chip"><i class="fas fa-exchange-alt"></i></div>
+                        <div>
+                            <h2 class="section-heading-text">Fitur Rotasi Halaman & Saluran Display</h2>
+                            <p class="small text-muted mb-0">Daftar lengkap 19 saluran informasi visual yang berputar di layar TV masjid</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Saluran Slide Grid -->
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/utama.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(30,90,58,0.15); color: #1e5a3a; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-clock"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">1. Jadwal Sholat 5 Waktu</div><div style="font-size: 10px; color: #6b7280;">slides/utama.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/hikmah.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(217,119,6,0.15); color: #d97706; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-star-and-crescent"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">2. Mutiara Hadits & Hikmah AI</div><div style="font-size: 10px; color: #6b7280;">slides/hikmah.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/keuangan.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(14,53,33,0.15); color: #0e3521; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-wallet"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">3. Rincian Kas Utama Masjid</div><div style="font-size: 10px; color: #6b7280;">slides/keuangan.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/keuangan-summary.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(2,132,199,0.15); color: #0284c7; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-chart-pie"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">4. Grafik Ringkasan Arus Kas</div><div style="font-size: 10px; color: #6b7280;">slides/keuangan-summary.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/ambulance.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(185,28,28,0.15); color: #b91c1c; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-ambulance"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">5. Kas Operasional Ambulance</div><div style="font-size: 10px; color: #6b7280;">slides/ambulance.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/infaq.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(5,150,105,0.15); color: #059669; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-hand-holding-usd"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">6. Program Donasi & Infaq</div><div style="font-size: 10px; color: #6b7280;">slides/infaq.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/jumat.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(201,160,61,0.15); color: #c9a03d; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-users"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">7. Petugas Sholat Jum'at</div><div style="font-size: 10px; color: #6b7280;">slides/jumat.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/kajian.html" target="_blank" class="slide-pill" style="border: 1.5px solid rgba(201,160,61,0.5);">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(7,26,16,0.2); color: #ffd700; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-book-reader"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">8. Pengajian Malam Ahad ⭐</div><div style="font-size: 10px; color: #6b7280;">slides/kajian.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/pengumuman.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(79,70,229,0.15); color: #4f46e5; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-bullhorn"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">9. Daftar Pengumuman DKM</div><div style="font-size: 10px; color: #6b7280;">slides/pengumuman.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/slide.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(217,119,6,0.15); color: #d97706; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-images"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">10. Slide Poster & Brosur</div><div style="font-size: 10px; color: #6b7280;">slides/slide.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/qris.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(15,23,42,0.15); color: #0f172a; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-qrcode"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">11. QRIS Infaq & Sedekah</div><div style="font-size: 10px; color: #6b7280;">slides/qris.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/qurban.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(16,185,129,0.15); color: #10b981; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-cow"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">12. Penerimaan Qurban</div><div style="font-size: 10px; color: #6b7280;">slides/qurban.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/live-mekah.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(124,58,237,0.15); color: #7c3aed; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-kaaba"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">13. Live Makkah (Ka'bah)</div><div style="font-size: 10px; color: #6b7280;">slides/live-mekah.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/live-madinah.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(22,163,74,0.15); color: #16a34a; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-mosque"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">14. Live Madinah (Nabawi)</div><div style="font-size: 10px; color: #6b7280;">slides/live-madinah.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/idul-fitri.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(201,160,61,0.15); color: #c9a03d; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-star-and-crescent"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">15. Petugas Sholat Idul Fitri</div><div style="font-size: 10px; color: #6b7280;">slides/idul-fitri.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/idul-adha.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(30,90,58,0.15); color: #1e5a3a; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-moon"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">16. Petugas Sholat Idul Adha</div><div style="font-size: 10px; color: #6b7280;">slides/idul-adha.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/yasin.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(14,53,33,0.15); color: #0e3521; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-book-open"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">17. Surat Yaasiin Arab Scroll</div><div style="font-size: 10px; color: #6b7280;">slides/yasin.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/welcome.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(79,70,229,0.15); color: #4f46e5; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-home"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">18. Dashboard Welcome TV</div><div style="font-size: 10px; color: #6b7280;">slides/welcome.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <a href="slides/live-mimbar.html" target="_blank" class="slide-pill">
+                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(185,28,28,0.15); color: #b91c1c; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-video"></i></div>
+                                        <div class="overflow-hidden" style="flex: 1;"><div class="small font-weight-bold text-truncate" style="color: #1f2937;">19. CCTV Mimbar TV Serambi</div><div style="font-size: 10px; color: #6b7280;">slides/live-mimbar.html</div></div>
+                                        <i class="fas fa-external-link-alt text-muted ml-2" style="font-size: 11px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-5" style="border-color: rgba(30,90,58,0.12);">
+
+                <!-- 5. PEMBAGIAN HAK AKSES PENGGUNA (RBAC) -->
+                <section class="mb-5">
+                    <div class="section-header-title">
+                        <div class="section-icon-chip"><i class="fas fa-users-cog"></i></div>
+                        <div>
+                            <h2 class="section-heading-text">Pembagian Hak Akses Pengguna (RBAC)</h2>
+                            <p class="small text-muted mb-0">Keamanan data terstruktur sesuai bidang tugas kepengurusan DKM</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Admin -->
+                        <div class="col-lg-4 mb-3">
+                            <div class="card h-100 shadow-sm" style="border-radius: 16px; border-top: 4px solid var(--islamic-green); border-left: none; border-right: none; border-bottom: none;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(30,90,58,0.1); color: var(--islamic-green); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 10px;">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold m-0" style="color: #0e3521;">Administrator</h6>
+                                            <span class="badge badge-success" style="font-size: 10px;">Akses Penuh (Full Control)</span>
+                                        </div>
+                                    </div>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li>Kelola 3 akun pengguna & pembagian peran (RBAC)</li>
+                                        <li>Pengaturan urutan putaran slide TV (Naik/Turun)</li>
+                                        <li>Konfigurasi identitas masjid, logo, running text</li>
+                                        <li>Konfigurasi API Key Google Gemini & model AI</li>
+                                        <li>Integrasi link Live Makkah, Madinah, & CCTV Mimbar</li>
+                                        <li>Manajemen backup data Cloud Supabase</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Petugas Operator -->
+                        <div class="col-lg-4 mb-3">
+                            <div class="card h-100 shadow-sm" style="border-radius: 16px; border-top: 4px solid var(--islamic-gold); border-left: none; border-right: none; border-bottom: none;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(201,160,61,0.15); color: var(--islamic-gold); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 10px;">
+                                            <i class="fas fa-user-edit"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold m-0" style="color: #0e3521;">Petugas / Operator</h6>
+                                            <span class="badge badge-warning" style="font-size: 10px; color: #1e5a3a;">Operasional Harian</span>
+                                        </div>
+                                    </div>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li>Penyesuaian jadwal sholat & waktu jeda iqamah</li>
+                                        <li>Petugas Sholat Jum'at, Idul Fitri, & Idul Adha</li>
+                                        <li>Manajemen Pengajian Rutin Malam Ahad (Pekan 1-5)</li>
+                                        <li>Pembuatan pengumuman cerdas dibantu Gemini AI</li>
+                                        <li>Upload poster & brosur kegiatan dakwah masjid</li>
+                                        <li>Aktifkan/nonaktifkan slide TV (urutan terproteksi)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bendahara -->
+                        <div class="col-lg-4 mb-3">
+                            <div class="card h-100 shadow-sm" style="border-radius: 16px; border-top: 4px solid #0284c7; border-left: none; border-right: none; border-bottom: none;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(2,132,199,0.1); color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 10px;">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold m-0" style="color: #0e3521;">Bendahara</h6>
+                                            <span class="badge badge-info" style="font-size: 10px;">Manajemen Keuangan</span>
+                                        </div>
+                                    </div>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li>Pencatatan Buku Kas Utama (infaq tromol & operasional)</li>
+                                        <li>Pencatatan Kas Operasional Mobil Ambulance Masjid</li>
+                                        <li>Program penggalangan donasi & target infaq terarah</li>
+                                        <li>Pemantauan grafik ringkasan keuangan di TV</li>
+                                        <li>Penerimaan Infaq Ramadhan & Hewan Qurban</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-5" style="border-color: rgba(30,90,58,0.12);">
+
+                <!-- 6. PANDUAN PENGOPERASIAN SISTEM -->
+                <section class="mb-5">
+                    <div class="section-header-title">
+                        <div class="section-icon-chip"><i class="fas fa-book-open"></i></div>
+                        <div>
+                            <h2 class="section-heading-text">Panduan Pengoperasian Sistem</h2>
+                            <p class="small text-muted mb-0">Petunjuk teknis pengoperasian TV display, mode sholat, dan kajian</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion accordion-custom" id="guideAccordion">
+                        <!-- Panduan 1 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <button class="btn btn-accordion" type="button" data-toggle="collapse" data-target="#guideOne">
+                                    <span><i class="fas fa-tv mr-2 text-warning"></i>1. Menampilkan Sistem di Layar TV (Display TV Dalam & Luar)</span>
+                                    <i class="fas fa-chevron-down small text-muted"></i>
+                                </button>
+                            </div>
+                            <div id="guideOne" class="collapse show" data-parent="#guideAccordion">
+                                <div class="card-body small" style="line-height: 1.8;">
+                                    <p class="mb-2"><strong>A. Layar TV Utama (Di Dalam Masjid):</strong></p>
+                                    <ol class="pl-3 mb-3">
+                                        <li>Buka aplikasi browser (Chrome / Edge / Browser TV) pada Smart TV atau Android Box.</li>
+                                        <li>Ketik alamat website utama masjid: <code>https://digitalaljihad.my.id/</code>.</li>
+                                        <li>Tekan tombol <strong>F11</strong> pada keyboard (atau aktifkan mode <em>Fullscreen / Kiosk</em>) untuk menyembunyikan address bar.</li>
+                                        <li>Layar akan otomatis berputar menampilkan jadwal sholat, pengumuman, siaran live, dan laporan kas secara bergantian.</li>
+                                    </ol>
+                                    <p class="mb-2"><strong>B. Layar TV Luar / Serambi Masjid:</strong></p>
+                                    <ol class="pl-3 mb-0">
+                                        <li>Gunakan alamat khusus TV Luar: <code>https://digitalaljihad.my.id/slides/live-mimbar.html</code>.</li>
+                                        <li>Di jam biasa berputar menampilkan informasi umum. Saat Khutbah Jum'at tiba, layar otomatis beralih menampilkan siaran langsung mimbar masjid.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 2 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <button class="btn btn-accordion collapsed" type="button" data-toggle="collapse" data-target="#guideTwo">
+                                    <span><i class="fas fa-mosque mr-2 text-warning"></i>2. Alur Kerja Otomatis Mode Sholat (Prayer Mode & Khutbah)</span>
+                                    <i class="fas fa-chevron-down small text-muted"></i>
+                                </button>
+                            </div>
+                            <div id="guideTwo" class="collapse" data-parent="#guideAccordion">
+                                <div class="card-body small" style="line-height: 1.8;">
+                                    <ol class="pl-3 mb-0">
+                                        <li class="mb-2"><strong>Fase Tarhim:</strong> Audio tarhim otomatis berbunyi beberapa menit sebelum waktu adzan tiba.</li>
+                                        <li class="mb-2"><strong>Fase Adzan:</strong> Rotasi TV berhenti, menampilkan pengingat adzan berkumandang.</li>
+                                        <li class="mb-2"><strong>Fase Iqamah:</strong> Hitung mundur jeda sholat sunnah hingga iqamah ditegakkan.</li>
+                                        <li class="mb-2"><strong>Fase Sholat:</strong> Layar TV otomatis menjadi gelap syahdu bertuliskan <em>"Luruskan dan Rapatkan Shaf Anda"</em>.</li>
+                                        <li class="mb-2"><strong>Khusus Sholat Jum'at:</strong> Layar menampilkan 4 kartu petugas resmi (Khatib, Imam, Muadzin, Bilal) serta hadits larangan berbicara saat khutbah.</li>
+                                        <li><strong>Selesai Sholat:</strong> Layar TV kembali berotasi normal menampilkan informasi masjid secara otomatis.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 3 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <button class="btn btn-accordion collapsed" type="button" data-toggle="collapse" data-target="#guideThree">
+                                    <span><i class="fas fa-book-reader mr-2 text-warning"></i>3. Pengajian Rutin Malam Ahad (Auto-Switch Sabtu Malam)</span>
+                                    <i class="fas fa-chevron-down small text-muted"></i>
+                                </button>
+                            </div>
+                            <div id="guideThree" class="collapse" data-parent="#guideAccordion">
+                                <div class="card-body small" style="line-height: 1.8;">
+                                    <p class="mb-2">Setiap hari Sabtu malam, sistem akan otomatis beralih menampilkan poster pengajian:</p>
+                                    <ul class="pl-3 mb-0">
+                                        <li class="mb-2"><strong>Jam Mulai Otomatis:</strong> Dimulai ba'da Maghrib (pukul 18:25) hingga waktu adzan Isya tiba.</li>
+                                        <li class="mb-2"><strong>Tanya Jawab Digital:</strong> Menampilkan QR Code interaktif sehingga jamaah dapat mengirimkan pertanyaan dari smartphone tanpa perlu mikrofon.</li>
+                                        <li><strong>Manajemen Siklus 5 Pekan:</strong> Pengurus dapat mengisi jadwal pemateri dan kitab untuk 5 pekan sekaligus di panel admin.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-5" style="border-color: rgba(30,90,58,0.12);">
+
+                <!-- 7. RIWAYAT VERSI (TIMELINE PERJUANGAN PENGEMBANGAN) -->
+                <section class="mb-5">
+                    <div class="section-header-title">
+                        <div class="section-icon-chip"><i class="fas fa-history"></i></div>
+                        <div>
+                            <h2 class="section-heading-text">Riwayat Perjalanan & Pembaruan Sistem</h2>
+                            <p class="small text-muted mb-0">Rekam jejak tahapan perjuangan dari inisiasi awal hingga rilis mutakhir</p>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0" style="border-radius: 16px; background: #ffffff; border: 1px solid #e2e8f0 !important;">
+                        <div class="card-body p-4">
+                            <ul class="timeline-list mb-0">
+                                
+                                <!-- Versi 5.1.0 -->
+                                <li class="timeline-item active">
+                                    <div class="timeline-dot"></div>
+                                    <div class="d-flex align-items-center mb-1 flex-wrap">
+                                        <span class="badge badge-success px-3 py-1 mr-2" style="background: var(--islamic-green); font-size: 12px; font-weight: 700;">
+                                            Versi 5.1.0 (Rilis Terkini)
+                                        </span>
+                                        <span class="text-muted font-weight-bold small">25 September 2026</span>
+                                    </div>
+                                    <h6 class="font-weight-bold mt-2" style="color: #0e3521;">Fitur Pengajian Rutin Malam Ahad & Penajaman Tipografi Header TV</h6>
+                                    <ul class="small text-muted pl-3 mb-0" style="line-height: 1.8;">
+                                        <li><strong>Pengajian Rutin Malam Ahad (Bab 83):</strong> Slide khusus `slides/kajian.html`, auto-switch Sabtu malam ba'da Maghrib s/d Isya, smart countdown Isya, form preset 5 pekan di admin, dan QR tanya jawab digital.</li>
+                                        <li><strong>Peningkatan Kontras Font Header Masjid (Bab 82):</strong> Mengubah warna font teks header "MASJID JAMI' AL JIHAD" menjadi *Deep Dark Emerald Forest Green* (`#01220e`), garis tepi emas metalik (`#d4af37`), serta meniadakan efek glow blur kuning 20px agar karakter terlihat sangat tajam dari jarak jauh.</li>
+                                        <li><strong>Pembaruan Dokumentasi & Kenang-Kenangan (Bab 84):</strong> Adaptasi halaman Tentang Aplikasi ke format Web Statis Modern lengkap dengan Tabel Komparasi Head-to-Head Render.</li>
+                                    </ul>
+                                </li>
+
+                                <!-- Versi 5.0.0 -->
+                                <li class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="d-flex align-items-center mb-1 flex-wrap">
+                                        <span class="badge badge-info px-3 py-1 mr-2" style="font-size: 12px; font-weight: 700;">
+                                            Versi 5.0.0
+                                        </span>
+                                        <span class="text-muted font-weight-bold small">September 2026</span>
+                                    </div>
+                                    <h6 class="font-weight-bold mt-2" style="color: #0e3521;">Evolusi Web Statis Mandiri & Supabase BaaS</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.8;">
+                                        Migrasi arsitektur total dari PHP Laravel ke Web Statis Modern. Waktu build terpangkas dari 8 menit menjadi 15 detik, nol cold-start, dan ketahanan offline penuh jika Wi-Fi masjid terputus.
+                                    </p>
+                                </li>
+
+                                <!-- Versi 4.2.6 -->
+                                <li class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="d-flex align-items-center mb-1 flex-wrap">
+                                        <span class="badge badge-purple px-3 py-1 mr-2" style="background: #9333ea; color: #fff; font-size: 12px; font-weight: 700;">
+                                            Versi 4.2.6
+                                        </span>
+                                        <span class="text-muted font-weight-bold small">15 September 2026</span>
+                                    </div>
+                                    <h6 class="font-weight-bold mt-2" style="color: #0e3521;">Integrasi Google Gemini AI & Reposisi Countdown Sholat</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.8;">
+                                        Pemasangan AI Copywriter pengumuman dan Slide Mutiara Hadits Hikmah AI. Pengecualian Syuruk & Imsak dari layar gelap prayer mode, serta reposisi kapsul hitung mundur di atas kartu jadwal sholat.
+                                    </p>
+                                </li>
+
+                                <!-- Versi 4.0.0 -->
+                                <li class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="d-flex align-items-center mb-1 flex-wrap">
+                                        <span class="badge badge-dark px-3 py-1 mr-2" style="font-size: 12px; font-weight: 700;">
+                                            Versi 4.0.0
+                                        </span>
+                                        <span class="text-muted font-weight-bold small">14 September 2026</span>
+                                    </div>
+                                    <h6 class="font-weight-bold mt-2" style="color: #0e3521;">Grand Redesign Islamic Material Design 3</h6>
+                                    <p class="small text-muted mb-0" style="line-height: 1.8;">
+                                        Penyempurnaan visual SB Admin 2 dengan nuansa hijau botol islami, live clock topbar, widget prayer pill, dan penataan ulang 14 slide siaran TV.
+                                    </p>
+                                </li>
+
+                                <!-- Versi 3.0.3 -->
+                                <li class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="d-flex align-items-center mb-1 flex-wrap">
+                                        <span class="badge badge-secondary px-3 py-1 mr-2" style="font-size: 12px; font-weight: 700;">
+                                            Versi 3.0.3
+                                        </span>
+                                        <span class="text-muted font-weight-bold small">Agustus 2026</span>
+                                    </div>
+                                    <h6 class="font-weight-bold mt-2" style="color: #0e3521;">Catatan Sejarah TV Masjid & Momen Bersejarah</h6>
+                                    <div class="p-3 rounded bg-light border mt-2" style="font-size: 12.5px; color: #475569; line-height: 1.7;">
+                                        <strong>Catatan Kenangan:</strong> NDILALAH TV masjid terbeli dan diserahkan lagi. Bracket dipasang Sabtu malam minggu 5 Sept '26, langsung GAZZZ beli SamSoe 3 slop, trus lanjut lembur ke versi 3.0.4!
+                                    </div>
+                                </li>
+
+                                <!-- Versi 1.0.0 - 3.0.2 -->
+                                <li class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <span class="text-muted font-weight-bold small">Versi 1.0.0 – 3.0.2 (Juli – Agustus 2026)</span>
+                                    <p class="small text-muted mb-0 mt-1">Inisiasi konsep dasar, riset tampilan display jadwal sholat 5 waktu, modul keuangan kas, dan perintisan sistem display masjid digital.</p>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. FOOTER RESMI -->
+                <footer class="about-footer mt-5">
+                    <div class="mb-2">
+                        <i class="fas fa-mosque" style="font-size: 32px; color: var(--islamic-gold-bright);"></i>
+                    </div>
+                    <h5 class="font-weight-bold mb-1" style="font-family: 'Amiri', serif; font-size: 20px; color: #ffd700;">
+                        MASJID JAMI' AL JIHAD
+                    </h5>
+                    <p class="small mb-3 text-light opacity-80">
+                        Platform Digital Signage & Smart Mosque Display System — Membangun Syiar & Transparansi Ibadah
+                    </p>
+                    <div class="pt-3 border-top border-secondary small text-muted d-flex justify-content-center flex-wrap" style="gap: 16px;">
+                        <span><i class="fas fa-shield-alt text-success mr-1"></i> Status: 100% Client-Side Engine</span>
+                        <span><i class="fas fa-bolt text-warning mr-1"></i> Zero Cold-Start Edge CDN</span>
+                        <span><i class="fas fa-tv text-info mr-1"></i> Teruji Resolusi 1080p Full HD & 4K</span>
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/fontawesome-free/js/all.min.js" defer></script>
+</body>
+</html>

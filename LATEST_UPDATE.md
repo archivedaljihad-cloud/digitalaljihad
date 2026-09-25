@@ -3370,6 +3370,51 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 6. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
 7. `LATEST_UPDATE.md` (Dokumentasi Bab 83).
 
+---
+
+## 🏛️ 84. IMPLEMENTASI HALAMAN TENTANG SISTEM DIGITAL & PANDUAN LENGKAP (ABOUT.HTML) DENGAN TABEL KOMPARASI HEAD-TO-HEAD
+
+**Tanggal:** 25 September 2026  
+**Status:** Sukses & Tayang Penuh (*Live Production Ready*)  
+**Domain Live:** `https://digitalaljihad.my.id/about.html`  
+**Menu Akses:** Sidebar Admin > Sesi Akun > Tentang & Panduan (`about.html`)
+
+### Latar Belakang & Kebutuhan Pengguna:
+- Sebagai bentuk kenang-kenangan perjuangan pengembang dalam membangun sistem digital signage Masjid Jami' Al-Jihad, pengguna meminta dibuatkan halaman dokumentasi komprehensif pada Web Statis Modern yang setara dengan halaman `about.blade.php` di versi Laravel sebelumnya.
+- Isinya diselaraskan 100% dengan kondisi aktual sistem saat ini (Versi 5.1.0):
+  1. Melestarikan mukaddimah kaligrafi Arab, ucapan basmalah, salam, shalawat, serta surat/doa curahan hati pengembang kepada pengurus dan jamaah Masjid Jami' Al-Jihad.
+  2. Menyertakan **Tabel Ringkasan Komparasi Head-to-Head** (Web Statis Modern vs Web Laravel Dinamis jika sama-sama di-deploy di platform Render).
+  3. Memuat showcase fitur mutakhir (Dual-Engine Crossfade, Smart Next Prayer Bar, Dynamic Ambient Theme, Prayer & Khutbah Engine, CCTV Mimbar, Live Makkah/Madinah, Smart Running Text, dan Pengajian Rutin Malam Ahad).
+  4. Menampilkan daftar lengkap **19 Saluran Slide Display Aktif** dengan badge tematik dan tautan pratinjau langsung.
+  5. Menambahkan tautan langsung di sidebar Web Admin (`admin.html`) di bawah "Sesi Akun".
+  6. Mengabadikan catatan sejarah perjuangan pembelian TV, bracket, dan GAZZZ SamSoe 3 slop.
+
+---
+
+### Solusi & Rincian Teknis yang Diterapkan:
+1. **Pembuatan Berkas `web-statis/about.html`:**
+   - Halaman mandiri responsif modern dengan integrasi Bootstrap 4.6, Google Fonts (*Amiri, Inter, Cinzel*), dan Font Awesome lokal/SVG.
+   - **Hero Header Islami:** Menampilkan logo resmi Al-Jihad berbingkai emas, badge versi `v5.1.0`, tombol pratinjau TV dan tombol Dashboard Admin.
+   - **Tabel Analisis Head-to-Head:** Menampilkan perbandingan 8 aspek kunci (Tipe Layanan, Ukuran Disk, Waktu Build, RAM Server, Cold Start, Kecepatan Respon, Resiliensi Offline, dan Beban Hardware TV Box).
+   - **Katalog 19 Saluran Slide TV:** Seluruh slide dari `slides/utama.html` hingga `slides/live-mimbar.html` ditampilkan dalam kartu pil interaktif.
+2. **Pembaruan Sidebar Admin (`web-statis/admin.html`):**
+   - Menambahkan menu `Tentang & Panduan` berikon `<i class="fas fa-fw fa-info-circle">` dan badge versi emas `v5.1` di bawah Sesi Akun yang membuka `about.html` di tab baru.
+3. **Penyelarasan SOP AGENTS.md:**
+   - Dokumentasi Bab 84 dicatat ke `LATEST_UPDATE.md`.
+   - Sinkronisasi lokal ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit & push origin main.
+   - Deployment live Cloudflare Pages/Workers (`npx wrangler deploy`).
+
+---
+
+### Berkas yang Terkait / Diperbarui:
+1. `web-statis/about.html` (Berkas halaman baru Tentang Aplikasi & Panduan Lengkap).
+2. `web-statis/admin.html` (Menu navigasi Tentang & Panduan pada sidebar).
+3. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+4. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 84).
+
+
 
 
 
