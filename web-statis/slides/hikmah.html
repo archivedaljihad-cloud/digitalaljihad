@@ -289,6 +289,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="../js/supabase-db.js"></script>
+    <script src="../js/gemini-ai.js"></script>
     <script src="../js/display-clock-ambient.js"></script>
 
     <script>
@@ -342,8 +343,8 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Koleksi Hadits Hikmah Terpilih
-        const hikmahCollection = [
+        // Koleksi Hadits Hikmah Terpilih (Koleksi Dasar)
+        let hikmahCollection = [
             {
                 tema: "KEUTAMAAN MENUNTUT ILMU",
                 arab: "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
@@ -382,7 +383,7 @@
 
             document.getElementById('themeTitle').textContent = item.tema;
             document.getElementById('hadithArab').textContent = item.arab;
-            document.getElementById('hadithTerjemah').textContent = item.terjemah;
+            document.getElementById('hadithTerjemah').textContent = item.terjemah || item.terjemahan || '';
             document.getElementById('hadithPerawi').textContent = item.perawi;
             document.getElementById('hadithHikmah').textContent = item.hikmah;
         }
@@ -393,6 +394,29 @@
             showHikmah(currentHikmahIdx);
         }, 14000);
 
+        // Muat Hadits Harian dari Google Gemini AI / Koleksi Harian
+        async function loadDailyAiHikmah() {
+            if (window.GeminiAI && typeof window.GeminiAI.getDailyHikmah === 'function') {
+                try {
+                    const daily = await window.GeminiAI.getDailyHikmah();
+                    if (daily && daily.arab && (daily.terjemah || daily.terjemahan)) {
+                        const dailyItem = {
+                            tema: `HADITS HARI ${daily.hari ? daily.hari.toUpperCase() : 'INI'}: ${daily.tema ? daily.tema.toUpperCase() : 'MUTIARA HIKMAH'}`,
+                            arab: daily.arab,
+                            terjemah: `"${daily.terjemahan || daily.terjemah}"`,
+                            perawi: daily.perawi || 'Hadits Shahih',
+                            hikmah: daily.hikmah || 'Semoga Allah memberkahi amal ibadah kita hari ini.'
+                        };
+                        // Tempatkan hadits hari ini di posisi pertama
+                        hikmahCollection.unshift(dailyItem);
+                        showHikmah(0);
+                    }
+                } catch (e) {
+                    console.warn('Gagal memuat Hadits Harian Gemini AI:', e);
+                }
+            }
+        }
+
         // Load Settings
         async function loadHikmahData() {
             try {
@@ -400,6 +424,10 @@
                 if (settings) {
                     if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
                     if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    if (settings.gemini_api_key && window.GeminiAI) {
+                        window.GeminiAI.setApiKey(settings.gemini_api_key);
+                        if (settings.gemini_model) window.GeminiAI.setModel(settings.gemini_model);
+                    }
                     const rText = SupabaseDB.getRunningTextForPage('/hikmah-embed', settings);
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-quran"></i> ${rText}`;
                 }
@@ -408,9 +436,10 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             showHikmah(0);
-            loadHikmahData();
+            await loadHikmahData();
+            await loadDailyAiHikmah();
 
             if (window.SupabaseDB) {
                 SupabaseDB.subscribeRealtime((payload) => {

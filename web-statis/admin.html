@@ -1777,9 +1777,14 @@
                             <h4 class="font-weight-bold text-gray-800 mb-0">
                                 <i class="fas fa-book-reader text-success mr-2"></i> Pengajian Rutin Malam Ahad
                             </h4>
-                            <button class="btn btn-success font-weight-bold" onclick="simpanKajianSabtu()">
-                                <i class="fas fa-save mr-1"></i> Simpan Agenda Kajian
-                            </button>
+                            <div>
+                                <button class="btn btn-outline-warning font-weight-bold mr-2 shadow-sm" onclick="bukaModalAiCopywriter('Kajian Rutin', 'kajian')">
+                                    <i class="fas fa-magic mr-1"></i> ✨ AI Copywriter
+                                </button>
+                                <button class="btn btn-success font-weight-bold" onclick="simpanKajianSabtu()">
+                                    <i class="fas fa-save mr-1"></i> Simpan Agenda Kajian
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Card Switch Otomatis Layar TV -->
@@ -2160,9 +2165,14 @@
                             <h4 class="font-weight-bold text-gray-800 mb-0">
                                 <i class="fas fa-bullhorn text-warning mr-2"></i> Teks Berjalan TV (Running Text)
                             </h4>
-                            <button class="btn btn-success" onclick="simpanRunningText()">
-                                <i class="fas fa-save mr-1"></i> Simpan Teks Berjalan
-                            </button>
+                            <div>
+                                <button class="btn btn-outline-warning font-weight-bold mr-2 shadow-sm" onclick="bukaModalAiCopywriter('Teks Berjalan TV', 'running_text')">
+                                    <i class="fas fa-magic mr-1"></i> ✨ Buat Running Text AI
+                                </button>
+                                <button class="btn btn-success" onclick="simpanRunningText()">
+                                    <i class="fas fa-save mr-1"></i> Simpan Teks Berjalan
+                                </button>
+                            </div>
                         </div>
 
                         <div class="content-card">
@@ -2770,6 +2780,74 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- CARD INTEGRASI GOOGLE GEMINI AI -->
+                            <div class="col-12 mb-4">
+                                <div class="content-card border-left-success" style="border-left: 5px solid #10b981;">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-robot text-success mr-2"></i> Integrasi Kecerdasan Buatan (Google Gemini AI)
+                                        </h6>
+                                        <span id="geminiStatusBadge" class="badge badge-secondary px-3 py-1">
+                                            <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> Memeriksa Status...
+                                        </span>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="alert alert-light border d-flex align-items-center justify-content-between flex-wrap p-3 mb-3" style="border-radius: 12px; background: #f0fdf4; border-color: #bbf7d0 !important;">
+                                            <div class="d-flex align-items-center mb-2 mb-md-0">
+                                                <i class="fas fa-magic text-success mr-3" style="font-size: 1.4rem;"></i>
+                                                <div>
+                                                    <strong class="text-dark d-block">Google Gemini AI Engine (Display & Signage Al-Jihad)</strong>
+                                                    <small class="text-muted">Fitur ini mentenagai <strong>AI Copywriter Pengumuman</strong>, <strong>Agenda Pengajian</strong>, dan <strong>Mutiara Hadits Shahih Harian</strong> otomatis di layar TV.</small>
+                                                </div>
+                                            </div>
+                                            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="btn btn-sm btn-outline-success font-weight-bold">
+                                                <i class="fas fa-external-link-alt mr-1"></i> Dapatkan API Key Gratis
+                                            </a>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold d-flex justify-content-between align-items-center">
+                                                        <span>Google Gemini API Key</span>
+                                                        <a href="javascript:void(0)" onclick="toggleApiKeyVisibility()" class="text-muted" style="font-size: 0.82rem;">
+                                                            <i class="fas fa-eye" id="toggleApiKeyIcon"></i> <span id="toggleApiKeyText">Tampilkan</span>
+                                                        </a>
+                                                    </label>
+                                                    <input type="password" class="form-control font-weight-bold" id="cfgGeminiApiKey" placeholder="Contoh: AIzaSyD..." autocomplete="off">
+                                                    <small class="text-muted">Kunci tersimpan aman di Supabase dan browser lokal operator.</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold">Model Gemini AI</label>
+                                                    <select class="form-control font-weight-bold" id="cfgGeminiModel">
+                                                        <option value="gemini-1.5-flash" selected>gemini-1.5-flash (Direkomendasikan - Cepat & Kuota Luas)</option>
+                                                        <option value="gemini-2.0-flash">gemini-2.0-flash (Generasi Terkini)</option>
+                                                        <option value="gemini-1.5-pro">gemini-1.5-pro (Penalaran Mendalam)</option>
+                                                    </select>
+                                                    <small class="text-muted">Gunakan Flash untuk respon draf tercepat.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap mt-2 pt-2 border-top">
+                                            <div id="geminiTestFeedback" class="small text-muted font-weight-bold mb-2 mb-md-0">
+                                                <i class="fas fa-info-circle mr-1"></i> Klik "Uji Koneksi AI" untuk memeriksa status kunci API.
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-outline-primary mr-2" id="btnTestGemini" onclick="ujiKoneksiGeminiAdmin()">
+                                                    <i class="fas fa-plug mr-1"></i> Uji Koneksi AI
+                                                </button>
+                                                <button type="button" class="btn btn-success" onclick="simpanPengaturanSistem()">
+                                                    <i class="fas fa-save mr-1"></i> Simpan Konfigurasi
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -3134,6 +3212,135 @@
         </div>
     </div>
 
+    <!-- =======================================================
+         MODAL AI COPYWRITER & GENERATOR (GOOGLE GEMINI)
+         ======================================================= -->
+    <div class="modal fade" id="modalAiCopywriter" tabindex="-1" role="dialog" aria-labelledby="modalAiCopywriterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header text-white" style="background: linear-gradient(135deg, #071a10 0%, #0e3521 100%); border-bottom: 2px solid #c9a03d;">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3" style="width: 42px; height: 42px; background: rgba(201, 160, 61, 0.2); border: 1px solid rgba(255, 215, 0, 0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #ffd700;">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title font-weight-bold text-white mb-0" id="modalAiCopywriterLabel">
+                                Asisten AI Copywriter Masjid
+                            </h5>
+                            <small class="text-warning font-weight-bold" style="font-size: 0.78rem;">
+                                Didukung Google Gemini AI • Otomatis Susun Redaksi Islami & Rapi
+                            </small>
+                        </div>
+                    </div>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4" style="background: #f8fafc;">
+                    <!-- Input Section -->
+                    <div class="card p-3 mb-3 border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="font-weight-bold text-dark"><i class="fas fa-tag text-success mr-1"></i> Kategori Kegiatan</label>
+                                <select class="form-control font-weight-bold" id="aiKategori">
+                                    <option value="Kajian Rutin" selected>Kajian Rutin / Pengajian Malam Ahad</option>
+                                    <option value="Tabligh Akbar">Tabligh Akbar / Kajian Tematik</option>
+                                    <option value="Peringatan Hari Besar Islam">Peringatan Hari Besar Islam (PHBI)</option>
+                                    <option value="Bakti Sosial & Santunan">Bakti Sosial & Santunan Dhuafa</option>
+                                    <option value="Sholat Jum'at & Pengumuman DKM">Sholat Jum'at & Himbauan DKM</option>
+                                    <option value="Teks Berjalan TV">Teks Berjalan TV (Running Text)</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="font-weight-bold text-dark"><i class="fas fa-bullseye text-primary mr-1"></i> Target Penerapan Form</label>
+                                <select class="form-control font-weight-bold" id="aiTargetApply">
+                                    <option value="kajian" selected>Form Pengajian Malam Ahad</option>
+                                    <option value="running_text">Teks Berjalan TV (Running Text)</option>
+                                    <option value="clipboard">Salin ke Papan Klip Saja</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label class="font-weight-bold text-dark d-flex justify-content-between">
+                                <span><i class="fas fa-pencil-alt text-warning mr-1"></i> Catatan Mentah / Poin Kegiatan</span>
+                                <small class="text-muted">Cukup tuliskan poin pokok tanpa perlu bahasa formal</small>
+                            </label>
+                            <textarea class="form-control" id="aiRawPoints" rows="3" placeholder="Contoh: kajian ahad subuh ustadz ahmad sholeh al hafidz tema fiqih sholat berjamaah di ruang utama ba'da subuh sampai syuruq ajak keluarga dan siapkan infaq terbaik"></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-lightbulb text-warning mr-1"></i> Gemini AI akan mengubah catatan singkat menjadi draf formal santun.
+                            </small>
+                            <button type="button" class="btn btn-success font-weight-bold px-4 shadow-sm" id="btnGenerateAi" onclick="prosesGenerateAiAnnouncement()">
+                                <i class="fas fa-robot mr-1"></i> Susun Draf dengan AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Loading Indicator -->
+                    <div id="aiLoadingBox" class="text-center py-4 d-none">
+                        <div class="spinner-border text-success mb-2" role="status" style="width: 2.5rem; height: 2.5rem;">
+                            <span class="sr-only">Menyusun redaksi...</span>
+                        </div>
+                        <p class="font-weight-bold text-dark mb-0">Sedang menyusun redaksi pengumuman islami dengan Google Gemini AI...</p>
+                        <small class="text-muted">Menghasilkan judul formal, deskripsi ajakan ibadah, dan running text TV.</small>
+                    </div>
+
+                    <!-- Result Section -->
+                    <div id="aiResultBox" class="card border-0 shadow-sm d-none" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center py-2 px-3" style="border-radius: 12px 12px 0 0;">
+                            <h6 class="font-weight-bold text-dark mb-0">
+                                <i class="fas fa-check-circle text-success mr-1"></i> Pratinjau Draf Pengumuman
+                            </h6>
+                            <span id="aiResultBadge" class="badge badge-success px-2 py-1">Gemini AI</span>
+                        </div>
+                        <div class="p-3">
+                            <div class="form-group mb-2">
+                                <label class="font-weight-bold text-muted small mb-1">JUDUL KEGIATAN</label>
+                                <input type="text" class="form-control font-weight-bold text-dark" id="aiResJudul">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-5 mb-2">
+                                    <label class="font-weight-bold text-muted small mb-1">PEMATERI / USTADZ</label>
+                                    <input type="text" class="form-control" id="aiResPemateri">
+                                </div>
+                                <div class="form-group col-md-4 mb-2">
+                                    <label class="font-weight-bold text-muted small mb-1">WAKTU PELAKSANAAN</label>
+                                    <input type="text" class="form-control" id="aiResWaktu">
+                                </div>
+                                <div class="form-group col-md-3 mb-2">
+                                    <label class="font-weight-bold text-muted small mb-1">TEMPAT</label>
+                                    <input type="text" class="form-control" id="aiResTempat">
+                                </div>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="font-weight-bold text-muted small mb-1">REDAKSI LENGKAP PENGUMUMAN</label>
+                                <textarea class="form-control" id="aiResIsi" rows="4" style="line-height: 1.6;"></textarea>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="font-weight-bold text-muted small mb-1">TEKS BERJALAN TV (RUNNING TEXT MAKS 130 KARAKTER)</label>
+                                <input type="text" class="form-control font-weight-bold text-success" id="aiResRunningText">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between" style="background: #ffffff; border-top: 1px solid #e2e8f0;">
+                    <button type="button" class="btn btn-secondary px-3" data-dismiss="modal">Tutup</button>
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary mr-2" onclick="salinDrafAiLengkap()">
+                            <i class="fas fa-copy mr-1"></i> Salin Teks
+                        </button>
+                        <button type="button" class="btn btn-success font-weight-bold px-4" id="btnApplyAi" onclick="terapkanHasilAiKeForm()">
+                            <i class="fas fa-check mr-1"></i> Terapkan ke Form
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- =======================================================
          SCRIPTS: VENDOR & SUPABASE REALTIME ENGINE
@@ -3142,6 +3349,7 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/admin-auth.js"></script>
+    <script src="js/gemini-ai.js"></script>
 
     <script>
         // 1. Verifikasi Autentikasi Pengguna saat halaman dimuat
@@ -3921,6 +4129,19 @@
                         if (document.getElementById('cfgLiveMekah') && s.live_makkah_url) document.getElementById('cfgLiveMekah').value = s.live_makkah_url;
                         if (document.getElementById('cfgCctvMimbar') && s.cctv_mimbar_url) document.getElementById('cfgCctvMimbar').value = s.cctv_mimbar_url;
                         
+                        // Google Gemini AI Settings
+                        const activeGeminiKey = s.gemini_api_key || (window.GeminiAI ? window.GeminiAI.getApiKey() : '');
+                        const activeGeminiModel = s.gemini_model || (window.GeminiAI ? window.GeminiAI.getModel() : 'gemini-1.5-flash');
+                        if (document.getElementById('cfgGeminiApiKey')) document.getElementById('cfgGeminiApiKey').value = activeGeminiKey || '';
+                        if (document.getElementById('cfgGeminiModel')) document.getElementById('cfgGeminiModel').value = activeGeminiModel;
+                        if (window.GeminiAI) {
+                            if (activeGeminiKey) window.GeminiAI.setApiKey(activeGeminiKey);
+                            if (activeGeminiModel) window.GeminiAI.setModel(activeGeminiModel);
+                        }
+                        if (typeof updateGeminiStatusBadge === 'function') {
+                            updateGeminiStatusBadge();
+                        }
+
                         // Switch & Durasi Prayer Mode
                         const prayerEnabled = (s.prayer_mode_enabled !== false && s.value != '0');
                         if (document.getElementById('cfgPrayerModeEnabled')) document.getElementById('cfgPrayerModeEnabled').checked = prayerEnabled;
@@ -5013,26 +5234,241 @@
             const interval = parseInt(document.getElementById('cfgIntervalTV')?.value) || 20;
             const liveMekah = document.getElementById('cfgLiveMekah')?.value;
             const cctv = document.getElementById('cfgCctvMimbar')?.value;
+            const geminiApiKey = document.getElementById('cfgGeminiApiKey')?.value?.trim();
+            const geminiModel = document.getElementById('cfgGeminiModel')?.value || 'gemini-1.5-flash';
+
+            // Simpan lokal di browser
+            if (window.GeminiAI) {
+                window.GeminiAI.setApiKey(geminiApiKey);
+                window.GeminiAI.setModel(geminiModel);
+                updateGeminiStatusBadge();
+            }
 
             try {
+                const patchPayload = {
+                    nama_aplikasi: nama,
+                    rotation_interval: interval,
+                    live_makkah_url: liveMekah,
+                    cctv_mimbar_url: cctv
+                };
+                if (typeof geminiApiKey === 'string') {
+                    patchPayload.gemini_api_key = geminiApiKey;
+                    patchPayload.gemini_model = geminiModel;
+                }
+
                 const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
-                    body: JSON.stringify({
-                        nama_aplikasi: nama,
-                        rotation_interval: interval,
-                        live_makkah_url: liveMekah,
-                        cctv_mimbar_url: cctv
-                    })
+                    body: JSON.stringify(patchPayload)
                 });
 
                 if (res.ok) {
-                    alert('Alhamdulillah! Konfigurasi sistem berhasil disimpan ke Supabase.');
+                    alert('Alhamdulillah! Konfigurasi sistem dan Google Gemini AI berhasil disimpan ke Supabase.');
                 } else {
-                    alert('Gagal menyimpan konfigurasi.');
+                    alert('Gagal menyimpan konfigurasi ke Supabase. Namun konfigurasi telah disimpan secara lokal di browser.');
                 }
             } catch (err) {
-                alert('Tersimpan secara lokal.');
+                alert('Tersimpan secara lokal di browser ini.');
+            }
+        }
+
+        // ==========================================
+        // FITUR GOOGLE GEMINI AI ENGINE (ADMIN PANEL)
+        // ==========================================
+        let lastAiResult = null;
+
+        function updateGeminiStatusBadge() {
+            const badge = document.getElementById('geminiStatusBadge');
+            if (!badge) return;
+            const hasKey = window.GeminiAI ? window.GeminiAI.hasApiKey() : false;
+            if (hasKey) {
+                badge.className = 'badge badge-success px-3 py-1';
+                badge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Gemini AI Siap';
+            } else {
+                badge.className = 'badge badge-warning text-dark px-3 py-1';
+                badge.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i> Belum Dikonfigurasi';
+            }
+        }
+
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('cfgGeminiApiKey');
+            const icon = document.getElementById('toggleApiKeyIcon');
+            const text = document.getElementById('toggleApiKeyText');
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (icon) icon.className = 'fas fa-eye-slash';
+                if (text) text.textContent = 'Sembunyikan';
+            } else {
+                input.type = 'password';
+                if (icon) icon.className = 'fas fa-eye';
+                if (text) text.textContent = 'Tampilkan';
+            }
+        }
+
+        async function ujiKoneksiGeminiAdmin() {
+            const key = document.getElementById('cfgGeminiApiKey')?.value?.trim();
+            const model = document.getElementById('cfgGeminiModel')?.value || 'gemini-1.5-flash';
+            const feedback = document.getElementById('geminiTestFeedback');
+            const btn = document.getElementById('btnTestGemini');
+
+            if (!key) {
+                alert('Silakan masukkan Google Gemini API Key terlebih dahulu.');
+                return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menguji...';
+            }
+            if (feedback) {
+                feedback.className = 'small text-primary font-weight-bold mb-2 mb-md-0';
+                feedback.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menghubungi Google Gemini API...';
+            }
+
+            try {
+                const testRes = await window.GeminiAI.testConnection(key, model);
+                if (testRes.success) {
+                    if (feedback) {
+                        feedback.className = 'small text-success font-weight-bold mb-2 mb-md-0';
+                        feedback.innerHTML = `<i class="fas fa-check-circle mr-1"></i> ${testRes.message}`;
+                    }
+                    window.GeminiAI.setApiKey(key);
+                    window.GeminiAI.setModel(model);
+                    updateGeminiStatusBadge();
+                    alert(`Alhamdulillah! Koneksi ke Google Gemini AI (${model}) Berhasil! (Latensi: ${testRes.latencyMs} ms)`);
+                } else {
+                    if (feedback) {
+                        feedback.className = 'small text-danger font-weight-bold mb-2 mb-md-0';
+                        feedback.innerHTML = `<i class="fas fa-times-circle mr-1"></i> ${testRes.message}`;
+                    }
+                    alert(`Uji Koneksi Gagal:\n${testRes.message}`);
+                }
+            } catch (err) {
+                if (feedback) {
+                    feedback.className = 'small text-danger font-weight-bold mb-2 mb-md-0';
+                    feedback.innerHTML = `<i class="fas fa-times-circle mr-1"></i> Gagal: ${err.message}`;
+                }
+                alert('Terjadi kesalahan koneksi.');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-plug mr-1"></i> Uji Koneksi AI';
+                }
+            }
+        }
+
+        function bukaModalAiCopywriter(kategori, target) {
+            if (kategori && document.getElementById('aiKategori')) {
+                document.getElementById('aiKategori').value = kategori;
+            }
+            if (target && document.getElementById('aiTargetApply')) {
+                document.getElementById('aiTargetApply').value = target;
+            }
+            $('#modalAiCopywriter').modal('show');
+        }
+
+        async function prosesGenerateAiAnnouncement() {
+            const rawPoints = document.getElementById('aiRawPoints')?.value?.trim();
+            const kategori = document.getElementById('aiKategori')?.value || 'Kajian Rutin';
+            const masjid = document.getElementById('cfgNamaMasjid')?.value || 'Masjid Jami\' Al-Jihad';
+            const loadingBox = document.getElementById('aiLoadingBox');
+            const resultBox = document.getElementById('aiResultBox');
+            const btnGen = document.getElementById('btnGenerateAi');
+
+            if (!rawPoints) {
+                alert('Silakan tuliskan poin-poin atau catatan mentah kegiatan terlebih dahulu.');
+                return;
+            }
+
+            if (loadingBox) loadingBox.classList.remove('d-none');
+            if (resultBox) resultBox.classList.add('d-none');
+            if (btnGen) {
+                btnGen.disabled = true;
+                btnGen.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyusun...';
+            }
+
+            try {
+                const res = await window.GeminiAI.generateAnnouncement(rawPoints, kategori, masjid);
+                lastAiResult = res.data;
+
+                if (document.getElementById('aiResJudul')) document.getElementById('aiResJudul').value = res.data.judul || '';
+                if (document.getElementById('aiResPemateri')) document.getElementById('aiResPemateri').value = res.data.pemateri || '';
+                if (document.getElementById('aiResWaktu')) document.getElementById('aiResWaktu').value = res.data.waktu || '';
+                if (document.getElementById('aiResTempat')) document.getElementById('aiResTempat').value = res.data.tempat || '';
+                if (document.getElementById('aiResIsi')) document.getElementById('aiResIsi').value = res.data.isi || '';
+                if (document.getElementById('aiResRunningText')) document.getElementById('aiResRunningText').value = res.data.running_text || '';
+
+                const badge = document.getElementById('aiResultBadge');
+                if (badge) {
+                    badge.textContent = res.source === 'gemini_ai' ? `Google Gemini AI (${res.model || 'Flash'})` : 'Fallback Offline Cerdas';
+                    badge.className = res.source === 'gemini_ai' ? 'badge badge-success px-2 py-1' : 'badge badge-warning text-dark px-2 py-1';
+                }
+
+                if (resultBox) resultBox.classList.remove('d-none');
+            } catch (err) {
+                alert('Terjadi kesalahan saat menyusun draf: ' + err.message);
+            } finally {
+                if (loadingBox) loadingBox.classList.add('d-none');
+                if (btnGen) {
+                    btnGen.disabled = false;
+                    btnGen.innerHTML = '<i class="fas fa-robot mr-1"></i> Susun Draf dengan AI';
+                }
+            }
+        }
+
+        function salinDrafAiLengkap() {
+            const judul = document.getElementById('aiResJudul')?.value || '';
+            const pemateri = document.getElementById('aiResPemateri')?.value || '';
+            const waktu = document.getElementById('aiResWaktu')?.value || '';
+            const tempat = document.getElementById('aiResTempat')?.value || '';
+            const isi = document.getElementById('aiResIsi')?.value || '';
+            const running = document.getElementById('aiResRunningText')?.value || '';
+
+            let text = `*${judul}*\n`;
+            if (pemateri) text += `Pemateri: ${pemateri}\n`;
+            if (waktu) text += `Waktu: ${waktu}\n`;
+            if (tempat) text += `Tempat: ${tempat}\n`;
+            text += `\n${isi}\n\nTeks Berjalan: ${running}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Alhamdulillah! Draf pengumuman lengkap berhasil disalin ke clipboard.');
+            }).catch(() => {
+                alert('Gagal menyalin teks ke clipboard.');
+            });
+        }
+
+        function terapkanHasilAiKeForm() {
+            const target = document.getElementById('aiTargetApply')?.value || 'kajian';
+            const judul = document.getElementById('aiResJudul')?.value || '';
+            const pemateri = document.getElementById('aiResPemateri')?.value || '';
+            const running = document.getElementById('aiResRunningText')?.value || '';
+
+            if (target === 'kajian') {
+                if (pemateri && document.getElementById('kajianUstadzNama')) {
+                    document.getElementById('kajianUstadzNama').value = pemateri;
+                }
+                if (judul && document.getElementById('kajianKitabRujukan')) {
+                    document.getElementById('kajianKitabRujukan').value = judul;
+                }
+                if (typeof updateKajianPreview === 'function') {
+                    updateKajianPreview();
+                }
+                switchAdminSection('kajian-sabtu');
+                $('#modalAiCopywriter').modal('hide');
+                alert('Alhamdulillah! Data pengumuman hasil AI berhasil diterapkan ke Form Pengajian Malam Ahad.');
+            } else if (target === 'running_text') {
+                const inputRT = document.getElementById('inputRunningText');
+                if (inputRT && running) {
+                    const current = inputRT.value.trim();
+                    inputRT.value = current ? `${current} • ${running}` : running;
+                }
+                switchAdminSection('running-text');
+                $('#modalAiCopywriter').modal('hide');
+                alert('Alhamdulillah! Teks berjalan hasil AI berhasil ditambahkan ke form Teks Berjalan TV.');
+            } else {
+                salinDrafAiLengkap();
+                $('#modalAiCopywriter').modal('hide');
             }
         }
 

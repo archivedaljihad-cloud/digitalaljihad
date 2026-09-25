@@ -3456,6 +3456,59 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 6. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
 7. `LATEST_UPDATE.md` (Dokumentasi Bab 85).
 
+---
+
+## 🤖 BAB 86: INTEGRASI FITUR KECERDASAN BUATAN (GOOGLE GEMINI AI) DI WEB STATIS DISPLAY MASJID
+
+**Tanggal Pembaruan:** 26 September 2026  
+**Status:** Sukses Diimplementasikan, Diuji, & Disinkronkan  
+**Area Terkait:** Web Statis (`web-statis/`), Panel Admin Kontrol (`admin.html`), Slide Mutiara Hadits Hikmah (`slides/hikmah.html`), Engine Client AI (`web-statis/js/gemini-ai.js`).
+
+### 1. Latar Belakang & Kebutuhan Fitur:
+- Pengguna menanyakan ketersediaan fitur Kecerdasan Buatan (AI) di Web Statis masjid dan meminta agar fitur AI seperti pada sistem Laravel diintegrasikan langsung secara native ke versi Web Statis (`web-statis/`).
+- Sebelumnya, fitur Google Gemini AI hanya ada di backend Laravel (`app/Services/GeminiService.php` dan `app/Http/Controllers/AiController.php`).
+- Pada versi Web Statis (yang berjalan di Cloudflare Pages dan lingkungan serverless), diperlukan arsitektur client-side API yang cepat, aman, responsif, dan tahan gangguan jaringan (*offline-resilient*).
+
+### 2. Arsitektur & Rincian Implementasi:
+1. **Modul Client-Side `web-statis/js/gemini-ai.js` (`window.GeminiAI`):**
+   - **Kunci API & Pemilihan Model:** Menyediakan fungsi `getApiKey()`, `setApiKey(key)`, `getModel()`, `setModel(model)`, dan `hasApiKey()`. Mengintegrasikan penyimpanan ganda di browser lokal (`localStorage`) dan tabel Supabase `app_settings` (kolom `gemini_api_key` & `gemini_model`).
+   - **Uji Koneksi Realtime (`testConnection`):** Menguji konektivitas langsung ke Google Gemini endpoint `v1beta/models/{model}:generateContent` dengan mengukur latensi milidetik dan pesan status yang jelas.
+   - **AI Copywriter Pengumuman & Agenda (`generateAnnouncement`):**
+     - Mengubah coretan/poin-poin mentah kegiatan masjid menjadi draf pengumuman formal islami terstruktur (JSON schema: `judul`, `pemateri`, `waktu`, `tempat`, `isi`, `running_text`).
+     - Menggunakan `generationConfig` (`temperature: 0.4`, `responseMimeType: "application/json"`).
+     - **Cerdas Anti-Gagal (Offline Fallback):** Jika API Key belum disetel atau perangkat sedang offline, sistem otomatis menyusun pengumuman berbasis template cerdas tanpa melempar error (*graceful fallback*).
+   - **Mutiara Hadits Shahih Harian (`getDailyHikmah`):**
+     - Memilih otomatis 1 hadits shahih otentik (Bukhari, Muslim, Abu Dawud, Tirmidzi, An-Nasa'i) dengan tema yang diselaraskan per hari (Senin s/d Ahad).
+     - Dilengkapi mekanisme caching harian (`cacheDate: YYYY-MM-DD`) di `localStorage` agar tidak membuang kuota API berulang kali.
+     - Menyediakan 7 koleksi hadits otentik bawaan sebagai fallback instan anti-gagal.
+
+2. **Penyempurnaan Panel Admin (`web-statis/admin.html`):**
+   - **Kartu Konfigurasi Google Gemini AI (`view-settings`):**
+     - Badge status koneksi (*Gemini AI Siap* / *Belum Dikonfigurasi*).
+     - Input API Key dengan toggle tampilkan/sembunyikan password (`fa-eye` / `fa-eye-slash`).
+     - Pilihan model AI: `gemini-1.5-flash` (Rekomendasi - Cepat & Hemat), `gemini-2.0-flash` (Generasi Terkini), `gemini-1.5-pro` (Penalaran Mendalam).
+     - Tombol "Uji Koneksi AI" dengan indikator status dan latensi ms.
+     - Tautan resmi untuk mendapatkan Google Gemini API Key gratis di Google AI Studio.
+   - **Tombol Pintas AI Copywriter:**
+     - Ditambahkan pada Pengajian Rutin Malam Ahad (`view-kajian-sabtu`): Tombol "✨ AI Copywriter".
+     - Ditambahkan pada Teks Berjalan TV (`view-running-text`): Tombol "✨ Buat Running Text AI".
+   - **Modal Interaktif AI Copywriter (`#modalAiCopywriter`):**
+     - Desain Islamic Material Design dengan nuansa hijau botol `#071a10` dan emas `#c9a03d`.
+     - Pilihan kategori kegiatan dan target formulir yang dituju.
+     - Pratinjau draf hasil susunan AI yang dapat disunting langsung sebelum diterapkan.
+     - Tombol satu-klik "Terapkan ke Form" dan "Salin Teks Lengkap".
+
+3. **Penyempurnaan Slide Display TV Mutiara Hikmah (`web-statis/slides/hikmah.html`):**
+   - Mengimpor `../js/gemini-ai.js`.
+   - Mengambil hadits harian via `GeminiAI.getDailyHikmah()` saat slide dibuka dan meletakkannya di urutan pertama rotasi mutiara hikmah.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/js/gemini-ai.js` (Modul utama Google Gemini AI client-side).
+2. `web-statis/admin.html` (Penambahan card setting Gemini AI, tombol pintas, modal copywriter, dan handler script).
+3. `web-statis/slides/hikmah.html` (Penyematan hadits harian Gemini AI).
+4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 86).
+
+
 
 
 
