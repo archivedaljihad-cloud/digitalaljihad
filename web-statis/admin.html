@@ -533,25 +533,7 @@
         }
 
         .hero-badges-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 14px;
-            flex-wrap: wrap;
-        }
-
-        .hero-badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.76rem;
-            font-weight: 600;
-            color: #e2e8f0;
-            backdrop-filter: blur(4px);
+            display: none !important;
         }
 
         /* === METRIC CARDS === */
@@ -1256,25 +1238,11 @@
                             <div class="hero-arabic-title">
                                 أَهْلًا وَسَهْلًا • Ahlan Wa Sahlan
                             </div>
-                            <div class="hero-main-title">
-                                Selamat Datang, <span class="auth-user-name text-warning">Administrator</span>!
+                            <div class="hero-main-title" id="welcomeHeroTitle">
+                                <span class="hero-greeting-time" id="heroGreetingTime">Selamat</span>, Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)</span>!
                             </div>
                             <div class="hero-sub-desc">
                                 Panel Kontrol Web Statis Masjid Jami' Al-Jihad. Seluruh perubahan data akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display melalui Supabase BaaS.
-                            </div>
-                            <div class="hero-badges-row">
-                                <span class="hero-badge-pill">
-                                    <i class="fas fa-id-badge text-warning"></i>
-                                    Peran Aktif: <strong class="auth-user-role-label ml-1">Super Admin</strong>
-                                </span>
-                                <span class="hero-badge-pill">
-                                    <i class="fas fa-bolt text-success"></i>
-                                    Status Engine: <strong>Cloudflare Edge + Supabase Realtime</strong>
-                                </span>
-                                <span class="hero-badge-pill">
-                                    <i class="fas fa-tv text-info"></i>
-                                    Display TV: <strong class="text-success">ONLINE (60 FPS)</strong>
-                                </span>
                             </div>
                         </div>
 
@@ -4387,6 +4355,17 @@
                 }
                 if (dateEl) {
                     dateEl.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+                }
+
+                // Update ucapan selamat mengikuti jam secara real-time pada Banner Selamat Datang
+                if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getGreetingWaktu === 'function') {
+                    const greetingTimeEl = document.getElementById('heroGreetingTime');
+                    if (greetingTimeEl) {
+                        const currentSalam = AdminAuth.getGreetingWaktu();
+                        if (greetingTimeEl.textContent !== currentSalam) {
+                            greetingTimeEl.textContent = currentSalam;
+                        }
+                    }
                 }
             }
             updateTime();

@@ -3,33 +3,63 @@
 
 @section('main-content')
 <!-- Page Heading -->
+@php
+    $hour = (int) date('H');
+    if ($hour >= 3 && $hour < 11) {
+        $salamWaktu = 'Selamat Pagi';
+    } elseif ($hour >= 11 && $hour < 15) {
+        $salamWaktu = 'Selamat Siang';
+    } elseif ($hour >= 15 && $hour < 18) {
+        $salamWaktu = 'Selamat Sore';
+    } else {
+        $salamWaktu = 'Selamat Malam';
+    }
+
+    $rawRole = strtolower(trim(optional(auth()->user()->role)->name ?? ''));
+    $uEmail = strtolower(auth()->user()->email ?? '');
+    $rawName = auth()->user()->name ?? 'Pengurus';
+    $cleanName = trim(preg_replace('/\s*\([^)]*\)\s*$/', '', $rawName));
+
+    // Prioritas 1: Bendahara
+    if ($rawRole === 'bendahara' || str_contains($uEmail, 'bendahara') || str_contains(strtolower($rawName), 'bendahara') || str_contains(strtolower($rawName), 'utut')) {
+        $currentRole = 'bendahara';
+        if (str_contains(strtolower($cleanName), 'utut') || ! $cleanName) {
+            $displayName = "Bpk. H. Utut Priastya";
+        } else {
+            $displayName = (str_starts_with($cleanName, 'Bpk.') || str_starts_with($cleanName, 'Bapak')) ? $cleanName : 'Bpk. ' . $cleanName;
+        }
+        $roleLabel = "(Bendahara Masjid Jami' Al Jihad)";
+    // Prioritas 2: Admin
+    } elseif ($rawRole === 'admin' || $rawRole === 'superadmin' || str_contains($uEmail, 'admin') || str_contains(strtolower($rawName), 'admin') || str_contains(strtolower($rawName), 'sholeh')) {
+        $currentRole = 'admin';
+        if (strtolower($cleanName) === 'administrator' || ! $cleanName) {
+            $displayName = "Bpk. H. M. Sholeh";
+        } else {
+            $displayName = (str_starts_with($cleanName, 'Bpk.') || str_starts_with($cleanName, 'Bapak')) ? $cleanName : 'Bpk. ' . $cleanName;
+        }
+        $roleLabel = "(Super Admin Masjid Jami' Al Jihad)";
+    // Prioritas 3: Petugas / Operator
+    } else {
+        $currentRole = 'petugas';
+        if (str_contains(strtolower($cleanName), 'ahmad') || strtolower($cleanName) === 'operator' || ! $cleanName) {
+            $displayName = "Bpk. Ust. Ahmad";
+        } else {
+            $displayName = (str_starts_with($cleanName, 'Bpk.') || str_starts_with($cleanName, 'Bapak') || str_starts_with($cleanName, 'Ust.')) ? $cleanName : 'Bpk. ' . $cleanName;
+        }
+        $roleLabel = "(Pengurus / Operator Masjid Jami' Al Jihad)";
+    }
+@endphp
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <div>
         <h1 class="h3 mb-0 text-gray-800">
             <i class="fas fa-tachometer-alt"></i> {{ __('Dashboard') }}
         </h1>
-        <p class="text-muted mt-1 mb-0">Selamat datang kembali, <strong>{{ auth()->user()->name }}</strong>!</p>
+        <p class="text-muted mt-1 mb-0">{{ $salamWaktu }}, Selamat Datang, <strong class="text-success">{{ $displayName }} {{ $roleLabel }}</strong>!</p>
     </div>
     <div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" id="quickActionsDropdown" data-toggle="dropdown">
             <i class="fas fa-bolt"></i> Aksi Cepat
         </button>
-        @php
-        $rawRole = strtolower(trim(optional(auth()->user()->role)->name ?? ''));
-        $uEmail = strtolower(auth()->user()->email ?? '');
-        $uName = strtolower(auth()->user()->name ?? '');
-
-        // Prioritas 1: Bendahara
-        if ($rawRole === 'bendahara' || str_contains($uEmail, 'bendahara') || str_contains($uName, 'bendahara')) {
-            $currentRole = 'bendahara';
-        // Prioritas 2: Admin
-        } elseif ($rawRole === 'admin' || $rawRole === 'superadmin' || str_contains($uEmail, 'admin') || str_contains($uName, 'admin')) {
-            $currentRole = 'admin';
-        // Prioritas 3: Petugas / Operator
-        } else {
-            $currentRole = 'petugas';
-        }
-        @endphp
         <div class="dropdown-menu dropdown-menu-right">
             @if(in_array($currentRole, ['admin', 'petugas']))
             <a class="dropdown-item" href="{{ route('jadwal_sholat.create') }}">
@@ -107,8 +137,8 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-8">
-                        <h4 class="mb-2">Selamat Datang di Sistem Informasi Masjid</h4>
-                        <p class="mb-0">Kelola jadwal sholat, pengumuman, keuangan, dan tampilan TV digital dengan mudah.</p>
+                        <h4 class="mb-2">{{ $salamWaktu }}, Selamat Datang di Sistem Informasi Masjid</h4>
+                        <p class="mb-0">Selamat bertugas, <strong>{{ $displayName }} {{ $roleLabel }}</strong>. Kelola jadwal sholat, pengumuman, keuangan, dan tampilan TV digital dengan mudah.</p>
                         <small class="opacity-75">Terakhir login: {{ auth()->user()->updated_at->diffForHumans() ?? 'Baru saja' }}</small>
                     </div>
                     <div class="col-md-4 text-center">

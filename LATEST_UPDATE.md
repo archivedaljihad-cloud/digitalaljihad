@@ -3844,25 +3844,40 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 95).
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).
 
+---
 
+## 📌 BAB 96: PENYELARASAN SAPAAN WAKTU REAL-TIME (PAGI/SIANG/SORE/MALAM), GELAR RESMI PENGURUS MASJID JAMI' AL JIHAD, & PEMBERSIHAN BADGE STATUS HERO BANNER
 
+### 1. Latar Belakang & Kebutuhan Pengguna
+Pengguna menginginkan agar banner sapaan pada dashboard admin diselaraskan dengan etika sapaan islami dan waktu lokal:
+1. **Ucapan Selamat Mengikuti Waktu Lokal:**
+   - Menambahkan salam waktu secara otomatis: *Selamat Pagi* (03:00 - 10:59), *Selamat Siang* (11:00 - 14:59), *Selamat Sore* (15:00 - 17:59), dan *Selamat Malam* (18:00 - 02:59).
+2. **Penyempurnaan Format Sapaan & Gelar Resmi Masjid:**
+   - Mengubah sapaan lama `Selamat Datang, H. Utut Priyastya (Bendahara)!` menjadi:
+     **`Selamat [Waktu], Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)!`**
+   - Format yang setara juga diterapkan untuk peran lainnya:
+     - **Super Admin:** `Selamat [Waktu], Selamat Datang, Bpk. H. M. Sholeh (Super Admin Masjid Jami' Al Jihad)!`
+     - **Pengurus / Operator:** `Selamat [Waktu], Selamat Datang, Bpk. Ust. Ahmad (Pengurus / Operator Masjid Jami' Al Jihad)!`
+3. **Penyembunyian Badge Pills Status (Gambar 2):**
+   - Menghilangkan badge pills `Peran Aktif: ...`, `Status Engine: Cloudflare Edge + Supabase Realtime`, dan `Display TV: ONLINE (60 FPS)` pada hero banner karena bersifat teknis internal dan tidak penting diketahui oleh pengurus.
 
+### 2. Rincian Perubahan Teknis
+1. **`web-statis/admin.html`:**
+   - Menghapus elemen `<div class="hero-badges-row">...</div>` dari DOM hero banner.
+   - Memberikan `display: none !important;` pada selector `.hero-badges-row` di CSS untuk memastikan kebersihan tampilan 100%.
+   - Mengubah judul hero menjadi `<div class="hero-main-title" id="welcomeHeroTitle"><span class="hero-greeting-time" id="heroGreetingTime">Selamat</span>, Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)</span>!</div>`.
+   - Menambahkan pembaruan sapaan waktu otomatis di dalam interval detik `startTopbarClock()` sehingga teks berganti tepat waktu saat pergantian jam tanpa perlu me-reload halaman.
+2. **`web-statis/js/admin-auth.js`:**
+   - Memperbarui `DEFAULT_AUTH_USERS` dengan nama resmi: `Bpk. H. M. Sholeh` (Admin), `Bpk. H. Utut Priastya` (Bendahara), dan `Bpk. Ust. Ahmad` (Petugas).
+   - Menambahkan method pembantu `AdminAuth.getGreetingWaktu()` untuk mendeteksi jam sistem lokal.
+   - Menambahkan method `AdminAuth.getFormattedGreeting(user)` yang secara cerdas mendeteksi nama, membersihkan akhiran kurung lama, menambahkan awalan `Bpk.` jika belum ada, serta menyematkan gelar resmi masjid (`(Bendahara Masjid Jami' Al Jihad)`, `(Super Admin Masjid Jami' Al Jihad)`, `(Pengurus / Operator Masjid Jami' Al Jihad)`).
+   - Memperbarui `applyRBAC(user)` agar menginjeksi salam lengkap ini ke `#welcomeHeroTitle` saat inisialisasi login maupun peralihan peran (*switch role*).
+3. **`resources/views/home.blade.php` (Web Dinamis Laravel):**
+   - Menyelaraskan teks heading dashboard dan kartu sambutan (*Welcome Card*) dengan logika salam waktu lokal (`Selamat Pagi/Siang/Sore/Malam`) dan sapaan gelar resmi masjid yang sama.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Hero banner, CSS display none hero-badges-row, clock interval sync).
+2. `web-statis/js/admin-auth.js` (Method greeting waktu, format sapaan gelar masjid, RBAC banner inject).
+3. `resources/views/home.blade.php` (Blade template dashboard Laravel).
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 96).
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).

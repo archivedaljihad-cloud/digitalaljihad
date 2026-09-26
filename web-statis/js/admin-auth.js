@@ -12,7 +12,7 @@
 const DEFAULT_AUTH_USERS = [
     {
         id: 3,
-        name: 'Administrator',
+        name: 'Bpk. H. M. Sholeh',
         email: 'admin@aljihad.com',
         username: 'admin',
         password: 'admin123',
@@ -24,7 +24,7 @@ const DEFAULT_AUTH_USERS = [
     },
     {
         id: 1,
-        name: 'H. Sudirman (Bendahara)',
+        name: 'Bpk. H. Utut Priastya',
         email: 'bendahara@aljihad.com',
         username: 'bendahara',
         password: 'bendahara123',
@@ -36,7 +36,7 @@ const DEFAULT_AUTH_USERS = [
     },
     {
         id: 2,
-        name: 'Ust. Ahmad (Operator DKM)',
+        name: 'Bpk. Ust. Ahmad',
         email: 'petugas@aljihad.com',
         username: 'operator',
         password: 'operator123',
@@ -377,6 +377,86 @@ const AdminAuth = {
     },
 
     /**
+     * Helper ucapan selamat berdasarkan jam lokal (Pagi, Siang, Sore, Malam)
+     */
+    getGreetingWaktu() {
+        const hours = new Date().getHours();
+        if (hours >= 3 && hours < 11) {
+            return 'Selamat Pagi';
+        } else if (hours >= 11 && hours < 15) {
+            return 'Selamat Siang';
+        } else if (hours >= 15 && hours < 18) {
+            return 'Selamat Sore';
+        } else {
+            return 'Selamat Malam';
+        }
+    },
+
+    /**
+     * Format Sapaan Selamat Datang Lengkap Sesuai Peran & Gelar Masjid
+     * Contoh: "Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)"
+     */
+    getFormattedGreeting(user) {
+        const salamWaktu = this.getGreetingWaktu();
+        if (!user) {
+            return {
+                salamWaktu,
+                displayName: "Bpk. Pengurus",
+                roleSuffix: "(Masjid Jami' Al Jihad)",
+                fullText: `${salamWaktu}, Selamat Datang di Masjid Jami' Al Jihad!`
+            };
+        }
+
+        const role = (user.role || '').toLowerCase();
+        let rawName = (user.name || '').trim();
+
+        // Bersihkan tanda kurung peran sebelumnya jika ada (misal: "H. Sudirman (Bendahara)" -> "H. Sudirman")
+        let cleanName = rawName.replace(/\s*\([^)]*\)\s*$/g, '').trim();
+
+        let displayName = cleanName;
+        let roleSuffix = '';
+
+        if (role === 'bendahara' || cleanName.toLowerCase().includes('utut') || cleanName.toLowerCase().includes('sudirman')) {
+            // Bendahara: "Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)"
+            if (cleanName.toLowerCase().includes('utut') || cleanName.toLowerCase().includes('sudirman') || !cleanName || cleanName.toLowerCase() === 'bendahara') {
+                displayName = "Bpk. H. Utut Priastya";
+            } else {
+                if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak')) {
+                    displayName = 'Bpk. ' + displayName;
+                }
+            }
+            roleSuffix = "(Bendahara Masjid Jami' Al Jihad)";
+        } else if (role === 'admin' || cleanName.toLowerCase().includes('admin') || cleanName.toLowerCase().includes('sholeh')) {
+            // Super Admin: "Bpk. H. M. Sholeh (Super Admin Masjid Jami' Al Jihad)"
+            if (cleanName.toLowerCase() === 'administrator' || cleanName.toLowerCase() === 'admin' || cleanName.toLowerCase().includes('sholeh') || !cleanName) {
+                displayName = "Bpk. H. M. Sholeh";
+            } else {
+                if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak')) {
+                    displayName = 'Bpk. ' + displayName;
+                }
+            }
+            roleSuffix = "(Super Admin Masjid Jami' Al Jihad)";
+        } else {
+            // Petugas / Operator: "Bpk. Ust. Ahmad (Pengurus / Operator Masjid Jami' Al Jihad)"
+            if (cleanName.toLowerCase().includes('ahmad') || cleanName.toLowerCase() === 'operator' || cleanName.toLowerCase() === 'petugas' || !cleanName) {
+                displayName = "Bpk. Ust. Ahmad";
+            } else {
+                if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak') && !displayName.toLowerCase().startsWith('ust.')) {
+                    displayName = 'Bpk. ' + displayName;
+                }
+            }
+            roleSuffix = "(Pengurus / Operator Masjid Jami' Al Jihad)";
+        }
+
+        return {
+            salamWaktu,
+            displayName,
+            roleSuffix,
+            fullText: `${salamWaktu}, Selamat Datang, ${displayName} ${roleSuffix}!`
+        };
+    },
+
+    /**
      * Terapkan Role-Based Access Control (RBAC) pada antarmuka admin
      */
     applyRBAC(user) {
@@ -396,17 +476,29 @@ const AdminAuth = {
             }
         });
 
-        // 2. Update Label Profil di Sidebar dan Topbar
+        // 2. Format Sapaan Selamat Datang Lengkap Berdasarkan Waktu & Peran
+        const greetingData = this.getFormattedGreeting(user);
+
+        // Update Welcome Hero Banner Title jika elemen ada
+        const heroTitleEl = document.getElementById('welcomeHeroTitle');
+        if (heroTitleEl) {
+            heroTitleEl.innerHTML = `<span class="hero-greeting-time">${greetingData.salamWaktu}</span>, Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold">${greetingData.displayName} ${greetingData.roleSuffix}</span>!`;
+        }
+
+        // 3. Update Label Profil di Sidebar dan Topbar
         document.querySelectorAll('.auth-user-name').forEach(el => {
-            el.textContent = user.name || 'Pengurus Masjid';
+            // Jangan timpa jika elemen berada di dalam hero banner
+            if (el.closest && el.closest('.welcome-hero-banner')) return;
+            el.textContent = greetingData.displayName || user.name || 'Pengurus Masjid';
         });
 
         document.querySelectorAll('.auth-user-role-label').forEach(el => {
-            el.textContent = user.role_label || (user.role === 'admin' ? 'Super Admin' : (user.role === 'bendahara' ? 'Bendahara' : 'Petugas / Operator'));
+            el.textContent = user.role_label || (user.role === 'admin' ? 'Super Admin' : (user.role === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator'));
         });
 
         document.querySelectorAll('.auth-user-initial').forEach(el => {
-            const firstLetter = (user.name || 'U').trim().charAt(0).toUpperCase();
+            const cleanStr = (greetingData.displayName || user.name || 'U').replace(/^Bpk\.\s*/i, '').trim();
+            const firstLetter = cleanStr.charAt(0).toUpperCase() || 'U';
             el.textContent = firstLetter;
         });
 
