@@ -1406,8 +1406,8 @@
                         @else
                         <span>
                             <i class="far fa-copyright"></i> {{ now()->year }}
-                            <a href="https://wa.me/628179851011" target="_blank" style="text-decoration: none;">
-                                Copyright &copy; 2026 Masjid Al-Jihad Dev. System
+                            <a href="https://wa.me/6287758767000" target="_blank" style="text-decoration: none;">
+                                Copyright &copy; 2026 DKM Masjid Al-Jihad
                             </a>
                         </span>
                         <div class="mt-1">

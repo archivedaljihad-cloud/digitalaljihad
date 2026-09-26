@@ -193,8 +193,8 @@
                             <p class="small text-muted mb-1">
                                 <i class="fas fa-heart text-danger"></i> 
                                 Developed with <i class="fas fa-code"></i> by 
-                                <a href="https://wa.me/628179851011" target="_blank" class="text-success text-decoration-none fw-bold">
-                                    Masjid Al-Jihad Dev. System
+                                <a href="https://wa.me/6287758767000" target="_blank" class="text-success text-decoration-none fw-bold">
+                                    DKM Masjid Al-Jihad
                                 </a>
                             </p>
                             <p class="small text-muted mb-0">

@@ -1,153 +1,42 @@
-ADMIN
-user : adminsholeh@admin.com
-pass : password
+# 🕌 SISTEM INFORMASI DIGITAL MASJID JAMI' AL-JIHAD
 
-PETUGAS
-user : adminsholeh@admin.com
-pass : password
+Panel Kontrol & Layar TV Display Digital Masjid Jami' Al-Jihad Graha Asri.
+Sistem terintegrasi multi-role (Super Admin, Bendahara, Operator TV), sinkronisasi Cloudflare Edge, dan Supabase BaaS Realtime.
 
-============
+---
 
-🕌 GRATIS — SISTEM INFORMASI MASJID DIGITAL V3
-✨ Update Versi 3 dengan Fitur QRIS & Sholat Hari Raya ✨
+## 👤 AKUN & KREDENSIAL RESMI PENGURUS
 
-🚀 SISTEM INFORMASI MASJID DIGITAL V3 | Laravel 13 | Tampilan TV Masjid | Jadwal Sholat Otomatis | QRIS Donasi
+### 1. 👑 SUPER ADMIN (Akses Penuh 100%)
+- **Email / Username:** `admin@aljihad.com`
+- **Kata Sandi:** `admin123`
 
-Aplikasi web modern berbasis Laravel 13 untuk digitalisasi masjid yang dapat menampilkan informasi secara realtime di TV masjid, mulai dari jadwal sholat, pengumuman, keuangan, hingga QRIS donasi digital.
+### 2. 💼 BENDAHARA (Kas Utama, Kas Ambulance, Infaq, Laporan)
+- **Email / Username:** `bendahara@aljihad.com`
+- **Kata Sandi:** `bendahara123`
 
-Versi terbaru ini hadir dengan fitur tambahan yang sangat dibutuhkan masjid modern:
+### 3. 📺 PETUGAS / OPERATOR DKM (Jadwal Sholat, Jumat, Pengumuman, Teks Berjalan, Slide TV)
+- **Email / Username:** `petugas@aljihad.com`
+- **Kata Sandi:** `operator123`
 
-✅ QRIS Donasi Digital
-✅ Informasi Sholat Idul Fitri
-✅ Informasi Sholat Idul Adha
-✅ Rotasi Halaman Otomatis
-✅ Auto Update Jadwal Sholat
+---
 
-📥 SOURCE CODE V3:
-Download Source Code V3
+## ✨ FITUR UTAMA SISTEM
+✅ Layar TV Display Digital Otomatis (18 Slide Terintegrasi)  
+✅ Sapaan Waktu Real-Time (Selamat Pagi/Siang/Sore/Malam) & Gelar Resmi Masjid  
+✅ Manajemen Kas Masjid & Kas Ambulance Transparan  
+✅ Penggalangan Infaq & Donasi Digital (Nominal Rupiah Berformat Titik Otomatis)  
+✅ Semarak Ramadhan & Kas Tromol Tarawih  
+✅ Jadwal Sholat Otomatis & Hitung Mundur Adzan/Iqomah  
+✅ Teks Berjalan (Running Text) Realtime  
+✅ Panel Admin Multi-Hak Akses Berbasis RBAC  
+✅ Dukungan PWA Offline Resilience & Cloudflare CDN  
 
-📊 DATA PLAYLIST + SOURCE CODE SPREADSHEET:
-Spreadsheet Playlist Lengkap
+---
 
-📥 Form Pendaftaran Program Gratis:
-Daftar Sekarang
+## 📞 KONTAK RESMI PENGURUS
+- **Lembaga:** DKM Masjid Jami' Al-Jihad Graha Asri
+- **Alamat Domain Live:** [https://digitalaljihad.my.id/](https://digitalaljihad.my.id/)
+- **WhatsApp Pengurus:** [0877 5876 7000](https://wa.me/6287758767000)
+- **Email Resmi:** admin@aljihad.com
 
-✨ FITUR BARU DI VERSI 3
-
-🔥 1. QRIS Donasi Masjid
-
-Menampilkan QRIS donasi langsung di layar TV masjid
-Bisa upload banyak QRIS
-Pilih QRIS aktif melalui dashboard admin
-Cocok untuk infak digital / donasi cashless
-
-🔥 2. Modul Sholat Idul Fitri
-
-Jadwal imam & khatib
-waktu pelaksanaan
-teks pengumuman otomatis di TV
-
-🔥 3. Modul Sholat Idul Adha
-
-jadwal pelaksanaan
-informasi takbir & khutbah
-tampil khusus saat momen hari raya
-
-🔥 4. Tampilan Rotasi Otomatis
-
-halaman berganti otomatis
-dapat diatur interval 1–3600 detik
-cocok untuk TV besar di masjid
-🎯 FITUR UTAMA SISTEM
-
-✅ Jadwal Sholat Otomatis
-✅ Running Text Pengumuman
-✅ Laporan Keuangan Masjid
-✅ Dashboard Admin
-✅ Tampilan TV Masjid
-✅ QRIS Donasi
-✅ Jadwal Sholat Jumat
-✅ Jadwal Sholat Idul Fitri
-✅ Jadwal Sholat Idul Adha
-✅ Auto Update Jadwal
-✅ Export Data
-✅ Role Admin & Petugas
-✅ AJAX Realtime
-✅ Responsive Design
-✅ Full Open Source
-
-👤 AKUN DEMO
-
-🔹 ADMIN
-📧 adminsholeh@admin.com
-
-🔑 password
-
-🔹 PETUGAS
-📧 sam@sam.com
-
-🔑 password
-
-⚙ REQUIREMENT
-PHP 8.3
-MySQL / MariaDB
-Web Server Apache / Nginx
-🛠 PETUNJUK INSTALASI
-Ekstrak file project
-Buat database
-Import file SQL di folder _db
-Atur nama database di file .env
-Jalankan terminal pada folder project
-
-Menjalankan server:
-
-php artisan serve
-
-Agar bisa diakses di jaringan LAN:
-
-php artisan serve --host=0.0.0.0 --port=8000
-
-Akses browser:
-
-http://127.0.0.1:8000
-
-atau:
-
-http://IP_KOMPUTER:8000
-🎁 PROGRAM DIGITALISASI 1000 MASJID GRATIS
-
-Saya akan membagikan aplikasi ini secara GRATIS untuk 1000 masjid di Indonesia.
-
-💡 Cocok digunakan untuk:
-
-✔ Masjid
-✔ Musholla
-✔ Pondok Pesantren
-✔ Yayasan Islam
-✔ Sekolah Islam
-✔ Instansi Dakwah
-
-🛠 TEKNOLOGI
-Laravel 13
-Bootstrap 5
-jQuery
-MySQL
-AJAX
-SB Admin 2
-📞 KONTAK DEVELOPER
-
-👨‍💻 DKM AL JIHAD Dev.Syatem
-
-📱 WhatsApp : 0877 5876 7000
-
-🎥 Channel YouTube:
-YouTube Channel DKM AL JIHAD Dev.Syatem
-
-🕌 SISTEM INFORMASI MASJID DIGITAL Versi 3
-ADMIN
-user : adminsholeh@admin.com
-pass : password
-
-PETUGAS
-user : adminsholeh@admin.com
-pass : password

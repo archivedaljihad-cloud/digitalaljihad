@@ -200,20 +200,20 @@
                 <a href="/" class="btn">
                     <i class="fas fa-home"></i> Kembali ke Beranda
                 </a>
-                <a href="https://wa.me/628179851011" class="btn btn-outline">
-                    <i class="fas fa-envelope"></i> Hubungi Kami
+                <a href="https://wa.me/6287758767000" class="btn btn-outline" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Hubungi Pengurus
                 </a>
             </div>
             
             <div class="initiative-card">
-                <h2 class="initiative-title">✨ Inisiatif Besar untuk Indonesia yang Lebih Berkah! ✨</h2>
+                <h2 class="initiative-title">✨ Sistem Informasi Digital Masjid Jami' Al Jihad ✨</h2>
                 <p class="initiative-description">
-                    Saya akan <strong>membagikan aplikasi digital manajemen masjid ini secara GRATIS</strong> ke 1000 masjid di seluruh Indonesia. Aplikasi ini menampilkan jadwal sholat, laporan keuangan, pengumuman, hingga tampilan TV digital yang dinamis – semua bisa dikendalikan lewat satu dashboard admin.
+                    Aplikasi digital manajemen <strong>Masjid Jami' Al-Jihad Graha Asri</strong>. Aplikasi ini menampilkan jadwal sholat, laporan keuangan, infaq donasi, pengumuman, hingga tampilan TV digital yang dinamis – semua dikendalikan lewat satu dashboard admin.
                 </p>
                 
                 <div class="features">
                     <span class="feature-item">
-                        <i class="fas fa-check-circle"></i> GRATIS 100% untuk masjid
+                        <i class="fas fa-check-circle"></i> Digitalisasi Masjid
                     </span>
                     <span class="feature-item">
                         <i class="fas fa-tv"></i> Tampilan TV masjid
@@ -229,21 +229,21 @@
                     </span>
                 </div>
                 
-                <p class="cta-text">🎁 Ayo dukung gerakan ini!</p>
+                <p class="cta-text">🎁 Layanan Informasi Ummat</p>
                 <p>
-                    Kami membuka kesempatan bagi para donatur yang ingin ikut serta dalam pengadaan perangkat seperti server lokal, hosting, TV, dan lainnya.
+                    Menghadirkan transparansi dan kemudahan informasi bagi jamaah Masjid Jami' Al-Jihad.
                 </p>
                 
                 <div class="contact-info">
-                    <p>🌐 Info selengkapnya dan cara mendukung:</p>
+                    <p>🌐 Informasi Pengurus & Layanan:</p>
                     <p>
-                        <a href="https://wa.me/628179851011" target="_blank">
-                            <i class="fab fa-whatsapp"></i> WA Developer: 08179851011
+                        <a href="https://wa.me/6287758767000" target="_blank">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Pengurus: 087758767000
                         </a>
                     </p>
                     <p>
-                        <a href="mailto:alimochtar.id@gmail.com">
-                            <i class="fas fa-envelope"></i> Email: alimochtar.id@gmail.com
+                        <a href="mailto:admin@aljihad.com">
+                            <i class="fas fa-envelope"></i> Email: admin@aljihad.com
                         </a>
                     </p>
                 </div>

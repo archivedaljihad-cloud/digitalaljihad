@@ -66,8 +66,8 @@
                                 @if(isset($setting['footer']))
                                 {!! $setting['footer'] !!}
                                 @else
-                                <a href="https://wa.me/628179851011" target="_blank" style="font-size: 12px; text-decoration: none; color: gray;">
-                                    Copyright &copy; 2026 Masjid Al-Jihad Dev. System
+                                <a href="https://wa.me/6287758767000" target="_blank" style="font-size: 12px; text-decoration: none; color: gray;">
+                                    Copyright &copy; 2026 DKM Masjid Al-Jihad
                                 </a>
                                 @endif
                             </center>

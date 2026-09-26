@@ -3953,4 +3953,39 @@ Pengguna menginginkan agar banner sapaan pada dashboard admin diselaraskan denga
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 97.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
 
+---
+
+## 📌 BAB 98: AUDIT MENYELURUH DAN PEMBERSIHAN JEJAK APLIKASI LAMA (ALI MOCHTAR & ADMINSHOLEH) SERTA PEMBAHARUAN KREDENSIAL RESMI DKM AL-JIHAD
+
+### 1. Latar Belakang & Pertanyaan Pengguna
+Pengguna menanyakan status kebersihan sistem dari jejak pengembang lama maupun data default lawas:
+*"Apakah di web ini masih ada nama default adminsoleh atau Ali Mochtar atau ada yang yang masih berkaitan dengan aplikasi web yang lama ?"*
+
+### 2. Hasil Audit Mendalam & Tindakan Pembersihan Total
+1. **Nama & Kontak Ali Mochtar (Developer Versi Bawaan Awal):**
+   - **Pada Web Statis (`web-statis/`):** 100% Bersih (0 kemunculan). Tidak ada satupun nama Ali Mochtar, email `alimochtar.id@gmail.com`, maupun nomor WhatsApp `08179851011`. Seluruhnya telah mengarah ke WhatsApp DKM Masjid Al-Jihad (`087758767000`) dan email `admin@aljihad.com`.
+   - **Pada Template Blade Laravel (`resources/views/`):**
+     - Ditemukan sisa teks promosi asli *"Program 1000 Masjid Gratis"*, nomor WA `08179851011`, dan email `alimochtar.id@gmail.com` pada `resources/views/auth/register.blade.php`. Telah **dibersihkan total** dan diganti dengan informasi resmi DKM Masjid Jami' Al-Jihad Graha Asri.
+     - Ditemukan link footer WhatsApp lama `wa.me/628179851011` pada `admin.blade.php`, `reset.blade.php`, `email.blade.php`, `confirm.blade.php`, dan `login.bladeBACKUP.php`. Telah **diperbarui** seluruhnya ke nomor resmi WhatsApp DKM Al-Jihad `https://wa.me/6287758767000`.
+2. **Akun & Nama "Admin Sholeh" (`adminsholeh@admin.com`):**
+   - **Tabel Hak Akses & Database:** Akun ganda ID 1 paling bawah (`Admin` / `adminsholeh@admin.com`) telah **dihapus dan diblokir permanen** dari Supabase dan LocalStorage.
+   - **Dokumentasi `README.md`:** Seluruh teks akun demo lawas `adminsholeh@admin.com` telah **diganti tuntas** dengan 3 akun resmi DKM Masjid Jami' Al-Jihad:
+     - Super Admin: `admin@aljihad.com` / `admin123`
+     - Bendahara: `bendahara@aljihad.com` / `bendahara123`
+     - Operator TV: `petugas@aljihad.com` / `operator123`
+   - **Placeholder & Teks Default:** Placeholder input modal Edit Akun `Contoh: Administrator Sholeh` di `admin.html` telah diperbarui menjadi `Contoh: Administrator / Nama Pengurus`.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `resources/views/auth/register.blade.php`: Penggantian teks inisiatif & kontak Ali Mochtar ke DKM Al-Jihad.
+2. `resources/views/layouts/admin.blade.php`: Penggantian link WhatsApp footer ke `087758767000`.
+3. `resources/views/auth/passwords/reset.blade.php`: Penggantian link WhatsApp ke `087758767000`.
+4. `resources/views/auth/passwords/email.blade.php`: Penggantian link WhatsApp ke `087758767000`.
+5. `resources/views/auth/passwords/confirm.blade.php`: Penggantian link WhatsApp ke `087758767000`.
+6. `resources/views/auth/login.bladeBACKUP.php`: Penggantian link WhatsApp ke `087758767000`.
+7. `README.md`: Pembaharuan total identitas sistem, kredensial resmi 3 akun, dan kontak DKM Al-Jihad.
+8. `web-statis/admin.html`: Pembaharuan placeholder input modal Edit Akun dan prompt AI.
+9. `LATEST_UPDATE.md`: Dokumentasi Bab 98.
+10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
+
+
 
