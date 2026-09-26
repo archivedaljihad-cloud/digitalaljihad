@@ -203,6 +203,62 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Remote Emergency Alert Overlay Banner */
+        .emergency-banner-overlay {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            max-width: 90vw;
+            width: auto;
+            min-width: 480px;
+            padding: 16px 28px;
+            background: linear-gradient(135deg, rgba(185, 28, 28, 0.96), rgba(127, 29, 29, 0.98));
+            border: 2px solid #ffd700;
+            border-radius: 18px;
+            color: #ffffff;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 215, 0, 0.45);
+            z-index: 950;
+            display: none;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(12px);
+        }
+        .emergency-banner-overlay.show {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .emergency-banner-overlay.theme-gold {
+            background: linear-gradient(135deg, rgba(202, 138, 4, 0.96), rgba(161, 98, 7, 0.98));
+        }
+        .emergency-banner-overlay.theme-green {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.96), rgba(4, 120, 87, 0.98));
+        }
+        .emergency-icon {
+            font-size: 2.2rem;
+            color: #ffd700;
+            animation: pulseAlert 1.5s infinite alternate;
+        }
+        @keyframes pulseAlert {
+            0% { transform: scale(0.92); }
+            100% { transform: scale(1.15); filter: drop-shadow(0 0 10px #ffd700); }
+        }
+        .emergency-text {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+        }
+        .emergency-sub {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body>
@@ -223,6 +279,15 @@
 
     <!-- OSD Notifikasi Remote TV -->
     <div class="tv-osd" id="tvOsd">Slide 1/2</div>
+
+    <!-- Remote Emergency Alert Overlay Banner -->
+    <div id="emergencyBanner" class="emergency-banner-overlay">
+        <i class="fas fa-bullhorn emergency-icon" id="emergencyIcon"></i>
+        <div>
+            <div class="emergency-text" id="emergencyText">Pemberitahuan Khusus DKM</div>
+            <div class="emergency-sub" id="emergencySub">Siaran Langsung Pengurus Masjid Jami' Al-Jihad</div>
+        </div>
+    </div>
 
     <!-- Dual Iframe Crossfade Engine -->
     <div class="iframe-container">
@@ -381,6 +446,53 @@
             } else {
                 clearTimeout(rotationTimer);
             }
+        }
+
+        // Lompat langsung ke slide tertentu berdasarkan URL atau rute
+        function jumpToSlideUrl(url, label = '') {
+            if (!url || isPrayerModeActive) return;
+            const targetIdx = activePages.findIndex(p => p.includes(url) || url.includes(p));
+            if (targetIdx !== -1) {
+                switchSlide(targetIdx);
+            } else {
+                // Jika URL tidak ada di rotasi normal (misal slide khusus / CCTV), muat langsung di frame
+                const frontFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
+                const backFrame = currentFrame === 1 ? document.getElementById('frame2') : document.getElementById('frame1');
+                backFrame.src = url;
+                backFrame.onload = function() {
+                    backFrame.className = 'active';
+                    frontFrame.className = 'outgoing';
+                    currentFrame = currentFrame === 1 ? 2 : 1;
+                    showOsd(label ? `📺 ${label}` : '📺 Slide Khusus');
+                };
+            }
+        }
+
+        // Tampilkan Banner Siaran Darurat / Pengumuman Jarak Jauh
+        let emergencyAlertTimer = null;
+        function showEmergencyAlert(text, theme = 'red', duration = 30) {
+            const banner = document.getElementById('emergencyBanner');
+            const txt = document.getElementById('emergencyText');
+            if (!banner || !txt) return;
+
+            txt.textContent = text;
+            banner.className = 'emergency-banner-overlay show';
+            if (theme === 'gold') banner.classList.add('theme-gold');
+            else if (theme === 'green') banner.classList.add('theme-green');
+
+            clearTimeout(emergencyAlertTimer);
+            if (duration && duration > 0) {
+                emergencyAlertTimer = setTimeout(() => {
+                    hideEmergencyAlert();
+                }, duration * 1000);
+            }
+        }
+
+        function hideEmergencyAlert() {
+            const banner = document.getElementById('emergencyBanner');
+            if (!banner) return;
+            banner.classList.remove('show');
+            clearTimeout(emergencyAlertTimer);
         }
 
         function scheduleNextRotation() {
@@ -569,6 +681,67 @@
                         SupabaseDB.getSholatJumat().then(petugas => jumatPetugas = petugas);
                     }
                 });
+            }
+
+            // Pasang Pendengar Remote Control Supabase (Perintah Jarak Jauh Super Admin)
+            if (window.SupabaseDB && typeof SupabaseDB.subscribeRemoteCommands === 'function') {
+                SupabaseDB.subscribeRemoteCommands((payload) => {
+                    const cmd = (payload.command || '').toUpperCase();
+                    const d = payload.data || {};
+                    console.log('📡 [TV Remote Command Received]:', cmd, d);
+
+                    switch (cmd) {
+                        case 'NEXT':
+                            nextPage();
+                            scheduleNextRotation();
+                            showOsd('🎮 Remote: Slide Berikutnya');
+                            break;
+                        case 'PREV':
+                            prevPage();
+                            scheduleNextRotation();
+                            showOsd('🎮 Remote: Slide Sebelumnya');
+                            break;
+                        case 'PAUSE':
+                            if (!isPaused) togglePause();
+                            break;
+                        case 'RESUME':
+                            if (isPaused) togglePause();
+                            break;
+                        case 'TOGGLE_PAUSE':
+                            togglePause();
+                            break;
+                        case 'JUMP':
+                            jumpToSlideUrl(d.url, d.name);
+                            break;
+                        case 'RELOAD':
+                            showOsd('🔄 Remote: Memuat Ulang TV...');
+                            setTimeout(() => location.reload(), 1200);
+                            break;
+                        case 'EMERGENCY_ALERT':
+                            showEmergencyAlert(d.text, d.theme, d.duration || 30);
+                            showOsd('📢 Peringatan Siaran Darurat Masuk');
+                            break;
+                        case 'CLEAR_ALERT':
+                            hideEmergencyAlert();
+                            showOsd('✅ Peringatan Dihapus');
+                            break;
+                        case 'PING':
+                            showOsd('📡 Ping Sukses dari Super Admin (Online)');
+                            break;
+                    }
+                });
+
+                // Daftarkan Status Kehadiran (Presence Heartbeat) Perangkat TV ke Cloud
+                setTimeout(() => {
+                    try {
+                        SupabaseDB.trackDevicePresence({
+                            device_id: 'TV_MASJID_UTAMA',
+                            device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
+                            resolution: `${window.innerWidth}x${window.innerHeight}`,
+                            current_slide: (activePages && activePages[currentIndex]) ? activePages[currentIndex] : 'slides/utama.html'
+                        });
+                    } catch (e) {}
+                }, 2000);
             }
 
             // PWA Service Worker Registration

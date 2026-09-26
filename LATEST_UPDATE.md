@@ -4074,3 +4074,60 @@ Untuk mengantisipasi situasi di mana masjid mengadakan lebih dari satu program p
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 100.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+---
+
+## 📡 BAB 101: LAYANAN REMOT TV & DIAGNOSTIK JARAK JAUH (REALTIME CLOUD WEBSOCKET & PRESENCE TRACKER)
+
+### 1. Latar Belakang & Solusi Permasalahan Lapangan
+Pengurus lapangan (operator display TV dan bendahara masjid) saat ini mayoritas telah berusia di atas 47 tahun dan belum begitu akrab dengan penanganan teknis digital signage modern. Selain itu, terdapat kendala fisik dan jaringan di mana Super Admin sering kali sedang berada di luar jangkauan masjid (misal: mudik, luar kota, perjalanan dinas, atau luar negeri), sementara perangkat seperti TV display utama dan IP Camera CCTV keamanan masjid membutuhkan pemantauan berkala atau mengalami masalah lokal (seperti TV macet, kamera CCTV lokal offline, atau ada kebutuhan mendesak menyiarkan pengumuman darurat).
+
+Untuk menjawab kebutuhan tersebut secara paripurna tanpa menambah biaya perangkat keras mahal atau server fisik tambahan, dibangunlah arsitektur **Layanan Remot TV & Diagnostik Jarak Jauh** berbasis Cloud Realtime WebSocket Supabase:
+1. **Pancaran Komando Ultra Cepat (< 100ms):** Super Admin dapat mengendalikan perputaran slide TV masjid dari ponsel/laptop mana saja di seluruh dunia seketika.
+2. **Device Presence & Telemetri Realtime:** Status TV masjid (Online/Offline, resolusi monitor, slide yang sedang tayang detik ini, dan status jeda) terpantau langsung di layar kontrol admin.
+3. **Penyelamatan Kendala IP Kamera CCTV Lokal (CCTV Fallback Switcher):** Jika kamera CCTV lokal masjid bermasalah atau jaringan internal terputus, Super Admin dari luar kota dapat mengalihkan tampilan slide CCTV seketika ke siaran langsung Mekah (*Ka'bah Masjidil Haram*) atau Madinah (*Masjid Nabawi*) agar layar TV masjid tetap anggun dan tidak menampilkan halaman error/blank.
+4. **Siaran Darurat OSD (On-Screen Display Alert):** Super Admin dapat menyiarkan pesan darurat (misal: kendaraan menghalangi jalur ambulans, anak terpisah, gempa/cuaca, atau pengumuman takmir) yang langsung melayang elegan di atas layar TV masjid dengan berbagai pilihan tema warna dan auto-dismiss.
+5. **Pemulihan Mandiri Jarak Jauh (Remote Reload & Ping):** Layar TV dapat dimuat ulang (*reload*) dari jauh tanpa operator masjid harus memanjat dinding atau mencabut colokan TV.
+
+---
+
+### 2. Rincian Arsitektur & Fitur yang Diimplementasikan
+
+1. **`web-statis/js/supabase-db.js` (Pusat Komunikasi Realtime & State Tracking):**
+   - **Saluran WebSocket Terdedikasi:** Menggunakan Supabase Realtime Channel `'mosque-tv-remote-channel'`.
+   - **`sendRemoteCommand(command, data, sender)`:** Memancarkan perintah broadcast event `'tv_command'` dengan waktu respon instan (<100ms) sekaligus memperbarui payload fallback `app_settings.remote_command`.
+   - **`subscribeRemoteCommands(onCommand)`:** Mendaftarkan receiver perintah di display TV.
+   - **`trackDevicePresence(deviceInfo)`:** Mengirim heartbeat presence status TV (URL slide aktif, judul slide, resolusi layar, peramban, dan status pause).
+   - **`subscribeDevicePresence(onSync)`:** Memantau daftar perangkat TV yang sedang aktif dan online secara realtime.
+
+2. **`web-statis/index.html` (Mesin TV Display - Penerima Komando):**
+   - **Komponen OSD Emergency Banner (`#emergencyBanner`):** Banner melayang responsif di posisi atas dengan backdrop blur glassmorphism, pilihan tema (Emas Masjid, Merah Darurat, Hijau Syar'i, Biru Khidmat), teks animasi berjalan, dan tombol tutup.
+   - **Fungsi `jumpToSlideUrl(url, label)`:** Memungkinkan TV melompat langsung ke halaman manapun baik slide dalam rotasi maupun slide mandiri seketika.
+   - **Handler Komando Lengkap:**
+     - `NEXT`: Melompat ke slide berikutnya dalam rotasi.
+     - `PREV`: Mundur ke slide sebelumnya.
+     - `PAUSE` / `RESUME` / `TOGGLE_PAUSE`: Membekukan atau melanjutkan timer rotasi slide.
+     - `JUMP`: Lompat ke slide spesifik dengan parameter URL.
+     - `RELOAD`: Memuat ulang peramban TV masjid secara halus dalam 2 detik.
+     - `EMERGENCY_ALERT`: Memunculkan banner siaran darurat OSD dengan timer auto-close.
+     - `CLEAR_ALERT`: Menutup siaran darurat seketika.
+     - `PING`: Membalas heartbeat status dan memunculkan toast konfirmasi.
+
+3. **`web-statis/admin.html` (Panel Kontrol Remot & Diagnostik Super Admin):**
+   - **Sidebar Menu:** Nav item baru `nav-remote-tv` dengan ikon antena satelit dan badge `LIVE`.
+   - **Kartu Telemetri TV:** Indikator Online/Offline dengan denyut glow hijau/merah, judul & URL slide aktif detik ini, resolusi perangkat TV (misal: 1920x1080 px), dan status rotasi.
+   - **Virtual D-Pad Controller:** Tombol Mundur (*PREV*), Tombol Freeze/Lanjut (*PAUSE/RESUME*), Tombol Maju (*NEXT*), Tombol Tes Sinyal (*PING*), dan Tombol Muat Ulang TV (*RELOAD*).
+   - **Matriks Lompat Cepat Slide (12 Halaman):** Grid 12 tombol jalan pintas langsung ke seluruh slide (Slide Utama, Petugas Jumat, Buku Kas, Infaq, Kajian, Ambulance, Qurban, Ramadhan, Yasin, Live Mekah, Live Madinah, CCTV).
+   - **Form Siaran Pengumuman Darurat:** Input teks pengumuman, pilihan 4 tema warna, pilihan durasi (15s, 30s, 60s, permanen), serta tombol siar dan tarik pengumuman.
+   - **Pengalihan Darurat IP Kamera CCTV:** Tombol 1-klik untuk mengalihkan CCTV lokal ke Live Ka'bah atau Live Nabawi saat IP lokal kamera masjid offline.
+   - **Log Aktivitas Perintah:** Tabel riwayat perintah remote yang terkirim beserta waktu dan status konfirmasinya.
+
+---
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/js/supabase-db.js`: Penambahan API Remote Broadcast & Device Presence Tracking.
+2. `web-statis/index.html`: Penambahan pendengar remote command, presence heartbeat, dan Emergency Alert OSD Banner.
+3. `web-statis/admin.html`: Penambahan sidebar `nav-remote-tv`, section `#view-remote-tv`, styling CSS D-Pad, dan modul JavaScript pengendali remote.
+4. `scratch/verify_remote.js`: Skrip pengujian otomatis kelengkapan fungsi Remote TV.
+5. `LATEST_UPDATE.md`: Dokumentasi Bab 101.
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+

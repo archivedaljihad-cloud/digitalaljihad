@@ -372,6 +372,153 @@
                 });
 
             return channel;
+        },
+
+        /**
+         * =====================================================
+         * MODUL LAYANAN REMOTE TV & DIAGNOSTIK JARAK JAUH
+         * =====================================================
+         */
+        _remoteChannel: null,
+
+        getRemoteChannel() {
+            if (!this._remoteChannel) {
+                const client = getClient();
+                if (client && client.channel) {
+                    this._remoteChannel = client.channel('mosque-tv-remote-channel', {
+                        config: {
+                            broadcast: { ack: true },
+                            presence: { key: 'device_id' }
+                        }
+                    });
+                }
+            }
+            return this._remoteChannel;
+        },
+
+        /**
+         * Kirim perintah remote kontrol ke seluruh layar TV yang terhubung di masjid
+         * @param {string} command - Jenis perintah ('NEXT', 'PREV', 'PAUSE', 'JUMP', 'RELOAD', 'EMERGENCY_ALERT', 'CLEAR_ALERT')
+         * @param {object} data - Data pelengkap (url slide, teks peringatan, warna, durasi, dll.)
+         * @param {string} sender - Identitas pengirim perintah (misal: 'Super Admin - Luar Kota')
+         */
+        async sendRemoteCommand(command, data = {}, sender = 'Super Admin') {
+            const payload = {
+                command: command,
+                data: data,
+                sender: sender,
+                timestamp: Date.now()
+            };
+
+            console.log('📡 [Remote Super Admin] Mengirim perintah:', command, payload);
+
+            // 1. Kirim via Realtime WebSocket Broadcast (< 100ms ultra cepat)
+            try {
+                const channel = this.getRemoteChannel();
+                if (channel) {
+                    if (channel.state !== 'joined') {
+                        await new Promise((resolve) => {
+                            channel.subscribe((status) => {
+                                if (status === 'SUBSCRIBED') resolve();
+                            });
+                            setTimeout(resolve, 1500); // timeout aman
+                        });
+                    }
+
+                    await channel.send({
+                        type: 'broadcast',
+                        event: 'tv_command',
+                        payload: payload
+                    });
+                }
+            } catch (err) {
+                console.warn('Gagal broadcast remote command via WebSocket:', err);
+            }
+
+            // 2. Simpan juga ke app_settings.remote_command (Dual-Track Redundancy)
+            try {
+                if (SUPABASE_CONFIG.url) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_CONFIG.anonKey,
+                            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            remote_command: payload
+                        })
+                    }).catch(() => {});
+                }
+            } catch (e) {}
+
+            return payload;
+        },
+
+        /**
+         * Pasang pendengar perintah remote di layar TV (Receiver)
+         */
+        subscribeRemoteCommands(onCommand) {
+            const channel = this.getRemoteChannel();
+            if (!channel) return null;
+
+            channel
+                .on('broadcast', { event: 'tv_command' }, ({ payload }) => {
+                    console.log('🎮 [TV Receiver] Menerima sinyal remote:', payload.command, payload);
+                    if (typeof onCommand === 'function') {
+                        onCommand(payload);
+                    }
+                })
+                .subscribe((status) => {
+                    if (status === 'SUBSCRIBED') {
+                        console.log('🟢 [TV Receiver] Saluran remote control siap menerima sinyal');
+                    }
+                });
+
+            return channel;
+        },
+
+        /**
+         * Daftarkan status kehadiran TV (Presence Heartbeat)
+         */
+        trackDevicePresence(deviceInfo) {
+            const channel = this.getRemoteChannel();
+            if (!channel) return;
+
+            const payload = Object.assign({
+                device_id: 'TV_MASJID_UTAMA',
+                device_name: 'TV Display Masjid Utama',
+                online_since: new Date().toISOString(),
+                current_slide: 'slides/utama.html',
+                last_heartbeat: Date.now()
+            }, deviceInfo);
+
+            channel.subscribe(async (status) => {
+                if (status === 'SUBSCRIBED') {
+                    await channel.track(payload);
+                    console.log('📡 [TV Presence] Status TV online terdaftar di cloud');
+                }
+            });
+        },
+
+        /**
+         * Pantau kehadiran perangkat TV yang online dari dashboard Admin
+         */
+        subscribeDevicePresence(onSync) {
+            const channel = this.getRemoteChannel();
+            if (!channel) return null;
+
+            channel
+                .on('presence', { event: 'sync' }, () => {
+                    const state = channel.presenceState();
+                    console.log('👥 [Admin Presence] Daftar TV Online Sync:', state);
+                    if (typeof onSync === 'function') {
+                        onSync(state);
+                    }
+                })
+                .subscribe();
+
+            return channel;
         }
     };
 
