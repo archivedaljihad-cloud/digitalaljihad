@@ -34,7 +34,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px 25px 85px 25px;
+            padding: 8px 24px 75px 24px;
             position: relative;
             z-index: 5;
         }
@@ -42,7 +42,7 @@
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             flex-shrink: 0;
             position: relative;
         }
@@ -125,8 +125,8 @@
         .kajian-card {
             background: linear-gradient(135deg, rgba(6, 32, 22, 0.9) 0%, rgba(2, 18, 12, 0.94) 100%);
             border: 1.5px solid rgba(212, 175, 55, 0.55);
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 18px;
+            padding: 16px 18px;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 238, 170, 0.25);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
@@ -135,6 +135,7 @@
             justify-content: space-between;
             position: relative;
             overflow: hidden;
+            transition: opacity 0.35s ease, transform 0.35s ease;
         }
 
         .kajian-card::before {
@@ -151,14 +152,14 @@
         /* Kolom Kiri: Pemateri / Ustadz */
         .ustadz-photo-container {
             width: 100%;
-            height: 230px;
-            border-radius: 16px;
+            height: 180px;
+            border-radius: 14px;
             overflow: hidden;
             border: 2px solid rgba(255, 215, 0, 0.65);
             position: relative;
             background: #02130c;
             box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .ustadz-photo {
             width: 100%;
@@ -422,6 +423,163 @@
             line-height: 1.3;
         }
 
+        /* TIMELINE STRIP 1 BULAN PENUH (PEKAN 1 - 5) */
+        .kajian-timeline-container {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(2, 24, 16, 0.95) 0%, rgba(1, 15, 10, 0.98) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.65);
+            border-radius: 16px;
+            padding: 8px 16px 10px 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255, 238, 170, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            margin-top: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .timeline-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .timeline-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #ffd700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .timeline-subtext {
+            font-size: 0.72rem;
+            color: #94a3b8;
+        }
+        .rotator-pill {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #86efac;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .timeline-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .timeline-mini-card {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 10px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .timeline-mini-card:hover {
+            border-color: rgba(255, 215, 0, 0.7);
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .timeline-mini-card.active-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(6, 78, 59, 0.5) 100%);
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .timeline-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+        .timeline-pekan-badge {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: #ffd700;
+            text-transform: uppercase;
+        }
+        .timeline-date-text {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .timeline-ustadz-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+        .timeline-tema-text {
+            font-size: 0.65rem;
+            color: #cbd5e1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+        .timeline-status-pill {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 2px;
+            align-self: flex-start;
+        }
+        .status-pill-live {
+            background: #dc2626;
+            color: #ffffff;
+            animation: blinkLive 1.5s infinite;
+        }
+        .status-pill-next {
+            background: #d97706;
+            color: #ffffff;
+        }
+        .status-pill-done {
+            background: rgba(255,255,255,0.15);
+            color: #94a3b8;
+        }
+        .status-pill-future {
+            background: rgba(16, 185, 129, 0.3);
+            color: #a7f3d0;
+        }
+
+        .timeline-progress-track {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        .timeline-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #10b981, #ffd700);
+            transition: width 0.1s linear;
+        }
+
+        .fade-card-transition {
+            opacity: 0.2;
+            transform: scale(0.985);
+        }
+
         @media (max-width: 1200px) {
             .kajian-main-layout {
                 grid-template-columns: 300px 1fr 280px;
@@ -460,15 +618,10 @@
                         <p><i class="fas fa-calendar-check mr-1"></i> Setiap Hari Sabtu • Ba'da Maghrib s/d Menjelang Isya</p>
                         <div class="sholawat-greeting">مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ</div>
                     </div>
-                    <div class="title-icon-badge right-icon"><i class="fas fa-graduation-cap"></i></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3-COLUMN MAIN CONTENT -->
-        <div class="kajian-main-layout">
+                    <div class="title-icon-badge right-icon"><i class="fas f        <!-- 3-COLUMN MAIN CONTENT -->
+        <div class="kajian-main-layout" id="kajianMainLayout">
             <!-- KOLOM 1: PROFIL PEMATERI -->
-            <div class="kajian-card">
+            <div class="kajian-card" id="cardKolom1">
                 <div>
                     <div class="ustadz-photo-container">
                         <img src="../image/display/default_imam.jpg" id="ustadzPhoto" class="ustadz-photo" alt="Ustadz Pemateri" onerror="this.onerror=null;this.src='../image/display/default_imam.jpg';">
@@ -490,12 +643,12 @@
             </div>
 
             <!-- KOLOM 2: KITAB & TEMA PEKAN INI -->
-            <div class="kajian-card">
+            <div class="kajian-card" id="cardKolom2">
                 <div>
                     <div class="tema-badge-wrap">
-                        <span class="pekan-badge" id="badgePekanKajian"><i class="fas fa-calendar-week mr-1"></i> Pekan Ini</span>
-                        <span class="live-status-badge">
-                            <span class="live-dot"></span> MAJELIS ILMU TERBUKA UMUM
+                        <span class="pekan-badge" id="badgePekanKajian"><i class="fas fa-calendar-week mr-1"></i> Pekan 1</span>
+                        <span class="live-status-badge" id="liveStatusBadge">
+                            <span class="live-dot" id="liveDot"></span> <span id="liveStatusText">MAJELIS ILMU TERBUKA UMUM</span>
                         </span>
                     </div>
 
@@ -521,7 +674,7 @@
             </div>
 
             <!-- KOLOM 3: COUNTDOWN ISYA & TANYA JAWAB QR -->
-            <div class="kajian-card">
+            <div class="kajian-card" id="cardKolom3">
                 <!-- Countdown Isya -->
                 <div class="countdown-isya-box">
                     <div class="cd-label">
@@ -541,6 +694,25 @@
                 </div>
             </div>
         </div>
+
+        <!-- TIMELINE STRIP 1 BULAN PENUH (PEKAN 1 - 5) -->
+        <div class="kajian-timeline-container" id="kajianTimelineContainer">
+            <div class="timeline-header-bar">
+                <div style="display: flex; align-items: center;">
+                    <span class="timeline-title"><i class="fas fa-calendar-alt text-warning mr-1"></i> AGENDA BULAN INI (<span id="timelineBulanLabel">OKTOBER 2026</span>):</span>
+                    <span class="timeline-subtext" style="margin-left: 10px;">Menampilkan jadwal kajian 1 bulan penuh secara bergiliran</span>
+                </div>
+                <div class="timeline-rotator-status">
+                    <span class="rotator-pill" id="rotatorIndicatorPill"><i class="fas fa-sync-alt fa-spin mr-1"></i> Bergiliran Otomatis (9s)</span>
+                </div>
+            </div>
+            <div class="timeline-cards-grid" id="timelineCardsGrid">
+                <!-- Diisi otomatis oleh JavaScript -->
+            </div>
+            <div class="timeline-progress-track">
+                <div class="timeline-progress-fill" id="timelineProgressFill"></div>
+            </div>
+        </div>
     </div>
 
     <!-- SCRIPT JAM, COUNTDOWN ISYA & SUPABASE INTEGRATION -->
@@ -548,25 +720,41 @@
     <script src="../js/supabase-config.js"></script>
     <script src="../js/supabase-db.js"></script>
     <script>
+        const NAMA_BULAN_INDONESIA = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+        const SHORT_BULAN_INDONESIA = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
         // Default Data Kajian Malam Ahad
         const DEFAULT_KAJIAN = {
             ustadz_nama: "Ust. H. Ahmad Sholeh Al-Hafidz",
             ustadz_gelar: "Dewan Asatidz DKM Masjid Jami' Al-Jihad",
             kitab_rujukan: "Kitab Riyadhus Shalihin (Imam An-Nawawi)",
             tema_kajian: "Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga",
-            pekan_label: "Pekan Ini",
-            waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya"
+            pekan_label: "Pekan 1",
+            waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya",
+            tanggal: ""
         };
+
+        let currentJadwalList = [];
+        let activeJadwalIndex = 0;
+        let rotationTimer = null;
+        let progressInterval = null;
+        let progressVal = 0;
+        let isTodaySaturday = false;
+        let todaySaturdayIndex = -1;
+        let nextUpcomingIndex = -1;
+        const ROTATION_INTERVAL_MS = 9000; // 9 detik per pekan
 
         // Jam & Tanggal Header
         function updateDateTime() {
             const now = new Date();
-            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
 
             const dayName = days[now.getDay()];
             const date = now.getDate();
-            const monthName = months[now.getMonth()];
+            const monthName = NAMA_BULAN_INDONESIA[now.getMonth()];
             const year = now.getFullYear();
 
             const h = String(now.getHours()).padStart(2, '0');
@@ -589,7 +777,6 @@
 
             const now = new Date();
             if (!targetIsyaTime) {
-                // Fallback default jam 19:00 jika jadwal belum dimuat
                 targetIsyaTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
             }
 
@@ -607,6 +794,213 @@
         }
         setInterval(updateCountdownIsya, 1000);
 
+        function formatTanggalShort(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                const parts = dateStr.split('-');
+                if (parts.length === 3) {
+                    const m = parseInt(parts[1]) - 1;
+                    const d = parseInt(parts[2]);
+                    return `${d} ${SHORT_BULAN_INDONESIA[m] || ''}`;
+                }
+            } catch (e) {}
+            return dateStr;
+        }
+
+        function formatTanggalIndoFull(dateStr) {
+            if (!dateStr) return '';
+            try {
+                const parts = dateStr.split('-');
+                if (parts.length === 3) {
+                    const y = parseInt(parts[0]);
+                    const m = parseInt(parts[1]) - 1;
+                    const d = parseInt(parts[2]);
+                    const dObj = new Date(y, m, d);
+                    const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+                    return `${days[dObj.getDay()]}, ${d} ${NAMA_BULAN_INDONESIA[m]} ${y}`;
+                }
+            } catch (e) {}
+            return dateStr;
+        }
+
+        // Render Baris Mini Card Timeline
+        function renderTimelineCards() {
+            const grid = document.getElementById('timelineCardsGrid');
+            if (!grid) return;
+
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${y}-${m}-${d}`;
+
+            let html = '';
+            currentJadwalList.forEach((item, idx) => {
+                const pekanNum = item.pekan || (idx + 1);
+                const isActive = (idx === activeJadwalIndex);
+                const isToday = (item.tanggal && item.tanggal === todayStr && isTodaySaturday);
+                const isNext = (idx === nextUpcomingIndex && !isToday);
+
+                let statusPill = '';
+                if (isToday) {
+                    statusPill = '<span class="timeline-status-pill status-pill-live"><i class="fas fa-broadcast-tower mr-1"></i> Hari Ini</span>';
+                } else if (isNext) {
+                    statusPill = '<span class="timeline-status-pill status-pill-next"><i class="fas fa-star mr-1"></i> Terdekat</span>';
+                } else if (item.tanggal) {
+                    if (item.tanggal < todayStr) {
+                        statusPill = '<span class="timeline-status-pill status-pill-done">Selesai</span>';
+                    } else {
+                        statusPill = '<span class="timeline-status-pill status-pill-future">Mendatang</span>';
+                    }
+                }
+
+                const shortDate = item.tanggal ? formatTanggalShort(item.tanggal) : `Sabtu P${pekanNum}`;
+                const ustadzShort = item.ustadz_nama || 'Pemateri DKM';
+                const temaShort = item.kitab_rujukan ? item.kitab_rujukan.split('(')[0].trim() : (item.tema_kajian || 'Majelis Ilmu');
+
+                html += `
+                    <div class="timeline-mini-card ${isActive ? 'active-card' : ''}" onclick="selectPekanManual(${idx})" id="miniCard${idx}">
+                        <div class="timeline-card-header">
+                            <span class="timeline-pekan-badge">Pekan ${pekanNum}</span>
+                            <span class="timeline-date-text">${shortDate}</span>
+                        </div>
+                        <div class="timeline-ustadz-text" title="${ustadzShort}">${ustadzShort}</div>
+                        <div class="timeline-tema-text" title="${temaShort}">${temaShort}</div>
+                        ${statusPill}
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        // Tampilkan data pekan terpilih ke 3 kartu utama
+        function displayKajianItem(index, withTransition = true) {
+            if (!currentJadwalList[index]) return;
+            const d = currentJadwalList[index];
+            activeJadwalIndex = index;
+
+            const layout = document.getElementById('kajianMainLayout');
+            if (withTransition && layout) {
+                layout.classList.add('fade-card-transition');
+            }
+
+            setTimeout(() => {
+                // Update teks kartu pemateri
+                if (d.ustadz_nama && document.getElementById('valUstadzName')) {
+                    document.getElementById('valUstadzName').textContent = d.ustadz_nama;
+                }
+                if (d.ustadz_gelar && document.getElementById('valUstadzSpec')) {
+                    document.getElementById('valUstadzSpec').textContent = d.ustadz_gelar;
+                }
+                if (d.waktu_pelaksanaan && document.getElementById('valWaktuPelaksanaan')) {
+                    document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan;
+                }
+
+                // Update teks kartu kitab & tema
+                if (d.kitab_rujukan && document.getElementById('valKitabRujukan')) {
+                    document.getElementById('valKitabRujukan').textContent = d.kitab_rujukan;
+                }
+                if (d.tema_kajian && document.getElementById('valTemaKajian')) {
+                    document.getElementById('valTemaKajian').textContent = d.tema_kajian;
+                }
+
+                // Update badge pekan
+                const pekanLabel = d.pekan_label || `Pekan ${index + 1}`;
+                const tglLabel = d.tanggal ? ` • ${formatTanggalShort(d.tanggal)}` : '';
+                if (document.getElementById('badgePekanKajian')) {
+                    document.getElementById('badgePekanKajian').innerHTML = `<i class="fas fa-calendar-week mr-1"></i> ${pekanLabel}${tglLabel}`;
+                }
+
+                // Update status banner
+                const statusBadge = document.getElementById('liveStatusBadge');
+                const statusText = document.getElementById('liveStatusText');
+                const liveDot = document.getElementById('liveDot');
+
+                const now = new Date();
+                const y = now.getFullYear();
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const date = String(now.getDate()).padStart(2, '0');
+                const todayStr = `${y}-${m}-${date}`;
+
+                if (d.tanggal && d.tanggal === todayStr && isTodaySaturday) {
+                    if (statusText) statusText.textContent = "HARI INI • SEDANG BERLANGSUNG";
+                    if (statusBadge) {
+                        statusBadge.style.background = "rgba(220, 38, 38, 0.35)";
+                        statusBadge.style.borderColor = "rgba(239, 68, 68, 0.9)";
+                        statusBadge.style.color = "#fecaca";
+                    }
+                    if (liveDot) liveDot.style.background = "#ef4444";
+                } else if (index === nextUpcomingIndex) {
+                    if (statusText) statusText.textContent = `SABTU TERDEKAT (${formatTanggalShort(d.tanggal)})`;
+                    if (statusBadge) {
+                        statusBadge.style.background = "rgba(217, 119, 6, 0.35)";
+                        statusBadge.style.borderColor = "rgba(245, 158, 11, 0.9)";
+                        statusBadge.style.color = "#fef3c7";
+                    }
+                    if (liveDot) liveDot.style.background = "#f59e0b";
+                } else {
+                    if (statusText) statusText.textContent = `AGENDA BULAN INI (${formatTanggalShort(d.tanggal)})`;
+                    if (statusBadge) {
+                        statusBadge.style.background = "rgba(16, 185, 129, 0.25)";
+                        statusBadge.style.borderColor = "rgba(16, 185, 129, 0.6)";
+                        statusBadge.style.color = "#a7f3d0";
+                    }
+                    if (liveDot) liveDot.style.background = "#10b981";
+                }
+
+                // Update status aktif di timeline strip
+                currentJadwalList.forEach((_, idx) => {
+                    const card = document.getElementById(`miniCard${idx}`);
+                    if (card) {
+                        if (idx === index) {
+                            card.classList.add('active-card');
+                        } else {
+                            card.classList.remove('active-card');
+                        }
+                    }
+                });
+
+                if (layout) {
+                    layout.classList.remove('fade-card-transition');
+                }
+            }, withTransition ? 200 : 0);
+        }
+
+        // Jalankan rotasi otomatis bergiliran tiap 9 detik
+        function startAutoRotation() {
+            stopAutoRotation();
+            if (currentJadwalList.length <= 1) return;
+
+            progressVal = 0;
+            const fillEl = document.getElementById('timelineProgressFill');
+            const stepMs = 100;
+            const increment = (100 / (ROTATION_INTERVAL_MS / stepMs));
+
+            progressInterval = setInterval(() => {
+                progressVal += increment;
+                if (fillEl) fillEl.style.width = `${Math.min(progressVal, 100)}%`;
+
+                if (progressVal >= 100) {
+                    progressVal = 0;
+                    activeJadwalIndex = (activeJadwalIndex + 1) % currentJadwalList.length;
+                    displayKajianItem(activeJadwalIndex, true);
+                }
+            }, stepMs);
+        }
+
+        function stopAutoRotation() {
+            if (progressInterval) clearInterval(progressInterval);
+            if (rotationTimer) clearTimeout(rotationTimer);
+        }
+
+        function selectPekanManual(index) {
+            displayKajianItem(index, true);
+            progressVal = 0;
+            const fillEl = document.getElementById('timelineProgressFill');
+            if (fillEl) fillEl.style.width = '0%';
+        }
+
         // Ambil Data Kajian & Jadwal Isya dari Supabase
         async function loadKajianData() {
             try {
@@ -622,45 +1016,78 @@
                     if (typeof kData === 'string') {
                         try { kData = JSON.parse(kData); } catch (e) {}
                     }
-                    if (kData) {
-                        applyKajianData(kData);
-                    } else {
-                        // Cek local cache
-                        const cached = localStorage.getItem('cached_kajian_sabtu');
-                        if (cached) {
-                            try { applyKajianData(JSON.parse(cached)); } catch (e) {}
-                        } else {
-                            applyKajianData(DEFAULT_KAJIAN);
-                        }
+                    if (!kData) {
+                        try { kData = JSON.parse(localStorage.getItem('cached_kajian_sabtu')); } catch (e) {}
                     }
+
+                    if (kData) {
+                        if (kData.bulan_label && document.getElementById('timelineBulanLabel')) {
+                            document.getElementById('timelineBulanLabel').textContent = kData.bulan_label.toUpperCase();
+                        }
+
+                        if (kData.jadwal_list && Array.isArray(kData.jadwal_list) && kData.jadwal_list.length > 0) {
+                            currentJadwalList = kData.jadwal_list;
+                        } else {
+                            // Single fallback data
+                            currentJadwalList = [Object.assign({}, DEFAULT_KAJIAN, kData)];
+                        }
+                    } else {
+                        currentJadwalList = [DEFAULT_KAJIAN];
+                    }
+                } else {
+                    currentJadwalList = [DEFAULT_KAJIAN];
                 }
 
-                // 2. Ambil jadwal Isya untuk countdown
+                // 2. Deteksi tanggal hari ini & jadwal terdekat
+                const now = new Date();
+                isTodaySaturday = (now.getDay() === 6);
+                const y = now.getFullYear();
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const d = String(now.getDate()).padStart(2, '0');
+                const todayStr = `${y}-${m}-${d}`;
+
+                todaySaturdayIndex = -1;
+                nextUpcomingIndex = -1;
+                currentJadwalList.forEach((item, idx) => {
+                    if (item.tanggal) {
+                        if (item.tanggal === todayStr) {
+                            todaySaturdayIndex = idx;
+                        } else if (item.tanggal > todayStr && nextUpcomingIndex === -1) {
+                            nextUpcomingIndex = idx;
+                        }
+                    }
+                });
+
+                // Pilih index awal: Hari H jika Sabtu, atau jadwal terdekat berikutnya
+                if (isTodaySaturday && todaySaturdayIndex !== -1) {
+                    activeJadwalIndex = todaySaturdayIndex;
+                } else if (nextUpcomingIndex !== -1) {
+                    activeJadwalIndex = nextUpcomingIndex;
+                } else {
+                    activeJadwalIndex = 0;
+                }
+
+                renderTimelineCards();
+                displayKajianItem(activeJadwalIndex, false);
+                startAutoRotation();
+
+                // 3. Ambil jadwal Isya untuk countdown
                 const jadwalList = await SupabaseDB.getJadwalSholat();
                 if (jadwalList && jadwalList.length > 0) {
                     const isya = jadwalList.find(j => j.nama_sholat && j.nama_sholat.toLowerCase().includes('isya'));
                     if (isya && isya.waktu) {
-                        const [h, m, s] = isya.waktu.split(':');
-                        const now = new Date();
-                        targetIsyaTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(h), parseInt(m), parseInt(s || 0));
+                        const [h, min, s] = isya.waktu.split(':');
+                        targetIsyaTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(h), parseInt(min), parseInt(s || 0));
                         const labelEl = document.getElementById('waktuIsyaLabel');
                         if (labelEl) labelEl.textContent = `Waktu Isya: ${isya.waktu.substring(0, 5)} WIB`;
                     }
                 }
             } catch (err) {
                 console.warn('Gagal memuat data kajian online:', err);
-                applyKajianData(DEFAULT_KAJIAN);
+                currentJadwalList = [DEFAULT_KAJIAN];
+                renderTimelineCards();
+                displayKajianItem(0, false);
             }
-        }
-
-        function applyKajianData(d) {
-            if (!d) return;
-            if (d.ustadz_nama && document.getElementById('valUstadzName')) document.getElementById('valUstadzName').textContent = d.ustadz_nama;
-            if (d.ustadz_gelar && document.getElementById('valUstadzSpec')) document.getElementById('valUstadzSpec').textContent = d.ustadz_gelar;
-            if (d.kitab_rujukan && document.getElementById('valKitabRujukan')) document.getElementById('valKitabRujukan').textContent = d.kitab_rujukan;
-            if (d.tema_kajian && document.getElementById('valTemaKajian')) document.getElementById('valTemaKajian').textContent = d.tema_kajian;
-            if (d.pekan_label && document.getElementById('badgePekanKajian')) document.getElementById('badgePekanKajian').innerHTML = `<i class="fas fa-calendar-week mr-1"></i> ${d.pekan_label}`;
-            if (d.waktu_pelaksanaan && document.getElementById('valWaktuPelaksanaan')) document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan;
         }
 
         document.addEventListener('DOMContentLoaded', loadKajianData);

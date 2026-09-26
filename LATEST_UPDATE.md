@@ -4209,3 +4209,49 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 103.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+---
+
+## 🌙 BAB 104: PENGGANTIAN NAMA MENU "SEMARAK RAMADHAN" & IMPLEMENTASI JADWAL KAJIAN MALAM AHAD 1 BULAN PENUH DENGAN ROTASI TV BERGILIRAN
+
+### 1. Latar Belakang & Permintaan Pengguna
+1. **Penyesuaian Branding Menu Sidebar:** Mengubah nama menu di sidebar kiri dari sebelumnya `"Agenda & Infaq Ramadhan"` menjadi **`"Semarak Ramadhan"`**, menyelaraskan dengan judul utama modul *"Semarak Ramadhan & Sholat Tarawih"*.
+2. **Kajian Malam Ahad 1 Bulan Penuh:** Petugas/Operator masjid membutuhkan fasilitas untuk mengelola seluruh jadwal Kajian Rutin Malam Ahad selama 1 bulan penuh (Pekan 1 s/d Pekan 5) sekaligus, alih-alih hanya menginput 1 pekan secara manual setiap minggunya.
+3. **Rotasi Cerdas di Layar TV Signage:** Layar TV Kajian (`web-statis/slides/kajian.html`) harus mampu menampilkan jadwal kajian secara bergiliran/berganti sesuai tanggalnya:
+   - **Pada Hari Sabtu (Malam Ahad):** Secara cerdas memprioritaskan jadwal pekan yang jatuh pada hari tersebut dengan badge status aktif `🔴 HARI INI • SEDANG BERLANGSUNG`.
+   - **Pada Hari Biasa (Senin s/d Jum'at & Ahad):** Menayangkan etalase seluruh jadwal pekan di bulan berjalan secara bergiliran (rotasi halus beranimasi fade setiap 9 detik), dilengkapi bilah navigasi kartu mini (*bottom timeline cards*) dan progress bar dinamis.
+
+---
+
+### 2. Solusi & Perubahan Arsitektur
+
+1. **Pembaruan Menu Sidebar & Tombol Remote Admin (`web-statis/admin.html`):**
+   - Mengganti teks `<span>Agenda & Infaq Ramadhan</span>` menjadi `<span>Semarak Ramadhan</span>` pada sidebar navigasi kiri (`#nav-ramadhan`).
+   - Memperbarui tombol pintasan Remote TV Jarak Jauh menjadi `<span>Semarak Ramadhan</span>`.
+
+2. **Perombakan Modul Form Kajian Malam Ahad 1 Bulan Penuh (`web-statis/admin.html`):**
+   - **Header & Tooling Kontrol:** Dilengkapi selector Bulan dan Tahun, tombol aksi cepat `Auto-Generate Tanggal Sabtu` (menghitung seluruh hari Sabtu dalam bulan yang dipilih), dan tombol `Terapkan Preset 5 Pekan DKM` (otomatis mengisi kurikulum kajian tematik Al-Jihad: Tafsir Ibnu Katsir, Riyadhus Shalihin, Fiqhus Sunnah, Sirah Nabawiyah, & Tazkiyatun Nufus).
+   - **Navigasi Tab Interaktif Pekan 1–5:** Dilengkapi badge indikator tanggal dinamis (contoh: `Pekan 1 (03 Okt)`).
+   - **Form Input Terstruktur Per Pekan:** Input Nama Ustadz, Gelar, Kitab Rujukan, Tema/Topik Kajian, Tanggal Pelaksanaan, dan Waktu Pelaksanaan.
+   - **Live TV Preview Mini:** Menampilkan replika tampilan slide TV secara langsung (*real-time preview*) saat petugas mengetik data.
+   - **Tabel Rekapitulasi 1 Bulan:** Memberikan ringkasan tabel seluruh pekan lengkap dengan tombol pintas edit ke masing-masing pekan.
+   - **Struktur Penyimpanan Data Supabase (`kajian_sabtu_data`):**
+     Data disimpan ke Supabase tabel `app_settings` dengan format JSON komprehensif `jadwal_list` (array pekan 1-5) sekaligus menjaga *backward compatibility* dengan field top-level untuk pembaca versi lawas.
+
+3. **Mesin Rotasi Cerdas & Tampilan Layar TV (`web-statis/slides/kajian.html`):**
+   - **Timeline Bar & Mini Cards:** Menambahkan container kartu mini timeline di bagian bawah layar (`.kajian-timeline-container`) yang memvisualisasikan Pekan 1 s/d 5 lengkap dengan tanggal, status badge, dan nama ustadz.
+   - **Engine Auto-Rotasi Berbasis Waktu:**
+     - Menghitung kecocokan tanggal hari ini (`todayStr === item.tanggal`).
+     - Jika hari ini adalah Sabtu dan ada jadwal yang cocok, TV menampilkan jadwal tersebut sebagai fokus utama.
+     - Jika tidak cocok (hari biasa) atau mode etalase berjalan, TV berotasi bergantian antar pekan setiap 9 detik dengan transisi fade halus dan animasi progress bar (`#timelineProgressBar`).
+   - **Interaktivitas:** Kartu mini di timeline dapat diklik secara manual untuk langsung beralih melihat jadwal pekan tertentu.
+   - **Integrasi Countdown Isya:** Tetap mempertahankan hitung mundur akurat menuju adzan Isya yang sinkron dengan jadwal sholat Supabase.
+
+---
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html`: Penggantian label menu "Semarak Ramadhan", perombakan total view `#view-kajian-sabtu` menjadi formulir 1 bulan penuh, integrasi generator tanggal Sabtu, preset siklus kajian, tabel rekap, dan live preview.
+2. `web-statis/slides/kajian.html`: Implementasi timeline mini cards, dynamic timeline progress bar, engine rotasi pekan otomatis 9 detik, dan deteksi cerdas jadwal hari ini.
+3. `LATEST_UPDATE.md`: Dokumentasi Bab 104.
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+
+
