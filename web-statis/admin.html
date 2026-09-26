@@ -2389,46 +2389,104 @@
                          VIEW 8: PENGGALANGAN INFAQ
                          ========================================== -->
                     <div id="view-infaq" class="section-view">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h4 class="font-weight-bold text-gray-800 mb-0">
-                                <i class="fas fa-donate text-warning mr-2"></i> Program Penggalangan Infaq & Donasi
-                            </h4>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-5 mb-4">
-                                <div class="content-card text-center p-4">
-                                    <h6 class="font-weight-bold text-gray-800 mb-3"><i class="fas fa-qrcode text-success mr-1"></i> QRIS Standar Nasional</h6>
-                                    <img src="img/QRIS.jpg" alt="QRIS Donasi" style="max-width: 240px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.12);" class="mb-3">
-                                    <p class="small text-muted mb-0">Dapat dipindai menggunakan seluruh aplikasi dompet digital (GoPay, OVO, DANA, ShopeePay, LinkAja) & Mobile Banking Syariah.</p>
-                                </div>
+                        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap" style="gap: 12px;">
+                            <div>
+                                <h4 class="font-weight-bold text-gray-800 mb-0">
+                                    <i class="fas fa-donate text-warning mr-2"></i> Program Penggalangan Infaq & Donasi
+                                </h4>
+                                <small class="text-muted">Kelola judul program penggalangan infaq baru, target dana, dan pilih program yang tayang di TV monitor.</small>
                             </div>
+                            <div>
+                                <button class="btn btn-success font-weight-bold shadow-sm" onclick="bukaModalTambahProgramInfaq()">
+                                    <i class="fas fa-plus-circle mr-1"></i> Buat Program Infaq Baru
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Banner Status Program yang Sedang Tayang di TV Monitor -->
+                        <div class="row">
                             <div class="col-lg-7 mb-4">
-                                <div class="content-card">
-                                    <div class="content-card-header">
-                                        <h6 class="content-card-title"><i class="fas fa-hand-holding-usd"></i> Program Wakaf & Renovasi Aktif</h6>
+                                <div class="content-card h-100">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="content-card-title mb-0">
+                                            <i class="fas fa-broadcast-tower text-success mr-1"></i> Sedang Tayang di Layar TV Display
+                                        </h6>
+                                        <span class="badge badge-success px-2 py-1 font-weight-bold">
+                                            <i class="fas fa-check-circle mr-1"></i> Program Aktif
+                                        </span>
                                     </div>
                                     <div class="p-4">
-                                        <h5 class="font-weight-bold text-gray-800 mb-1">Infaq Pembebasan & Renovasi Lahan Masjid</h5>
-                                        <p class="text-muted small mb-3">Program perluasan area parkir dan fasilitas serbaguna jamaah Masjid Jami' Al-Jihad.</p>
+                                        <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                                            <h5 class="font-weight-bold text-gray-800 mb-0" id="infaqActiveName">Infaq Pembebasan & Renovasi Lahan Masjid</h5>
+                                        </div>
+                                        <p class="text-muted small mb-3" id="infaqActiveDesc">Program perluasan area parkir dan fasilitas serbaguna jamaah Masjid Jami' Al-Jihad.</p>
                                         
                                         <div class="d-flex justify-content-between font-weight-bold small mb-1">
-                                            <span>Progress Terkumpul (51.3%)</span>
-                                            <span class="text-success font-weight-bold">Rp 128.450.000 / Rp 250.000.000</span>
+                                            <span id="infaqActivePercentText">Progress Terkumpul (51.3%)</span>
+                                            <span class="text-success font-weight-bold" id="infaqActiveProgressRatio">Rp 128.450.000 / Rp 250.000.000</span>
                                         </div>
-                                        <div class="progress mb-4" style="height: 12px; border-radius: 10px;">
-                                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 51.3%;" aria-valuenow="51.3" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress mb-4" style="height: 14px; border-radius: 10px;">
+                                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated font-weight-bold" id="infaqActiveProgressBar" role="progressbar" style="width: 51.3%; font-size: 10px;" aria-valuenow="51.3" aria-valuemin="0" aria-valuemax="100">51.3%</div>
                                         </div>
 
-                                        <div class="p-3 bg-light rounded border">
-                                            <div class="font-weight-bold text-gray-800 mb-2"><i class="fas fa-university text-primary mr-1"></i> Rekening Resmi Infaq / Transfer Bank:</div>
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <span><strong>Bank Syariah Indonesia (BSI)</strong></span>
-                                                <code class="font-weight-bold" style="font-size: 1rem;">7123-456-789</code>
+                                        <div class="row">
+                                            <div class="col-6 mb-2">
+                                                <div class="p-2 border rounded bg-light text-center">
+                                                    <div class="text-xs text-muted font-weight-bold text-uppercase">Target Dana</div>
+                                                    <div class="font-weight-bold text-gray-800" id="infaqActiveTarget">Rp 250.000.000</div>
+                                                </div>
                                             </div>
-                                            <div class="small text-muted">Atas Nama: <strong>Masjid Jami' Al-Jihad</strong></div>
+                                            <div class="col-6 mb-2">
+                                                <div class="p-2 border rounded bg-light text-center">
+                                                    <div class="text-xs text-muted font-weight-bold text-uppercase">Dana Terkumpul</div>
+                                                    <div class="font-weight-bold text-success" id="infaqActiveTerkumpul">Rp 128.450.000</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-lg-5 mb-4">
+                                <div class="content-card text-center p-4 h-100 d-flex flex-column justify-content-center">
+                                    <h6 class="font-weight-bold text-gray-800 mb-2"><i class="fas fa-qrcode text-success mr-1"></i> QRIS & Rekening Resmi</h6>
+                                    <div class="my-2">
+                                        <img src="img/QRIS.jpg" alt="QRIS Donasi" style="max-width: 170px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.12);" class="mb-2">
+                                    </div>
+                                    <div class="p-2 bg-light rounded border text-left small">
+                                        <div class="d-flex justify-content-between">
+                                            <span><strong>BSI (Bank Syariah Indonesia)</strong></span>
+                                            <code class="font-weight-bold">7123-456-789</code>
+                                        </div>
+                                        <div class="text-muted">a.n. <strong>Masjid Jami' Al-Jihad</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabel Seluruh Program Penggalangan Infaq -->
+                        <div class="content-card">
+                            <div class="content-card-header d-flex justify-content-between align-items-center">
+                                <h6 class="content-card-title mb-0">
+                                    <i class="fas fa-list mr-1"></i> Daftar Seluruh Program Penggalangan Infaq
+                                </h6>
+                                <span class="badge badge-light border text-muted font-weight-bold" id="badgeTotalProgramInfaq">1 Program</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px;" class="text-center">No</th>
+                                            <th>Judul / Nama Program</th>
+                                            <th>Target Dana (Rp)</th>
+                                            <th>Keterangan</th>
+                                            <th style="width: 150px;" class="text-center">Status di Layar TV</th>
+                                            <th style="width: 180px;" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableProgramInfaqBody">
+                                        <!-- Dimuat secara dinamis oleh JavaScript -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -3028,6 +3086,101 @@
     </div>
 
     <!-- =======================================================
+         MODAL TAMBAH PROGRAM INFAQ BARU
+         ======================================================= -->
+    <div class="modal fade" id="modalTambahProgramInfaq" tabindex="-1" role="dialog" aria-labelledby="modalTambahProgramInfaqLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title font-weight-bold" id="modalTambahProgramInfaqLabel">
+                        <i class="fas fa-plus-circle mr-2"></i> Buat Program Penggalangan Infaq Baru
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahProgramInfaq">
+                        <div class="form-group">
+                            <label class="font-weight-bold text-gray-800">Judul / Nama Program Infaq <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="inputProgInfaqNama" placeholder="Contoh: Pengadaan Karpet Masjid Utama" required>
+                            <small class="text-muted">Nama ini yang akan muncul sebagai judul banner infaq pada layar TV.</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold text-gray-800">Target Total Penggalangan Dana (Rp) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control font-weight-bold text-success" id="inputProgInfaqTarget" placeholder="Contoh: 50000000" min="100000" required>
+                            <small class="text-muted">Nominal target dana yang ingin dicapai (dalam Rupiah tanpa titik).</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold text-gray-800">Keterangan / Deskripsi Program</label>
+                            <textarea class="form-control" id="inputProgInfaqKeterangan" rows="2" placeholder="Contoh: Pengadaan karpet tebal saf utama untuk kenyamanan ibadah jamaah."></textarea>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-3">
+                            <input type="checkbox" class="custom-control-input" id="checkProgInfaqAktifTV" checked>
+                            <label class="custom-control-label font-weight-bold text-primary" for="checkProgInfaqAktifTV">
+                                <i class="fas fa-broadcast-tower mr-1"></i> Langsung jadikan program aktif yang tayang di TV monitor
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success font-weight-bold" onclick="simpanProgramInfaqBaru()">
+                        <i class="fas fa-save mr-1"></i> Simpan Program
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
+         MODAL EDIT PROGRAM INFAQ
+         ======================================================= -->
+    <div class="modal fade" id="modalEditProgramInfaq" tabindex="-1" role="dialog" aria-labelledby="modalEditProgramInfaqLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title font-weight-bold" id="modalEditProgramInfaqLabel">
+                        <i class="fas fa-edit mr-2"></i> Edit Program Penggalangan Infaq
+                    </h5>
+                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditProgramInfaq">
+                        <input type="hidden" id="editProgInfaqId">
+                        <div class="form-group">
+                            <label class="font-weight-bold text-gray-800">Judul / Nama Program Infaq <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editProgInfaqNama" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold text-gray-800">Target Total Penggalangan Dana (Rp) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control font-weight-bold text-success" id="editProgInfaqTarget" min="100000" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold text-gray-800">Keterangan / Deskripsi Program</label>
+                            <textarea class="form-control" id="editProgInfaqKeterangan" rows="2"></textarea>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-3">
+                            <input type="checkbox" class="custom-control-input" id="editCheckProgInfaqAktifTV">
+                            <label class="custom-control-label font-weight-bold text-primary" for="editCheckProgInfaqAktifTV">
+                                <i class="fas fa-broadcast-tower mr-1"></i> Jadikan program aktif yang tayang di TV monitor
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-warning font-weight-bold" onclick="simpanEditProgramInfaq()">
+                        <i class="fas fa-save mr-1"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
          MODAL TAMBAH PENGURUS BARU
          ======================================================= -->
     <div class="modal fade" id="modalTambahUser" tabindex="-1" role="dialog" aria-labelledby="modalTambahUserLabel" aria-hidden="true">
@@ -3401,6 +3554,7 @@
         let cachedAmbData = [];
         let cachedRotationPages = [];
         let cachedQurbanData = [];
+        let cachedProgramInfaq = [];
 
         // Master List Resmi Seluruh 18 Halaman Layar Display TV Masjid Jami' Al-Jihad
         const MASTER_ROTATION_PAGES = [
@@ -3775,6 +3929,8 @@
                 renderRotationTable(cachedRotationPages);
             } else if (sectionName === 'ramadhan') {
                 renderAdminRamadhanView();
+            } else if (sectionName === 'infaq') {
+                renderProgramInfaqSection();
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4342,6 +4498,35 @@
             } catch (err) {
                 console.warn('Gagal memuat users dari Supabase:', err);
             }
+
+            // F. Program Penggalangan Infaq & Donasi Khusus
+            try {
+                const resInfaq = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?order=id.desc`, { headers });
+                if (resInfaq.ok) {
+                    cachedProgramInfaq = await resInfaq.json();
+                }
+            } catch (err) {
+                console.warn('Gagal memuat program infaq dari Supabase:', err);
+            }
+            if (!cachedProgramInfaq || cachedProgramInfaq.length === 0) {
+                const localInfaq = localStorage.getItem('cached_program_infaq');
+                if (localInfaq) {
+                    try { cachedProgramInfaq = JSON.parse(localInfaq); } catch (e) {}
+                }
+            }
+            if (!cachedProgramInfaq || cachedProgramInfaq.length === 0) {
+                cachedProgramInfaq = [
+                    {
+                        id: 1,
+                        nama_program: "Infaq Pembebasan & Renovasi Lahan Masjid",
+                        target_dana: 250000000,
+                        keterangan: "Program perluasan area parkir dan fasilitas serbaguna jamaah Masjid Jami' Al-Jihad.",
+                        is_active: true
+                    }
+                ];
+            }
+            localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+            renderProgramInfaqSection();
         }
 
         // Render Tabel Kas
@@ -4517,6 +4702,286 @@
                     }).join('');
                 }
             }
+        }
+
+        // =======================================================
+        // MANAJEMEN MULTI-PROGRAM PENGGALANGAN INFAQ & DONASI
+        // =======================================================
+        function renderProgramInfaqSection() {
+            if (!cachedProgramInfaq || cachedProgramInfaq.length === 0) return;
+
+            // Cari program yang berstatus aktif di layar TV
+            let activeProg = cachedProgramInfaq.find(p => p.is_active === true);
+            if (!activeProg) {
+                activeProg = cachedProgramInfaq[0];
+                activeProg.is_active = true;
+            }
+
+            // Hitung total dana terkumpul untuk program aktif dari kas
+            let terkumpul = 0;
+            if (cachedKasData && cachedKasData.length > 0) {
+                const actNameLower = (activeProg.nama_program || '').toLowerCase();
+                cachedKasData.forEach(item => {
+                    const masuk = parseFloat(item.pemasukan) || 0;
+                    if (masuk > 0) {
+                        const kat = (item.kategori || '').toLowerCase();
+                        const desc = (item.deskripsi || item.uraian || '').toLowerCase();
+                        if (kat.includes('penggalangan infaq') || kat.includes('infaq renovasi') || desc.includes(actNameLower)) {
+                            terkumpul += masuk;
+                        }
+                    }
+                });
+            }
+            if (terkumpul === 0 && activeProg.dana_terkumpul) {
+                terkumpul = parseFloat(activeProg.dana_terkumpul);
+            } else if (terkumpul === 0 && (activeProg.id === 1 || !activeProg.id)) {
+                terkumpul = 128450000;
+            }
+
+            const target = parseFloat(activeProg.target_dana) || 250000000;
+            const percent = target > 0 ? Math.min(100, (terkumpul / target) * 100).toFixed(1) : 0;
+
+            if (document.getElementById('infaqActiveName')) document.getElementById('infaqActiveName').textContent = activeProg.nama_program;
+            if (document.getElementById('infaqActiveDesc')) document.getElementById('infaqActiveDesc').textContent = activeProg.keterangan || 'Program penggalangan infaq & donasi jamaah.';
+            if (document.getElementById('infaqActivePercentText')) document.getElementById('infaqActivePercentText').textContent = `Progress Terkumpul (${percent}%)`;
+            if (document.getElementById('infaqActiveProgressRatio')) document.getElementById('infaqActiveProgressRatio').textContent = `${formatRupiah(terkumpul)} / ${formatRupiah(target)}`;
+            if (document.getElementById('infaqActiveTarget')) document.getElementById('infaqActiveTarget').textContent = formatRupiah(target);
+            if (document.getElementById('infaqActiveTerkumpul')) document.getElementById('infaqActiveTerkumpul').textContent = formatRupiah(terkumpul);
+
+            const pBar = document.getElementById('infaqActiveProgressBar');
+            if (pBar) {
+                pBar.style.width = percent + '%';
+                pBar.textContent = percent + '%';
+            }
+
+            // Render Tabel Daftar Seluruh Program
+            const tbody = document.getElementById('tableProgramInfaqBody');
+            const badgeCount = document.getElementById('badgeTotalProgramInfaq');
+            if (badgeCount) badgeCount.textContent = `${cachedProgramInfaq.length} Program`;
+
+            if (tbody) {
+                tbody.innerHTML = cachedProgramInfaq.map((p, idx) => {
+                    const isActive = p.is_active === true;
+                    const statusBadge = isActive 
+                        ? '<span class="badge badge-success px-2 py-1 font-weight-bold"><i class="fas fa-broadcast-tower mr-1"></i> Aktif di TV</span>'
+                        : '<span class="badge badge-secondary px-2 py-1 font-weight-bold">Tidak Aktif</span>';
+                    
+                    const btnAktif = !isActive 
+                        ? `<button class="btn btn-sm btn-outline-success mr-1 font-weight-bold" onclick="aktifkanProgramInfaqTV(${p.id})" title="Jadikan Aktif di TV Monitor"><i class="fas fa-check-circle mr-1"></i> Aktifkan di TV</button>`
+                        : '';
+
+                    return `
+                        <tr class="${isActive ? 'table-success-light' : ''}">
+                            <td class="text-center font-weight-bold">${idx + 1}</td>
+                            <td>
+                                <strong>${p.nama_program}</strong>
+                                ${isActive ? '<span class="badge badge-warning ml-2 text-dark font-weight-bold">Tayang di TV</span>' : ''}
+                            </td>
+                            <td class="font-weight-bold text-success">${formatRupiah(p.target_dana)}</td>
+                            <td><small class="text-muted">${p.keterangan || '-'}</small></td>
+                            <td class="text-center">${statusBadge}</td>
+                            <td class="text-center text-nowrap">
+                                ${btnAktif}
+                                <button class="btn btn-sm btn-outline-warning mr-1" onclick="bukaModalEditProgramInfaq(${p.id})" title="Edit Program"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="hapusProgramInfaq(${p.id})" title="Hapus Program" ${cachedProgramInfaq.length <= 1 ? 'disabled' : ''}><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        function bukaModalTambahProgramInfaq() {
+            document.getElementById('inputProgInfaqNama').value = '';
+            document.getElementById('inputProgInfaqTarget').value = '';
+            document.getElementById('inputProgInfaqKeterangan').value = '';
+            document.getElementById('checkProgInfaqAktifTV').checked = true;
+            $('#modalTambahProgramInfaq').modal('show');
+        }
+
+        async function simpanProgramInfaqBaru() {
+            const nama = document.getElementById('inputProgInfaqNama')?.value.trim();
+            const target = parseFloat(document.getElementById('inputProgInfaqTarget')?.value) || 0;
+            const ket = document.getElementById('inputProgInfaqKeterangan')?.value.trim() || '';
+            const isActive = document.getElementById('checkProgInfaqAktifTV')?.checked === true;
+
+            if (!nama || target <= 0) {
+                alert('Harap isi judul program dan target nominal dana dengan benar!');
+                return;
+            }
+
+            try {
+                // Jika dijadikan aktif, nonaktifkan program lain terlebih dahulu
+                if (isActive && SUPABASE_CONFIG.url) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?is_active=eq.true`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({ is_active: false })
+                    }).catch(() => {});
+                }
+
+                const payload = {
+                    nama_program: nama,
+                    target_dana: target,
+                    keterangan: ket,
+                    is_active: isActive
+                };
+
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq`, {
+                    method: 'POST',
+                    headers: {
+                        ...getSupabaseHeaders(),
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    $('#modalTambahProgramInfaq').modal('hide');
+                    await loadAllSupabaseData();
+                    alert(`Alhamdulillah! Program penggalangan infaq "${nama}" berhasil dibuat.`);
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.message || 'Gagal menyimpan ke Supabase');
+                }
+            } catch (e) {
+                const newId = Date.now();
+                if (isActive) {
+                    cachedProgramInfaq.forEach(p => p.is_active = false);
+                }
+                cachedProgramInfaq.unshift({
+                    id: newId,
+                    nama_program: nama,
+                    target_dana: target,
+                    keterangan: ket,
+                    is_active: isActive
+                });
+                localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+                renderProgramInfaqSection();
+                $('#modalTambahProgramInfaq').modal('hide');
+                alert(`Program penggalangan infaq "${nama}" berhasil disimpan.`);
+            }
+        }
+
+        function bukaModalEditProgramInfaq(id) {
+            const prog = cachedProgramInfaq.find(p => p.id == id);
+            if (!prog) return;
+
+            document.getElementById('editProgInfaqId').value = prog.id;
+            document.getElementById('editProgInfaqNama').value = prog.nama_program;
+            document.getElementById('editProgInfaqTarget').value = prog.target_dana;
+            document.getElementById('editProgInfaqKeterangan').value = prog.keterangan || '';
+            document.getElementById('editCheckProgInfaqAktifTV').checked = prog.is_active === true;
+
+            $('#modalEditProgramInfaq').modal('show');
+        }
+
+        async function simpanEditProgramInfaq() {
+            const id = document.getElementById('editProgInfaqId')?.value;
+            const nama = document.getElementById('editProgInfaqNama')?.value.trim();
+            const target = parseFloat(document.getElementById('editProgInfaqTarget')?.value) || 0;
+            const ket = document.getElementById('editProgInfaqKeterangan')?.value.trim() || '';
+            const isActive = document.getElementById('editCheckProgInfaqAktifTV')?.checked === true;
+
+            if (!id || !nama || target <= 0) {
+                alert('Harap isi judul dan target dana program!');
+                return;
+            }
+
+            try {
+                if (isActive && SUPABASE_CONFIG.url) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?id=neq.${id}&is_active=eq.true`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({ is_active: false })
+                    }).catch(() => {});
+                }
+
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?id=eq.${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        ...getSupabaseHeaders(),
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        nama_program: nama,
+                        target_dana: target,
+                        keterangan: ket,
+                        is_active: isActive
+                    })
+                });
+
+                if (res.ok) {
+                    $('#modalEditProgramInfaq').modal('hide');
+                    await loadAllSupabaseData();
+                    alert('Alhamdulillah! Perubahan program penggalangan infaq berhasil disimpan.');
+                } else {
+                    throw new Error('Gagal menyimpan ke server');
+                }
+            } catch (e) {
+                const prog = cachedProgramInfaq.find(p => p.id == id);
+                if (prog) {
+                    if (isActive) cachedProgramInfaq.forEach(p => p.is_active = false);
+                    prog.nama_program = nama;
+                    prog.target_dana = target;
+                    prog.keterangan = ket;
+                    prog.is_active = isActive;
+                    localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+                    renderProgramInfaqSection();
+                }
+                $('#modalEditProgramInfaq').modal('hide');
+                alert('Perubahan program berhasil disimpan.');
+            }
+        }
+
+        async function aktifkanProgramInfaqTV(id) {
+            try {
+                if (SUPABASE_CONFIG.url) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({ is_active: false })
+                    }).catch(() => {});
+
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?id=eq.${id}`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({ is_active: true })
+                    });
+                }
+            } catch (e) {}
+
+            cachedProgramInfaq.forEach(p => p.is_active = (p.id == id));
+            localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+            renderProgramInfaqSection();
+            alert('Alhamdulillah! Program berhasil diaktifkan untuk siaran Layar TV Monitor.');
+        }
+
+        async function hapusProgramInfaq(id) {
+            if (cachedProgramInfaq.length <= 1) {
+                alert('Minimal harus ada 1 program penggalangan infaq.');
+                return;
+            }
+            if (!confirm('Apakah Anda yakin ingin menghapus program penggalangan infaq ini?')) {
+                return;
+            }
+
+            try {
+                if (SUPABASE_CONFIG.url) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?id=eq.${id}`, {
+                        method: 'DELETE',
+                        headers: getSupabaseHeaders()
+                    });
+                }
+            } catch (e) {}
+
+            cachedProgramInfaq = cachedProgramInfaq.filter(p => p.id != id);
+            if (!cachedProgramInfaq.some(p => p.is_active)) {
+                cachedProgramInfaq[0].is_active = true;
+            }
+            localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+            renderProgramInfaqSection();
+            alert('Program penggalangan infaq berhasil dihapus.');
         }
 
         // Render Rotation Table (Menampilkan seluruh 17 halaman display TV)

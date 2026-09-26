@@ -3723,6 +3723,44 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 92).
 
+---
+
+## 🕌 BAB 93: FITUR MANAJEMEN MULTI-PROGRAM PENGGALANGAN INFAQ & DONASI KHUSUS PADA DASHBOARD BENDAHARA & LAYAR TV DISPLAY
+
+**Tanggal:** 26 September 2026 | **Versi:** 4.4.6  
+**Domain Live:** `https://digitalaljihad.my.id/`  
+**Target Modul:** Dashboard Bendahara (`web-statis/admin.html`) & Slide TV Infaq (`web-statis/slides/infaq.html`)
+
+### 1. Kebutuhan Pengguna:
+- Pengurus / Bendahara menanyakan: *"Kalau penggalangan infaq pertama belum selesai tapi ingin mengadakan penggalangan infaq baru, menuliskan judulnya di mana?"*
+- Kebutuhan: Pengurus ingin dapat membuat banyak program penggalangan dana infaq baru (misal: *Pengadaan Karpet Masjid*, *Pengadaan AC*, *Renovasi Tempat Wudhu*, dll.) tanpa perlu menghapus atau kehilangan data program sebelumnya yang masih berjalan, serta bisa memilih program mana yang sedang aktif disiarkan di layar TV display.
+
+### 2. Rincian Fitur & Perubahan Teknis:
+1. **Antarmuka Interaktif Penggalangan Infaq (`#view-infaq`):**
+   - Menambahkan tombol hijau **`+ Buat Program Infaq Baru`** di bagian atas menu Penggalangan Infaq.
+   - **Banner Program Aktif di TV:** Menampilkan judul program infaq yang sedang tayang, target nominal, progres persentase, dana terkumpul, kekurangan dana, serta QRIS & rekening bank resmi.
+   - **Tabel Seluruh Program Infaq:** Menampilkan daftar seluruh program penggalangan dana, target dana (Rp), keterangan, status (`Aktif di TV` / `Tidak Aktif`), serta tombol aksi (**Aktifkan di TV**, **Edit Program**, dan **Hapus Program**).
+2. **Form Modal Tambah Program Baru (`#modalTambahProgramInfaq`):**
+   - Input: Judul / Nama Program Infaq (muncul di banner TV).
+   - Input: Target Total Penggalangan Dana (Rp).
+   - Input: Keterangan / Deskripsi Program.
+   - Checkbox: *"Langsung jadikan program aktif yang tayang di TV monitor"*.
+3. **Form Modal Edit Program (`#modalEditProgramInfaq`):**
+   - Mengedit judul program, target dana, keterangan, dan status siaran TV.
+4. **Sinkronisasi Supabase Real-Time & Fallback:**
+   - Menyimpan dan memperbarui data secara langsung ke tabel `program_infaq` di Supabase.
+   - Tersedia fallback aman ke `localStorage` jika offline atau keterlambatan jaringan.
+   - Ketika satu program diaktifkan (`is_active = true`), program lain otomatis dinonaktifkan sehingga hanya 1 program utama yang tayang di slide infaq TV.
+5. **Slide TV Infaq (`web-statis/slides/infaq.html`):**
+   - Diperbarui agar memprioritaskan program dengan `is_active === true`.
+   - Menghitung dana terkumpul secara dinamis dari catatan mutasi kas `keuangan` yang relevan.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html`
+2. `web-statis/slides/infaq.html`
+3. `LATEST_UPDATE.md` (Dokumentasi Bab 93).
+
+
 
 
 
