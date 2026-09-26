@@ -4154,6 +4154,40 @@
                     </div>
                 </div>
             </div>
+    </div>
+
+    <!-- =======================================================
+         MODAL KONFIRMASI LOGOUT RESMI PENGURUS
+         ======================================================= -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 440px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header bg-gradient-danger text-white py-3 border-0">
+                    <h5 class="modal-title font-weight-bold" id="logoutModalLabel">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Konfirmasi Keluar Panel
+                    </h5>
+                    <button class="close text-white opacity-75" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body py-4 text-center px-4">
+                    <div class="mb-3">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-light text-danger shadow-sm" style="width: 75px; height: 75px; font-size: 2.2rem; border: 2px solid rgba(220, 53, 69, 0.2);">
+                            <i class="fas fa-power-off"></i>
+                        </span>
+                    </div>
+                    <h5 class="font-weight-bold text-gray-900 mb-2">Akhiri Sesi Pengurus?</h5>
+                    <p class="text-muted small mb-0">Apakah Anda yakin ingin keluar dari Panel Admin Masjid Jami' Al-Jihad? Sesi aktif Anda akan ditutup dengan aman.</p>
+                </div>
+                <div class="modal-footer bg-light border-0 justify-content-center py-3">
+                    <button class="btn btn-secondary px-4 font-weight-bold" type="button" data-dismiss="modal" style="border-radius: 10px;">
+                        <i class="fas fa-times mr-1"></i> Batal
+                    </button>
+                    <button class="btn btn-danger px-4 font-weight-bold shadow-sm" type="button" onclick="eksekusiLogout()" style="border-radius: 10px;">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Ya, Keluar Sekarang
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -6065,12 +6099,12 @@
                 }).join('');
             }
 
-            printWin.document.write(\`
+            printWin.document.write(`
                 <!DOCTYPE html>
                 <html lang="id">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Laporan Infaq - \${escapeHtml(prog.nama_program)}</title>
+                    <title>Laporan Infaq - ${escapeHtml(prog.nama_program)}</title>
                     <style>
                         @page { size: A4 portrait; margin: 15mm 20mm; }
                         body { font-family: 'Times New Roman', serif; color: #111; line-height: 1.35; font-size: 11pt; margin: 0; }
@@ -6106,32 +6140,32 @@
                     </div>
 
                     <div class="doc-title">LAPORAN PENERIMAAN INFAQ & DONASI KHUSUS</div>
-                    <div class="doc-prog">Program: \${escapeHtml(prog.nama_program)}</div>
+                    <div class="doc-prog">Program: ${escapeHtml(prog.nama_program)}</div>
 
                     <table class="meta-table">
                         <tr>
                             <td style="width: 25%; font-weight: bold;">Target Penggalangan</td>
                             <td style="width: 2%;">:</td>
-                            <td style="width: 28%; font-weight: bold;">Rp \${targetDana.toLocaleString('id-ID')}</td>
+                            <td style="width: 28%; font-weight: bold;">Rp ${targetDana.toLocaleString('id-ID')}</td>
                             <td style="width: 22%; font-weight: bold;">Jumlah Donatur</td>
                             <td style="width: 2%;">:</td>
-                            <td style="width: 21%;">\${donasiList.length} Orang / Muhsinin</td>
+                            <td style="width: 21%;">${donasiList.length} Orang / Muhsinin</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold; color: #047857;">Total Dana Terkumpul</td>
                             <td>:</td>
-                            <td style="font-weight: bold; color: #047857;">Rp \${totalTerkumpul.toLocaleString('id-ID')} (\${persentase}%)</td>
+                            <td style="font-weight: bold; color: #047857;">Rp ${totalTerkumpul.toLocaleString('id-ID')} (${persentase}%)</td>
                             <td style="font-weight: bold;">Status Tayang TV</td>
                             <td>:</td>
-                            <td>\${prog.is_active ? 'Aktif Tayang di TV' : 'Ditutup / Tidak Tayang'}</td>
+                            <td>${prog.is_active ? 'Aktif Tayang di TV' : 'Ditutup / Tidak Tayang'}</td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold; color: \${sisaDana > 0 ? '#b91c1c' : '#047857'};">Sisa Kekurangan</td>
+                            <td style="font-weight: bold; color: ${sisaDana > 0 ? '#b91c1c' : '#047857'};">Sisa Kekurangan</td>
                             <td>:</td>
-                            <td style="font-weight: bold; color: \${sisaDana > 0 ? '#b91c1c' : '#047857'};">\${sisaDana > 0 ? 'Rp ' + sisaDana.toLocaleString('id-ID') : 'Rp 0 (Target Terpenuhi)'}</td>
+                            <td style="font-weight: bold; color: ${sisaDana > 0 ? '#b91c1c' : '#047857'};">${sisaDana > 0 ? 'Rp ' + sisaDana.toLocaleString('id-ID') : 'Rp 0 (Target Terpenuhi)'}</td>
                             <td style="font-weight: bold;">Tanggal Laporan</td>
                             <td>:</td>
-                            <td>\${tglCetak}</td>
+                            <td>${tglCetak}</td>
                         </tr>
                     </table>
 
@@ -6146,10 +6180,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            \${rowsHtml}
+                            ${rowsHtml}
                             <tr class="total-row">
                                 <td colspan="3" style="text-align: right; text-transform: uppercase;">Total Penerimaan Infaq :</td>
-                                <td style="text-align: right; color: #047857;">Rp \${totalTerkumpul.toLocaleString('id-ID')}</td>
+                                <td style="text-align: right; color: #047857;">Rp ${totalTerkumpul.toLocaleString('id-ID')}</td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -6171,7 +6205,7 @@
                     </div>
                 </body>
                 </html>
-            \`);
+            `);
             printWin.document.close();
             printWin.focus();
         }
@@ -8165,9 +8199,34 @@
         }
 
         function confirmLogout() {
-            if (confirm('Apakah Anda yakin ingin keluar dari Panel Admin?')) {
-                AdminAuth.logout('login.html');
+            try {
+                if (typeof $ !== 'undefined' && $('#logoutModal').length) {
+                    $('#logoutModal').modal('show');
+                    return;
+                }
+            } catch (e) {
+                console.warn('Gagal membuka modal logout, fallback ke dialog browser:', e);
             }
+
+            if (confirm('Apakah Anda yakin ingin mengakhiri sesi dan keluar dari Panel Admin Masjid Jami\' Al-Jihad?')) {
+                eksekusiLogout();
+            }
+        }
+
+        function eksekusiLogout() {
+            try {
+                if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.logout === 'function') {
+                    AdminAuth.logout('login.html');
+                    return;
+                }
+            } catch (err) {
+                console.warn('AdminAuth.logout mengalami kendala, melakukan logout manual:', err);
+            }
+            try {
+                localStorage.removeItem('aljihad_auth_user');
+                sessionStorage.clear();
+            } catch (e) {}
+            window.location.replace('login.html');
         }
     </script>
 </body>

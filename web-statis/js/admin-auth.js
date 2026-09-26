@@ -403,8 +403,17 @@ const AdminAuth = {
      * Logout dan redirect ke login.html
      */
     logout(redirectUrl = 'login.html') {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
-        window.location.replace(redirectUrl);
+        try {
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+            sessionStorage.removeItem('auth_redirect_reason');
+        } catch (e) {
+            console.warn('Gagal membersihkan storage logout:', e);
+        }
+        try {
+            window.location.replace(redirectUrl);
+        } catch (e) {
+            window.location.href = redirectUrl;
+        }
     },
 
     /**
