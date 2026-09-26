@@ -532,26 +532,21 @@
                     const prog = programs.find(p => p.is_active === true) || programs[0];
                     if (prog.nama_program) document.getElementById('programName').textContent = prog.nama_program;
 
-                    const target = parseFloat(prog.target_dana) || 100000000;
-                    let terkumpul = parseFloat(prog.dana_terkumpul) || 0;
-                    if (terkumpul === 0) {
-                        try {
-                            const kasItems = await SupabaseDB.getKeuangan();
-                            if (kasItems && kasItems.length > 0) {
-                                const progNameLower = (prog.nama_program || '').toLowerCase();
-                                kasItems.forEach(item => {
-                                    const kat = (item.kategori || '').toLowerCase();
-                                    const desc = (item.deskripsi || item.uraian || '').toLowerCase();
-                                    const masuk = parseFloat(item.pemasukan) || 0;
-                                    if (masuk > 0 && (kat.includes('penggalangan infaq') || kat.includes('infaq renovasi') || desc.includes(progNameLower))) {
-                                        terkumpul += masuk;
-                                    }
-                                });
-                            }
-                        } catch (e) {}
-                    }
-                    if (terkumpul === 0 && (prog.id === 1 || !prog.id)) {
-                        terkumpul = 128450000;
+                    const target = parseFloat(prog.target_dana) || 36000000;
+                    let terkumpul = 0;
+                    let totalDonaturCount = 0;
+
+                    // Prioritaskan pembacaan donasi spesifik dari tabel donasi_infaq
+                    try {
+                        const donaturList = await SupabaseDB.getDonasiInfaq(prog.id);
+                        if (donaturList && donaturList.length > 0) {
+                            terkumpul = donaturList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
+                            totalDonaturCount = donaturList.length;
+                        }
+                    } catch (e) {}
+
+                    if (terkumpul === 0 && prog.dana_terkumpul) {
+                        terkumpul = parseFloat(prog.dana_terkumpul);
                     }
 
                     const sisa = Math.max(0, target - terkumpul);
@@ -560,7 +555,7 @@
                     document.getElementById('valTarget').textContent = 'Rp ' + formatRupiah(target);
                     document.getElementById('valTerkumpul').textContent = 'Rp ' + formatRupiah(terkumpul);
                     document.getElementById('valKekurangan').textContent = 'Rp ' + formatRupiah(sisa);
-                    if (prog.total_donatur) document.getElementById('valDonatur').textContent = prog.total_donatur + ' Muhsinin';
+                    document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Muhsinin';
 
                     document.getElementById('progressPercent').textContent = percent + '%';
                     document.getElementById('progressBarFill').style.width = percent + '%';
@@ -575,7 +570,7 @@
 
             if (window.SupabaseDB) {
                 SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'program_infaq' || payload.table === 'app_settings') {
+                    if (payload.table === 'program_infaq' || payload.table === 'donasi_infaq' || payload.table === 'app_settings') {
                         loadProgramInfaqData();
                     }
                 });

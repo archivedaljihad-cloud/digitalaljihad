@@ -3794,6 +3794,57 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 94).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html` (Sinkronisasi lokal).
 
+---
+
+## BAB 95: RESTRUKTURISASI SISTEM PENGGALANGAN INFAQ & DONATUR MENJADI IDENTIK DENGAN WEB DINAMIS (GAMBAR 2 & GAMBAR 3)
+
+### 1. Masalah & Kendala Pengguna
+1. **Kebingungan Pengoperasian & Data Terdistorsi:**
+   - Pengguna melaporkan bahwa saat membuat Program Infaq 2, program 1 seolah hilang, dan saat mencatat mutasi pemasukan kas, dana program 1 ikut tercatat/tercampur ke program 2.
+   - **Akar Masalah:**
+     - Pada sistem statis sebelumnya, donasi dicatat lewat Buku Kas & Transaksi Umum (`kategori = 'Penggalangan Infaq'`) secara global tanpa relasi `program_infaq_id`. Akibatnya seluruh uang masuk kas diakumulasikan ke semua program.
+     - Di tampilan admin statis sebelumnya, hanya menampilkan 1 banner program aktif saja tanpa adanya pemilih (*selector*) dropdown program yang sedang dikelola.
+2. **Kebutuhan Pengguna:**
+   - Mengubah antarmuka dan alur kerja pengelolaan penggalangan infaq agar **sama persis dengan Web Dinamis** (seperti Gambar 2 dan Gambar 3 pada referensi `https://digitalaljihad1.onrender.com/program-infaq`).
+
+### 2. Rincian Pembaruan Teknis & Implementasi Fitur Baru
+1. **Dropdown Selector Program & Kontrol Aksi (`web-statis/admin.html`):**
+   - Menambahkan dropdown selector **Pilih Program:** (`#selectProgramInfaq`), menampilkan seluruh program infaq yang terdaftar di Supabase lengkap dengan penanda bintang `★ (Tampil di TV)`.
+   - Mengganti program terpilih langsung memperbarui seluruh tampilan detail, progress bar, 4 stat box, formulir donasi, dan tabel penerimaan donatur khusus untuk program tersebut.
+   - Tombol status siaran TV: Badge *"Sedang Aktif di TV Monitor"* jika program aktif, atau tombol *"Aktifkan Tampil di TV"* jika belum aktif.
+   - Tombol *"Edit Target"* (membuka modal edit program) dan tombol *"Hapus"* (menghapus program beserta seluruh donasinya dengan konfirmasi).
+2. **Banner Detail Program & Progress Bar Real-Time:**
+   - Menampilkan judul program, keterangan, dan badge periode tanggal: `Periode: [tgl_mulai] s/d [tgl_selesai]`.
+   - Progres pencapaian dana terhitung dinamis: `[X]% Terkumpul` dengan animated progress bar.
+3. **4 Stat Box Ringkasan Donasi:**
+   - **TARGET DANA** (border-left-info): Target nominal penggalangan dana.
+   - **DANA TERKUMPUL** (border-left-success): Total donasi yang masuk khusus untuk program tersebut dari tabel `donasi_infaq`.
+   - **SISA KEKURANGAN** (border-left-danger): Selisih kekurangan dana target.
+   - **JUMLAH DONATUR** (border-left-warning): Total donatur terdaftar (`[X] Orang/Hamba Allah`).
+4. **Formulir "Catat Donasi Masuk" (Kolom Kiri, col-lg-4):**
+   - Tanggal Infaq (datepicker default hari ini).
+   - Nama Donatur + Checkbox *"Hamba Allah (Sembunyikan Nama di Layar TV)"* (otomatis menonaktifkan input teks jika dicentang).
+   - Nominal Infaq (Rp) dengan pemformatan titik ribuan otomatis (`oninput="formatRupiahInput(this)"`).
+   - Keterangan / Doa / Catatan donatur (opsional).
+   - Tombol *"Simpan Donasi Infaq"*: menyimpan data langsung ke tabel `donasi_infaq` di Supabase dengan `program_infaq_id = selectedProgramInfaqId`.
+5. **Tabel "Daftar Penerimaan Infaq Donatur" (Kolom Kanan, col-lg-8):**
+   - Header hijau islamic dengan badge total data (`[X] Data`) dan subtitle *Akan ditampilkan otomatis bergulir (scroll) di layar TV*.
+   - Tabel responsif memuat: No, Tanggal, Nama Donatur (ikon Hamba Allah atau User Circle), Nominal (Rp hijau tebal), Keterangan, dan Tombol Hapus (merah bulat dengan konfirmasi).
+   - Empty state informatif jika program terpilih belum memiliki catatan donasi.
+6. **Pemisahan dari Buku Kas Umum:**
+   - Menghilangkan opsi "Penggalangan Infaq" dari form Buku Kas Umum agar bendahara tidak mencampuradukkan kas operasional harian dengan donasi terikat program infaq.
+7. **Integrasi Slide Layar TV (`web-statis/slides/infaq.html`):**
+   - Membaca donasi spesifik dari tabel `donasi_infaq?program_infaq_id=eq.${prog.id}`.
+   - Mendengarkan subscription realtime Supabase pada tabel `program_infaq` dan `donasi_infaq` sehingga layar monitor TV selalu up-to-date saat ada donasi baru yang dicatat.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Layout identik web dinamis Gambar 2 & 3, selector program, form catat donasi, tabel donatur, helper & handler JS).
+2. `web-statis/slides/infaq.html` (Penghitungan dana dan donatur live dari tabel `donasi_infaq`).
+3. `web-statis/js/supabase-db.js` (Method baru `getDonasiInfaq(programId)`).
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 95).
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).
+
+
 
 
 

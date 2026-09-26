@@ -239,6 +239,28 @@
         },
 
         /**
+         * Ambil daftar donasi infaq per program atau keseluruhan
+         */
+        async getDonasiInfaq(programId = null) {
+            try {
+                const client = getClient();
+                if (client) {
+                    let query = client.from('donasi_infaq').select('*').order('tanggal', { ascending: false });
+                    if (programId) query = query.eq('program_infaq_id', programId);
+                    const { data, error } = await query;
+                    if (!error && data) {
+                        return data;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca donasi_infaq:', err);
+            }
+            const cached = localStorage.getItem('cached_donasi_infaq');
+            const allDonasi = cached ? JSON.parse(cached) : [];
+            return programId ? allDonasi.filter(d => d.program_infaq_id == programId) : allDonasi;
+        },
+
+        /**
          * Ambil jadwal Sholat Idul Fitri terbaru
          */
         async getIdulFitri() {
