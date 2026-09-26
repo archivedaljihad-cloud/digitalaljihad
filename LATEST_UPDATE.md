@@ -4170,3 +4170,42 @@ Setelah dilakukan audit menyeluruh pada engine JavaScript, ditemukan akar masala
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 102.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+---
+
+## 🚀 BAB 103: PEMBEBASAN MODAL LOGOUT DARI SARANG MODAL LAIN, PEMBAHARUAN SERVICE WORKER v2.0, & CACHE BUSTING
+
+### 1. Masalah yang Ditemukan (Second Deep Audit)
+Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan dialog pada peramban yang sedang aktif karena dua faktor struktural:
+1. **Unclosed DIV Tag pada Modal Sebelumnya (`#modalAiCopywriter`):**
+   - Modal Asisten AI Gemini (`#modalAiCopywriter`) kekurangan 1 tag penutup `</div>`.
+   - Akibatnya, elemen `#logoutModal` yang baru ditambahkan terperangkap secara fisik (*DOM nesting*) di dalam container `#modalAiCopywriter` yang berstatus `display: none` / `fade`.
+   - Saat jQuery Bootstrap memicu `.modal('show')` pada `#logoutModal`, modal tersebut tetap tidak terlihat di layar karena berada di dalam elemen induk yang disembunyikan oleh CSS Bootstrap.
+2. **Cache Service Worker (PWA Stale Cache):**
+   - Service Worker browser sebelumnya (`aljihad-signage-v1.3`) menerapkan *stale-while-revalidate* pada berkas statis, sehingga peramban pengguna masih menyajikan berkas HTML/JS lama dari memori cache peramban.
+
+---
+
+### 2. Solusi & Tindakan Perbaikan Paripurna
+
+1. **Koreksi Struktur DOM Modal (`web-statis/admin.html`):**
+   - Menambahkan tag penutup `</div>` yang presisi pada `#modalAiCopywriter` sehingga seluruh 10 modal dialog di `admin.html` kini memiliki jumlah *open divs* dan *close divs* yang 100% seimbang (diverifikasi melalui `check_modals.js`).
+   - `#logoutModal` kini menjadi elemen modal independen yang berdiri sendiri di level root dokumen.
+
+2. **Pemicu Ganda (Dual Trigger Modal):**
+   - Menambahkan atribut deklaratif bawaan Bootstrap: `data-toggle="modal" data-target="#logoutModal"` langsung pada tag `<a>` logout di sidebar maupun dropdown profil atas.
+   - Dengan pemicu deklaratif ini, Bootstrap akan langsung menampilkan pop-up modal konfirmasi keluar seketika saat tombol ditekan, tanpa bergantung pada eksekusi runtime JavaScript lainnya.
+
+3. **Peningkatan Versi Service Worker ke v2.0 & Network-First Strategy (`web-statis/sw.js`):**
+   - Mengubah `CACHE_NAME` menjadi `'aljihad-signage-v2.0'` yang otomatis memicu event `activate` untuk membersihkan dan menghapus seluruh cache versi lama dari peramban.
+   - Memasang aturan **Network-First** khusus untuk berkas-berkas administratif (`admin.html`, `login.html`, `admin-auth.js`) agar peramban selalu mengambil versi terbaru langsung dari server cloud.
+   - Melakukan *cache-busting* query versioning pada skrip otentikasi: `js/admin-auth.js?v=2.3`.
+
+---
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html`: Penyeimbangan tag modal, penambahan `data-toggle="modal"`, dan bump versi `admin-auth.js?v=2.3`.
+2. `web-statis/sw.js`: Peningkatan ke `aljihad-signage-v2.0` dan penambahan strategi Network-First untuk aset admin.
+3. `scratch/check_modals.js`: Skrip audit validasi pembukaan dan penutupan seluruh modal HTML.
+4. `LATEST_UPDATE.md`: Dokumentasi Bab 103.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+

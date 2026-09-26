@@ -1210,7 +1210,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-danger" href="javascript:void(0)" onclick="confirmLogout()">
+                <a class="nav-link text-danger" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal" onclick="confirmLogout()">
                     <i class="fas fa-fw fa-sign-out-alt text-danger"></i>
                     <span>Keluar (Logout)</span>
                 </a>
@@ -1313,7 +1313,7 @@
                                     <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-primary"></i> 
                                     <span>Dashboard Utama</span>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center text-danger font-weight-bold" href="javascript:void(0)" onclick="confirmLogout()">
+                                <a class="dropdown-item d-flex align-items-center text-danger font-weight-bold" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal" onclick="confirmLogout()">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i> 
                                     <span>Keluar (Logout)</span>
                                 </a>
@@ -4154,6 +4154,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 
     <!-- =======================================================
@@ -4198,7 +4199,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/supabase-config.js"></script>
-    <script src="js/admin-auth.js?v=2.2"></script>
+    <script src="js/admin-auth.js?v=2.3"></script>
     <script src="js/gemini-ai.js"></script>
 
     <script>

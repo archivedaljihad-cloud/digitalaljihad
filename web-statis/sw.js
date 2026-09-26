@@ -2,7 +2,7 @@
    SERVICE WORKER - AL-JIHAD DIGITAL SIGNAGE PWA
    Offline-First Resiliency & Intelligent Caching
    ===================================================== */
-const CACHE_NAME = 'aljihad-signage-v1.3';
+const CACHE_NAME = 'aljihad-signage-v2.0';
 const STATIC_ASSETS = [
     './',
     'index.html',
@@ -63,8 +63,11 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Strategi untuk Halaman HTML & Slide (Network-First -> Cache Fallback)
-    if (request.headers.get('accept') && request.headers.get('accept').includes('text/html')) {
+    // Strategi untuk Halaman HTML, Slide, & Script Admin/Auth (Network-First -> Cache Fallback)
+    const isHtml = request.headers.get('accept') && request.headers.get('accept').includes('text/html');
+    const isAdminAsset = request.url.includes('admin') || request.url.includes('login') || request.url.includes('auth');
+
+    if (isHtml || isAdminAsset) {
         event.respondWith(
             fetch(request)
                 .then((networkResponse) => {
@@ -77,8 +80,8 @@ self.addEventListener('fetch', (event) => {
                 .catch(async () => {
                     const cachedResponse = await caches.match(request);
                     if (cachedResponse) return cachedResponse;
-                    // Fallback jika halaman belum dicache: sajikan index.html
-                    return caches.match('index.html');
+                    if (isHtml) return caches.match('index.html');
+                    return null;
                 })
         );
         return;
