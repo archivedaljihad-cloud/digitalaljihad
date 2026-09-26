@@ -3642,6 +3642,59 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 1. `web-statis/admin.html` (Revisi tata letak presisi header kartu Waktu Sholat Hari Ini).
 2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 90).
 
+---
+
+## 🕌 BAB 91: PENINGKATAN KETEGASAN & KONTRAS TIPOGRAFI HEADER MASJID PADA LAYAR TV DISPLAY (OPSI A: ISLAMIC GOLD METALLIC & MULTI-LAYER BLACK OUTLINE)
+
+**Tanggal:** 26 September 2026 | **Versi:** 4.4.4  
+**Domain Live:** `https://digitalaljihad.my.id/`  
+**Target Komponen:** Header Nama Masjid (`.header h1`, `.header-section h1`, `h3.sub-header`) di Layar TV Display
+
+### 1. Kebutuhan Pengguna & Analisis Layar Fisik:
+- Pengguna mengirimkan foto aktual layar TV display masjid (menampilkan halaman jadwal sholat dengan latar belakang Ka'bah Masjidil Haram) dan menanyakan apakah tulisan **"MASJID JAMI' AL-JIHAD"** sudah cukup tegas terlihat.
+- Berdasarkan observasi visual layar TV di lapangan:
+  1. Tepat di belakang tulisan nama masjid terdapat bagian langit Ka'bah dengan pendaran awan terang dan pantulan cahaya (*flare/bokeh*).
+  2. Warna teks sebelumnya yang gelap/kehijauan dengan outline emas tipis terlihat kurang menggigit dan rentan "berbaur" atau silau saat dilihat dari jarak pandang jamaah (5–15 meter).
+- Pengguna memilih **Opsi A** (Warna Kuning Emas Metalik / Islamic Gold `#FFD700` dengan outline hitam tebal multi-arah).
+
+### 2. Rincian Teknis Implementasi Opsi A:
+1. **Pewarnaan Huruf Emas Islami Pekat (*Islamic Gold Metallic*):**
+   - Badan font kaligrafi *Masking Renta* diubah menjadi emas murni yang bersinar: `color: #FFD700 !important; -webkit-text-fill-color: #FFD700 !important;`.
+   - Warna ini senada dengan ornamen medali kaligrafi 3D Allah & Muhammad di pojok kiri/kanan, serta angka jadwal sholat 5 waktu yang terbukti sangat kontras dan mudah dibaca.
+2. **Penguncian Garis Tepi (*Text-Stroke* & 3D Multi-Layer Black Outline):**
+   - Menambahkan `-webkit-text-stroke: 1.5px #000000;` pada setiap kontur huruf.
+   - Menambahkan bayangan hitam solid multi-arah 8 mata angin (2px, 3px, 4px):
+     `2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000, 3px 3px 0 #000, -3px 3px 0 #000, 3px -3px 0 #000, -3px -3px 0 #000, 4px 4px 0 #000, -4px 4px 0 #000, 4px -4px 0 #000, -4px -4px 0 #000`.
+   - Menambahkan kedalaman 3D bayangan hitam pekat: `0 4px 10px rgba(0, 0, 0, 0.95), 0 8px 25px rgba(0, 0, 0, 0.98)`.
+   - Efek ini menghasilkan pemisah kontras yang mutlak (> 12:1), sehingga huruf emas tidak akan pernah silau atau tenggelam meskipun latar belakang berganti-ganti foto terang/awan.
+3. **Penajaman Sub-Header Alamat (`h3.sub-header`):**
+   - Mengubah bobot teks menjadi `font-weight: 600; color: #ffffff; opacity: 1;`.
+   - Diberikan outline hitam pekat keliling huruf `1px/2px 0 #000000` dan drop shadow `0 2px 8px rgba(0, 0, 0, 0.95)` sehingga tulisan *"GRAHA ASRI, CIKARANG UTARA, BEKASI"* terbaca tajam dan tidak pudar.
+4. **Penerapan Menyeluruh di Seluruh Modul Display TV:**
+   - Berkas Master CSS: `web-statis/css/partials-theme.css`, `web-statis/css/display-theme.css`, `public/css/display-theme.css`.
+   - Seluruh Slide TV: `ambulance.html`, `hikmah.html`, `infaq.html`, `keuangan.html`, `keuangan-summary.html`, `pengumuman.html`, `qris.html`, `qurban.html`, `slide.html`, `idul-adha.html`, `idul-fitri.html`, `jumat.blade.php`, `welcome.blade.php`, dan `partials/display-theme.blade.php`.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/css/partials-theme.css`
+2. `web-statis/css/display-theme.css`
+3. `web-statis/slides/ambulance.html`
+4. `web-statis/slides/hikmah.html`
+5. `web-statis/slides/infaq.html`
+6. `web-statis/slides/keuangan.html`
+7. `web-statis/slides/keuangan-summary.html`
+8. `web-statis/slides/pengumuman.html`
+9. `web-statis/slides/qris.html`
+10. `web-statis/slides/qurban.html`
+11. `web-statis/slides/slide.html`
+12. `web-statis/slides/idul-adha.html`
+13. `web-statis/slides/idul-fitri.html`
+14. `web-statis/about.html`
+15. `resources/views/partials/display-theme.blade.php`
+16. `resources/views/welcome.blade.php`
+17. `resources/views/jumat.blade.php`
+18. `public/css/display-theme.css`
+19. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 91).
+
 
 
 

@@ -263,13 +263,10 @@ body.theme-isya {
     text-transform: uppercase !important;
     background: none !important;
     -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: #01220e !important;
-    color: #01220e !important;
+    -webkit-text-fill-color: #FFD700 !important;
+    color: #FFD700 !important;
+    -webkit-text-stroke: 1.5px #000000;
     text-shadow:
-        1px 1px 0 #d4af37,
-        -1px 1px 0 #d4af37,
-        1px -1px 0 #d4af37,
-        -1px -1px 0 #d4af37,
         2px 2px 0 #000000,
         -2px 2px 0 #000000,
         2px -2px 0 #000000,
@@ -278,7 +275,12 @@ body.theme-isya {
         -3px 3px 0 #000000,
         3px -3px 0 #000000,
         -3px -3px 0 #000000,
-        0 5px 12px rgba(0, 0, 0, 0.95), 0 5px 14px rgba(0, 0, 0, 0.98) !important;
+        4px 4px 0 #000000,
+        -4px 4px 0 #000000,
+        4px -4px 0 #000000,
+        -4px -4px 0 #000000,
+        0 4px 10px rgba(0, 0, 0, 0.95),
+        0 8px 25px rgba(0, 0, 0, 0.98) !important;
     filter: none !important;
     margin: 0 0 -15px 0 !important;
     padding: 0 !important;
@@ -294,13 +296,22 @@ h3.sub-header,
 h2.sub-header {
     font-family: 'Poppins', sans-serif !important;
     font-size: 1.25rem !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     line-height: 1.2 !important;
     letter-spacing: 4px !important;
     color: #ffffff !important;
     text-transform: uppercase !important;
-    opacity: 0.95 !important;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important;
+    opacity: 1 !important;
+    text-shadow:
+        1px 1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px -1px 0 #000000,
+        2px 2px 0 #000000,
+        -2px 2px 0 #000000,
+        2px -2px 0 #000000,
+        -2px -2px 0 #000000,
+        0 2px 8px rgba(0, 0, 0, 0.95) !important;
     margin-top: 10px !important;
     margin-bottom: 6px !important;
     padding: 0 !important;
@@ -652,12 +663,15 @@ h2.sub-header {
         line-height: 1.2 !important;
         margin: 0 0 2px 0 !important;
         text-shadow:
-            1px 1px 0 #d4af37,
-            -1px 1px 0 #d4af37,
-            1px -1px 0 #d4af37,
-            -1px -1px 0 #d4af37,
-            1px 1px 4px rgba(0, 0, 0, 0.9),
-            0 0 10px rgba(255, 215, 0, 0.5) !important;
+            1px 1px 0 #000000,
+            -1px 1px 0 #000000,
+            1px -1px 0 #000000,
+            -1px -1px 0 #000000,
+            2px 2px 0 #000000,
+            -2px 2px 0 #000000,
+            2px -2px 0 #000000,
+            -2px -2px 0 #000000,
+            0 2px 8px rgba(0, 0, 0, 0.95) !important;
     }
 
     .header h2.sub-header,
