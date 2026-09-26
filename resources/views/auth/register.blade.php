@@ -242,8 +242,8 @@
                         </a>
                     </p>
                     <p>
-                        <a href="mailto:admin@aljihad.com">
-                            <i class="fas fa-envelope"></i> Email: admin@aljihad.com
+                        <a href="mailto:archived.aljihad@gmail.com">
+                            <i class="fas fa-envelope"></i> Email: archived.aljihad@gmail.com
                         </a>
                     </p>
                 </div>

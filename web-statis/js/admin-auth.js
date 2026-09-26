@@ -13,7 +13,7 @@ const DEFAULT_AUTH_USERS = [
     {
         id: 3,
         name: 'Bpk. H. M. Sholeh',
-        email: 'admin@aljihad.com',
+        email: 'archived.aljihad@gmail.com',
         username: 'admin',
         password: 'admin123',
         role: 'admin',
@@ -89,7 +89,7 @@ const AdminAuth = {
                 finalUsers.push({
                     id: assignedId,
                     name: u.name || (r === 'admin' ? 'Bpk. H. M. Sholeh' : (r === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Ahmad')),
-                    email: u.email || (r === 'admin' ? 'admin@aljihad.com' : (r === 'bendahara' ? 'bendahara@aljihad.com' : 'petugas@aljihad.com')),
+                    email: u.email || (r === 'admin' ? 'archived.aljihad@gmail.com' : (r === 'bendahara' ? 'bendahara@aljihad.com' : 'petugas@aljihad.com')),
                     username: u.username || (r === 'admin' ? 'admin' : (r === 'bendahara' ? 'bendahara' : 'operator')),
                     password: u.password || (r === 'admin' ? 'admin123' : (r === 'bendahara' ? 'bendahara123' : 'operator123')),
                     role: r,

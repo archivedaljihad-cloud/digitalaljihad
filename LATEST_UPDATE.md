@@ -3987,5 +3987,41 @@ Pengguna menanyakan status kebersihan sistem dari jejak pengembang lama maupun d
 9. `LATEST_UPDATE.md`: Dokumentasi Bab 98.
 10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
 
+---
+
+## 📌 BAB 99: PENYELARASAN EMAIL ADMIN UTAMA KE ARCHIVED.ALJIHAD@GMAIL.COM & PENULISAN ULANG TOTAL SEJARAH LAHIRNYA WEB STATIS DI README.MD
+
+### 1. Latar Belakang & Arahan Pengguna
+Pengguna menegaskan bahwa Web Statis ini telah berevolusi total hingga 1000% dari sistem aslinya dan tidak boleh lagi membawa atribut aplikasi web dinamis lama yang rumit, rentan, dan usang jika nantinya diimplementasikan di masjid-masjid lain di luar Al-Jihad:
+1. **Penyelarasan Email Akun Super Admin & Pemulihan:**
+   - Mengubah seluruh referensi email `admin@aljihad.com` menjadi email aktif resmi: **`archived.aljihad@gmail.com`**.
+   - Email ini menjadi kanal utama untuk keperluan konfirmasi, pencadangan (*backup*), dan reset kata sandi darurat.
+   - Nomor kontak resmi tetap terpusat di WhatsApp **`0877 5876 7000`**.
+2. **Penulisan Ulang Total `README.md`:**
+   - Menghapus total isi lama `README.md` dan menggantinya dengan narasi sejarah aktual lahirnya Web Statis: berawal dari ide web dinamis (Laravel + MySQL) yang di lapangan menemui banyak kendala fatal (server sering down, biaya mahal, database corrupt akibat mati lampu, dan display TV macet saat internet putus).
+   - Menegaskan transformasi ke arsitektur Web Statis Modern Serverless (Cloudflare Pages + Supabase Realtime + Service Worker PWA Offline Resilience) yang bebas beban server, anti-down, dan 100% tahan pemadaman internet.
+
+### 2. Rincian Perubahan Teknis
+1. **Pembaruan Alamat Email (`archived.aljihad@gmail.com`):**
+   - `web-statis/login.html`: Nilai default input login dan identitas role preset Admin diubah menjadi `archived.aljihad@gmail.com`.
+   - `web-statis/js/admin-auth.js`: Data `DEFAULT_AUTH_USERS` untuk akun Super Admin dan fallback `getUsers()` diperbarui menjadi `archived.aljihad@gmail.com`.
+   - `web-statis/admin.html`: Tabel hak akses awal, placeholder modal edit akun, dan logika `renderUsersTable()` diperbarui menggunakan `archived.aljihad@gmail.com`.
+   - `resources/views/auth/register.blade.php`: Tautan `mailto:` kontak bantuan diselaraskan ke `archived.aljihad@gmail.com`.
+2. **Penulisan Ulang Dokumen [`README.md`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/README.md):**
+   - Menuliskan bab khusus: *"SEJARAH & LATAR BELAKANG KELAHIRAN WEB STATIS"*.
+   - Menguraikan 4 kendala utama web dinamis lama: biaya server mahal, kerentanan database lokal corrupt, ketiadaan ketahanan offline, dan atribut bawaan template yang kaku.
+   - Menguraikan solusi revolusioner Web Statis: Cloudflare Edge Network, Supabase Realtime WebSockets, dan PWA Service Worker caching.
+   - Menyajikan tabel 3 Hak Akses Resmi Pengurus (Super Admin, Bendahara, Operator TV) lengkap dengan kredensial bawaan dan kontak resmi.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/login.html`: Penyelarasan email default login Super Admin.
+2. `web-statis/js/admin-auth.js`: Penyelarasan email akun resmi Super Admin.
+3. `web-statis/admin.html`: Penyelarasan email di markup, modal, dan tabel hak akses.
+4. `resources/views/auth/register.blade.php`: Penyelarasan mailto link.
+5. `README.md`: Penulisan ulang total dokumen sejarah dan identitas sistem.
+6. `LATEST_UPDATE.md`: Dokumentasi Bab 99.
+7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
+
+
 
 
