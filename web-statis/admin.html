@@ -1243,15 +1243,42 @@
                                 أَهْلًا وَسَهْلًا • Ahlan Wa Sahlan
                             </div>
                             <div class="hero-greeting-time" id="heroGreetingTime">
-                                Selamat Sore,
+                                Selamat Datang,
                             </div>
                             <div class="hero-main-title" id="welcomeHeroTitle">
-                                Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)</span>!
+                                Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Pengurus Masjid Jami' Al Jihad</span>!
                             </div>
                             <div class="hero-sub-desc">
                                 Panel Kontrol Web Statis Masjid Jami' Al-Jihad. Seluruh perubahan data akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display melalui Supabase BaaS.
                             </div>
                         </div>
+                        <script>
+                            (function() {
+                                try {
+                                    var raw = localStorage.getItem('aljihad_auth_user');
+                                    if (raw) {
+                                        var u = JSON.parse(raw);
+                                        var r = (u.role || '').toLowerCase();
+                                        var h = new Date().getHours();
+                                        var s = 'Selamat Malam,';
+                                        if (h >= 3 && h < 11) s = 'Selamat Pagi,';
+                                        else if (h >= 11 && h < 15) s = 'Selamat Siang,';
+                                        else if (h >= 15 && h < 18) s = 'Selamat Sore,';
+
+                                        var d = "Bpk. H. M. Sholeh (Super Admin Masjid Jami' Al Jihad)";
+                                        if (r === 'bendahara') {
+                                            d = "Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)";
+                                        } else if (r === 'petugas') {
+                                            d = "Bpk. Ust. Ahmad (Pengurus / Operator Masjid Jami' Al Jihad)";
+                                        }
+                                        var timeEl = document.getElementById('heroGreetingTime');
+                                        var userEl = document.getElementById('heroGreetingUser');
+                                        if (timeEl) timeEl.textContent = s;
+                                        if (userEl) userEl.textContent = d;
+                                    }
+                                } catch(e) {}
+                            })();
+                        </script>
 
                         <!-- Row Kartu Metrik Dinamis Berdasarkan Peran -->
                         <div class="row mb-4">
@@ -3710,7 +3737,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/supabase-config.js"></script>
-    <script src="js/admin-auth.js"></script>
+    <script src="js/admin-auth.js?v=2.2"></script>
     <script src="js/gemini-ai.js"></script>
 
     <script>
@@ -4071,8 +4098,73 @@
                 }
             }
 
+            // Update Welcome Hero Banner Greeting Sesuai Peran Aktif Pengguna
+            updateWelcomeBannerGreeting(user);
+
             // Render ulang tabel pengguna sesuai hak akses terkini
             renderUsersTable();
+        }
+
+        // Helper: Pembaruan Banner Sapaan Waktu & Gelar Resmi Berdasarkan Peran
+        function updateWelcomeBannerGreeting(user) {
+            if (!user) return;
+            const hours = new Date().getHours();
+            let salamWaktu = 'Selamat Malam,';
+            if (hours >= 3 && hours < 11) salamWaktu = 'Selamat Pagi,';
+            else if (hours >= 11 && hours < 15) salamWaktu = 'Selamat Siang,';
+            else if (hours >= 15 && hours < 18) salamWaktu = 'Selamat Sore,';
+
+            const role = (user.role || '').toLowerCase();
+            const rawName = (user.name || '').trim();
+            const cleanName = rawName.replace(/\s*\([^)]*\)\s*$/g, '').trim();
+
+            let displayName = cleanName;
+            let roleSuffix = '';
+
+            if (role === 'bendahara' || cleanName.toLowerCase().includes('utut') || cleanName.toLowerCase().includes('sudirman')) {
+                if (cleanName.toLowerCase().includes('utut') || cleanName.toLowerCase().includes('sudirman') || !cleanName || cleanName.toLowerCase() === 'bendahara') {
+                    displayName = "Bpk. H. Utut Priastya";
+                } else {
+                    if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak')) {
+                        displayName = 'Bpk. ' + displayName;
+                    }
+                }
+                roleSuffix = "(Bendahara Masjid Jami' Al Jihad)";
+            } else if (role === 'admin' || cleanName.toLowerCase().includes('admin') || cleanName.toLowerCase().includes('sholeh')) {
+                if (cleanName.toLowerCase() === 'administrator' || cleanName.toLowerCase() === 'admin' || cleanName.toLowerCase().includes('sholeh') || !cleanName) {
+                    displayName = "Bpk. H. M. Sholeh";
+                } else {
+                    if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak')) {
+                        displayName = 'Bpk. ' + displayName;
+                    }
+                }
+                roleSuffix = "(Super Admin Masjid Jami' Al Jihad)";
+            } else {
+                // Petugas / Operator
+                if (cleanName.toLowerCase().includes('ahmad') || cleanName.toLowerCase().includes('takmir') || cleanName.toLowerCase() === 'operator' || cleanName.toLowerCase() === 'petugas' || !cleanName) {
+                    displayName = "Bpk. Ust. Ahmad";
+                } else {
+                    if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak') && !displayName.toLowerCase().startsWith('ust.')) {
+                        displayName = 'Bpk. ' + displayName;
+                    }
+                }
+                roleSuffix = "(Pengurus / Operator Masjid Jami' Al Jihad)";
+            }
+
+            const greetingTimeEl = document.getElementById('heroGreetingTime');
+            if (greetingTimeEl) {
+                greetingTimeEl.textContent = salamWaktu;
+            }
+
+            const heroGreetingUserEl = document.getElementById('heroGreetingUser');
+            if (heroGreetingUserEl) {
+                heroGreetingUserEl.textContent = `${displayName} ${roleSuffix}`;
+            }
+
+            const welcomeHeroTitleEl = document.getElementById('welcomeHeroTitle');
+            if (welcomeHeroTitleEl) {
+                welcomeHeroTitleEl.innerHTML = `Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">${displayName} ${roleSuffix}</span>!`;
+            }
         }
 
         // 3. Switch Role Instan (Demo Mode)

@@ -3868,7 +3868,14 @@ Pengguna menginginkan agar banner sapaan pada dashboard admin diselaraskan denga
    - **Menghilangkan Watermark Kotak Silang:** Menghapus/menonaktifkan pseudo-element `.welcome-hero-banner::after` yang sebelumnya memuat ikon `\f663` yang terdeteksi sebagai karakter silang (missing glyph).
    - **Pemisahan Baris Sapaan:** Menjadikan sapaan waktu sebagai baris tersendiri di atas kalimat selamat datang:
      - Baris 1: `<div class="hero-greeting-time" id="heroGreetingTime">Selamat Sore,</div>`
-     - Baris 2: `<div class="hero-main-title" id="welcomeHeroTitle">Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)</span>!</div>`
+     - Baris 2: `<div class="hero-main-title" id="welcomeHeroTitle">Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">...</span>!</div>`
+   - **Perbaikan Isolasi Peran Sapaan (Solusi Masalah Semua Peran Muncul Nama Bendahara):**
+     - Mengganti teks HTML statis default dari nama hardcode bendahara menjadi placeholder netral dan menyematkan inline script rendering instan di bawah banner HTML sehingga browser langsung menginjeksi salam yang tepat sesuai sesi login `aljihad_auth_user` sebelum file JS eksternal selesai dimuat:
+       - **Super Admin:** `Selamat Datang, Bpk. H. M. Sholeh (Super Admin Masjid Jami' Al Jihad)!`
+       - **Bendahara:** `Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)!`
+       - **Petugas / Operator:** `Selamat Datang, Bpk. Ust. Ahmad (Pengurus / Operator Masjid Jami' Al Jihad)!`
+     - Menambahkan pemanggilan langsung `updateWelcomeBannerGreeting(user)` di dalam `applyCurrentUserState(user)` pada `admin.html` agar tidak semata-mata bergantung pada cache file `admin-auth.js`.
+     - Menaikkan versi cache PWA di `sw.js` ke `aljihad-signage-v1.3` dan menambahkan cache buster query string `js/admin-auth.js?v=2.2`.
    - Menambahkan pembaruan sapaan waktu otomatis di dalam interval detik `startTopbarClock()` sehingga teks berganti tepat waktu saat pergantian jam tanpa perlu me-reload halaman.
 2. **`web-statis/js/admin-auth.js`:**
    - Memperbarui `DEFAULT_AUTH_USERS` dengan nama resmi: `Bpk. H. M. Sholeh` (Admin), `Bpk. H. Utut Priastya` (Bendahara), dan `Bpk. Ust. Ahmad` (Petugas).
@@ -3879,9 +3886,10 @@ Pengguna menginginkan agar banner sapaan pada dashboard admin diselaraskan denga
    - Menyelaraskan teks heading dashboard dan kartu sambutan (*Welcome Card*) dengan struktur dua baris salam waktu lokal (`Selamat Pagi/Siang/Sore/Malam,`) dan sapaan gelar resmi masjid yang sama.
 
 ### 3. Berkas yang Terkait / Diperbarui:
-1. `web-statis/admin.html` (Hero banner 2 baris, CSS display none hero-badges-row, hapus watermark ::after, clock interval sync).
-2. `web-statis/js/admin-auth.js` (Method greeting waktu berakhiran koma, format sapaan gelar masjid, RBAC banner inject).
-3. `resources/views/home.blade.php` (Blade template dashboard Laravel).
-4. `LATEST_UPDATE.md` (Dokumentasi Bab 96).
-5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).
+1. `web-statis/admin.html` (Hero banner 2 baris, inline instant rendering script, updateWelcomeBannerGreeting, hapus watermark ::after, clock interval sync, cache-buster script tag).
+2. `web-statis/sw.js` (Pembaruan CACHE_NAME ke aljihad-signage-v1.3).
+3. `web-statis/js/admin-auth.js` (Method greeting waktu berakhiran koma, format sapaan gelar masjid, RBAC banner inject).
+4. `resources/views/home.blade.php` (Blade template dashboard Laravel).
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 96).
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).
 
