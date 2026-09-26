@@ -382,19 +382,20 @@ const AdminAuth = {
     getGreetingWaktu() {
         const hours = new Date().getHours();
         if (hours >= 3 && hours < 11) {
-            return 'Selamat Pagi';
+            return 'Selamat Pagi,';
         } else if (hours >= 11 && hours < 15) {
-            return 'Selamat Siang';
+            return 'Selamat Siang,';
         } else if (hours >= 15 && hours < 18) {
-            return 'Selamat Sore';
+            return 'Selamat Sore,';
         } else {
-            return 'Selamat Malam';
+            return 'Selamat Malam,';
         }
     },
 
     /**
      * Format Sapaan Selamat Datang Lengkap Sesuai Peran & Gelar Masjid
-     * Contoh: "Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)"
+     * Contoh Baris 1: "Selamat Sore,"
+     * Contoh Baris 2: "Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)!"
      */
     getFormattedGreeting(user) {
         const salamWaktu = this.getGreetingWaktu();
@@ -403,7 +404,7 @@ const AdminAuth = {
                 salamWaktu,
                 displayName: "Bpk. Pengurus",
                 roleSuffix: "(Masjid Jami' Al Jihad)",
-                fullText: `${salamWaktu}, Selamat Datang di Masjid Jami' Al Jihad!`
+                fullText: `${salamWaktu}\nSelamat Datang di Masjid Jami' Al Jihad!`
             };
         }
 
@@ -452,7 +453,7 @@ const AdminAuth = {
             salamWaktu,
             displayName,
             roleSuffix,
-            fullText: `${salamWaktu}, Selamat Datang, ${displayName} ${roleSuffix}!`
+            fullText: `${salamWaktu}\nSelamat Datang, ${displayName} ${roleSuffix}!`
         };
     },
 
@@ -479,10 +480,16 @@ const AdminAuth = {
         // 2. Format Sapaan Selamat Datang Lengkap Berdasarkan Waktu & Peran
         const greetingData = this.getFormattedGreeting(user);
 
-        // Update Welcome Hero Banner Title jika elemen ada
+        // Update Elemen Salam Waktu (Baris 1: Misal "Selamat Sore,")
+        const greetingTimeEl = document.getElementById('heroGreetingTime');
+        if (greetingTimeEl) {
+            greetingTimeEl.textContent = greetingData.salamWaktu;
+        }
+
+        // Update Elemen Selamat Datang & Nama (Baris 2: Misal "Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)!")
         const heroTitleEl = document.getElementById('welcomeHeroTitle');
         if (heroTitleEl) {
-            heroTitleEl.innerHTML = `<span class="hero-greeting-time">${greetingData.salamWaktu}</span>, Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold">${greetingData.displayName} ${greetingData.roleSuffix}</span>!`;
+            heroTitleEl.innerHTML = `Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">${greetingData.displayName} ${greetingData.roleSuffix}</span>!`;
         }
 
         // 3. Update Label Profil di Sidebar dan Topbar

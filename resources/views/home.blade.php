@@ -54,7 +54,8 @@
         <h1 class="h3 mb-0 text-gray-800">
             <i class="fas fa-tachometer-alt"></i> {{ __('Dashboard') }}
         </h1>
-        <p class="text-muted mt-1 mb-0">{{ $salamWaktu }}, Selamat Datang, <strong class="text-success">{{ $displayName }} {{ $roleLabel }}</strong>!</p>
+        <div class="h5 font-weight-bold text-dark mt-2 mb-1">{{ $salamWaktu }},</div>
+        <p class="text-muted mt-0 mb-0">Selamat Datang, <strong class="text-success">{{ $displayName }} {{ $roleLabel }}</strong>!</p>
     </div>
     <div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" id="quickActionsDropdown" data-toggle="dropdown">
@@ -137,7 +138,8 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-8">
-                        <h4 class="mb-2">{{ $salamWaktu }}, Selamat Datang di Sistem Informasi Masjid</h4>
+                        <h4 class="mb-1">{{ $salamWaktu }},</h4>
+                        <h5 class="mb-2 font-weight-bold">Selamat Datang di Sistem Informasi Masjid</h5>
                         <p class="mb-0">Selamat bertugas, <strong>{{ $displayName }} {{ $roleLabel }}</strong>. Kelola jadwal sholat, pengumuman, keuangan, dan tampilan TV digital dengan mudah.</p>
                         <small class="opacity-75">Terakhir login: {{ auth()->user()->updated_at->diffForHumans() ?? 'Baru saja' }}</small>
                     </div>

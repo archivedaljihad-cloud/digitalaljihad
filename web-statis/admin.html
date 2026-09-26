@@ -498,16 +498,10 @@
             border: 1px solid rgba(201, 160, 61, 0.25);
         }
 
+        /* Hapus watermark kotak silang (fa-mosque missing glyph) */
         .welcome-hero-banner::after {
-            content: "\f663";
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 20px;
-            bottom: -25px;
-            font-size: 140px;
-            color: rgba(255, 255, 255, 0.04);
-            pointer-events: none;
+            display: none !important;
+            content: none !important;
         }
 
         .hero-arabic-title {
@@ -515,14 +509,24 @@
             font-size: 1.6rem;
             color: var(--islamic-gold-bright);
             line-height: 1.2;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+        }
+
+        .hero-greeting-time {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            margin-bottom: 3px;
+            line-height: 1.25;
         }
 
         .hero-main-title {
             font-size: 1.35rem;
             font-weight: 800;
             letter-spacing: 0.3px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            line-height: 1.35;
         }
 
         .hero-sub-desc {
@@ -1238,8 +1242,11 @@
                             <div class="hero-arabic-title">
                                 أَهْلًا وَسَهْلًا • Ahlan Wa Sahlan
                             </div>
+                            <div class="hero-greeting-time" id="heroGreetingTime">
+                                Selamat Sore,
+                            </div>
                             <div class="hero-main-title" id="welcomeHeroTitle">
-                                <span class="hero-greeting-time" id="heroGreetingTime">Selamat</span>, Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)</span>!
+                                Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)</span>!
                             </div>
                             <div class="hero-sub-desc">
                                 Panel Kontrol Web Statis Masjid Jami' Al-Jihad. Seluruh perubahan data akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display melalui Supabase BaaS.
