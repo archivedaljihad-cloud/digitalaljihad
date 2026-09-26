@@ -53,38 +53,74 @@ const USERS_LIST_STORAGE_KEY = 'aljihad_users_list';
 
 const AdminAuth = {
     /**
-     * Mengambil daftar seluruh user (dari localStorage atau fallback DEFAULT_AUTH_USERS)
+     * Mengambil daftar seluruh user (Tepat 3 Akun Resmi: Super Admin id 3, Bendahara id 1, Petugas id 2)
+     * Otomatis membuang akun duplikat atau akun lama seperti adminsholeh@admin.com
      */
     getUsers() {
+        let storedUsers = [];
         try {
             const raw = localStorage.getItem(USERS_LIST_STORAGE_KEY);
             if (raw) {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    const sanitized = parsed.filter(u => u && typeof u === 'object' && (u.name || u.email));
-                    if (sanitized.length > 0) {
-                        return sanitized.map(u => ({
-                            id: u.id || 1,
-                            name: u.name || 'Pengguna',
-                            email: u.email || 'user@aljihad.com',
-                            username: u.username || (u.email ? u.email.split('@')[0] : 'user'),
-                            password: u.password || 'admin123',
-                            role: u.role || (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas')),
-                            role_id: u.role_id || (u.role === 'admin' ? 3 : (u.role === 'bendahara' ? 1 : 2)),
-                            role_label: u.role_label || (u.role === 'admin' ? 'Super Admin' : (u.role === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator')),
-                            role_icon: u.role_icon || (u.role === 'admin' ? 'fa-shield-alt' : (u.role === 'bendahara' ? 'fa-wallet' : 'fa-tv')),
-                            color: u.color || (u.role === 'admin' ? '#ffd700' : (u.role === 'bendahara' ? '#10b981' : '#38bdf8'))
-                        }));
-                    }
+                    storedUsers = parsed.filter(u => {
+                        if (!u || typeof u !== 'object') return false;
+                        const em = (u.email || '').toLowerCase().trim();
+                        // Buang akun duplikat adminsholeh@admin.com atau yang bukan 3 akun resmi
+                        if (em === 'adminsholeh@admin.com' || em === 'admin@admin.com') return false;
+                        return true;
+                    });
                 }
             }
         } catch (e) {
             console.warn('Gagal membaca users dari localStorage:', e);
         }
+
+        const OFFICIAL_ROLES = ['admin', 'bendahara', 'petugas'];
+        const finalUsers = [];
+        const seenRoles = new Set();
+
+        // 1. Ambil dari user yang tersimpan (maksimal 1 per peran)
+        storedUsers.forEach(u => {
+            const r = (u.role || (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas'))).toLowerCase();
+            if (OFFICIAL_ROLES.includes(r) && !seenRoles.has(r)) {
+                seenRoles.add(r);
+                const assignedId = (r === 'admin' ? 3 : (r === 'bendahara' ? 1 : 2));
+                finalUsers.push({
+                    id: assignedId,
+                    name: u.name || (r === 'admin' ? 'Bpk. H. M. Sholeh' : (r === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Ahmad')),
+                    email: u.email || (r === 'admin' ? 'admin@aljihad.com' : (r === 'bendahara' ? 'bendahara@aljihad.com' : 'petugas@aljihad.com')),
+                    username: u.username || (r === 'admin' ? 'admin' : (r === 'bendahara' ? 'bendahara' : 'operator')),
+                    password: u.password || (r === 'admin' ? 'admin123' : (r === 'bendahara' ? 'bendahara123' : 'operator123')),
+                    role: r,
+                    role_id: assignedId,
+                    role_label: (r === 'admin' ? 'Super Admin' : (r === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator')),
+                    role_icon: (r === 'admin' ? 'fa-shield-alt' : (r === 'bendahara' ? 'fa-wallet' : 'fa-tv')),
+                    color: (r === 'admin' ? '#ffd700' : (r === 'bendahara' ? '#10b981' : '#38bdf8'))
+                });
+            }
+        });
+
+        // 2. Lengkapi peran resmi yang belum ada dari DEFAULT_AUTH_USERS
+        DEFAULT_AUTH_USERS.forEach(def => {
+            if (!seenRoles.has(def.role)) {
+                seenRoles.add(def.role);
+                finalUsers.push(Object.assign({}, def));
+            }
+        });
+
+        // 3. Urutkan baku: Super Admin (ID 3), Bendahara (ID 1), Operator TV (ID 2)
+        finalUsers.sort((a, b) => {
+            const order = { admin: 1, bendahara: 2, petugas: 3 };
+            return (order[a.role] || 99) - (order[b.role] || 99);
+        });
+
+        // Simpan daftar bersih ini kembali ke localStorage agar data kotor di browser user langsung hilang
         try {
-            localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(DEFAULT_AUTH_USERS));
+            localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(finalUsers));
         } catch (e) {}
-        return JSON.parse(JSON.stringify(DEFAULT_AUTH_USERS));
+
+        return finalUsers;
     },
 
     /**
@@ -157,7 +193,7 @@ const AdminAuth = {
 
         // Jika user yang diedit adalah akun yang sedang aktif login, perbarui data sesinya juga
         const currentActive = this.getCurrentUser();
-        if (currentActive && String(currentActive.id) === String(userId)) {
+        if (currentActive && (String(currentActive.id) === String(userId) || currentActive.role === users[index].role)) {
             currentActive.name = users[index].name;
             currentActive.email = users[index].email;
             currentActive.username = users[index].username;
@@ -192,11 +228,31 @@ const AdminAuth = {
 
     /**
      * Mengambil sesi login user saat ini dari localStorage
+     * Selalu disinkronkan dengan data terbaru hasil edit akun oleh Super Admin
      */
     getCurrentUser() {
         try {
             const raw = localStorage.getItem(AUTH_STORAGE_KEY);
-            return raw ? JSON.parse(raw) : null;
+            if (!raw) return null;
+            const user = JSON.parse(raw);
+            if (!user) return null;
+
+            // Selalu sinkronkan nama profil dengan data terbaru di USERS_LIST_STORAGE_KEY
+            try {
+                const rawList = localStorage.getItem(USERS_LIST_STORAGE_KEY);
+                if (rawList) {
+                    const list = JSON.parse(rawList);
+                    if (Array.isArray(list)) {
+                        const matched = list.find(u => String(u.id) === String(user.id) || (u.role && u.role === user.role));
+                        if (matched && matched.name) {
+                            user.name = matched.name;
+                            if (matched.email) user.email = matched.email;
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            return user;
         } catch (e) {
             console.error('Gagal membaca sesi auth:', e);
             return null;
@@ -393,9 +449,8 @@ const AdminAuth = {
     },
 
     /**
-     * Format Sapaan Selamat Datang Lengkap Sesuai Peran & Gelar Masjid
-     * Contoh Baris 1: "Selamat Sore,"
-     * Contoh Baris 2: "Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)!"
+     * Format Sapaan Selamat Datang Lengkap Sesuai Nama Akun yang Diedit & Peran Masjid
+     * Menggunakan Nama yang diedit/disetting di menu Kelola Akun Super Admin
      */
     getFormattedGreeting(user) {
         const salamWaktu = this.getGreetingWaktu();
@@ -404,48 +459,37 @@ const AdminAuth = {
                 salamWaktu,
                 displayName: "Bpk. Pengurus",
                 roleSuffix: "(Masjid Jami' Al Jihad)",
+                fullWelcomeLine: "Selamat Datang, Bpk. Pengurus (Masjid Jami' Al Jihad)!",
                 fullText: `${salamWaktu}\nSelamat Datang di Masjid Jami' Al Jihad!`
             };
         }
 
-        const role = (user.role || '').toLowerCase();
+        const role = (user.role || (user.role_id === 3 ? 'admin' : (user.role_id === 1 ? 'bendahara' : 'petugas'))).toLowerCase();
         let rawName = (user.name || '').trim();
 
-        // Bersihkan tanda kurung peran sebelumnya jika ada (misal: "H. Sudirman (Bendahara)" -> "H. Sudirman")
+        // Jika belum diset namanya, gunakan fallback default
+        if (!rawName) {
+            rawName = (role === 'admin' ? 'Bpk. H. M. Sholeh' : (role === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Ahmad'));
+        }
+
+        // 1. Bersihkan tanda kurung peran sebelumnya di nama jika ada (misal "H. Utut Priyastya (Bendahara)" -> "H. Utut Priyastya")
         let cleanName = rawName.replace(/\s*\([^)]*\)\s*$/g, '').trim();
+        if (!cleanName) cleanName = rawName;
 
+        // 2. Beri sapaan kehormatan Bpk. jika belum ada awalan Bpk./Bapak/Ust./Ustadz/Hj./Ibu
         let displayName = cleanName;
-        let roleSuffix = '';
+        const lower = cleanName.toLowerCase();
+        if (!lower.startsWith('bpk.') && !lower.startsWith('bpk ') && !lower.startsWith('bapak') && !lower.startsWith('ust.') && !lower.startsWith('ustadz') && !lower.startsWith('ibu') && !lower.startsWith('hj.')) {
+            displayName = 'Bpk. ' + cleanName;
+        }
 
-        if (role === 'bendahara' || cleanName.toLowerCase().includes('utut') || cleanName.toLowerCase().includes('sudirman')) {
-            // Bendahara: "Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)"
-            if (cleanName.toLowerCase().includes('utut') || cleanName.toLowerCase().includes('sudirman') || !cleanName || cleanName.toLowerCase() === 'bendahara') {
-                displayName = "Bpk. H. Utut Priastya";
-            } else {
-                if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak')) {
-                    displayName = 'Bpk. ' + displayName;
-                }
-            }
+        // 3. Gelar Resmi Masjid Berdasarkan Peran Akun
+        let roleSuffix = '';
+        if (role === 'bendahara') {
             roleSuffix = "(Bendahara Masjid Jami' Al Jihad)";
-        } else if (role === 'admin' || cleanName.toLowerCase().includes('admin') || cleanName.toLowerCase().includes('sholeh')) {
-            // Super Admin: "Bpk. H. M. Sholeh (Super Admin Masjid Jami' Al Jihad)"
-            if (cleanName.toLowerCase() === 'administrator' || cleanName.toLowerCase() === 'admin' || cleanName.toLowerCase().includes('sholeh') || !cleanName) {
-                displayName = "Bpk. H. M. Sholeh";
-            } else {
-                if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak')) {
-                    displayName = 'Bpk. ' + displayName;
-                }
-            }
+        } else if (role === 'admin') {
             roleSuffix = "(Super Admin Masjid Jami' Al Jihad)";
         } else {
-            // Petugas / Operator: "Bpk. Ust. Ahmad (Pengurus / Operator Masjid Jami' Al Jihad)"
-            if (cleanName.toLowerCase().includes('ahmad') || cleanName.toLowerCase() === 'operator' || cleanName.toLowerCase() === 'petugas' || !cleanName) {
-                displayName = "Bpk. Ust. Ahmad";
-            } else {
-                if (!displayName.toLowerCase().startsWith('bpk.') && !displayName.toLowerCase().startsWith('bapak') && !displayName.toLowerCase().startsWith('ust.')) {
-                    displayName = 'Bpk. ' + displayName;
-                }
-            }
             roleSuffix = "(Pengurus / Operator Masjid Jami' Al Jihad)";
         }
 
@@ -453,6 +497,7 @@ const AdminAuth = {
             salamWaktu,
             displayName,
             roleSuffix,
+            fullWelcomeLine: `Selamat Datang, ${displayName} ${roleSuffix}!`,
             fullText: `${salamWaktu}\nSelamat Datang, ${displayName} ${roleSuffix}!`
         };
     },

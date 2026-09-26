@@ -3893,3 +3893,64 @@ Pengguna menginginkan agar banner sapaan pada dashboard admin diselaraskan denga
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 96).
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).
 
+---
+
+## 📌 BAB 97: ELIMINASI DUPLIKASI AKUN NO 1 (ADMINSHOLEH) & IMPLEMENTASI PENGATURAN NAMA SAPAAN DASHBOARD DINAMIS 100% MELALUI MODAL EDIT AKUN SUPER ADMIN
+
+### 1. Latar Belakang & Kebutuhan Pengguna
+1. **Penghapusan Akun Duplikat No 1 di Menu Kelola 3 Hak Akses:**
+   - Pada tabel menu *Kelola 3 Hak Akses*, pengguna mendapati terdapat 4 baris akun dengan nomor urut ganda `(3, 1, 2, 1)`. Baris nomor 1 paling bawah berisi akun usang `Admin` (`adminsholeh@admin.com`) dengan peran Bendahara.
+   - Pengguna meminta agar baris akun no 1 paling bawah tersebut dihilangkan secara permanen sehingga tabel hak akses murni hanya menampilkan 3 akun resmi:
+     - **ID 3:** Super Admin (`admin@aljihad.com`)
+     - **ID 1:** Bendahara (`bendahara@aljihad.com`)
+     - **ID 2:** Operator TV (`petugas@aljihad.com`)
+2. **Pengaturan Nama Sapaan Dashboard Dinamis 100%:**
+   - Pengguna menginginkan agar nama yang muncul pada masing-masing dashboard (baik di hero banner ucapan selamat datang, sidebar, maupun topbar) dapat diedit/disetting secara bebas oleh Super Admin di menu modal *Edit Akun*, dan langsung tercermin secara dinamis tanpa tertimpa string hardcode bawaan sistem.
+
+### 2. Akar Masalah & Rincian Solusi Teknis
+1. **Penyebab Kemunculan Akun Duplikat No 1 Paling Bawah:**
+   - Di fungsi `loadAllSupabaseData()` pada `web-statis/admin.html`, pemanggilan `fetch('/rest/v1/users?select=*')` menarik seluruh baris dari tabel `users` di Supabase. Karena tabel Supabase memuat baris lawas `adminsholeh@admin.com` (role_id 1), kode lama melakukan `currentUsers.push(...)` dan menyimpannya ke `localStorage['aljihad_users_list']`, sehingga muncul baris keempat dengan ID 1 di tabel hak akses.
+   - **Solusi:**
+     - Menambahkan filter penolakan keras (*strict blacklist*) terhadap `adminsholeh@admin.com` dan `admin@admin.com` pada:
+       1. `AdminAuth.getUsers()` di `web-statis/js/admin-auth.js`.
+       2. `renderUsersTable()` di `web-statis/admin.html`.
+       3. Bagian F `loadAllSupabaseData()` di `web-statis/admin.html`.
+     - Menerapkan deduplikasi ketat per peran: hanya tepat 1 akun unik per peran resmi (`admin`, `bendahara`, `petugas`), menetapkan ID baku (3, 1, 2), serta mengurutkannya rapi: Super Admin (3), Bendahara (1), Operator TV (2).
+     - Menghapus kemungkinan Supabase menyisipkan akun asing di luar 3 akun resmi.
+2. **Implementasi Nama Sapaan Dashboard 100% Dinamis dari Modal Edit Akun:**
+   - **Eliminasi String Hardcode:** Menghapus seluruh logika percabangan di `updateWelcomeBannerGreeting(user)` yang sebelumnya memaksakan nama `"Bpk. H. Utut Priastya"` atau `"Bpk. H. M. Sholeh"` jika nama mengandung kata tertentu.
+   - **Penerapan Logika Format Dinamis (`AdminAuth.getFormattedGreeting(user)`):**
+     1. Mengambil `user.name` riil yang diedit pengguna dari form modal Edit Akun.
+     2. Menghapus tanda kurung peran usang di ujung nama (misal `"H. Utut Priyastya (Bendahara)"` -> `"H. Utut Priyastya"`).
+     3. Menambahkan awalan kehormatan `Bpk.` jika belum ada (dan mencegah penggandaan jika sudah diawali `Bpk.`, `Bapak`, `Ust.`, `Hj.`, dll.).
+     4. Menambahkan gelar resmi peran masjid:
+        - Bendahara: `(Bendahara Masjid Jami' Al Jihad)`
+        - Super Admin: `(Super Admin Masjid Jami' Al Jihad)`
+        - Operator TV: `(Pengurus / Operator Masjid Jami' Al Jihad)`
+     5. Contoh hasil:
+        - Diedit: `"H. Utut Priastya"` -> `"Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)!"`
+        - Diedit: `"Drs. H. M. Sholeh"` -> `"Selamat Datang, Bpk. Drs. H. M. Sholeh (Super Admin Masjid Jami' Al Jihad)!"`
+        - Diedit: `"Ust. Ahmad Syaifullah"` -> `"Selamat Datang, Ust. Ahmad Syaifullah (Pengurus / Operator Masjid Jami' Al Jihad)!"`
+   - **Sinkronisasi Real-Time:**
+     - Di `AdminAuth.getCurrentUser()`, sesi aktif selalu disinkronkan secara real-time dengan data terbaru di `USERS_LIST_STORAGE_KEY`.
+     - Di `AdminAuth.updateUser()`, jika akun yang diedit adalah akun aktif atau memiliki role yang sama, sesi `AUTH_STORAGE_KEY` langsung diperbarui seketika.
+     - Di `simpanPerubahanUser()` pada `admin.html`, pembaruan form modal Edit Akun langsung memicu pembaruan banner dan profil aktif tanpa perlu me-refresh browser.
+     - Inline script banner HTML awal di `admin.html` juga diperbarui agar langsung membaca nama dinamis dari `aljihad_auth_user` & `aljihad_users_list`.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/js/admin-auth.js`:
+   - Filter pembuangan akun `adminsholeh@admin.com` & deduplikasi 3 akun resmi di `getUsers()`.
+   - Real-time name syncing di `getCurrentUser()`.
+   - Active session updating di `updateUser()`.
+   - Format salam sapaan dinamis 100% di `getFormattedGreeting()`.
+2. `web-statis/admin.html`:
+   - Sanitasi dan deduplikasi ketat di `renderUsersTable()`.
+   - Penyaringan akun Supabase di `loadAllSupabaseData()`.
+   - Eliminasi hardcoded override di `updateWelcomeBannerGreeting()`.
+   - Pembaruan inline script banner HTML untuk pembacaan nama dinamis.
+   - Penyesuaian nama statis awal tabel menjadi `H. Utut Priyastya (Bendahara)`.
+3. `scratch/verify_auth_greeting.js`: Script verifikasi otomatis berbasis Node.js yang memvalidasi eliminasi akun dobel dan fungsionalitas nama sapaan dinamis 100% lolos.
+4. `LATEST_UPDATE.md`: Dokumentasi Bab 97.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
+
+
