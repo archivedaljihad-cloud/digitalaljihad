@@ -2276,7 +2276,7 @@
                                         <option value="all">Semua Kategori Kas</option>
                                         <option value="Kas Utama Masjid">Kas Utama Masjid</option>
                                         <option value="Kas Ambulance">Kas Ambulance</option>
-                                        <option value="Infaq Renovasi">Infaq Renovasi</option>
+                                        <option value="Penggalangan Infaq">Penggalangan Infaq</option>
                                     </select>
                                 </div>
                             </div>
@@ -2948,7 +2948,7 @@
                             <select class="form-control" id="kasKategori">
                                 <option value="Kas Utama Masjid">Kas Utama Masjid</option>
                                 <option value="Kas Ambulance">Kas Ambulance</option>
-                                <option value="Infaq Renovasi">Infaq Renovasi</option>
+                                <option value="Penggalangan Infaq">Penggalangan Infaq</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -3004,7 +3004,7 @@
                             <select class="form-control" id="editKasKategori">
                                 <option value="Kas Utama Masjid">Kas Utama Masjid</option>
                                 <option value="Kas Ambulance">Kas Ambulance</option>
-                                <option value="Infaq Renovasi">Infaq Renovasi</option>
+                                <option value="Penggalangan Infaq">Penggalangan Infaq</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -4412,7 +4412,13 @@
             }
 
             if (katFilter !== 'all') {
-                filtered = filtered.filter(item => (item.kategori || '').toLowerCase().includes(katFilter.toLowerCase()));
+                filtered = filtered.filter(item => {
+                    const kat = (item.kategori || '').toLowerCase();
+                    if (katFilter === 'Penggalangan Infaq') {
+                        return kat.includes('penggalangan infaq') || kat.includes('infaq renovasi') || kat.includes('renovasi');
+                    }
+                    return kat.includes(katFilter.toLowerCase());
+                });
             }
 
             if (query) {
@@ -4722,7 +4728,9 @@
             document.getElementById('editKasTable').value = table;
             document.getElementById('editKasTanggal').value = item.tanggal ? item.tanggal.split('T')[0] : '';
             document.getElementById('editKasTipe').value = isMasuk ? 'masuk' : 'keluar';
-            document.getElementById('editKasKategori').value = item.kategori || (table === 'keuangan_ambulance' ? 'Kas Ambulance' : 'Kas Utama Masjid');
+            let katVal = item.kategori || (table === 'keuangan_ambulance' ? 'Kas Ambulance' : 'Kas Utama Masjid');
+            if (katVal === 'Infaq Renovasi') katVal = 'Penggalangan Infaq';
+            document.getElementById('editKasKategori').value = katVal;
             document.getElementById('editKasUraian').value = item.deskripsi || item.uraian || '';
             document.getElementById('editKasNominal').value = nominal;
 

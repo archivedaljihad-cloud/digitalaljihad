@@ -3695,6 +3695,35 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 18. `public/css/display-theme.css`
 19. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 91).
 
+---
+
+## 🕌 BAB 92: PENYESUAIAN LABEL & KATEGORI KAS DARI "INFAQ RENOVASI" MENJADI "PENGGALANGAN INFAQ" PADA DASHBOARD BENDAHARA
+
+**Tanggal:** 26 September 2026 | **Versi:** 4.4.5  
+**Domain Live:** `https://digitalaljihad.my.id/`  
+**Target Modul:** Dashboard Bendahara (`web-statis/admin.html`) — Modul Manajemen Keuangan & Buku Kas Transaksi
+
+### 1. Kebutuhan Pengguna:
+- Pada halaman **Buku Kas & Transaksi Masjid** di dashboard bendahara, opsi filter kategori kas sebelumnya mencantumkan *"Infaq Renovasi"*.
+- Pengguna meminta agar opsi tersebut diubah menjadi **"Penggalangan Infaq"**, selaras dengan penamaan menu navigasi sidebar *"Penggalangan Infaq"* serta modul program infaq donasi masjid.
+
+### 2. Rincian Perubahan Teknis:
+1. **Dropdown Filter Kategori Kas (`#kasFilterKat`):**
+   - Mengubah elemen `<option value="Infaq Renovasi">Infaq Renovasi</option>` menjadi `<option value="Penggalangan Infaq">Penggalangan Infaq</option>`.
+2. **Form Modal Tambah Transaksi Kas Baru (`#kasKategori`):**
+   - Mengubah opsi pemilihan akun kas dari *"Infaq Renovasi"* menjadi *"Penggalangan Infaq"*.
+3. **Form Modal Koreksi / Edit Transaksi Kas (`#editKasKategori`):**
+   - Mengubah opsi pemilihan akun kas dari *"Infaq Renovasi"* menjadi *"Penggalangan Infaq"*.
+4. **Logika Filter Pencarian (`filterKasTable()`):**
+   - Ditambahkan logika penyesuaian agar ketika opsi *"Penggalangan Infaq"* dipilih, sistem tetap menyaring dan menampilkan data historis lama yang mungkin masih tersimpan dengan label `"infaq renovasi"` maupun data baru berlabel `"penggalangan infaq"` (*backward compatibility* aman).
+5. **Logika Binding Modal Koreksi (`bukaModalEditKas()`):**
+   - Ditambahkan fallback mapping: jika transaksi lama memiliki `kategori == 'Infaq Renovasi'`, otomatis terpilih ke option `"Penggalangan Infaq"` di dropdown edit kas.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html`
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 92).
+
+
 
 
 
