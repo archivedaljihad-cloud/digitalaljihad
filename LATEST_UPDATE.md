@@ -4021,7 +4021,56 @@ Pengguna menegaskan bahwa Web Statis ini telah berevolusi total hingga 1000% dar
 5. `README.md`: Penulisan ulang total dokumen sejarah dan identitas sistem.
 6. `LATEST_UPDATE.md`: Dokumentasi Bab 99.
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
+---
 
+## 📌 BAB 100: ARSITEKTUR MULTI-SLIDE DINAMIS PROGRAM PENGGALANGAN INFAQ DI LAYAR TV & FITUR EXPORT LAPORAN DONASI RESMI (EXCEL & PDF)
 
+### 1. Latar Belakang & Kebutuhan Pengurus
+Untuk mengantisipasi situasi di mana masjid mengadakan lebih dari satu program penggalangan dana infaq khusus (misalnya: *Renovasi Tempat Wudhu*, *Pengadaan Sound System/Karpet*, dan *Operasional Ambulance*), pengurus menghendaki sistem penyajian yang transparan, akuntabel, dan profesional:
+1. **Prinsip 1 Program Per Slide Mandiri:**
+   - Tidak menumpuk banyak program dalam satu slide sempit yang membuat tulisan mengecil dan sulit dibaca jemaah dari jarak jauh.
+   - Menggunakan 1 template dinamis (`infaq.html?id=...`). Jika ada 2 atau lebih program aktif, rotator TV (`index.html`) secara cerdas memekarkan antrean menjadi beberapa slide mandiri utuh.
+2. **Otomatisasi Status Tayang di TV:**
+   - Program yang berstatus aktif (`is_active: true`) otomatis muncul sebagai slide di layar TV.
+   - Program yang sudah mencapai target donasi (100% terpenuhi) menampilkan penanda emas *"Alhamdulillah Target Terpenuhi!"*.
+   - Program yang ditutup/dinonaktifkan oleh pengurus otomatis langsung hilang dari rotasi slide TV tanpa perlu mengubah kode sumber.
+   - Sinkronisasi perubahan status ke layar TV berlangsung instan (*realtime*) via WebSocket Supabase.
+3. **Fitur Export Laporan Donasi Per Program:**
+   - **Download Excel (.CSV):** Format CSV ber-BOM UTF-8 siap buka di Microsoft Excel, mencakup ringkasan target, total dana terkumpul, sisa dana, serta tabel rincian donatur (No, Tanggal, Nama Donatur, Nominal Infaq, Keterangan/Niat).
+   - **Cetak Laporan Resmi (PDF):** Jendela cetak standar dokumen formal berkop surat *DKM Masjid Jami' Al-Jihad*, detail identitas program, tabel muhsinin, serta lembar tanda tangan ganda Ketua DKM dan Bendahara (*Bpk. H. Utut Priastya*).
 
+---
+
+### 2. Rincian Implementasi & Perubahan Berkas
+
+1. **`web-statis/admin.html` (Modul Manajemen Penggalangan Infaq):**
+   - **Dukungan Multi-Program Aktif:** Menghapus pembatasan mutlak yang sebelumnya mematikan program lain saat satu program diaktifkan. Sekarang beberapa program dapat berstatus aktif bersamaan.
+   - **Tombol Status TV Dinamis (`btnGroupProgramActions`):**
+     - Status Aktif: Tombol hijau bertuliskan *"Tayang di TV (Aktif)"* dengan fungsi sekali klik untuk menutup/menonaktifkan.
+     - Status Nonaktif: Tombol outline bertuliskan *"Ditutup (Klik utk Tayangkan)"*.
+   - **Tombol & Fungsi `exportLaporanInfaqCSV(progId)`:**
+     - Menghasilkan file `.csv` dengan header rekapitulasi program dan rincian lengkap daftar donatur yang rapi terbaca di MS Excel.
+   - **Tombol & Fungsi `cetakLaporanInfaqPDF(progId)`:**
+     - Membuka jendela print preview format A4 portrait dengan Kop Surat Resmi DKM Al-Jihad, tabel data donatur bergaris rapi, dan kolom pengesahan Ketua DKM serta Bendahara (Bpk. H. Utut Priastya).
+   - **Tombol Aksi Tambahan di Header Tabel Donatur:** Disediakan tombol cepat *Export Excel (.CSV)* dan *Cetak Laporan* tepat di atas tabel data muhsinin.
+
+2. **`web-statis/slides/infaq.html` (Template Slide Infaq Dinamis):**
+   - **Parameter URL Dinamis (`?id=...`):** Slide kini membaca `urlParams.get('id')`. Jika diberikan parameter ID, slide memuat data spesifik program tersebut dari Supabase / LocalStorage.
+   - **Fallback & Rotasi Halus Internal:** Jika dibuka mandiri tanpa parameter ID dan terdapat lebih dari 1 program aktif, slide secara otomatis melakukan transisi rotasi internal setiap 12 detik.
+   - **Render Donatur Dinamis:** Daftar donatur terbaru di kolom kiri dirender dinamis dari riwayat donasi program yang dipilih.
+   - **Penanganan Target Tercapai:** Jika dana terkumpul mencapai/melebihi target nominal, indikator kekurangan otomatis berubah menjadi *Rp 0 (Terpenuhi)* dan progress bar menampilkan status pencapaian penuh 100%.
+
+3. **`web-statis/index.html` (Mesin Rotator TV Display):**
+   - **Pemekaran Slide Dinamis di `resolveActivePages()`:** Saat mendeteksi halaman `/infaq-embed` atau `slides/infaq.html`, rotator memeriksa seluruh program infaq aktif. Jika terdapat 2 atau 3 program aktif, antrean slide otomatis dimekarkan menjadi `slides/infaq.html?id=1`, `slides/infaq.html?id=2`, dst.
+   - **Penanganan Program Ditutup:** Jika seluruh program infaq berstatus nonaktif/ditutup, slide infaq otomatis dilewati dari rotasi TV.
+   - **Realtime Supabase Listener:** Menambahkan pendengar event pada tabel `program_infaq` sehingga setiap penambahan program, aktivasi, maupun penutupan program langsung merestrukturisasi antrean slide TV tanpa perlu me-reload peramban.
+
+---
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html`: Penambahan aksi toggle TV, dropdown export, fungsi `exportLaporanInfaqCSV()`, dan cetak PDF.
+2. `web-statis/slides/infaq.html`: Penanganan parameter query `?id=`, render donatur dinamis, dan penanda target terpenuhi.
+3. `web-statis/index.html`: Pemekaran multi-slide dinamis infaq di `resolveActivePages()` dan pendengar Realtime Supabase.
+4. `LATEST_UPDATE.md`: Dokumentasi Bab 100.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 

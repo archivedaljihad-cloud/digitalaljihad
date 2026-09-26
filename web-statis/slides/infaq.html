@@ -514,6 +514,13 @@
         updateClock();
         setInterval(updateClock, 1000);
 
+        // Ambil ID program dari parameter URL jika ada (misal: infaq.html?id=2)
+        const urlParams = new URLSearchParams(window.location.search);
+        let requestedProgId = urlParams.get('id');
+        let allActivePrograms = [];
+        let internalProgIndex = 0;
+        let internalProgTimer = null;
+
         // Load Program Infaq dari Supabase
         async function loadProgramInfaqData() {
             try {
@@ -529,39 +536,99 @@
                 // 2. Program Infaq
                 const programs = await SupabaseDB.getProgramInfaq();
                 if (programs && programs.length > 0) {
-                    const prog = programs.find(p => p.is_active === true) || programs[0];
-                    if (prog.nama_program) document.getElementById('programName').textContent = prog.nama_program;
+                    allActivePrograms = programs.filter(p => p.is_active === true);
+                    if (allActivePrograms.length === 0) allActivePrograms = [programs[0]];
 
-                    const target = parseFloat(prog.target_dana) || 36000000;
-                    let terkumpul = 0;
-                    let totalDonaturCount = 0;
-
-                    // Prioritaskan pembacaan donasi spesifik dari tabel donasi_infaq
-                    try {
-                        const donaturList = await SupabaseDB.getDonasiInfaq(prog.id);
-                        if (donaturList && donaturList.length > 0) {
-                            terkumpul = donaturList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
-                            totalDonaturCount = donaturList.length;
-                        }
-                    } catch (e) {}
-
-                    if (terkumpul === 0 && prog.dana_terkumpul) {
-                        terkumpul = parseFloat(prog.dana_terkumpul);
+                    let prog = null;
+                    if (requestedProgId) {
+                        prog = programs.find(p => p.id == requestedProgId) || allActivePrograms[0];
+                    } else {
+                        prog = allActivePrograms[internalProgIndex % allActivePrograms.length];
                     }
 
-                    const sisa = Math.max(0, target - terkumpul);
-                    const percent = target > 0 ? Math.min(100, (terkumpul / target) * 100).toFixed(1) : 0;
+                    renderSingleProgram(prog);
 
-                    document.getElementById('valTarget').textContent = 'Rp ' + formatRupiah(target);
-                    document.getElementById('valTerkumpul').textContent = 'Rp ' + formatRupiah(terkumpul);
-                    document.getElementById('valKekurangan').textContent = 'Rp ' + formatRupiah(sisa);
-                    document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Muhsinin';
-
-                    document.getElementById('progressPercent').textContent = percent + '%';
-                    document.getElementById('progressBarFill').style.width = percent + '%';
+                    // Jika dibuka tanpa query parameter ID dan terdapat > 1 program aktif, jalankan rotasi internal tiap 12 detik
+                    if (!requestedProgId && allActivePrograms.length > 1) {
+                        clearTimeout(internalProgTimer);
+                        internalProgTimer = setTimeout(() => {
+                            internalProgIndex = (internalProgIndex + 1) % allActivePrograms.length;
+                            loadProgramInfaqData();
+                        }, 12000);
+                    }
                 }
             } catch (err) {
                 console.error('Gagal memuat program infaq:', err);
+            }
+        }
+
+        async function renderSingleProgram(prog) {
+            if (!prog) return;
+
+            if (prog.nama_program) {
+                document.getElementById('programName').textContent = prog.nama_program;
+            }
+
+            const target = parseFloat(prog.target_dana) || 0;
+            let terkumpul = 0;
+            let totalDonaturCount = 0;
+            let rawDonaturList = [];
+
+            // Prioritaskan pembacaan donasi spesifik dari tabel donasi_infaq
+            try {
+                const donaturList = await SupabaseDB.getDonasiInfaq(prog.id);
+                if (donaturList && donaturList.length > 0) {
+                    terkumpul = donaturList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
+                    totalDonaturCount = donaturList.length;
+                    rawDonaturList = donaturList;
+                }
+            } catch (e) {}
+
+            if (terkumpul === 0 && prog.dana_terkumpul) {
+                terkumpul = parseFloat(prog.dana_terkumpul);
+            }
+
+            const isTercapai = (target > 0 && terkumpul >= target);
+            const sisa = Math.max(0, target - terkumpul);
+            const percent = target > 0 ? ((terkumpul / target) * 100).toFixed(1) : 0;
+
+            document.getElementById('valTarget').textContent = 'Rp ' + formatRupiah(target);
+            document.getElementById('valTerkumpul').textContent = 'Rp ' + formatRupiah(terkumpul);
+
+            if (isTercapai) {
+                document.getElementById('valKekurangan').innerHTML = '<span style="color:#00e676; font-size:1rem;">Rp 0 (Terpenuhi)</span>';
+                document.getElementById('progressPercent').innerHTML = '<span style="color:#00e676;"><i class="fas fa-check-circle"></i> 100% Target Terpenuhi</span>';
+                document.getElementById('progressBarFill').style.width = '100%';
+                document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #00b4d8 100%)';
+            } else {
+                document.getElementById('valKekurangan').textContent = 'Rp ' + formatRupiah(sisa);
+                document.getElementById('progressPercent').textContent = percent + '%';
+                document.getElementById('progressBarFill').style.width = Math.min(100, percent) + '%';
+                document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #ffd700 100%)';
+            }
+
+            document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Muhsinin';
+
+            // Render Donatur List Dinamis (5 teratas)
+            const donaturContainer = document.getElementById('donaturList');
+            if (donaturContainer) {
+                if (rawDonaturList.length > 0) {
+                    donaturContainer.innerHTML = rawDonaturList.slice(0, 5).map(d => {
+                        const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
+                        return `
+                            <div class="donatur-item">
+                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> ${nama}</span>
+                                <span class="donatur-val">Rp ${formatRupiah(d.nominal)}</span>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    donaturContainer.innerHTML = `
+                        <div class="donatur-item" style="justify-content:center; color:#94a3b8; font-style:italic;">
+                            <span>Belum ada catatan donatur masuk untuk program ini</span>
+                        </div>
+                    `;
+                }
             }
         }
 

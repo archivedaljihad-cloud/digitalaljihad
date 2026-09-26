@@ -2441,7 +2441,7 @@
                                         </select>
                                     </div>
                                     <div class="d-flex align-items-center flex-wrap" id="btnGroupProgramActions">
-                                        <!-- Tombol status TV, edit, dan hapus -->
+                                        <!-- Tombol status TV, export laporan, edit, dan hapus -->
                                     </div>
                                 </div>
                             </div>
@@ -2620,15 +2620,22 @@
                                 <div class="col-lg-8 mb-4">
                                     <div class="card shadow">
                                         <div class="card-header py-3 d-flex flex-wrap align-items-center justify-content-between" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); border-bottom: 2px solid #ffd700;">
-                                            <h6 class="m-0 font-weight-bold text-white d-flex align-items-center" style="font-size: 1.05rem;">
-                                                <i class="fas fa-clipboard-list text-warning mr-2"></i> Daftar Penerimaan Infaq Donatur
-                                                <span class="badge badge-warning text-dark font-weight-bold ml-2 px-2 py-1" id="badgeCountDonatur" style="font-size: 0.85rem; border-radius: 6px;">
-                                                    0 Data
-                                                </span>
-                                            </h6>
-                                            <span class="small font-weight-bold mt-1 mt-md-0 text-white" style="opacity: 0.95; font-size: 0.85rem;">
-                                                <i class="fas fa-tv text-warning mr-1"></i> Akan ditampilkan otomatis bergulir (scroll) di layar TV
-                                            </span>
+                                            <div class="d-flex align-items-center mb-1 mb-md-0">
+                                                <h6 class="m-0 font-weight-bold text-white d-flex align-items-center" style="font-size: 1.05rem;">
+                                                    <i class="fas fa-clipboard-list text-warning mr-2"></i> Daftar Penerimaan Infaq Donatur
+                                                    <span class="badge badge-warning text-dark font-weight-bold ml-2 px-2 py-1" id="badgeCountDonatur" style="font-size: 0.85rem; border-radius: 6px;">
+                                                        0 Data
+                                                    </span>
+                                                </h6>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
+                                                <button type="button" class="btn btn-sm btn-light font-weight-bold text-success shadow-sm" onclick="exportLaporanInfaqCSV()" title="Download Laporan Format Excel/CSV">
+                                                    <i class="fas fa-file-excel mr-1 text-success"></i> Export Excel (.CSV)
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark shadow-sm" onclick="cetakLaporanInfaqPDF()" title="Cetak Rekap Resmi / Simpan PDF">
+                                                    <i class="fas fa-print mr-1"></i> Cetak Laporan
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
@@ -5083,7 +5090,7 @@
             // 1. Render Dropdown Selector Program
             if (selectEl) {
                 selectEl.innerHTML = cachedProgramInfaq.map(p => {
-                    const tagActive = p.is_active ? ' ★ (Tampil di TV)' : '';
+                    const tagActive = p.is_active ? ' ★ (Tayang di TV)' : ' ✕ (Ditutup/Nonaktif)';
                     return `<option value="${p.id}" ${p.id == selectedProgramInfaqId ? 'selected' : ''}>${escapeHtml(p.nama_program)}${tagActive}</option>`;
                 }).join('');
             }
@@ -5093,11 +5100,24 @@
             if (btnGroup) {
                 const isActive = currentProg.is_active === true;
                 const statusBtn = isActive 
-                    ? `<span class="badge badge-success px-3 py-2 mr-2 mb-1" style="font-size: 0.85rem;"><i class="fas fa-broadcast-tower mr-1"></i> Sedang Aktif di TV Monitor</span>`
-                    : `<button class="btn btn-outline-success btn-sm shadow-sm mr-2 mb-1 font-weight-bold" onclick="aktifkanProgramInfaqTV(${currentProg.id})"><i class="fas fa-check-circle mr-1"></i> Aktifkan Tampil di TV</button>`;
+                    ? `<button class="btn btn-success btn-sm shadow-sm mr-2 mb-1 font-weight-bold" onclick="toggleStatusProgramInfaqTV(${currentProg.id})" title="Klik untuk menonaktifkan/menutup slide ini dari TV"><i class="fas fa-check-circle mr-1"></i> Tayang di TV (Aktif)</button>`
+                    : `<button class="btn btn-outline-secondary btn-sm shadow-sm mr-2 mb-1 font-weight-bold" onclick="toggleStatusProgramInfaqTV(${currentProg.id})" title="Klik untuk mengaktifkan dan menampilkan slide ini di TV"><i class="fas fa-eye-slash mr-1"></i> Ditutup (Klik utk Tayangkan)</button>`;
 
                 btnGroup.innerHTML = `
                     ${statusBtn}
+                    <div class="btn-group mr-2 mb-1">
+                        <button type="button" class="btn btn-info btn-sm shadow-sm dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-file-export mr-1"></i> Export Laporan
+                        </button>
+                        <div class="dropdown-menu shadow">
+                            <a class="dropdown-item font-weight-bold" href="javascript:void(0)" onclick="exportLaporanInfaqCSV(${currentProg.id})">
+                                <i class="fas fa-file-excel text-success mr-2"></i> Download Excel (.CSV)
+                            </a>
+                            <a class="dropdown-item font-weight-bold" href="javascript:void(0)" onclick="cetakLaporanInfaqPDF(${currentProg.id})">
+                                <i class="fas fa-print text-warning mr-2"></i> Cetak Laporan Resmi (PDF)
+                            </a>
+                        </div>
+                    </div>
                     <button class="btn btn-warning btn-sm shadow-sm mr-2 mb-1 font-weight-bold" onclick="bukaModalEditProgramInfaq(${currentProg.id})">
                         <i class="fas fa-edit mr-1"></i> Edit Target
                     </button>
@@ -5117,7 +5137,8 @@
             if (document.getElementById('detailProgPeriode')) {
                 const tglMulai = formatDateIndo(currentProg.tanggal_mulai);
                 const tglSelesai = formatDateIndo(currentProg.tanggal_selesai);
-                document.getElementById('detailProgPeriode').innerHTML = `<i class="fas fa-calendar-alt text-primary mr-1"></i> Periode: ${tglMulai} s/d ${tglSelesai}`;
+                const statusTayang = currentProg.is_active ? '<span class="badge badge-success ml-2">Tayang di TV</span>' : '<span class="badge badge-secondary ml-2">Ditutup / Tidak Tayang</span>';
+                document.getElementById('detailProgPeriode').innerHTML = `<i class="fas fa-calendar-alt text-primary mr-1"></i> Periode: ${tglMulai} s/d ${tglSelesai} ${statusTayang}`;
             }
 
             // 4. Hitung Donasi Masuk Khusus Program Terpilih
@@ -5130,19 +5151,31 @@
 
             // 5. Update Progress Bar
             if (document.getElementById('detailProgPersenText')) {
-                document.getElementById('detailProgPersenText').textContent = `${persentase}% Terkumpul`;
+                const isTercapai = targetDana > 0 && totalTerkumpul >= targetDana;
+                document.getElementById('detailProgPersenText').innerHTML = isTercapai 
+                    ? `<span class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> 100% Target Terpenuhi!</span>` 
+                    : `${persentase}% Terkumpul`;
             }
             const pBar = document.getElementById('detailProgProgressBar');
             if (pBar) {
                 pBar.style.width = persentase + '%';
                 pBar.textContent = persentase + '%';
                 pBar.setAttribute('aria-valuenow', persentase);
+                if (targetDana > 0 && totalTerkumpul >= targetDana) {
+                    pBar.className = 'progress-bar bg-success font-weight-bold';
+                }
             }
 
             // 6. Update 4 Summary Cards
             if (document.getElementById('cardTargetDana')) document.getElementById('cardTargetDana').textContent = formatRupiah(targetDana);
             if (document.getElementById('cardDanaTerkumpul')) document.getElementById('cardDanaTerkumpul').textContent = formatRupiah(totalTerkumpul);
-            if (document.getElementById('cardSisaDana')) document.getElementById('cardSisaDana').textContent = formatRupiah(sisaDana);
+            if (document.getElementById('cardSisaDana')) {
+                if (targetDana > 0 && totalTerkumpul >= targetDana) {
+                    document.getElementById('cardSisaDana').innerHTML = '<span class="text-success" style="font-size: 1.1rem;">Rp 0 (Terpenuhi)</span>';
+                } else {
+                    document.getElementById('cardSisaDana').textContent = formatRupiah(sisaDana);
+                }
+            }
             if (document.getElementById('cardJumlahDonatur')) document.getElementById('cardJumlahDonatur').textContent = `${jumlahDonatur} Orang/Hamba Allah`;
             if (document.getElementById('badgeCountDonatur')) document.getElementById('badgeCountDonatur').textContent = `${jumlahDonatur} Data`;
 
@@ -5326,7 +5359,7 @@
             $('#modalTambahProgramInfaq').modal('show');
         }
 
-        // Simpan Program Infaq Baru
+        // Simpan Program Infaq Baru (Dukungan Multi-Program Aktif Bersamaan)
         async function simpanProgramInfaqBaru() {
             const nama = document.getElementById('inputProgInfaqNama')?.value.trim();
             const target = parseRupiahInput(document.getElementById('inputProgInfaqTarget')?.value);
@@ -5341,14 +5374,6 @@
             }
 
             try {
-                if (isActive && SUPABASE_CONFIG.url) {
-                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?is_active=eq.true`, {
-                        method: 'PATCH',
-                        headers: getSupabaseHeaders(),
-                        body: JSON.stringify({ is_active: false })
-                    }).catch(() => {});
-                }
-
                 const payload = {
                     nama_program: nama,
                     target_dana: target,
@@ -5373,7 +5398,6 @@
                         const resData = await res.json().catch(() => ([]));
                         if (resData && resData.length > 0) {
                             savedId = resData[0].id;
-                            if (isActive) cachedProgramInfaq.forEach(p => p.is_active = false);
                             cachedProgramInfaq.unshift(resData[0]);
                         }
                     }
@@ -5382,7 +5406,6 @@
                 if (!savedId) {
                     savedId = Date.now();
                     payload.id = savedId;
-                    if (isActive) cachedProgramInfaq.forEach(p => p.is_active = false);
                     cachedProgramInfaq.unshift(payload);
                 }
 
@@ -5390,10 +5413,9 @@
                 localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
                 $('#modalTambahProgramInfaq').modal('hide');
                 renderProgramInfaqSection();
-                alert(`Alhamdulillah! Program penggalangan infaq "${nama}" berhasil dibuat.`);
+                alert(`Alhamdulillah! Program penggalangan infaq "${nama}" berhasil dibuat ${isActive ? 'dan langsung aktif di Layar TV' : ''}.`);
             } catch (e) {
                 const newId = Date.now();
-                if (isActive) cachedProgramInfaq.forEach(p => p.is_active = false);
                 const localItem = {
                     id: newId,
                     nama_program: nama,
@@ -5432,7 +5454,7 @@
             $('#modalEditProgramInfaq').modal('show');
         }
 
-        // Simpan Koreksi / Edit Program Infaq
+        // Simpan Koreksi / Edit Program Infaq (Multi-Program)
         async function simpanEditProgramInfaq() {
             const id = document.getElementById('editProgInfaqId')?.value;
             const nama = document.getElementById('editProgInfaqNama')?.value.trim();
@@ -5448,14 +5470,6 @@
             }
 
             try {
-                if (isActive && SUPABASE_CONFIG.url) {
-                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?id=neq.${id}&is_active=eq.true`, {
-                        method: 'PATCH',
-                        headers: getSupabaseHeaders(),
-                        body: JSON.stringify({ is_active: false })
-                    }).catch(() => {});
-                }
-
                 if (SUPABASE_CONFIG.url) {
                     await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?id=eq.${id}`, {
                         method: 'PATCH',
@@ -5477,7 +5491,6 @@
 
             const prog = cachedProgramInfaq.find(p => p.id == id);
             if (prog) {
-                if (isActive) cachedProgramInfaq.forEach(p => p.is_active = false);
                 prog.nama_program = nama;
                 prog.target_dana = target;
                 prog.tanggal_mulai = tglMulai;
@@ -5493,28 +5506,35 @@
             alert('Alhamdulillah! Perubahan program penggalangan infaq berhasil disimpan.');
         }
 
-        // Jadikan Program Aktif yang Tayang di TV Monitor
-        async function aktifkanProgramInfaqTV(id) {
+        // Toggle Status Tayang TV (Bisa Menayangkan 1, 2, atau 3 Program Sekaligus atau Menutupnya)
+        async function toggleStatusProgramInfaqTV(id) {
+            const prog = cachedProgramInfaq.find(p => p.id == id);
+            if (!prog) return;
+
+            const newStatus = !(prog.is_active === true);
+
             try {
                 if (SUPABASE_CONFIG.url) {
-                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq`, {
-                        method: 'PATCH',
-                        headers: getSupabaseHeaders(),
-                        body: JSON.stringify({ is_active: false })
-                    });
                     await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?id=eq.${id}`, {
                         method: 'PATCH',
                         headers: getSupabaseHeaders(),
-                        body: JSON.stringify({ is_active: true })
+                        body: JSON.stringify({ is_active: newStatus })
                     });
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.warn('Gagal sinkron status program infaq ke Supabase:', e);
+            }
 
-            cachedProgramInfaq.forEach(p => p.is_active = (p.id == id));
+            prog.is_active = newStatus;
             selectedProgramInfaqId = id;
             localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
             renderProgramInfaqSection();
-            alert('Alhamdulillah! Program ini telah dijadikan program aktif yang tayang di TV monitor.');
+
+            if (newStatus) {
+                alert(`Alhamdulillah! Program "${prog.nama_program}" sekarang TAYANG di Layar TV.`);
+            } else {
+                alert(`Program "${prog.nama_program}" telah DITUTUP / TIDAK TAYANG di Layar TV.`);
+            }
         }
 
         // Hapus Program Infaq
@@ -5548,6 +5568,212 @@
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
             renderProgramInfaqSection();
             alert('Program penggalangan infaq berhasil dihapus.');
+        }
+
+        // =======================================================
+        // FITUR EXPORT LAPORAN DONASI INFAQ RESMI (EXCEL & PDF)
+        // =======================================================
+        function exportLaporanInfaqCSV(progId) {
+            const targetId = progId || selectedProgramInfaqId;
+            const prog = (cachedProgramInfaq || []).find(p => p.id == targetId);
+            if (!prog) {
+                alert('Pilih program infaq yang ingin di-export terlebih dahulu.');
+                return;
+            }
+
+            const donasiList = (cachedDonasiInfaq || []).filter(d => d.program_infaq_id == prog.id);
+            const targetDana = parseFloat(prog.target_dana) || 0;
+            const totalTerkumpul = donasiList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
+            const sisaDana = Math.max(0, targetDana - totalTerkumpul);
+            const persentase = targetDana > 0 ? ((totalTerkumpul / targetDana) * 100).toFixed(1) : 0;
+            const now = new Date();
+            const tglCetak = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+
+            let csv = '\uFEFF'; // UTF-8 BOM agar rapi di Microsoft Excel
+            csv += `LAPORAN PENERIMAAN INFAQ & DONASI - MASJID JAMI' AL-JIHAD\r\n`;
+            csv += `Nama Program,"${prog.nama_program.replace(/"/g, '""')}"\r\n`;
+            csv += `Target Penggalangan Dana,"Rp ${targetDana.toLocaleString('id-ID')}"\r\n`;
+            csv += `Total Dana Terkumpul,"Rp ${totalTerkumpul.toLocaleString('id-ID')}"\r\n`;
+            csv += `Sisa Kekurangan Dana,"Rp ${sisaDana.toLocaleString('id-ID')}"\r\n`;
+            csv += `Persentase Pencapaian,"${persentase}%"\r\n`;
+            csv += `Jumlah Donatur / Muhsinin,"${donasiList.length} Orang/Hamba Allah"\r\n`;
+            csv += `Status Tayang di TV,"${prog.is_active ? 'Aktif Tayang di TV' : 'Ditutup / Nonaktif'}"\r\n`;
+            csv += `Tanggal Export,"${tglCetak}"\r\n\r\n`;
+
+            csv += `No,Tanggal,Nama Donatur,Nominal (Rp),Keterangan / Niat Infaq\r\n`;
+            donasiList.forEach((d, idx) => {
+                const tgl = d.tanggal || '-';
+                const nama = (d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah')).replace(/"/g, '""');
+                const nominal = parseFloat(d.nominal) || 0;
+                const ket = (d.keterangan || '-').replace(/"/g, '""');
+                csv += `${idx + 1},"${tgl}","${nama}",${nominal},"${ket}"\r\n`;
+            });
+
+            csv += `\r\n,,,TOTAL PENERIMAAN TERKUMPUL,${totalTerkumpul}\r\n`;
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const safeName = (prog.nama_program || 'Program_Infaq').replace(/[^a-zA-Z0-9_-]/g, '_');
+            a.href = url;
+            a.download = `Laporan_Infaq_${safeName}_${now.toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function cetakLaporanInfaqPDF(progId) {
+            const targetId = progId || selectedProgramInfaqId;
+            const prog = (cachedProgramInfaq || []).find(p => p.id == targetId);
+            if (!prog) {
+                alert('Pilih program infaq yang ingin dicetak terlebih dahulu.');
+                return;
+            }
+
+            const donasiList = (cachedDonasiInfaq || []).filter(d => d.program_infaq_id == prog.id);
+            const targetDana = parseFloat(prog.target_dana) || 0;
+            const totalTerkumpul = donasiList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
+            const sisaDana = Math.max(0, targetDana - totalTerkumpul);
+            const persentase = targetDana > 0 ? ((totalTerkumpul / targetDana) * 100).toFixed(1) : 0;
+            const now = new Date();
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const tglCetak = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('Pop-up cetak terblokir browser. Harap izinkan pop-up untuk mencetak dokumen.');
+                return;
+            }
+
+            let rowsHtml = '';
+            if (donasiList.length === 0) {
+                rowsHtml = `<tr><td colspan="5" style="text-align:center; padding: 15px; color:#666;">Belum ada catatan penerimaan donasi untuk program ini.</td></tr>`;
+            } else {
+                rowsHtml = donasiList.map((d, idx) => {
+                    const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
+                    const nominal = (parseFloat(d.nominal) || 0).toLocaleString('id-ID');
+                    return `
+                        <tr>
+                            <td style="text-align:center; padding: 6px 8px; border: 1px solid #333;">${idx + 1}</td>
+                            <td style="text-align:center; padding: 6px 8px; border: 1px solid #333;">${d.tanggal || '-'}</td>
+                            <td style="padding: 6px 8px; border: 1px solid #333;">${escapeHtml(nama)}</td>
+                            <td style="text-align:right; padding: 6px 8px; border: 1px solid #333; font-weight: bold;">Rp ${nominal}</td>
+                            <td style="padding: 6px 8px; border: 1px solid #333;">${escapeHtml(d.keterangan || '-')}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            printWin.document.write(\`
+                <!DOCTYPE html>
+                <html lang="id">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Laporan Infaq - \${escapeHtml(prog.nama_program)}</title>
+                    <style>
+                        @page { size: A4 portrait; margin: 15mm 20mm; }
+                        body { font-family: 'Times New Roman', serif; color: #111; line-height: 1.35; font-size: 11pt; margin: 0; }
+                        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 14px; }
+                        .kop-masjid { font-size: 15pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; }
+                        .kop-sub { font-size: 10pt; margin: 3px 0; color: #333; }
+                        .doc-title { text-align: center; font-size: 12pt; font-weight: bold; text-transform: uppercase; text-decoration: underline; margin: 12px 0 4px 0; }
+                        .doc-prog { text-align: center; font-size: 11pt; font-weight: bold; color: #1e5a3a; margin-bottom: 14px; }
+                        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10.5pt; }
+                        .meta-table td { padding: 4px 6px; vertical-align: top; }
+                        .table-donasi { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt; }
+                        .table-donasi th { background-color: #f2f2f2; border: 1px solid #333; padding: 7px 8px; text-align: center; }
+                        .total-row td { background-color: #f9f9f9; font-weight: bold; border: 1px solid #333; padding: 7px 8px; }
+                        .ttd-box { width: 100%; display: flex; justify-content: space-between; margin-top: 35px; page-break-inside: avoid; }
+                        .ttd-col { width: 45%; text-align: center; }
+                        .ttd-space { height: 65px; }
+                        @media print {
+                            .no-print { display: none !important; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="no-print" style="background: #f8fafc; padding: 10px; border-bottom: 1px solid #cbd5e1; text-align: right; margin-bottom: 15px;">
+                        <button onclick="window.print()" style="background:#1e5a3a; color:#fff; border:none; padding:8px 18px; border-radius:5px; font-weight:bold; cursor:pointer;">
+                            🖨️ Cetak / Simpan PDF
+                        </button>
+                    </div>
+
+                    <div class="header">
+                        <h1 class="kop-masjid">DEWAN KEMAKMURAN MASJID (DKM) JAMI' AL-JIHAD</h1>
+                        <p class="kop-sub">Sekretariat: Jl. Abdullah Syafei No. 5 | WhatsApp / Konfirmasi: 0877 5876 7000</p>
+                        <p class="kop-sub" style="font-size: 9pt;">Email: archived.aljihad@gmail.com | Situs Resmi: https://digitalaljihad.my.id</p>
+                    </div>
+
+                    <div class="doc-title">LAPORAN PENERIMAAN INFAQ & DONASI KHUSUS</div>
+                    <div class="doc-prog">Program: \${escapeHtml(prog.nama_program)}</div>
+
+                    <table class="meta-table">
+                        <tr>
+                            <td style="width: 25%; font-weight: bold;">Target Penggalangan</td>
+                            <td style="width: 2%;">:</td>
+                            <td style="width: 28%; font-weight: bold;">Rp \${targetDana.toLocaleString('id-ID')}</td>
+                            <td style="width: 22%; font-weight: bold;">Jumlah Donatur</td>
+                            <td style="width: 2%;">:</td>
+                            <td style="width: 21%;">\${donasiList.length} Orang / Muhsinin</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: #047857;">Total Dana Terkumpul</td>
+                            <td>:</td>
+                            <td style="font-weight: bold; color: #047857;">Rp \${totalTerkumpul.toLocaleString('id-ID')} (\${persentase}%)</td>
+                            <td style="font-weight: bold;">Status Tayang TV</td>
+                            <td>:</td>
+                            <td>\${prog.is_active ? 'Aktif Tayang di TV' : 'Ditutup / Tidak Tayang'}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: \${sisaDana > 0 ? '#b91c1c' : '#047857'};">Sisa Kekurangan</td>
+                            <td>:</td>
+                            <td style="font-weight: bold; color: \${sisaDana > 0 ? '#b91c1c' : '#047857'};">\${sisaDana > 0 ? 'Rp ' + sisaDana.toLocaleString('id-ID') : 'Rp 0 (Target Terpenuhi)'}</td>
+                            <td style="font-weight: bold;">Tanggal Laporan</td>
+                            <td>:</td>
+                            <td>\${tglCetak}</td>
+                        </tr>
+                    </table>
+
+                    <table class="table-donasi">
+                        <thead>
+                            <tr>
+                                <th style="width: 6%;">No</th>
+                                <th style="width: 16%;">Tanggal</th>
+                                <th style="width: 32%;">Nama Donatur / Muhsinin</th>
+                                <th style="width: 22%;">Nominal Infaq</th>
+                                <th style="width: 24%;">Keterangan / Niat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${rowsHtml}
+                            <tr class="total-row">
+                                <td colspan="3" style="text-align: right; text-transform: uppercase;">Total Penerimaan Infaq :</td>
+                                <td style="text-align: right; color: #047857;">Rp \${totalTerkumpul.toLocaleString('id-ID')}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="ttd-box">
+                        <div class="ttd-col">
+                            <p style="margin: 0;">Mengetahui,</p>
+                            <p style="margin: 0; font-weight: bold;">Ketua DKM Masjid Jami' Al-Jihad</p>
+                            <div class="ttd-space"></div>
+                            <p style="margin: 0; font-weight: bold; text-decoration: underline;">( .................................................. )</p>
+                        </div>
+                        <div class="ttd-col">
+                            <p style="margin: 0;">Dibuat Oleh,</p>
+                            <p style="margin: 0; font-weight: bold;">Bendahara Masjid Jami' Al-Jihad</p>
+                            <div class="ttd-space"></div>
+                            <p style="margin: 0; font-weight: bold; text-decoration: underline;">( Bpk. H. Utut Priastya )</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            \`);
+            printWin.document.close();
+            printWin.focus();
         }
 
         // Render Rotation Table (Menampilkan seluruh 17 halaman display TV)

@@ -292,14 +292,44 @@
             }, 2000);
         }
 
-        // Resolusi daftar slide aktif dari settings
-        function resolveActivePages(appSettings) {
+        // Resolusi daftar slide aktif dari settings (dengan pemekaran dinamis multi-program infaq)
+        function resolveActivePages(appSettings, programInfaqList = []) {
             const list = [];
+            let activeInfaqPrograms = [];
+
+            if (Array.isArray(programInfaqList) && programInfaqList.length > 0) {
+                activeInfaqPrograms = programInfaqList.filter(p => p.is_active === true);
+            } else {
+                try {
+                    const cached = localStorage.getItem('cached_program_infaq');
+                    if (cached) {
+                        const parsed = JSON.parse(cached);
+                        activeInfaqPrograms = parsed.filter(p => p.is_active === true);
+                    }
+                } catch (e) {}
+            }
+
             if (appSettings && Array.isArray(appSettings.rotation_pages)) {
                 appSettings.rotation_pages.forEach(p => {
                     if (p.active !== false) {
                         const localPath = PATH_MAPPING[p.page] || p.path || p.page;
-                        if (localPath && !list.includes(localPath)) {
+                        
+                        // Khusus untuk Slide Infaq: Periksa apakah ada program aktif
+                        if (localPath === 'slides/infaq.html' || p.page === '/infaq-embed') {
+                            if (activeInfaqPrograms.length > 1) {
+                                // Jika ada 2 atau lebih program penggalangan infaq aktif:
+                                // Otomatis muncul slide baru untuk setiap program (1 program per slide di TV)
+                                activeInfaqPrograms.forEach(prog => {
+                                    const progUrl = `slides/infaq.html?id=${prog.id}`;
+                                    if (!list.includes(progUrl)) list.push(progUrl);
+                                });
+                            } else if (activeInfaqPrograms.length === 1) {
+                                const progUrl = `slides/infaq.html?id=${activeInfaqPrograms[0].id}`;
+                                if (!list.includes(progUrl)) list.push(progUrl);
+                            }
+                            // Jika activeInfaqPrograms.length === 0 (semua program ditutup/selesai):
+                            // Slide infaq otomatis TIDAK dimasukkan ke rotasi TV!
+                        } else if (localPath && !list.includes(localPath)) {
                             list.push(localPath);
                         }
                     }
@@ -435,8 +465,13 @@
             try {
                 if (statusEl) statusEl.textContent = 'MEMUAT DATA SUPABASE...';
 
-                // 1. Ambil settings
+                // 1. Ambil settings & data program infaq
                 settings = await SupabaseDB.getSettings();
+                let programInfaqList = [];
+                try {
+                    programInfaqList = await SupabaseDB.getProgramInfaq();
+                } catch (e) {}
+
                 if (settings) {
                     if (settings.nama_aplikasi) {
                         document.getElementById('splashTitle').textContent = settings.nama_aplikasi;
@@ -445,7 +480,7 @@
                     if (settings.rotation_interval) {
                         rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
                     }
-                    activePages = resolveActivePages(settings);
+                    activePages = resolveActivePages(settings, programInfaqList);
                 }
 
                 // 2. Ambil jadwal & petugas Jumat
@@ -514,13 +549,19 @@
                 SupabaseDB.subscribeRealtime((payload) => {
                     console.log('⚡ [Realtime Index] Perubahan terdeteksi:', payload.table);
                     if (payload.table === 'app_settings') {
-                        SupabaseDB.getSettings().then(newSettings => {
+                        Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
                             settings = newSettings;
-                            if (settings.rotation_interval) {
+                            if (settings && settings.rotation_interval) {
                                 rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
                             }
-                            activePages = resolveActivePages(settings);
+                            activePages = resolveActivePages(settings, progs);
                             showOsd('⚡ Pengaturan Diperbarui (Realtime)');
+                        });
+                    } else if (payload.table === 'program_infaq') {
+                        Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
+                            if (currSettings) settings = currSettings;
+                            activePages = resolveActivePages(settings, progs);
+                            showOsd('⚡ Rotasi Program Infaq Diperbarui (Realtime)');
                         });
                     } else if (payload.table === 'jadwal_sholat') {
                         SupabaseDB.getJadwalSholat().then(list => jadwalList = list);
