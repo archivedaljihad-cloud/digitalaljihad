@@ -2247,7 +2247,7 @@
                                 <button class="btn btn-outline-success mr-2" onclick="exportKasExcel()">
                                     <i class="fas fa-file-excel mr-1"></i> Export Excel
                                 </button>
-                                <button class="btn btn-success" data-toggle="modal" data-target="#modalTambahKas">
+                                <button class="btn btn-success" onclick="bukaModalCatatKas('Kas Utama Masjid')">
                                     <i class="fas fa-plus-circle mr-1"></i> Catat Transaksi Baru
                                 </button>
                             </div>
@@ -2265,10 +2265,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-2 mb-md-0">
-                                    <select class="form-control" id="kasFilterType" onchange="filterKasTable()">
+                                    <select class="form-control font-weight-bold" id="kasFilterType" onchange="filterKasTable()">
                                         <option value="all">Semua Tipe (Masuk & Keluar)</option>
-                                        <option value="masuk">Pemasukan Saja</option>
-                                        <option value="keluar">Pengeluaran Saja</option>
+                                        <option value="masuk">PEMASUKAN</option>
+                                        <option value="keluar">PENGELUARAN</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 col-6">
@@ -2327,7 +2327,7 @@
                             <h4 class="font-weight-bold text-gray-800 mb-0">
                                 <i class="fas fa-ambulance text-primary mr-2"></i> Kas Layanan Mobil Ambulance
                             </h4>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambahKas">
+                            <button class="btn btn-primary" onclick="bukaModalCatatKas('Kas Ambulance')">
                                 <i class="fas fa-plus-circle mr-1"></i> Catat Transaksi Ambulance
                             </button>
                         </div>
@@ -2996,9 +2996,9 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">Jenis Transaksi</label>
-                            <select class="form-control" id="kasTipe" required>
-                                <option value="masuk">Pemasukan (Infaq / Donasi)</option>
-                                <option value="keluar">Pengeluaran (Operasional / Belanja)</option>
+                            <select class="form-control font-weight-bold" id="kasTipe" required>
+                                <option value="masuk">PEMASUKAN</option>
+                                <option value="keluar">PENGELUARAN</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -3011,11 +3011,16 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">Uraian / Keterangan</label>
-                            <input type="text" class="form-control" id="kasUraian" placeholder="Contoh: Infaq Kotak Amal Jum'at" required>
+                            <input type="text" class="form-control" id="kasUraian" placeholder="Contoh: Infaq Kotak Amal Jum'at / Donasi Operasional Ambulance" required>
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">Nominal (Rupiah)</label>
-                            <input type="number" class="form-control font-weight-bold" id="kasNominal" placeholder="Contoh: 500000" required min="1000">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold">Rp</span>
+                                </div>
+                                <input type="text" class="form-control font-weight-bold text-dark" id="kasNominal" placeholder="Contoh: 500.000" oninput="formatRupiahInput(this)" autocomplete="off" required>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -3052,9 +3057,9 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">Jenis Transaksi</label>
-                            <select class="form-control" id="editKasTipe" required>
-                                <option value="masuk">Pemasukan (Infaq / Donasi)</option>
-                                <option value="keluar">Pengeluaran (Operasional / Belanja)</option>
+                            <select class="form-control font-weight-bold" id="editKasTipe" required>
+                                <option value="masuk">PEMASUKAN</option>
+                                <option value="keluar">PENGELUARAN</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -3071,7 +3076,12 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">Nominal (Rupiah)</label>
-                            <input type="number" class="form-control font-weight-bold" id="editKasNominal" required min="1000">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold">Rp</span>
+                                </div>
+                                <input type="text" class="form-control font-weight-bold text-dark" id="editKasNominal" placeholder="Contoh: 500.000" oninput="formatRupiahInput(this)" autocomplete="off" required>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -3108,8 +3118,13 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold text-gray-800">Target Total Penggalangan Dana (Rp) <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control font-weight-bold text-success" id="inputProgInfaqTarget" placeholder="Contoh: 50000000" min="100000" required>
-                            <small class="text-muted">Nominal target dana yang ingin dicapai (dalam Rupiah tanpa titik).</small>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold">Rp</span>
+                                </div>
+                                <input type="text" class="form-control font-weight-bold text-success" id="inputProgInfaqTarget" placeholder="Contoh: 36.000.000" oninput="formatRupiahInput(this)" autocomplete="off" required>
+                            </div>
+                            <small class="text-muted">Target nominal penggalangan dana (titik pemisah ribuan otomatis).</small>
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold text-gray-800">Keterangan / Deskripsi Program</label>
@@ -3118,7 +3133,7 @@
                         <div class="custom-control custom-checkbox mt-3">
                             <input type="checkbox" class="custom-control-input" id="checkProgInfaqAktifTV" checked>
                             <label class="custom-control-label font-weight-bold text-primary" for="checkProgInfaqAktifTV">
-                                <i class="fas fa-broadcast-tower mr-1"></i> Langsung jadikan program aktif yang tayang di TV monitor
+                                <i class="fas fa-tv mr-1 text-success"></i> Langsung jadikan program aktif yang tayang di TV monitor
                             </label>
                         </div>
                     </form>
@@ -3156,7 +3171,13 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold text-gray-800">Target Total Penggalangan Dana (Rp) <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control font-weight-bold text-success" id="editProgInfaqTarget" min="100000" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold">Rp</span>
+                                </div>
+                                <input type="text" class="form-control font-weight-bold text-success" id="editProgInfaqTarget" placeholder="Contoh: 36.000.000" oninput="formatRupiahInput(this)" autocomplete="off" required>
+                            </div>
+                            <small class="text-muted">Target nominal penggalangan dana (titik pemisah ribuan otomatis).</small>
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold text-gray-800">Keterangan / Deskripsi Program</label>
@@ -3165,7 +3186,7 @@
                         <div class="custom-control custom-checkbox mt-3">
                             <input type="checkbox" class="custom-control-input" id="editCheckProgInfaqAktifTV">
                             <label class="custom-control-label font-weight-bold text-primary" for="editCheckProgInfaqAktifTV">
-                                <i class="fas fa-broadcast-tower mr-1"></i> Jadikan program aktif yang tayang di TV monitor
+                                <i class="fas fa-tv mr-1 text-success"></i> Jadikan program aktif yang tayang di TV monitor
                             </label>
                         </div>
                     </form>
@@ -4212,6 +4233,39 @@
             return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
         }
 
+        // Format input rupiah secara dinamis dengan pemisah ribuan titik (1.000.000)
+        function formatRupiahInput(el) {
+            if (!el) return;
+            let value = (el.value || '').toString().replace(/[^0-9]/g, '');
+            el.value = value ? parseInt(value, 10).toLocaleString('id-ID') : '';
+        }
+
+        // Parse nominal rupiah dari input bertitik menjadi float angka murni
+        function parseRupiahInput(val) {
+            if (!val) return 0;
+            return parseFloat(val.toString().replace(/[^0-9]/g, '')) || 0;
+        }
+
+        // Buka Modal Catat Transaksi Kas dengan kategori akun terpilih otomatis
+        function bukaModalCatatKas(kategoriDefault = 'Kas Utama Masjid') {
+            const today = new Date().toISOString().split('T')[0];
+            const kasTgl = document.getElementById('kasTanggal');
+            if (kasTgl) kasTgl.value = today;
+
+            const kasKat = document.getElementById('kasKategori');
+            if (kasKat && kategoriDefault) {
+                kasKat.value = kategoriDefault;
+            }
+
+            const kasUraian = document.getElementById('kasUraian');
+            if (kasUraian) kasUraian.value = '';
+
+            const kasNominal = document.getElementById('kasNominal');
+            if (kasNominal) kasNominal.value = '';
+
+            $('#modalTambahKas').modal('show');
+        }
+
         function getSupabaseHeaders() {
             return {
                 'apikey': SUPABASE_CONFIG.anonKey,
@@ -4801,7 +4855,7 @@
 
         async function simpanProgramInfaqBaru() {
             const nama = document.getElementById('inputProgInfaqNama')?.value.trim();
-            const target = parseFloat(document.getElementById('inputProgInfaqTarget')?.value) || 0;
+            const target = parseRupiahInput(document.getElementById('inputProgInfaqTarget')?.value);
             const ket = document.getElementById('inputProgInfaqKeterangan')?.value.trim() || '';
             const isActive = document.getElementById('checkProgInfaqAktifTV')?.checked === true;
 
@@ -4869,7 +4923,7 @@
 
             document.getElementById('editProgInfaqId').value = prog.id;
             document.getElementById('editProgInfaqNama').value = prog.nama_program;
-            document.getElementById('editProgInfaqTarget').value = prog.target_dana;
+            document.getElementById('editProgInfaqTarget').value = parseInt(prog.target_dana || 0, 10).toLocaleString('id-ID');
             document.getElementById('editProgInfaqKeterangan').value = prog.keterangan || '';
             document.getElementById('editCheckProgInfaqAktifTV').checked = prog.is_active === true;
 
@@ -4879,7 +4933,7 @@
         async function simpanEditProgramInfaq() {
             const id = document.getElementById('editProgInfaqId')?.value;
             const nama = document.getElementById('editProgInfaqNama')?.value.trim();
-            const target = parseFloat(document.getElementById('editProgInfaqTarget')?.value) || 0;
+            const target = parseRupiahInput(document.getElementById('editProgInfaqTarget')?.value);
             const ket = document.getElementById('editProgInfaqKeterangan')?.value.trim() || '';
             const isActive = document.getElementById('editCheckProgInfaqAktifTV')?.checked === true;
 
@@ -5187,7 +5241,7 @@
             }
 
             const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
-            const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
+            const rawNominal = isMasuk ? item.pemasukan : item.pengeluaran;
 
             document.getElementById('editKasId').value = item.id;
             document.getElementById('editKasTable').value = table;
@@ -5197,7 +5251,7 @@
             if (katVal === 'Infaq Renovasi') katVal = 'Penggalangan Infaq';
             document.getElementById('editKasKategori').value = katVal;
             document.getElementById('editKasUraian').value = item.deskripsi || item.uraian || '';
-            document.getElementById('editKasNominal').value = nominal;
+            document.getElementById('editKasNominal').value = parseInt(rawNominal || 0, 10).toLocaleString('id-ID');
 
             $('#modalEditKas').modal('show');
         }
@@ -5210,7 +5264,7 @@
             const tipe = document.getElementById('editKasTipe')?.value;
             const kat = document.getElementById('editKasKategori')?.value;
             const uraian = document.getElementById('editKasUraian')?.value;
-            const nominal = parseFloat(document.getElementById('editKasNominal')?.value) || 0;
+            const nominal = parseRupiahInput(document.getElementById('editKasNominal')?.value);
 
             if (!id || !uraian || nominal <= 0) {
                 alert('Harap lengkapi uraian dan nominal transaksi!');
@@ -5303,7 +5357,7 @@
             const tipe = document.getElementById('kasTipe')?.value;
             const kat = document.getElementById('kasKategori')?.value;
             const uraian = document.getElementById('kasUraian')?.value;
-            const nominal = parseFloat(document.getElementById('kasNominal')?.value) || 0;
+            const nominal = parseRupiahInput(document.getElementById('kasNominal')?.value);
 
             if (!uraian || nominal <= 0) {
                 alert('Harap lengkapi uraian dan nominal transaksi!');

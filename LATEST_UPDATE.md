@@ -3760,6 +3760,41 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 2. `web-statis/slides/infaq.html`
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 93).
 
+---
+
+## BAB 94: FORMAT OTOMATIS TITIK RUPIAH PADA INPUT DANA & PENYERAGAMAN JENIS TRANSAKSI KAS MENJADI "PEMASUKAN" & "PENGELUARAN"
+
+### 1. Masalah & Kebutuhan Pengguna
+1. **Gambar 1 (Input Nominal Kurang Mudah Dibaca):**
+   - Pada input Target Penggalangan Dana (`#inputProgInfaqTarget` dan `#editProgInfaqTarget`) serta input Nominal Transaksi Kas (`#kasNominal` dan `#editKasNominal`), angka rupiah sebelumnya belum memiliki pemisah ribuan otomatis (misalnya `1000000` atau `36000000000000` yang sulit dibaca oleh bendahara).
+   - Pengguna meminta agar diformat otomatis memiliki tanda titik seperti `1.000.000` atau `36.000.000`, identik dengan standar form yang ada di `https://digitalaljihad1.onrender.com/program-infaq`.
+2. **Gambar 2 (Pilihan Jenis Transaksi Kas Terbatas):**
+   - Pada modal Catat Transaksi Kas, pilihan transaksi sebelumnya berupa *"Pemasukan (Infaq / Donasi)"* dan *"Pengeluaran (Operasional / Belanja)"*, yang membingungkan bendahara saat mencatat kas ambulance atau kas umum lainnya karena belum mencakup pemasukan dan pengeluaran secara menyeluruh.
+   - Pengguna meminta agar Jenis Transaksi disederhanakan menjadi 2 kategori universal: **"PEMASUKAN"** dan **"PENGELUARAN"**.
+3. **Perbaikan Tampilan Ikon Checkbox TV:**
+   - Menghilangkan glitch karakter pada teks label checkbox aktivasi program di TV dan menggantikannya dengan ikon `<i class="fas fa-tv mr-1 text-success"></i>`.
+
+### 2. Rincian Pembaruan Teknis
+1. **Fungsi Helper Pemformatan & Parsing Rupiah Dinamis (`web-statis/admin.html`):**
+   - Menambahkan `formatRupiahInput(el)`: membersihkan karakter non-angka dan memformatnya secara real-time saat diketik menggunakan `toLocaleString('id-ID')`.
+   - Menambahkan `parseRupiahInput(val)`: mem-parse string nominal berformat ribuan kembali ke nilai angka numerik (`float`) murni sebelum disimpan ke database atau API Supabase.
+   - Menambahkan `bukaModalCatatKas(kategoriDefault)`: membuka modal transaksi kas dengan default akun kas (Kas Utama Masjid atau Kas Ambulance) yang terpilih langsung.
+2. **Modal Transaksi Kas (`#modalTambahKas` & `#modalEditKas`):**
+   - Opsi `#kasTipe` & `#editKasTipe`: Diubah menjadi `<option value="masuk">PEMASUKAN</option>` dan `<option value="keluar">PENGELUARAN</option>`.
+   - Filter dropdown kas `#kasFilterType`: Diubah menjadi opsi `"PEMASUKAN"` dan `"PENGELUARAN"`.
+   - Input `#kasNominal` & `#editKasNominal`: Menggunakan `input-group-prepend` bertanda `Rp`, `type="text"`, dan event handler `oninput="formatRupiahInput(this)"`.
+   - Logika `simpanTransaksiKas()`, `bukaModalEditKas()`, dan `simpanEditTransaksiKas()` disesuaikan agar menggunakan `parseRupiahInput()` saat submit dan `toLocaleString('id-ID')` saat membuka modal edit.
+3. **Modal Program Penggalangan Infaq (`#modalTambahProgramInfaq` & `#modalEditProgramInfaq`):**
+   - Input `#inputProgInfaqTarget` & `#editProgInfaqTarget`: Menggunakan `input-group-prepend` bertanda `Rp`, `type="text"`, dan event handler `oninput="formatRupiahInput(this)"`.
+   - Logika `simpanProgramInfaqBaru()`, `bukaModalEditProgramInfaq()`, dan `simpanEditProgramInfaq()` disesuaikan agar menggunakan `parseRupiahInput()` dan `toLocaleString('id-ID')`.
+   - Label checkbox status siaran monitor TV dipercantik dengan ikon FontAwesome TV.
+
+### 3. Berkas yang Terkait / Diperbarui:
+1. `web-statis/admin.html` (Form modal kas & infaq, helper `formatRupiahInput`, `parseRupiahInput`, `bukaModalCatatKas`, handler simpan/edit).
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 94).
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html` (Sinkronisasi lokal).
+
+
 
 
 
