@@ -5357,8 +5357,16 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
    - Menambahkan section view `#view-agenda-rutin` dengan form 4 kegiatan dan 1-Click Day Picker interaktif.
    - Menambahkan fungsi JavaScript: `loadAgendaRutinAdmin()`, `simpanAgendaRutinAdmin()`, `toggleWsDayPill(btn)`, dan `renderDashAgendaRutinWidget()`.
    - Data otomatis tersimpan ganda ke `localStorage` (`agenda_rutin_settings`) dan Supabase BaaS `kegiatan_rutin_settings`.
-2. **Player Rotasi TV (`web-statis/index.html`):**
-   - Menambahkan pemetaan canon `/agenda-rutin-embed` -> `'slides/agenda-rutin.html'` pada `PATH_MAPPING`.
+#### F. Penyempurnaan Tampilan Slide TV Display Sesuai Standar Estetika Masjid (KOREKSI):
+1. **Pemusatan Judul Kegiatan (Center Alignment):**
+   - Teks judul di dalam 4 kotak kegiatan ("Pembacaan Surat Yaasiin & Tahlil", "Kajian Umum Malam Ahad", "Bimbingan Tahsin Al-Qur'an", "Kajian Tafsir Al-Qur'an Tematik") kini diposisikan persis di tengah (`text-align: center !important`).
+2. **Pembersihan Footer Kartu:**
+   - Menghapus teks samping kanan yang tidak perlu di bagian bawah kotak: `"Otomatis di TV"`, `"Ikhwan & Akhwat"`, `"Gratis / Infaq"`, dan `"Keluarga Muslim"`.
+   - Badge status yang tersisa diposisikan rapi di tengah (`justify-content: center`).
+3. **Penyelarasan Header Seragam Masjid:**
+   - Mengganti header atas agar identik 100% dengan slide display masjid lainnya (`slides/jumat.html`, `slides/keuangan.html`, dll) menggunakan stylesheet master `display-theme.css`, `partials-theme.css`, medali kaligrafi 3D (`muhammad_3d.png` & `allah_3d.png`), H1 emas 3D, sub-header `SISTEM INFORMASI DIGITAL`, kapsul jam & tanggal realtime, serta badge judul `JADWAL KEGIATAN RUTIN MASJID`.
+4. **Pembaruan Teks Identitas Footer:**
+   - Teks `"Masjid Jami' Al Jihad — Digital Signage System"` resmi diubah menjadi `"Sistem Informasi Digital — Masjid Jami' Al Jihad"`.
 
 ---
 
@@ -5368,13 +5376,14 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 3. `app/Http/Controllers/AgendaRutinController.php` (BARU).
 4. `routes/web.php` (DIMODIFIKASI).
 5. `resources/views/agenda_rutin/index.blade.php` (BARU).
-6. `resources/views/agenda-rutin-embed.blade.php` (BARU).
+6. `resources/views/agenda-rutin-embed.blade.php` (BARU - Disempurnakan).
 7. `resources/views/layouts/admin.blade.php` (DIMODIFIKASI).
 8. `resources/views/home.blade.php` (DIMODIFIKASI - Dashboard Petugas).
 9. `web-statis/admin.html` (DIMODIFIKASI - Dashboard & Panel Kontrol Petugas).
-10. `web-statis/slides/agenda-rutin.html` (BARU).
+10. `web-statis/slides/agenda-rutin.html` (BARU - Disempurnakan).
 11. `web-statis/index.html` (DIMODIFIKASI - PATH_MAPPING Slide TV).
 12. `LATEST_UPDATE.md` (DIMODIFIKASI - Bab 129).
 13. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN).
 14. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
 
