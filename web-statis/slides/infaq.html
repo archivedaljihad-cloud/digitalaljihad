@@ -609,11 +609,17 @@
 
             document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Muhsinin';
 
-            // Render Donatur List Dinamis (5 teratas)
+            // Render Donatur List Dinamis (5 donatur terbaru di TV)
             const donaturContainer = document.getElementById('donaturList');
             if (donaturContainer) {
                 if (rawDonaturList.length > 0) {
-                    donaturContainer.innerHTML = rawDonaturList.slice(0, 5).map(d => {
+                    const sortedRecent = [...rawDonaturList].sort((a, b) => {
+                        const dateA = new Date(a.tanggal || 0).getTime();
+                        const dateB = new Date(b.tanggal || 0).getTime();
+                        if (dateA !== dateB) return dateB - dateA;
+                        return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+                    });
+                    donaturContainer.innerHTML = sortedRecent.slice(0, 5).map(d => {
                         const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
                         return `
                             <div class="donatur-item">

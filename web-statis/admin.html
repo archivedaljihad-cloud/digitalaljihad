@@ -5438,7 +5438,7 @@
 
             // F2. Daftar Donatur Donasi Infaq
             try {
-                const resDonasi = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?order=tanggal.desc,id.desc`, { headers });
+                const resDonasi = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?order=tanggal.asc,id.asc`, { headers });
                 if (resDonasi.ok) {
                     cachedDonasiInfaq = await resDonasi.json();
                 }
@@ -5718,8 +5718,15 @@
                 document.getElementById('detailProgPeriode').innerHTML = `<i class="fas fa-calendar-alt text-primary mr-1"></i> Periode: ${tglMulai} s/d ${tglSelesai} ${statusTayang}`;
             }
 
-            // 4. Hitung Donasi Masuk Khusus Program Terpilih
-            const donasiList = (cachedDonasiInfaq || []).filter(d => d.program_infaq_id == currentProg.id);
+            // 4. Hitung Donasi Masuk Khusus Program Terpilih (Urutan: Paling lama di atas, paling baru di bawah)
+            const donasiList = (cachedDonasiInfaq || [])
+                .filter(d => d.program_infaq_id == currentProg.id)
+                .sort((a, b) => {
+                    const dateA = new Date(a.tanggal || 0).getTime();
+                    const dateB = new Date(b.tanggal || 0).getTime();
+                    if (dateA !== dateB) return dateA - dateB;
+                    return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+                });
             const totalTerkumpul = donasiList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
             const targetDana = parseFloat(currentProg.target_dana) || 0;
             const sisaDana = Math.max(0, targetDana - totalTerkumpul);
@@ -5869,22 +5876,22 @@
                     if (res.ok) {
                         const newItems = await res.json().catch(() => ([]));
                         if (newItems && newItems.length > 0) {
-                            cachedDonasiInfaq.unshift(newItems[0]);
+                            cachedDonasiInfaq.push(newItems[0]);
                         } else {
                             payload.id = Date.now();
-                            cachedDonasiInfaq.unshift(payload);
+                            cachedDonasiInfaq.push(payload);
                         }
                     } else {
                         payload.id = Date.now();
-                        cachedDonasiInfaq.unshift(payload);
+                        cachedDonasiInfaq.push(payload);
                     }
                 } else {
                     payload.id = Date.now();
-                    cachedDonasiInfaq.unshift(payload);
+                    cachedDonasiInfaq.push(payload);
                 }
             } catch (err) {
                 payload.id = Date.now();
-                cachedDonasiInfaq.unshift(payload);
+                cachedDonasiInfaq.push(payload);
             }
 
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
@@ -6158,7 +6165,14 @@
                 return;
             }
 
-            const donasiList = (cachedDonasiInfaq || []).filter(d => d.program_infaq_id == prog.id);
+            const donasiList = (cachedDonasiInfaq || [])
+                .filter(d => d.program_infaq_id == prog.id)
+                .sort((a, b) => {
+                    const dateA = new Date(a.tanggal || 0).getTime();
+                    const dateB = new Date(b.tanggal || 0).getTime();
+                    if (dateA !== dateB) return dateA - dateB;
+                    return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+                });
             const targetDana = parseFloat(prog.target_dana) || 0;
             const totalTerkumpul = donasiList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
             const sisaDana = Math.max(0, targetDana - totalTerkumpul);
@@ -6208,7 +6222,14 @@
                 return;
             }
 
-            const donasiList = (cachedDonasiInfaq || []).filter(d => d.program_infaq_id == prog.id);
+            const donasiList = (cachedDonasiInfaq || [])
+                .filter(d => d.program_infaq_id == prog.id)
+                .sort((a, b) => {
+                    const dateA = new Date(a.tanggal || 0).getTime();
+                    const dateB = new Date(b.tanggal || 0).getTime();
+                    if (dateA !== dateB) return dateA - dateB;
+                    return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+                });
             const targetDana = parseFloat(prog.target_dana) || 0;
             const totalTerkumpul = donasiList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
             const sisaDana = Math.max(0, targetDana - totalTerkumpul);

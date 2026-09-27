@@ -4289,5 +4289,48 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 105.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+---
+
+## 🕌 BAB 106: PENYESUAIAN METODE URUTAN LIST DONATUR PROGRAM INFAQ (PALING ATAS YANG LAMA, PALING BAWAH YANG TERBARU)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- Pengurus / Bendahara masjid meminta agar urutan tabel **"Daftar Penerimaan Infaq Donatur"** pada modul Program Infaq diubah susunannya:
+  - **Paling Atas:** Donatur / donasi yang paling lama (tanggal awal masuk / riwayat terdahulu).
+  - **Paling Bawah:** Donatur / donasi yang paling baru (terkini masuk).
+- Dengan susunan kronologis menaik (*ascending* by date & id), nomor urut (No. 1, 2, 3...) mencerminkan deretan donatur pertama yang mengawali program hingga donatur terbaru di urutan akhir.
+
+---
+
+### 2. Solusi & Perubahan Arsitektur:
+1. **Pembaruan Query & Logika Sort Admin (`web-statis/admin.html`):**
+   - Mengubah parameter query fetch Supabase dari `?order=tanggal.desc,id.desc` menjadi `?order=tanggal.asc,id.asc`.
+   - Menambahkan pengurutan presisi pada array `donasiList` di `renderProgramInfaqSection()` menggunakan formula:
+     ```javascript
+     donasiList.sort((a, b) => {
+         const dateA = new Date(a.tanggal || 0).getTime();
+         const dateB = new Date(b.tanggal || 0).getTime();
+         if (dateA !== dateB) return dateA - dateB; // Lama di atas, baru di bawah
+         return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+     });
+     ```
+   - Mengubah mekanisme input donasi masuk (`simpanDonasiInfaq`): Donasi baru yang baru saja dicatat kini dimasukkan ke akhir deretan menggunakan `cachedDonasiInfaq.push(payload)` (sebelumnya `unshift`), sehingga langsung muncul di baris paling bawah tabel.
+   - Menyelaraskan urutan cetak laporan resmi (`cetakLaporanInfaqPDF`) dan ekspor Excel (`exportLaporanInfaqCSV`) agar tersusun kronologis dari infaq pertama hingga terakhir.
+
+2. **Pembaruan Kueri Basis Data (`web-statis/js/supabase-db.js`):**
+   - Memperbarui fungsi `getDonasiInfaq()` agar menggunakan `.order('tanggal', { ascending: true }).order('id', { ascending: true })` serta fallback sorting ascending untuk data lokal/cache.
+
+3. **Preservasi Tampilan Layar TV Signage (`web-statis/slides/infaq.html`):**
+   - Pada kartu *"Daftar Donatur Terkini"* di slide TV, data tetap disortir secara cerdas (*recent 5 items*) agar TV selalu menampilkan nama-nama donatur dermawan yang baru saja berdonasi.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Query fetch `tanggal.asc,id.asc`, sorting ascending `donasiList`, `push` pada donasi baru, serta ekspor CSV & PDF.
+2. `web-statis/js/supabase-db.js`: Query ascending pada fungsi `getDonasiInfaq`.
+3. `web-statis/slides/infaq.html`: Sorting 5 donatur terbaru untuk slide TV.
+4. `LATEST_UPDATE.md`: Dokumentasi Bab 106.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+
+
 
 

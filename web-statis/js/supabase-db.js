@@ -245,7 +245,7 @@
             try {
                 const client = getClient();
                 if (client) {
-                    let query = client.from('donasi_infaq').select('*').order('tanggal', { ascending: false });
+                    let query = client.from('donasi_infaq').select('*').order('tanggal', { ascending: true }).order('id', { ascending: true });
                     if (programId) query = query.eq('program_infaq_id', programId);
                     const { data, error } = await query;
                     if (!error && data) {
@@ -257,7 +257,13 @@
             }
             const cached = localStorage.getItem('cached_donasi_infaq');
             const allDonasi = cached ? JSON.parse(cached) : [];
-            return programId ? allDonasi.filter(d => d.program_infaq_id == programId) : allDonasi;
+            const filtered = programId ? allDonasi.filter(d => d.program_infaq_id == programId) : allDonasi;
+            return filtered.sort((a, b) => {
+                const dateA = new Date(a.tanggal || 0).getTime();
+                const dateB = new Date(b.tanggal || 0).getTime();
+                if (dateA !== dateB) return dateA - dateB;
+                return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+            });
         },
 
         /**
