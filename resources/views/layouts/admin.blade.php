@@ -93,6 +93,26 @@
             --islamic-maroon: #8b4513;
         }
 
+        /* Tombol Hijau NU / Zamrud Gelap */
+        .btn-nu-emerald {
+            background-color: #0d6e38 !important;
+            border-color: #0a582d !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(13, 110, 56, 0.25);
+        }
+        .btn-nu-emerald:hover, .btn-nu-emerald:focus {
+            background-color: #085228 !important;
+            border-color: #06401f !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 10px rgba(8, 82, 40, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-nu-emerald:active {
+            transform: translateY(1px);
+        }
+
         body {
             font-family: 'Poppins', 'Nunito', sans-serif;
             background: linear-gradient(135deg, #f5f7f2 0%, #e8ede5 100%);
@@ -968,11 +988,11 @@
                 </a>
             </li>
 
-            <!-- Nav Item - Penggalangan Infaq -->
+            <!-- Nav Item - Program Infaq -->
             <li class="nav-item {{ request()->routeIs('program-infaq.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('program-infaq.index') }}">
                     <i class="fas fa-fw fa-donate"></i>
-                    <span>Penggalangan Infaq</span>
+                    <span>Program Infaq</span>
                 </a>
             </li>
 
@@ -1188,11 +1208,11 @@
                 </a>
             </li>
 
-            <!-- Nav Item - Penggalangan Infaq -->
+            <!-- Nav Item - Program Infaq -->
             <li class="nav-item {{ request()->routeIs('program-infaq.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('program-infaq.index') }}">
                     <i class="fas fa-fw fa-donate"></i>
-                    <span>Penggalangan Infaq</span>
+                    <span>Program Infaq</span>
                 </a>
             </li>
 

@@ -7,16 +7,13 @@
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 		<div>
 			<h1 class="h3 mb-0 text-gray-800">
-				<i class="fas fa-donate text-warning mr-2"></i> Penggalangan Infaq & Donasi Khusus
+				<i class="fas fa-donate text-warning mr-2"></i> Program Infaq & Donasi Khusus
 			</h1>
 			<p class="text-muted small mb-0 mt-1">Kelola program penggalangan dana masjid terukur dengan target, pencatatan donatur, dan display TV monitor.</p>
 		</div>
 		<div class="mt-3 mt-sm-0">
-			<a href="{{ route('program-infaq.create') }}" class="btn btn-primary btn-sm shadow-sm">
-				<i class="fas fa-plus-circle"></i> Buat Program Baru
-			</a>
-			<a href="{{ route('infaq.embed') }}" target="_blank" class="btn btn-info btn-sm shadow-sm ml-2">
-				<i class="fas fa-tv"></i> Buka Layar TV
+			<a href="{{ route('infaq.embed') }}" target="_blank" class="btn btn-info btn-sm shadow-sm font-weight-bold">
+				<i class="fas fa-tv mr-1"></i> Buka Layar TV
 			</a>
 		</div>
 	</div>
@@ -43,11 +40,12 @@
 	@if($programs->count() > 0)
 	<div class="card shadow-sm mb-4 border-0">
 		<div class="card-body py-3">
-			<div class="d-flex flex-wrap align-items-center justify-content-between">
-				<div class="d-flex align-items-center mb-2 mb-md-0">
-					<span class="font-weight-bold text-gray-700 mr-2"><i class="fas fa-list-ul mr-1"></i> Pilih Program:</span>
+			<div class="d-flex flex-column" style="gap: 12px;">
+				<!-- Baris 1: Pilih Program -->
+				<div class="d-flex align-items-center flex-wrap">
+					<span class="font-weight-bold text-gray-700 mr-2 text-nowrap"><i class="fas fa-list-ul mr-1"></i> Pilih Program:</span>
 					<form method="GET" action="{{ route('program-infaq.index') }}" class="form-inline">
-						<select name="program_id" class="form-control form-control-sm font-weight-bold text-primary" onchange="this.form.submit()" style="min-width: 250px;">
+						<select name="program_id" class="form-control form-control-sm font-weight-bold text-primary" onchange="this.form.submit()" style="max-width: 520px; min-width: 250px;">
 							@foreach($programs as $p)
 								<option value="{{ $p->id }}" {{ ($selectedProgram && $selectedProgram->id === $p->id) ? 'selected' : '' }}>
 									{{ $p->nama_program }} {{ $p->is_active ? '★ (Tampil di TV)' : '' }}
@@ -56,35 +54,46 @@
 						</select>
 					</form>
 				</div>
-				@if($selectedProgram)
-				<div class="d-flex align-items-center">
-					@if($selectedProgram->is_active)
-						<span class="badge badge-success px-3 py-2 mr-2" style="font-size: 0.85rem;">
-							<i class="fas fa-broadcast-tower mr-1"></i> Sedang Aktif di TV Monitor
-						</span>
-					@else
-						<form action="{{ route('program-infaq.activate', $selectedProgram->id) }}" method="POST" class="d-inline mr-2">
+				<!-- Baris 2: Tombol Aksi Program (Kiri: Status TV, Edit, Hapus | Kanan: Buat Program Baru) -->
+				<div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 8px;">
+					@if($selectedProgram)
+					<div class="d-flex align-items-center flex-wrap">
+						@if($selectedProgram->is_active)
+							<span class="badge badge-success px-3 py-2 mr-2 mb-1" style="font-size: 0.85rem;">
+								<i class="fas fa-broadcast-tower mr-1"></i> Sedang Aktif di TV Monitor
+							</span>
+						@else
+							<form action="{{ route('program-infaq.activate', $selectedProgram->id) }}" method="POST" class="d-inline mr-2 mb-1">
+								@csrf
+								@method('PUT')
+								<button type="submit" class="btn btn-outline-success btn-sm shadow-sm font-weight-bold">
+									<i class="fas fa-check-circle mr-1"></i> Aktifkan Tampil di TV
+								</button>
+							</form>
+						@endif
+
+						<a href="{{ route('program-infaq.edit', $selectedProgram->id) }}" class="btn btn-warning btn-sm shadow-sm mr-2 mb-1 font-weight-bold">
+							<i class="fas fa-edit mr-1"></i> Edit Target
+						</a>
+
+						<form action="{{ route('program-infaq.destroy', $selectedProgram->id) }}" method="POST" class="d-inline mb-1" onsubmit="return confirm('Yakin ingin menghapus program ini beserta seluruh riwayat donasinya?');">
 							@csrf
-							@method('PUT')
-							<button type="submit" class="btn btn-outline-success btn-sm shadow-sm">
-								<i class="fas fa-check-circle mr-1"></i> Aktifkan Tampil di TV
+							@method('DELETE')
+							<button type="submit" class="btn btn-danger btn-sm shadow-sm font-weight-bold">
+								<i class="fas fa-trash mr-1"></i> Hapus
 							</button>
 						</form>
+					</div>
+					@else
+					<div></div>
 					@endif
 
-					<a href="{{ route('program-infaq.edit', $selectedProgram->id) }}" class="btn btn-warning btn-sm shadow-sm mr-2">
-						<i class="fas fa-edit"></i> Edit Target
-					</a>
-
-					<form action="{{ route('program-infaq.destroy', $selectedProgram->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus program ini beserta seluruh riwayat donasinya?');">
-						@csrf
-						@method('DELETE')
-						<button type="submit" class="btn btn-danger btn-sm shadow-sm">
-							<i class="fas fa-trash"></i> Hapus
-						</button>
-					</form>
+					<div class="ml-auto my-1">
+						<a href="{{ route('program-infaq.create') }}" class="btn btn-sm shadow-sm font-weight-bold btn-nu-emerald text-nowrap">
+							<i class="fas fa-plus-circle mr-1"></i> Buat Program Baru
+						</a>
+					</div>
 				</div>
-				@endif
 			</div>
 		</div>
 	</div>

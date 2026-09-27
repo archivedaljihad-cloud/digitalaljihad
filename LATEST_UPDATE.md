@@ -4254,4 +4254,40 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 3. `LATEST_UPDATE.md`: Dokumentasi Bab 104.
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+---
+
+## 🕌 BAB 105: PENYESUAIAN LABEL "PROGRAM INFAQ", JUDUL UTAMA "PROGRAM INFAQ & DONASI KHUSUS", SERTA REPOSISI TOMBOL "BUAT PROGRAM BARU" BERWARNA HIJAU NU / ZAMRUD GELAP
+
+### 1. Latar Belakang & Permintaan Pengguna
+1. **Penyempurnaan Label Menu Sidebar:**
+   - Mengubah penamaan menu di sidebar navigasi kiri (*Manajemen Keuangan*) dari sebelumnya `"Penggalangan Infaq"` menjadi **`"Program Infaq"`**.
+2. **Penyelarasan Judul Utama Halaman:**
+   - Mengubah judul utama modul halaman dari sebelumnya `"Penggalangan Infaq & Donasi Khusus"` menjadi **`"Program Infaq & Donasi Khusus"`**.
+3. **Reposisi & Tata Letak Tombol "Buat Program Baru":**
+   - Memindahkan tombol **"Buat Program Baru"** yang sebelumnya berada di header kanan atas (berdekatan dengan tombol *"Buka Layar TV"*) ke dalam kotak/kartu selector program.
+   - Memposisikan tombol tersebut agar sejajar secara horizontal dengan kelompok tombol aksi program: `[Tayang di TV (Aktif)]`, `[Export Laporan]`, `[Edit Target]`, dan `[Hapus]`.
+   - Mengatur letak tombol di sisi paling kanan kotak (`ml-auto`), memberikan jarak pemisah yang bersih dan agak menjauh dari tombol `[Hapus]` (merah) untuk menghindari kekeliruan klik sekaligus memperindah komposisi visual.
+4. **Sentuhan Warna Islami (Hijau NU / Zamrud Gelap):**
+   - Mengubah latar belakang tombol **"Buat Program Baru"** menggunakan class khusus `.btn-nu-emerald` dengan kode warna **Hijau NU / Hijau Zamrud Agak Gelap** (`#0d6e38` dengan efek hover `#085228`, teks putih berbobot tebal `font-weight: 700`, dan bayangan pendaran lembut) sehingga mencolok, berwibawa, dan sangat mudah terlihat oleh admin.
+
+---
+
+### 2. Berkas yang Diperbarui:
+1. `web-statis/admin.html`:
+   - Penambahan style CSS `.btn-nu-emerald` bernuansa hijau NU / hijau zamrud agak gelap.
+   - Pembaruan label menu sidebar kiri: `<span>Program Infaq</span>`.
+   - Pembaruan judul utama view infaq: `Program Infaq & Donasi Khusus`.
+   - Restrukturisasi kotak selector program menjadi 2 baris teratur:
+     - Baris 1: Label `Pilih Program:` dan `<select id="selectProgramInfaq">`.
+     - Baris 2: Tombol aksi program di sebelah kiri (`btnGroupProgramActions`: status TV, export laporan, edit target, hapus) serta tombol `[+ Buat Program Baru]` di ujung paling kanan dengan class `.btn-nu-emerald`.
+2. `resources/views/layouts/admin.blade.php`:
+   - Penambahan class CSS `.btn-nu-emerald` pada style tema admin Laravel.
+   - Pembaruan nama menu navigasi sidebar untuk role Super Admin & Bendahara menjadi `Program Infaq`.
+3. `resources/views/program_infaq/index.blade.php`:
+   - Pembaruan judul halaman menjadi `Program Infaq & Donasi Khusus`.
+   - Pemindahan tombol `Buat Program Baru` ke samping paling kanan baris aksi pada kartu selector program dengan tombol `.btn-nu-emerald`.
+4. `LATEST_UPDATE.md`: Dokumentasi Bab 105.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+
+
 
