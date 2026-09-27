@@ -4901,3 +4901,33 @@ Pengguna melaporkan bahwa gambar galeri informasi tidak tampil di layar TV masji
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## BAB 120: PENERAPAN BORDERLESS FLOATING POSTER (TRANSPARANSI BINGKAI GAMBAR GALERI TV)
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna meminta agar tampilan Galeri Informasi di TV display terlihat lebih rapi, lega, dan enak dilihat dengan **menghilangkan/menyembunyikan (mentransparankan) bingkai untuk gambarnya saja**, sementara kartu panel teks informasi di sebelah kanan tetap dipertahankan. Hal ini dikarenakan berkas gambar/dokumen masjid (seperti kompas arah kiblat atau piagam sertifikat) sudah memiliki ornamen pigura/bingkai internalnya sendiri, sehingga bingkai luar ganda terlihat kaku dan membatasi estetika gambar.
+
+### 2. Solusi & Perubahan yang Diterapkan:
+1. **Transparansi Bingkai Wadah Gambar (`.poster-frame`):**
+   - Menghilangkan garis tepi kotak emas tebal (`border: none;`).
+   - Menghilangkan latar belakang kotak hijau gelap (`background: transparent;`).
+   - Menghilangkan bayangan kotak kaku (`box-shadow: none;`).
+   - Mengubah `overflow: visible;` agar elemen gambar dan bayangan naturalnya tidak terpotong.
+2. **Efek Natural 3D Drop-Shadow (`.poster-frame img`):**
+   - Menambahkan efek bayangan lembut mengambang pada gambar dokumen itu sendiri: `filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.88));`.
+   - Hasilnya, poster dokumen tampil melayang bebas (*floating poster*) secara anggun, bersih, dan menyatu harmonis dengan latar belakang video/gambar dinamis masjid.
+3. **Harmonisasi Transisi 3D Grid Flip (`.grid-flip-container`):**
+   - Menyelaraskan kontainer transisi ubin 3D flip dengan bayangan mengambang yang sama (`filter: drop-shadow(...)`), sehingga selama proses rotasi ubin membalik tidak timbul patahan visual ataupun kotak border luar.
+4. **Pembaruan Cache-Buster Script (`?v=20260927_02`):**
+   - Menaikkan versi query string pada `slide.html` agar Smart TV masjid langsung memuat CSS dan JavaScript versi teranyar tanpa tertahan oleh cache browser.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/slides/slide.html`: Transformasi `.poster-frame` menjadi borderless transparan, penambahan drop-shadow gambar, dan versioning script `v=20260927_02`.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 120.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
