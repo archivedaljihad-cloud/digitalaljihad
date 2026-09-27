@@ -5002,6 +5002,27 @@ Pengguna meminta agar elemen kotak kapsul (*pill badge*) bertuliskan *"GALERI IN
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## BAB 123: REPOSISI MENU "REMOTE TV JARAK JAUH" KE BAGIAN PALING BAWAH SIDEBAR ADMIN
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna meminta agar posisi menu *"Remote TV Jarak Jauh"* di sidebar dashboard Admin diatur ulang dan dipindahkan ke bagian paling bawah. Hal ini bertujuan agar menu kontrol remote TV mudah dijangkau tepat berdampingan dengan pintasan *"Buka Layar TV Display"* dan *"Keluar (Logout)"* di bagian bawah panel navigasi.
+
+### 2. Solusi & Perubahan yang Diterapkan:
+1. **Pemindahan Posisi Nav Item di Sidebar (`web-statis/admin.html`):**
+   - Menghapus elemen `<li class="nav-item" id="nav-remote-tv">` dari posisinya yang lama (di antara *Rotasi TV & Reorder* dan *Galeri Informasi*).
+   - Menempatkan elemen `<li class="nav-item" id="nav-remote-tv" data-role="admin, petugas">` di kelompok bagian paling bawah sidebar, tepat setelah menu *"Buka Layar TV Display"* dan sebelum tombol *"Keluar (Logout)"*.
+2. **Preservasi RBAC (Role-Based Access Control):**
+   - Menambahkan atribut `data-role="admin, petugas"` pada elemen nav item tersebut sehingga menu remote TV tetap dapat diakses oleh Super Admin dan Operator/Petugas, serta tersinkronisasi rapi dengan sistem hak akses.
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Pemindahan posisi menu sidebar `#nav-remote-tv` ke bagian paling bawah.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 123.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 
 
