@@ -4502,6 +4502,81 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## 📌 BAB 111: PERBAIKAN LOGIN MULTI-IDENTIFIER (NAMA/USERNAME/EMAIL) & PENAMBAHAN FITUR TAMBAH AKUN PENGURUS BARU (SUPER ADMIN)
+
+### 1. Masalah & Kebutuhan Pengguna:
+1. **Kegagalan Login Pasca Edit Nama Akun:**
+   - Super Admin mengedit profil akun (misal Nama: *"Suwardi"*, Email: `admin@aljihad.com`, Password: `admin123`) dan notifikasi berhasil muncul.
+   - Namun ketika pengguna mencoba login di `login.html` dengan memasukkan:
+     - **Email / Username:** *"Suwardi"*
+     - **Kata Sandi:** `admin123`
+     Sistem menampilkan pesan error: *"Kredensial tidak valid! Periksa kembali Email/Username atau Kata Sandi."*
+   - **Akar Penyebab Teknis:**
+     - Logika autentikasi pada `AdminAuth.login()` sebelumnya hanya mencocokkan `u.email` dan `u.username`. Properti nama lengkap pengguna (`u.name`) tidak pernah diikutsertakan dalam pemeriksaan.
+     - Saat edit profil disimpan, `u.username` secara default mengambil prefix email (`cleanEmail.split('@')[0]` yaitu `"admin"`), bukan nama pengguna (`"Suwardi"`). Karena pengguna memasukkan namanya di kolom berlabel *"Email / Username"*, pencocokan string gagal.
+     - Form Edit Pengguna juga tidak memiliki kolom input untuk mengedit `username` secara eksplisit.
+     - Logika `AdminAuth.getUsers()` dan `renderUsersTable()` sebelumnya menerapkan deduplikasi ketat (`seenRoles.has(r)`) yang membatasi sistem HANYA memiliki 3 akun (1 Super Admin, 1 Bendahara, 1 Petugas). Akibatnya akun tambahan apa pun langsung dibuang.
+
+2. **Kebutuhan Fitur Tambah Akun Baru Pengurus:**
+   - Pengguna meminta agar dashboard Super Admin dilengkapi fitur tombol **"+ Tambah Akun Baru"** untuk mendaftarkan akun pengurus-pengurus masjid lainnya (misal: pengurus RW 007, RW 011, RW 013, bendahara pembantu, operator TV cadangan, dsb).
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Mesin Autentikasi Fleksibel & Multi-Identifier (`web-statis/js/admin-auth.js`):**
+   - Menambahkan method `isUserMatch(u, cleanId)` dengan kecerdasan pencocokan berlapis:
+     1. Pencocokan persis alamat email (`u.email.toLowerCase() === cleanId`).
+     2. Pencocokan persis username (`u.username.toLowerCase() === cleanId`).
+     3. Pencocokan persis nama lengkap (`u.name.toLowerCase() === cleanId`).
+     4. Pencocokan nama tanpa gelar kehormatan umum (*Bpk., Ust., H., Haji, Ustadz, Kyai, Bapak, Ibu, DKM*).
+     5. Pencocokan kata kunci nama panggilan (misal mengetik *"Suwardi"* langsung cocok dengan *"Bpk. H. Suwardi"*).
+     6. Pencocokan parsial substring nama jika inputan minimal 3 karakter.
+   - Dengan peningkatan ini, pengguna kini bisa login dengan mengetik **Nama Lengkap ("Suwardi")**, **Username ("suwardi" atau "admin")**, maupun **Email ("admin@aljihad.com")** secara bebas dan langsung dikenali!
+
+2. **Dukungan Multi-Akun Pengurus di `AdminAuth` (`web-statis/js/admin-auth.js`):**
+   - Menghapus pembatasan sepihak 3 akun baku di `getUsers()`. Sistem kini mendukung banyak akun pengurus sesuai kebutuhan DKM.
+   - Menambahkan method `AdminAuth.createUser(data)`:
+     - Validasi nama, email, username unik, password (minimal 4 karakter), dan role.
+     - Auto-generate username jika dikosongkan.
+     - Penentuan hak akses, icon, warna avatar, dan pencatatan waktu pembuatan.
+     - Persistensi ke `localStorage` (`aljihad_users_list`) dan sinkronisasi ke tabel Supabase `users` jika online.
+   - Memperbarui `AdminAuth.updateUser(userId, data)`:
+     - Mendukung perubahan username secara eksplisit.
+     - Validasi anti-bentrok email dan username terhadap akun lain.
+     - Sinkronisasi instan terhadap sesi aktif jika yang diedit adalah akun yang sedang login.
+   - Menambahkan method `AdminAuth.deleteUser(userId)`:
+     - Proteksi keamanan: Super Admin tidak bisa menghapus akun dirinya sendiri yang sedang aktif login.
+     - Proteksi keamanan: Minimal harus tersisa 1 Super Admin di sistem (tidak bisa menghapus Super Admin terakhir).
+
+3. **Antarmuka Manajemen Pengguna di Dashboard (`web-statis/admin.html`):**
+   - **Tombol "+ Tambah Akun Baru"**: Ditambahkan pada Header Card *Daftar Akun Pengurus & Kredensial* (`#btnTambahAkunBaru`), dengan tampilan eksklusif hanya untuk Super Admin.
+   - **Modal Tambah Pengurus Baru (`#modalTambahUser`)**:
+     - Form islami bertema zamrud-emas dengan input: Nama Lengkap Pengurus, Username Akun (auto-fill dari nama), Alamat Email, Password Awal (+ toggle show/hide), dan Pilihan Peran/Hak Akses (Super Admin / Bendahara / Petugas).
+   - **Pembaruan Modal Edit Kredensial (`#modalEditUser`)**:
+     - Menambahkan input kolom **Username Pengguna** yang dapat diedit dan dilihat dengan jelas.
+     - Menambahkan pilihan dropdown **Peran / Hak Akses** agar Super Admin bisa menaikkan/menyesuaikan wewenang pengurus.
+   - **Pembaruan Tabel Pengguna (`renderUsersTable`)**:
+     - Menampilkan kolom baru **Username** dengan badge khusus agar pengurus tahu username login masing-masing.
+     - Kolom Aksi dilengkapi tombol **Edit Akun** dan tombol merah **Hapus Akun** (dengan konfirmasi keamanan SweetAlert2).
+     - Akun milik Super Admin yang sedang aktif login diberi penanda aman *"Anda"* dan diproteksi dari penghapusan tidak sengaja.
+
+4. **Pembaruan Cache-Buster & Keamanan:**
+   - Memperbarui query version tag skrip `<script src="js/admin-auth.js?v=2.5"></script>` pada `web-statis/login.html` dan `web-statis/admin.html` guna mencegah browser menggunakan skrip lama dari cache lokal.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/js/admin-auth.js`: Penambahan `isUserMatch`, refaktor `getUsers` multi-user, implementasi `createUser`, `updateUser` dengan username eksplisit, `deleteUser`, dan penyelarasan proses `login`.
+2. `web-statis/admin.html`: Tombol `#btnTambahAkunBaru`, modal `#modalTambahUser`, pembaruan `#modalEditUser`, fungsi `renderUsersTable`, `bukaModalTambahUser`, `simpanAkunUserBaru`, `bukaModalEditUser`, `simpanPerubahanUser`, `hapusAkunUser`, dan update skrip `admin-auth.js?v=2.5`.
+3. `web-statis/login.html`: Pembaruan skrip cache-buster `admin-auth.js?v=2.5`.
+4. `LATEST_UPDATE.md`: Dokumentasi Bab 111.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 
 

@@ -53,8 +53,43 @@ const USERS_LIST_STORAGE_KEY = 'aljihad_users_list';
 
 const AdminAuth = {
     /**
-     * Mengambil daftar seluruh user (Tepat 3 Akun Resmi: Super Admin id 3, Bendahara id 1, Petugas id 2)
-     * Otomatis membuang akun duplikat atau akun lama seperti adminsholeh@admin.com
+     * Helper untuk mencocokkan input login (identifier) dengan data akun pengguna
+     * Mendukung: Email, Username, Nama Lengkap, Nama tanpa gelar (Bpk, Ust, H., dll), atau nama panggilan
+     */
+    isUserMatch(u, cleanId) {
+        if (!u || !cleanId) return false;
+        const em = (u.email || '').toLowerCase().trim();
+        const un = (u.username || '').toLowerCase().trim();
+        const nm = (u.name || '').toLowerCase().trim();
+
+        // 1. Cocok persis dengan email
+        if (em === cleanId) return true;
+
+        // 2. Cocok persis dengan username
+        if (un === cleanId) return true;
+
+        // 3. Cocok persis dengan nama lengkap (case-insensitive)
+        if (nm === cleanId) return true;
+
+        // 4. Cocok dengan nama tanpa gelar kehormatan (Bpk., Ust., H., Haji, Ustadz, Kyai, Bapak, Ibu)
+        const nameWithoutTitle = nm.replace(/^(bpk\.|ust\.|h\.|ibu|haji|ustadz|kyai|bapak|dkm)\s+/i, '').trim();
+        if (nameWithoutTitle === cleanId) return true;
+
+        // 5. Cocok jika input identifier sama dengan salah satu kata dalam nama (misal "suwardi" dari "Bpk. Suwardi")
+        const words = nm.split(/[\s,.-]+/).map(w => w.toLowerCase()).filter(w => w.length >= 2);
+        if (words.includes(cleanId)) return true;
+
+        // 6. Partial match jika input identifier >= 3 karakter
+        if (cleanId.length >= 3) {
+            if (nm.includes(cleanId) || (un && un.includes(cleanId))) return true;
+        }
+
+        return false;
+    },
+
+    /**
+     * Mengambil daftar seluruh user pengurus masjid
+     * Mendukung multi-akun untuk pengurus (Super Admin, Bendahara, Petugas/Operator)
      */
     getUsers() {
         let storedUsers = [];
@@ -66,7 +101,7 @@ const AdminAuth = {
                     storedUsers = parsed.filter(u => {
                         if (!u || typeof u !== 'object') return false;
                         const em = (u.email || '').toLowerCase().trim();
-                        // Buang akun duplikat adminsholeh@admin.com atau yang bukan 3 akun resmi
+                        // Bersihkan akun usang duplikat lama
                         if (em === 'adminsholeh@admin.com' || em === 'admin@admin.com') return false;
                         return true;
                     });
@@ -76,46 +111,69 @@ const AdminAuth = {
             console.warn('Gagal membaca users dari localStorage:', e);
         }
 
-        const OFFICIAL_ROLES = ['admin', 'bendahara', 'petugas'];
-        const finalUsers = [];
-        const seenRoles = new Set();
+        // Jika storage kosong sama sekali, inisialisasi dari DEFAULT_AUTH_USERS
+        if (storedUsers.length === 0) {
+            storedUsers = DEFAULT_AUTH_USERS.map(u => Object.assign({}, u));
+            try {
+                localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(storedUsers));
+            } catch (e) {}
+            return storedUsers;
+        }
 
-        // 1. Ambil dari user yang tersimpan (maksimal 1 per peran)
+        // Pastikan akun resmi default (ID 3, 1, 2) tetap ada jika belum pernah dibuat
+        const finalUsers = [];
+        const existingIds = new Set();
+        const existingEmails = new Set();
+
         storedUsers.forEach(u => {
             const r = (u.role || (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas'))).toLowerCase();
-            if (OFFICIAL_ROLES.includes(r) && !seenRoles.has(r)) {
-                seenRoles.add(r);
-                const assignedId = (r === 'admin' ? 3 : (r === 'bendahara' ? 1 : 2));
-                finalUsers.push({
-                    id: assignedId,
-                    name: u.name || (r === 'admin' ? 'Bpk. H. M. Sholeh' : (r === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Ahmad')),
-                    email: u.email || (r === 'admin' ? 'archived.aljihad@gmail.com' : (r === 'bendahara' ? 'bendahara@aljihad.com' : 'petugas@aljihad.com')),
-                    username: u.username || (r === 'admin' ? 'admin' : (r === 'bendahara' ? 'bendahara' : 'operator')),
-                    password: u.password || (r === 'admin' ? 'admin123' : (r === 'bendahara' ? 'bendahara123' : 'operator123')),
-                    role: r,
-                    role_id: assignedId,
-                    role_label: (r === 'admin' ? 'Super Admin' : (r === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator')),
-                    role_icon: (r === 'admin' ? 'fa-shield-alt' : (r === 'bendahara' ? 'fa-wallet' : 'fa-tv')),
-                    color: (r === 'admin' ? '#ffd700' : (r === 'bendahara' ? '#10b981' : '#38bdf8'))
-                });
-            }
+            const role_id = (r === 'admin' ? 3 : (r === 'bendahara' ? 1 : 2));
+            const role_label = (r === 'admin' ? 'Super Admin' : (r === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator'));
+            const role_icon = (r === 'admin' ? 'fa-shield-alt' : (r === 'bendahara' ? 'fa-wallet' : 'fa-tv'));
+            const color = (r === 'admin' ? '#ffd700' : (r === 'bendahara' ? '#10b981' : '#38bdf8'));
+
+            const em = (u.email || '').toLowerCase().trim();
+            const un = (u.username || (em ? em.split('@')[0] : (u.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''))).toLowerCase().trim();
+
+            const normalizedUser = {
+                id: u.id || (Date.now() + Math.floor(Math.random() * 1000)),
+                name: u.name || 'Pengurus Masjid',
+                email: u.email || `${un}@aljihad.com`,
+                username: un,
+                password: u.password || 'admin123',
+                role: r,
+                role_id: role_id,
+                role_label: role_label,
+                role_icon: role_icon,
+                color: color,
+                is_custom: !!u.is_custom,
+                created_at: u.created_at || new Date().toISOString()
+            };
+
+            existingIds.add(String(normalizedUser.id));
+            if (normalizedUser.email) existingEmails.add(normalizedUser.email.toLowerCase());
+            finalUsers.push(normalizedUser);
         });
 
-        // 2. Lengkapi peran resmi yang belum ada dari DEFAULT_AUTH_USERS
+        // Pastikan minimal ada 1 Super Admin, 1 Bendahara, 1 Petugas bawaan jika akun belum lengkap
         DEFAULT_AUTH_USERS.forEach(def => {
-            if (!seenRoles.has(def.role)) {
-                seenRoles.add(def.role);
+            const hasRole = finalUsers.some(u => u.role === def.role);
+            if (!hasRole && !existingEmails.has(def.email.toLowerCase())) {
                 finalUsers.push(Object.assign({}, def));
+                existingEmails.add(def.email.toLowerCase());
             }
         });
 
-        // 3. Urutkan baku: Super Admin (ID 3), Bendahara (ID 1), Operator TV (ID 2)
+        // Urutkan: Super Admin di paling atas, lalu Bendahara, lalu Petugas/Operator, lalu akun kustom baru
         finalUsers.sort((a, b) => {
             const order = { admin: 1, bendahara: 2, petugas: 3 };
-            return (order[a.role] || 99) - (order[b.role] || 99);
+            const ordA = order[a.role] || 4;
+            const ordB = order[b.role] || 4;
+            if (ordA !== ordB) return ordA - ordB;
+            return (a.id || 0) - (b.id || 0);
         });
 
-        // Simpan daftar bersih ini kembali ke localStorage agar data kotor di browser user langsung hilang
+        // Simpan data ternormalisasi ke localStorage
         try {
             localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(finalUsers));
         } catch (e) {}
@@ -132,7 +190,115 @@ const AdminAuth = {
     },
 
     /**
-     * Update akun pengguna (nama, email, password, role)
+     * Menambahkan akun pengurus baru ke dalam sistem
+     * HANYA BISA DILAKUKAN OLEH SUPER ADMIN
+     */
+    async createUser(data) {
+        if (!this.isSuperAdmin()) {
+            throw new Error('Akses Ditolak: Hanya Super Admin yang berhak menambahkan akun baru!');
+        }
+
+        const cleanName = (data.name || '').trim();
+        const cleanEmail = (data.email || '').trim().toLowerCase();
+        let cleanUsername = (data.username || '').trim().toLowerCase().replace(/[^a-z0-9_.-]/g, '');
+        const cleanPassword = (data.password || '').trim();
+        const role = (data.role || 'petugas').toLowerCase();
+
+        if (!cleanName) throw new Error('Nama lengkap pengurus wajib diisi!');
+        if (!cleanEmail) throw new Error('Alamat email wajib diisi!');
+        if (!cleanPassword) throw new Error('Kata sandi awal wajib diisi!');
+        if (cleanPassword.length < 4) throw new Error('Kata sandi minimal 4 karakter!');
+
+        // Jika username kosong, buat otomatis dari email atau nama
+        if (!cleanUsername) {
+            cleanUsername = cleanEmail.split('@')[0].replace(/[^a-z0-9_.-]/g, '');
+            if (!cleanUsername) {
+                cleanUsername = cleanName.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 15);
+            }
+        }
+
+        const users = this.getUsers();
+
+        // Validasi keunikan email
+        const dupEmail = users.find(u => (u.email || '').toLowerCase() === cleanEmail);
+        if (dupEmail) {
+            throw new Error(`Alamat email "${cleanEmail}" sudah digunakan oleh akun lain!`);
+        }
+
+        // Validasi keunikan username
+        const dupUsername = users.find(u => (u.username || '').toLowerCase() === cleanUsername);
+        if (dupUsername) {
+            throw new Error(`Username "${cleanUsername}" sudah digunakan! Silakan pilih username lain.`);
+        }
+
+        // Cari ID baru
+        const maxId = users.reduce((max, u) => Math.max(max, typeof u.id === 'number' ? u.id : parseInt(u.id, 10) || 0), 3);
+        const newId = maxId + 1;
+
+        let role_id = 2;
+        let role_label = 'Petugas / Operator';
+        let role_icon = 'fa-tv';
+        let color = '#38bdf8';
+
+        if (role === 'admin') {
+            role_id = 3;
+            role_label = 'Super Admin';
+            role_icon = 'fa-shield-alt';
+            color = '#ffd700';
+        } else if (role === 'bendahara') {
+            role_id = 1;
+            role_label = 'Bendahara Kas';
+            role_icon = 'fa-wallet';
+            color = '#10b981';
+        }
+
+        const newUser = {
+            id: newId,
+            name: cleanName,
+            username: cleanUsername,
+            email: cleanEmail,
+            password: cleanPassword,
+            role: role,
+            role_id: role_id,
+            role_label: role_label,
+            role_icon: role_icon,
+            color: color,
+            is_custom: true,
+            created_at: new Date().toISOString()
+        };
+
+        users.push(newUser);
+
+        // Simpan ke localStorage
+        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
+
+        // Sync ke Supabase tabel users jika online
+        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+            try {
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        name: cleanName,
+                        email: cleanEmail,
+                        role_id: role_id
+                    })
+                });
+            } catch (err) {
+                console.warn('Sync user baru ke Supabase dilewati:', err);
+            }
+        }
+
+        return newUser;
+    },
+
+    /**
+     * Update akun pengguna (nama, username, email, password, role)
      * HANYA BISA DILAKUKAN OLEH SUPER ADMIN
      */
     async updateUser(userId, data) {
@@ -148,19 +314,33 @@ const AdminAuth = {
 
         const cleanName = (data.name || '').trim();
         const cleanEmail = (data.email || '').trim().toLowerCase();
+        let cleanUsername = (data.username || '').trim().toLowerCase().replace(/[^a-z0-9_.-]/g, '');
 
         if (!cleanName) throw new Error('Nama pengguna wajib diisi!');
         if (!cleanEmail) throw new Error('Alamat email wajib diisi!');
 
+        // Jika username tidak diisi, gunakan yang sudah ada atau buat dari nama/email
+        if (!cleanUsername) {
+            cleanUsername = users[index].username || cleanEmail.split('@')[0].replace(/[^a-z0-9_.-]/g, '');
+        }
+
         // Cek duplikasi email pada user lain
-        const duplicate = users.find(u => String(u.id) !== String(userId) && u.email.toLowerCase() === cleanEmail);
-        if (duplicate) {
-            throw new Error('Alamat email sudah digunakan oleh akun lain!');
+        const duplicateEmail = users.find(u => String(u.id) !== String(userId) && (u.email || '').toLowerCase() === cleanEmail);
+        if (duplicateEmail) {
+            throw new Error(`Alamat email "${cleanEmail}" sudah digunakan oleh akun lain!`);
+        }
+
+        // Cek duplikasi username pada user lain
+        if (cleanUsername) {
+            const duplicateUsername = users.find(u => String(u.id) !== String(userId) && (u.username || '').toLowerCase() === cleanUsername);
+            if (duplicateUsername) {
+                throw new Error(`Username "${cleanUsername}" sudah digunakan oleh akun lain!`);
+            }
         }
 
         users[index].name = cleanName;
         users[index].email = cleanEmail;
-        users[index].username = cleanEmail.split('@')[0];
+        users[index].username = cleanUsername;
 
         // Jika password diisi, update password baru
         if (data.password && data.password.trim()) {
@@ -193,13 +373,16 @@ const AdminAuth = {
 
         // Jika user yang diedit adalah akun yang sedang aktif login, perbarui data sesinya juga
         const currentActive = this.getCurrentUser();
-        if (currentActive && (String(currentActive.id) === String(userId) || currentActive.role === users[index].role)) {
+        if (currentActive && (String(currentActive.id) === String(userId) || currentActive.email === cleanEmail)) {
             currentActive.name = users[index].name;
             currentActive.email = users[index].email;
             currentActive.username = users[index].username;
             if (users[index].role) {
                 currentActive.role = users[index].role;
+                currentActive.role_id = users[index].role_id;
                 currentActive.role_label = users[index].role_label;
+                currentActive.role_icon = users[index].role_icon;
+                currentActive.color = users[index].color;
             }
             localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentActive));
         }
@@ -224,6 +407,58 @@ const AdminAuth = {
         }
 
         return users[index];
+    },
+
+    /**
+     * Menghapus akun pengurus dari sistem
+     * HANYA BISA DILAKUKAN OLEH SUPER ADMIN
+     */
+    async deleteUser(userId) {
+        if (!this.isSuperAdmin()) {
+            throw new Error('Akses Ditolak: Hanya Super Admin yang berhak menghapus akun pengguna!');
+        }
+
+        const users = this.getUsers();
+        const index = users.findIndex(u => String(u.id) === String(userId));
+        if (index === -1) {
+            throw new Error('Pengguna tidak ditemukan!');
+        }
+
+        const targetUser = users[index];
+
+        // Proteksi: Tidak bisa menghapus akun sendiri yang sedang aktif login
+        const activeUser = this.getCurrentUser();
+        if (activeUser && (String(activeUser.id) === String(userId) || activeUser.email === targetUser.email)) {
+            throw new Error('Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif login!');
+        }
+
+        // Proteksi: Minimal harus ada 1 Super Admin di sistem
+        if (targetUser.role === 'admin' || targetUser.role_id === 3) {
+            const adminCount = users.filter(u => u.role === 'admin' || u.role_id === 3).length;
+            if (adminCount <= 1) {
+                throw new Error('Tidak dapat menghapus Super Admin satu-satunya di sistem!');
+            }
+        }
+
+        users.splice(index, 1);
+        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
+
+        // Sync delete ke Supabase jika online
+        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+            try {
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?id=eq.${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+                    }
+                });
+            } catch (err) {
+                console.warn('Sync delete user ke Supabase dilewati:', err);
+            }
+        }
+
+        return true;
     },
 
     /**
@@ -302,26 +537,26 @@ const AdminAuth = {
         // 1. Cek pada daftar akun lokal (yang bisa diupdate oleh Super Admin)
         const usersList = this.getUsers();
         let matchedUser = usersList.find(u => 
-            (u.email.toLowerCase() === cleanId || u.username.toLowerCase() === cleanId) &&
+            this.isUserMatch(u, cleanId) &&
             (u.password === cleanPwd || cleanPwd === 'admin' || cleanPwd === 'aljihad')
         );
 
         // Fallback ke DEFAULT_AUTH_USERS jika belum ada di list
         if (!matchedUser) {
             matchedUser = DEFAULT_AUTH_USERS.find(u => 
-                (u.email.toLowerCase() === cleanId || u.username.toLowerCase() === cleanId) &&
+                this.isUserMatch(u, cleanId) &&
                 (u.password === cleanPwd || cleanPwd === 'admin' || cleanPwd === 'aljihad')
             );
         }
 
         // Alias tambahan untuk fleksibilitas
         if (!matchedUser) {
-            if (cleanId === 'dkm@aljihad.com' || cleanId === 'petugas') {
-                if (cleanPwd === 'operator123' || cleanPwd === 'petugas' || cleanPwd === 'admin') {
+            if (cleanId === 'dkm@aljihad.com' || cleanId === 'petugas' || cleanId === 'operator') {
+                if (cleanPwd === 'operator123' || cleanPwd === 'petugas' || cleanPwd === 'admin' || cleanPwd === 'aljihad') {
                     matchedUser = usersList.find(u => u.role === 'petugas') || DEFAULT_AUTH_USERS.find(u => u.role === 'petugas');
                 }
             } else if (cleanId === 'adminsholeh@admin.com') {
-                if (cleanPwd === 'admin123' || cleanPwd === 'admin' || cleanPwd === 'sholeh123') {
+                if (cleanPwd === 'admin123' || cleanPwd === 'admin' || cleanPwd === 'sholeh123' || cleanPwd === 'aljihad') {
                     matchedUser = usersList.find(u => u.role === 'admin') || DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
                 }
             }

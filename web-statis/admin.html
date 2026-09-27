@@ -3342,11 +3342,16 @@
                         </div>
 
                         <div class="content-card">
-                            <div class="content-card-header d-flex justify-content-between align-items-center">
+                            <div class="content-card-header d-flex justify-content-between align-items-center flex-wrap" style="gap: 12px;">
                                 <h6 class="content-card-title mb-0">
                                     <i class="fas fa-user-shield mr-1"></i> Daftar Akun Pengurus & Kredensial
                                 </h6>
-                                <span class="badge badge-success" id="badgeTotalUsersCount">3 Akun Terdaftar</span>
+                                <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
+                                    <span class="badge badge-success" id="badgeTotalUsersCount">3 Akun Terdaftar</span>
+                                    <button class="btn btn-sm btn-success font-weight-bold" id="btnTambahAkunBaru" onclick="bukaModalTambahUser()" style="border-radius: 8px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);">
+                                        <i class="fas fa-user-plus mr-1"></i> Tambah Akun Baru
+                                    </button>
+                                </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-custom table-hover">
@@ -3354,11 +3359,12 @@
                                         <tr>
                                             <th style="width: 50px;">ID</th>
                                             <th>Nama Pengguna</th>
-                                            <th>Email / Username</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
                                             <th>Peran (Role)</th>
                                             <th>Ruang Lingkup Hak Akses</th>
                                             <th>Status</th>
-                                            <th class="text-center" style="width: 140px;">Aksi</th>
+                                            <th class="text-center" style="width: 170px;">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyUsersManagement">
@@ -4154,6 +4160,90 @@
         </div>
     </div>
 
+    <!-- MODAL TAMBAH PENGGUNA BARU (KHUSUS SUPER ADMIN) -->
+    <div class="modal fade" id="modalTambahUser" tabindex="-1" role="dialog" aria-labelledby="modalTambahUserTitle" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 16px; border: 2px solid #10b981; background: #072218; color: #fff; box-shadow: 0 15px 45px rgba(0,0,0,0.85); overflow: hidden;">
+                <div class="modal-header d-flex align-items-center justify-content-between" style="border-bottom: 1px solid rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, #064e3b 0%, #031710 100%); padding: 14px 20px;">
+                    <div class="d-flex align-items-center" style="gap: 10px;">
+                        <span class="badge badge-success font-weight-bold px-2 py-1">
+                            <i class="fas fa-user-plus mr-1"></i> SUPER ADMIN
+                        </span>
+                        <h5 class="modal-title font-weight-bold text-white mb-0" id="modalTambahUserTitle" style="font-size: 1.1rem;">
+                            Tambah Akun Pengurus Baru
+                        </h5>
+                    </div>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="formTambahUser" onsubmit="simpanAkunUserBaru(event)">
+                    <div class="modal-body p-4" style="background: #061e15;">
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold" style="color: #6ee7b7;">
+                                <i class="fas fa-user mr-1"></i> Nama Lengkap Pengurus <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="tambahUserName" required placeholder="Contoh: Bpk. H. Suwardi / Nama Pengurus" oninput="autoFillUsernameTambah(this.value)" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(16,185,129,0.3); border-radius: 8px;">
+                            <small class="text-white-50">Nama pengurus yang tampil pada profil topbar dan catatan sistem.</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="font-weight-bold" style="color: #6ee7b7;">
+                                    <i class="fas fa-at mr-1"></i> Username Akun <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="tambahUserUsername" required placeholder="Contoh: suwardi" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(16,185,129,0.3); border-radius: 8px;">
+                                <small class="text-white-50">Bisa digunakan untuk login.</small>
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="font-weight-bold" style="color: #6ee7b7;">
+                                    <i class="fas fa-envelope mr-1"></i> Alamat Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control" id="tambahUserEmail" required placeholder="Contoh: suwardi@aljihad.com" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(16,185,129,0.3); border-radius: 8px;">
+                                <small class="text-white-50">Juga bisa untuk login.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold" style="color: #6ee7b7;">
+                                <i class="fas fa-key mr-1"></i> Kata Sandi Awal <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="tambahUserPassword" required placeholder="Minimal 4 karakter (Contoh: admin123)" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(16,185,129,0.3); border-radius: 8px 0 0 8px;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-success" type="button" onclick="toggleTambahPasswordVisibility()" style="border-radius: 0 8px 8px 0; border: 1.5px solid rgba(16,185,129,0.3); border-left: none;">
+                                        <i class="fas fa-eye" id="iconToggleTambahPassword"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <small class="text-white-50">Kata sandi yang digunakan pengurus saat pertama kali masuk.</small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold" style="color: #6ee7b7;">
+                                <i class="fas fa-shield-alt mr-1"></i> Peran / Hak Akses <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control" id="tambahUserRole" required style="background: #04261a; color: #fff; border: 1.5px solid rgba(16,185,129,0.3); border-radius: 8px;">
+                                <option value="petugas" selected>Petugas / Operator TV (Jadwal Sholat, Jumat, Slide & Running Text)</option>
+                                <option value="bendahara">Bendahara Kas (Buku Kas Utama, Kas Ambulance, Infaq & Laporan)</option>
+                                <option value="admin">Super Admin (Akses Penuh 100% Seluruh Fitur & Sistem)</option>
+                            </select>
+                            <small class="text-white-50">Menentukan menu dan wewenang yang dapat dibuka oleh pengurus ini.</small>
+                        </div>
+
+                        <div id="alertTambahUserError" class="alert alert-danger d-none py-2 px-3" role="alert" style="border-radius: 8px; font-size: 0.9rem;"></div>
+                    </div>
+                    <div class="modal-footer py-3 px-4 d-flex justify-content-between align-items-center" style="background: #04261a; border-top: 1px solid rgba(16,185,129,0.2);">
+                        <button type="button" class="btn btn-secondary px-4 font-weight-bold" data-dismiss="modal" style="border-radius: 8px;">Batal</button>
+                        <button type="submit" class="btn btn-success px-4 font-weight-bold" id="btnSubmitTambahUser" style="border-radius: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none;">
+                            <i class="fas fa-user-plus mr-1"></i> Simpan & Buat Akun
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL EDIT PENGGUNA (KHUSUS SUPER ADMIN) -->
     <div class="modal fade" id="modalEditUser" tabindex="-1" role="dialog" aria-labelledby="modalEditUserTitle" aria-hidden="true" style="z-index: 1060;">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -4180,15 +4270,24 @@
                                 <i class="fas fa-user mr-1"></i> Nama Lengkap Pengguna <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" id="editUserName" required placeholder="Contoh: Administrator / Nama Pengurus" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(255,215,0,0.3); border-radius: 8px;">
-                            <small class="text-white-50">Nama yang tampil pada profil topbar dan catatan sistem.</small>
+                            <small class="text-white-50">Nama yang tampil pada profil topbar dan catatan sistem (bisa untuk login).</small>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label class="font-weight-bold" style="color: #ffd700;">
-                                <i class="fas fa-envelope mr-1"></i> Alamat Email <span class="text-danger">*</span>
-                            </label>
-                            <input type="email" class="form-control" id="editUserEmail" required placeholder="Contoh: archived.aljihad@gmail.com" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(255,215,0,0.3); border-radius: 8px;">
-                            <small class="text-white-50">Digunakan untuk autentikasi login pengguna.</small>
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="font-weight-bold" style="color: #ffd700;">
+                                    <i class="fas fa-at mr-1"></i> Username Pengguna <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="editUserUsername" required placeholder="Contoh: admin / suwardi" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(255,215,0,0.3); border-radius: 8px;">
+                                <small class="text-white-50">Digunakan untuk login (huruf kecil tanpa spasi).</small>
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="font-weight-bold" style="color: #ffd700;">
+                                    <i class="fas fa-envelope mr-1"></i> Alamat Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control" id="editUserEmail" required placeholder="Contoh: archived.aljihad@gmail.com" style="background: rgba(0,0,0,0.4); color: #fff; border: 1.5px solid rgba(255,215,0,0.3); border-radius: 8px;">
+                                <small class="text-white-50">Digunakan untuk login & autentikasi.</small>
+                            </div>
                         </div>
 
                         <div class="form-group mb-3">
@@ -4206,8 +4305,17 @@
                             <small class="text-white-50">Isi hanya jika ingin memperbarui kata sandi akun ini.</small>
                         </div>
 
-                        <!-- Role disimpan secara otomatis tanpa perlu diubah di modal -->
-                        <input type="hidden" id="editUserRole">
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold" style="color: #ffd700;">
+                                <i class="fas fa-shield-alt mr-1"></i> Peran / Hak Akses <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control" id="editUserRole" required style="background: #04261a; color: #fff; border: 1.5px solid rgba(255,215,0,0.3); border-radius: 8px;">
+                                <option value="admin">Super Admin (Akses Penuh 100%)</option>
+                                <option value="bendahara">Bendahara Kas (Buku Kas, Ambulance, Infaq & Laporan)</option>
+                                <option value="petugas">Petugas / Operator TV (Jadwal Sholat, Slide TV & Pengumuman)</option>
+                            </select>
+                            <small class="text-white-50">Menentukan level otorisasi akun pengguna ini.</small>
+                        </div>
 
                         <div id="alertEditUserError" class="alert alert-danger d-none py-2 px-3" role="alert" style="border-radius: 8px; font-size: 0.9rem;"></div>
                     </div>
@@ -4561,7 +4669,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/supabase-config.js"></script>
-    <script src="js/admin-auth.js?v=2.3"></script>
+    <script src="js/admin-auth.js?v=2.5"></script>
     <script src="js/gemini-ai.js"></script>
 
     <script>
@@ -5014,6 +5122,7 @@
                 const isSuperAdmin = (activeUser && (activeUser.role === 'admin' || activeUser.role_id === 3));
                 const alertNonAdmin = document.getElementById('alertNonSuperAdminUsers');
                 const badgeIndicator = document.getElementById('badgeSuperAdminOnlyIndicator');
+                const btnTambahAkun = document.getElementById('btnTambahAkunBaru');
 
                 if (alertNonAdmin) {
                     if (isSuperAdmin) {
@@ -5026,71 +5135,32 @@
                 if (badgeIndicator) {
                     if (isSuperAdmin) {
                         badgeIndicator.className = 'badge badge-warning font-weight-bold px-3 py-2';
-                        badgeIndicator.innerHTML = '<i class="fas fa-shield-alt mr-1"></i> Mode Super Admin: Akses Edit Aktif';
+                        badgeIndicator.innerHTML = '<i class="fas fa-shield-alt mr-1"></i> Mode Super Admin: Akses Penuh Aktif';
                     } else {
                         badgeIndicator.className = 'badge badge-secondary font-weight-bold px-3 py-2';
                         badgeIndicator.innerHTML = '<i class="fas fa-lock mr-1"></i> Mode Read-Only (Hanya Super Admin)';
                     }
                 }
 
-                let rawUsers = [];
+                if (btnTambahAkun) {
+                    if (isSuperAdmin) {
+                        btnTambahAkun.classList.remove('d-none');
+                    } else {
+                        btnTambahAkun.classList.add('d-none');
+                    }
+                }
+
+                let users = [];
                 if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getUsers === 'function') {
                     try {
-                        rawUsers = AdminAuth.getUsers();
+                        users = AdminAuth.getUsers();
                     } catch (e) {
                         console.warn('Gagal memanggil AdminAuth.getUsers:', e);
                     }
                 }
-                if (!Array.isArray(rawUsers) || rawUsers.length === 0) {
-                    rawUsers = (typeof DEFAULT_AUTH_USERS !== 'undefined') ? DEFAULT_AUTH_USERS : [];
+                if (!Array.isArray(users) || users.length === 0) {
+                    users = (typeof DEFAULT_AUTH_USERS !== 'undefined') ? DEFAULT_AUTH_USERS : [];
                 }
-
-                // 1. Buang akun usang / duplikat adminsholeh@admin.com
-                rawUsers = rawUsers.filter(u => {
-                    if (!u || !u.email) return false;
-                    const em = u.email.toLowerCase().trim();
-                    return em !== 'adminsholeh@admin.com' && em !== 'admin@admin.com';
-                });
-
-                // 2. Normalisasi & deduplikasi ketat: Maksimal 1 akun unik per peran resmi
-                const OFFICIAL_ROLES = ['admin', 'bendahara', 'petugas'];
-                const users = [];
-                const seenRoles = new Set();
-
-                rawUsers.forEach(u => {
-                    if (!u || typeof u !== 'object') return;
-                    const r = (u.role || (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas'))).toLowerCase();
-                    if (OFFICIAL_ROLES.includes(r) && !seenRoles.has(r)) {
-                        seenRoles.add(r);
-                        const assignedId = (r === 'admin' ? 3 : (r === 'bendahara' ? 1 : 2));
-                        users.push({
-                            id: assignedId,
-                            name: u.name || (r === 'admin' ? 'Bpk. H. M. Sholeh' : (r === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Ahmad')),
-                            email: u.email || (r === 'admin' ? 'archived.aljihad@gmail.com' : (r === 'bendahara' ? 'bendahara@aljihad.com' : 'petugas@aljihad.com')),
-                            username: u.username || (u.email ? u.email.split('@')[0] : (r === 'admin' ? 'admin' : (r === 'bendahara' ? 'bendahara' : 'operator'))),
-                            role: r,
-                            role_id: assignedId,
-                            role_label: (r === 'admin' ? 'Super Admin' : (r === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator')),
-                            color: (r === 'admin' ? '#ffd700' : (r === 'bendahara' ? '#10b981' : '#38bdf8'))
-                        });
-                    }
-                });
-
-                // 3. Lengkapi peran resmi yang belum ada dari DEFAULT_AUTH_USERS
-                if (typeof DEFAULT_AUTH_USERS !== 'undefined') {
-                    DEFAULT_AUTH_USERS.forEach(def => {
-                        if (!seenRoles.has(def.role)) {
-                            seenRoles.add(def.role);
-                            users.push(Object.assign({}, def));
-                        }
-                    });
-                }
-
-                // 4. Urutkan baku: Super Admin (ID 3), Bendahara (ID 1), Operator TV (ID 2)
-                users.sort((a, b) => {
-                    const order = { admin: 1, bendahara: 2, petugas: 3 };
-                    return (order[a.role] || 99) - (order[b.role] || 99);
-                });
 
                 const badgeCount = document.getElementById('badgeTotalUsersCount');
                 if (badgeCount) badgeCount.textContent = `${users.length} Akun Terdaftar`;
@@ -5105,25 +5175,35 @@
                     let scopeDesc = '';
                     if (u.role === 'admin') {
                         roleBadge = '<span class="badge badge-warning font-weight-bold px-2 py-1"><i class="fas fa-crown mr-1"></i> Super Admin</span>';
-                        scopeDesc = 'Akses Penuh 100% (Display TV, Reorder Slide ▲/▼, Keuangan, Pengguna, Sistem)';
+                        scopeDesc = 'Akses Penuh 100% (Display TV, Pengaturan Slide, Keuangan, Pengguna, Sistem)';
                     } else if (u.role === 'bendahara') {
                         roleBadge = '<span class="badge badge-success font-weight-bold px-2 py-1"><i class="fas fa-wallet mr-1"></i> Bendahara</span>';
-                        scopeDesc = 'Buku Kas Utama, Kas Ambulance, Infaq, Laporan Kas & Export Excel';
+                        scopeDesc = 'Buku Kas Utama, Kas Ambulance, Infaq & Donasi, Laporan Keuangan';
                     } else {
                         roleBadge = '<span class="badge badge-info font-weight-bold px-2 py-1"><i class="fas fa-tv mr-1"></i> Operator TV</span>';
-                        scopeDesc = 'Jadwal Sholat, Petugas Jum\'at, Pengumuman, Teks Berjalan, Slide TV (Urutan Terkunci)';
+                        scopeDesc = 'Jadwal Sholat, Petugas Jum\'at, Pengumuman, Teks Berjalan, Slide TV';
                     }
 
-                    // Tombol aksi Edit Akun
-                    let editBtnHtml = '';
+                    // Tombol aksi Edit & Hapus Akun
+                    let actionHtml = '';
                     if (isSuperAdmin) {
-                        editBtnHtml = `
-                            <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(${u.id})" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px;">
-                                <i class="fas fa-user-edit mr-1"></i> Edit Akun
-                            </button>
+                        const isSelf = activeUser && (String(activeUser.id) === String(u.id) || activeUser.email === u.email);
+                        const deleteBtn = isSelf 
+                            ? `<span class="badge badge-secondary py-1 px-2 ml-1" title="Akun Anda yang sedang aktif login" style="font-size: 11px;"><i class="fas fa-user-check"></i> Anda</span>`
+                            : `<button class="btn btn-sm btn-outline-danger font-weight-bold ml-1" onclick="hapusAkunUser(${u.id}, '${escapeHtml(u.name)}')" title="Hapus Akun Pengurus" style="border-radius: 6px; padding: 4px 8px;">
+                                   <i class="fas fa-trash-alt"></i>
+                               </button>`;
+
+                        actionHtml = `
+                            <div class="d-flex align-items-center justify-content-center" style="gap: 4px;">
+                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(${u.id})" title="Edit Akun" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 4px 10px;">
+                                    <i class="fas fa-user-edit mr-1"></i> Edit
+                                </button>
+                                ${deleteBtn}
+                            </div>
                         `;
                     } else {
-                        editBtnHtml = `
+                        actionHtml = `
                             <button class="btn btn-sm btn-secondary disabled" disabled title="Hanya Super Admin yang berhak mengedit" style="cursor: not-allowed; opacity: 0.5; border-radius: 6px;">
                                 <i class="fas fa-lock mr-1"></i> Terkunci
                             </button>
@@ -5131,6 +5211,7 @@
                     }
 
                     const initialLetter = (u.name || 'U').trim().charAt(0).toUpperCase();
+                    const cleanUsername = u.username || (u.email ? u.email.split('@')[0] : 'user');
 
                     tr.innerHTML = `
                         <td class="font-weight-bold">${u.id || (idx + 1)}</td>
@@ -5144,11 +5225,12 @@
                                 </div>
                             </div>
                         </td>
+                        <td><span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc;"><i class="fas fa-at text-muted mr-1"></i>${escapeHtml(cleanUsername)}</span></td>
                         <td><code>${escapeHtml(u.email || '-')}</code></td>
                         <td>${roleBadge}</td>
                         <td><small class="text-muted">${scopeDesc}</small></td>
                         <td><span class="badge badge-success">Aktif</span></td>
-                        <td class="text-center">${editBtnHtml}</td>
+                        <td class="text-center">${actionHtml}</td>
                     `;
 
                     tbody.appendChild(tr);
@@ -5158,6 +5240,131 @@
             }
         }
 
+        // =====================================================
+        // MODAL TAMBAH PENGURUS BARU
+        // =====================================================
+        function bukaModalTambahUser() {
+            const activeUser = (currentUser || (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getCurrentUser === 'function' ? AdminAuth.getCurrentUser() : null));
+            if (!activeUser || (activeUser.role !== 'admin' && activeUser.role_id !== 3)) {
+                alert('Akses Ditolak: Hanya Super Admin yang berhak menambahkan akun pengguna!');
+                return;
+            }
+
+            const form = document.getElementById('formTambahUser');
+            if (form) form.reset();
+
+            const pwdInput = document.getElementById('tambahUserPassword');
+            const icon = document.getElementById('iconToggleTambahPassword');
+            if (pwdInput) pwdInput.type = 'password';
+            if (icon) icon.className = 'fas fa-eye';
+
+            const alertErr = document.getElementById('alertTambahUserError');
+            if (alertErr) {
+                alertErr.classList.add('d-none');
+                alertErr.textContent = '';
+            }
+
+            $('#modalTambahUser').modal('show');
+        }
+
+        function autoFillUsernameTambah(name) {
+            const unInput = document.getElementById('tambahUserUsername');
+            if (!unInput) return;
+            // Hanya isi otomatis jika username masih kosong atau baru mengetik
+            const clean = (name || '').toLowerCase()
+                .replace(/^(bpk\.|ust\.|h\.|ibu|haji|ustadz|kyai|bapak)\s+/i, '')
+                .replace(/[^a-z0-9]/g, '')
+                .substring(0, 15);
+            if (clean && (!unInput.dataset.manualEdit || unInput.dataset.manualEdit === '0')) {
+                unInput.value = clean;
+            }
+        }
+
+        // Tandai jika username diubah manual oleh pengguna
+        document.addEventListener('DOMContentLoaded', () => {
+            const unInput = document.getElementById('tambahUserUsername');
+            if (unInput) {
+                unInput.addEventListener('input', () => {
+                    unInput.dataset.manualEdit = '1';
+                });
+            }
+        });
+
+        function toggleTambahPasswordVisibility() {
+            const pwdInput = document.getElementById('tambahUserPassword');
+            const icon = document.getElementById('iconToggleTambahPassword');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                pwdInput.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        async function simpanAkunUserBaru(event) {
+            event.preventDefault();
+
+            if (!currentUser || (currentUser.role !== 'admin' && currentUser.role_id !== 3)) {
+                alert('Akses Ditolak: Hanya Super Admin yang berhak menambahkan akun baru!');
+                return;
+            }
+
+            const name = document.getElementById('tambahUserName').value.trim();
+            const username = document.getElementById('tambahUserUsername').value.trim();
+            const email = document.getElementById('tambahUserEmail').value.trim();
+            const password = document.getElementById('tambahUserPassword').value.trim();
+            const role = document.getElementById('tambahUserRole')?.value || 'petugas';
+
+            const btnSubmit = document.getElementById('btnSubmitTambahUser');
+            const alertErr = document.getElementById('alertTambahUserError');
+
+            try {
+                if (btnSubmit) {
+                    btnSubmit.disabled = true;
+                    btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
+                }
+
+                const newUser = await AdminAuth.createUser({ name, username, email, password, role });
+
+                $('#modalTambahUser').modal('hide');
+
+                // Render ulang tabel
+                renderUsersTable();
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Akun Berhasil Dibuat!',
+                        text: `Akun pengurus "${newUser.name}" (${newUser.role_label}) berhasil ditambahkan dan siap digunakan untuk login.`,
+                        timer: 3000,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Alhamdulillah',
+                        confirmButtonColor: '#10b981',
+                        background: '#04261a',
+                        color: '#ffd700'
+                    });
+                } else {
+                    alert(`Akun pengurus "${newUser.name}" (${newUser.role_label}) berhasil ditambahkan!`);
+                }
+            } catch (err) {
+                if (alertErr) {
+                    alertErr.classList.remove('d-none');
+                    alertErr.textContent = err.message || 'Gagal menambahkan akun pengurus baru.';
+                } else {
+                    alert(err.message || 'Gagal menambahkan akun pengurus baru.');
+                }
+            } finally {
+                if (btnSubmit) {
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = '<i class="fas fa-user-plus mr-1"></i> Simpan & Buat Akun';
+                }
+            }
+        }
+
+        // =====================================================
+        // MODAL EDIT PENGURUS
+        // =====================================================
         function bukaModalEditUser(userId) {
             const activeUser = (currentUser || (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getCurrentUser === 'function' ? AdminAuth.getCurrentUser() : null));
             if (!activeUser || (activeUser.role !== 'admin' && activeUser.role_id !== 3)) {
@@ -5174,6 +5381,7 @@
 
             document.getElementById('editUserId').value = targetUser.id;
             document.getElementById('editUserName').value = targetUser.name || '';
+            document.getElementById('editUserUsername').value = targetUser.username || (targetUser.email ? targetUser.email.split('@')[0] : '');
             document.getElementById('editUserEmail').value = targetUser.email || '';
             document.getElementById('editUserPassword').value = '';
             document.getElementById('editUserRole').value = targetUser.role || 'petugas';
@@ -5215,6 +5423,7 @@
 
             const userId = document.getElementById('editUserId').value;
             const name = document.getElementById('editUserName').value.trim();
+            const username = document.getElementById('editUserUsername').value.trim();
             const email = document.getElementById('editUserEmail').value.trim();
             const password = document.getElementById('editUserPassword').value.trim();
             const role = document.getElementById('editUserRole')?.value || 'petugas';
@@ -5228,7 +5437,7 @@
                     btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
                 }
 
-                await AdminAuth.updateUser(userId, { name, email, password, role });
+                await AdminAuth.updateUser(userId, { name, username, email, password, role });
 
                 $('#modalEditUser').modal('hide');
 
@@ -5240,14 +5449,14 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil Diperbarui!',
-                        text: `Kredensial akun "${name}" (${email}) berhasil diperbarui oleh Super Admin.`,
+                        text: `Kredensial akun "${name}" (Username: ${username || email.split('@')[0]}) berhasil diperbarui oleh Super Admin.`,
                         timer: 2500,
                         showConfirmButton: false,
                         background: '#04261a',
                         color: '#ffd700'
                     });
                 } else {
-                    alert(`Kredensial akun "${name}" (${email}) berhasil diperbarui oleh Super Admin.`);
+                    alert(`Kredensial akun "${name}" berhasil diperbarui oleh Super Admin.`);
                 }
             } catch (err) {
                 if (alertErr) {
@@ -5260,6 +5469,71 @@
                 if (btnSubmit) {
                     btnSubmit.disabled = false;
                     btnSubmit.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Perubahan';
+                }
+            }
+        }
+
+        // =====================================================
+        // HAPUS AKUN PENGURUS
+        // =====================================================
+        async function hapusAkunUser(userId, userName) {
+            if (!currentUser || (currentUser.role !== 'admin' && currentUser.role_id !== 3)) {
+                alert('Akses Ditolak: Hanya Super Admin yang berhak menghapus akun pengguna!');
+                return;
+            }
+
+            const executeDelete = async () => {
+                try {
+                    await AdminAuth.deleteUser(userId);
+                    renderUsersTable();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Akun Terhapus!',
+                            text: `Akun pengurus "${userName}" telah berhasil dihapus dari sistem.`,
+                            timer: 2000,
+                            showConfirmButton: false,
+                            background: '#04261a',
+                            color: '#ffd700'
+                        });
+                    } else {
+                        alert(`Akun pengurus "${userName}" telah berhasil dihapus dari sistem.`);
+                    }
+                } catch (err) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal Menghapus',
+                            text: err.message || 'Terjadi kesalahan saat menghapus akun.',
+                            background: '#04261a',
+                            color: '#ef4444'
+                        });
+                    } else {
+                        alert(err.message || 'Terjadi kesalahan saat menghapus akun.');
+                    }
+                }
+            };
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Hapus Akun Pengurus?',
+                    text: `Apakah Anda yakin ingin menghapus akun "${userName}"? Pengurus ini tidak akan bisa login lagi ke sistem dashboard.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: '<i class="fas fa-trash-alt mr-1"></i> Ya, Hapus Akun',
+                    cancelButtonText: 'Batal',
+                    background: '#04261a',
+                    color: '#fff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        executeDelete();
+                    }
+                });
+            } else {
+                if (confirm(`Apakah Anda yakin ingin menghapus akun "${userName}"?`)) {
+                    executeDelete();
                 }
             }
         }
