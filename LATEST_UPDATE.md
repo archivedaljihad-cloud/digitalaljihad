@@ -4572,9 +4572,63 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 1. `web-statis/js/admin-auth.js`: Penambahan `isUserMatch`, refaktor `getUsers` multi-user, implementasi `createUser`, `updateUser` dengan username eksplisit, `deleteUser`, dan penyelarasan proses `login`.
 2. `web-statis/admin.html`: Tombol `#btnTambahAkunBaru`, modal `#modalTambahUser`, pembaruan `#modalEditUser`, fungsi `renderUsersTable`, `bukaModalTambahUser`, `simpanAkunUserBaru`, `bukaModalEditUser`, `simpanPerubahanUser`, `hapusAkunUser`, dan update skrip `admin-auth.js?v=2.5`.
 3. `web-statis/login.html`: Pembaruan skrip cache-buster `admin-auth.js?v=2.5`.
-4. `LATEST_UPDATE.md`: Dokumentasi Bab 111.
-5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
-6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+---
+
+## 📌 BAB 112: PERBAIKAN MENU LOGOUT BERSIH & INTEGRASI PENUH SUPABASE REMOTE CONTROL ENGINE
+
+### 1. Masalah yang Dilaporkan Pengguna:
+1. **Menu Logout di Seluruh Dashboard Tidak Berfungsi:**
+   - Ketika pengguna mengklik menu *"Keluar (Logout)"* baik di sidebar navigasi maupun dropdown profil atas, menu tidak merespon atau tidak mengeluarkan pengguna dari sesi panel admin.
+   - **Akar Masalah Teknis:**
+     - Elemen link `<a>` memuat atribut deklaratif Bootstrap `data-toggle="modal" data-target="#logoutModal"` bersamaan dengan penanganan event `onclick="confirmLogout()"`.
+     - Ketika diklik, terjadi benturan (*event race condition*) antara handler Bootstrap `data-api` dan pemanggilan `$('#logoutModal').modal('show')` di dalam `confirmLogout()`, yang menyebabkan modal langsung tertutup kembali secara instan sehingga pengguna merasa tombol tidak berfungsi.
+
+2. **Error Saat Klik "Tes Sinyal TV":**
+   - Muncul dialog alert peramban: `digitalaljihad.my.id says - Kesalahan pengiriman: SupabaseDB.sendRemoteCommand belum terdefinisi`.
+   - **Akar Masalah Teknis:**
+     - Pada berkas `web-statis/admin.html`, library eksternal `@supabase/supabase-js@2` dan skrip `js/supabase-db.js` belum dimuat di tag `<script>`.
+     - Karena skrip belum diimpor, objek global `window.SupabaseDB` tidak terbentuk di halaman admin, sehingga method `SupabaseDB.sendRemoteCommand` dan `SupabaseDB.subscribeDevicePresence` berstatus `undefined`.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Perbaikan Menyeluruh Alur Logout Pengurus (`web-statis/admin.html`):**
+   - **Pembersihan Atribut Pemicu Ganda:** Menghapus atribut `data-toggle="modal" data-target="#logoutModal"` dari link navigasi sidebar dan dropdown profil atas.
+   - **Handler Konfirmasi Universal (`confirmLogout(event)`):**
+     - Mencegah *event bubbling* dengan `event.preventDefault()` dan `event.stopPropagation()`.
+     - Menutup dropdown menu aktif secara otomatis.
+     - Menggunakan dialog konfirmasi peramban (*native confirm dialog*) bertuliskan: *"Apakah Anda yakin ingin mengakhiri sesi dan keluar dari Panel Admin Masjid Jami' Al-Jihad?"*.
+     - Dialog ini 100% responsif, bebas bentrok CSS/JS modal, dan dijamin muncul di semua jenis perangkat (Laptop, Komputer, Tablet, HP Android, iPhone).
+   - **Eksekusi Logout Bersih (`eksekusiLogout()`):**
+     - Menghapus kunci sesi `aljihad_auth_user` dari `localStorage` dan membersihkan `sessionStorage`.
+     - Mengalihkan pengguna ke rute tujuan `login.html?action=logout`.
+
+2. **Pengamanan Pembersihan Sesi di Halaman Login (`web-statis/login.html`):**
+   - Menambahkan deteksi parameter query URL `?action=logout`.
+   - Jika terdeteksi parameter tersebut, sistem secara tuntas membersihkan `aljihad_auth_user` dan mencegah pengalihan balik otomatis (`redirectIfLoggedIn`), menjamin form login siap menerima input akun berikutnya.
+
+3. **Integrasi Penuh Library Supabase & Remote Engine (`web-statis/admin.html` & `web-statis/js/supabase-db.js`):**
+   - Menambahkan tag `<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>` dan `<script src="js/supabase-db.js?v=2.6"></script>` ke dalam `web-statis/admin.html`.
+   - Memperbarui method `sendRemoteCommand` di `web-statis/js/supabase-db.js` agar mengembalikan properti status `{ success: true, ...payload }`.
+   - Memperbarui pengecekan respons pada `kirimPerintahRemote` di `admin.html` menjadi `if (res && (res.success || res.command))`.
+   - Fitur **Tes Sinyal TV**, **Jeda / Lanjutkan Layar**, **Jump Slide**, **Peringatan Darurat**, dan **Muat Ulang TV** kini aktif dan terhubung secara realtime ke TV display masjid.
+
+4. **Peningkatan Service Worker & Cache Busting (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `aljihad-signage-v2.1` dan mendaftarkan `js/supabase-db.js` ke dalam `STATIC_ASSETS`.
+   - Memperbarui versi query string menjadi `admin-auth.js?v=2.6` dan `supabase-db.js?v=2.6` agar peramban langsung mengambil berkas termutakhir dari server.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Penghapusan bentrok atribut modal logout, pembaruan fungsi `confirmLogout` & `eksekusiLogout`, impor `@supabase/supabase-js` dan `supabase-db.js?v=2.6`, serta penyelarasan penanganan respons perintah remote.
+2. `web-statis/js/supabase-db.js`: Penambahan flag `success: true` pada pengembalian method `sendRemoteCommand`.
+3. `web-statis/login.html`: Penanganan parameter query URL `?action=logout`.
+4. `web-statis/sw.js`: Peningkatan versi cache ke `aljihad-signage-v2.1` dan pendaftaran `js/supabase-db.js`.
+5. `LATEST_UPDATE.md`: Dokumentasi Bab 112.
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
 
 
 

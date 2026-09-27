@@ -792,8 +792,17 @@
 <script src="js/admin-auth.js?v=2.5"></script>
 
 <script>
-    // Cek jika sudah login, langsung alihkan ke admin.html
-    AdminAuth.redirectIfLoggedIn('admin.html');
+    // Jika ada param ?action=logout, bersihkan sesi secara tuntas dan pastikan form login tampil
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('action') === 'logout') {
+        try {
+            localStorage.removeItem('aljihad_auth_user');
+            sessionStorage.clear();
+        } catch(e) {}
+    } else {
+        // Cek jika sudah login, alihkan ke admin.html
+        AdminAuth.redirectIfLoggedIn('admin.html');
+    }
 
     // Cek pesan redirect dari sessionStorage
     const redirectReason = sessionStorage.getItem('auth_redirect_reason');

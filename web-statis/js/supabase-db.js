@@ -458,7 +458,10 @@
                 }
             } catch (e) {}
 
-            return payload;
+            return {
+                success: true,
+                ...payload
+            };
         },
 
         /**

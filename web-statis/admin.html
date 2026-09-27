@@ -1237,7 +1237,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-danger" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal" onclick="confirmLogout()">
+                <a class="nav-link text-danger font-weight-bold" href="javascript:void(0)" onclick="confirmLogout(event)">
                     <i class="fas fa-fw fa-sign-out-alt text-danger"></i>
                     <span>Keluar (Logout)</span>
                 </a>
@@ -1340,7 +1340,7 @@
                                     <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-primary"></i> 
                                     <span>Dashboard Utama</span>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center text-danger font-weight-bold" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal" onclick="confirmLogout()">
+                                <a class="dropdown-item d-flex align-items-center text-danger font-weight-bold" href="javascript:void(0)" onclick="confirmLogout(event)">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i> 
                                     <span>Keluar (Logout)</span>
                                 </a>
@@ -4668,8 +4668,10 @@
          ======================================================= -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
-    <script src="js/admin-auth.js?v=2.5"></script>
+    <script src="js/supabase-db.js?v=2.6"></script>
+    <script src="js/admin-auth.js?v=2.6"></script>
     <script src="js/gemini-ai.js"></script>
 
     <script>
@@ -9479,7 +9481,7 @@
                 }
 
                 const res = await SupabaseDB.sendRemoteCommand(command, data, senderName);
-                if (res && res.success) {
+                if (res && (res.success || res.command)) {
                     updateLastRemoteLogStatus('Berhasil Terkirim (<100ms)');
                     console.log(`[RemoteAdmin] Perintah "${command}" terkirim dengan sukses.`);
                 } else {
@@ -9604,35 +9606,41 @@
             `).join('');
         }
 
-        function confirmLogout() {
-            try {
-                if (typeof $ !== 'undefined' && $('#logoutModal').length) {
-                    $('#logoutModal').modal('show');
-                    return;
-                }
-            } catch (e) {
-                console.warn('Gagal membuka modal logout, fallback ke dialog browser:', e);
+        function confirmLogout(event) {
+            if (event) {
+                try {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } catch(e) {}
             }
 
-            if (confirm('Apakah Anda yakin ingin mengakhiri sesi dan keluar dari Panel Admin Masjid Jami\' Al-Jihad?')) {
+            try {
+                if (typeof $ !== 'undefined') {
+                    $('.dropdown-menu').removeClass('show');
+                }
+            } catch(e) {}
+
+            // Konfirmasi langsung browser yang 100% responsif & bebas konflik modal di semua perangkat
+            const yakin = confirm("Apakah Anda yakin ingin mengakhiri sesi dan keluar dari Panel Admin Masjid Jami' Al-Jihad?");
+            if (yakin) {
                 eksekusiLogout();
             }
         }
 
         function eksekusiLogout() {
             try {
-                if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.logout === 'function') {
-                    AdminAuth.logout('login.html');
-                    return;
-                }
-            } catch (err) {
-                console.warn('AdminAuth.logout mengalami kendala, melakukan logout manual:', err);
-            }
-            try {
                 localStorage.removeItem('aljihad_auth_user');
                 sessionStorage.clear();
-            } catch (e) {}
-            window.location.replace('login.html');
+            } catch (e) {
+                console.warn('Gagal menghapus session storage:', e);
+            }
+
+            if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.logout === 'function') {
+                AdminAuth.logout('login.html?action=logout');
+                return;
+            }
+
+            window.location.replace('login.html?action=logout');
         }
     </script>
 </body>
