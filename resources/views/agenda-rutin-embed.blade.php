@@ -224,19 +224,38 @@
         .cat-tahsin { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
         .cat-tafsir { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
 
-        /* Teks Judul Center */
+        /* Teks Judul Center Bertingkat 2 Baris */
         .card-title {
             font-size: 1.15rem;
             font-weight: 800;
             color: #ffffff;
-            line-height: 1.35;
+            line-height: 1.25;
             margin-bottom: 10px;
-            min-height: 44px;
+            min-height: 48px;
             text-align: center !important;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .card-title .title-top {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: block;
+            text-align: center;
+        }
+
+        .card-title .title-bottom {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #ffffff;
+            opacity: 0.95;
+            display: block;
+            text-align: center;
+            margin-top: 2px;
         }
 
         /* ========================================================
@@ -434,6 +453,37 @@
                 $tafsirPekan = $kegiatan['tafsir']['pekan_aktif'] ?? [1, 3];
                 $isTafsirThisWeek = in_array($weekOfMonth, $tafsirPekan);
                 $isTafsirToday = ($dayOfWeek === 'ahad' && $isTafsirThisWeek);
+
+                if (!function_exists('formatAgendaCardTitle')) {
+                    function formatAgendaCardTitle($rawTitle, $defaultTop, $defaultBottom) {
+                        $raw = trim($rawTitle ?? '');
+                        if (empty($raw)) {
+                            return '<span class="title-top">' . e($defaultTop) . '</span><span class="title-bottom">' . e($defaultBottom) . '</span>';
+                        }
+                        if (str_contains($raw, "\n")) {
+                            $parts = explode("\n", $raw, 2);
+                            return '<span class="title-top">' . e(trim($parts[0])) . '</span><span class="title-bottom">' . e(trim($parts[1])) . '</span>';
+                        }
+                        if (str_contains($raw, '<br>')) {
+                            $parts = explode('<br>', $raw, 2);
+                            return '<span class="title-top">' . e(trim($parts[0])) . '</span><span class="title-bottom">' . e(trim($parts[1])) . '</span>';
+                        }
+                        $lower = strtolower($raw);
+                        if (str_contains($lower, 'kajian') && str_contains($lower, 'ahad')) {
+                            return '<span class="title-top">Kajian</span><span class="title-bottom">Malam Ahad</span>';
+                        }
+                        if (str_contains($lower, 'tahsin')) {
+                            return '<span class="title-top">Bimbingan</span><span class="title-bottom">Tahsin Al-Qur\'an</span>';
+                        }
+                        if (str_contains($lower, 'tafsir')) {
+                            return '<span class="title-top">Kajian Umum</span><span class="title-bottom">Tafsir Al-Qur\'an</span>';
+                        }
+                        if (str_contains($lower, 'yaasiin') || str_contains($lower, 'yasin')) {
+                            return '<span class="title-top">Pembacaan Surat Yaasiin</span><span class="title-bottom">& Tahlil</span>';
+                        }
+                        return '<span class="title-top">' . e($raw) . '</span>';
+                    }
+                }
             @endphp
 
             <div class="cards-grid">
@@ -446,7 +496,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-yasin"><i class="fa-solid fa-book-quran"></i> Rutin Setiap Pekan</span>
                         </div>
-                        <h2 class="card-title">{{ $kegiatan['yasin']['judul'] ?? 'Pembacaan Surat Yaasiin & Tahlil' }}</h2>
+                        <h2 class="card-title">{!! formatAgendaCardTitle($kegiatan['yasin']['judul'] ?? '', 'Pembacaan Surat Yaasiin', '& Tahlil') !!}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
@@ -482,7 +532,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-kajian"><i class="fa-solid fa-book-reader"></i> Rutin Setiap Pekan</span>
                         </div>
-                        <h2 class="card-title">{{ $kegiatan['kajian_ahad']['judul'] ?? 'Kajian Umum Malam Ahad' }}</h2>
+                        <h2 class="card-title">{!! formatAgendaCardTitle($kegiatan['kajian_ahad']['judul'] ?? '', 'Kajian', 'Malam Ahad') !!}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
@@ -518,7 +568,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-tahsin"><i class="fa-solid fa-quran"></i> Bimbingan Tartil</span>
                         </div>
-                        <h2 class="card-title">{{ $kegiatan['tahsin']['judul'] ?? 'Bimbingan Tahsin Al-Qur\'an' }}</h2>
+                        <h2 class="card-title">{!! formatAgendaCardTitle($kegiatan['tahsin']['judul'] ?? '', 'Bimbingan', 'Tahsin Al-Qur\'an') !!}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
@@ -588,7 +638,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-tafsir"><i class="fa-solid fa-sun"></i> Tiap 2 Pekan Sekali</span>
                         </div>
-                        <h2 class="card-title">{{ $kegiatan['tafsir']['judul'] ?? 'Kajian Tafsir Al-Qur\'an Tematik' }}</h2>
+                        <h2 class="card-title">{!! formatAgendaCardTitle($kegiatan['tafsir']['judul'] ?? '', 'Kajian Umum', 'Tafsir Al-Qur\'an') !!}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Jadwal :</div>

@@ -244,7 +244,7 @@ class AppSetting extends Model
             ],
             'kajian_ahad' => [
                 'enabled' => true,
-                'judul' => 'Kajian Umum Malam Ahad',
+                'judul' => 'Kajian Malam Ahad',
                 'hari' => 'Sabtu (Malam Ahad)',
                 'waktu' => 'Ba\'da Maghrib s/d Isya',
                 'pembimbing' => 'Ust. H. Ahmad Sholeh Al-Hafidz',
@@ -263,7 +263,7 @@ class AppSetting extends Model
             ],
             'tafsir' => [
                 'enabled' => true,
-                'judul' => 'Kajian Tafsir Al-Qur\'an Tematik',
+                'judul' => 'Kajian Umum Tafsir Al-Qur\'an',
                 'pola' => '2_minggu',
                 'pekan_aktif' => [1, 3],
                 'hari' => 'Ahad',

@@ -1759,7 +1759,7 @@
                                                         <span class="badge badge-primary" style="font-size: 9px;">MALAM AHAD</span>
                                                         <span class="badge badge-light text-muted" id="dashBadgeKajianAhad" style="font-size: 9px;"><i class="fas fa-check-circle text-success"></i> Aktif TV</span>
                                                     </div>
-                                                    <div class="font-weight-bold text-dark" style="font-size: 12px; line-height: 1.3;" id="dashTextKajianAhadJudul">Kajian Umum Malam Ahad</div>
+                                                    <div class="font-weight-bold text-dark" style="font-size: 12px; line-height: 1.3;" id="dashTextKajianAhadJudul">Kajian Malam Ahad</div>
                                                     <small class="text-muted d-block mt-1" style="font-size: 10px;" id="dashTextKajianAhadWaktu">Ba'da Maghrib s/d Isya</small>
                                                 </div>
                                             </div>
@@ -2599,7 +2599,7 @@
                                         <div class="d-flex align-items-center">
                                             <span class="badge badge-warning text-dark font-weight-bold mr-2 px-2 py-1">2</span>
                                             <h6 class="content-card-title text-white mb-0">
-                                                <i class="fas fa-book-reader mr-1"></i> Kajian Umum Malam Ahad
+                                                <i class="fas fa-book-reader mr-1"></i> Kajian Malam Ahad
                                             </h6>
                                         </div>
                                         <div class="custom-control custom-switch">
@@ -2613,7 +2613,7 @@
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="small font-weight-bold text-dark mb-1">Judul Kajian</label>
-                                            <input type="text" class="form-control form-control-sm" id="wsKajianAhadJudul" value="Kajian Umum Malam Ahad">
+                                            <input type="text" class="form-control form-control-sm" id="wsKajianAhadJudul" value="Kajian Malam Ahad">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 form-group mb-2">
@@ -2710,7 +2710,7 @@
                                         <div class="d-flex align-items-center">
                                             <span class="badge badge-warning text-dark font-weight-bold mr-2 px-2 py-1">4</span>
                                             <h6 class="content-card-title text-white mb-0">
-                                                <i class="fas fa-sun mr-1"></i> Tafsir Al-Qur'an (2 Pekan Sekali)
+                                                <i class="fas fa-sun mr-1"></i> Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)
                                             </h6>
                                         </div>
                                         <div class="custom-control custom-switch">
@@ -2745,7 +2745,7 @@
 
                                         <div class="form-group mb-2">
                                             <label class="small font-weight-bold text-dark mb-1">Nama Kegiatan</label>
-                                            <input type="text" class="form-control form-control-sm" id="wsTafsirJudul" value="Kajian Tafsir Al-Qur'an Tematik">
+                                            <input type="text" class="form-control form-control-sm" id="wsTafsirJudul" value="Kajian Umum Tafsir Al-Qur'an">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 form-group mb-2">
@@ -11082,7 +11082,7 @@
                 },
                 kajian_ahad: {
                     enabled: true,
-                    judul: 'Kajian Umum Malam Ahad',
+                    judul: 'Kajian Malam Ahad',
                     hari_teks: 'Setiap Malam Ahad (Sabtu Malam)',
                     waktu: 'Ba\'da Maghrib s/d Isya',
                     pembimbing: 'Ust. H. Ahmad Sholeh Al-Hafidz',
@@ -11098,7 +11098,7 @@
                 },
                 tafsir: {
                     enabled: true,
-                    judul: 'Kajian Tafsir Al-Qur\'an Tematik',
+                    judul: 'Kajian Umum Tafsir Al-Qur\'an',
                     pekan_aktif: [1, 3],
                     waktu: 'Ahad Ba\'da Subuh (05:15 WIB)',
                     pembimbing: 'Asatidz Dewan Syari\'ah Masjid',
@@ -11240,7 +11240,7 @@
                 },
                 kajian_ahad: {
                     enabled: document.getElementById('wsKajianAhadEnabled') ? document.getElementById('wsKajianAhadEnabled').checked : true,
-                    judul: (document.getElementById('wsKajianAhadJudul') ? document.getElementById('wsKajianAhadJudul').value : '').trim() || 'Kajian Umum Malam Ahad',
+                    judul: (document.getElementById('wsKajianAhadJudul') ? document.getElementById('wsKajianAhadJudul').value : '').trim() || 'Kajian Malam Ahad',
                     hari_teks: 'Setiap Malam Ahad (Sabtu Malam)',
                     waktu: (document.getElementById('wsKajianAhadWaktu') ? document.getElementById('wsKajianAhadWaktu').value : '').trim() || 'Ba\'da Maghrib s/d Isya',
                     pembimbing: (document.getElementById('wsKajianAhadPembimbing') ? document.getElementById('wsKajianAhadPembimbing').value : '').trim() || 'Ust. H. Ahmad Sholeh Al-Hafidz',
@@ -11256,7 +11256,7 @@
                 },
                 tafsir: {
                     enabled: document.getElementById('wsTafsirEnabled') ? document.getElementById('wsTafsirEnabled').checked : true,
-                    judul: (document.getElementById('wsTafsirJudul') ? document.getElementById('wsTafsirJudul').value : '').trim() || 'Kajian Tafsir Al-Qur\'an Tematik',
+                    judul: (document.getElementById('wsTafsirJudul') ? document.getElementById('wsTafsirJudul').value : '').trim() || 'Kajian Umum Tafsir Al-Qur\'an',
                     pekan_aktif: pekanAktif.length > 0 ? pekanAktif : [1, 3],
                     waktu: (document.getElementById('wsTafsirWaktu') ? document.getElementById('wsTafsirWaktu').value : '').trim() || 'Ahad Ba\'da Subuh (05:15 WIB)',
                     pembimbing: (document.getElementById('wsTafsirPembimbing') ? document.getElementById('wsTafsirPembimbing').value : '').trim() || 'Asatidz Dewan Syari\'ah Masjid',

@@ -93,7 +93,7 @@
                     <div class="d-flex align-items-center">
                         <span class="badge badge-warning text-dark font-weight-bold mr-2 px-2 py-1">2</span>
                         <h6 class="m-0 font-weight-bold text-white">
-                            <i class="fas fa-book-reader mr-1"></i> Kajian Umum Malam Ahad
+                            <i class="fas fa-book-reader mr-1"></i> Kajian Malam Ahad
                         </h6>
                     </div>
                     <div class="custom-control custom-switch">
@@ -108,7 +108,7 @@
 
                     <div class="form-group">
                         <label class="font-weight-bold small text-gray-700">Nama / Judul Kajian</label>
-                        <input type="text" class="form-control" name="kajian_ahad_judul" value="{{ $kegiatan['kajian_ahad']['judul'] ?? 'Kajian Umum Malam Ahad' }}" required>
+                        <input type="text" class="form-control" name="kajian_ahad_judul" value="{{ $kegiatan['kajian_ahad']['judul'] ?? 'Kajian Malam Ahad' }}" required>
                     </div>
 
                     <div class="row">
@@ -230,7 +230,7 @@
                     <div class="d-flex align-items-center">
                         <span class="badge badge-warning text-dark font-weight-bold mr-2 px-2 py-1">4</span>
                         <h6 class="m-0 font-weight-bold text-white">
-                            <i class="fas fa-sun mr-1"></i> Tafsir Al-Qur'an (2 Pekan Sekali)
+                            <i class="fas fa-sun mr-1"></i> Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)
                         </h6>
                     </div>
                     <div class="custom-control custom-switch">
@@ -268,7 +268,7 @@
 
                     <div class="form-group">
                         <label class="font-weight-bold small text-gray-700">Nama Kegiatan</label>
-                        <input type="text" class="form-control" name="tafsir_judul" value="{{ $kegiatan['tafsir']['judul'] ?? 'Kajian Tafsir Al-Qur\'an Tematik' }}" required>
+                        <input type="text" class="form-control" name="tafsir_judul" value="{{ $kegiatan['tafsir']['judul'] ?? 'Kajian Umum Tafsir Al-Qur\'an' }}" required>
                     </div>
 
                     <div class="row">

@@ -229,19 +229,38 @@
         .cat-tahsin { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
         .cat-tafsir { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
 
-        /* Teks Judul Center */
+        /* Teks Judul Center Bertingkat 2 Baris */
         .card-title {
             font-size: 1.15rem;
             font-weight: 800;
             color: #ffffff;
-            line-height: 1.35;
+            line-height: 1.25;
             margin-bottom: 10px;
-            min-height: 44px;
+            min-height: 48px;
             text-align: center !important;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .card-title .title-top {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: block;
+            text-align: center;
+        }
+
+        .card-title .title-bottom {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #ffffff;
+            opacity: 0.95;
+            display: block;
+            text-align: center;
+            margin-top: 2px;
         }
 
         /* ========================================================
@@ -464,7 +483,7 @@
             },
             kajian_ahad: {
                 enabled: true,
-                judul: 'Kajian Umum Malam Ahad',
+                judul: 'Kajian Malam Ahad',
                 hari: 'Sabtu (Malam Ahad)',
                 waktu: 'Ba\'da Sholat Maghrib s/d Isya',
                 pembimbing: 'Ust. H. Ahmad Sholeh Al-Hafidz',
@@ -483,7 +502,7 @@
             },
             tafsir: {
                 enabled: true,
-                judul: 'Kajian Tafsir Al-Qur\'an Tematik',
+                judul: 'Kajian Umum Tafsir Al-Qur\'an',
                 pola: '2_minggu',
                 pekan_aktif: [1, 3],
                 hari: 'Ahad',
@@ -504,6 +523,36 @@
             sabtu: 'Sabtu',
             ahad: 'Ahad'
         };
+
+        // Helper Format Judul Bertingkat 2 Baris (Center)
+        function formatCardTitle(rawTitle, defaultTop, defaultBottom) {
+            const raw = (rawTitle || '').trim();
+            if (!raw) {
+                return `<span class="title-top">${defaultTop}</span><span class="title-bottom">${defaultBottom}</span>`;
+            }
+            if (raw.includes('\n')) {
+                const parts = raw.split('\n');
+                return `<span class="title-top">${parts[0].trim()}</span><span class="title-bottom">${parts.slice(1).join(' ').trim()}</span>`;
+            }
+            if (raw.includes('<br>')) {
+                const parts = raw.split('<br>');
+                return `<span class="title-top">${parts[0].trim()}</span><span class="title-bottom">${parts.slice(1).join(' ').trim()}</span>`;
+            }
+            const lower = raw.toLowerCase();
+            if (lower.includes('kajian') && lower.includes('ahad')) {
+                return `<span class="title-top">Kajian</span><span class="title-bottom">Malam Ahad</span>`;
+            }
+            if (lower.includes('tahsin')) {
+                return `<span class="title-top">Bimbingan</span><span class="title-bottom">Tahsin Al-Qur'an</span>`;
+            }
+            if (lower.includes('tafsir')) {
+                return `<span class="title-top">Kajian Umum</span><span class="title-bottom">Tafsir Al-Qur'an</span>`;
+            }
+            if (lower.includes('yaasiin') || lower.includes('yasin')) {
+                return `<span class="title-top">Pembacaan Surat Yaasiin</span><span class="title-bottom">& Tahlil</span>`;
+            }
+            return `<span class="title-top">${raw}</span>`;
+        }
 
         function renderCards(data) {
             const now = new Date();
@@ -530,7 +579,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-yasin"><i class="fa-solid fa-book-quran"></i> Rutin Setiap Pekan</span>
                         </div>
-                        <h2 class="card-title">${data.yasin.judul || 'Pembacaan Surat Yaasiin & Tahlil'}</h2>
+                        <h2 class="card-title">${formatCardTitle(data.yasin.judul, 'Pembacaan Surat Yaasiin', '& Tahlil')}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
@@ -564,7 +613,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-kajian"><i class="fa-solid fa-book-reader"></i> Rutin Setiap Pekan</span>
                         </div>
-                        <h2 class="card-title">${data.kajian_ahad.judul || 'Kajian Umum Malam Ahad'}</h2>
+                        <h2 class="card-title">${formatCardTitle(data.kajian_ahad.judul, 'Kajian', 'Malam Ahad')}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
@@ -598,7 +647,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-tahsin"><i class="fa-solid fa-quran"></i> Bimbingan Tartil</span>
                         </div>
-                        <h2 class="card-title">${data.tahsin.judul || 'Bimbingan Tahsin Al-Qur\'an'}</h2>
+                        <h2 class="card-title">${formatCardTitle(data.tahsin.judul, 'Bimbingan', 'Tahsin Al-Qur\'an')}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
@@ -645,7 +694,7 @@
                         <div class="card-category-wrap">
                             <span class="card-category cat-tafsir"><i class="fa-solid fa-sun"></i> Tiap 2 Pekan Sekali</span>
                         </div>
-                        <h2 class="card-title">${data.tafsir.judul || 'Kajian Tafsir Al-Qur\'an Tematik'}</h2>
+                        <h2 class="card-title">${formatCardTitle(data.tafsir.judul, 'Kajian Umum', 'Tafsir Al-Qur\'an')}</h2>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Jadwal :</div>

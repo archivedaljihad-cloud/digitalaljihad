@@ -5372,6 +5372,13 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
      - Baris 1: Label Informasi (`Hari :`, `Waktu :`, `Imam / Pembimbing :`, `Tempat :`, `Pemateri :`, `Kitab :`, dll) berwarna **Kuning Emas (`#ffd700`)**.
      - Baris 2: Nilai Informasi di bawahnya berwarna **Putih Bersih (`#ffffff`)** dengan indentasi bersih (`padding-left: 20px`).
    - Kontras warna yang tegas dan susunan bertingkat ini memastikan teks tidak berdesakan, tidak terpotong, dan sangat nyaman dibaca oleh jamaah dari jarak jauh.
+6. **KOREKSI Format Judul 2 Baris Terpusat (Center Stacked Titles):**
+   - Format judul di setiap kotak diubah menjadi 2 baris terpusat (*center aligned*):
+     - **Kotak 1:** `Pembacaan Surat Yaasiin` (baris 1) di bawahnya `& Tahlil` (baris 2).
+     - **Kotak 2:** Dari *"Kajian Umum Malam Ahad"* menjadi `Kajian` (baris 1) di bawahnya `Malam Ahad` (baris 2).
+     - **Kotak 3:** Dari *"Bimbingan Tahsin Al-Qur'an"* menjadi `Bimbingan` (baris 1) di bawahnya `Tahsin Al-Qur'an` (baris 2).
+     - **Kotak 4:** Dari *"Kajian Tafsir Al-Qur'an Tematik"* menjadi `Kajian Umum` (baris 1) di bawahnya `Tafsir Al-Qur'an` (baris 2) (kata "Tematik" resmi dihilangkan).
+   - Penataan judul menggunakan Flexbox column terpusat (`display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center !important;`) sehingga tampil seimbang, simetris, dan rapi di semua resolusi TV Digital.
 
 ---
 
