@@ -99,6 +99,8 @@ class AppSetting extends Model
         'yasin_mode_enabled',
         'yasin_start_time',
         'yasin_scroll_speed',
+        // ===== Agenda Rutin Masjid (Pusat Kegiatan) =====
+        'kegiatan_rutin_settings',
     ];
 
     protected $casts = [
@@ -116,6 +118,7 @@ class AppSetting extends Model
         'auto_update_time' => 'datetime:H:i:s',
         'daily_hikmah_cache' => 'array',
         'running_text_pages' => 'array',
+        'kegiatan_rutin_settings' => 'array',
         // ===== TAMBAHAN PENGATURAN AUDIO =====
         'audio_tarhim' => 'boolean',
         'tarhim_trigger_seconds' => 'integer',
@@ -215,8 +218,73 @@ class AppSetting extends Model
                 'url' => 'hikmah-embed',
                 'name' => 'Mutiara Hadits & Hikmah',
                 'active' => true
+            ],
+            [
+                'url' => 'agenda-rutin-embed',
+                'name' => 'Kalender Agenda Rutin',
+                'active' => true
             ]
         ];
+    }
+
+    /**
+     * Mengambil konfigurasi Pusat Agenda Rutin Masjid dengan fallback nilai default.
+     */
+    public function getKegiatanRutin(): array
+    {
+        $default = [
+            'yasin' => [
+                'enabled' => true,
+                'judul' => 'Pembacaan Surat Yaasiin & Tahlil',
+                'hari' => 'Kamis (Malam Jum\'at)',
+                'waktu' => 'Ba\'da Maghrib s/d Isya',
+                'pembimbing' => 'Imam Rawatib / Asatidz Masjid',
+                'keterangan' => 'Rutin Setiap Malam Jum\'at Bersama Seluruh Jamaah',
+                'lokasi' => 'Ruang Utama Masjid Jami\' Al Jihad'
+            ],
+            'kajian_ahad' => [
+                'enabled' => true,
+                'judul' => 'Kajian Umum Malam Ahad',
+                'hari' => 'Sabtu (Malam Ahad)',
+                'waktu' => 'Ba\'da Maghrib s/d Isya',
+                'pembimbing' => 'Ust. H. Ahmad Sholeh Al-Hafidz',
+                'keterangan' => 'Kajian Kitab Bidayatul Hidayah & Fiqih Keseharian',
+                'lokasi' => 'Ruang Utama Masjid Jami\' Al Jihad'
+            ],
+            'tahsin' => [
+                'enabled' => true,
+                'judul' => 'Bimbingan Tahsin Al-Qur\'an',
+                'waktu' => 'Ba\'da Sholat Isya (20:00 WIB)',
+                'pembimbing' => 'Ust. Pembina Tahsin Al-Qur\'an',
+                'keterangan' => 'Terbuka untuk Jamaah Ikhwan & Akhwat (Semua Usia)',
+                'lokasi' => 'Serambi & Ruang Utama Masjid',
+                'hari_aktif' => ['senin', 'rabu', 'sabtu'],
+                'catatan_khusus' => ''
+            ],
+            'tafsir' => [
+                'enabled' => true,
+                'judul' => 'Kajian Tafsir Al-Qur\'an Tematik',
+                'pola' => '2_minggu',
+                'pekan_aktif' => [1, 3],
+                'hari' => 'Ahad',
+                'waktu' => 'Ba\'da Sholat Subuh (05:15 WIB)',
+                'pembimbing' => 'Asatidz Dewan Syari\'ah Masjid',
+                'keterangan' => 'Tafsir Ayat-ayat Pilihan & Sarapan Pagi Bersama',
+                'lokasi' => 'Ruang Utama Masjid Jami\' Al Jihad'
+            ]
+        ];
+
+        $raw = $this->kegiatan_rutin_settings;
+        if (empty($raw)) return $default;
+        if (is_string($raw)) {
+            $decoded = json_decode($raw, true);
+            if (is_array($decoded)) {
+                return array_replace_recursive($default, $decoded);
+            }
+        } elseif (is_array($raw)) {
+            return array_replace_recursive($default, $raw);
+        }
+        return $default;
     }
 
     /**

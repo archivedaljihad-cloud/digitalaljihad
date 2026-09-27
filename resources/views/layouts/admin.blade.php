@@ -964,6 +964,14 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Agenda Rutin Masjid -->
+            <li class="nav-item {{ request()->routeIs('agenda_rutin.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('agenda_rutin.index') }}">
+                    <i class="fas fa-fw fa-calendar-check" style="color: #ffd700;"></i>
+                    <span>Agenda Rutin Masjid</span>
+                </a>
+            </li>
+
             <!-- Nav Item - Slide Informasi -->
             <li class="nav-item {{ request()->routeIs('slides.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('slides.index') }}">
@@ -1150,6 +1158,14 @@
                 <a class="nav-link" href="{{ route('agenda_kajian.index') }}">
                     <i class="fas fa-fw fa-book-open"></i>
                     <span>Agenda Kajian</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Agenda Rutin Masjid -->
+            <li class="nav-item {{ request()->routeIs('agenda_rutin.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('agenda_rutin.index') }}">
+                    <i class="fas fa-fw fa-calendar-check" style="color: #ffd700;"></i>
+                    <span>Agenda Rutin Masjid</span>
                 </a>
             </li>
 

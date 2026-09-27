@@ -72,6 +72,9 @@
             <a class="dropdown-item" href="{{ route('pengumuman.create') }}">
                 <i class="fas fa-bullhorn text-info"></i> Buat Pengumuman
             </a>
+            <a class="dropdown-item" href="{{ route('agenda_rutin.index') }}">
+                <i class="fas fa-calendar-check text-primary"></i> Kelola Agenda Rutin Masjid
+            </a>
             @endif
 
             @if(in_array($currentRole, ['admin', 'bendahara']))
@@ -682,6 +685,109 @@
                 </div>
             </div>
         </a>
+    </div>
+</div>
+
+<!-- Pusat Agenda Rutin Masjid (Status Pekan Ini & Akses Cepat Petugas) -->
+@php
+    $rutinSettings = $setting->getKegiatanRutin();
+    $nowId = \Carbon\Carbon::now('Asia/Jakarta');
+    $curDay = strtolower($nowId->locale('id')->isoFormat('dddd'));
+    if ($curDay === 'minggu') $curDay = 'ahad';
+    $tahsinDays = $rutinSettings['tahsin']['hari_aktif'] ?? [];
+    $isTahsinToday = in_array($curDay, $tahsinDays);
+    $isYasinToday = ($curDay === 'kamis');
+    $isAhadKajianToday = ($curDay === 'sabtu');
+@endphp
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow border-0" style="border-radius: 14px; overflow: hidden; border: 1.5px solid #10b981 !important;">
+            <div class="card-header py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between" style="background: linear-gradient(135deg, #064e3b 0%, #047857 100%);">
+                <div>
+                    <h6 class="m-0 font-weight-bold text-white">
+                        <i class="fas fa-calendar-check mr-2" style="color: #ffd700;"></i> Pusat Agenda Rutin Masjid (Display TV)
+                    </h6>
+                    <small class="text-white-50">Pengaturan jadwal rutin otomatis & update hari Tahsin Al-Qur'an mingguan</small>
+                </div>
+                <div class="mt-2 mt-sm-0">
+                    <a href="{{ route('agenda_rutin.index') }}" class="btn btn-warning btn-sm font-weight-bold text-dark shadow-sm" style="border-radius: 8px;">
+                        <i class="fas fa-edit mr-1"></i> Buka Pusat Pengaturan Agenda
+                    </a>
+                </div>
+            </div>
+            <div class="card-body bg-light">
+                <div class="row">
+                    <!-- Kartu 1: Yaasiin -->
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: 10px; background: #ffffff;">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="badge badge-success px-2 py-1 font-weight-bold">Malam Jum'at</span>
+                                @if($isYasinToday)
+                                <span class="badge badge-warning text-dark font-weight-bold"><i class="fas fa-bell"></i> MALAM INI</span>
+                                @endif
+                            </div>
+                            <div class="font-weight-bold text-dark" style="font-size: 0.92rem;">Surat Yaasiin 83 Ayat</div>
+                            <small class="text-muted d-block mt-1"><i class="fas fa-clock mr-1 text-warning"></i> Ba'da Maghrib s/d Isya</small>
+                            <small class="text-muted d-block"><i class="fas fa-check-circle mr-1 text-success"></i> Otomatis Setiap Pekan</small>
+                        </div>
+                    </div>
+
+                    <!-- Kartu 2: Kajian Malam Ahad -->
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: 10px; background: #ffffff;">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="badge badge-primary px-2 py-1 font-weight-bold">Malam Ahad</span>
+                                @if($isAhadKajianToday)
+                                <span class="badge badge-warning text-dark font-weight-bold"><i class="fas fa-bell"></i> MALAM INI</span>
+                                @endif
+                            </div>
+                            <div class="font-weight-bold text-dark" style="font-size: 0.92rem;">Kajian Umum Ahad</div>
+                            <small class="text-muted d-block mt-1"><i class="fas fa-clock mr-1 text-warning"></i> Ba'da Maghrib s/d Isya</small>
+                            <small class="text-muted d-block"><i class="fas fa-user-tie mr-1 text-primary"></i> {{ Str::limit($rutinSettings['kajian_ahad']['pembimbing'] ?? 'Ust. Ahmad Sholeh', 18) }}</small>
+                        </div>
+                    </div>
+
+                    <!-- Kartu 3: Tahsin Al-Qur'an (1-Click Day Picker) -->
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: 10px; background: #fffbeb; border: 1px solid #fde68a !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="badge badge-warning text-dark px-2 py-1 font-weight-bold">Tahsin Al-Qur'an</span>
+                                @if($isTahsinToday)
+                                <span class="badge badge-success font-weight-bold"><i class="fas fa-bell"></i> HARI INI</span>
+                                @endif
+                            </div>
+                            <div class="font-weight-bold text-dark" style="font-size: 0.92rem;">Bimbingan Tahsin</div>
+                            <small class="text-muted d-block mt-1"><i class="fas fa-clock mr-1 text-warning"></i> Ba'da Sholat Isya</small>
+                            <div class="mt-2 pt-1 border-top">
+                                <small class="font-weight-bold text-dark d-block mb-1" style="font-size: 11px;">Hari Aktif Pekan Ini:</small>
+                                <div class="d-flex flex-wrap" style="gap: 4px;">
+                                    @php
+                                        $labelDayMap = ['senin'=>'Sen', 'selasa'=>'Sel', 'rabu'=>'Rab', 'kamis'=>'Kam', 'jumat'=>'Jum', 'sabtu'=>'Sab', 'ahad'=>'Ahd'];
+                                    @endphp
+                                    @forelse($tahsinDays as $td)
+                                    <span class="badge badge-dark px-2 py-1" style="font-size: 10px;">{{ $labelDayMap[$td] ?? ucfirst($td) }}</span>
+                                    @empty
+                                    <span class="badge badge-secondary px-2 py-1" style="font-size: 10px;">Menunggu jadwal</span>
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kartu 4: Tafsir Al-Qur'an (2 Pekan Sekali) -->
+                    <div class="col-md-3">
+                        <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: 10px; background: #ffffff;">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="badge badge-purple text-white px-2 py-1 font-weight-bold" style="background: #7c3aed;">2 Pekan Sekali</span>
+                            </div>
+                            <div class="font-weight-bold text-dark" style="font-size: 0.92rem;">Tafsir Al-Qur'an</div>
+                            <small class="text-muted d-block mt-1"><i class="fas fa-clock mr-1 text-warning"></i> Ahad Ba'da Subuh</small>
+                            <small class="text-muted d-block"><i class="fas fa-calendar-alt mr-1 text-purple"></i> Pekan ke-{{ implode(' & ke-', $rutinSettings['tafsir']['pekan_aktif'] ?? [1, 3]) }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

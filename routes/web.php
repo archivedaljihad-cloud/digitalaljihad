@@ -24,6 +24,7 @@ use App\Http\Controllers\KeuanganAmbulanceController;
 use App\Http\Controllers\ProgramInfaqController;
 use App\Http\Controllers\LiveStreamController;
 use App\Http\Controllers\AiController;
+use App\Http\Controllers\AgendaRutinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,10 @@ Route::get('/live-mimbar-embed', [LiveStreamController::class, 'mimbarEmbed'])
     ->name('live-mimbar.embed');
 Route::get('/hikmah-embed', [AiController::class, 'hikmahEmbed'])
     ->name('hikmah.embed');
+Route::get('/agenda-rutin-embed', [AgendaRutinController::class, 'embed'])
+    ->name('agenda-rutin.embed');
+Route::get('/api/agenda-rutin', [AgendaRutinController::class, 'api'])
+    ->name('agenda-rutin.api');
 Route::get('/tv-outdoor', [WelcomeController::class, 'rotatorOutdoor'])
     ->name('rotator.outdoor');
 Route::get('/data-timestamp', [WelcomeController::class, 'getDataTimestamp'])
@@ -213,6 +218,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('pengumuman', PengumumanController::class);
         Route::resource('slides', SlideController::class);
         Route::resource('agenda_kajian', AgendaKajianController::class);
+
+        // Pusat Agenda Rutin Masjid (Bisa diakses Petugas & Admin)
+        Route::get('/agenda-rutin', [AgendaRutinController::class, 'index'])->name('agenda_rutin.index');
+        Route::post('/agenda-rutin', [AgendaRutinController::class, 'store'])->name('agenda_rutin.store');
 
         // AI Assistant (Google Gemini)
         Route::prefix('ai')->name('ai.')->group(function () {

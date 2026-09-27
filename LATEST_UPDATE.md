@@ -5281,6 +5281,100 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
    - Sinkronisasi folder mandiri lokal.
 7. Git Repository & Live Deployment Cloudflare Pages:
    - `https://digitalaljihad.my.id/`.
+---
 
+## 🕌 129. IMPLEMENTASI PUSAT AGENDA RUTIN MASJID (4 KEGIATAN MINGGUAN & DWI-MINGGUAN) DENGAN 1-CLICK DAY PICKER TAHSIN AL-QUR'AN PADA DASHBOARD PETUGAS & SLIDE TV DISPLAY (28 September 2026)
 
+### 1. Latar Belakang & Kebutuhan Pengguna:
+- **Analisis Kebutuhan Operasional Masjid:**
+  - Masjid Jami' Al Jihad memiliki 4 pilar kegiatan rutin keilmuan & ibadah berjamaah:
+    1. **Pembacaan Surat Yaasiin & Tahlil:** Berulang setiap Malam Jum'at (Kamis malam) ba'da Maghrib.
+    2. **Kajian Umum Malam Ahad:** Berulang setiap Malam Ahad (Sabtu malam) ba'da Maghrib.
+    3. **Bimbingan Tahsin Al-Qur'an (BARU):** Waktu ba'da Isya (20:00 WIB), dengan frekuensi 2–3x seminggu namun **harinya bersifat fleksibel/berubah-ubah** sesuai kesepakatan asatidz & jamaah.
+    4. **Kajian Tafsir Al-Qur'an Tematik (BARU):** Berlangsung dwi-mingguan (setiap 2 pekan sekali, yaitu Pekan 1 & Pekan 3) waktu Ahad ba'da Subuh.
+  - **Tantangan Petugas:** Jika petugas harus membuat pengumuman baru dari awal atau mengetik teks berulang setiap pekan, akan sangat merepotkan, rawan terlupakan, atau salah ketik.
+  - **Permintaan Spesifik Pengguna:**
+    > *"Ya silakan di eksekusi sekarang. Tapi tampilkan juga pengaturan ini di dashboard petugas karena dia yang akan melakukan updatenya."*
+  - **Solusi Cerdas & Praktis:**
+    - Membuat **Pusat Agenda Rutin Masjid** terpadu.
+    - Menghadirkan fitur **1-Click Day Picker** untuk Tahsin Al-Qur'an: Petugas cukup mengklik pil hari (`[Senin] [Selasa] [Rabu] [Kamis] [Jum'at] [Sabtu] [Ahad]`) dalam hitungan 5 detik tanpa perlu mengetik ulang kalimat jadwal.
+    - Menghadirkan pengaturan siklus pekan untuk Tafsir Al-Qur'an (`[Pekan 1] [Pekan 2] [Pekan 3] [Pekan 4]`).
+    - Menyematkan widget pengingat & form pembaruan langsung di **Dashboard Petugas & Admin** pada sistem Laravel maupun Web Statis.
+    - Merancang **Slide TV Full HD / 4K Khusus Agenda Rutin** (`/agenda-rutin-embed` & `slides/agenda-rutin.html`) yang secara otomatis mendeteksi hari ini dan memberikan pendaran lencana emas berdenyut (*pulsing gold badge*) **"HARI INI / MALAM INI"** saat kegiatan berlangsung.
+
+---
+
+### 2. Rincian Teknis & Arsitektur Implementasi:
+
+#### A. Database Migration & Model Laravel
+1. **Migration Baru:**
+   - Berkas: `database/migrations/2026_09_28_004230_add_kegiatan_rutin_settings_to_app_settings.php`.
+   - Menambahkan kolom `kegiatan_rutin_settings` (tipe `JSON`, `nullable`) ke tabel `app_settings`.
+2. **Model `AppSetting.php`:**
+   - Menambahkan `'kegiatan_rutin_settings' => 'array'` ke `$fillable` dan `$casts`.
+   - Membuat helper method `getKegiatanRutin()` dengan *fallback default* aman untuk 4 kegiatan.
+   - Memperbarui `getDefaultRotationPagesList()` untuk menyertakan halaman `/agenda-rutin-embed` di rotasi layar TV.
+
+#### B. Controller & Routing Laravel
+1. **`app/Http/Controllers/AgendaRutinController.php`:**
+   - `index()`: Menampilkan formulir master pengelolaan 4 kegiatan rutin (dapat diakses Admin, Petugas, dan Operator).
+   - `store()`: Menyimpan konfigurasi 4 kegiatan, termasuk array `hari_aktif` Tahsin dan array `pekan_aktif` Tafsir.
+   - `embed()`: Menghasilkan slide layar TV display Full HD/4K dengan perhitungan pintar hari ini vs jadwal kegiatan.
+   - `api()`: Endpoint JSON realtime untuk konsumsi layar TV atau aplikasi eksternal.
+2. **`routes/web.php`:**
+   - Rute publik: `GET /agenda-rutin-embed` & `GET /api/agenda-rutin`.
+   - Rute panel kerja: `GET /admin/agenda-rutin` & `POST /admin/agenda-rutin` di bawah middleware auth dengan pengecekan peran `admin,petugas,operator`.
+
+#### C. Dashboard Petugas / Operator & Menu Navigasi
+1. **Dashboard Petugas Laravel (`resources/views/home.blade.php`):**
+   - Menambahkan Card Khusus **Pusat Agenda Rutin Masjid (Display TV)** tepat di atas jadwal sholat pada dashboard Petugas.
+   - Menampilkan ringkasan 4 kartu kegiatan lengkap dengan badge hari aktif Tahsin dan siklus pekan Tafsir.
+   - Menambahkan tombol cepat *"Update Jadwal Hari Ini / Pekan Ini"* yang langsung mengarahkan ke form agenda.
+2. **Sidebar Admin & Petugas (`resources/views/layouts/admin.blade.php`):**
+   - Menambahkan menu **Agenda Rutin Masjid** lengkap dengan ikon kalender centang hijau dan badge *"NEW"* di bagian operasional masjid untuk Super Admin, Petugas, dan Operator.
+3. **Form Master Blade (`resources/views/agenda_rutin/index.blade.php`):**
+   - Dilengkapi switcher aktif/nonaktif per kegiatan, 1-Click Day Picker interaktif dengan tombol pills dinamis, selector pekan ke-1 s/d ke-4, dan tombol pratinjau langsung ke layar TV.
+
+#### D. Slide Layar TV Display (Full HD & 4K)
+1. **`resources/views/agenda-rutin-embed.blade.php` & `web-statis/slides/agenda-rutin.html`:**
+   - Tampilan bernuansa *emerald-gold glassmorphism* khas Masjid Jami' Al Jihad.
+   - Grid 4 kartu berpenampilan simetris:
+     - Kartu 1: Pembacaan Surat Yaasiin (Pola Malam Jum'at).
+     - Kartu 2: Kajian Umum Malam Ahad (Pola Malam Ahad).
+     - Kartu 3: Tahsin Al-Qur'an (Menampilkan daftar badge hari aktif pekan ini).
+     - Kartu 4: Tafsir Al-Qur'an (Menampilkan badge pekan aktif ke-1 & ke-3).
+   - **Smart Auto-Highlighting:** JavaScript cerdas membaca `new Date().getDay()` dan pekan ke berapa dalam bulan ini (`Math.ceil(date / 7)`). Jika hari ini cocok dengan jadwal kegiatan, kartu tersebut akan mendapat border emas berpendar dan badge berdenyut:
+     ```html
+     <div class="pulsing-today-badge">
+         <i class="fas fa-bell"></i> HARI INI / MALAM INI
+     </div>
+     ```
+
+#### E. Web Statis & Cloudflare Pages Alignment
+1. **Dashboard Petugas Web Statis (`web-statis/admin.html`):**
+   - Menambahkan menu `#nav-agenda-rutin` di sidebar di bawah hak akses `data-role="admin, petugas"`.
+   - Menambahkan Card Ringkasan Agenda Rutin di `#view-dashboard` (overview utama) sehingga petugas langsung melihat status kegiatan saat pertama login.
+   - Menambahkan section view `#view-agenda-rutin` dengan form 4 kegiatan dan 1-Click Day Picker interaktif.
+   - Menambahkan fungsi JavaScript: `loadAgendaRutinAdmin()`, `simpanAgendaRutinAdmin()`, `toggleWsDayPill(btn)`, dan `renderDashAgendaRutinWidget()`.
+   - Data otomatis tersimpan ganda ke `localStorage` (`agenda_rutin_settings`) dan Supabase BaaS `kegiatan_rutin_settings`.
+2. **Player Rotasi TV (`web-statis/index.html`):**
+   - Menambahkan pemetaan canon `/agenda-rutin-embed` -> `'slides/agenda-rutin.html'` pada `PATH_MAPPING`.
+
+---
+
+### 3. Berkas yang Dibuat & Dimodifikasi:
+1. `database/migrations/2026_09_28_004230_add_kegiatan_rutin_settings_to_app_settings.php` (BARU).
+2. `app/Models/AppSetting.php` (DIMODIFIKASI).
+3. `app/Http/Controllers/AgendaRutinController.php` (BARU).
+4. `routes/web.php` (DIMODIFIKASI).
+5. `resources/views/agenda_rutin/index.blade.php` (BARU).
+6. `resources/views/agenda-rutin-embed.blade.php` (BARU).
+7. `resources/views/layouts/admin.blade.php` (DIMODIFIKASI).
+8. `resources/views/home.blade.php` (DIMODIFIKASI - Dashboard Petugas).
+9. `web-statis/admin.html` (DIMODIFIKASI - Dashboard & Panel Kontrol Petugas).
+10. `web-statis/slides/agenda-rutin.html` (BARU).
+11. `web-statis/index.html` (DIMODIFIKASI - PATH_MAPPING Slide TV).
+12. `LATEST_UPDATE.md` (DIMODIFIKASI - Bab 129).
+13. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN).
+14. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
