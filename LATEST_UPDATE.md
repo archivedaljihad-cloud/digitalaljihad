@@ -4716,3 +4716,40 @@ Pengguna meminta penambahan fitur dari web Laravel versi lama yaitu halaman **Sl
 5. `LATEST_UPDATE.md`: Dokumentasi Bab 114.
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## BAB 115: REPOSISI SIARAN PENGUMUMAN DARURAT (ON-SCREEN ALERT) KE TENGAH LAYAR TV DENGAN BACKDROP BLUR & DESAIN ISLAMI MAJESTIK
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna meminta agar posisi **Siaran Pengumuman Darurat (On-Screen Alert)** pada Layar TV Masjid dipindahkan ke **tengah-tengah halaman TV**. Sebelumnya banner peringatan muncul di bagian atas (menutupi nama masjid dan jam). Dengan memposisikannya di tengah layar secara tegas, pesan darurat dapat langsung menarik perhatian jamaah dan pengunjung masjid secara maksimal.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Reposisi Presisi ke Tengah Layar TV (`web-statis/index.html`):**
+   - Mengubah properti CSS `.emergency-banner-overlay` dari posisi atas (`top: 25px`) menjadi posisi tepat di tengah viewport (`top: 50%; left: 50%; transform: translate(-50%, -50%)`).
+   - Memberikan efek animasi transisi *smooth scale zoom* (`scale(0.85)` ke `scale(1)`) saat siaran darurat dipancarkan dari dashboard admin.
+
+2. **Pemberian Backdrop Gelap Sinematik (`.emergency-backdrop`):**
+   - Menambahkan lapisan latar belakang transparan gelap berpadu efek kaca buram (`background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(10px)`).
+   - Efek ini meredupkan konten slide di belakangnya secara elegan sehingga perhatian jamaah 100% langsung terarah ke pesan pengumuman tanpa distraksi visual.
+
+3. **Desain Kotak Pengumuman Majestik & Berwibawa:**
+   - **Bingkai Emas Islami:** Border emas tebal (`3.5px solid #ffd700`) berpadu bayangan bersinar (*ambient golden glow*).
+   - **Badge Header Berdenyut:** Badge atas seperti `SIARAN PENGUMUMAN DARURAT` / `PENGUMUMAN DKM MASJID` dengan ikon megaphone beranimasi denyut lembut (`pulseAlertBadge`).
+   - **Tipografi Sangat Jelas & Besar:** Teks pesan berukuran `2.3rem` *extra-bold* dengan bayangan ganda agar sangat mudah dibaca dari jarak jauh oleh jamaah di dalam masjid.
+   - **Garis Pembatas & Subtitle:** Dilengkapi pembatas ornamen emas gradasi dan identitas DKM Masjid Jami' Al-Jihad.
+
+4. **Dukungan Multi-Tema & Normalisasi Durasi:**
+   - Mendukung 4 tema visual: 🔴 Merah Tegas (Darurat), 🟡 Emas (Default DKM), 🟢 Hijau (Agenda/Kabar Gembira), dan 🔵 Biru (Informasi Umum).
+   - Parser durasi cerdas yang menangani format detik maupun milidetik secara akurat.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/index.html`: Pembaruan tata letak, CSS backdrop, modal pengumuman tengah layar, dan logika timer alert.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 115.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
