@@ -4351,6 +4351,57 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 2. `LATEST_UPDATE.md`: Dokumentasi Bab 107.
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+---
+
+## 💰 BAB 108: PENAMBAHAN KARTU SALDO TERKINI BUKU KAS & PENYELARASAN METODE URUTAN DESCENDING (TERBARU DI ATAS) PADA BUKU KAS DAN KAS AMBULANCE
+
+### 1. Latar Belakang & Permintaan Pengguna:
+- Pada halaman modul **"Buku Kas & Transaksi" (`#view-keuangan`)**, sebelumnya belum terdapat kartu ringkasan saldo terkini yang terlihat langsung di atas tabel data (hanya ada toolbar pencarian). Pengguna meminta agar **saldo terbarunya ditampilkan**.
+- Pengguna meminta agar metode penyusunan daftar catatan (*list record*) pada **Buku Kas & Transaksi** diatur dengan urutan **paling atas terbaru dan paling bawah yang lama** (kronologis terbalik / descending).
+- Pengguna juga meminta agar aturan urutan yang sama diterapkan pada menu **Kas Ambulance** (**paling atas terbaru dan paling bawah yang lama**).
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+1. **Penambahan Row Kartu Metrik Saldo Terkini di `#view-keuangan` (`web-statis/admin.html`):**
+   - Menambahkan 3 kartu ringkasan (*summary metric cards*) di atas Filter & Search Toolbar:
+     - **Saldo Kas Terkini (`#statSaldoKasKeuanganCard`)**: Kartu hijau zamrud (`.metric-card-green`) dengan nominal saldo bersih buku kas (Pemasukan - Pengeluaran).
+     - **Total Pemasukan (`#statTotalMasukKasCard`)**: Kartu biru (`.metric-card-blue`) yang menampilkan akumulasi seluruh penerimaan kas masuk.
+     - **Total Pengeluaran (`#statTotalKeluarKasCard`)**: Kartu merah (`border-left: #ef4444`) yang menampilkan akumulasi seluruh pengeluaran operasional masjid.
+   - Pada fungsi `renderKasTables(data)`, ditambahkan kalkulasi `totalSaldo`, `totalPemasukan`, dan `totalPengeluaran` secara otomatis dan real-time memperbarui elemen kartu tersebut.
+
+2. **Metode Pengurutan Descending pada "Buku Kas & Transaksi":**
+   - Pada fungsi `filterKasTable()`, data hasil filter diurutkan secara eksplisit dengan metode descending:
+     ```javascript
+     filtered = [...filtered].sort((a, b) => {
+         const dateA = new Date(a.tanggal || 0).getTime();
+         const dateB = new Date(b.tanggal || 0).getTime();
+         if (dateA !== dateB) return dateB - dateA; // Tanggal terbaru di atas
+         return (parseInt(b.id) || 0) - (parseInt(a.id) || 0); // ID terbaru di atas
+     });
+     ```
+   - Pada fungsi `renderKasTableRows(items)`, ditambahkan *safety sorting* descending serupa sebelum rendering elemen baris tabel `mainKasTableBody`.
+   - Pada tabel ringkas overview `quickKasTableBody`, 5 transaksi teratas dipastikan adalah transaksi paling baru.
+
+3. **Metode Pengurutan Descending pada "Kas Ambulance":**
+   - Pada fungsi `renderAmbulanceData(data)`, data transaksi armada ambulance diurutkan secara presisi descending (tanggal terbaru di atas, tanggal lama di bawah; jika tanggal sama maka ID terbaru di atas) sebelum di-render ke `ambulanceTableBody`:
+     ```javascript
+     const sortedAmb = [...data].sort((a, b) => {
+         const dateA = new Date(a.tanggal || 0).getTime();
+         const dateB = new Date(b.tanggal || 0).getTime();
+         if (dateA !== dateB) return dateB - dateA;
+         return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+     });
+     ```
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Penambahan kartu saldo terkini, kartu pemasukan & pengeluaran di `#view-keuangan`, kalkulasi real-time di `renderKasTables`, dan pengurutan descending di `filterKasTable`, `renderKasTableRows`, serta `renderAmbulanceData`.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 108.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages.
+
 
 
 

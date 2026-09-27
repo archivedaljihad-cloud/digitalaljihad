@@ -2786,6 +2786,46 @@
                             </div>
                         </div>
 
+                        <!-- Kartu Ringkasan Saldo Terkini Buku Kas -->
+                        <div class="row mb-4">
+                            <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+                                <div class="metric-card metric-card-green">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Saldo Kas Terkini</div>
+                                            <div class="metric-value text-success" id="statSaldoKasKeuanganCard">Rp 0</div>
+                                            <div class="metric-sub text-success"><i class="fas fa-check-circle mr-1"></i> Saldo Kas Terkini Masjid</div>
+                                        </div>
+                                        <div class="metric-icon-box icon-box-green"><i class="fas fa-wallet"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+                                <div class="metric-card metric-card-blue">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Total Pemasukan</div>
+                                            <div class="metric-value text-primary" id="statTotalMasukKasCard">Rp 0</div>
+                                            <div class="metric-sub text-primary"><i class="fas fa-arrow-down mr-1"></i> Seluruh Kas Masuk</div>
+                                        </div>
+                                        <div class="metric-icon-box icon-box-blue"><i class="fas fa-hand-holding-usd"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
+                                <div class="metric-card" style="border-left: 5px solid #ef4444;">
+                                    <div class="metric-card-body">
+                                        <div>
+                                            <div class="metric-title">Total Pengeluaran</div>
+                                            <div class="metric-value text-danger" id="statTotalKeluarKasCard">Rp 0</div>
+                                            <div class="metric-sub text-danger"><i class="fas fa-arrow-up mr-1"></i> Seluruh Kas Keluar</div>
+                                        </div>
+                                        <div class="metric-icon-box" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;"><i class="fas fa-receipt"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Filter & Search Toolbar -->
                         <div class="content-card mb-3 p-3">
                             <div class="row align-items-center">
@@ -5463,13 +5503,17 @@
         // Render Tabel Kas
         function renderKasTables(data) {
             let totalSaldo = 0;
+            let totalPemasukan = 0;
+            let totalPengeluaran = 0;
             let totalMasukBulanIni = 0;
             const currentMonth = new Date().getMonth();
 
-            data.forEach(item => {
+            (data || []).forEach(item => {
                 const masuk = parseFloat(item.pemasukan) || 0;
                 const keluar = parseFloat(item.pengeluaran) || 0;
                 totalSaldo += (masuk - keluar);
+                totalPemasukan += masuk;
+                totalPengeluaran += keluar;
 
                 if (item.tanggal) {
                     const itemMonth = new Date(item.tanggal).getMonth();
@@ -5479,18 +5523,35 @@
                 }
             });
 
-            // Update Card Metrik
+            // Update Card Metrik Dashboard
             if (document.getElementById('statKasUtama')) {
                 document.getElementById('statKasUtama').textContent = formatRupiah(totalSaldo);
             }
 
-            // Quick table (Dashboard - 5 record)
+            // Update Card Metrik di View Buku Kas & Transaksi (Saldo Terkini, Pemasukan, Pengeluaran)
+            if (document.getElementById('statSaldoKasKeuanganCard')) {
+                document.getElementById('statSaldoKasKeuanganCard').textContent = formatRupiah(totalSaldo);
+            }
+            if (document.getElementById('statTotalMasukKasCard')) {
+                document.getElementById('statTotalMasukKasCard').textContent = formatRupiah(totalPemasukan);
+            }
+            if (document.getElementById('statTotalKeluarKasCard')) {
+                document.getElementById('statTotalKeluarKasCard').textContent = formatRupiah(totalPengeluaran);
+            }
+
+            // Quick table (Dashboard - 5 record terbaru)
             const quickTbody = document.getElementById('quickKasTableBody');
             if (quickTbody) {
                 if (!data || data.length === 0) {
                     quickTbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3">Belum ada transaksi kas tercatat.</td></tr>';
                 } else {
-                    quickTbody.innerHTML = data.slice(0, 5).map(item => {
+                    const sortedQuick = [...data].sort((a, b) => {
+                        const dateA = new Date(a.tanggal || 0).getTime();
+                        const dateB = new Date(b.tanggal || 0).getTime();
+                        if (dateA !== dateB) return dateB - dateA;
+                        return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+                    });
+                    quickTbody.innerHTML = sortedQuick.slice(0, 5).map(item => {
                         const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
                         const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
                         const badgeHTML = isMasuk ? '<span class="badge-masuk">Masuk</span>' : '<span class="badge-keluar">Keluar</span>';
@@ -5513,7 +5574,7 @@
             filterKasTable();
         }
 
-        // Filter & Search Tabel Kas Utama
+        // Filter & Search Tabel Kas Utama (Urutan: Paling atas terbaru, paling bawah yang lama)
         function filterKasTable() {
             const query = (document.getElementById('kasSearchInput')?.value || '').toLowerCase().trim();
             const typeFilter = document.getElementById('kasFilterType')?.value || 'all';
@@ -5547,6 +5608,14 @@
                 });
             }
 
+            // Urutkan list record: paling atas terbaru dan paling bawah yang lama (Tanggal DESC, ID DESC)
+            filtered = [...filtered].sort((a, b) => {
+                const dateA = new Date(a.tanggal || 0).getTime();
+                const dateB = new Date(b.tanggal || 0).getTime();
+                if (dateA !== dateB) return dateB - dateA;
+                return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+            });
+
             const infoEl = document.getElementById('kasFilterInfo');
             if (infoEl) {
                 if (query || typeFilter !== 'all' || katFilter !== 'all') {
@@ -5561,7 +5630,7 @@
             renderKasTableRows(filtered);
         }
 
-        // Render Baris Tabel Kas dengan Tombol Edit & Hapus
+        // Render Baris Tabel Kas dengan Tombol Edit & Hapus (Urutan: Paling atas terbaru, paling bawah yang lama)
         function renderKasTableRows(items) {
             const mainTbody = document.getElementById('mainKasTableBody');
             if (!mainTbody) return;
@@ -5569,7 +5638,16 @@
                 mainTbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-search mr-1"></i> Tidak ada transaksi yang sesuai dengan filter pencarian.</td></tr>';
                 return;
             }
-            mainTbody.innerHTML = items.map(item => {
+
+            // Jamin urutan: paling atas terbaru dan paling bawah yang lama
+            const sortedItems = [...items].sort((a, b) => {
+                const dateA = new Date(a.tanggal || 0).getTime();
+                const dateB = new Date(b.tanggal || 0).getTime();
+                if (dateA !== dateB) return dateB - dateA;
+                return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+            });
+
+            mainTbody.innerHTML = sortedItems.map(item => {
                 const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
                 const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
                 const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
@@ -5592,10 +5670,10 @@
             }).join('');
         }
 
-        // Render Ambulance Data
+        // Render Ambulance Data (Urutan: Paling atas terbaru, paling bawah yang lama)
         function renderAmbulanceData(data) {
             let totalSaldoAmb = 0;
-            data.forEach(item => {
+            (data || []).forEach(item => {
                 totalSaldoAmb += (parseFloat(item.pemasukan) || 0) - (parseFloat(item.pengeluaran) || 0);
             });
 
@@ -5611,7 +5689,15 @@
                 if (!data || data.length === 0) {
                     ambTbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Belum ada riwayat transaksi armada ambulance di database.</td></tr>';
                 } else {
-                    ambTbody.innerHTML = data.map(item => {
+                    // Jamin urutan: paling atas terbaru dan paling bawah yang lama (Tanggal DESC, ID DESC)
+                    const sortedAmb = [...data].sort((a, b) => {
+                        const dateA = new Date(a.tanggal || 0).getTime();
+                        const dateB = new Date(b.tanggal || 0).getTime();
+                        if (dateA !== dateB) return dateB - dateA;
+                        return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+                    });
+
+                    ambTbody.innerHTML = sortedAmb.map(item => {
                         const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
                         const nominal = isMasuk ? item.pemasukan : item.pengeluaran;
                         const badgeHTML = isMasuk ? '<span class="badge-masuk">Pemasukan</span>' : '<span class="badge-keluar">Pengeluaran</span>';
