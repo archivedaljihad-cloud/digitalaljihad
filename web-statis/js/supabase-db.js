@@ -307,9 +307,28 @@
         },
 
         /**
+        /**
          * Ambil daftar galeri informasi masjid
          */
         async getSlides() {
+            // 1. Coba baca dari cloud database Supabase
+            try {
+                const client = getClient();
+                if (client) {
+                    const { data, error } = await client.from('slides').select('*').order('urutan', { ascending: true });
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        try {
+                            localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(data));
+                            localStorage.setItem('cached_slides', JSON.stringify(data));
+                        } catch (e) {}
+                        return data;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca slides dari Supabase:', err);
+            }
+
+            // 2. Coba baca dari localStorage lokal
             try {
                 const local = localStorage.getItem('aljihad_galeri_informasi');
                 if (local) {
@@ -320,25 +339,13 @@
                 }
             } catch (e) {}
 
-            try {
-                const client = getClient();
-                if (client) {
-                    const { data, error } = await client.from('slides').select('*').order('urutan', { ascending: true });
-                    if (!error && data && data.length > 0) {
-                        localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(data));
-                        return data;
-                    }
-                }
-            } catch (err) {
-                console.warn('Gagal membaca slides dari Supabase:', err);
-            }
-
-            // Default fallback 3 arsip dokumentasi & sertifikasi resmi Masjid Al-Jihad
+            // 3. Default fallback 3 arsip dokumentasi & sertifikasi resmi Masjid Al-Jihad
             const defaultSlides = [
                 {
                     id: 1,
                     judul: 'Arah Qiblat',
-                    deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB',
+                    kategori: 'Pengukuran & Validasi',
+                    deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
                     gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
                     urutan: 1,
                     durasi: 10,
@@ -347,7 +354,8 @@
                 {
                     id: 2,
                     judul: 'Qiblat Sertifikat',
-                    deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat',
+                    kategori: 'Sertifikasi Resmi',
+                    deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat Kementerian Agama Republik Indonesia.',
                     gambar: 'image/slides/iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png',
                     urutan: 2,
                     durasi: 10,
@@ -356,7 +364,8 @@
                 {
                     id: 3,
                     judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
-                    deskripsi: 'Surat Keterangan Masjid Al Jihad terdaftar di KEMENAG',
+                    kategori: 'Legalitas & Perizinan',
+                    deskripsi: 'Surat Tanda Daftar Masjid Jami\' Al Jihad terdaftar resmi di Kementerian Agama (KEMENAG) RI.',
                     gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
                     urutan: 3,
                     durasi: 10,
@@ -372,7 +381,7 @@
         },
 
         /**
-         * Simpan seluruh daftar galeri informasi ke localStorage & Supabase
+         * Simpan seluruh daftar galeri informasi ke localStorage & Cloud Supabase
          */
         async saveSlides(slidesList) {
             try {
@@ -383,8 +392,31 @@
             try {
                 const client = getClient();
                 if (client && SUPABASE_CONFIG.url) {
-                    // Update ke Supabase tabel slides jika tersedia
-                    console.log('📡 [SupabaseDB] Menyimpan galeri informasi ke cloud...');
+                    console.log('📡 [SupabaseDB] Menyimpan galeri informasi ke cloud Supabase...');
+                    const cleanSlides = slidesList.map(s => ({
+                        id: s.id,
+                        judul: s.judul || '',
+                        deskripsi: s.deskripsi || '',
+                        gambar: s.gambar || '',
+                        urutan: parseInt(s.urutan, 10) || 1,
+                        durasi: parseInt(s.durasi, 10) || 10,
+                        aktif: s.aktif !== false,
+                        updated_at: new Date().toISOString()
+                    }));
+
+                    // Upsert seluruh baris slide ke tabel slides
+                    const { error: upsertErr } = await client.from('slides').upsert(cleanSlides, { onConflict: 'id' });
+                    if (upsertErr) {
+                        console.warn('Gagal upsert slides ke Supabase:', upsertErr);
+                    } else {
+                        console.log('✅ [SupabaseDB] Sukses menyinkronkan slides ke cloud!');
+                    }
+
+                    // Hapus slide yang tidak ada lagi dalam daftar
+                    const activeIds = cleanSlides.map(s => s.id).filter(Boolean);
+                    if (activeIds.length > 0) {
+                        await client.from('slides').delete().not('id', 'in', `(${activeIds.join(',')})`);
+                    }
                 }
             } catch (err) {
                 console.warn('Gagal sync galeri ke Supabase:', err);

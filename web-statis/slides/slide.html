@@ -359,8 +359,8 @@
             <!-- Kolom Kiri: Poster Gambar -->
             <div class="slide-left-col">
                 <div class="poster-frame" id="posterFrame">
-                    <img id="posterImg" src="../image/display/default_imam.jpg" alt="Poster Informasi" style="display: none;" onerror="this.style.display='none'; document.getElementById('posterFallback').style.display='flex';">
-                    <div class="poster-fallback" id="posterFallback">
+                    <img id="posterImg" src="../image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png" alt="Poster Informasi" style="display: block;" onerror="handlePosterError(this)">
+                    <div class="poster-fallback" id="posterFallback" style="display: none;">
                         <i class="fas fa-images"></i>
                         <div>
                             <div style="font-size: 1.4rem; font-weight: 800; color: #ffffff;">INFORMASI & DAKWAH</div>
@@ -377,11 +377,11 @@
                 <div class="slide-card">
                     <div class="slide-badge-title">
                         <i class="fas fa-bullhorn"></i>
-                        <span id="slideCategory">Informasi Terkini</span>
+                        <span id="slideCategory">Pengukuran & Validasi</span>
                     </div>
-                    <div class="slide-title" id="slideTitle">Warta & Pengumuman DKM Al-Jihad</div>
+                    <div class="slide-title" id="slideTitle">Arah Qiblat</div>
                     <div class="slide-desc" id="slideDesc">
-                        Selamat datang di Masjid Jami' Al-Jihad. Ikuti terus kabar informasi agenda ibadah, kajian, dan kegiatan sosial keummatan di lingkungan masjid kita.
+                        Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami' Al-Jihad.
                     </div>
 
                     <div class="slide-dots-indicator" id="slideDots"></div>
@@ -399,11 +399,11 @@
         </div>
     </div>
 
-    <!-- CORE SCRIPTS -->
+    <!-- CORE SCRIPTS DENGAN CACHE-BUSTER -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js"></script>
-    <script src="../js/supabase-db.js"></script>
-    <script src="../js/display-clock-ambient.js"></script>
+    <script src="../js/supabase-config.js?v=20260927_01"></script>
+    <script src="../js/supabase-db.js?v=20260927_01"></script>
+    <script src="../js/display-clock-ambient.js?v=20260927_01"></script>
 
     <script>
         // Background Rotator Islami
@@ -456,21 +456,79 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        let slidesData = [];
+        // Data Bawaan Resmi Galeri Informasi Masjid Jami' Al-Jihad
+        const DEFAULT_SLIDES = [
+            {
+                id: 1,
+                judul: 'Arah Qiblat',
+                kategori: 'Pengukuran & Validasi',
+                deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
+                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                urutan: 1,
+                durasi: 10,
+                aktif: true
+            },
+            {
+                id: 2,
+                judul: 'Qiblat Sertifikat',
+                kategori: 'Sertifikasi Resmi',
+                deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat Kementerian Agama Republik Indonesia.',
+                gambar: 'image/slides/iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png',
+                urutan: 2,
+                durasi: 10,
+                aktif: true
+            },
+            {
+                id: 3,
+                judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
+                kategori: 'Legalitas & Perizinan',
+                deskripsi: 'Surat Tanda Daftar Masjid Jami\' Al Jihad terdaftar resmi di Kementerian Agama (KEMENAG) RI.',
+                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                urutan: 3,
+                durasi: 10,
+                aktif: true
+            }
+        ];
+
+        let slidesData = [...DEFAULT_SLIDES];
         let currentSlideIdx = 0;
         let slideTimer = null;
-
-        let isTransitioning = false;
         let lastResolvedImgUrl = '';
+        let posterRetryMap = {};
+
+        // Penanganan fallback cerdas gambar jika salah satu path gagal di browser TV
+        function handlePosterError(imgEl) {
+            if (!imgEl) return;
+            const currentSrc = imgEl.src;
+            const filename = currentSrc.split('/').pop().split('?')[0];
+
+            if (!posterRetryMap[filename]) {
+                posterRetryMap[filename] = 1;
+                console.warn('⚠️ Path gambar relatif gagal, mencoba path root:', filename);
+                imgEl.src = '/image/slides/' + filename;
+                return;
+            }
+            if (posterRetryMap[filename] === 1) {
+                posterRetryMap[filename] = 2;
+                console.warn('⚠️ Path root gagal, mencoba CDN Cloudflare live:', filename);
+                imgEl.src = 'https://digitalaljihad.my.id/image/slides/' + filename;
+                return;
+            }
+
+            console.error('❌ Gagal memuat gambar dari seluruh sumber:', filename);
+            imgEl.style.display = 'none';
+            const fallback = document.getElementById('posterFallback');
+            if (fallback) fallback.style.display = 'flex';
+        }
 
         function resolveSlideUrl(url) {
             if (!url) return '';
             if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image/')) {
                 return url;
-            } else if (url.startsWith('image/')) {
-                return '../' + url;
             } else if (url.startsWith('../image/')) {
                 return url;
+            } else if (url.startsWith('image/')) {
+                return '../' + url;
             } else if (url.startsWith('slides/')) {
                 return '../image/' + url;
             } else {
@@ -579,7 +637,7 @@
             if (descEl) descEl.textContent = nextDesc;
 
             if (newResolvedUrl) {
-                fallback.style.display = 'none';
+                if (fallback) fallback.style.display = 'none';
 
                 if (lastResolvedImgUrl && lastResolvedImgUrl !== newResolvedUrl) {
                     // Jalankan efek Card Flip Transition (3D Grid Flip)
@@ -587,13 +645,15 @@
                         lastResolvedImgUrl = newResolvedUrl;
                     });
                 } else {
-                    posterImg.src = newResolvedUrl;
-                    posterImg.style.display = 'block';
+                    if (posterImg) {
+                        posterImg.src = newResolvedUrl;
+                        posterImg.style.display = 'block';
+                    }
                     lastResolvedImgUrl = newResolvedUrl;
                 }
             } else {
-                posterImg.style.display = 'none';
-                fallback.style.display = 'flex';
+                if (posterImg) posterImg.style.display = 'none';
+                if (fallback) fallback.style.display = 'flex';
                 lastResolvedImgUrl = '';
             }
 
@@ -634,44 +694,83 @@
             scheduleNextSlide();
         }
 
-        // Load Slides
-        async function loadSlides() {
-            try {
-                // 1. Settings
-                const settings = await SupabaseDB.getSettings();
-                if (settings) {
-                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
-                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
-                    const rText = SupabaseDB.getRunningTextForPage('/slide-embed', settings);
-                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
+        // 1. INISIALISASI INSTAN (ZERO DELAY) SEBELUM KONEKSI JARINGAN SELESAI
+        try {
+            const cached = localStorage.getItem('aljihad_galeri_informasi');
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    const valid = parsed.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
+                    if (valid.length > 0) slidesData = valid;
                 }
+            }
+        } catch (e) {}
 
-                // 2. Slides Galeri Informasi
-                const list = await SupabaseDB.getSlides();
-                if (list && list.length > 0) {
-                    slidesData = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
-                    if (slidesData.length > 0) {
-                        currentSlideIdx = 0;
-                        showSlide(slidesData[0], 0, slidesData.length);
-                        startSlideRotation();
+        // Tampilkan slide pertama sekarang juga
+        if (slidesData.length > 0) {
+            showSlide(slidesData[0], 0, slidesData.length);
+            startSlideRotation();
+        }
+
+        // 2. SINKRONISASI DARI CLOUD SUPABASE SECARA ASINKRON
+        async function loadSlidesFromCloud() {
+            try {
+                if (window.SupabaseDB) {
+                    // Ambil Pengaturan Umum (Nama Masjid & Teks Berjalan)
+                    const settings = await SupabaseDB.getSettings();
+                    if (settings) {
+                        if (settings.nama_aplikasi) {
+                            const nameEl = document.getElementById('nama-masjid');
+                            if (nameEl) nameEl.textContent = settings.nama_aplikasi;
+                        }
+                        if (settings.sub_header) {
+                            const subEl = document.getElementById('sub-header');
+                            if (subEl) subEl.textContent = settings.sub_header;
+                        }
+                        const rText = SupabaseDB.getRunningTextForPage('/slide-embed', settings);
+                        if (rText) {
+                            const rtEl = document.getElementById('runningTextContent');
+                            if (rtEl) rtEl.innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
+                        }
+                    }
+
+                    // Ambil Daftar Galeri Informasi dari Cloud
+                    if (typeof SupabaseDB.getSlides === 'function') {
+                        const list = await SupabaseDB.getSlides();
+                        if (Array.isArray(list) && list.length > 0) {
+                            const valid = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
+                            if (valid.length > 0) {
+                                slidesData = valid;
+                                if (currentSlideIdx >= slidesData.length) currentSlideIdx = 0;
+                                showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+                                startSlideRotation();
+                            }
+                        }
                     }
                 }
             } catch (err) {
-                console.error('Gagal memuat slides galeri informasi:', err);
+                console.warn('Gagal sinkronisasi slides dari cloud:', err);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSlides();
+        function initSlideApp() {
+            loadSlidesFromCloud();
 
-            if (window.SupabaseDB) {
+            if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'slides' || payload.table === 'app_settings') {
-                        loadSlides();
+                    if (payload && (payload.table === 'slides' || payload.table === 'app_settings')) {
+                        console.log('⚡ Menerima update data realtime untuk Galeri Informasi');
+                        loadSlidesFromCloud();
                     }
                 });
             }
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSlideApp);
+        } else {
+            initSlideApp();
+        }
     </script>
 </body>
 </html>

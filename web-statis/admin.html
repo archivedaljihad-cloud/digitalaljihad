@@ -4997,7 +4997,7 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
-    <script src="js/supabase-db.js?v=2.6"></script>
+    <script src="js/supabase-db.js?v=20260927_01"></script>
     <script src="js/admin-auth.js?v=2.6"></script>
     <script src="js/gemini-ai.js"></script>
 
@@ -6346,6 +6346,24 @@
             }
             localStorage.setItem('cached_qris_list', JSON.stringify(cachedQrisList));
             renderQrisTable();
+
+            // H. Data Galeri Informasi & Dokumentasi TV (Slides)
+            try {
+                const resSlides = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/slides?order=urutan.asc`, { headers });
+                if (resSlides.ok) {
+                    const sbSlides = await resSlides.json();
+                    if (Array.isArray(sbSlides) && sbSlides.length > 0) {
+                        cachedGaleriData = sbSlides;
+                        localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(sbSlides));
+                        localStorage.setItem('cached_slides', JSON.stringify(sbSlides));
+                        if (typeof renderGaleriTable === 'function') {
+                            renderGaleriTable();
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal memuat slides galeri informasi dari Supabase:', err);
+            }
         }
 
         // Render Tabel Kas

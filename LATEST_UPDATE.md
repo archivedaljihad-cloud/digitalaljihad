@@ -4858,3 +4858,46 @@ Pengguna meminta penambahan efek transisi visual **"Card Flip Transition (3D Gri
 2. `LATEST_UPDATE.md`: Dokumentasi Bab 118.
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## BAB 119: PERBAIKAN TAMPILAN GAMBAR & DATA GALERI INFORMASI PADA TV DISPLAY SERTA SINKRONISASI CLOUD DATABASE SUPABASE
+
+### 1. Latar Belakang & Keluhan Pengguna:
+Pengguna melaporkan bahwa gambar galeri informasi tidak tampil di layar TV masjid fisik (hanya memunculkan ikon kuning placeholder *"INFORMASI & DAKWAH / Masjid Jami' Al-Jihad"* di kolom kiri serta teks lama bawaan *"Warta & Pengumuman DKM Al-Jihad"* di kolom kanan).
+
+### 2. Akar Masalah (Root Cause Analysis):
+1. **Cache Browser TV & CDN Edge (`immutable`):** Berkas JavaScript `supabase-db.js` pada konfigurasi header Cloudflare Pages diberikan header `Cache-Control: public, max-age=31536000, immutable`. Tag script di `slide.html` sebelumnya tidak menyertakan parameter versi (`?v=...`), sehingga browser Smart TV masjid menjalankan `supabase-db.js` versi lama yang belum memiliki metode `getSlides()`. Akibatnya eksekusi JavaScript terhenti karena error dan fungsi `showSlide()` tidak pernah terpanggil.
+2. **Ketiadaan Data di Tabel Cloud Supabase `slides`:** Tabel `slides` di cloud Supabase sebelumnya berstatus kosong (0 entri). TV masjid yang tidak mengakses panel admin di komputernya tidak memiliki data di `localStorage`, sehingga saat membaca Supabase hanya mendapatkan array kosong tanpa data arsip resmi.
+3. **Ketergantungan Eksekusi Asinkron Jaringan Tanpa Default Sinkron:** Di `slide.html`, tag gambar awal diatur dengan `style="display: none;"` dan menunggu jaringan Supabase selesai. Jika koneksi lambat atau script terhenti, layar TV terjebak pada tampilan placeholder kosong.
+4. **Penyimpanan Admin Belum Melakukan Sinkronisasi Cloud:** Pada `admin.html`, penyimpanan data galeri informasi sebelumnya hanya menulis ke `localStorage` laptop admin, belum menyinkronkan data langsung ke tabel `slides` Supabase.
+
+### 3. Solusi & Perubahan yang Diterapkan:
+1. **Inisialisasi Data Default Sinkron (Zero-Delay Instant Render):**
+   - Mendefinisikan 3 data slide resmi (Arah Qiblat, Sertifikat Rasdhul Qiblat Kemenag, dan Surat Tanda Daftar SIMAS) langsung secara inline di dalam berkas `web-statis/slides/slide.html`.
+   - Mengatur markup HTML awal agar langsung memuat gambar slide 1 (`../image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png`), judul *"Arah Qiblat"*, dan kategori *"Pengukuran & Validasi"* dengan `display: block`.
+   - Slide pertama langsung ditampilkan seketika dalam 0 detik saat halaman dibuka tanpa menunggu respon jaringan cloud.
+2. **Pengisian Data Resmi ke Cloud Database Supabase:**
+   - Melakukan entri 3 data arsip resmi masjid langsung ke tabel `slides` di Supabase (`https://xskusfacwsclbgdtgier.supabase.co/rest/v1/slides`) sehingga perangkat TV manapun langsung menerima data dari cloud.
+3. **Penerapan Cache-Busting Script:**
+   - Menambahkan query parameter versi `?v=20260927_01` pada seluruh tag script di `web-statis/slides/slide.html` dan `web-statis/admin.html` (`supabase-config.js`, `supabase-db.js`, `display-clock-ambient.js`), memaksa browser TV mengambil file JavaScript terbaru dan mengabaikan cache lama.
+4. **Smart Path Fallback Gambar (`handlePosterError`):**
+   - Menambahkan mekanisme penanganan error bertingkat jika browser TV gagal memuat salah satu format path gambar:
+     `Relatif (../image/slides/...)` ➔ `Root (/image/slides/...)` ➔ `Cloudflare Live (https://digitalaljihad.my.id/image/slides/...)`.
+5. **Penyempurnaan `getSlides()` & `saveSlides()` di `supabase-db.js`:**
+   - `getSlides()` memprioritaskan pembacaan tabel cloud Supabase, menyimpannya ke cache lokal, dan menggunakan fallback default yang aman jika offline.
+   - `saveSlides()` melakukan `upsert` otomatis seluruh item ke tabel `slides` di Supabase dan membersihkan entri yang dihapus, sehingga perubahan galeri dari laptop pengurus langsung tersinkronisasi ke seluruh TV display secara realtime.
+6. **Integrasi Pemuatan Galeri di Dashboard Admin (`admin.html`):**
+   - Menambahkan pemuatan otomatis tabel `slides` pada fungsi `loadAllSupabaseData()` saat halaman admin dibuka.
+
+---
+
+### 4. Berkas yang Diperbarui:
+1. `web-statis/slides/slide.html`: Markup awal default aktif, inline slides fallback, inisialisasi instan tanpa jeda, penanganan cerdas `handlePosterError()`, dan script tag versioning.
+2. `web-statis/js/supabase-db.js`: Sinkronisasi baca/tulis cloud Supabase pada `getSlides()` dan `saveSlides()`.
+3. `web-statis/admin.html`: Cache-buster script dan pemuatan `slides` pada `loadAllSupabaseData()`.
+4. Cloud Supabase (`slides` table): Terisi 3 arsip data resmi Masjid Jami' Al-Jihad.
+5. `LATEST_UPDATE.md`: Dokumentasi Bab 119.
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
