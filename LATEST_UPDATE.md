@@ -4434,6 +4434,75 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## 📱 BAB 110: PENAMBAHAN MODUL MANAJEMEN QRIS DONASI PADA PANEL ADMIN WEB STATIS & SINKRONISASI TAMPILAN DISPLAY TV
+
+### 1. Latar Belakang & Permintaan Pengguna:
+- Pengguna melaporkan bahwa pada versi **Web Statis**, belum terdapat menu dan halaman **"QRIS Donasi"** seperti yang sudah ada pada versi web sebelumnya (Laravel).
+- Berdasarkan tangkapan layar yang dilampirkan pengguna:
+  1. Di sidebar menu navigasi admin harus tersedia menu **"QRIS Donasi"** (ikon `fas fa-qrcode`) di bawah menu Program Infaq.
+  2. Tersedia halaman **Manajemen QRIS** (`#view-qris`) lengkap dengan tabel **Daftar QRIS**:
+     - Kolom tabel: `No`, `Nama`, `Gambar`, `Status`, `Bank`, `Atas Nama`, dan `Aksi`.
+     - Tombol aksi: **Lihat / Detail** (ikon mata), **Edit** (ikon pensil), **Aktifkan di TV** (ikon centang hijau untuk QRIS nonaktif), dan **Hapus** (ikon sampah merah).
+     - Tombol **+ Tambah QRIS** di pojok kanan atas.
+     - Kotak pencarian (*Search*) dan pemilih jumlah entri per halaman.
+  3. Form **Tambah / Edit QRIS** (`#modalQris`) dengan masukan:
+     - Nama QRIS (wajib).
+     - Gambar QRIS (dukungan unggah file langsung dengan preview instan, atau tempel tautan/URL gambar).
+     - Keterangan infaq/sedekah digital.
+     - Nama Bank (misal: Bank Jawa Barat / BJB).
+     - Nomor Rekening (misal: 011 686 685 4100).
+     - Atas Nama Rekening (misal: DKM Jami Al Jihad).
+     - Status Penayangan (Aktif / Nonaktif).
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+1. **Pembaruan Navigasi Sidebar (`web-statis/admin.html`):**
+   - Menambahkan `nav-item` baru dengan ID `#nav-qris` di bawah `#nav-infaq`:
+     ```html
+     <li class="nav-item" id="nav-qris">
+         <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('qris')">
+             <i class="fas fa-fw fa-qrcode"></i>
+             <span>QRIS Donasi</span>
+         </a>
+     </li>
+     ```
+
+2. **Pembuatan Tampilan Manajemen QRIS (`#view-qris` di `web-statis/admin.html`):**
+   - Menambahkan seksi antarmuka modern dengan Card Header hijau gradien bertuliskan *"Daftar QRIS"* dan badge jumlah data.
+   - Tabel responsive yang menampilkan thumbnail gambar QRIS (dapat diklik untuk preview perbesaran), badge status *Aktif* (hijau) atau *Nonaktif* (abu-abu), nama bank, nomor rekening, atas nama, serta tombol aksi lengkap.
+   - Menyertakan tombol navigasi cepat *"Buka Layar TV"* menuju `slides/qris.html`.
+
+3. **Modal Form Tambah / Edit & Modal Rincian (`web-statis/admin.html`):**
+   - Modal Form `#modalQris`: Mengintegrasikan `FileReader` JavaScript untuk memproses unggahan file gambar lokal (<2MB) ke format base64/DataURL atau menerima URL eksternal, lengkap dengan preview gambar live sebelum disimpan.
+   - Modal Detail `#modalDetailQris`: Menampilkan kartu pindaian QRIS resolusi tinggi beserta ringkasan rekening dan pesan sedekah.
+
+4. **Engine JavaScript & Sinkronisasi Dual-Track (`web-statis/admin.html`):**
+   - Menambahkan array `cachedQrisList` dengan data awal default presisi sesuai tangkapan layar pengguna:
+     - Nama: *QRIS Masjid Al-Jihad*
+     - Bank: *Bank Jawa Barat (BJB)*
+     - Rekening: *011 686 685 4100*
+     - Atas Nama: *DKM Jami Al Jihad*
+     - Status: *aktif*
+   - Logika persistensi aman: Disimpan ke `localStorage` (`cached_qris_list`), dikirim ke Supabase REST API jika daring, serta otomatis memperbarui konfigurasi `app_settings` (`qris_image`).
+   - Fitur proteksi: Menjamin hanya ada 1 QRIS berstatus *aktif* yang tayang di TV dalam satu waktu.
+
+5. **Pembaruan Slide Display TV (`web-statis/slides/qris.html`):**
+   - Menambahkan **Medali Kaligrafi Emas 3D (Muhammad SAW & Allah SWT)** di sisi kiri dan kanan header layar TV.
+   - Menjadikan seluruh teks pada slide (keterangan, nama bank, nomor rekening, atas nama, dan gambar barcode QRIS) bergerak dinamis membaca data QRIS yang sedang aktif dari database cloud / lokal storage, serta merespons perubahan secara real-time via event `storage` dan WebSocket Supabase.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Penambahan menu sidebar `#nav-qris`, view `#view-qris`, modal `#modalQris`, modal `#modalDetailQris`, dan fungsi JavaScript `renderQrisTable`, `simpanDataQris`, `setAktifQris`, `hapusQris`.
+2. `web-statis/slides/qris.html`: Penambahan medali kaligrafi 3D dan penyelarasan pembacaan data dinamis QRIS aktif.
+3. `LATEST_UPDATE.md`: Dokumentasi Bab 110.
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 
 

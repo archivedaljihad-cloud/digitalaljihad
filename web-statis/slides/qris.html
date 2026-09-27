@@ -294,6 +294,14 @@
     <div class="display-background"></div>
     <div class="display-overlay"></div>
 
+    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DENGAN EFEK DENYUT PELAN -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
+
     <div class="container">
         <!-- HEADER MASJID -->
         <div class="header">
@@ -313,13 +321,13 @@
                     <!-- Kolom Informasi & Rekening -->
                     <div class="info-col">
                         <div class="qris-desc-box">
-                            <div class="qris-instruction">
+                            <div class="qris-instruction" id="qrisInstruction">
                                 Salurkan infaq, shodaqoh, dan jariyah terbaik Anda secara cepat, mudah, dan aman menggunakan pemindaian kode QRIS Nasional.
                             </div>
                             <div class="qris-alert-box">
                                 <i class="fas fa-check-circle"></i>
                                 <div class="qris-alert-text">
-                                    Pastikan nama penerima tertera: <strong style="color: #ffd700;">MASJID JAMI' AL-JIHAD</strong>
+                                    Pastikan nama penerima tertera: <strong style="color: #ffd700;" id="qrisAtasNamaAlert">MASJID JAMI' AL-JIHAD</strong>
                                 </div>
                             </div>
                         </div>
@@ -330,12 +338,12 @@
                                 <span>Rekening Resmi Donasi Masjid</span>
                             </div>
                             <div class="bank-detail-row">
-                                <span class="bank-label">Bank Syariah Indonesia (BSI)</span>
-                                <span class="bank-val">7123-456-789</span>
+                                <span class="bank-label" id="qrisBankLabel">Bank Syariah Indonesia (BSI)</span>
+                                <span class="bank-val" id="qrisBankAcc">7123-456-789</span>
                             </div>
                             <div class="bank-detail-row">
                                 <span class="bank-label">Atas Nama</span>
-                                <span class="bank-val" style="color: #ffd700;">Masjid Jami' Al-Jihad</span>
+                                <span class="bank-val" style="color: #ffd700;" id="qrisBankOwner">Masjid Jami' Al-Jihad</span>
                             </div>
                         </div>
 
@@ -436,10 +444,54 @@
 
                     // Update Gambar QRIS jika ada URL di app_settings
                     if (settings.qris_image) {
-                        const imgUrl = settings.qris_image.startsWith('http') 
+                        const imgUrl = (settings.qris_image.startsWith('http') || settings.qris_image.startsWith('data:') || settings.qris_image.startsWith('../') || settings.qris_image.startsWith('image/'))
                             ? settings.qris_image 
                             : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${settings.qris_image}`;
                         document.getElementById('qrisImage').src = imgUrl;
+                    }
+                }
+
+                // Muat Data Detail QRIS Aktif (Bank, Norek, Atas Nama, Keterangan)
+                let activeQris = null;
+                try {
+                    if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+                        const resQ = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?status=eq.aktif&limit=1`, {
+                            headers: { 'apikey': SUPABASE_CONFIG.anonKey }
+                        });
+                        if (resQ.ok) {
+                            const dataQ = await resQ.json();
+                            if (dataQ && dataQ.length > 0) activeQris = dataQ[0];
+                        }
+                    }
+                } catch(e) {}
+
+                if (!activeQris) {
+                    try {
+                        const localQ = JSON.parse(localStorage.getItem('cached_qris_list') || '[]');
+                        activeQris = localQ.find(q => q.status === 'aktif') || localQ[0];
+                    } catch(e) {}
+                }
+
+                if (activeQris) {
+                    if (activeQris.gambar) {
+                        document.getElementById('qrisImage').src = activeQris.gambar;
+                    }
+                    if (activeQris.keterangan && document.getElementById('qrisInstruction')) {
+                        document.getElementById('qrisInstruction').textContent = activeQris.keterangan;
+                    }
+                    if (activeQris.atas_nama) {
+                        if (document.getElementById('qrisAtasNamaAlert')) {
+                            document.getElementById('qrisAtasNamaAlert').textContent = activeQris.atas_nama;
+                        }
+                        if (document.getElementById('qrisBankOwner')) {
+                            document.getElementById('qrisBankOwner').textContent = activeQris.atas_nama;
+                        }
+                    }
+                    if (activeQris.bank && document.getElementById('qrisBankLabel')) {
+                        document.getElementById('qrisBankLabel').textContent = activeQris.bank;
+                    }
+                    if (activeQris.nomor_rekening && document.getElementById('qrisBankAcc')) {
+                        document.getElementById('qrisBankAcc').textContent = activeQris.nomor_rekening;
                     }
                 }
             } catch (err) {
@@ -452,11 +504,17 @@
 
             if (window.SupabaseDB) {
                 SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'app_settings') {
+                    if (payload.table === 'app_settings' || payload.table === 'qris') {
                         loadQrisData();
                     }
                 });
             }
+
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'cached_qris_list') {
+                    loadQrisData();
+                }
+            });
         });
     </script>
 </body>

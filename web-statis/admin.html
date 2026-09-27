@@ -1180,6 +1180,13 @@
                         <span>Program Infaq</span>
                     </a>
                 </li>
+
+                <li class="nav-item" id="nav-qris">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('qris')">
+                        <i class="fas fa-fw fa-qrcode"></i>
+                        <span>QRIS Donasi</span>
+                    </a>
+                </li>
             </div>
 
             <!-- ==============================================
@@ -3228,6 +3235,82 @@
                         </div>
                     </div>
 
+                    <!-- ==========================================
+                         VIEW: MANAJEMEN QRIS DONASI DIGITAL
+                         ========================================== -->
+                    <div id="view-qris" class="section-view">
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h1 class="h3 mb-0 text-gray-800">
+                                    <i class="fas fa-qrcode text-success mr-2"></i> Manajemen QRIS
+                                </h1>
+                                <p class="text-muted small mb-0 mt-1">Kelola data kode QRIS donasi digital masjid, informasi rekening bank, dan penayangan di layar TV display.</p>
+                            </div>
+                            <div class="mt-3 mt-sm-0 d-flex flex-wrap" style="gap: 8px;">
+                                <a href="slides/qris.html" target="_blank" class="btn btn-info btn-sm shadow-sm font-weight-bold">
+                                    <i class="fas fa-tv mr-1"></i> Buka Layar TV
+                                </a>
+                                <button type="button" class="btn btn-success btn-sm shadow-sm font-weight-bold" onclick="bukaModalTambahQris()">
+                                    <i class="fas fa-plus mr-1"></i> Tambah QRIS
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Card Daftar QRIS -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 bg-gradient-success text-white d-flex align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
+                                    <i class="fas fa-list-alt mr-2"></i> Daftar QRIS
+                                </h6>
+                                <span class="badge badge-light text-dark font-weight-bold" id="badgeTotalQris">1 QRIS</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap" style="gap: 10px;">
+                                    <div class="d-flex align-items-center">
+                                        <span class="mr-2 small text-muted">Tampilkan</span>
+                                        <select id="qrisEntriesPerPage" class="custom-select custom-select-sm form-control form-control-sm" style="width: 75px;" onchange="renderQrisTable()">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                        <span class="ml-2 small text-muted">entri</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="mr-2 small text-muted">Cari:</span>
+                                        <input type="search" id="qrisSearchInput" class="form-control form-control-sm" placeholder="Cari nama, bank, norek..." onkeyup="renderQrisTable()" style="max-width: 250px;">
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover" id="tableQris" width="100%" cellspacing="0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th width="50" class="text-center">No</th>
+                                                <th>Nama</th>
+                                                <th width="100" class="text-center">Gambar</th>
+                                                <th width="110" class="text-center">Status</th>
+                                                <th>Bank</th>
+                                                <th>Atas Nama</th>
+                                                <th width="160" class="text-center">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="qrisTableBody">
+                                            <!-- Dimuat secara dinamis oleh JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap" style="gap: 10px;">
+                                    <div class="small text-muted" id="qrisPaginationInfo">Menampilkan 1 sampai 1 dari 1 entri</div>
+                                    <ul class="pagination pagination-sm mb-0" id="qrisPaginationButtons">
+                                        <li class="page-item active"><a class="page-link" href="javascript:void(0)">1</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- ==========================================
                          VIEW 9: KELOLA 3 HAK AKSES PENGGUNA (SUPER ADMIN)
@@ -4348,6 +4431,129 @@
         </div>
     </div>
 
+    <!-- =======================================================
+         MODAL FORM TAMBAH / EDIT QRIS
+         ======================================================= -->
+    <div class="modal fade" id="modalQris" tabindex="-1" role="dialog" aria-labelledby="modalQrisLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title font-weight-bold" id="modalQrisLabel">
+                        <i class="fas fa-qrcode mr-2"></i> Form Edit QRIS
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="formQris" onsubmit="event.preventDefault(); simpanDataQris();">
+                    <div class="modal-body">
+                        <input type="hidden" id="qrisEditId" value="">
+
+                        <div class="form-group">
+                            <label for="inputQrisNama" class="font-weight-bold text-gray-800">Nama QRIS <span class="text-danger">*</span></label>
+                            <input type="text" id="inputQrisNama" class="form-control" placeholder="Contoh: QRIS Masjid Al-Jihad" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold text-gray-800">Gambar QRIS Saat Ini</label>
+                            <div class="d-flex align-items-start flex-wrap mb-2" style="gap: 16px;">
+                                <div class="border rounded p-2 text-center bg-light" style="width: 150px; min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                    <img id="previewQrisImg" src="../image/qris.png" alt="Preview QRIS" style="max-width: 130px; max-height: 130px; object-fit: contain;">
+                                </div>
+                                <div style="flex: 1; min-width: 250px;">
+                                    <label class="small font-weight-bold text-muted mb-1">Ganti Gambar QRIS (Opsional):</label>
+                                    <input type="file" id="inputQrisFile" class="form-control-file border rounded p-1 mb-2" accept="image/*" onchange="previewUploadQris(event)">
+                                    <small class="form-text text-muted mb-2">Format: JPG, PNG, GIF, WEBP. Maksimal 2MB</small>
+                                    <label class="small font-weight-bold text-muted mb-1">Atau Tempel Tautan Gambar / CDN Supabase:</label>
+                                    <input type="text" id="inputQrisGambarUrl" class="form-control form-control-sm" placeholder="https://... / path gambar" oninput="previewUrlQris(this.value)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputQrisKeterangan" class="font-weight-bold text-gray-800">Keterangan</label>
+                            <textarea id="inputQrisKeterangan" rows="3" class="form-control" placeholder="Bagi yang ingin berinfaq dan sedekah secara digital, silahkan scan QRIS ini"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="inputQrisBank" class="font-weight-bold text-gray-800">Bank</label>
+                                    <input type="text" id="inputQrisBank" class="form-control" placeholder="Contoh: Bank Jawa Barat (BJB)">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="inputQrisRekening" class="font-weight-bold text-gray-800">Nomor Rekening</label>
+                                    <input type="text" id="inputQrisRekening" class="form-control" placeholder="Contoh: 011 686 685 4100">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="inputQrisAtasNama" class="font-weight-bold text-gray-800">Atas Nama</label>
+                                    <input type="text" id="inputQrisAtasNama" class="form-control" placeholder="Contoh: DKM Jami Al Jihad">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputQrisStatus" class="font-weight-bold text-gray-800">Status Penayangan di TV</label>
+                            <select id="inputQrisStatus" class="form-control">
+                                <option value="aktif">Aktif (Ditampilkan di Layar TV Display)</option>
+                                <option value="nonaktif">Nonaktif (Arsip / Cadangan)</option>
+                            </select>
+                            <small class="form-text text-muted">Catatan: Mengaktifkan QRIS ini akan otomatis menonaktifkan status QRIS lain di layar TV.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal">
+                            <i class="fas fa-times mr-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-success font-weight-bold" id="btnSimpanQris">
+                            <i class="fas fa-save mr-1"></i> Simpan Data QRIS
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
+         MODAL RINCIAN / LIHAT QRIS
+         ======================================================= -->
+    <div class="modal fade" id="modalDetailQris" tabindex="-1" role="dialog" aria-labelledby="modalDetailQrisLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title font-weight-bold" id="modalDetailQrisLabel">
+                        <i class="fas fa-eye mr-2"></i> Rincian QRIS Donasi
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="border rounded p-3 bg-white mb-3 d-inline-block shadow-sm">
+                        <img id="detailQrisImg" src="../image/qris.png" alt="QRIS" style="max-width: 240px; max-height: 240px; object-fit: contain;">
+                    </div>
+                    <h4 class="font-weight-bold text-primary mb-1" id="detailQrisNama">QRIS Masjid Al-Jihad</h4>
+                    <div id="detailQrisStatusBadge" class="mb-3">
+                        <span class="badge badge-success px-3 py-1">Aktif</span>
+                    </div>
+                    <div class="text-left bg-light p-3 rounded">
+                        <div class="mb-2"><strong>Bank:</strong> <span id="detailQrisBank">-</span></div>
+                        <div class="mb-2"><strong>Nomor Rekening:</strong> <span id="detailQrisRekening">-</span></div>
+                        <div class="mb-2"><strong>Atas Nama:</strong> <span id="detailQrisAtasNama">-</span></div>
+                        <div><strong>Keterangan:</strong> <p class="text-muted mb-0 mt-1" id="detailQrisKeterangan">-</p></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- =======================================================
          SCRIPTS: VENDOR & SUPABASE REALTIME ENGINE
@@ -4368,6 +4574,8 @@
         let cachedProgramInfaq = [];
         let cachedDonasiInfaq = [];
         let selectedProgramInfaqId = null;
+        let cachedQrisList = [];
+        let uploadedQrisBase64 = null;
 
         // Master List Resmi Seluruh 18 Halaman Layar Display TV Masjid Jami' Al-Jihad
         const MASTER_ROTATION_PAGES = [
@@ -4775,6 +4983,8 @@
                 renderAdminRamadhanView();
             } else if (sectionName === 'infaq') {
                 renderProgramInfaqSection();
+            } else if (sectionName === 'qris') {
+                renderQrisTable();
             } else if (sectionName === 'remote-tv') {
                 initRemoteControlView();
             }
@@ -5498,6 +5708,39 @@
                 selectedProgramInfaqId = active ? active.id : cachedProgramInfaq[0].id;
             }
             renderProgramInfaqSection();
+
+            // G. Data QRIS Donasi Digital
+            try {
+                const resQris = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?order=id.asc`, { headers });
+                if (resQris.ok) {
+                    cachedQrisList = await resQris.json();
+                }
+            } catch (err) {
+                console.warn('Gagal memuat QRIS dari Supabase:', err);
+            }
+            if (!cachedQrisList || cachedQrisList.length === 0) {
+                const localQris = localStorage.getItem('cached_qris_list');
+                if (localQris) {
+                    try { cachedQrisList = JSON.parse(localQris); } catch (e) {}
+                }
+            }
+            if (!cachedQrisList || cachedQrisList.length === 0) {
+                cachedQrisList = [
+                    {
+                        id: 1,
+                        nama: 'QRIS Masjid Al-Jihad',
+                        gambar: '../image/qris.png',
+                        keterangan: 'Bagi yang ingin berinfaq dan sedekah secara digital, silahkan scan QRIS ini',
+                        bank: 'Bank Jawa Barat (BJB)',
+                        nomor_rekening: '011 686 685 4100',
+                        atas_nama: 'DKM Jami Al Jihad',
+                        status: 'aktif',
+                        created_at: new Date().toISOString()
+                    }
+                ];
+            }
+            localStorage.setItem('cached_qris_list', JSON.stringify(cachedQrisList));
+            renderQrisTable();
         }
 
         // Render Tabel Kas
@@ -6457,6 +6700,318 @@
             `);
             printWin.document.close();
             printWin.focus();
+        }
+
+        // =====================================================
+        // MODUL MANAJEMEN QRIS DONASI DIGITAL
+        // =====================================================
+        function renderQrisTable() {
+            const tbody = document.getElementById('qrisTableBody');
+            if (!tbody) return;
+
+            const searchVal = (document.getElementById('qrisSearchInput')?.value || '').toLowerCase().trim();
+            const entriesPerPage = parseInt(document.getElementById('qrisEntriesPerPage')?.value || 10);
+
+            let filtered = (cachedQrisList || []).filter(item => {
+                if (!searchVal) return true;
+                const nama = (item.nama || '').toLowerCase();
+                const bank = (item.bank || '').toLowerCase();
+                const norek = (item.nomor_rekening || '').toLowerCase();
+                const atasNama = (item.atas_nama || '').toLowerCase();
+                const ket = (item.keterangan || '').toLowerCase();
+                return nama.includes(searchVal) || bank.includes(searchVal) || norek.includes(searchVal) || atasNama.includes(searchVal) || ket.includes(searchVal);
+            });
+
+            const total = filtered.length;
+            const displayed = filtered.slice(0, entriesPerPage);
+
+            if (document.getElementById('badgeTotalQris')) {
+                document.getElementById('badgeTotalQris').textContent = `${total} QRIS`;
+            }
+
+            if (displayed.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="fas fa-qrcode fa-2x mb-2 text-gray-300 d-block"></i>
+                            Tidak ada data QRIS yang cocok dengan pencarian.
+                        </td>
+                    </tr>
+                `;
+                if (document.getElementById('qrisPaginationInfo')) {
+                    document.getElementById('qrisPaginationInfo').textContent = 'Menampilkan 0 entri';
+                }
+                return;
+            }
+
+            tbody.innerHTML = displayed.map((item, idx) => {
+                const isActive = item.status === 'aktif';
+                const statusBadge = isActive
+                    ? '<span class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i>Aktif</span>'
+                    : '<span class="badge badge-secondary px-2 py-1">Nonaktif</span>';
+
+                const activateBtn = !isActive
+                    ? `<button type="button" class="btn btn-success btn-sm" onclick="setAktifQris(${item.id})" title="Aktifkan di Layar TV"><i class="fas fa-check-circle"></i></button>`
+                    : '';
+
+                const imgSrc = item.gambar || '../image/qris.png';
+
+                return `
+                    <tr>
+                        <td class="text-center font-weight-bold text-gray-700">${idx + 1}</td>
+                        <td class="font-weight-bold text-gray-900">${escapeHtml(item.nama || 'QRIS Masjid')}</td>
+                        <td class="text-center">
+                            <img src="${imgSrc}" alt="${escapeHtml(item.nama)}" 
+                                 onclick="bukaModalDetailQris(${item.id})"
+                                 style="width: 50px; height: 50px; object-fit: contain; border: 1px solid #e3e6f0; border-radius: 6px; padding: 2px; cursor: pointer; background: #fff;"
+                                 title="Klik untuk melihat rincian penuh">
+                        </td>
+                        <td class="text-center">${statusBadge}</td>
+                        <td class="font-weight-bold text-gray-800">${escapeHtml(item.bank || '-')}</td>
+                        <td class="text-gray-700">${escapeHtml(item.atas_nama || '-')}</td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-info btn-sm" onclick="bukaModalDetailQris(${item.id})" title="Lihat Rincian">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-warning btn-sm" onclick="bukaModalEditQris(${item.id})" title="Edit QRIS">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                ${activateBtn}
+                                <button type="button" class="btn btn-danger btn-sm" onclick="hapusQris(${item.id})" title="Hapus QRIS">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            if (document.getElementById('qrisPaginationInfo')) {
+                document.getElementById('qrisPaginationInfo').textContent = `Menampilkan 1 sampai ${displayed.length} dari ${total} entri`;
+            }
+        }
+
+        function bukaModalTambahQris() {
+            document.getElementById('qrisEditId').value = '';
+            document.getElementById('inputQrisNama').value = 'QRIS Masjid Al-Jihad';
+            document.getElementById('previewQrisImg').src = '../image/qris.png';
+            document.getElementById('inputQrisFile').value = '';
+            document.getElementById('inputQrisGambarUrl').value = '';
+            document.getElementById('inputQrisKeterangan').value = 'Bagi yang ingin berinfaq dan sedekah secara digital, silahkan scan QRIS ini';
+            document.getElementById('inputQrisBank').value = 'Bank Jawa Barat (BJB)';
+            document.getElementById('inputQrisRekening').value = '011 686 685 4100';
+            document.getElementById('inputQrisAtasNama').value = 'DKM Jami Al Jihad';
+            document.getElementById('inputQrisStatus').value = 'aktif';
+            uploadedQrisBase64 = null;
+
+            document.getElementById('modalQrisLabel').innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Tambah QRIS Baru';
+            $('#modalQris').modal('show');
+        }
+
+        function bukaModalEditQris(id) {
+            const item = (cachedQrisList || []).find(q => q.id == id);
+            if (!item) return;
+
+            document.getElementById('qrisEditId').value = item.id;
+            document.getElementById('inputQrisNama').value = item.nama || '';
+            document.getElementById('previewQrisImg').src = item.gambar || '../image/qris.png';
+            document.getElementById('inputQrisFile').value = '';
+            document.getElementById('inputQrisGambarUrl').value = (item.gambar && item.gambar.startsWith('http')) ? item.gambar : '';
+            document.getElementById('inputQrisKeterangan').value = item.keterangan || '';
+            document.getElementById('inputQrisBank').value = item.bank || '';
+            document.getElementById('inputQrisRekening').value = item.nomor_rekening || '';
+            document.getElementById('inputQrisAtasNama').value = item.atas_nama || '';
+            document.getElementById('inputQrisStatus').value = item.status || 'aktif';
+            uploadedQrisBase64 = null;
+
+            document.getElementById('modalQrisLabel').innerHTML = '<i class="fas fa-edit mr-2"></i> Form Edit QRIS';
+            $('#modalQris').modal('show');
+        }
+
+        function bukaModalDetailQris(id) {
+            const item = (cachedQrisList || []).find(q => q.id == id);
+            if (!item) return;
+
+            document.getElementById('detailQrisImg').src = item.gambar || '../image/qris.png';
+            document.getElementById('detailQrisNama').textContent = item.nama || 'QRIS Masjid';
+            const isActive = item.status === 'aktif';
+            document.getElementById('detailQrisStatusBadge').innerHTML = isActive
+                ? '<span class="badge badge-success px-3 py-1 font-weight-bold"><i class="fas fa-check-circle mr-1"></i> Aktif di TV Display</span>'
+                : '<span class="badge badge-secondary px-3 py-1 font-weight-bold">Nonaktif (Arsip)</span>';
+            document.getElementById('detailQrisBank').textContent = item.bank || '-';
+            document.getElementById('detailQrisRekening').textContent = item.nomor_rekening || '-';
+            document.getElementById('detailQrisAtasNama').textContent = item.atas_nama || '-';
+            document.getElementById('detailQrisKeterangan').textContent = item.keterangan || '-';
+
+            $('#modalDetailQris').modal('show');
+        }
+
+        function previewUploadQris(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Ukuran file maksimal adalah 2MB.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedQrisBase64 = e.target.result;
+                document.getElementById('previewQrisImg').src = uploadedQrisBase64;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function previewUrlQris(url) {
+            const cleanUrl = url.trim();
+            if (cleanUrl) {
+                document.getElementById('previewQrisImg').src = cleanUrl;
+            } else if (!uploadedQrisBase64) {
+                document.getElementById('previewQrisImg').src = '../image/qris.png';
+            }
+        }
+
+        async function simpanDataQris() {
+            const editId = document.getElementById('qrisEditId').value;
+            const nama = document.getElementById('inputQrisNama').value.trim();
+            const keterangan = document.getElementById('inputQrisKeterangan').value.trim();
+            const bank = document.getElementById('inputQrisBank').value.trim();
+            const norek = document.getElementById('inputQrisRekening').value.trim();
+            const atasNama = document.getElementById('inputQrisAtasNama').value.trim();
+            const status = document.getElementById('inputQrisStatus').value;
+            const urlInput = document.getElementById('inputQrisGambarUrl').value.trim();
+
+            if (!nama) {
+                alert('Mohon isi nama QRIS.');
+                return;
+            }
+
+            let finalImage = '../image/qris.png';
+            if (uploadedQrisBase64) {
+                finalImage = uploadedQrisBase64;
+            } else if (urlInput) {
+                finalImage = urlInput;
+            } else if (editId) {
+                const existing = (cachedQrisList || []).find(q => q.id == editId);
+                if (existing && existing.gambar) finalImage = existing.gambar;
+            }
+
+            if (status === 'aktif') {
+                (cachedQrisList || []).forEach(q => {
+                    q.status = 'nonaktif';
+                });
+            }
+
+            if (editId) {
+                const idx = cachedQrisList.findIndex(q => q.id == editId);
+                if (idx !== -1) {
+                    cachedQrisList[idx] = {
+                        ...cachedQrisList[idx],
+                        nama: nama,
+                        gambar: finalImage,
+                        keterangan: keterangan,
+                        bank: bank,
+                        nomor_rekening: norek,
+                        atas_nama: atasNama,
+                        status: status,
+                        updated_at: new Date().toISOString()
+                    };
+                }
+            } else {
+                const newId = Date.now();
+                const newQris = {
+                    id: newId,
+                    nama: nama,
+                    gambar: finalImage,
+                    keterangan: keterangan,
+                    bank: bank,
+                    nomor_rekening: norek,
+                    atas_nama: atasNama,
+                    status: status,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+                cachedQrisList.unshift(newQris);
+            }
+
+            localStorage.setItem('cached_qris_list', JSON.stringify(cachedQrisList));
+
+            // Sync ke Supabase (jika terhubung)
+            try {
+                if (SUPABASE_CONFIG.url) {
+                    const activeQris = cachedQrisList.find(q => q.status === 'aktif') || cachedQrisList[0];
+                    if (activeQris && status === 'aktif') {
+                        // Sinkronkan ke app_settings agar slide TV otomatis mengadopsi
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                            method: 'PATCH',
+                            headers: getSupabaseHeaders(),
+                            body: JSON.stringify({
+                                qris_image: activeQris.gambar.startsWith('data:') ? 'image/qris.png' : activeQris.gambar
+                            })
+                        });
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal sync ke cloud Supabase:', err);
+            }
+
+            $('#modalQris').modal('hide');
+            renderQrisTable();
+            alert(`Alhamdulillah! Data "${nama}" berhasil disimpan ${status === 'aktif' ? 'dan aktif di Layar TV Display' : ''}.`);
+        }
+
+        async function setAktifQris(id) {
+            const item = (cachedQrisList || []).find(q => q.id == id);
+            if (!item) return;
+
+            if (!confirm(`Aktifkan "${item.nama}" untuk ditayangkan di Layar TV Display?`)) return;
+
+            (cachedQrisList || []).forEach(q => {
+                q.status = (q.id == id) ? 'aktif' : 'nonaktif';
+            });
+
+            localStorage.setItem('cached_qris_list', JSON.stringify(cachedQrisList));
+
+            try {
+                if (SUPABASE_CONFIG.url) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({
+                            qris_image: item.gambar.startsWith('data:') ? 'image/qris.png' : item.gambar
+                        })
+                    });
+                }
+            } catch (err) {}
+
+            renderQrisTable();
+            alert(`"${item.nama}" sekarang aktif ditayangkan di Layar TV Display.`);
+        }
+
+        function hapusQris(id) {
+            const item = (cachedQrisList || []).find(q => q.id == id);
+            if (!item) return;
+
+            if (cachedQrisList.length <= 1) {
+                alert('Tidak dapat menghapus. Minimal harus ada 1 data QRIS donasi tersimpan.');
+                return;
+            }
+
+            if (!confirm(`Yakin ingin menghapus "${item.nama}"?`)) return;
+
+            const wasActive = item.status === 'aktif';
+            cachedQrisList = cachedQrisList.filter(q => q.id != id);
+
+            if (wasActive && cachedQrisList.length > 0) {
+                cachedQrisList[0].status = 'aktif';
+            }
+
+            localStorage.setItem('cached_qris_list', JSON.stringify(cachedQrisList));
+            renderQrisTable();
+            alert(`Data "${item.nama}" berhasil dihapus.`);
         }
 
         // Render Rotation Table (Menampilkan seluruh 17 halaman display TV)
