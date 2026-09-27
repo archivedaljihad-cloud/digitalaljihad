@@ -139,12 +139,14 @@
 								{{-- FOOTER TEXT (KOLOM KANAN - 1 LINE SEJAJAR) --}}
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="footer" class="font-weight-bold">
-											Footer Text
+										<label for="footer" class="font-weight-bold d-flex justify-content-between align-items-center">
+											<span>Teks Footer Copyright Rotasi TV</span>
+											<span class="badge badge-warning text-dark" style="font-size: 0.72rem; padding: 4px 8px; border-radius: 6px;"><i class="fas fa-crown mr-1"></i> Khusus Super Admin</span>
 										</label>
 										<input type="text" class="form-control" id="footer" name="footer"
-											value="{{ old('footer', $setting->footer ?? '') }}"
-											placeholder="Contoh: © 2026 Powered by DKM AL JIHAD">
+											value="{{ old('footer', $setting->footer ?? '© 2026 MASJID JAMI\' AL JIHAD. All Rights Reserved') }}"
+											placeholder="© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved">
+										<small class="form-text text-muted">Teks hak cipta paten yang selalu tampil di bagian paling bawah pada setiap halaman rotasi display TV.</small>
 									</div>
 								</div>
 							</div>

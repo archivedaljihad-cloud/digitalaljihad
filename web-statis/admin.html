@@ -4283,6 +4283,14 @@
                                             <input type="number" class="form-control" id="cfgIntervalTV" value="20" min="1">
                                             <small class="text-muted">Ambang batas durasi pergantian antar halaman slide TV.</small>
                                         </div>
+                                        <div class="form-group mb-0">
+                                            <label class="font-weight-bold d-flex justify-content-between align-items-center">
+                                                <span>Teks Footer Copyright Rotasi TV</span>
+                                                <span class="badge badge-warning text-dark" style="font-size: 0.72rem; padding: 4px 8px; border-radius: 6px;"><i class="fas fa-crown mr-1"></i> Khusus Super Admin</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="cfgFooterMasjid" value="© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved" placeholder="© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved">
+                                            <small class="text-muted">Teks hak cipta paten yang selalu tampil di bagian paling bawah pada setiap slide rotasi display TV.</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -6609,6 +6617,9 @@
                         const s = settingsList[0];
                         if (document.getElementById('cfgNamaMasjid') && s.nama_aplikasi) document.getElementById('cfgNamaMasjid').value = s.nama_aplikasi;
                         if (document.getElementById('cfgIntervalTV') && s.rotation_interval) document.getElementById('cfgIntervalTV').value = s.rotation_interval;
+                        if (document.getElementById('cfgFooterMasjid')) {
+                            document.getElementById('cfgFooterMasjid').value = s.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved";
+                        }
                         if (document.getElementById('cfgLiveMekah') && s.live_makkah_url) document.getElementById('cfgLiveMekah').value = s.live_makkah_url;
                         if (document.getElementById('cfgCctvMimbar') && s.cctv_mimbar_url) document.getElementById('cfgCctvMimbar').value = s.cctv_mimbar_url;
                         
@@ -9511,6 +9522,7 @@
         async function simpanPengaturanSistem() {
             const nama = document.getElementById('cfgNamaMasjid')?.value;
             const interval = parseInt(document.getElementById('cfgIntervalTV')?.value) || 20;
+            const footerText = document.getElementById('cfgFooterMasjid')?.value?.trim() || "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved";
             const liveMekah = document.getElementById('cfgLiveMekah')?.value;
             const cctv = document.getElementById('cfgCctvMimbar')?.value;
             const geminiApiKey = document.getElementById('cfgGeminiApiKey')?.value?.trim();
@@ -9525,6 +9537,7 @@
             const yasinMushafDuration = document.getElementById('cfgYasinMushafDuration') ? parseInt(document.getElementById('cfgYasinMushafDuration').value) || 120 : 120;
 
             // Simpan langsung ke LocalStorage untuk responsivitas instan
+            localStorage.setItem('app_footer_text', footerText);
             localStorage.setItem('yasin_display_mode', yasinDisplayMode);
             localStorage.setItem('yasin_step_duration', yasinStepDuration);
             localStorage.setItem('yasin_mushaf_duration', yasinMushafDuration);
@@ -9542,6 +9555,7 @@
                 const patchPayload = {
                     nama_aplikasi: nama,
                     rotation_interval: interval,
+                    footer: footerText,
                     live_makkah_url: liveMekah,
                     cctv_mimbar_url: cctv,
                     yasin_mode_enabled: yasinEnabled,

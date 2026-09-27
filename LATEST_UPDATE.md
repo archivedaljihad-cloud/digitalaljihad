@@ -5398,4 +5398,71 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 13. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN).
 14. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## 🏛️ BAB 130: PENAMBAHAN MASTER PERSISTENT FOOTER COPYRIGHT 2026 & KONTROL EKSKLUSIF SUPER ADMIN
+
+### 1. Latar Belakang & Kebutuhan Pengguna
+- **Permintaan:** Menambahkan teks footer resmi copyright: `© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved` di **setiap halaman rotasi web display TV**, dan teks footer ini **hanya dapat diedit secara eksklusif dari dashboard Super Admin** (dikunci dari petugas/bendahara).
+- **Tantangan Arsitektur:** Layar TV menggunakan *Dual Iframe Crossfade Engine* di mana setiap slide memiliki konten dan running text ticker masing-masing. Footer harus persisten melintasi seluruh pergantian halaman tanpa berkedip (*flicker-free*) dan tanpa menutupi running text bawaan slide di dalam iframe.
+
+---
+
+### 2. Rincian Implementasi & Solusi Arsitektur
+
+#### A. Master Persistent Footer pada Wrapper Display TV (`index.html` & `rotator.blade.php`)
+1. **Container Iframe:**
+   - Mengubah tinggi `.iframe-container` dari `height: 100%` menjadi `height: calc(100% - 24px);`.
+   - Mengatur `overflow: hidden; border: none;` sehingga konten slide di dalam iframe pas secara presisi dan running text di bagian bawah slide tidak pernah bertabrakan atau terpotong oleh footer.
+2. **Styling Master Footer (`display-theme`):**
+   - Menggunakan gradien mewah nuansa Royal Islamic Emerald & Gold:
+     `background: linear-gradient(90deg, #02140d 0%, #042819 25%, #063a24 50%, #042819 75%, #02140d 100%);`
+   - Border atas emas halus: `border-top: 1px solid rgba(212, 175, 55, 0.45);`.
+   - Tipografi elegan: `font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: #d1fae5; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);`.
+   - Properti `pointer-events: none;` untuk memastikan tidak mengganggu klik/interaksi layar sentuh atau remote TV.
+3. **Penyelarasan TV Luar (`rotator-outdoor.blade.php`):**
+   - Menyesuaikan posisi pill status TV luar (`.outdoor-badge-pill`) dari `bottom: 18px;` menjadi `bottom: 32px;` agar tidak bertumpuk dengan footer 24px.
+
+#### B. Kontrol Eksklusif Hanya untuk Super Admin (RBAC Proteksi)
+1. **Dashboard Web Statis (`web-statis/admin.html`):**
+   - Input `cfgFooterMasjid` ditempatkan di dalam card "Identitas Masjid" pada section `#view-settings`.
+   - Menu `#nav-settings` dan section `#view-settings` telah terproteksi secara eksklusif dengan atribut `data-role="admin"` (Super Admin), sehingga operator biasa atau bendahara tidak dapat mengakses maupun melihat menu ini.
+   - Dilengkapi badge visual: `<span class="badge badge-warning text-dark"><i class="fas fa-crown mr-1"></i> Khusus Super Admin</span>`.
+   - Fungsi `simpanPengaturanSistem()` menyimpan teks footer ke `localStorage.app_footer_text` dan menyertakan `footer: footerText` dalam payload PATCH ke tabel Supabase `app_settings` (ID: 1).
+   - Layar TV display (`web-statis/index.html`) dilengkapi listener realtime Supabase (`app_settings`), sehingga saat Super Admin mengubah footer dari admin panel, teks di TV display langsung berubah secara instan tanpa perlu refresh layar (*live real-time synchronization*).
+2. **Dashboard Laravel (`resources/views/settings/edit.blade.php`):**
+   - Field `footer` terproteksi dengan `@if($isAdmin)`:
+     ```blade
+     @if($isAdmin)
+     <div class="form-group">
+         <label for="footer" class="font-weight-bold d-flex justify-content-between align-items-center">
+             <span>Teks Footer Copyright Rotasi TV</span>
+             <span class="badge badge-warning text-dark"><i class="fas fa-crown mr-1"></i> Khusus Super Admin</span>
+         </label>
+         <input type="text" class="form-control" id="footer" name="footer"
+             value="{{ old('footer', $setting->footer ?? '© 2026 MASJID JAMI\' AL JIHAD. All Rights Reserved') }}"
+             placeholder="© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved">
+         <small class="form-text text-muted">Teks hak cipta paten yang selalu tampil di bagian paling bawah pada setiap halaman rotasi display TV.</small>
+     </div>
+     @else
+     <input type="hidden" name="footer" value="{{ $setting->footer ?? '' }}">
+     @endif
+     ```
+   - Operator non-admin hanya mengirimkan *hidden input* tanpa bisa mengubah nilainya.
+3. **Database App Setting:**
+   - Kolom `footer` pada database SQLite/MySQL `app_settings` telah diperbarui menjadi `"© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved"`.
+
+---
+
+### 3. Berkas yang Terkait & Dimodifikasi:
+1. `web-statis/index.html` (DIMODIFIKASI - Menambahkan CSS `.master-display-footer`, markup persistent footer, `height: calc(100% - 24px)` pada `.iframe-container`, pemuatan `settings.footer`, dan sinkronisasi realtime).
+2. `web-statis/admin.html` (DIMODIFIKASI - Menambahkan input `cfgFooterMasjid` pada card Identitas Masjid di `view-settings` khusus Super Admin, binding load settings, dan fungsi simpan).
+3. `resources/views/rotator.blade.php` (DIMODIFIKASI - Menambahkan CSS `.master-display-footer`, markup persistent footer dengan fallback `{{ $settings->footer }}`, dan `height: calc(100% - 24px)`).
+4. `resources/views/rotator-outdoor.blade.php` (DIMODIFIKASI - Menambahkan CSS `.master-display-footer`, markup persistent footer, penyesuaian posisi pill outdoor `bottom: 32px;`).
+5. `resources/views/settings/edit.blade.php` (DIMODIFIKASI - Memperjelas label, badge Khusus Super Admin, help text, dan fallback value 2026).
+6. `LATEST_UPDATE.md` (DIMODIFIKASI - Bab 130).
+7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN OTOMATIS).
+8. Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 

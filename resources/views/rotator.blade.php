@@ -35,9 +35,40 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: calc(100% - 24px);
             border: none;
             overflow: hidden;
+        }
+
+        /* Persistent Master Display Footer */
+        .master-display-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 24px;
+            background: linear-gradient(90deg, #02140d 0%, #042819 25%, #063a24 50%, #042819 75%, #02140d 100%);
+            border-top: 1px solid rgba(212, 175, 55, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 990;
+            color: #d1fae5;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .master-display-footer span {
+            color: #ffd700;
+            font-weight: 700;
+            margin-right: 4px;
         }
 
         iframe {
@@ -351,6 +382,11 @@
         <iframe id="frame1" class="active" src="" title="Rotating Content" allow="autoplay"></iframe>
         <iframe id="frame2" src="" title="Rotating Content" allow="autoplay"></iframe>
     </div>
+
+    <!-- Master Persistent Footer TV (Diatur Super Admin) -->
+    <footer class="master-display-footer" id="masterDisplayFooter">
+        <span id="masterFooterContent">{{ $settings->footer ?? "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved" }}</span>
+    </footer>
 
     <script>
         const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
