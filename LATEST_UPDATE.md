@@ -5218,4 +5218,69 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 8. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## 🕌 128. SENTRALISASI PENUH PENGATURAN SURAT YAASIIN HANYA DI HALAMAN ADMIN & PEMBERSIHAN TOTAL FLOATING BAR PADA LAYAR DISPLAY TV (28 September 2026)
+
+### 1. Latar Belakang & Permintaan Pengguna:
+- **Analisis Kebutuhan Jamaah & Takmir:**
+  - Sebelumnya, tombol *Floating Operator Bar* (tombol Prev, Next, Play/Pause, dan Autoswitch Quick Button) diletakkan melayang di bagian bawah layar TV.
+  - Namun, setelah ditinjau lebih lanjut, keberadaan tombol-tombol floating di layar TV display masjid berpotensi:
+    1. Mengganggu estetika dan kesakralan tampilan mushaf di masjid.
+    2. Menutupi sebagian area teks ayat Al-Qur'an pada resolusi tertentu.
+    3. Rawan disentuh atau diklik secara tidak sengaja bila menggunakan mouse nirkabel.
+  - Pengguna bertanya dan menyetujui: *"Apakah untuk setingan pilihan surat yasin bisa diatur di halaman admin saja?"* -> **"Ya"**.
+  - **Keputusan Desain:** Seluruh konfigurasi (Opsi 1: 17 Blok Ayat vs Opsi 2: 6 Lembar Mushaf Madinah, serta durasi detik pergantian masing-masing) **100% diputuskan dan dikontrol terpusat oleh Takmir / Admin melalui Dashboard Pengaturan Admin**. Layar TV dijadikan penampil murni (*pure display presentation*) yang bersih, hening, dan megah.
+
+---
+
+### 2. Rincian Perubahan & Pembaruan Sistem:
+
+#### A. Pembersihan Total Elemen Floating Bar di Layar TV Display
+1. **Pelegaan Area Pandang Mushaf:**
+   - Menghapus CSS dan markup `<div class="floating-bar">` serta `<div class="pause-floating-badge">` di `web-statis/slides/yasin.html` dan `resources/views/yasin-embed.blade.php`.
+   - Mengurangi padding bawah container panggung dari sebelumnya `70px` (yang dulu disiapkan untuk ruang floating bar) menjadi `24px` (`padding: 18px 50px 24px 50px;`).
+   - Area mushaf kini menjadi jauh lebih lapang, proporsional, dan megah di layar TV 43" – 75" inch.
+2. **Pembersihan Logika & Runtime JavaScript:**
+   - Menghilangkan referensi DOM yang tidak terpakai (`btnPrev`, `btnPlayPause`, `btnNext`, `btnQuickSwitch`, `fNavIndicator`, `pauseBadge`) sehingga tidak menimbulkan runtime error `Cannot set properties of null`.
+   - Menghapus listener tombol floating yang tidak lagi digunakan di layar TV.
+   - Tetap mempertahankan shortcut darurat keyboard nirkabel (Panah Kanan untuk Next, Panah Kiri untuk Prev, Spasi untuk Pause/Resume) bagi takmir yang menggunakan wireless presenter keyboard.
+
+#### B. Mekanisme Live Auto-Sync Terpusat dari Dashboard Admin
+1. **Responsivitas Realtime Tanpa Reload:**
+   - Layar TV mendengarkan event perubahan storage browser:
+     ```javascript
+     window.addEventListener('storage', (e) => {
+         if (e.key === 'yasin_display_mode' || e.key === 'yasin_step_duration' || e.key === 'yasin_mushaf_duration') {
+             loadSettingsAndPrayer();
+         }
+     });
+     ```
+   - Layar TV juga melakukan sinkronisasi berkala (tiap 30 detik) ke database Supabase `app_settings` dan `localStorage`.
+   - **Hasil:** Ketika pengurus masjid memilih Opsi 1 atau Opsi 2 di laptop/HP Admin dan menekan tombol simpan, layar TV yang sedang tayang di masjid otomatis langsung beralih mode dan menyesuaikan timer durasi detik tanpa perlu di-refresh atau disentuh manual.
+
+#### C. Penyelarasan Lengkap Dual-Engine (Laravel Blade & Web Statis)
+- Telah dipastikan kedua engine memiliki fungsionalitas dan estetika yang setara 100%:
+  - **Laravel Engine:** `resources/views/settings/edit.blade.php` (Admin) & `resources/views/yasin-embed.blade.php` (TV Display).
+  - **Web Statis Engine:** `web-statis/admin.html` (Admin) & `web-statis/slides/yasin.html` (TV Display).
+
+---
+
+### 3. Berkas yang Terkait:
+1. `web-statis/slides/yasin.html`:
+   - Menghapus floating bar & pause badge, melegakan container panggung, merapikan JS timer loop, dan memasang live auto-sync listener.
+2. `resources/views/yasin-embed.blade.php`:
+   - Menghapus CSS floating bar, menghapus markup floating bar, merapikan script engine, dan melegakan padding bawah.
+3. `web-statis/admin.html`:
+   - Panel kontrol eksklusif pemilihan Opsi 1 / Opsi 2 dan durasi pergantian ayat Yaasiin.
+4. `resources/views/settings/edit.blade.php`:
+   - Panel kontrol Blade pemilihan Opsi 1 / Opsi 2 dan durasi pergantian ayat Yaasiin.
+5. `LATEST_UPDATE.md`:
+   - Dokumentasi lengkap Bab 128.
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`:
+   - Sinkronisasi folder mandiri lokal.
+7. Git Repository & Live Deployment Cloudflare Pages:
+   - `https://digitalaljihad.my.id/`.
+
+
 

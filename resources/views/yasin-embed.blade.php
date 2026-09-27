@@ -231,7 +231,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: 16px 50px 70px 50px;
+            padding: 18px 50px 24px 50px;
         }
 
         .view-pane {
@@ -451,102 +451,6 @@
             color: #e2e8f0;
             line-height: 1.5;
         }
-
-        /* FLOATING BAR */
-        .floating-bar {
-            position: fixed;
-            bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 50;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(1, 18, 10, 0.92);
-            border: 1.5px solid rgba(212, 175, 55, 0.45);
-            border-radius: 35px;
-            padding: 6px 16px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(12px);
-            opacity: 0.4;
-            transition: opacity 0.3s ease, transform 0.2s ease;
-        }
-
-        .floating-bar:hover {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-2px);
-        }
-
-        .f-btn {
-            background: transparent;
-            border: none;
-            color: var(--gold-light);
-            font-size: 12px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .f-btn:hover {
-            background: rgba(212, 175, 55, 0.25);
-            color: #ffffff;
-        }
-
-        .f-btn-switch {
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            color: #6ee7b7;
-        }
-
-        .f-btn-switch:hover {
-            background: rgba(16, 185, 129, 0.35);
-            color: #ffffff;
-        }
-
-        .f-indicator {
-            font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 14px;
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #ffd700;
-            font-weight: 700;
-            font-family: monospace;
-        }
-
-        .f-divider {
-            width: 1px;
-            height: 18px;
-            background: rgba(212, 175, 55, 0.25);
-        }
-
-        .pause-floating-badge {
-            position: fixed;
-            top: 76px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 60;
-            background: rgba(0, 0, 0, 0.88);
-            border: 1.5px solid var(--gold-primary);
-            color: #fde047;
-            padding: 6px 20px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: none;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-        }
-
-        .pause-floating-badge.show {
-            display: flex;
-        }
     </style>
 </head>
 
@@ -572,12 +476,6 @@
 
     <div class="bg-pattern"></div>
     <div class="mihrab-frame"></div>
-
-    <!-- PAUSE NOTIFICATION BADGE -->
-    <div class="pause-floating-badge" id="pauseBadge">
-        <i class="fa-solid fa-circle-pause"></i>
-        <span>Tayangan Dijeda Sementara (Klik tombol Play atau spasi untuk lanjut)</span>
-    </div>
 
     <!-- TOP HEADER BAR -->
     <header class="top-header-bar">
@@ -663,38 +561,11 @@
         </div>
     </main>
 
-    <!-- FLOATING OPERATOR BAR -->
-    <div class="floating-bar">
-        <button class="f-btn" id="btnPrev" title="Halaman / Blok Sebelumnya">
-            <i class="fa-solid fa-chevron-left"></i>
-            <span>Sebelumnya</span>
-        </button>
-
-        <button class="f-btn" id="btnPlayPause" title="Jeda / Lanjutkan Waktu">
-            <i class="fa-solid fa-pause" id="iconPlayPause"></i>
-            <span id="textPlayPause">Jeda</span>
-        </button>
-
-        <button class="f-btn" id="btnNext" title="Halaman / Blok Berikutnya">
-            <span>Berikutnya</span>
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
-
-        <div class="f-divider"></div>
-
-        <span class="f-indicator" id="fNavIndicator">1 / 17 (20s)</span>
-
-        <div class="f-divider"></div>
-
-        <button class="f-btn f-btn-switch" id="btnQuickSwitch" title="Autoswitch Ganti Opsi Tampilan">
-            <i class="fa-solid fa-repeat"></i>
-            <span id="btnQuickSwitchText">Ganti ke Opsi 2 (Mushaf)</span>
-        </button>
-    </div>
-
     <script>
         /**
          * ENGINE SURAT YAASIIN 83 AYAT (2 OPSI AUTOSWITCH)
+         * Opsi 1: 17 Blok Ayat (Teks 100% Diam & Elegan)
+         * Opsi 2: Mushaf Madinah (6 Halaman Standar, Teks 100% Diam)
          */
         const STEP_BLOCKS = [
             { block: 1, start: 1, end: 5, bismillah: true },
@@ -730,7 +601,7 @@
         let stepDuration = {{ (int)$stepDur }};
         let mushafDuration = {{ (int)$mushafDur }};
 
-        // Fallback LocalStorage jika pernah disimpan di browser
+        // Fallback LocalStorage jika pernah disimpan di browser dari Admin
         const localMode = localStorage.getItem('yasin_display_mode');
         if (localMode) currentMode = localMode;
         const localStepDur = parseInt(localStorage.getItem('yasin_step_duration'));
@@ -751,16 +622,6 @@
         const modeDisplayBadge = document.getElementById('modeDisplayBadge');
         const modeDisplayBadgeText = document.getElementById('modeDisplayBadgeText');
         const progressBarFill = document.getElementById('progressBarFill');
-        const pauseBadge = document.getElementById('pauseBadge');
-
-        const btnPrev = document.getElementById('btnPrev');
-        const btnPlayPause = document.getElementById('btnPlayPause');
-        const btnNext = document.getElementById('btnNext');
-        const iconPlayPause = document.getElementById('iconPlayPause');
-        const textPlayPause = document.getElementById('textPlayPause');
-        const fNavIndicator = document.getElementById('fNavIndicator');
-        const btnQuickSwitch = document.getElementById('btnQuickSwitch');
-        const btnQuickSwitchText = document.getElementById('btnQuickSwitchText');
 
         function renderCurrentSlide() {
             if (!allAyahs || allAyahs.length === 0) return;
@@ -770,7 +631,6 @@
                 yasinMushafView.classList.remove('active');
 
                 modeDisplayBadgeText.textContent = 'Opsi 1: Blok Ayat';
-                btnQuickSwitchText.textContent = 'Ganti ke Opsi 2 (Mushaf)';
 
                 const blk = STEP_BLOCKS[currentStepIndex];
                 document.getElementById('stepBadgeNum').textContent = `BLOK ${blk.block} / ${STEP_BLOCKS.length}`;
@@ -806,7 +666,6 @@
                 yasinMushafView.classList.add('active');
 
                 modeDisplayBadgeText.textContent = 'Opsi 2: Mushaf Madinah';
-                btnQuickSwitchText.textContent = 'Ganti ke Opsi 1 (Blok)';
 
                 const pge = MUSHAF_PAGES[currentMushafIndex];
                 document.getElementById('mushafJuzTitle').textContent = pge.juz;
@@ -839,7 +698,6 @@
             }
 
             timerSecondsRemaining = timerTotalSeconds;
-            updateNavIndicator();
             updateProgressBar();
         }
 
@@ -861,47 +719,6 @@
             renderCurrentSlide();
         }
 
-        function togglePlayPause() {
-            isPaused = !isPaused;
-            if (isPaused) {
-                iconPlayPause.className = 'fa-solid fa-play';
-                textPlayPause.textContent = 'Lanjut';
-                pauseBadge.classList.add('show');
-            } else {
-                iconPlayPause.className = 'fa-solid fa-pause';
-                textPlayPause.textContent = 'Jeda';
-                pauseBadge.classList.remove('show');
-            }
-        }
-
-        function toggleModeQuick() {
-            currentMode = (currentMode === 'step') ? 'mushaf' : 'step';
-            localStorage.setItem('yasin_display_mode', currentMode);
-
-            if (currentMode === 'mushaf') {
-                const currentBlk = STEP_BLOCKS[currentStepIndex];
-                const matchingPageIdx = MUSHAF_PAGES.findIndex(p => currentBlk.start >= p.start && currentBlk.start <= p.end);
-                currentMushafIndex = (matchingPageIdx !== -1) ? matchingPageIdx : 0;
-            } else {
-                const currentPge = MUSHAF_PAGES[currentMushafIndex];
-                const matchingStepIdx = STEP_BLOCKS.findIndex(b => currentPge.start >= b.start && currentPge.start <= b.end);
-                currentStepIndex = (matchingStepIdx !== -1) ? matchingStepIdx : 0;
-            }
-
-            renderCurrentSlide();
-        }
-
-        function updateNavIndicator() {
-            if (currentMode === 'step') {
-                fNavIndicator.textContent = `Blok ${currentStepIndex + 1}/${STEP_BLOCKS.length} (${timerSecondsRemaining}s)`;
-            } else {
-                const mins = Math.floor(timerSecondsRemaining / 60);
-                const secs = timerSecondsRemaining % 60;
-                const timeFormatted = `${mins}:${String(secs).padStart(2, '0')}`;
-                fNavIndicator.textContent = `Hal ${currentMushafIndex + 1}/6 (${timeFormatted})`;
-            }
-        }
-
         function updateProgressBar() {
             if (timerTotalSeconds <= 0) return;
             const elapsed = timerTotalSeconds - timerSecondsRemaining;
@@ -915,7 +732,6 @@
                 if (!isPaused) {
                     if (timerSecondsRemaining > 0) {
                         timerSecondsRemaining--;
-                        updateNavIndicator();
                         updateProgressBar();
                     } else {
                         nextSlide();
@@ -924,20 +740,27 @@
             }, 1000);
         }
 
-        btnPrev.addEventListener('click', prevSlide);
-        btnNext.addEventListener('click', nextSlide);
-        btnPlayPause.addEventListener('click', togglePlayPause);
-        btnQuickSwitch.addEventListener('click', toggleModeQuick);
+        // Live Auto-Sync dari Pengaturan Admin via LocalStorage
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'yasin_display_mode' || e.key === 'yasin_step_duration' || e.key === 'yasin_mushaf_duration') {
+                const newMode = localStorage.getItem('yasin_display_mode');
+                if (newMode) currentMode = newMode;
+                const newStepDur = parseInt(localStorage.getItem('yasin_step_duration'));
+                if (newStepDur > 0) stepDuration = newStepDur;
+                const newMushafDur = parseInt(localStorage.getItem('yasin_mushaf_duration'));
+                if (newMushafDur > 0) mushafDuration = newMushafDur;
+                renderCurrentSlide();
+            }
+        });
 
+        // Remote / Keyboard Shortcuts darurat
         window.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === 'PageDown') {
                 nextSlide();
             } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
                 prevSlide();
-            } else if (e.key === ' ' || e.key === 'Enter') {
-                togglePlayPause();
-            } else if (e.key === 'm' || e.key === 'M') {
-                toggleModeQuick();
+            } else if (e.key === ' ') {
+                isPaused = !isPaused;
             }
         });
 
