@@ -1013,38 +1013,127 @@
 												</small>
 											</div>
 
-											<div class="row">
-												<div class="col-md-6">
-													<div class="form-group mb-3">
+											@php
+												$rawSpeed = $setting->yasin_scroll_speed ?? 'medium';
+												$yasinMode = 'step';
+												$stepDur = 20;
+												$mushafDur = 120;
+												if (is_string($rawSpeed) && str_starts_with(trim($rawSpeed), '{')) {
+													$parsed = json_decode($rawSpeed, true);
+													if (!empty($parsed['mode'])) $yasinMode = $parsed['mode'];
+													if (!empty($parsed['step_duration'])) $stepDur = (int)$parsed['step_duration'];
+													if (!empty($parsed['mushaf_duration'])) $mushafDur = (int)$parsed['mushaf_duration'];
+												} elseif ($rawSpeed === 'slow') {
+													$stepDur = 28;
+													$mushafDur = 150;
+												} elseif ($rawSpeed === 'fast') {
+													$stepDur = 14;
+													$mushafDur = 90;
+												}
+											@endphp
+
+											<div class="row mb-3">
+												<div class="col-md-12">
+													<div class="form-group mb-2">
 														<label for="yasin_start_time" class="font-weight-bold text-gray-800">
-															<i class="far fa-clock text-success mr-1"></i> Jam Mulai Dimulai (Kamis Malam)
+															<i class="far fa-clock text-success mr-1"></i> Jam Mulai Tayang (Kamis Malam)
 														</label>
-														<input type="time" class="form-control" id="yasin_start_time" name="yasin_start_time"
+														<input type="time" class="form-control" style="max-width: 200px;" id="yasin_start_time" name="yasin_start_time"
 															value="{{ old('yasin_start_time', $setting->yasin_start_time ?? '18:30') }}">
 														<small class="form-text text-muted">
 															Default: <strong>18:30</strong> (setelah zikir sholat Maghrib selesai).
 														</small>
 													</div>
 												</div>
-												<div class="col-md-6">
-													<div class="form-group mb-3">
-														<label for="yasin_scroll_speed" class="font-weight-bold text-gray-800">
-															<i class="fas fa-gauge-high text-info mr-1"></i> Kecepatan Gulir Teks Arab
-														</label>
-														@php
-															$currentSpeed = old('yasin_scroll_speed', $setting->yasin_scroll_speed ?? 'medium');
-														@endphp
-														<select class="form-control" id="yasin_scroll_speed" name="yasin_scroll_speed">
-															<option value="slow" {{ $currentSpeed == 'slow' ? 'selected' : '' }}>Santai (Perlahan / ~22-25 Menit)</option>
-															<option value="medium" {{ $currentSpeed == 'medium' ? 'selected' : '' }}>Normal (Disarankan / ~16-18 Menit)</option>
-															<option value="fast" {{ $currentSpeed == 'fast' ? 'selected' : '' }}>Cepat (~10-12 Menit)</option>
-														</select>
-														<small class="form-text text-muted">
-															Kecepatan pergerakan ayat Arab ke atas di layar TV.
-														</small>
+											</div>
+
+											<!-- PILIHAN 2 OPSI AUTOSWITCH -->
+											<div class="mb-3">
+												<label class="font-weight-bold text-gray-800 d-block mb-1">
+													<i class="fas fa-sliders-h text-success mr-1"></i> Model Tampilan Surat Yaasiin (Autoswitch Saling Mengunci):
+												</label>
+												<small class="text-muted d-block mb-3">
+													Pilih salah satu mode tampilan agar jamaah membaca dengan tenang (teks 100% diam, tidak berjalan terus menerus).
+												</small>
+
+												<div class="row">
+													<!-- OPSI 1: BLOK AYAT -->
+													<div class="col-md-6 mb-3">
+														<div class="card h-100 border" id="cardLaravelYasinOption1" onclick="setBladeYasinOption('step')" style="cursor: pointer; border-radius: 12px; transition: all 0.2s; {{ $yasinMode === 'step' ? 'border: 2px solid #10b981 !important; background: #f0fdf4;' : 'background: #f8fafc;' }}">
+															<div class="card-body p-3">
+																<div class="custom-control custom-radio mb-2">
+																	<input type="radio" id="bladeRadioYasin1" name="yasin_display_mode" value="step" class="custom-control-input" {{ $yasinMode === 'step' ? 'checked' : '' }} onchange="setBladeYasinOption('step')">
+																	<label class="custom-control-label font-weight-bold text-dark" for="bladeRadioYasin1" style="cursor: pointer;">
+																		Opsi 1: Lompat Halus per Blok
+																	</label>
+																	<span class="badge badge-success ml-1 px-2 py-1" style="font-size: 9px;">DIREKOMENDASIKAN</span>
+																</div>
+																<p class="small text-muted mb-2">
+																	Teks 100% diam. Menampilkan 4–5 ayat berukuran sangat besar per blok (Total 17 Blok).
+																</p>
+																<div class="bg-white p-2 rounded border" onclick="event.stopPropagation()">
+																	<label class="small font-weight-bold text-dark mb-1 d-block">Durasi per Blok (Detik):</label>
+																	<div class="input-group input-group-sm">
+																		<input type="number" class="form-control" name="yasin_step_duration" id="bladeYasinStepDuration" value="{{ old('yasin_step_duration', $stepDur) }}" min="5" max="180" step="5">
+																		<div class="input-group-append">
+																			<span class="input-group-text">Detik</span>
+																		</div>
+																	</div>
+																	<small class="text-muted d-block mt-1" style="font-size: 10px;">Default: 20 detik (15-25 detik disarankan)</small>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<!-- OPSI 2: LEMBARAN MUSHAF MADINAH -->
+													<div class="col-md-6 mb-3">
+														<div class="card h-100 border" id="cardLaravelYasinOption2" onclick="setBladeYasinOption('mushaf')" style="cursor: pointer; border-radius: 12px; transition: all 0.2s; {{ $yasinMode === 'mushaf' ? 'border: 2px solid #0284c7 !important; background: #f0f9ff;' : 'background: #f8fafc;' }}">
+															<div class="card-body p-3">
+																<div class="custom-control custom-radio mb-2">
+																	<input type="radio" id="bladeRadioYasin2" name="yasin_display_mode" value="mushaf" class="custom-control-input" {{ $yasinMode === 'mushaf' ? 'checked' : '' }} onchange="setBladeYasinOption('mushaf')">
+																	<label class="custom-control-label font-weight-bold text-dark" for="bladeRadioYasin2" style="cursor: pointer;">
+																		Opsi 2: Lembaran Mushaf (6 Hal)
+																	</label>
+																	<span class="badge badge-secondary ml-1 px-2 py-1" style="font-size: 9px;">MUSHAF 15 BARIS</span>
+																</div>
+																<p class="small text-muted mb-2">
+																	Teks 100% diam seperti mushaf Al-Qur'an Madinah/Kemenag (Hal 440–445, Total 6 Hal).
+																</p>
+																<div class="bg-white p-2 rounded border" onclick="event.stopPropagation()">
+																	<label class="small font-weight-bold text-dark mb-1 d-block">Durasi per Halaman (Detik):</label>
+																	<div class="input-group input-group-sm">
+																		<input type="number" class="form-control" name="yasin_mushaf_duration" id="bladeYasinMushafDuration" value="{{ old('yasin_mushaf_duration', $mushafDur) }}" min="20" max="600" step="10">
+																		<div class="input-group-append">
+																			<span class="input-group-text">Detik</span>
+																		</div>
+																	</div>
+																	<small class="text-muted d-block mt-1" style="font-size: 10px;">Default: 120 detik / 2 menit (90-150s disarankan)</small>
+																</div>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
+
+											<script>
+												function setBladeYasinOption(opt) {
+													const r1 = document.getElementById('bladeRadioYasin1');
+													const r2 = document.getElementById('bladeRadioYasin2');
+													const c1 = document.getElementById('cardLaravelYasinOption1');
+													const c2 = document.getElementById('cardLaravelYasinOption2');
+													if (opt === 'step') {
+														if (r1) r1.checked = true;
+														if (r2) r2.checked = false;
+														if (c1) { c1.style.border = '2px solid #10b981'; c1.style.background = '#f0fdf4'; }
+														if (c2) { c2.style.border = '1px solid #dee2e6'; c2.style.background = '#f8fafc'; }
+													} else {
+														if (r1) r1.checked = false;
+														if (r2) r2.checked = true;
+														if (c1) { c1.style.border = '1px solid #dee2e6'; c1.style.background = '#f8fafc'; }
+														if (c2) { c2.style.border = '2px solid #0284c7'; c2.style.background = '#f0f9ff'; }
+													}
+												}
+											</script>
 
 											<div class="alert alert-info border-0 shadow-sm mb-0" style="background: rgba(13, 74, 43, 0.08); border-left: 4px solid #0d4a2b !important;">
 												<h6 class="font-weight-bold text-success mb-1">

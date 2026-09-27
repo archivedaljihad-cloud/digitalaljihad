@@ -241,8 +241,17 @@ class AppSettingController extends Controller
         if (Schema::hasColumn('app_settings', 'yasin_start_time') && $request->has('yasin_start_time')) {
             $setting->yasin_start_time = $request->input('yasin_start_time', '18:30');
         }
-        if (Schema::hasColumn('app_settings', 'yasin_scroll_speed') && $request->has('yasin_scroll_speed')) {
-            $setting->yasin_scroll_speed = $request->input('yasin_scroll_speed', 'medium');
+        if (Schema::hasColumn('app_settings', 'yasin_scroll_speed')) {
+            if ($request->has('yasin_display_mode')) {
+                $setting->yasin_scroll_speed = json_encode([
+                    'mode' => $request->input('yasin_display_mode', 'step'),
+                    'step_duration' => (int) $request->input('yasin_step_duration', 20),
+                    'mushaf_duration' => (int) $request->input('yasin_mushaf_duration', 120),
+                    'updated_at' => now()->toIso8601String(),
+                ]);
+            } elseif ($request->has('yasin_scroll_speed')) {
+                $setting->yasin_scroll_speed = $request->input('yasin_scroll_speed', 'medium');
+            }
         }
 
         // ==================================================

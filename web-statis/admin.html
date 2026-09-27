@@ -3985,6 +3985,140 @@
                                 </div>
                             </div>
 
+                            <!-- CARD PENGATURAN SURAT YAASIIN 83 AYAT (2 OPSI AUTOSWITCH) -->
+                            <div class="col-12 mb-4">
+                                <div class="content-card border-left-success" style="border-left: 5px solid #059669; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #062b18 0%, #0d4a2b 100%); color: #ffffff; padding: 14px 20px; border-radius: 12px 12px 0 0;">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-book-quran text-warning mr-2" style="font-size: 1.25rem;"></i>
+                                            <h6 class="content-card-title mb-0 text-white font-weight-bold">
+                                                Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat
+                                            </h6>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a href="slides/yasin.html" target="_blank" class="btn btn-sm btn-outline-warning text-warning" style="border-radius: 20px; font-size: 11px; padding: 4px 12px; border-color: rgba(255,215,0,0.5);">
+                                                <i class="fas fa-tv mr-1"></i> Buka Layar TV Yaasiin
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="p-4" style="background: #ffffff;">
+                                        <!-- Saklar Utama & Jam Mulai -->
+                                        <div class="row align-items-center mb-4 pb-3" style="border-bottom: 1px solid #e2e8f0;">
+                                            <div class="col-md-7 mb-3 mb-md-0">
+                                                <div class="custom-control custom-switch custom-switch-lg">
+                                                    <input type="checkbox" class="custom-control-input" id="cfgYasinEnabled" checked>
+                                                    <label class="custom-control-label font-weight-bold text-dark" for="cfgYasinEnabled" style="font-size: 1rem; cursor: pointer;">
+                                                        Aktifkan Tayangan Otomatis Surat Yaasiin Setiap Kamis Malam
+                                                    </label>
+                                                </div>
+                                                <small class="text-muted d-block mt-1 pl-4">
+                                                    Layar TV masjid akan otomatis menampilkan Surat Yaasiin 83 ayat pada hari Kamis malam setelah Maghrib hingga menjelang Isya.
+                                                </small>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="d-flex align-items-center justify-content-md-end gap-2">
+                                                    <label for="cfgYasinStartTime" class="font-weight-bold text-dark mb-0 mr-2" style="font-size: 0.9rem; white-space: nowrap;">
+                                                        <i class="far fa-clock text-success mr-1"></i> Jam Mulai:
+                                                    </label>
+                                                    <input type="time" class="form-control" id="cfgYasinStartTime" value="18:30" style="width: 140px; border-radius: 8px; font-weight: 700;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- JUDUL SELEKSI DUA OPSI AUTOSWITCH -->
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <div>
+                                                <h6 class="font-weight-bold text-dark mb-1">
+                                                    <i class="fas fa-sliders-h text-success mr-1"></i> Pilih Model Tampilan Pembacaan Jamaah:
+                                                </h6>
+                                                <p class="text-muted small mb-0">
+                                                    Pilihan dilengkapi <strong>Autoswitch</strong>: memilih salah satu opsi otomatis menonaktifkan opsi lainnya. Teks 100% diam saat dibaca agar jamaah tidak pusing dan lebih khusyuk.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- 2 KARTU OPSI BERSANDING -->
+                                        <div class="row">
+                                            <!-- OPSI 1: LOMPAT HALUS PER BLOK AYAT -->
+                                            <div class="col-lg-6 mb-3">
+                                                <div class="yasin-option-card p-3 h-100 position-relative" id="cardYasinOption1" onclick="selectYasinOption('step')" style="border-radius: 12px; border: 2px solid #10b981; background: #f0fdf4; cursor: pointer; transition: all 0.25s ease;">
+                                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="custom-control custom-radio mr-2">
+                                                                <input type="radio" id="radioYasinOption1" name="yasin_display_option" value="step" class="custom-control-input" checked onchange="onYasinOptionRadioChange(this)">
+                                                                <label class="custom-control-label font-weight-bold text-dark" for="radioYasinOption1" style="font-size: 1.02rem; cursor: pointer;">
+                                                                    Opsi 1: Lompat Halus per Blok Ayat
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <span class="badge badge-success px-2 py-1" style="font-size: 10px; border-radius: 10px;">DIREKOMENDASIKAN</span>
+                                                    </div>
+                                                    <p class="text-muted small mb-3" style="line-height: 1.5;">
+                                                        <strong>Teks 100% Diam saat dibaca.</strong> Menampilkan 4–5 ayat berukuran sangat besar dan jelas (Total 17 Blok Ayat). Layar berpindah halus ke blok berikutnya setelah jeda waktu selesai.
+                                                    </p>
+                                                    <div class="bg-white p-2 rounded border" style="border-color: rgba(16, 185, 129, 0.3) !important;">
+                                                        <label class="small font-weight-bold text-dark d-block mb-1">
+                                                            <i class="fas fa-stopwatch text-success mr-1"></i> Durasi Pergantian per Blok (Detik):
+                                                        </label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control" id="cfgYasinStepDuration" value="20" min="5" max="180" step="5" onclick="event.stopPropagation()">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">Detik / Blok</span>
+                                                            </div>
+                                                        </div>
+                                                        <small class="text-muted d-block mt-1" style="font-size: 10px;">
+                                                            Rekomendasi: <strong>15–25 Detik</strong> (17 blok × 20 detik ≈ 6-7 menit putaran).
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- OPSI 2: LEMBARAN MUSHAF STANDAR MADINAH / KEMENAG -->
+                                            <div class="col-lg-6 mb-3">
+                                                <div class="yasin-option-card p-3 h-100 position-relative" id="cardYasinOption2" onclick="selectYasinOption('mushaf')" style="border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; cursor: pointer; transition: all 0.25s ease;">
+                                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="custom-control custom-radio mr-2">
+                                                                <input type="radio" id="radioYasinOption2" name="yasin_display_option" value="mushaf" class="custom-control-input" onchange="onYasinOptionRadioChange(this)">
+                                                                <label class="custom-control-label font-weight-bold text-dark" for="radioYasinOption2" style="font-size: 1.02rem; cursor: pointer;">
+                                                                    Opsi 2: Lembaran Mushaf Madinah (6 Hal)
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <span class="badge badge-secondary px-2 py-1" style="font-size: 10px; border-radius: 10px;">MUSHAF 15 BARIS</span>
+                                                    </div>
+                                                    <p class="text-muted small mb-3" style="line-height: 1.5;">
+                                                        <strong>Teks 100% Diam seperti membuka mushaf Al-Qur'an fisik.</strong> Menampilkan per halaman standar Al-Qur'an Madinah/Kemenag (Hal 440–445, Total 6 Halaman).
+                                                    </p>
+                                                    <div class="bg-white p-2 rounded border" style="border-color: #e2e8f0 !important;">
+                                                        <label class="small font-weight-bold text-dark d-block mb-1">
+                                                            <i class="fas fa-hourglass-half text-primary mr-1"></i> Durasi Pergantian per Halaman (Detik):
+                                                        </label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control" id="cfgYasinMushafDuration" value="120" min="20" max="600" step="10" onclick="event.stopPropagation()">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">Detik / Halaman</span>
+                                                            </div>
+                                                        </div>
+                                                        <small class="text-muted d-block mt-1" style="font-size: 10px;">
+                                                            Rekomendasi: <strong>90–150 Detik</strong> (1.5 - 2.5 Menit per halaman; 6 hal ≈ 12-15 menit).
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- INFO SINKRONISASI & SAFETY LOCK -->
+                                        <div class="alert alert-light border d-flex align-items-center mt-2 mb-0 p-3" style="border-radius: 10px; background: #fafaf9; border-color: #e7e5e4 !important;">
+                                            <i class="fas fa-info-circle text-info mr-3" style="font-size: 1.25rem;"></i>
+                                            <div class="small text-muted">
+                                                <strong>Catatan Jamaah & TV:</strong> Pengaturan mode dan durasi otomatis tersimpan ke <em>Cloud Database (Supabase)</em> dan <em>Local Storage Browser TV</em>. Di layar TV Surat Yaasiin juga disediakan tombol kontrol navigasi (Prev, Jeda/Lanjut, Next, dan Ganti Mode Cepat) untuk memudahkan operator masjid.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- CARD INTEGRASI GOOGLE GEMINI AI -->
                             <div class="col-12 mb-4">
                                 <div class="content-card border-left-success" style="border-left: 5px solid #10b981;">
@@ -6180,6 +6314,48 @@
                         // Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
                         const jumatDur = parseInt(s.prayer_mode_jumat_duration) || 50;
                         syncDurasiJumat(jumatDur);
+
+                        // Pengaturan Agenda Surat Yaasiin 83 Ayat (2 Opsi Autoswitch)
+                        const yasinEnabled = (s.yasin_mode_enabled !== false);
+                        if (document.getElementById('cfgYasinEnabled')) document.getElementById('cfgYasinEnabled').checked = yasinEnabled;
+                        if (document.getElementById('cfgYasinStartTime') && s.yasin_start_time) {
+                            document.getElementById('cfgYasinStartTime').value = s.yasin_start_time.substring(0, 5);
+                        }
+
+                        let yMode = 'step';
+                        let yStepDur = 20;
+                        let yMushafDur = 120;
+
+                        if (s.yasin_scroll_speed) {
+                            try {
+                                if (typeof s.yasin_scroll_speed === 'string' && s.yasin_scroll_speed.trim().startsWith('{')) {
+                                    const parsed = JSON.parse(s.yasin_scroll_speed);
+                                    if (parsed.mode) yMode = parsed.mode;
+                                    if (parsed.step_duration) yStepDur = parseInt(parsed.step_duration) || 20;
+                                    if (parsed.mushaf_duration) yMushafDur = parseInt(parsed.mushaf_duration) || 120;
+                                } else if (s.yasin_scroll_speed === 'slow') {
+                                    yStepDur = 28;
+                                    yMushafDur = 150;
+                                } else if (s.yasin_scroll_speed === 'fast') {
+                                    yStepDur = 14;
+                                    yMushafDur = 90;
+                                }
+                            } catch (e) {}
+                        }
+
+                        // Cek localStorage browser lokal jika ada setting spesifik
+                        const localYMode = localStorage.getItem('yasin_display_mode');
+                        if (localYMode) yMode = localYMode;
+                        const localYStepDur = localStorage.getItem('yasin_step_duration');
+                        if (localYStepDur) yStepDur = parseInt(localYStepDur) || yStepDur;
+                        const localYMushafDur = localStorage.getItem('yasin_mushaf_duration');
+                        if (localYMushafDur) yMushafDur = parseInt(localYMushafDur) || yMushafDur;
+
+                        if (document.getElementById('cfgYasinStepDuration')) document.getElementById('cfgYasinStepDuration').value = yStepDur;
+                        if (document.getElementById('cfgYasinMushafDuration')) document.getElementById('cfgYasinMushafDuration').value = yMushafDur;
+                        if (typeof selectYasinOption === 'function') {
+                            selectYasinOption(yMode);
+                        }
                         
                         // Running text
                         if (document.getElementById('inputRunningText') && s.running_text_pages) {
@@ -8973,6 +9149,42 @@
             }
         }
 
+        // Pemilihan Model Tampilan Surat Yaasiin (Autoswitch Mutually Exclusive)
+        function selectYasinOption(option) {
+            const r1 = document.getElementById('radioYasinOption1');
+            const r2 = document.getElementById('radioYasinOption2');
+            const c1 = document.getElementById('cardYasinOption1');
+            const c2 = document.getElementById('cardYasinOption2');
+
+            if (option === 'step') {
+                if (r1) r1.checked = true;
+                if (r2) r2.checked = false;
+                if (c1) {
+                    c1.style.border = '2px solid #10b981';
+                    c1.style.background = '#f0fdf4';
+                }
+                if (c2) {
+                    c2.style.border = '1.5px solid #cbd5e1';
+                    c2.style.background = '#f8fafc';
+                }
+            } else {
+                if (r1) r1.checked = false;
+                if (r2) r2.checked = true;
+                if (c1) {
+                    c1.style.border = '1.5px solid #cbd5e1';
+                    c1.style.background = '#f8fafc';
+                }
+                if (c2) {
+                    c2.style.border = '2px solid #0284c7';
+                    c2.style.background = '#f0f9ff';
+                }
+            }
+        }
+
+        function onYasinOptionRadioChange(radio) {
+            selectYasinOption(radio.value);
+        }
+
         // Simpan Konfigurasi Sistem
         async function simpanPengaturanSistem() {
             const nama = document.getElementById('cfgNamaMasjid')?.value;
@@ -8982,7 +9194,22 @@
             const geminiApiKey = document.getElementById('cfgGeminiApiKey')?.value?.trim();
             const geminiModel = document.getElementById('cfgGeminiModel')?.value || 'gemini-1.5-flash';
 
-            // Simpan lokal di browser
+            // Ambil pengaturan Surat Yaasiin
+            const yasinEnabled = document.getElementById('cfgYasinEnabled') ? document.getElementById('cfgYasinEnabled').checked : true;
+            const yasinStartTime = document.getElementById('cfgYasinStartTime') ? document.getElementById('cfgYasinStartTime').value : '18:30';
+            const isYasinMushaf = document.getElementById('radioYasinOption2') && document.getElementById('radioYasinOption2').checked;
+            const yasinDisplayMode = isYasinMushaf ? 'mushaf' : 'step';
+            const yasinStepDuration = document.getElementById('cfgYasinStepDuration') ? parseInt(document.getElementById('cfgYasinStepDuration').value) || 20 : 20;
+            const yasinMushafDuration = document.getElementById('cfgYasinMushafDuration') ? parseInt(document.getElementById('cfgYasinMushafDuration').value) || 120 : 120;
+
+            // Simpan langsung ke LocalStorage untuk responsivitas instan
+            localStorage.setItem('yasin_display_mode', yasinDisplayMode);
+            localStorage.setItem('yasin_step_duration', yasinStepDuration);
+            localStorage.setItem('yasin_mushaf_duration', yasinMushafDuration);
+            localStorage.setItem('yasin_mode_enabled', yasinEnabled);
+            localStorage.setItem('yasin_start_time', yasinStartTime);
+
+            // Simpan lokal di browser untuk Gemini
             if (window.GeminiAI) {
                 window.GeminiAI.setApiKey(geminiApiKey);
                 window.GeminiAI.setModel(geminiModel);
@@ -8994,7 +9221,15 @@
                     nama_aplikasi: nama,
                     rotation_interval: interval,
                     live_makkah_url: liveMekah,
-                    cctv_mimbar_url: cctv
+                    cctv_mimbar_url: cctv,
+                    yasin_mode_enabled: yasinEnabled,
+                    yasin_start_time: yasinStartTime,
+                    yasin_scroll_speed: JSON.stringify({
+                        mode: yasinDisplayMode,
+                        step_duration: yasinStepDuration,
+                        mushaf_duration: yasinMushafDuration,
+                        updated_at: new Date().toISOString()
+                    })
                 };
                 if (typeof geminiApiKey === 'string') {
                     patchPayload.gemini_api_key = geminiApiKey;
@@ -9008,7 +9243,7 @@
                 });
 
                 if (res.ok) {
-                    alert('Alhamdulillah! Konfigurasi sistem dan Google Gemini AI berhasil disimpan ke Supabase.');
+                    alert('Alhamdulillah! Konfigurasi sistem, tampilan Surat Yaasiin, dan Google Gemini AI berhasil disimpan ke Supabase.');
                 } else {
                     alert('Gagal menyimpan konfigurasi ke Supabase. Namun konfigurasi telah disimpan secara lokal di browser.');
                 }

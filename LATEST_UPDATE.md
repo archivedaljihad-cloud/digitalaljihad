@@ -5121,10 +5121,101 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
 
+## BAB 127: FITUR DUA OPSI TAMPILAN SURAT YAASIIN 83 AYAT (AUTOSWITCH) & PENGATURAN DURASI INDEPENDEN
 
+### 1. Latar Belakang & Permintaan Pengguna:
+1. **Permasalahan Teks Gulir Bergerak (*Continuous Scrollup*):**  
+   Pengguna mereview tayangan "Surat Yaasiin 83 Ayat" di layar TV masjid dan menemukan bahwa jamaah mengalami sedikit kesulitan dan kurang khusyuk dalam membaca karena tulisan Arab berjalan terus menerus ke atas (*auto scrollup*), yang berpotensi membuat mata lelah atau pusing saat membaca bersama.
+2. **Kebutuhan Solusi 2 Opsi Sekaligus dengan Autoswitch:**  
+   Pengguna meminta dibuatkan 2 opsi tampilan sekaligus yang dapat dipilih sesuai kebutuhan:
+   - **Opsi 1:** Model "Lompat Halus per Blok / Ayat" (*Paginated Step-Scroll*). Teks 100% diam saat dibaca, berganti blok per beberapa ayat secara halus setelah jeda waktu tertentu.
+   - **Opsi 2:** Model "Lembaran Mushaf Standar Madinah / Kemenag" (*Page-by-Page 6 Halaman: Hal 440–445*). Menampilkan halaman penuh mushaf 15 baris yang 100% diam layaknya membuka Al-Qur'an fisik.
+   - **Mekanisme Autoswitch Saling Mengunci (*Mutually Exclusive*):** Jika Opsi 1 dipilih/aktif maka otomatis Opsi 2 nonaktif, dan sebaliknya (tidak dapat aktif keduanya secara bersamaan).
+   - **Durasi Pergantian Independen yang Dapat Diedit:** Durasi pergantian ayat/blok di Opsi 1 (misal 15–25 detik) dan durasi pergantian halaman di Opsi 2 (misal 90–150 detik) dapat diatur dan diedit secara bebas melalui panel Admin sesuai kecepatan imam/jamaah masjid.
 
+---
 
+### 2. Arsitektur & Logika Teknis yang Diterapkan:
 
+#### A. Pembagian Dataset 83 Ayat Utsmani
+1. **Opsi 1 (17 Blok Terfokus):**
+   - 83 ayat dibagi menjadi 17 blok logis (rata-rata 5 ayat per blok):
+     - Blok 1: Ayat 1 – 5 (+ Bismillah)
+     - Blok 2: Ayat 6 – 10
+     - Blok 3: Ayat 11 – 15
+     - Blok 4: Ayat 16 – 20
+     - Blok 5: Ayat 21 – 25
+     - Blok 6: Ayat 26 – 30
+     - Blok 7: Ayat 31 – 35
+     - Blok 8: Ayat 36 – 40
+     - Blok 9: Ayat 41 – 45
+     - Blok 10: Ayat 46 – 50
+     - Blok 11: Ayat 51 – 54
+     - Blok 12: Ayat 55 – 59
+     - Blok 13: Ayat 60 – 64
+     - Blok 14: Ayat 65 – 70
+     - Blok 15: Ayat 71 – 75
+     - Blok 16: Ayat 76 – 80
+     - Blok 17: Ayat 81 – 83 (+ Doa Khatam & Tashdiq)
+   - Font Arab ekstra besar (`2.45rem`), kontras tinggi, penomoran ayat bulat emas bersinar.
+
+2. **Opsi 2 (Mushaf Standar Madinah 6 Halaman - Hal 440 s/d 445):**
+   - Halaman 1 (Hal 440): Ayat 1 – 12 (+ Ornamen Bismillah)
+   - Halaman 2 (Hal 441): Ayat 13 – 27
+   - Halaman 3 (Hal 442): Ayat 28 – 40
+   - Halaman 4 (Hal 443): Ayat 41 – 54
+   - Halaman 5 (Hal 444): Ayat 55 – 70
+   - Halaman 6 (Hal 445): Ayat 71 – 83 (+ Doa Khatam & Tashdiq)
+   - Teks mengalir rata kanan-kiri Utsmani (*justified kashida*) dengan header juz/halaman resmi.
+
+#### B. Mekanisme Autoswitch di Panel Admin (`web-statis/admin.html` & `resources/views/settings/edit.blade.php`)
+- Menambahkan Card khusus: **"Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat"**.
+- Menyandingkan dua kartu radio pilihan (`radioYasinOption1` vs `radioYasinOption2`):
+  - Memilih Opsi 1 otomatis mencentang radio 1, mematikan radio 2, memberikan styling hijau aktif pada kartu 1, dan meredupkan kartu 2.
+  - Memilih Opsi 2 otomatis mencentang radio 2, mematikan radio 1, memberikan styling biru/emas aktif pada kartu 2, dan meredupkan kartu 1.
+- Masing-masing kartu memiliki field input durasi tersendiri:
+  - `cfgYasinStepDuration`: Input durasi per blok ayat (detik, default: 20s).
+  - `cfgYasinMushafDuration`: Input durasi per halaman mushaf (detik, default: 120s / 2 menit).
+- **Format Penyimpanan Kompatibel (Dual-Track Persistence):**
+  - Disimpan ke kolom `yasin_scroll_speed` di Supabase `app_settings` dalam bentuk JSON string (`{"mode":"step|mushaf","step_duration":20,"mushaf_duration":120}`) tanpa merusak skema database yang sudah ada.
+  - Sekaligus disimpan ke `localStorage` (`yasin_display_mode`, `yasin_step_duration`, `yasin_mushaf_duration`) untuk responsivitas instan tanpa jeda jaringan.
+
+#### C. Fitur Layar Slide TV (`web-statis/slides/yasin.html` & `resources/views/yasin-embed.blade.php`)
+1. **Teks 100% Diam (*No Jitter/Scroll Pain*):**
+   - Menghilangkan mode scrollup terus menerus yang membuat pusing.
+   - Layar menampilkan konten secara stabil, tenang, dan jernih.
+2. **Progress Bar Waktu Baca:**
+   - Bar tipis gradasi hijau-emas bersinar di bawah header yang berjalan dari 0% ke 100% menandakan waktu baca yang tersisa sebelum berganti ke blok/halaman berikutnya.
+3. **Floating Operator Bar di Pojok Bawah Layar:**
+   - Tombol **Sebelumnya (Prev)** dan **Berikutnya (Next)** untuk memindah blok/halaman manual.
+   - Tombol **Jeda / Lanjut (Pause/Play)** untuk membekukan waktu jika imam/jamaah membaca lebih perlahan.
+   - **Indikator Status:** Menampilkan nomor blok/halaman serta sisa detik (misal `Blok 3/17 (18s)` atau `Hal 2/6 (01:45)`).
+   - Tombol **Quick Autoswitch ("🔁 Ganti ke Opsi 2 (Mushaf) / Ganti ke Opsi 1 (Blok)")**: Mengizinkan operator di dekat TV untuk langsung mengganti mode tayangan secara instan tanpa perlu membuka admin.
+4. **Dukungan Remote TV Keyboard:**
+   - Tombol Panah Kanan / PageDown: Maju ke slide/blok berikutnya.
+   - Tombol Panah Kiri / PageUp: Mundur ke slide/blok sebelumnya.
+   - Tombol Spasi / Enter: Jeda / Lanjut (*Pause/Play*).
+   - Tombol M: Pintasan keyboard untuk Autoswitch berganti mode.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`:
+   - Menambahkan Card Pengaturan Surat Yaasiin 83 Ayat dengan radio autoswitch & input durasi per opsi.
+   - Menambahkan fungsi `selectYasinOption()` dan `onYasinOptionRadioChange()`.
+   - Memperbarui `resSet` parsing dan `simpanPengaturanSistem()` untuk menyimpan serialisasi konfigurasi ke Supabase dan LocalStorage.
+2. `web-statis/slides/yasin.html`:
+   - Menulis ulang arsitektur slide player dengan 2 view terpisah (`#yasinStepView` & `#yasinMushafView`), progress bar waktu, timer otomatis, floating bar interaktif, dan navigasi remote TV.
+3. `resources/views/settings/edit.blade.php`:
+   - Menyelaraskan tab `#yasin` di panel admin Laravel dengan 2 kartu opsi autoswitch dan input durasi per opsi.
+4. `app/Http/Controllers/AppSettingController.php`:
+   - Memperbarui penanganan penyimpanan setting Yaasiin agar memproses `yasin_display_mode`, `yasin_step_duration`, dan `yasin_mushaf_duration`.
+5. `resources/views/yasin-embed.blade.php`:
+   - Menyelaraskan view blade Yaasiin agar memiliki arsitektur 2 opsi autoswitch, progress bar, dan floating bar navigasi yang identik.
+6. `LATEST_UPDATE.md`: Dokumentasi lengkap Bab 127.
+7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+8. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
 
