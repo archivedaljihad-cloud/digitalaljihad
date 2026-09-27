@@ -4978,5 +4978,30 @@ Pengguna meminta agar tampilan Galeri Informasi di TV display terlihat lebih rap
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## BAB 122: PENGHILANGAN KOTAK KAPSUL KATEGORI "GALERI INFORMASI" PADA KARTU DETAIL SLIDE TV DISPLAY
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna meminta agar elemen kotak kapsul (*pill badge*) bertuliskan *"GALERI INFORMASI"* (atau kategori slide) di bagian atas kartu teks informasi dihilangkan saja. Tujuannya adalah membuat tampilan kartu panel kanan terlihat lebih minimalis, bersih, elegan, dan fokus langsung ke judul utama dokumen serta rincian keterangannya.
+
+### 2. Solusi & Perubahan yang Diterapkan:
+1. **Penghapusan Elemen HTML Kapsul Kategori:**
+   - Menghilangkan kontainer `<div class="slide-badge-title">...</div>` beserta ikon megaphone dan teks kategori dari struktur DOM `web-statis/slides/slide.html`.
+2. **Penyempurnaan Ruang Visual & Tipografi:**
+   - Mengatur jarak vertikal antar-elemen kartu (`gap: 20px;`) sehingga judul dokumen dan kotak deskripsi terpusat rapi secara vertikal (*vertical center alignment*).
+   - Mempertegas ukuran font judul dokumen (`.slide-title`: `2.25rem`) agar tampil dominan dan mudah dibaca oleh jamaah dari jarak jauh di layar Smart TV.
+3. **Pembersihan Logika JavaScript:**
+   - Menghapus referensi `catEl` di fungsi `showSlide()` untuk menjaga kebersihan dan efisiensi eksekusi script.
+4. **Pembaruan Cache-Buster (`?v=20260927_04`):**
+   - Menaikkan parameter versi file JavaScript di `web-statis/slides/slide.html` agar browser Smart TV dan CDN Cloudflare langsung menyajikan versi terbaru.
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/slides/slide.html`: Penghilangan elemen badge kategori, optimasi CSS `.slide-card`, pembersihan `catEl`, dan pembaruan versioning `v=20260927_04`.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 122.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 

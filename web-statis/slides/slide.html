@@ -257,27 +257,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 16px;
+            gap: 20px;
             position: relative;
         }
 
-        .slide-badge-title {
-            align-self: flex-start;
-            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.65);
-            color: #ffd700;
-            padding: 6px 20px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-        }
-
         .slide-title {
-            font-size: 2.1rem;
+            font-size: 2.25rem;
             font-weight: 800;
             color: #ffffff;
             line-height: 1.25;
@@ -387,10 +372,6 @@
             <!-- Kolom Kanan: Detail Slide -->
             <div class="slide-right-col">
                 <div class="slide-card">
-                    <div class="slide-badge-title">
-                        <i class="fas fa-bullhorn"></i>
-                        <span id="slideCategory">Pengukuran & Validasi</span>
-                    </div>
                     <div class="slide-title" id="slideTitle">Arah Qiblat</div>
                     <div class="slide-desc" id="slideDesc">
                         Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami' Al-Jihad.
@@ -413,9 +394,9 @@
 
     <!-- CORE SCRIPTS DENGAN CACHE-BUSTER -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js?v=20260927_03"></script>
-    <script src="../js/supabase-db.js?v=20260927_03"></script>
-    <script src="../js/display-clock-ambient.js?v=20260927_03"></script>
+    <script src="../js/supabase-config.js?v=20260927_04"></script>
+    <script src="../js/supabase-db.js?v=20260927_04"></script>
+    <script src="../js/display-clock-ambient.js?v=20260927_04"></script>
 
     <script>
         // Background Rotator Islami
@@ -632,20 +613,17 @@
             if (!item) return;
 
             const titleEl = document.getElementById('slideTitle');
-            const catEl = document.getElementById('slideCategory');
             const descEl = document.getElementById('slideDesc');
             const posterImg = document.getElementById('posterImg');
             const fallback = document.getElementById('posterFallback');
 
             const nextTitle = item.judul || item.title || 'Galeri Informasi Masjid';
-            const nextCat = item.kategori || 'Galeri Informasi';
             const nextDesc = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
             const rawUrl = item.gambar_base64 || item.gambar || item.image || item.file_path;
             const newResolvedUrl = resolveSlideUrl(rawUrl);
 
             // Update elemen teks
             if (titleEl) titleEl.textContent = nextTitle;
-            if (catEl) catEl.textContent = nextCat;
             if (descEl) descEl.textContent = nextDesc;
 
             if (newResolvedUrl) {
