@@ -5056,6 +5056,40 @@ Sebelumnya, saat akun Takmir/Operator login, kartu-kartu keuangan (Kas Utama, Ka
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## BAB 125: PENYERAGAMAN UKURAN & REDESAIN ELEGAN 4 KOTAK STATUS DIAGNOSTIK REMOTE TV SERTA PENJELASAN PERBEDAAN RENDER URL
+
+### 1. Latar Belakang & Permintaan Pengguna:
+1. **Pertanyaan Tampilan URL Berbeda:** Pengguna menanyakan mengapa pada alamat URL yang sama, tampilan teks nama masjid ("MASJID JAMI' AL-JIHAD") dapat terlihat berbeda antara tangkapan layar 1 (huruf emas pekat 3D timbul) dan tangkapan layar 2 (huruf dengan garis outline emas dan bodi dalam transparan/gelap).
+2. **Permintaan Penyeragaman 4 Kotak Status Remote TV:** Pengguna melampirkan tangkapan layar panel *Layanan Remot TV & Diagnostik Jarak Jauh* pada Dashboard Admin, di mana ke-4 kotak status (Koneksi TV Masjid, Slide Tayang Saat Ini, Status Rotasi Slide, dan Resolusi & Perangkat) memiliki tinggi yang tidak rata, teks terpotong canggung menjadi 2 baris, dan ukuran kotak yang terlalu gemuk/tidak seimbang. Pengguna meminta: *"Edit ke 4 kotak ini agar ukurannya semua sama kecil sehingga terlihat rapi dan elegan"*.
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Analisis Perbedaan Render URL Display TV:**
+   - **Cache Browser vs Pembaruan CSS:** Perangkat yang satu masih menyimpan cache stylesheet lokal (perlu `Ctrl + F5` / hard refresh), sedangkan perangkat lain sudah memuat aturan CSS terbaru.
+   - **Dukungan CSS Webkit Text Fill & Stroke antar Perangkat/Browser:** Pada browser TV berdaya rendah atau browser non-Chromium, properti non-standar `-webkit-text-fill-color: #FFD700;` dan `-webkit-text-stroke: 1.5px #000000;` kadang diproses secara parsial atau fallback ke warna latar belakang jika font custom (`Masking Renta`) belum selesai dimuat (*font loading swap*), sehingga bodi huruf tampak transparan dengan outline saja.
+   - **Hardware Acceleration GPU:** Perangkat dengan GPU berbeda dapat merender belasan tumpukan *text-shadow* secara berbeda.
+
+2. **Redesain 4 Kotak Diagnostik Remote TV Menjadi Sama Kecil & Elegan (`web-statis/admin.html`):**
+   - **Keseragaman Ukuran & Grid:** Menggunakan `d-flex` dan `height: 100%; min-height: 86px;` dengan flexbox column vertikal sehingga keempat kotak di baris horizontal memiliki dimensi tinggi dan lebar yang 100% presisi dan sejajar.
+   - **Bentuk Kompak & Ramping (*Sama Kecil*):** Mengurangi padding dari `20px` menjadi `10px 14px` dan border radius menjadi `10px`, memberikan kesan minimalis mewah bergaya *cockpit dashboard*.
+   - **Tipografi Bersih & Elegan:**
+     - Label atas: Font emas `0.68rem` kapital tajam (`.remote-stat-label`).
+     - Nilai metrik: `font-size: 0.92rem; font-weight: 700;` dengan `white-space: nowrap` dan `text-truncate` agar tidak ada kartu yang terdorong melar ke bawah menjadi 2 baris.
+     - Subketerangan: `0.72rem` warna abu-abu lembut (`rgba(255, 255, 255, 0.65)`).
+   - **Optimalisasi Logika Render JavaScript (`updateTvPresenceUI`):**
+     - Memperbarui teks koneksi menjadi ringkas: `"Terhubung ke Cloud"` dengan `title="Terhubung ke Cloud Realtime"`.
+     - Memperbarui status putar menjadi `"MEMUTAR OTOMATIS"` atau `"DIJEDA (Freeze)"` dengan kelas `text-truncate` dan warna dinamis (`text-success` / `text-warning`).
+     - Menyematkan atribut `title` pada nama slide, URL, resolusi, dan User Agent agar operator tetap dapat membaca info lengkap hanya dengan mengarahkan kursor (*hover*).
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: CSS `.remote-stat-card`, HTML layout grid 4 kotak diagnostik, dan JS `updateTvPresenceUI`.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 125.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 
 

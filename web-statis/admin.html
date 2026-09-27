@@ -927,41 +927,95 @@
 
         /* === REMOTE CONTROL & DIAGNOSTIK TV JARAK JAUH === */
         .remote-stat-card {
-            background: linear-gradient(135deg, #071a10 0%, #0e3521 100%);
-            border: 1px solid rgba(201, 160, 61, 0.35);
-            border-radius: 14px;
+            background: linear-gradient(145deg, #071a10 0%, #0c2b1b 100%);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 10px;
             color: #ffffff;
-            padding: 20px;
+            padding: 10px 14px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(7, 26, 16, 0.25);
+            box-shadow: 0 4px 14px rgba(7, 26, 16, 0.3);
+            width: 100%;
+            height: 100%;
+            min-height: 86px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.22s ease-in-out;
+            box-sizing: border-box;
+        }
+        .remote-stat-card:hover {
+            border-color: rgba(255, 215, 0, 0.65);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), 0 0 10px rgba(212, 175, 55, 0.15);
+            transform: translateY(-1.5px);
         }
         .remote-stat-card::after {
             content: '';
             position: absolute;
-            top: -25px;
-            right: -25px;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(201, 160, 61, 0.25) 0%, transparent 70%);
+            top: -15px;
+            right: -15px;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
             pointer-events: none;
+        }
+        .remote-stat-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--islamic-gold-bright, #ffd700);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .remote-stat-icon {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.65);
+            flex-shrink: 0;
+            margin-left: 6px;
+        }
+        .remote-stat-val,
+        .remote-stat-card .h5,
+        .remote-stat-card .h6 {
+            font-size: 0.92rem !important;
+            font-weight: 700 !important;
+            line-height: 1.25 !important;
+            margin-bottom: 2px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: flex;
+            align-items: center;
+        }
+        .remote-stat-sub,
+        .remote-stat-card small {
+            font-size: 0.72rem !important;
+            color: rgba(255, 255, 255, 0.65) !important;
+            line-height: 1.2 !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: block !important;
+            margin: 0 !important;
         }
         .remote-pulse-dot {
             display: inline-block;
-            width: 11px;
-            height: 11px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             margin-right: 6px;
+            flex-shrink: 0;
             vertical-align: middle;
         }
         .remote-pulse-dot.online {
             background-color: #10b981;
-            box-shadow: 0 0 10px #10b981;
+            box-shadow: 0 0 8px #10b981;
             animation: pulseGlow 1.8s infinite;
         }
         .remote-pulse-dot.offline {
             background-color: #ef4444;
-            box-shadow: 0 0 8px #ef4444;
+            box-shadow: 0 0 6px #ef4444;
         }
         @keyframes pulseGlow {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -2476,48 +2530,48 @@
                         </div>
 
                         <!-- KARTU STATUS DIAGNOSTIK REALTIME -->
-                        <div class="row mb-4">
-                            <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="row mb-3">
+                            <div class="col-xl-3 col-md-6 mb-2 d-flex">
                                 <div class="remote-stat-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="text-xs text-uppercase font-weight-bold" style="color: var(--islamic-gold-bright);">Koneksi TV Masjid</span>
-                                        <i class="fas fa-wifi text-light opacity-75"></i>
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <span class="remote-stat-label">Koneksi TV Masjid</span>
+                                        <i class="fas fa-wifi remote-stat-icon"></i>
                                     </div>
-                                    <div class="h5 mb-1 font-weight-bold">
+                                    <div class="remote-stat-val text-truncate" title="Terhubung ke Cloud Realtime">
                                         <span class="remote-pulse-dot" id="tvStatusDot"></span>
                                         <span id="tvStatusText">Memeriksa TV...</span>
                                     </div>
-                                    <small class="text-muted" style="color: rgba(255,255,255,0.7) !important;" id="tvLastSeenText">Sinyal Realtime Cloud</small>
+                                    <small class="remote-stat-sub" id="tvLastSeenText">Sinyal Realtime Cloud</small>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="col-xl-3 col-md-6 mb-2 d-flex">
                                 <div class="remote-stat-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="text-xs text-uppercase font-weight-bold" style="color: var(--islamic-gold-bright);">Slide Tayang Saat Ini</span>
-                                        <i class="fas fa-desktop text-light opacity-75"></i>
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <span class="remote-stat-label">Slide Tayang Saat Ini</span>
+                                        <i class="fas fa-desktop remote-stat-icon"></i>
                                     </div>
-                                    <div class="h6 mb-1 font-weight-bold text-truncate" id="tvCurrentSlideName">Menunggu data TV...</div>
-                                    <small class="text-muted text-truncate d-block" style="color: rgba(255,255,255,0.7) !important;" id="tvCurrentSlideUrl">-</small>
+                                    <div class="remote-stat-val text-truncate" id="tvCurrentSlideName">Menunggu data TV...</div>
+                                    <small class="remote-stat-sub" id="tvCurrentSlideUrl">-</small>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="col-xl-3 col-md-6 mb-2 d-flex">
                                 <div class="remote-stat-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="text-xs text-uppercase font-weight-bold" style="color: var(--islamic-gold-bright);">Status Rotasi Slide</span>
-                                        <i class="fas fa-play-circle text-light opacity-75"></i>
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <span class="remote-stat-label">Status Rotasi Slide</span>
+                                        <i class="fas fa-play-circle remote-stat-icon"></i>
                                     </div>
-                                    <div class="h5 mb-1 font-weight-bold text-success" id="tvPlaybackStatusText">MEMUTAR OTOMATIS</div>
-                                    <small class="text-muted" style="color: rgba(255,255,255,0.7) !important;">Dapat di-freeze/jeda manual</small>
+                                    <div class="remote-stat-val text-success text-truncate" id="tvPlaybackStatusText">MEMUTAR OTOMATIS</div>
+                                    <small class="remote-stat-sub">Dapat di-freeze/jeda manual</small>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="col-xl-3 col-md-6 mb-2 d-flex">
                                 <div class="remote-stat-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="text-xs text-uppercase font-weight-bold" style="color: var(--islamic-gold-bright);">Resolusi & Perangkat</span>
-                                        <i class="fas fa-tv text-light opacity-75"></i>
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <span class="remote-stat-label">Resolusi & Perangkat</span>
+                                        <i class="fas fa-tv remote-stat-icon"></i>
                                     </div>
-                                    <div class="h5 mb-1 font-weight-bold" id="tvResolutionText">1920 x 1080 px</div>
-                                    <small class="text-muted text-truncate d-block" style="color: rgba(255,255,255,0.7) !important;" id="tvUserAgentText">Display Smart TV</small>
+                                    <div class="remote-stat-val text-truncate" id="tvResolutionText">1920 x 1080 px</div>
+                                    <small class="remote-stat-sub" id="tvUserAgentText">Display Smart TV</small>
                                 </div>
                             </div>
                         </div>
@@ -9839,26 +9893,41 @@
                     statusBadge.className = 'badge badge-success font-weight-bold px-3 py-2 mr-2 mb-1';
                     statusBadge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> TV ONLINE (' + tvDevices.length + ' Layar Aktif)';
                 }
-                if (statusText) statusText.textContent = 'Terhubung ke Cloud Realtime';
+                if (statusText) {
+                    statusText.textContent = 'Terhubung ke Cloud';
+                    statusText.title = 'Terhubung ke Cloud Realtime';
+                }
 
                 const slideTitle = activeTv.currentSlideTitle || activeTv.current_slide_title || activeTv.currentSlide || activeTv.current_slide || 'Slide Utama';
                 const slideUrl = activeTv.currentSlide || activeTv.current_slide || 'slides/utama.html';
 
-                if (currentSlideEl) currentSlideEl.textContent = slideTitle;
-                if (currentSlideUrlEl) currentSlideUrlEl.textContent = slideUrl;
+                if (currentSlideEl) {
+                    currentSlideEl.textContent = slideTitle;
+                    currentSlideEl.title = slideTitle;
+                }
+                if (currentSlideUrlEl) {
+                    currentSlideUrlEl.textContent = slideUrl;
+                    currentSlideUrlEl.title = slideUrl;
+                }
 
                 const resText = activeTv.resolution || ((activeTv.width && activeTv.height) ? `${activeTv.width} x ${activeTv.height} px` : '1920 x 1080 px');
-                if (tvResolutionEl) tvResolutionEl.textContent = resText;
+                if (tvResolutionEl) {
+                    tvResolutionEl.textContent = resText;
+                    tvResolutionEl.title = resText;
+                }
 
                 const uaText = (activeTv.userAgent || activeTv.user_agent || 'Smart TV Browser');
-                if (tvUserAgentEl) tvUserAgentEl.textContent = uaText.length > 45 ? uaText.substring(0, 45) + '...' : uaText;
+                if (tvUserAgentEl) {
+                    tvUserAgentEl.textContent = uaText;
+                    tvUserAgentEl.title = uaText;
+                }
 
                 if (tvLastSeenEl) tvLastSeenEl.textContent = 'Aktif (Sinyal Realtime)';
 
                 const isPaused = (activeTv.isPaused === true || activeTv.is_paused === true);
                 if (tvPlaybackStatusEl) {
-                    tvPlaybackStatusEl.textContent = isPaused ? 'DIJEDA (Freeze Slide)' : 'MEMUTAR OTOMATIS';
-                    tvPlaybackStatusEl.className = isPaused ? 'h5 mb-1 font-weight-bold text-warning' : 'h5 mb-1 font-weight-bold text-success';
+                    tvPlaybackStatusEl.textContent = isPaused ? 'DIJEDA (Freeze)' : 'MEMUTAR OTOMATIS';
+                    tvPlaybackStatusEl.className = isPaused ? 'remote-stat-val text-warning text-truncate' : 'remote-stat-val text-success text-truncate';
                 }
 
                 if (btnPauseResume) {
