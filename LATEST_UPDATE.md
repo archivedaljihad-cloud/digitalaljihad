@@ -4331,6 +4331,27 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 106.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+---
+
+## 🚑 BAB 107: PENYESUAIAN TEKS INFORMASI LAYANAN DRIVER AMBULANCE RW.007, RW.011, & RW.013 PADA MODUL KAS AMBULANCE
+
+### 1. Latar Belakang & Permintaan Pengguna
+- Pengguna meminta agar teks informasi pada panel kartu **"Info Layanan & Kontak Darurat Ambulance"** di modul Kas Ambulance (`#view-ambulance`) diperbarui.
+- Teks lama yang mencantumkan *"Nomor Hotline / WA Driver: 0877-5876-7000 (Siaga 24 Jam) Layanan antar-jemput pasien gawat darurat dan pengantaran jenazah untuk warga jamaah dan kaum dhuafa secara gratis (disubsidi dari Kas Ambulance Masjid Jami' Al-Jihad)."* diganti dengan narasi kesepakatan rapat DKM dan pengurus 3 wilayah RW (RW.007, RW.011, dan RW.013).
+
+---
+
+### 2. Teks Baru yang Diterapkan:
+> *"Sesuai keputusan rapat antara Pengurus DKM dan pengurus diketiga wilayah (RW.007,RW.011 dan RW.013), setiap RW menyiapkan 1(satu) orang warganya khusus untuk layanan driver antar-jemput pasien gawat darurat dan pengantaran jenazah untuk warga jamaah."*
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Pembaruan teks informasi kartu layanan ambulance pada baris 2883-2887.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 107.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+
+
 
 
 
