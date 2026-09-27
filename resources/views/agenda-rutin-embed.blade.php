@@ -132,7 +132,7 @@
             position: relative;
             z-index: 10;
             flex: 1;
-            padding: 12px 10px 8px 10px;
+            padding: 10px 10px 6px 10px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -145,7 +145,7 @@
             gap: 20px;
             width: 100%;
             height: 100%;
-            max-height: 64vh;
+            max-height: 65vh;
             align-items: stretch;
         }
 
@@ -154,7 +154,7 @@
             background: linear-gradient(170deg, rgba(4, 41, 27, 0.92) 0%, rgba(2, 26, 17, 0.95) 100%);
             border: 1.5px solid rgba(212, 175, 55, 0.35);
             border-radius: 18px;
-            padding: 18px 18px 14px 18px;
+            padding: 16px 18px 12px 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -204,7 +204,7 @@
 
         .card-category-wrap {
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .card-category {
@@ -224,14 +224,14 @@
         .cat-tahsin { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
         .cat-tafsir { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
 
-        /* KOREKSI 1: Teks Judul di dalam kotak dibuat CENTER */
+        /* Teks Judul Center */
         .card-title {
             font-size: 1.15rem;
             font-weight: 800;
             color: #ffffff;
             line-height: 1.35;
-            margin-bottom: 12px;
-            min-height: 48px;
+            margin-bottom: 10px;
+            min-height: 44px;
             text-align: center !important;
             display: flex;
             align-items: center;
@@ -239,32 +239,52 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
-        .info-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
+        /* ========================================================
+           FORMAT 2 BARIS PER ITEM (STACKED CLEAN LAYOUT)
+           Baris 1: Label Emas (Hari, Waktu, Imam, Tempat, dll)
+           Baris 2: Value Putih Bersih (Indentasi di bawahnya)
+           ======================================================== */
+        .info-item {
             margin-bottom: 8px;
-            font-size: 0.84rem;
-            color: #e2e8f0;
-            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
             text-align: left;
         }
 
-        .info-row i {
-            color: var(--gold-light);
-            font-size: 13px;
-            margin-top: 3px;
-            flex-shrink: 0;
-            width: 16px;
+        .info-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #ffd700; /* Warna Emas Kuning Berbeda dengan teks di bawahnya */
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 2px;
+        }
+
+        .info-label i {
+            color: #ffd700;
+            font-size: 11px;
+            width: 14px;
             text-align: center;
+        }
+
+        .info-value {
+            font-size: 0.94rem;
+            font-weight: 600;
+            color: #ffffff; /* Warna Putih Bersih Kontras */
+            line-height: 1.3;
+            padding-left: 20px; /* Indentasi rapi di bawah teks label */
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
         }
 
         /* Day Pills Box (Tahsin) */
         .day-pills-box {
             background: rgba(0, 0, 0, 0.35);
             border-radius: 12px;
-            padding: 8px 10px;
-            margin-top: 8px;
+            padding: 7px 10px;
+            margin-top: 4px;
             border: 1px solid rgba(212, 175, 55, 0.2);
             text-align: left;
         }
@@ -274,7 +294,7 @@
             font-weight: 700;
             color: var(--gold-light);
             text-transform: uppercase;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -313,10 +333,10 @@
             100% { transform: scale(1); }
         }
 
-        /* KOREKSI 2: Bagian bawah kotak tanpa teks samping, badge di-center */
+        /* Bagian bawah kotak: badge status di-center */
         .card-bottom {
-            margin-top: 10px;
-            padding-top: 10px;
+            margin-top: 8px;
+            padding-top: 8px;
             border-top: 1px solid rgba(212, 175, 55, 0.2);
             display: flex;
             align-items: center;
@@ -385,7 +405,7 @@
     </div>
 
     <div class="container">
-        <!-- HEADER SERAGAM MASTER MASJID (KOREKSI 3) -->
+        <!-- HEADER SERAGAM MASTER MASJID -->
         <div class="header">
             <h1 id="nama-masjid">{{ $settings->nama_aplikasi ?? "MASJID JAMI' AL JIHAD" }}</h1>
             <h3 class="sub-header" id="sub-header">{{ $settings->sub_header ?? "SISTEM INFORMASI DIGITAL" }}</h3>
@@ -417,7 +437,7 @@
             @endphp
 
             <div class="cards-grid">
-                <!-- 1. SURAT YAASIIN 83 AYAT -->
+                <!-- 1. SURAT YAASIIN 83 AYAT (FORMAT 2 BARIS STACKED) -->
                 <div class="agenda-card {{ $isYasinToday ? 'today-active' : '' }}">
                     @if($isYasinToday)
                     <div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> MALAM INI</div>
@@ -428,30 +448,32 @@
                         </div>
                         <h2 class="card-title">{{ $kegiatan['yasin']['judul'] ?? 'Pembacaan Surat Yaasiin & Tahlil' }}</h2>
 
-                        <div class="info-row">
-                            <i class="fa-solid fa-calendar-day"></i>
-                            <span><strong>Hari:</strong> Setiap Kamis (Malam Jum'at)</span>
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
+                            <div class="info-value">Setiap Kamis (Malam Jum'at)</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-clock"></i>
-                            <span><strong>Waktu:</strong> {{ $kegiatan['yasin']['waktu'] ?? 'Ba\'da Maghrib s/d Isya' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
+                            <div class="info-value">{{ $kegiatan['yasin']['waktu'] ?? 'Ba\'da Sholat Maghrib s/d Isya' }}</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-user-tie"></i>
-                            <span><strong>Imam:</strong> {{ $kegiatan['yasin']['pembimbing'] ?? 'Imam Rawatib / Asatidz' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Imam / Pembimbing :</div>
+                            <div class="info-value">{{ $kegiatan['yasin']['pembimbing'] ?? 'Ketua / Pengurus DKM Al Jihad' }}</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span><strong>Tempat:</strong> {{ $kegiatan['yasin']['lokasi'] ?? 'Ruang Utama Masjid' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-location-dot"></i> Tempat :</div>
+                            <div class="info-value">{{ $kegiatan['yasin']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}</div>
                         </div>
                     </div>
-                    <!-- KOREKSI 2: Teks 'Otomatis di TV' dihapus -->
                     <div class="card-bottom">
                         <span class="status-badge"><i class="fa-solid fa-users"></i> Terbuka untuk Jamaah Umum</span>
                     </div>
                 </div>
 
-                <!-- 2. KAJIAN MALAM AHAD -->
+                <!-- 2. KAJIAN MALAM AHAD (FORMAT 2 BARIS STACKED) -->
                 <div class="agenda-card {{ $isAhadKajianToday ? 'today-active' : '' }}">
                     @if($isAhadKajianToday)
                     <div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> MALAM INI</div>
@@ -462,30 +484,32 @@
                         </div>
                         <h2 class="card-title">{{ $kegiatan['kajian_ahad']['judul'] ?? 'Kajian Umum Malam Ahad' }}</h2>
 
-                        <div class="info-row">
-                            <i class="fa-solid fa-calendar-day"></i>
-                            <span><strong>Hari:</strong> Setiap Sabtu (Malam Ahad)</span>
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
+                            <div class="info-value">Setiap Sabtu (Malam Ahad)</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-clock"></i>
-                            <span><strong>Waktu:</strong> {{ $kegiatan['kajian_ahad']['waktu'] ?? 'Ba\'da Maghrib s/d Isya' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
+                            <div class="info-value">{{ $kegiatan['kajian_ahad']['waktu'] ?? 'Ba\'da Sholat Maghrib s/d Isya' }}</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-user-tie"></i>
-                            <span><strong>Pemateri:</strong> {{ $kegiatan['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pemateri :</div>
+                            <div class="info-value">{{ $kegiatan['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh Al-Hafidz' }}</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-book"></i>
-                            <span><strong>Kitab:</strong> {{ $kegiatan['kajian_ahad']['keterangan'] ?? 'Kitab Bidayatul Hidayah' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-book-open"></i> Kitab / Tema :</div>
+                            <div class="info-value">{{ $kegiatan['kajian_ahad']['keterangan'] ?? 'Kitab Bidayatul Hidayah & Fiqih' }}</div>
                         </div>
                     </div>
-                    <!-- KOREKSI 2: Teks 'Ikhwan & Akhwat' dihapus -->
                     <div class="card-bottom">
                         <span class="status-badge"><i class="fa-solid fa-circle-question"></i> Sesi Tanya Jawab</span>
                     </div>
                 </div>
 
-                <!-- 3. TAHSIN AL-QUR'AN (FLEKSIBEL 1-CLICK PICKER) -->
+                <!-- 3. TAHSIN AL-QUR'AN (FORMAT 2 BARIS STACKED) -->
                 <div class="agenda-card {{ $isTahsinToday ? 'today-active' : '' }}">
                     @if($isTahsinToday)
                     <div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> HARI INI</div>
@@ -496,28 +520,29 @@
                         </div>
                         <h2 class="card-title">{{ $kegiatan['tahsin']['judul'] ?? 'Bimbingan Tahsin Al-Qur\'an' }}</h2>
 
-                        <div class="info-row">
-                            <i class="fa-solid fa-clock"></i>
-                            <span><strong>Waktu:</strong> {{ $kegiatan['tahsin']['waktu'] ?? 'Ba\'da Sholat Isya' }}</span>
-                        </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-user-tie"></i>
-                            <span><strong>Pembina:</strong> {{ $kegiatan['tahsin']['pembimbing'] ?? 'Ust. Pembina Tahsin' }}</span>
-                        </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span><strong>Lokasi:</strong> {{ $kegiatan['tahsin']['lokasi'] ?? 'Serambi & Ruang Utama' }}</span>
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
+                            <div class="info-value">{{ $kegiatan['tahsin']['waktu'] ?? 'Ba\'da Sholat Isya (20:00 WIB)' }}</div>
                         </div>
 
-                        <!-- DAY PILLS JADWAL AKTIF PEKAN INI -->
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pembina :</div>
+                            <div class="info-value">{{ $kegiatan['tahsin']['pembimbing'] ?? 'Ust. Pembina Tahsin Al-Qur\'an' }}</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-location-dot"></i> Tempat :</div>
+                            <div class="info-value">{{ $kegiatan['tahsin']['lokasi'] ?? 'Serambi & Ruang Utama Masjid' }}</div>
+                        </div>
+
                         <div class="day-pills-box">
                             <div class="day-pills-title">
-                                <span>Jadwal Pekan Ini:</span>
+                                <span class="info-label" style="margin-bottom: 0;"><i class="fa-solid fa-calendar-week"></i> Jadwal Pekan Ini :</span>
                                 @if($isTahsinToday)
-                                <span style="color: #6ee7b7;"><i class="fa-solid fa-circle-check"></i> Hari Ini Ada</span>
+                                <span style="color: #6ee7b7; font-size: 10px; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Hari Ini Ada</span>
                                 @endif
                             </div>
-                            <div class="pills-container">
+                            <div class="pills-container" style="margin-top: 5px; padding-left: 4px;">
                                 @php
                                     $dayLabels = [
                                         'senin' => 'Senin',
@@ -547,13 +572,12 @@
                         </div>
                     </div>
 
-                    <!-- KOREKSI 2: Teks 'Gratis / Infaq' dihapus -->
                     <div class="card-bottom">
                         <span class="status-badge"><i class="fa-solid fa-graduation-cap"></i> Semua Tingkatan Usia</span>
                     </div>
                 </div>
 
-                <!-- 4. TAFSIR AL-QUR'AN (2 PEKAN SEKALI) -->
+                <!-- 4. TAFSIR AL-QUR'AN (FORMAT 2 BARIS STACKED) -->
                 <div class="agenda-card {{ $isTafsirToday ? 'today-active' : '' }}">
                     @if($isTafsirToday)
                     <div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> PAGI INI</div>
@@ -566,25 +590,27 @@
                         </div>
                         <h2 class="card-title">{{ $kegiatan['tafsir']['judul'] ?? 'Kajian Tafsir Al-Qur\'an Tematik' }}</h2>
 
-                        <div class="info-row">
-                            <i class="fa-solid fa-calendar-day"></i>
-                            <span><strong>Jadwal:</strong> Setiap Ahad (Pekan ke-{{ implode(' & ke-', $tafsirPekan) }})</span>
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Jadwal :</div>
+                            <div class="info-value">Setiap Ahad (Pekan ke-{{ implode(' & ke-', $tafsirPekan) }})</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-clock"></i>
-                            <span><strong>Waktu:</strong> {{ $kegiatan['tafsir']['waktu'] ?? 'Ba\'da Sholat Subuh' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
+                            <div class="info-value">{{ $kegiatan['tafsir']['waktu'] ?? 'Ba\'da Sholat Subuh (05:15 WIB)' }}</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-user-tie"></i>
-                            <span><strong>Pemateri:</strong> {{ $kegiatan['tafsir']['pembimbing'] ?? 'Asatidz Dewan Syari\'ah' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pemateri :</div>
+                            <div class="info-value">{{ $kegiatan['tafsir']['pembimbing'] ?? 'Asatidz Dewan Syari\'ah Masjid' }}</div>
                         </div>
-                        <div class="info-row">
-                            <i class="fa-solid fa-utensils"></i>
-                            <span><strong>Fasilitas:</strong> {{ $kegiatan['tafsir']['keterangan'] ?? 'Tafsir & Sarapan Bersama' }}</span>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="fa-solid fa-utensils"></i> Fasilitas :</div>
+                            <div class="info-value">{{ $kegiatan['tafsir']['keterangan'] ?? 'Tafsir Ayat & Sarapan Pagi Bersama' }}</div>
                         </div>
                     </div>
 
-                    <!-- KOREKSI 2: Teks 'Keluarga Muslim' dihapus -->
                     <div class="card-bottom">
                         <span class="status-badge">
                             @if($isTafsirThisWeek)
@@ -599,7 +625,7 @@
         </main>
     </div>
 
-    <!-- BOTTOM TICKER (KOREKSI 4) -->
+    <!-- BOTTOM TICKER -->
     <footer class="bottom-ticker">
         <div class="ticker-left">
             <i class="fa-solid fa-circle-info text-warning"></i>

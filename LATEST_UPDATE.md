@@ -5367,6 +5367,11 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
    - Mengganti header atas agar identik 100% dengan slide display masjid lainnya (`slides/jumat.html`, `slides/keuangan.html`, dll) menggunakan stylesheet master `display-theme.css`, `partials-theme.css`, medali kaligrafi 3D (`muhammad_3d.png` & `allah_3d.png`), H1 emas 3D, sub-header `SISTEM INFORMASI DIGITAL`, kapsul jam & tanggal realtime, serta badge judul `JADWAL KEGIATAN RUTIN MASJID`.
 4. **Pembaruan Teks Identitas Footer:**
    - Teks `"Masjid Jami' Al Jihad — Digital Signage System"` resmi diubah menjadi `"Sistem Informasi Digital — Masjid Jami' Al Jihad"`.
+5. **Format 2 Baris Stacked Layout per Item Informasi (Anti-Menumpuk):**
+   - Mengubah rincian isi di setiap kotak menjadi format 2 baris vertikal (*stacked*):
+     - Baris 1: Label Informasi (`Hari :`, `Waktu :`, `Imam / Pembimbing :`, `Tempat :`, `Pemateri :`, `Kitab :`, dll) berwarna **Kuning Emas (`#ffd700`)**.
+     - Baris 2: Nilai Informasi di bawahnya berwarna **Putih Bersih (`#ffffff`)** dengan indentasi bersih (`padding-left: 20px`).
+   - Kontras warna yang tegas dan susunan bertingkat ini memastikan teks tidak berdesakan, tidak terpotong, dan sangat nyaman dibaca oleh jamaah dari jarak jauh.
 
 ---
 
