@@ -2574,7 +2574,12 @@
                                 <h6 class="content-card-title mb-0">
                                     <i class="fas fa-history text-secondary mr-2"></i> Log Aktivitas Perintah Remote Terkirim
                                 </h6>
-                                <span class="badge badge-light">Sesi Aktif</span>
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm font-weight-bold py-1 px-3 mr-2" style="font-size: 12px; border-radius: 6px;" onclick="clearRemoteCommandLog()" title="Bersihkan riwayat log aktivitas">
+                                        <i class="fas fa-trash-alt mr-1"></i> Bersihkan Log
+                                    </button>
+                                    <span class="badge badge-light">Sesi Aktif</span>
+                                </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-custom table-hover mb-0">
@@ -9827,6 +9832,17 @@
                     <td><span class="badge ${item.status.includes('Berhasil') ? 'badge-success' : (item.status.includes('Gagal') || item.status.includes('Error') ? 'badge-danger' : 'badge-warning')} px-2 py-1">${item.status}</span></td>
                 </tr>
             `).join('');
+        }
+
+        function clearRemoteCommandLog() {
+            if (!remoteCommandHistory || remoteCommandHistory.length === 0) {
+                alert('Log aktivitas saat ini sudah kosong.');
+                return;
+            }
+            if (confirm('Bersihkan seluruh riwayat log perintah remote pada sesi ini?')) {
+                remoteCommandHistory = [];
+                renderRemoteCommandLog();
+            }
         }
 
         function confirmLogout(event) {

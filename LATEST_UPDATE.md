@@ -4753,3 +4753,34 @@ Pengguna meminta agar posisi **Siaran Pengumuman Darurat (On-Screen Alert)** pad
 2. `LATEST_UPDATE.md`: Dokumentasi Bab 115.
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## BAB 116: PENAMBAHAN TOMBOL & FITUR "BERSIHKAN LOG" PADA RIWAYAT AKTIVITAS PERINTAH REMOTE TV
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna menanyakan bagaimana cara menghapus atau membersihkan daftar riwayat pada tabel **"Log Aktivitas Perintah Remote Terkirim"** di menu *Layanan Remot TV & Diagnostik Jarak Jauh*. Sebelumnya belum tersedia tombol pembersih di antarmuka tabel tersebut.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Penambahan Tombol "Bersihkan Log" (`web-statis/admin.html`):**
+   - Menambahkan tombol aksi berwarna merah `btn-outline-danger` dengan ikon sampah (`fas fa-trash-alt`) tepat di header tabel *Log Aktivitas Perintah Remote Terkirim* di samping badge *Sesi Aktif*.
+   - Tampilan bersih, intuitif, dan responsif.
+
+2. **Implementasi Fungsi `clearRemoteCommandLog()`:**
+   - Memberikan dialog konfirmasi ramah: *"Bersihkan seluruh riwayat log perintah remote pada sesi ini?"*.
+   - Mengosongkan data log dalam memori (`remoteCommandHistory = []`) dan merender ulang tabel secara instan.
+   - Menampilkan kembali placeholder ramah: *"Belum ada aktivitas perintah remote pada sesi ini."*.
+
+3. **Karakteristik Log Aktivitas Sesi:**
+   - Log aktivitas ini bersifat dinamis per-sesi tab browser. Selain menggunakan tombol pembersih ini, me-refresh/memuat ulang browser (tekan F5) juga secara otomatis membersihkan daftar log.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Penambahan tombol dan fungsi `clearRemoteCommandLog()`.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 116.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
