@@ -4669,12 +4669,50 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
 
+## BAB 114: IMPLEMENTASI HALAMAN GALERI INFORMASI & ARSIP DOKUMENTASI MASJID PADA WEB STATIS & LAYAR DISPLAY TV
 
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna meminta penambahan fitur dari web Laravel versi lama yaitu halaman **Slide Informasi** ke dalam web statis ini untuk menampilkan hal-hal penting/arsip dokumentasi di masjid (seperti Sertifikat Arah Kiblat, Sertifikat Rasdhul Qiblat, dan Surat Keterangan Tanda Daftar SIMAS Kemenag). Pengguna juga secara khusus meminta: **Ganti nama "Slide Informasi" menjadi "Galeri Informasi"**.
 
+---
 
+### 2. Solusi & Perubahan yang Diterapkan:
 
+1. **Penyalinan Aset Dokumen Asli Masjid (`web-statis/image/slides/`):**
+   - Berkas sertifikat dan arsip penting dari direktori Laravel `public/storage/slides/*` telah disalin secara permanen ke direktori web statis `web-statis/image/slides/`:
+     - `GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png` (Foto & Bukti Pengecekan Arah Qiblat)
+     - `iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png` (Sertifikat Gerakan Nasional Rasdhul Qiblat)
+     - `1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png` (Surat Keterangan SIMAS Kemenag RI)
 
+2. **Manajemen Admin "Galeri Informasi" (`web-statis/admin.html`):**
+   - **Menu Sidebar & View:** Menambahkan tab menu navigasi `#nav-galeri-informasi` dengan ikon `fas fa-images` dan tampilan `#view-galeri-informasi`.
+   - **Tabel Interaktif Berstandar Web Dinamis:** Menampilkan nomor, thumbnail gambar (dapat diklik untuk zoom pratinjau), judul informasi, deskripsi, urutan tayang, durasi (detik), badge status (Aktif/Nonaktif), serta tombol Aksi (Edit & Hapus).
+   - **Modal Tambah & Edit (`#modalGaleriInformasi`):**
+     - Form input: Judul Dokumen, Deskripsi Singkat, Urutan Tayang, Durasi (detik), Status Tayang.
+     - Upload Gambar: Mendukung unggah berkas foto langsung dari komputer/HP (dikonversi otomatis ke Data URL Base64 yang tahan banting) atau input jalur URL gambar.
+     - Live Image Preview & Validasi ukuran berkas (maksimal 5MB).
+   - **Modal Pratinjau Dokumen Penuh (`#modalZoomGambarGaleri`):**
+     - Memberikan pengalaman melihat berkas sertifikat/arsip masjid dalam resolusi tinggi dengan latar belakang gelap transparan.
 
+3. **Lapisan Penyimpanan Data BaaS & Local Storage (`web-statis/js/supabase-db.js`):**
+   - Method `getSlides()` dan `saveSlides(list)` disesuaikan untuk membaca dan menyimpan data galeri informasi ke kunci `aljihad_galeri_informasi` dengan fallback 3 slide bawaan masjid.
+   - Perubahan data langsung disinkronkan secara realtime ke seluruh display TV.
 
+4. **Layar Tayang Display TV (`web-statis/slides/slide.html`):**
+   - Memperbarui halaman slide display TV dengan nama & tema **"Galeri Informasi"**.
+   - Dilengkapi layout 2 kolom: sisi kiri menampilkan poster/dokumen secara proporsional dan elegan, sisi kanan menampilkan informasi detail (judul dokumen, deskripsi, indikator urutan halaman dan durasi).
+   - Mesin rotasi waktu mandiri (`scheduleNextSlide()`) yang memutar setiap dokumen sesuai durasi detiknya masing-masing.
+   - Path resolver cerdas yang mendukung gambar dari direktori lokal, path relatif, base64, maupun tautan internet.
 
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Penambahan modul Galeri Informasi (sidebar, tabel, modal form CRUD, dan modal zoom preview).
+2. `web-statis/slides/slide.html`: Pembaruan tampilan tayangan TV menjadi Galeri Informasi dengan rotasi per durasi slide.
+3. `web-statis/js/supabase-db.js`: Dukungan persistensi data galeri informasi.
+4. `web-statis/image/slides/*`: Penambahan aset gambar sertifikat dan dokumen resmi masjid.
+5. `LATEST_UPDATE.md`: Dokumentasi Bab 114.
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

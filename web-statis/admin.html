@@ -1129,6 +1129,15 @@
                     </a>
                 </li>
 
+                <!-- NAV ITEM: GALERI INFORMASI (ARSIP DOKUMEN & DOKUMENTASI TV) -->
+                <li class="nav-item" id="nav-galeri-informasi">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('galeri-informasi')">
+                        <i class="fas fa-fw fa-images" style="color: #10b981;"></i>
+                        <span>Galeri Informasi</span>
+                        <span class="badge badge-success ml-1" style="font-size: 0.65rem;">NEW</span>
+                    </a>
+                </li>
+
                 <li class="nav-item" id="nav-running-text">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('running-text')">
                         <i class="fas fa-fw fa-bullhorn" style="color: #ffd700;"></i>
@@ -2591,7 +2600,53 @@
 
 
                     <!-- ==========================================
-                         VIEW 4B: PENERIMAAN HEWAN QURBAN IDUL ADHA
+                         VIEW 4B: GALERI INFORMASI & DOKUMENTASI MASJID
+                         ========================================== -->
+                    <div id="view-galeri-informasi" class="section-view">
+                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4">
+                            <div class="mb-3 mb-md-0">
+                                <h4 class="font-weight-bold text-gray-800 mb-1">
+                                    <i class="fas fa-images text-success mr-2"></i> Galeri Informasi
+                                </h4>
+                                <span class="text-muted small">Kelola dokumen resmi, piagam sertifikat, dan arsip informasi penting kegiatan masjid untuk ditampilkan pada Layar TV Display.</span>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-success font-weight-bold px-3 py-2 shadow-sm mr-2" onclick="bukaModalTambahGaleri()">
+                                    <i class="fas fa-plus mr-1"></i> Tambah Galeri Informasi
+                                </button>
+                                <a href="slides/slide.html" target="_blank" class="btn btn-outline-info font-weight-bold px-3 py-2">
+                                    <i class="fas fa-tv mr-1"></i> Pratinjau Layar TV
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-sm border-0 mb-4" style="border-radius: 14px; overflow: hidden;">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover align-middle mb-0" id="tableGaleriInformasi">
+                                        <thead class="bg-gradient-success text-white">
+                                            <tr>
+                                                <th width="60" class="text-center py-3">No</th>
+                                                <th width="150" class="text-center py-3">Gambar</th>
+                                                <th class="py-3">Informasi Slide</th>
+                                                <th width="90" class="text-center py-3">Urutan</th>
+                                                <th width="110" class="text-center py-3">Durasi</th>
+                                                <th width="100" class="text-center py-3">Status</th>
+                                                <th width="160" class="text-center py-3">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyGaleriInformasi">
+                                            <!-- Rendered dynamically by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ==========================================
+                         VIEW 4C: PENERIMAAN HEWAN QURBAN IDUL ADHA
                          ========================================== -->
                     <div id="view-qurban" class="section-view">
                         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -4665,6 +4720,126 @@
         </div>
     </div>
 
+    <!-- =======================================================
+         MODAL TAMBAH / EDIT GALERI INFORMASI
+         ======================================================= -->
+    <div class="modal fade" id="modalGaleriInformasi" tabindex="-1" role="dialog" aria-labelledby="modalGaleriTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 14px; overflow: hidden;">
+                <div class="modal-header bg-gradient-success text-white py-3">
+                    <h5 class="modal-title font-weight-bold" id="modalGaleriTitle">
+                        <i class="fas fa-images mr-2"></i> Tambah Galeri Informasi
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="galeriForm" onsubmit="simpanGaleriInformasi(event)">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="galeriId" value="">
+                        
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="form-group mb-3">
+                                    <label for="galeriJudul" class="font-weight-bold text-gray-800">
+                                        Judul Informasi / Dokumen <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="galeriJudul" required placeholder="Contoh: Arah Qiblat / Sertifikat Masjid / SIMAS Kemenag">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="galeriDeskripsi" class="font-weight-bold text-gray-800">
+                                        Keterangan / Deskripsi Singkat
+                                    </label>
+                                    <textarea class="form-control" id="galeriDeskripsi" rows="3" placeholder="Contoh: Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB"></textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-3">
+                                            <label for="galeriUrutan" class="font-weight-bold text-gray-800">Urutan Tayang</label>
+                                            <input type="number" class="form-control text-center font-weight-bold" id="galeriUrutan" min="1" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-3">
+                                            <label for="galeriDurasi" class="font-weight-bold text-gray-800">Durasi (Detik)</label>
+                                            <input type="number" class="form-control text-center font-weight-bold" id="galeriDurasi" min="3" max="300" value="10">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-3">
+                                            <label for="galeriAktif" class="font-weight-bold text-gray-800">Status Tayang</label>
+                                            <select class="form-control font-weight-bold" id="galeriAktif">
+                                                <option value="1">Aktif</option>
+                                                <option value="0">Nonaktif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label class="font-weight-bold text-gray-800 mb-2">Berkas Gambar / Foto Dokumen</label>
+                                
+                                <div class="card p-2 text-center bg-light border-dashed mb-3" style="min-height: 190px; display: flex; align-items: center; justify-content: center; border: 2px dashed #cbd5e1; border-radius: 10px;">
+                                    <img id="galeriPreviewImg" src="" alt="Pratinjau Gambar" style="max-width: 100%; max-height: 180px; object-fit: contain; border-radius: 8px; display: none;">
+                                    <div id="galeriPlaceholder" class="text-muted py-4">
+                                        <i class="fas fa-image fa-3x mb-2 text-gray-400 d-block"></i>
+                                        <span class="small font-weight-bold">Belum ada gambar terpilih</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="galeriFileInput" class="btn btn-outline-success btn-sm btn-block font-weight-bold mb-1" style="cursor: pointer;">
+                                        <i class="fas fa-upload mr-1"></i> Pilih Berkas Foto / Dokumen
+                                    </label>
+                                    <input type="file" id="galeriFileInput" class="d-none" accept="image/*" onchange="handleGaleriImageUpload(this)">
+                                    <small class="text-muted d-block text-center">Format: PNG, JPG, JPEG, WEBP (Maks 5MB)</small>
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <label for="galeriGambarUrl" class="small text-muted font-weight-bold mb-1">Atau gunakan URL / Jalur Gambar:</label>
+                                    <input type="text" class="form-control form-control-sm" id="galeriGambarUrl" placeholder="image/slides/nama-file.png atau URL web">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light px-4 py-3">
+                        <button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal">
+                            <i class="fas fa-times mr-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-success font-weight-bold px-4 shadow-sm">
+                            <i class="fas fa-save mr-1"></i> Simpan Galeri
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
+         MODAL ZOOM PRATINJAU GAMBAR GALERI
+         ======================================================= -->
+    <div class="modal fade" id="modalZoomGambarGaleri" tabindex="-1" role="dialog" aria-labelledby="zoomGaleriTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 14px; overflow: hidden; background: rgba(15, 23, 42, 0.95);">
+                <div class="modal-header border-0 py-3 text-white">
+                    <h5 class="modal-title font-weight-bold" id="zoomGaleriTitle">Pratinjau Dokumen</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center p-3">
+                    <img id="zoomGaleriImg" src="" alt="Zoom Dokumen" class="img-fluid rounded shadow" style="max-height: 80vh; object-fit: contain;">
+                </div>
+                <div class="modal-footer border-0 justify-content-center pt-0">
+                    <button type="button" class="btn btn-light px-4 font-weight-bold" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- =======================================================
          SCRIPTS: VENDOR & SUPABASE REALTIME ENGINE
@@ -4698,7 +4873,7 @@
             { order: 4, name: 'Pengumuman DKM', path: 'slides/pengumuman.html', url: 'slides/pengumuman.html', page: '/pengumuman-embed', category: 'Informasi', category_color: 'info', active: true },
             { order: 5, name: 'Grafik Arus Kas', path: 'slides/keuangan-summary.html', url: 'slides/keuangan-summary.html', page: '/keuangan-summary-embed', category: 'Keuangan', category_color: 'success', active: true },
             { order: 6, name: 'QRIS Donasi & Infaq', path: 'slides/qris.html', url: 'slides/qris.html', page: '/qris-embed', category: 'Donasi', category_color: 'danger', active: true },
-            { order: 7, name: 'Poster & Brosur Slide', path: 'slides/slide.html', url: 'slides/slide.html', page: '/slide-embed', category: 'Media', category_color: 'secondary', active: true },
+            { order: 7, name: 'Galeri Informasi & Dokumentasi', path: 'slides/slide.html', url: 'slides/slide.html', page: '/slide-embed', category: 'Dokumentasi', category_color: 'info', active: true },
             { order: 8, name: 'Kas Layanan Ambulance', path: 'slides/ambulance.html', url: 'slides/ambulance.html', page: '/ambulance-embed', category: 'Ambulance', category_color: 'danger', active: true },
             { order: 9, name: 'Program Donasi Infaq', path: 'slides/infaq.html', url: 'slides/infaq.html', page: '/infaq-embed', category: 'Infaq', category_color: 'success', active: true },
             { order: 10, name: 'Mutiara Hadits & Hikmah', path: 'slides/hikmah.html', url: 'slides/hikmah.html', page: '/hikmah-embed', category: 'Dakwah AI', category_color: 'dark', active: true },
@@ -5090,6 +5265,8 @@
 
             if (sectionName === 'users') {
                 renderUsersTable();
+            } else if (sectionName === 'galeri-informasi') {
+                renderGaleriTable();
             } else if (sectionName === 'rotasi-tv') {
                 renderRotationTable(cachedRotationPages);
             } else if (sectionName === 'ramadhan') {
@@ -9687,6 +9864,265 @@
             }
 
             window.location.replace('login.html?action=logout');
+        }
+
+        // =====================================================
+        // MANAJEMEN GALERI INFORMASI & DOKUMENTASI MASJID
+        // =====================================================
+        const DEFAULT_GALERI_DATA = [
+            {
+                id: 1,
+                judul: 'Arah Qiblat',
+                deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB',
+                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                urutan: 1,
+                durasi: 10,
+                aktif: true
+            },
+            {
+                id: 2,
+                judul: 'Qiblat Sertifikat',
+                deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat',
+                gambar: 'image/slides/iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png',
+                urutan: 2,
+                durasi: 10,
+                aktif: true
+            },
+            {
+                id: 3,
+                judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
+                deskripsi: 'Surat Keterangan Masjid Al Jihad terdaftar di KEMENAG',
+                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                urutan: 3,
+                durasi: 10,
+                aktif: true
+            }
+        ];
+
+        let cachedGaleriData = [];
+        let galeriUploadedBase64 = null;
+
+        function getGaleriData() {
+            try {
+                const raw = localStorage.getItem('aljihad_galeri_informasi');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        cachedGaleriData = parsed;
+                        return cachedGaleriData;
+                    }
+                }
+            } catch(e) {}
+            cachedGaleriData = JSON.parse(JSON.stringify(DEFAULT_GALERI_DATA));
+            try {
+                localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(cachedGaleriData));
+            } catch(e) {}
+            return cachedGaleriData;
+        }
+
+        function renderGaleriTable() {
+            const tbody = document.getElementById('tbodyGaleriInformasi');
+            if (!tbody) return;
+
+            const list = getGaleriData();
+            list.sort((a, b) => (parseInt(a.urutan, 10) || 0) - (parseInt(b.urutan, 10) || 0));
+
+            if (list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4"><i class="fas fa-images mr-1"></i> Belum ada data Galeri Informasi. Silakan klik tombol Tambah.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const isAktif = (item.aktif !== false && item.status !== 'nonaktif');
+                const badgeStatus = isAktif
+                    ? '<span class="badge badge-success px-2 py-1 font-weight-bold"><i class="fas fa-check-circle mr-1"></i> Aktif</span>'
+                    : '<span class="badge badge-secondary px-2 py-1 font-weight-bold"><i class="fas fa-eye-slash mr-1"></i> Nonaktif</span>';
+
+                let imgThumb = '';
+                if (item.gambar) {
+                    imgThumb = `<img src="${escapeHtml(item.gambar)}" class="img-thumbnail" style="max-width: 120px; max-height: 80px; object-fit: contain; background: #fdfdfd; cursor: pointer;" alt="${escapeHtml(item.judul)}" onclick="zoomGambarGaleri('${escapeHtml(item.gambar)}', '${escapeHtml(item.judul)}')">`;
+                } else {
+                    imgThumb = '<span class="text-muted small"><i class="fas fa-image mr-1"></i> Tanpa gambar</span>';
+                }
+
+                return `
+                    <tr>
+                        <td class="text-center font-weight-bold align-middle">${idx + 1}</td>
+                        <td class="text-center align-middle">${imgThumb}</td>
+                        <td class="align-middle">
+                            <strong class="text-gray-900 d-block mb-1" style="font-size: 1rem;">${escapeHtml(item.judul)}</strong>
+                            <small class="text-muted d-block" style="line-height: 1.4;">${escapeHtml(item.deskripsi || '-')}</small>
+                        </td>
+                        <td class="text-center align-middle font-weight-bold"><span class="badge badge-light border px-2 py-1">${item.urutan || (idx + 1)}</span></td>
+                        <td class="text-center align-middle"><span class="badge badge-info px-2 py-1">${item.durasi || 10} detik</span></td>
+                        <td class="text-center align-middle">${badgeStatus}</td>
+                        <td class="text-center align-middle">
+                            <button class="btn btn-warning btn-sm font-weight-bold mr-1" onclick="bukaModalEditGaleri(${item.id})" title="Edit Galeri">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger btn-sm font-weight-bold" onclick="hapusGaleriInformasi(${item.id})" title="Hapus Galeri">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function bukaModalTambahGaleri() {
+            document.getElementById('modalGaleriTitle').innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Tambah Galeri Informasi';
+            document.getElementById('galeriId').value = '';
+            document.getElementById('galeriJudul').value = '';
+            document.getElementById('galeriDeskripsi').value = '';
+            document.getElementById('galeriUrutan').value = (getGaleriData().length + 1);
+            document.getElementById('galeriDurasi').value = '10';
+            document.getElementById('galeriAktif').value = '1';
+            document.getElementById('galeriGambarUrl').value = '';
+            document.getElementById('galeriFileInput').value = '';
+            galeriUploadedBase64 = null;
+
+            const previewImg = document.getElementById('galeriPreviewImg');
+            const placeholder = document.getElementById('galeriPlaceholder');
+            previewImg.style.display = 'none';
+            placeholder.style.display = 'block';
+
+            $('#modalGaleriInformasi').modal('show');
+        }
+
+        function bukaModalEditGaleri(id) {
+            const list = getGaleriData();
+            const item = list.find(g => String(g.id) === String(id));
+            if (!item) return;
+
+            document.getElementById('modalGaleriTitle').innerHTML = '<i class="fas fa-edit mr-2"></i> Edit Galeri Informasi';
+            document.getElementById('galeriId').value = item.id;
+            document.getElementById('galeriJudul').value = item.judul || '';
+            document.getElementById('galeriDeskripsi').value = item.deskripsi || '';
+            document.getElementById('galeriUrutan').value = item.urutan || 1;
+            document.getElementById('galeriDurasi').value = item.durasi || 10;
+            document.getElementById('galeriAktif').value = (item.aktif !== false && item.status !== 'nonaktif') ? '1' : '0';
+            document.getElementById('galeriGambarUrl').value = (item.gambar && !item.gambar.startsWith('data:image/')) ? item.gambar : '';
+            document.getElementById('galeriFileInput').value = '';
+            galeriUploadedBase64 = null;
+
+            const previewImg = document.getElementById('galeriPreviewImg');
+            const placeholder = document.getElementById('galeriPlaceholder');
+            if (item.gambar) {
+                previewImg.src = item.gambar;
+                previewImg.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                previewImg.style.display = 'none';
+                placeholder.style.display = 'block';
+            }
+
+            $('#modalGaleriInformasi').modal('show');
+        }
+
+        function handleGaleriImageUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Ukuran berkas terlalu besar! Maksimal 5MB.');
+                    input.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    galeriUploadedBase64 = e.target.result;
+                    const previewImg = document.getElementById('galeriPreviewImg');
+                    const placeholder = document.getElementById('galeriPlaceholder');
+                    previewImg.src = galeriUploadedBase64;
+                    previewImg.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function simpanGaleriInformasi(event) {
+            if (event) event.preventDefault();
+
+            const idVal = document.getElementById('galeriId').value;
+            const judul = document.getElementById('galeriJudul').value.trim();
+            const deskripsi = document.getElementById('galeriDeskripsi').value.trim();
+            const urutan = parseInt(document.getElementById('galeriUrutan').value, 10) || 1;
+            const durasi = parseInt(document.getElementById('galeriDurasi').value, 10) || 10;
+            const aktif = (document.getElementById('galeriAktif').value === '1');
+            const urlInput = document.getElementById('galeriGambarUrl').value.trim();
+
+            if (!judul) {
+                alert('Judul Galeri Informasi wajib diisi!');
+                return;
+            }
+
+            let list = getGaleriData();
+            let gambarFinal = galeriUploadedBase64 || urlInput;
+
+            if (idVal) {
+                const index = list.findIndex(g => String(g.id) === String(idVal));
+                if (index !== -1) {
+                    if (!gambarFinal) {
+                        gambarFinal = list[index].gambar || 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png';
+                    }
+                    list[index].judul = judul;
+                    list[index].deskripsi = deskripsi;
+                    list[index].urutan = urutan;
+                    list[index].durasi = durasi;
+                    list[index].aktif = aktif;
+                    list[index].gambar = gambarFinal;
+                }
+            } else {
+                const newId = Date.now();
+                if (!gambarFinal) {
+                    gambarFinal = 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png';
+                }
+                list.push({
+                    id: newId,
+                    judul: judul,
+                    deskripsi: deskripsi,
+                    urutan: urutan,
+                    durasi: durasi,
+                    aktif: aktif,
+                    gambar: gambarFinal
+                });
+            }
+
+            if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSlides === 'function') {
+                SupabaseDB.saveSlides(list);
+            } else {
+                localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(list));
+            }
+
+            $('#modalGaleriInformasi').modal('hide');
+            renderGaleriTable();
+            alert('Data Galeri Informasi berhasil disimpan dan disinkronkan ke Layar TV!');
+        }
+
+        function hapusGaleriInformasi(id) {
+            const list = getGaleriData();
+            const item = list.find(g => String(g.id) === String(id));
+            if (!item) return;
+
+            if (confirm(`Apakah Anda yakin ingin menghapus "${item.judul}" dari Galeri Informasi?`)) {
+                const filtered = list.filter(g => String(g.id) !== String(id));
+                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSlides === 'function') {
+                    SupabaseDB.saveSlides(filtered);
+                } else {
+                    localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(filtered));
+                }
+                renderGaleriTable();
+            }
+        }
+
+        function zoomGambarGaleri(src, judul) {
+            const modalImg = document.getElementById('zoomGaleriImg');
+            const modalTitle = document.getElementById('zoomGaleriTitle');
+            if (modalImg && modalTitle) {
+                modalImg.src = src;
+                modalTitle.textContent = judul || 'Pratinjau Dokumen / Gambar';
+                $('#modalZoomGambarGaleri').modal('show');
+            }
         }
     </script>
 </body>

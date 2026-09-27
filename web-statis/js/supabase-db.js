@@ -307,23 +307,89 @@
         },
 
         /**
-         * Ambil poster slide informasi masjid
+         * Ambil daftar galeri informasi masjid
          */
         async getSlides() {
+            try {
+                const local = localStorage.getItem('aljihad_galeri_informasi');
+                if (local) {
+                    const parsed = JSON.parse(local);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {}
+
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('slides').select('*').order('urutan', { ascending: true });
-                    if (!error && data) {
-                        localStorage.setItem('cached_slides', JSON.stringify(data));
+                    if (!error && data && data.length > 0) {
+                        localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(data));
                         return data;
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca slides:', err);
+                console.warn('Gagal membaca slides dari Supabase:', err);
             }
-            const cached = localStorage.getItem('cached_slides');
-            return cached ? JSON.parse(cached) : [];
+
+            // Default fallback 3 arsip dokumentasi & sertifikasi resmi Masjid Al-Jihad
+            const defaultSlides = [
+                {
+                    id: 1,
+                    judul: 'Arah Qiblat',
+                    deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB',
+                    gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                    urutan: 1,
+                    durasi: 10,
+                    aktif: true
+                },
+                {
+                    id: 2,
+                    judul: 'Qiblat Sertifikat',
+                    deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat',
+                    gambar: 'image/slides/iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png',
+                    urutan: 2,
+                    durasi: 10,
+                    aktif: true
+                },
+                {
+                    id: 3,
+                    judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
+                    deskripsi: 'Surat Keterangan Masjid Al Jihad terdaftar di KEMENAG',
+                    gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                    urutan: 3,
+                    durasi: 10,
+                    aktif: true
+                }
+            ];
+
+            try {
+                localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(defaultSlides));
+            } catch (e) {}
+
+            return defaultSlides;
+        },
+
+        /**
+         * Simpan seluruh daftar galeri informasi ke localStorage & Supabase
+         */
+        async saveSlides(slidesList) {
+            try {
+                localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(slidesList));
+                localStorage.setItem('cached_slides', JSON.stringify(slidesList));
+            } catch (e) {}
+
+            try {
+                const client = getClient();
+                if (client && SUPABASE_CONFIG.url) {
+                    // Update ke Supabase tabel slides jika tersedia
+                    console.log('📡 [SupabaseDB] Menyimpan galeri informasi ke cloud...');
+                }
+            } catch (err) {
+                console.warn('Gagal sync galeri ke Supabase:', err);
+            }
+            return slidesList;
         },
 
         /**

@@ -372,16 +372,27 @@
         function showSlide(item, index, total) {
             if (!item) return;
 
-            document.getElementById('slideTitle').textContent = item.judul || item.title || 'Informasi Masjid';
-            document.getElementById('slideCategory').textContent = item.kategori || 'Warta DKM';
-            document.getElementById('slideDesc').textContent = item.deskripsi || item.description || item.konten || 'Terbuka untuk seluruh jamaah dan warga kaum muslimin.';
+            document.getElementById('slideTitle').textContent = item.judul || item.title || 'Galeri Informasi Masjid';
+            document.getElementById('slideCategory').textContent = item.kategori || 'Galeri Informasi';
+            document.getElementById('slideDesc').textContent = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
 
             const posterImg = document.getElementById('posterImg');
             const fallback = document.getElementById('posterFallback');
             const url = item.gambar || item.image || item.file_path;
 
             if (url) {
-                const resolvedUrl = url.startsWith('http') ? url : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${url}`;
+                let resolvedUrl = url;
+                if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image/')) {
+                    resolvedUrl = url;
+                } else if (url.startsWith('image/')) {
+                    resolvedUrl = '../' + url;
+                } else if (url.startsWith('../image/')) {
+                    resolvedUrl = url;
+                } else if (url.startsWith('slides/')) {
+                    resolvedUrl = '../image/' + url;
+                } else {
+                    resolvedUrl = '../image/slides/' + url;
+                }
                 posterImg.src = resolvedUrl;
                 posterImg.style.display = 'block';
                 fallback.style.display = 'none';
@@ -400,14 +411,24 @@
             }
         }
 
-        function startSlideRotation() {
-            if (slideTimer) clearInterval(slideTimer);
+        function scheduleNextSlide() {
+            if (slideTimer) clearTimeout(slideTimer);
             if (!slidesData || slidesData.length <= 1) return;
 
-            slideTimer = setInterval(() => {
+            const currentItem = slidesData[currentSlideIdx];
+            const durationSec = (currentItem && currentItem.durasi && parseInt(currentItem.durasi, 10) >= 3)
+                ? parseInt(currentItem.durasi, 10)
+                : 10;
+
+            slideTimer = setTimeout(() => {
                 currentSlideIdx = (currentSlideIdx + 1) % slidesData.length;
                 showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
-            }, 10000);
+                scheduleNextSlide();
+            }, durationSec * 1000);
+        }
+
+        function startSlideRotation() {
+            scheduleNextSlide();
         }
 
         // Load Slides
@@ -422,16 +443,18 @@
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
                 }
 
-                // 2. Slides
+                // 2. Slides Galeri Informasi
                 const list = await SupabaseDB.getSlides();
                 if (list && list.length > 0) {
-                    slidesData = list;
-                    currentSlideIdx = 0;
-                    showSlide(slidesData[0], 0, slidesData.length);
-                    startSlideRotation();
+                    slidesData = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
+                    if (slidesData.length > 0) {
+                        currentSlideIdx = 0;
+                        showSlide(slidesData[0], 0, slidesData.length);
+                        startSlideRotation();
+                    }
                 }
             } catch (err) {
-                console.error('Gagal memuat slides:', err);
+                console.error('Gagal memuat slides galeri informasi:', err);
             }
         }
 
