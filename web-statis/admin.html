@@ -1034,6 +1034,146 @@
         .btn-nu-emerald:active {
             transform: translateY(1px);
         }
+
+        /* === TERMINAL LOG WINDOW (CLEAN MACOS STYLE CONSOLE) === */
+        .terminal-log-window {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            font-family: 'SF Mono', 'Fira Code', 'Roboto Mono', 'Cascadia Code', Consolas, Monaco, monospace;
+        }
+        .terminal-log-header {
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 9px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+        .terminal-dots {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            width: 60px;
+        }
+        .terminal-dots .dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .terminal-dots .dot-red { background: #ff5f56; }
+        .terminal-dots .dot-yellow { background: #ffbd2e; }
+        .terminal-dots .dot-green { background: #27c93f; }
+        .terminal-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .terminal-meta {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        .terminal-log-body {
+            max-height: 270px;
+            min-height: 130px;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding: 12px 16px;
+            font-size: 12.5px;
+            line-height: 1.7;
+            background: #ffffff;
+            color: #1e293b;
+        }
+        .terminal-log-body::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .terminal-log-body::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+        .terminal-log-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .terminal-log-body::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .log-line {
+            white-space: pre;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background 0.15s ease;
+        }
+        .log-line:hover {
+            background: #f8fafc;
+        }
+        .log-time {
+            color: #64748b;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        .log-tag {
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+        }
+        .log-tag-cmd { background: #e0f2fe; color: #0284c7; }
+        .log-tag-emg { background: #ffe4e6; color: #e11d48; }
+        .log-tag-png { background: #f3e8ff; color: #9333ea; }
+        .log-tag-rot { background: #fef3c7; color: #d97706; }
+        .log-tag-sys { background: #dcfce7; color: #16a34a; }
+        .log-tag-clr { background: #f1f5f9; color: #475569; }
+
+        .log-cmd-name {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .log-arrow {
+            color: #94a3b8;
+            margin: 0 4px;
+        }
+        .log-payload {
+            color: #2563eb;
+        }
+        .log-payload-val {
+            color: #0d9488;
+        }
+        .log-status-success {
+            color: #16a34a;
+            font-weight: 600;
+        }
+        .log-status-error {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        .log-status-wait {
+            color: #d97706;
+            font-weight: 600;
+        }
+        .terminal-empty {
+            color: #94a3b8;
+            font-style: italic;
+            padding: 36px 10px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -2568,37 +2708,41 @@
                             </div>
                         </div>
 
-                        <!-- RIWAYAT PERINTAH REMOTE (LOG AKTIVITAS) -->
+                        <!-- RIWAYAT PERINTAH REMOTE (LOG AKTIVITAS MODEL SCROLL COMPACT) -->
                         <div class="content-card">
-                            <div class="content-card-header d-flex align-items-center justify-content-between">
+                            <div class="content-card-header d-flex flex-wrap align-items-center justify-content-between">
                                 <h6 class="content-card-title mb-0">
-                                    <i class="fas fa-history text-secondary mr-2"></i> Log Aktivitas Perintah Remote Terkirim
+                                    <i class="fas fa-terminal text-success mr-2"></i> Log Aktivitas Perintah Remote
                                 </h6>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center mt-2 mt-sm-0">
+                                    <button type="button" class="btn btn-outline-primary btn-sm font-weight-bold py-1 px-3 mr-2" style="font-size: 12px; border-radius: 6px;" onclick="downloadRemoteCommandLog()" title="Download riwayat log sebagai berkas .log">
+                                        <i class="fas fa-download mr-1"></i> Download Log
+                                    </button>
                                     <button type="button" class="btn btn-outline-danger btn-sm font-weight-bold py-1 px-3 mr-2" style="font-size: 12px; border-radius: 6px;" onclick="clearRemoteCommandLog()" title="Bersihkan riwayat log aktivitas">
                                         <i class="fas fa-trash-alt mr-1"></i> Bersihkan Log
                                     </button>
-                                    <span class="badge badge-light">Sesi Aktif</span>
+                                    <span class="badge badge-light border font-weight-bold" id="badgeLogCount">0 baris</span>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-custom table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 60px;" class="text-center">No</th>
-                                            <th style="width: 120px;">Waktu</th>
-                                            <th>Perintah (Command) & Payload</th>
-                                            <th style="width: 200px;">Status Pancaran</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="remoteLogTableBody">
-                                        <tr>
-                                            <td colspan="4" class="text-center text-muted py-3">
-                                                <i class="fas fa-info-circle mr-1"></i> Belum ada aktivitas perintah remote pada sesi ini.
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="p-3">
+                                <div class="terminal-log-window">
+                                    <div class="terminal-log-header">
+                                        <div class="terminal-dots">
+                                            <span class="dot dot-red"></span>
+                                            <span class="dot dot-yellow"></span>
+                                            <span class="dot dot-green"></span>
+                                        </div>
+                                        <div class="terminal-title">
+                                            <i class="fas fa-file-code text-muted mr-1" style="font-size: 12px;"></i> aljihad/remote-activity.log
+                                        </div>
+                                        <div class="terminal-meta" id="terminalMetaStatus">Live WebSocket</div>
+                                    </div>
+                                    <div class="terminal-log-body" id="remoteLogTerminalBody">
+                                        <div class="terminal-empty">
+                                            <i class="fas fa-terminal mr-2"></i> Belum ada aktivitas perintah remote pada sesi ini.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -9800,11 +9944,12 @@
             const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             remoteCommandHistory.unshift({
                 time: timeStr,
+                timestamp: now.toISOString(),
                 command: cmd,
-                payload: JSON.stringify(data),
-                status: status
+                payload: data,
+                status: status || 'Mengirim...'
             });
-            if (remoteCommandHistory.length > 20) remoteCommandHistory.pop();
+            if (remoteCommandHistory.length > 200) remoteCommandHistory.pop();
             renderRemoteCommandLog();
         }
 
@@ -9816,22 +9961,77 @@
         }
 
         function renderRemoteCommandLog() {
-            const tbody = document.getElementById('remoteLogTableBody');
-            if (!tbody) return;
+            const body = document.getElementById('remoteLogTerminalBody');
+            const countBadge = document.getElementById('badgeLogCount');
+            const metaStatus = document.getElementById('terminalMetaStatus');
+            if (!body) return;
 
-            if (remoteCommandHistory.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3"><i class="fas fa-info-circle mr-1"></i> Belum ada aktivitas perintah remote pada sesi ini.</td></tr>';
+            const total = remoteCommandHistory.length;
+            if (countBadge) countBadge.textContent = `${total} baris`;
+            if (metaStatus) metaStatus.textContent = total > 0 ? `${total} entri tercatat` : 'Live WebSocket';
+
+            if (total === 0) {
+                body.innerHTML = `
+                    <div class="terminal-empty">
+                        <i class="fas fa-terminal mr-2"></i> Belum ada aktivitas perintah remote pada sesi ini.
+                    </div>
+                `;
                 return;
             }
 
-            tbody.innerHTML = remoteCommandHistory.map((item, idx) => `
-                <tr>
-                    <td class="font-weight-bold text-center">${idx + 1}</td>
-                    <td><span class="badge badge-dark px-2 py-1">${item.time}</span></td>
-                    <td><strong class="text-primary">${item.command}</strong> <small class="text-muted">${item.payload !== '{}' ? item.payload : ''}</small></td>
-                    <td><span class="badge ${item.status.includes('Berhasil') ? 'badge-success' : (item.status.includes('Gagal') || item.status.includes('Error') ? 'badge-danger' : 'badge-warning')} px-2 py-1">${item.status}</span></td>
-                </tr>
-            `).join('');
+            body.innerHTML = remoteCommandHistory.map((item, idx) => {
+                let tag = 'CMD';
+                let tagClass = 'log-tag-cmd';
+                const cmd = (item.command || '').toUpperCase();
+
+                if (cmd.includes('EMERGENCY')) {
+                    tag = 'EMG';
+                    tagClass = 'log-tag-emg';
+                } else if (cmd.includes('PING')) {
+                    tag = 'PNG';
+                    tagClass = 'log-tag-png';
+                } else if (cmd === 'NEXT' || cmd === 'PREV' || cmd === 'PAUSE' || cmd === 'RESUME') {
+                    tag = 'ROT';
+                    tagClass = 'log-tag-rot';
+                } else if (cmd === 'RELOAD') {
+                    tag = 'SYS';
+                    tagClass = 'log-tag-sys';
+                } else if (cmd.includes('CLEAR')) {
+                    tag = 'CLR';
+                    tagClass = 'log-tag-clr';
+                }
+
+                let payloadStr = '';
+                if (item.payload && typeof item.payload === 'object' && Object.keys(item.payload).length > 0) {
+                    const entries = Object.entries(item.payload).map(([k, v]) => {
+                        let valStr = typeof v === 'string' ? `"${v}"` : String(v);
+                        if (valStr.length > 50) valStr = valStr.substring(0, 47) + '..."';
+                        return `<span class="log-payload">${escapeHtml(k)}</span>=<span class="log-payload-val">${escapeHtml(valStr)}</span>`;
+                    });
+                    payloadStr = ` <span class="log-arrow">&gt;</span> ` + entries.join(' ');
+                } else if (typeof item.payload === 'string' && item.payload !== '{}' && item.payload !== '') {
+                    payloadStr = ` <span class="log-arrow">&gt;</span> <span class="log-payload">${escapeHtml(item.payload)}</span>`;
+                }
+
+                let statusClass = 'log-status-success';
+                const st = item.status || '';
+                if (st.includes('Gagal') || st.includes('Error')) {
+                    statusClass = 'log-status-error';
+                } else if (st.includes('Mengirim') || st.includes('Menunggu')) {
+                    statusClass = 'log-status-wait';
+                }
+
+                return `
+                    <div class="log-line">
+                        <span class="log-time">${item.time}</span>
+                        <span class="log-tag ${tagClass}">[${tag}]</span>
+                        <span class="log-cmd-name">${escapeHtml(cmd)}</span>
+                        ${payloadStr}
+                        <span class="log-arrow">&rarr;</span>
+                        <span class="${statusClass}">status=${escapeHtml(st)}</span>
+                    </div>
+                `;
+            }).join('');
         }
 
         function clearRemoteCommandLog() {
@@ -9843,6 +10043,60 @@
                 remoteCommandHistory = [];
                 renderRemoteCommandLog();
             }
+        }
+
+        function downloadRemoteCommandLog() {
+            if (!remoteCommandHistory || remoteCommandHistory.length === 0) {
+                alert('Log aktivitas masih kosong. Belum ada perintah remote yang tercatat untuk diunduh.');
+                return;
+            }
+
+            const now = new Date();
+            const tglFormatted = now.toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            const jamFormatted = now.toLocaleTimeString('id-ID');
+            const operatorName = currentUser ? (currentUser.name || currentUser.email) : 'Administrator';
+
+            let logText = [
+                '========================================================================================',
+                '                   MASJID JAMI\' AL-JIHAD - LOG AKTIVITAS PERINTAH REMOTE TV             ',
+                '========================================================================================',
+                `Waktu Ekspor  : ${tglFormatted}, ${jamFormatted} WIB`,
+                `Operator      : ${operatorName}`,
+                `Total Perintah: ${remoteCommandHistory.length} entri tercatat`,
+                '----------------------------------------------------------------------------------------',
+                'WAKTU     TAG    PERINTAH              RINCIAN PAYLOAD                   STATUS PANCARAN',
+                '----------------------------------------------------------------------------------------'
+            ];
+
+            remoteCommandHistory.slice().reverse().forEach((item, i) => {
+                let tag = 'CMD';
+                const cmd = (item.command || '').toUpperCase();
+                if (cmd.includes('EMERGENCY')) tag = 'EMG';
+                else if (cmd.includes('PING')) tag = 'PNG';
+                else if (cmd === 'NEXT' || cmd === 'PREV' || cmd === 'PAUSE' || cmd === 'RESUME') tag = 'ROT';
+                else if (cmd === 'RELOAD') tag = 'SYS';
+                else if (cmd.includes('CLEAR')) tag = 'CLR';
+
+                const pStr = typeof item.payload === 'object' ? JSON.stringify(item.payload) : (item.payload || '{}');
+                logText.push(`${item.time}  [${tag}]  ${cmd.padEnd(20)}  > ${pStr}  ->  ${item.status}`);
+            });
+
+            logText.push('========================================================================================');
+            logText.push('               Dokumen ini diunduh secara resmi dari Dashboard Smart Signage            ');
+            logText.push('========================================================================================');
+
+            const blob = new Blob([logText.join('\r\n')], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const fileDate = now.toISOString().replace(/[-:]/g, '').split('.')[0].replace('T', '-');
+            a.href = url;
+            a.download = `remote-tv-log-${fileDate}.log`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         function confirmLogout(event) {

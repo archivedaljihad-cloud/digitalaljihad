@@ -4784,3 +4784,41 @@ Pengguna menanyakan bagaimana cara menghapus atau membersihkan daftar riwayat pa
 2. `LATEST_UPDATE.md`: Dokumentasi Bab 116.
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## BAB 117: PEROMBAKAN TAMPILAN LOG AKTIVITAS REMOTE MENJADI TERMINAL CONSOLE SCROLL COMPACT & PENAMBAHAN MENU "DOWNLOAD LOG"
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna meminta perombakan tampilan **"Log Aktivitas Perintah Remote Terkirim"** agar halaman tidak terlihat penuh dan panjang ke bawah. Pengguna melampirkan referensi antarmuka berupa jendela *console log viewer* minimalis dengan model scroll, serta meminta penambahan tombol menu **"Download Log"** yang sejajar dengan tombol **"Bersihkan Log"**.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Jendela Terminal Console Log Bergaya macOS (`web-statis/admin.html`):**
+   - Mengganti tabel biasa dengan komponen visual **Terminal Console Window** yang memiliki 3 titik kontrol jendela (merah, kuning, hijau), judul berkas `aljihad/remote-activity.log`, dan badge status koneksi realtime.
+   - **Model Scroll Ringkas (*Fixed Height*):** Batas ketinggian `max-height: 270px` dengan scroll vertikal mandiri (`overflow-y: auto`), sehingga sebanyak apa pun perintah remote yang dikirimkan, tinggi halaman admin tetap rapi, stabil, dan tidak memanjang ke bawah.
+
+2. **Format Baris Monospace Berwarna (Persis Sesuai Gambar Referensi):**
+   - Menggunakan tipografi monospace modern (`SF Mono`, `Fira Code`, `Consolas`).
+   - Format baris rapi: `[WAKTU] [TAG] PERINTAH > payload → status=...`.
+   - Pewarnaan tag dinamis:
+     - `[CMD]` (Biru Muda): Perintah remote umum.
+     - `[EMG]` (Merah/Rose): Siaran pengumuman darurat (`EMERGENCY_ALERT`).
+     - `[PNG]` (Ungu): Uji sinyal detak jantung TV (`PING`).
+     - `[ROT]` (Amber/Emas): Rotasi slide (`NEXT`, `PREV`, `PAUSE`, `RESUME`).
+     - `[SYS]` (Hijau): Perintah sistem TV (`RELOAD`).
+     - `[CLR]` (Abu-abu): Penarikan siaran darurat (`CLEAR_ALERT`).
+
+3. **Penambahan Menu & Tombol "Download Log" Sejajar:**
+   - Tombol **"Download Log"** (`btn-outline-primary`) ditempatkan rapi bersanding dengan tombol **"Bersihkan Log"** (`btn-outline-danger`) di baris header kartu.
+   - **Fungsi `downloadRemoteCommandLog()`:** Menghasilkan berkas teks `.log` terstruktur (contoh: `remote-tv-log-20260927-171500.log`) yang memuat kop resmi Masjid Jami' Al-Jihad, waktu ekspor, nama operator pengurus, serta rekaman seluruh baris perintah remote.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Penerapan CSS terminal log, markup jendela konsol, tombol Download Log, dan fungsi unduh berkas log.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 117.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
