@@ -5089,6 +5089,39 @@ Sebelumnya, saat akun Takmir/Operator login, kartu-kartu keuangan (Kas Utama, Ka
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## BAB 126: OPTIMASI TRANSPARANSI TOTAL (BORDERLESS) & TEKS CENTER PADA SLIDE GALERI INFORMASI DISPLAY TV
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna mengirimkan tangkapan layar slide informasi dokumen/sertifikat (`slides/slide.html`) dan meminta:
+*"Edit teks judul deskripsinya menjadi center, kamudian kotaknya dibuat full tranparan atu dihilangkan saja agar tidak terlalu menutupi gambar backgroundnya."*
+Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.slide-card`) dengan border tebal dan kotak deskripsi berlatar gelap yang menutupi keindahan gambar background masjid/Ka'bah di belakangnya, serta teks judul dan deskripsi masih rata kiri.
+
+### 2. Solusi & Perubahan yang Diterapkan:
+1. **Perubahan Teks Menjadi Rata Tengah (Center Alignment):**
+   - Mengatur `.slide-title` ke `text-align: center;` dengan ukuran tajam `2.45rem`, `font-weight: 800`, serta tumpukan *text-shadow* berlapis untuk keterbacaan prima di atas gambar latar.
+   - Menambahkan garis aksen pemisah emas gradasi elegan (`width: 75px; height: 3px; background: linear-gradient(90deg, transparent, #ffd700, transparent);`) tepat di bawah judul.
+   - Mengatur `.slide-desc` ke `text-align: center;` dengan ukuran `1.25rem`, `line-height: 1.7`, dan *text-shadow* kontras tinggi.
+2. **Penghilangan Kotak Latar Belakang (Full Transparan / Borderless):**
+   - Menghilangkan background, border, box-shadow, dan backdrop blur pada kartu luar (`.slide-card`):
+     `background: transparent; border: none; box-shadow: none; backdrop-filter: none;`
+   - Menghilangkan background kotak dan garis border-kiri kuning pada deskripsi (`.slide-desc`):
+     `background: transparent; border: none; padding: 0;`
+   - Gambar background panggung (Ka'bah dan arsitektur masjid) kini terlihat 100% penuh dan leluasa tanpa terhalang kotak masif.
+3. **Pemusatan Indikator Navigasi Slide (Centered Dots Indicator):**
+   - Memposisikan indikator titik bulat/pil navigasi dokumen (`.slide-dots-indicator`) tepat berada di tengah bawah deskripsi (`justify-content: center;`) secara simetris dan rapi.
+4. **Sinkronisasi Kode:**
+   - Diterapkan pada file tampilan web statis (`web-statis/slides/slide.html`) dan template Blade (`resources/views/slide-embed.blade.php`).
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/slides/slide.html`: CSS `.slide-card`, `.slide-title`, `.slide-desc`, `.slide-dots-indicator`.
+2. `resources/views/slide-embed.blade.php`: CSS `.slide-card`.
+3. `LATEST_UPDATE.md`: Dokumentasi Bab 126.
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 
 

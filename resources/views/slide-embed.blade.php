@@ -245,15 +245,15 @@
         }
 
         .slide-card {
-            background: rgba(4, 25, 18, 0.75);
-            border: 1.5px solid rgba(255, 215, 0, 0.45);
-            border-radius: 24px;
-            padding: 35px 36px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 10px 24px;
             text-align: center;
             align-items: center;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: none;
             max-height: 65vh;
             width: 100%;
             box-sizing: border-box;
