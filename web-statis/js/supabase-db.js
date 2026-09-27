@@ -490,24 +490,44 @@
         /**
          * Daftarkan status kehadiran TV (Presence Heartbeat)
          */
-        trackDevicePresence(deviceInfo) {
+        async trackDevicePresence(deviceInfo) {
             const channel = this.getRemoteChannel();
             if (!channel) return;
 
             const payload = Object.assign({
+                type: 'tv-display',
                 device_id: 'TV_MASJID_UTAMA',
-                device_name: 'TV Display Masjid Utama',
-                online_since: new Date().toISOString(),
+                device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
+                online_since: this._onlineSince || (this._onlineSince = new Date().toISOString()),
                 current_slide: 'slides/utama.html',
+                currentSlide: 'slides/utama.html',
+                currentSlideTitle: 'Slide Utama',
+                resolution: '1920 x 1080 px',
+                width: typeof window !== 'undefined' ? (window.innerWidth || 1920) : 1920,
+                height: typeof window !== 'undefined' ? (window.innerHeight || 1080) : 1080,
+                userAgent: typeof navigator !== 'undefined' ? (navigator.userAgent || 'Smart TV Browser') : 'Smart TV Browser',
+                isPaused: false,
                 last_heartbeat: Date.now()
             }, deviceInfo);
 
-            channel.subscribe(async (status) => {
-                if (status === 'SUBSCRIBED') {
+            const sendTrack = async () => {
+                try {
                     await channel.track(payload);
-                    console.log('📡 [TV Presence] Status TV online terdaftar di cloud');
+                    console.log('📡 [TV Presence] Status TV online terdaftar di cloud:', payload);
+                } catch (e) {
+                    console.warn('Gagal track presence TV:', e);
                 }
-            });
+            };
+
+            if (channel.state === 'joined') {
+                await sendTrack();
+            } else {
+                channel.subscribe(async (status) => {
+                    if (status === 'SUBSCRIBED') {
+                        await sendTrack();
+                    }
+                });
+            }
         },
 
         /**
@@ -517,15 +537,28 @@
             const channel = this.getRemoteChannel();
             if (!channel) return null;
 
+            const handleSync = () => {
+                const state = channel.presenceState();
+                console.log('👥 [Admin Presence] Daftar TV Online Sync:', state);
+                if (typeof onSync === 'function') {
+                    onSync(state);
+                }
+            };
+
             channel
-                .on('presence', { event: 'sync' }, () => {
-                    const state = channel.presenceState();
-                    console.log('👥 [Admin Presence] Daftar TV Online Sync:', state);
-                    if (typeof onSync === 'function') {
-                        onSync(state);
+                .on('presence', { event: 'sync' }, handleSync)
+                .on('presence', { event: 'join' }, handleSync)
+                .on('presence', { event: 'leave' }, handleSync);
+
+            if (channel.state === 'joined') {
+                handleSync();
+            } else {
+                channel.subscribe((status) => {
+                    if (status === 'SUBSCRIBED') {
+                        handleSync();
                     }
-                })
-                .subscribe();
+                });
+            }
 
             return channel;
         }

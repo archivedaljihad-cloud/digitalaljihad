@@ -427,6 +427,7 @@
 
                 currentFrame = currentFrame === 1 ? 2 : 1;
                 showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);
+                broadcastTvState();
             };
         }
 
@@ -441,6 +442,7 @@
         function togglePause() {
             isPaused = !isPaused;
             showOsd(isPaused ? '⏸ Rotasi Dijeda' : '▶ Rotasi Dilanjutkan');
+            broadcastTvState();
             if (!isPaused) {
                 scheduleNextRotation();
             } else {
@@ -731,17 +733,35 @@
                     }
                 });
 
-                // Daftarkan Status Kehadiran (Presence Heartbeat) Perangkat TV ke Cloud
-                setTimeout(() => {
+                // Daftarkan Status Kehadiran & Heartbeat Realtime Layar TV ke Cloud
+                function broadcastTvState() {
                     try {
-                        SupabaseDB.trackDevicePresence({
-                            device_id: 'TV_MASJID_UTAMA',
-                            device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
-                            resolution: `${window.innerWidth}x${window.innerHeight}`,
-                            current_slide: (activePages && activePages[currentIndex]) ? activePages[currentIndex] : 'slides/utama.html'
-                        });
+                        if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.trackDevicePresence === 'function') {
+                            const curSlide = (activePages && activePages[currentIndex]) ? activePages[currentIndex] : 'slides/utama.html';
+                            const cleanName = curSlide.replace(/^slides\//, '').replace(/\.html$/, '').replace(/-/g, ' ').toUpperCase();
+                            const total = (activePages && activePages.length) ? activePages.length : 19;
+                            SupabaseDB.trackDevicePresence({
+                                type: 'tv-display',
+                                device_id: 'TV_MASJID_UTAMA',
+                                device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
+                                current_slide: curSlide,
+                                currentSlide: curSlide,
+                                currentSlideTitle: `Slide ${cleanName} (${currentIndex + 1}/${total})`,
+                                resolution: `${window.innerWidth} x ${window.innerHeight} px`,
+                                width: window.innerWidth,
+                                height: window.innerHeight,
+                                userAgent: navigator.userAgent || 'Smart TV Browser',
+                                isPaused: isPaused,
+                                is_paused: isPaused,
+                                last_heartbeat: Date.now()
+                            });
+                        }
                     } catch (e) {}
-                }, 2000);
+                }
+
+                // Inisialisasi awal kehadiran TV dan interval berkala setiap 15 detik
+                setTimeout(broadcastTvState, 1500);
+                setInterval(broadcastTvState, 15000);
             }
 
             // PWA Service Worker Registration

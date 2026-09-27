@@ -4623,11 +4623,52 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Penghapusan bentrok atribut modal logout, pembaruan fungsi `confirmLogout` & `eksekusiLogout`, impor `@supabase/supabase-js` dan `supabase-db.js?v=2.6`, serta penyelarasan penanganan respons perintah remote.
 2. `web-statis/js/supabase-db.js`: Penambahan flag `success: true` pada pengembalian method `sendRemoteCommand`.
-3. `web-statis/login.html`: Penanganan parameter query URL `?action=logout`.
-4. `web-statis/sw.js`: Peningkatan versi cache ke `aljihad-signage-v2.1` dan pendaftaran `js/supabase-db.js`.
-5. `LATEST_UPDATE.md`: Dokumentasi Bab 112.
-6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
-7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+---
+
+## 📌 BAB 113: OPTIMALISASI STATUS PRESENSI REALTIME LAYAR TV & DETAK JANTUNG OTOMATIS (PRESENCE HEARTBEAT)
+
+### 1. Masalah & Analisis Tangkapan Layar:
+- Pengguna mengirimkan tangkapan layar panel **Layanan Remot TV & Diagnostik Jarak Jauh** dengan kondisi:
+  - *Koneksi TV Masjid:* **Menunggu sinyal TV... Belum ada koneksi**
+  - *Slide Tayang Saat Ini:* **Menunggu data TV... -**
+  - *Lencana Status:* **TV STANDBY / MENUNGGU**
+- **Akar Masalah Teknis:**
+  1. **Format Pengembalian Presence Supabase:** Pustaka Supabase Realtime mengembalikan `channel.presenceState()` dalam bentuk *Object of Arrays* `{ [uuid]: [presenceData] }`. Skrip `admin.html` sebelumnya mengecek `Array.isArray(devices)` yang menghasilkan `false`, sehingga data presensi TV yang masuk tidak dapat di-parse dan antarmuka selalu terdorong ke blok `else` (Standby / Menunggu).
+  2. **Pancaran Status Layar TV Masih Satu Kali (`index.html`):** Layar TV display sebelumnya hanya mengirim status kehadiran 1 kali saat halaman pertama kali dibuka tanpa ada pengiriman berkala (*heartbeat*) dan tanpa pembaruan saat slide berganti.
+  3. **Event Listener Presence:** Pada `supabase-db.js`, event handler presence hanya mendengarkan `'sync'`, padahal Supabase juga menembakkan event `'join'` dan `'leave'` ketika ada tab/layar TV yang baru bergabung atau terputus.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Parser Presensi Cerdas & Multiformat (`web-statis/admin.html`):**
+   - Memperbarui fungsi `updateTvPresenceUI(rawState)` agar mendukung baik format *Array* maupun format asli Supabase *Object of Arrays* (`Object.values(rawState).forEach(...)`).
+   - Mendukung pencocokan perangkat fleksibel (`d.type === 'tv-display'` atau `d.device_id.startsWith('TV')`).
+   - Menghubungkan tombol **Refresh Monitor** ke fungsi `refreshRemoteMonitor()` yang langsung meminta snapshot presence state terbaru secara instan.
+   - Menambahkan tombol pintas **"Buka Layar TV"** (`index.html` di tab baru) agar pengurus dapat menguji dan menyaksikan perubahan status indikator secara langsung berdampingan.
+
+2. **Mesin Detak Jantung Presensi Layar TV (`web-statis/index.html`):**
+   - Menambahkan fungsi `broadcastTvState()` yang merangkum data resolusi layar, status jeda/putar, URL slide, dan judul slide aktif (contoh: *"Slide UTAMA (1/19)"*).
+   - Memanggil `broadcastTvState()` pada 4 titik waktu krusial:
+     1. Inisialisasi awal saat TV mulai beroperasi.
+     2. Setiap kali slide berganti ke slide berikutnya atau sebelumnya (`switchSlide`).
+     3. Setiap kali status jeda/freeze diubah (`togglePause`).
+     4. Secara otomatis setiap 15 detik (*recurring presence heartbeat*) melalui `setInterval`.
+
+3. **Penyempurnaan Saluran Realtime (`web-statis/js/supabase-db.js`):**
+   - Menyelaraskan `trackDevicePresence` agar mengecek status `channel.state === 'joined'` terlebih dahulu untuk menghindari panggilan gantung.
+   - Menambahkan listener event lengkap `'sync'`, `'join'`, dan `'leave'` pada `subscribeDevicePresence`.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Parser objek presensi multiformat, fungsi `refreshRemoteMonitor`, dan tombol cepat *"Buka Layar TV"*.
+2. `web-statis/index.html`: Fungsi `broadcastTvState`, pemicu saat rotasi slide, dan interval heartbeat 15 detik.
+3. `web-statis/js/supabase-db.js`: Penyempurnaan `trackDevicePresence` dan integrasi event `'sync'`, `'join'`, `'leave'`.
+4. `LATEST_UPDATE.md`: Dokumentasi Bab 113.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
 
 
 
