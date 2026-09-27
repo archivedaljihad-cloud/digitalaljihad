@@ -4997,7 +4997,7 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
-    <script src="js/supabase-db.js?v=20260927_01"></script>
+    <script src="js/supabase-db.js?v=20260927_03"></script>
     <script src="js/admin-auth.js?v=2.6"></script>
     <script src="js/gemini-ai.js"></script>
 
@@ -10162,7 +10162,7 @@
                 id: 1,
                 judul: 'Arah Qiblat',
                 deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB',
-                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
                 urutan: 1,
                 durasi: 10,
                 aktif: true
@@ -10171,7 +10171,7 @@
                 id: 2,
                 judul: 'Qiblat Sertifikat',
                 deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat',
-                gambar: 'image/slides/iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png',
+                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
                 urutan: 2,
                 durasi: 10,
                 aktif: true
@@ -10180,7 +10180,7 @@
                 id: 3,
                 judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
                 deskripsi: 'Surat Keterangan Masjid Al Jihad terdaftar di KEMENAG',
-                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                gambar: 'image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp',
                 urutan: 3,
                 durasi: 10,
                 aktif: true
@@ -10226,9 +10226,10 @@
                     ? '<span class="badge badge-success px-2 py-1 font-weight-bold"><i class="fas fa-check-circle mr-1"></i> Aktif</span>'
                     : '<span class="badge badge-secondary px-2 py-1 font-weight-bold"><i class="fas fa-eye-slash mr-1"></i> Nonaktif</span>';
 
+                const displaySrc = item.gambar_base64 || item.gambar || '';
                 let imgThumb = '';
-                if (item.gambar) {
-                    imgThumb = `<img src="${escapeHtml(item.gambar)}" class="img-thumbnail" style="max-width: 120px; max-height: 80px; object-fit: contain; background: #fdfdfd; cursor: pointer;" alt="${escapeHtml(item.judul)}" onclick="zoomGambarGaleri('${escapeHtml(item.gambar)}', '${escapeHtml(item.judul)}')">`;
+                if (displaySrc) {
+                    imgThumb = `<img src="${escapeHtml(displaySrc)}" class="img-thumbnail" style="max-width: 120px; max-height: 80px; object-fit: contain; background: #fdfdfd; cursor: pointer;" alt="${escapeHtml(item.judul)}" onclick="zoomGambarGaleri('${escapeHtml(displaySrc)}', '${escapeHtml(item.judul)}')">`;
                 } else {
                     imgThumb = '<span class="text-muted small"><i class="fas fa-image mr-1"></i> Tanpa gambar</span>';
                 }
@@ -10289,14 +10290,15 @@
             document.getElementById('galeriUrutan').value = item.urutan || 1;
             document.getElementById('galeriDurasi').value = item.durasi || 10;
             document.getElementById('galeriAktif').value = (item.aktif !== false && item.status !== 'nonaktif') ? '1' : '0';
-            document.getElementById('galeriGambarUrl').value = (item.gambar && !item.gambar.startsWith('data:image/')) ? item.gambar : '';
+            const displayImg = item.gambar_base64 || item.gambar || '';
+            document.getElementById('galeriGambarUrl').value = (item.gambar && !item.gambar.startsWith('data:image/') && !item.gambar.includes('custom_uploaded')) ? item.gambar : '';
             document.getElementById('galeriFileInput').value = '';
-            galeriUploadedBase64 = null;
+            galeriUploadedBase64 = item.gambar_base64 || null;
 
             const previewImg = document.getElementById('galeriPreviewImg');
             const placeholder = document.getElementById('galeriPlaceholder');
-            if (item.gambar) {
-                previewImg.src = item.gambar;
+            if (displayImg) {
+                previewImg.src = displayImg;
                 previewImg.style.display = 'block';
                 placeholder.style.display = 'none';
             } else {
@@ -10345,26 +10347,27 @@
             }
 
             let list = getGaleriData();
-            let gambarFinal = galeriUploadedBase64 || urlInput;
 
             if (idVal) {
                 const index = list.findIndex(g => String(g.id) === String(idVal));
                 if (index !== -1) {
-                    if (!gambarFinal) {
-                        gambarFinal = list[index].gambar || 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png';
-                    }
                     list[index].judul = judul;
                     list[index].deskripsi = deskripsi;
                     list[index].urutan = urutan;
                     list[index].durasi = durasi;
                     list[index].aktif = aktif;
-                    list[index].gambar = gambarFinal;
+                    if (galeriUploadedBase64) {
+                        list[index].gambar_base64 = galeriUploadedBase64;
+                        list[index].gambar = 'image/slides/custom_uploaded.png';
+                    } else if (urlInput) {
+                        list[index].gambar = urlInput;
+                        list[index].gambar_base64 = null;
+                    }
                 }
             } else {
                 const newId = Date.now();
-                if (!gambarFinal) {
-                    gambarFinal = 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png';
-                }
+                let b64Val = galeriUploadedBase64 || null;
+                let pathVal = urlInput || (b64Val ? 'image/slides/custom_uploaded.png' : 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png');
                 list.push({
                     id: newId,
                     judul: judul,
@@ -10372,7 +10375,8 @@
                     urutan: urutan,
                     durasi: durasi,
                     aktif: aktif,
-                    gambar: gambarFinal
+                    gambar: pathVal,
+                    gambar_base64: b64Val
                 });
             }
 

@@ -346,7 +346,7 @@
                     judul: 'Arah Qiblat',
                     kategori: 'Pengukuran & Validasi',
                     deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
-                    gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                    gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
                     urutan: 1,
                     durasi: 10,
                     aktif: true
@@ -356,7 +356,7 @@
                     judul: 'Qiblat Sertifikat',
                     kategori: 'Sertifikasi Resmi',
                     deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat Kementerian Agama Republik Indonesia.',
-                    gambar: 'image/slides/iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png',
+                    gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
                     urutan: 2,
                     durasi: 10,
                     aktif: true
@@ -366,7 +366,7 @@
                     judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
                     kategori: 'Legalitas & Perizinan',
                     deskripsi: 'Surat Tanda Daftar Masjid Jami\' Al Jihad terdaftar resmi di Kementerian Agama (KEMENAG) RI.',
-                    gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                    gambar: 'image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp',
                     urutan: 3,
                     durasi: 10,
                     aktif: true
@@ -393,16 +393,28 @@
                 const client = getClient();
                 if (client && SUPABASE_CONFIG.url) {
                     console.log('📡 [SupabaseDB] Menyimpan galeri informasi ke cloud Supabase...');
-                    const cleanSlides = slidesList.map(s => ({
-                        id: s.id,
-                        judul: s.judul || '',
-                        deskripsi: s.deskripsi || '',
-                        gambar: s.gambar || '',
-                        urutan: parseInt(s.urutan, 10) || 1,
-                        durasi: parseInt(s.durasi, 10) || 10,
-                        aktif: s.aktif !== false,
-                        updated_at: new Date().toISOString()
-                    }));
+                    const cleanSlides = slidesList.map(s => {
+                        let imgVal = s.gambar || '';
+                        let b64Val = s.gambar_base64 || null;
+
+                        // Jika imgVal adalah string data URI base64 atau melebihi 250 karakter
+                        if (imgVal.startsWith('data:image/') || imgVal.length > 250) {
+                            b64Val = imgVal;
+                            imgVal = 'image/slides/custom_uploaded.png';
+                        }
+
+                        return {
+                            id: s.id,
+                            judul: s.judul || '',
+                            deskripsi: s.deskripsi || '',
+                            gambar: imgVal.substring(0, 250),
+                            gambar_base64: b64Val,
+                            urutan: parseInt(s.urutan, 10) || 1,
+                            durasi: parseInt(s.durasi, 10) || 10,
+                            aktif: s.aktif !== false,
+                            updated_at: new Date().toISOString()
+                        };
+                    });
 
                     // Upsert seluruh baris slide ke tabel slides
                     const { error: upsertErr } = await client.from('slides').upsert(cleanSlides, { onConflict: 'id' });

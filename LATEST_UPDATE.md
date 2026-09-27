@@ -4930,4 +4930,53 @@ Pengguna meminta agar tampilan Galeri Informasi di TV display terlihat lebih rap
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## BAB 121: PERBAIKAN PEMETAAN GAMBAR DOKUMEN GALERI, PENYELARASAN UPLOAD GAMBAR BASE64 CLOUD SUPABASE, DAN PENAMBAHAN MEDALI KALIGRAFI EMAS 3D HEADER TV
+
+### 1. Latar Belakang & Keluhan Pengguna:
+1. **Ketidaksesuaian Gambar dan Deskripsi Galeri:** Pengguna mendapati bahwa gambar dan deskripsi dokumen di galeri tertukar/berbeda (misalnya judul SIMAS memuat gambar kompas kiblat, dan judul sertifikat memuat file yang salah).
+2. **Hasil Upload Gambar di Admin Tidak Berubah:** Pengguna mencoba meng-upload gambar yang sesuai melalui form admin, namun di TV display maupun admin hasilnya tidak berubah.
+3. **Kaligrafi Kanan-Kiri Header Tidak Muncul:** Pada halaman TV Slide Informasi (`slide.html`), medali kaligrafi emas 3D Muhammad SAW (kiri) dan Allah SWT (kanan) di samping header atas tidak muncul seperti pada halaman TV display lainnya (`utama.html`, `jumat.html`, dsb.).
+
+### 2. Akar Masalah (Root Cause Analysis):
+1. **Ketertukaran File Gambar Asli:**
+   - File `image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png` secara fisik adalah **Kompas Pengukuran Arah Qiblat**, tetapi sebelumnya tertulis pada judul SIMAS Kemenag.
+   - File `image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png` adalah **Piagam Sertifikasi Rasdhul Qiblat Kemenag RI**, tetapi sebelumnya tertulis pada judul Arah Qiblat.
+   - File `image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp` adalah **Surat Tanda Daftar SIMAS Kemenag RI**, namun belum dijadikan gambar bawaan slide 3.
+2. **Keterbatasan Karakter VARCHAR(255) Kolom `gambar` di Cloud Database Supabase:**
+   - Ketika admin mengunggah file foto/dokumen lewat input berkas di form modal admin, file dibaca sebagai Data URI Base64 berukuran panjang (~50.000 hingga 1.000.000 karakter).
+   - Di tabel `slides` Supabase, kolom `gambar` bertipe `VARCHAR(255)`. Ketika data base64 panjang disimpan ke kolom ini, PostgreSQL Supabase menolak transaksi dengan kode error `22001: value too long for type character varying(255)`.
+   - Akibatnya transaksi `upsert` gagal total di cloud, dan data di TV display tetap menampilkan data lama.
+3. **Ketiadaan Tag Medali Kaligrafi di `slide.html`:**
+   - Halaman `slide.html` sudah memuat stylesheet `partials-theme.css`, namun markup elemen `<div class="kaligrafi-medallion ...">` belum disematkan di dalam `<body>`.
+
+### 3. Solusi & Perubahan yang Diterapkan:
+1. **Koreksi 100% Pemetaan Gambar Dokumen Resmi di Cloud Supabase & LocalStorage:**
+   - Slide ID 1 (**Arah Qiblat**): Gambar kompas arah qiblat `image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png`.
+   - Slide ID 2 (**Qiblat Sertifikat**): Sertifikat Rasdhul Qiblat Kemenag `image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png`.
+   - Slide ID 3 (**Sistem Informasi Masjid KEMENAG SIMAS**): Surat tanda daftar SIMAS `image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp`.
+   - Seluruh baris di tabel `slides` Supabase telah di-update langsung melalui REST API dan diverifikasi berstatus HTTP 200 OK.
+2. **Dukungan Dual-Column Base64 & Path Singkat di `supabase-db.js` & `admin.html`:**
+   - Kolom `gambar_base64` (tipe `TEXT`) di tabel `slides` Supabase dimanfaatkan untuk menampung string base64 panjang secara utuh tanpa terpotong atau tertolak database.
+   - Kolom `gambar` (`VARCHAR(255)`) secara aman diisi dengan path placeholder pendek (`image/slides/custom_uploaded.png`) jika berkas di-upload secara lokal, atau diisi dengan URL tautan eksternal jika menggunakan link web.
+   - Fungsi `saveSlides()` di `supabase-db.js` secara otomatis memilah data URI base64 ke kolom `gambar_base64`.
+   - Fungsi `showSlide()` di `slide.html` dan `renderGaleriTable()` di `admin.html` membaca gambar dengan prioritas `item.gambar_base64 || item.gambar`.
+3. **Penyematan Medali Kaligrafi Emas 3D Muhammad SAW & Allah SWT di Header TV:**
+   - Menambahkan elemen `.kaligrafi-medallion.kaligrafi-muhammad` (kiri) dan `.kaligrafi-medallion.kaligrafi-allah` (kanan) di `slide.html` tepat di bawah `<body>`.
+   - Menggunakan aset medali emas 3D resmi: `../image/display/medallion/muhammad_3d.png` dan `../image/display/medallion/allah_3d.png`.
+   - Efek pendaran emas gelombang denyut lembut (*gold heartbeat & aura pulse animation*) tampil harmonis menghiasi sisi kiri dan kanan judul masjid.
+4. **Pembaruan Cache-Buster Script (`?v=20260927_03`):**
+   - Menaikkan versi script tag di `slide.html` dan `admin.html` ke `v=20260927_03` untuk memastikan seluruh browser TV dan komputer admin langsung menjalankan update terbaru.
+
+### 4. Berkas yang Diperbarui:
+1. `web-statis/slides/slide.html`: Medali kaligrafi emas 3D Muhammad & Allah, pemetaan slide default, dukungan `gambar_base64`, dan versioning `v=20260927_03`.
+2. `web-statis/js/supabase-db.js`: Pemetaan slide default resmi, pemisahan base64 ke kolom `gambar_base64` pada `saveSlides()`, pencegahan error PostgreSQL VARCHAR(255).
+3. `web-statis/admin.html`: `DEFAULT_GALERI_DATA` resmi, penanganan upload base64 di `simpanGaleriInformasi`, thumbnail `renderGaleriTable`, dan versioning `v=20260927_03`.
+4. Cloud Database Supabase (`slides` table): Data baris 1, 2, 3 sinkron dengan gambar fisik yang benar.
+5. `LATEST_UPDATE.md`: Dokumentasi Bab 121.
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 

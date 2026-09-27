@@ -350,6 +350,14 @@
     <div class="display-background"></div>
     <div class="display-overlay"></div>
 
+    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DENGAN EFEK DENYUT PELAN -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
+
     <div class="container">
         <!-- HEADER MASJID -->
         <div class="header">
@@ -363,7 +371,7 @@
             <!-- Kolom Kiri: Poster Gambar -->
             <div class="slide-left-col">
                 <div class="poster-frame" id="posterFrame">
-                    <img id="posterImg" src="../image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png" alt="Poster Informasi" style="display: block;" onerror="handlePosterError(this)">
+                    <img id="posterImg" src="../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png" alt="Poster Informasi" style="display: block;" onerror="handlePosterError(this)">
                     <div class="poster-fallback" id="posterFallback" style="display: none;">
                         <i class="fas fa-images"></i>
                         <div>
@@ -405,9 +413,9 @@
 
     <!-- CORE SCRIPTS DENGAN CACHE-BUSTER -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js?v=20260927_02"></script>
-    <script src="../js/supabase-db.js?v=20260927_02"></script>
-    <script src="../js/display-clock-ambient.js?v=20260927_02"></script>
+    <script src="../js/supabase-config.js?v=20260927_03"></script>
+    <script src="../js/supabase-db.js?v=20260927_03"></script>
+    <script src="../js/display-clock-ambient.js?v=20260927_03"></script>
 
     <script>
         // Background Rotator Islami
@@ -467,7 +475,7 @@
                 judul: 'Arah Qiblat',
                 kategori: 'Pengukuran & Validasi',
                 deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
-                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
                 urutan: 1,
                 durasi: 10,
                 aktif: true
@@ -477,7 +485,7 @@
                 judul: 'Qiblat Sertifikat',
                 kategori: 'Sertifikasi Resmi',
                 deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat Kementerian Agama Republik Indonesia.',
-                gambar: 'image/slides/iJ405oSm0AMLVGmy8cjCcAXDsdw8niSYqGxtBCKW.png',
+                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
                 urutan: 2,
                 durasi: 10,
                 aktif: true
@@ -487,7 +495,7 @@
                 judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
                 kategori: 'Legalitas & Perizinan',
                 deskripsi: 'Surat Tanda Daftar Masjid Jami\' Al Jihad terdaftar resmi di Kementerian Agama (KEMENAG) RI.',
-                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                gambar: 'image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp',
                 urutan: 3,
                 durasi: 10,
                 aktif: true
@@ -632,7 +640,7 @@
             const nextTitle = item.judul || item.title || 'Galeri Informasi Masjid';
             const nextCat = item.kategori || 'Galeri Informasi';
             const nextDesc = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
-            const rawUrl = item.gambar || item.image || item.file_path;
+            const rawUrl = item.gambar_base64 || item.gambar || item.image || item.file_path;
             const newResolvedUrl = resolveSlideUrl(rawUrl);
 
             // Update elemen teks
