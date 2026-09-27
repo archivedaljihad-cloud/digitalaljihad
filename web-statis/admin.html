@@ -1576,51 +1576,17 @@
                             })();
                         </script>
 
-                        <!-- Row Kartu Metrik Dinamis Berdasarkan Peran -->
-                        <div class="row mb-4">
-                            <!-- Card 1: Saldo Kas Utama (Admin & Bendahara) -->
-                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, bendahara">
-                                <div class="metric-card metric-card-green">
-                                    <div class="metric-card-body">
-                                        <div>
-                                            <div class="metric-title">Saldo Kas Utama</div>
-                                            <div class="metric-value text-success" id="statKasUtama">Rp 128.450.000</div>
-                                            <div class="metric-sub text-success">
-                                                <i class="fas fa-arrow-up"></i> + Rp 12.500.000 bulan ini
-                                            </div>
-                                        </div>
-                                        <div class="metric-icon-box icon-box-green">
-                                            <i class="fas fa-wallet"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 2: Kas Ambulance (Admin & Bendahara) -->
-                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, bendahara">
-                                <div class="metric-card metric-card-blue">
-                                    <div class="metric-card-body">
-                                        <div>
-                                            <div class="metric-title">Kas Ambulance</div>
-                                            <div class="metric-value text-primary" id="statKasAmbulance">Rp 18.750.000</div>
-                                            <div class="metric-sub text-primary">
-                                                <i class="fas fa-gas-pump"></i> BBM & Pemeliharaan Siap
-                                            </div>
-                                        </div>
-                                        <div class="metric-icon-box icon-box-blue">
-                                            <i class="fas fa-ambulance"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 3: Display TV & Sholat (Admin & Operator) -->
-                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, petugas">
-                                <div class="metric-card metric-card-gold">
+                        <!-- =======================================================
+                             SECTION A: KONTROL SIARAN & OPERASIONAL TV (ADMIN & PETUGAS)
+                             ======================================================= -->
+                        <div class="row mb-4" data-role="admin, petugas">
+                            <!-- Card 1: Display TV & Sholat (Admin & Operator) -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="metric-card metric-card-gold h-100">
                                     <div class="metric-card-body">
                                         <div>
                                             <div class="metric-title">Layar Display TV</div>
-                                            <div class="metric-value text-warning" id="statStatusTV">8 Halaman</div>
+                                            <div class="metric-value text-warning" id="statStatusTV">16 Halaman</div>
                                             <div class="metric-sub text-success">
                                                 <i class="fas fa-check-circle"></i> Rotasi Berjalan Lancar
                                             </div>
@@ -1632,9 +1598,9 @@
                                 </div>
                             </div>
 
-                            <!-- Card 4: Sholat Jum'at (Admin & Operator) -->
-                            <div class="col-xl-3 col-md-6 mb-4" data-role="admin, petugas">
-                                <div class="metric-card metric-card-purple">
+                            <!-- Card 2: Sholat Jum'at (Admin & Operator) -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="metric-card metric-card-purple h-100">
                                     <div class="metric-card-body">
                                         <div>
                                             <div class="metric-title">Khotib Jum'at Ini</div>
@@ -1649,88 +1615,138 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Preview Cepat Tabel Sesuai Hak Akses -->
-                        <div class="row">
-                            <!-- Preview Keuangan (Admin & Bendahara) -->
-                            <div class="col-lg-7" data-role="admin, bendahara">
-                                <div class="content-card">
-                                    <div class="content-card-header">
-                                        <h6 class="content-card-title">
-                                            <i class="fas fa-receipt"></i> Mutasi Kas Terbaru
+                            <!-- Card 3: Kotak Hitam Petugas Sholat Jum'at (SEJAJAR DENGAN LAYAR DISPLAY TV & KHOTIB) -->
+                            <div class="col-xl-6 col-md-12 mb-4">
+                                <div class="content-card h-100" style="margin-bottom: 0;">
+                                    <div class="content-card-header py-2 px-3">
+                                        <h6 class="content-card-title mb-0" style="font-size: 0.95rem;">
+                                            <i class="fas fa-calendar-alt text-warning mr-1"></i> Petugas Sholat Jum'at
                                         </h6>
-                                        <button class="btn btn-sm btn-outline-success font-weight-bold" onclick="switchAdminSection('keuangan')">
-                                            Lihat Semua <i class="fas fa-arrow-right ml-1"></i>
-                                        </button>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-custom table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tanggal</th>
-                                                    <th>Uraian Transaksi</th>
-                                                    <th>Tipe</th>
-                                                    <th class="text-right">Nominal</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="quickKasTableBody">
-                                                <tr>
-                                                    <td>25/09/2026</td>
-                                                    <td>Kotak Infaq Sholat Shubuh Berjamaah</td>
-                                                    <td><span class="badge-masuk">Pemasukan</span></td>
-                                                    <td class="text-right font-weight-bold text-success">+ Rp 1.450.000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>24/09/2026</td>
-                                                    <td>Pembelian Sabun & Pembersih Lantai Masjid</td>
-                                                    <td><span class="badge-keluar">Pengeluaran</span></td>
-                                                    <td class="text-right font-weight-bold text-danger">- Rp 380.000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23/09/2026</td>
-                                                    <td>Infaq Donasi QRIS Bank Syariah</td>
-                                                    <td><span class="badge-masuk">Pemasukan</span></td>
-                                                    <td class="text-right font-weight-bold text-success">+ Rp 2.200.000</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Preview Petugas Sholat Jum'at (Admin & Operator) -->
-                            <div class="col-lg-5" data-role="admin, petugas">
-                                <div class="content-card">
-                                    <div class="content-card-header">
-                                        <h6 class="content-card-title">
-                                            <i class="fas fa-calendar-alt"></i> Petugas Sholat Jum'at
-                                        </h6>
-                                        <button class="btn btn-sm btn-outline-warning font-weight-bold" onclick="switchAdminSection('sholat-jumat')">
+                                        <button class="btn btn-sm btn-outline-warning font-weight-bold py-1 px-2" style="font-size: 0.8rem;" onclick="switchAdminSection('sholat-jumat')">
                                             Ubah <i class="fas fa-edit ml-1"></i>
                                         </button>
                                     </div>
                                     <div class="p-3">
-                                        <div class="jumat-preview-box">
-                                            <span class="jumat-badge-title">
-                                                <i class="fas fa-star mr-1"></i> TAMPILAN TV HARI JUM'AT
-                                            </span>
-                                            <div class="jumat-officer-item">
-                                                <div class="jumat-officer-label">Khatib</div>
-                                                <div class="jumat-officer-name">Ust. Dr. H. Faisal, M.Ag</div>
+                                        <div class="jumat-preview-box p-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="jumat-badge-title mb-0" style="font-size: 0.72rem; padding: 2px 10px;">
+                                                    <i class="fas fa-star mr-1"></i> TAMPILAN TV HARI JUM'AT
+                                                </span>
                                             </div>
-                                            <div class="jumat-officer-item">
-                                                <div class="jumat-officer-label">Imam Sholat</div>
-                                                <div class="jumat-officer-name">Ust. Ahmad Sholeh Al-Hafidz</div>
+                                            <div class="row" style="margin-left: -5px; margin-right: -5px;">
+                                                <div class="col-sm-6" style="padding-left: 5px; padding-right: 5px;">
+                                                    <div class="jumat-officer-item mb-2 py-1 px-2">
+                                                        <div class="jumat-officer-label" style="font-size: 0.72rem;">Khatib</div>
+                                                        <div class="jumat-officer-name font-weight-bold" style="font-size: 0.88rem;" id="dashJumatKhotib">Ust. Dr. H. Faisal, M.Ag</div>
+                                                    </div>
+                                                    <div class="jumat-officer-item mb-2 mb-sm-0 py-1 px-2">
+                                                        <div class="jumat-officer-label" style="font-size: 0.72rem;">Imam Sholat</div>
+                                                        <div class="jumat-officer-name font-weight-bold" style="font-size: 0.88rem;" id="dashJumatImam">Ust. Ahmad Sholeh Al-Hafidz</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6" style="padding-left: 5px; padding-right: 5px;">
+                                                    <div class="jumat-officer-item mb-2 py-1 px-2">
+                                                        <div class="jumat-officer-label" style="font-size: 0.72rem;">Muadzin</div>
+                                                        <div class="jumat-officer-name font-weight-bold" style="font-size: 0.88rem;" id="dashJumatMuadzin">Bilal M. Ridwan</div>
+                                                    </div>
+                                                    <div class="jumat-officer-item mb-0 py-1 px-2">
+                                                        <div class="jumat-officer-label" style="font-size: 0.72rem;">Bilal & Doa</div>
+                                                        <div class="jumat-officer-name font-weight-bold" style="font-size: 0.88rem;" id="dashJumatBilal">Ust. Syahrul Ramadhan</div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="jumat-officer-item">
-                                                <div class="jumat-officer-label">Muadzin</div>
-                                                <div class="jumat-officer-name">Bilal M. Ridwan</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- =======================================================
+                             SECTION B: MANAJEMEN KEUANGAN (ADMIN & BENDAHARA)
+                             ======================================================= -->
+                        <div data-role="admin, bendahara">
+                            <div class="row mb-4">
+                                <!-- Card 1: Saldo Kas Utama -->
+                                <div class="col-xl-6 col-md-6 mb-4">
+                                    <div class="metric-card metric-card-green">
+                                        <div class="metric-card-body">
+                                            <div>
+                                                <div class="metric-title">Saldo Kas Utama</div>
+                                                <div class="metric-value text-success" id="statKasUtama">Rp 128.450.000</div>
+                                                <div class="metric-sub text-success">
+                                                    <i class="fas fa-arrow-up"></i> + Rp 12.500.000 bulan ini
+                                                </div>
                                             </div>
-                                            <div class="jumat-officer-item mb-0">
-                                                <div class="jumat-officer-label">Bilal & Doa</div>
-                                                <div class="jumat-officer-name">Ust. Syahrul Ramadhan</div>
+                                            <div class="metric-icon-box icon-box-green">
+                                                <i class="fas fa-wallet"></i>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Kas Ambulance -->
+                                <div class="col-xl-6 col-md-6 mb-4">
+                                    <div class="metric-card metric-card-blue">
+                                        <div class="metric-card-body">
+                                            <div>
+                                                <div class="metric-title">Kas Ambulance</div>
+                                                <div class="metric-value text-primary" id="statKasAmbulance">Rp 18.750.000</div>
+                                                <div class="metric-sub text-primary">
+                                                    <i class="fas fa-gas-pump"></i> BBM & Pemeliharaan Siap
+                                                </div>
+                                            </div>
+                                            <div class="metric-icon-box icon-box-blue">
+                                                <i class="fas fa-ambulance"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Preview Mutasi Kas -->
+                            <div class="row">
+                                <div class="col-12 mb-4">
+                                    <div class="content-card">
+                                        <div class="content-card-header">
+                                            <h6 class="content-card-title">
+                                                <i class="fas fa-receipt"></i> Mutasi Kas Terbaru
+                                            </h6>
+                                            <button class="btn btn-sm btn-outline-success font-weight-bold" onclick="switchAdminSection('keuangan')">
+                                                Lihat Semua <i class="fas fa-arrow-right ml-1"></i>
+                                            </button>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-custom table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tanggal</th>
+                                                        <th>Uraian Transaksi</th>
+                                                        <th>Tipe</th>
+                                                        <th class="text-right">Nominal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="quickKasTableBody">
+                                                    <tr>
+                                                        <td>25/09/2026</td>
+                                                        <td>Kotak Infaq Sholat Shubuh Berjamaah</td>
+                                                        <td><span class="badge-masuk">Pemasukan</span></td>
+                                                        <td class="text-right font-weight-bold text-success">+ Rp 1.450.000</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>24/09/2026</td>
+                                                        <td>Pembelian Sabun & Pembersih Lantai Masjid</td>
+                                                        <td><span class="badge-keluar">Pengeluaran</span></td>
+                                                        <td class="text-right font-weight-bold text-danger">- Rp 380.000</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>23/09/2026</td>
+                                                        <td>Infaq Donasi QRIS Bank Syariah</td>
+                                                        <td><span class="badge-masuk">Pemasukan</span></td>
+                                                        <td class="text-right font-weight-bold text-success">+ Rp 2.200.000</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -6013,6 +6029,10 @@
 
                         // Update Dashboard & Preview
                         if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = j.khatib || j.khotib || '-';
+                        if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = j.khatib || j.khotib || '-';
+                        if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = j.imam || '-';
+                        if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = j.muadzin || '-';
+                        if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = j.bilal || '-';
                         if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = j.khatib || j.khotib || '-';
                         if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = j.imam || '-';
                         if (document.getElementById('prevJumatTanggal') && j.tanggal) {
@@ -8071,6 +8091,10 @@
                     if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotib;
                     if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = imam;
                     if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotib;
+                    if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = khotib;
+                    if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = imam;
+                    if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = muadzin;
+                    if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = bilal;
                     alert(`Alhamdulillah! Petugas Sholat Jum'at dan durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
                 } else {
                     alert(`Petugas Jum'at gagal disimpan ke database, namun durasi sholat (${jumatDur} menit) telah diperbarui.`);

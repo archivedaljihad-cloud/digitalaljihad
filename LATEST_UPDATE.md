@@ -5022,6 +5022,41 @@ Pengguna meminta agar posisi menu *"Remote TV Jarak Jauh"* di sidebar dashboard 
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## BAB 124: PENJAJARAN KOTAK HITAM PETUGAS SHOLAT JUM'AT DENGAN KARTU DISPLAY TV DAN KHOTIB PADA DASHBOARD ADMIN
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna menanyakan dan meminta apakah kotak hitam petugas sholat jum'at yang sebelumnya berada di bawah posisinya dapat dipindah sehingga sejajar (*side-by-side*) dengan kartu metrik *"Layar Display TV"* dan *"Khotib Jum'at Ini"*. 
+Sebelumnya, saat akun Takmir/Operator login, kartu-kartu keuangan (Kas Utama, Kas Ambulance, dan Mutasi Kas) disembunyikan berdasarkan hak akses (*RBAC data-role="admin, bendahara"*). Akibatnya, baris atas hanya terisi 2 kartu metrik kecil (50% lebar layar), sedangkan kotak hitam Petugas Sholat Jum'at sendirian di baris bawah memanjang secara canggung dengan banyak ruang kosong di kanannya.
+
+### 2. Solusi & Perubahan yang Diterapkan:
+1. **Penyatuan Grid Dashboard Section A (Operasional TV & Siaran):**
+   - Mengelompokkan komponen operasional siaran TV ke dalam satu baris horizontal (`row`) dengan pembagian kolom Bootstrap 12 kolom penuh:
+     - Kartu *"Layar Display TV"*: `col-xl-3 col-md-6 mb-4`
+     - Kartu *"Khotib Jum'at Ini"*: `col-xl-3 col-md-6 mb-4`
+     - Kotak Hitam *"Petugas Sholat Jum'at"*: `col-xl-6 col-md-12 mb-4`
+   - Dengan pembagian `3 + 3 + 6 = 12`, seluruh lebar dashboard terisi 100% penuh secara padat, rapi, dan estetis tanpa ada ruang kosong yang terbuang.
+2. **Desain Kompak 2 Kolom untuk Kotak Hitam Petugas Jum'at:**
+   - Menyusun 4 petugas (Khatib, Imam Sholat, Muadzin, Bilal & Doa) ke dalam grid 2 kolom internal (`col-sm-6`) di dalam kotak hitam:
+     - Kolom Kiri: Khatib & Imam Sholat.
+     - Kolom Kanan: Muadzin & Bilal/Doa.
+   - Memberikan padding dan ukuran tipografi yang seimbang sehingga tinggi kotak hitam pas sejajar dengan tinggi kartu metrik di sebelah kirinya.
+   - Tetap menyertakan tombol pintasan *"Ubah"* di bagian header kartu untuk memudahkan operator langsung menuju menu pengeditan jadwal Jum'at.
+3. **Pembaruan Data Dinamis Real-Time:**
+   - Menambahkan ID elemen: `dashJumatKhotib`, `dashJumatImam`, `dashJumatMuadzin`, `dashJumatBilal`.
+   - Menghubungkan fungsi `loadAllSupabaseData()` dan `simpanPetugasJumat()` agar teks nama keempat petugas pada kotak hitam dashboard terupdate secara real-time saat data dimuat dari Supabase maupun sesaat setelah operator menekan tombol simpan perubahan.
+4. **Pemisahan Terstruktur untuk Fitur Keuangan (Section B):**
+   - Menempatkan kartu metrik saldo kas dan tabel mutasi kas di bawah Section A dengan pembungkus `<div data-role="admin, bendahara">...</div>`.
+   - Menjamin bahwa saat Super Admin login, dashboard menampilkan seluruh informasi secara bertingkat dan teratur, sedangkan saat Operator/Takmir login, dashboard fokus pada operasional siaran tanpa kekosongan tata letak.
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/admin.html`: Restrukturisasi layout grid Section A dan Section B pada dashboard, penataan grid 2 kolom kotak hitam petugas Jum'at, dan pembaruan sinkronisasi data JavaScript di `loadAllSupabaseData` & `simpanPetugasJumat`.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 124.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 
 
