@@ -106,18 +106,27 @@
             position: relative;
         }
 
+        /* 3D GRID FLIP TRANSITION ENGINE */
         .poster-frame {
             position: relative;
             width: 100%;
             height: 100%;
             border-radius: 20px;
             overflow: hidden;
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65), 0 0 25px rgba(255, 215, 0, 0.2);
-            background: rgba(4, 25, 18, 0.7);
+            border: 2px solid rgba(255, 215, 0, 0.55);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65), 0 0 30px rgba(255, 215, 0, 0.25);
+            background: rgba(4, 25, 18, 0.75);
             display: flex;
             align-items: center;
             justify-content: center;
+            perspective: 1400px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease;
+        }
+
+        .poster-frame.flip-lifting {
+            transform: scale(0.97) rotateX(2deg);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 215, 0, 0.4);
         }
 
         .poster-frame img {
@@ -128,7 +137,87 @@
             object-fit: contain;
             border-radius: 18px;
             display: block;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
+        }
+
+        /* 3D Grid Flip Overlay */
+        .grid-flip-container {
+            position: absolute;
+            inset: 0;
+            display: none;
+            perspective: 1400px;
+            pointer-events: none;
+            z-index: 20;
+            border-radius: 18px;
+            overflow: hidden;
+            background: transparent;
+        }
+        .grid-flip-container.active {
+            display: block;
+        }
+
+        .grid-flip-tile {
+            position: absolute;
+            transform-style: preserve-3d;
+            will-change: transform;
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            box-sizing: border-box;
+            background: #03140f;
+            border-radius: 6px;
+        }
+
+        .grid-flip-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background-repeat: no-repeat;
+            background-color: #041912;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .grid-flip-face.front {
+            transform: rotateY(0deg);
+        }
+
+        .grid-flip-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .grid-flip-face::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        @keyframes tileFlip3D {
+            0% {
+                transform: perspective(1200px) rotateY(0deg) translateZ(0);
+            }
+            50% {
+                transform: perspective(1200px) rotateY(90deg) translateZ(35px) scale(0.95);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.4);
+            }
+            100% {
+                transform: perspective(1200px) rotateY(180deg) translateZ(0);
+            }
+        }
+
+        .tile-flipping {
+            animation: tileFlip3D 0.75s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+        }
+
+        /* 3D Flip Reveal Effect for Text Card */
+        .slide-card {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+            transform-origin: center left;
+        }
+        .slide-card.card-flipping {
+            transform: perspective(1000px) rotateY(12deg) scale(0.97);
+            opacity: 0.65;
         }
 
         .poster-fallback {
@@ -269,7 +358,7 @@
         <div class="slide-stage">
             <!-- Kolom Kiri: Poster Gambar -->
             <div class="slide-left-col">
-                <div class="poster-frame">
+                <div class="poster-frame" id="posterFrame">
                     <img id="posterImg" src="../image/display/default_imam.jpg" alt="Poster Informasi" style="display: none;" onerror="this.style.display='none'; document.getElementById('posterFallback').style.display='flex';">
                     <div class="poster-fallback" id="posterFallback">
                         <i class="fas fa-images"></i>
@@ -278,6 +367,8 @@
                             <div style="font-size: 0.95rem; color: #cbd5e1; margin-top: 4px;">Masjid Jami' Al-Jihad</div>
                         </div>
                     </div>
+                    <!-- 3D Grid Flip Overlay Container -->
+                    <div class="grid-flip-container" id="gridFlipContainer"></div>
                 </div>
             </div>
 
@@ -369,46 +460,158 @@
         let currentSlideIdx = 0;
         let slideTimer = null;
 
+        let isTransitioning = false;
+        let lastResolvedImgUrl = '';
+
+        function resolveSlideUrl(url) {
+            if (!url) return '';
+            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image/')) {
+                return url;
+            } else if (url.startsWith('image/')) {
+                return '../' + url;
+            } else if (url.startsWith('../image/')) {
+                return url;
+            } else if (url.startsWith('slides/')) {
+                return '../image/' + url;
+            } else {
+                return '../image/slides/' + url;
+            }
+        }
+
+        // Efek Card Flip Transition (3D Grid Flip)
+        function perform3DGridFlip(fromUrl, toUrl, callback) {
+            const container = document.getElementById('gridFlipContainer');
+            const posterImg = document.getElementById('posterImg');
+            const frame = document.getElementById('posterFrame');
+            const card = document.querySelector('.slide-card');
+
+            if (!container || !fromUrl || !toUrl || fromUrl === toUrl) {
+                if (posterImg && toUrl) {
+                    posterImg.src = toUrl;
+                    posterImg.style.display = 'block';
+                }
+                if (callback) callback();
+                return;
+            }
+
+            const COLS = 4;
+            const ROWS = 3;
+            const tileWidthPercent = 100 / COLS;
+            const tileHeightPercent = 100 / ROWS;
+
+            container.innerHTML = '';
+            container.classList.add('active');
+            if (frame) frame.classList.add('flip-lifting');
+            if (card) card.classList.add('card-flipping');
+
+            let maxDelay = 0;
+
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'grid-flip-tile tile-flipping';
+                    tile.style.width = `${tileWidthPercent}%`;
+                    tile.style.height = `${tileHeightPercent}%`;
+                    tile.style.left = `${c * tileWidthPercent}%`;
+                    tile.style.top = `${r * tileHeightPercent}%`;
+
+                    // Wave delay diagonal dari kiri atas ke kanan bawah
+                    const delay = (c + r) * 65;
+                    if (delay > maxDelay) maxDelay = delay;
+                    tile.style.animationDelay = `${delay}ms`;
+
+                    const bgPosX = (COLS > 1) ? `${(c / (COLS - 1)) * 100}%` : '50%';
+                    const bgPosY = (ROWS > 1) ? `${(r / (ROWS - 1)) * 100}%` : '50%';
+
+                    // Sisi Depan (Gambar Saat Ini)
+                    const front = document.createElement('div');
+                    front.className = 'grid-flip-face front';
+                    front.style.backgroundImage = `url("${fromUrl}")`;
+                    front.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
+                    front.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+
+                    // Sisi Belakang (Gambar Baru yang Akan Muncul)
+                    const back = document.createElement('div');
+                    back.className = 'grid-flip-face back';
+                    back.style.backgroundImage = `url("${toUrl}")`;
+                    back.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
+                    back.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+
+                    tile.appendChild(front);
+                    tile.appendChild(back);
+                    container.appendChild(tile);
+                }
+            }
+
+            const totalDuration = 750 + maxDelay + 50;
+
+            setTimeout(() => {
+                if (posterImg) {
+                    posterImg.src = toUrl;
+                    posterImg.style.display = 'block';
+                }
+                container.classList.remove('active');
+                container.innerHTML = '';
+                if (frame) frame.classList.remove('flip-lifting');
+                if (card) card.classList.remove('card-flipping');
+                if (callback) callback();
+            }, totalDuration);
+        }
+
         function showSlide(item, index, total) {
             if (!item) return;
 
-            document.getElementById('slideTitle').textContent = item.judul || item.title || 'Galeri Informasi Masjid';
-            document.getElementById('slideCategory').textContent = item.kategori || 'Galeri Informasi';
-            document.getElementById('slideDesc').textContent = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
-
+            const titleEl = document.getElementById('slideTitle');
+            const catEl = document.getElementById('slideCategory');
+            const descEl = document.getElementById('slideDesc');
             const posterImg = document.getElementById('posterImg');
             const fallback = document.getElementById('posterFallback');
-            const url = item.gambar || item.image || item.file_path;
 
-            if (url) {
-                let resolvedUrl = url;
-                if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image/')) {
-                    resolvedUrl = url;
-                } else if (url.startsWith('image/')) {
-                    resolvedUrl = '../' + url;
-                } else if (url.startsWith('../image/')) {
-                    resolvedUrl = url;
-                } else if (url.startsWith('slides/')) {
-                    resolvedUrl = '../image/' + url;
-                } else {
-                    resolvedUrl = '../image/slides/' + url;
-                }
-                posterImg.src = resolvedUrl;
-                posterImg.style.display = 'block';
+            const nextTitle = item.judul || item.title || 'Galeri Informasi Masjid';
+            const nextCat = item.kategori || 'Galeri Informasi';
+            const nextDesc = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
+            const rawUrl = item.gambar || item.image || item.file_path;
+            const newResolvedUrl = resolveSlideUrl(rawUrl);
+
+            // Update elemen teks
+            if (titleEl) titleEl.textContent = nextTitle;
+            if (catEl) catEl.textContent = nextCat;
+            if (descEl) descEl.textContent = nextDesc;
+
+            if (newResolvedUrl) {
                 fallback.style.display = 'none';
+
+                if (lastResolvedImgUrl && lastResolvedImgUrl !== newResolvedUrl) {
+                    // Jalankan efek Card Flip Transition (3D Grid Flip)
+                    perform3DGridFlip(lastResolvedImgUrl, newResolvedUrl, () => {
+                        lastResolvedImgUrl = newResolvedUrl;
+                    });
+                } else {
+                    posterImg.src = newResolvedUrl;
+                    posterImg.style.display = 'block';
+                    lastResolvedImgUrl = newResolvedUrl;
+                }
             } else {
                 posterImg.style.display = 'none';
                 fallback.style.display = 'flex';
+                lastResolvedImgUrl = '';
             }
 
             const dotsEl = document.getElementById('slideDots');
             if (dotsEl && total > 1) {
                 dotsEl.innerHTML = Array.from({ length: total }).map((_, i) => `
-                    <div class="dot-pill ${i === index ? 'active' : ''}"></div>
+                    <div class="dot-pill ${i === index ? 'active' : ''}" style="cursor: pointer;" onclick="goToSlide(${i})" title="Buka Dokumen ${i + 1}"></div>
                 `).join('');
             } else if (dotsEl) {
                 dotsEl.innerHTML = '';
             }
+        }
+
+        function goToSlide(targetIdx) {
+            if (!slidesData || targetIdx < 0 || targetIdx >= slidesData.length) return;
+            currentSlideIdx = targetIdx;
+            showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+            scheduleNextSlide();
         }
 
         function scheduleNextSlide() {

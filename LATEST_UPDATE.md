@@ -4822,3 +4822,39 @@ Pengguna meminta perombakan tampilan **"Log Aktivitas Perintah Remote Terkirim"*
 2. `LATEST_UPDATE.md`: Dokumentasi Bab 117.
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## BAB 118: PENERAPAN EFEK TRANSISI "CARD FLIP TRANSITION (3D GRID FLIP)" PADA PERGANTIAN GAMBAR GALERI INFORMASI
+
+### 1. Latar Belakang & Permintaan Pengguna:
+Pengguna meminta penambahan efek transisi visual **"Card Flip Transition (3D Grid Flip)"** pada setiap pergantian gambar dokumen/arsip pada halaman Galeri Informasi masjid. Efek ini bertujuan memberikan pengalaman visual modern, elegan, dan menarik perhatian jamaah saat layar TV display masjid menampilkan sertifikat atau pengumuman penting.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan:
+
+1. **Mesin Animasi 3D Grid Flip (`web-statis/slides/slide.html`):**
+   - Mengimplementasikan sistem transisi ubin 3D Grid interaktif (4 kolom x 3 baris = 12 ubin/tiles) di atas wadah bingkai gambar (`.poster-frame`).
+   - Menggunakan kedalaman perspektif ruang 3D (`perspective: 1400px; transform-style: preserve-3d; will-change: transform`).
+
+2. **Dual-Sided Dynamic Tiles (Front & Back Faces):**
+   - Setiap ubin memiliki sisi depan (`front face`) yang memuat potongan gambar saat ini, dan sisi belakang (`back face`) yang memuat potongan gambar baru yang akan muncul.
+   - Koordinat `background-position` dan `background-size` dihitung presisi secara proporsional sehingga seluruh 12 ubin menyatu sempurna tanpa distorsi gambar.
+   - Menggunakan animasi putar 180 derajat pada sumbu Y (`rotateY(180deg)`) dengan efek akselerasi 3D (`translateZ(35px)`) dan bayangan neon emas.
+
+3. **Efek Gelombang Diagonal (Cascading Wave Delay):**
+   - Setiap ubin membalik secara bertahap dalam gelombang diagonal lembut dari sudut kiri atas menuju kanan bawah (`animation-delay: (c + r) * 65ms`).
+   - Dilengkapi kilau cahaya emas (*golden gloss sweep*) di setiap permukaan ubin.
+
+4. **Reaksi 3D Kartu Teks & Indikator Titik Interaktif:**
+   - Panel teks informasi di sisi kanan (`.slide-card`) dan bingkai poster kiri merespons secara harmonis dengan sedikit mengangkat (`flip-lifting`) selama proses flip berlangsung.
+   - Titik-titik navigasi slide (*indicator dots*) kini bersifat interaktif (dapat diklik langsung) untuk menguji dan memicu efek 3D Grid Flip secara manual.
+
+---
+
+### 3. Berkas yang Diperbarui:
+1. `web-statis/slides/slide.html`: Mesin CSS 3D Grid Flip, markup kontainer ubin, dan fungsi `perform3DGridFlip()`.
+2. `LATEST_UPDATE.md`: Dokumentasi Bab 118.
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
