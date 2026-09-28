@@ -5840,3 +5840,35 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 138).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 139 — Penambahan Medali Kaligrafi Arab Emas 3D Nabi Muhammad ﷺ & Lafadz Allah ﷻ pada Layar Mode Sholat (Prayer Mode) (28 Sep 2026)
+
+### 1. Kebutuhan Pengguna
+- Pada halaman **Prayer Mode** (layar hitung mundur menjelang sholat / adzan / iqamah), pengguna menginginkan ditampilkannya kaligrafi Arab sakral di sisi kanan dan kiri layar.
+- **Ketentuan Khusus:** Header nama masjid di bagian tengah atas (`MASJID JAMI' AL JIHAD` beserta ornamen kubah masjid) **tidak boleh diubah/diganti**.
+
+---
+
+### 2. Solusi & Desain Visual yang Diterapkan
+1. **Medali Kaligrafi Arab Emas 3D Simetris & Sakral:**
+   - **Sisi Kiri Atas:** Medali Kaligrafi Nabi Muhammad ﷺ (`image/display/medallion/muhammad_3d.png`) dengan posisi `fixed`, `top: 20px`, `left: 32px`.
+   - **Sisi Kanan Atas:** Medali Kaligrafi Lafadz Allah ﷻ (`image/display/medallion/allah_3d.png`) dengan posisi `fixed`, `top: 20px`, `right: 32px`.
+   - **Header Tengah Tetap Utuh:** Elemen header masjid di tengah (`.masjid-header`) tetap presisi di tengah layar tanpa tergeser maupun terpotong.
+2. **Efek Animasi Pendaran Cahaya Emas Mewah (*Royal Gold Glow*):**
+   - Dilengkapi pseudo-element `::before` untuk pendaran aura radial emas lembut (`goldMedallionAuraWave`).
+   - Dilengkapi pseudo-element `::after` berupa riak cincin cahaya berkilau yang memancar keluar perlahan (`goldRippleRays`).
+   - Dilengkapi efek denyut nafas lembut dan bayangan 3D mengambang (`goldMedallionHeartbeat` + `drop-shadow` multi-layer emas).
+3. **Responsif Multi-Layar TV & Monitor:**
+   - Diatur dengan breakpoint `@media (max-width: 1400px)`, `(max-width: 1024px)`, dan `(max-width: 768px)` agar ukuran medali mengecil secara proporsional dan tidak pernah menabrak teks judul masjid di perangkat resolusi berapapun.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/prayer-mode.html` (Penambahan CSS animasi dan elemen medali kaligrafi Arab 3D di kiri dan kanan).
+2. `resources/views/prayer-mode.blade.php` (Penyelarasan template Laravel Blade mode sholat).
+3. `public/preview-prayer-mode.html` (Penyelarasan file preview mode sholat).
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 139).
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
