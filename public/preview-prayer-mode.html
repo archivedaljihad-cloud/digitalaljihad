@@ -123,15 +123,15 @@
 
         /* Ka'bah Watermark Vignette */
         .bg-kaabah {
-            background-image: url('');
+            background-image: url('img/Kaabah.png');
             background-size: contain;
             background-position: center 85%;
             background-repeat: no-repeat;
-            opacity: 0.22;
+            opacity: 0.30;
             mix-blend-mode: luminosity;
-            filter: contrast(1.15) brightness(0.9);
-            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
-            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
+            filter: contrast(1.15) brightness(1.2);
+            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 45%, rgba(0, 0, 0, 0) 85%);
+            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 45%, rgba(0, 0, 0, 0) 85%);
         }
 
         /* Dark Radial Vignette */
@@ -718,12 +718,7 @@
            BAGIAN 6: FOOTER MASJID
            ===================================================== */
         .masjid-footer {
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 2px;
-            color: rgba(212, 175, 55, 0.75);
-            text-transform: uppercase;
-            padding-bottom: 2px;
+            display: none !important;
         }
 
         /* =====================================================
@@ -1251,17 +1246,6 @@
             
 
             <span class="quote-watermark quote-right">”</span>
-        </div>
-
-        <!-- 6. FOOTER MASJID -->
-        <div class="masjid-footer">
-            @php
-                $rawFooter = $setting->footer ?? '';
-                // Mengonversi kode &copy;, &COPY;, &#169;, dll menjadi simbol © asli
-                $cleanFooter = preg_replace('/&amp;copy;|&copy;|&#169;|&#xa9;/i', '©', $rawFooter);
-                $cleanFooter = html_entity_decode($cleanFooter, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            @endphp
-            {!! $cleanFooter !!}
         </div>
     </div>
 

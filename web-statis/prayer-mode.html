@@ -55,11 +55,11 @@
             background-size: contain;
             background-position: center 85%;
             background-repeat: no-repeat;
-            opacity: 0.18;
+            opacity: 0.30;
             mix-blend-mode: luminosity;
-            filter: contrast(1.15) brightness(0.9);
-            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
-            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 75%);
+            filter: contrast(1.15) brightness(1.2);
+            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 45%, rgba(0, 0, 0, 0) 85%);
+            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 45%, rgba(0, 0, 0, 0) 85%);
         }
 
         /* CONTAINER UTAMA */
@@ -439,12 +439,7 @@
 
         /* 7. FOOTER MASJID */
         .masjid-footer {
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 2px;
-            color: rgba(212, 175, 55, 0.75);
-            text-transform: uppercase;
-            padding-bottom: 2px;
+            display: none !important;
         }
 
         @keyframes pulseGlow {
@@ -733,11 +728,6 @@
 
             <span class="quote-watermark quote-right">”</span>
         </div>
-
-        <!-- 6. FOOTER MASJID -->
-        <div class="masjid-footer" id="masjidFooter">
-            © SISTEM INFORMASI DIGITAL MASJID JAMI' AL JIHAD
-        </div>
     </div>
 
     <!-- ELEMEN AUDIO -->
@@ -954,7 +944,8 @@
 
                     if (settings && settings.nama_aplikasi) {
                         document.getElementById('masjidTitle').textContent = settings.nama_aplikasi.toUpperCase();
-                        document.getElementById('masjidFooter').textContent = '© ' + settings.nama_aplikasi.toUpperCase();
+                        const elFooter = document.getElementById('masjidFooter');
+                        if (elFooter) elFooter.textContent = '© ' + settings.nama_aplikasi.toUpperCase();
                     }
                 }
 

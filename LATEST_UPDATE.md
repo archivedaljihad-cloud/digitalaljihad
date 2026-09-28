@@ -5872,3 +5872,38 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 139).
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 140 — Peningkatan Visibilitas Gambar Ka'bah & Penghapusan Footer Duplikat di Belakang Master Footer Emas pada Halaman Prayer Mode (28 Sep 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+1. **Gambar Ka'bah Kurang Terlihat:**
+   - Sebelumnya gambar Ka'bah memiliki opacity rendah (`0.18`), brightness rendah (`0.9`), dan masking yang memotong 70% siluet (`30% - 75%`), sehingga Ka'bah tampak samar/terlalu gelap dan detail ornamennya tidak terlihat jelas di belakang panel hitung mundur sholat.
+   - Pengguna meminta agar visibilitas Ka'bah ditingkatkan agar lebih tampak jelas dan terlihat megah.
+2. **Footer Ganda / Tumpang Tindih:**
+   - Terdapat teks footer bawaan `prayer-mode.html` bertuliskan `"© MASJID JAMI' AL-JIHAD"` di bagian bawah yang bertabrakan dan berada tepat di belakang master display footer emas (`© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). ALL RIGHTS RESERVED`).
+   - Pengguna meminta untuk menghilangkan footer `"MASJID JAMI' AL-JIHAD"` tersebut.
+
+---
+
+### 2. Solusi & Perbaikan yang Diterapkan
+1. **Peningkatan Kualitas & Visibilitas Gambar Ka'bah (`.bg-kaabah`):**
+   - Nilai opacity dinaikkan secara proporsional dari `0.18` menjadi `0.30`.
+   - Filter kecerahan ditingkatkan dari `brightness(0.9)` menjadi `brightness(1.2)` dengan kontras tajam `contrast(1.15)`.
+   - Masking radial diperluas dari `30% - 75%` menjadi `45% - 85%` sehingga detail tekstur Ka'bah, ornamen, dan kubah/lengkungan masjid di sekitarnya tampak nyata, anggun, dan berkelas tanpa mengganggu keterbacaan angka timer.
+2. **Penghapusan Footer Duplikat:**
+   - Menghapus elemen HTML `<div class="masjid-footer" id="masjidFooter">` pada `prayer-mode.html`, `prayer-mode.blade.php`, dan `preview-prayer-mode.html`.
+   - Memberikan aturan CSS `.masjid-footer { display: none !important; }`.
+   - Memperbarui skrip inisialisasi agar *null-safe* terhadap elemen `masjidFooter`.
+   - Sekarang hanya satu master footer emas resmi di bagian bawah layar yang tampil bersih dan elegan tanpa tumpang tindih teks lagi.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/prayer-mode.html` (Peningkatan styling `.bg-kaabah`, penghapusan `#masjidFooter`, CSS & JS null-safe).
+2. `resources/views/prayer-mode.blade.php` (Penyelarasan `.bg-kaabah` dan penghapusan `.masjid-footer`).
+3. `public/preview-prayer-mode.html` (Penyelarasan path, `.bg-kaabah`, dan penghapusan `.masjid-footer`).
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 140).
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
