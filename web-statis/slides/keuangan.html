@@ -696,7 +696,7 @@
                         <td class="col-tgl">${tglFormatted}</td>
                         <td class="col-desc">
                             <i class="fas ${isIncome ? 'fa-arrow-up' : 'fa-arrow-down'}" style="color: ${isIncome ? '#00e676' : '#ff6b6b'}; margin-right: 6px;"></i>
-                            <strong>${item.deskripsi || item.uraian || 'Infaq Kas'}</strong>
+                            <strong>${escapeHtml(item.deskripsi || item.uraian || 'Infaq Kas')}</strong>
                         </td>
                         <td class="col-masuk">
                             ${masuk > 0 ? `<span class="rp-prefix">Rp</span><span class="amount-income-val">${formatRupiah(masuk)}</span>` : '<span class="dash-empty">-</span>'}
@@ -708,7 +708,7 @@
                             <span class="rp-prefix">Rp</span><span class="amount-saldo-val">${formatRupiah(item.computedSaldo)}</span>
                         </td>
                         <td class="col-kat">
-                            <span class="badge-kategori-pill">${item.kategori || 'Kas Utama'}</span>
+                            <span class="badge-kategori-pill">${escapeHtml(item.kategori || 'Kas Utama')}</span>
                         </td>
                     </tr>
                 `;

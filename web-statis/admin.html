@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -6642,11 +6642,35 @@
 
             const headers = getSupabaseHeaders();
 
+            // Eksekusi paralel 10 query ke Supabase (memangkas latensi serial dari ~3500ms menjadi ~350ms)
+            const [
+                resKasSettled,
+                resAmbSettled,
+                resJumatSettled,
+                resSholatSettled,
+                resSetSettled,
+                resUsersSettled,
+                resInfaqSettled,
+                resDonasiSettled,
+                resQrisSettled,
+                resSlidesSettled
+            ] = await Promise.allSettled([
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?order=tanggal.desc,id.desc`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan_ambulance?order=tanggal.desc,id.desc`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc&limit=1`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=*`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?order=id.desc`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?order=tanggal.asc,id.asc`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?order=id.asc`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/slides?order=urutan.asc`, { headers })
+            ]);
+
             // A. Kas Utama Masjid
             try {
-                const resKas = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?order=tanggal.desc,id.desc`, { headers });
-                if (resKas.ok) {
-                    cachedKasData = await resKas.json();
+                if (resKasSettled.status === 'fulfilled' && resKasSettled.value.ok) {
+                    cachedKasData = await resKasSettled.value.json();
                     renderKasTables(cachedKasData);
                 }
             } catch (err) {
@@ -6655,9 +6679,8 @@
 
             // B. Kas Mobil Ambulance
             try {
-                const resAmb = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan_ambulance?order=tanggal.desc,id.desc`, { headers });
-                if (resAmb.ok) {
-                    cachedAmbData = await resAmb.json();
+                if (resAmbSettled.status === 'fulfilled' && resAmbSettled.value.ok) {
+                    cachedAmbData = await resAmbSettled.value.json();
                     renderAmbulanceData(cachedAmbData);
                 }
             } catch (err) {
@@ -6666,9 +6689,8 @@
 
             // C. Petugas Sholat Jum'at Terkini
             try {
-                const resJumat = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc&limit=1`, { headers });
-                if (resJumat.ok) {
-                    const jumatList = await resJumat.json();
+                if (resJumatSettled.status === 'fulfilled' && resJumatSettled.value.ok) {
+                    const jumatList = await resJumatSettled.value.json();
                     if (jumatList && jumatList.length > 0) {
                         const j = jumatList[0];
                         if (document.getElementById('jumatTanggal')) document.getElementById('jumatTanggal').value = j.tanggal || '';
@@ -6697,9 +6719,8 @@
 
             // D. Jadwal Sholat
             try {
-                const resSholat = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers });
-                if (resSholat.ok) {
-                    const sholatList = await resSholat.json();
+                if (resSholatSettled.status === 'fulfilled' && resSholatSettled.value.ok) {
+                    const sholatList = await resSholatSettled.value.json();
                     sholatList.forEach(s => {
                         const name = (s.nama_sholat || s.nama || '').toLowerCase();
                         const timeVal = s.waktu ? s.waktu.substring(0, 5) : (s.jam || '');
@@ -6742,9 +6763,8 @@
 
             // E. App Settings (Durasi, Running Text, Rotasi TV)
             try {
-                const resSet = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers });
-                if (resSet.ok) {
-                    const settingsList = await resSet.json();
+                if (resSetSettled.status === 'fulfilled' && resSetSettled.value.ok) {
+                    const settingsList = await resSetSettled.value.json();
                     if (settingsList && settingsList.length > 0) {
                         const s = settingsList[0];
                         if (document.getElementById('cfgNamaMasjid') && s.nama_aplikasi) document.getElementById('cfgNamaMasjid').value = s.nama_aplikasi;
@@ -6955,9 +6975,8 @@
 
             // F. Muat Akun Pengguna dari Supabase jika ada & sinkronkan (Hanya 3 Akun Resmi)
             try {
-                const resUsers = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=*`, { headers });
-                if (resUsers.ok) {
-                    const sbUsers = await resUsers.json();
+                if (resUsersSettled.status === 'fulfilled' && resUsersSettled.value.ok) {
+                    const sbUsers = await resUsersSettled.value.json();
                     if (Array.isArray(sbUsers) && sbUsers.length > 0) {
                         let currentUsers = (typeof AdminAuth !== 'undefined') ? AdminAuth.getUsers() : [...DEFAULT_AUTH_USERS];
                         sbUsers.forEach(sbu => {
@@ -6984,9 +7003,8 @@
 
             // F. Program Penggalangan Infaq & Donasi Khusus
             try {
-                const resInfaq = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?order=id.desc`, { headers });
-                if (resInfaq.ok) {
-                    cachedProgramInfaq = await resInfaq.json();
+                if (resInfaqSettled.status === 'fulfilled' && resInfaqSettled.value.ok) {
+                    cachedProgramInfaq = await resInfaqSettled.value.json();
                 }
             } catch (err) {
                 console.warn('Gagal memuat program infaq dari Supabase:', err);
@@ -7014,9 +7032,8 @@
 
             // F2. Daftar Donatur Donasi Infaq
             try {
-                const resDonasi = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?order=tanggal.asc,id.asc`, { headers });
-                if (resDonasi.ok) {
-                    cachedDonasiInfaq = await resDonasi.json();
+                if (resDonasiSettled.status === 'fulfilled' && resDonasiSettled.value.ok) {
+                    cachedDonasiInfaq = await resDonasiSettled.value.json();
                 }
             } catch (err) {
                 console.warn('Gagal memuat donasi infaq dari Supabase:', err);
@@ -7038,9 +7055,8 @@
 
             // G. Data QRIS Donasi Digital
             try {
-                const resQris = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?order=id.asc`, { headers });
-                if (resQris.ok) {
-                    cachedQrisList = await resQris.json();
+                if (resQrisSettled.status === 'fulfilled' && resQrisSettled.value.ok) {
+                    cachedQrisList = await resQrisSettled.value.json();
                 }
             } catch (err) {
                 console.warn('Gagal memuat QRIS dari Supabase:', err);
@@ -7071,9 +7087,8 @@
 
             // H. Data Galeri Informasi & Dokumentasi TV (Slides)
             try {
-                const resSlides = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/slides?order=urutan.asc`, { headers });
-                if (resSlides.ok) {
-                    const sbSlides = await resSlides.json();
+                if (resSlidesSettled.status === 'fulfilled' && resSlidesSettled.value.ok) {
+                    const sbSlides = await resSlidesSettled.value.json();
                     if (Array.isArray(sbSlides) && sbSlides.length > 0) {
                         cachedGaleriData = sbSlides;
                         localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(sbSlides));

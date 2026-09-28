@@ -638,7 +638,7 @@
                         const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
                         return `
                             <div class="donatur-item">
-                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> ${nama}</span>
+                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> ${escapeHtml(nama)}</span>
                                 <span class="donatur-val">Rp ${formatRupiah(d.nominal)}</span>
                             </div>
                         `;

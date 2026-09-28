@@ -766,14 +766,14 @@
                     <div class="table-row">
                         <div class="col-no">${idx + 1}</div>
                         <div class="col-nama">
-                            <div>${item.nama}</div>
-                            <div class="col-subnama">${item.bin || 'Atas Nama Shohibul Qurban'}</div>
+                            <div>${escapeHtml(item.nama)}</div>
+                            <div class="col-subnama">${escapeHtml(item.bin || 'Atas Nama Shohibul Qurban')}</div>
                         </div>
                         <div style="text-align:center;">${badgeHtml}</div>
                         <div class="col-jumlah">${jml} Ekor</div>
                         <div class="col-infaq">${formatRupiah(inf)}</div>
                         <div class="col-status">
-                            <span class="status-badge"><i class="fa-solid fa-check-circle"></i> ${item.status || 'DITERIMA'}</span>
+                            <span class="status-badge"><i class="fa-solid fa-check-circle"></i> ${escapeHtml(item.status || 'DITERIMA')}</span>
                         </div>
                     </div>
                 `;

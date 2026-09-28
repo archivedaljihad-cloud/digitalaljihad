@@ -1,7 +1,19 @@
 /**
- * Global Unified Hijri + Masehi + Realtime Clock Formatter
- * Format: [Hari, DD MMMM YYYY] <span class="dt-sep">•</span> <span class="hijri-date">[DD BulanHijri YYYY H]</span> <span class="dt-sep">•</span> [HH:mm:ss WIB]
+ * Helper Sanitasi XSS Global untuk Display Masjid
  */
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+if (typeof window !== 'undefined') {
+    window.escapeHtml = escapeHtml;
+}
+
 function getStandardHijriDate(date = new Date()) {
     const hijriMonths = [
         '',

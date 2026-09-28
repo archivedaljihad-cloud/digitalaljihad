@@ -68,8 +68,11 @@
                 const isFridayPrayer = isFriday && isDzuhur;
 
                 // Parse waktu sholat hari ini
-                const [hStr, mStr, sStr] = item.waktu.split(':');
-                const adzanTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hStr), parseInt(mStr), parseInt(sStr || 0));
+                const timeParts = (item.waktu || '').split(':');
+                const h = parseInt(timeParts[0], 10) || 0;
+                const m = parseInt(timeParts[1], 10) || 0;
+                const s = parseInt(timeParts[2] || 0, 10) || 0;
+                const adzanTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, s);
 
                 const countdownStart = new Date(adzanTime.getTime() - beforeAdzan * 60 * 1000);
                 const adzanEnd = new Date(adzanTime.getTime() + adzanDuration * 60 * 1000);

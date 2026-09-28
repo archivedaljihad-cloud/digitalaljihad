@@ -115,6 +115,58 @@
         },
 
         /**
+         * Simpan / Perbarui app_settings ke Cloud Supabase (id=1)
+         * Mendukung pembaruan sebagian (partial update) dan pembaruan menyeluruh
+         * @param {Object} updatedFields
+         */
+        async saveSettings(updatedFields) {
+            if (!updatedFields || typeof updatedFields !== 'object') {
+                return { success: false, error: 'Payload tidak valid' };
+            }
+
+            // 1. Simpan langsung ke cache lokal browser
+            try {
+                const currentRaw = localStorage.getItem('cached_app_settings');
+                const current = currentRaw ? JSON.parse(currentRaw) : Object.assign({}, this.defaultSettings);
+                const merged = Object.assign({}, current, updatedFields);
+                localStorage.setItem('cached_app_settings', JSON.stringify(merged));
+            } catch (e) {
+                console.warn('[SupabaseDB] Gagal update cached_app_settings lokal:', e);
+            }
+
+            // 2. Kirim update ke Cloud Supabase (id=1)
+            try {
+                if (SUPABASE_CONFIG && SUPABASE_CONFIG.url) {
+                    const headers = {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    };
+
+                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: headers,
+                        body: JSON.stringify(updatedFields)
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json().catch(() => null);
+                        console.log('✅ [SupabaseDB] Sukses sinkronisasi settings ke cloud:', updatedFields);
+                        return { success: true, data };
+                    } else {
+                        const errText = await res.text().catch(() => '');
+                        console.warn('⚠️ [SupabaseDB] Gagal update app_settings cloud:', res.status, errText);
+                    }
+                }
+            } catch (err) {
+                console.warn('⚠️ [SupabaseDB] Jaringan error saat saveSettings:', err);
+            }
+
+            return { success: false };
+        },
+
+        /**
          * Ambil jadwal sholat dari tabel jadwal_sholat
          */
         async getJadwalSholat() {
