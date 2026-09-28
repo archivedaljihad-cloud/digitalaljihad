@@ -6234,3 +6234,37 @@ Halaman Mode Sholat kini dapat diakses melalui:
 2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 149).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 150 — Perbaikan Tombol "Simpan Agenda 1 Bulan" Kajian Malam Ahad & Penambahan State Interaktif (29 Sep 2026)
+
+### 1. Masalah yang Ditemukan
+- Saat tombol **"Simpan Agenda 1 Bulan"** di klik oleh petugas di halaman Kajian Malam Ahad (`web-statis/admin.html`), tombol tidak memberikan respon apapun (*unresponsive*).
+- **Akar Masalah (*Root Cause*):**
+  1. Konstanta `NAMA_BULAN_INDONESIA` belum didefinisikan di dalam skrip modul Kajian Malam Ahad pada `web-statis/admin.html`. Akibatnya, saat `simpanKajianSabtu()` mengevaluasi `NAMA_BULAN_INDONESIA[bulan - 1]`, peramban memicu galat kritis `ReferenceError: NAMA_BULAN_INDONESIA is not defined` yang menghentikan eksekusi kode sebelum mencapai logika penyimpanan atau peringatan (*alert*).
+  2. Validasi `hasValidEntry` sebelumnya mewajibkan kedua field `ustadz_nama` dan `tema_kajian` terisi secara kaku. Jika petugas hanya mengisi judul Kitab Rujukan (misalnya `Tafsir Al Qur'an` atau `Kitab Safinatunnajah`) tanpa menuliskan tema terpisah, data tidak lolos simpan.
+  3. Belum adanya *loading state* (indikator putar/spinner) saat tombol diklik.
+
+---
+
+### 2. Solusi & Perbaikan yang Diterapkan
+1. **Deklarasi Variabel Global `NAMA_BULAN_INDONESIA`:**
+   - Menambahkan array resmi 12 nama bulan bahasa Indonesia (`Januari` s/d `Desember`) pada baris awal skrip modul Pengajian Rutin Malam Ahad.
+   - Memberikan fallback aman `(typeof NAMA_BULAN_INDONESIA !== 'undefined' && NAMA_BULAN_INDONESIA[bulan - 1]) ? ... : 'Bulan Ini'` di setiap fungsi pemformatan tanggal.
+2. **Penyelarasan Cerdas Tema & Kitab Rujukan:**
+   - Jika petugas mengisi `Kitab Rujukan Utama` tetapi mengosongkan `Tema Pembahasan`, sistem secara otomatis menggunakan nama kitab tersebut sebagai tema pembahasan sehingga proses simpan tidak terhambat.
+   - Validasi disesuaikan menjadi `hasValidEntry = currentKajianBulanData.jadwal_list.some(j => j.ustadz_nama && (j.tema_kajian || j.kitab_rujukan))`.
+3. **Indikator Loading & Proteksi Tombol:**
+   - Menambahkan `id="btnSimpanKajian"` pada tombol simpan.
+   - Tombol otomatis beralih menampilkan ikon `<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan Agenda...` dan dinonaktifkan sementara (*disabled*) selama proses penyimpanan berlangsung, lalu dipulihkan kembali melalui blok `finally`.
+4. **Bungkus Error Handling Komprehensif (`try-catch-finally`):**
+   - Seluruh alur fungsi `simpanKajianSabtu()` dibungkus secara menyeluruh dengan penanganan pesan error yang informatif jika terjadi kegagalan jaringan atau parsing data.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/admin.html` (Deklarasi `NAMA_BULAN_INDONESIA`, perbaikan `simpanKajianSabtu`, penambahan ID `btnSimpanKajian`, dan penanganan loading state).
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 150).
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

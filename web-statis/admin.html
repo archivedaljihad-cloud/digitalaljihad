@@ -2573,7 +2573,7 @@
 
                                 <!-- Tombol Aksi Simpan Agenda 1 Bulan (Di Bawah Rekap Kajian, Sejajar dengan Form Kiri) -->
                                 <div class="mt-3">
-                                    <button type="button" class="btn btn-success btn-block font-weight-bold shadow d-flex align-items-center justify-content-center" onclick="simpanKajianSabtu()" style="border-radius: 10px; font-size: 1.05rem; padding: 12px 20px; letter-spacing: 0.3px;">
+                                    <button type="button" id="btnSimpanKajian" class="btn btn-success btn-block font-weight-bold shadow d-flex align-items-center justify-content-center" onclick="simpanKajianSabtu()" style="border-radius: 10px; font-size: 1.05rem; padding: 12px 20px; letter-spacing: 0.3px;">
                                         <i class="fas fa-save mr-2" style="font-size: 1.25rem;"></i> Simpan Agenda 1 Bulan
                                     </button>
                                     <small class="text-muted text-center d-block mt-2" style="font-size: 11px;">
@@ -9006,6 +9006,11 @@
         // =======================================================
         // PENGAJIAN RUTIN MALAM AHAD (SABTU MALAM)
         // =======================================================
+        const NAMA_BULAN_INDONESIA = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+
         const KAJIAN_PRESETS = {
             1: {
                 pekan: "Pekan 1",
@@ -9406,86 +9411,113 @@
         }
 
         async function simpanKajianSabtu() {
-            simpanInputFormKeMemory(currentKajianPekanActive);
-            const elJam = document.getElementById('kajianJamMulai');
-            if (elJam) validateTime24H(elJam);
-            const enabled = document.getElementById('cfgKajianSabtuEnabled') ? document.getElementById('cfgKajianSabtuEnabled').checked : true;
-            const jamMulai = elJam?.value || '18:25';
-            const bulan = parseInt(document.getElementById('kajianBulanSelect')?.value || ((new Date()).getMonth() + 1));
-            const tahun = parseInt(document.getElementById('kajianTahunSelect')?.value || (new Date()).getFullYear());
-            const namaBulan = NAMA_BULAN_INDONESIA[bulan - 1] || 'Bulan Ini';
-
-            // Validasi minimal ada 1 ustadz & tema terisi
-            const hasValidEntry = currentKajianBulanData.jadwal_list.some(j => j.ustadz_nama && j.tema_kajian);
-            if (!hasValidEntry) {
-                alert('Harap lengkapi setidaknya satu jadwal kajian (Nama Ustadz dan Tema)!');
-                return;
+            const btnSimpan = document.getElementById('btnSimpanKajian');
+            let originalBtnHtml = '';
+            if (btnSimpan) {
+                originalBtnHtml = btnSimpan.innerHTML;
+                btnSimpan.disabled = true;
+                btnSimpan.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan Agenda...';
             }
 
-            // Cari pekan terdekat atau hari ini untuk kompatibilitas backward
-            const todayStr = getTodayDateStringKajian();
-            let nearestIndex = 0;
-            let minDiff = Infinity;
-            currentKajianBulanData.jadwal_list.forEach((item, idx) => {
-                if (item.tanggal) {
-                    if (item.tanggal === todayStr) {
-                        nearestIndex = idx;
-                        minDiff = -1;
-                    } else if (item.tanggal >= todayStr && minDiff !== -1) {
-                        const diff = new Date(item.tanggal) - new Date(todayStr);
-                        if (diff < minDiff) {
-                            minDiff = diff;
-                            nearestIndex = idx;
-                        }
-                    }
-                }
-            });
-
-            const nearestItem = currentKajianBulanData.jadwal_list[nearestIndex] || currentKajianBulanData.jadwal_list[0];
-
-            const payloadData = {
-                bulan_num: bulan,
-                tahun: tahun,
-                bulan_label: `${namaBulan} ${tahun}`,
-                jadwal_list: currentKajianBulanData.jadwal_list,
-                // Kompatibilitas dengan pembaca lama:
-                pekan_label: nearestItem.pekan_label || `Pekan ${nearestIndex + 1}`,
-                tanggal: nearestItem.tanggal || '',
-                ustadz_nama: nearestItem.ustadz_nama || '',
-                ustadz_gelar: nearestItem.ustadz_gelar || '',
-                kitab_rujukan: nearestItem.kitab_rujukan || '',
-                tema_kajian: nearestItem.tema_kajian || '',
-                waktu_pelaksanaan: nearestItem.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Menjelang Isya"
-            };
-
-            // Simpan ke local cache
-            localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
-            localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
-            localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
-
             try {
-                // Simpan ke app_settings Supabase
-                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                    method: 'PATCH',
-                    headers: getSupabaseHeaders(),
-                    body: JSON.stringify({
-                        kajian_sabtu_enabled: enabled,
-                        kajian_sabtu_start_time: jamMulai,
-                        kajian_sabtu_data: JSON.stringify(payloadData)
-                    })
+                simpanInputFormKeMemory(currentKajianPekanActive);
+                const elJam = document.getElementById('kajianJamMulai');
+                if (elJam && typeof validateTime24H === 'function') validateTime24H(elJam);
+                const enabled = document.getElementById('cfgKajianSabtuEnabled') ? document.getElementById('cfgKajianSabtuEnabled').checked : true;
+                const jamMulai = elJam?.value || '18:25';
+                const bulan = parseInt(document.getElementById('kajianBulanSelect')?.value || ((new Date()).getMonth() + 1));
+                const tahun = parseInt(document.getElementById('kajianTahunSelect')?.value || (new Date()).getFullYear());
+                const namaBulan = (typeof NAMA_BULAN_INDONESIA !== 'undefined' && NAMA_BULAN_INDONESIA[bulan - 1]) ? NAMA_BULAN_INDONESIA[bulan - 1] : 'Bulan Ini';
+
+                // Sinkronkan tema_kajian jika kosong tapi kitab_rujukan ada
+                currentKajianBulanData.jadwal_list.forEach(j => {
+                    if (!j.tema_kajian && j.kitab_rujukan) {
+                        j.tema_kajian = j.kitab_rujukan;
+                    }
                 });
 
-                renderKajianPekanTabsUI();
-                renderKajianRekapTable();
-                updateKajianPreview();
+                // Validasi minimal ada 1 ustadz & tema / kitab terisi
+                const hasValidEntry = currentKajianBulanData.jadwal_list.some(j => j.ustadz_nama && (j.tema_kajian || j.kitab_rujukan));
+                if (!hasValidEntry) {
+                    alert('Harap lengkapi setidaknya satu jadwal kajian (Nama Ustadz Pemateri dan Tema / Kitab Rujukan)!');
+                    return;
+                }
 
-                if (res.ok) {
+                // Cari pekan terdekat atau hari ini untuk kompatibilitas backward
+                const todayStr = getTodayDateStringKajian();
+                let nearestIndex = 0;
+                let minDiff = Infinity;
+                currentKajianBulanData.jadwal_list.forEach((item, idx) => {
+                    if (item.tanggal) {
+                        if (item.tanggal === todayStr) {
+                            nearestIndex = idx;
+                            minDiff = -1;
+                        } else if (item.tanggal >= todayStr && minDiff !== -1) {
+                            const diff = new Date(item.tanggal) - new Date(todayStr);
+                            if (diff < minDiff) {
+                                minDiff = diff;
+                                nearestIndex = idx;
+                            }
+                        }
+                    }
+                });
+
+                const nearestItem = currentKajianBulanData.jadwal_list[nearestIndex] || currentKajianBulanData.jadwal_list[0];
+
+                const payloadData = {
+                    bulan_num: bulan,
+                    tahun: tahun,
+                    bulan_label: `${namaBulan} ${tahun}`,
+                    jadwal_list: currentKajianBulanData.jadwal_list,
+                    // Kompatibilitas dengan pembaca lama:
+                    pekan_label: nearestItem.pekan_label || `Pekan ${nearestIndex + 1}`,
+                    tanggal: nearestItem.tanggal || '',
+                    ustadz_nama: nearestItem.ustadz_nama || '',
+                    ustadz_gelar: nearestItem.ustadz_gelar || '',
+                    kitab_rujukan: nearestItem.kitab_rujukan || '',
+                    tema_kajian: nearestItem.tema_kajian || '',
+                    waktu_pelaksanaan: nearestItem.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Menjelang Isya"
+                };
+
+                // Simpan ke local cache
+                localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
+                localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
+                localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
+
+                // Simpan ke app_settings Supabase
+                let sbSuccess = false;
+                try {
+                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({
+                            kajian_sabtu_enabled: enabled,
+                            kajian_sabtu_start_time: jamMulai,
+                            kajian_sabtu_data: JSON.stringify(payloadData)
+                        })
+                    });
+                    sbSuccess = res.ok;
+                } catch (fetchErr) {
+                    console.warn('Gagal sync ke Supabase (offline/network):', fetchErr);
+                }
+
+                if (typeof renderKajianPekanTabsUI === 'function') renderKajianPekanTabsUI();
+                if (typeof renderKajianRekapTable === 'function') renderKajianRekapTable();
+                if (typeof updateKajianPreview === 'function') updateKajianPreview();
+
+                if (sbSuccess) {
                     alert(`Alhamdulillah! Seluruh Agenda Pengajian Rutin Malam Ahad 1 Bulan Penuh (${namaBulan} ${tahun}) berhasil disimpan dan langsung terhubung ke Layar Display TV.`);
                 } else {
-                    alert('Agenda tersimpan di sesi lokal (periksa koneksi Supabase).');
+                    alert(`Alhamdulillah! Agenda Pengajian Rutin Malam Ahad (${namaBulan} ${tahun}) berhasil disimpan di cache lokal peramban & layar TV (Mode Offline).`);
                 }
             } catch (err) {
-                alert('Tersimpan di sesi lokal (koneksi offline).');
+                console.error('Error saat simpanKajianSabtu:', err);
+                alert('Terjadi kendala saat menyimpan agenda: ' + err.message);
+            } finally {
+                if (btnSimpan && originalBtnHtml) {
+                    btnSimpan.disabled = false;
+                    btnSimpan.innerHTML = originalBtnHtml;
+                }
             }
         }
 
