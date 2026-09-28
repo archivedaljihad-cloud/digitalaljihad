@@ -2668,7 +2668,12 @@
                                             <i class="fas fa-magic text-primary mr-1"></i> <strong>Full Otomatis:</strong> Berulang setiap <strong>Malam Ahad (Sabtu malam)</strong> ba'da Maghrib.
                                         </div>
                                         <div class="form-group mb-2">
-                                            <label class="small font-weight-bold text-dark mb-1">Judul Kajian</label>
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <label class="small font-weight-bold text-dark mb-0">Judul Kajian</label>
+                                                <button type="button" class="btn btn-sm btn-outline-primary font-weight-bold shadow-sm" onclick="syncKajianPekanIniKeAgendaRutin(true)" title="Ambil otomatis nama ustadz & tema dari jadwal kajian 1 bulan yang sedang aktif atau terdekat" style="font-size: 11px; padding: 2px 10px; border-radius: 6px;">
+                                                    <i class="fas fa-sync-alt mr-1"></i> Ambil Jadwal Pekan Ini
+                                                </button>
+                                            </div>
                                             <input type="text" class="form-control form-control-sm" id="wsKajianAhadJudul" value="Kajian Malam Ahad">
                                         </div>
                                         <div class="row">
@@ -2681,9 +2686,11 @@
                                                 <input type="text" class="form-control form-control-sm" id="wsKajianAhadPembimbing" value="Ust. H. Ahmad Sholeh Al-Hafidz">
                                             </div>
                                         </div>
-                                        <div class="form-group mb-0">
+                                        <div class="form-group mb-2">
                                             <label class="small font-weight-bold text-dark mb-1">Kitab / Tema</label>
                                             <input type="text" class="form-control form-control-sm" id="wsKajianAhadKet" value="Kitab Bidayatul Hidayah & Tanya Jawab Fiqih">
+                                        </div>
+                                        <div id="wsKajianAhadSyncStatus" class="p-1 px-2 rounded small" style="display: none; background: #e0f2fe; color: #0369a1; font-size: 11px; border-left: 3px solid #0284c7;">
                                         </div>
                                     </div>
                                 </div>
@@ -9505,10 +9512,19 @@
                 if (typeof renderKajianRekapTable === 'function') renderKajianRekapTable();
                 if (typeof updateKajianPreview === 'function') updateKajianPreview();
 
+                // Otomatis sinkronkan jadwal pekan ini ke Pusat Agenda Rutin (Kotak 2: Kajian Malam Ahad)
+                try {
+                    if (typeof syncKajianPekanIniKeAgendaRutin === 'function') {
+                        syncKajianPekanIniKeAgendaRutin(false, nearestItem);
+                    }
+                } catch (syncErr) {
+                    console.warn('Otomatis sync ke agenda rutin:', syncErr);
+                }
+
                 if (sbSuccess) {
-                    alert(`Alhamdulillah! Seluruh Agenda Pengajian Rutin Malam Ahad 1 Bulan Penuh (${namaBulan} ${tahun}) berhasil disimpan dan langsung terhubung ke Layar Display TV.`);
+                    alert(`Alhamdulillah! Seluruh Agenda Pengajian Rutin Malam Ahad 1 Bulan Penuh (${namaBulan} ${tahun}) berhasil disimpan dan otomatis tersinkronisasi ke Pusat Agenda Rutin serta Layar Display TV.`);
                 } else {
-                    alert(`Alhamdulillah! Agenda Pengajian Rutin Malam Ahad (${namaBulan} ${tahun}) berhasil disimpan di cache lokal peramban & layar TV (Mode Offline).`);
+                    alert(`Alhamdulillah! Agenda Pengajian Rutin Malam Ahad (${namaBulan} ${tahun}) berhasil disimpan di cache lokal peramban, tersinkronisasi ke Pusat Agenda Rutin & Layar TV (Mode Offline).`);
                 }
             } catch (err) {
                 console.error('Error saat simpanKajianSabtu:', err);
@@ -11760,6 +11776,162 @@
             }
         }
 
+        // =====================================================
+        // SINKRONISASI JADWAL PEKAN INI KE PUSAT AGENDA RUTIN
+        // =====================================================
+        function syncKajianPekanIniKeAgendaRutin(isUserClick = false, targetItem = null) {
+            let activeItem = targetItem;
+
+            if (!activeItem) {
+                // 1. Coba ambil dari currentKajianBulanData di memori
+                if (typeof currentKajianBulanData !== 'undefined' && currentKajianBulanData && Array.isArray(currentKajianBulanData.jadwal_list)) {
+                    const todayStr = (typeof getTodayDateStringKajian === 'function') ? getTodayDateStringKajian() : (new Date()).toISOString().split('T')[0];
+                    let nearestIndex = 0;
+                    let minDiff = Infinity;
+                    currentKajianBulanData.jadwal_list.forEach((item, idx) => {
+                        if (item.tanggal) {
+                            if (item.tanggal === todayStr) {
+                                nearestIndex = idx;
+                                minDiff = -1;
+                            } else if (item.tanggal >= todayStr && minDiff !== -1) {
+                                const diff = new Date(item.tanggal) - new Date(todayStr);
+                                if (diff < minDiff) {
+                                    minDiff = diff;
+                                    nearestIndex = idx;
+                                }
+                            }
+                        }
+                    });
+                    activeItem = currentKajianBulanData.jadwal_list[nearestIndex] || currentKajianBulanData.jadwal_list[0];
+                }
+
+                // 2. Jika belum ada, baca dari cached_kajian_sabtu
+                if (!activeItem) {
+                    try {
+                        const raw = localStorage.getItem('cached_kajian_sabtu');
+                        if (raw) {
+                            const parsed = JSON.parse(raw);
+                            if (Array.isArray(parsed.jadwal_list) && parsed.jadwal_list.length > 0) {
+                                const todayStr = (new Date()).toISOString().split('T')[0];
+                                let nearestIdx = 0;
+                                let minDiff = Infinity;
+                                parsed.jadwal_list.forEach((item, idx) => {
+                                    if (item.tanggal) {
+                                        if (item.tanggal === todayStr) {
+                                            nearestIdx = idx;
+                                            minDiff = -1;
+                                        } else if (item.tanggal >= todayStr && minDiff !== -1) {
+                                            const diff = new Date(item.tanggal) - new Date(todayStr);
+                                            if (diff < minDiff) {
+                                                minDiff = diff;
+                                                nearestIdx = idx;
+                                            }
+                                        }
+                                    }
+                                });
+                                activeItem = parsed.jadwal_list[nearestIdx] || parsed.jadwal_list[0];
+                            } else if (parsed.ustadz_nama) {
+                                activeItem = parsed;
+                            }
+                        }
+                    } catch(e) {
+                        console.warn('Gagal membaca cached_kajian_sabtu:', e);
+                    }
+                }
+            }
+
+            if (!activeItem || (!activeItem.ustadz_nama && !activeItem.tema_kajian && !activeItem.kitab_rujukan)) {
+                if (isUserClick) {
+                    alert('Belum ada data jadwal kajian 1 bulan yang tersimpan. Silakan isi terlebih dahulu di menu "Kajian Malam Ahad" lalu klik "Simpan Agenda 1 Bulan".');
+                }
+                return false;
+            }
+
+            // Ambil elemen form di Pusat Agenda Rutin
+            const elJudul = document.getElementById('wsKajianAhadJudul');
+            const elWaktu = document.getElementById('wsKajianAhadWaktu');
+            const elUstadz = document.getElementById('wsKajianAhadPembimbing');
+            const elKet = document.getElementById('wsKajianAhadKet');
+            const elStatus = document.getElementById('wsKajianAhadSyncStatus');
+
+            const ustadzNama = (activeItem.ustadz_nama || '').trim();
+            const waktuPelaksanaan = (activeItem.waktu_pelaksanaan || "Ba'da Maghrib s/d Isya").trim();
+
+            let ketTema = '';
+            if (activeItem.kitab_rujukan && activeItem.tema_kajian && activeItem.kitab_rujukan !== activeItem.tema_kajian) {
+                ketTema = `${activeItem.kitab_rujukan} (${activeItem.tema_kajian})`;
+            } else {
+                ketTema = activeItem.kitab_rujukan || activeItem.tema_kajian || "Kitab Bidayatul Hidayah & Tanya Jawab Fiqih";
+            }
+
+            const pekanLabel = activeItem.pekan_label || (activeItem.pekan ? `Pekan ${activeItem.pekan}` : 'Pekan Aktif');
+            const tglShort = activeItem.tanggal ? (typeof formatTanggalShort === 'function' ? formatTanggalShort(activeItem.tanggal) : activeItem.tanggal) : '';
+
+            // Update nilai form
+            if (elJudul && (!elJudul.value || elJudul.value === 'Kajian Malam Ahad' || isUserClick)) {
+                elJudul.value = 'Kajian Malam Ahad';
+            }
+            if (elWaktu && waktuPelaksanaan) elWaktu.value = waktuPelaksanaan;
+            if (elUstadz && ustadzNama) elUstadz.value = ustadzNama;
+            if (elKet && ketTema) elKet.value = ketTema;
+
+            // Highlight animasi saat diklik manual
+            if (isUserClick) {
+                [elJudul, elWaktu, elUstadz, elKet].forEach(el => {
+                    if (el) {
+                        el.style.transition = 'all 0.4s ease';
+                        el.style.borderColor = '#10b981';
+                        el.style.backgroundColor = '#ecfdf5';
+                        setTimeout(() => {
+                            el.style.borderColor = '';
+                            el.style.backgroundColor = '';
+                        }, 1200);
+                    }
+                });
+            }
+
+            // Tampilkan status sinkronisasi
+            if (elStatus) {
+                elStatus.style.display = 'block';
+                elStatus.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Tersinkronisasi dari <strong>${pekanLabel}</strong>${tglShort ? ' (' + tglShort + ')' : ''}: <em>${ustadzNama}</em>.`;
+            }
+
+            // Simpan otomatis ke agenda_rutin_settings di localStorage & Supabase
+            try {
+                const currentAgenda = getAgendaRutinDataWs();
+                currentAgenda.kajian_ahad.judul = (elJudul ? elJudul.value : currentAgenda.kajian_ahad.judul).trim() || 'Kajian Malam Ahad';
+                currentAgenda.kajian_ahad.waktu = waktuPelaksanaan;
+                currentAgenda.kajian_ahad.pembimbing = ustadzNama;
+                currentAgenda.kajian_ahad.keterangan = ketTema;
+
+                localStorage.setItem('agenda_rutin_settings', JSON.stringify(currentAgenda));
+
+                if (typeof SUPABASE_CONFIG !== 'undefined' && typeof getSupabaseHeaders === 'function') {
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({ kegiatan_rutin_settings: currentAgenda })
+                    }).catch(e => console.warn('Sync Supabase agenda rutin gagal:', e));
+                }
+
+                if (typeof renderDashAgendaRutinWidget === 'function') {
+                    renderDashAgendaRutinWidget(currentAgenda);
+                }
+            } catch(e) {
+                console.warn('Gagal simpan sync agenda rutin:', e);
+            }
+
+            if (isUserClick) {
+                alert(`Alhamdulillah! Jadwal Kajian Malam Ahad berhasil disinkronkan dari ${pekanLabel}:\n\n` +
+                      `• Pemateri: ${ustadzNama}\n` +
+                      `• Kitab / Tema: ${ketTema}\n` +
+                      `• Waktu: ${waktuPelaksanaan}\n\n` +
+                      `Data langsung otomatis tersimpan dan aktif di Layar Display TV.`);
+            }
+
+            return true;
+        }
+
         function loadAgendaRutinAdmin() {
             const data = getAgendaRutinDataWs();
 
@@ -11788,6 +11960,45 @@
             if (wsKajianAhadWaktu) wsKajianAhadWaktu.value = data.kajian_ahad.waktu || '';
             if (wsKajianAhadPembimbing) wsKajianAhadPembimbing.value = data.kajian_ahad.pembimbing || '';
             if (wsKajianAhadKet) wsKajianAhadKet.value = data.kajian_ahad.keterangan || '';
+
+            // Tampilkan info sinkronisasi aktif jika tersedia
+            const elSyncStatus = document.getElementById('wsKajianAhadSyncStatus');
+            try {
+                const rawKajian = localStorage.getItem('cached_kajian_sabtu');
+                if (rawKajian && elSyncStatus) {
+                    const parsedKajian = JSON.parse(rawKajian);
+                    const todayStr = (new Date()).toISOString().split('T')[0];
+                    let activeItem = null;
+                    if (Array.isArray(parsedKajian.jadwal_list) && parsedKajian.jadwal_list.length > 0) {
+                        let nearestIdx = 0;
+                        let minDiff = Infinity;
+                        parsedKajian.jadwal_list.forEach((item, idx) => {
+                            if (item.tanggal) {
+                                if (item.tanggal === todayStr) {
+                                    nearestIdx = idx;
+                                    minDiff = -1;
+                                } else if (item.tanggal >= todayStr && minDiff !== -1) {
+                                    const diff = new Date(item.tanggal) - new Date(todayStr);
+                                    if (diff < minDiff) {
+                                        minDiff = diff;
+                                        nearestIdx = idx;
+                                    }
+                                }
+                            }
+                        });
+                        activeItem = parsedKajian.jadwal_list[nearestIdx] || parsedKajian.jadwal_list[0];
+                    } else if (parsedKajian.ustadz_nama) {
+                        activeItem = parsedKajian;
+                    }
+
+                    if (activeItem && activeItem.ustadz_nama) {
+                        const pLabel = activeItem.pekan_label || (activeItem.pekan ? `Pekan ${activeItem.pekan}` : 'Pekan Aktif');
+                        const tShort = activeItem.tanggal ? (typeof formatTanggalShort === 'function' ? formatTanggalShort(activeItem.tanggal) : activeItem.tanggal) : '';
+                        elSyncStatus.style.display = 'block';
+                        elSyncStatus.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Terhubung ke Jadwal 1 Bulan: <strong>${pLabel}</strong>${tShort ? ' (' + tShort + ')' : ''} — <em>${activeItem.ustadz_nama}</em>.`;
+                    }
+                }
+            } catch(e) {}
 
             // 3. Tahsin (1-Click Days)
             const wsTahsinEnabled = document.getElementById('wsTahsinEnabled');

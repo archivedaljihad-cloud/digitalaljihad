@@ -6304,3 +6304,36 @@ Halaman Mode Sholat kini dapat diakses melalui:
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 151).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 152 — Implementasi Tombol "Ambil Jadwal Pekan Ini" & Sinkronisasi Otomatis Kajian Malam Ahad ke Pusat Agenda Rutin (29 Sep 2026)
+
+### 1. Masalah & Latar Belakang
+- Petugas/Operator masjid yang telah selesai mengisi jadwal Kajian Malam Ahad 1 Bulan Penuh (Pekan 1 s/d Pekan 5) di menu **Kajian Malam Ahad** mendapati bahwa kotak nomor 2 (*Kajian Malam Ahad*) di menu **Pusat Agenda Rutin** isinya tidak berubah dan masih berupa data contoh / teks lama.
+- Kondisi ini menimbulkan kebingungan bagi operator karena data harus diketik ulang dua kali di dua menu yang berbeda.
+
+---
+
+### 2. Solusi & Fitur Baru yang Diterapkan
+1. **Fitur Sinkronisasi Otomatis Dua Arah (`syncKajianPekanIniKeAgendaRutin`):**
+   - Saat operator mengklik tombol **"Simpan Agenda 1 Bulan"** di menu *Kajian Malam Ahad*, sistem kini secara otomatis mengevaluasi pekan aktif / terdekat (berdasarkan tanggal hari ini atau pekan terdekat yang diisi).
+   - Data pemateri (`ustadz_nama`), waktu pelaksanaan, dan tema/kitab rujukan pekan tersebut **langsung otomatis disinkronkan dan disimpan ke konfigurasi `agenda_rutin_settings` (localStorage & Supabase BaaS)**.
+   - Dengan demikian, saat operator membuka menu *Pusat Agenda Rutin*, data pada kotak nomor 2 sudah langsung terbarui tanpa perlu tindakan tambahan.
+2. **Tombol Cepat "Ambil Jadwal Pekan Ini":**
+   - Menambahkan tombol interaktif berikon putar: `<button class="btn btn-sm btn-outline-primary">Ambil Jadwal Pekan Ini</button>` pada Card 2 (*Kajian Malam Ahad*) di menu *Pusat Agenda Rutin* (`web-statis/admin.html`) dan Laravel Blade (`resources/views/agenda_rutin/index.blade.php`).
+   - Saat diklik:
+     - Mengisi otomatis seluruh input: Judul, Waktu, Pemateri / Ustadz, dan Kitab / Tema dari jadwal pekan aktif.
+     - Memicu animasi *green highlight pulse* pada form sebagai konfirmasi visual interaktif.
+     - Menyimpan konfigurasi secara instan ke sistem TV display dan menampilkan notifikasi sukses informatif.
+3. **Badge Status Sinkronisasi Real-Time:**
+   - Menambahkan kotak status di bawah input: `Tersinkronisasi dari Pekan X (Tanggal): Nama Ustadz` sehingga operator selalu mengetahui dengan pasti dari pekan mana data tersebut diambil.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/admin.html` (Penambahan tombol *Ambil Jadwal Pekan Ini*, fungsi `syncKajianPekanIniKeAgendaRutin`, integrasi auto-sync di `simpanKajianSabtu`, dan status indikator di `loadAgendaRutinAdmin`).
+2. `resources/views/agenda_rutin/index.blade.php` (Penambahan tombol *Ambil Jadwal Pekan Ini*, status box, dan skrip `syncKajianPekanIniBlade`).
+3. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 152).
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
+5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

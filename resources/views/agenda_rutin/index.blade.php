@@ -107,30 +107,37 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="font-weight-bold small text-gray-700">Nama / Judul Kajian</label>
-                        <input type="text" class="form-control" name="kajian_ahad_judul" value="{{ $kegiatan['kajian_ahad']['judul'] ?? 'Kajian Malam Ahad' }}" required>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="font-weight-bold small text-gray-700 mb-0">Nama / Judul Kajian</label>
+                            <button type="button" class="btn btn-sm btn-outline-primary font-weight-bold shadow-sm" onclick="syncKajianPekanIniBlade(true)" title="Ambil otomatis nama ustadz & tema dari jadwal kajian 1 bulan yang sedang aktif atau terdekat" style="font-size: 11px; padding: 2px 10px; border-radius: 6px;">
+                                <i class="fas fa-sync-alt mr-1"></i> Ambil Jadwal Pekan Ini
+                            </button>
+                        </div>
+                        <input type="text" class="form-control" id="bladeKajianJudul" name="kajian_ahad_judul" value="{{ $kegiatan['kajian_ahad']['judul'] ?? 'Kajian Malam Ahad' }}" required>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label class="font-weight-bold small text-gray-700">Waktu Pelaksanaan</label>
-                            <input type="text" class="form-control" name="kajian_ahad_waktu" value="{{ $kegiatan['kajian_ahad']['waktu'] ?? 'Ba\'da Maghrib s/d Isya' }}" required>
+                            <input type="text" class="form-control" id="bladeKajianWaktu" name="kajian_ahad_waktu" value="{{ $kegiatan['kajian_ahad']['waktu'] ?? 'Ba\'da Maghrib s/d Isya' }}" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="font-weight-bold small text-gray-700">Pemateri / Ustadz</label>
-                            <input type="text" class="form-control" name="kajian_ahad_pembimbing" value="{{ $kegiatan['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh Al-Hafidz' }}">
+                            <input type="text" class="form-control" id="bladeKajianPembimbing" name="kajian_ahad_pembimbing" value="{{ $kegiatan['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh Al-Hafidz' }}">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label class="font-weight-bold small text-gray-700">Lokasi Kegiatan</label>
-                            <input type="text" class="form-control" name="kajian_ahad_lokasi" value="{{ $kegiatan['kajian_ahad']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}">
+                            <input type="text" class="form-control" id="bladeKajianLokasi" name="kajian_ahad_lokasi" value="{{ $kegiatan['kajian_ahad']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}">
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="font-weight-bold small text-gray-700">Kitab / Pembahasan</label>
-                            <input type="text" class="form-control" name="kajian_ahad_keterangan" value="{{ $kegiatan['kajian_ahad']['keterangan'] ?? 'Kajian Kitab Bidayatul Hidayah & Tanya Jawab Fiqih' }}">
+                            <input type="text" class="form-control" id="bladeKajianKet" name="kajian_ahad_keterangan" value="{{ $kegiatan['kajian_ahad']['keterangan'] ?? 'Kajian Kitab Bidayatul Hidayah & Tanya Jawab Fiqih' }}">
                         </div>
+                    </div>
+                    <div id="bladeKajianSyncStatus" class="p-1 px-2 rounded small mt-1" style="display: none; background: #e0f2fe; color: #0369a1; font-size: 11px; border-left: 3px solid #0284c7;">
                     </div>
                 </div>
             </div>
@@ -326,5 +333,109 @@
             icon.className = 'fas fa-circle mr-1';
         }
     }
+
+    function syncKajianPekanIniBlade(isUserClick = false) {
+        try {
+            const raw = localStorage.getItem('cached_kajian_sabtu');
+            if (!raw) {
+                if (isUserClick) alert('Belum ada data jadwal kajian 1 bulan yang tersimpan di cache. Silakan isi dan simpan di menu Kajian Malam Ahad terlebih dahulu.');
+                return;
+            }
+            const parsed = JSON.parse(raw);
+            const todayStr = (new Date()).toISOString().split('T')[0];
+            let activeItem = null;
+            if (Array.isArray(parsed.jadwal_list) && parsed.jadwal_list.length > 0) {
+                let nearestIdx = 0;
+                let minDiff = Infinity;
+                parsed.jadwal_list.forEach((item, idx) => {
+                    if (item.tanggal) {
+                        if (item.tanggal === todayStr) {
+                            nearestIdx = idx;
+                            minDiff = -1;
+                        } else if (item.tanggal >= todayStr && minDiff !== -1) {
+                            const diff = new Date(item.tanggal) - new Date(todayStr);
+                            if (diff < minDiff) {
+                                minDiff = diff;
+                                nearestIdx = idx;
+                            }
+                        }
+                    }
+                });
+                activeItem = parsed.jadwal_list[nearestIdx] || parsed.jadwal_list[0];
+            } else if (parsed.ustadz_nama) {
+                activeItem = parsed;
+            }
+
+            if (!activeItem || (!activeItem.ustadz_nama && !activeItem.tema_kajian && !activeItem.kitab_rujukan)) {
+                if (isUserClick) alert('Data jadwal kajian pekan ini masih kosong.');
+                return;
+            }
+
+            const elWaktu = document.getElementById('bladeKajianWaktu');
+            const elUstadz = document.getElementById('bladeKajianPembimbing');
+            const elKet = document.getElementById('bladeKajianKet');
+            const elStatus = document.getElementById('bladeKajianSyncStatus');
+
+            const ustadzNama = (activeItem.ustadz_nama || '').trim();
+            const waktuPelaksanaan = (activeItem.waktu_pelaksanaan || "Ba'da Maghrib s/d Isya").trim();
+
+            let ketTema = '';
+            if (activeItem.kitab_rujukan && activeItem.tema_kajian && activeItem.kitab_rujukan !== activeItem.tema_kajian) {
+                ketTema = `${activeItem.kitab_rujukan} (${activeItem.tema_kajian})`;
+            } else {
+                ketTema = activeItem.kitab_rujukan || activeItem.tema_kajian || "Kitab Bidayatul Hidayah & Tanya Jawab Fiqih";
+            }
+
+            const pekanLabel = activeItem.pekan_label || (activeItem.pekan ? `Pekan ${activeItem.pekan}` : 'Pekan Aktif');
+
+            if (elWaktu && waktuPelaksanaan) elWaktu.value = waktuPelaksanaan;
+            if (elUstadz && ustadzNama) elUstadz.value = ustadzNama;
+            if (elKet && ketTema) elKet.value = ketTema;
+
+            // Highlight animasi
+            if (isUserClick) {
+                [elWaktu, elUstadz, elKet].forEach(el => {
+                    if (el) {
+                        el.style.transition = 'all 0.4s ease';
+                        el.style.borderColor = '#10b981';
+                        el.style.backgroundColor = '#ecfdf5';
+                        setTimeout(() => {
+                            el.style.borderColor = '';
+                            el.style.backgroundColor = '';
+                        }, 1200);
+                    }
+                });
+            }
+
+            if (elStatus) {
+                elStatus.style.display = 'block';
+                elStatus.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Data diambil dari <strong>${pekanLabel}</strong>: <em>${ustadzNama}</em>. Klik 'Simpan Perubahan Jadwal' di bawah untuk menyimpan.`;
+            }
+
+            if (isUserClick) {
+                alert(`Alhamdulillah! Data Kajian Malam Ahad berhasil disinkronkan dari ${pekanLabel}:\n\n` +
+                      `• Pemateri: ${ustadzNama}\n` +
+                      `• Kitab / Tema: ${ketTema}\n` +
+                      `• Waktu: ${waktuPelaksanaan}\n\n` +
+                      `Silakan klik 'Simpan Perubahan Jadwal' di bagian bawah.`);
+            }
+        } catch(e) {
+            console.warn('Gagal sinkronisasi blade:', e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const raw = localStorage.getItem('cached_kajian_sabtu');
+            const elStatus = document.getElementById('bladeKajianSyncStatus');
+            if (raw && elStatus) {
+                const parsed = JSON.parse(raw);
+                if (parsed.ustadz_nama || (Array.isArray(parsed.jadwal_list) && parsed.jadwal_list.length > 0)) {
+                    elStatus.style.display = 'block';
+                    elStatus.innerHTML = `<i class="fas fa-info-circle text-info mr-1"></i> Terhubung ke jadwal kajian 1 bulan. Klik tombol <strong>Ambil Jadwal Pekan Ini</strong> jika ingin menyamakan data.`;
+                }
+            }
+        } catch(e) {}
+    });
 </script>
 @endsection
