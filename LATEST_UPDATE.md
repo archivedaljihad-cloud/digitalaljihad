@@ -5566,3 +5566,20 @@ Setiap halaman rotasi kini memiliki badge tematik dan teks hadits/warta kontekst
 
 
 
+
+---
+
+## Bab 132 — Reorder Sidebar Menu Admin & Sembunyikan Kolom Aksi Reorder untuk Petugas (28 Sep 2026)
+
+### Perubahan Urutan Sidebar
+Urutan baru: Jadwal Sholat, Petugas Jumat, Kajian Malam Ahad, Agenda Rutin, **Teks Berjalan TV**, Galeri Informasi, **Semarak Ramadhan**, **Penerimaan Qurban**, **Rotasi TV & Reorder** (paling bawah).
+
+### Sembunyikan Kolom Aksi Reorder untuk Petugas
+Class eorder-col ditambahkan ke th header dan td baris tabel Rotasi TV. JS enderRotationTable() sekarang menyembunyikan seluruh kolom (bukan hanya disable) jika role = petugas.
+
+### Berkas Dimodifikasi
+1. web-statis/admin.html (sidebar reorder + reorder-col class + JS logic)
+2. LATEST_UPDATE.md (Bab 132)
+3. C:\Users\anthu\Documents\[Digital WebSTATIS]\ (Sinkronisasi lokal)
+4. Git Repository & Cloudflare Pages live: https://digitalaljihad.my.id/
+

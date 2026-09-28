@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -1317,10 +1317,10 @@
                     </a>
                 </li>
 
-                <li class="nav-item" id="nav-rotasi-tv">
-                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('rotasi-tv')">
-                        <i class="fas fa-fw fa-exchange-alt"></i>
-                        <span>Rotasi TV & Reorder</span>
+                <li class="nav-item" id="nav-running-text">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('running-text')">
+                        <i class="fas fa-fw fa-bullhorn" style="color: #ffd700;"></i>
+                        <span>Teks Berjalan TV</span>
                     </a>
                 </li>
 
@@ -1333,10 +1333,10 @@
                     </a>
                 </li>
 
-                <li class="nav-item" id="nav-running-text">
-                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('running-text')">
-                        <i class="fas fa-fw fa-bullhorn" style="color: #ffd700;"></i>
-                        <span>Teks Berjalan TV</span>
+                <li class="nav-item" id="nav-ramadhan">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('ramadhan')">
+                        <i class="fas fa-fw fa-star-and-crescent" style="color: #ffd700;"></i>
+                        <span>Semarak Ramadhan</span>
                     </a>
                 </li>
 
@@ -1347,10 +1347,10 @@
                     </a>
                 </li>
 
-                <li class="nav-item" id="nav-ramadhan">
-                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('ramadhan')">
-                        <i class="fas fa-fw fa-star-and-crescent" style="color: #ffd700;"></i>
-                        <span>Semarak Ramadhan</span>
+                <li class="nav-item" id="nav-rotasi-tv">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('rotasi-tv')">
+                        <i class="fas fa-fw fa-exchange-alt"></i>
+                        <span>Rotasi TV &amp; Reorder</span>
                     </a>
                 </li>
             </div>
@@ -2814,7 +2814,7 @@
                                             <th>Berkas Slide</th>
                                             <th style="width: 175px;" class="text-center">Pratinjau Layar TV</th>
                                             <th style="width: 130px;" class="text-center">Status Aktif</th>
-                                            <th style="width: 130px;" class="text-center">Aksi Reorder</th>
+                                            <th style="width: 130px;" class="text-center reorder-col">Aksi Reorder</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rotationTableBody">
@@ -8285,7 +8285,7 @@
                                 <label class="custom-control-label font-weight-bold ${p.active !== false ? 'text-success' : 'text-muted'}" for="rotCheck${idx + 1}">${p.active !== false ? 'Aktif' : 'Nonaktif'}</label>
                             </div>
                         </td>
-                        <td class="text-center align-middle">
+                        <td class="text-center align-middle reorder-col">
                             <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-up mr-1" onclick="reorderSlide(this, 'up')" title="Geser Naik (▲)"><i class="fas fa-arrow-up"></i></button>
                             <button class="btn btn-sm btn-outline-secondary btn-reorder btn-reorder-down" onclick="reorderSlide(this, 'down')" title="Geser Turun (▼)"><i class="fas fa-arrow-down"></i></button>
                         </td>
@@ -8295,20 +8295,13 @@
 
             updateActiveRotationCountBadge();
 
-            // Terapkan hak akses reorder Super Admin
+            // Terapkan hak akses reorder Super Admin (sembunyikan kolom seluruhnya untuk Petugas)
             if (currentUser) {
                 const isSuperAdmin = (currentUser.role === 'admin' || currentUser.role_id === 3);
-                document.querySelectorAll('.btn-reorder').forEach(btn => {
-                    btn.disabled = !isSuperAdmin;
-                    if (!isSuperAdmin) {
-                        btn.classList.add('disabled');
-                        btn.style.opacity = '0.35';
-                        btn.style.cursor = 'not-allowed';
-                    } else {
-                        btn.classList.remove('disabled');
-                        btn.style.opacity = '1';
-                        btn.style.cursor = 'pointer';
-                    }
+
+                // Tampilkan atau sembunyikan seluruh kolom Aksi Reorder berdasarkan role
+                document.querySelectorAll('.reorder-col').forEach(el => {
+                    el.style.display = isSuperAdmin ? '' : 'none';
                 });
 
                 const roleBadge = document.getElementById('badgeRotasiRole');
@@ -8318,7 +8311,6 @@
                         roleBadge.className = 'badge badge-warning font-weight-bold px-3 py-2';
                         roleBadge.innerHTML = '<i class="fas fa-shield-alt mr-1"></i> Mode Super Admin (Reorder ▲/▼ Aktif)';
                     } else {
-                        // Sembunyikan total untuk Petugas / Operator
                         roleBadge.style.display = 'none';
                         roleBadge.innerHTML = '';
                     }
