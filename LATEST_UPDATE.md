@@ -5982,3 +5982,58 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 142).
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 143 — Penambahan Mode Pratinjau Mandiri (Standalone Preview Toolbar) & Panduan Lokasi Halaman Prayer Mode (28 Sep 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- Pengguna menanyakan di mana dan bagaimana cara melihat tampilan halaman **Prayer Mode** (Mode Sholat) yang sebelumnya telah dipercantik dengan medali kaligrafi emas 3D Arab, opasitas latar Ka'bah yang lebih terang, dan pembersihan footer duplikat.
+- **Penyebab Kendala Sebelumnya:**
+  - File `web-statis/prayer-mode.html` memiliki logika proteksi: jika jam saat ini bukan waktu sholat fardhu (`!state.active`), script otomatis menjalankan `window.location.href = 'index.html'`.
+  - Akibatnya, saat operator/pengguna mencoba membuka file `prayer-mode.html` di browser pada jam-jam biasa, halaman seketika terlempar (*auto-redirect*) kembali ke slide display utama, sehingga tampilan Prayer Mode tidak bisa diinspeksi.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Dukungan Pratinjau Mandiri (*Standalone & URL Preview Mode*):**
+   - Menambahkan deteksi standalone (`window.self === window.top`) serta pemeriksaan parameter URL (`?preview=1`, `?debug=1`, atau `?phase=...`).
+   - Jika halaman dibuka mandiri oleh operator di luar jam sholat, sistem **tidak akan me-redirect**, melainkan mengaktifkan simulasi hitung mundur sholat sehingga operator dapat melihat seluruh elemen visual secara penuh dan stabil.
+2. **Toolbar Kontrol Pratinjau Interaktif (*Floating Preview Toolbar*):**
+   - Menambahkan bilah kontrol elegan bertema glassmorphism zamrud-emas di bagian bawah layar (hanya muncul jika halaman dibuka mandiri / standalone):
+     - `[Menuju Adzan]` — Menampilkan fase countdown hitung mundur tarhim & adzan (03:15).
+     - `[Adzan]` — Menampilkan fase adzan sedang berkumandang & himbauan silent HP.
+     - `[Iqamah]` — Menampilkan fase hitung mundur iqamah (05:00) & doa mustajab.
+     - `[Sholat]` — Menampilkan fase sholat berjamaah & himbauan luruskan shaf.
+     - `[Sholat Jum'at]` — Menampilkan tata letak grid 4 petugas Jum'at (Khatib, Imam, Muadzin, Bilal) & adab menyimak khutbah.
+     - `[Rotator TV]` — Tombol cepat untuk kembali ke halaman display TV utama.
+3. **Penyembunyian Otomatis pada Display TV Masjid:**
+   - Saat disematkan di dalam iframe rotator TV (`web-statis/index.html` `<iframe id="prayerFrame">`), kondisi `window.self === window.top` bernilai `false`, sehingga bilah kontrol pratinjau otomatis tidak dibuat sama sekali, dan transisi layar otomatis saat sholat selesai tetap berjalan 100% normal.
+4. **Pencegahan Autoplay Audio yang Mengagetkan:**
+   - Pada mode pratinjau mandiri, audio tarhim tidak dipaksa autoplay kecuali jika diminta melalui parameter `?audio=1`, agar operator dapat meninjau desain visual dengan nyaman.
+5. **Penyelarasan File Demo:**
+   - Menyelaraskan `public/preview-prayer-mode.html` dengan salinan `web-statis/prayer-mode.html` terbaru.
+
+---
+
+### 3. Panduan Lokasi Halaman Prayer Mode
+Halaman Mode Sholat kini dapat diakses melalui:
+1. **Online (Live Cloudflare Pages):**
+   - `https://digitalaljihad.my.id/prayer-mode.html`
+2. **Offline Lokal Mandiri (PC/Laptop Operator):**
+   - `C:\Users\anthu\Documents\【Digital WebSTATIS】\prayer-mode.html`
+3. **Workspace Proyek:**
+   - `web-statis/prayer-mode.html`
+4. **Server Laravel Lokal (PHP):**
+   - `http://localhost:8000/prayer-mode?debug=1` atau `http://localhost:8000/preview-prayer-mode.html`
+5. **Otomatis pada Display TV Utama:**
+   - Muncul otomatis di layar penuh saat jam dinding masjid memasuki waktu sholat (Subuh, Dzuhur, Ashar, Maghrib, Isya, dan Jum'at).
+
+---
+
+### 4. Berkas yang Dimodifikasi & Ditambahkan
+1. `web-statis/prayer-mode.html` (Penambahan CSS Toolbar Pratinjau, logika deteksi standalone, simulasi pergantian fase interaktif).
+2. `public/preview-prayer-mode.html` (Penyelarasan berkas demo publik).
+3. `LATEST_UPDATE.md` (Dokumentasi Bab 143).
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

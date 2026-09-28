@@ -605,6 +605,107 @@
                 right: 8px !important;
             }
         }
+
+        /* STANDALONE PREVIEW TOOLBAR (Hanya tampil jika dibuka langsung di tab browser / standalone) */
+        .standalone-preview-bar {
+            position: fixed;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999999;
+            background: rgba(1, 19, 10, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            border-radius: 50px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 25px rgba(212,175,55,0.25);
+            animation: fadeInBar 0.5s ease-out;
+        }
+
+        @keyframes fadeInBar {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .preview-badge {
+            color: #F5DC8C;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding-right: 12px;
+            border-right: 1px solid rgba(212,175,55,0.3);
+            white-space: nowrap;
+        }
+
+        .preview-btn-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .preview-btn {
+            background: rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .preview-btn:hover {
+            background: rgba(212, 175, 55, 0.25);
+            border-color: #D4AF37;
+            color: #FFFDF0;
+            transform: translateY(-1px);
+        }
+
+        .preview-btn.active {
+            background: linear-gradient(135deg, #FFFDF0 0%, #D4AF37 50%, #9E7416 100%);
+            border-color: #F5DC8C;
+            color: #01130A;
+            font-weight: 800;
+            box-shadow: 0 0 14px rgba(212,175,55,0.5);
+            transform: translateY(-1px);
+        }
+
+        .preview-btn.exit-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.45);
+            color: #fca5a5;
+        }
+
+        .preview-btn.exit-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+            border-color: rgba(239, 68, 68, 0.7);
+            color: #ffffff;
+        }
+
+        @media (max-width: 900px) {
+            .standalone-preview-bar {
+                width: 96%;
+                overflow-x: auto;
+                border-radius: 16px;
+                bottom: 12px;
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 
@@ -809,24 +910,117 @@
             }
         }
 
+        // Variabel Simulasi Pratinjau (Bila dibuka mandiri oleh operator / standalone)
+        let previewPhase = 'countdown';
+        let previewPrayer = 'Ashar';
+        let simulatedSeconds = 195;
+
+        window.switchPreview = function(phase) {
+            previewPhase = phase;
+            if (phase === 'countdown') {
+                simulatedSeconds = 195; // 03:15
+                previewPrayer = 'Ashar';
+            } else if (phase === 'adzan') {
+                simulatedSeconds = 180; // 03:00
+                previewPrayer = 'Ashar';
+            } else if (phase === 'iqamah') {
+                simulatedSeconds = 300; // 05:00
+                previewPrayer = 'Ashar';
+            } else if (phase === 'prayer') {
+                simulatedSeconds = 0;
+                previewPrayer = 'Ashar';
+            } else if (phase === 'khutbah') {
+                simulatedSeconds = 0;
+                previewPrayer = "SHOLAT JUM'AT";
+            }
+
+            document.querySelectorAll('.preview-btn-group .preview-btn').forEach(btn => {
+                if (btn.getAttribute('data-phase') === phase) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            updatePrayerUI();
+        };
+
+        function setupPreviewBar() {
+            const isStandAlone = (window.self === window.top);
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!isStandAlone && !urlParams.has('preview') && !urlParams.has('debug')) return;
+
+            if (document.getElementById('standalonePreviewBar')) return;
+
+            if (urlParams.has('phase')) {
+                previewPhase = urlParams.get('phase');
+            }
+            if (urlParams.has('prayer')) {
+                previewPrayer = urlParams.get('prayer');
+            }
+            if (urlParams.has('sec')) {
+                simulatedSeconds = parseInt(urlParams.get('sec')) || 195;
+            }
+
+            const bar = document.createElement('div');
+            bar.id = 'standalonePreviewBar';
+            bar.className = 'standalone-preview-bar';
+            bar.innerHTML = `
+                <div class="preview-badge"><i class="fas fa-eye"></i> PRATINJAU</div>
+                <div class="preview-btn-group">
+                    <button type="button" class="preview-btn ${previewPhase === 'countdown' ? 'active' : ''}" data-phase="countdown" onclick="switchPreview('countdown')">Menuju Adzan</button>
+                    <button type="button" class="preview-btn ${previewPhase === 'adzan' ? 'active' : ''}" data-phase="adzan" onclick="switchPreview('adzan')">Adzan</button>
+                    <button type="button" class="preview-btn ${previewPhase === 'iqamah' ? 'active' : ''}" data-phase="iqamah" onclick="switchPreview('iqamah')">Iqamah</button>
+                    <button type="button" class="preview-btn ${previewPhase === 'prayer' ? 'active' : ''}" data-phase="prayer" onclick="switchPreview('prayer')">Sholat</button>
+                    <button type="button" class="preview-btn ${previewPhase === 'khutbah' ? 'active' : ''}" data-phase="khutbah" onclick="switchPreview('khutbah')">Sholat Jum'at</button>
+                </div>
+                <a href="index.html" class="preview-btn exit-btn" title="Buka Rotasi Display TV"><i class="fas fa-tv"></i> Rotator TV</a>
+            `;
+            document.body.appendChild(bar);
+        }
+
         // Render UI
         function updatePrayerUI() {
             if (!window.PrayerEngine) return;
             const now = new Date();
-            const state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+            let state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+
+            const isStandAlone = (window.self === window.top);
+            const urlParams = new URLSearchParams(window.location.search);
+            const isExplicitPreview = urlParams.has('preview') || urlParams.has('debug') || urlParams.has('test');
 
             if (!state.active) {
-                // Selesai Prayer Mode -> kembalikan ke rotasi utama
-                if (window.parent && window.parent.onPrayerModeEnd) {
-                    window.parent.onPrayerModeEnd();
+                if (isStandAlone || isExplicitPreview) {
+                    // Mode Pratinjau / Standalone: Aktifkan simulasi agar operator bisa melihat tampilan kapan saja
+                    if (simulatedSeconds > 0 && previewPhase !== PrayerEngine.PHASES.PRAYER && previewPhase !== PrayerEngine.PHASES.KHUTBAH) {
+                        simulatedSeconds--;
+                    }
+                    state = {
+                        active: true,
+                        phase: previewPhase,
+                        prayer: previewPrayer,
+                        remaining: simulatedSeconds,
+                        jumatPetugas: jumatPetugas || {
+                            khatib: 'Ustd. H. Abdul Somad, Lc., MA',
+                            imam: 'Ustd. H. Ahmad Al-Habsyi',
+                            muadzin: 'Ustd. Bilal bin Rabah',
+                            bilal: 'Ustd. Abdullah'
+                        }
+                    };
                 } else {
-                    window.location.href = 'index.html';
+                    // Berada di dalam frame rotasi TV utama dan sholat selesai -> kembalikan ke rotasi normal
+                    if (window.parent && window.parent.onPrayerModeEnd) {
+                        window.parent.onPrayerModeEnd();
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                    return;
                 }
-                return;
             }
 
             // Audio trigger (fase, nama sholat, dan sisa detik)
-            handleAudio(state.phase, state.prayer || '', state.remaining || 0);
+            if (!isStandAlone || urlParams.has('audio')) {
+                handleAudio(state.phase, state.prayer || '', state.remaining || 0);
+            }
 
             // Elements
             const phaseTitleEl = document.getElementById('phaseTitle');
@@ -938,6 +1132,8 @@
 
         async function init() {
             try {
+                setupPreviewBar();
+
                 if (window.SupabaseDB) {
                     settings = await SupabaseDB.getSettings();
                     jadwalList = await SupabaseDB.getJadwalSholat();
@@ -954,6 +1150,9 @@
                 setInterval(updatePrayerUI, 1000);
             } catch (err) {
                 console.warn('Gagal inisialisasi prayer mode:', err);
+                setupPreviewBar();
+                updatePrayerUI();
+                setInterval(updatePrayerUI, 1000);
             }
         }
 
