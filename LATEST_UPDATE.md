@@ -5722,3 +5722,38 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. LATEST_UPDATE.md (Dokumentasi Bab 135).
 4. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
 5. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
+---
+
+## Bab 136 — Perapian Tata Letak Grid Simetris Header "Waktu Sholat Hari Ini" di Panel Admin (28 Sep 2026)
+
+### 1. Masalah Layout Sebelumnya
+- Pada card header **"Waktu Sholat Hari Ini"** di panel admin, elemen dropdown lembaga hisab, tombol sinkronisasi Kemenag RI & Falakiyah NU, serta dropdown kota sebelumnya menggunakan pembungkus d-flex flex-wrap justify-content-between.
+- Pada resolusi layar standar (laptop atau tablet), elemen-elemen tersebut membungkus (*wrap*) secara tidak simetris: tombol sinkronisasi bertumpuk vertikal di kanan atas, dropdown lembaga hisab jatuh ke kiri bawah, dan dropdown kota melorot sendirian di pojok kanan bawah, menciptakan tampilan yang asimetris dan kurang profesional.
+
+---
+
+### 2. Solusi & Perbaikan Tata Letak Simetris (Symmetrical Grid Edition)
+1. **Header Card Bersih & Proporsional:**
+   - Ikon kalender kini diletakkan di dalam rounded badge hijau modern (width: 40px; height: 40px; background: rgba(16, 185, 129, 0.12); border-radius: 10px; color: #10b981;).
+   - Teks judul *"Waktu Sholat Hari Ini"* dilengkapi sub-teks deskriptif rapi *"Sinkronisasi Hisab & Penyesuaian Manual"*.
+   - Badge *"Data Resmi"* di sisi kanan atas menyeimbangkan komposisi header secara vertikal.
+2. **Grid 2 Kolom Seimbang untuk Dropdown Pengaturan (50% - 50%):**
+   - Menggunakan Bootstrap grid ow no-gutters dengan col-6 px-1:
+     - **Kolom Kiri (50%):** Label jelas 🏛️ Lembaga Hisab + Dropdown pilihan Falakiyah NU (PBNU) / Kemenag RI.
+     - **Kolom Kanan (50%):** Label jelas 📍 Wilayah / Kota + Dropdown pilihan Kab. Bekasi / Kota Bekasi / Kota Jakarta.
+   - Kedua kotak memiliki tinggi (38px), border-radius (8px), dan garis pembatas yang seragam dan simetris di semua ukuran layar.
+3. **Grid 2 Kolom Seimbang untuk Tombol Aksi Manual (50% - 50%):**
+   - Tepat di bawah dropdown, diletakkan dua tombol aksi sinkronisasi berlebar penuh (masing-masing 50% lebar kontainer):
+     - **Tombol Kiri (50%):** 🔄 Kemenag RI (Warna biru modern #0284c7).
+     - **Tombol Kanan (50%):** ☪ Falakiyah NU (Warna hijau islami formal #166534).
+   - Keduanya sejajar presisi dengan dropdown di atasnya dan tidak akan pernah terlempar ke baris yang salah.
+4. **Penambahan Event Handler Kota Otomatis (handleCityChange):**
+   - Menambahkan fungsi JavaScript handleCityChange(cityId) yang langsung menyimpan ID dan nama kota ke localStorage, memperbarui teks badge adgeKemenagCity, dan otomatis menarik jadwal hisab terkini sesuai lembaga hisab yang aktif.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. web-statis/admin.html (Redesain HTML card header waktu sholat ke grid simetris 2 kolom & penambahan fungsi handleCityChange).
+2. LATEST_UPDATE.md (Dokumentasi Bab 136).
+3. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
+4. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
