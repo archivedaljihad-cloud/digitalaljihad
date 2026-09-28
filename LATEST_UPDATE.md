@@ -6037,3 +6037,40 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 143).
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 144 — Efek Denyut Halus & Pendaran Aura Keemasan pada Kotak Kapsul Sholat (Prayer Badge) (28 Sep 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- Pengguna meminta agar pada halaman **Prayer Mode** (Mode Sholat), kotak kapsul yang menampilkan nama sholat saat ini (`• ASHAR •`, `• MAGHRIB •`, dll.) diberikan:
+  1. **Efek denyut halus (*smooth breathing pulse*)** agar kapsul terasa hidup dan anggun.
+  2. **Efek keemasan yang memancar di pinggiran kotak kapsulnya (*radiant golden outer halo & glow*)**.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Animasi Denyut Organik (`@keyframes prayerBadgeGoldenPulse`):**
+   - Menerapkan pernapasan halus dengan kurva timing `cubic-bezier(0.4, 0, 0.2, 1)` durasi 3.2 detik berulang tak terbatas (*infinite*).
+   - Skala kapsul membesar sangat halus dari `scale(1)` ke `scale(1.032)` dengan transisi warna border dari emas klasik `rgba(255, 215, 0, 0.75)` ke emas cemerlang `rgba(255, 245, 140, 1)`.
+2. **Efek Pendaran Keemasan Memancar di Luar Pinggiran Kapsul (`.prayer-badge::before` & `@keyframes prayerBadgeOuterAura`):**
+   - Menambahkan cincin pendaran halo keemasan di luar batas kapsul (`inset: -6px; border-radius: 56px; border: 1.5px solid rgba(255, 225, 80, 0.65)`).
+   - Menggunakan gradien radial `radial-gradient(ellipse at center, rgba(255, 215, 0, 0.25) 0%, rgba(255, 185, 0, 0.12) 45%, transparent 75%)` dengan efek blur yang mekar dan memancar keluar hingga `65px` saat denyut mencapai puncaknya.
+3. **Efek Sapuan Kilau Emas Melintas (`.prayer-badge::after` & `@keyframes prayerBadgeShimmer`):**
+   - Kilatan cahaya emas lembut (*light shimmer sweep*) melintas miring secara berkala setiap 5 detik di sepanjang permukaan kapsul kaca zamrud, memberikan kesan mewah plakat emas murni.
+4. **Sinkronisasi Titik Permata Emas (`.badge-gem`):**
+   - Kedua titik permata emas di kiri dan kanan nama sholat turut berdenyut sinkron (`transform: scale(1.35)` dan `box-shadow: 0 0 30px rgba(255, 215, 0, 1)`).
+5. **Penyelarasan Seluruh Versi Sistem:**
+   - Diterapkan pada `web-statis/prayer-mode.html` (Web Statis).
+   - Diterapkan pada `public/preview-prayer-mode.html` (Pratinjau Publik).
+   - Diterapkan pada `resources/views/prayer-mode.blade.php` (Blade Laravel).
+
+---
+
+### 3. Berkas yang Dimodifikasi & Ditambahkan
+1. `web-statis/prayer-mode.html` (Penambahan CSS denyut emas dan pendaran aura pinggiran).
+2. `public/preview-prayer-mode.html` (Penyelarasan salinan web statis).
+3. `resources/views/prayer-mode.blade.php` (Penyelarasan Blade Laravel).
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 144).
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

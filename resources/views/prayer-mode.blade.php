@@ -324,23 +324,51 @@
         /* =====================================================
            EFEK DENYUT PRAYER BADGE EMAS & NAMA SHOLAT PUTIH
            ===================================================== */
-        @keyframes prayerBadgePulse {
+        @keyframes prayerBadgeGoldenPulse {
             0%, 100% {
-                border-color: rgba(255, 215, 0, 0.65);
+                transform: scale(1);
+                border-color: rgba(255, 215, 0, 0.75);
                 box-shadow: 
                     0 4px 20px rgba(0, 0, 0, 0.6),
-                    0 0 20px rgba(255, 215, 0, 0.4),
-                    inset 0 1px 0 rgba(255, 245, 190, 0.5);
-                transform: scale(1);
+                    0 0 16px rgba(255, 215, 0, 0.5),
+                    0 0 32px rgba(255, 180, 0, 0.3),
+                    inset 0 1px 1px rgba(255, 245, 190, 0.7),
+                    inset 0 0 14px rgba(255, 215, 0, 0.25);
             }
             50% {
-                border-color: rgba(255, 235, 130, 1);
+                transform: scale(1.032);
+                border-color: rgba(255, 245, 140, 1);
                 box-shadow: 
-                    0 8px 30px rgba(0, 0, 0, 0.7),
-                    0 0 40px rgba(255, 215, 0, 0.85),
-                    0 0 15px rgba(255, 245, 170, 0.6),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-                transform: scale(1.035);
+                    0 8px 32px rgba(0, 0, 0, 0.7),
+                    0 0 28px rgba(255, 225, 60, 0.95),
+                    0 0 55px rgba(255, 190, 20, 0.65),
+                    0 0 85px rgba(212, 175, 55, 0.4),
+                    inset 0 1px 2px rgba(255, 255, 235, 1),
+                    inset 0 0 22px rgba(255, 215, 0, 0.5);
+            }
+        }
+
+        @keyframes prayerBadgeOuterAura {
+            0%, 100% {
+                transform: scale(0.98);
+                opacity: 0.45;
+                filter: blur(3px);
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
+            }
+            50% {
+                transform: scale(1.055);
+                opacity: 0.95;
+                filter: blur(6px);
+                box-shadow: 0 0 35px rgba(255, 220, 60, 0.85), 0 0 65px rgba(255, 180, 0, 0.45);
+            }
+        }
+
+        @keyframes prayerBadgeShimmer {
+            0%, 35% {
+                left: -120%;
+            }
+            60%, 100% {
+                left: 170%;
             }
         }
 
@@ -349,19 +377,49 @@
         }
 
         .prayer-badge {
+            position: relative;
             display: inline-flex;
             align-items: center;
             gap: 18px;
             padding: 10px 42px;
             border-radius: 50px;
-            border: 2px solid rgba(255, 215, 0, 0.75);
+            border: 2px solid rgba(255, 215, 0, 0.85);
             background: linear-gradient(135deg, rgba(8, 48, 28, 0.94) 0%, rgba(2, 22, 12, 0.98) 100%);
-            box-shadow:
-                0 4px 20px rgba(0, 0, 0, 0.6),
-                0 0 25px rgba(255, 215, 0, 0.5),
-                inset 0 1px 0 rgba(255, 245, 190, 0.5);
-            backdrop-filter: blur(12px);
-            animation: prayerBadgePulse 2.8s ease-in-out infinite;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            z-index: 3;
+            animation: prayerBadgeGoldenPulse 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            overflow: visible;
+        }
+
+        .prayer-badge::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border-radius: 56px;
+            border: 1.5px solid rgba(255, 225, 80, 0.65);
+            background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.25) 0%, rgba(255, 185, 0, 0.12) 45%, rgba(212, 175, 55, 0) 75%);
+            z-index: -1;
+            pointer-events: none;
+            animation: prayerBadgeOuterAura 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        .prayer-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 70%;
+            height: 100%;
+            border-radius: 50px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 250, 205, 0.22) 50%, transparent 100%);
+            transform: skewX(-25deg);
+            z-index: 1;
+            pointer-events: none;
+            animation: prayerBadgeShimmer 5s ease-in-out infinite;
         }
 
         .badge-gem {
@@ -370,7 +428,19 @@
             background: #FFD700;
             border-radius: 50%;
             box-shadow: 0 0 12px #FFD700;
-            animation: pulseGlow 2s infinite;
+            animation: pulseGlowGem 3.2s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes pulseGlowGem {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #FFD700, 0 0 16px rgba(255, 215, 0, 0.6);
+            }
+            50% {
+                transform: scale(1.35);
+                box-shadow: 0 0 18px #FFF070, 0 0 30px rgba(255, 215, 0, 1);
+            }
         }
 
         .prayer-name {
