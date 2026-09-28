@@ -6171,3 +6171,28 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 147).
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 148 — Penyesuaian Catatan Sejarah Versi 5.0.0 pada Riwayat Pembaruan Sistem (29 Sep 2026)
+
+### 1. Kebutuhan Pengguna
+- Memperbarui deskripsi catatan sejarah **Versi 5.0.0 (September 2026)** di bagian timeline riwayat pembaruan:
+  - **Sebelumnya:** *"Migrasi arsitektur total dari PHP Laravel ke Web Statis Modern. Waktu build terpangkas dari 8 menit menjadi 15 detik, nol cold-start, dan ketahanan offline penuh jika Wi-Fi masjid terputus."*
+  - **Menjadi:** *"Migrasi total arsitektur, dari PHP-Laravel-MySQL (yang sangat merepotkan dalam proses deploy dan mencari hosting) ke Web Statis Modern. Waktu build terpangkas dari 8 menit menjadi 15 detik, nol cold-start, dan ketahanan offline penuh jika Wi-Fi masjid terputus."*
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembaruan Deskripsi Riwayat Versi 5.0.0:**
+   - Diterapkan pada `web-statis/about.html` pada elemen `.timeline-item` Versi 5.0.0.
+   - Diterapkan pada `resources/views/about.blade.php` untuk keselarasan penuh.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/about.html` (Pembaruan teks narasi Versi 5.0.0).
+2. `resources/views/about.blade.php` (Penyelarasan teks narasi Versi 5.0.0).
+3. `LATEST_UPDATE.md` (Dokumentasi Bab 148).
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

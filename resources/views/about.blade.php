@@ -911,6 +911,36 @@
                                     </ul>
                                 </li>
 
+                                <!-- Versi 5.1.0 -->
+                                <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #0284c7;">
+                                    <div class="d-flex align-items-center mb-2 flex-wrap">
+                                        <span class="badge px-3 py-1 mr-2" style="background: #0284c7; color: #ffffff; font-weight: 700; font-size: 12px; border-radius: 8px;">
+                                            Versi 5.1.0
+                                        </span>
+                                        <span class="text-muted font-weight-bold">25 September 2026</span>
+                                    </div>
+                                    <p class="font-weight-bold mb-1" style="color: #0e3521;">Fitur Pengajian Rutin Malam Ahad & Penajaman Tipografi Header TV</p>
+                                    <ul class="pl-3 mb-0 text-muted">
+                                        <li><strong>Pengajian Rutin Malam Ahad (Bab 83):</strong> Slide khusus `slides/kajian.html`, auto-switch Sabtu malam ba'da Maghrib s/d Isya, smart countdown Isya, form preset 5 pekan di admin, dan QR tanya jawab digital.</li>
+                                        <li><strong>Peningkatan Kontras Font Header Masjid (Bab 82 & 85):</strong> Penyempurnaan warna font header menjadi <em>Islamic Gold Metallic</em> (<code>#FFD700</code>) dengan <em>text-stroke</em> hitam pekat 1.5px dan bayangan 3D multi-arah.</li>
+                                        <li><strong>Pembaruan Dokumentasi & Kenang-Kenangan (Bab 84):</strong> Adaptasi halaman Tentang Aplikasi ke format Web Statis Modern lengkap dengan Tabel Komparasi Head-to-Head Render.</li>
+                                    </ul>
+                                </li>
+
+                                <!-- Versi 5.0.0 -->
+                                <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #059669;">
+                                    <div class="d-flex align-items-center mb-2 flex-wrap">
+                                        <span class="badge px-3 py-1 mr-2" style="background: #059669; color: #ffffff; font-weight: 700; font-size: 12px; border-radius: 8px;">
+                                            Versi 5.0.0
+                                        </span>
+                                        <span class="text-muted font-weight-bold">September 2026</span>
+                                    </div>
+                                    <p class="font-weight-bold mb-1" style="color: #0e3521;">Evolusi Web Statis Mandiri & Supabase BaaS</p>
+                                    <p class="small text-muted mb-0" style="line-height: 1.8;">
+                                        Migrasi total arsitektur, dari PHP-Laravel-MySQL (yang sangat merepotkan dalam proses deploy dan mencari hosting) ke Web Statis Modern. Waktu build terpangkas dari 8 menit menjadi 15 detik, nol cold-start, dan ketahanan offline penuh jika Wi-Fi masjid terputus.
+                                    </p>
+                                </li>
+
                                 <!-- Versi 4.2.6 -->
                                 <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #9333ea;">
                                     <div class="d-flex align-items-center mb-2 flex-wrap">
