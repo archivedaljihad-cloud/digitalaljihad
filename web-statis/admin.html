@@ -1909,74 +1909,77 @@
                             <!-- Tabel Jadwal Sholat 5 Waktu -->
                             <div class="col-lg-6 mb-4">
                                 <div class="content-card">
-                                    <div class="content-card-header p-3 border-bottom bg-white" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
-                                        <!-- Baris 1: Judul Card Bersih di Kiri & Status Badge di Kanan -->
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="mr-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.12); border-radius: 10px; color: #10b981; flex-shrink: 0;">
-                                                    <i class="fas fa-calendar-alt" style="font-size: 19px;"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="font-weight-bold mb-0" style="color: #0f172a; font-size: 15px; letter-spacing: -0.2px;">Waktu Sholat Hari Ini</h6>
-                                                    <span class="text-muted small" style="font-size: 11px;">Sinkronisasi Hisab & Penyesuaian Manual</span>
-                                                </div>
+                                    <div class="content-card-header d-flex justify-content-between align-items-center p-3 border-bottom bg-white" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="mr-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px; background: rgba(16, 185, 129, 0.12); border-radius: 10px; color: #10b981; flex-shrink: 0;">
+                                                <i class="fas fa-calendar-alt" style="font-size: 20px;"></i>
                                             </div>
                                             <div>
-                                                <span class="badge badge-pill border px-2 py-1 shadow-sm" style="font-size: 11px; font-weight: 700; color: #047857; background: #ecfdf5; border-color: #a7f3d0 !important;">
-                                                    <i class="fas fa-shield-alt mr-1"></i> Data Resmi
-                                                </span>
+                                                <h6 class="font-weight-bold mb-0 text-gray-800" style="font-size: 15px;">Waktu Sholat Hari Ini</h6>
+                                                <small class="text-muted" style="font-size: 11.5px;">Sinkronisasi Hisab &amp; Penyesuaian Manual</small>
                                             </div>
                                         </div>
-
-                                        <!-- Baris 2: Grid 2 Kolom Simetris Sempurna untuk Dropdown Pilihan (50% - 50%) -->
-                                        <div class="row no-gutters mb-2" style="margin-left: -4px; margin-right: -4px;">
-                                            <div class="col-6 px-1">
-                                                <label class="small font-weight-bold text-muted mb-1 d-flex align-items-center" style="font-size: 11.5px;">
-                                                    <i class="fas fa-mosque mr-1 text-primary"></i> Lembaga Hisab
-                                                </label>
-                                                <select class="custom-select font-weight-bold shadow-none" id="selPrayerSource" onchange="gantiSumberJadwalSholat(this.value)" style="height: 38px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 12.5px; color: #1e293b; background-color: #f8fafc; cursor: pointer; width: 100%;" title="Pilih Lembaga / Sumber Hisab">
-                                                    <option value="nu">Falakiyah NU (PBNU)</option>
-                                                    <option value="kemenag">Kemenag RI</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-6 px-1">
-                                                <label class="small font-weight-bold text-muted mb-1 d-flex align-items-center" style="font-size: 11.5px;">
-                                                    <i class="fas fa-map-marker-alt mr-1 text-danger"></i> Wilayah / Kota
-                                                </label>
-                                                <select class="custom-select font-weight-bold shadow-none" id="selKemenagCity" onchange="handleCityChange(this.value)" style="height: 38px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 12.5px; color: #1e293b; background-color: #f8fafc; cursor: pointer; width: 100%;" title="Pilih Wilayah / Kota">
-                                                    <option value="1203" selected>Kab. Bekasi</option>
-                                                    <option value="1221">Kota Bekasi</option>
-                                                    <option value="1301">Kota Jakarta</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <!-- Baris 3: Grid 2 Kolom Simetris Sempurna untuk Tombol Sinkronisasi Manual (50% - 50%) -->
-                                        <div class="row no-gutters" style="margin-left: -4px; margin-right: -4px;">
-                                            <div class="col-6 px-1">
-                                                <button class="btn btn-sm btn-block font-weight-bold text-white shadow-sm d-flex align-items-center justify-content-center" style="height: 38px; border-radius: 8px; background: #0284c7; border: none; font-size: 12.5px; gap: 6px; transition: all 0.2s ease;" onclick="sinkronkanKemenagManual()" id="btnSyncKemenag" title="Tarik jadwal sholat terbaru dari API Kemenag RI">
-                                                    <i class="fas fa-sync-alt"></i> <span>Kemenag RI</span>
-                                                </button>
-                                            </div>
-                                            <div class="col-6 px-1">
-                                                <button class="btn btn-sm btn-block font-weight-bold text-white shadow-sm d-flex align-items-center justify-content-center" style="height: 38px; border-radius: 8px; background: #166534; border: none; font-size: 12.5px; gap: 6px; transition: all 0.2s ease;" onclick="sinkronkanFalakiyahNU()" id="btnSyncNU" title="Tarik jadwal hisab Lembaga Falakiyah NU (LF PBNU)">
-                                                    <i class="fas fa-star-and-crescent text-warning"></i> <span>Falakiyah NU</span>
-                                                </button>
-                                            </div>
+                                        <div>
+                                            <span class="badge badge-success px-3 py-2 font-weight-bold shadow-sm" style="font-size: 12px; border-radius: 8px;">
+                                                <i class="fas fa-check-circle mr-1"></i> Data Resmi
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="p-3">
-                                        <div class="alert alert-light border d-flex justify-content-between align-items-center py-2 px-3 mb-3" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3) !important;">
+                                        <!-- Kotak Pengaturan Sinkronisasi Hisab & Wilayah -->
+                                        <div class="card shadow-none mb-3" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px;">
+                                            <div class="card-body p-3">
+                                                <div class="row align-items-center mb-2">
+                                                    <div class="col-sm-6 mb-2 mb-sm-0">
+                                                        <label class="small font-weight-bold text-gray-700 mb-1 d-flex align-items-center" style="font-size: 12px;">
+                                                            <i class="fas fa-mosque text-primary mr-1"></i> Lembaga / Sumber Hisab
+                                                        </label>
+                                                        <select class="custom-select font-weight-bold shadow-sm" id="selPrayerSource" onchange="gantiSumberJadwalSholat(this.value)" style="height: 38px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 13px; color: #1e293b; background-color: #ffffff; cursor: pointer;">
+                                                            <option value="nu">Lembaga Falakiyah NU (LF PBNU)</option>
+                                                            <option value="kemenag">Bimas Islam Kemenag RI</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="small font-weight-bold text-gray-700 mb-1 d-flex align-items-center" style="font-size: 12px;">
+                                                            <i class="fas fa-map-marker-alt text-danger mr-1"></i> Wilayah / Kota
+                                                        </label>
+                                                        <select class="custom-select font-weight-bold shadow-sm" id="selKemenagCity" onchange="handleCityChange(this.value)" style="height: 38px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 13px; color: #1e293b; background-color: #ffffff; cursor: pointer;">
+                                                            <option value="1203" selected>Kab. Bekasi</option>
+                                                            <option value="1221">Kota Bekasi</option>
+                                                            <option value="1301">Kota Jakarta (DKI)</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Baris Tombol Tarik Data & Sakelar Auto Update -->
+                                                <div class="d-flex align-items-center justify-content-between flex-wrap pt-2 mt-2" style="border-top: 1px dashed #cbd5e1; gap: 10px;">
+                                                    <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                                                        <span class="small font-weight-bold text-muted mr-1" style="font-size: 11.5px;">Tarik Jadwal:</span>
+                                                        <button type="button" class="btn btn-sm font-weight-bold text-white shadow-sm d-flex align-items-center" style="background: #0284c7; border: none; border-radius: 8px; padding: 6px 14px; font-size: 12.5px; gap: 6px;" onclick="sinkronkanKemenagManual()" id="btnSyncKemenag" title="Tarik jadwal dari API Kemenag RI">
+                                                            <i class="fas fa-sync-alt"></i> Kemenag RI
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm font-weight-bold text-white shadow-sm d-flex align-items-center" style="background: #166534; border: none; border-radius: 8px; padding: 6px 14px; font-size: 12.5px; gap: 6px;" onclick="sinkronkanFalakiyahNU()" id="btnSyncNU" title="Tarik jadwal hisab Lembaga Falakiyah NU (LF PBNU)">
+                                                            <i class="fas fa-star-and-crescent text-warning"></i> Falakiyah NU
+                                                        </button>
+                                                    </div>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="cfgAutoSyncKemenag" checked>
+                                                        <label class="custom-control-label font-weight-bold small text-success" for="cfgAutoSyncKemenag" style="cursor: pointer;">
+                                                            Auto-Update Harian
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Panel Status Sumber Aktif -->
+                                        <div class="alert alert-light border d-flex justify-content-between align-items-center py-2 px-3 mb-3" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25) !important; border-radius: 8px;">
                                             <div class="small">
                                                 <i class="fas fa-check-circle text-success mr-1"></i>
                                                 <span class="font-weight-bold text-dark">Sumber Aktif:</span>
-                                                <span class="badge badge-success ml-1" id="badgePrayerSource">Bimas Islam Kemenag RI</span>
-                                                <span class="badge badge-secondary ml-1" id="badgeKemenagCity">Kab. Bekasi</span>
-                                                <div class="text-muted" style="font-size: 11px;" id="infoKemenagTanggal">Sinkronisasi: Memeriksa tanggal...</div>
-                                            </div>
-                                            <div class="custom-control custom-switch ml-2 text-right">
-                                                <input type="checkbox" class="custom-control-input" id="cfgAutoSyncKemenag" checked>
-                                                <label class="custom-control-label font-weight-bold small text-success" for="cfgAutoSyncKemenag">Auto-Update Harian</label>
+                                                <span class="badge badge-success ml-1 px-2 py-1" id="badgePrayerSource">Lembaga Falakiyah NU (LF PBNU)</span>
+                                                <span class="badge badge-secondary ml-1 px-2 py-1" id="badgeKemenagCity">Kab. Bekasi</span>
+                                                <div class="text-muted mt-1" style="font-size: 11px;" id="infoKemenagTanggal">Sinkronisasi: Memeriksa tanggal...</div>
                                             </div>
                                         </div>
                                         <div class="form-group row align-items-center">

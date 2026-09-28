@@ -5803,3 +5803,40 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 7. `LATEST_UPDATE.md` (Dokumentasi Bab 137).
 8. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 9. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 138 — Redesain Total Tata Letak Panel Jadwal Sholat: Memisahkan Header Card & Kontrol Sinkronisasi Hisab (28 Sep 2026)
+
+### 1. Masalah yang Dikeluhkan Operator
+- Pada panel admin, menu dropdown lembaga hisab, dropdown kota, dan tombol sinkronisasi sebelumnya dipaksa masuk ke dalam elemen `.content-card-header`.
+- Karena `.content-card-header` di CSS memiliki aturan baku `display: flex; flex-direction: row; justify-content: space-between;`, browser memaksa judul, dropdown hisab, dropdown kota, dan kedua tombol sinkronisasi berjejer horizontal dalam satu baris sempit.
+- Akibatnya, seluruh elemen menciut dan teksnya terpotong menjadi *"Fc"* (Falakiyah), *"Kc"* (Kab. Bekasi), *"Kemen RI"*, dan *"Falakiy NU"*, sangat berantakan, menumpuk, dan membingungkan operator masjid saat hendak mengatur jadwal sholat.
+
+---
+
+### 2. Solusi & Desain Ergonomis Baru (Dedicated Hisab Control Panel)
+1. **Restorasi Kemurnian Header Card (`.content-card-header`):**
+   - Header kartu dikembalikan fungsinya sebagai judul kartu yang bersih, lega, dan berkelas:
+     - **Sisi Kiri:** Ikon kalender hijau dalam rounded box (`#10b981`), teks judul *"Waktu Sholat Hari Ini"*, dan sub-judul deskriptif *"Sinkronisasi Hisab & Penyesuaian Manual"*.
+     - **Sisi Kanan:** Badge status elegan *"Data Resmi"*.
+   - Tidak ada lagi dropdown atau tombol berdesakan di baris header!
+2. **Dedicated Card Control Panel di Dalam Card Body (`<div class="p-3">`):**
+   - Membuat panel kontrol sinkronisasi terpisah berlatar abu-abu terang halus (`#f8fafc`) dengan border rapi (`1.5px solid #e2e8f0`):
+     - **Baris 1 (Pilihan Seimbang 50% - 50%):**
+       - Dropdown **Lembaga / Sumber Hisab** (Lembaga Falakiyah NU LF PBNU / Bimas Islam Kemenag RI) dengan lebar 50%.
+       - Dropdown **Wilayah / Kota** (Kab. Bekasi / Kota Bekasi / Kota Jakarta) dengan lebar 50%.
+       - Seluruh teks terbaca 100% utuh tanpa ada yang terpotong.
+     - **Baris 2 (Tombol Tarik Jadwal & Auto-Update):**
+       - Tombol **Kemenag RI** (Biru) dan **Falakiyah NU** (Hijau Islami) dengan label lengkap, ikon jelas, dan ruang klik yang nyaman.
+       - Sakelar switch **Auto-Update Harian** diletakkan rapi di sebelah kanan.
+3. **Panel Status Sumber Aktif Terintegrasi:**
+   - Panel alert sumber aktif diletakkan di bawah kontrol hisab, menampilkan lembaga aktif, kota terpilih, dan status tanggal sinkronisasi terkini secara proporsional.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/admin.html` (Restorasi header card waktu sholat & pemindahan kontrol hisab ke panel terpisah di card body).
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 138).
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
