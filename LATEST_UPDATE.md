@@ -6077,36 +6077,31 @@ Halaman Mode Sholat kini dapat diakses melalui:
 
 ---
 
-## Bab 145 — Panduan Simpan Kajian Malam Ahad & Penambahan Tombol Simpan Cepat di Form (28 Sep 2026)
+## Bab 145 — Panduan Simpan Kajian Malam Ahad & Pemindahan Tombol Simpan Agenda ke Bawah Rekap (28 Sep 2026)
 
 ### 1. Masalah & Kebutuhan Pengguna
 - **Pertanyaan 1:** Setelah mengisi jadwal kajian dari Pekan 1 s/d Pekan 5, bagaimana cara menyimpannya?
 - **Pertanyaan 2:** Tombol *"Terapkan Preset 5 Pekan DKM"* di kanan atas untuk apa?
-- **Kendala UI/UX Teridentifikasi:** Tombol utama `Simpan Agenda 1 Bulan` sebelumnya hanya berada di bagian paling atas (*page header*). Ketika pengguna fokus mengisi formulir Pekan 1 hingga Pekan 5 ke bawah, header atas tersebut tergulung (*scrolled out of view*) sehingga pengguna kesulitan menemukan tombol simpan.
+- **Permintaan Penataan Posisi:** Karena halaman panjang, pengguna meminta tombol menu *"Simpan Agenda 1 Bulan"* dipindahkan ke **bawahnya kotak "Rekap Kajian Bulan Ini"** dan sejajar dengan kolom isian/formulir di sebelah kiri agar mudah dilihat dan tidak membingungkan.
 
 ---
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penjelasan Mekanisme Penyimpanan:**
-   - Setiap kali berpindah tab Pekan 1 s/d 5, data form aktif langsung tersimpan sementara di memori internal browser (`currentKajianBulanData`).
-   - Untuk menyimpan permanen ke Supabase database (`app_settings` kolom `kajian_sabtu_data`) dan menampilkannya di seluruh Layar TV Digital Masjid, pengguna cukup menekan tombol warna hijau **`Simpan Agenda 1 Bulan`**.
-2. **Peningkatan UI/UX (Akses Simpan di Form):**
-   - Menambahkan tombol hijau **`Simpan Agenda`** langsung di toolbar kartu header *"PENGATURAN PERIODE BULAN KAJIAN"* (bersebelahan dengan *"Auto-Generate Tanggal"* dan *"Terapkan Preset 5 Pekan DKM"*).
-   - Menambahkan tombol hijau **`Simpan Agenda 1 Bulan`** di bagian bawah (*card footer*) masing-masing formulir pengisian pekan, bersebelahan dengan tombol *"Reset ke Preset Pekan Ini"* dan *"✨ AI Copywriter Pekan Ini"*.
-   - Dengan ini, setelah selesai mengisi atau mengedit pekan mana pun (termasuk Pekan ke-5), pengguna dapat langsung menekan tombol simpan tepat di bawah formulir tanpa harus mencari atau menggulir layar ke atas.
+   - Saat operator beralih tab Pekan 1 s/d 5, input form yang sedang aktif otomatis disimpan sementara ke memori kerja browser (`currentKajianBulanData`).
+   - Untuk menyimpan secara permanen ke database Supabase (`app_settings` kolom `kajian_sabtu_data`) dan mengirimkannya langsung ke seluruh Layar Display TV Masjid, operator menekan tombol hijau **`Simpan Agenda 1 Bulan`**.
+2. **Pemindahan Posisi Tombol Simpan (Reposisi Sesuai Permintaan):**
+   - Menghapus tombol simpan yang berada di header atas yang sering tergulung ke luar pandangan saat formulir di-scroll.
+   - Menempatkan tombol utama **`Simpan Agenda 1 Bulan`** berukuran penuh (*full-width block*) tepat di **bawah kartu "Rekap Kajian Bulan Ini"** pada kolom kanan.
+   - Menjaga footer formulir sebelah kiri tetap rapi dan bersih dengan tombol *"Reset ke Preset Pekan Ini"* dan *"✨ AI Copywriter Pekan Ini"*.
+   - Posisi vertikal tombol baru ini sekarang **sejajar sempurna (*horizontally aligned*)** dengan batas bawah formulir pengisian di sebelah kiri, sehingga menciptakan komposisi tata letak yang seimbang, simetris, dan langsung terlihat begitu pengguna selesai mengedit form atau meninjau tabel rekap.
 3. **Penjelasan Fungsi *"Terapkan Preset 5 Pekan DKM"*:**
-   - Merupakan fitur jalan pintas (*1-click auto fill*) yang secara instan memasukkan kurikulum silabus kajian rutin Sabtu malam Masjid Jami' Al-Jihad untuk seluruh 5 pekan sekaligus:
-     - **Pekan 1:** Kitab *Bidayatul Hidayah* (Imam Al-Ghazali) — Ust. H. Ahmad Sholeh Al-Hafidz (Fiqih Ibadah & Adab Keseharian)
-     - **Pekan 2:** *Tafsir Al-Qur'an Al-'Azhim* (Ibnu Katsir) — Ust. Dr. H. Faisal, M.Ag (Tafsir Tematik Keluarga Sakinah & Berkah Qur'ani)
-     - **Pekan 3:** Kitab *Al-Adab Al-Mufrad* (Imam Bukhari) — Ust. M. Syahrul Ramadhan, Lc (Tazkiyatun Nafs & Akhlak Bermasyarakat)
-     - **Pekan 4:** Kitab *Riyadhus Shalihin* (Imam An-Nawawi) — Ust. H. Ahmad Sholeh Al-Hafidz (Hak Sesama Muslim & Adab Bertetangga)
-     - **Pekan 5:** Kajian Tematik Sirah Nabawiyah & Muamalah Kontemporer — Dai Tamu / Asatidz Pilihan DKM (Tabligh Akbar Keummatan)
-   - Tombol ini menghemat waktu pengurus DKM agar tidak perlu mengetik ulang judul kitab, ustadz, dan tema dari awal setiap pergantian bulan.
+   - Tombol jalan pintas 1-klik untuk memasukkan kurikulum silabus kajian rutin Sabtu malam Masjid Jami' Al-Jihad selama 5 pekan sekaligus (Pekan 1: Kitab Bidayatul Hidayah / Ust. Ahmad Sholeh; Pekan 2: Tafsir Ibnu Katsir / Ust. Dr. Faisal; Pekan 3: Kitab Al-Adab Al-Mufrad / Ust. M. Syahrul Ramadhan; Pekan 4: Kitab Riyadhus Shalihin / Ust. Ahmad Sholeh; Pekan 5: Kajian Tematik Sirah Nabawiyah & Muamalah Kontemporer / Dai Tamu DKM).
 
 ---
 
 ### 3. Berkas yang Dimodifikasi
-1. `web-statis/admin.html` (Penambahan tombol Simpan Agenda di toolbar kartu periode dan footer formulir pekan).
+1. `web-statis/admin.html` (Reposisi tombol Simpan Agenda 1 Bulan ke bawah kotak Rekap Kajian Bulan Ini sejajar form kiri).
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 145).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
