@@ -17,7 +17,7 @@
                              class="img-fluid"
                              style="max-width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #c9a03d; padding: 4px; background: #ffffff; box-shadow: 0 8px 25px rgba(0,0,0,0.3);">
                         <span class="badge position-absolute" style="bottom: 0; right: -10px; background: #c9a03d; color: #071a10; font-weight: 700; font-size: 11px; padding: 4px 8px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-                            v4.2.6
+                            v5.5.0
                         </span>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 <!-- Quick Status Badges -->
                 <div class="d-flex flex-wrap justify-content-center align-items-center mt-3" style="gap: 8px;">
                     <span class="badge px-3 py-2" style="background: rgba(201, 160, 61, 0.2); color: #ffd700; border: 1px solid rgba(201, 160, 61, 0.4); border-radius: 20px; font-weight: 500;">
-                        <i class="fas fa-code-branch mr-1"></i> Versi 4.2.6 (Update Sep 2026)
+                        <i class="fas fa-code-branch mr-1"></i> Versi 5.5.0 (Rilis Terkini)
                     </span>
                     <span class="badge px-3 py-2" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.5); border-radius: 20px; font-weight: 500;">
                         <i class="fas fa-robot mr-1" style="color: #c084fc;"></i> Google Gemini AI Inside
@@ -602,7 +602,10 @@
                         <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(30,90,58,0.1); color: #1e5a3a; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px;">
                             <i class="fas fa-book-open"></i>
                         </div>
-                        <h4 class="font-weight-bold m-0" style="color: #0e3521;">Panduan Pengoperasian Sistem</h4>
+                        <div>
+                            <h4 class="font-weight-bold m-0" style="color: #0e3521;">Panduan Pengoperasian Sistem</h4>
+                            <p class="small text-muted mb-0">Petunjuk teknis operasional lengkap: display TV, jadwal sholat, agenda rutin, Ramadhan, infaq, dan kas masjid</p>
+                        </div>
                     </div>
 
                     <div class="accordion" id="usageGuide">
@@ -623,17 +626,17 @@
                                         <li>Buka aplikasi browser (Chrome / Edge / Browser TV) pada perangkat Smart TV atau Android Box yang terhubung ke TV.</li>
                                         <li>Ketikkan alamat website utama masjid (contoh: <code>{{ url('/') }}</code> atau <code>{{ url('/rotator') }}</code>).</li>
                                         <li>Tekan tombol <strong>F11</strong> pada keyboard (atau aktifkan mode <em>Fullscreen / Kiosk</em> di browser TV) untuk menyembunyikan address bar.</li>
-                                        <li>Layar akan otomatis berputar menampilkan jadwal sholat, pengumuman, siaran live, dan laporan keuangan secara bergantian.</li>
+                                        <li>Layar otomatis berputar mulus 60 FPS menampilkan jadwal sholat, mutiara hadits, laporan kas, pengumuman, dan agenda dakwah.</li>
                                     </ol>
                                     <p class="mb-2"><strong>B. Layar TV Luar / Serambi Masjid:</strong></p>
                                     <ol class="pl-3 mb-3">
-                                        <li>Gunakan alamat khusus TV Luar: <code>{{ url('/tv-outdoor') }}</code>.</li>
+                                        <li>Gunakan alamat khusus TV Luar: <code>{{ url('/tv-outdoor') }}</code> atau <code>slides/live-mimbar.html</code>.</li>
                                         <li>Pada hari dan jam biasa, layar TV luar berputar menampilkan informasi umum seperti TV utama.</li>
-                                        <li>Saat waktu Khutbah Jum'at atau Sholat Ied tiba, layar TV luar akan <strong>secara otomatis beralih</strong> menampilkan siaran langsung CCTV Mimbar agar jamaah di luar dapat menyimak khutbah dengan jelas.</li>
+                                        <li>Saat waktu Khutbah Jum'at atau Sholat Ied tiba, layar TV luar akan <strong>secara otomatis beralih</strong> menampilkan siaran langsung CCTV Mimbar agar jamaah di serambi luar dapat menyimak khutbah dengan jelas.</li>
                                     </ol>
                                     <p class="mb-2"><strong>C. Otomasi Mandiri Hemat Daya (Full Auto Self-Running):</strong></p>
                                     <p class="mb-0 text-muted">
-                                        Demi efisiensi konsumsi daya listrik serta kepraktisan waktu pengoperasian, rangkaian TV ini telah terintegrasi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong>. Sistem TV dapat menyala (<em>power ON</em>) dan mati/standby (<em>power OFF</em>) secara otomatis dan terjadwal, sehingga beroperasi penuh secara mandiri (*full auto self running*) tanpa perlu campur tangan manual marbot atau pengurus setiap hari.
+                                        Rangkaian TV display masjid telah terintegrasi dengan <strong>Smart Breaker</strong> dan <strong>Smart IR Remote Control</strong>. Seluruh TV menyala (<em>Power ON</em>) dan mati/standby (<em>Power OFF</em>) otomatis terjadwal tanpa perlu repot dinyalakan manual oleh marbot setiap hari.
                                     </p>
                                 </div>
                             </div>
@@ -644,59 +647,205 @@
                             <div class="card-header py-3" id="headingTwo" style="background: rgba(30,90,58,0.03);">
                                 <h6 class="mb-0">
                                     <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseTwo" style="color: #0e3521; text-decoration: none; font-weight: 600;">
-                                        <span><i class="fas fa-mosque mr-2" style="color: #c9a03d;"></i>2. Alur Kerja Otomatis Mode Sholat (Prayer Mode & Khutbah)</span>
+                                        <span><i class="fas fa-clock mr-2" style="color: #c9a03d;"></i>2. Jadwal Sholat & Durasi Prayer Mode (Hisab Falakiyah NU vs Kemenag & 4 Fase)</span>
                                         <i class="fas fa-chevron-down small text-muted"></i>
                                     </button>
                                 </h6>
                             </div>
                             <div id="collapseTwo" class="collapse" data-parent="#usageGuide">
                                 <div class="card-body small" style="line-height: 1.8; color: #374151;">
-                                    <p class="mb-2">Sistem bekerja mandiri mengunci rotasi TV saat masuk waktu ibadah:</p>
-                                    <ol class="pl-3 mb-0">
-                                        <li class="mb-2"><strong>Fase Menjelang Adzan (Tarhim):</strong> Audio tarhim/murottal dapat berputar otomatis beberapa menit sebelum adzan sebagai pengingat jamaah.</li>
-                                        <li class="mb-2"><strong>Fase Adzan:</strong> Layar menghentikan perputaran slide dan menampilkan pengingat adzan berkumandang.</li>
-                                        <li class="mb-2"><strong>Fase Iqamah:</strong> Menampilkan hitungan mundur jeda sholat sunnah hingga iqamah ditegakkan.</li>
-                                        <li class="mb-2"><strong>Fase Sholat Berjamaah:</strong> Layar TV otomatis menjadi gelap syahdu bertuliskan <em>"Luruskan dan Rapatkan Shaf Anda"</em> agar tidak mengganggu kekhusyukan jamaah.</li>
-                                        <li class="mb-2"><strong>Khusus Sholat Jum'at:</strong> Layar menampilkan 4 kartu petugas resmi (Khatib, Imam, Muadzin, Bilal) serta plakat hadits adab mendengarkan khutbah selama durasi khutbah berlangsung.</li>
-                                        <li><strong>Selesai Sholat:</strong> Setelah waktu ibadah usai, layar TV otomatis kembali berotasi menampilkan informasi masjid seperti semula.</li>
+                                    <p class="mb-2"><strong>A. Metode Perhitungan & Sinkronisasi Waktu:</strong></p>
+                                    <ul class="pl-3 mb-3">
+                                        <li>Tersedia 2 pilihan metode hisab resmi: <strong>Falakiyah Nahdlatul Ulama (LF-PBNU)</strong> dan <strong>Kementerian Agama RI (Bimas Islam)</strong>.</li>
+                                        <li>Sistem otomatis menghitung waktu sholat harian berdasarkan koordinat GPS masjid (Lintang & Bujur) serta zona waktu WIB (UTC+7).</li>
+                                        <li>Fitur <em>Koreksi Manual (+/- Menit)</em>: Memudahkan pengurus mencocokkan waktu sholat lokal (misal: Subuh +2 mnt, Ashar -1 mnt) agar tepat selaras dengan jam istiwa masjid.</li>
+                                    </ul>
+                                    <p class="mb-2"><strong>B. 4 Fase Siklus Ibadah Reguler:</strong></p>
+                                    <ol class="pl-3 mb-3">
+                                        <li class="mb-1"><strong>Fase 1: Tarhim Otomatis</strong> — Audio tarhim/murottal mengalun merdu beberapa menit sebelum adzan sebagai peringatan awal jamaah bersiap wudhu.</li>
+                                        <li class="mb-1"><strong>Fase 2: Panggilan Adzan</strong> — Rotasi TV berhenti sementara, menampilkan visual seruan adzan berkumandang.</li>
+                                        <li class="mb-1"><strong>Fase 3: Hitung Mundur Iqamah</strong> — Display menampilkan countdown waktu jeda sholat sunnah qobliyah hingga iqamah ditegakkan.</li>
+                                        <li class="mb-1"><strong>Fase 4: Sholat Khusyuk (Blank Screen)</strong> — Layar TV otomatis menjadi gelap syahdu bertuliskan pesan <em>"Luruskan dan Rapatkan Shaf Anda"</em> selama durasi sholat (default: 15 menit) agar konsentrasi sholat jamaah tidak terganggu oleh cahaya layar.</li>
                                     </ol>
+                                    <p class="mb-2"><strong>C. Khusus Sholat Jum'at (Durasi 50 Menit):</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Saat masuk waktu Sholat Jum'at, sistem otomatis mengunci layar dalam mode <strong>Khutbah Jum'at (50 Menit)</strong>: menampilkan 4 plakat petugas resmi (Khatib, Imam, Muadzin, Bilal) serta hadits larangan berbicara saat khatib berkhutbah. TV Serambi Luar otomatis beralih menyiarkan feed CCTV Mimbar.
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Panduan 3: Sinkronisasi Database -->
+                        <!-- Panduan 3: Pusat Agenda Rutin -->
                         <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
                             <div class="card-header py-3" id="headingThree" style="background: rgba(30,90,58,0.03);">
                                 <h6 class="mb-0">
                                     <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseThree" style="color: #0e3521; text-decoration: none; font-weight: 600;">
-                                        <span><i class="fas fa-sync-alt mr-2" style="color: #c9a03d;"></i>3. Pemeliharaan & Sinkronisasi Database 1-Klik (`/settings/migrate`)</span>
+                                        <span><i class="fas fa-calendar-check mr-2" style="color: #c9a03d;"></i>3. Pusat Agenda Rutin Masjid (4 Pilar Dakwah & Smart Pulsing Badge TV)</span>
                                         <i class="fas fa-chevron-down small text-muted"></i>
                                     </button>
                                 </h6>
                             </div>
                             <div id="collapseThree" class="collapse" data-parent="#usageGuide">
                                 <div class="card-body small" style="line-height: 1.8; color: #374151;">
-                                    <p class="mb-2">Saat sistem mendapatkan pembaruan fitur (misal: kolom durasi Jum'at baru, pengaturan CCTV, dll.), administrator tidak perlu membuka terminal SSH atau hosting:</p>
-                                    <ul class="pl-3 mb-0">
-                                        <li class="mb-2">Buka menu <strong>Pengaturan Aplikasi</strong> di sidebar.</li>
-                                        <li class="mb-2">Klik tombol <strong>"Sinkronkan Database (Migrate)"</strong> di pojok kanan atas halaman.</li>
-                                        <li>Sistem akan mengeksekusi migrasi database secara otomatis dan menampilkan notifikasi sukses tanpa risiko kehilangan data yang sudah tersimpan.</li>
+                                    <p class="mb-2"><strong>A. 4 Pilar Kegiatan Dakwah Rutin:</strong></p>
+                                    <ul class="pl-3 mb-3">
+                                        <li class="mb-1"><strong>Rutinan Malam Jum'at:</strong> Pembacaan Surat Yaasiin, Tahlil, dan Doa Bersama untuk ahli kubur jamaah.</li>
+                                        <li class="mb-1"><strong>Pengajian Rutin Sabtu Malam Ahad:</strong> Kajian Ba'da Maghrib s/d Isya dengan kurikulum kitab kuning & kajian tematik bergilir.</li>
+                                        <li class="mb-1"><strong>Tahsin Al-Qur'an Pekanan:</strong> Kelas perbaikan makharijul huruf & tajwid dengan pilihan hari bebas menggunakan fitur <strong>1-Click Day Picker</strong> (Senin s/d Ahad).</li>
+                                        <li class="mb-1"><strong>Kajian Tematik Dwi-Mingguan:</strong> Pengajian Subuh Ahad Ke-2 & Ke-4 mengupas fiqih keluarga dan tasawuf.</li>
                                     </ul>
+                                    <p class="mb-2"><strong>B. Smart Pulsing Badge TV ("HARI INI / MALAM INI"):</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Sistem TV membaca jam & hari kalender secara cerdas. Jika hari ini bertepatan dengan jadwal agenda (misal hari Kamis malam), kartu agenda Yaasiin akan otomatis menyalakan badge emas berkedip dinamis (*Golden Pulsing Glow*) bertuliskan <strong>"MALAM INI"</strong> untuk menarik perhatian jamaah yang sholat di masjid.
+                                    </p>
+                                    <p class="mb-2"><strong>C. Sakelar Status Cepat (Toggle Switch):</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Pengurus dapat meliburkan atau mengaktifkan kembali masing-masing pilar kajian dengan menekan sakelar switch ON/OFF tanpa menghapus data pemateri, kitab, atau jam kajian yang telah tersimpan.
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Panduan 4: Pemanfaatan Google Gemini AI -->
-                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(168,85,247,0.2); overflow: hidden;">
-                            <div class="card-header py-3" id="headingFour" style="background: rgba(168,85,247,0.04);">
+                        <!-- Panduan 4: Kajian Malam Ahad 1 Bulan Penuh -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
+                            <div class="card-header py-3" id="headingFour" style="background: rgba(30,90,58,0.03);">
                                 <h6 class="mb-0">
-                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseFour" style="color: #581c87; text-decoration: none; font-weight: 600;">
-                                        <span><i class="fas fa-robot mr-2" style="color: #9333ea;"></i>4. Panduan Pemanfaatan Asisten Google Gemini AI (Pengumuman & Hadits Hikmah)</span>
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseFour" style="color: #0e3521; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-book-reader mr-2" style="color: #c9a03d;"></i>4. Pengajian Rutin Malam Ahad 1 Bulan Penuh (Preset 5 Pekan & Tombol Simpan)</span>
                                         <i class="fas fa-chevron-down small text-muted"></i>
                                     </button>
                                 </h6>
                             </div>
                             <div id="collapseFour" class="collapse" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2"><strong>A. Tombol "Terapkan Preset 5 Pekan DKM":</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Berfungsi sebagai pengisi otomatis 1-klik untuk jadwal standar DKM Masjid Al-Jihad:
+                                    </p>
+                                    <ul class="pl-3 mb-3">
+                                        <li>Pekan 1: Kitab Riyadush Shalihin (Ustadz H. Ahmad Dahlan)</li>
+                                        <li>Pekan 2: Kitab Fathul Qorib / Fiqih Ibadah (Ustadz H. Abdul Malik, Lc.)</li>
+                                        <li>Pekan 3: Tafsir Al-Qur'an Tematik (K.H. Zainal Abidin)</li>
+                                        <li>Pekan 4: Tazkiyatun Nufus & Sirah Nabawiyah (Ustadz M. Ridwan, M.Pd.I)</li>
+                                        <li>Pekan 5: Muhasabah / Tematik Khusus (Ustadz Tamu / DKM)</li>
+                                    </ul>
+                                    <p class="mb-2"><strong>B. Sinkronisasi Kalender Sabtu Otomatis:</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Cukup pilih Bulan & Tahun di bagian atas form, sistem akan mendeteksi seluruh tanggal hari Sabtu dalam bulan tersebut secara matematis (termasuk pekan ke-5 jika bulan tersebut memiliki 5 hari Sabtu).
+                                    </p>
+                                    <p class="mb-2"><strong>C. Posisi Tombol "Simpan Agenda 1 Bulan":</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Untuk mempermudah pengisian tanpa perlu scroll panjang ke paling bawah layar, tombol <strong>"Simpan Agenda 1 Bulan"</strong> kini diposisikan tepat di bawah kotak <em>Rekap Kajian Bulan Ini</em> dan sejajar horizontal dengan formulir pengisian di sebelah kiri.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 5: Semarak Ramadhan -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
+                            <div class="card-header py-3" id="headingFive" style="background: rgba(30,90,58,0.03);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseFive" style="color: #0e3521; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-moon mr-2" style="color: #c9a03d;"></i>5. Semarak Ramadhan (Jadwal Tarawih 30 Hari, Kultum Opsional & Kas Tromol)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseFive" class="collapse" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2"><strong>A. Manajemen Petugas Tarawih 30 Malam:</strong></p>
+                                    <ul class="pl-3 mb-3">
+                                        <li>Formulir terpadu untuk menyusun petugas: <strong>Imam Sholat Tarawih</strong>, <strong>Muadzin / Bilal Tarawih</strong>, serta <strong>Penceramah Kultum Ba'da Isya</strong> selama 30 hari penuh.</li>
+                                        <li><strong>Kolom Penceramah Kultum Bersifat Opsional:</strong> Jika pada malam tertentu masjid tidak mengadakan kultum tarawih, cukup kosongkan kolom kultum dan sistem akan tetap menampilkan nama Imam & Bilal di TV tanpa pesan error.</li>
+                                    </ul>
+                                    <p class="mb-2"><strong>B. Pencatatan Kas Tromol Sholat Tarawih:</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Setiap malam ba'da tarawih, bendahara atau marbot dapat langsung menginput nominal perolehan kotak tromol keliling. Data akan langsung terangkum dalam tabel rekap kas Ramadhan dan siap ditampilkan di TV menjelang waktu sholat malam berikutnya.
+                                    </p>
+                                    <p class="mb-2"><strong>C. Sakelar Khusus Mode TV Ramadhan:</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Ketika bulan suci Ramadhan tiba, aktifkan sakelar <strong>"Mode TV Ramadhan"</strong> di admin. Display TV akan otomatis menambahkan countdown waktu berbuka puasa, slide jadwal Imsakiyah harian, serta ornamen visual Ramadhan Mubarak yang megah.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 6: Program Infaq & Donasi Khusus -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
+                            <div class="card-header py-3" id="headingSix" style="background: rgba(30,90,58,0.03);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseSix" style="color: #0e3521; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-hand-holding-usd mr-2" style="color: #c9a03d;"></i>6. Program Infaq & Donasi Khusus (Multi-Program, Target Dana & Hamba Allah)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseSix" class="collapse" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2"><strong>A. Dukungan Multi-Program Infaq Aktif:</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Masjid dapat menggalang beberapa pos dana secara simultan (misal: Renovasi Kubah & Tempat Wudhu, Pengadaan Karpet Turki, Santunan Anak Yatim & Dhuafa, serta Pembelian Mobil Ambulance). Masing-masing program memiliki saldo, target, dan rincian mutasi tersendiri.
+                                    </p>
+                                    <p class="mb-2"><strong>B. Target Dana & Progress Bar Otomatis:</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Setiap donasi yang masuk otomatis dihitung terhadap target nominal program. Layar TV akan menampilkan indikator persentase capaian dan grafik progress bar dinamis untuk memotivasi jamaah berinfaq.
+                                    </p>
+                                    <p class="mb-2"><strong>C. Fitur Donatur Anonim ("Hamba Allah"):</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Tersedia tombol pintas <em>"Gunakan Hamba Allah"</em> untuk menyamarkan identitas muhsinin yang menginginkan kerahasiaan sedekah demi menjaga kemurnian niat dan keikhlasan beramal.
+                                    </p>
+                                    <p class="mb-2"><strong>D. Cetak Kuitansi & Ekspor Laporan:</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Sistem menyediakan fitur cetak kuitansi tanda terima donasi resmi berkop DKM Masjid Al-Jihad serta tombol ekspor pembukuan donatur ke format file CSV/Excel.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 7: Buku Kas & Transaksi Keuangan -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(30,90,58,0.1); overflow: hidden;">
+                            <div class="card-header py-3" id="headingSeven" style="background: rgba(30,90,58,0.03);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseSeven" style="color: #0e3521; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-wallet mr-2" style="color: #c9a03d;"></i>7. Buku Kas & Transaksi Keuangan Masjid (Kas Utama vs Ambulance & 3 Kartu Saldo)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseSeven" class="collapse" data-parent="#usageGuide">
+                                <div class="card-body small" style="line-height: 1.8; color: #374151;">
+                                    <p class="mb-2"><strong>A. Pemisahan Kas Utama & Kas Mobil Ambulance:</strong></p>
+                                    <ul class="pl-3 mb-3">
+                                        <li><strong>Buku Kas Utama:</strong> Menampung seluruh penerimaan infaq jum'at, kotak keliling, operasional listrik, air, kebersihan, dan gaji marbot.</li>
+                                        <li><strong>Buku Kas Ambulance:</strong> Khusus mencatat donasi operasional ambulance, pembelian BBM, servis rutin, perpanjangan STNK, serta insentif relawan supir.</li>
+                                    </ul>
+                                    <p class="mb-2"><strong>B. 3 Kartu Metrik Saldo Real-Time:</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Di bagian atas halaman Kas, terdapat 3 kartu ringkasan keuangan yang otomatis ter-update setiap kali ada transaksi baru: <strong>Total Pemasukan</strong>, <strong>Total Pengeluaran</strong>, dan <strong>Saldo Kas Terkini</strong>.
+                                    </p>
+                                    <p class="mb-2"><strong>C. Urutan Transaksi Kronologis Terkini (Descending):</strong></p>
+                                    <p class="mb-2 text-muted">
+                                        Tabel mutasi keuangan disajikan secara kronologis menurun (transaksi paling baru berada di baris teratas) sehingga bendahara dapat langsung memantau transaksi mutasi terakhir tanpa perlu mencari ke halaman belakang.
+                                    </p>
+                                    <p class="mb-2"><strong>D. Filter Cepat & Pencarian Transaksi:</strong></p>
+                                    <p class="mb-0 text-muted">
+                                        Bendahara dapat menyaring pembukuan berdasarkan rentang tanggal tertentu, memfilter kategori penerimaan/pengeluaran, mencari kata kunci uraian, serta mengunduh rekap mutasi ke file CSV/Excel dengan satu klik.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panduan 8: AI & Fitur Cerdas Display -->
+                        <div class="card shadow-sm mb-2" style="border-radius: 12px; border: 1px solid rgba(168,85,247,0.2); overflow: hidden;">
+                            <div class="card-header py-3" id="headingEight" style="background: rgba(168,85,247,0.04);">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link collapsed w-100 text-left d-flex justify-content-between align-items-center" type="button" data-toggle="collapse" data-target="#collapseEight" style="color: #581c87; text-decoration: none; font-weight: 600;">
+                                        <span><i class="fas fa-robot mr-2" style="color: #9333ea;"></i>8. Asisten Google Gemini AI & Fitur Cerdas Display (AI Copywriter & Mutiara Hadits)</span>
+                                        <i class="fas fa-chevron-down small text-muted"></i>
+                                    </button>
+                                </h6>
+                            </div>
+                            <div id="collapseEight" class="collapse" data-parent="#usageGuide">
                                 <div class="card-body small" style="line-height: 1.8; color: #374151;">
                                     <p class="mb-2"><strong>A. Konfigurasi API Key Google Gemini (Sekali di Awal):</strong></p>
                                     <ol class="pl-3 mb-3">
@@ -737,11 +886,30 @@
                         <div class="card-body p-4">
                             <ul class="small mb-0" style="line-height: 1.8; list-style: none; padding-left: 0;">
                                 
+                                <!-- Versi 5.5.0 -->
+                                <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #1e5a3a;">
+                                    <div class="d-flex align-items-center mb-2 flex-wrap">
+                                        <span class="badge px-3 py-1 mr-2" style="background: #1e5a3a; color: #ffd700; font-weight: 700; font-size: 12px; border-radius: 8px;">
+                                            Versi 5.5.0 (Rilis Terkini)
+                                        </span>
+                                        <span class="text-muted font-weight-bold">September 2026</span>
+                                    </div>
+                                    <p class="font-weight-bold mb-1" style="color: #0e3521;">Konsolidasi Pusat Agenda Rutin, Semarak Ramadhan, Program Infaq, & Panduan Sistem Lengkap</p>
+                                    <ul class="pl-3 mb-0 text-muted">
+                                        <li><strong>Pusat Agenda Rutin Masjid (Bab 143):</strong> Konsolidasi 4 pilar dakwah terpadu (Yaasiin Malam Jum'at, Pengajian Rutin Sabtu Malam Ahad, Tahsin 1-Click Day Picker, Tafsir Subuh Dwi-Mingguan) dilengkapi Smart Pulsing Badge TV (*"HARI INI / MALAM INI"*).</li>
+                                        <li><strong>Pengajian Rutin Malam Ahad 1 Bulan Penuh (Bab 144 - 145):</strong> Fitur Preset 5 Pekan DKM 1-klik, auto-generate kalender hari Sabtu, dan reposisi tombol simpan sejajar di bawah kotak rekap kajian.</li>
+                                        <li><strong>Semarak Ramadhan Terintegrasi (Bab 135 - 140):</strong> Penyusunan jadwal tarawih 30 hari, kolom kultum opsional fleksibel, pencatatan kas tromol harian tarawih, serta sakelar mode TV Ramadhan.</li>
+                                        <li><strong>Program Infaq & Donasi Khusus Multi-Program (Bab 125 - 130):</strong> Dukungan multi-pos infaq aktif, visual target & progress bar persentase, mode donatur anonim "Hamba Allah", serta cetak kuitansi resmi.</li>
+                                        <li><strong>Buku Kas & Transaksi Realtime (Bab 110 - 120):</strong> Pemisahan Buku Kas Utama vs Kas Ambulance, 3 kartu ringkasan saldo realtime, dan pengurutan mutasi descending kronologis.</li>
+                                        <li><strong>Pembaruan Dokumentasi & Panduan Lengkap (Bab 146):</strong> Integrasi seluruh tutorial operasional 8 modul utama ke menu Tentang & Panduan.</li>
+                                    </ul>
+                                </li>
+
                                 <!-- Versi 4.2.6 -->
                                 <li class="mb-4 pb-3 border-bottom position-relative pl-4" style="border-left: 3px solid #9333ea;">
                                     <div class="d-flex align-items-center mb-2 flex-wrap">
                                         <span class="badge px-3 py-1 mr-2" style="background: #9333ea; color: #ffffff; font-weight: 700; font-size: 12px; border-radius: 8px;">
-                                            Versi 4.2.6 (Terbaru)
+                                            Versi 4.2.6
                                         </span>
                                         <span class="text-muted font-weight-bold">15 September 2026</span>
                                     </div>

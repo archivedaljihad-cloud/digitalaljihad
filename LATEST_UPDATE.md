@@ -6105,3 +6105,40 @@ Halaman Mode Sholat kini dapat diakses melalui:
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 145).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 146 — Integrasi Panduan Pengoperasian Lengkap & Pembaruan Sistem v5.5.0 ke Menu "Tentang & Panduan" (28 Sep 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- **Pertanyaan Pengguna:** *"Apakah semua perbaikan dan perubahan juga panduan pengopersian sudah tambahakan ke menu "Tentang dan Panduan"?"*
+- **Kondisi Sebelum Pembaruan:**
+  - Halaman `web-statis/about.html` dan `resources/views/about.blade.php` sebelumnya baru memuat panduan dasar versi awal (hanya 3 panduan singkat: Display TV, Alur Prayer Mode, dan Pengajian Rutin versi lama).
+  - Riwayat changelog pada timeline masih terhenti di versi `v5.1.0` (Bab 85).
+  - Seluruh modul mutakhir yang telah dibangun (Bab 86 s/d Bab 145) seperti **Pusat Agenda Rutin (4 Pilar Dakwah)**, **Jadwal Sholat & Durasi Falakiyah NU/Kemenag**, **Semarak Ramadhan & Kas Tromol Tarawih**, **Program Infaq & Donasi Khusus Multi-Program**, **Buku Kas & Transaksi Realtime**, serta **Kajian Malam Ahad 1 Bulan Penuh** belum tercakup dalam halaman panduan resmi.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembaruan Menyeluruh Bagian 6: Panduan Pengoperasian Sistem (`#guideAccordion` & `#usageGuide`):**
+   - Menambahkan 8 modul panduan operasional teknis yang sangat rinci, berstruktur, dan mudah dipahami:
+     1. **1. Menampilkan Sistem di Layar TV (Display TV Dalam & Luar):** Petunjuk Kiosk Mode Fullscreen (F11), alamat URL TV Utama & TV Luar Serambi, serta integrasi hardware cerdas hemat daya (Smart Breaker & Smart IR Remote).
+     2. **2. Jadwal Sholat & Durasi Prayer Mode (Hisab Falakiyah NU vs Kemenag & 4 Fase):** Pemilihan hisab LF-PBNU vs Kemenag RI, koordinat GPS & koreksi menit lokal, 4 fase siklus ibadah (Tarhim, Adzan, Iqamah, Sholat Hening Blank Screen), serta Sholat Jum'at 50 menit dengan plakat petugas & adab khutbah.
+     3. **3. Pusat Agenda Rutin Masjid (4 Pilar Dakwah & Smart Pulsing Badge TV):** Penjelasan 4 pilar (Yaasiin Malam Jum'at, Pengajian Rutin Sabtu Malam Ahad, Tahsin 1-Click Day Picker, Tafsir Subuh Dwi-Mingguan), sakelar toggle status cepat, serta pulsing badge TV emas dinamis (*"HARI INI / MALAM INI"*).
+     4. **4. Pengajian Rutin Malam Ahad 1 Bulan Penuh (Preset 5 Pekan & Tombol Simpan):** Manfaat tombol "Terapkan Preset 5 Pekan DKM", sinkronisasi kalender hari Sabtu otomatis, dan posisi strategis tombol *Simpan Agenda 1 Bulan* di bawah kotak rekap kajian.
+     5. **5. Semarak Ramadhan (Jadwal Tarawih 30 Hari, Kultum Opsional & Kas Tromol):** Form petugas tarawih 30 hari, fleksibilitas penceramah kultum opsional, pencatatan kas tromol harian tarawih, serta sakelar Mode TV Ramadhan.
+     6. **6. Program Infaq & Donasi Khusus (Multi-Program, Target Dana & Hamba Allah):** Penggalangan banyak pos infaq simultan, visual target nominal & progress bar persentase, mode donatur anonim "Hamba Allah", serta cetak kuitansi dan ekspor data donasi.
+     7. **7. Buku Kas & Transaksi Keuangan Masjid (Kas Utama vs Ambulance & 3 Kartu Saldo):** Pemisahan tegas Kas Utama vs Kas Ambulance, 3 metrik saldo realtime, tabel mutasi descending kronologis, dan fitur filter/pencarian transaksi.
+     8. **8. Asisten Google Gemini AI & Fitur Cerdas Display (AI Copywriter & Mutiara Hadits):** Cara memanfaatkan AI Copywriter pengumuman resmi & running text, penayangan Hadits Hikmah harian font Amiri, dan efek pencahayaan pendaran Golden Pulse.
+2. **Peningkatan Versi Sistem ke `v5.5.0`:**
+   - Memperbarui badge versi di header hero `about.html` dan `about.blade.php` menjadi **`v5.5.0 (Rilis Terkini)`**.
+   - Menambahkan entri rilis terkini pada Bagian 7: Timeline Riwayat Pembaruan Sistem yang merangkum pencapaian besar Bab 110 hingga 146.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/about.html` (Pembaruan lengkap 8 panduan modul operasional, badge v5.5.0, dan timeline riwayat mutakhir).
+2. `resources/views/about.blade.php` (Penyelarasan penuh modul panduan dan riwayat versi Laravel Blade).
+3. `LATEST_UPDATE.md` (Pencatatan Bab 146).
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
