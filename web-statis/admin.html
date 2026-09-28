@@ -3666,28 +3666,19 @@
                                             <label class="font-weight-bold text-gray-700 mb-1">
                                                 <i class="fas fa-university text-warning mr-1"></i> Nama Bank
                                             </label>
-                                            <input type="text" id="cfgInfaqBankName" class="form-control form-control-sm font-weight-bold"
-                                                placeholder="Contoh: Bank Syariah Indonesia (BSI)"
-                                                value="Bank Syariah Indonesia (BSI)"
-                                                style="border: 1.5px solid #fcd34d; border-radius: 8px;">
+                                            <input type="text" id="cfgInfaqBankName" class="form-control form-control-sm font-weight-bold" placeholder="Contoh: Bank Jawa Barat (BJB)" value="Bank Jawa Barat (BJB)" oninput="updateRekeningPreview()" style="border: 1.5px solid #fcd34d; border-radius: 8px;">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="font-weight-bold text-gray-700 mb-1">
                                                 <i class="fas fa-credit-card text-warning mr-1"></i> Nomor Rekening
                                             </label>
-                                            <input type="text" id="cfgInfaqNoRekening" class="form-control form-control-sm font-weight-bold"
-                                                placeholder="Contoh: 7123-456-789"
-                                                value="7123-456-789"
-                                                style="border: 1.5px solid #fcd34d; border-radius: 8px;">
+                                            <input type="text" id="cfgInfaqNoRekening" class="form-control form-control-sm font-weight-bold" placeholder="Contoh: 011 686 685 4100" value="011 686 685 4100" oninput="updateRekeningPreview()" style="border: 1.5px solid #fcd34d; border-radius: 8px;">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="font-weight-bold text-gray-700 mb-1">
                                                 <i class="fas fa-user-circle text-warning mr-1"></i> Atas Nama Rekening
                                             </label>
-                                            <input type="text" id="cfgInfaqAtasNama" class="form-control form-control-sm font-weight-bold"
-                                                placeholder="Contoh: Masjid Jami' Al-Jihad"
-                                                value="Masjid Jami' Al-Jihad"
-                                                style="border: 1.5px solid #fcd34d; border-radius: 8px;">
+                                            <input type="text" id="cfgInfaqAtasNama" class="form-control form-control-sm font-weight-bold" placeholder="Contoh: DKM Jami Al Jihad" value="DKM Jami Al Jihad" oninput="updateRekeningPreview()" style="border: 1.5px solid #fcd34d; border-radius: 8px;">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="font-weight-bold text-gray-700 mb-1">
@@ -3699,10 +3690,7 @@
                                                         <i class="fab fa-whatsapp text-success"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" id="cfgInfaqWaKonfirmasi" class="form-control form-control-sm font-weight-bold"
-                                                    placeholder="Contoh: 0877-5876-7000"
-                                                    value="0877-5876-7000"
-                                                    style="border: 1.5px solid #86efac; border-radius: 0 8px 8px 0;">
+                                                <input type="text" id="cfgInfaqWaKonfirmasi" class="form-control form-control-sm font-weight-bold" placeholder="Contoh: 0856 1235 167 (BENDAHARA)" value="0856 1235 167 (BENDAHARA)" oninput="updateRekeningPreview()" style="border: 1.5px solid #86efac; border-radius: 0 8px 8px 0;">
                                             </div>
                                         </div>
                                     </div>
@@ -3715,19 +3703,19 @@
                                         </div>
                                         <div class="d-flex justify-content-between border-bottom border-secondary pb-1 mb-1">
                                             <small style="color:#94a3b8;">Bank</small>
-                                            <small id="prevInfaqBankName" class="font-weight-bold" style="color:#fff;">Bank Syariah Indonesia (BSI)</small>
+                                            <small id="prevInfaqBankName" class="font-weight-bold" style="color:#fff;">Bank Jawa Barat (BJB)</small>
                                         </div>
                                         <div class="d-flex justify-content-between border-bottom border-secondary pb-1 mb-1">
                                             <small style="color:#94a3b8;">Nomor Rekening</small>
-                                            <small id="prevInfaqNoRek" class="font-weight-bold" style="color:#ffd700; letter-spacing:0.04em;">7123-456-789</small>
+                                            <small id="prevInfaqNoRek" class="font-weight-bold" style="color:#ffd700; letter-spacing:0.04em;">011 686 685 4100</small>
                                         </div>
                                         <div class="d-flex justify-content-between border-bottom border-secondary pb-1 mb-1">
                                             <small style="color:#94a3b8;">Atas Nama</small>
-                                            <small id="prevInfaqAtasNama" class="font-weight-bold" style="color:#ffd700;">Masjid Jami' Al-Jihad</small>
+                                            <small id="prevInfaqAtasNama" class="font-weight-bold" style="color:#ffd700;">DKM Jami Al Jihad</small>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <small style="color:#94a3b8;">Konfirmasi WhatsApp</small>
-                                            <small id="prevInfaqWa" class="font-weight-bold" style="color:#00e676;">0877-5876-7000</small>
+                                            <small id="prevInfaqWa" class="font-weight-bold" style="color:#00e676;">0856 1235 167 (BENDAHARA)</small>
                                         </div>
                                     </div>
 
@@ -4432,7 +4420,7 @@
                                                 <span>Teks Footer Copyright Rotasi TV</span>
                                                 <span class="badge badge-warning text-dark" style="font-size: 0.72rem; padding: 4px 8px; border-radius: 6px;"><i class="fas fa-crown mr-1"></i> Khusus Super Admin</span>
                                             </label>
-                                            <input type="text" class="form-control" id="cfgFooterMasjid" value="© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved" placeholder="© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved">
+                                            <input type="text" class="form-control" id="cfgFooterMasjid" value="© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved" placeholder="© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved">
                                             <small class="text-muted">Teks hak cipta paten yang selalu tampil di bagian paling bawah pada setiap slide rotasi display TV.</small>
                                         </div>
                                     </div>
@@ -6790,7 +6778,7 @@
                         if (document.getElementById('cfgNamaMasjid') && s.nama_aplikasi) document.getElementById('cfgNamaMasjid').value = s.nama_aplikasi;
                         if (document.getElementById('cfgIntervalTV') && s.rotation_interval) document.getElementById('cfgIntervalTV').value = s.rotation_interval;
                         if (document.getElementById('cfgFooterMasjid')) {
-                            document.getElementById('cfgFooterMasjid').value = s.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved";
+                            document.getElementById('cfgFooterMasjid').value = s.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
                         }
                         if (document.getElementById('cfgLiveMekah') && s.live_makkah_url) document.getElementById('cfgLiveMekah').value = s.live_makkah_url;
                         if (document.getElementById('cfgCctvMimbar') && s.cctv_mimbar_url) document.getElementById('cfgCctvMimbar').value = s.cctv_mimbar_url;
@@ -7662,7 +7650,7 @@
             if (document.getElementById('prevInfaqWa'))       document.getElementById('prevInfaqWa').textContent       = wa || '-';
         }
 
-        // Simpan rekening infaq ke Supabase & LocalStorage
+        // Simpan rekening infaq ke Supabase (via app_settings.running_text_pages.infaq_rekening) & LocalStorage
         async function simpanRekeningInfaq() {
             const btn   = document.getElementById('btnSimpanRekeningInfaq');
             const alert = document.getElementById('alertRekeningInfaq');
@@ -7678,29 +7666,53 @@
 
             if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...'; }
 
-            const payload = {
-                infaq_bank_name:      bank,
-                infaq_no_rekening:    noRek,
-                infaq_atas_nama:      nama,
-                infaq_wa_konfirmasi:  wa
+            const rekData = { bank, noRek, nama, wa };
+            const payloadCompat = {
+                bank,
+                noRek,
+                nama,
+                wa,
+                infaq_bank_name: bank,
+                infaq_no_rekening: noRek,
+                infaq_atas_nama: nama,
+                infaq_wa_konfirmasi: wa
             };
 
             // Simpan ke LocalStorage sebagai cache cepat
-            localStorage.setItem('infaq_rekening', JSON.stringify(payload));
+            localStorage.setItem('infaq_rekening', JSON.stringify(payloadCompat));
+            updateRekeningPreview();
 
             try {
-                if (typeof SUPABASE_CONFIG !== 'undefined') {
+                if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
                     const headers = {
                         'apikey':        SUPABASE_CONFIG.anonKey,
                         'Authorization': 'Bearer ' + SUPABASE_CONFIG.anonKey,
                         'Content-Type':  'application/json',
-                        'Prefer':        'return=minimal'
+                        'Prefer':        'return=representation'
                     };
-                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+
+                    // Ambil running_text_pages yang ada saat ini
+                    const getRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers });
+                    let currentRt = {};
+                    if (getRes.ok) {
+                        const rows = await getRes.json();
+                        let rt = rows[0]?.running_text_pages;
+                        if (typeof rt === 'string') {
+                            try { rt = JSON.parse(rt); } catch(e) { rt = {}; }
+                        }
+                        currentRt = rt || {};
+                    }
+                    currentRt.infaq_rekening = rekData;
+
+                    const patchRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                         method:  'PATCH',
                         headers: headers,
-                        body:    JSON.stringify(payload)
+                        body:    JSON.stringify({ running_text_pages: currentRt })
                     });
+
+                    if (!patchRes.ok) {
+                        throw new Error('Supabase response status ' + patchRes.status);
+                    }
                 }
                 if (alert) { alert.textContent = '✅ Berhasil disimpan! Layar TV diperbarui otomatis.'; alert.style.display='inline'; alert.style.color='#16a34a'; }
             } catch (err) {
@@ -7712,13 +7724,13 @@
             }
         }
 
-        // Reset rekening infaq ke nilai default BSI
+        // Reset rekening infaq ke nilai default BJB
         function resetRekeningInfaqDefault() {
             const defaults = {
-                bank:  'Bank Syariah Indonesia (BSI)',
-                noRek: '7123-456-789',
-                nama:  "Masjid Jami' Al-Jihad",
-                wa:    '0877-5876-7000'
+                bank:  'Bank Jawa Barat (BJB)',
+                noRek: '011 686 685 4100',
+                nama:  'DKM Jami Al Jihad',
+                wa:    '0856 1235 167 (BENDAHARA)'
             };
             if (document.getElementById('cfgInfaqBankName'))      document.getElementById('cfgInfaqBankName').value      = defaults.bank;
             if (document.getElementById('cfgInfaqNoRekening'))    document.getElementById('cfgInfaqNoRekening').value    = defaults.noRek;
@@ -7730,10 +7742,14 @@
         // Muat nilai rekening dari Supabase settings atau LocalStorage ke form
         function loadRekeningInfaqToForm(settings) {
             const cached = (() => { try { return JSON.parse(localStorage.getItem('infaq_rekening') || '{}'); } catch(e){ return {}; } })();
-            const bank  = settings?.infaq_bank_name      ?? cached.infaq_bank_name      ?? 'Bank Syariah Indonesia (BSI)';
-            const noRek = settings?.infaq_no_rekening    ?? cached.infaq_no_rekening    ?? '7123-456-789';
-            const nama  = settings?.infaq_atas_nama      ?? cached.infaq_atas_nama      ?? "Masjid Jami' Al-Jihad";
-            const wa    = settings?.infaq_wa_konfirmasi  ?? cached.infaq_wa_konfirmasi  ?? '0877-5876-7000';
+            const rt = settings?.running_text_pages;
+            const rek = (rt && typeof rt === 'object' && rt.infaq_rekening) ? rt.infaq_rekening : {};
+
+            const bank  = rek.bank  || settings?.infaq_bank_name   || cached.bank  || cached.infaq_bank_name   || 'Bank Jawa Barat (BJB)';
+            const noRek = rek.noRek || settings?.infaq_no_rekening || cached.noRek || cached.infaq_no_rekening || '011 686 685 4100';
+            const nama  = rek.nama  || settings?.infaq_atas_nama   || cached.nama  || cached.infaq_atas_nama   || 'DKM Jami Al Jihad';
+            const wa    = rek.wa    || settings?.infaq_wa_konfirmasi || cached.wa  || cached.infaq_wa_konfirmasi || '0856 1235 167 (BENDAHARA)';
+
             if (document.getElementById('cfgInfaqBankName'))      document.getElementById('cfgInfaqBankName').value      = bank;
             if (document.getElementById('cfgInfaqNoRekening'))    document.getElementById('cfgInfaqNoRekening').value    = noRek;
             if (document.getElementById('cfgInfaqAtasNama'))      document.getElementById('cfgInfaqAtasNama').value      = nama;
@@ -9993,7 +10009,7 @@
         async function simpanPengaturanSistem() {
             const nama = document.getElementById('cfgNamaMasjid')?.value;
             const interval = parseInt(document.getElementById('cfgIntervalTV')?.value) || 20;
-            const footerText = document.getElementById('cfgFooterMasjid')?.value?.trim() || "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved";
+            const footerText = document.getElementById('cfgFooterMasjid')?.value?.trim() || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
             const liveMekah = document.getElementById('cfgLiveMekah')?.value;
             const cctv = document.getElementById('cfgCctvMimbar')?.value;
             const geminiApiKey = document.getElementById('cfgGeminiApiKey')?.value?.trim();

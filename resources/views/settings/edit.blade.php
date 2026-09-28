@@ -144,8 +144,8 @@
 											<span class="badge badge-warning text-dark" style="font-size: 0.72rem; padding: 4px 8px; border-radius: 6px;"><i class="fas fa-crown mr-1"></i> Khusus Super Admin</span>
 										</label>
 										<input type="text" class="form-control" id="footer" name="footer"
-											value="{{ old('footer', $setting->footer ?? '© 2026 MASJID JAMI\' AL JIHAD. All Rights Reserved') }}"
-											placeholder="© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved">
+											value="{{ old('footer', $setting->footer ?? '© 2026 MASJID JAMI\' AL JIHAD (GRAHA ASRI). All Rights Reserved') }}"
+											placeholder="© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved">
 										<small class="form-text text-muted">Teks hak cipta paten yang selalu tampil di bagian paling bawah pada setiap halaman rotasi display TV.</small>
 									</div>
 								</div>

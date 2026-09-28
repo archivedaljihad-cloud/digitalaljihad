@@ -1,4 +1,4 @@
-﻿# LATEST UPDATE - SISTEM INFORMASI DISPLAY MASJID (DIGITALv304)
+# LATEST UPDATE - SISTEM INFORMASI DISPLAY MASJID (DIGITALv304)
 
 > **Catatan Penting untuk AI Agent / Pengembang Baru:**  
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
@@ -5757,3 +5757,49 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 2. LATEST_UPDATE.md (Dokumentasi Bab 136).
 3. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
 4. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
+
+---
+
+## Bab 137 — Perbaikan Sinkronisasi Rekening Saluran Donasi Infaq (Supabase JSON/Cloud & LocalStorage) & Pembaruan Footer Resmi Graha Asri (28 Sep 2026)
+
+### 1. Masalah yang Ditemukan (Root Cause)
+1. **Kegagalan Sinkronisasi Rekening Donasi ke Supabase Cloud:**
+   - Ketika pengurus masjid mengisi data rekening baru (*Bank Jawa Barat / BJB, No. Rek: 011 686 685 4100, An: DKM Jami Al Jihad, WA: 0856 1235 167 (BENDAHARA)*) di panel admin dan mengklik *"Simpan & Tayang ke TV"*, data di layar TV dan preview admin tidak berubah dan kembali ke default (*Bank Syariah Indonesia / BSI*).
+   - **Penyebab Utama:** Skrip simpan di `admin.html` mencoba melakukan `PATCH` kolom `infaq_bank_name`, `infaq_no_rekening`, `infaq_atas_nama`, dan `infaq_wa_konfirmasi` ke tabel `app_settings` Supabase. Kolom-kolom tersebut **tidak ada** di skema tabel `app_settings` Supabase, sehingga Supabase menolak request dengan status `HTTP 400 Bad Request (PGRST204: Could not find column in schema cache)`.
+   - Di `slides/infaq.html`, elemen hanya membaca kolom `settings.infaq_bank_name` yang bernilai `undefined`, sehingga slide TV selalu menampilkan fallback teks statis awal (*BSI*).
+2. **Penyelarasan Teks Footer Hak Cipta Display TV:**
+   - Permintaan penambahan teks `(GRAHA ASRI)` pada footer resmi display TV: dari `"© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved"` menjadi `"© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved"` di seluruh komponen (Blade views, display TV, panel admin, dan database cloud).
+
+---
+
+### 2. Solusi & Perbaikan Komprehensif
+1. **Penyimpanan Rekening Dinamis via Kolom `running_text_pages` di Supabase:**
+   - Memanfaatkan kolom JSON dinamis `running_text_pages` pada tabel `app_settings` Supabase yang sudah aktif dan mendukung skema object fleksibel.
+   - Objek rekening donasi kini disimpan secara persisten di:
+     `app_settings.running_text_pages.infaq_rekening = { bank, noRek, nama, wa }`
+   - Data juga disinkronkan ke `localStorage.setItem('infaq_rekening', ...)` sebagai cache cepat instan.
+2. **Perbaikan Skrip Simpan di Panel Admin (`web-statis/admin.html`):**
+   - Fungsi `simpanRekeningInfaq()` kini mengambil data `running_text_pages` yang ada, memasukkan `infaq_rekening`, dan melakukan `PATCH` ke Supabase dengan status `HTTP 200 OK` terverifikasi.
+   - Fungsi `loadRekeningInfaqToForm(settings)` kini membaca secara terurut: `settings?.running_text_pages?.infaq_rekening` → `settings?.infaq_rekening` → `cached` di LocalStorage.
+   - Ditambahkan atribut `oninput="updateRekeningPreview()"` pada seluruh 4 input field form rekening (`#cfgInfaqBankName`, `#cfgInfaqNoRekening`, `#cfgInfaqAtasNama`, `#cfgInfaqWaKonfirmasi`), sehingga kotak *"Preview Tampilan TV"* langsung merespons secara real-time saat pengguna mengetik.
+3. **Penyempurnaan Tampilan Slide TV (`web-statis/slides/infaq.html`):**
+   - Mengganti nilai default HTML statis ke **Bank Jawa Barat (BJB)**, No. Rek **011 686 685 4100**, An. **DKM Jami Al Jihad**, WA **0856 1235 167 (BENDAHARA)**.
+   - Memperbarui fungsi `loadProgramInfaqData()` agar membaca data rekening donasi dinamis dari `settings?.running_text_pages?.infaq_rekening` serta merender secara otomatis ke layar TV.
+4. **Pembaruan Footer Resmi Graha Asri:**
+   - `web-statis/index.html`: Diperbarui ke `© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved`.
+   - `web-statis/admin.html`: Input `#cfgFooterMasjid` dan seluruh fallback JS diperbarui ke `(GRAHA ASRI)`.
+   - `resources/views/rotator.blade.php`, `resources/views/rotator-outdoor.blade.php`, `resources/views/settings/edit.blade.php`: Fallback Blade view diperbarui ke `(GRAHA ASRI)`.
+   - Database Supabase `app_settings` (ID 1) kolom `footer` telah diperbarui secara langsung menjadi `"© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved"`.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/admin.html` (Perbaikan `simpanRekeningInfaq()`, `loadRekeningInfaqToForm()`, penambahan `oninput="updateRekeningPreview()"`, pembaruan footer Graha Asri).
+2. `web-statis/slides/infaq.html` (Default HTML rekening BJB, pembacaan dinamis dari `running_text_pages.infaq_rekening`).
+3. `web-statis/index.html` (Master footer TV & update fallback Graha Asri).
+4. `resources/views/rotator.blade.php` (Master footer fallback Blade).
+5. `resources/views/rotator-outdoor.blade.php` (Master footer fallback Blade outdoor).
+6. `resources/views/settings/edit.blade.php` (Input footer admin Laravel).
+7. `LATEST_UPDATE.md` (Dokumentasi Bab 137).
+8. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+9. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

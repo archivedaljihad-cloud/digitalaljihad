@@ -489,7 +489,7 @@
 
     <!-- Master Persistent Footer TV (Diatur Super Admin) -->
     <footer class="master-display-footer" id="masterDisplayFooter">
-        <span id="masterFooterContent">© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved</span>
+        <span id="masterFooterContent">© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved</span>
     </footer>
 
     <!-- Prayer Mode Frame (Diaktifkan Otomatis Saat Waktu Sholat) -->
@@ -559,7 +559,7 @@
         function updateMasterFooter(text) {
             const el = document.getElementById('masterFooterContent');
             if (el) {
-                el.textContent = text || "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved";
+                el.textContent = text || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
             }
         }
 
@@ -819,12 +819,12 @@
                         rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
                     }
                     // Sinkronisasi teks footer hak cipta yang diatur Super Admin
-                    const footerText = settings.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved";
+                    const footerText = settings.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
                     updateMasterFooter(footerText);
 
                     activePages = resolveActivePages(settings, programInfaqList);
                 } else {
-                    const localFooter = localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved";
+                    const localFooter = localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
                     updateMasterFooter(localFooter);
                 }
 

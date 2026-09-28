@@ -361,7 +361,7 @@
 
     <!-- Master Persistent Footer TV (Diatur Super Admin) -->
     <footer class="master-display-footer" id="masterDisplayFooter">
-        <span id="masterFooterContent">{{ $settings->footer ?? "© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved" }}</span>
+        <span id="masterFooterContent">{{ $settings->footer ?? "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved" }}</span>
     </footer>
 
     <script>
