@@ -14,8 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="css/display-theme.css?v=3.0.6">
-    <link rel="stylesheet" href="css/partials-theme.css?v=3.0.6">
+    <link rel="stylesheet" href="css/display-theme.css?v=3.0.7">
+    <link rel="stylesheet" href="css/partials-theme.css?v=3.0.7">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -114,19 +114,19 @@
             opacity: 1;
         }
 
-        /* Royal Emerald Splash Loading Overlay */
+        /* Royal Emerald Splash Loading Overlay - Luxury Mosque Edition */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at center, #0d4a2b 0%, #052917 55%, #01140b 100%);
+            background: radial-gradient(circle at center, #093c23 0%, #042415 50%, #01130b 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .splash-card {
@@ -134,33 +134,59 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            animation: splashFadeIn 0.8s ease-out;
+            animation: splashFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
         }
 
         @keyframes splashFadeIn {
-            from { opacity: 0; transform: scale(0.92); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .splash-logo-wrapper {
             position: relative;
-            width: 170px;
-            height: 170px;
+            width: 175px;
+            height: 175px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
+        /* Halo cahaya pendaran di belakang logo */
+        .splash-logo-halo {
+            position: absolute;
+            inset: -25px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.22) 0%, rgba(16, 185, 129, 0.15) 50%, transparent 75%);
+            animation: splashHaloBreathe 3s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes splashHaloBreathe {
+            0% { transform: scale(0.92); opacity: 0.5; }
+            100% { transform: scale(1.15); opacity: 0.9; }
+        }
+
+        /* Double Ring Spinner Emas Mewah */
         .splash-spinner-ring {
             position: absolute;
             inset: -14px;
             border-radius: 50%;
-            border: 3px solid rgba(212, 175, 55, 0.15);
-            border-top: 3px solid #FFD700;
-            border-right: 3px solid rgba(255, 215, 0, 0.6);
-            animation: splashSpin 1.4s linear infinite;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+            border: 2px dashed rgba(212, 175, 55, 0.25);
+            border-top: 3.5px solid #FFD700;
+            border-right: 3.5px solid rgba(255, 215, 0, 0.7);
+            animation: splashSpin 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+
+        .splash-inner-ring {
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-bottom: 2px solid #34D399;
+            animation: splashSpinReverse 2.4s linear infinite;
         }
 
         @keyframes splashSpin {
@@ -168,49 +194,103 @@
             100% { transform: rotate(360deg); }
         }
 
+        @keyframes splashSpinReverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
         .splash-logo-img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+            filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.6));
+            position: relative;
+            z-index: 2;
         }
 
+        /* Teks Nama Masjid dengan Efek Shimmer Emas Berjalan */
         .splash-title {
-            font-size: 2rem;
+            font-size: 2.35rem;
             font-weight: 800;
-            letter-spacing: 4px;
-            color: #FFFFFF;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.4);
             margin-bottom: 14px;
+            background: linear-gradient(
+                120deg,
+                #ffffff 0%,
+                #ffe066 20%,
+                #ffffff 40%,
+                #ffd700 60%,
+                #fff8db 80%,
+                #ffd700 100%
+            );
+            background-size: 250% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: splashGoldShimmer 4s ease-in-out infinite, splashTitleFloat 3.6s ease-in-out infinite;
+            filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 24px rgba(255, 215, 0, 0.4));
         }
 
-        .splash-loading-pill {
-            display: inline-flex;
+        @keyframes splashGoldShimmer {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+
+        @keyframes splashTitleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Divider Garis Emas Islami dengan Ornamen Bintang Segi Delapan */
+        .splash-divider-wrap {
+            display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 6px 22px;
-            border-radius: 30px;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            font-size: 0.95rem;
-            color: #E2E8F0;
-            letter-spacing: 2px;
+            justify-content: center;
+            gap: 16px;
+            width: 340px;
+            margin-bottom: 10px;
+        }
+
+        .splash-divider-line {
+            flex: 1;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, #FFD700);
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        }
+
+        .splash-divider-line.right {
+            background: linear-gradient(90deg, #FFD700, transparent);
+        }
+
+        .splash-divider-ornament {
+            color: #FFD700;
+            font-size: 1.15rem;
+            line-height: 1;
+            text-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255, 215, 0, 0.9);
+            animation: splashStarPulse 2.4s ease-in-out infinite;
+        }
+
+        @keyframes splashStarPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.75; }
+            50% { transform: scale(1.35) rotate(45deg); opacity: 1; filter: drop-shadow(0 0 10px #FFFFFF); }
+        }
+
+        .splash-subtitle {
+            font-size: 0.85rem;
             font-weight: 600;
+            letter-spacing: 5px;
+            color: #a7f3d0;
+            text-transform: uppercase;
+            opacity: 0.85;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+            animation: splashSubtitlePulse 3s ease-in-out infinite;
         }
 
-        .splash-dot {
-            width: 8px;
-            height: 8px;
-            background: #FFD700;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #FFD700;
-            animation: splashDotPulse 1.2s infinite alternate;
-        }
-
-        @keyframes splashDotPulse {
-            0% { opacity: 0.4; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); }
+        @keyframes splashSubtitlePulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; text-shadow: 0 0 12px rgba(52, 211, 153, 0.7); }
         }
 
         /* Remote TV Control OSD Notification */
@@ -363,18 +443,22 @@
     </style>
 </head>
 <body>
-    <!-- Splash Screen Awal -->
+    <!-- Splash Screen Awal - Luxury Mosque Edition -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="splash-card">
             <div class="splash-logo-wrapper">
+                <div class="splash-logo-halo"></div>
                 <div class="splash-spinner-ring"></div>
+                <div class="splash-inner-ring"></div>
                 <img src="image/display/logo_aljihad.png" alt="Logo Masjid" class="splash-logo-img" onerror="this.onerror=null;this.src='img/logo-aljihad-circle.png';">
             </div>
             <div class="splash-title" id="splashTitle">MASJID JAMI' AL JIHAD</div>
-            <div class="splash-loading-pill">
-                <span class="splash-dot"></span>
-                <span id="splashStatus">MENGHUBUNGKAN CLOUD...</span>
+            <div class="splash-divider-wrap">
+                <span class="splash-divider-line left"></span>
+                <span class="splash-divider-ornament">✦</span>
+                <span class="splash-divider-line right"></span>
             </div>
+            <div class="splash-subtitle">SISTEM INFORMASI DIGITAL</div>
         </div>
     </div>
 
@@ -413,9 +497,9 @@
 
     <!-- SUPABASE & CORE SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=3.0.6"></script>
-    <script src="js/supabase-db.js?v=3.0.6"></script>
-    <script src="js/prayer-engine.js?v=3.0.6"></script>
+    <script src="js/supabase-config.js?v=3.0.7"></script>
+    <script src="js/supabase-db.js?v=3.0.7"></script>
+    <script src="js/prayer-engine.js?v=3.0.7"></script>
 
     <script>
         // Pemetaan rute canonical ke path file statis

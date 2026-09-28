@@ -5686,3 +5686,39 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 16. LATEST_UPDATE.md (DIMODIFIKASI - Dokumentasi Bab 134).
 17. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
 18. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
+---
+
+## Bab 135 — Redesain Splash Screen TV: Shimmering Gold Typography & Eliminasi Kotak Kapsul Loading (28 Sep 2026)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- Tampilan splash screen (layar sambutan saat TV pertama kali dinyalakan) sebelumnya terlihat kaku dan monoton karena nama masjid hanya berupa teks putih statis biasa.
+- Kotak kapsul lonjong bertuliskan "MEMUAT DATA SUPABASE..." dirasa terlalu teknis dan kurang sesuai dengan estetika sakral dan agung sebuah rumah ibadah.
+- Pengguna meminta agar teks di bawah logo diberi animasi berkelas yang memukau, serta kotak kapsul dan teksnya dihilangkan.
+
+---
+
+### 2. Solusi Desain & Eksekusi Mewah (Luxury Mosque Edition)
+1. **Eliminasi Kotak Kapsul Loading:**
+   - Menghapus sepenuhnya elemen .splash-loading-pill, .splash-dot, dan status loading teks teknis dari DOM HTML dan CSS.
+   - Pengecekan JavaScript (if (statusEl)) tetap aman dan berjalan mulus tanpa error saat inisialisasi Supabase.
+2. **Efek Animasi Teks Nama Masjid (Shimmering Pure Gold):**
+   - Teks nama masjid diperbesar dengan tipografi megah (*letter-spacing: 6px*, font-weight: 800).
+   - Diterapkan gradasi multi-stop emas murni (*pure gold metallic* #FFFFFF → #FFE066 → #FFD700 → #FFF8DB) dengan ackground-clip: text dan animasi @keyframes splashGoldShimmer (cahaya emas berkilau mengalir melintasi huruf-huruf secara lembut dan dinamis).
+   - Ditambahkan efek @keyframes splashTitleFloat (pergerakan elevasi mengambang halus) dengan pendaran bayangan emas (*golden ambient glow drop-shadow*).
+3. **Double-Ring Orbit Spinner & Logo Halo:**
+   - Menambahkan ornamen halo cahaya hijau zamrud dan emas di belakang logo (.splash-logo-halo) yang berhembus lembut (*breathing pulse*).
+   - Spinner ring logo ditingkatkan menjadi sistem cincin ganda (*double-ring orbit*): cincin luar emas berputar searah jarum jam, dan cincin dalam zamrud berputar berlawanan arah (*counter-rotation*).
+4. **Royal Islamic Divider Bar (Garis Ornamen Islami):**
+   - Sebagai pengganti kapsul teknis, ditambahkan garis horizontal ramping berpendar emas tipis (.splash-divider-wrap) dengan bintang segi delapan Islam (✦) di tengah yang berputar dan berdenyut lembut.
+   - Di bawah divider tersemat sub-teks resmi bernuansa agung: <div class="splash-subtitle">SISTEM INFORMASI DIGITAL</div>.
+5. **Pembaruan Versi Cache (v3.0.7):**
+   - Menaikkan versi cache PWA Service Worker (web-statis/sw.js) dan query parameter skrip/stylesheet di web-statis/index.html menjadi ?v=3.0.7 agar browser TV langsung memperbarui tampilan tanpa tertahan cache lama.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. web-statis/index.html (CSS splash screen baru, struktur HTML splash baru, bump versi ?v=3.0.7).
+2. web-statis/sw.js (Bump cache version ke aljihad-signage-v3.0.7).
+3. LATEST_UPDATE.md (Dokumentasi Bab 135).
+4. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
+5. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
