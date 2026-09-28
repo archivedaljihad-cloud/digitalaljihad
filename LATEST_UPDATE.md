@@ -6268,3 +6268,39 @@ Halaman Mode Sholat kini dapat diakses melalui:
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 150).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 151 — Perbaikan Kerusakan Layout Tampilan Display TV Kajian Malam Ahad (`slides/kajian.html`) (29 Sep 2026)
+
+### 1. Masalah yang Ditemukan
+- Halaman tayangan Display TV **Kajian Malam Ahad** (`https://digitalaljihad.my.id/slides/kajian.html`) tampil berantakan (*layout kacau / bertumpuk*).
+- **Akar Masalah (*Root Cause*):**
+  - Pada baris 621 file `web-statis/slides/kajian.html`, terdapat potongan tag HTML yang terpotong/korup:
+    `<div class="title-icon-badge right-icon"><i class="fas f        <!-- 3-COLUMN MAIN CONTENT -->`
+  - Akibat potongan tag ini, 4 tag penutup `</div>` penting (`right-icon`, `title-with-icons`, `schedule-header-section`, dan `header`) hilang/tidak tertutup.
+  - Hal ini menyebabkan seluruh grid utama (`.kajian-main-layout`) serta strip timeline 5 pekan (`.kajian-timeline-container`) terkurung masuk ke dalam badge ikon header yang memiliki properti `inline-flex` dan `border-radius: 35px`. Akibatnya, seluruh layout kartu kolaps, memanjang secara tidak wajar, dan bertumpukan menutupi header masjid.
+
+---
+
+### 2. Solusi & Perbaikan yang Diterapkan
+1. **Restorasi Tag Header & Ikon FontAwesome:**
+   - Memperbaiki baris 621 dengan mengembalikan ikon yang utuh: `<div class="title-icon-badge right-icon"><i class="fas fa-graduation-cap"></i></div>`.
+   - Menutup kembali seluruh hierarki tag header:
+     - Penutup `</div>` untuk `title-with-icons`
+     - Penutup `</div>` untuk `schedule-header-section`
+     - Penutup `</div>` untuk `header`
+2. **Normalisasi Hierarki Layout TV:**
+   - Grid 3 kolom utama (`.kajian-main-layout`) dan strip agenda 5 pekan (`.kajian-timeline-container`) kembali menjadi elemen tingkat atas langsung (*direct children*) di dalam `.container`.
+   - Jumlah tag pembuka `<div...>` dan penutup `</div>` kembali seimbang sempurna (61 pasang).
+3. **Sinkronisasi Otomatis:**
+   - Menyalin berkas perbaikan ke folder lokal `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\kajian.html`.
+   - Melakukan commit dan push ke GitHub `main` agar perbaikan langsung aktif di Cloudflare Pages `https://digitalaljihad.my.id/slides/kajian.html`.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/slides/kajian.html` (Perbaikan tag penutup header dan sintaks fontawesome icon).
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 151).
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
