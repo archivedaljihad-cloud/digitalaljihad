@@ -1488,6 +1488,7 @@
         <source src="{{ $adzanSource }}" type="audio/mpeg">
     </audio>
     @endif
+    <script src="{{ asset('js/anti-idle.js') }}?v=3.0.7"></script>
 </body>
 
 </html>

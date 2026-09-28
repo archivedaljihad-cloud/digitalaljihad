@@ -843,5 +843,6 @@
         applyRotatorAmbientTheme();
         setInterval(applyRotatorAmbientTheme, 30000);
     </script>
+    <script src="{{ asset('js/anti-idle.js') }}?v=3.0.7"></script>
 </body>
 </html>

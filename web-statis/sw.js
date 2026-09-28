@@ -21,6 +21,7 @@ const STATIC_ASSETS = [
     'js/admin-auth.js',
     'js/prayer-engine.js',
     'js/display-clock-ambient.js',
+    'js/anti-idle.js',
     'slides/utama.html',
     'slides/keuangan.html',
     'slides/jumat.html',

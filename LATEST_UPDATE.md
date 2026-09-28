@@ -5907,3 +5907,43 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 140).
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 141 — Pemasangan Engine Anti-Idle & Screen Keep-Awake 24 Jam Nonstop Menggunakan HTML5 Screen Wake Lock API & Smart Fallback Looper (28 Sep 2026)
+
+### 1. Masalah & Latar Belakang
+- Sebelumnya, layar TV display masjid belum memiliki instruksi penahan layar (*Screen Keep-Awake*).
+- Meskipun rotasi slide TV berjalan lancar via JavaScript, sistem operasi perangkat (Windows PC, Android TV Box, Linux, Smart TV OS) tidak menganggap perpindahan slide atau animasi CSS sebagai interaksi fisik pengguna.
+- Akibatnya, pada perangkat yang memiliki kebijakan daya bawaan (*Power & Sleep / Screensaver*), layar TV bisa otomatis meredup (*dim*), mengaktifkan screensaver, atau mati masuk mode standby/sleep setelah 10-30 menit tanpa aktivitas remote.
+
+---
+
+### 2. Solusi & Arsitektur Engine Anti-Idle yang Dibangun
+Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis perlindungan:
+1. **HTML5 Screen Wake Lock API W3C (`navigator.wakeLock.request('screen')`):**
+   - Mengirim perintah langsung ke subsistem grafis OS untuk mengunci layar agar **tetap menyala 100% (Never Sleep)** selama tab display TV masjid dibuka.
+2. **Auto-Reacquire Mechanism (`visibilitychange` & window `focus`):**
+   - Jika tab sempat tertutup, diminimalkan, atau kabel HDMI berpindah input lalu kembali ke display, sistem secara otomatis meminta kembali izin kunci layar tanpa perlu me-refresh halaman.
+3. **Smart User Gesture Hook:**
+   - Mendengarkan event interaksi awal (`click`, `touchstart`, `keydown` remote TV) untuk mengaktifkan kunci layar secara instan jika kebijakan autoplay/gesture browser sempat membatasi inisialisasi awal.
+4. **Fallback Invisible Micro-Video Looper:**
+   - Untuk browser Smart TV versi lama (Samsung Tizen, LG WebOS, Android TV jadul) yang belum mengadopsi API `navigator.wakeLock`, modul secara otomatis memasang video loop mikro transparan (1x1 px, silent, data-URI ultra-ringan) di latar belakang sehingga display pipeline OS tetap aktif menyala.
+5. **Heartbeat Monitoring Berkala (Tiap 30 Detik):**
+   - Skrip secara rutin memastikan bahwa status Wake Lock tetap aktif saat halaman berada di latar depan (*foreground*).
+
+---
+
+### 3. Berkas yang Dimodifikasi & Ditambahkan
+1. `web-statis/js/anti-idle.js` (Modul engine utama Anti-Idle untuk web statis).
+2. `public/js/anti-idle.js` (Modul engine Anti-Idle untuk Laravel / live display).
+3. `web-statis/index.html` (Pemasangan tag script `anti-idle.js`).
+4. `web-statis/prayer-mode.html` (Pemasangan tag script `anti-idle.js`).
+5. `resources/views/rotator.blade.php` (Pemasangan tag script `anti-idle.js` pada TV display utama).
+6. `resources/views/rotator-outdoor.blade.php` (Pemasangan tag script `anti-idle.js` pada TV display luar/serambi).
+7. `resources/views/prayer-mode.blade.php` (Pemasangan tag script `anti-idle.js` pada mode sholat Laravel).
+8. `public/preview-prayer-mode.html` (Penyelarasan file preview).
+9. `web-statis/sw.js` (Pendaftaran aset `js/anti-idle.js` ke Service Worker offline cache).
+10. `LATEST_UPDATE.md` (Dokumentasi Bab 141).
+11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
