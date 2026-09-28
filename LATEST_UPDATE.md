@@ -6074,3 +6074,39 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 144).
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 145 — Panduan Simpan Kajian Malam Ahad & Penambahan Tombol Simpan Cepat di Form (28 Sep 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- **Pertanyaan 1:** Setelah mengisi jadwal kajian dari Pekan 1 s/d Pekan 5, bagaimana cara menyimpannya?
+- **Pertanyaan 2:** Tombol *"Terapkan Preset 5 Pekan DKM"* di kanan atas untuk apa?
+- **Kendala UI/UX Teridentifikasi:** Tombol utama `Simpan Agenda 1 Bulan` sebelumnya hanya berada di bagian paling atas (*page header*). Ketika pengguna fokus mengisi formulir Pekan 1 hingga Pekan 5 ke bawah, header atas tersebut tergulung (*scrolled out of view*) sehingga pengguna kesulitan menemukan tombol simpan.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penjelasan Mekanisme Penyimpanan:**
+   - Setiap kali berpindah tab Pekan 1 s/d 5, data form aktif langsung tersimpan sementara di memori internal browser (`currentKajianBulanData`).
+   - Untuk menyimpan permanen ke Supabase database (`app_settings` kolom `kajian_sabtu_data`) dan menampilkannya di seluruh Layar TV Digital Masjid, pengguna cukup menekan tombol warna hijau **`Simpan Agenda 1 Bulan`**.
+2. **Peningkatan UI/UX (Akses Simpan di Form):**
+   - Menambahkan tombol hijau **`Simpan Agenda`** langsung di toolbar kartu header *"PENGATURAN PERIODE BULAN KAJIAN"* (bersebelahan dengan *"Auto-Generate Tanggal"* dan *"Terapkan Preset 5 Pekan DKM"*).
+   - Menambahkan tombol hijau **`Simpan Agenda 1 Bulan`** di bagian bawah (*card footer*) masing-masing formulir pengisian pekan, bersebelahan dengan tombol *"Reset ke Preset Pekan Ini"* dan *"✨ AI Copywriter Pekan Ini"*.
+   - Dengan ini, setelah selesai mengisi atau mengedit pekan mana pun (termasuk Pekan ke-5), pengguna dapat langsung menekan tombol simpan tepat di bawah formulir tanpa harus mencari atau menggulir layar ke atas.
+3. **Penjelasan Fungsi *"Terapkan Preset 5 Pekan DKM"*:**
+   - Merupakan fitur jalan pintas (*1-click auto fill*) yang secara instan memasukkan kurikulum silabus kajian rutin Sabtu malam Masjid Jami' Al-Jihad untuk seluruh 5 pekan sekaligus:
+     - **Pekan 1:** Kitab *Bidayatul Hidayah* (Imam Al-Ghazali) — Ust. H. Ahmad Sholeh Al-Hafidz (Fiqih Ibadah & Adab Keseharian)
+     - **Pekan 2:** *Tafsir Al-Qur'an Al-'Azhim* (Ibnu Katsir) — Ust. Dr. H. Faisal, M.Ag (Tafsir Tematik Keluarga Sakinah & Berkah Qur'ani)
+     - **Pekan 3:** Kitab *Al-Adab Al-Mufrad* (Imam Bukhari) — Ust. M. Syahrul Ramadhan, Lc (Tazkiyatun Nafs & Akhlak Bermasyarakat)
+     - **Pekan 4:** Kitab *Riyadhus Shalihin* (Imam An-Nawawi) — Ust. H. Ahmad Sholeh Al-Hafidz (Hak Sesama Muslim & Adab Bertetangga)
+     - **Pekan 5:** Kajian Tematik Sirah Nabawiyah & Muamalah Kontemporer — Dai Tamu / Asatidz Pilihan DKM (Tabligh Akbar Keummatan)
+   - Tombol ini menghemat waktu pengurus DKM agar tidak perlu mengetik ulang judul kitab, ustadz, dan tema dari awal setiap pergantian bulan.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/admin.html` (Penambahan tombol Simpan Agenda di toolbar kartu periode dan footer formulir pekan).
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 145).
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

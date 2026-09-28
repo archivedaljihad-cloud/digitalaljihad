@@ -2370,8 +2370,11 @@
                                         <button type="button" class="btn btn-warning btn-sm font-weight-bold mr-2 mb-2 shadow" onclick="generateTanggalSabtuBulan(true)">
                                             <i class="fas fa-magic mr-1"></i> 🗓️ Auto-Generate Tanggal Sabtu
                                         </button>
-                                        <button type="button" class="btn btn-outline-light btn-sm font-weight-bold mb-2 shadow" onclick="isiSemuaPresetSiklus()">
+                                        <button type="button" class="btn btn-outline-light btn-sm font-weight-bold mr-2 mb-2 shadow" onclick="isiSemuaPresetSiklus()">
                                             <i class="fas fa-list-ol mr-1"></i> Terapkan Preset 5 Pekan DKM
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-sm font-weight-bold mb-2 shadow text-white" onclick="simpanKajianSabtu()">
+                                            <i class="fas fa-save mr-1"></i> Simpan Agenda
                                         </button>
                                     </div>
                                     <div class="small" style="color: #94a3b8; font-size: 11px;">
@@ -2481,12 +2484,17 @@
                                             <textarea class="form-control font-weight-bold" id="kajianTemaPembahasan" rows="2" placeholder="Contoh: Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga" oninput="onKajianFieldChanged()">Kajian Fiqih Ibadah & Adab Keseharian Seorang Muslim</textarea>
                                         </div>
 
-                                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                            <button type="button" class="btn btn-outline-success btn-sm font-weight-bold" onclick="isiPresetPekanAktif()">
-                                                <i class="fas fa-sync-alt mr-1"></i> Reset ke Preset Pekan Ini
-                                            </button>
-                                            <button type="button" class="btn btn-outline-warning btn-sm font-weight-bold" onclick="bukaModalAiCopywriter('Kajian Rutin', 'kajian')">
-                                                <i class="fas fa-magic mr-1"></i> ✨ AI Copywriter Pekan Ini
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center pt-3 border-top mt-2" style="gap: 8px;">
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <button type="button" class="btn btn-outline-success btn-sm font-weight-bold mr-1" onclick="isiPresetPekanAktif()">
+                                                    <i class="fas fa-sync-alt mr-1"></i> Reset ke Preset Pekan Ini
+                                                </button>
+                                                <button type="button" class="btn btn-outline-warning btn-sm font-weight-bold" onclick="bukaModalAiCopywriter('Kajian Rutin', 'kajian')">
+                                                    <i class="fas fa-magic mr-1"></i> ✨ AI Copywriter Pekan Ini
+                                                </button>
+                                            </div>
+                                            <button type="button" class="btn btn-success btn-sm font-weight-bold shadow px-3" onclick="simpanKajianSabtu()">
+                                                <i class="fas fa-save mr-1"></i> Simpan Agenda 1 Bulan
                                             </button>
                                         </div>
                                     </div>
