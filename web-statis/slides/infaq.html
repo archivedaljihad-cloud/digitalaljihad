@@ -430,19 +430,19 @@
                         <div class="rek-content">
                             <div class="rek-item">
                                 <span style="color: #cbd5e1;">Bank</span>
-                                <span style="font-weight: 700; color: #ffffff;">Bank Syariah Indonesia (BSI)</span>
+                                <span id="infaqBankName" style="font-weight: 700; color: #ffffff;">Bank Syariah Indonesia (BSI)</span>
                             </div>
                             <div class="rek-item">
                                 <span style="color: #cbd5e1;">Nomor Rekening</span>
-                                <span class="rek-num">7123-456-789</span>
+                                <span id="infaqNoRek" class="rek-num">7123-456-789</span>
                             </div>
                             <div class="rek-item">
                                 <span style="color: #cbd5e1;">Atas Nama</span>
-                                <span style="font-weight: 700; color: #ffd700;">Masjid Jami' Al-Jihad</span>
+                                <span id="infaqAtasNama" style="font-weight: 700; color: #ffd700;">Masjid Jami' Al-Jihad</span>
                             </div>
                             <div class="rek-item">
                                 <span style="color: #cbd5e1;">Konfirmasi WhatsApp</span>
-                                <span class="rek-num" style="color: #00e676;">0877-5876-7000</span>
+                                <span id="infaqWaKonfirmasi" class="rek-num" style="color: #00e676;">0877-5876-7000</span>
                             </div>
                         </div>
                     </div>
@@ -540,6 +540,12 @@
                     if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
                     const rText = SupabaseDB.getRunningTextForPage('/infaq-embed', settings);
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-hand-holding-usd"></i> ${rText}`;
+
+                    // Muat data rekening donasi dinamis dari settings
+                    if (settings.infaq_bank_name) document.getElementById('infaqBankName').textContent = settings.infaq_bank_name;
+                    if (settings.infaq_no_rekening) document.getElementById('infaqNoRek').textContent = settings.infaq_no_rekening;
+                    if (settings.infaq_atas_nama) document.getElementById('infaqAtasNama').textContent = settings.infaq_atas_nama;
+                    if (settings.infaq_wa_konfirmasi) document.getElementById('infaqWaKonfirmasi').textContent = settings.infaq_wa_konfirmasi;
                 }
 
                 // 2. Program Infaq

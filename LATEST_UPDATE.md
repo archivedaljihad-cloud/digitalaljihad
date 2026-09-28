@@ -5583,3 +5583,24 @@ Class eorder-col ditambahkan ke th header dan td baris tabel Rotasi TV. JS end
 3. C:\Users\anthu\Documents\[Digital WebSTATIS]\ (Sinkronisasi lokal)
 4. Git Repository & Cloudflare Pages live: https://digitalaljihad.my.id/
 
+
+---
+
+## Bab 133 — Fitur Edit Rekening Saluran Transfer Donasi via Panel Admin (28 Sep 2026)
+
+### Latar Belakang
+Data Saluran Transfer Donasi (Bank, No. Rekening, Atas Nama, WA Konfirmasi) sebelumnya hardcoded di slides/infaq.html. Kini dapat diedit langsung dari panel admin dan tersimpan ke Supabase/LocalStorage secara realtime.
+
+### Perubahan
+- web-statis/slides/infaq.html: Elemen rekening diberi ID agar bisa diupdate via JS. loadProgramInfaqData() kini membaca infaq_bank_name, infaq_no_rekening, infaq_atas_nama, infaq_wa_konfirmasi dari Supabase settings.
+- web-statis/admin.html: Ditambahkan card `Pengaturan Rekening & Saluran Donasi` accordion di bawah selector program infaq dengan: form input 4 field, live preview tampilan TV, tombol Simpan (PATCH ke Supabase + LocalStorage), tombol Reset Default. JS functions: 	oggleRekeningInfaqPanel, updateRekeningPreview, simpanRekeningInfaq, esetRekeningInfaqDefault, loadRekeningInfaqToForm (dipanggil saat Supabase settings dimuat).
+
+### Cara Edit
+Admin → Menu Infaq Donasi → Card `Pengaturan Rekening & Saluran Donasi` (klik untuk buka) → isi form → Simpan & Tayang ke TV.
+
+### Berkas Dimodifikasi
+1. web-statis/slides/infaq.html
+2. web-statis/admin.html
+3. LATEST_UPDATE.md (Bab 133)
+4. Git push & Cloudflare Pages live
+

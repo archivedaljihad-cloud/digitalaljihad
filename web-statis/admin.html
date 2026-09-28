@@ -3621,6 +3621,114 @@
                             </div>
                         </div>
 
+                        <!-- ============================================
+                             CARD: PENGATURAN REKENING & SALURAN DONASI
+                             ============================================ -->
+                        <div class="card shadow-sm mb-4 border-left-warning">
+                            <div class="card-header py-3 d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg,#fffbeb,#fef3c7); border-bottom: 2px solid #fcd34d; cursor: pointer;" onclick="toggleRekeningInfaqPanel()" id="headerRekeningInfaq">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-university text-warning mr-2" style="font-size:1.1rem;"></i>
+                                    <h6 class="mb-0 font-weight-bold text-gray-800">Pengaturan Rekening &amp; Saluran Donasi</h6>
+                                    <span class="badge badge-warning ml-2 px-2 py-1" style="font-size:0.7rem;">Tampil di TV</span>
+                                </div>
+                                <div class="d-flex align-items-center" style="gap:8px;">
+                                    <span class="text-muted small" id="lblRekeningInfaqToggle">▼ Klik untuk buka</span>
+                                </div>
+                            </div>
+                            <div id="panelRekeningInfaq" style="display:none;">
+                                <div class="card-body">
+                                    <p class="text-muted small mb-3">
+                                        <i class="fas fa-info-circle text-info mr-1"></i>
+                                        Data di bawah ini tampil pada kotak <strong>"Saluran Transfer Donasi"</strong> di layar TV Display halaman Program Infaq.
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="font-weight-bold text-gray-700 mb-1">
+                                                <i class="fas fa-university text-warning mr-1"></i> Nama Bank
+                                            </label>
+                                            <input type="text" id="cfgInfaqBankName" class="form-control form-control-sm font-weight-bold"
+                                                placeholder="Contoh: Bank Syariah Indonesia (BSI)"
+                                                value="Bank Syariah Indonesia (BSI)"
+                                                style="border: 1.5px solid #fcd34d; border-radius: 8px;">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="font-weight-bold text-gray-700 mb-1">
+                                                <i class="fas fa-credit-card text-warning mr-1"></i> Nomor Rekening
+                                            </label>
+                                            <input type="text" id="cfgInfaqNoRekening" class="form-control form-control-sm font-weight-bold"
+                                                placeholder="Contoh: 7123-456-789"
+                                                value="7123-456-789"
+                                                style="border: 1.5px solid #fcd34d; border-radius: 8px;">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="font-weight-bold text-gray-700 mb-1">
+                                                <i class="fas fa-user-circle text-warning mr-1"></i> Atas Nama Rekening
+                                            </label>
+                                            <input type="text" id="cfgInfaqAtasNama" class="form-control form-control-sm font-weight-bold"
+                                                placeholder="Contoh: Masjid Jami' Al-Jihad"
+                                                value="Masjid Jami' Al-Jihad"
+                                                style="border: 1.5px solid #fcd34d; border-radius: 8px;">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="font-weight-bold text-gray-700 mb-1">
+                                                <i class="fab fa-whatsapp text-success mr-1"></i> Nomor WhatsApp Konfirmasi
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" style="background:#dcfce7; border:1.5px solid #86efac; font-size:0.8rem;">
+                                                        <i class="fab fa-whatsapp text-success"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" id="cfgInfaqWaKonfirmasi" class="form-control form-control-sm font-weight-bold"
+                                                    placeholder="Contoh: 0877-5876-7000"
+                                                    value="0877-5876-7000"
+                                                    style="border: 1.5px solid #86efac; border-radius: 0 8px 8px 0;">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Preview Live -->
+                                    <div class="p-3 mb-3 rounded" style="background: linear-gradient(135deg,#021a12,#031f15); border: 2px solid #2d9e6b;" id="previewRekeningInfaq">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-university mr-2" style="color:#ffd700;"></i>
+                                            <span class="font-weight-bold" style="color:#ffd700; font-size:0.95rem;">Preview Tampilan TV</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between border-bottom border-secondary pb-1 mb-1">
+                                            <small style="color:#94a3b8;">Bank</small>
+                                            <small id="prevInfaqBankName" class="font-weight-bold" style="color:#fff;">Bank Syariah Indonesia (BSI)</small>
+                                        </div>
+                                        <div class="d-flex justify-content-between border-bottom border-secondary pb-1 mb-1">
+                                            <small style="color:#94a3b8;">Nomor Rekening</small>
+                                            <small id="prevInfaqNoRek" class="font-weight-bold" style="color:#ffd700; letter-spacing:0.04em;">7123-456-789</small>
+                                        </div>
+                                        <div class="d-flex justify-content-between border-bottom border-secondary pb-1 mb-1">
+                                            <small style="color:#94a3b8;">Atas Nama</small>
+                                            <small id="prevInfaqAtasNama" class="font-weight-bold" style="color:#ffd700;">Masjid Jami' Al-Jihad</small>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small style="color:#94a3b8;">Konfirmasi WhatsApp</small>
+                                            <small id="prevInfaqWa" class="font-weight-bold" style="color:#00e676;">0877-5876-7000</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tombol Aksi -->
+                                    <div class="d-flex align-items-center" style="gap:10px; flex-wrap:wrap;">
+                                        <button type="button" class="btn btn-warning font-weight-bold shadow-sm px-4"
+                                            onclick="simpanRekeningInfaq()" id="btnSimpanRekeningInfaq"
+                                            style="border-radius:8px; min-width:140px;">
+                                            <i class="fas fa-save mr-1"></i> Simpan & Tayang ke TV
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                                            onclick="resetRekeningInfaqDefault()"
+                                            style="border-radius:8px;">
+                                            <i class="fas fa-undo mr-1"></i> Reset Default
+                                        </button>
+                                        <span id="alertRekeningInfaq" class="small font-weight-bold" style="display:none;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="containerDetailProgramInfaq">
                             <!-- Banner Detail Program & Progress Bar -->
                             <div class="card shadow mb-4 border-left-primary">
@@ -6834,6 +6942,11 @@
                             }
                         }
                     }
+
+                        // Muat data rekening infaq ke form pengaturan
+                        if (typeof loadRekeningInfaqToForm === 'function') {
+                            loadRekeningInfaqToForm(s);
+                        }
                 }
             } catch (err) {
                 console.warn('Gagal memuat app_settings:', err);
@@ -7486,6 +7599,120 @@
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
             renderProgramInfaqSection();
             alert('Catatan donasi berhasil dihapus.');
+        }
+
+        // =====================================================================
+        // PENGATURAN REKENING & SALURAN DONASI PROGRAM INFAQ
+        // =====================================================================
+
+        // Toggle buka/tutup panel rekening infaq
+        function toggleRekeningInfaqPanel() {
+            const panel = document.getElementById('panelRekeningInfaq');
+            const lbl   = document.getElementById('lblRekeningInfaqToggle');
+            if (!panel) return;
+            const isHidden = (panel.style.display === 'none' || panel.style.display === '');
+            panel.style.display = isHidden ? 'block' : 'none';
+            if (lbl) lbl.textContent = isHidden ? '▲ Klik untuk tutup' : '▼ Klik untuk buka';
+        }
+
+        // Update live preview saat user mengetik
+        function updateRekeningPreview() {
+            const bank   = document.getElementById('cfgInfaqBankName')?.value || '';
+            const noRek  = document.getElementById('cfgInfaqNoRekening')?.value || '';
+            const nama   = document.getElementById('cfgInfaqAtasNama')?.value || '';
+            const wa     = document.getElementById('cfgInfaqWaKonfirmasi')?.value || '';
+            if (document.getElementById('prevInfaqBankName')) document.getElementById('prevInfaqBankName').textContent = bank || '-';
+            if (document.getElementById('prevInfaqNoRek'))   document.getElementById('prevInfaqNoRek').textContent   = noRek || '-';
+            if (document.getElementById('prevInfaqAtasNama')) document.getElementById('prevInfaqAtasNama').textContent = nama || '-';
+            if (document.getElementById('prevInfaqWa'))       document.getElementById('prevInfaqWa').textContent       = wa || '-';
+        }
+
+        // Simpan rekening infaq ke Supabase & LocalStorage
+        async function simpanRekeningInfaq() {
+            const btn   = document.getElementById('btnSimpanRekeningInfaq');
+            const alert = document.getElementById('alertRekeningInfaq');
+            const bank  = document.getElementById('cfgInfaqBankName')?.value.trim() || '';
+            const noRek = document.getElementById('cfgInfaqNoRekening')?.value.trim() || '';
+            const nama  = document.getElementById('cfgInfaqAtasNama')?.value.trim() || '';
+            const wa    = document.getElementById('cfgInfaqWaKonfirmasi')?.value.trim() || '';
+
+            if (!bank || !noRek || !nama) {
+                if (alert) { alert.textContent = '⚠ Nama Bank, Nomor Rekening, dan Atas Nama wajib diisi.'; alert.style.display='inline'; alert.style.color='#dc2626'; }
+                return;
+            }
+
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...'; }
+
+            const payload = {
+                infaq_bank_name:      bank,
+                infaq_no_rekening:    noRek,
+                infaq_atas_nama:      nama,
+                infaq_wa_konfirmasi:  wa
+            };
+
+            // Simpan ke LocalStorage sebagai cache cepat
+            localStorage.setItem('infaq_rekening', JSON.stringify(payload));
+
+            try {
+                if (typeof SUPABASE_CONFIG !== 'undefined') {
+                    const headers = {
+                        'apikey':        SUPABASE_CONFIG.anonKey,
+                        'Authorization': 'Bearer ' + SUPABASE_CONFIG.anonKey,
+                        'Content-Type':  'application/json',
+                        'Prefer':        'return=minimal'
+                    };
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method:  'PATCH',
+                        headers: headers,
+                        body:    JSON.stringify(payload)
+                    });
+                }
+                if (alert) { alert.textContent = '✅ Berhasil disimpan! Layar TV diperbarui otomatis.'; alert.style.display='inline'; alert.style.color='#16a34a'; }
+            } catch (err) {
+                console.warn('Supabase patch rekening infaq gagal:', err);
+                if (alert) { alert.textContent = '⚠ Tersimpan lokal. Sinkronisasi cloud gagal.'; alert.style.display='inline'; alert.style.color='#d97706'; }
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan & Tayang ke TV'; }
+                setTimeout(() => { if (alert) alert.style.display = 'none'; }, 4000);
+            }
+        }
+
+        // Reset rekening infaq ke nilai default BSI
+        function resetRekeningInfaqDefault() {
+            const defaults = {
+                bank:  'Bank Syariah Indonesia (BSI)',
+                noRek: '7123-456-789',
+                nama:  "Masjid Jami' Al-Jihad",
+                wa:    '0877-5876-7000'
+            };
+            if (document.getElementById('cfgInfaqBankName'))      document.getElementById('cfgInfaqBankName').value      = defaults.bank;
+            if (document.getElementById('cfgInfaqNoRekening'))    document.getElementById('cfgInfaqNoRekening').value    = defaults.noRek;
+            if (document.getElementById('cfgInfaqAtasNama'))      document.getElementById('cfgInfaqAtasNama').value      = defaults.nama;
+            if (document.getElementById('cfgInfaqWaKonfirmasi')) document.getElementById('cfgInfaqWaKonfirmasi').value  = defaults.wa;
+            updateRekeningPreview();
+        }
+
+        // Muat nilai rekening dari Supabase settings atau LocalStorage ke form
+        function loadRekeningInfaqToForm(settings) {
+            const cached = (() => { try { return JSON.parse(localStorage.getItem('infaq_rekening') || '{}'); } catch(e){ return {}; } })();
+            const bank  = settings?.infaq_bank_name      ?? cached.infaq_bank_name      ?? 'Bank Syariah Indonesia (BSI)';
+            const noRek = settings?.infaq_no_rekening    ?? cached.infaq_no_rekening    ?? '7123-456-789';
+            const nama  = settings?.infaq_atas_nama      ?? cached.infaq_atas_nama      ?? "Masjid Jami' Al-Jihad";
+            const wa    = settings?.infaq_wa_konfirmasi  ?? cached.infaq_wa_konfirmasi  ?? '0877-5876-7000';
+            if (document.getElementById('cfgInfaqBankName'))      document.getElementById('cfgInfaqBankName').value      = bank;
+            if (document.getElementById('cfgInfaqNoRekening'))    document.getElementById('cfgInfaqNoRekening').value    = noRek;
+            if (document.getElementById('cfgInfaqAtasNama'))      document.getElementById('cfgInfaqAtasNama').value      = nama;
+            if (document.getElementById('cfgInfaqWaKonfirmasi')) document.getElementById('cfgInfaqWaKonfirmasi').value  = wa;
+            updateRekeningPreview();
+
+            // Pasang event listener live preview (sekali saja)
+            ['cfgInfaqBankName','cfgInfaqNoRekening','cfgInfaqAtasNama','cfgInfaqWaKonfirmasi'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.dataset.previewBound) {
+                    el.addEventListener('input', updateRekeningPreview);
+                    el.dataset.previewBound = '1';
+                }
+            });
         }
 
         // Buka Modal Tambah Program Baru
