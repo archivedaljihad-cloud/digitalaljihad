@@ -437,29 +437,75 @@
         },
 
         /**
-         * Ambil teks berjalan untuk halaman tertentu (Opsi 3 Multi-Halaman)
+         * Master Teks Berjalan Kontekstual untuk Seluruh 19 Halaman Rotasi Display TV
+         */
+        DEFAULT_RUNNING_TEXTS: {
+            'utama': "🌙 \"Luruskan dan rapatkan shaf saat sholat berjamaah, karena lurus dan rapatnya shaf termasuk kesempurnaan sholat.\" (HR. Bukhari & Muslim) • 📱 Mohon menonaktifkan atau mengalihkan HP ke mode hening saat berada di dalam ruang sholat • 🤲 \"Barangsiapa yang menanti sholat maka dia senantiasa dihitung berada dalam sholat.\" (HR. Bukhari)",
+            'keuangan': "📊 Laporan kas keuangan Masjid Jami' Al-Jihad dicatat transparan, akuntabel, dan diaudit secara berkala • 🤲 \"Perumpamaan orang yang menafkahkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh bulir, pada tiap bulir seratus biji.\" (QS. Al-Baqarah: 261) • Jazakumullah khairan katsiran kepada seluruh jamaah dan donatur",
+            'jumat': "🌿 \"Jika khatib telah naik ke mimbar dan menyampaikan khutbah, maka dengarkanlah dan diamlah dengan seksama.\" (HR. Bukhari & Muslim) • 🕌 Sunnah Hari Jum'at: Mandi besar, memakai wewangian, mengenakan pakaian terbaik, bersiwak, dan memperbanyak sholawat atas Nabi Muhammad ﷺ",
+            'pengumuman': "📢 Warta & Agenda DKM Masjid Jami' Al-Jihad: Seluruh kegiatan peribadatan dan majelis ta'lim terbuka untuk seluruh kaum muslimin • 🧹 Mari senantiasa menjaga kebersihan, ketertiban, dan kesucian area masjid • Hubungi Sekretariat DKM untuk informasi kegiatan dakwah",
+            'keuangan-summary': "📈 Ringkasan grafik arus kas masjid: Pengalokasian dana difokuskan untuk kemakmuran masjid, operasional ibadah, santunan dhuafa, dan pemeliharaan fasilitas • 💎 \"Sedekah tidak akan mengurangi harta, melainkan menambah keberkahan dan melapangkan rezeki.\" (HR. Muslim)",
+            'qris': "💳 Salurkan infaq dan donasi terbaik Anda melalui scan QRIS resmi Masjid Jami' Al-Jihad menggunakan Mobile Banking atau Dompet Digital apa saja • Bebas biaya admin, aman, cepat, dan tercatat otomatis ke rekening kas masjid • \"Naungan orang beriman di hari kiamat adalah sedekahnya.\" (HR. Ahmad)",
+            'slide': "📸 Dokumentasi kegiatan, syiar dakwah, dan informasi program pembinaan umat Masjid Jami' Al-Jihad • 🤝 \"Barangsiapa mengajak kepada kebaikan, maka ia memperoleh pahala semisal pahala orang yang mengikutinya.\" (HR. Muslim) • Mari aktif memakmurkan rumah Allah",
+            'ambulance': "🚑 Layanan Mobil Ambulance Gratis DKM Masjid Jami' Al-Jihad siaga 24 jam melayani warga yang sakit dan pengantaran jenazah • ☎️ Hotline Siaga Ambulance: 0812-3456-7890 • Didukung oleh kas operasional umat: Salurkan infaq khusus armada ambulance Anda untuk kepedulian sesama",
+            'infaq': "🏗️ Mari berpartisipasi dalam program wakaf pengembangan sarana dan prasarana ibadah Masjid Jami' Al-Jihad • 🤲 \"Apabila anak Adam meninggal dunia, terputuslah amalannya kecuali sedekah jariyah, ilmu yang bermanfaat, atau anak sholeh yang mendoakannya.\" (HR. Muslim)",
+            'hikmah': "✨ \"Sebaik-baik manusia adalah yang paling banyak memberikan manfaat bagi manusia lainnya.\" (HR. Ath-Thabrani) • 🌿 \"Barangsiapa menempuh suatu jalan untuk mencari ilmu, maka Allah akan mudahkan baginya jalan menuju surga.\" (HR. Muslim) • Tetaplah istiqomah dalam ketaatan",
+            'qurban': "🥩 Panitia Penerimaan & Penyaluran Hewan Qurban Masjid Jami' Al-Jihad siap melayani ibadah qurban Anda • 📜 \"Daging-daging dan darah qurban itu sekali-kali tidak dapat mencapai keridhaan Allah, tetapi ketakwaan dari kamulah yang mencapainya.\" (QS. Al-Hajj: 37) • Hubungi panitia DKM untuk pendaftaran qurban",
+            'yasin': "📖 Agenda Rutin Malam Jum'at: Pembacaan Surat Yaasiin 83 Ayat, Dzikir Bersama & Doa untuk Keselamatan Umat • 🤲 \"Surat Yaasiin adalah jantung Al-Qur'an. Barangsiapa membacanya karena mengharapkan ridha Allah dan akhirat, maka diampuni dosa-dosanya.\" • Mari bersiap menyimak dan membaca bersama",
+            'live-mekah': "🕋 Siaran Langsung 24 Jam Ka'bah Masjidil Haram Makkah Al-Mukarramah • 🕊️ \"Labbaik Allahumma Labbaik, Labbaika Laa Syariika Laka Labbaik, Innal Hamda Wan Ni'mata Laka Wal Mulk, Laa Syariika Lak.\" • Semoga Allah karuniakan kita kesempatan berhaji dan berumrah ke Baitullah",
+            'live-madinah': "🕌 Siaran Langsung 24 Jam Masjid Nabawi Madinah Al-Munawwarah • 💚 \"Allahumma shalli 'alaa Sayyidina Muhammad wa 'alaa aali Sayyidina Muhammad.\" • Salam dan sholawat tercurah selalu kepada junjungan mulia Baginda Rasulullah Muhammad ﷺ",
+            'live-mimbar': "🎙️ Siaran Langsung Mimbar Utama Masjid Jami' Al-Jihad • Mohon tenang dan mendengarkan tausiyah serta nasihat keagamaan dengan penuh ketundukan hati • \"Dengarkanlah khutbah dengan seksama agar kalian mendapatkan rahmat dari Allah SWT.\"",
+            'idul-fitri': "🌙 Selamat Hari Raya Idul Fitri 1 Syawal • Taqabbalallahu minna wa minkum, shiyamana wa shiyamakum • Mohon maaf lahir dan batin atas segala khilaf • Pelaksanaan Sholat Idul Fitri dimulai tepat pukul 06.45 WIB, mohon hadir tepat waktu dengan membawa perlengkapan sholat",
+            'idul-adha': "🐑 Selamat Hari Raya Idul Adha 10 Dzulhijjah & Ibadah Qurban • \"Tiada amal ibadah anak Adam pada hari Nahr yang lebih dicintai Allah melebihi menyembelih hewan qurban.\" (HR. Tirmidzi) • Sholat Ied dimulai pukul 06.45 WIB dilanjutkan prosesi penyembelihan hewan qurban",
+            'ramadhan': "🌙 Marhaban Ya Ramadhan • \"Barangsiapa berpuasa di bulan Ramadhan karena iman dan mengharap pahala dari Allah, niscaya diampuni dosa-dosanya yang telah lalu.\" (HR. Bukhari) • Laporan tromol infaq tarawih dan sedekah ifthar ramadhan disajikan transparan setiap hari",
+            'kajian': "📚 Kajian Rutin Malam Ahad Ba'da Maghrib Masjid Jami' Al-Jihad • 🌿 \"Barangsiapa yang menempuh jalan untuk menuntut ilmu syar'i, Allah akan mudahkan baginya jalan menuju surga.\" (HR. Muslim) • Terbuka untuk umum jamaah ikhwan & akhwat, scan QR untuk sesi tanya jawab digital"
+        },
+
+        /**
+         * Ambil teks berjalan untuk halaman tertentu (Multi-Halaman Rotasi Unik)
          */
         getRunningTextForPage(pagePath, settings) {
-            if (!settings) return '';
-            const pathClean = pagePath.replace(/^\/+/, '').replace(/\.html$/, '');
-            const pagesMapping = settings.running_text_pages || {};
+            const canonicalKey = (pagePath || '')
+                .toString()
+                .toLowerCase()
+                .replace(/^https?:\/\/[^\/]+/, '')
+                .replace(/^\/+/, '')
+                .replace(/^slides\//, '')
+                .replace(/-embed$/, '')
+                .replace(/\.html$/, '')
+                .trim();
 
-            // Cek variasi kunci URL
+            let pagesMapping = {};
+            if (settings && settings.running_text_pages) {
+                if (typeof settings.running_text_pages === 'string') {
+                    try { pagesMapping = JSON.parse(settings.running_text_pages); } catch (e) {}
+                } else if (typeof settings.running_text_pages === 'object') {
+                    pagesMapping = settings.running_text_pages;
+                }
+            }
+
+            // Cek variasi kunci URL di mapping tersimpan
             const candidates = [
-                pagePath,
-                '/' + pathClean,
-                pathClean,
-                pathClean + '-embed',
-                '/' + pathClean + '-embed'
+                canonicalKey,
+                canonicalKey + '-embed',
+                '/' + canonicalKey + '-embed',
+                '/' + canonicalKey,
+                'slides/' + canonicalKey + '.html',
+                pagePath
             ];
 
             for (const key of candidates) {
-                if (pagesMapping[key] && pagesMapping[key].trim() !== '') {
+                if (key && pagesMapping[key] && pagesMapping[key].trim() !== '') {
                     return pagesMapping[key].trim();
                 }
             }
 
-            return (settings.running_text || '').trim();
+            // Kembalikan teks hadits/warta spesifik rekomendasi untuk halaman ini (Tanpa fallback teks global monoton)
+            if (this.DEFAULT_RUNNING_TEXTS[canonicalKey]) {
+                return this.DEFAULT_RUNNING_TEXTS[canonicalKey];
+            }
+
+            return "🕌 Selamat Datang di Masjid Jami' Al-Jihad • Luruskan dan rapatkan shaf saat sholat berjamaah • Jagalah kebersihan dan kesucian masjid";
         },
 
         /**

@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css">
 
     <style>
         :root {
@@ -207,7 +208,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: 18px 50px 24px 50px;
+            padding: 18px 50px 58px 50px;
         }
 
         /* VIEW CONTAINER (UNTUK OPSI 1 & OPSI 2) */
@@ -526,6 +527,16 @@
             </div>
         </div>
     </main>
+ 
+    <!-- RUNNING TEKS MARQUEE BAWAH -->
+    <div class="bottom-running-wrap">
+        <div class="running-badge"><i class="fas fa-moon"></i> SURAT YAASIIN</div>
+        <div class="running-text-container">
+            <div class="running-text" id="runningText">
+                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">📖 Agenda Rutin Malam Jum'at: Pembacaan Surat Yaasiin 83 Ayat, Dzikir Bersama & Doa untuk Keselamatan Umat. "Surat Yaasiin adalah jantung Al-Qur'an. Barangsiapa membacanya karena mengharapkan ridha Allah dan akhirat, maka diampuni dosa-dosanya."</span>
+            </div>
+        </div>
+    </div>
 
     <!-- CORE SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -810,6 +821,12 @@
                                 mushafDuration = 90;
                             }
                         } catch (e) {}
+                    }
+
+                    // Teks Berjalan Khusus Layar Yaasiin
+                    const rText = SupabaseDB.getRunningTextForPage('/yasin-embed', settings);
+                    if (rText && document.getElementById('runningTextContent')) {
+                        document.getElementById('runningTextContent').textContent = rText;
                     }
                 }
 

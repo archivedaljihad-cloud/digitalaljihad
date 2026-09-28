@@ -590,11 +590,22 @@
             </section>
 
         </main>
+    </div>
 
+    <!-- RUNNING TEKS MARQUEE BAWAH (PROFESIONAL TV TICKER) -->
+    <div class="bottom-running-wrap">
+        <div class="running-badge"><i class="fas fa-star-and-crescent"></i> RAMADHAN</div>
+        <div class="running-text-container">
+            <div class="running-text" id="runningText">
+                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">🌙 Marhaban Ya Ramadhan • "Barangsiapa berpuasa di bulan Ramadhan karena iman dan mengharap pahala dari Allah, niscaya diampuni dosa-dosanya yang telah lalu." (HR. Bukhari) • Laporan tromol infaq tarawih dan sedekah ifthar ramadhan disajikan transparan setiap hari</span>
+            </div>
+        </div>
     </div>
 
     <!-- Script Data Engine Ramadhan -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
     <script>
         // Data Default Petugas Ramadhan
         const DEFAULT_RAMADHAN_PETUGAS = {
@@ -795,10 +806,23 @@
                                 renderTromolInfaq(inf);
                                 localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(inf));
                             }
+
+                            // Teks Berjalan Layar Ramadhan
+                            if (typeof SupabaseDB !== 'undefined') {
+                                const rText = SupabaseDB.getRunningTextForPage('/ramadhan-embed', s);
+                                if (rText && document.getElementById('runningTextContent')) {
+                                    document.getElementById('runningTextContent').textContent = rText;
+                                }
+                            }
                         }
                     }
                 } catch (err) {
                     console.warn('Sync Ramadhan Supabase dilewati:', err);
+                }
+            } else if (typeof SupabaseDB !== 'undefined') {
+                const rText = SupabaseDB.getRunningTextForPage('/ramadhan-embed', {});
+                if (rText && document.getElementById('runningTextContent')) {
+                    document.getElementById('runningTextContent').textContent = rText;
                 }
             }
         }

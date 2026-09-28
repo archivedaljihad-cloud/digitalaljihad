@@ -715,6 +715,16 @@
         </div>
     </div>
 
+    <!-- RUNNING TEKS MARQUEE BAWAH (PROFESIONAL TV TICKER) -->
+    <div class="bottom-running-wrap">
+        <div class="running-badge"><i class="fas fa-graduation-cap"></i> KAJIAN ILMU</div>
+        <div class="running-text-container">
+            <div class="running-text" id="runningText">
+                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">📚 Kajian Rutin Malam Ahad Ba'da Maghrib Masjid Jami' Al-Jihad • "Barangsiapa menempuh jalan mencari ilmu, Allah mudahkan jalannya menuju surga." (HR. Muslim) • Terbuka untuk umum jamaah ikhwan & akhwat</span>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPT JAM, COUNTDOWN ISYA & SUPABASE INTEGRATION -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
@@ -1010,6 +1020,12 @@
                     if (settings.nama_aplikasi) {
                         const namaEl = document.getElementById('nama-masjid');
                         if (namaEl) namaEl.textContent = settings.nama_aplikasi;
+                    }
+
+                    // Teks Berjalan Layar Kajian
+                    const rText = SupabaseDB.getRunningTextForPage('/kajian-embed', settings);
+                    if (rText && document.getElementById('runningTextContent')) {
+                        document.getElementById('runningTextContent').textContent = rText;
                     }
 
                     let kData = settings.kajian_sabtu_data;

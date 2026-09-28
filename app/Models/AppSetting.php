@@ -628,6 +628,30 @@ class AppSetting extends Model
                 'desc'        => 'Jadwal imam, khatib, dan bilal sholat Idul Adha & Qurban',
                 'placeholder' => "Selamat Hari Raya Idul Adha & Ibadah Qurban, semoga membawa keberkahan."
             ],
+            'qurban-embed' => [
+                'name'        => 'Penerimaan Hewan Qurban',
+                'icon'        => 'fas fa-drum',
+                'desc'        => 'Daftar shohibul qurban dan penerimaan hewan kurban',
+                'placeholder' => "Panitia Qurban Masjid Jami' Al-Jihad siap melayani ibadah qurban Anda."
+            ],
+            'yasin-embed' => [
+                'name'        => 'Surat Yaasiin 83 Ayat',
+                'icon'        => 'fas fa-moon',
+                'desc'        => 'Agenda malam Jum\'at pembacaan Surat Yaasiin dan tahlil',
+                'placeholder' => "Agenda Rutin Malam Jum'at: Pembacaan Surat Yaasiin 83 Ayat & Doa Bersama."
+            ],
+            'ramadhan-embed' => [
+                'name'        => 'Semarak Ramadhan & Kas Tromol',
+                'icon'        => 'fas fa-star-and-crescent',
+                'desc'        => 'Jadwal imam/tarawih ramadhan & laporan infaq tromol harian',
+                'placeholder' => "Marhaban Ya Ramadhan. Laporan kas tromol infaq tarawih disajikan transparan."
+            ],
+            'kajian-embed' => [
+                'name'        => 'Pengajian Rutin Malam Ahad',
+                'icon'        => 'fas fa-graduation-cap',
+                'desc'        => 'Jadwal kajian ta\'lim mingguan & tanya jawab digital',
+                'placeholder' => "Kajian Rutin Malam Ahad Ba'da Maghrib Masjid Jami' Al-Jihad."
+            ],
             'welcome-embed' => [
                 'name'        => 'Dashboard Lengkap',
                 'icon'        => 'fas fa-desktop',

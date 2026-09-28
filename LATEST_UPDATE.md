@@ -5464,5 +5464,105 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN OTOMATIS).
 8. Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+---
+
+## 🏛️ BAB 131: SISTEM TEKS BERJALAN KHUSUS TIAP HALAMAN ROTASI TV (MULTI-PAGE BROADCAST TICKER) & PENGHAPUSAN RUNNING TEXT GLOBAL
+
+### 1. Latar Belakang & Kebutuhan Pengguna
+- **Kebutuhan Pengguna:** 
+  1. Jama'ah merasa monoton dan bosan jika teks berjalan di seluruh halaman rotasi display TV selalu menampilkan kalimat yang sama persis.
+  2. Pengguna meminta dibuatkan teks berjalan yang berbeda-beda, selaras, dan spesifik untuk setiap halaman yang berotasi.
+  3. Teks berjalan umum (global) resmi **dihilangkan**.
+  4. Model dan tipografi teks berjalan diubah menjadi tampak elegan, berkelas, dan profesional layaknya tampilan siaran televisi profesional (*broadcast news ticker*).
+
+---
+
+### 2. Rincian Implementasi & Solusi Arsitektur
+
+#### A. Standarisasi Tampilan TV Broadcast Ticker Elegan (`css/display-theme.css`)
+1. **Ticker Bar Container (`.bottom-running-wrap`):**
+   - Menggunakan gradien malam gelap islami yang mewah: `linear-gradient(90deg, #021a12 0%, #03271b 25%, #053324 50%, #03271b 75%, #021a12 100%)`.
+   - Garis batas atas aksen emas mengkilap: `border-top: 2.5px solid #ffd700;` dilengkapi pencahayaan ambient ganda: `box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.85), 0 -1px 5px rgba(255, 215, 0, 0.4);`.
+   - Menggunakan `backdrop-filter: blur(14px);` dan hardware acceleration `will-change: transform;`.
+2. **Channel Badge Tetap di Sisi Kiri (`.running-badge`):**
+   - Meniru gaya siaran TV berita (*News Channel TV Station Ticker*): Badge judul stasiun/tema tetap diam di kiri layar sementara teks mengalir halus di sebelahnya.
+   - Menggunakan gradien logam emas mewah: `linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%)` dengan tulisan huruf kapital warna hijau zamrud pekat (`#041f14`) dan potongan sudut modern beveled (`clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%)`).
+   - Dilengkapi ikon tematik Font Awesome yang bersinar (*drop-shadow*).
+3. **Tipografi & Teks Berjalan (`.running-text`, `.marquee-text`):**
+   - Font modern standar broadcast: `'Poppins', 'Segoe UI', -apple-system, sans-serif` dengan ukuran `1.16rem` dan ketebalan `600`.
+   - Warna putih bersih (`#ffffff`) dengan bayangan teks tajam (`text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.5)`) sehingga sangat mudah dibaca dari jarak jauh oleh jama'ah segala usia.
+   - Titik pemisah emas peluru (`•`) bercahaya (`text-shadow: 0 0 8px rgba(255,215,0,0.7)`).
+   - Animasi linier ultra halus: `@keyframes tvTickerScroll { 0% { transform: translate3d(100vw, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }`.
+
+---
+
+#### B. Integrasi Seluruh 19 Halaman Rotasi Display TV
+Setiap halaman rotasi kini memiliki badge tematik dan teks hadits/warta kontekstual khusus:
+1. **Jadwal Sholat 5 Waktu (`slides/utama.html`):** `<i class="fas fa-mosque"></i> JADWAL SHOLAT` — Hadits kesempurnaan shaf sholat, himbauan hening HP, keutamaan menanti sholat.
+2. **Laporan Kas Masjid (`slides/keuangan.html`):** `<i class="fas fa-wallet"></i> KAS MASJID` — Hadits keutamaan menafkahkan harta di jalan Allah & transparansi audit kas.
+3. **Petugas Sholat Jum'at (`slides/jumat.html`):** `<i class="fas fa-user-tie"></i> WARTA JUM'AT` — Hadits larangan berbicara saat khutbah & sunnah-sunnah hari Jum'at.
+4. **Pengumuman DKM (`slides/pengumuman.html`):** `<i class="fas fa-bullhorn"></i> INFO DKM` — Warta agenda taklim, ajakan memakmurkan masjid, kebersihan tempat ibadah.
+5. **Grafik Arus Kas (`slides/keuangan-summary.html`):** `<i class="fas fa-chart-pie"></i> ARUS KAS` — Alokasi dana umat untuk sarana ibadah & kepedulian sosial, hadits sedekah melapangkan rezeki.
+6. **QRIS Infaq Digital (`slides/qris.html`):** `<i class="fas fa-qrcode"></i> INFAQ DIGITAL` — Kemudahan sedekah nontunai bebas biaya admin & hadits naungan sedekah di hari kiamat.
+7. **Galeri Dokumentasi (`slides/slide.html`):** `<i class="fas fa-images"></i> DOKUMENTASI` — Dokumentasi syiar dakwah & hadits pahala orang yang mengajak kepada kebaikan.
+8. **Kas Layanan Ambulance (`slides/ambulance.html`):** `<i class="fas fa-ambulance"></i> AMBULANCE` — Layanan siaga 24 jam mobil ambulance gratis & nomor hotline darurat warga.
+9. **Program Donasi & Wakaf (`slides/infaq.html`):** `<i class="fas fa-hand-holding-heart"></i> INFAQ & WAKAF` — Program amal jariyah pembangunan fasilitas masjid.
+10. **Mutiara Hadits & Hikmah (`slides/hikmah.html`):** `<i class="fas fa-book-open"></i> MUTIARA HIKMAH` — Hadits manusia paling bermanfaat & keutamaan menuntut ilmu.
+11. **Penerimaan Hewan Qurban (`slides/qurban.html`):** `<i class="fas fa-drum"></i> HEWAN QURBAN` — QS. Al-Hajj: 37 tentang ketakwaan dalam ibadah kurban & informasi pendaftaran shohibul qurban.
+12. **Surat Yaasiin 83 Ayat (`slides/yasin.html`):** `<i class="fas fa-moon"></i> SURAT YAASIIN` — Keutamaan Surat Yaasiin jantung Al-Qur'an & agenda malam Jum'at.
+13. **Live TV Makkah (`slides/live-mekah.html`):** `<i class="fas fa-kaaba"></i> LIVE MAKKAH` — Kalimat talbiyah & siaran langsung 24 jam Masjidil Haram.
+14. **Live TV Madinah (`slides/live-madinah.html`):** `<i class="fas fa-star-and-crescent"></i> LIVE MADINAH` — Kalimat sholawat salam atas Rasulullah ﷺ & siaran langsung Masjid Nabawi.
+15. **Live CCTV Mimbar Khutbah (`slides/live-mimbar.html`):** `<i class="fas fa-video"></i> MIMBAR KHUTBAH` — Himbauan menyimak khutbah dengan seksama dan penuh kekhusyukan.
+16. **Petugas Sholat Idul Fitri (`slides/idul-fitri.html`):** `<i class="fas fa-bullhorn"></i> IDUL FITRI` — Ucapan selamat Idul Fitri, doa taqabbalallahu minna wa minkum, dan jadwal sholat Ied.
+17. **Petugas Sholat Idul Adha (`slides/idul-adha.html`):** `<i class="fas fa-bullhorn"></i> IDUL ADHA` — Ucapan Idul Adha, hadits hari Nahr, dan jadwal penyembelihan kurban.
+18. **Semarak Ramadhan & Tromol (`slides/ramadhan.html`):** `<i class="fas fa-star-and-crescent"></i> RAMADHAN` — Keutamaan puasa Ramadhan & laporan kas tromol tarawih harian.
+19. **Pengajian Rutin Malam Ahad (`slides/kajian.html`):** `<i class="fas fa-graduation-cap"></i> KAJIAN ILMU` — Warta kajian ta'lim ba'da maghrib, hadits menuntut ilmu, dan QR tanya jawab digital.
+
+---
+
+#### C. Panel Pengaturan Baru di Admin Web Statis (`web-statis/admin.html`)
+1. **Penghapusan Form Teks Global:**
+   - Kolom tunggal `#inputRunningText` (Teks Berjalan Utama Default) resmi dihapus sesuai instruksi.
+2. **Antarmuka Accordion Multi-Halaman Rotasi:**
+   - Disediakan accordion 19 halaman rotasi lengkap dengan ikon, nama layar, badge slug (`/utama-embed`, dsb.), dan badge status kustom/bawaan.
+   - Tiap halaman memiliki textarea mandiri dengan tinggi 3 baris.
+   - Dilengkapi tombol aksi per halaman:
+     - `✨ Buat AI`: Terhubung dengan Google Gemini AI copywriter untuk menyusun teks berjalan halaman tersebut.
+     - `🔄 Rekomendasi Hadits`: Mengembalikan teks ke hadits/warta rekomendasi resmi.
+     - `🗑️ Kosongkan`: Mengosongkan form jika ingin diisi manual.
+     - `🖥️ Preview Layar TV`: Membuka modal preview langsung untuk menguji tampilan slide.
+3. **Penyimpanan Terpusat ke Supabase (`running_text_pages`):**
+   - Fungsi `simpanRunningText()` merangkum seluruh inputan 19 halaman ke dalam format JSON objek `running_text_pages` dan mengirimkan `PATCH` ke tabel `app_settings` Supabase ID 1.
+   - Didukung tombol **"Buka / Tutup Semua Panel"** dan **"✨ Isi Seluruh Rekomendasi Hadits"** untuk efisiensi operator masjid.
+
+---
+
+### 3. Berkas yang Dimodifikasi:
+1. `web-statis/js/supabase-db.js` (Menambahkan `DEFAULT_RUNNING_TEXTS` untuk ke-19 slide rotasi, memperbarui `getRunningTextForPage` agar membaca mapping tanpa fallback ke teks global monoton).
+2. `web-statis/css/display-theme.css` (Menambahkan master CSS TV Broadcast Ticker dengan badge emas tetap, gradien emerald gelap, tipografi high-contrast, dan animasi hardware-accelerated).
+3. `web-statis/admin.html` (Menghapus card teks global, menggantinya dengan panel multi-halaman 19 accordion, JavaScript render, dan fungsi penyimpanan ke Supabase).
+4. `web-statis/slides/utama.html` (Menambahkan `.running-badge` JADWAL SHOLAT).
+5. `web-statis/slides/keuangan.html` (Menambahkan `.running-badge` KAS MASJID).
+6. `web-statis/slides/jumat.html` (Menambahkan `.running-badge` WARTA JUM'AT).
+7. `web-statis/slides/pengumuman.html` (Menambahkan `.running-badge` INFO DKM).
+8. `web-statis/slides/keuangan-summary.html` (Menambahkan `.running-badge` ARUS KAS).
+9. `web-statis/slides/qris.html` (Menambahkan `.running-badge` INFAQ DIGITAL).
+10. `web-statis/slides/slide.html` (Menambahkan `.running-badge` DOKUMENTASI).
+11. `web-statis/slides/ambulance.html` (Menambahkan `.running-badge` AMBULANCE).
+12. `web-statis/slides/infaq.html` (Menambahkan `.running-badge` INFAQ & WAKAF).
+13. `web-statis/slides/hikmah.html` (Menambahkan `.running-badge` MUTIARA HIKMAH).
+14. `web-statis/slides/qurban.html` (Menambahkan `.running-badge` HEWAN QURBAN).
+15. `web-statis/slides/yasin.html` (Menghubungkan `display-theme.css`, menambahkan ticker HTML SURAT YAASIIN, dan binding data `getRunningTextForPage`).
+16. `web-statis/slides/ramadhan.html` (Menambahkan ticker HTML RAMADHAN, script `supabase-db.js`, dan binding data `getRunningTextForPage`).
+17. `web-statis/slides/kajian.html` (Menambahkan ticker HTML KAJIAN ILMU dan binding data `getRunningTextForPage`).
+18. `web-statis/slides/live-mekah.html` (Menambahkan `.running-badge` LIVE MAKKAH).
+19. `web-statis/slides/live-madinah.html` (Menambahkan `.running-badge` LIVE MADINAH).
+20. `web-statis/slides/live-mimbar.html` (Menambahkan `.running-badge` MIMBAR KHUTBAH).
+21. `app/Models/AppSetting.php` (Melengkapi master katalog halaman rotasi di Laravel backend).
+22. `LATEST_UPDATE.md` (DIMODIFIKASI - Bab 131).
+23. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN OTOMATIS).
+24. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+
 
 

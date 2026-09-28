@@ -3338,36 +3338,52 @@
 
 
                     <!-- ==========================================
-                         VIEW 5: TEKS BERJALAN TV (RUNNING TEXT)
+                         VIEW 5: TEKS BERJALAN TV (RUNNING TEXT TIAP HALAMAN ROTASI)
                          ========================================== -->
                     <div id="view-running-text" class="section-view">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h4 class="font-weight-bold text-gray-800 mb-0">
-                                <i class="fas fa-bullhorn text-warning mr-2"></i> Teks Berjalan TV (Running Text)
-                            </h4>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 pb-2 border-bottom">
                             <div>
-                                <button class="btn btn-outline-warning font-weight-bold mr-2 shadow-sm" onclick="bukaModalAiCopywriter('Teks Berjalan TV', 'running_text')">
-                                    <i class="fas fa-magic mr-1"></i> ✨ Buat Running Text AI
+                                <h4 class="font-weight-bold text-gray-800 mb-1">
+                                    <i class="fas fa-bullhorn text-warning mr-2"></i> Teks Berjalan TV Tiap Halaman Rotasi
+                                </h4>
+                                <p class="text-muted small mb-0">
+                                    Atur kalimat teks berjalan di bagian bawah layar yang spesifik dan selaras untuk masing-masing halaman display TV agar jama'ah tidak merasa bosan. Teks global telah dinonaktifkan.
+                                </p>
+                            </div>
+                            <div class="mt-2 mt-md-0 d-flex flex-wrap align-items-center">
+                                <button type="button" class="btn btn-sm btn-outline-secondary font-weight-bold mr-2 mb-1 shadow-sm" onclick="toggleAllRunningPagesAccordion()">
+                                    <i class="fas fa-expand-arrows-alt mr-1"></i> Buka / Tutup Semua Panel
                                 </button>
-                                <button class="btn btn-success" onclick="simpanRunningText()">
-                                    <i class="fas fa-save mr-1"></i> Simpan Teks Berjalan
+                                <button type="button" class="btn btn-sm btn-outline-warning font-weight-bold mr-2 mb-1 shadow-sm" onclick="resetAllRunningTextsToDefault()">
+                                    <i class="fas fa-magic mr-1"></i> ✨ Isi Seluruh Rekomendasi Hadits
+                                </button>
+                                <button type="button" class="btn btn-sm btn-success font-weight-bold mb-1 shadow-sm" onclick="simpanRunningText()">
+                                    <i class="fas fa-save mr-1"></i> Simpan Seluruh Teks Berjalan
                                 </button>
                             </div>
                         </div>
 
-                        <div class="content-card">
-                            <div class="content-card-header">
-                                <h6 class="content-card-title">
-                                    <i class="fas fa-edit"></i> Teks Berjalan Utama (Default Seluruh Halaman)
-                                </h6>
-                            </div>
-                            <div class="p-3">
-                                <div class="form-group">
-                                    <label class="font-weight-bold">Teks Berjalan Berita & Himbauan Masjid</label>
-                                    <textarea class="form-control font-weight-bold" id="inputRunningText" rows="4" style="font-size: 0.95rem; line-height: 1.6;">SELAMAT DATANG DI MASJID JAMI' AL-JIHAD • LURUSKAN DAN RAPATKAN SHAF SAAT SHOLAT BERJAMAAH • MOHON NONAKTIFKAN NADA DERING HP • KAJIAN RUTIN AHAD SUBUH BERSAMA USTADZ AHMAD SHOLEH • SALURKAN INFAQ DAN DONASI TERBAIK ANDA MELALUI QRIS MASJID AL-JIHAD</textarea>
-                                    <small class="text-muted">Gunakan tanda titik peluru ( • ) untuk memisahkan setiap bait pengumuman.</small>
+                        <!-- Banner Info Multi-Halaman -->
+                        <div class="card mb-4 border-0 shadow-sm" style="background: linear-gradient(135deg, rgba(7, 26, 16, 0.04) 0%, rgba(14, 53, 33, 0.08) 100%); border-left: 5px solid #10b981 !important; border-radius: 12px;">
+                            <div class="card-body p-3 d-flex align-items-center justify-content-between flex-wrap">
+                                <div class="d-flex align-items-center">
+                                    <span class="mr-3" style="width: 44px; height: 44px; border-radius: 50%; background: #10b981; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: 0 4px 10px rgba(16,185,129,0.3);">
+                                        <i class="fas fa-tv"></i>
+                                    </span>
+                                    <div>
+                                        <h6 class="font-weight-bold text-gray-900 mb-0">Multi-Halaman Rotasi Aktif (19 Layar TV Berbeda)</h6>
+                                        <small class="text-muted">Setiap slide otomatis memuat teks berjalan khususnya masing-masing secara realtime tanpa menunggu refresh halaman.</small>
+                                    </div>
+                                </div>
+                                <div class="mt-2 mt-sm-0">
+                                    <span class="badge badge-success px-3 py-2 font-weight-bold" style="font-size: 0.85rem;" id="badgeCountCustomRT">19 Halaman Terkonfigurasi</span>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Daftar Accordion 19 Halaman Rotasi TV -->
+                        <div class="accordion" id="accordionRunningPages">
+                            <!-- Dimuat secara dinamis oleh JavaScript renderRunningTextPagesPanel() -->
                         </div>
                     </div>
 
@@ -5676,6 +5692,14 @@
             renderRotationTable(cachedRotationPages);
             renderUsersTable();
             renderAdminRamadhanView();
+            // Inisialisasi awal panel running text 19 halaman rotasi
+            try {
+                const localRT = localStorage.getItem('cached_running_text_pages');
+                if (localRT) {
+                    cachedRunningTextPages = JSON.parse(localRT);
+                }
+            } catch (e) {}
+            renderRunningTextPagesPanel(cachedRunningTextPages);
 
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
@@ -6690,14 +6714,16 @@
                             selectYasinOption(yMode);
                         }
                         
-                        // Running text
-                        if (document.getElementById('inputRunningText') && s.running_text_pages) {
-                            if (typeof s.running_text_pages === 'string') {
-                                document.getElementById('inputRunningText').value = s.running_text_pages;
-                            } else if (typeof s.running_text_pages === 'object' && s.running_text_pages.default) {
-                                document.getElementById('inputRunningText').value = s.running_text_pages.default;
-                            }
+                        // Running text Multi-Halaman Rotasi
+                        let rtPages = s.running_text_pages;
+                        if (typeof rtPages === 'string') {
+                            try { rtPages = JSON.parse(rtPages); } catch (e) {}
                         }
+                        if (!rtPages) {
+                            try { rtPages = JSON.parse(localStorage.getItem('cached_running_text_pages')); } catch (e) {}
+                        }
+                        cachedRunningTextPages = rtPages || {};
+                        renderRunningTextPagesPanel(cachedRunningTextPages);
 
                         // Rotasi TV Count & Render Seluruh 17 Tabel Rotasi
                         let rotPages = s.rotation_pages;
@@ -9455,30 +9481,206 @@
             }
         }
 
-        // Simpan Teks Berjalan Running Text
-        async function simpanRunningText() {
-            const textVal = document.getElementById('inputRunningText')?.value;
-            if (!textVal) {
-                alert('Teks berjalan tidak boleh kosong!');
-                return;
+        // =======================================================
+        // MANAJEMEN TEKS BERJALAN MULTI-HALAMAN DISPLAY TV
+        // =======================================================
+        let cachedRunningTextPages = {};
+
+        function renderRunningTextPagesPanel(pagesMapping) {
+            const container = document.getElementById('accordionRunningPages');
+            if (!container) return;
+
+            let mapping = pagesMapping || {};
+            if (typeof mapping === 'string') {
+                try { mapping = JSON.parse(mapping); } catch (e) { mapping = {}; }
             }
+            cachedRunningTextPages = mapping;
+
+            const iconMap = {
+                'utama': 'fas fa-mosque',
+                'keuangan': 'fas fa-wallet',
+                'jumat': 'fas fa-user-tie',
+                'pengumuman': 'fas fa-bullhorn',
+                'keuangan-summary': 'fas fa-chart-pie',
+                'qris': 'fas fa-qrcode',
+                'slide': 'fas fa-images',
+                'ambulance': 'fas fa-ambulance',
+                'infaq': 'fas fa-hand-holding-heart',
+                'hikmah': 'fas fa-book-open',
+                'qurban': 'fas fa-drum',
+                'yasin': 'fas fa-moon',
+                'live-mekah': 'fas fa-kaaba',
+                'live-madinah': 'fas fa-star-and-crescent',
+                'live-mimbar': 'fas fa-video',
+                'idul-fitri': 'fas fa-bullhorn',
+                'idul-adha': 'fas fa-bullhorn',
+                'ramadhan': 'fas fa-star-and-crescent',
+                'kajian': 'fas fa-graduation-cap'
+            };
+
+            container.innerHTML = MASTER_ROTATION_PAGES.map((page, idx) => {
+                const slug = getCanonicalSlideKey(page.url);
+                const collapseId = `collapseRT_${slug}`;
+                const defaultText = (typeof SupabaseDB !== 'undefined' && SupabaseDB.DEFAULT_RUNNING_TEXTS && SupabaseDB.DEFAULT_RUNNING_TEXTS[slug]) 
+                    ? SupabaseDB.DEFAULT_RUNNING_TEXTS[slug] 
+                    : "🌙 \"Luruskan dan rapatkan shaf saat sholat berjamaah.\" (HR. Bukhari & Muslim) • Jagalah kebersihan dan kesucian masjid";
+
+                const currentVal = mapping[slug] || mapping[slug + '-embed'] || mapping['/' + slug + '-embed'] || mapping[page.url] || defaultText;
+                const isCustom = (mapping[slug] || mapping[slug + '-embed'] || mapping['/' + slug + '-embed']) && (currentVal.trim() !== defaultText.trim());
+                const icon = iconMap[slug] || 'fas fa-tv';
+
+                return `
+                    <div class="card mb-3 shadow-sm" style="border-radius: 12px; overflow: hidden; border: 1.5px solid ${isCustom ? '#10b981' : 'rgba(212,175,55,0.35)'} !important;">
+                        <div class="card-header py-2 px-3 d-flex justify-content-between align-items-center"
+                            style="cursor: pointer; user-select: none; background: linear-gradient(135deg, #041f14 0%, #083824 100%) !important; border-bottom: 1px solid rgba(255,255,255,0.08) !important;"
+                            data-toggle="collapse"
+                            data-target="#${collapseId}">
+                            <div class="d-flex align-items-center">
+                                <span style="width: 38px; height: 38px; min-width: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: ${isCustom ? '#10b981' : 'rgba(255,215,0,0.18)'}; color: ${isCustom ? '#ffffff' : '#ffd700'}; border: 1.5px solid ${isCustom ? '#34d399' : 'rgba(255,215,0,0.45)'}; font-size: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.4);" class="mr-3">
+                                    <i class="${icon}"></i>
+                                </span>
+                                <div>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <strong style="color: #ffffff !important; font-size: 1.01rem; font-weight: 700; letter-spacing: 0.3px;">${page.name}</strong>
+                                        <span class="badge badge-${page.category_color || 'info'} ml-2 font-weight-bold" style="font-size: 0.74rem;">${page.category || 'Display'}</span>
+                                        <span class="badge ml-2" style="background: rgba(255, 215, 0, 0.16); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.4); font-size: 0.72rem; font-family: monospace;">/${slug}-embed</span>
+                                    </div>
+                                    <small style="color: #cbd5e1 !important; font-size: 0.80rem; display: block; margin-top: 1px;">
+                                        Teks berjalan pada layar rotasi: ${page.url}
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="badge px-2 py-1 mr-2 badge-rt-status-${slug}" style="background: ${isCustom ? '#10b981' : 'rgba(255, 255, 255, 0.16)'}; color: #ffffff; font-weight: 700; font-size: 0.78rem;">
+                                    ${isCustom ? '<i class="fas fa-check-circle mr-1"></i> Teks Kustom' : '<i class="fas fa-book-open mr-1"></i> Rekomendasi Bawaan'}
+                                </span>
+                                <i class="fas fa-chevron-down text-warning" style="font-size: 0.95rem;"></i>
+                            </div>
+                        </div>
+
+                        <div id="${collapseId}" class="collapse show">
+                            <div class="card-body p-3" style="background: #ffffff !important; border-top: 1px solid #e2e8f0 !important;">
+                                <div class="form-group mb-2">
+                                    <label class="small font-weight-bold d-flex justify-content-between align-items-center text-gray-900 mb-1">
+                                        <span><i class="fas fa-edit text-success mr-1"></i> Kalimat Teks Berjalan Layar <strong>${page.name}</strong>:</span>
+                                        <span class="text-muted font-weight-normal small">Pisahkan tiap bait dengan tanda ( • )</span>
+                                    </label>
+                                    <textarea class="form-control font-weight-bold input-running-page"
+                                        id="inputRT_${slug}"
+                                        data-slug="${slug}"
+                                        rows="3"
+                                        style="font-size: 0.95rem; line-height: 1.6; border: 1.5px solid #cbd5e1; border-radius: 8px; color: #0f172a;"
+                                        oninput="onRunningTextInputChange('${slug}')">${escapeHtml(currentVal)}</textarea>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center justify-content-between pt-1">
+                                    <div class="btn-group btn-group-sm mb-1">
+                                        <button type="button" class="btn btn-outline-warning font-weight-bold" onclick="bukaModalAiCopywriter('Teks Berjalan - ${page.name.replace(/'/g, "\\'")}', 'running_text_page:${slug}')">
+                                            <i class="fas fa-magic mr-1"></i> ✨ Buat AI
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary font-weight-bold" onclick="resetSingleRunningText('${slug}')">
+                                            <i class="fas fa-undo mr-1"></i> Rekomendasi Hadits
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger font-weight-bold" onclick="document.getElementById('inputRT_${slug}').value = ''; onRunningTextInputChange('${slug}');">
+                                            <i class="fas fa-eraser mr-1"></i> Kosongkan
+                                        </button>
+                                    </div>
+                                    <div class="mb-1">
+                                        <button type="button" class="btn btn-sm btn-outline-info font-weight-bold" onclick="bukaPreviewSlide('${page.url}', '${page.name.replace(/'/g, "\\'")}')">
+                                            <i class="fas fa-desktop mr-1"></i> Preview Layar TV
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const badgeCount = document.getElementById('badgeCountCustomRT');
+            if (badgeCount) {
+                badgeCount.textContent = `${MASTER_ROTATION_PAGES.length} Halaman Terkonfigurasi`;
+            }
+        }
+
+        function onRunningTextInputChange(slug) {
+            const input = document.getElementById(`inputRT_${slug}`);
+            const badge = document.querySelector(`.badge-rt-status-${slug}`);
+            if (!input || !badge) return;
+
+            const defaultText = (typeof SupabaseDB !== 'undefined' && SupabaseDB.DEFAULT_RUNNING_TEXTS && SupabaseDB.DEFAULT_RUNNING_TEXTS[slug]) 
+                ? SupabaseDB.DEFAULT_RUNNING_TEXTS[slug].trim() 
+                : '';
+            const currentVal = input.value.trim();
+
+            if (currentVal && currentVal !== defaultText) {
+                badge.style.background = '#10b981';
+                badge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Teks Kustom';
+            } else {
+                badge.style.background = 'rgba(255, 255, 255, 0.16)';
+                badge.innerHTML = '<i class="fas fa-book-open mr-1"></i> Rekomendasi Bawaan';
+            }
+        }
+
+        function resetSingleRunningText(slug) {
+            const input = document.getElementById(`inputRT_${slug}`);
+            if (!input) return;
+            const defaultText = (typeof SupabaseDB !== 'undefined' && SupabaseDB.DEFAULT_RUNNING_TEXTS && SupabaseDB.DEFAULT_RUNNING_TEXTS[slug]) 
+                ? SupabaseDB.DEFAULT_RUNNING_TEXTS[slug] 
+                : '';
+            input.value = defaultText;
+            onRunningTextInputChange(slug);
+        }
+
+        function resetAllRunningTextsToDefault() {
+            if (!confirm('Apakah Anda yakin ingin mengisi seluruh 19 halaman rotasi dengan teks hadits dan warta rekomendasi resmi?')) return;
+            MASTER_ROTATION_PAGES.forEach(page => {
+                const slug = getCanonicalSlideKey(page.url);
+                resetSingleRunningText(slug);
+            });
+            alert('Alhamdulillah! Seluruh 19 halaman rotasi telah diisi dengan rekomendasi hadits & warta resmi. Jangan lupa klik "Simpan Seluruh Teks Berjalan" agar tersimpan ke Supabase.');
+        }
+
+        let isAllRunningPagesOpen = true;
+        function toggleAllRunningPagesAccordion() {
+            isAllRunningPagesOpen = !isAllRunningPagesOpen;
+            $('#accordionRunningPages .collapse').collapse(isAllRunningPagesOpen ? 'show' : 'hide');
+        }
+
+        // Simpan Seluruh Teks Berjalan Multi-Halaman ke Supabase
+        async function simpanRunningText() {
+            const pagesObj = {};
+
+            MASTER_ROTATION_PAGES.forEach(page => {
+                const slug = getCanonicalSlideKey(page.url);
+                const input = document.getElementById(`inputRT_${slug}`);
+                const defaultText = (typeof SupabaseDB !== 'undefined' && SupabaseDB.DEFAULT_RUNNING_TEXTS && SupabaseDB.DEFAULT_RUNNING_TEXTS[slug]) 
+                    ? SupabaseDB.DEFAULT_RUNNING_TEXTS[slug] 
+                    : '';
+                const val = input ? (input.value.trim() || defaultText) : defaultText;
+                pagesObj[slug] = val;
+                pagesObj[slug + '-embed'] = val;
+                pagesObj['/' + slug + '-embed'] = val;
+            });
+
+            cachedRunningTextPages = pagesObj;
+            localStorage.setItem('cached_running_text_pages', JSON.stringify(pagesObj));
 
             try {
                 const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
                     body: JSON.stringify({
-                        running_text_pages: textVal
+                        running_text_pages: pagesObj
                     })
                 });
 
                 if (res.ok) {
-                    alert('Alhamdulillah! Teks Berjalan TV berhasil disimpan ke Supabase dan seketika tayang di layar TV.');
+                    alert('Alhamdulillah! Teks Berjalan untuk SELURUH 19 Halaman Rotasi berhasil disimpan ke Supabase dan seketika tayang di layar TV.');
                 } else {
-                    alert('Gagal memperbarui running text.');
+                    alert('Gagal memperbarui ke server Supabase, namun telah disimpan di sesi lokal browser.');
                 }
             } catch (err) {
-                alert('Tersimpan di sesi lokal.');
+                alert('Tersimpan di sesi lokal browser (offline mode).');
             }
         }
 
@@ -9775,15 +9977,27 @@
                 switchAdminSection('kajian-sabtu');
                 $('#modalAiCopywriter').modal('hide');
                 alert('Alhamdulillah! Data pengumuman hasil AI berhasil diterapkan ke Form Pengajian Malam Ahad Pekan Ini.');
-            } else if (target === 'running_text') {
-                const inputRT = document.getElementById('inputRunningText');
+            } else if (target && target.startsWith('running_text_page:')) {
+                const slug = target.replace('running_text_page:', '');
+                const inputRT = document.getElementById(`inputRT_${slug}`);
                 if (inputRT && running) {
                     const current = inputRT.value.trim();
                     inputRT.value = current ? `${current} • ${running}` : running;
+                    onRunningTextInputChange(slug);
                 }
                 switchAdminSection('running-text');
                 $('#modalAiCopywriter').modal('hide');
-                alert('Alhamdulillah! Teks berjalan hasil AI berhasil ditambahkan ke form Teks Berjalan TV.');
+                alert(`Alhamdulillah! Teks berjalan hasil AI berhasil diterapkan untuk halaman ${slug}.`);
+            } else if (target === 'running_text') {
+                const inputUtama = document.getElementById('inputRT_utama');
+                if (inputUtama && running) {
+                    const current = inputUtama.value.trim();
+                    inputUtama.value = current ? `${current} • ${running}` : running;
+                    onRunningTextInputChange('utama');
+                }
+                switchAdminSection('running-text');
+                $('#modalAiCopywriter').modal('hide');
+                alert('Alhamdulillah! Teks berjalan hasil AI berhasil ditambahkan ke Jadwal Sholat Utama.');
             } else {
                 salinDrafAiLengkap();
                 $('#modalAiCopywriter').modal('hide');

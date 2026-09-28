@@ -639,10 +639,117 @@ h2.sub-header {
     .kaligrafi-muhammad { left: 8px !important; }
 
     /* Running text mobile: font disesuaikan & touch-safe */
-    .running-text {
-        font-size: 0.92rem !important;
+    .running-text,
+    .marquee-text {
+        font-size: 0.95rem !important;
     }
-    .running-text-container {
-        padding: 6px 10px !important;
+    .running-text-container,
+    .marquee-container {
+        padding: 4px 10px !important;
+    }
+    .running-badge {
+        font-size: 0.76rem !important;
+        padding: 0 14px 0 10px !important;
     }
 }
+
+/* =====================================================
+   PROFESSIONAL TV BROADCAST TICKER (RUNNING TEXT SYSTEM)
+   Tampilan Elegan, Berkelas & Profesional Standar Siaran TV Premium
+   ===================================================== */
+.bottom-running-wrap {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    height: 48px !important;
+    background: linear-gradient(90deg, #021a12 0%, #03271b 25%, #053324 50%, #03271b 75%, #021a12 100%) !important;
+    border-top: 2.5px solid #ffd700 !important;
+    display: flex !important;
+    align-items: center !important;
+    z-index: 1000 !important;
+    box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.85), 0 -1px 5px rgba(255, 215, 0, 0.4) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Badge Ticker Kiri (Gaya TV News Channel Premium) */
+.running-badge {
+    background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%) !important;
+    color: #041f14 !important;
+    height: 100% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0 24px 0 20px !important;
+    font-family: 'Poppins', 'Inter', -apple-system, sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 0.88rem !important;
+    letter-spacing: 1.2px !important;
+    text-transform: uppercase !important;
+    flex-shrink: 0 !important;
+    border-right: 2px solid rgba(0, 0, 0, 0.3) !important;
+    gap: 8px !important;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
+    z-index: 10 !important;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
+}
+
+.running-badge i {
+    color: #041f14 !important;
+    font-size: 0.95rem !important;
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.4)) !important;
+}
+
+/* Container Jalur Teks Berjalan */
+.running-text-container,
+.marquee-container {
+    flex: 1 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+}
+
+/* Konten Teks Marquee Berjalan */
+.running-text,
+.marquee-text {
+    display: inline-block !important;
+    white-space: nowrap !important;
+    animation: tvTickerScroll 42s linear infinite !important;
+    font-family: 'Poppins', 'Segoe UI', -apple-system, sans-serif !important;
+    font-size: 1.16rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    letter-spacing: 0.6px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.5) !important;
+    will-change: transform !important;
+    padding-left: 20px !important;
+}
+
+.running-text i,
+.marquee-text i {
+    color: #ffd700 !important;
+    margin: 0 10px !important;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.6)) !important;
+}
+
+@keyframes tvTickerScroll {
+    0% { transform: translate3d(100vw, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+}
+
+@keyframes marquee {
+    0% { transform: translate3d(100vw, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+}
+
+@keyframes marqueeScroll {
+    0% { transform: translate3d(100vw, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+}
