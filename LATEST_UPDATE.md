@@ -6142,3 +6142,32 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `LATEST_UPDATE.md` (Pencatatan Bab 146).
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 147 — Pembaruan Badge Kapsul Header: "SMART Full Auto Self-Running", "IoT Remote Access", & Versi Terkini v5.5.0 (29 Sep 2026)
+
+### 1. Kebutuhan Pengguna
+- Mengganti teks dan ikon kotak kapsul `"Cloudflare Edge & Supabase"` menjadi `"SMART Full Auto Self-Running"` dengan ikon tombol daya/power (`<i class="fas fa-power-off"></i>`) selaras dengan kartu Otomasi Mandiri Hemat Daya.
+- Menambahkan kotak kapsul baru yang berisi teks dan ikon `"Internet of Things (IoT) Remote Access"` (`<i class="fas fa-wifi"></i>`).
+- Memastikan seluruh kotak kapsul dan badge versi di header menampilkan versi terbaru (`v5.5.0` & `Versi 5.5.0 (Rilis Terkini)`).
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembaruan Badge Kapsul Header di `web-statis/about.html` & `resources/views/about.blade.php`:**
+   - **Badge Versi:** Memastikan logo badge lingkaran terpasang `v5.5.0` dan kapsul versi berwarna emas menampilkan `Versi 5.5.0 (Rilis Terkini)`.
+   - **Badge SMART Full Auto Self-Running:** Menggantikan badge lama dengan kapsul amber/gold menyala bertuliskan `<i class="fas fa-power-off" style="color: #facc15;"></i> SMART Full Auto Self-Running`.
+   - **Badge IoT Remote Access:** Menambahkan kapsul biru langit (*sky blue*) bertuliskan `<i class="fas fa-wifi" style="color: #38bdf8;"></i> Internet of Things (IoT) Remote Access`.
+2. **Penyelarasan Seluruh Versi Sistem:**
+   - Diterapkan pada `web-statis/about.html` (Web Statis Cloudflare Pages).
+   - Diterapkan pada `resources/views/about.blade.php` (Blade Laravel).
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/about.html` (Penggantian badge "SMART Full Auto Self-Running" dan penambahan badge "IoT Remote Access").
+2. `resources/views/about.blade.php` (Penyelarasan badge Blade Laravel).
+3. `LATEST_UPDATE.md` (Dokumentasi Bab 147).
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

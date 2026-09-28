@@ -40,6 +40,12 @@
                     <span class="badge px-3 py-2" style="background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; font-weight: 500;">
                         <i class="fab fa-laravel mr-1" style="color: #ff2d20;"></i> Laravel 13 & PHP 8.3
                     </span>
+                    <span class="badge px-3 py-2" style="background: rgba(245, 158, 11, 0.25); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 20px; font-weight: 500;">
+                        <i class="fas fa-power-off mr-1" style="color: #facc15;"></i> SMART Full Auto Self-Running
+                    </span>
+                    <span class="badge px-3 py-2" style="background: rgba(56, 189, 248, 0.25); color: #bae6fd; border: 1px solid rgba(56, 189, 248, 0.45); border-radius: 20px; font-weight: 500;">
+                        <i class="fas fa-wifi mr-1" style="color: #38bdf8;"></i> Internet of Things (IoT) Remote Access
+                    </span>
                     @if($setting->rotation_enabled ?? false)
                     <span class="badge px-3 py-2" style="background: rgba(40, 167, 69, 0.25); color: #a3e635; border: 1px solid rgba(40, 167, 69, 0.5); border-radius: 20px; font-weight: 500;">
                         <i class="fas fa-play-circle mr-1"></i> Rotasi TV: AKTIF ({{ $setting->rotation_interval ?? 10 }}s)
