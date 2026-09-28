@@ -2357,8 +2357,34 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4 col-12">
-                                            <label class="text-warning small font-weight-bold mb-1">Jam Mulai (WIB):</label>
-                                            <input type="time" class="form-control form-control-sm font-weight-bold text-success text-center" id="kajianJamMulai" value="18:25">
+                                            <label class="text-warning small font-weight-bold mb-1 d-flex justify-content-between align-items-center">
+                                                <span>Jam Mulai (WIB):</span>
+                                                <span class="badge badge-warning text-dark font-weight-bold" style="font-size: 9px; padding: 2px 5px; border-radius: 4px;">24H</span>
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-sm font-weight-bold text-success text-center" 
+                                                       id="kajianJamMulai" value="18:25" placeholder="18:25" maxlength="5"
+                                                       style="letter-spacing: 1.5px; font-size: 13.5px; background: #ffffff;"
+                                                       oninput="formatTime24H(this)" onblur="validateTime24H(this)"
+                                                       onkeydown="this._deleting = (event.key === 'Backspace' || event.key === 'Delete')"
+                                                       title="Format 24 Jam (Contoh: 18:25)">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-warning dropdown-toggle font-weight-bold px-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 11px; background: #f59e0b; color: #071a10; border-color: #f59e0b;">
+                                                        <i class="fas fa-clock mr-1"></i>24H
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right shadow-lg p-2" style="min-width: 175px; border-radius: 10px; border: 1px solid rgba(201,160,61,0.3); z-index: 1050;">
+                                                        <div class="dropdown-header text-uppercase font-weight-bold px-2 py-1" style="font-size: 10px; color: #0e3521;">Pilihan Cepat (24 Jam)</div>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:15')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:15 WIB</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:20')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:20 WIB</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success active" href="javascript:void(0)" onclick="setKajianJam24H('18:25')"><i class="fas fa-star mr-1 text-warning" style="font-size: 10px;"></i> 18:25 WIB (Standar)</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:30')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:30 WIB</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:45')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:45 WIB</a>
+                                                        <div class="dropdown-divider my-1"></div>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-primary" href="javascript:void(0)" onclick="setKajianJam24H('19:30')"><i class="fas fa-moon mr-1 text-info" style="font-size: 10px;"></i> 19:30 WIB (Ba'da Isya)</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-primary" href="javascript:void(0)" onclick="setKajianJam24H('20:00')"><i class="fas fa-moon mr-1 text-info" style="font-size: 10px;"></i> 20:00 WIB</a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -6935,8 +6961,12 @@
                         if (s.kajian_sabtu_enabled !== undefined) {
                             if (document.getElementById('cfgKajianSabtuEnabled')) document.getElementById('cfgKajianSabtuEnabled').checked = (s.kajian_sabtu_enabled !== false);
                         }
-                        if (s.kajian_sabtu_start_time && document.getElementById('kajianJamMulai')) {
-                            document.getElementById('kajianJamMulai').value = s.kajian_sabtu_start_time;
+                        if (document.getElementById('kajianJamMulai')) {
+                            const savedJam = s.kajian_sabtu_start_time || localStorage.getItem('cached_kajian_sabtu_start_time');
+                            if (savedJam) {
+                                document.getElementById('kajianJamMulai').value = savedJam;
+                                if (typeof validateTime24H === 'function') validateTime24H(document.getElementById('kajianJamMulai'));
+                            }
                         }
                         let kData = s.kajian_sabtu_data;
                         if (typeof kData === 'string') {
@@ -9341,10 +9371,46 @@
             }
         }
 
+        // --- Helper Input Jam 24H Kajian Malam Ahad ---
+        function formatTime24H(input) {
+            if (!input) return;
+            let v = input.value.replace(/[^0-9:]/g, '');
+            if (v.length === 2 && !v.includes(':') && !input._deleting) {
+                v = v + ':';
+            }
+            input.value = v.slice(0, 5);
+        }
+
+        function validateTime24H(input) {
+            if (!input) return;
+            let val = input.value.trim();
+            if (!val) { input.value = '18:25'; return; }
+            if (/^\d{4}$/.test(val)) val = val.substring(0, 2) + ':' + val.substring(2);
+            if (/^\d{1,2}$/.test(val)) val = val.padStart(2, '0') + ':00';
+            const parts = val.split(':');
+            let h = parseInt(parts[0], 10);
+            let m = parseInt(parts[1], 10);
+            if (isNaN(h) || h < 0) h = 18;
+            if (h > 23) h = 23;
+            if (isNaN(m) || m < 0) m = 0;
+            if (m > 59) m = 59;
+            input.value = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+
+        function setKajianJam24H(val) {
+            const el = document.getElementById('kajianJamMulai');
+            if (el) {
+                el.value = val;
+                validateTime24H(el);
+            }
+        }
+
         async function simpanKajianSabtu() {
             simpanInputFormKeMemory(currentKajianPekanActive);
+            const elJam = document.getElementById('kajianJamMulai');
+            if (elJam) validateTime24H(elJam);
             const enabled = document.getElementById('cfgKajianSabtuEnabled') ? document.getElementById('cfgKajianSabtuEnabled').checked : true;
-            const jamMulai = document.getElementById('kajianJamMulai')?.value || '18:25';
+            const jamMulai = elJam?.value || '18:25';
             const bulan = parseInt(document.getElementById('kajianBulanSelect')?.value || ((new Date()).getMonth() + 1));
             const tahun = parseInt(document.getElementById('kajianTahunSelect')?.value || (new Date()).getFullYear());
             const namaBulan = NAMA_BULAN_INDONESIA[bulan - 1] || 'Bulan Ini';

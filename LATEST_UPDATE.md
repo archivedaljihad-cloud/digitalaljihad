@@ -6196,3 +6196,41 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 148).
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 149 — Pembaruan Kolom Jam Mulai Kajian Malam Ahad ke Format 24 Jam (24H WIB) (29 Sep 2026)
+
+### 1. Kebutuhan Pengguna
+- Pada halaman Pengaturan **Pengajian Rutin Malam Ahad (1 Bulan Penuh)** di panel Admin (`web-statis/admin.html`), mengganti kolom input **"Jam Mulai (WIB)"** dari model bawaan browser AM/PM (yang sebelumnya menampilkan contoh `06:25 PM` dengan ikon jam bawaan OS) menjadi model **"24H"** (contoh: `18:25`) agar lebih intuitif, ramah operasional, dan mudah dipahami oleh petugas masjid di Indonesia tanpa kebingungan format waktu.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembaruan Struktur UI Input Jam di `web-statis/admin.html`:**
+   - Menggantikan elemen `<input type="time">` (yang format visualnya dikendalikan sistem lokal/bahasa browser pengguna) dengan kontrol terpadu `<input type="text">` bergaya 24H:
+     - Badge penanda jelas `24H` berwarna kuning emas pada label kolom.
+     - Input teks presisi dengan teks hijau tebal di tengah (*text-center font-weight-bold*), monospace spacing, placeholder `18:25`, dan `maxlength="5"`.
+     - Tombol dropdown pilihan cepat (*quick presets*) berlabel `24H` yang menyediakan pilihan instan waktu sholat ba'da Maghrib s/d Isya:
+       - `18:15 WIB`
+       - `18:20 WIB`
+       - `18:25 WIB (Standar)`
+       - `18:30 WIB`
+       - `18:45 WIB`
+       - `19:30 WIB (Ba'da Isya)`
+       - `20:00 WIB`
+2. **Validasi & Otomasi Masking Jam 24H:**
+   - Fungsi `formatTime24H(input)`: Menambahkan separator titik dua (`:`) otomatis saat petugas mengetik 2 digit jam pertama tanpa terpotong tombol hapus/backspace.
+   - Fungsi `validateTime24H(input)`: Memastikan jam berada pada rentang valid `00:00` s/d `23:59`, mengonversi input 4 angka (contoh: `1825` menjadi `18:25`), dan memvalidasi fallback aman ke `18:25` jika kosong.
+   - Fungsi `setKajianJam24H(val)`: Menyetel waktu langsung dari dropdown pilihan cepat.
+   - Mengintegrasikan validasi otomatis saat fungsi `simpanKajianSabtu()` dipanggil sebelum payload dikirim ke cache lokal dan `app_settings` Supabase.
+3. **Kompatibilitas Penuh dengan Mesin Sholat (`prayer-engine.js`):**
+   - Nilai waktu tetap tersimpan dalam format standar `HH:MM` (misalnya `18:25`), sehingga kompatibilitas dengan fungsi penghitung durasi tayang otomatis `isKajianSabtuActive()` di `prayer-engine.js` berjalan 100% mulus tanpa risiko galat.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/admin.html` (Penggantian model input jam dari AM/PM ke format 24H, penambahan dropdown presets cepat, dan fungsi validasi waktu 24 jam).
+2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 149).
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
