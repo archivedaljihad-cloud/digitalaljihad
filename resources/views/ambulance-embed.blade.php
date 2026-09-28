@@ -572,9 +572,8 @@
 		<div class="main-content">
 			<div class="panel keuangan">
 				<h2>
-					<i class="fas fa-ambulance"></i>
+					<img src="{{ asset('img/Ambulance.gif') }}" alt="Ambulance" style="height: 38px; width: auto; max-width: 52px; object-fit: contain; vertical-align: middle; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.55)); margin-right: 6px;">
 					<span>Rincian Keuangan Kas Ambulance</span>
-					<i class="fas fa-ambulance"></i>
 				</h2>
 				
 				<!-- KPI SUMMARY CARDS: BERSIH, MEWAH & BEBAS TUMPUK -->

@@ -5947,3 +5947,38 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
 10. `LATEST_UPDATE.md` (Dokumentasi Bab 141).
 11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 142 — Pembaruan Halaman Kas Ambulance: Penghapusan Kapsul Hotline Siaga & Penggantian Ikon Judul dengan Animasi Ambulance.gif (28 Sep 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- Pada halaman slide display **Kas Mobil Ambulance** (`slides/ambulance.html` & `ambulance-embed.blade.php`), pengguna menginginkan dua penyesuaian visual:
+  1. Menghilangkan kotak kapsul merah hotline siaga beserta teks di dalamnya: `"SIAGA 24 JAM: 0877-5876-7000"`.
+  2. Mengganti ikon ambulance FontAwesome sebelumnya (`<i class="fas fa-ambulance"></i>`) di sebelah teks *"Laporan Kas Mobil Ambulance"* dengan berkas animasi **`Ambulance.gif`** yang telah disediakan di folder `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penempatan & Replikasi Berkas Aset:**
+   - Menyalin berkas animasi `Ambulance.gif` dari folder `C:\Users\anthu\Documents\【Digital WebSTATIS】\` ke repositori proyek:
+     - `web-statis/img/Ambulance.gif`
+     - `public/img/Ambulance.gif`
+2. **Penghapusan Kotak Kapsul Hotline Siaga:**
+   - Menghapus elemen `<div class="hotline-badge-box">...</div>` yang sebelumnya berisi teks *"SIAGA 24 JAM: 0877-5876-7000"*.
+   - Tata letak header kartu kas ambulance kini menjadi lebih lega, bersih, dan berfokus pada judul serta 3 kartu KPI metrik kas.
+3. **Penggantian Ikon Judul dengan Animasi GIF:**
+   - Mengganti tag `<i>` dengan `<img src="../img/Ambulance.gif" alt="Ambulance" class="ambulance-gif-icon">` pada `slides/ambulance.html`.
+   - Mengganti ikon di `ambulance-embed.blade.php` dengan `<img src="{{ asset('img/Ambulance.gif') }}" ...>`.
+   - Menambahkan aturan CSS `.keuangan-title .ambulance-gif-icon` dengan dimensi proporsional (`height: 38px; width: auto; max-width: 52px;`) serta drop-shadow pendaran emas lembut agar serasi dan harmonis dengan tema kartu hijau zamrud-emas.
+
+---
+
+### 3. Berkas yang Dimodifikasi & Ditambahkan
+1. `web-statis/img/Ambulance.gif` (Aset gambar animasi baru).
+2. `public/img/Ambulance.gif` (Aset gambar animasi Laravel).
+3. `web-statis/slides/ambulance.html` (Penghapusan kotak hotline, penggantian ikon dengan `Ambulance.gif`, dan styling CSS).
+4. `resources/views/ambulance-embed.blade.php` (Penyelarasan Blade view).
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 142).
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
+7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
