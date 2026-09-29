@@ -6337,3 +6337,48 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 152).
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 153 — Penyempurnaan Kontras Tipografi Header Nama Masjid: Hijau Zamrud Pekat (#064e3b) dengan Hairline Outline 1 pt Kuning Emas (#FFD700) (29 Sep 2026)
+
+### 1. Masalah & Observasi Visual Layar TV
+- Pengguna mengirimkan foto aktual layar TV display fisik di dinding masjid yang menayangkan halaman Jadwal Sholat (`slides/utama.html`).
+- Pada foto tersebut, teks judul header **"MASJID JAMI' AL-JIHAD"** tampak kurang tegas dan silau/berbaur karena tepat di belakang tulisan terdapat pendaran awan terang (*sunburst flare/halo*) dari latar belakang Ka'bah Masjidil Haram dan pantulan cahaya pendaran medali kaligrafi emas.
+- Pengguna meminta agar warna font judul header **"MASJID JAMI' ALJIHAD"** diubah menjadi **warna hijau zamrud yang pekat (*deep emerald green*)** dipadukan dengan **Hairline Outline 1 pt warna kuning emas (*gold*)** agar kontras, tajam, dan sangat mudah terbaca dari jarak jamaah (5–15 meter).
+
+---
+
+### 2. Solusi & Perubahan Teknis yang Diterapkan
+1. **Pewarnaan Font Hijau Zamrud Pekat (*Deep Emerald Green*):**
+   - Badan font header kaligrafi *Masking Renta* diubah menjadi warna hijau zamrud pekat yang berwibawa:
+     - `color: #064e3b !important;`
+     - `-webkit-text-fill-color: #064e3b !important;`
+   - Warna ini memberikan rasio kontras gelap-terang yang sangat tinggi terhadap pendaran awan/halo emas di belakangnya, sehingga bentuk huruf langsung terbaca jelas tanpa silau.
+2. **Hairline Outline 1 pt Kuning Emas (*Gold Hairline*):**
+   - Menerapkan garis tepi presisi setebal 1 pt: `-webkit-text-stroke: 1pt #FFD700 !important;`.
+   - Menggunakan teknik rendering modern `paint-order: stroke fill;` agar garis tepi digambar di belakang isi huruf (*underneath/outside*), sehingga ketebalan dan bentuk asli font tetap terjaga 100% penuh dan garis emas hanya membingkai sisi luar huruf secara presisi (*hairline*).
+3. **Bayangan Lembut 3D (*Soft Ambient Shadow*):**
+   - Menghapus bayangan hitam kaku/tebal multi-arah lama (`2px`, `3px`, `4px`) yang sebelumnya berpotensi membuat garis terlihat bergerigi.
+   - Menggantinya dengan bayangan jatuh lembut dan dalam: `text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 4px 14px rgba(0, 0, 0, 0.7) !important;` untuk memberikan efek timbul (*floating depth*) yang elegan dan mempertegas batas luar hairline emas di segala jenis latar belakang.
+4. **Targeting Selektor Lengkap & Komprehensif:**
+   - Menyertakan selektor `.header h1`, `.header-section h1`, serta `#nama-masjid` secara eksplisit pada master CSS dan seluruh slide mandiri agar konsisten di seluruh tayangan.
+5. **Pembaruan Service Worker & Cache Busting:**
+   - Memperbarui query parameter berkas CSS menjadi `?v=3.0.8` pada `web-statis/index.html` dan `web-statis/slides/utama.html`.
+   - Menaikkan versi cache PWA pada `web-statis/sw.js` menjadi `aljihad-signage-v3.0.8` agar browser TV langsung mengambil berkas CSS terbaru tanpa terhambat cache browser.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/css/partials-theme.css` (Pembaruan aturan `.header h1, .header-section h1, #nama-masjid` desktop dan mobile).
+2. `web-statis/css/display-theme.css` (Pembaruan aturan `.header h1, .header-section h1, #nama-masjid`).
+3. `public/css/display-theme.css` (Pembaruan aturan `.header h1, .header-section h1, #nama-masjid`).
+4. `resources/views/partials/display-theme.blade.php` (Pembaruan aturan blade partials header).
+5. `resources/views/utama.blade.php` (Pembaruan aturan `.header-section h1, #nama-masjid`).
+6. `web-statis/slides/utama.html` (Penambahan CSS eksplisit `#nama-masjid` dan pembaruan versi link `?v=3.0.8`).
+7. `web-statis/slides/ambulance.html`, `hikmah.html`, `idul-adha.html`, `idul-fitri.html`, `infaq.html`, `keuangan-summary.html`, `keuangan.html`, `pengumuman.html`, `qris.html`, `qurban.html`, `slide.html` (Pembaruan internal style `.header h1`).
+8. `web-statis/index.html` (Pembaruan versi link CSS `?v=3.0.8`).
+9. `web-statis/sw.js` (Pembaruan cache PWA `aljihad-signage-v3.0.8`).
+10. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 153).
+11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
+12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

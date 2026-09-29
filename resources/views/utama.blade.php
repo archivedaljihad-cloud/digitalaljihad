@@ -82,7 +82,8 @@
 			position: relative;
 		}
 
-		.header-section h1 {
+		.header-section h1,
+		#nama-masjid {
 			font-family: 'Masking Renta', sans-serif !important;
 			font-size: 3.2rem !important;
 			line-height: 1.1 !important;
@@ -90,23 +91,13 @@
 			text-transform: uppercase !important;
 			background: none !important;
 			-webkit-background-clip: initial !important;
-			-webkit-text-fill-color: #085a2b !important;
-			color: #085a2b !important;
+			-webkit-text-fill-color: #064e3b !important;
+			color: #064e3b !important;
+			-webkit-text-stroke: 1pt #FFD700 !important;
+			paint-order: stroke fill;
 			text-shadow:
-				1px 1px 0 #ffd700,
-				-1px 1px 0 #ffd700,
-				1px -1px 0 #ffd700,
-				-1px -1px 0 #ffd700,
-				2px 2px 0 #000000,
-				-2px 2px 0 #000000,
-				2px -2px 0 #000000,
-				-2px -2px 0 #000000,
-				3px 3px 0 #000000,
-				-3px 3px 0 #000000,
-				3px -3px 0 #000000,
-				-3px -3px 0 #000000,
-				0 5px 12px rgba(0, 0, 0, 0.95),
-				0 0 20px rgba(255, 215, 0, 0.65) !important;
+				0 2px 6px rgba(0, 0, 0, 0.8),
+				0 4px 14px rgba(0, 0, 0, 0.7) !important;
 			filter: none !important;
 			margin: 0 0 -15px 0 !important;
 			padding: 0 !important;
