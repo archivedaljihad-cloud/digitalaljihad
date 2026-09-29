@@ -29,9 +29,10 @@ class KeuanganExport implements FromCollection, WithHeadings, WithMapping, WithS
 
 	public function collection()
 	{
-		return Keuangan::whereBetween('tanggal', [$this->dari, $this->sampai])
-		->orderBy('tanggal', 'desc')
-		->get();
+		return Keuangan::kasUtama()
+			->whereBetween('tanggal', [$this->dari, $this->sampai])
+			->orderBy('tanggal', 'desc')
+			->get();
 	}
 
 	public function headings(): array
@@ -123,8 +124,8 @@ class KeuanganExport implements FromCollection, WithHeadings, WithMapping, WithS
 		
         // Total row style
 		$lastRow = $highestRow + 1;
-		$totalPemasukan = Keuangan::whereBetween('tanggal', [$this->dari, $this->sampai])->sum('pemasukan');
-		$totalPengeluaran = Keuangan::whereBetween('tanggal', [$this->dari, $this->sampai])->sum('pengeluaran');
+		$totalPemasukan = Keuangan::kasUtama()->whereBetween('tanggal', [$this->dari, $this->sampai])->sum('pemasukan');
+		$totalPengeluaran = Keuangan::kasUtama()->whereBetween('tanggal', [$this->dari, $this->sampai])->sum('pengeluaran');
 		$saldo = $totalPemasukan - $totalPengeluaran;
 		
 		$sheet->setCellValue('A' . $lastRow, 'TOTAL');

@@ -300,6 +300,39 @@
         },
 
         /**
+         * Validasi apakah transaksi merupakan Kas Utama Masjid murni
+         */
+        isKasUtamaMasjid(item) {
+            if (!item) return false;
+            const kat = (item.kategori || '').toLowerCase().trim();
+            const bukanKasUtama = [
+                'penggalangan',
+                'program infaq',
+                'infaq program',
+                'infaq renovasi',
+                'renovasi',
+                'ambulance',
+                'ambulans',
+                'qurban',
+                'ramadhan',
+                'donasi infaq',
+                'donatur'
+            ];
+            for (const pos of bukanKasUtama) {
+                if (kat.includes(pos)) return false;
+            }
+            return true;
+        },
+
+        /**
+         * Ambil transaksi murni Kas Utama Masjid (Mengecualikan program penggalangan, infaq program, ambulans, dll)
+         */
+        async getKeuanganKasUtama() {
+            const all = await this.getKeuangan();
+            return (all || []).filter(item => this.isKasUtamaMasjid(item));
+        },
+
+        /**
          * Ambil data transaksi kas mobil ambulance
          */
         async getKeuanganAmbulance() {

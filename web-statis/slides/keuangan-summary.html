@@ -471,18 +471,47 @@
 
         let chartInstance = null;
 
+        // Validasi murni Kas Keuangan Masjid (Menjaga independensi kas operasional masjid)
+        function isKasUtamaMasjid(item) {
+            if (!item) return false;
+            const kat = (item.kategori || '').toLowerCase().trim();
+            const posMandiriLain = [
+                'penggalangan',
+                'program infaq',
+                'infaq program',
+                'infaq renovasi',
+                'renovasi',
+                'ambulance',
+                'ambulans',
+                'qurban',
+                'ramadhan',
+                'donasi infaq',
+                'donatur'
+            ];
+            for (const pos of posMandiriLain) {
+                if (kat.includes(pos)) return false;
+            }
+            return true;
+        }
+
         // Render Chart Donut & List
         function renderSummaryUI(data) {
             const transListEl = document.getElementById('transList');
-            if (!data || data.length === 0) {
-                if (transListEl) transListEl.innerHTML = '<div class="text-center py-4 text-muted">Belum ada transaksi.</div>';
+            // FILTER KETAT: Hanya tampilkan Keuangan Kas Utama Masjid murni
+            const kasUtamaData = (data || []).filter(isKasUtamaMasjid);
+
+            if (!kasUtamaData || kasUtamaData.length === 0) {
+                if (transListEl) transListEl.innerHTML = '<div class="text-center py-4 text-muted">Belum ada transaksi kas masjid.</div>';
+                document.getElementById('statPemasukan').textContent = '0';
+                document.getElementById('statPengeluaran').textContent = '0';
+                document.getElementById('statSaldo').textContent = '0';
                 return;
             }
 
             let totMasuk = 0;
             let totKeluar = 0;
 
-            data.forEach(item => {
+            kasUtamaData.forEach(item => {
                 totMasuk += parseFloat(item.pemasukan) || 0;
                 totKeluar += parseFloat(item.pengeluaran) || 0;
             });
@@ -542,7 +571,7 @@
 
             // 2. Render 8 Transaksi Terakhir
             if (transListEl) {
-                const latest = data.slice(0, 8);
+                const latest = kasUtamaData.slice(0, 8);
                 transListEl.innerHTML = latest.map(item => {
                     const masuk = parseFloat(item.pemasukan) || 0;
                     const keluar = parseFloat(item.pengeluaran) || 0;
@@ -556,6 +585,9 @@
                         tglFormatted = `${d.getDate()} ${blnShort[d.getMonth()]} ${d.getFullYear()}`;
                     }
 
+                    let katLabel = item.kategori || 'Kas Utama Masjid';
+                    if (katLabel.toLowerCase() === 'kas utama') katLabel = 'Kas Utama Masjid';
+
                     return `
                         <div class="trans-item">
                             <div class="trans-meta">
@@ -564,7 +596,7 @@
                                 </div>
                                 <div class="trans-text">
                                     <span class="trans-desc">${item.deskripsi || item.uraian || 'Infaq Kas'}</span>
-                                    <span class="trans-date">${tglFormatted} &nbsp;•&nbsp; ${item.kategori || 'Kas Utama'}</span>
+                                    <span class="trans-date">${tglFormatted} &nbsp;•&nbsp; ${katLabel}</span>
                                 </div>
                             </div>
                             <div class="trans-val ${isIncome ? 'income' : 'expense'}">
@@ -588,8 +620,8 @@
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-chart-line"></i> ${rText}`;
                 }
 
-                // 2. Data Keuangan
-                const data = await SupabaseDB.getKeuangan();
+                // 2. Data Keuangan Kas Murni Masjid
+                const data = await SupabaseDB.getKeuanganKasUtama();
                 renderSummaryUI(data);
             } catch (err) {
                 console.error('Gagal memuat ringkasan keuangan:', err);

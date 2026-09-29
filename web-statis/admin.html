@@ -6741,7 +6741,17 @@
             // A. Kas Utama Masjid
             try {
                 if (resKasSettled.status === 'fulfilled' && resKasSettled.value.ok) {
-                    cachedKasData = await resKasSettled.value.json();
+                    const rawKas = await resKasSettled.value.json();
+                    // FILTER KETAT: Jaga independensi Kas Utama Masjid dari pos penggalangan infaq / donasi program lain
+                    cachedKasData = (rawKas || []).filter(item => {
+                        if (!item) return false;
+                        const kat = (item.kategori || '').toLowerCase().trim();
+                        const bukanKas = ['penggalangan', 'program infaq', 'infaq program', 'infaq renovasi', 'renovasi', 'ambulance', 'ambulans', 'qurban', 'ramadhan', 'donasi infaq', 'donatur'];
+                        for (const b of bukanKas) {
+                            if (kat.includes(b)) return false;
+                        }
+                        return true;
+                    });
                     renderKasTables(cachedKasData);
                 }
             } catch (err) {
@@ -8805,7 +8815,7 @@
             document.getElementById('editKasTanggal').value = item.tanggal ? item.tanggal.split('T')[0] : '';
             document.getElementById('editKasTipe').value = isMasuk ? 'masuk' : 'keluar';
             let katVal = item.kategori || (table === 'keuangan_ambulance' ? 'Kas Ambulance' : 'Kas Utama Masjid');
-            if (katVal === 'Infaq Renovasi') katVal = 'Penggalangan Infaq';
+            if (katVal === 'Infaq Renovasi' || katVal === 'Penggalangan Infaq' || katVal === 'Kas Utama') katVal = 'Kas Utama Masjid';
             document.getElementById('editKasKategori').value = katVal;
             document.getElementById('editKasUraian').value = item.deskripsi || item.uraian || '';
             document.getElementById('editKasNominal').value = parseInt(rawNominal || 0, 10).toLocaleString('id-ID');

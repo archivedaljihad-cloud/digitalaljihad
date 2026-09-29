@@ -6994,3 +6994,87 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 161).
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## 🕌 BAB 162: RESTRUKTURISASI & PEMISAHAN KAS UTAMA MASJID SECARA MANDIRI / INDEPENDEN DARI PROGRAM PENGGALANGAN INFAQ & POS DANA LAINNYA
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:** *"halaman Kas Keuangan masjid. Jangan memasukkan keuangan yang lain ke dalam laporan Keuangan Kas Masjid, akan membuat bingung jamaah. Saya melihat dihalaman ini uang penggalangan/program infaq juga masuk dalam list keuangan masjid. Semua pemasukan dan pengeluaran keuangan masjid dibuat secara mandiri/independent sehingga tidak membuat bingung jamaah."*
+- **Akar Masalah yang Ditemukan:**
+  1. Pada slide display TV **Rincian Keuangan Kas Masjid** (`slides/keuangan.html`) dan **Grafik Ringkasan Kas** (`slides/keuangan-summary.html`), fungsi `renderKeuanganUI()` dan `renderSummaryUI()` sebelumnya memuat seluruh transaksi mentah dari tabel `keuangan` tanpa melakukan filter ketat terhadap kategori rekening kas.
+  2. Pada tabel `keuangan` di Supabase, terdapat baris transaksi historis (ID: 2) dengan deskripsi *"Bpk. H. Utut Priastya RW.007"* berlabel kategori *"Penggalangan Infaq"* nominal Rp 500.000. Padahal, data donasi tersebut sudah tercatat resmi dan mandiri di tabel `donasi_infaq` (ID: 2, `program_infaq_id: 4`).
+  3. Akibatnya, pada layar TV display kas masjid, uang donasi program penggalangan tersebut ikut terdaftar di tabel mutasi dan menambah angka Total Pemasukan Kas Masjid menjadi Rp 20.879.023 dan Saldo menjadi Rp 19.879.023, yang berpotensi membingungkan jamaah karena pos program infaq bercampur dengan kas operasional harian masjid.
+
+---
+
+### 2. Solusi & Perubahan Teknis yang Diterapkan
+
+1. **Filter Validasi Kas Utama Masjid Mandiri (`isKasUtamaMasjid`):**
+   - Menambahkan fungsi filter ketat pada slide `web-statis/slides/keuangan.html` dan `web-statis/slides/keuangan-summary.html`:
+     ```javascript
+     function isKasUtamaMasjid(item) {
+         if (!item) return false;
+         const kat = (item.kategori || '').toLowerCase().trim();
+         const posMandiriLain = [
+             'penggalangan',
+             'program infaq',
+             'infaq program',
+             'infaq renovasi',
+             'renovasi',
+             'ambulance',
+             'ambulans',
+             'qurban',
+             'ramadhan',
+             'donasi infaq',
+             'donatur'
+         ];
+         for (const pos of posMandiriLain) {
+             if (kat.includes(pos)) return false;
+         }
+         return true;
+     }
+     ```
+   - Seluruh data transaksi yang masuk difilter terlebih dahulu menjadi `kasUtamaData` sebelum dilakukan penjumlahan akumulasi total pemasukan, total pengeluaran, saldo berjalan, perakitan chart donat, serta pembuatan baris tabel mutasi.
+   - Kategori kas yang tampil di badge pill diseragamkan dengan label resmi yang jelas: **`Kas Utama Masjid`**.
+
+2. **Penambahan Helper Terpadu di `web-statis/js/supabase-db.js`:**
+   - Menambahkan fungsi `SupabaseDB.isKasUtamaMasjid(item)` dan `SupabaseDB.getKeuanganKasUtama()` yang secara otomatis mengembalikan daftar transaksi murni kas operasional masjid.
+   - Memperbarui pemanggilan data pada `slides/keuangan.html` dan `slides/keuangan-summary.html` agar langsung menggunakan `SupabaseDB.getKeuanganKasUtama()`.
+
+3. **Pembersihan Record Tercampur di Supabase BaaS:**
+   - Menghapus record ID: 2 (`Penggalangan Infaq`) dari tabel `keuangan`.
+   - Memverifikasi tabel `donasi_infaq`: seluruh 8 data donatur Program Infaq (termasuk Bpk. H. Utut Priastya) tetap aman, utuh, dan terpisah 100% pada modul Program Infaq.
+   - Hasil hitungan kas operasional masjid kini menjadi akurat dan murni:
+     - **Total Pemasukan Kas Masjid:** Rp 20.379.023
+     - **Total Pengeluaran Kas Masjid:** Rp 1.000.000
+     - **Sisa Saldo Kas Utama Masjid:** Rp 19.379.023
+
+4. **Proteksi Integritas Data di Panel Admin (`web-statis/admin.html`):**
+   - Memastikan proses inisialisasi `cachedKasData` menyaring data dengan filter independensi kas sehingga 3 kartu ringkasan saldo kas utama, tabel quick dashboard, dan tabel transaksi buku kas tidak pernah kemasukan program infaq donatur.
+   - Mengoreksi penanganan form koreksi/edit kas (`bukaModalEditKas`) agar dropdown pilihan akun kas konsisten hanya melayani **Kas Utama Masjid** dan **Kas Ambulance**.
+
+5. **Penyelarasan Backend & Model Laravel:**
+   - **`app/Models/Keuangan.php`:** Menambahkan local query scope `scopeKasUtama($query)` yang mengecualikan seluruh string kategori penggalangan, infaq program, ambulans, qurban, dan ramadhan.
+   - **`app/Http/Controllers/WelcomeController.php`:** Menerapkan `Keuangan::kasUtama()` pada `keuanganEmbed()`, `keuanganSummaryEmbed()`, dan data summary di `rotator()`.
+   - **`app/Http/Controllers/KeuanganController.php`:** Menerapkan `Keuangan::kasUtama()` pada method `index()`, `laporan()`, `pdf()`, dan `export()`.
+   - **`app/Exports/KeuanganExport.php`:** Menerapkan `Keuangan::kasUtama()` pada pengambilan data collection Excel dan penghitungan baris total akhir.
+
+6. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi **`aljihad-signage-v3.1.6`** agar seluruh display TV fisik dan browser pengguna langsung memperbarui cache slide keuangan secara instan.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/slides/keuangan.html` (Penerapan filter independensi `isKasUtamaMasjid`, penyelarasan badge kategori, integrasi `getKeuanganKasUtama`).
+2. `web-statis/slides/keuangan-summary.html` (Penerapan filter independensi `isKasUtamaMasjid` pada kartu metrik, chart donat, dan list 8 mutasi terakhir).
+3. `web-statis/js/supabase-db.js` (Penambahan method `isKasUtamaMasjid` dan `getKeuanganKasUtama`).
+4. `web-statis/admin.html` (Penyaringan murni `cachedKasData` kas utama dan koreksi fallback modal edit kas).
+5. `app/Models/Keuangan.php` (Penambahan method Eloquent `scopeKasUtama`).
+6. `app/Http/Controllers/WelcomeController.php` (Penggunaan `Keuangan::kasUtama()` pada seluruh view embed kas TV).
+7. `app/Http/Controllers/KeuanganController.php` (Penggunaan `Keuangan::kasUtama()` pada index, laporan, export, dan pdf).
+8. `app/Exports/KeuanganExport.php` (Penggunaan `Keuangan::kasUtama()` pada export Excel).
+9. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.1.6`).
+10. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 162).
+11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
+12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

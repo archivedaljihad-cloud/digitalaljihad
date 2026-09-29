@@ -637,12 +637,40 @@
         updateClock();
         setInterval(updateClock, 1000);
 
+        // Validasi murni Kas Keuangan Masjid (Menjaga independensi kas operasional masjid)
+        function isKasUtamaMasjid(item) {
+            if (!item) return false;
+            const kat = (item.kategori || '').toLowerCase().trim();
+            // Pos keuangan luar kas masjid yang berdiri mandiri/independen
+            const posMandiriLain = [
+                'penggalangan',
+                'program infaq',
+                'infaq program',
+                'infaq renovasi',
+                'renovasi',
+                'ambulance',
+                'ambulans',
+                'qurban',
+                'ramadhan',
+                'donasi infaq',
+                'donatur'
+            ];
+            for (const pos of posMandiriLain) {
+                if (kat.includes(pos)) return false;
+            }
+            return true;
+        }
+
         // Render Data Keuangan ke UI
         function renderKeuanganUI(data) {
             const tbody = document.getElementById('keuangan-tbody');
             if (!tbody) return;
 
-            if (!data || data.length === 0) {
+            // FILTER KETAT: Hanya tampilkan Keuangan Kas Utama Masjid murni
+            // Program Penggalangan Infaq, Ambulans, Ramadhan, Qurban dicatat secara independen
+            const kasUtamaData = (data || []).filter(isKasUtamaMasjid);
+
+            if (!kasUtamaData || kasUtamaData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">Belum ada catatan transaksi kas masjid yang tercatat.</td></tr>';
                 document.getElementById('statPemasukan').textContent = '0';
                 document.getElementById('statPengeluaran').textContent = '0';
@@ -655,7 +683,7 @@
             let totKeluar = 0;
 
             // Sorting tanggal ascending untuk hitung saldo berjalan
-            const sortedAsc = [...data].sort((a, b) => new Date(a.tanggal || 0) - new Date(b.tanggal || 0));
+            const sortedAsc = [...kasUtamaData].sort((a, b) => new Date(a.tanggal || 0) - new Date(b.tanggal || 0));
             let runningBalance = 0;
             const computedRows = sortedAsc.map(item => {
                 const masuk = parseFloat(item.pemasukan) || 0;
@@ -692,6 +720,9 @@
                     tglFormatted = `${d.getDate()} ${blnShort[d.getMonth()]} '${String(d.getFullYear()).slice(-2)}`;
                 }
 
+                let katLabel = item.kategori || 'Kas Utama Masjid';
+                if (katLabel.toLowerCase() === 'kas utama') katLabel = 'Kas Utama Masjid';
+
                 return `
                     <tr class="${rowClass}">
                         <td class="col-tgl">${tglFormatted}</td>
@@ -709,7 +740,7 @@
                             <span class="rp-prefix">Rp</span><span class="amount-saldo-val">${formatRupiah(item.computedSaldo)}</span>
                         </td>
                         <td class="col-kat">
-                            <span class="badge-kategori-pill">${escapeHtml(item.kategori || 'Kas Utama')}</span>
+                            <span class="badge-kategori-pill">${escapeHtml(katLabel)}</span>
                         </td>
                     </tr>
                 `;
@@ -742,8 +773,8 @@
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-bullhorn"></i> ${rText}`;
                 }
 
-                // 2. Transaksi Kas
-                const data = await SupabaseDB.getKeuangan();
+                // 2. Transaksi Kas Murni Masjid
+                const data = await SupabaseDB.getKeuanganKasUtama();
                 renderKeuanganUI(data);
             } catch (err) {
                 console.error('Gagal memuat data keuangan:', err);

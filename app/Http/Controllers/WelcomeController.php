@@ -153,9 +153,9 @@ class WelcomeController extends Controller
             ->take(3)
             ->get();
         $keuanganSummary = [
-            'total_pemasukan'  => Keuangan::sum('pemasukan'),
-            'total_pengeluaran'=> Keuangan::sum('pengeluaran'),
-            'saldo'            => Keuangan::sum('pemasukan') - Keuangan::sum('pengeluaran'),
+            'total_pemasukan'  => Keuangan::kasUtama()->sum('pemasukan'),
+            'total_pengeluaran'=> Keuangan::kasUtama()->sum('pengeluaran'),
+            'saldo'            => Keuangan::kasUtama()->sum('pemasukan') - Keuangan::kasUtama()->sum('pengeluaran'),
         ];
         $qris = Qris::aktif()->first();
         $slides = Slide::aktif()
@@ -209,9 +209,9 @@ class WelcomeController extends Controller
     public function keuanganEmbed()
     {
         $settings = AppSetting::first();
-        $keuangan = Keuangan::orderBy('tanggal', 'desc')->get();
-        $totalPemasukan = Keuangan::sum('pemasukan');
-        $totalPengeluaran = Keuangan::sum('pengeluaran');
+        $keuangan = Keuangan::kasUtama()->orderBy('tanggal', 'desc')->get();
+        $totalPemasukan = Keuangan::kasUtama()->sum('pemasukan');
+        $totalPengeluaran = Keuangan::kasUtama()->sum('pengeluaran');
         $saldo = $totalPemasukan - $totalPengeluaran;
         return view(
             'keuangan',
@@ -259,10 +259,10 @@ class WelcomeController extends Controller
     public function keuanganSummaryEmbed()
     {
         $settings = AppSetting::first();
-        $totalPemasukan = Keuangan::sum('pemasukan');
-        $totalPengeluaran = Keuangan::sum('pengeluaran');
+        $totalPemasukan = Keuangan::kasUtama()->sum('pemasukan');
+        $totalPengeluaran = Keuangan::kasUtama()->sum('pengeluaran');
         $saldo = $totalPemasukan - $totalPengeluaran;
-        $recentTransactions = Keuangan::orderBy('tanggal', 'desc')
+        $recentTransactions = Keuangan::kasUtama()->orderBy('tanggal', 'desc')
             ->take(10)
             ->get();
         return view(

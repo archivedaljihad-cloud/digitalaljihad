@@ -25,11 +25,12 @@ class KeuanganController extends Controller
     }
     public function index()
     {
-        $keuangan = Keuangan::orderBy('tanggal', 'desc')
+        $keuangan = Keuangan::kasUtama()
+            ->orderBy('tanggal', 'desc')
             ->orderBy('id', 'desc')
             ->get();
-        $totalPemasukan = Keuangan::sum('pemasukan');
-        $totalPengeluaran = Keuangan::sum('pengeluaran');
+        $totalPemasukan = Keuangan::kasUtama()->sum('pemasukan');
+        $totalPengeluaran = Keuangan::kasUtama()->sum('pengeluaran');
         $saldo = $totalPemasukan - $totalPengeluaran;
         return view('keuangan.index', compact(
             'keuangan',
@@ -221,7 +222,8 @@ class KeuanganController extends Controller
     {
         $dari = $request->get('dari', date('Y-m-01'));
         $sampai = $request->get('sampai', date('Y-m-t'));
-        $keuangan = Keuangan::whereBetween('tanggal', [$dari, $sampai])
+        $keuangan = Keuangan::kasUtama()
+            ->whereBetween('tanggal', [$dari, $sampai])
             ->orderBy('tanggal', 'desc')
             ->orderBy('id', 'desc')
             ->get();
@@ -244,7 +246,8 @@ class KeuanganController extends Controller
     {
         $dari = $request->get('dari', date('Y-m-01'));
         $sampai = $request->get('sampai', date('Y-m-t'));
-        $keuangan = Keuangan::whereBetween('tanggal', [$dari, $sampai])
+        $keuangan = Keuangan::kasUtama()
+            ->whereBetween('tanggal', [$dari, $sampai])
             ->orderBy('tanggal', 'desc')
             ->orderBy('id', 'desc')
             ->get();
@@ -273,7 +276,8 @@ class KeuanganController extends Controller
         $dari = $request->get('dari', date('Y-m-01'));
         $sampai = $request->get('sampai', date('Y-m-t'));
         if ($type == 'pdf') {
-            $keuangan = Keuangan::whereBetween('tanggal', [$dari, $sampai])
+            $keuangan = Keuangan::kasUtama()
+                ->whereBetween('tanggal', [$dari, $sampai])
                 ->orderBy('tanggal', 'desc')
                 ->orderBy('id', 'desc')
                 ->get();
