@@ -280,6 +280,10 @@
                     ? localMadinah 
                     : ((dbMadinah && !dbMadinah.includes('live_stream?channel=')) ? dbMadinah : '');
 
+                if (!rawUrl) {
+                    rawUrl = 'https://www.youtube.com/watch?v=Rs7St51oDDc';
+                }
+
                 if (settings) {
                     const rText = SupabaseDB.getRunningTextForPage('/live-madinah-embed', settings);
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-mosque"></i> ${rText}`;
@@ -301,8 +305,11 @@
 
         // Fast immediate load dari localStorage agar tampilan instan tanpa jeda
         try {
-            const fastMadinah = localStorage.getItem('live_madinah_url');
-            if (fastMadinah && !fastMadinah.includes('live_stream?channel=') && window.SupabaseDB && SupabaseDB.formatYouTubeEmbed) {
+            let fastMadinah = localStorage.getItem('live_madinah_url');
+            if (!fastMadinah || fastMadinah.includes('live_stream?channel=')) {
+                fastMadinah = 'https://www.youtube.com/watch?v=Rs7St51oDDc';
+            }
+            if (window.SupabaseDB && SupabaseDB.formatYouTubeEmbed) {
                 const fastEmbed = SupabaseDB.formatYouTubeEmbed(fastMadinah);
                 if (fastEmbed) {
                     const iframe = document.getElementById('videoIframe');

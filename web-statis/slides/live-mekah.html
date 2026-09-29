@@ -280,6 +280,10 @@
                     ? localMekah 
                     : ((dbMekah && !dbMekah.includes('live_stream?channel=')) ? dbMekah : '');
 
+                if (!rawUrl) {
+                    rawUrl = 'https://www.youtube.com/watch?v=eC4LfEVxvKg';
+                }
+
                 if (settings) {
                     const rText = SupabaseDB.getRunningTextForPage('/live-mekah-embed', settings);
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-kaaba"></i> ${rText}`;
@@ -301,8 +305,11 @@
 
         // Fast immediate load dari localStorage agar tampilan instan tanpa jeda
         try {
-            const fastMekah = localStorage.getItem('live_makkah_url');
-            if (fastMekah && !fastMekah.includes('live_stream?channel=') && window.SupabaseDB && SupabaseDB.formatYouTubeEmbed) {
+            let fastMekah = localStorage.getItem('live_makkah_url');
+            if (!fastMekah || fastMekah.includes('live_stream?channel=')) {
+                fastMekah = 'https://www.youtube.com/watch?v=eC4LfEVxvKg';
+            }
+            if (window.SupabaseDB && SupabaseDB.formatYouTubeEmbed) {
                 const fastEmbed = SupabaseDB.formatYouTubeEmbed(fastMekah);
                 if (fastEmbed) {
                     const iframe = document.getElementById('videoIframe');

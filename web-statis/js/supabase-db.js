@@ -33,8 +33,8 @@
             prayer_mode_jumat_duration: 50,
             enable_dynamic_theme: true,
             enable_next_prayer_bar: true,
-            live_makkah_url: '',
-            live_madinah_url: '',
+            live_makkah_url: 'https://www.youtube.com/watch?v=eC4LfEVxvKg',
+            live_madinah_url: 'https://www.youtube.com/watch?v=Rs7St51oDDc',
             cctv_mimbar_url: '',
             running_text: 'Selamat Datang di Masjid Jami\' Al-Jihad. Luruskan dan rapatkan shaf saat sholat berjamaah. Jagalah kebersihan dan kesucian masjid.',
             running_text_pages: {},
@@ -656,12 +656,24 @@
             const trimmed = url.trim();
             if (!trimmed) return fallbackUrl;
 
-            // 1. Ekstrak 11-digit Video ID jika ada
-            let videoId = '';
+            // 0. Auto-resolve jika pengguna menempelkan link dari portal makkahlive.net atau handle channel YouTube
+            if (trimmed.includes('makkahlive.net')) {
+                if (trimmed.includes('madin') || trimmed.includes('medin')) {
+                    videoId = 'Rs7St51oDDc'; // Saudi Sunnah TV Madinah
+                } else {
+                    videoId = 'eC4LfEVxvKg'; // Saudi Quran TV Makkah
+                }
+            } else if (trimmed.includes('@SaudiQuranTv') || trimmed.includes('SaudiQuranTv')) {
+                videoId = 'eC4LfEVxvKg';
+            } else if (trimmed.includes('@SaudiSunnahTv') || trimmed.includes('SaudiSunnahTv')) {
+                videoId = 'Rs7St51oDDc';
+            }
 
             // Format: youtube.com/watch?v=VIDEO_ID atau /watch?xxx&v=VIDEO_ID
-            const vMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-            if (vMatch) videoId = vMatch[1];
+            if (!videoId) {
+                const vMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+                if (vMatch) videoId = vMatch[1];
+            }
 
             // Format: youtube.com/live/VIDEO_ID
             if (!videoId) {

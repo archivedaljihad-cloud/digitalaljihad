@@ -7366,3 +7366,40 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 4. `web-statis/index.html`
 5. `web-statis/js/supabase-db.js`
 6. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 168 - RESOLVER OTOMATIS LINK MAKKAH LIVE & SIARAN RESMI 24 JAM SAUDI QURAN/SUNNAH TV)
+
+### 1. Latar Belakang & Analisis Masalah
+- **Masalah yang Diungkapkan Pengguna:**
+  - *"Hasilnya sama. Gambar 1 = Tes Putar, Gambar 2 = Preview layar TV. Saya mengambil link dari : `https://makkahlive.net/makkahlive.aspx`."*
+- **Akar Masalah (*Root Cause*):**
+  1. `https://makkahlive.net/makkahlive.aspx` adalah **halaman website lengkap** (bukan link langsung video/stream embed YouTube). Di dalamnya terdapat tombol navigasi, menu, iklan, dan tombol play interaktif yang harus diklik oleh pengunjung web.
+  2. Saat dicoba pada **Tes Putar (Gambar 1)**, modal membuka iframe browser biasa sehingga halaman website `makkahlive.net` termuat utuh lengkap dengan navigasi atas (`Makkah | Madinah | Qibla | Quran | Radio`). Pengguna dapat mengklik tombol Play di dalam halaman tersebut.
+  3. Namun pada **Layar Display TV Masjid (Gambar 2 - `slides/live-mekah.html`)**, display TV digantung di dinding masjid tanpa keyboard/mouse. Desain slide TV memiliki lapisan Smart Mosque Overlay (jam digital, teks hadits berjalan, badge siaran) dan `pointer-events: none` pada iframe video agar tayangan berjalan otomatis tanpa perlu diklik manual.
+  4. Halaman website pihak ketiga seperti `makkahlive.net` dilindungi oleh *Cloudflare Turnstile/Challenge* dan memblokir *autoplay* interaktif di dalam *nested cross-origin iframe*. Akibatnya, website tidak memutar video dan slide TV secara aman menampilkan wallpaper fallback Ka'bah (`kaabah.webp`).
+
+### 2. Solusi & Perbaikan yang Diterapkan
+1. **Penyelidikan Sumber Asli Siaran Makkah & Madinah:**
+   - Ditelusuri bahwa siaran live Ka'bah Makkah pada portal tersebut bersumber dari **Saluran Resmi Pemerintah Kerajaan Arab Saudi (Saudi Broadcasting Authority)**:
+     - **Makkah Live (Ka'bah Masjidil Haram 24 Jam):** Channel resmi `@SaudiQuranTv` (Video ID: `eC4LfEVxvKg`).
+     - **Madinah Live (Masjid Nabawi 24 Jam):** Channel resmi `@SaudiSunnahTv` (Video ID: `Rs7St51oDDc`).
+   - Kedua siaran resmi YouTube ini telah diverifikasi: status 200, bebas izin sematan (`unplayable: false`), aktif 24 jam nonstop, tanpa iklan pihak ketiga, dan mendukung sematan *fullscreen clean embed*.
+2. **Smart URL Auto-Resolver di `SupabaseDB.formatYouTubeEmbed`:**
+   - Jika pengguna memasukkan link dari `makkahlive.net` atau handle channel `@SaudiQuranTv` / `@SaudiSunnahTv`, sistem **secara otomatis mengonversinya langsung** ke ID video sematan YouTube resmi yang bersih dan aktif.
+   - Tidak akan ada lagi halaman website bertombol yang masuk ke TV masjid.
+3. **Penyediaan Tombol 1-Klik Siaran Resmi 24 Jam di Admin:**
+   - Ditambahkan tombol pintas di bawah input Makkah & Madinah:
+     - `[⚡ Gunakan Siaran Resmi Makkah 24 Jam]` -> otomatis mengisi link Saudi Quran TV.
+     - `[⚡ Gunakan Siaran Resmi Madinah 24 Jam]` -> otomatis mengisi link Saudi Sunnah TV.
+   - Mengklik tombol ini otomatis memunculkan dialog konfirmasi dan tombol langsung membuka pratinjau slide.
+4. **Fallback Default Tanpa Putus di Slide TV:**
+   - Jika kolom URL dikosongkan atau belum diisi oleh pengurus, slide `live-mekah.html` dan `live-madinah.html` secara otomatis langsung memutar siaran resmi 24 jam Makkah & Madinah, sehingga layar TV masjid tidak akan pernah macet atau sekadar menampilkan foto statis.
+
+### 3. Berkas yang Terkait
+1. `web-statis/js/supabase-db.js`
+2. `web-statis/slides/live-mekah.html`
+3. `web-statis/slides/live-madinah.html`
+4. `web-statis/admin.html`
+5. `LATEST_UPDATE.md`

@@ -4503,9 +4503,14 @@
                                                 </div>
                                             </div>
                                             <input type="text" class="form-control" id="cfgLiveMekah" placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...">
-                                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
-                                                Mendukung link nonton YouTube biasa (watch/live), link share (youtu.be), atau Video ID 11 karakter. Otomatis dikonversi ke embed resmi.
-                                            </small>
+                                            <div class="d-flex justify-content-between align-items-center mt-1 flex-wrap" style="gap: 6px;">
+                                                <small class="text-muted" style="font-size: 11px;">
+                                                    Mendukung YouTube biasa, youtu.be, atau Video ID 11 karakter.
+                                                </small>
+                                                <button type="button" class="btn btn-xs btn-outline-warning" style="font-size: 10.5px; padding: 2px 8px; border-radius: 6px;" onclick="setOfficialStream('cfgLiveMekah', 'https://www.youtube.com/watch?v=eC4LfEVxvKg')">
+                                                    <i class="fas fa-bolt text-warning mr-1"></i> Gunakan Siaran Resmi Makkah 24 Jam
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <!-- LIVE MADINAH -->
@@ -4524,9 +4529,14 @@
                                                 </div>
                                             </div>
                                             <input type="text" class="form-control" id="cfgLiveMadinah" placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...">
-                                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
-                                                Mendukung link nonton YouTube biasa (watch/live), link share (youtu.be), atau Video ID 11 karakter. Otomatis dikonversi ke embed resmi.
-                                            </small>
+                                            <div class="d-flex justify-content-between align-items-center mt-1 flex-wrap" style="gap: 6px;">
+                                                <small class="text-muted" style="font-size: 11px;">
+                                                    Mendukung YouTube biasa, youtu.be, atau Video ID 11 karakter.
+                                                </small>
+                                                <button type="button" class="btn btn-xs btn-outline-success" style="font-size: 10.5px; padding: 2px 8px; border-radius: 6px;" onclick="setOfficialStream('cfgLiveMadinah', 'https://www.youtube.com/watch?v=Rs7St51oDDc')">
+                                                    <i class="fas fa-bolt text-success mr-1"></i> Gunakan Siaran Resmi Madinah 24 Jam
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <!-- CCTV MIMBAR -->
@@ -6951,8 +6961,18 @@
                             if (inputEl && !inputEl.dataset.autoSyncBound) {
                                 inputEl.dataset.autoSyncBound = 'true';
                                 inputEl.addEventListener('input', function() {
+                                    let val = this.value.trim();
+                                    // Auto-convert jika pengguna menempelkan link portal makkahlive.net
+                                    if (val.includes('makkahlive.net')) {
+                                        if (id === 'cfgLiveMadinah' || val.includes('madin') || val.includes('medin')) {
+                                            val = 'https://www.youtube.com/watch?v=Rs7St51oDDc';
+                                        } else {
+                                            val = 'https://www.youtube.com/watch?v=eC4LfEVxvKg';
+                                        }
+                                        this.value = val;
+                                    }
                                     const key = (id === 'cfgLiveMekah') ? 'live_makkah_url' : 'live_madinah_url';
-                                    localStorage.setItem(key, this.value.trim());
+                                    localStorage.setItem(key, val);
                                 });
                             }
                         });
@@ -10585,6 +10605,38 @@
         function closeStreamPreview() {
             const iframe = document.getElementById('previewStreamIframe');
             if (iframe) iframe.src = '';
+        }
+
+        // Pasang Siaran Resmi 24 Jam YouTube (1-Klik)
+        function setOfficialStream(inputId, url) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.value = url;
+                const key = (inputId === 'cfgLiveMekah') ? 'live_makkah_url' : 'live_madinah_url';
+                localStorage.setItem(key, url);
+                const title = (inputId === 'cfgLiveMekah') ? 'Live TV Makkah (Masjidil Haram)' : 'Live TV Madinah (Masjid Nabawi)';
+                const slideUrl = (inputId === 'cfgLiveMekah') ? 'slides/live-mekah.html' : 'slides/live-madinah.html';
+                
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Siaran Resmi 24 Jam Dipasang!',
+                        html: `Link siaran resmi YouTube: <br><code>${url}</code><br><br>Siaran sudah tersinkron dan siap tayang di TV Display.`,
+                        showCancelButton: true,
+                        confirmButtonText: '<i class="fas fa-desktop mr-1"></i> Buka Preview Sekarang',
+                        cancelButtonText: 'Tutup',
+                        confirmButtonColor: '#059669',
+                        cancelButtonColor: '#6b7280'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            bukaPreviewSlide(slideUrl, title);
+                        }
+                    });
+                } else {
+                    alert('Siaran resmi YouTube 24 jam berhasil dipasang!');
+                    bukaPreviewSlide(slideUrl, title);
+                }
+            }
         }
 
         // Event listener saat modal preview ditutup via klik di luar atau ESC
