@@ -78,37 +78,40 @@
             border: none;
             background-color: #050505;
             will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             pointer-events: none;
             opacity: 0;
-            transform: translate3d(50px, 0, 0);
-            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translate3d(0, 0, 0) scale(1.015);
+            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Frame bersiap di samping kanan tanpa transisi */
-        iframe.incoming {
+        /* Frame bersiap di latar belakang: posisi stabil tanpa hentakan horizontal */
+        iframe.incoming,
+        iframe.standby {
             opacity: 0 !important;
-            transform: translate3d(50px, 0, 0) !important;
+            transform: translate3d(0, 0, 0) scale(1.015) !important;
             transition: none !important;
-            z-index: 2;
-            pointer-events: none;
+            z-index: 2 !important;
+            pointer-events: none !important;
         }
 
-        /* Frame aktif: perlahan muncul (fade in) dan meluncur lembut dari samping ke tengah */
+        /* Frame aktif: memudar masuk anggun & lembut (scale 1.015 -> 1, opacity 0 -> 1) */
         iframe.active {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-            z-index: 2;
-            pointer-events: auto;
-            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 1 !important;
+            transform: translate3d(0, 0, 0) scale(1) !important;
+            z-index: 2 !important;
+            pointer-events: auto !important;
+            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
         }
 
-        /* Frame lama: perlahan-lahan/dengan lembut menghilang (fade out) bergeser halus ke kiri */
+        /* Frame lama: tetap tenang di bawahnya sambil memudar lembut (scale 1 -> 0.99, opacity 1 -> 0) */
         iframe.outgoing {
-            opacity: 0;
-            transform: translate3d(-35px, 0, 0);
-            z-index: 1;
-            pointer-events: none;
-            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 0 !important;
+            transform: translate3d(0, 0, 0) scale(0.99) !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
         }
 
         /* Prayer Mode Fullscreen Overlay Frame */
@@ -647,7 +650,7 @@
 
         let slideTransitionFailsafe = null;
 
-        // Pergantian slide TV: halaman lama fade-out lembut, halaman baru fade-in meluncur anggun dari samping
+        // Pergantian slide TV: Seamless cross-dissolve & elegant depth bloom (zero stutter, zero horizontal shearing)
         function switchSlide(targetIndex) {
             if (activePages.length === 0 || isPrayerModeActive) return;
 
@@ -666,22 +669,35 @@
                     slideTransitionFailsafe = null;
                 }
 
+                // Double rAF + forced reflow agar browser engine siap menginterpolasi CSS transition tanpa jank/hentakan
                 requestAnimationFrame(() => {
-                    // Halaman baru perlahan-lahan muncul (fade in) dan meluncur dari samping ke tengah
-                    backFrame.className = 'active';
-                    // Halaman lama perlahan-lahan dengan lembut menghilang (fade out)
-                    frontFrame.className = 'outgoing';
+                    void backFrame.offsetWidth;
+                    requestAnimationFrame(() => {
+                        // Halaman baru perlahan mekar & fade in anggun (scale 1.015 -> 1, opacity 0 -> 1)
+                        backFrame.className = 'active';
+                        // Halaman lama dengan tenang fade out ke belakang (scale 1 -> 0.99, opacity 1 -> 0)
+                        frontFrame.className = 'outgoing';
 
-                    currentFrame = currentFrame === 1 ? 2 : 1;
-                    showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);
-                    broadcastTvState();
+                        currentFrame = currentFrame === 1 ? 2 : 1;
+                        showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);
+                        broadcastTvState();
+
+                        // Setelah transisi selesai sempurna (1.4s), bersihkan kelas outgoing menjadi standby
+                        setTimeout(() => {
+                            if (frontFrame.classList.contains('outgoing')) {
+                                frontFrame.className = 'standby';
+                            }
+                        }, 1400);
+                    });
                 });
             };
 
-            // Set frame latar belakang dalam posisi bersiap di samping kanan tanpa transisi
+            // Set frame latar belakang dalam posisi bersiap standby tanpa transisi
             backFrame.className = 'incoming';
             backFrame.onload = function() {
-                setTimeout(applyTransition, 60);
+                // Beri waktu 120ms agar iframe baru selesai initial layout, font loading & clock paint
+                // Hal ini menghilangkan micro-stutter (hentakan awal) secara tuntas
+                setTimeout(applyTransition, 120);
             };
             backFrame.onerror = function() {
                 applyTransition();
@@ -731,15 +747,24 @@
                     if (transitioned) return;
                     transitioned = true;
                     requestAnimationFrame(() => {
-                        backFrame.className = 'active';
-                        frontFrame.className = 'outgoing';
-                        currentFrame = currentFrame === 1 ? 2 : 1;
-                        showOsd(label ? `📺 ${label}` : '📺 Slide Khusus');
+                        void backFrame.offsetWidth;
+                        requestAnimationFrame(() => {
+                            backFrame.className = 'active';
+                            frontFrame.className = 'outgoing';
+                            currentFrame = currentFrame === 1 ? 2 : 1;
+                            showOsd(label ? `📺 ${label}` : '📺 Slide Khusus');
+
+                            setTimeout(() => {
+                                if (frontFrame.classList.contains('outgoing')) {
+                                    frontFrame.className = 'standby';
+                                }
+                            }, 1400);
+                        });
                     });
                 };
 
                 backFrame.onload = function() {
-                    setTimeout(applyCustomTransition, 60);
+                    setTimeout(applyCustomTransition, 120);
                 };
                 backFrame.onerror = function() {
                     applyCustomTransition();

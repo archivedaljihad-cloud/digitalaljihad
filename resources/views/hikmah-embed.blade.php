@@ -252,10 +252,14 @@
 		}
 	</style>
 </head>
-
 <body>
-	<div class="kaligrafi kaligrafi-allah">الله</div>
-	<div class="kaligrafi kaligrafi-muhammad">محمد</div>
+	<!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) SERAGAM MASJID -->
+	<div class="kaligrafi-medallion kaligrafi-muhammad">
+		<img src="{{ asset('image/display/medallion/muhammad_3d.png') }}" alt="Kaligrafi Muhammad SAW" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'kaligrafi\'>محمد</span>';">
+	</div>
+	<div class="kaligrafi-medallion kaligrafi-allah">
+		<img src="{{ asset('image/display/medallion/allah_3d.png') }}" alt="Kaligrafi Allah SWT" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'kaligrafi\'>الله</span>';">
+	</div>
 
 	<div class="container">
 		<!-- Header -->

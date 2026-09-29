@@ -6780,3 +6780,104 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 6. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 158).
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 8. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## 🚀 BAB 159: KESERAGAMAN MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DAN REKAYASA TRANSISI ROTASI SLIDE TV TANPA HENTAKAN (CINEMATIC CROSS-DISSOLVE & PRE-PAINT BUFFER)
+
+### 1. Deskripsi Masalah & Keluhan Pengguna
+- **Laporan Pengguna:**
+  1. Pada halaman **Mutiara Hadits & Hikmah (`hikmah.html`)**, pengguna meminta ditambahkan kaligrafi di kanan dan kiri agar seluruh halaman siaran display TV terlihat seragam dan harmonis.
+  2. Transisi perpindahan halaman TV masih dirasa kurang halus, terlihat kaku, dan seperti ada "hentakan kecil" saat pergantian slide.
+- **Tujuan Pembaruan:**
+  - Menghadirkan medali kaligrafi emas 3D seragam di kanan (Allah SWT) dan kiri (Muhammad SAW) di halaman hadits serta seluruh slide informasi yang belum memilikinya.
+  - Mengeliminasi hentakan visual dan micro-stutter pada transisi pergantian slide TV sehingga perpindahan antar halaman berlangsung sangat mulus, anggun, dan berkelas stasiun televisi profesional.
+
+---
+
+### 2. Analisis & Akar Masalah (Root Causes)
+
+1. **Inkonsistensi Elemen Kaligrafi Antar Slide:**
+   - Beberapa slide utama seperti `utama.html`, `jumat.html`, `keuangan.html`, `infaq.html`, dan `qris.html` telah memiliki medali emas 3D (`kaligrafi-medallion`).
+   - Namun, slide `hikmah.html`, `pengumuman.html`, `keuangan-summary.html`, `ambulance.html`, `idul-fitri.html`, dan `idul-adha.html` belum dipasangi elemen tersebut, sehingga ketika TV berotasi ke slide-slide ini, ornamen kaligrafi mendadak lenyap dan merusak keseragaman estetika.
+
+2. **Penyebab Hentakan dan Kekakuan Transisi Rotator (`web-statis/index.html` & `rotator.blade.php`):**
+   - **Visual Shearing & Header Tearing (Translasi Horizontal Berlawanan Arah):**
+     - Sebelumnya, frame baru meluncur dari samping kanan `translate3d(50px, 0, 0)` ke tengah, sementara frame lama bergeser ke kiri `translate3d(-35px, 0, 0)`.
+     - Karena kedua halaman memiliki header tetap (*Nama Masjid, Kapsul Tanggal, Jam*) yang hampir identik di posisi yang sama, translasi horizontal 50px membuat mata penonton melihat header seolah terbelah dua dan melompat menyamping secara kasar sebelum menetap di tengah. Efek inilah yang dirasakan pengguna sebagai **"hentakan kecil"**.
+   - **Micro-Stutter / Frame Drop Akibat Jeda Render Terlalu Singkat (60 ms):**
+     - Event `onload` iframe hanya menandakan berkas HTML telah di-parse, bukan berarti sub-sumber daya (font Google, kalkulasi layout DOM kartu hadits, inisialisasi jam digital) sudah selesai digambar (*painted*).
+     - Dengan jeda hanya 60 ms, animasi transformasi CSS dimulai persis saat CPU/GPU sedang sibuk melakukan render awal sub-dokumen iframe, memicu dropped frame di awal transisi.
+   - **Ketiadaan Forced Reflow & Double rAF:**
+     - Mengubah kelas dari `.incoming` (`transition: none !important`) ke `.active` tanpa forced reflow (`void offsetWidth`) dan double `requestAnimationFrame` menyebabkan mesin perender Chromium kadang memulai interpolasi animasi dari posisi yang melompat.
+
+---
+
+### 3. Solusi & Rekayasa Sistem yang Diterapkan
+
+1. **Pemasangan Medali Kaligrafi Emas 3D Seragam:**
+   - Menambahkan elemen medali kaligrafi resmi pada:
+     - `web-statis/slides/hikmah.html`
+     - `web-statis/slides/pengumuman.html`
+     - `web-statis/slides/keuangan-summary.html`
+     - `web-statis/slides/ambulance.html`
+     - `web-statis/slides/idul-fitri.html`
+     - `web-statis/slides/idul-adha.html`
+     - `resources/views/hikmah-embed.blade.php`
+   - Struktur medali yang dipasang:
+     ```html
+     <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) SERAGAM MASJID -->
+     <div class="kaligrafi-medallion kaligrafi-muhammad">
+         <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+     </div>
+     <div class="kaligrafi-medallion kaligrafi-allah">
+         <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+     </div>
+     ```
+   - Didukung penuh oleh CSS global di `partials-theme.css` dan `display-theme.css` dengan efek pendaran cahaya emas (*golden aura pulse*), efek 3D mengambang, serta penyesuaian otomatis untuk layar TV, tablet, maupun smartphone.
+
+2. **Rekayasa Transisi TV: Cinematic Cross-Dissolve & Micro-Depth Bloom:**
+   - **Eliminasi Total Translasi Horizontal:**
+     - Menghilangkan `translate3d(50px, 0, 0)` dan `translate3d(-35px, 0, 0)`. Posisi horizontal dikunci kokoh pada `translate3d(0, 0, 0)`.
+     - Header nama masjid, kapsul waktu, dan footer tetap tenang dan stabil di posisinya tanpa pernah bergeser atau melompat.
+   - **Cross-Dissolve Halus dengan Micro-Depth (Skala Kedalaman Mewah):**
+     - Frame aktif mekar perlahan dari `scale(1.015)` ke `scale(1)` dengan `opacity 0` ke `1` selama 1,35 detik menggunakan kurva presisi `cubic-bezier(0.25, 1, 0.5, 1)`.
+     - Frame lama memudar lembut di bawahnya dari `scale(1)` ke `scale(0.99)` dengan `opacity 1` ke `0`.
+   - **Hardware Acceleration:**
+     - Ditambahkan `will-change: opacity, transform`, `backface-visibility: hidden`, dan `-webkit-backface-visibility: hidden` untuk memastikan komposit layer sepenuhnya dikerjakan oleh GPU.
+   - **Pre-Paint Buffer 120 ms, Forced Reflow & Double rAF:**
+     - Setelah event `onload`, sistem memberi buffer 120 ms agar seluruh font, CSS, dan skrip jam di dalam iframe selesai dieksekusi.
+     - Dipasang `requestAnimationFrame` bertingkat dengan `void backFrame.offsetWidth;` untuk memicu reflow bersih sebelum transisi berjalan.
+   - **Pembersihan Layer Otomatis (`.standby`):**
+     - Setelah 1.400 ms (ketika transisi tuntas), frame lama otomatis beralih ke kelas `.standby` untuk melepaskan beban komposit GPU.
+
+3. **Penyelarasan Blade View (`resources/views/rotator.blade.php`):**
+   - Transisi pada template rotator Laravel Blade diselaraskan 100% menggunakan arsitektur transisi cross-dissolve dan timing buffer yang sama.
+
+4. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.3` agar display TV dan peramban klien langsung mengunduh pembaruan berkas secara instan.
+
+---
+
+### 4. Hasil Verifikasi Nyata
+- **Tampilan Kaligrafi:**
+  - Halaman Hadits Hari Ini (`hikmah.html`), Pengumuman (`pengumuman.html`), dan Ringkasan Keuangan (`keuangan-summary.html`) kini menampilkan medali kaligrafi emas 3D Muhammad SAW di sisi kiri dan Allah SWT di sisi kanan, seragam sempurna dengan halaman utama dan jadwal sholat.
+- **Kualitas Transisi Perpindahan Slide:**
+  - Uji perpindahan halaman menunjukkan tidak ada lagi hentakan horizontal (*no shearing/tearing*). Header masjid tetap kokoh di tempatnya, dan kartu konten melebur (*cross-dissolve*) dengan sangat halus dan lembut (*buttery-smooth*).
+
+---
+
+### 5. Berkas yang Dimodifikasi
+1. `web-statis/slides/hikmah.html` (Penambahan medali kaligrafi 3D Muhammad & Allah).
+2. `web-statis/slides/pengumuman.html` (Penambahan medali kaligrafi 3D Muhammad & Allah).
+3. `web-statis/slides/keuangan-summary.html` (Penambahan medali kaligrafi 3D Muhammad & Allah).
+4. `web-statis/slides/ambulance.html` (Penambahan medali kaligrafi 3D Muhammad & Allah).
+5. `web-statis/slides/idul-fitri.html` (Penambahan medali kaligrafi 3D Muhammad & Allah).
+6. `web-statis/slides/idul-adha.html` (Penambahan medali kaligrafi 3D Muhammad & Allah).
+7. `resources/views/hikmah-embed.blade.php` (Upgrade kaligrafi teks ke medali emas 3D seragam).
+8. `web-statis/index.html` (Rekayasa transisi cross-dissolve, eliminasi hentakan horizontal, pre-paint buffer 120 ms, forced reflow).
+9. `resources/views/rotator.blade.php` (Penyelarasan transisi cross-dissolve pada template Blade).
+10. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.1.3`).
+11. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 159).
+12. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
+13. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

@@ -80,26 +80,28 @@
             border: none;
             background-color: #050505;
             will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             pointer-events: none;
             opacity: 0;
-            transform: translate3d(50px, 0, 0);
-            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translate3d(0, 0, 0) scale(1.015);
+            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1);
         }
         
         iframe.active {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-            z-index: 2;
-            pointer-events: auto;
-            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 1 !important;
+            transform: translate3d(0, 0, 0) scale(1) !important;
+            z-index: 2 !important;
+            pointer-events: auto !important;
+            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
         }
 
         iframe.outgoing {
-            opacity: 0;
-            transform: translate3d(-35px, 0, 0);
-            z-index: 1;
-            pointer-events: none;
-            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 0 !important;
+            transform: translate3d(0, 0, 0) scale(0.99) !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
         }
 
         /* Mode standby instan tanpa animasi saat memuat halaman berikutnya */
@@ -107,8 +109,8 @@
         iframe.incoming {
             transition: none !important;
             opacity: 0 !important;
-            transform: translate3d(50px, 0, 0) !important;
-            z-index: 1 !important;
+            transform: translate3d(0, 0, 0) scale(1.015) !important;
+            z-index: 2 !important;
             pointer-events: none !important;
         }
 
@@ -748,14 +750,16 @@
             if (frameElement === frames.next && frameElement.src && frameElement.src !== window.location.href) {
                 clearTimeout(failsafeTimeout);
                 
-                // Beri waktu 80ms dan double requestAnimationFrame agar iframe baru selesai initial layout paint
-                // Hal ini menghilangkan stutter/jank (hentakan awal) secara total
+                // Beri waktu 120ms dan double requestAnimationFrame agar iframe baru selesai initial layout, font loading & clock paint
+                // Hal ini menghilangkan micro-stutter (hentakan awal) secara tuntas
                 setTimeout(() => {
                     requestAnimationFrame(() => {
+                        void frames.next.offsetWidth;
                         requestAnimationFrame(() => {
-                            // Lakukan transisi slide & fade yang lembut
-                            frames.current.className = 'outgoing'; // Meluncur pelan ke kiri sambil memudar
-                            frames.next.className = 'active';     // Masuk anggun dari kanan ke tengah
+                            // Lakukan transisi cross-dissolve & depth bloom yang mewah dan lembut
+                            const outgoingFrame = frames.current;
+                            outgoingFrame.className = 'outgoing'; // Tetap di tengah sambil memudar lembut
+                            frames.next.className = 'active';     // Masuk anggun & mekar lembut dari tengah
 
                             // Swap ID
                             currentFrameId = frames.next.id;
@@ -764,9 +768,16 @@
                             if (rotationEnabled && activePages.length > 1) {
                                 resetCountdown();
                             }
+
+                            // Bersihkan kelas frame lama setelah transisi selesai sempurna
+                            setTimeout(() => {
+                                if (outgoingFrame.classList.contains('outgoing')) {
+                                    outgoingFrame.className = 'standby';
+                                }
+                            }, 1400);
                         });
                     });
-                }, 80);
+                }, 120);
             }
         }
 
