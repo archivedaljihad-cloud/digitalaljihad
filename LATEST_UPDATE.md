@@ -7416,3 +7416,63 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 ### 2. Berkas Terkait
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 170 - INTEGRASI TERPADU FILTER BUKU KAS: DUKUNGAN KAS AMBULANCE & PROGRAM INFAQ)
+
+### 1. Pertanyaan Pengguna & Analisis Akar Masalah (Root Cause)
+- **Pertanyaan Pengguna:**
+  1. *Di dalam menu "Buku Kas & Transaksi", di bagian dropdown menu tidak ada pilihan "Program Infaq".*
+  2. *Di pilihan dropdown saya pilih "Kas Ambulance" tapi data yang ditampilkan kosong padahal di halaman khusus "Kas Ambulance" (Gambar 2) ada transaksi.*
+  3. *Tolong jelaskan bagaimana hal ini bisa terjadi?*
+
+- **Penjelasan Mengapa Hal Ini Bisa Terjadi:**
+  1. **Terkait Tidak Adanya Pilihan "Program Infaq":**
+     - Pada elemen `<select id="kasFilterKat">` di bagian toolbar pencarian Buku Kas sebelumnya hanya didefinisikan 3 opsi statis: `"all"` (Semua Kategori Kas), `"Kas Utama Masjid"`, dan `"Kas Ambulance"`. Opsi `"Program Infaq"` belum dimasukkan ke dalam elemen select HTML tersebut.
+  2. **Terkait Kas Ambulance Kosong di Buku Kas padahal Ada Data di Menu Kas Ambulance:**
+     - **Arsitektur Multi-Ledger Database:** Sistem dirancang memisahkan transaksi keuangan masjid menjadi 3 tabel terpisah di Supabase agar pembukuan dan kas operasional tidak saling mengacaukan saldo kas utama:
+       - `keuangan`: Menampung kas umum operasional masjid (disimpan di variabel JavaScript `cachedKasData`).
+       - `keuangan_ambulance`: Menampung kas operasional & donasi mobil ambulance (disimpan di variabel `cachedAmbData`).
+       - `donasi_infaq`: Menampung donasi dari muhsinin untuk program penggalangan dana terukur (disimpan di `cachedDonasiInfaq`).
+     - **Pembersihan Data Ketat Saat Fetching:** Saat data tabel `keuangan` dimuat dari Supabase, terdapat kode sanitasi ketat yang membuang record berlabel `ambulance`, `ambulans`, `program infaq`, `renovasi`, dll., dari array `cachedKasData`. Tujuannya agar metrik *Saldo Kas Terkini Masjid* (Rp 19.379.023) murni hanya menghitung kas operasional masjid.
+     - **Akar Masalah Filter:** Fungsi JavaScript `filterKasTable()` sebelumnya hanya memfilter array tunggal `cachedKasData`. Karena seluruh data ambulance sudah dikeluarkan sejak awal dari `cachedKasData`, maka ketika pengguna memilih filter `katFilter === 'Kas Ambulance'`, pencarian mencari kategori ambulance pada array yang sudah tidak memiliki record ambulance sama sekali. Hasilnya selalu array kosong `[]` sehingga muncul pesan: *"Tidak ada transaksi yang sesuai dengan filter pencarian."*
+
+---
+
+### 2. Solusi & Perbaikan yang Diterapkan
+
+1. **Penambahan Opsi "Program Infaq" pada Dropdown Filter:**
+   - Ditambahkan opsi `<option value="Program Infaq">Program Infaq</option>` pada `#kasFilterKat` di halaman Buku Kas & Transaksi.
+
+2. **Normalisasi & Integrasi 3 Sumber Data Kas Terpadu di `filterKasTable()`:**
+   - Fungsi `filterKasTable()` kini secara cerdas merangkum dan menormalisasi 3 pos keuangan:
+     - **Kas Utama Masjid:** Mengambil data dari `cachedKasData` (tabel `keuangan`).
+     - **Kas Ambulance:** Mengambil data dari `cachedAmbData` (tabel `keuangan_ambulance`).
+     - **Program Infaq:** Mengambil data dari `cachedDonasiInfaq` (tabel `donasi_infaq`) lengkap dengan rincian nama donatur/Hamba Allah, program infaq yang dituju (misal: *Pengadaan AC Baru*), serta keterangan donasi.
+   - Logika Filter Kategori:
+     - **Semua Kategori Kas:** Menggabungkan seluruh transaksi dari ketiga pos keuangan dan mengurutkannya secara kronologis (paling atas terbaru, paling bawah lama).
+     - **Kas Utama Masjid:** Menampilkan hanya transaksi kas operasional utama masjid.
+     - **Kas Ambulance:** Menampilkan seluruh transaksi operasional & pemasukan armada ambulance dari `cachedAmbData`.
+     - **Program Infaq:** Menampilkan seluruh catatan donasi infaq masuk dari `cachedDonasiInfaq`.
+
+3. **Penyempurnaan Tampilan Baris Tabel (`renderKasTableRows()`):**
+   - **Badge Kategori Berwarna:**
+     - `Kas Utama Masjid` -> Badge Hijau (`badge-success`)
+     - `Kas Ambulance` -> Badge Biru (`badge-primary`)
+     - `Program Infaq` -> Badge Kuning Emas (`badge-warning text-dark`)
+   - **Tombol Aksi Dinamis per Sumber Data:**
+     - Untuk transaksi dari tabel `keuangan` dan `keuangan_ambulance`: Tombol Koreksi/Edit (`bukaModalEditKas`) dan Hapus (`hapusTransaksi`) secara otomatis mengirimkan parameter nama tabel target yang sesuai ke Supabase.
+     - Untuk donasi dari tabel `donasi_infaq`: Disediakan tombol pintas langsung menuju manajemen Program Infaq serta tombol Hapus donasi resmi.
+
+4. **Pembaruan Ekspor Excel/CSV (`exportKasExcel()`):**
+   - Fungsi ekspor sekarang mengekspor dataset yang sedang aktif terfilter (`window._lastFilteredKasData`), sehingga pengurus dapat mengekspor laporan Kas Ambulance, Program Infaq, maupun Kas Terpadu secara fleksibel.
+
+5. **Sinkronisasi Reaktif Otomatis:**
+   - Memanggil `filterKasTable()` otomatis setelah seluruh query paralel di `loadAllSupabaseData()` selesai dieksekusi, serta saat ada penghapusan donasi infaq.
+
+---
+
+### 3. Berkas Terkait
+1. `web-statis/admin.html`
+2. `LATEST_UPDATE.md`

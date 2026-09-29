@@ -3543,6 +3543,7 @@
                                         <option value="all">Semua Kategori Kas</option>
                                         <option value="Kas Utama Masjid">Kas Utama Masjid</option>
                                         <option value="Kas Ambulance">Kas Ambulance</option>
+                                        <option value="Program Infaq">Program Infaq</option>
                                     </select>
                                 </div>
                             </div>
@@ -7310,6 +7311,11 @@
             } catch (err) {
                 console.warn('Gagal memuat slides galeri informasi dari Supabase:', err);
             }
+
+            // Refresh tabel filter kas terpadu (Kas Utama, Ambulance, Donasi Infaq)
+            if (typeof filterKasTable === 'function') {
+                filterKasTable();
+            }
         }
 
         // Render Tabel Kas
@@ -7386,41 +7392,86 @@
             filterKasTable();
         }
 
-        // Filter & Search Tabel Kas Utama (Urutan: Paling atas terbaru, paling bawah yang lama)
+        // Filter & Search Tabel Kas Terpadu (Kas Utama, Kas Ambulance, Program Infaq)
+        // Urutan: Paling atas terbaru, paling bawah yang lama
         function filterKasTable() {
             const query = (document.getElementById('kasSearchInput')?.value || '').toLowerCase().trim();
             const typeFilter = document.getElementById('kasFilterType')?.value || 'all';
             const katFilter = document.getElementById('kasFilterKat')?.value || 'all';
 
-            let filtered = cachedKasData || [];
+            // 1. Siapkan dataset yang dinormalisasi dari 3 pos keuangan
+            const kasUtamaItems = (cachedKasData || []).map(item => ({
+                ...item,
+                kategori: item.kategori || 'Kas Utama Masjid',
+                _sourceTable: 'keuangan'
+            }));
 
+            const ambItems = (cachedAmbData || []).map(item => ({
+                ...item,
+                kategori: 'Kas Ambulance',
+                _sourceTable: 'keuangan_ambulance'
+            }));
+
+            const infaqItems = (cachedDonasiInfaq || []).map(item => {
+                const isAnon = item.is_anonim === true || item.nama_donatur === 'Hamba Allah';
+                const donorName = isAnon ? 'Hamba Allah' : (item.nama_donatur || 'Hamba Allah');
+                const prog = (cachedProgramInfaq || []).find(p => p.id == item.program_infaq_id);
+                const progLabel = prog ? ` [${prog.nama_program}]` : '';
+                const desc = `Infaq: ${donorName}${progLabel}${item.keterangan ? ' - ' + item.keterangan : ''}`;
+                return {
+                    id: item.id,
+                    tanggal: item.tanggal,
+                    deskripsi: desc,
+                    uraian: desc,
+                    kategori: 'Program Infaq',
+                    pemasukan: parseFloat(item.nominal) || 0,
+                    pengeluaran: 0,
+                    _sourceTable: 'donasi_infaq',
+                    _isDonasiInfaq: true
+                };
+            });
+
+            // 2. Tentukan dataset awal berdasarkan filter kategori
+            let baseData = [];
+            let totalAvailable = 0;
+
+            if (katFilter === 'Kas Ambulance') {
+                baseData = [...ambItems];
+                totalAvailable = ambItems.length;
+            } else if (katFilter === 'Program Infaq') {
+                baseData = [...infaqItems];
+                totalAvailable = infaqItems.length;
+            } else if (katFilter === 'Kas Utama Masjid') {
+                baseData = [...kasUtamaItems];
+                totalAvailable = kasUtamaItems.length;
+            } else {
+                // 'all': Gabungkan seluruh transaksi dari ketiga pos keuangan
+                baseData = [...kasUtamaItems, ...ambItems, ...infaqItems];
+                totalAvailable = baseData.length;
+            }
+
+            let filtered = baseData;
+
+            // 3. Filter berdasarkan Tipe (Pemasukan / Pengeluaran)
             if (typeFilter === 'masuk') {
                 filtered = filtered.filter(item => (parseFloat(item.pemasukan) || 0) > 0);
             } else if (typeFilter === 'keluar') {
                 filtered = filtered.filter(item => (parseFloat(item.pengeluaran) || 0) > 0);
             }
 
-            if (katFilter !== 'all') {
-                filtered = filtered.filter(item => {
-                    const kat = (item.kategori || '').toLowerCase();
-                    if (katFilter === 'Penggalangan Infaq') {
-                        return kat.includes('penggalangan infaq') || kat.includes('infaq renovasi') || kat.includes('renovasi');
-                    }
-                    return kat.includes(katFilter.toLowerCase());
-                });
-            }
-
+            // 4. Filter berdasarkan Pencarian Teks
             if (query) {
                 filtered = filtered.filter(item => {
                     const desc = (item.deskripsi || item.uraian || '').toLowerCase();
                     const masukStr = (item.pemasukan || '').toString();
                     const keluarStr = (item.pengeluaran || '').toString();
                     const tglStr = (item.tanggal || '').toLowerCase();
-                    return desc.includes(query) || masukStr.includes(query) || keluarStr.includes(query) || tglStr.includes(query);
+                    const katStr = (item.kategori || '').toLowerCase();
+                    return desc.includes(query) || masukStr.includes(query) || keluarStr.includes(query) || tglStr.includes(query) || katStr.includes(query);
                 });
             }
 
-            // Urutkan list record: paling atas terbaru dan paling bawah yang lama (Tanggal DESC, ID DESC)
+            // 5. Urutkan: Paling atas terbaru, paling bawah yang lama (Tanggal DESC, ID DESC)
             filtered = [...filtered].sort((a, b) => {
                 const dateA = new Date(a.tanggal || 0).getTime();
                 const dateB = new Date(b.tanggal || 0).getTime();
@@ -7428,14 +7479,18 @@
                 return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
             });
 
+            // Simpan cache hasil filter aktif untuk ekspor excel
+            window._lastFilteredKasData = filtered;
+
+            // 6. Update badge info status filter
             const infoEl = document.getElementById('kasFilterInfo');
             if (infoEl) {
                 if (query || typeFilter !== 'all' || katFilter !== 'all') {
                     infoEl.className = 'badge badge-warning font-weight-bold';
-                    infoEl.textContent = `Ditemukan: ${filtered.length} dari ${cachedKasData.length}`;
+                    infoEl.textContent = `Ditemukan: ${filtered.length} dari ${totalAvailable}`;
                 } else {
                     infoEl.className = 'badge badge-light border text-muted font-weight-bold';
-                    infoEl.textContent = `Menampilkan Semua (${cachedKasData.length})`;
+                    infoEl.textContent = `Menampilkan Semua (${totalAvailable})`;
                 }
             }
 
@@ -7466,16 +7521,36 @@
                 const textClass = isMasuk ? 'text-success' : 'text-danger';
                 const sign = isMasuk ? '+' : '-';
                 const tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
+                const srcTable = item._sourceTable || 'keuangan';
+
+                let actionBtns = '';
+                if (srcTable === 'donasi_infaq') {
+                    actionBtns = `
+                        <button class="btn btn-sm btn-outline-info mr-1" onclick="switchAdminSection('infaq')" title="Kelola di Menu Program Infaq"><i class="fas fa-hand-holding-usd"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="hapusDonasiInfaq(${item.id})" title="Hapus Donasi"><i class="fas fa-trash"></i></button>
+                    `;
+                } else {
+                    actionBtns = `
+                        <button class="btn btn-sm btn-outline-warning mr-1" onclick="bukaModalEditKas(${item.id}, '${srcTable}')" title="Koreksi / Edit"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, '${srcTable}')" title="Hapus"><i class="fas fa-trash"></i></button>
+                    `;
+                }
+
+                // Warna badge kategori kas
+                let katBadgeClass = 'badge-secondary';
+                if (item.kategori === 'Kas Ambulance') katBadgeClass = 'badge-primary';
+                else if (item.kategori === 'Program Infaq') katBadgeClass = 'badge-warning text-dark';
+                else if (item.kategori === 'Kas Utama Masjid') katBadgeClass = 'badge-success';
+
                 return `
                     <tr>
                         <td>${tgl}</td>
-                        <td><strong>${item.deskripsi || item.uraian || 'Infaq Kas'}</strong></td>
-                        <td>${item.kategori || 'Kas Utama Masjid'}</td>
+                        <td><strong>${escapeHtml(item.deskripsi || item.uraian || 'Infaq Kas')}</strong></td>
+                        <td><span class="badge ${katBadgeClass} px-2 py-1">${escapeHtml(item.kategori || 'Kas Utama Masjid')}</span></td>
                         <td>${badgeHTML}</td>
                         <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
                         <td class="text-center text-nowrap">
-                            <button class="btn btn-sm btn-outline-warning mr-1" onclick="bukaModalEditKas(${item.id}, 'keuangan')" title="Koreksi / Edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, 'keuangan')" title="Hapus"><i class="fas fa-trash"></i></button>
+                            ${actionBtns}
                         </td>
                     </tr>
                 `;
@@ -7822,6 +7897,9 @@
             cachedDonasiInfaq = cachedDonasiInfaq.filter(d => d.id != id);
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
             renderProgramInfaqSection();
+            if (typeof filterKasTable === 'function') {
+                filterKasTable();
+            }
             alert('Catatan donasi berhasil dihapus.');
         }
 
@@ -11414,21 +11492,23 @@
             updateActiveRotationCountBadge();
         }
 
-        // Export Kas ke Format Excel / CSV
+        // Export Kas ke Format Excel / CSV (Mendukung data aktif terfilter)
         function exportKasExcel() {
-            if (!cachedKasData || cachedKasData.length === 0) {
+            const dataToExport = window._lastFilteredKasData || cachedKasData || [];
+            if (!dataToExport || dataToExport.length === 0) {
                 alert('Belum ada data transaksi kas untuk diexport!');
                 return;
             }
 
+            const katFilter = document.getElementById('kasFilterKat')?.value || 'Semua';
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
             csvContent += "No,Tanggal,Uraian Transaksi,Kategori,Tipe,Pemasukan (Rp),Pengeluaran (Rp)\n";
 
-            cachedKasData.forEach((item, index) => {
+            dataToExport.forEach((item, index) => {
                 const isMasuk = (parseFloat(item.pemasukan) || 0) > 0;
                 const tipe = isMasuk ? "Pemasukan" : "Pengeluaran";
                 const cleanUraian = (item.deskripsi || item.uraian || 'Infaq').replace(/,/g, ' ');
-                const cleanKat = (item.kategori || 'Kas Utama').replace(/,/g, ' ');
+                const cleanKat = (item.kategori || 'Kas Utama Masjid').replace(/,/g, ' ');
                 const row = [
                     index + 1,
                     item.tanggal || '-',
@@ -11444,7 +11524,7 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `Laporan_Kas_Masjid_Al_Jihad_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute("download", `Laporan_Kas_${katFilter.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
