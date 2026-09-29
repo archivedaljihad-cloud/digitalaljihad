@@ -49,8 +49,8 @@ GRANT INSERT (name, email, role_id) ON public.users TO anon, authenticated;
 GRANT UPDATE (name, email, role_id) ON public.users TO anon, authenticated;
 GRANT DELETE ON public.users TO anon, authenticated;
 
--- Bersihkan data hash password yang tidak diperlukan di database cloud statis
-UPDATE public.users SET password = NULL, remember_token = NULL WHERE password IS NOT NULL OR remember_token IS NOT NULL;
+-- Batasi hak akses anon & authenticated agar tidak bisa membaca kolom password dan token
+-- Password tetap aman tersimpan untuk backend, namun tidak bisa dibaca oleh API publik anonim
 
 -- Kebijakan (Policy) Tabel Users
 DROP POLICY IF EXISTS "Allow public users access" ON public.users;

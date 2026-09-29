@@ -7555,7 +7555,7 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
    - Skrip ini:
      - Mengaktifkan RLS pada seluruh tabel publik dan sistem.
      - Mencabut izin baca kolom sensitif (`REVOKE SELECT (password, remember_token) ON public.users FROM anon, authenticated`).
-     - Mengosongkan data hash password bawaan yang tidak diperlukan di database cloud statis.
+     - Membatasi izin akses kolom sensitif agar password hash tidak bisa diintip melalui REST API publik, sementara hash tetap aman di database untuk autentikasi backend.
      - Menyematkan kebijakan akses (*RLS Policies*) terbuka bagi tabel-tabel display masjid (`app_settings`, `jadwal_sholat`, `sholat_jumat`, `pengumuman`, `keuangan`, `qris`, `slides`, dll.) agar TV Display dan Web Admin tetap dapat membaca dan memperbarui data secara lancar.
 
 ---
