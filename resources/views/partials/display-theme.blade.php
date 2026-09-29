@@ -208,7 +208,7 @@ body.theme-isya {
 
 .running-text {
     white-space: nowrap;
-    animation: marquee 50s linear infinite !important; /* Kecepatan pas dan santai */
+    animation: marquee 68s linear infinite !important; /* Kecepatan santai dan mudah dibaca jamaah */
     font-size: 1.1rem !important; /* Ukuran besar 5rem */
     letter-spacing: 0.5px;
     font-weight: 500;

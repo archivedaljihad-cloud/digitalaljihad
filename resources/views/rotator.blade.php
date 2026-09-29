@@ -79,31 +79,35 @@
             height: 100%;
             border: none;
             background-color: #050505;
-            will-change: opacity;
+            will-change: opacity, transform;
             pointer-events: none;
             opacity: 0;
-            /* Transisi cross-fade TV performa tinggi: ringan di GPU tanpa 3D perspective / scale jitter */
-            transition: opacity 0.8s ease-in-out;
+            transform: translate3d(50px, 0, 0);
+            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
         
         iframe.active {
             opacity: 1;
+            transform: translate3d(0, 0, 0);
             z-index: 2;
             pointer-events: auto;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         iframe.outgoing {
             opacity: 0;
+            transform: translate3d(-35px, 0, 0);
             z-index: 1;
             pointer-events: none;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         /* Mode standby instan tanpa animasi saat memuat halaman berikutnya */
-        iframe.standby {
+        iframe.standby,
+        iframe.incoming {
             transition: none !important;
             opacity: 0 !important;
+            transform: translate3d(50px, 0, 0) !important;
             z-index: 1 !important;
             pointer-events: none !important;
         }

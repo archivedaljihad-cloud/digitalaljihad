@@ -711,7 +711,7 @@ h2.sub-header {
 .marquee-text {
     display: inline-block !important;
     white-space: nowrap !important;
-    animation: tvTickerScroll 42s linear infinite !important;
+    animation: tvTickerScroll 68s linear infinite !important;
     font-family: 'Poppins', 'Segoe UI', -apple-system, sans-serif !important;
     font-size: 1.16rem !important;
     font-weight: 600 !important;

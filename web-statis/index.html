@@ -77,22 +77,38 @@
             height: 100%;
             border: none;
             background-color: #050505;
-            will-change: opacity;
+            will-change: opacity, transform;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.8s ease-in-out;
+            transform: translate3d(50px, 0, 0);
+            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
+        /* Frame bersiap di samping kanan tanpa transisi */
+        iframe.incoming {
+            opacity: 0 !important;
+            transform: translate3d(50px, 0, 0) !important;
+            transition: none !important;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Frame aktif: perlahan muncul (fade in) dan meluncur lembut dari samping ke tengah */
         iframe.active {
             opacity: 1;
+            transform: translate3d(0, 0, 0);
             z-index: 2;
             pointer-events: auto;
+            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
+        /* Frame lama: perlahan-lahan/dengan lembut menghilang (fade out) bergeser halus ke kiri */
         iframe.outgoing {
             opacity: 0;
+            transform: translate3d(-35px, 0, 0);
             z-index: 1;
             pointer-events: none;
+            transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         /* Prayer Mode Fullscreen Overlay Frame */
@@ -484,7 +500,7 @@
     <!-- Dual Iframe Crossfade Engine -->
     <div class="iframe-container">
         <iframe id="frame1" class="active" src="about:blank"></iframe>
-        <iframe id="frame2" class="outgoing" src="about:blank"></iframe>
+        <iframe id="frame2" class="incoming" src="about:blank"></iframe>
     </div>
 
     <!-- Master Persistent Footer TV (Diatur Super Admin) -->
@@ -614,7 +630,7 @@
             return list;
         }
 
-        // Pergantian slide TV dengan crossfade mulus
+        // Pergantian slide TV: halaman lama fade-out lembut, halaman baru fade-in meluncur anggun dari samping
         function switchSlide(targetIndex) {
             if (activePages.length === 0 || isPrayerModeActive) return;
 
@@ -624,17 +640,26 @@
             const frontFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
             const backFrame = currentFrame === 1 ? document.getElementById('frame2') : document.getElementById('frame1');
 
-            // Muat URL di frame latar belakang
+            // Set frame latar belakang dalam posisi bersiap di samping kanan tanpa transisi
+            backFrame.className = 'incoming';
             backFrame.src = nextUrl;
 
             backFrame.onload = function() {
-                // Crossfade
-                backFrame.className = 'active';
-                frontFrame.className = 'outgoing';
+                // Jeda stabilisasi rendering (double RAF) agar GPU siap sebelum animasi dimulai
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            // Halaman baru perlahan-lahan muncul (fade in) dan meluncur dari samping ke tengah
+                            backFrame.className = 'active';
+                            // Halaman lama perlahan-lahan dengan lembut menghilang (fade out)
+                            frontFrame.className = 'outgoing';
 
-                currentFrame = currentFrame === 1 ? 2 : 1;
-                showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);
-                broadcastTvState();
+                            currentFrame = currentFrame === 1 ? 2 : 1;
+                            showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);
+                            broadcastTvState();
+                        });
+                    });
+                }, 60);
             };
         }
 
@@ -667,12 +692,19 @@
                 // Jika URL tidak ada di rotasi normal (misal slide khusus / CCTV), muat langsung di frame
                 const frontFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
                 const backFrame = currentFrame === 1 ? document.getElementById('frame2') : document.getElementById('frame1');
+                backFrame.className = 'incoming';
                 backFrame.src = url;
                 backFrame.onload = function() {
-                    backFrame.className = 'active';
-                    frontFrame.className = 'outgoing';
-                    currentFrame = currentFrame === 1 ? 2 : 1;
-                    showOsd(label ? `📺 ${label}` : '📺 Slide Khusus');
+                    setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                backFrame.className = 'active';
+                                frontFrame.className = 'outgoing';
+                                currentFrame = currentFrame === 1 ? 2 : 1;
+                                showOsd(label ? `📺 ${label}` : '📺 Slide Khusus');
+                            });
+                        });
+                    }, 60);
                 };
             }
         }

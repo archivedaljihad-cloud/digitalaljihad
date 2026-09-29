@@ -6382,3 +6382,61 @@ Halaman Mode Sholat kini dapat diakses melalui:
 10. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 153).
 11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 154 — Efek Transisi Antar Halaman Layar TV (Fade-Out Lembut & Fade-In Meluncur Halus dari Samping) dan Penyesuaian Kecepatan Running Text (29 Sep 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+1. **Transisi Antar Halaman Layar TV Display:**
+   - Pengguna menginginkan efek pergantian antar slide TV yang lebih sinematik, lembut, dan elegan.
+   - Efek yang diinginkan: halaman lama perlahan-lahan/dengan lembut menghilang (*fade out*) dan halaman baru perlahan-lahan muncul (*fade in*) dari samping (*slide & fade-in*).
+2. **Keterbacaan Teks Berjalan (*Running Text / Marquee*):**
+   - Kecepatan teks berjalan sebelumnya dirasa agak terlalu cepat bagi jamaah masjid untuk membaca ayat, hadits, maupun maklumat pengumuman secara tuntas.
+   - Pengguna meminta agar kecepatan teks berjalan sedikit dikurangi (*slowed down*) agar nyaman dan mudah dibaca oleh jamaah dari kejauhan.
+
+---
+
+### 2. Solusi & Perubahan Teknis yang Diterapkan
+1. **Arsitektur Dual-Iframe Transition Engine (Fade Out Lembut & Slide Fade In Samping):**
+   - Pada layar TV utama (`web-statis/index.html` dan `resources/views/rotator.blade.php`), mekanisme pergantian iframe ditingkatkan menggunakan transisi CSS GPU-accelerated (`transform: translate3d(...)` dan `opacity`):
+     - **Frame Bersiap (`iframe.incoming` / `iframe.standby`):**
+       - `opacity: 0 !important;`
+       - `transform: translate3d(50px, 0, 0) !important;`
+       - `transition: none !important;`
+       - Iframe target diatur seketika berada di posisi sebelah kanan (50px) tanpa memicu animasi apapun saat halaman baru sedang diunduh/dimuat.
+     - **Frame Muncul Masuk (`iframe.active`):**
+       - `opacity: 1;`
+       - `transform: translate3d(0, 0, 0);`
+       - `transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);`
+       - Halaman baru perlahan-lahan memudar masuk (*fade in*) sembari meluncur mulus dari samping kanan menuju posisi tengah layar secara anggun.
+     - **Frame Lama Menghilang (`iframe.outgoing`):**
+       - `opacity: 0;`
+       - `transform: translate3d(-35px, 0, 0);`
+       - `transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);`
+       - Halaman lama perlahan-lahan dan dengan lembut menghilang (*soft fade out*) sembari sedikit bergeser halus ke sisi kiri (-35px).
+   - **Kurva Easing & Durasi:** Durasi diatur menjadi **1.25 detik** dengan kurva akselerasi natural `cubic-bezier(0.22, 1, 0.36, 1)`, menghasilkan sensasi visual modern premium setara antarmuka TV pintar kelas atas.
+   - **Anti-Jank / Stutter Free Stabilization:**
+     - Menambahkan penstabilan render GPU menggunakan jeda mikro (60–80ms) yang dibungkus dalam *double* `requestAnimationFrame` saat event `onload` iframe selesai. Ini memastikan engine browser (termasuk Android TV / TV Stick) telah tuntas mem-parse DOM dan stylesheet halaman baru sebelum transisi animasi dimulai, menghilangkan hentakan/kedipan awal 100%.
+
+2. **Penyesuaian Kecepatan Teks Berjalan (Running Text / Marquee):**
+   - Kecepatan animasi teks berjalan diturunkan dari sebelumnya 35s–50s menjadi **68 detik** (`68s linear infinite`).
+   - Penyesuaian durasi 68 detik ini memberikan kecepatan laju teks yang sangat tenang dan bersahabat bagi mata jamaah lansia maupun anak-anak untuk membaca hadits, laporan keuangan, pengumuman, dan doa secara utuh.
+   - Diterapkan secara seragam dan konsisten pada:
+     - Master stylesheet: `web-statis/css/display-theme.css` (`tvTickerScroll 68s`) dan `web-statis/css/partials-theme.css` (`marquee 68s`).
+     - Blade partials: `resources/views/partials/display-theme.blade.php` dan `resources/views/live-stream.blade.php`.
+     - Seluruh berkas slide mandiri TV: `ambulance.html`, `hikmah.html`, `idul-adha.html`, `idul-fitri.html`, `infaq.html`, `jumat.html`, `keuangan.html`, `keuangan-summary.html`, `live-madinah.html`, `live-mekah.html`, `live-mimbar.html`, `pengumuman.html`, `qris.html`, `qurban.html`, `slide.html`, dan `utama.html`.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/index.html` (CSS transisi `iframe.incoming`, `iframe.active`, `iframe.outgoing` dan logika `switchSlide` & `jumpToSlideUrl`).
+2. `resources/views/rotator.blade.php` (CSS transisi dual-iframe dan penanganan `onFrameLoad`).
+3. `web-statis/css/display-theme.css` (Penyesuaian durasi animasi `tvTickerScroll` menjadi 68s).
+4. `web-statis/css/partials-theme.css` (Penyesuaian durasi animasi `marquee` running-text menjadi 68s).
+5. `resources/views/partials/display-theme.blade.php` (Penyesuaian durasi animasi `marquee` running-text menjadi 68s).
+6. `resources/views/live-stream.blade.php` (Penyesuaian durasi animasi ticker menjadi 68s).
+7. `web-statis/slides/ambulance.html`, `hikmah.html`, `idul-adha.html`, `idul-fitri.html`, `infaq.html`, `jumat.html`, `keuangan-summary.html`, `keuangan.html`, `live-madinah.html`, `live-mekah.html`, `live-mimbar.html`, `pengumuman.html`, `qris.html`, `qurban.html`, `slide.html`, `utama.html` (Penyesuaian kecepatan marquee menjadi 68s).
+8. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 154).
+9. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
+10. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

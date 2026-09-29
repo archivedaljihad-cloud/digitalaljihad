@@ -294,7 +294,7 @@
         .ticker-content {
             display: inline-block;
             padding-left: 100%;
-            animation: marquee 35s linear infinite;
+            animation: marquee 68s linear infinite;
             font-size: 15px;
             font-weight: 500;
             color: #F1F5F9;
