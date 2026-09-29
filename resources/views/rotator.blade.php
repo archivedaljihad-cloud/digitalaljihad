@@ -225,7 +225,7 @@
         }
 
         .page-indicator {
-            display: none;
+            display: none !important;
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -242,7 +242,7 @@
             border-left: 3px solid #ffd700;
         }
 
-        .page-indicator.debug-visible { display: flex; }
+        .page-indicator.debug-visible { display: none !important; }
 
         .page-indicator .page-name {
             font-weight: bold;
@@ -373,7 +373,7 @@
         </div>
     </div>
 
-    <div class="page-indicator" id="pageIndicator">
+    <div class="page-indicator" id="pageIndicator" style="display: none !important;">
         <span class="page-name" id="pageName">Memuat...</span>
         <span style="opacity:.5;">●</span>
         <span class="countdown" id="countdown">-- dtk</span>

@@ -312,8 +312,9 @@
             50% { opacity: 1; text-shadow: 0 0 12px rgba(52, 211, 153, 0.7); }
         }
 
-        /* Remote TV Control OSD Notification */
+        /* Remote TV Control OSD Notification - Dihilangkan total agar layar TV bersih dan elegan */
         .tv-osd {
+            display: none !important;
             position: fixed;
             top: 20px;
             right: 20px;
@@ -325,13 +326,14 @@
             font-size: 0.9rem;
             font-weight: 600;
             z-index: 900;
-            opacity: 0;
+            opacity: 0 !important;
             transform: translateY(-10px);
             transition: all 0.3s ease;
-            pointer-events: none;
+            pointer-events: none !important;
         }
         .tv-osd.show {
-            opacity: 1;
+            display: none !important;
+            opacity: 0 !important;
             transform: translateY(0);
         }
 
@@ -481,8 +483,8 @@
         </div>
     </div>
 
-    <!-- OSD Notifikasi Remote TV -->
-    <div class="tv-osd" id="tvOsd">Slide 1/2</div>
+    <!-- OSD Notifikasi Remote TV (Dihilangkan agar layar TV bersih) -->
+    <div class="tv-osd" id="tvOsd" style="display: none !important;"></div>
 
     <!-- Remote Emergency Alert Overlay Backdrop & Modal Center -->
     <div id="emergencyBackdrop" class="emergency-backdrop" onclick="hideEmergencyAlert()"></div>
@@ -580,14 +582,10 @@
         let jumatPetugas = null;
 
         function showOsd(text) {
+            // Dinonaktifkan total sesuai permintaan pengguna: Layar TV display bersih tanpa gangguan kotak kapsul OSD
             const el = document.getElementById('tvOsd');
-            if (!el) return;
-            el.textContent = text;
-            el.classList.add('show');
-            clearTimeout(el.hideTimeout);
-            el.hideTimeout = setTimeout(() => {
-                el.classList.remove('show');
-            }, 2000);
+            if (el) el.style.display = 'none';
+            return;
         }
 
         // Pembaruan teks footer copyright display TV (Bisa diedit Super Admin)
@@ -679,7 +677,7 @@
                         frontFrame.className = 'outgoing';
 
                         currentFrame = currentFrame === 1 ? 2 : 1;
-                        showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);
+                        // OSD nomor slide di pojok kanan atas dihilangkan agar tampilan syahdu & tidak mengganggu
                         broadcastTvState();
 
                         // Setelah transisi selesai sempurna (1.4s), bersihkan kelas outgoing menjadi standby

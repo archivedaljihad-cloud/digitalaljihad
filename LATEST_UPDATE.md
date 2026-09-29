@@ -6943,3 +6943,54 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 7. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 160).
 8. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 9. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## 📺 BAB 161: ELIMINASI KOTAK KAPSUL OSD SLIDE TV (PENGHILANGAN KOTAK URUTAN & JUMLAH SLIDE POJOK KANAN ATAS)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:** *"Dihalaman rotasi dipojok kanan atas muncul kotak kapsul urutan dan jumlah slide (slide 5/10). Ini sangat mengganggu pemandangan. Sebaiknya kotak kapsul itu disembunyikan atau di hilangkan saja."*
+- **Akar Masalah:**
+  - Pada layar utama rotasi display TV (`web-statis/index.html`), terdapat elemen OSD (*On-Screen Display*) `#tvOsd` yang diposisikan di pojok kanan atas (`top: 20px; right: 20px;`).
+  - Setiap kali siklus perpindahan slide berlangsung, skrip rotator menjalankan pemanggilan `showOsd('Slide ' + (currentIndex + 1) + '/' + activePages.length)`.
+  - Hal ini memunculkan kotak kapsul hitam bertepi emas berisi teks urutan slide (seperti *"Slide 5/10"*). Kotak ini menutupi dan bertabrakan dengan ornamen **Medali Kaligrafi Emas 3D Allah SWT** yang berada persis di sisi kanan atas layar masjid, sehingga merusak ketenangan dan keindahan estetika visual TV display.
+
+---
+
+### 2. Solusi & Rekayasa yang Diterapkan
+
+1. **Penghilangan Pemanggilan OSD pada Pergantian Slide (`web-statis/index.html`):**
+   - Menghapus pemanggilan `showOsd(`Slide ${currentIndex + 1}/${activePages.length}`);` pada fungsi transisi slide `switchSlide()`.
+   - Rotasi slide kini berjalan sepenuhnya mulus, tenang, dan bersih tanpa ada pop-up nomor slide yang melayang di pojok kanan atas.
+
+2. **Penonaktifan Total Elemen `.tv-osd`:**
+   - Menambahkan aturan CSS permanen:
+     ```css
+     .tv-osd {
+         display: none !important;
+         opacity: 0 !important;
+         pointer-events: none !important;
+     }
+     .tv-osd.show {
+         display: none !important;
+         opacity: 0 !important;
+     }
+     ```
+   - Memberikan atribut inline style `style="display: none !important;"` pada elemen `<div class="tv-osd" id="tvOsd">`.
+   - Menetralkan fungsi `showOsd(text)` agar langsung me-`return;` dan tidak pernah menampilkan elemen kotak kapsul ke layar TV.
+
+3. **Penyelarasan Template Laravel Blade (`resources/views/rotator.blade.php`):**
+   - Mengunci aturan `.page-indicator { display: none !important; }` dan `.page-indicator.debug-visible { display: none !important; }` agar pada template Blade indikator nomor/countdown slide juga tetap tersembunyi secara permanen.
+
+4. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.5` agar display TV dan peramban klien langsung mengunduh pembaruan berkas tanpa menyimpan cache lama.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/index.html` (Penghilangan total kapsul OSD nomor slide di pojok kanan atas, CSS display:none !important, netralisasi showOsd).
+2. `resources/views/rotator.blade.php` (Penguncian display:none !important pada page-indicator).
+3. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.1.5`).
+4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 161).
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
+6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
