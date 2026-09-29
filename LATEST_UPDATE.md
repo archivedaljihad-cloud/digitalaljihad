@@ -7403,3 +7403,16 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 3. `web-statis/slides/live-madinah.html`
 4. `web-statis/admin.html`
 5. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 169 - PEMBARUAN TEKS FOOTER DASHBOARD ADMIN GRAHA ASRI)
+
+### 1. Perubahan yang Dilakukan
+- Memperbarui teks copyright pada footer halaman Dashboard Admin ([`web-statis/admin.html`](file:///c:/Users/anthu/Documents/%E3%80%90Project%E3%80%91/DIGITALv304/web-statis/admin.html)):
+  - **Sebelum:** `Hak Cipta © 2026 Masjid Jami' Al-Jihad • Informasi Digital Statis v5.1.0 (Powered by Cloudflare Edge)`
+  - **Sesudah:** `Hak Cipta © 2026 Masjid Jami' Al-Jihad (GRAHA ASRI) • Sistem Informasi Digital (Statis v5.1.0)`
+
+### 2. Berkas Terkait
+1. `web-statis/admin.html`
+2. `LATEST_UPDATE.md`
