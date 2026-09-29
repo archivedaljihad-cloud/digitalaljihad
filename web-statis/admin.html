@@ -6814,7 +6814,7 @@
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc&limit=1`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=*`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=id,name,email,role_id`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?order=id.desc`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?order=tanggal.asc,id.asc`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?order=id.asc`, { headers }),

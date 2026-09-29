@@ -7519,3 +7519,50 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/slides/infaq.html`
 2. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 173 - PENANGANAN PERINGATAN KEAMANAN SUPABASE: ROW LEVEL SECURITY & PROTEKSI DATA SENSITIF)
+
+### 1. Latar Belakang & Analisis Peringatan Supabase
+- **Notifikasi Keamanan dari Supabase:**
+  Supabase mengirimkan peringatan kritis (*Critical Issues*) pada 2 proyek:
+  1. **`Table publicly accessible (rls_disabled_in_public)`**: Tabel pada skema `public` dapat dibaca, diedit, atau dihapus secara bebas melalui PostgREST REST API karena *Row-Level Security (RLS)* belum diaktifkan.
+  2. **`Sensitive data publicly accessible (sensitive_columns_exposed)`**: Tabel `users` memiliki kolom sensitif (hash password `$2y$12$...` dan `remember_token`) yang dapat diakses publik melalui REST API tanpa pembatasan akses.
+- **Dua Proyek yang Terlibat:**
+  - **Proyek A (`digitalaljihad` / `jhukhvxpgezbftbxgdgbc`):** Database PostgreSQL untuk backend Laravel (`DB_HOST=aws-0-ap-south-1.pooler.supabase.com`).
+  - **Proyek B (`digitalaljihad-cloud's Project` / `xskusfacwsclbgdtgier`):** Database cloud BaaS untuk website statis & display TV Cloudflare Pages (`digitalaljihad.my.id`).
+
+---
+
+### 2. Tindakan Solusi yang Telah Diterapkan
+
+#### A. Penyelesaian Otomatis pada Proyek Laravel (`digitalaljihad` / `jhukhvxpgezbftbxgdgbc`)
+1. **Pembuatan & Eksekusi Migrasi RLS:**
+   - Dibuat migrasi [`database/migrations/2026_09_30_060000_enable_row_level_security_on_public_tables.php`](file:///c:/Users/anthu/Documents/%E3%80%90Project%E3%80%91/DIGITALv304/database/migrations/2026_09_30_060000_enable_row_level_security_on_public_tables.php).
+   - Migrasi telah dieksekusi secara sukses (`php artisan migrate`).
+   - Seluruh 25 tabel (`users`, `app_settings`, `jadwal_sholat`, `keuangan`, `pengumuman`, `slides`, dll.) kini berstatus **`RLS ENABLED`**.
+2. **Keamanan & Kompatibilitas Laravel:**
+   - Laravel terhubung menggunakan user `postgres` (pemilik tabel/superuser). Dalam PostgreSQL, pemilik tabel secara otomatis memiliki hak *bypass RLS*.
+   - Hasil pengujian: Operasi query Laravel (`SELECT`, `INSERT`, `UPDATE`, `DELETE`) berjalan 100% normal tanpa kendala, sementara akses publik anonim dari luar melalui REST API PostgREST ditolak secara total.
+   - Peringatan di dashboard Supabase untuk proyek `digitalaljihad` langsung **TERATASI (RESOLVED)**.
+
+#### B. Penyelesaian pada Proyek Web Statis (`digitalaljihad-cloud` / `xskusfacwsclbgdtgier`)
+1. **Sanitasi Query Pengguna di Frontend:**
+   - Di [`web-statis/admin.html`](file:///c:/Users/anthu/Documents/%E3%80%90Project%E3%80%91/DIGITALv304/web-statis/admin.html), query user diubah dari `users?select=*` menjadi `users?select=id,name,email,role_id` sehingga kolom hash password tidak pernah diminta oleh browser.
+2. **Pembuatan Skrip SQL Terpadu Supabase:**
+   - Dibuat berkas [`database/supabase_rls_security_fix.sql`](file:///c:/Users/anthu/Documents/%E3%80%90Project%E3%80%91/DIGITALv304/database/supabase_rls_security_fix.sql) yang siap disalin dan dijalankan di **SQL Editor** pada Supabase Dashboard.
+   - Skrip ini:
+     - Mengaktifkan RLS pada seluruh tabel publik dan sistem.
+     - Mencabut izin baca kolom sensitif (`REVOKE SELECT (password, remember_token) ON public.users FROM anon, authenticated`).
+     - Mengosongkan data hash password bawaan yang tidak diperlukan di database cloud statis.
+     - Menyematkan kebijakan akses (*RLS Policies*) terbuka bagi tabel-tabel display masjid (`app_settings`, `jadwal_sholat`, `sholat_jumat`, `pengumuman`, `keuangan`, `qris`, `slides`, dll.) agar TV Display dan Web Admin tetap dapat membaca dan memperbarui data secara lancar.
+
+---
+
+### 3. Berkas Terkait yang Dibuat / Dimodifikasi
+1. `database/migrations/2026_09_30_060000_enable_row_level_security_on_public_tables.php` (Baru)
+2. `database/supabase_rls_security_fix.sql` (Baru)
+3. `web-statis/admin.html` (Diperbarui)
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html` (Tersinkronisasi)
+5. `LATEST_UPDATE.md` (Diperbarui)
