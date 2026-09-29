@@ -171,6 +171,40 @@
         .stat-pill.kekurangan .icon-box { background: rgba(255, 82, 82, 0.25); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.4); }
         .stat-pill.donatur .icon-box { background: rgba(255, 215, 0, 0.25); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.4); }
 
+        /* Efek Denyut Pelan (Slow Breathing Pulse) di Kolom Target Dana */
+        @keyframes pulseTargetDanaSlow {
+            0%, 100% {
+                transform: scale(1);
+                border-color: rgba(0, 180, 216, 0.4);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 rgba(0, 180, 216, 0);
+            }
+            50% {
+                transform: scale(1.025);
+                border-color: rgba(0, 220, 255, 0.85);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 180, 216, 0.55);
+            }
+        }
+
+        @keyframes pulseTargetIcon {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.3));
+            }
+            50% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 8px rgba(0, 220, 255, 0.85));
+            }
+        }
+
+        .stat-pill.target {
+            animation: pulseTargetDanaSlow 3.2s ease-in-out infinite;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .stat-pill.target .icon-box i {
+            animation: pulseTargetIcon 3.2s ease-in-out infinite;
+        }
+
         .stat-info { display: flex; flex-direction: column; min-width: 0; }
         .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; color: rgba(255, 255, 255, 0.85); }
         .stat-value { font-size: 1.15rem; font-weight: 800; font-family: monospace; white-space: nowrap; }
@@ -232,6 +266,7 @@
             display: flex;
             flex-direction: column;
             min-height: 0;
+            overflow: hidden;
         }
 
         .box-title {
@@ -247,12 +282,31 @@
             padding-bottom: 4px;
         }
 
-        .donatur-list {
+        .donatur-scroll-wrapper {
             flex: 1;
-            overflow-y: auto;
+            overflow: hidden;
+            position: relative;
+            min-height: 0;
+        }
+
+        .donatur-list {
             display: flex;
             flex-direction: column;
             gap: 6px;
+        }
+
+        .donatur-list.can-scroll {
+            will-change: transform;
+            animation: scrollDonaturUp var(--scroll-duration, 30s) linear infinite;
+        }
+
+        .donatur-list.can-scroll:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollDonaturUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
         }
 
         .donatur-item {
@@ -264,6 +318,7 @@
             background: rgba(255, 255, 255, 0.04);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             font-size: 0.90rem;
+            flex-shrink: 0;
         }
 
         .donatur-name { font-weight: 600; color: #ffffff; }
@@ -392,32 +447,34 @@
 
                 <!-- 2 KOLOM BAWAH -->
                 <div class="bottom-split-row">
-                    <!-- Kolom Donatur Terbaru -->
+                    <!-- Kolom Daftar Donatur -->
                     <div class="donatur-box">
                         <div class="box-title">
                             <i class="fas fa-heart"></i>
-                            <span>Daftar Donatur Terkini</span>
+                            <span>Daftar Donatur</span>
                         </div>
-                        <div class="donatur-list" id="donaturList">
-                            <div class="donatur-item">
-                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah (Kel. H. Syahrul)</span>
-                                <span class="donatur-val">Rp 5.000.000</span>
-                            </div>
-                            <div class="donatur-item">
-                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah</span>
-                                <span class="donatur-val">Rp 2.500.000</span>
-                            </div>
-                            <div class="donatur-item">
-                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Bpk. Rahmat Hidayat</span>
-                                <span class="donatur-val">Rp 1.000.000</span>
-                            </div>
-                            <div class="donatur-item">
-                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah</span>
-                                <span class="donatur-val">Rp 500.000</span>
-                            </div>
-                            <div class="donatur-item">
-                                <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Majelis Taklim Ummahat</span>
-                                <span class="donatur-val">Rp 3.200.000</span>
+                        <div class="donatur-scroll-wrapper" id="donaturScrollWrapper">
+                            <div class="donatur-list" id="donaturList">
+                                <div class="donatur-item">
+                                    <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah (Kel. H. Syahrul)</span>
+                                    <span class="donatur-val">Rp 5.000.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah</span>
+                                    <span class="donatur-val">Rp 2.500.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Bpk. Rahmat Hidayat</span>
+                                    <span class="donatur-val">Rp 1.000.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Hamba Allah</span>
+                                    <span class="donatur-val">Rp 500.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <span class="donatur-name"><i class="fas fa-user-circle mr-2 text-warning"></i> Majelis Taklim Ummahat</span>
+                                    <span class="donatur-val">Rp 3.200.000</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -634,17 +691,24 @@
 
             document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Muhsinin';
 
-            // Render Donatur List Dinamis (5 donatur terbaru di TV)
+            // Render Donatur List Dinamis (Urutan: yang terlama di atas, yang terbaru di paling bawah)
             const donaturContainer = document.getElementById('donaturList');
+            const scrollWrapper = document.getElementById('donaturScrollWrapper');
             if (donaturContainer) {
+                // Reset animasi scroll sebelumnya jika ada
+                donaturContainer.classList.remove('can-scroll');
+
                 if (rawDonaturList.length > 0) {
-                    const sortedRecent = [...rawDonaturList].sort((a, b) => {
+                    // Sorting ASC: yang lama di atas, yang paling baru di paling bawah
+                    const sortedAsc = [...rawDonaturList].sort((a, b) => {
                         const dateA = new Date(a.tanggal || 0).getTime();
                         const dateB = new Date(b.tanggal || 0).getTime();
-                        if (dateA !== dateB) return dateB - dateA;
-                        return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+                        if (dateA !== dateB) return dateA - dateB;
+                        return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
                     });
-                    donaturContainer.innerHTML = sortedRecent.slice(0, 5).map(d => {
+
+                    // Render semua donatur (tanpa memotong slice 5 agar seluruh muhsinin tampil)
+                    donaturContainer.innerHTML = sortedAsc.map(d => {
                         const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
                         return `
                             <div class="donatur-item">
@@ -653,6 +717,22 @@
                             </div>
                         `;
                     }).join('');
+
+                    // Cek apakah data donatur melebihi tinggi kotak container (overflow)
+                    requestAnimationFrame(() => {
+                        if (scrollWrapper && donaturContainer.scrollHeight > scrollWrapper.clientHeight + 4) {
+                            // Gandakan elemen anak untuk efek seamless vertical marquee loop tanpa jeda
+                            const originalChildren = Array.from(donaturContainer.children);
+                            originalChildren.forEach(child => {
+                                donaturContainer.appendChild(child.cloneNode(true));
+                            });
+
+                            // Kecepatan membaca ideal di layar TV: ~3.5 detik per donatur, minimal 20 detik
+                            const duration = Math.max(20, sortedAsc.length * 3.5);
+                            donaturContainer.style.setProperty('--scroll-duration', `${duration}s`);
+                            donaturContainer.classList.add('can-scroll');
+                        }
+                    });
                 } else {
                     donaturContainer.innerHTML = `
                         <div class="donatur-item" style="justify-content:center; color:#94a3b8; font-style:italic;">

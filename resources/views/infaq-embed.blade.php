@@ -233,6 +233,40 @@
 			border: 1px solid rgba(0, 180, 216, 0.4);
 		}
 
+		/* Efek Denyut Pelan Target Dana */
+		@keyframes pulseTargetDanaSlow {
+			0%, 100% {
+				transform: scale(1);
+				border-color: rgba(0, 180, 216, 0.4);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 rgba(0, 180, 216, 0);
+			}
+			50% {
+				transform: scale(1.025);
+				border-color: rgba(0, 220, 255, 0.85);
+				box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 180, 216, 0.55);
+			}
+		}
+
+		@keyframes pulseTargetIcon {
+			0%, 100% {
+				transform: scale(1);
+				filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.3));
+			}
+			50% {
+				transform: scale(1.1);
+				filter: drop-shadow(0 0 8px rgba(0, 220, 255, 0.85));
+			}
+		}
+
+		.stat-pill.target {
+			animation: pulseTargetDanaSlow 3.2s ease-in-out infinite;
+			will-change: transform, box-shadow, border-color;
+		}
+
+		.stat-pill.target .icon-box i {
+			animation: pulseTargetIcon 3.2s ease-in-out infinite;
+		}
+
 		.stat-pill.terkumpul .icon-box {
 			background: rgba(0, 230, 118, 0.25);
 			color: #00e676;

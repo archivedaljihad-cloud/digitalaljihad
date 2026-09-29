@@ -7078,3 +7078,112 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 10. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 162).
 11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## 🕌 BAB 163: OPTIMASI DISPLAY PROGRAM INFAQ — MODE DONATUR TERBARU DI BAWAH, EFEK DENYUT PELAN TARGET DANA, LABEL HEADER BERSIH, & SEAMLESS INFINITE VERTICAL AUTO-SCROLL
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:** *"Dihalaman Program infaq. Ganti mode daftar list donaturnya yang terbaru yang paling bawah, Tambahkan efek denyut pelan di kolom target dana.Ganti teks "Daftar Donatur Terkini" menjadi "Daftar Donatur". Bagaimana anda menampilkan list donatur ini jika donaturnya melebihi kotak daftar donatur ?"*
+- **Tujuan Peningkatan:**
+  1. Mengubah orientasi urutan daftar donatur agar tersusun kronologis (lama di atas, baru di bawah / ASCENDING), sehingga donatur yang baru saja berinfaq muncul di baris paling bawah.
+  2. Memberikan aksen visual hidup dan elegan berupa efek denyut pelan (*slow breathing pulse*) pada kartu / kolom **TARGET DANA** agar menjadi titik fokus (*focal point*) yang menarik perhatian jamaah di layar TV masjid.
+  3. Menyederhanakan teks header dari *"Daftar Donatur Terkini"* menjadi *"Daftar Donatur"* agar lebih formal, ringkas, dan proporsional.
+  4. Menjawab dan mengimplementasikan mekanisme penanganan daftar donatur jika jumlahnya melampaui tinggi kotak kontainer layar TV display.
+
+---
+
+### 2. Solusi & Perubahan Teknis yang Diterapkan
+
+#### A. Urutan Donatur Kronologis (Terbaru di Paling Bawah)
+- Pada `web-statis/slides/infaq.html` di dalam fungsi `renderSingleProgram()`:
+  - Kode sorting sebelumnya yang bertipe *descending* (`dateB - dateA`, `idB - idA`) diubah menjadi *ascending* (`dateA - dateB`, `idA - idB`):
+    ```javascript
+    const sortedAsc = [...rawDonaturList].sort((a, b) => {
+        const dateA = new Date(a.tanggal || 0).getTime();
+        const dateB = new Date(b.tanggal || 0).getTime();
+        if (dateA !== dateB) return dateA - dateB;
+        return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+    });
+    ```
+  - Dengan demikian, donatur awal berada di bagian atas dan donatur yang paling mutakhir/terbaru berada di baris paling bawah.
+
+#### B. Efek Denyut Pelan (Slow Breathing Pulse) di Kolom Target Dana
+- Menambahkan animasi CSS keyframe ritmik bernapas pelan (*breathing glow & subtle scale*) pada `.stat-pill.target` dan ikon target di dalamnya:
+  ```css
+  @keyframes pulseTargetDanaSlow {
+      0%, 100% {
+          transform: scale(1);
+          border-color: rgba(0, 180, 216, 0.4);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 rgba(0, 180, 216, 0);
+      }
+      50% {
+          transform: scale(1.025);
+          border-color: rgba(0, 220, 255, 0.85);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 180, 216, 0.55);
+      }
+  }
+
+  @keyframes pulseTargetIcon {
+      0%, 100% {
+          transform: scale(1);
+          filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.3));
+      }
+      50% {
+          transform: scale(1.1);
+          filter: drop-shadow(0 0 8px rgba(0, 220, 255, 0.85));
+      }
+  }
+
+  .stat-pill.target {
+      animation: pulseTargetDanaSlow 3.2s ease-in-out infinite;
+      will-change: transform, box-shadow, border-color;
+  }
+
+  .stat-pill.target .icon-box i {
+      animation: pulseTargetIcon 3.2s ease-in-out infinite;
+  }
+  ```
+- Efek ini juga diterapkan secara konsisten pada template backend Laravel `resources/views/infaq-embed.blade.php`.
+
+#### C. Pembaruan Label Header Kotak Donatur
+- Label teks pada `web-statis/slides/infaq.html` diubah dari:
+  ```html
+  <span>Daftar Donatur Terkini</span>
+  ```
+  menjadi:
+  ```html
+  <span>Daftar Donatur</span>
+  ```
+
+#### D. Penanganan Otomatis Jika Donatur Melebihi Kotak (Seamless Infinite Vertical Auto-Scroll)
+- **Mekanisme Penanganan:**
+  1. Menghilangkan batasan `.slice(0, 5)` sehingga seluruh data muhsinin (saat ini 8 donatur, maupun bertambah menjadi puluhan) dapat dirender ke dalam kontainer.
+  2. Membungkus `.donatur-list` ke dalam kontainer `.donatur-scroll-wrapper` dengan properti `overflow: hidden; position: relative; min-height: 0;`.
+  3. Menambahkan deteksi overflow otomatis via JavaScript:
+     - Jika jumlah donatur sedikit (tinggi konten masih muat di dalam kotak), daftar donatur tetap tampil tenang / statis tanpa scrolling.
+     - Jika tinggi konten donatur melampaui tinggi kotak (`scrollHeight > clientHeight + 4`), sistem secara otomatis:
+       - **Menduplikasi elemen anak** (*clone node*) dari daftar donatur original.
+       - Menghitung durasi animasi secara proporsional sesuai jumlah baris (~3.5 detik per donatur, minimal 20 detik) agar teks nyaman dibaca oleh jamaah di layar TV.
+       - Mengaktifkan animasi `@keyframes scrollDonaturUp` dari `translateY(0)` menuju `translateY(-50%)`.
+       - Karena elemen diduplikasi persis, transisi saat mencapai `-50%` dan kembali ke `0%` berlangsung secara **100% mulus (seamless)** tanpa lompatan grafis (*zero visual jump*).
+       - Menambahkan `animation-play-state: paused` saat kursor berada di atas list (`:hover`).
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/slides/infaq.html`:
+   - Penambahan keyframe denyut pelan target dana `.stat-pill.target`.
+   - Perubahan judul header menjadi `"Daftar Donatur"`.
+   - Penataan wrapper overflow `.donatur-scroll-wrapper` dan animasi marquee infinite `.donatur-list.can-scroll`.
+   - Pembaruan sorting ascending dan auto-cloning overflow di JavaScript.
+2. `resources/views/infaq-embed.blade.php`:
+   - Penambahan animasi denyut pelan `pulseTargetDanaSlow` pada kartu `.stat-pill.target`.
+3. `web-statis/sw.js`:
+   - Pembaruan cache PWA menjadi **`aljihad-signage-v3.1.7`**.
+4. `LATEST_UPDATE.md`:
+   - Dokumentasi lengkap Bab 163.
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`:
+   - Sinkronisasi otomatis seluruh berkas mandiri.
+6. Git Repository & Live Deployment Cloudflare Pages:
+   - `https://digitalaljihad.my.id/`.
