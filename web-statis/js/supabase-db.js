@@ -33,6 +33,9 @@
             prayer_mode_jumat_duration: 50,
             enable_dynamic_theme: true,
             enable_next_prayer_bar: true,
+            live_makkah_url: '',
+            live_madinah_url: '',
+            cctv_mimbar_url: '',
             running_text: 'Selamat Datang di Masjid Jami\' Al-Jihad. Luruskan dan rapatkan shaf saat sholat berjamaah. Jagalah kebersihan dan kesucian masjid.',
             running_text_pages: {},
             rotation_pages: [
@@ -166,7 +169,7 @@
                         delete cleanPayload.prayer_mode_duration;
                     }
                     const validColumns = [
-                        'id', 'key', 'value', 'nama_aplikasi', 'footer', 'live_makkah_url', 'cctv_mimbar_url',
+                        'id', 'key', 'value', 'nama_aplikasi', 'footer', 'live_makkah_url', 'live_madinah_url', 'cctv_mimbar_url',
                         'gemini_api_key', 'gemini_model', 'rotation_interval', 'prayer_mode_before_adzan',
                         'prayer_mode_adzan_duration', 'prayer_mode_iqamah_duration', 'prayer_mode_after_prayer',
                         'prayer_mode_jumat_duration', 'audio_tarhim', 'tarhim_trigger_seconds', 'yasin_mode_enabled',
@@ -640,6 +643,63 @@
             }
 
             return "🕌 Selamat Datang di Masjid Jami' Al-Jihad • Luruskan dan rapatkan shaf saat sholat berjamaah • Jagalah kebersihan dan kesucian masjid";
+        },
+
+        /**
+         * Konversi berbagai format URL YouTube (watch, share, live, embed, short ID)
+         * menjadi URL sematan resmi (embed) yang valid dan mematuhi kebijakan Google/YouTube
+         * @param {string} url
+         * @param {string} fallbackUrl
+         */
+        formatYouTubeEmbed(url, fallbackUrl = '') {
+            if (!url || typeof url !== 'string') return fallbackUrl;
+            const trimmed = url.trim();
+            if (!trimmed) return fallbackUrl;
+
+            // 1. Ekstrak 11-digit Video ID jika ada
+            let videoId = '';
+
+            // Format: youtube.com/watch?v=VIDEO_ID atau /watch?xxx&v=VIDEO_ID
+            const vMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+            if (vMatch) videoId = vMatch[1];
+
+            // Format: youtube.com/live/VIDEO_ID
+            if (!videoId) {
+                const liveMatch = trimmed.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{11})/);
+                if (liveMatch) videoId = liveMatch[1];
+            }
+
+            // Format: youtu.be/VIDEO_ID
+            if (!videoId) {
+                const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+                if (shortMatch) videoId = shortMatch[1];
+            }
+
+            // Format: youtube.com/embed/VIDEO_ID atau youtube-nocookie.com/embed/VIDEO_ID
+            if (!videoId) {
+                const embedMatch = trimmed.match(/youtube(?:-nocookie)?\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+                if (embedMatch) videoId = embedMatch[1];
+            }
+
+            // Format: hanya 11 karakter Video ID langsung
+            if (!videoId && /^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+                videoId = trimmed;
+            }
+
+            if (videoId) {
+                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${videoId}&enablejsapi=1&playsinline=1`;
+            }
+
+            // Jika URL iframe / stream lain (misal RTSP HLS http/https)
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                let stream = trimmed;
+                if (!stream.includes('autoplay=')) {
+                    stream += (stream.includes('?') ? '&' : '?') + 'autoplay=1&mute=1&controls=0';
+                }
+                return stream;
+            }
+
+            return fallbackUrl;
         },
 
         /**

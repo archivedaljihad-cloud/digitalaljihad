@@ -32,7 +32,7 @@
             height: 100%;
             z-index: 1;
             overflow: hidden;
-            background: #000000;
+            background: #000000 url('../image/display/background/kaabah.webp') center center / cover no-repeat;
         }
 
         .video-container iframe {
@@ -208,8 +208,9 @@
     <!-- 1. LAYER VIDEO STREAMING -->
     <div class="video-container">
         <iframe id="videoIframe"
-                src="https://www.youtube.com/embed/live_stream?channel=UC4Sj_3d1kH15aMh3t7k7W3A&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&enablejsapi=1" 
-                allow="autoplay; encrypted-media" 
+                src="" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin"
                 allowfullscreen>
         </iframe>
     </div>
@@ -273,16 +274,22 @@
         async function loadStreamSettings() {
             try {
                 const settings = await SupabaseDB.getSettings();
+                const rawUrl = (settings && settings.live_makkah_url) 
+                    ? settings.live_makkah_url 
+                    : (localStorage.getItem('live_makkah_url') || '');
+
                 if (settings) {
                     const rText = SupabaseDB.getRunningTextForPage('/live-mekah-embed', settings);
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-kaaba"></i> ${rText}`;
+                }
 
-                    if (settings.live_makkah_url) {
-                        let streamUrl = settings.live_makkah_url;
-                        if (!streamUrl.includes('autoplay=')) {
-                            streamUrl += (streamUrl.includes('?') ? '&' : '?') + 'autoplay=1&mute=1&controls=0';
+                if (rawUrl) {
+                    const embedUrl = SupabaseDB.formatYouTubeEmbed(rawUrl);
+                    if (embedUrl) {
+                        const iframe = document.getElementById('videoIframe');
+                        if (iframe.src !== embedUrl) {
+                            iframe.src = embedUrl;
                         }
-                        document.getElementById('videoIframe').src = streamUrl;
                     }
                 }
             } catch (err) {

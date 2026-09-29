@@ -4482,18 +4482,50 @@
                             </div>
                             <div class="col-lg-6 mb-4">
                                 <div class="content-card">
-                                    <div class="content-card-header">
-                                        <h6 class="content-card-title"><i class="fas fa-video"></i> Saluran Live Streaming & CCTV Mimbar</h6>
+                                    <div class="content-card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="content-card-title mb-0"><i class="fas fa-video"></i> Saluran Live Streaming & CCTV Mimbar</h6>
+                                        <span class="badge badge-info"><i class="fab fa-youtube mr-1"></i> Auto Embed</span>
                                     </div>
                                     <div class="p-3">
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">YouTube Live Ka'bah Makkah</label>
-                                            <input type="text" class="form-control" id="cfgLiveMekah" value="https://www.youtube.com/embed/live_stream?channel=UC4_H8f9YjE3n6Y3u-yA">
+                                        <!-- LIVE MAKKAH -->
+                                        <div class="form-group mb-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <label class="font-weight-bold mb-0 text-dark">
+                                                    <i class="fas fa-kaaba text-warning mr-1"></i> YouTube Live Ka'bah Makkah
+                                                </label>
+                                                <button type="button" class="btn btn-xs btn-outline-primary" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="previewStreamUrl('cfgLiveMekah', 'Live Makkah (Masjidil Haram)')">
+                                                    <i class="fas fa-play mr-1"></i> Tes Putar
+                                                </button>
+                                            </div>
+                                            <input type="text" class="form-control" id="cfgLiveMekah" placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...">
+                                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                                Mendukung link nonton YouTube biasa (watch/live), link share (youtu.be), atau Video ID 11 karakter. Otomatis dikonversi ke embed resmi.
+                                            </small>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">RTSP / HTTP Stream CCTV Mimbar</label>
+
+                                        <!-- LIVE MADINAH -->
+                                        <div class="form-group mb-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <label class="font-weight-bold mb-0 text-dark">
+                                                    <i class="fas fa-mosque text-success mr-1"></i> YouTube Live Masjid Nabawi Madinah
+                                                </label>
+                                                <button type="button" class="btn btn-xs btn-outline-success" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="previewStreamUrl('cfgLiveMadinah', 'Live Madinah (Masjid Nabawi)')">
+                                                    <i class="fas fa-play mr-1"></i> Tes Putar
+                                                </button>
+                                            </div>
+                                            <input type="text" class="form-control" id="cfgLiveMadinah" placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...">
+                                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                                Mendukung link nonton YouTube biasa (watch/live), link share (youtu.be), atau Video ID 11 karakter. Otomatis dikonversi ke embed resmi.
+                                            </small>
+                                        </div>
+
+                                        <!-- CCTV MIMBAR -->
+                                        <div class="form-group mb-0">
+                                            <label class="font-weight-bold text-dark">
+                                                <i class="fas fa-camera text-info mr-1"></i> RTSP / HTTP Stream CCTV Mimbar
+                                            </label>
                                             <input type="text" class="form-control" id="cfgCctvMimbar" value="http://192.168.1.100:8080/live">
-                                            <small class="text-muted">Digunakan TV Luar (Outdoor) otomatis saat Sholat Jum'at.</small>
+                                            <small class="text-muted d-block mt-1" style="font-size: 11px;">Digunakan TV Luar (Outdoor) otomatis saat Sholat Jum'at.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -5709,6 +5741,36 @@
 
 
     <!-- =======================================================
+         MODAL PREVIEW LIVE STREAMING YOUTUBE
+         ======================================================= -->
+    <div class="modal fade" id="modalPreviewLiveStream" tabindex="-1" role="dialog" aria-labelledby="modalPreviewLiveStreamTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden; background: #0b1712;">
+                <div class="modal-header py-3 px-4" style="background: linear-gradient(135deg, #071a10 0%, #1a5235 100%); border-bottom: 1.5px solid rgba(212,175,55,0.4);">
+                    <h5 class="modal-title font-weight-bold text-white mb-0" id="modalPreviewLiveStreamTitle">
+                        <i class="fab fa-youtube text-danger mr-2"></i> Uji Coba Pemutaran Live Stream
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="closeStreamPreview()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0" style="background: #000000; position: relative; min-height: 380px;">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe id="previewStreamIframe" class="embed-responsive-item" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between align-items-center py-2 px-4" style="background: #071a10; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <small class="text-white-50">
+                        <i class="fas fa-info-circle mr-1 text-warning"></i> Jika muncul pesan <em>"Video unavailable"</em>, pastikan video masih tayang live dan pemilik video YouTube tidak mematikan opsi <em>Allow embedding</em>.
+                    </small>
+                    <button type="button" class="btn btn-secondary btn-sm px-3" data-dismiss="modal" onclick="closeStreamPreview()">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =======================================================
          SCRIPTS: VENDOR & SUPABASE REALTIME ENGINE
          ======================================================= -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -6863,7 +6925,12 @@
                         if (document.getElementById('cfgFooterMasjid')) {
                             document.getElementById('cfgFooterMasjid').value = s.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
                         }
-                        if (document.getElementById('cfgLiveMekah') && s.live_makkah_url) document.getElementById('cfgLiveMekah').value = s.live_makkah_url;
+                        if (document.getElementById('cfgLiveMekah')) {
+                            document.getElementById('cfgLiveMekah').value = s.live_makkah_url || localStorage.getItem('live_makkah_url') || '';
+                        }
+                        if (document.getElementById('cfgLiveMadinah')) {
+                            document.getElementById('cfgLiveMadinah').value = s.live_madinah_url || localStorage.getItem('live_madinah_url') || '';
+                        }
                         if (document.getElementById('cfgCctvMimbar') && s.cctv_mimbar_url) document.getElementById('cfgCctvMimbar').value = s.cctv_mimbar_url;
                         
                         // Google Gemini AI Settings
@@ -10356,8 +10423,9 @@
             const nama = document.getElementById('cfgNamaMasjid')?.value;
             const interval = Math.max(1, parseInt(document.getElementById('cfgIntervalTVSystem')?.value || document.getElementById('cfgIntervalTV')?.value) || 10);
             const footerText = document.getElementById('cfgFooterMasjid')?.value?.trim() || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
-            const liveMekah = document.getElementById('cfgLiveMekah')?.value;
-            const cctv = document.getElementById('cfgCctvMimbar')?.value;
+            const liveMekah = document.getElementById('cfgLiveMekah')?.value?.trim() || '';
+            const liveMadinah = document.getElementById('cfgLiveMadinah')?.value?.trim() || '';
+            const cctv = document.getElementById('cfgCctvMimbar')?.value?.trim() || '';
             const geminiApiKey = document.getElementById('cfgGeminiApiKey')?.value?.trim();
             const geminiModel = document.getElementById('cfgGeminiModel')?.value || 'gemini-1.5-flash';
 
@@ -10372,6 +10440,8 @@
             // Simpan langsung ke LocalStorage untuk responsivitas instan
             localStorage.setItem('display_rotation_interval', interval);
             localStorage.setItem('app_footer_text', footerText);
+            localStorage.setItem('live_makkah_url', liveMekah);
+            localStorage.setItem('live_madinah_url', liveMadinah);
             localStorage.setItem('yasin_display_mode', yasinDisplayMode);
             localStorage.setItem('yasin_step_duration', yasinStepDuration);
             localStorage.setItem('yasin_mushaf_duration', yasinMushafDuration);
@@ -10385,6 +10455,8 @@
                 cached.rotation_interval = interval;
                 if (nama) cached.nama_aplikasi = nama;
                 if (footerText) cached.footer = footerText;
+                cached.live_makkah_url = liveMekah;
+                cached.live_madinah_url = liveMadinah;
                 localStorage.setItem('cached_app_settings', JSON.stringify(cached));
             } catch (e) {}
 
@@ -10401,6 +10473,7 @@
                     rotation_interval: interval,
                     footer: footerText,
                     live_makkah_url: liveMekah,
+                    live_madinah_url: liveMadinah,
                     cctv_mimbar_url: cctv,
                     yasin_mode_enabled: yasinEnabled,
                     yasin_start_time: yasinStartTime,
@@ -10429,19 +10502,63 @@
                     body: JSON.stringify({ rotation_interval: interval })
                 }).catch(() => {});
 
-                // Kirim sinyal Remote Broadcast UPDATE_SETTINGS agar display TV langsung mengadopsi interval baru tanpa jeda
+                // Kirim sinyal Remote Broadcast UPDATE_SETTINGS agar display TV langsung mengadopsi interval & streaming baru tanpa jeda
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', { rotation_interval: interval }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', { 
+                        rotation_interval: interval,
+                        live_makkah_url: liveMekah,
+                        live_madinah_url: liveMadinah
+                    }).catch(() => {});
                 }
 
                 if (res.ok) {
-                    alert('Alhamdulillah! Konfigurasi sistem, tampilan Surat Yaasiin, dan Google Gemini AI berhasil disimpan ke Supabase.');
+                    alert('Alhamdulillah! Konfigurasi sistem, siaran live streaming Mekah & Madinah, serta Surat Yaasiin berhasil disimpan.');
                 } else {
                     alert('Gagal menyimpan konfigurasi ke Supabase. Namun konfigurasi telah disimpan secara lokal di browser.');
                 }
             } catch (err) {
                 alert('Tersimpan secara lokal di browser ini.');
             }
+        }
+
+        // ==========================================
+        // FITUR PREVIEW LIVE STREAMING (YOUTUBE TESTER)
+        // ==========================================
+        function previewStreamUrl(inputId, title) {
+            const input = document.getElementById(inputId);
+            const rawVal = input ? input.value.trim() : '';
+            if (!rawVal) {
+                alert('Silakan masukkan link atau URL YouTube terlebih dahulu pada kolom sebelum melakukan uji putar.');
+                return;
+            }
+
+            const embedUrl = (typeof SupabaseDB !== 'undefined' && SupabaseDB.formatYouTubeEmbed)
+                ? SupabaseDB.formatYouTubeEmbed(rawVal)
+                : rawVal;
+
+            const titleEl = document.getElementById('modalPreviewLiveStreamTitle');
+            if (titleEl) titleEl.innerHTML = `<i class="fab fa-youtube text-danger mr-2"></i> Uji Coba: ${title}`;
+
+            const iframe = document.getElementById('previewStreamIframe');
+            if (iframe) iframe.src = embedUrl;
+
+            if (typeof $ !== 'undefined') {
+                $('#modalPreviewLiveStream').modal('show');
+            }
+        }
+
+        function closeStreamPreview() {
+            const iframe = document.getElementById('previewStreamIframe');
+            if (iframe) iframe.src = '';
+        }
+
+        // Event listener saat modal preview ditutup via klik di luar atau ESC
+        if (typeof $ !== 'undefined') {
+            $(document).ready(function() {
+                $('#modalPreviewLiveStream').on('hidden.bs.modal', function() {
+                    closeStreamPreview();
+                });
+            });
         }
 
         // ==========================================

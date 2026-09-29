@@ -7267,3 +7267,48 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
     - Sinkronisasi otomatis seluruh berkas mandiri.
 11. Git Repository & Live Deployment Cloudflare Pages:
     - `https://digitalaljihad.my.id/`.
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 165 - PENYEMPURNAAN LIVE STREAMING MEKAH & MADINAHDAN FORM INPUT LIVE NABAWI)
+
+### 1. Masalah yang Teridentifikasi
+1. **Penyebab *"This video is unavailable"*:*
+   - YouTube telah mendeprekasi dan mematikan endpoint embed berbasis Channel ID (`https://www.youtube.com/embed/live_stream?channel=...`).
+   - Ketika pengguna memasukkan URL nonton biasa (seperti `https://www.youtube.com/watch?v=...` atau `https://www.youtube.com/live/...` atau link share `https://youtu.be/...`), sebelumnya URL tersebut dimasukkan mentah-mentah ke `iframe.src` tanpa diekstrak Video ID-nya. Karena kebijakan *X-Frame-Options: SAMEORIGIN* Google, YouTube langsung memblokir tampilan pemutar dan memunculkan pesan "This video is unavailable".
+   - Iframe sebelumnya belum dilengkapi atribut modern `referrerpolicy="strict-origin-when-cross-origin"` dan `allow` lengkap, yang diwajibkan pemutar YouTube terkini.
+2. **Ketiadaan Input Form Live Madinah (Masjid Nabawi):**
+   - Pada halaman rotasi TV terdapat halaman `Live TV Madinah (Masjid Nabawi)` (`slides/live-madinah.html`), namun pada menu Pengaturan di `admin.html` hanya ada input untuk Mekah dan CCTV Mimbar, belum ada input untuk link Live Madinah.
+
+### 2. Solusi & Perubahan yang Dilakukan
+1. **Fungsi Auto-Converter YouTube Embed (`formatYouTubeEmbed`):**
+   - Dibuat fungsi cerdas di `supabase-db.js` yang secara otomatis mengekstrak 11-karakter Video ID dari berbagai variasi link YouTube:
+     - `https://www.youtube.com/watch?v=VIDEO_ID`
+     - `https://www.youtube.com/live/VIDEO_ID`
+     - `https://youtu.be/VIDEO_ID`
+     - `https://www.youtube.com/embed/VIDEO_ID`
+     - Video ID 11 karakter langsung.
+   - Hasil konversi berupa URL embed resmi yang patuh:
+     `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${videoId}&enablejsapi=1&playsinline=1`
+2. **Penambahan Form Input Live Madinah di Panel Admin:**
+   - Ditambahkan input `#cfgLiveMadinah` (YouTube Live Masjid Nabawi Madinah) di `web-statis/admin.html`.
+   - Diintegrasikan ke penyimpanan `localStorage` (`live_madinah_url`), cache `cached_app_settings`, dan sinkronisasi Cloud Supabase `app_settings` (penambahan `live_madinah_url` ke `validColumns` di `supabase-db.js`).
+3. **Fitur Pengujian Interaktif *"Tes Putar" & Modal Preview*:**
+   - Ditambahkan tombol `[Tes Putar]` di samping input Live Mekah dan Live Madinah pada Panel Admin.
+   - Menampilkan modal popup pemutar video langsung di admin sehingga pengurus dapat memverifikasi apakah video dapat diputar dan memiliki izin sematan (*Allow embedding*) sebelum disimpan ke layar TV.
+4. **Fallback Wallpaper Elegan (Ka'bah & Nabawi):**
+   - Di `live-mekah.html`, `.video-container` diberikan latar belakang `../image/display/background/kaabah.webp`.
+   - Di `live-madinah.html`, `.video-container` diberikan latar belakang `../image/display/background/Nabawi.jpg`.
+   - Layar TV tidak akan menampilkan layar hitam kosong saat memuat atau jika siaran sedang offline.
+5. **Penyelarasan Backend Laravel:**
+   - Di `app/Http/Controllers/LiveStreamController.php`, method `buildEmbedUrl` disempurnakan untuk memprioritaskan ekstraksi Video ID dan menghindari endpoint deprecated `live_stream?channel=`.
+   - Di `resources/views/live-stream.blade.php`, iframe dilengkapi dengan `referrerpolicy="strict-origin-when-cross-origin"` dan `allow` lengkap.
+
+### 3. Berkas yang Terkait
+1. `web-statis/js/supabase-db.js`
+2. `web-statis/admin.html`
+3. `web-statis/slides/live-mekah.html`
+4. `web-statis/slides/live-madinah.html`
+5. `app/Http/Controllers/LiveStreamController.php`
+6. `resources/views/live-stream.blade.php`
+7. `LATEST_UPDATE.md`
