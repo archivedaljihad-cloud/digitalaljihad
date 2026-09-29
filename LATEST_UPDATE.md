@@ -6547,3 +6547,130 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 156).
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi berkas lokal).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## 🚀 BAB 157: PERBAIKAN SINKRONISASI INTERVAL DURASI ROTASI TV (5 DETIK), PENYELESAIAN DUPLIKASI INPUT ADMIN, REALTIME BROADCAST, DAN PEMBERSIHAN BARIS SUPABASE
+
+### 1. Deskripsi Masalah & Keluhan Pengguna
+- **Laporan Pengguna:** Pengguna mengatur "Interval Rotasi Halaman TV" menjadi **5 detik** di panel admin dan notifikasi sukses menyimpan muncul, namun secara aktual durasi tayang setiap slide di layar TV tetap berdurasi 10 detik atau mengalami jeda awal 10 detik sebelum mengadopsi konfigurasi baru.
+- **Dampak:** Pengguna merasa pengaturan interval tidak efektif atau diabaikan oleh sistem tampilan TV.
+
+---
+
+### 2. Analisis & Akar Masalah (Root Causes)
+Melalui audit menyeluruh pada berkas antarmuka TV (`web-statis/index.html`), panel admin (`web-statis/admin.html`), basis data Supabase, dan pengujian DevTools CDP, ditemukan 5 akar masalah:
+
+1. **Inisialisasi Statis 10 Detik pada Awal Muat Layar (`index.html`):**
+   - Di `web-statis/index.html`, variabel timer rotasi dideklarasikan secara statis:
+     ```javascript
+     let rotationInterval = 10000;
+     ```
+   - Meskipun data di cloud telah disetel ke 5 detik, ketika layar TV pertama kali dibuka atau dimuat ulang, timer pertama langsung dijadwalkan berjalan selama 10 detik sebelum proses asinkron `initDisplay()` selesai mengambil data dari Supabase. Akibatnya siklus slide pertama selalu tertahan selama 10 detik.
+
+2. **Ketiadaan Penjadwalan Ulang Seketika (*Missing Immediate Reschedule*) pada Listener Realtime:**
+   - Ketika admin mengubah nilai durasi dan menyimpannya, listener Realtime WebSocket di `index.html` menerima event update dan memperbarui variabel `rotationInterval = newSettings.rotation_interval * 1000`.
+   - Namun, kode tersebut **tidak memanggil `scheduleNextRotation()`**. Timer `setTimeout` yang sedang berjalan pada durasi lama (10 detik) dibiarkan terus berdetik sampai selesai, menciptakan kesan bahwa perubahan tidak berpengaruh.
+
+3. **Duplikasi Elemen ID di Formulir Panel Admin (`admin.html`):**
+   - Terdapat dua formulir berbeda yang menggunakan ID DOM identik `id="cfgIntervalTV"`:
+     - Tab **Jadwal Sholat & Durasi TV** (baris 2082).
+     - Tab **Pengaturan Sistem** (baris 4458).
+   - Di JavaScript standar, `document.getElementById('cfgIntervalTV')` hanya akan selalu mengambil elemen DOM pertama. Jika pengguna menyetel nilai pada tab Pengaturan Sistem, perubahan tersebut terabaikan atau tertimpa oleh nilai lama tab pertama.
+   - Atribut input sebelumnya juga memiliki `min="5"` yang membatasi fleksibilitas pengguna jika ingin durasi lebih cepat.
+
+4. **Anomali Baris Duplikat (*Ghost Rows*) di Tabel `app_settings` Supabase:**
+   - Pengecekan isi tabel Supabase via REST API mengungkap adanya 3 baris data:
+     - `id: 1` memiliki `rotation_interval: 5`
+     - `id: 2` memiliki `rotation_interval: 10`
+     - `id: 3` memiliki `rotation_interval: 10`
+   - Jika ada kueri atau fallback kueri yang mengambil baris tanpa pengurutan spesifik `id=eq.1`, baris cadangan dengan durasi 10 detik berisiko dibaca oleh layar TV.
+
+5. **Ketiadaan Sinyal Siaran Jarak Jauh (*Instant Remote Broadcast*):**
+   - Sebelumnya, tombol simpan hanya mengandalkan pembaruan tabel REST API Supabase. Display TV harus menunggu siklus polling atau event stream tanpa pemaksaan eksekusi instan di level runtime TV.
+
+---
+
+### 3. Rincian Solusi & Perbaikan Komprehensif
+
+1. **Inisialisasi Sinkron 0 ms di `web-statis/index.html`:**
+   - Mengganti deklarasi statis dengan IIFE yang membaca secara sinkron dari `localStorage.getItem('display_rotation_interval')` atau `cached_app_settings.rotation_interval`:
+     ```javascript
+     const _savedRotInterval = (() => {
+         try {
+             const direct = localStorage.getItem('display_rotation_interval');
+             if (direct && !isNaN(parseInt(direct))) return Math.max(1, parseInt(direct));
+             const cached = localStorage.getItem('cached_app_settings');
+             if (cached) {
+                 const p = JSON.parse(cached);
+                 if (p && p.rotation_interval && !isNaN(parseInt(p.rotation_interval))) {
+                     return Math.max(1, parseInt(p.rotation_interval));
+                 }
+             }
+         } catch (e) {}
+         return 10;
+     })();
+     let rotationInterval = _savedRotInterval * 1000;
+     ```
+   - Dengan ini, begitu browser TV dinyalakan atau dimuat, timer pertama langsung berjalan pada durasi 5 detik sejak milidetik ke-0.
+
+2. **Reschedule Seketika pada Listener Realtime:**
+   - Pada blok `SupabaseDB.subscribeRealtime` ketika menerima payload tabel `app_settings`:
+     ```javascript
+     if (settings && settings.rotation_interval) {
+         rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
+         localStorage.setItem('display_rotation_interval', settings.rotation_interval);
+         scheduleNextRotation(); // Langsung atur ulang timer rotasi detik itu juga
+     }
+     ```
+
+3. **Penambahan Remote Broadcast Command `UPDATE_SETTINGS`:**
+   - Menambahkan event command `UPDATE_SETTINGS` pada listener `subscribeRemoteCommands`:
+     ```javascript
+     case 'UPDATE_SETTINGS':
+         if (d.rotation_interval) {
+             rotationInterval = Math.max(1, parseInt(d.rotation_interval)) * 1000;
+             localStorage.setItem('display_rotation_interval', d.rotation_interval);
+             scheduleNextRotation();
+             showOsd(`⚡ Remote: Durasi Rotasi ${d.rotation_interval} detik`);
+         }
+         break;
+     ```
+   - Memungkinkan perubahan durasi di admin langsung tercermin di TV display dalam waktu < 100 milidetik via WebSocket broadcast.
+
+4. **Penyelesaian ID Duplikat & Sinkronisasi Dua Arah di `web-statis/admin.html`:**
+   - Mengubah ID pada tab Pengaturan Sistem menjadi `id="cfgIntervalTVSystem"`.
+   - Mengizinkan input minimal 1 detik (`min="1"`).
+   - Menambahkan fungsi sinkronisasi input dua arah `syncIntervalTV(val)` sehingga jika salah satu input diubah, input di tab lain langsung mengikuti secara otomatis.
+   - Memperbarui fungsi `populateSettings()` untuk mengisi kedua input dengan nilai yang sama dari database.
+   - Memperbarui `simpanJadwalSholat()` dan `simpanPengaturanSistem()` agar sama-sama membaca kedua input dengan aman (`cfgIntervalTV` || `cfgIntervalTVSystem`), menyimpan ke `localStorage.setItem('display_rotation_interval', val)`, memperbarui cache `cached_app_settings`, mem-patch `id=eq.1` sekaligus `id=gt.1` di Supabase, dan memancarkan `sendRemoteCommand('UPDATE_SETTINGS')`.
+
+5. **Pembersihan & Sinkronisasi Baris Supabase Cloud:**
+   - Melakukan eksekusi PATCH REST API langsung ke tabel `app_settings` sehingga seluruh baris (`id: 1`, `id: 2`, `id: 3`) tersinkronisasi menjadi `rotation_interval: 5`.
+
+6. **Pembaruan `web-statis/js/supabase-db.js`:**
+   - Fungsi `getSettings()` kini otomatis menyinkronkan `localStorage.setItem('display_rotation_interval', settings.rotation_interval)`.
+   - Fungsi `saveSettings()` otomatis memperbarui `display_rotation_interval`, mem-patch baris cadangan `id=gt.1`, dan memancarkan remote command `UPDATE_SETTINGS`.
+
+7. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.1` agar browser TV segera memperbarui skrip dan aset teranyar.
+
+---
+
+### 4. Hasil Verifikasi Nyata (CDP Automation)
+Pengujian durasi rotasi dilakukan langsung pada instance browser display TV (`scratch/poll_slide_switches.js`):
+- **Slide 1 (`slides/jumat.html`) ➔ Slide 2 (`slides/pengumuman.html`):** Berganti tepat dalam **5,0 detik**.
+- **Slide 2 (`slides/pengumuman.html`) ➔ Slide 3 (`slides/keuangan-summary.html`):** Berganti tepat dalam **5,0 detik**.
+- **Slide 3 (`slides/keuangan-summary.html`) ➔ Slide 4 (`slides/qris.html`):** Berganti tepat dalam **5,0 detik**.
+- Seluruh pergantian slide kini terbukti akurat, presisi, dan stabil pada durasi 5 detik sesuai pengaturan pengguna.
+
+---
+
+### 5. Berkas yang Dimodifikasi
+1. `web-statis/index.html` (Inisialisasi sinkron 0 ms dari localStorage, immediate reschedule pada Realtime listener, handler `UPDATE_SETTINGS`).
+2. `web-statis/admin.html` (Penyelesaian duplikasi ID `cfgIntervalTVSystem`, fungsi `syncIntervalTV`, penyesuaian `min="1"`, pembaruan `simpanJadwalSholat` dan `simpanPengaturanSistem`).
+3. `web-statis/js/supabase-db.js` (Sinkronisasi otomatis `display_rotation_interval`, backup patch `id=gt.1`, dan broadcast `UPDATE_SETTINGS`).
+4. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.1.1`).
+5. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 157).
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi berkas lokal otomatis).
+7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

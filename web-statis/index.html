@@ -552,7 +552,22 @@
         let activePages = [];
         let currentIndex = 0;
         let rotationTimer = null;
-        let rotationInterval = 10000;
+        // Baca langsung preferensi durasi dari LocalStorage agar sejak milidetik pertama durasi rotasi sudah tepat
+        const _savedRotInterval = (() => {
+            const direct = localStorage.getItem('display_rotation_interval');
+            if (direct && !isNaN(parseInt(direct))) return Math.max(1, parseInt(direct));
+            try {
+                const cached = localStorage.getItem('cached_app_settings');
+                if (cached) {
+                    const p = JSON.parse(cached);
+                    if (p && p.rotation_interval && !isNaN(parseInt(p.rotation_interval))) {
+                        return Math.max(1, parseInt(p.rotation_interval));
+                    }
+                }
+            } catch (e) {}
+            return 10;
+        })();
+        let rotationInterval = _savedRotInterval * 1000;
         let isPaused = false;
         let currentFrame = 1;
         let isPrayerModeActive = false;
@@ -960,12 +975,14 @@
                             settings = newSettings;
                             if (settings && settings.rotation_interval) {
                                 rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
+                                localStorage.setItem('display_rotation_interval', settings.rotation_interval);
+                                scheduleNextRotation(); // Langsung reschedule timer rotasi
                             }
                             if (settings && settings.footer) {
                                 updateMasterFooter(settings.footer);
                             }
                             activePages = resolveActivePages(settings, progs);
-                            showOsd('⚡ Pengaturan Diperbarui (Realtime)');
+                            showOsd(`⚡ Durasi Rotasi: ${settings.rotation_interval || 10} detik`);
                         });
                     } else if (payload.table === 'program_infaq') {
                         Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
@@ -989,6 +1006,17 @@
                     console.log('📡 [TV Remote Command Received]:', cmd, d);
 
                     switch (cmd) {
+                        case 'UPDATE_SETTINGS':
+                            if (d.rotation_interval) {
+                                rotationInterval = Math.max(1, parseInt(d.rotation_interval)) * 1000;
+                                localStorage.setItem('display_rotation_interval', d.rotation_interval);
+                                scheduleNextRotation();
+                                showOsd(`⚡ Remote: Durasi Rotasi ${d.rotation_interval} detik`);
+                            }
+                            if (d.footer) {
+                                updateMasterFooter(d.footer);
+                            }
+                            break;
                         case 'NEXT':
                             nextPage();
                             scheduleNextRotation();

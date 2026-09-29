@@ -86,8 +86,11 @@
                             settings.sub_header = 'SISTEM INFORMASI DIGITAL';
                         }
 
-                        // Simpan ke cache lokal browser
+                        // Simpan ke cache lokal browser & pastikan display_rotation_interval tersinkronisasi
                         localStorage.setItem('cached_app_settings', JSON.stringify(settings));
+                        if (settings.rotation_interval) {
+                            localStorage.setItem('display_rotation_interval', settings.rotation_interval);
+                        }
                         return settings;
                     }
                 }
@@ -97,6 +100,7 @@
 
             // Fallback ke localStorage atau default
             const cached = localStorage.getItem('cached_app_settings');
+            let fallbackSettings = Object.assign({}, this.defaultSettings);
             if (cached) {
                 try {
                     const parsed = JSON.parse(cached);
@@ -107,11 +111,14 @@
                     if (!parsed.sub_header || parsed.sub_header.includes('Kebon Jeruk') || parsed.sub_header.includes('Melati') || parsed.sub_header.includes('Graha Asri')) {
                         parsed.sub_header = 'SISTEM INFORMASI DIGITAL';
                     }
-                    localStorage.setItem('cached_app_settings', JSON.stringify(parsed));
-                    return parsed;
+                    fallbackSettings = Object.assign({}, fallbackSettings, parsed);
                 } catch (e) {}
             }
-            return this.defaultSettings;
+            const localRot = localStorage.getItem('display_rotation_interval');
+            if (localRot && !isNaN(parseInt(localRot))) {
+                fallbackSettings.rotation_interval = Math.max(1, parseInt(localRot));
+            }
+            return fallbackSettings;
         },
 
         /**
@@ -130,11 +137,14 @@
                 const current = currentRaw ? JSON.parse(currentRaw) : Object.assign({}, this.defaultSettings);
                 const merged = Object.assign({}, current, updatedFields);
                 localStorage.setItem('cached_app_settings', JSON.stringify(merged));
+                if (updatedFields.rotation_interval) {
+                    localStorage.setItem('display_rotation_interval', updatedFields.rotation_interval);
+                }
             } catch (e) {
                 console.warn('[SupabaseDB] Gagal update cached_app_settings lokal:', e);
             }
 
-            // 2. Kirim update ke Cloud Supabase (id=1)
+            // 2. Kirim update ke Cloud Supabase (id=1 dan baris cadangan id>1)
             try {
                 if (SUPABASE_CONFIG && SUPABASE_CONFIG.url) {
                     const headers = {
@@ -149,6 +159,20 @@
                         headers: headers,
                         body: JSON.stringify(updatedFields)
                     });
+
+                    // Sinkronkan juga baris cadangan jika rotation_interval berubah
+                    if (updatedFields.rotation_interval) {
+                        fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=gt.1`, {
+                            method: 'PATCH',
+                            headers: headers,
+                            body: JSON.stringify({ rotation_interval: updatedFields.rotation_interval })
+                        }).catch(() => {});
+                    }
+
+                    // Kirim sinyal Remote Command UPDATE_SETTINGS agar display TV langsung adopsi tanpa jeda
+                    if (typeof this.sendRemoteCommand === 'function') {
+                        this.sendRemoteCommand('UPDATE_SETTINGS', updatedFields).catch(() => {});
+                    }
 
                     if (res.ok) {
                         const data = await res.json().catch(() => null);
