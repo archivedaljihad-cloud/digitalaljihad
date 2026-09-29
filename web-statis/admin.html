@@ -4493,9 +4493,14 @@
                                                 <label class="font-weight-bold mb-0 text-dark">
                                                     <i class="fas fa-kaaba text-warning mr-1"></i> YouTube Live Ka'bah Makkah
                                                 </label>
-                                                <button type="button" class="btn btn-xs btn-outline-primary" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="previewStreamUrl('cfgLiveMekah', 'Live Makkah (Masjidil Haram)')">
-                                                    <i class="fas fa-play mr-1"></i> Tes Putar
-                                                </button>
+                                                <div class="d-flex align-items-center" style="gap: 5px;">
+                                                    <button type="button" class="btn btn-xs btn-outline-primary" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="previewStreamUrl('cfgLiveMekah', 'Live Makkah (Masjidil Haram)')" title="Uji putar langsung video YouTube">
+                                                        <i class="fas fa-play mr-1"></i> Tes Putar
+                                                    </button>
+                                                    <button type="button" class="btn btn-xs btn-outline-info" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="bukaPreviewSlide('slides/live-mekah.html', 'Live TV Makkah (Masjidil Haram)')" title="Pratinjau tampilan layar penuh TV slide Makkah">
+                                                        <i class="fas fa-desktop mr-1"></i> Preview Layar TV
+                                                    </button>
+                                                </div>
                                             </div>
                                             <input type="text" class="form-control" id="cfgLiveMekah" placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...">
                                             <small class="text-muted d-block mt-1" style="font-size: 11px;">
@@ -4509,9 +4514,14 @@
                                                 <label class="font-weight-bold mb-0 text-dark">
                                                     <i class="fas fa-mosque text-success mr-1"></i> YouTube Live Masjid Nabawi Madinah
                                                 </label>
-                                                <button type="button" class="btn btn-xs btn-outline-success" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="previewStreamUrl('cfgLiveMadinah', 'Live Madinah (Masjid Nabawi)')">
-                                                    <i class="fas fa-play mr-1"></i> Tes Putar
-                                                </button>
+                                                <div class="d-flex align-items-center" style="gap: 5px;">
+                                                    <button type="button" class="btn btn-xs btn-outline-success" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="previewStreamUrl('cfgLiveMadinah', 'Live Madinah (Masjid Nabawi)')" title="Uji putar langsung video YouTube">
+                                                        <i class="fas fa-play mr-1"></i> Tes Putar
+                                                    </button>
+                                                    <button type="button" class="btn btn-xs btn-outline-info" style="font-size: 11px; padding: 2px 8px; border-radius: 6px;" onclick="bukaPreviewSlide('slides/live-madinah.html', 'Live TV Madinah (Masjid Nabawi)')" title="Pratinjau tampilan layar penuh TV slide Madinah">
+                                                        <i class="fas fa-desktop mr-1"></i> Preview Layar TV
+                                                    </button>
+                                                </div>
                                             </div>
                                             <input type="text" class="form-control" id="cfgLiveMadinah" placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...">
                                             <small class="text-muted d-block mt-1" style="font-size: 11px;">
@@ -5318,7 +5328,7 @@
                 </div>
                 <div class="modal-body p-2" style="background: #020c08;">
                     <div style="position: relative; width: 100%; height: 72vh; min-height: 520px; border-radius: 10px; overflow: hidden; background: #000; box-shadow: inset 0 0 25px rgba(0,0,0,0.9); border: 2px solid rgba(255,215,0,0.2);">
-                        <iframe id="framePreviewTV" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+                        <iframe id="framePreviewTV" src="" style="width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="modal-footer py-2 px-3 d-flex justify-content-between align-items-center" style="background: #04261a; border-top: 1px solid rgba(255,215,0,0.2);">
@@ -6926,11 +6936,26 @@
                             document.getElementById('cfgFooterMasjid').value = s.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
                         }
                         if (document.getElementById('cfgLiveMekah')) {
-                            document.getElementById('cfgLiveMekah').value = s.live_makkah_url || localStorage.getItem('live_makkah_url') || '';
+                            let valMekah = s.live_makkah_url || localStorage.getItem('live_makkah_url') || '';
+                            if (valMekah.includes('live_stream?channel=')) valMekah = '';
+                            document.getElementById('cfgLiveMekah').value = valMekah;
                         }
                         if (document.getElementById('cfgLiveMadinah')) {
-                            document.getElementById('cfgLiveMadinah').value = s.live_madinah_url || localStorage.getItem('live_madinah_url') || '';
+                            let valMadinah = s.live_madinah_url || localStorage.getItem('live_madinah_url') || '';
+                            if (valMadinah.includes('live_stream?channel=')) valMadinah = '';
+                            document.getElementById('cfgLiveMadinah').value = valMadinah;
                         }
+                        // Sinkronkan input streaming otomatis ke localStorage saat pengguna mengetik/menempelkan link
+                        ['cfgLiveMekah', 'cfgLiveMadinah'].forEach(id => {
+                            const inputEl = document.getElementById(id);
+                            if (inputEl && !inputEl.dataset.autoSyncBound) {
+                                inputEl.dataset.autoSyncBound = 'true';
+                                inputEl.addEventListener('input', function() {
+                                    const key = (id === 'cfgLiveMekah') ? 'live_makkah_url' : 'live_madinah_url';
+                                    localStorage.setItem(key, this.value.trim());
+                                });
+                            }
+                        });
                         if (document.getElementById('cfgCctvMimbar') && s.cctv_mimbar_url) document.getElementById('cfgCctvMimbar').value = s.cctv_mimbar_url;
                         
                         // Google Gemini AI Settings
@@ -8827,6 +8852,16 @@
             const btnNewTab = document.getElementById('btnPreviewNewTab');
 
             if (!frame) return;
+
+            // Sinkronkan nilai input streaming langsung ke localStorage agar preview selalu mutakhir
+            const mekahVal = document.getElementById('cfgLiveMekah')?.value?.trim();
+            if (mekahVal !== undefined && mekahVal !== null) {
+                localStorage.setItem('live_makkah_url', mekahVal);
+            }
+            const madinahVal = document.getElementById('cfgLiveMadinah')?.value?.trim();
+            if (madinahVal !== undefined && madinahVal !== null) {
+                localStorage.setItem('live_madinah_url', madinahVal);
+            }
 
             if (labelTitle) labelTitle.textContent = title || 'Pratinjau Layar TV Display';
             if (labelUrl) labelUrl.textContent = url || '';

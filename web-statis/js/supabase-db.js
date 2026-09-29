@@ -690,6 +690,11 @@
                 return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${videoId}&enablejsapi=1&playsinline=1`;
             }
 
+            // Abaikan endpoint live_stream?channel= yang telah dimatikan total oleh YouTube
+            if (trimmed.includes('live_stream?channel=') || trimmed.includes('channel=')) {
+                return fallbackUrl;
+            }
+
             // Jika URL iframe / stream lain (misal RTSP HLS http/https)
             if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
                 let stream = trimmed;

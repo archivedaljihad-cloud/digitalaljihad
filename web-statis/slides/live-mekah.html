@@ -274,9 +274,11 @@
         async function loadStreamSettings() {
             try {
                 const settings = await SupabaseDB.getSettings();
-                const rawUrl = (settings && settings.live_makkah_url) 
-                    ? settings.live_makkah_url 
-                    : (localStorage.getItem('live_makkah_url') || '');
+                const localMekah = localStorage.getItem('live_makkah_url');
+                const dbMekah = settings ? settings.live_makkah_url : '';
+                let rawUrl = (localMekah && !localMekah.includes('live_stream?channel=')) 
+                    ? localMekah 
+                    : ((dbMekah && !dbMekah.includes('live_stream?channel=')) ? dbMekah : '');
 
                 if (settings) {
                     const rText = SupabaseDB.getRunningTextForPage('/live-mekah-embed', settings);
@@ -296,6 +298,18 @@
                 console.error('Gagal memuat setting streaming:', err);
             }
         }
+
+        // Fast immediate load dari localStorage agar tampilan instan tanpa jeda
+        try {
+            const fastMekah = localStorage.getItem('live_makkah_url');
+            if (fastMekah && !fastMekah.includes('live_stream?channel=') && window.SupabaseDB && SupabaseDB.formatYouTubeEmbed) {
+                const fastEmbed = SupabaseDB.formatYouTubeEmbed(fastMekah);
+                if (fastEmbed) {
+                    const iframe = document.getElementById('videoIframe');
+                    if (iframe) iframe.src = fastEmbed;
+                }
+            }
+        } catch (e) {}
 
         document.addEventListener('DOMContentLoaded', () => {
             loadStreamSettings();

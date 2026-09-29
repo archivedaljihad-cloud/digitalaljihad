@@ -7325,3 +7325,44 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 ### 2. Berkas Terkait
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 167 - PERBAIKAN PRATINJAU SLIDE LIVE STREAMING & FAST INSTANT LOADER)
+
+### 1. Latar Belakang & Analisis Masalah
+- **Keluhan Pengguna:**
+  - *"Test putar di gambar 1 bisa. Tapi Saat di preview halaman tampilannya hanya seperti di gambar 2."*
+- **Akar Masalah (*Root Cause*):**
+  1. **Ketidakcocokan Kolom Input vs Slide yang Dibuka:**
+     - Pada **Gambar 1**, pengguna memasukkan link video YouTube `youtube.com/watch?v=YUa2p85jR68...` ke kolom **YouTube Live Masjid Nabawi Madinah** (kotak hijau) dan menekan *Tes Putar* (berhasil memutar video di modal player).
+     - Namun pada **Gambar 2**, pengguna membuka modal pratinjau untuk slide **Live TV Makkah (Masjidil Haram) `slides/live-mekah.html`** (slide Makkah, bukan Madinah).
+     - Kolom input **YouTube Live Ka'bah Makkah** (kotak emas) masih terisi link lama `https://www.youtube.com/embed/live_stream?channel=...` yang telah dinonaktifkan permanen oleh Google/YouTube.
+     - Karena link Makkah tidak valid dan ditolak oleh filter keamanan `SupabaseDB.formatYouTubeEmbed`, slide `live-mekah.html` secara cerdas dan aman menampilkan latar belakang cadangan (*fallback wallpaper* Ka'bah `kaabah.webp`) bersama jam digital dan teks berjalan.
+  2. **Izin Nested Iframe Antar Dokumen:**
+     - Pratinjau slide TV di admin menggunakan iframe bertingkat (*nested iframe*): Admin -> `#framePreviewTV` -> `slides/live-mekah.html` -> `#videoIframe` (YouTube).
+     - Iframe induk `#framePreviewTV` dan rotator utama di `web-statis/index.html` (`#frame1` & `#frame2`) memerlukan atribut `allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"` dan `referrerpolicy="strict-origin-when-cross-origin"` agar browser tidak memblokir komunikasi silang (*cross-origin*) YouTube Player.
+  3. **Keterlambatan Penyimpanan Lokal (*Draft State*):**
+     - Jika pengguna belum menekan tombol *"Simpan Konfigurasi"*, perubahan di input teks belum masuk ke database Supabase.
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembersihan Otomatis URL Deprecated Channel (`loadSettings`):**
+   - Saat halaman Admin dibuka, sistem secara otomatis mendeteksi jika URL Makkah atau Madinah masih berupa format usang `live_stream?channel=`, lalu langsung mengosongkannya agar pengguna tidak terkecoh oleh link usang.
+2. **Sinkronisasi Realtime Input ke `localStorage`:**
+   - Menambahkan event listener `input` langsung pada `#cfgLiveMekah` dan `#cfgLiveMadinah`. Setiap kali pengguna mengetik atau menempel (*paste*) link baru, nilai otomatis tersimpan ke `localStorage` tanpa harus menunggu klik tombol Simpan.
+   - Pada fungsi `bukaPreviewSlide()`, kedua nilai streaming Makkah & Madinah disinkronkan secara ganda ke `localStorage`.
+3. **Tombol Pintas *"Preview Layar TV"* Langsung di Kartu Streaming:**
+   - Di samping tombol *[Tes Putar]*, ditambahkan tombol baru *[Preview Layar TV]* langsung pada kotak input Makkah maupun Madinah di `admin.html`. Pengguna dapat langsung menguji tampilan TV slide Makkah atau Madinah dengan 1 klik tanpa harus mencari barisnya di tabel rotasi 19 slide.
+4. **Fast Immediate Boot Loader di Slide (`live-mekah.html` & `live-madinah.html`):**
+   - Ditambahkan script inisialisasi cepat yang membaca URL langsung dari `localStorage` secara sinkron saat slide pertama kali dimuat.
+   - Jika tersedia URL valid, embed YouTube langsung dipasang ke `iframe.src` sebelum koneksi database Supabase selesai, sehingga pratinjau tampil instan tanpa jeda/kedip layar hitam.
+5. **Pembaruan Izin Iframe Display Rotator (`web-statis/index.html`):**
+   - Ditambahkan `allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"` dan `referrerpolicy="strict-origin-when-cross-origin"` pada `#frame1` dan `#frame2` di `index.html` untuk menjamin kelancaran putaran live stream di TV fisik masjid.
+
+### 3. Berkas yang Terkait
+1. `web-statis/admin.html`
+2. `web-statis/slides/live-mekah.html`
+3. `web-statis/slides/live-madinah.html`
+4. `web-statis/index.html`
+5. `web-statis/js/supabase-db.js`
+6. `LATEST_UPDATE.md`

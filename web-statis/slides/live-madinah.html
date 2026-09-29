@@ -274,9 +274,11 @@
         async function loadStreamSettings() {
             try {
                 const settings = await SupabaseDB.getSettings();
-                const rawUrl = (settings && settings.live_madinah_url) 
-                    ? settings.live_madinah_url 
-                    : (localStorage.getItem('live_madinah_url') || '');
+                const localMadinah = localStorage.getItem('live_madinah_url');
+                const dbMadinah = settings ? settings.live_madinah_url : '';
+                let rawUrl = (localMadinah && !localMadinah.includes('live_stream?channel=')) 
+                    ? localMadinah 
+                    : ((dbMadinah && !dbMadinah.includes('live_stream?channel=')) ? dbMadinah : '');
 
                 if (settings) {
                     const rText = SupabaseDB.getRunningTextForPage('/live-madinah-embed', settings);
@@ -296,6 +298,18 @@
                 console.error('Gagal memuat setting streaming:', err);
             }
         }
+
+        // Fast immediate load dari localStorage agar tampilan instan tanpa jeda
+        try {
+            const fastMadinah = localStorage.getItem('live_madinah_url');
+            if (fastMadinah && !fastMadinah.includes('live_stream?channel=') && window.SupabaseDB && SupabaseDB.formatYouTubeEmbed) {
+                const fastEmbed = SupabaseDB.formatYouTubeEmbed(fastMadinah);
+                if (fastEmbed) {
+                    const iframe = document.getElementById('videoIframe');
+                    if (iframe) iframe.src = fastEmbed;
+                }
+            }
+        } catch (e) {}
 
         document.addEventListener('DOMContentLoaded', () => {
             loadStreamSettings();
