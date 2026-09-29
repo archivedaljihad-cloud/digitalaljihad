@@ -154,10 +154,35 @@
                         'Prefer': 'return=representation'
                     };
 
+                    // Salin dan sanitasi payload agar hanya kolom yang valid di tabel app_settings Supabase yang dikirim
+                    // Mencegah error PGRST204 (Could not find column in schema cache)
+                    const cleanPayload = Object.assign({}, updatedFields);
+                    if (cleanPayload.prayer_mode_enabled !== undefined) {
+                        cleanPayload.value = cleanPayload.prayer_mode_enabled ? '1' : '0';
+                        delete cleanPayload.prayer_mode_enabled;
+                    }
+                    if (cleanPayload.prayer_mode_duration !== undefined) {
+                        cleanPayload.prayer_mode_after_prayer = cleanPayload.prayer_mode_duration;
+                        delete cleanPayload.prayer_mode_duration;
+                    }
+                    const validColumns = [
+                        'id', 'key', 'value', 'nama_aplikasi', 'footer', 'live_makkah_url', 'cctv_mimbar_url',
+                        'gemini_api_key', 'gemini_model', 'rotation_interval', 'prayer_mode_before_adzan',
+                        'prayer_mode_adzan_duration', 'prayer_mode_iqamah_duration', 'prayer_mode_after_prayer',
+                        'prayer_mode_jumat_duration', 'audio_tarhim', 'tarhim_trigger_seconds', 'yasin_mode_enabled',
+                        'yasin_start_time', 'yasin_scroll_speed', 'auto_switch_views', 'rotation_pages'
+                    ];
+                    const filteredPayload = {};
+                    for (const k of Object.keys(cleanPayload)) {
+                        if (validColumns.includes(k)) {
+                            filteredPayload[k] = cleanPayload[k];
+                        }
+                    }
+
                     const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                         method: 'PATCH',
                         headers: headers,
-                        body: JSON.stringify(updatedFields)
+                        body: JSON.stringify(filteredPayload)
                     });
 
                     // Sinkronkan juga baris cadangan jika rotation_interval berubah

@@ -893,7 +893,10 @@
                         document.title = settings.nama_aplikasi + ' - Display TV';
                     }
                     if (settings.rotation_interval) {
-                        rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
+                        const sec = Math.max(1, parseInt(settings.rotation_interval));
+                        rotationInterval = sec * 1000;
+                        localStorage.setItem('display_rotation_interval', sec);
+                        console.log(`⏱️ [Display TV] Durasi rotasi disetel dari Cloud Supabase: ${sec} detik (${rotationInterval} ms)`);
                     }
                     // Sinkronisasi teks footer hak cipta yang diatur Super Admin
                     const footerText = settings.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";

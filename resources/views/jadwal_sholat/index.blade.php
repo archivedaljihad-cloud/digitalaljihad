@@ -206,7 +206,7 @@
 								</label>
 								<div class="input-group">
 									<input type="number" name="rotation_interval" class="form-control"
-										value="{{ old('rotation_interval', $setting->rotation_interval ?? 20) }}" min="1" max="3600" required>
+										value="{{ old('rotation_interval', $setting->rotation_interval ?? 10) }}" min="1" max="3600" required>
 									<div class="input-group-append">
 										<span class="input-group-text font-weight-bold">detik</span>
 									</div>

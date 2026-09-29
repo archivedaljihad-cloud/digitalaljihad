@@ -2066,7 +2066,7 @@
                                                     <small class="text-muted d-block">Jika aktif, layar TV otomatis masuk ke mode hitung mundur, kumandang adzan, iqamah, dan mode sholat hening saat waktu sholat tiba.</small>
                                                 </div>
                                                 <div class="custom-control custom-switch ml-3" style="transform: scale(1.35);">
-                                                    <input type="checkbox" class="custom-control-input" id="cfgPrayerModeEnabled" checked onchange="handlePrayerModeSwitch(this)">
+                                                    <input type="checkbox" class="custom-control-input" id="cfgPrayerModeEnabled" checked onchange="handlePrayerModeSwitch(this); simpanPengaturanDurasiTV(true);">
                                                     <label class="custom-control-label" for="cfgPrayerModeEnabled" style="cursor: pointer;"></label>
                                                 </div>
                                             </div>
@@ -2079,7 +2079,7 @@
                                                     <i class="fas fa-sync-alt text-primary mr-1"></i> Interval Rotasi Halaman TV
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control font-weight-bold text-center" id="cfgIntervalTV" value="5" min="1" max="300" oninput="syncIntervalTV(this.value)">
+                                                    <input type="number" class="form-control font-weight-bold text-center" id="cfgIntervalTV" value="10" min="1" max="300" oninput="syncIntervalTV(this.value)" onchange="simpanPengaturanDurasiTV(true)">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text font-weight-bold">detik</span>
                                                     </div>
@@ -2090,7 +2090,7 @@
                                                 <label class="font-weight-bold text-dark mb-1">
                                                     <i class="fas fa-volume-up text-info mr-1"></i> Audio Tarhim Sebelum Adzan
                                                 </label>
-                                                <select class="form-control" id="cfgAudioTarhim">
+                                                <select class="form-control" id="cfgAudioTarhim" onchange="simpanPengaturanDurasiTV(true)">
                                                     <option value="5" selected>5 Menit Sebelum Adzan (Standar)</option>
                                                     <option value="10">10 Menit Sebelum Adzan</option>
                                                     <option value="15">15 Menit Sebelum Adzan</option>
@@ -2169,6 +2169,16 @@
                                                     <small class="mt-2 text-center font-weight-bold" style="font-size: 11.5px; color: #64748b; max-width: 155px; line-height: 1.3;">Bisa disesuaikan tiap pekan (35–60 mnt)</small>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <!-- ACTION BUTTON & AUTO-SYNC STATUS DURASI TV -->
+                                        <div class="mt-3 pt-3 border-top d-flex align-items-center justify-content-between flex-wrap" style="gap: 10px;">
+                                            <small class="text-muted font-italic" id="statusAutoSyncTV">
+                                                <i class="fas fa-magic text-success mr-1"></i> Tersimpan otomatis saat nilai diubah & disiarkan langsung ke TV
+                                            </small>
+                                            <button type="button" class="btn btn-success font-weight-bold px-4 shadow-sm" onclick="simpanPengaturanDurasiTV(false)" id="btnSimpanDurasiTV">
+                                                <i class="fas fa-save mr-1"></i> Simpan Pengaturan Durasi TV
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -4455,7 +4465,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Interval Rotasi Layar TV (Detik)</label>
-                                            <input type="number" class="form-control" id="cfgIntervalTVSystem" value="5" min="1" oninput="syncIntervalTV(this.value)">
+                                            <input type="number" class="form-control" id="cfgIntervalTVSystem" value="10" min="1" max="300" oninput="syncIntervalTV(this.value)" onchange="simpanPengaturanDurasiTV(true)">
                                             <small class="text-muted">Ambang batas durasi pergantian antar halaman slide TV.</small>
                                         </div>
                                         <div class="form-group mb-0">
@@ -5835,6 +5845,15 @@
             initDateInputs();
             initSidebarToggle();
 
+            // Inisialisasi awal nilai interval rotasi TV dari cache / setting
+            try {
+                const savedInterval = localStorage.getItem('display_rotation_interval') || (localStorage.getItem('cached_app_settings') ? JSON.parse(localStorage.getItem('cached_app_settings')).rotation_interval : null);
+                if (savedInterval) {
+                    if (document.getElementById('cfgIntervalTV')) document.getElementById('cfgIntervalTV').value = savedInterval;
+                    if (document.getElementById('cfgIntervalTVSystem')) document.getElementById('cfgIntervalTVSystem').value = savedInterval;
+                }
+            } catch (e) {}
+
             // Inisialisasi awal tabel rotasi (langsung dari cache lokal atau master 18 halaman)
             try {
                 const localRot = localStorage.getItem('cached_rotation_pages');
@@ -6822,6 +6841,7 @@
                         if (s.rotation_interval) {
                             if (document.getElementById('cfgIntervalTV')) document.getElementById('cfgIntervalTV').value = s.rotation_interval;
                             if (document.getElementById('cfgIntervalTVSystem')) document.getElementById('cfgIntervalTVSystem').value = s.rotation_interval;
+                            localStorage.setItem('display_rotation_interval', s.rotation_interval);
                         }
                         if (document.getElementById('cfgFooterMasjid')) {
                             document.getElementById('cfgFooterMasjid').value = s.footer || localStorage.getItem('app_footer_text') || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
@@ -6848,7 +6868,9 @@
                         if (document.getElementById('cfgCountdownAdzan') && s.prayer_mode_before_adzan) document.getElementById('cfgCountdownAdzan').value = s.prayer_mode_before_adzan;
                         if (document.getElementById('cfgDurasiAdzan') && s.prayer_mode_adzan_duration) document.getElementById('cfgDurasiAdzan').value = s.prayer_mode_adzan_duration;
                         if (document.getElementById('cfgDurasiIqamah') && s.prayer_mode_iqamah_duration) document.getElementById('cfgDurasiIqamah').value = s.prayer_mode_iqamah_duration;
-                        if (document.getElementById('cfgDurasiSholat') && s.prayer_mode_duration) document.getElementById('cfgDurasiSholat').value = s.prayer_mode_duration;
+                        const sholatDurVal = s.prayer_mode_after_prayer || s.prayer_mode_duration;
+                        if (document.getElementById('cfgDurasiSholat') && sholatDurVal) document.getElementById('cfgDurasiSholat').value = sholatDurVal;
+                        if (document.getElementById('cfgAudioTarhim') && s.audio_tarhim !== undefined) document.getElementById('cfgAudioTarhim').value = s.audio_tarhim;
                         
                         // Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
                         const jumatDur = parseInt(s.prayer_mode_jumat_duration) || 50;
@@ -9812,23 +9834,147 @@
             }
         }
 
-        // Sinkronisasi otomatis nilai interval antar form jadwal sholat dan pengaturan sistem
+        // Sinkronisasi otomatis nilai interval antar form jadwal sholat dan pengaturan sistem dengan auto-save debounced
+        let _durasiSaveDebounce = null;
         function syncIntervalTV(val) {
             const el1 = document.getElementById('cfgIntervalTV');
             const el2 = document.getElementById('cfgIntervalTVSystem');
             if (el1 && el1.value != val) el1.value = val;
             if (el2 && el2.value != val) el2.value = val;
+
+            const badge = document.getElementById('statusAutoSyncTV');
+            if (badge) {
+                badge.innerHTML = '<i class="fas fa-spinner fa-spin text-primary mr-1"></i> Menyimpan perubahan durasi...';
+            }
+
+            clearTimeout(_durasiSaveDebounce);
+            _durasiSaveDebounce = setTimeout(() => {
+                simpanPengaturanDurasiTV(true);
+            }, 600);
+        }
+
+        // Simpan Pengaturan Durasi TV, Prayer Mode, dan Interval Rotasi ke Supabase Cloud
+        async function simpanPengaturanDurasiTV(isSilent = false) {
+            const btn = document.getElementById('btnSimpanDurasiTV');
+            const badge = document.getElementById('statusAutoSyncTV');
+            if (btn && !isSilent) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
+            }
+
+            const prayerEnabled = document.getElementById('cfgPrayerModeEnabled') ? document.getElementById('cfgPrayerModeEnabled').checked : true;
+            const rotInterval = Math.max(1, parseInt(document.getElementById('cfgIntervalTV')?.value || document.getElementById('cfgIntervalTVSystem')?.value) || 10);
+            const countdownDur = Math.max(1, parseInt(document.getElementById('cfgCountdownAdzan')?.value) || 5);
+            const adzanDur = Math.max(1, parseInt(document.getElementById('cfgDurasiAdzan')?.value) || 3);
+            const iqamahDur = Math.max(1, parseInt(document.getElementById('cfgDurasiIqamah')?.value) || 10);
+            const sholatDur = Math.max(1, parseInt(document.getElementById('cfgDurasiSholat')?.value) || 15);
+            const jumatDur = Math.max(10, parseInt(document.getElementById('cfgDurasiJumat')?.value) || 50);
+            const audioTarhim = parseInt(document.getElementById('cfgAudioTarhim')?.value ?? 5);
+
+            // Sinkronkan input form
+            syncIntervalTV(rotInterval);
+            syncDurasiJumat(jumatDur);
+
+            // Simpan ke localStorage lokal browser
+            localStorage.setItem('display_rotation_interval', rotInterval);
+            localStorage.setItem('display_prayer_mode_enabled', prayerEnabled);
+            localStorage.setItem('display_prayer_mode_jumat_duration', jumatDur);
+
+            try {
+                const cachedRaw = localStorage.getItem('cached_app_settings');
+                const cached = cachedRaw ? JSON.parse(cachedRaw) : {};
+                cached.rotation_interval = rotInterval;
+                cached.prayer_mode_enabled = prayerEnabled;
+                cached.value = prayerEnabled ? '1' : '0';
+                cached.prayer_mode_before_adzan = countdownDur;
+                cached.prayer_mode_adzan_duration = adzanDur;
+                cached.prayer_mode_iqamah_duration = iqamahDur;
+                cached.prayer_mode_after_prayer = sholatDur;
+                cached.prayer_mode_duration = sholatDur;
+                cached.prayer_mode_jumat_duration = jumatDur;
+                cached.audio_tarhim = audioTarhim;
+                cached.tarhim_trigger_seconds = audioTarhim * 60;
+                localStorage.setItem('cached_app_settings', JSON.stringify(cached));
+            } catch (e) {}
+
+            // Payload bersih sesuai skema kolom tabel app_settings di Supabase
+            const cleanPayload = {
+                rotation_interval: rotInterval,
+                value: prayerEnabled ? '1' : '0',
+                prayer_mode_before_adzan: countdownDur,
+                prayer_mode_adzan_duration: adzanDur,
+                prayer_mode_iqamah_duration: iqamahDur,
+                prayer_mode_after_prayer: sholatDur,
+                prayer_mode_jumat_duration: jumatDur,
+                audio_tarhim: audioTarhim,
+                tarhim_trigger_seconds: audioTarhim * 60
+            };
+
+            let saveSuccess = false;
+            try {
+                if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify(cleanPayload)
+                    });
+
+                    if (res.ok) {
+                        saveSuccess = true;
+                    } else {
+                        const errTxt = await res.text();
+                        console.warn('⚠️ Gagal update app_settings cloud:', res.status, errTxt);
+                    }
+
+                    // Sinkronkan juga baris cadangan (id>1)
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=gt.1`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({ rotation_interval: rotInterval })
+                    }).catch(() => {});
+                }
+
+                // Kirim sinyal broadcast remote ke Display TV
+                if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
+                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', cleanPayload).catch(() => {});
+                }
+            } catch (err) {
+                console.warn('⚠️ Network error saat simpanPengaturanDurasiTV:', err);
+            } finally {
+                const jamSekarang = new Date().toLocaleTimeString('id-ID');
+                if (badge) {
+                    badge.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Tersinkron ke TV: ${rotInterval} detik (${jamSekarang})`;
+                }
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Pengaturan Durasi TV';
+                }
+                if (!isSilent) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pengaturan Durasi TV Tersimpan!',
+                            html: `Durasi rotasi halaman TV diatur ke <b>${rotInterval} detik</b>.<br>Sinyal pembaruan langsung dipancarkan secara realtime ke seluruh layar TV display.`,
+                            confirmButtonColor: '#10b981',
+                            timer: 2500
+                        });
+                    } else {
+                        alert(`Pengaturan Durasi TV berhasil disimpan (${rotInterval} detik)!`);
+                    }
+                }
+            }
         }
 
         // Simpan Jadwal Sholat, Pengaturan Prayer Mode TV & Durasi Sholat Jum'at
         async function simpanJadwalSholat() {
             const prayerEnabled = document.getElementById('cfgPrayerModeEnabled') ? document.getElementById('cfgPrayerModeEnabled').checked : true;
-            const rotInterval = parseInt(document.getElementById('cfgIntervalTV')?.value || document.getElementById('cfgIntervalTVSystem')?.value) || 20;
-            const countdownDur = parseInt(document.getElementById('cfgCountdownAdzan')?.value) || 5;
-            const adzanDur = parseInt(document.getElementById('cfgDurasiAdzan')?.value) || 3;
-            const iqamahDur = parseInt(document.getElementById('cfgDurasiIqamah')?.value) || 10;
-            const sholatDur = parseInt(document.getElementById('cfgDurasiSholat')?.value) || 15;
-            const jumatDur = parseInt(document.getElementById('cfgDurasiJumat')?.value) || 50;
+            const rotInterval = Math.max(1, parseInt(document.getElementById('cfgIntervalTV')?.value || document.getElementById('cfgIntervalTVSystem')?.value) || 10);
+            const countdownDur = Math.max(1, parseInt(document.getElementById('cfgCountdownAdzan')?.value) || 5);
+            const adzanDur = Math.max(1, parseInt(document.getElementById('cfgDurasiAdzan')?.value) || 3);
+            const iqamahDur = Math.max(1, parseInt(document.getElementById('cfgDurasiIqamah')?.value) || 10);
+            const sholatDur = Math.max(1, parseInt(document.getElementById('cfgDurasiSholat')?.value) || 15);
+            const jumatDur = Math.max(10, parseInt(document.getElementById('cfgDurasiJumat')?.value) || 50);
+            const audioTarhim = parseInt(document.getElementById('cfgAudioTarhim')?.value ?? 5);
 
             const showImsak = document.getElementById('cfgShowImsak') ? document.getElementById('cfgShowImsak').checked : true;
             const showSyuruk = document.getElementById('cfgShowSyuruk') ? document.getElementById('cfgShowSyuruk').checked : true;
@@ -9844,12 +9990,16 @@
                 const cachedRaw = localStorage.getItem('cached_app_settings');
                 const cached = cachedRaw ? JSON.parse(cachedRaw) : {};
                 cached.prayer_mode_enabled = prayerEnabled;
+                cached.value = prayerEnabled ? '1' : '0';
                 cached.rotation_interval = rotInterval;
                 cached.prayer_mode_before_adzan = countdownDur;
                 cached.prayer_mode_adzan_duration = adzanDur;
                 cached.prayer_mode_iqamah_duration = iqamahDur;
+                cached.prayer_mode_after_prayer = sholatDur;
                 cached.prayer_mode_duration = sholatDur;
                 cached.prayer_mode_jumat_duration = jumatDur;
+                cached.audio_tarhim = audioTarhim;
+                cached.tarhim_trigger_seconds = audioTarhim * 60;
                 localStorage.setItem('cached_app_settings', JSON.stringify(cached));
             } catch (e) {}
 
@@ -9865,18 +10015,23 @@
 
             try {
                 // 1. Update pengaturan prayer mode & seluruh durasi ke app_settings (id=1 dan baris cadangan)
+                // Menggunakan skema kolom valid Supabase tanpa kolom usang yang memicu PGRST204
+                const cleanPayload = {
+                    rotation_interval: rotInterval,
+                    value: prayerEnabled ? '1' : '0',
+                    prayer_mode_before_adzan: countdownDur,
+                    prayer_mode_adzan_duration: adzanDur,
+                    prayer_mode_iqamah_duration: iqamahDur,
+                    prayer_mode_after_prayer: sholatDur,
+                    prayer_mode_jumat_duration: jumatDur,
+                    audio_tarhim: audioTarhim,
+                    tarhim_trigger_seconds: audioTarhim * 60
+                };
+
                 await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
-                    body: JSON.stringify({
-                        prayer_mode_enabled: prayerEnabled,
-                        rotation_interval: rotInterval,
-                        prayer_mode_before_adzan: countdownDur,
-                        prayer_mode_adzan_duration: adzanDur,
-                        prayer_mode_iqamah_duration: iqamahDur,
-                        prayer_mode_duration: sholatDur,
-                        prayer_mode_jumat_duration: jumatDur
-                    })
+                    body: JSON.stringify(cleanPayload)
                 });
 
                 // Sinkronkan juga baris cadangan di cloud
@@ -9888,7 +10043,7 @@
 
                 // Kirim sinyal Remote Broadcast UPDATE_SETTINGS agar display TV langsung mengadopsi interval baru tanpa jeda
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', { rotation_interval: rotInterval }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', cleanPayload).catch(() => {});
                 }
 
                 // 2. Update waktu sholat ke tabel jadwal_sholat Supabase
@@ -10169,7 +10324,7 @@
         // Simpan Konfigurasi Sistem
         async function simpanPengaturanSistem() {
             const nama = document.getElementById('cfgNamaMasjid')?.value;
-            const interval = parseInt(document.getElementById('cfgIntervalTVSystem')?.value || document.getElementById('cfgIntervalTV')?.value) || 20;
+            const interval = Math.max(1, parseInt(document.getElementById('cfgIntervalTVSystem')?.value || document.getElementById('cfgIntervalTV')?.value) || 10);
             const footerText = document.getElementById('cfgFooterMasjid')?.value?.trim() || "© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved";
             const liveMekah = document.getElementById('cfgLiveMekah')?.value;
             const cctv = document.getElementById('cfgCctvMimbar')?.value;
