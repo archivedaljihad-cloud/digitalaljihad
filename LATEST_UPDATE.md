@@ -7201,3 +7201,69 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
    - Sinkronisasi otomatis seluruh berkas mandiri.
 6. Git Repository & Live Deployment Cloudflare Pages:
    - `https://digitalaljihad.my.id/`.
+
+---
+
+## BAB 164: PENEBALAN & PENINGKATAN KETERBACAAN TEKS KOTAK KUNING BADGE TICKER POJOK KIRI BAWAH DI SEMUA HALAMAN
+
+### 1. Masalah & Kebutuhan Pengguna
+- **Kondisi Sebelumnya:**
+  - Teks di dalam kotak kuning/emas ticker bar di pojok kiri bawah (`.running-badge` seperti `🕌 JADWAL SHOLAT`, `KAS MASJID`, `WARTA JUM'AT`, `INFO DKM`, dll.) tampak tipis dan berukuran relatif kecil (`0.88rem` / ~14px) dibandingkan dengan running text di sebelahnya.
+  - Warna font menggunakan `#041f14` dengan gradien latar belakang yang menggelap ke arah kanan (`#d97706`), sehingga kontras teks berkurang dan kurang tegas terbaca dari jarak jauh di layar TV masjid.
+- **Kebutuhan Pengguna:**
+  - Mempertebal teks dan ikon di dalam kotak kuning pojok kiri bawah agar lebih jelas, tegas, tajam, dan kontras di semua halaman/slide display.
+
+---
+
+### 2. Rincian Implementasi & Solusi
+1. **Peningkatan Bobot Huruf & Penambahan Stroke Fisik:**
+   - Memastikan font weight `900` (Black/Heavy) dari Google Fonts Poppins dimuat di seluruh berkas slide HTML dan file master CSS (`@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&display=swap')`).
+   - Menerapkan `font-weight: 900 !important;` pada kelas `.running-badge`.
+   - Menambahkan `-webkit-text-stroke: 0.45px #000000 !important;` dan `paint-order: stroke fill !important;` sehingga kontur huruf benar-benar tebal solid dan tajam.
+   - Mengaktifkan antialiasing tingkat tinggi: `-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;`.
+
+2. **Peningkatan Ukuran Font & Spasi Huruf:**
+   - Ukuran font dinaikkan dari `0.88rem` (~14px) menjadi `1.06rem` (~17px) pada display desktop/TV, dan dari `0.76rem` menjadi `0.92rem` pada tampilan mobile responsive.
+   - Spasi huruf disesuaikan menjadi `letter-spacing: 1px !important;` agar karakter huruf kapital tetap rapat, padat, dan kokoh.
+
+3. **Optimalisasi Kontras Warna & Gradien Emas:**
+   - Warna teks diubah menjadi hitam pekat murni `#000000 !important;`.
+   - Ditambahkan efek highlight halus di bawah huruf: `text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) !important;` untuk memberikan kesan timbul (embossed/engraved) yang tajam.
+   - Gradien latar belakang kotak kuning disempurnakan menjadi: `linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;` sehingga seluruh area kotak tetap kuning emas terang benderang tanpa sudut gelap yang memudarkan kontras teks.
+
+4. **Penebalan Ikon Font Awesome:**
+   - Ikon Font Awesome di dalam badge (`.running-badge i`) diperbesar dari `0.95rem` ke `1.15rem`, diberikan `font-weight: 900`, `-webkit-text-stroke: 0.45px #000000`, warna hitam pekat `#000000`, dan `filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45))`.
+
+5. **Penyelarasan ke Seluruh Halaman & Template:**
+   - Diterapkan pada CSS terpusat `web-statis/css/display-theme.css`.
+   - Diterapkan pada template backend Laravel `resources/views/partials/display-theme.blade.php`.
+   - Diselaraskan pada CSS internal `idul-fitri.html` dan `idul-adha.html` serta penyeragaman label kapital (`IDUL FITRI`, `IDUL ADHA`).
+   - Ditambahkan ticker bar standar lengkap dengan badge emas tebal pada `agenda-rutin.html`.
+   - Seluruh 20 slide kini memuat varian Poppins 900 secara native.
+   - Versi cache buster CSS diperbarui ke `?v=3.1.0` dan cache service worker ke `v3.1.9`.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/css/display-theme.css`:
+   - Penambahan import Poppins 900 dan perombakan `.running-badge` serta `.running-badge i` dengan gaya ultra-bold, text-stroke hitam, dan gradien emas cerah.
+2. `resources/views/partials/display-theme.blade.php`:
+   - Penambahan kelas `.bottom-running-wrap`, `.running-badge`, dan `.running-badge i` sinkron dengan master web-statis.
+3. `web-statis/index.html`:
+   - Penambahan bobot Poppins 900 dan kenaikan cache-buster `css/display-theme.css?v=3.1.0`.
+4. `web-statis/slides/utama.html`:
+   - Penambahan bobot Poppins 900 dan kenaikan cache-buster `css/display-theme.css?v=3.1.0`.
+5. `web-statis/slides/idul-fitri.html` & `web-statis/slides/idul-adha.html`:
+   - Penyelarasan style internal `.running-badge` dan teks label menjadi `IDUL FITRI` & `IDUL ADHA`.
+6. `web-statis/slides/agenda-rutin.html`:
+   - Standarisasi ticker bawah menjadi `.bottom-running-wrap` dengan badge `AGENDA RUTIN`.
+7. `web-statis/slides/*.html` (19 berkas slide):
+   - ambulance, hikmah, idul-adha, idul-fitri, infaq, jumat, kajian, keuangan-summary, keuangan, live-madinah, live-mekah, live-mimbar, pengumuman, qris, qurban, ramadhan, slide, utama, yasin: Penambahan font-weight 900 pada Google Fonts link.
+8. `web-statis/sw.js`:
+   - Pembaruan versi cache PWA menjadi **`aljihad-signage-v3.1.9`**.
+9. `LATEST_UPDATE.md`:
+   - Dokumentasi lengkap Bab 164.
+10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`:
+    - Sinkronisasi otomatis seluruh berkas mandiri.
+11. Git Repository & Live Deployment Cloudflare Pages:
+    - `https://digitalaljihad.my.id/`.

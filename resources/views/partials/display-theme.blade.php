@@ -235,6 +235,63 @@ body.theme-isya {
 }
 
 /* =====================================================
+   PROFESSIONAL TV BROADCAST TICKER & ULTRA BOLD BADGE
+   ===================================================== */
+.bottom-running-wrap {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    height: 48px !important;
+    background: linear-gradient(90deg, #021a12 0%, #03271b 25%, #053324 50%, #03271b 75%, #021a12 100%) !important;
+    border-top: 2.5px solid #ffd700 !important;
+    display: flex !important;
+    align-items: center !important;
+    z-index: 1000 !important;
+    box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.85), 0 -1px 5px rgba(255, 215, 0, 0.4) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.running-badge {
+    background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
+    color: #000000 !important;
+    height: 100% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0 24px 0 20px !important;
+    font-family: 'Poppins', 'Montserrat', 'Inter', -apple-system, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 1.06rem !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    flex-shrink: 0 !important;
+    border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
+    gap: 8px !important;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
+    z-index: 10 !important;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
+    -webkit-text-stroke: 0.45px #000000 !important;
+    paint-order: stroke fill !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+}
+
+.running-badge i {
+    color: #000000 !important;
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
+    -webkit-text-stroke: 0.45px #000000 !important;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
+    margin-right: 2px !important;
+}
+
+/* =====================================================
    MASTER UNIFIED HEADER (H1, SUB-HEADER, DATETIME)
    Menyeragamkan posisi & ukuran font di semua halaman
    ===================================================== */
