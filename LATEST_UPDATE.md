@@ -7108,43 +7108,57 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
     ```
   - Dengan demikian, donatur awal berada di bagian atas dan donatur yang paling mutakhir/terbaru berada di baris paling bawah.
 
-#### B. Efek Denyut Pelan (Slow Breathing Pulse) di Kolom Target Dana
-- Menambahkan animasi CSS keyframe ritmik bernapas pelan (*breathing glow & subtle scale*) pada `.stat-pill.target` dan ikon target di dalamnya:
+#### B. Efek Denyut Pelan (Slow Breathing Pulse) Khusus Kotak Persegi Kecil Target (Icon Box)
+- **Revisi Presisi Sesuai Arahan Pengguna:**
+  - Kotak persegi panjang kartu Target Dana (`.stat-pill.target`) tetap **diam / tenang** (tanpa animasi scale/gerakan).
+  - Efek denyut pelan difokuskan secara spesifik pada **kotak persegi kecil yang bagian tengahnya terdapat bulatan-bulatan target** (`.stat-pill.target .icon-box` beserta ikon `fa-bullseye` di dalamnya) agar efektif mencuri perhatian jamaah terhadap target penggalangan dana tanpa mengganggu layout kartu:
   ```css
-  @keyframes pulseTargetDanaSlow {
+  @keyframes pulseTargetIconBox {
       0%, 100% {
           transform: scale(1);
-          border-color: rgba(0, 180, 216, 0.4);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 rgba(0, 180, 216, 0);
+          border-color: rgba(0, 180, 216, 0.45);
+          background: rgba(0, 180, 216, 0.22);
+          box-shadow: 0 0 0 rgba(0, 180, 216, 0);
       }
       50% {
-          transform: scale(1.025);
-          border-color: rgba(0, 220, 255, 0.85);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 180, 216, 0.55);
+          transform: scale(1.15);
+          border-color: rgba(0, 235, 255, 0.95);
+          background: rgba(0, 200, 240, 0.42);
+          box-shadow: 0 0 16px rgba(0, 210, 255, 0.75), inset 0 0 8px rgba(0, 235, 255, 0.45);
       }
   }
 
-  @keyframes pulseTargetIcon {
+  @keyframes pulseBullseyeInner {
       0%, 100% {
           transform: scale(1);
-          filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.3));
+          filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.4));
+          color: #00b4d8;
       }
       50% {
-          transform: scale(1.1);
-          filter: drop-shadow(0 0 8px rgba(0, 220, 255, 0.85));
+          transform: scale(1.18);
+          filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.95));
+          color: #e0f7fa;
       }
   }
 
+  /* Kotak persegi panjang tetap diam */
   .stat-pill.target {
-      animation: pulseTargetDanaSlow 3.2s ease-in-out infinite;
-      will-change: transform, box-shadow, border-color;
+      /* Tetap tenang tanpa animasi gerakan scale */
+  }
+
+  /* Kotak persegi kecil dengan bulatan target berdenyut memikat perhatian */
+  .stat-pill.target .icon-box {
+      animation: pulseTargetIconBox 2.6s ease-in-out infinite;
+      will-change: transform, box-shadow, border-color, background;
   }
 
   .stat-pill.target .icon-box i {
-      animation: pulseTargetIcon 3.2s ease-in-out infinite;
+      display: inline-block;
+      animation: pulseBullseyeInner 2.6s ease-in-out infinite;
+      will-change: transform, filter, color;
   }
   ```
-- Efek ini juga diterapkan secara konsisten pada template backend Laravel `resources/views/infaq-embed.blade.php`.
+- Penyelarasan ini diterapkan serentak pada `web-statis/slides/infaq.html` dan template backend `resources/views/infaq-embed.blade.php`.
 
 #### C. Pembaruan Label Header Kotak Donatur
 - Label teks pada `web-statis/slides/infaq.html` diubah dari:
@@ -7173,14 +7187,14 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/slides/infaq.html`:
-   - Penambahan keyframe denyut pelan target dana `.stat-pill.target`.
+   - Penataan denyut pelan khusus kotak persegi kecil target (icon box bullseye), kotak kartu persegi panjang tetap diam.
    - Perubahan judul header menjadi `"Daftar Donatur"`.
    - Penataan wrapper overflow `.donatur-scroll-wrapper` dan animasi marquee infinite `.donatur-list.can-scroll`.
    - Pembaruan sorting ascending dan auto-cloning overflow di JavaScript.
 2. `resources/views/infaq-embed.blade.php`:
-   - Penambahan animasi denyut pelan `pulseTargetDanaSlow` pada kartu `.stat-pill.target`.
+   - Penyelarasan denyut pelan khusus kotak persegi kecil target `pulseTargetIconBox`.
 3. `web-statis/sw.js`:
-   - Pembaruan cache PWA menjadi **`aljihad-signage-v3.1.7`**.
+   - Pembaruan cache PWA menjadi **`aljihad-signage-v3.1.8`**.
 4. `LATEST_UPDATE.md`:
    - Dokumentasi lengkap Bab 163.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`:

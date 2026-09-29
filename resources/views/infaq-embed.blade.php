@@ -227,44 +227,53 @@
 			flex-shrink: 0;
 		}
 
+		/* Efek Denyut Pelan khusus Kotak Persegi Kecil Target (Icon Box dengan bulatan-bulatan) */
+		@keyframes pulseTargetIconBox {
+			0%, 100% {
+				transform: scale(1);
+				border-color: rgba(0, 180, 216, 0.45);
+				background: rgba(0, 180, 216, 0.22);
+				box-shadow: 0 0 0 rgba(0, 180, 216, 0);
+			}
+			50% {
+				transform: scale(1.15);
+				border-color: rgba(0, 235, 255, 0.95);
+				background: rgba(0, 200, 240, 0.42);
+				box-shadow: 0 0 16px rgba(0, 210, 255, 0.75), inset 0 0 8px rgba(0, 235, 255, 0.45);
+			}
+		}
+
+		@keyframes pulseBullseyeInner {
+			0%, 100% {
+				transform: scale(1);
+				filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.4));
+				color: #00b4d8;
+			}
+			50% {
+				transform: scale(1.18);
+				filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.95));
+				color: #e0f7fa;
+			}
+		}
+
+		/* Kotak persegi panjang Target Dana tetap diam */
+		.stat-pill.target {
+			/* Tetap tenang / diam tanpa animasi gerakan skala */
+		}
+
+		/* Kotak persegi kecil yang ada bulatan-bulatannya (fa-bullseye) berdenyut pelan memikat perhatian */
 		.stat-pill.target .icon-box {
 			background: rgba(0, 180, 216, 0.25);
 			color: #00b4d8;
 			border: 1px solid rgba(0, 180, 216, 0.4);
-		}
-
-		/* Efek Denyut Pelan Target Dana */
-		@keyframes pulseTargetDanaSlow {
-			0%, 100% {
-				transform: scale(1);
-				border-color: rgba(0, 180, 216, 0.4);
-				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 rgba(0, 180, 216, 0);
-			}
-			50% {
-				transform: scale(1.025);
-				border-color: rgba(0, 220, 255, 0.85);
-				box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 180, 216, 0.55);
-			}
-		}
-
-		@keyframes pulseTargetIcon {
-			0%, 100% {
-				transform: scale(1);
-				filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.3));
-			}
-			50% {
-				transform: scale(1.1);
-				filter: drop-shadow(0 0 8px rgba(0, 220, 255, 0.85));
-			}
-		}
-
-		.stat-pill.target {
-			animation: pulseTargetDanaSlow 3.2s ease-in-out infinite;
-			will-change: transform, box-shadow, border-color;
+			animation: pulseTargetIconBox 2.6s ease-in-out infinite;
+			will-change: transform, box-shadow, border-color, background;
 		}
 
 		.stat-pill.target .icon-box i {
-			animation: pulseTargetIcon 3.2s ease-in-out infinite;
+			display: inline-block;
+			animation: pulseBullseyeInner 2.6s ease-in-out infinite;
+			will-change: transform, filter, color;
 		}
 
 		.stat-pill.terkumpul .icon-box {
