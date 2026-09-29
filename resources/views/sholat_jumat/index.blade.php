@@ -85,8 +85,7 @@
 							<th width="65" class="text-center">Foto</th>
 							<th>Tanggal</th>
 							<th>Hari</th>
-							<th>Imam</th>
-							<th>Khatib</th>
+							<th>Khotib & Imam</th>
 							<th>Muadzin</th>
 							<th>Bilal</th>
 							<th>Status</th>
@@ -122,24 +121,20 @@
 								</span>
 							</td>
 							<td>
-								@if($item->imam)
+								@php
+									$namaPetugas = '';
+									if (!empty($item->khatib) && !empty($item->imam)) {
+										$namaPetugas = ($item->khatib === $item->imam) ? $item->khatib : ($item->khatib . ' / ' . $item->imam);
+									} else {
+										$namaPetugas = $item->khatib ?? $item->imam ?? '';
+									}
+								@endphp
+								@if($namaPetugas)
 								<div class="d-flex align-items-center">
-									<div class="avatar-circle bg-primary text-white mr-2" style="width: 30px; height: 30px; font-size: 12px;">
-										{{ strtoupper(substr($item->imam, 0, 1)) }}
+									<div class="avatar-circle bg-success text-white mr-2" style="width: 30px; height: 30px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;">
+										<i class="fas fa-user-tie"></i>
 									</div>
-									<span>{{ $item->imam }}</span>
-								</div>
-								@else
-								<span class="text-muted">- Belum ditentukan -</span>
-								@endif
-							</td>
-							<td>
-								@if($item->khatib)
-								<div class="d-flex align-items-center">
-									<div class="avatar-circle bg-success text-white mr-2" style="width: 30px; height: 30px; font-size: 12px;">
-										{{ strtoupper(substr($item->khatib, 0, 1)) }}
-									</div>
-									<span>{{ $item->khatib }}</span>
+									<span class="font-weight-bold">{{ $namaPetugas }}</span>
 								</div>
 								@else
 								<span class="text-muted">- Belum ditentukan -</span>

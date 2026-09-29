@@ -62,6 +62,19 @@ class SholatJumatController extends Controller
 
 		$data = $request->except(['foto_imam', '_token']);
 
+		// Sinkronisasi otomatis Khotib & Imam jika diinput dalam 1 kolom terpadu
+		if (!empty($data['khatib']) && empty($data['imam'])) {
+			if (str_contains($data['khatib'], '/')) {
+				$parts = array_map('trim', explode('/', $data['khatib'], 2));
+				$data['khatib'] = $parts[0] ?: $data['khatib'];
+				$data['imam'] = $parts[1] ?: $parts[0];
+			} else {
+				$data['imam'] = $data['khatib'];
+			}
+		} elseif (!empty($data['imam']) && empty($data['khatib'])) {
+			$data['khatib'] = $data['imam'];
+		}
+
 		// Guard columns if migration failed
 		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
 			unset($data['bilal']);
@@ -122,6 +135,19 @@ class SholatJumatController extends Controller
 		}
 
 		$data = $request->except(['foto_imam', '_token', '_method', 'hapus_foto']);
+
+		// Sinkronisasi otomatis Khotib & Imam jika diinput dalam 1 kolom terpadu
+		if (!empty($data['khatib']) && empty($data['imam'])) {
+			if (str_contains($data['khatib'], '/')) {
+				$parts = array_map('trim', explode('/', $data['khatib'], 2));
+				$data['khatib'] = $parts[0] ?: $data['khatib'];
+				$data['imam'] = $parts[1] ?: $parts[0];
+			} else {
+				$data['imam'] = $data['khatib'];
+			}
+		} elseif (!empty($data['imam']) && empty($data['khatib'])) {
+			$data['khatib'] = $data['imam'];
+		}
 
 		// Guard columns if migration failed
 		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {

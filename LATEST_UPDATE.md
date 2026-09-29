@@ -6881,3 +6881,65 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 11. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 159).
 12. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 13. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## 📅 BAB 160: UNIFIKASI PETUGAS SHOLAT JUM'AT (PENGGABUNGAN KHOTIB & IMAM MENJADI 1 KOLOM TERPADU)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:** *"Dibagian Petugas Sholat Jum'at, Imam dan Khotib di jadikan 1 kolom saja."*
+- **Konteks Operasional Masjid:**
+  - Dalam tradisi sholat Jum'at di sebagian besar masjid di Indonesia, khususnya di Masjid Jami' Al-Jihad, ustadz yang menyampaikan khutbah Jum'at (*Khatib*) lazimnya sekaligus mengimami sholat Jum'at (*Imam*).
+  - Sebelumnya, pada menu **Petugas Sholat Jum'at**, terdapat dua form input terpisah: `Khotib Jum'at` dan `Imam Sholat`. Hal ini membuat operator harus mengetikkan nama yang sama dua kali, serta tampilan preview dan tabel riwayat membagi data menjadi dua kolom terpisah yang redundan.
+  - Pengguna meminta agar bagian Khotib dan Imam disatukan ke dalam **1 kolom saja** untuk mempermudah entri data, membuat tampilan form lebih ringkas, dan selaras dengan layout display TV yang sudah menggabungkan info *"Imam & Khotib"*.
+
+---
+
+### 2. Rekayasa & Penyesuaian Sistem yang Diterapkan
+
+1. **Pembaruan Form Entri Petugas Jum'at (`web-statis/admin.html`):**
+   - Menggabungkan dua field terpisah (`#jumatKhotib` dan `#jumatImam`) menjadi **1 kolom terpadu**:
+     - **Label:** `Khotib & Imam Sholat` dengan badge penanda hijau `1 Kolom Terpadu`.
+     - **Input:** `#jumatKhotib` dengan placeholder deskriptif dan input pendamping `#jumatImam` yang tersinkronisasi otomatis.
+     - **Panduan Input:** Dilengkapi keterangan bahwa operator cukup mengetikkan nama satu kali (atau dapat memisahkan dengan tanda `' / '` jika dalam kondisi khusus imam dan khatib dijabat oleh orang yang berbeda).
+
+2. **Penyempurnaan Kotak Preview Tampilan TV & Dashboard:**
+   - **Preview Box (`view-sholat-jumat`):**
+     - Mengubah item petugas dari dua kartu terpisah menjadi 1 kartu terpadu: **Khatib & Imam**.
+     - Menambahkan kartu **Muadzin** dan **Bilal / Pengumuman** di bawahnya agar pratinjau kartu petugas Jum'at di admin lengkap mencakup 3 entitas petugas (Khatib & Imam, Muadzin, Bilal).
+   - **Dashboard Utama (`#dashJumatKhotib`):**
+     - Menata ulang kotak hitam ringkasan display TV hari Jum'at: kolom kiri menampilkan **Khatib & Imam** secara penuh dan proporsional, kolom kanan menampilkan **Muadzin** dan **Bilal & Doa**.
+
+3. **Sinkronisasi Logika JavaScript (`loadAllSupabaseData` & `simpanPetugasJumat`):**
+   - **`simpanPetugasJumat()`:**
+     - Mengambil nilai tunggal dari `#jumatKhotib`.
+     - Jika input mengandung tanda garis miring `'/'` (misal *"Ust. A / Ust. B"*), sistem secara cerdas memecah menjadi `khatib` dan `imam` masing-masing untuk menjaga integritas backward-compatibility. Jika tidak ada pemisah, nilai yang sama otomatis disimpan ke field `khatib` dan `imam`.
+     - Menyimpan payload ke tabel Supabase `sholat_jumat` dan durasi sholat ke `app_settings`.
+     - Memperbarui seluruh elemen display DOM (`#prevJumatKhotib`, `#prevJumatMuadzin`, `#prevJumatBilal`, `#dashJumatKhotib`, `#dashJumatMuadzin`, `#dashJumatBilal`) secara instan (*optimistic UI update*).
+   - **`loadAllSupabaseData()`:**
+     - Saat memuat data dari Supabase, jika `khatib === imam`, nilai nama tunggal langsung dimasukkan ke form. Jika berbeda, diformat rapi sebagai `${j.khatib} / ${j.imam}`.
+
+4. **Penyelarasan Modul Laravel Backend:**
+   - **`resources/views/sholat_jumat/index.blade.php`:**
+     - Menggabungkan header tabel dari dua kolom (`Imam` dan `Khatib`) menjadi **1 kolom terpadu**: `<th>Khotib & Imam</th>`.
+     - Isi baris tabel (`<td>`) menampilkan nama petugas lengkap dengan avatar hijau dan ikon `fas fa-user-tie`.
+   - **`resources/views/sholat_jumat/create.blade.php` & `edit.blade.php`:**
+     - Menggabungkan input `imam` dan `khatib` menjadi satu form-group terpadu `Khotib & Imam Sholat`.
+   - **`app/Http/Controllers/SholatJumatController.php`:**
+     - Pada method `store()` dan `update()`, ditambahkan logika sinkronisasi otomatis: jika operator menginput satu kolom `khatib`, controller otomatis menduplikasi nilai ke kolom `imam` (atau memecah jika ada tanda `'/'`) sehingga integritas basis data MySQL tetap terjaga sempurna.
+
+5. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.4`.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/admin.html` (Penyatuan input Khotib & Imam menjadi 1 kolom terpadu, update preview TV, update dashboard box, dan sinkronisasi JS).
+2. `resources/views/sholat_jumat/index.blade.php` (Penggabungan kolom tabel Imam & Khatib menjadi 1 kolom Khotib & Imam).
+3. `resources/views/sholat_jumat/create.blade.php` (Penyatuan input form menjadi 1 form-group Khotib & Imam).
+4. `resources/views/sholat_jumat/edit.blade.php` (Penyatuan input form menjadi 1 form-group Khotib & Imam).
+5. `app/Http/Controllers/SholatJumatController.php` (Sinkronisasi otomatis nilai khatib & imam pada fungsi store & update).
+6. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.1.4`).
+7. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 160).
+8. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
+9. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

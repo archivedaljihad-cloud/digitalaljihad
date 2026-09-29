@@ -46,33 +46,16 @@
 								</div>
 
 								<div class="form-group">
-									<label for="imam"><strong>Imam</strong></label>
+									<label for="khatib"><strong>Khotib & Imam Sholat</strong> <span class="text-danger">*</span></label>
 									<div class="input-group">
 										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="fas fa-user text-success"></i></span>
-										</div>
-										<input type="text" name="imam" id="imam" class="form-control @error('imam') is-invalid @enderror" 
-										value="{{ old('imam') }}" placeholder="Masukkan nama imam (contoh: Ust. H. Abdullah)">
-									</div>
-									<small class="form-text text-muted">
-										<i class="fas fa-info-circle"></i> Nama imam yang akan memimpin sholat
-									</small>
-									@error('imam')
-									<small class="text-danger">{{ $message }}</small>
-									@enderror
-								</div>
-
-								<div class="form-group">
-									<label for="khatib"><strong>Khatib</strong></label>
-									<div class="input-group">
-										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="fas fa-chalkboard-user text-info"></i></span>
+											<span class="input-group-text"><i class="fas fa-user-tie text-success"></i></span>
 										</div>
 										<input type="text" name="khatib" id="khatib" class="form-control @error('khatib') is-invalid @enderror" 
-										value="{{ old('khatib') }}" placeholder="Masukkan nama khatib">
+										value="{{ old('khatib', old('imam')) }}" placeholder="Masukkan nama Khotib & Imam (contoh: Ust. Dr. H. Faisal, M.Ag)" required>
 									</div>
 									<small class="form-text text-muted">
-										<i class="fas fa-info-circle"></i> Nama khatib yang menyampaikan khutbah Jumat
+										<i class="fas fa-info-circle"></i> Nama Khotib sekaligus Imam yang bertugas pada sholat Jum'at (dijadikan 1 kolom petugas).
 									</small>
 									@error('khatib')
 									<small class="text-danger">{{ $message }}</small>

@@ -1699,13 +1699,9 @@
                                             </div>
                                             <div class="row" style="margin-left: -5px; margin-right: -5px;">
                                                 <div class="col-sm-6" style="padding-left: 5px; padding-right: 5px;">
-                                                    <div class="jumat-officer-item mb-2 py-1 px-2">
-                                                        <div class="jumat-officer-label" style="font-size: 0.72rem;">Khatib</div>
+                                                    <div class="jumat-officer-item mb-2 py-2 px-2" style="min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
+                                                        <div class="jumat-officer-label" style="font-size: 0.72rem;"><i class="fas fa-user-tie text-success mr-1"></i> Khatib & Imam</div>
                                                         <div class="jumat-officer-name font-weight-bold" style="font-size: 0.88rem;" id="dashJumatKhotib">Ust. Dr. H. Faisal, M.Ag</div>
-                                                    </div>
-                                                    <div class="jumat-officer-item mb-2 mb-sm-0 py-1 px-2">
-                                                        <div class="jumat-officer-label" style="font-size: 0.72rem;">Imam Sholat</div>
-                                                        <div class="jumat-officer-name font-weight-bold" style="font-size: 0.88rem;" id="dashJumatImam">Ust. Ahmad Sholeh Al-Hafidz</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6" style="padding-left: 5px; padding-right: 5px;">
@@ -2214,12 +2210,13 @@
                                             <input type="date" class="form-control" id="jumatTanggal" value="2026-09-25">
                                         </div>
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Khotib Jum'at</label>
-                                            <input type="text" class="form-control" id="jumatKhotib" value="Ust. Dr. H. Faisal, M.Ag">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Imam Sholat</label>
-                                            <input type="text" class="form-control" id="jumatImam" value="Ust. Ahmad Sholeh Al-Hafidz">
+                                            <label class="font-weight-bold d-flex align-items-center justify-content-between">
+                                                <span><i class="fas fa-user-tie text-success mr-1"></i> Khotib & Imam Sholat</span>
+                                                <small class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> 1 Kolom Terpadu</small>
+                                            </label>
+                                            <input type="text" class="form-control" id="jumatKhotib" value="Ust. Dr. H. Faisal, M.Ag" placeholder="Masukkan nama Khotib & Imam">
+                                            <input type="hidden" id="jumatImam" value="Ust. Dr. H. Faisal, M.Ag">
+                                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i> Khotib dan Imam sholat dijadikan 1 kolom petugas (atau pisahkan dengan ' / ' jika berbeda orang).</small>
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Muadzin</label>
@@ -2279,12 +2276,16 @@
                                                 <i class="fas fa-hourglass-half mr-1"></i> Durasi TV: 50 Menit
                                             </div>
                                             <div class="jumat-officer-item text-left">
-                                                <div class="jumat-officer-label">Khatib</div>
+                                                <div class="jumat-officer-label">Khatib & Imam</div>
                                                 <div class="jumat-officer-name" id="prevJumatKhotib">Ust. Dr. H. Faisal, M.Ag</div>
                                             </div>
-                                            <div class="jumat-officer-item text-left">
-                                                <div class="jumat-officer-label">Imam Sholat</div>
-                                                <div class="jumat-officer-name" id="prevJumatImam">Ust. Ahmad Sholeh Al-Hafidz</div>
+                                            <div class="jumat-officer-item text-left mt-2">
+                                                <div class="jumat-officer-label">Muadzin</div>
+                                                <div class="jumat-officer-name" id="prevJumatMuadzin">Bilal M. Ridwan</div>
+                                            </div>
+                                            <div class="jumat-officer-item text-left mt-2">
+                                                <div class="jumat-officer-label">Bilal / Pengumuman</div>
+                                                <div class="jumat-officer-name" id="prevJumatBilal">Ust. Syahrul Ramadhan</div>
                                             </div>
                                         </div>
                                     </div>
@@ -6763,20 +6764,26 @@
                     const jumatList = await resJumatSettled.value.json();
                     if (jumatList && jumatList.length > 0) {
                         const j = jumatList[0];
+                        const namaKhotibImam = (j.khatib && j.imam && j.khatib !== j.imam) 
+                            ? `${j.khatib} / ${j.imam}` 
+                            : (j.khatib || j.imam || '');
+
                         if (document.getElementById('jumatTanggal')) document.getElementById('jumatTanggal').value = j.tanggal || '';
-                        if (document.getElementById('jumatKhotib')) document.getElementById('jumatKhotib').value = j.khatib || j.khotib || '';
-                        if (document.getElementById('jumatImam')) document.getElementById('jumatImam').value = j.imam || '';
+                        if (document.getElementById('jumatKhotib')) document.getElementById('jumatKhotib').value = namaKhotibImam;
+                        if (document.getElementById('jumatImam')) document.getElementById('jumatImam').value = namaKhotibImam;
                         if (document.getElementById('jumatMuadzin')) document.getElementById('jumatMuadzin').value = j.muadzin || '';
                         if (document.getElementById('jumatBilal')) document.getElementById('jumatBilal').value = j.bilal || '';
 
                         // Update Dashboard & Preview
-                        if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = j.khatib || j.khotib || '-';
-                        if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = j.khatib || j.khotib || '-';
-                        if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = j.imam || '-';
+                        if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = namaKhotibImam || '-';
+                        if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = namaKhotibImam || '-';
+                        if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = namaKhotibImam || '-';
                         if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = j.muadzin || '-';
                         if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = j.bilal || '-';
-                        if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = j.khatib || j.khotib || '-';
-                        if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = j.imam || '-';
+                        if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = namaKhotibImam || '-';
+                        if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = namaKhotibImam || '-';
+                        if (document.getElementById('prevJumatMuadzin')) document.getElementById('prevJumatMuadzin').textContent = j.muadzin || '-';
+                        if (document.getElementById('prevJumatBilal')) document.getElementById('prevJumatBilal').textContent = j.bilal || '-';
                         if (document.getElementById('prevJumatTanggal') && j.tanggal) {
                             const d = new Date(j.tanggal);
                             document.getElementById('prevJumatTanggal').textContent = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -8975,21 +8982,32 @@
         // Simpan Petugas Sholat Jum'at & Durasi Sholat Jum'at Khusus Pekan Ini
         async function simpanPetugasJumat() {
             const tgl = document.getElementById('jumatTanggal')?.value;
-            const khotib = document.getElementById('jumatKhotib')?.value;
-            const imam = document.getElementById('jumatImam')?.value;
-            const muadzin = document.getElementById('jumatMuadzin')?.value;
+            const khotibImam = document.getElementById('jumatKhotib')?.value || '';
+            const muadzin = document.getElementById('jumatMuadzin')?.value || '';
             const bilal = document.getElementById('jumatBilal')?.value || muadzin;
             const jumatDur = parseInt(document.getElementById('jumatDurasiInput')?.value) || 50;
 
-            if (!khotib || !imam || !tgl) {
-                alert('Harap lengkapi nama Khotib, Imam, dan Tanggal Jum\'at!');
+            if (!khotibImam || !tgl) {
+                alert('Harap lengkapi nama Khotib & Imam, serta Tanggal Jum\'at!');
                 return;
+            }
+
+            if (document.getElementById('jumatImam')) {
+                document.getElementById('jumatImam').value = khotibImam;
+            }
+
+            let finalKhatib = khotibImam;
+            let finalImam = khotibImam;
+            if (khotibImam.includes('/')) {
+                const parts = khotibImam.split('/').map(s => s.trim());
+                if (parts[0]) finalKhatib = parts[0];
+                if (parts[1]) finalImam = parts[1];
             }
 
             const payload = {
                 tanggal: tgl,
-                khatib: khotib,
-                imam: imam,
+                khatib: finalKhatib,
+                imam: finalImam,
                 muadzin: muadzin,
                 bilal: bilal
             };
@@ -9019,11 +9037,13 @@
                 try { localStorage.setItem('cached_prayer_mode_jumat_duration', jumatDur); } catch (e) {}
 
                 if (res.ok) {
-                    if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotib;
-                    if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = imam;
-                    if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotib;
-                    if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = khotib;
-                    if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = imam;
+                    if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotibImam;
+                    if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = khotibImam;
+                    if (document.getElementById('prevJumatMuadzin')) document.getElementById('prevJumatMuadzin').textContent = muadzin;
+                    if (document.getElementById('prevJumatBilal')) document.getElementById('prevJumatBilal').textContent = bilal;
+                    if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotibImam;
+                    if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = khotibImam;
+                    if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = khotibImam;
                     if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = muadzin;
                     if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = bilal;
                     alert(`Alhamdulillah! Petugas Sholat Jum'at dan durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);

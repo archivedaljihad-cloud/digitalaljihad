@@ -47,33 +47,24 @@
 								</div>
 
 								<div class="form-group">
-									<label for="imam"><strong>Imam</strong></label>
+									<label for="khatib"><strong>Khotib & Imam Sholat</strong> <span class="text-danger">*</span></label>
 									<div class="input-group">
 										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="fas fa-user text-success"></i></span>
+											<span class="input-group-text"><i class="fas fa-user-tie text-success"></i></span>
 										</div>
-										<input type="text" name="imam" id="imam" class="form-control @error('imam') is-invalid @enderror" 
-										value="{{ old('imam', $sholat_jumat->imam) }}" placeholder="Masukkan nama imam">
-									</div>
-									<small class="form-text text-muted">
-										<i class="fas fa-info-circle"></i> Nama imam yang akan memimpin sholat
-									</small>
-									@error('imam')
-									<small class="text-danger">{{ $message }}</small>
-									@enderror
-								</div>
-
-								<div class="form-group">
-									<label for="khatib"><strong>Khatib</strong></label>
-									<div class="input-group">
-										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="fas fa-chalkboard-user text-info"></i></span>
-										</div>
+										@php
+											$defaultNama = '';
+											if (!empty($sholat_jumat->khatib) && !empty($sholat_jumat->imam)) {
+												$defaultNama = ($sholat_jumat->khatib === $sholat_jumat->imam) ? $sholat_jumat->khatib : ($sholat_jumat->khatib . ' / ' . $sholat_jumat->imam);
+											} else {
+												$defaultNama = $sholat_jumat->khatib ?? $sholat_jumat->imam ?? '';
+											}
+										@endphp
 										<input type="text" name="khatib" id="khatib" class="form-control @error('khatib') is-invalid @enderror" 
-										value="{{ old('khatib', $sholat_jumat->khatib) }}" placeholder="Masukkan nama khatib">
+										value="{{ old('khatib', $defaultNama) }}" placeholder="Masukkan nama Khotib & Imam" required>
 									</div>
 									<small class="form-text text-muted">
-										<i class="fas fa-info-circle"></i> Nama khatib yang menyampaikan khutbah Jumat
+										<i class="fas fa-info-circle"></i> Nama Khotib sekaligus Imam yang bertugas pada sholat Jum'at (dijadikan 1 kolom petugas).
 									</small>
 									@error('khatib')
 									<small class="text-danger">{{ $message }}</small>
