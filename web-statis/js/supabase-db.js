@@ -21,7 +21,7 @@
         // Fallback default settings jika offline atau database belum terhubung
         defaultSettings: {
             nama_aplikasi: 'MASJID JAMI\' AL-JIHAD',
-            sub_header: 'Graha Asri, Cikarang Utara, Bekasi',
+            sub_header: 'SISTEM INFORMASI DIGITAL',
             rotation_interval: 10,
             rotation_enabled: true,
             prayer_mode_enabled: true,
@@ -82,8 +82,8 @@
                         if (!settings.nama_aplikasi || settings.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || settings.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
                             settings.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';
                         }
-                        if (!settings.sub_header || settings.sub_header.includes('Kebon Jeruk') || settings.sub_header.includes('Melati')) {
-                            settings.sub_header = 'Graha Asri, Cikarang Utara, Bekasi';
+                        if (!settings.sub_header || settings.sub_header.includes('Kebon Jeruk') || settings.sub_header.includes('Melati') || settings.sub_header.includes('Graha Asri')) {
+                            settings.sub_header = 'SISTEM INFORMASI DIGITAL';
                         }
 
                         // Simpan ke cache lokal browser
@@ -104,8 +104,8 @@
                     if (!parsed.nama_aplikasi || parsed.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || parsed.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
                         parsed.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';
                     }
-                    if (!parsed.sub_header || parsed.sub_header.includes('Kebon Jeruk') || parsed.sub_header.includes('Melati')) {
-                        parsed.sub_header = 'Graha Asri, Cikarang Utara, Bekasi';
+                    if (!parsed.sub_header || parsed.sub_header.includes('Kebon Jeruk') || parsed.sub_header.includes('Melati') || parsed.sub_header.includes('Graha Asri')) {
+                        parsed.sub_header = 'SISTEM INFORMASI DIGITAL';
                     }
                     localStorage.setItem('cached_app_settings', JSON.stringify(parsed));
                     return parsed;

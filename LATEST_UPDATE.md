@@ -6440,3 +6440,55 @@ Halaman Mode Sholat kini dapat diakses melalui:
 8. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 154).
 9. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 10. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 155 — Peningkatan Ketebalan Outline Header Emas (2.5 pt) & Pembaruan Teks Sub-Header Menjadi "SISTEM INFORMASI DIGITAL" (29 Sep 2026)
+
+### 1. Masalah & Observasi Layar TV
+1. **Ketegasan Garis Tepi (Outline) Emas Header:**
+   - Melalui screenshot aktual tampilan layar TV display (`media_1790651284231.jpg`), outline 1 pt kuning emas pada nama masjid **"MASJID JAMI' AL-JIHAD"** masih terasa tipis saat dilihat berpadu dengan badan huruf hijau zamrud pekat (`#064e3b`) dan latar belakang langit malam Ka'bah.
+   - Pengguna meminta agar ketebalan outline kuning emas dinaikkan sehingga garis tepi huruf terlihat jauh lebih tegas, berwibawa, dan kontras dari kejauhan.
+2. **Kesesuaian Teks Sub-Header:**
+   - Pada slide Jadwal Sholat Utama (`slides/utama.html`), teks sub-header masih bertuliskan **"Graha Asri, Cikarang Utara, Bekasi"**.
+   - Pengguna meminta teks tersebut diseragamkan menjadi **"SISTEM INFORMASI DIGITAL"** sebagaimana telah digunakan pada slide-slide informasi lainnya.
+
+---
+
+### 2. Solusi & Perubahan Teknis yang Diterapkan
+1. **Peningkatan Ketebalan Outline Header Kuning Emas (2.5 pt & Golden Glow):**
+   - Ketebalan `-webkit-text-stroke` dinaikkan 250% dari `1pt` menjadi **`2.5pt #FFD700 !important;`** (~3.33px).
+   - Berkat aturan `paint-order: stroke fill;`, stroke digambar di belakang badan huruf, sehingga ketebalan font dan kepekaan warna hijau zamrud di bagian tengah tetap utuh sempurna, sementara garis tepi emas di sekeliling karakter menjadi tebal (~1.7px) dan sangat tegas.
+   - Menambahkan pendaran aura emas lembut pada `text-shadow`: `0 0 10px rgba(255, 215, 0, 0.45)` serta bayangan gelap pekat `0 2px 6px rgba(0, 0, 0, 0.9), 0 4px 14px rgba(0, 0, 0, 0.8)` agar huruf tampak timbul secara 3D (*floating depth*) dan bebas silau.
+   - Untuk tampilan layar mobile pada `partials-theme.css`, stroke outline disesuaikan secara proporsional menjadi `1.8pt #FFD700`.
+   - Diterapkan secara seragam pada seluruh master stylesheet dan slide mandiri.
+
+2. **Penggantian Teks Sub-Header Menjadi "SISTEM INFORMASI DIGITAL":**
+   - Diperbarui pada elemen HTML langsung di `web-statis/slides/utama.html`:
+     ```html
+     <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+     ```
+   - Diperbarui pada database fallback dan sanitasi cache di `web-statis/js/supabase-db.js`:
+     - Nilai default `sub_header` diubah menjadi `'SISTEM INFORMASI DIGITAL'`.
+     - Logika pembersih cache browser TV ditambahkan: jika terdeteksi teks lama yang memuat kata `'Graha Asri'`, otomatis ditimpa dengan `'SISTEM INFORMASI DIGITAL'`, sehingga TV display yang sudah menyimpan cache lama langsung terupdate tanpa perlu clear cache manual oleh pengurus masjid.
+
+3. **Pembaruan Service Worker & Cache Busting:**
+   - Menaikkan query version CSS menjadi `?v=3.0.9` pada `web-statis/index.html` dan `web-statis/slides/utama.html`.
+   - Menaikkan versi cache PWA pada `web-statis/sw.js` menjadi `aljihad-signage-v3.0.9`.
+
+---
+
+### 3. Berkas yang Dimodifikasi
+1. `web-statis/css/display-theme.css` (Peningkatan stroke outline menjadi 2.5pt dan penambahan glow emas).
+2. `web-statis/css/partials-theme.css` (Peningkatan stroke outline 2.5pt desktop & 1.8pt mobile).
+3. `public/css/display-theme.css` (Peningkatan stroke outline menjadi 2.5pt).
+4. `resources/views/partials/display-theme.blade.php` (Peningkatan stroke outline 2.5pt).
+5. `resources/views/utama.blade.php` (Peningkatan stroke outline 2.5pt).
+6. `web-statis/slides/utama.html` (Peningkatan stroke 2.5pt, penggantian sub-header menjadi SISTEM INFORMASI DIGITAL, dan cache version 3.0.9).
+7. `web-statis/js/supabase-db.js` (Penggantian default dan sanitasi cache sub_header menjadi SISTEM INFORMASI DIGITAL).
+8. `web-statis/slides/ambulance.html`, `hikmah.html`, `idul-adha.html`, `idul-fitri.html`, `infaq.html`, `keuangan-summary.html`, `keuangan.html`, `pengumuman.html`, `qris.html`, `qurban.html`, `slide.html` (Peningkatan stroke outline internal menjadi 2.5pt).
+9. `web-statis/index.html` (Pembaruan versi link CSS `?v=3.0.9`).
+10. `web-statis/sw.js` (Pembaruan cache PWA `aljihad-signage-v3.0.9`).
+11. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 155).
+12. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
+13. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.

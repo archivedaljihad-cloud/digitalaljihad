@@ -93,11 +93,12 @@
 			-webkit-background-clip: initial !important;
 			-webkit-text-fill-color: #064e3b !important;
 			color: #064e3b !important;
-			-webkit-text-stroke: 1pt #FFD700 !important;
+			-webkit-text-stroke: 2.5pt #FFD700 !important;
 			paint-order: stroke fill;
 			text-shadow:
-				0 2px 6px rgba(0, 0, 0, 0.8),
-				0 4px 14px rgba(0, 0, 0, 0.7) !important;
+				0 0 10px rgba(255, 215, 0, 0.45),
+				0 2px 6px rgba(0, 0, 0, 0.9),
+				0 4px 14px rgba(0, 0, 0, 0.8) !important;
 			filter: none !important;
 			margin: 0 0 -15px 0 !important;
 			padding: 0 !important;
