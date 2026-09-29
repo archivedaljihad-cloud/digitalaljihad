@@ -276,16 +276,56 @@
 			will-change: transform, filter, color;
 		}
 
+		/* Efek Denyut Pelan Fase Kebalikan (Counter-Phase Pulse) khusus Kotak Jam Pasir Merah Kekurangan */
+		@keyframes pulseKekuranganIconBox {
+			0%, 100% {
+				transform: scale(1);
+				border-color: rgba(255, 82, 82, 0.45);
+				background: rgba(255, 82, 82, 0.22);
+				box-shadow: 0 0 0 rgba(255, 82, 82, 0);
+			}
+			50% {
+				transform: scale(1.15);
+				border-color: rgba(255, 23, 68, 0.95);
+				background: rgba(255, 60, 60, 0.42);
+				box-shadow: 0 0 16px rgba(255, 23, 68, 0.75), inset 0 0 8px rgba(255, 82, 82, 0.45);
+			}
+		}
+
+		@keyframes pulseHourglassInner {
+			0%, 100% {
+				transform: scale(1);
+				filter: drop-shadow(0 0 2px rgba(255, 82, 82, 0.4));
+				color: #ff5252;
+			}
+			50% {
+				transform: scale(1.18);
+				filter: drop-shadow(0 0 10px rgba(255, 82, 82, 0.95));
+				color: #ffebee;
+			}
+		}
+
 		.stat-pill.terkumpul .icon-box {
 			background: rgba(0, 230, 118, 0.25);
 			color: #00e676;
 			border: 1px solid rgba(0, 230, 118, 0.4);
 		}
 
+		/* Kotak persegi kecil jam pasir (fa-hourglass-half) berdenyut pelan bergantian ritme dengan Target Dana */
 		.stat-pill.kekurangan .icon-box {
 			background: rgba(255, 82, 82, 0.25);
 			color: #ff5252;
 			border: 1px solid rgba(255, 82, 82, 0.4);
+			animation: pulseKekuranganIconBox 2.6s ease-in-out infinite;
+			animation-delay: -1.3s; /* Kebalikan fase 180°: saat Target mengecil, Kekurangan membesar */
+			will-change: transform, box-shadow, border-color, background;
+		}
+
+		.stat-pill.kekurangan .icon-box i {
+			display: inline-block;
+			animation: pulseHourglassInner 2.6s ease-in-out infinite;
+			animation-delay: -1.3s;
+			will-change: transform, filter, color;
 		}
 
 		.stat-pill.donatur .icon-box {

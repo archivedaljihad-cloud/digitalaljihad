@@ -7476,3 +7476,22 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 ### 3. Berkas Terkait
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 171 - EFEK PULS FASE KEBALIKAN / COUNTER-PHASE PADA KOTAK KEKURANGAN PROGRAM INFAQ)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  - *"Di halaman Program infaq. Di kolom target sudah ada efek puls. Bagaimana kalau di kotak 'KEKURANGAN' juga diberikan efek yang sama tapi arah puls kebalikan dengan puls yang target ? Kemudian untuk nilai yang di kotak 'KEKURANGAN' dibuat hasil terkumpul dikurangi target dari ada tanda minusnya ? menurut anda bagaimana ?"*
+- **Keputusan Desain yang Disepakati Bersama Pengguna:**
+  1. **Animasi Efek Denyut Kebalikan (*Counter-Phase Pulse*) Diterapkan:**
+     - Kotak ikon jam pasir merah (`fa-hourglass-half`) pada kartu **KEKURANGAN** diberikan animasi denyut pelan (*slow breathing pulse*) berdurasi 2,6 detik yang seirama dengan **TARGET DANA** (ikon target *bullseye* biru muda), namun dengan fase keterlambatan tepat 180° (`animation-delay: -1.3s`).
+     - **Hasil Visual:** Tercipta ritme pernapasan bergantian (*pendulum breathing effect*). Ketika Target Dana mengembang dan berpendar cerah di titik puncaknya, Kekurangan sedang dalam posisi rileks (scale 1). Begitu Target kembali mengecil, ikon Jam Pasir merah Kekurangan bergantian mengembang dan memancarkan pendaran merah-oranye lembut. Tampilan display TV menjadi sangat dinamis, hidup, dan memikat perhatian jamaah tanpa terasa silau.
+  2. **Format Nominal Tetap Dipertahankan (Tanpa Tanda Minus):**
+     - Sesuai persetujuan pengguna, format nominal tetap mempertahankan kaidah positif `Rp 20.450.000` (dan otomatis menjadi `Rp 0 (Terpenuhi)` berwarna hijau saat target tercapai) agar tidak menimbulkan kerancuan makna atau persepsi *double negative* di kalangan jamaah.
+
+### 2. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/infaq.html`
+2. `resources/views/infaq-embed.blade.php`
+3. `LATEST_UPDATE.md`
