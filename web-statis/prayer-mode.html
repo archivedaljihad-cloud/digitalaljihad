@@ -1014,6 +1014,7 @@
         let previewPhase = 'countdown';
         let previewPrayer = 'Ashar';
         let simulatedSeconds = 195;
+        let wasPrayerActive = false;
 
         window.switchPreview = function(phase) {
             previewPhase = phase;
@@ -1107,14 +1108,17 @@
                         }
                     };
                 } else {
-                    // Berada di dalam frame rotasi TV utama dan sholat selesai -> kembalikan ke rotasi normal
-                    if (window.parent && window.parent.onPrayerModeEnd) {
-                        window.parent.onPrayerModeEnd();
-                    } else {
-                        window.location.href = 'index.html';
+                    // Berada di dalam frame rotasi TV utama dan sholat selesai -> kembalikan ke rotasi normal hanya saat transisi dari aktif ke selesai
+                    if (wasPrayerActive) {
+                        wasPrayerActive = false;
+                        if (window.parent && typeof window.parent.onPrayerModeEnd === 'function') {
+                            window.parent.onPrayerModeEnd();
+                        }
                     }
                     return;
                 }
+            } else {
+                wasPrayerActive = true;
             }
 
             // Audio trigger (fase, nama sholat, dan sisa detik)

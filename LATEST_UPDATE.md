@@ -6492,3 +6492,58 @@ Halaman Mode Sholat kini dapat diakses melalui:
 11. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 155).
 12. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 13. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
+
+---
+
+## Bab 156 - Investigasi Mendalam & Perbaikan Total Masalah Rotasi Slide TV yang Terhenti (29 Sep 2026)
+
+### 1. Deskripsi Masalah & Hasil Investigasi Nyata (Chrome DevTools Protocol - CDP)
+- **Laporan Pengguna:** Layar TV Display statis dan tidak berotasi otomatis antar halaman slide.
+- **Investigasi & Pelacakan Mendalam:**
+  1. Melalui pengujian browser Edge headless menggunakan Chrome DevTools Protocol (`scratch/test_edge.ps1` & `scratch/track_rotation.js`), ditemukan bahwa timer rotasi (`rotationTimer`) selalu terdaftar (`hasRotationTimer: true`), namun slide tidak pernah berpindah dari `currentIndex: 0`.
+  2. Pelacakan stack trace panggilan JavaScript mengungkap akar penyebab utama (**Root Cause**):
+     ```
+     scheduleNextRotation invoked by: at window.scheduleNextRotation -> at window.onPrayerModeEnd (index.html:830) -> at updatePrayerUI (prayer-mode.html:1112)
+     ```
+  3. Frame latar belakang `prayer-mode.html` (yang disematkan pada `<iframe id="prayerFrame">` untuk responsivitas instan waktu adzan) mengeksekusi `updatePrayerUI()` setiap 1.000 ms (1 detik).
+  4. Ketika waktu sholat sedang tidak aktif (`!state.active`), blok kode `prayer-mode.html` secara terus-menerus memanggil `window.parent.onPrayerModeEnd()` setiap 1 detik.
+  5. Di `web-statis/index.html`, fungsi `window.onPrayerModeEnd` sebelumnya tidak memverifikasi apakah `isPrayerModeActive` bernilai `true` sebelum memanggil `scheduleNextRotation()`.
+  6. Akibatnya, setiap 1 detik `clearTimeout(rotationTimer)` dieksekusi dan timer 10 detik diatur ulang dari awal. Karena dibatalkan dan dijadwal ulang setiap 1 detik, timer rotasi **tidak pernah mencapai 10 detik**, sehingga pergantian slide TV menjadi macet total (*rotation freeze/cancel loop*).
+
+### 2. Rincian Solusi & Perbaikan Kode
+
+1. **Pencegahan Spam Event pada `web-statis/prayer-mode.html`:**
+   - Menambahkan variabel pelacak status `let wasPrayerActive = false;`.
+   - Mengubah logika `updatePrayerUI()` sehingga hanya memanggil `window.parent.onPrayerModeEnd()` ketika terjadi transisi nyata dari aktif ke selesai (`wasPrayerActive === true` dan `!state.active`), kemudian mengatur `wasPrayerActive = false`.
+   - Di luar waktu sholat, fungsi langsung melakukan `return` tanpa memanggil parent callback sama sekali.
+
+2. **Perlindungan Bertingkat (*State Guard*) pada `web-statis/index.html`:**
+   - Fungsi `window.onPrayerModeEnd` kini diberi pengaman `if (isPrayerModeActive) { ... }`. Jika mode sholat sedang tidak aktif, panggilan tersebut diabaikan secara aman tanpa menyentuh timer rotasi.
+
+3. **Peningkatan Keandalan Pergantian Slide Iframe (`switchSlide` & `jumpToSlideUrl`):**
+   - Memindahkan pemasangan event handler `backFrame.onload` dan `backFrame.onerror` **sebelum** menetapkan `backFrame.src = nextUrl`. Hal ini mencegah event `onload` terlewat (*missed event*) akibat cache lokal atau Service Worker PWA yang memuat halaman secara instan.
+   - Menambahkan mekanisme **Failsafe Timeout** (2.500 ms) via `slideTransitionFailsafe`. Jika event `onload` tertunda atau terhalang oleh browser, transisi slide tetap dipicu secara mulus sehingga layar TV tidak akan pernah menggantung (*hang*).
+   - Menjaga transisi dieksekusi tepat satu kali per pergantian menggunakan flag `transitioned`.
+
+4. **Pembaruan Cache Service Worker PWA (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.0` agar browser TV dan klien langsung memperbarui skrip dan menghilangkan cache lama.
+
+### 3. Pengujian & Verifikasi Nyata
+- **Pengujian Headless Edge Lokal (`scratch/test_local_rotation.ps1`):**
+  - Menguji siklus rotasi lokal pada server `http://127.0.0.1:8899/index.html`.
+  - Hasil log observasi otomatis (`inspect_local.js`):
+    - Slide 0 (`slides/utama.html`) ➔ berpindah mulus ke Slide 1 (`slides/keuangan.html`).
+    - Slide 1 ➔ berpindah mulus ke Slide 2 (`slides/jumat.html`).
+    - Slide 2 ➔ berpindah mulus ke Slide 3 (`slides/pengumuman.html`).
+    - Slide 3 ➔ berpindah mulus ke Slide 4 (`slides/keuangan-summary.html`).
+    - Slide 4 ➔ berpindah mulus ke Slide 5 (`slides/qris.html`).
+    - Slide 5 ➔ berpindah mulus ke Slide 6... dan seterusnya secara siklis tanpa henti.
+  - Frame 1 dan Frame 2 bergantian secara sempurna antara status `.active`, `.incoming`, dan `.outgoing` dengan efek transisi meluncur lembut dari samping dan menghilang perlahan.
+
+### 4. Berkas yang Dimodifikasi
+1. `web-statis/prayer-mode.html` (Penambahan `wasPrayerActive` flag dan eliminasi pemanggilan redundan `onPrayerModeEnd`).
+2. `web-statis/index.html` (Pengaman `isPrayerModeActive` pada `onPrayerModeEnd`, perbaikan urutan event listener iframe, dan penambahan `slideTransitionFailsafe`).
+3. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.1.0`).
+4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 156).
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi berkas lokal).
+6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
