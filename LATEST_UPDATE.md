@@ -7495,3 +7495,27 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 1. `web-statis/slides/infaq.html`
 2. `resources/views/infaq-embed.blade.php`
 3. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 172 - PENAMBAHAN KOLOM NO / ANGKA URUT PADA DAFTAR DONATUR PROGRAM INFAQ)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  - *"Satu lagi. Bagaimana kalau daftar list donaturnya di berikan kolom NO (angka urut), agar jamaah lebih mudah membacanya ?"*
+- **Tujuan Pembaruan:**
+  - Membantu jamaah membaca daftar donatur dengan lebih mudah dan terstruktur melalui badge angka urut (No. 1, 2, 3...) yang jelas di setiap baris donatur.
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Styling Badge Angka Urut Islami (`.donatur-no`):**
+   - Menambahkan elemen badge angka urut berdesain modern dengan warna aksen emas (`#ffd700`), latar semi-transparan (`rgba(255, 215, 0, 0.15)`), border tipis berkilau, dan font angka proporsional bergaya monospace.
+   - Mengelompokkan nomor dan nama donatur ke dalam pembungkus fleksibel (`.donatur-left`) dengan *white-space: nowrap* dan *text-overflow: ellipsis* agar nama panjang tidak terpotong berantakan.
+2. **Implementasi Dinamis pada Render JavaScript:**
+   - Di fungsi `loadProgramInfaqData()` pada [`web-statis/slides/infaq.html`](file:///c:/Users/anthu/Documents/%E3%80%90Project%E3%80%91/DIGITALv304/web-statis/slides/infaq.html), pemetaan daftar donatur `sortedAsc.map((d, idx) => ...)` kini otomatis menyematkan angka urut `${idx + 1}`.
+   - Pada efek vertical marquee infinite loop, kloning elemen donatur otomatis menyertakan nomor urut sehingga alur putaran teks tetap konsisten dan sempurna.
+3. **Pembaruan Markup Fallback Awal:**
+   - Memperbarui 5 data donatur placeholder awal di HTML agar seragam memiliki badge nomor 1 sampai 5.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/infaq.html`
+2. `LATEST_UPDATE.md`
