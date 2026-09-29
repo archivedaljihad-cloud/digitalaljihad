@@ -7312,3 +7312,16 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 5. `app/Http/Controllers/LiveStreamController.php`
 6. `resources/views/live-stream.blade.php`
 7. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 166 - PEMBARUAN TEKS FOOTER DASHBOARD ADMIN)
+
+### 1. Perubahan yang Dilakukan
+- Memperbarui teks copyright pada footer halaman Dashboard Admin ([`web-statis/admin.html`](file:///c:/Users/anthu/Documents/%E3%80%90Project%E3%80%91/DIGITALv304/web-statis/admin.html)):
+  - **Sebelum:** `Hak Cipta © 2026 Masjid Jami' Al-Jihad • Digital Web Statis v5.1.0 (Cloudflare Edge)`
+  - **Sesudah:** `Hak Cipta © 2026 Masjid Jami' Al-Jihad • Informasi Digital Statis v5.1.0 (Powered by Cloudflare Edge)`
+
+### 2. Berkas Terkait
+1. `web-statis/admin.html`
+2. `LATEST_UPDATE.md`
