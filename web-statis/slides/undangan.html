@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Surat Undangan Luar & Warta Ukhuwah - Display TV</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -366,15 +369,17 @@
         }
 
         .inv-pesan {
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             color: #e2e8f0;
             font-style: italic;
-            line-height: 1.35;
+            line-height: 1.4;
             flex: 1;
-            text-align: center;
+            text-align: center !important;
+            display: block;
         }
 
         .inv-pesan i { color: #ffd700; margin-right: 6px; }
+        .inv-pesan span { text-align: center !important; }
 
         .inv-panitia-stamp {
             display: flex;
@@ -572,9 +577,9 @@
 
                 <!-- FOOTER KARTU (KETERANGAN & STEMPEL PANITIA) -->
                 <div class="inv-footer-row">
-                    <div class="inv-pesan" id="invKeterangan">
+                    <div class="inv-pesan" id="invKeterangan" style="text-align: center !important;">
                         <i class="fas fa-quote-left"></i>
-                        <span id="invKeteranganText">"Kehadiran dan doa restu Bapak/Ibu Jamaah merupakan kebahagiaan serta penyambung tali silaturahmi bagi kami. Jazakumullahu Khairan Katsiran."</span>
+                        <span id="invKeteranganText" style="text-align: center !important;">"Kehadiran dan doa restu Bapak/Ibu Jamaah merupakan kebahagiaan serta penyambung tali silaturahmi bagi kami. Jazakumullahu Khairan Katsiran."</span>
                     </div>
                     <div class="inv-panitia-stamp">
                         <span class="stamp-label">Hormat Kami,</span>

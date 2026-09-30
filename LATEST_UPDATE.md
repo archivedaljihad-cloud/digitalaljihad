@@ -8171,13 +8171,17 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Menambahkan class `text-center` dan atribut inline style `style="text-align: center;"` pada elemen `<textarea id="undanganKeterangan">`.
    - Seluruh teks yang diketikkan atau dimuat saat pengeditan undangan kini otomatis tampil rata tengah secara proporsional.
 2. **Slide TV Display Undangan (`web-statis/slides/undangan.html`):**
-   - Menambahkan properti `text-align: center;` pada class CSS `.inv-pesan` (kontainer `#invKeterangan` dan `#invKeteranganText`).
-   - Teks ajakan/keterangan yang muncul di bagian bawah kartu undangan pada layar TV kini tampil rata tengah secara elegan di samping stempel pengurus.
+   - Menambahkan properti `text-align: center !important;` dan `display: block;` pada class CSS `.inv-pesan` serta inline style pada elemen `#invKeterangan` dan `#invKeteranganText`.
+   - Menambahkan meta tag HTTP-EQUIV `Cache-Control: no-cache, no-store, must-revalidate` pada `<head>` slide agar perubahan perataan teks langsung terlihat tanpa terhalang cache browser.
+   - Teks ajakan/keterangan multi-baris di dalam kotak penutup kartu undangan pada layar TV kini tampil 100% rata tengah (*center*) secara simetris dan rapi.
+3. **PWA Service Worker (`web-statis/sw.js`):**
+   - Mendaftarkan `'slides/undangan.html'` ke dalam `STATIC_ASSETS` dan menaikkan versi cache menjadi `'aljihad-signage-v3.2.1'` untuk memicu pembaruan cache otomatis pada seluruh layar TV dan perangkat klien.
 
 ---
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penambahan styling `text-center` dan `style="text-align: center;"` pada textarea `#undanganKeterangan`)
-2. `web-statis/slides/undangan.html` (Penambahan `text-align: center;` pada class `.inv-pesan`)
-3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
-4. `LATEST_UPDATE.md` (Dokumentasi Bab 187)
+2. `web-statis/slides/undangan.html` (Penerapan `text-align: center !important;` pada class `.inv-pesan`, elemen `#invKeterangan`, dan penambahan meta no-cache)
+3. `web-statis/sw.js` (Pendaftaran `slides/undangan.html` dan bump cache ke `aljihad-signage-v3.2.1`)
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 187)
