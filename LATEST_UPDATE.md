@@ -7622,3 +7622,53 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
 9. `C:\Users\anthu\Documents\【Digital WebSTATIS】\css\partials-theme.css` (Sinkron)
 10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\css\display-theme.css` (Sinkron)
 11. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 175 - OPTIMASI TAMPILAN SLIDE PROGRAM INFAQ: PEMBESARAN UKURAN FONT DAFTAR DONATUR & PENYEMATAN SPASI 1 BARIS ANTARA AKHIR DAN AWAL PUTARAN LIST)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  - *"Dihalaman program infaq. Ukuran font untuk daftar list donatur terlalu kecil, sehingga susah dibaca oleh jamaah. Kemudian Daftar list dibuat antara pertama dan terakhir selalu dibuatkan spasi 1 baris sehingga tidak terlihat menumpuk dan agar yang baca lebih nyaman."*
+- **Analisis Masalah:**
+  1. Pada halaman Program Infaq (`web-statis/slides/infaq.html`), font daftar donatur sebelumnya hanya berukuran `0.90rem` (~14.4px) dengan nomor badge `0.80rem` (~12.8px). Di layar TV resolusi 1080p/4K dengan jarak pandang 3–7 meter di aula masjid, ukuran tersebut sangat kecil dan menyulitkan jamaah untuk membaca nama serta nominal infaq donatur.
+  2. Saat daftar donatur bergulir vertikal (*seamless vertical marquee loop*), elemen anak digandakan secara beruntun sehingga donatur paling akhir (#5 atau #N) langsung menempel rapat dengan donatur pertama (#1) dari putaran kloning berikutnya dengan jarak hanya `6px`. Hal ini menyebabkan daftar terlihat menumpuk (*cramped/cluttered*) dan membingungkan jamaah untuk membedakan batas akhir dan awal perulangan daftar.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembesaran Signifikan Ukuran Font Daftar Donatur (+35% s/d +40%):**
+   - **Kartu Donatur (`.donatur-item`):** Font diperbesar dari `0.90rem` menjadi **`1.20rem`** dengan padding lebih lega (`9px 14px`), border-radius `10px`, dan bayangan timbul yang tegas.
+   - **Badge Nomor Donatur (`.donatur-no`):** Dimensi diperbesar dari 26x22px menjadi **34x30px** dengan font **`1.05rem`**, font-weight 800, serta border emas semi-transparan `1.5px solid rgba(255, 215, 0, 0.55)`.
+   - **Nama Donatur (`.donatur-name`):** Font diperbesar menjadi **`1.20rem`** (font-weight: 700) dengan bayangan teks tajam `text-shadow: 0 1px 4px rgba(0,0,0,0.85)` dan ikon profil berwarna kuning emas.
+   - **Nominal Infaq (`.donatur-val`):** Font diperbesar menjadi **`1.28rem`** (font-weight: 800) warna hijau neon `#00e676` dengan pendaran cahaya lembut (*glow*) `text-shadow: 0 0 12px rgba(0, 230, 118, 0.45)`.
+   - **Judul Box (`.box-title`):** Diperbesar menjadi **`1.18rem`** dengan font-weight 800.
+   - **Kolom Saluran Transfer (`.rek-item` & `.rek-num`):** Disesuaikan menjadi `1.10rem` dan `1.25rem` agar kedua kolom bawah tampil seimbang dan proporsional.
+
+2. **Penyematan Spasi 1 Baris Elegan Antara Donatur Terakhir dan Pertama (`.donatur-loop-spacer`):**
+   - Dibuat elemen pemisah khusus berdimensi tepat 1 baris kartu donatur (`height: 48px; width: 100%;`):
+     ```html
+     <div class="donatur-loop-spacer" aria-hidden="true">
+         <div class="spacer-line"></div>
+     </div>
+     ```
+   - Spacer ini memiliki garis horizontal emas halus bergradasi `linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.45), transparent)` dengan ornamen tiga titik pembatas (*triple dots*) `• • •` di tengahnya.
+   - Spacer ini disematkan di ujung daftar asli maupun hasil kloning perulangan (*marquee loop*), sehingga setiap kali baris donatur terakhir selesai bergulir, terdapat jeda kosong 1 baris yang bersih dan nyaman sebelum donatur nomor 1 muncul kembali.
+
+3. **Sinkronisasi Header, Datetime & Running Badge di `infaq.html`:**
+   - Menyempurnakan gaya header `#nama-masjid` menjadi hijau zamrud pekat (`#033624`), stroke emas `1.5px #FFD700`, dan bayangan hitam bertingkat bebas *halo washout*.
+   - Mempertebal border kapsul `.datetime` menjadi `2.5px solid #FFD700 !important` dengan glow emas 16px.
+   - Mengunci warna font badge `.running-badge` menjadi hitam pekat (`color: #000000 !important; -webkit-text-fill-color: #000000 !important; font-weight: 900 !important;`).
+   - Menyematkan versi *cache-busting* `?v=20260930_04` pada tautan CSS.
+
+4. **Penyelarasan pada Template Laravel Blade (`resources/views/infaq-embed.blade.php`):**
+   - Menyelaraskan ukuran font tabel `td` menjadi `1.25rem` dan nominal menjadi `1.30rem`.
+   - Menyematkan `spacerRow` (`height: 42px;`) pada logika auto-scroll tabel agar konsisten saat diakses via Laravel.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/infaq.html`
+2. `resources/views/infaq-embed.blade.php`
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\infaq.html` (Sinkron)
+4. `LATEST_UPDATE.md`

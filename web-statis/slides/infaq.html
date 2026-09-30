@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css">
-    <link rel="stylesheet" href="../css/partials-theme.css">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20260930_04">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20260930_04">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,16 +51,17 @@
             line-height: 1.1;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: #064e3b;
-            -webkit-text-fill-color: #064e3b;
-            -webkit-text-stroke: 2.5pt #FFD700;
-            paint-order: stroke fill;
+            color: #033624 !important;
+            -webkit-text-fill-color: #033624 !important;
+            -webkit-text-stroke: 1.5px #FFD700 !important;
+            paint-order: stroke fill !important;
             text-shadow: 
-                0 0 10px rgba(255, 215, 0, 0.45),
-                0 2px 6px rgba(0, 0, 0, 0.9),
-                0 4px 14px rgba(0, 0, 0, 0.8);
+                0 2px 4px rgba(0, 0, 0, 0.95),
+                0 5px 14px rgba(0, 0, 0, 0.9),
+                0 0 20px rgba(0, 0, 0, 0.8) !important;
             margin: 0 0 4px 0;
-            font-weight: 800;
+            font-weight: 900 !important;
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
         }
 
         .header h3.sub-header {
@@ -75,15 +76,15 @@
 
         .datetime {
             font-size: 1.35rem;
-            background: rgba(3, 20, 15, 0.65);
+            background: linear-gradient(135deg, rgba(2, 44, 29, 0.92) 0%, rgba(5, 74, 49, 0.88) 100%) !important;
             display: inline-block;
             padding: 4px 24px;
             border-radius: 35px;
             font-weight: 600;
             letter-spacing: 1px;
-            border: 1.5px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
+            border: 2.5px solid #FFD700 !important;
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), 0 8px 25px rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(12px);
         }
 
         /* MAIN CONTENT PANEL */
@@ -314,27 +315,30 @@
         }
 
         .donatur-box, .rek-box {
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.38);
             border-radius: 14px;
-            padding: 12px 16px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 12px 18px;
+            border: 1px solid rgba(255, 215, 0, 0.35);
             display: flex;
             flex-direction: column;
             min-height: 0;
             overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
         .box-title {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.18rem;
+            font-weight: 800;
             color: #ffd700;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex-shrink: 0;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 6px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
         .donatur-scroll-wrapper {
@@ -347,7 +351,7 @@
         .donatur-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .donatur-list.can-scroll {
@@ -368,19 +372,20 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 6px 10px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.04);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.90rem;
+            padding: 9px 14px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+            font-size: 1.20rem;
             flex-shrink: 0;
-            gap: 12px;
+            gap: 14px;
         }
 
         .donatur-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             min-width: 0;
             flex: 1;
         }
@@ -389,41 +394,85 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 26px;
-            height: 22px;
-            padding: 0 4px;
-            border-radius: 6px;
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid rgba(255, 215, 0, 0.35);
+            min-width: 34px;
+            height: 30px;
+            padding: 0 6px;
+            border-radius: 8px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1.5px solid rgba(255, 215, 0, 0.55);
             color: #ffd700;
-            font-weight: 700;
-            font-size: 0.80rem;
+            font-weight: 800;
+            font-size: 1.05rem;
             flex-shrink: 0;
             font-family: monospace;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
         }
 
         .donatur-name {
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.20rem;
             color: #ffffff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .donatur-name i {
+            color: #ffd700;
+            font-size: 1.15rem;
+            flex-shrink: 0;
         }
 
         .donatur-val {
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 1.28rem;
             color: #00e676;
             font-family: monospace;
             white-space: nowrap;
             flex-shrink: 0;
+            text-shadow: 0 0 12px rgba(0, 230, 118, 0.45), 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Spasi 1 Baris Antara Terakhir dan Pertama */
+        .donatur-loop-spacer {
+            height: 48px;
+            flex-shrink: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4px 0;
+        }
+
+        .donatur-loop-spacer .spacer-line {
+            width: 85%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.45), transparent);
+            position: relative;
+        }
+
+        .donatur-loop-spacer .spacer-line::after {
+            content: '• • •';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(4, 25, 18, 0.95);
+            padding: 0 12px;
+            color: rgba(255, 215, 0, 0.65);
+            font-size: 0.90rem;
+            letter-spacing: 5px;
         }
 
         /* Rekening & QRIS */
         .rek-content {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             flex: 1;
             justify-content: center;
         }
@@ -431,14 +480,22 @@
         .rek-item {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.92rem;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 1.10rem;
         }
 
-        .rek-num { font-weight: 800; color: #ffd700; font-family: monospace; font-size: 1.05rem; }
+        .rek-num { 
+            font-weight: 800; 
+            color: #ffd700; 
+            font-family: monospace; 
+            font-size: 1.25rem; 
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
 
-        /* RUNNING TEXT FOOTER */
+        /* RUNNING TEXT FOOTER & BADGE */
         .bottom-running-wrap {
             position: fixed;
             bottom: 0;
@@ -448,8 +505,33 @@
             background: rgba(2, 16, 11, 0.88);
             border-top: 1.5px solid rgba(255, 215, 0, 0.4);
             backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            height: 48px;
         }
-        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-badge {
+            background: linear-gradient(135deg, #ffd700, #ffb300) !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            font-weight: 900 !important;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%) !important;
+            border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            height: 100% !important;
+            padding: 0 24px 0 18px !important;
+            font-size: 1.10rem !important;
+            flex-shrink: 0 !important;
+            letter-spacing: 1px !important;
+        }
+        .running-badge i {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            font-size: 1.15rem !important;
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; flex: 1; }
         .running-text {
             display: inline-block;
             white-space: nowrap;
@@ -585,6 +667,10 @@
                                     </div>
                                     <span class="donatur-val">Rp 3.200.000</span>
                                 </div>
+                                <!-- Spasi 1 baris antara donatur terakhir dan pertama -->
+                                <div class="donatur-loop-spacer" aria-hidden="true">
+                                    <div class="spacer-line"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -639,6 +725,16 @@
         function formatRupiah(num) {
             const val = parseFloat(num) || 0;
             return new Intl.NumberFormat('id-ID').format(val);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
 
         // Background Rotator Islami
@@ -818,30 +914,40 @@
                     });
 
                     // Render semua donatur (tanpa memotong slice 5 agar seluruh muhsinin tampil)
-                    donaturContainer.innerHTML = sortedAsc.map((d, idx) => {
+                    const donaturItemsHtml = sortedAsc.map((d, idx) => {
                         const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
                         return `
                             <div class="donatur-item">
                                 <div class="donatur-left">
                                     <span class="donatur-no">${idx + 1}</span>
-                                    <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> ${escapeHtml(nama)}</span>
+                                    <span class="donatur-name"><i class="fas fa-user-circle text-warning"></i> ${escapeHtml(nama)}</span>
                                 </div>
                                 <span class="donatur-val">Rp ${formatRupiah(d.nominal)}</span>
                             </div>
                         `;
                     }).join('');
 
+                    // Spasi 1 baris antara donatur terakhir dan pertama saat perulangan (loop)
+                    const loopSpacerHtml = `
+                        <div class="donatur-loop-spacer" aria-hidden="true">
+                            <div class="spacer-line"></div>
+                        </div>
+                    `;
+
+                    donaturContainer.innerHTML = donaturItemsHtml + loopSpacerHtml;
+
                     // Cek apakah data donatur melebihi tinggi kotak container (overflow)
                     requestAnimationFrame(() => {
                         if (scrollWrapper && donaturContainer.scrollHeight > scrollWrapper.clientHeight + 4) {
-                            // Gandakan elemen anak untuk efek seamless vertical marquee loop tanpa jeda
+                            // Gandakan elemen anak (termasuk spacer 1 baris) untuk efek seamless vertical marquee loop tanpa jeda
                             const originalChildren = Array.from(donaturContainer.children);
                             originalChildren.forEach(child => {
                                 donaturContainer.appendChild(child.cloneNode(true));
                             });
 
-                            // Kecepatan membaca ideal di layar TV: ~3.5 detik per donatur, minimal 20 detik
-                            const duration = Math.max(20, sortedAsc.length * 3.5);
+                            // Kecepatan membaca ideal di layar TV: ~3.8 detik per baris, minimal 20 detik
+                            const totalRows = sortedAsc.length + 1;
+                            const duration = Math.max(20, totalRows * 3.8);
                             donaturContainer.style.setProperty('--scroll-duration', `${duration}s`);
                             donaturContainer.classList.add('can-scroll');
                         }

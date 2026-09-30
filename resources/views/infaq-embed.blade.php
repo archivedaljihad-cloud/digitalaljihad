@@ -459,8 +459,8 @@
 		}
 
 		td {
-			padding: 9px 14px;
-			font-size: 1.12rem;
+			padding: 11px 16px;
+			font-size: 1.25rem;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 			color: #ffffff;
 			text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
@@ -474,19 +474,19 @@
 			background: rgba(255, 215, 0, 0.1);
 		}
 
-		.col-no { width: 5%; text-align: center; white-space: nowrap; }
+		.col-no { width: 6%; text-align: center; white-space: nowrap; font-weight: 700; color: #ffd700; }
 		.col-tanggal { width: 12%; text-align: center; white-space: nowrap; }
-		.col-nama { width: 46%; text-align: left; }
-		.col-nominal { width: 21%; text-align: right; white-space: nowrap; }
+		.col-nama { width: 44%; text-align: left; }
+		.col-nominal { width: 22%; text-align: right; white-space: nowrap; }
 		.col-ket { width: 16%; text-align: center; }
 
 		.badge-hamba-allah {
 			background: linear-gradient(135deg, rgba(0, 230, 118, 0.25), rgba(0, 180, 216, 0.25));
 			color: #00e676;
 			border: 1px solid rgba(0, 230, 118, 0.5);
-			padding: 3px 12px;
+			padding: 4px 14px;
 			border-radius: 20px;
-			font-size: 0.95rem;
+			font-size: 1.05rem;
 			font-weight: 700;
 			letter-spacing: 0.5px;
 			display: inline-flex;
@@ -495,10 +495,10 @@
 		}
 
 		.nominal-val {
-			color: #ffffff;
+			color: #00e676;
 			font-weight: 800;
-			font-size: 1.18rem;
-			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 255, 255, 0.4);
+			font-size: 1.30rem;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 230, 118, 0.4);
 		}
 
 		.empty-notice {
@@ -687,10 +687,18 @@
 				const originalRows = Array.from(tbody.querySelectorAll('tr'));
 				if (originalRows.length <= 1) return;
 
+				// Buat baris spacer pemisah antara akhir dan awal daftar
+				const spacerRow = document.createElement('tr');
+				spacerRow.className = 'spacer-row';
+				spacerRow.style.height = '42px';
+				spacerRow.innerHTML = '<td colspan="5" style="border: none; background: transparent; text-align: center; color: rgba(255,215,0,0.6); font-size: 0.95rem; letter-spacing: 6px;">• • •</td>';
+				tbody.appendChild(spacerRow);
+
 				originalRows.forEach(row => {
 					const clone = row.cloneNode(true);
 					tbody.appendChild(clone);
 				});
+				tbody.appendChild(spacerRow.cloneNode(true));
 
 				let scrollSpeed = 0.5; // Kecepatan scroll sangat tenang & mudah dibaca jamaah
 				let isPaused = false;
