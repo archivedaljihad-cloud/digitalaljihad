@@ -8152,3 +8152,32 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `resources/views/layouts/admin.blade.php` (Penyelarasan teks sidebar navigasi menu bendahara menjadi "Kas Utama Masjid")
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 186)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 187 - PENYELARASAN TEXT-ALIGN CENTER PADA KOLOM KETERANGAN / AJAKAN JAMAAH DI FORM EDIT UNDANGAN & SLIDE TV DISPLAY)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Dibagian edit Undangan Jama'ah, sub bagian "Keterangan / Ajakan Jamaah" isian kolom teks hasilnya dibuat center saja'*
+- **Tujuan:**
+  1. Membuat isian textarea pada formulir modal edit Undangan Jama'ah (`#undanganKeterangan`) menjadi rata tengah (*center*) agar tampilan pengetikan dan redaksi ajakan/himbauan tampak lebih seimbang, estetik, dan rapi.
+  2. Menyelaraskan hasil tampilan pesan kutipan keterangan/ajakan tersebut pada layar Slide TV Display (`slides/undangan.html`) agar terpusat simetris (*text-align: center*) di dalam kotak penutup kartu undangan.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Modal Form Edit Undangan Jama'ah (`web-statis/admin.html`):**
+   - Menambahkan class `text-center` dan atribut inline style `style="text-align: center;"` pada elemen `<textarea id="undanganKeterangan">`.
+   - Seluruh teks yang diketikkan atau dimuat saat pengeditan undangan kini otomatis tampil rata tengah secara proporsional.
+2. **Slide TV Display Undangan (`web-statis/slides/undangan.html`):**
+   - Menambahkan properti `text-align: center;` pada class CSS `.inv-pesan` (kontainer `#invKeterangan` dan `#invKeteranganText`).
+   - Teks ajakan/keterangan yang muncul di bagian bawah kartu undangan pada layar TV kini tampil rata tengah secara elegan di samping stempel pengurus.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penambahan styling `text-center` dan `style="text-align: center;"` pada textarea `#undanganKeterangan`)
+2. `web-statis/slides/undangan.html` (Penambahan `text-align: center;` pada class `.inv-pesan`)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 187)
