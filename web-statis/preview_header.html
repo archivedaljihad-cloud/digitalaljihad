@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uji Coba & Perbandingan Gaya Warna Header Layar TV</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #021a10;
+            color: #ffffff;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .title-bar {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 15px;
+        }
+
+        .title-bar h2 {
+            color: #FFD700;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .title-bar p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .card-preview {
+            background: linear-gradient(180deg, rgba(3, 40, 24, 0.96) 0%, rgba(2, 22, 14, 0.98) 100%);
+            border-radius: 18px;
+            border: 2px solid rgba(255, 215, 0, 0.35);
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-opt {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .header-wrap {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .h-title {
+            font-size: 2.85rem;
+            line-height: 1.15;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin: 0 0 6px 0;
+            font-weight: 900;
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif;
+        }
+
+        .sub-header {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000, 0 2px 8px rgba(0,0,0,0.95);
+            margin-bottom: 8px;
+        }
+
+        .datetime-pill {
+            font-size: 1.15rem;
+            background: linear-gradient(135deg, rgba(2, 44, 29, 0.92) 0%, rgba(5, 74, 49, 0.88) 100%);
+            display: inline-block;
+            padding: 4px 20px;
+            border-radius: 35px;
+            font-weight: 600;
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 14px rgba(255, 215, 0, 0.5), 0 6px 18px rgba(0, 0, 0, 0.85);
+        }
+
+        .expl {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* 0. KONDISI SAAT INI (HIJAU TUA GELAP) */
+        .h-current {
+            color: #033624 !important;
+            -webkit-text-fill-color: #033624 !important;
+            -webkit-text-stroke: 1.5px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 5px 14px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* 1. OPSI 1: PUTIH KRISTAL BERSIH + STROKE EMAS PEKAT */
+        .h-opt1 {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow: 
+                0 3px 6px rgba(0, 0, 0, 0.98),
+                0 6px 18px rgba(0, 0, 0, 0.92),
+                0 0 25px rgba(0, 0, 0, 0.85) !important;
+        }
+
+        /* 2. OPSI 2: ROYAL ISLAMIC METALLIC GOLD (GRADASI EMAS KUNINGAN MEWAH) */
+        .h-opt2 {
+            background: linear-gradient(180deg, #FFF9C4 0%, #FFD700 45%, #E6A100 80%, #B8860B 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            -webkit-text-stroke: 1.2px #453000 !important;
+            paint-order: stroke fill !important;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.98)) drop-shadow(0 8px 18px rgba(0, 0, 0, 0.92)) !important;
+        }
+
+        /* 3. OPSI 3: DUAL TONE DYNAMIC (MASJID JAMI' EMAS + AL-JIHAD PUTIH) */
+        .h-opt3 .gold-txt {
+            background: linear-gradient(180deg, #FFF9C4 0%, #FFD700 60%, #E6A100 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.95)) !important;
+        }
+        .h-opt3 .white-txt {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.98), 0 6px 18px rgba(0, 0, 0, 0.92) !important;
+        }
+
+        /* 4. OPSI 4: GLOWING MINT ZAMRUD */
+        .h-opt4 {
+            background: linear-gradient(180deg, #FFFFFF 0%, #A7F3D0 40%, #10B981 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            -webkit-text-stroke: 1.5px #FFD700 !important;
+            paint-order: stroke fill !important;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.98)) drop-shadow(0 8px 18px rgba(0, 0, 0, 0.92)) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-bar">
+            <h2><i class="fas fa-palette mr-2"></i> Perbandingan Tampilan &amp; Warna Header TV Masjid</h2>
+            <p>Buka halaman ini di browser laptop atau layar TV untuk membandingkan langsung ketegasan dan kejelasan setiap kombinasi warna di atas latar belakang gelap.</p>
+        </div>
+
+        <!-- 0. KONDISI SAAT INI -->
+        <div class="card-preview" style="border-color: #ef4444;">
+            <div class="badge-opt" style="background: #ef4444; color: #fff;">
+                <i class="fas fa-times-circle"></i> Kondisi Saat Ini (Tenggelam &amp; Kurang Tegas)
+            </div>
+            <div class="header-wrap">
+                <h1 class="h-title h-current">MASJID JAMI' AL-JIHAD</h1>
+                <div class="sub-header">SISTEM INFORMASI DIGITAL</div>
+                <div class="datetime-pill"><span style="color:#ffd700;">Rabu</span>, 30 Sept 2026 &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">11:35:00 WIB</span></div>
+            </div>
+            <div class="expl">
+                <strong class="text-danger">Penyebab Kurang Jelas:</strong> Badan huruf diisi warna hijau zamrud sangat tua (<code>#033624</code>) di atas latar belakang layar TV yang juga bernuansa hijau gelap (<code>#021a10</code>). Karena rasio kontrasnya sangat rendah, badan huruf "menyatu" dengan background dan jamaah dari jarak 3–5 meter hanya melihat garis kawat tipis stroke emas yang terkesan remang/pudar.
+            </div>
+        </div>
+
+        <!-- 1. OPSI 1 -->
+        <div class="card-preview" style="border-color: #10b981; border-width: 3px; background: linear-gradient(180deg, rgba(6, 60, 36, 0.98) 0%, rgba(2, 22, 14, 0.98) 100%);">
+            <div class="badge-opt" style="background: #10b981; color: #fff;">
+                <i class="fas fa-star"></i> Opsi 1 (Sangat Direkomendasikan): Putih Kristal Bersih + Kontur Emas 1.8px
+            </div>
+            <div class="header-wrap">
+                <h1 class="h-title h-opt1">MASJID JAMI' AL-JIHAD</h1>
+                <div class="sub-header">SISTEM INFORMASI DIGITAL</div>
+                <div class="datetime-pill"><span style="color:#ffd700;">Rabu</span>, 30 Sept 2026 &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">11:35:00 WIB</span></div>
+            </div>
+            <div class="expl">
+                <strong style="color: #10b981;">Keunggulan di Layar TV:</strong> Putih kristal memiliki nilai pendaran cahaya (*luminance*) tertinggi (rasio kontras 21:1 terhadap latar gelap). Badan huruf putih memancarkan cahaya solid di panel LED TV, sementara garis tepi emas 1.8px membingkai mewah. <strong>Hasilnya: Huruf sangat TEGAS, BOLD, ELEGAN, dan terbaca jelas dari jarak 15 meter!</strong>
+            </div>
+        </div>
+
+        <!-- 2. OPSI 2 -->
+        <div class="card-preview">
+            <div class="badge-opt" style="background: #FFD700; color: #000;">
+                <i class="fas fa-crown"></i> Opsi 2: Royal Islamic Metallic Gold (Gradasi Emas Logam Berkilau)
+            </div>
+            <div class="header-wrap">
+                <h1 class="h-title h-opt2">MASJID JAMI' AL-JIHAD</h1>
+                <div class="sub-header">SISTEM INFORMASI DIGITAL</div>
+                <div class="datetime-pill"><span style="color:#ffd700;">Rabu</span>, 30 Sept 2026 &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">11:35:00 WIB</span></div>
+            </div>
+            <div class="expl">
+                <strong style="color: #FFD700;">Keunggulan di Layar TV:</strong> Gradasi emas kuning terang berkilau (emas muda di atas, emas murni di tengah, emas tembaga di bawah). Menyerupai plakat ukiran kuningan/emas di masjid-masjid agung. Memberikan nuansa agung, hangat, dan sangat berkelas.
+            </div>
+        </div>
+
+        <!-- 3. OPSI 3 -->
+        <div class="card-preview">
+            <div class="badge-opt" style="background: #38bdf8; color: #000;">
+                <i class="fas fa-layer-group"></i> Opsi 3: Kombinasi Dua Warna (Dual-Tone: Emas &amp; Putih)
+            </div>
+            <div class="header-wrap">
+                <h1 class="h-title h-opt3">
+                    <span class="gold-txt">MASJID JAMI'</span> <span class="white-txt">AL-JIHAD</span>
+                </h1>
+                <div class="sub-header">SISTEM INFORMASI DIGITAL</div>
+                <div class="datetime-pill"><span style="color:#ffd700;">Rabu</span>, 30 Sept 2026 &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">11:35:00 WIB</span></div>
+            </div>
+            <div class="expl">
+                <strong style="color: #38bdf8;">Keunggulan di Layar TV:</strong> Memadukan dua warna utama: kata "MASJID JAMI'" menggunakan warna Emas Berkilau, sedangkan kata "AL-JIHAD" menggunakan Putih Kristal ber-stroke emas. Memberikan hierarki visual dinamis di mana kata "AL-JIHAD" menjadi pusat perhatian utama.
+            </div>
+        </div>
+
+        <!-- 4. OPSI 4 -->
+        <div class="card-preview">
+            <div class="badge-opt" style="background: #a7f3d0; color: #064e3b;">
+                <i class="fas fa-gem"></i> Opsi 4: Glowing Mint Zamrud + Kontur Emas
+            </div>
+            <div class="header-wrap">
+                <h1 class="h-title h-opt4">MASJID JAMI' AL-JIHAD</h1>
+                <div class="sub-header">SISTEM INFORMASI DIGITAL</div>
+                <div class="datetime-pill"><span style="color:#ffd700;">Rabu</span>, 30 Sept 2026 &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">11:35:00 WIB</span></div>
+            </div>
+            <div class="expl">
+                <strong style="color: #a7f3d0;">Keunggulan di Layar TV:</strong> Jika tetap ingin ada unsur hijau khas masjid: bukan memakai hijau tua gelap, melainkan spektrum hijau mint zamrud terang (gradasi putih ke mint muda lalu ke zamrud cerah). Karena spektrumnya cerah, huruf tetap memancarkan sinar dan tidak tenggelam.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
