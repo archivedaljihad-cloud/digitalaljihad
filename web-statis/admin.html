@@ -298,16 +298,9 @@
             font-weight: 800;
         }
 
-        /* QUICK ROLE SWITCHER PILL IN TOPBAR */
+        /* QUICK ROLE SWITCHER PILL IN TOPBAR (DISEMBUNYIKAN / HIDE) */
         .topbar-role-selector {
-            display: inline-flex;
-            align-items: center;
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            border-radius: 25px;
-            padding: 3px;
-            margin-right: 15px;
-            gap: 2px;
+            display: none !important;
         }
 
         .role-switch-btn {
@@ -1520,9 +1513,9 @@
                     <!-- Topbar Navbar Right -->
                     <ul class="navbar-nav ml-auto align-items-center">
 
-                        <!-- QUICK ROLE SWITCHER PILL (Praktis untuk Demo 3 Peran) -->
-                        <li class="nav-item d-none d-lg-block">
-                            <div class="topbar-role-selector" title="Ubah tampilan untuk menguji hak akses peran">
+                        <!-- QUICK ROLE SWITCHER PILL (Disembunyikan / Dihide Sesuai Permintaan) -->
+                        <li class="nav-item d-none" style="display: none !important;">
+                            <div class="topbar-role-selector" style="display: none !important;">
                                 <button type="button" class="role-switch-btn" id="btnSwitchAdmin" onclick="switchRoleDemo('admin')">
                                     <i class="fas fa-crown"></i> Super Admin
                                 </button>

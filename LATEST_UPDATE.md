@@ -8082,3 +8082,34 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `resources/views/layouts/admin.blade.php` (CSS `.topbar-clock-widget` borderless/transparent, dan penempatan kembali markup jam/tanggal & user dropdown)
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 184)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 185 - PENYEMBUNYIAN KOTAK SWITCH PERAN BENDAHARA / OPERATOR DI TENGAH ATAS TOPBAR DASHBOARD)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Sekarang hilangkan/hide kotak switch Bendahara/Operator yang ada di tengah atas halaman dashboard*
+- **Tujuan:**
+  - Membersihkan area tengah bilah atas (*topbar*) dashboard dari kapsul pengalih peran (*Quick Role Switcher: Bendahara / Operator*).
+  - Memberikan ruang yang lebih lega dan fokus pada navigasi utama: waktu sholat berikutnya, tombol *"Lihat Display"*, dan informasi akun pengguna di ujung kanan.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penyembunyian CSS `.topbar-role-selector` (`web-statis/admin.html`):**
+   - Mengubah properti class `.topbar-role-selector` menjadi `display: none !important;`.
+   - Menambahkan class `d-none` dan atribut `style="display: none !important;"` pada elemen `li.nav-item` pembungkus di topbar.
+2. **Preservasi Keamanan & Integritas JavaScript:**
+   - Elemen tombol peran tetap berada di dalam DOM secara tersembunyi (*hidden*), sehingga fungsi `AdminAuth` dan method JavaScript yang merujuk pada elemen tombol peran tetap berjalan aman tanpa error *null pointer*.
+3. **Hasil Tampilan Topbar yang Bersih & Rapi:**
+   - Sisi Kiri: Tombol Hamburger Menu + Jam Digital Realtime & Hari/Tanggal (tanpa kotak pembungkus) + Kapsul Waktu Sholat Berikutnya.
+   - Sisi Tengah: Bersih dan lega tanpa tombol switch peran.
+   - Sisi Kanan: Tombol hijau *"Lihat Display"* + Garis Pemisah + Profil Akun Pengurus (tanpa kotak pembungkus).
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penyembunyian CSS `.topbar-role-selector` dan penambahan `d-none` pada elemen topbar)
+2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+3. `LATEST_UPDATE.md` (Dokumentasi Bab 185)
