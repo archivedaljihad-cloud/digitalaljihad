@@ -8012,3 +8012,37 @@ Dibuat halaman slide visual premium dengan karakteristik:
 1. `web-statis/admin.html` (Reposisi layout baris atas-bawah, pemindahan tombol simpan di bawah preview TV, kontainer horizontal `#kajianRekapCardsContainer`, CSS `.kajian-rekap-card`, dan pembaruan fungsi `renderKajianRekapTable`)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas disinkronkan secara otomatis)
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 182)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 183 - PENYESUAIAN TEKS PENGINGAT MENU SAVE & REPOSISI KALIGRAFI ARAB "أَهْلًا وَسَهْلًا" KE PINGGIR KANAN KOTAK BANNER DASHBOARD UTAMA)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Di bagian Menu Dashboard Utama, ganti teks :*  
+  *"Panel Kontrol Web Statis Masjid Jami' Al-Jihad. Seluruh perubahan data akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display melalui Supabase BaaS." menjadi "JANGAN LUPA !!setelah input/edit data tekan menu SAVE agar seluruh perubahan data di dashboard ini akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display."*  
+  *Hilangkan teks latin "Ahlan Wa Sahlan" dan ganti posisi teks "أَهْلًا وَسَهْلًا" disebelah pinggir kanan kotaknya.*
+- **Tujuan:**
+  1. Memberikan pesan pengingat yang sangat tegas dan jelas kepada pengurus/operator agar selalu menekan tombol SAVE setelah selesai menginput/mengedit data.
+  2. Mempercantik tata letak kartu hero selamat datang (*Welcome Hero Banner*), di mana teks latin dihilangkan dan kaligrafi Arab emas `"أَهْلًا وَسَهْلًا"` diposisikan megah di sisi pinggir kanan kotak.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembaruan Teks Deskripsi Pengingat Menu SAVE:**
+   - Teks deskripsi diubah menjadi:
+     *"JANGAN LUPA !! setelah input/edit data tekan menu SAVE agar seluruh perubahan data di dashboard ini akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display."*
+   - Dilengkapi sorotan teks emas berbobot tebal (`<strong class="text-warning">JANGAN LUPA !!</strong>` dan `<strong class="text-warning">SAVE</strong>`) agar mudah terlihat seketika oleh operator/petugas.
+   - Properti CSS `.hero-sub-desc` disesuaikan dari `max-width: 650px` menjadi `max-width: 840px` agar kalimat mengalir rapi dan leluasa.
+2. **Penghilangan Teks Latin & Reposisi Kaligrafi Arab ke Pinggir Kanan Kotak:**
+   - Menghilangkan teks latin `"Ahlan Wa Sahlan"`.
+   - Mengubah layout `.welcome-hero-banner` menjadi flexbox modern (`d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center position-relative`).
+   - Kaligrafi Arab `"أَهْلًا وَسَهْلًا"` kini ditempatkan di wadah khusus sisi kanan (`.hero-arabic-right-container`) dengan font berukuran `2.3rem`, warna emas islami terang (`#ffd700`), serta bayangan pendaran halus.
+   - Di layar desktop/tablet, kaligrafi bertengger anggun di sebelah pinggir kanan kotak; di layar smartphone, posisinya beradaptasi otomatis secara responsif.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Markup banner `.welcome-hero-banner`, penghilangan teks latin, reposisi teks Arab ke pinggir kanan, teks pengingat SAVE, dan CSS `.hero-sub-desc`)
+2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+3. `LATEST_UPDATE.md` (Dokumentasi Bab 183)

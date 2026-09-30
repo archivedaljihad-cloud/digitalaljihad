@@ -532,7 +532,7 @@
         .hero-sub-desc {
             font-size: 0.88rem;
             color: #cbd5e1;
-            max-width: 650px;
+            max-width: 840px;
             line-height: 1.5;
         }
 
@@ -1550,18 +1550,22 @@
                     <div id="view-dashboard" class="section-view active">
 
                         <!-- Welcome Hero Banner -->
-                        <div class="welcome-hero-banner">
-                            <div class="hero-arabic-title">
-                                أَهْلًا وَسَهْلًا • Ahlan Wa Sahlan
+                        <div class="welcome-hero-banner d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center position-relative">
+                            <div class="pr-md-4 mb-3 mb-md-0" style="max-width: 820px; z-index: 2;">
+                                <div class="hero-greeting-time" id="heroGreetingTime">
+                                    Selamat Datang,
+                                </div>
+                                <div class="hero-main-title" id="welcomeHeroTitle">
+                                    Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Pengurus Masjid Jami' Al Jihad</span>!
+                                </div>
+                                <div class="hero-sub-desc">
+                                    <strong class="text-warning">JANGAN LUPA !!</strong> setelah input/edit data tekan menu <strong class="text-warning">SAVE</strong> agar seluruh perubahan data di dashboard ini akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display.
+                                </div>
                             </div>
-                            <div class="hero-greeting-time" id="heroGreetingTime">
-                                Selamat Datang,
-                            </div>
-                            <div class="hero-main-title" id="welcomeHeroTitle">
-                                Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">Pengurus Masjid Jami' Al Jihad</span>!
-                            </div>
-                            <div class="hero-sub-desc">
-                                Panel Kontrol Web Statis Masjid Jami' Al-Jihad. Seluruh perubahan data akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display melalui Supabase BaaS.
+                            <div class="hero-arabic-right-container text-md-right ml-md-auto align-self-start align-self-md-center" style="z-index: 2;">
+                                <div class="hero-arabic-title" style="font-size: 2.3rem; margin-bottom: 0; line-height: 1.2; white-space: nowrap; color: var(--islamic-gold-bright, #ffd700); text-shadow: 0 2px 10px rgba(0,0,0,0.35);">
+                                    أَهْلًا وَسَهْلًا
+                                </div>
                             </div>
                         </div>
                         <script>
