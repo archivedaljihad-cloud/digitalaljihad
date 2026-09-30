@@ -7843,3 +7843,26 @@ Dibuat halaman slide visual premium dengan karakteristik:
 19. `resources/views/partials/display-theme.blade.php`
 20. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 21. `LATEST_UPDATE.md` (Diperbarui Bab 177)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 178 - PENAMBAHAN PETUNJUK OPERASIONAL PADA DESKRIPSI KARTU PANDUAN UNDANGAN UKHUWAH DI ADMIN PANEL)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Tolong dibagian teks ini "Deskripsi Undangan Ukhuwah : Formulir ini disiapkan untuk mengakomodir undangan kegiatan keagamaan (Peringatan Maulid Nabi, Isra' Mi'raj, Tabligh Akbar, Istigozah, Rebo Wekasan, Santunan Anak Yatim atau yang lainnya). Undangan yang aktif akan otomatis ditampilkan bergantian pada layar TV." ditambahkan kalimat " Untuk mengaktifkan/meNONAKTIFKAN undangan ini, silakan di klik ikon mata di kolom AKSI dan lihat statusnya di kolom STATUS TV"*
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembaruan Kartu Informasi Panduan Pengisian Undangan Ukhuwah (`#view-undangan-eksternal`):**
+   - Teks panduan deskripsi diperkaya dengan petunjuk praktis bagi pengurus/operator DKM untuk mengontrol penayangan data undangan ke layar TV Display:
+     *"Deskripsi Undangan Ukhuwah : Formulir ini disiapkan untuk mengakomodir undangan kegiatan keagamaan (Peringatan Maulid Nabi, Isra' Mi'raj, Tabligh Akbar, Istigozah, Rebo Wekasan, Santunan Anak Yatim atau yang lainnya). Undangan yang aktif akan otomatis ditampilkan bergantian pada layar TV. Untuk mengaktifkan/meNONAKTIFKAN undangan ini, silakan di klik ikon mata di kolom AKSI dan lihat statusnya di kolom STATUS TV."*
+   - Memudahkan operator memahami langsung fungsi ikon mata di kolom **AKSI** untuk beralih antara status *Aktif di TV* (hijau) dan *Nonaktif* (abu-abu/kuning) tanpa perlu bingung mencari tombol pengaturan terpisah.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Teks deskripsi panduan Undangan Ukhuwah diperbarui)
+2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+3. `LATEST_UPDATE.md` (Diperbarui Bab 178)
