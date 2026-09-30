@@ -140,21 +140,22 @@ body {
 .header h1,
 .header-section h1,
 #nama-masjid {
-    font-family: 'Masking Renta', sans-serif !important;
+    font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
     font-size: 3.2rem !important;
+    font-weight: 900 !important;
     line-height: 1.1 !important;
     letter-spacing: 5px !important;
     text-transform: uppercase !important;
     background: none !important;
     -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: #064e3b !important;
-    color: #064e3b !important;
-    -webkit-text-stroke: 2.5pt #FFD700 !important;
+    -webkit-text-fill-color: #033624 !important;
+    color: #033624 !important;
+    -webkit-text-stroke: 1.5px #FFD700 !important;
     paint-order: stroke fill;
     text-shadow:
-        0 0 10px rgba(255, 215, 0, 0.45),
-        0 2px 6px rgba(0, 0, 0, 0.9),
-        0 4px 14px rgba(0, 0, 0, 0.8) !important;
+        0 2px 4px rgba(0, 0, 0, 0.95),
+        0 5px 14px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(0, 0, 0, 0.8) !important;
     filter: none !important;
     margin: 0 0 -15px 0 !important;
     padding: 0 !important;
@@ -194,19 +195,19 @@ h2.sub-header {
 .header .datetime,
 .header-section .datetime {
     font-size: 1.55rem !important;
-    background: rgba(3, 20, 15, 0.65) !important;
+    background: linear-gradient(135deg, rgba(2, 22, 15, 0.94) 0%, rgba(3, 34, 23, 0.90) 100%) !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 5px 28px !important;
+    padding: 6px 30px !important;
     border-radius: 35px !important;
     margin: 4px auto 0 auto !important;
     font-weight: 600 !important;
     letter-spacing: 1px !important;
-    border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+    border: 2.5px solid #FFD700 !important;
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), 0 8px 25px rgba(0, 0, 0, 0.9), inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
     box-sizing: border-box !important;
     white-space: nowrap !important;
 }
@@ -675,6 +676,7 @@ h2.sub-header {
 .running-badge {
     background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
     color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
     height: 100% !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -690,9 +692,9 @@ h2.sub-header {
     box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
     z-index: 10 !important;
     clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
-    -webkit-text-stroke: 0.45px #000000 !important;
+    -webkit-text-stroke: 0.5px #000000 !important;
     paint-order: stroke fill !important;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    text-shadow: none !important;
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
     text-rendering: optimizeLegibility !important;
@@ -700,10 +702,11 @@ h2.sub-header {
 
 .running-badge i {
     color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
     font-size: 1.15rem !important;
     font-weight: 900 !important;
-    -webkit-text-stroke: 0.45px #000000 !important;
-    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
+    -webkit-text-stroke: 0.5px #000000 !important;
+    filter: none !important;
     margin-right: 2px !important;
 }
 

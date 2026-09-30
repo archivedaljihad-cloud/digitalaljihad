@@ -7566,3 +7566,59 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 3. `web-statis/admin.html` (Diperbarui)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html` (Tersinkronisasi)
 5. `LATEST_UPDATE.md` (Diperbarui)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 174 - OPTIMASI TAMPILAN TV DISPLAY: PENAJAMAN KONTRAS HEADER HIJAU ZAMRUD, OUTLINE EMAS KAPSUL WAKTU 2.5PX, DAN BADGE RUNNING TEXT HITAM PEKAT)
+
+### 1. Latar Belakang & Analisis Permasalahan Tampilan di Layar TV
+Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qiblat* (`slides/slide.html`) dan mencatat 3 kejanggalan visual yang berbeda dibandingkan saat dibuka di browser laptop:
+1. **Header "MASJID JAMI' AL-JIHAD" Berubah Hijau Keputih-putihan:**
+   - **Penyebab:** Pada layar TV (LED backlight 350–500 nits dengan kontras tinggi/vivid), properti `-webkit-text-stroke: 2.5pt #FFD700` (~3.33px) dan `text-shadow: 0 0 10px rgba(255, 215, 0, 0.45)` (glow emas menyebar) menghasilkan pendaran cahaya terang yang "memakan" badan huruf warna hijau tua (`#05442A`). Akibatnya, pada resolusi TV dan jarak pandang 3–5 meter, warna hijau tua terasimilasi dengan pendaran emas terang sehingga tampak seperti hijau muda pudar/keputih-putihan (*optical washout*).
+2. **Font Ujung Teks Berjalan ("DOKUMENTASI") Menjadi Warna Putih:**
+   - **Penyebab:** File `slides/slide.html` sebelumnya belum menyematkan deklarasi styling lokal eksplisit untuk `.running-badge`, melainkan mengandalkan berkas stylesheet eksternal `display-theme.css`. Browser Smart TV yang menerapkan *aggressive caching* masih memuat CSS lama tanpa *cache buster* yang belum memiliki `-webkit-text-fill-color: #000000 !important;`, sehingga browser TV mewarisi aturan global `body { color: #ffffff; }` yang menjadikan teks label DOKUMENTASI berwarna putih di atas latar kuning.
+3. **Outline / Garis Kotak Kapsul Tanggal & Jam Kurang Terlihat:**
+   - **Penyebab:** Kotak kapsul `.datetime` sebelumnya menggunakan `border: 1.5px solid rgba(255, 215, 0, 0.5);` (hanya tebal 1.5px dan ber-opacity 50% transparan) dengan bayangan tipis ke bawah saja. Ketika bertumpuk dengan gambar kubah hijau masjid dan background bernuansa gelap, garis transparan 1.5px tersebut tenggelam dan sulit terbedakan dari kejauhan.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penajaman Header Masjid (`#nama-masjid` / `.header h1`):**
+   - **Warna Teks:** Digelapkan menjadi hijau zamrud pekat (`#033624` dan `linear-gradient(180deg, #075237 0%, #033624 100%)`).
+   - **Ketebalan Stroke:** Diturunkan dari 2.5pt (~3.33px) menjadi **1.5px solid #FFD700** dengan `paint-order: stroke fill` agar stroke emas membingkai rapi tanpa menutupi isi badan huruf.
+   - **Eliminasi Halo Washout:** Menghapus `text-shadow: 0 0 10px rgba(255, 215, 0, 0.45)` (glow kuning) dan menggantinya dengan bayangan hitam bertingkat (*multi-layer pitch-black drop shadows*): `0 2px 4px rgba(0, 0, 0, 0.95), 0 5px 14px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.8)`. Hasilnya, teks terlihat sangat tajam, kontras tinggi, dan hijau zamrudnya tampak mewah serta tegas di layar TV.
+   - **Font Fallback:** Menyematkan fallback font `font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;` dengan `font-weight: 900 !important;` untuk menjamin ketebalan huruf di peramban TV.
+
+2. **Penguncian Teks Badge Running Text Hitam Pekat (`.running-badge`):**
+   - Ditambahkan aturan inline berprioritas tinggi (`!important`) langsung di dalam `slides/slide.html`, serta diperbarui pada `display-theme.css`:
+     ```css
+     color: #000000 !important;
+     -webkit-text-fill-color: #000000 !important;
+     font-weight: 900 !important;
+     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+     ```
+   - Ikon Font Awesome (`.running-badge i`) juga dikunci tegas: `color: #000000 !important; -webkit-text-fill-color: #000000 !important;`.
+   - Ditambahkan pemotong trapesium modern `clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%)` dan bayangan tepi pembatas hitam agar badge terlihat kontras dan tegas memisahkan diri dari teks berita berjalan.
+
+3. **Penebalan & Pendaran Outline Kapsul Tanggal/Jam (`.header .datetime`):**
+   - **Border Outline:** Ditebalkan menjadi **`2.5px solid #FFD700 !important`** (warna emas pekat 100% tanpa transparansi).
+   - **Glow & Contrast:** Diberikan outer glow emas elegan berpadu bayangan hitam pekat: `box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), 0 8px 25px rgba(0, 0, 0, 0.9) !important;`.
+   - **Latar Belakang:** Menggunakan gradasi hijau zamrud gelap `linear-gradient(135deg, rgba(2, 44, 29, 0.92) 0%, rgba(5, 74, 49, 0.88) 100%)` ber-backdrop-filter blur 12px, sehingga garis batas emas kapsul terlihat sangat menonjol dan terbaca jelas dari sudut manapun di ruangan masjid.
+
+4. **Pencegahan Cache TV (*Cache Busting*):**
+   - Seluruh tautan stylesheet `display-theme.css` dan `partials-theme.css` pada `index.html`, `slides/utama.html`, dan `slides/slide.html` diperbarui versinya dengan parameter `?v=20260930_03` agar browser Smart TV langsung mengunduh versi CSS terbaru tanpa tersangkut cache lama.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/slide.html`
+2. `web-statis/slides/utama.html`
+3. `web-statis/index.html`
+4. `web-statis/css/partials-theme.css`
+5. `web-statis/css/display-theme.css`
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\slide.html` (Sinkron)
+7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\utama.html` (Sinkron)
+8. `C:\Users\anthu\Documents\【Digital WebSTATIS】\index.html` (Sinkron)
+9. `C:\Users\anthu\Documents\【Digital WebSTATIS】\css\partials-theme.css` (Sinkron)
+10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\css\display-theme.css` (Sinkron)
+11. `LATEST_UPDATE.md`

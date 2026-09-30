@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css">
-    <link rel="stylesheet" href="../css/partials-theme.css">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20260930_03">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20260930_03">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,20 +47,21 @@
         }
 
         .header h1 {
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
             font-size: 2.8rem;
             line-height: 1.1;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: #064e3b;
-            -webkit-text-fill-color: #064e3b;
-            -webkit-text-stroke: 2.5pt #FFD700;
+            color: #033624 !important;
+            -webkit-text-fill-color: #033624 !important;
+            -webkit-text-stroke: 1.5px #FFD700 !important;
             paint-order: stroke fill;
             text-shadow: 
-                0 0 10px rgba(255, 215, 0, 0.45),
-                0 2px 6px rgba(0, 0, 0, 0.9),
-                0 4px 14px rgba(0, 0, 0, 0.8);
+                0 2px 4px rgba(0, 0, 0, 0.95),
+                0 5px 14px rgba(0, 0, 0, 0.9),
+                0 0 20px rgba(0, 0, 0, 0.8) !important;
             margin: 0 0 4px 0;
-            font-weight: 800;
+            font-weight: 900 !important;
         }
 
         .header h3.sub-header {
@@ -74,16 +75,25 @@
         }
 
         .datetime {
-            font-size: 1.35rem;
-            background: rgba(3, 20, 15, 0.65);
-            display: inline-block;
-            padding: 4px 24px;
-            border-radius: 35px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            border: 1.5px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
+            font-size: 1.45rem !important;
+            background: linear-gradient(135deg, rgba(2, 22, 15, 0.94) 0%, rgba(3, 34, 23, 0.90) 100%) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 6px 30px !important;
+            border-radius: 35px !important;
+            font-weight: 700 !important;
+            letter-spacing: 1px !important;
+            border: 2.5px solid #FFD700 !important;
+            box-shadow: 
+                0 0 16px rgba(255, 215, 0, 0.55),
+                0 8px 25px rgba(0, 0, 0, 0.9),
+                inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+            white-space: nowrap !important;
         }
 
         /* STAGE UTAMA 2 KOLOM */
@@ -336,19 +346,61 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            z-index: 20;
-            background: rgba(2, 16, 11, 0.88);
-            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
-            backdrop-filter: blur(10px);
+            height: 48px;
+            z-index: 1000;
+            background: linear-gradient(90deg, #021a12 0%, #03271b 25%, #053324 50%, #03271b 75%, #021a12 100%) !important;
+            border-top: 2.5px solid #ffd700 !important;
+            display: flex !important;
+            align-items: center !important;
+            box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.85), 0 -1px 5px rgba(255, 215, 0, 0.4) !important;
+            backdrop-filter: blur(14px);
+            overflow: hidden;
         }
-        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+
+        .running-badge {
+            background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            height: 100% !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            padding: 0 24px 0 20px !important;
+            font-family: 'Poppins', 'Montserrat', 'Inter', -apple-system, sans-serif !important;
+            font-weight: 900 !important;
+            font-size: 1.06rem !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            flex-shrink: 0 !important;
+            border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
+            gap: 8px !important;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
+            z-index: 10 !important;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
+            -webkit-text-stroke: 0.5px #000000 !important;
+            paint-order: stroke fill !important;
+            text-shadow: none !important;
+        }
+
+        .running-badge i {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            font-size: 1.15rem !important;
+            font-weight: 900 !important;
+            -webkit-text-stroke: 0.5px #000000 !important;
+            filter: none !important;
+            margin-right: 2px !important;
+        }
+
+        .running-text-container { flex: 1; padding: 0 20px; overflow: hidden; white-space: nowrap; height: 100%; display: flex; align-items: center; }
         .running-text {
             display: inline-block;
             white-space: nowrap;
             animation: marquee 68s linear infinite;
-            font-size: 1.20rem;
+            font-size: 1.16rem;
             font-weight: 600;
             color: #ffffff;
+            letter-spacing: 0.6px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
         }
         .running-text i { color: #ffd700; margin: 0 10px; }
         @keyframes marquee {
