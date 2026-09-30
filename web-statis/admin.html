@@ -242,10 +242,10 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            padding: 6px 14px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            padding: 2px 6px;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
             margin-right: 12px;
         }
 
@@ -393,21 +393,24 @@
         }
 
         /* USER PROFILE KAPSUL TOPBAR (ANTI-CLIPPING / ANTI-OVERFLOW) */
+        /* USER PROFILE TOPBAR (KOTAK DIHILANGKAN, HANYA NAMA, ROLE, AVATAR & DROPDOWN) */
         .user-profile-card {
-            background: #f8fafc;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 30px;
-            padding: 4px 12px 4px 8px !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0;
+            box-shadow: none !important;
+            padding: 4px 6px !important;
             display: inline-flex !important;
             align-items: center;
-            transition: all 0.2s ease;
+            transition: opacity 0.2s ease;
             text-decoration: none !important;
             cursor: pointer;
         }
         .user-profile-card:hover, .user-profile-card[aria-expanded="true"] {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            opacity: 0.85;
         }
         .user-meta-info {
             max-width: 125px;
@@ -1499,6 +1502,12 @@
                         <i class="fas fa-bars" id="iconSidebarToggle"></i>
                     </button>
 
+                    <!-- Widget Jam Digital Realtime & Kalender (Tanpa Kotak/Border/Background) -->
+                    <div class="topbar-clock-widget d-none d-sm-flex">
+                        <div class="topbar-clock-time" id="topbarClockTime">00:00:00</div>
+                        <div class="topbar-clock-date" id="topbarClockDate">Memuat Tanggal...</div>
+                    </div>
+
                     <!-- Widget Pill Sholat Berikutnya -->
                     <div class="topbar-prayer-pill d-none d-md-inline-flex" title="Waktu Sholat Berikutnya">
                         <div class="pill-icon">
@@ -1532,6 +1541,42 @@
                                 <i class="fas fa-tv"></i>
                                 <span>Lihat Display</span>
                             </a>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- User Info Dropdown (Tanpa Kotak/Border/Background Kapsul) -->
+                        <li class="nav-item dropdown no-arrow ml-1">
+                            <a class="nav-link dropdown-toggle user-profile-card" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Menu Akun & Profil">
+                                <div class="user-meta-info d-none d-md-flex flex-column text-right mr-2">
+                                    <span class="auth-user-name user-display-name">Pengguna</span>
+                                    <span class="auth-user-role-label user-display-role">Petugas</span>
+                                </div>
+                                <div class="sup-avatar auth-user-initial" style="width: 36px; height: 36px; font-size: 0.95rem;">A</div>
+                                <svg class="user-chevron ml-2" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right user-dropdown-panel shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <div class="dropdown-header d-flex align-items-center">
+                                    <div class="sup-avatar auth-user-initial mr-2" style="width: 32px; height: 32px; font-size: 0.85rem;">A</div>
+                                    <div style="overflow: hidden; max-width: 170px;">
+                                        <div class="font-weight-bold text-dark text-truncate auth-user-name">Pengguna</div>
+                                        <div class="small font-weight-bold text-success text-truncate auth-user-role-label">Petugas / Operator</div>
+                                    </div>
+                                </div>
+                                <div class="px-3 py-1 small text-muted text-truncate auth-user-email" style="max-width: 220px;">email@aljihad.com</div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:void(0)" onclick="switchAdminSection('dashboard')">
+                                    <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-primary"></i> 
+                                    <span>Dashboard Utama</span>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center text-danger font-weight-bold" href="javascript:void(0)" onclick="confirmLogout(event)">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i> 
+                                    <span>Keluar (Logout)</span>
+                                </a>
+                            </div>
                         </li>
 
                     </ul>

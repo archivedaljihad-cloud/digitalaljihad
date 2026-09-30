@@ -692,10 +692,10 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            padding: 5px 12px;
-            background: linear-gradient(135deg, rgba(30,90,58,0.06), rgba(10,46,31,0.03));
-            border-radius: 10px;
-            border: 1px solid rgba(30, 90, 58, 0.12);
+            padding: 2px 6px;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
             margin-right: 12px;
             cursor: default;
             flex-shrink: 0;
@@ -1308,6 +1308,12 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
+                    <!-- Live Clock Widget (Tanpa Kotak/Border/Background) -->
+                    <div class="topbar-clock-widget d-none d-sm-flex" id="topbarClockWidget" title="Jam & Tanggal">
+                        <div class="topbar-clock-time" id="liveClockTime">--:--:--</div>
+                        <div class="topbar-clock-date" id="liveClockDate">Memuat tanggal...</div>
+                    </div>
+
                     <!-- Topbar Search -->
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -1381,6 +1387,36 @@
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500 font-weight-bold py-2" href="{{ route('notifications.index') }}"> Lihat Semua</a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information (Tanpa Kotak/Border/Background) -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                <div class="img-profile rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width: 32px; height: 32px; background: #e0f2fe; color: #0369a1; font-weight: bold;">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+                                <a class="dropdown-item" href="{{ route('profile') }}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-primary"></i>
+                                    Profil
+                                </a>
+                                <a class="dropdown-item" href="{{ route('settings.edit') }}">
+                                    <i class="fas fa-cog fa-sm fa-fw mr-2 text-primary"></i>
+                                    Pengaturan
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i>
+                                    Keluar
+                                </a>
                             </div>
                         </li>
 
