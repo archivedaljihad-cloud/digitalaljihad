@@ -1333,6 +1333,15 @@
                     </a>
                 </li>
 
+                <!-- NAV ITEM: SURAT UNDANGAN LUAR (WARTA UKHUWAH) -->
+                <li class="nav-item" id="nav-undangan-eksternal">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('undangan-eksternal')">
+                        <i class="fas fa-fw fa-envelope-open-text" style="color: #38bdf8;"></i>
+                        <span>Undangan Luar</span>
+                        <span class="badge badge-info ml-1" style="font-size: 0.65rem;">UKHUWAH</span>
+                    </a>
+                </li>
+
                 <li class="nav-item" id="nav-ramadhan">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('ramadhan')">
                         <i class="fas fa-fw fa-star-and-crescent" style="color: #ffd700;"></i>
@@ -3249,6 +3258,63 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbodyGaleriInformasi">
+                                            <!-- Rendered dynamically by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==========================================
+                         VIEW: SURAT UNDANGAN LUAR (WARTA UKHUWAH)
+                         ========================================== -->
+                    <div id="view-undangan-eksternal" class="section-view">
+                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4">
+                            <div class="mb-3 mb-md-0">
+                                <h4 class="font-weight-bold text-gray-800 mb-1">
+                                    <i class="fas fa-envelope-open-text text-info mr-2"></i> Surat Undangan Luar &amp; Warta Ukhuwah
+                                </h4>
+                                <span class="text-muted small">Kelola surat undangan kegiatan keagamaan dari mushola/masjid pengundang untuk diumumkan kepada jamaah di Layar TV Display Masjid Al-Jihad.</span>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-info font-weight-bold px-3 py-2 shadow-sm mr-2" onclick="bukaModalTambahUndangan()" style="border-radius: 8px;">
+                                    <i class="fas fa-plus-circle mr-1"></i> Tambah Undangan Baru
+                                </button>
+                                <a href="slides/undangan.html" target="_blank" class="btn btn-outline-info font-weight-bold px-3 py-2" style="border-radius: 8px;">
+                                    <i class="fas fa-tv mr-1"></i> Pratinjau Layar TV
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- KARTU INFORMASI PANDUAN PENGISIAN -->
+                        <div class="alert alert-info border-0 shadow-sm mb-4" style="border-radius: 12px; background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); border-left: 5px solid #0284c7 !important;">
+                            <div class="d-flex align-items-center">
+                                <div class="mr-3 text-info">
+                                    <i class="fas fa-info-circle fa-2x"></i>
+                                </div>
+                                <div class="text-dark small">
+                                    <strong>Panduan Warta Ukhuwah Antar Masjid:</strong> Formulir ini disiapkan khusus untuk mengakomodir undangan kegiatan keagamaan (Peringatan Maulid Nabi, Isra' Mi'raj, Tabligh Akbar, Haflah Wisuda TPQ, Santunan Anak Yatim). Undangan yang aktif akan otomatis ditampilkan bergantian pada layar TV Display dengan desain surat undangan islami berkelas.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-sm border-0 mb-4" style="border-radius: 14px; overflow: hidden;">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover align-middle mb-0" id="tableUndanganEksternal">
+                                        <thead style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff;">
+                                            <tr>
+                                                <th width="50" class="text-center py-3">No</th>
+                                                <th class="py-3" style="min-width: 170px;">Pengundang</th>
+                                                <th class="py-3" style="min-width: 220px;">Acara &amp; Penceramah</th>
+                                                <th class="py-3" style="min-width: 180px;">Hari / Tanggal &amp; Waktu</th>
+                                                <th class="py-3" style="min-width: 180px;">Tempat / Alamat</th>
+                                                <th width="110" class="text-center py-3">Status TV</th>
+                                                <th width="150" class="text-center py-3">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyUndanganEksternal">
                                             <!-- Rendered dynamically by JavaScript -->
                                         </tbody>
                                     </table>
@@ -5739,6 +5805,131 @@
     </div>
 
     <!-- =======================================================
+         MODAL FORM SURAT UNDANGAN LUAR (WARTA UKHUWAH)
+         ======================================================= -->
+    <div class="modal fade" id="modalUndanganEksternal" tabindex="-1" role="dialog" aria-labelledby="modalUndanganTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 14px; overflow: hidden;">
+                <div class="modal-header text-white py-3" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+                    <h5 class="modal-title font-weight-bold" id="modalUndanganTitle">
+                        <i class="fas fa-envelope-open-text mr-2"></i> Tambah Surat Undangan Luar
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="formUndanganEksternal" onsubmit="simpanUndanganEksternal(event)">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="undanganId" value="">
+                        
+                        <div class="row">
+                            <!-- 1. PENGUNDANG & ACARA -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="undanganPengundang" class="font-weight-bold text-gray-800">
+                                        <i class="fas fa-mosque text-info mr-1"></i> Nama Masjid / Mushola Pengundang <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="undanganPengundang" required placeholder="Contoh: Mushola Al-Ikhlas / Masjid Baitul Muttaqin">
+                                    <small class="text-muted">Pihak DKM / Pengurus yang mengundang.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="undanganAcara" class="font-weight-bold text-gray-800">
+                                        <i class="fas fa-calendar-alt text-info mr-1"></i> Nama Acara / Kegiatan <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="undanganAcara" required placeholder="Contoh: Peringatan Maulid Nabi 1448 H / Kajian Akbar &amp; Santunan Yatim">
+                                    <small class="text-muted">Nama / tema kegiatan yang diselenggarakan.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- 2. PENCERAMAH & TANGGAL -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="undanganPenceramah" class="font-weight-bold text-gray-800">
+                                        <i class="fas fa-microphone-alt text-info mr-1"></i> Penceramah / Tamu Undangan
+                                    </label>
+                                    <input type="text" class="form-control" id="undanganPenceramah" placeholder="Contoh: Ustadz Dr. H. Ahmad Fauzi, M.Ag">
+                                    <small class="text-muted">Nama muballigh, habib, kiai, atau narasumber.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="undanganTanggal" class="font-weight-bold text-gray-800">
+                                        <i class="far fa-calendar-check text-info mr-1"></i> Hari &amp; Tanggal Acara <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="undanganTanggal" required placeholder="Contoh: Sabtu, 15 Oktober 2026 / 12 Rabiul Awwal 1448 H">
+                                    <small class="text-muted">Hari dan tanggal pelaksanaan acara.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- 3. WAKTU & TEMPAT -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="undanganWaktu" class="font-weight-bold text-gray-800">
+                                        <i class="far fa-clock text-info mr-1"></i> Waktu Pelaksanaan <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="undanganWaktu" required placeholder="Contoh: 20:00 WIB (Ba'da Isya) ~ Selesai">
+                                    <small class="text-muted">Jam mulai sampai selesai / sholat berjamaah.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="undanganTempat" class="font-weight-bold text-gray-800">
+                                        <i class="fas fa-map-marker-alt text-info mr-1"></i> Alamat / Tempat Acara Dilakukan <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="undanganTempat" required placeholder="Contoh: Mushola Al-Ikhlas, Jl. Melati Raya Blok B No. 12">
+                                    <small class="text-muted">Lokasi spesifik diadakannya acara.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="undanganKeterangan" class="font-weight-bold text-gray-800">
+                                <i class="fas fa-comment-dots text-info mr-1"></i> Keterangan / Ajakan Jamaah
+                            </label>
+                            <textarea class="form-control" id="undanganKeterangan" rows="2" placeholder="Contoh: Mengharap kehadiran dan kebersamaan seluruh jamaah Masjid Jami' Al-Jihad dalam mempererat tali silaturahmi."></textarea>
+                            <small class="text-muted">Catatan penting / himbauan untuk jamaah Masjid Al-Jihad.</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-0">
+                                    <label for="undanganUrutan" class="font-weight-bold text-gray-800">Urutan Tayang di TV</label>
+                                    <input type="number" class="form-control text-center font-weight-bold" id="undanganUrutan" min="1" value="1">
+                                    <small class="text-muted">Prioritas tampil jika ada beberapa undangan.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-0">
+                                    <label for="undanganActive" class="font-weight-bold text-gray-800">Status Tayang di TV</label>
+                                    <select class="form-control font-weight-bold" id="undanganActive">
+                                        <option value="1">Aktif (Tampil di Rotasi TV)</option>
+                                        <option value="0">Nonaktif (Arsip Sementara)</option>
+                                    </select>
+                                    <small class="text-muted">Nonaktifkan jika acara sudah selesai.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light px-4 py-3">
+                        <button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal">
+                            <i class="fas fa-times mr-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-info font-weight-bold px-4 shadow-sm" id="btnSimpanUndangan">
+                            <i class="fas fa-save mr-1"></i> Simpan Undangan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
          MODAL ZOOM PRATINJAU GAMBAR GALERI
          ======================================================= -->
     <div class="modal fade" id="modalZoomGambarGaleri" tabindex="-1" role="dialog" aria-labelledby="zoomGaleriTitle" aria-hidden="true">
@@ -6246,6 +6437,8 @@
                 initRemoteControlView();
             } else if (sectionName === 'agenda-rutin') {
                 loadAgendaRutinAdmin();
+            } else if (sectionName === 'undangan-eksternal') {
+                loadUndanganEksternalAdmin();
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -12231,6 +12424,235 @@
                 modalTitle.textContent = judul || 'Pratinjau Dokumen / Gambar';
                 $('#modalZoomGambarGaleri').modal('show');
             }
+        }
+
+        // =======================================================
+        // MANAJEMEN SURAT UNDANGAN LUAR (WARTA UKHUWAH)
+        // =======================================================
+        let cachedUndanganList = [];
+
+        async function loadUndanganEksternalAdmin() {
+            const tbody = document.getElementById('tbodyUndanganEksternal');
+            if (!tbody) return;
+
+            try {
+                if (window.SupabaseDB && typeof SupabaseDB.getUndanganEksternal === 'function') {
+                    cachedUndanganList = await SupabaseDB.getUndanganEksternal();
+                } else {
+                    const raw = localStorage.getItem('aljihad_undangan_eksternal');
+                    cachedUndanganList = raw ? JSON.parse(raw) : [];
+                }
+            } catch (err) {
+                console.warn('Gagal load undangan eksternal:', err);
+                cachedUndanganList = [];
+            }
+
+            renderUndanganEksternalTable();
+        }
+
+        function renderUndanganEksternalTable() {
+            const tbody = document.getElementById('tbodyUndanganEksternal');
+            if (!tbody) return;
+
+            const list = cachedUndanganList || [];
+            list.sort((a, b) => (parseInt(a.urutan, 10) || 0) - (parseInt(b.urutan, 10) || 0));
+
+            if (list.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="fas fa-envelope-open-text fa-3x text-gray-300 mb-3 d-block"></i>
+                            <span class="font-weight-bold">Belum ada Surat Undangan Luar yang diinput.</span><br>
+                            <small class="text-muted">Klik tombol <strong>"Tambah Undangan Baru"</strong> di atas untuk memasukkan undangan kegiatan dari masjid/mushola mitra.</small>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const isAktif = (item.is_active !== false && item.is_active !== '0' && item.is_active !== 0);
+                const badgeStatus = isAktif
+                    ? '<span class="badge badge-success px-2 py-1 font-weight-bold"><i class="fas fa-check-circle mr-1"></i> Aktif di TV</span>'
+                    : '<span class="badge badge-secondary px-2 py-1 font-weight-bold"><i class="fas fa-eye-slash mr-1"></i> Nonaktif</span>';
+
+                const toggleBtn = isAktif
+                    ? `<button class="btn btn-outline-secondary btn-sm" onclick="toggleStatusUndangan(${item.id})" title="Nonaktifkan dari TV"><i class="fas fa-eye-slash"></i></button>`
+                    : `<button class="btn btn-outline-success btn-sm" onclick="toggleStatusUndangan(${item.id})" title="Aktifkan di TV"><i class="fas fa-check"></i></button>`;
+
+                const penceramahText = item.penceramah && item.penceramah.trim()
+                    ? `<span class="text-primary font-weight-bold"><i class="fas fa-microphone-alt mr-1"></i>${escapeHtml(item.penceramah)}</span>`
+                    : `<span class="text-muted font-italic small">- Tidak ada penceramah / belum diisi -</span>`;
+
+                return `
+                    <tr>
+                        <td class="text-center font-weight-bold align-middle">${idx + 1}</td>
+                        <td class="align-middle">
+                            <strong class="text-gray-900 d-block" style="font-size: 0.95rem;">
+                                <i class="fas fa-mosque text-info mr-1"></i> ${escapeHtml(item.nama_pengundang || '-')}
+                            </strong>
+                            <small class="text-muted d-block mt-1">
+                                <span class="badge badge-light border">Urutan: ${item.urutan || (idx + 1)}</span>
+                            </small>
+                        </td>
+                        <td class="align-middle">
+                            <strong class="text-dark d-block mb-1" style="font-size: 0.93rem;">${escapeHtml(item.nama_acara || '-')}</strong>
+                            <small class="d-block">${penceramahText}</small>
+                        </td>
+                        <td class="align-middle">
+                            <strong class="text-dark d-block small mb-1"><i class="far fa-calendar-alt text-info mr-1"></i> ${escapeHtml(item.tanggal_acara || '-')}</strong>
+                            <span class="badge badge-info px-2 py-1"><i class="far fa-clock mr-1"></i> ${escapeHtml(item.waktu_acara || '-')}</span>
+                        </td>
+                        <td class="align-middle">
+                            <small class="text-dark font-weight-bold d-block"><i class="fas fa-map-marker-alt text-danger mr-1"></i> ${escapeHtml(item.tempat_acara || '-')}</small>
+                            ${item.keterangan ? `<small class="text-muted d-block mt-1 text-truncate" style="max-width: 200px;" title="${escapeHtml(item.keterangan)}">${escapeHtml(item.keterangan)}</small>` : ''}
+                        </td>
+                        <td class="text-center align-middle">${badgeStatus}</td>
+                        <td class="text-center align-middle">
+                            <div class="btn-group" role="group">
+                                ${toggleBtn}
+                                <button class="btn btn-warning btn-sm font-weight-bold ml-1" onclick="editUndanganEksternal(${item.id})" title="Edit Undangan">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm font-weight-bold ml-1" onclick="hapusUndanganEksternal(${item.id})" title="Hapus Undangan">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function bukaModalTambahUndangan() {
+            document.getElementById('modalUndanganTitle').innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Tambah Surat Undangan Luar';
+            document.getElementById('undanganId').value = '';
+            document.getElementById('undanganPengundang').value = '';
+            document.getElementById('undanganAcara').value = '';
+            document.getElementById('undanganPenceramah').value = '';
+            document.getElementById('undanganTanggal').value = '';
+            document.getElementById('undanganWaktu').value = '';
+            document.getElementById('undanganTempat').value = '';
+            document.getElementById('undanganKeterangan').value = '';
+            document.getElementById('undanganUrutan').value = (cachedUndanganList.length + 1);
+            document.getElementById('undanganActive').value = '1';
+
+            $('#modalUndanganEksternal').modal('show');
+        }
+
+        function editUndanganEksternal(id) {
+            const item = (cachedUndanganList || []).find(u => String(u.id) === String(id));
+            if (!item) return;
+
+            document.getElementById('modalUndanganTitle').innerHTML = '<i class="fas fa-edit mr-2"></i> Edit Surat Undangan Luar';
+            document.getElementById('undanganId').value = item.id;
+            document.getElementById('undanganPengundang').value = item.nama_pengundang || '';
+            document.getElementById('undanganAcara').value = item.nama_acara || '';
+            document.getElementById('undanganPenceramah').value = item.penceramah || '';
+            document.getElementById('undanganTanggal').value = item.tanggal_acara || '';
+            document.getElementById('undanganWaktu').value = item.waktu_acara || '';
+            document.getElementById('undanganTempat').value = item.tempat_acara || '';
+            document.getElementById('undanganKeterangan').value = item.keterangan || '';
+            document.getElementById('undanganUrutan').value = item.urutan || 1;
+            document.getElementById('undanganActive').value = (item.is_active !== false && item.is_active !== '0' && item.is_active !== 0) ? '1' : '0';
+
+            $('#modalUndanganEksternal').modal('show');
+        }
+
+        async function simpanUndanganEksternal(event) {
+            if (event) event.preventDefault();
+
+            const idVal = document.getElementById('undanganId').value;
+            const pengundang = document.getElementById('undanganPengundang').value.trim();
+            const acara = document.getElementById('undanganAcara').value.trim();
+            const penceramah = document.getElementById('undanganPenceramah').value.trim();
+            const tanggal = document.getElementById('undanganTanggal').value.trim();
+            const waktu = document.getElementById('undanganWaktu').value.trim();
+            const tempat = document.getElementById('undanganTempat').value.trim();
+            const keterangan = document.getElementById('undanganKeterangan').value.trim();
+            const urutan = parseInt(document.getElementById('undanganUrutan').value, 10) || 1;
+            const isActive = (document.getElementById('undanganActive').value === '1');
+
+            if (!pengundang || !acara || !tanggal || !waktu || !tempat) {
+                alert('Mohon lengkapi data wajib (Nama Pengundang, Acara, Tanggal, Waktu, dan Tempat)!');
+                return;
+            }
+
+            let list = [...cachedUndanganList];
+
+            if (idVal) {
+                const idx = list.findIndex(u => String(u.id) === String(idVal));
+                if (idx !== -1) {
+                    list[idx] = {
+                        ...list[idx],
+                        nama_pengundang: pengundang,
+                        nama_acara: acara,
+                        penceramah: penceramah,
+                        tanggal_acara: tanggal,
+                        waktu_acara: waktu,
+                        tempat_acara: tempat,
+                        keterangan: keterangan,
+                        urutan: urutan,
+                        is_active: isActive
+                    };
+                }
+            } else {
+                const newId = Date.now();
+                list.push({
+                    id: newId,
+                    nama_pengundang: pengundang,
+                    nama_acara: acara,
+                    penceramah: penceramah,
+                    tanggal_acara: tanggal,
+                    waktu_acara: waktu,
+                    tempat_acara: tempat,
+                    keterangan: keterangan,
+                    urutan: urutan,
+                    is_active: isActive
+                });
+            }
+
+            cachedUndanganList = list;
+
+            if (window.SupabaseDB && typeof SupabaseDB.saveUndanganEksternal === 'function') {
+                await SupabaseDB.saveUndanganEksternal(list);
+            } else {
+                localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(list));
+            }
+
+            $('#modalUndanganEksternal').modal('hide');
+            renderUndanganEksternalTable();
+            alert('Alhamdulillah! Data Surat Undangan Luar berhasil disimpan dan langsung disinkronkan ke Layar TV!');
+        }
+
+        async function hapusUndanganEksternal(id) {
+            const item = (cachedUndanganList || []).find(u => String(u.id) === String(id));
+            if (!item) return;
+
+            if (confirm(`Apakah Anda yakin ingin menghapus surat undangan "${item.nama_acara}" dari ${item.nama_pengundang}?`)) {
+                cachedUndanganList = cachedUndanganList.filter(u => String(u.id) !== String(id));
+                if (window.SupabaseDB && typeof SupabaseDB.saveUndanganEksternal === 'function') {
+                    await SupabaseDB.saveUndanganEksternal(cachedUndanganList);
+                } else {
+                    localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(cachedUndanganList));
+                }
+                renderUndanganEksternalTable();
+            }
+        }
+
+        async function toggleStatusUndangan(id) {
+            const idx = (cachedUndanganList || []).findIndex(u => String(u.id) === String(id));
+            if (idx === -1) return;
+
+            cachedUndanganList[idx].is_active = !cachedUndanganList[idx].is_active;
+
+            if (window.SupabaseDB && typeof SupabaseDB.saveUndanganEksternal === 'function') {
+                await SupabaseDB.saveUndanganEksternal(cachedUndanganList);
+            } else {
+                localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(cachedUndanganList));
+            }
+
+            renderUndanganEksternalTable();
         }
 
         // =====================================================

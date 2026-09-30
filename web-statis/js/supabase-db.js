@@ -56,7 +56,8 @@
                 { page: '/live-mimbar-embed', path: 'slides/live-mimbar.html', name: 'Live CCTV Mimbar Khutbah', active: true, order: 15 },
                 { page: '/idul-fitri-embed', path: 'slides/idul-fitri.html', name: 'Petugas Sholat Idul Fitri', active: false, order: 16 },
                 { page: '/idul-adha-embed', path: 'slides/idul-adha.html', name: 'Petugas Sholat Idul Adha', active: false, order: 17 },
-                { page: '/ramadhan-embed', path: 'slides/ramadhan.html', name: 'Semarak Ramadhan & Kas Tromol', active: true, order: 18 }
+                { page: '/ramadhan-embed', path: 'slides/ramadhan.html', name: 'Semarak Ramadhan & Kas Tromol', active: true, order: 18 },
+                { page: '/undangan-embed', path: 'slides/undangan.html', name: 'Undangan Luar (Ukhuwah)', active: true, order: 19 }
             ]
         },
 
@@ -928,6 +929,115 @@
             }
 
             return channel;
+        },
+
+        /**
+         * Ambil daftar Surat Undangan Eksternal (Ukhuwah Antar Masjid)
+         */
+        async getUndanganEksternal() {
+            // 1. Coba baca dari cloud database Supabase jika tabel ada
+            try {
+                const client = getClient();
+                if (client) {
+                    const { data, error } = await client.from('undangan_eksternal').select('*').order('urutan', { ascending: true });
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(data));
+                        localStorage.setItem('cached_undangan_eksternal', JSON.stringify(data));
+                        return data;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal membaca undangan_eksternal dari Supabase:', err);
+            }
+
+            // 2. Coba baca dari localStorage lokal
+            try {
+                const local = localStorage.getItem('aljihad_undangan_eksternal') || localStorage.getItem('cached_undangan_eksternal');
+                if (local) {
+                    const parsed = JSON.parse(local);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {}
+
+            // 3. Default fallback 2 undangan resmi untuk demonstrasi & tampilan awal
+            const defaultUndangan = [
+                {
+                    id: 1,
+                    nama_pengundang: "Mushola Al-Ikhlas",
+                    nama_acara: "Peringatan Maulid Nabi Muhammad SAW 1448 H",
+                    penceramah: "Ustadz Dr. H. Ahmad Fauzi, M.Ag",
+                    tanggal_acara: "Sabtu, 15 Oktober 2026",
+                    waktu_acara: "20:00 WIB (Ba'da Isya) ~ Selesai",
+                    tempat_acara: "Mushola Al-Ikhlas, Jl. Melati Raya Blok B No. 12",
+                    keterangan: "Mengharap kehadiran dan kebersamaan seluruh jamaah Masjid Jami' Al-Jihad dalam mempererat tali silaturahmi.",
+                    is_active: true,
+                    urutan: 1
+                },
+                {
+                    id: 2,
+                    nama_pengundang: "Masjid Baitul Muttaqin",
+                    nama_acara: "Tabligh Akbar & Santunan Anak Yatim",
+                    penceramah: "Ustadz H. Abdul Somad, Lc., MA",
+                    tanggal_acara: "Ahad, 23 Oktober 2026",
+                    waktu_acara: "08:30 WIB ~ Dzuhur Berjamaah",
+                    tempat_acara: "Masjid Baitul Muttaqin, Jl. Kemuning Asri No. 8",
+                    keterangan: "Terbuka untuk umum kaum muslimin dan muslimat. Disediakan hidangan sarapan dan ramah tamah bersama.",
+                    is_active: true,
+                    urutan: 2
+                }
+            ];
+
+            try {
+                localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(defaultUndangan));
+                localStorage.setItem('cached_undangan_eksternal', JSON.stringify(defaultUndangan));
+            } catch (e) {}
+
+            return defaultUndangan;
+        },
+
+        /**
+         * Simpan / Perbarui daftar Surat Undangan Eksternal
+         */
+        async saveUndanganEksternal(undanganList) {
+            if (!Array.isArray(undanganList)) return false;
+
+            // 1. Simpan ke local cache seketika (offline-ready)
+            try {
+                localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(undanganList));
+                localStorage.setItem('cached_undangan_eksternal', JSON.stringify(undanganList));
+            } catch (e) {}
+
+            // 2. Coba simpan ke Supabase jika tabel tersedia
+            try {
+                const client = getClient();
+                if (client) {
+                    for (const item of undanganList) {
+                        const payload = {
+                            nama_pengundang: item.nama_pengundang,
+                            nama_acara: item.nama_acara,
+                            penceramah: item.penceramah || '',
+                            tanggal_acara: item.tanggal_acara || '',
+                            waktu_acara: item.waktu_acara || '',
+                            tempat_acara: item.tempat_acara || '',
+                            keterangan: item.keterangan || '',
+                            is_active: item.is_active !== false,
+                            urutan: parseInt(item.urutan) || 1
+                        };
+
+                        if (item.id && typeof item.id === 'number') {
+                            await client.from('undangan_eksternal').upsert({ id: item.id, ...payload });
+                        } else {
+                            await client.from('undangan_eksternal').insert([payload]);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal sinkronisasi undangan_eksternal ke Supabase:', err);
+            }
+
+            return true;
         }
     };
 

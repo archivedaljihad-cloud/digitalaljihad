@@ -7672,3 +7672,119 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
 2. `resources/views/infaq-embed.blade.php`
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\infaq.html` (Sinkron)
 4. `LATEST_UPDATE.md`
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 176 - IMPLEMENTASI TAHAP 1: MODUL SURAT UNDANGAN KEGIATAN LUAR & WARTA UKHUWAH ANTAR MASJID UNTUK JAMAAH DENGAN TAMPILAN DISPLAY TV ROYAL ISLAMIC & FORM MULTI-UNDANGAN)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Kebutuhan Pengguna:**
+  Masjid Jami' Al-Jihad sering menerima surat undangan kegiatan keagamaan dari mushola atau masjid lain (misal: Maulid Nabi, Kajian Akbar, Santunan Yatim, Haflah Wisuda Santri). Pengurus DKM membutuhkan sarana digital untuk mempublikasikan undangan tersebut kepada seluruh jamaah Masjid Al-Jihad melalui Layar TV Display.
+- **Batasan & Ruang Lingkup Tahap 1 yang Diminta Pengguna:**
+  1. *Penugasan Delegasi Utusan DKM Al-Jihad:* **TIDAK PERLU** (ditiadakan).
+  2. *Rencana Keberangkatan Rombongan:* **TIDAK PERLU** (ditiadakan).
+  3. *Informasi yang Diperlukan / Diinput:*
+     - **Nama Masjid / Mushola Pengundang:** (misal: *Mushola Al-Ikhlas, Masjid Baitul Muttaqin*)
+     - **Nama Acara:** (misal: *Peringatan Maulid Nabi 1448 H, Kajian Akbar & Santunan Yatim, Haflah Wisuda Santri TPQ*)
+     - **Penceramah / Tamu Undangan:** (misal: *Ustadz Dr. H. ...*)
+     - **Waktu Pelaksanaan:** (misal: *Jam 20:00 WIB ~ selesai*)
+     - **Alamat / Tempat Acara Dilakukan:** (misal: *di Mushola Al-Ikhlas, Masjid Baitul Muttaqin*)
+     - **Hari & Tanggal Pelaksanaan**
+     - **Keterangan / Ajakan Jamaah**
+     - **Status Tayang TV (Aktif / Nonaktif) & Urutan Tampil**
+  4. *Tampilan di Layar TV Display:* Dibuat menyerupai desain undangan pada umumnya namun **full bertema Islamic Royal berkelas dan profesional** (arabesque gold borders, wax seal / crest, basmalah calligraphy, layout seimbang, kontras tinggi).
+  5. *Form Admin Multi-Undangan:* Disediakan form di Panel Kontrol Admin agar pengurus DKM dapat membuat, mengedit, mengaktifkan/menonaktifkan, dan menghapus beberapa undangan sekaligus (multi-undangan CRUD).
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+
+#### A. Database & Model Backend (Laravel)
+1. **Migration PostgreSQL/MySQL:**
+   - Dibuat migration `database/migrations/2026_09_30_110000_create_undangan_eksternal_table.php` dan telah berhasil dieksekusi.
+   - Skema tabel `undangan_eksternal`:
+     - `id` (bigIncrements)
+     - `nama_pengundang` (string 255)
+     - `nama_acara` (string 255)
+     - `penceramah` (string 255, nullable)
+     - `tanggal_acara` (string 100, nullable)
+     - `waktu_acara` (string 100, nullable)
+     - `tempat_acara` (text, nullable)
+     - `keterangan` (text, nullable)
+     - `is_active` (boolean, default true)
+     - `urutan` (integer, default 1)
+     - `timestamps()`
+2. **Eloquent Model:**
+   - Dibuat model `app/Models/UndanganEksternal.php` lengkap dengan proteksi `$fillable` dan `$casts = ['is_active' => 'boolean', 'urutan' => 'integer']`.
+3. **Data Contoh Awal (Seeding):**
+   - Disematkan 2 contoh undangan resmi realistis (*Mushola Al-Ikhlas - Maulid Nabi* & *Masjid Baitul Muttaqin - Tabligh Akbar & Santunan Yatim*).
+
+#### B. Supabase Client Library (`web-statis/js/supabase-db.js`)
+1. **Penyelarasan Rotasi Halaman TV:**
+   - Menambahkan `/undangan-embed` ke dalam array default `rotation_pages` (urutan 19) dengan nama halaman *"Surat Undangan Luar & Warta Ukhuwah"*, durasi tayang 15 detik.
+2. **Dual-Tier Resilient Methods:**
+   - `getUndanganEksternal()`: Mengambil data dari cloud Supabase jika tabel tersedia; jika tidak/offline, membaca seketika dari `localStorage('aljihad_undangan_eksternal')`; jika kosong, mengembalikan 2 contoh default siap tayang.
+   - `saveUndanganEksternal(list)`: Menyimpan seketika ke cache lokal dan meng-upsert ke cloud Supabase secara aman (*fail-safe*).
+
+#### C. Integrasi Engine Rotator (`web-statis/index.html`)
+- Mendaftarkan rute embed pada `PATH_MAPPING`:
+  ```javascript
+  '/undangan-embed': 'slides/undangan.html',
+  ```
+  Layar TV utama (`index.html`) kini secara berkala memutar slide undangan saat giliran halamannya tiba dalam rotasi.
+
+#### D. Slide TV Display Bertema Islamic Royal (`web-statis/slides/undangan.html`)
+Dibuat halaman slide visual premium dengan karakteristik:
+1. **Header Masjid Al-Jihad:**
+   - Judul masjid hijau zamrud `#033624` dengan outline emas `1.5px #FFD700` dan bayangan hitam bertingkat bebas *optical washout*.
+   - Kapsul tanggal & jam digital dengan border solid `2.5px solid #FFD700` dan outer glow emas 16px.
+2. **Bingkai Ornamen Islami Bertingkat (*Arabesque Royal Border*):**
+   - Bingkai luar ganda (*double gold frame*) dengan ornamen lengkungan kubah masjid (*dome corner arches*) di 4 sudut.
+   - Medali stempel atas: pita keemasan melengkung bertuliskan *"SURAT UNDANGAN • WARTA UKHUWAH"*.
+   - Kaligrafi basmalah timbul (*embossed calligraphy*) teks Arab font `Amiri` berwana emas berkilau.
+3. **Kartu Tengah Berkilau (*Centerpiece Card*):**
+   - Badge pengundang berlatar hijau zamrud keemasan: *"MENGUNDANG DENGAN HORMAT JAMAAH MASJID JAMI' AL-JIHAD"*.
+   - Nama masjid/mushola pengundang berukuran besar dan jelas.
+   - Nama acara berukuran `2.4rem` font-weight 900 dengan gradasi emas mewah.
+4. **Grid Informasi 3 Kolom Simetris (*Glassmorphism Details*):**
+   - **Kolom 1 - Penceramah / Tamu Undangan:** Dilengkapi ikon mikrofon emas dan badge penceramah.
+   - **Kolom 2 - Hari, Tanggal & Waktu:** Hari/tanggal berwarna emas, jam pelaksanaan berwarna hijau neon `#00e676` tebal.
+   - **Kolom 3 - Tempat & Alamat Acara:** Ikon lokasi merah-emas, nama masjid pengundang, dan alamat lengkap.
+5. **Bagian Penutup & Stempel Panitia (*Wax Seal & Stamp*):**
+   - Kalimat ajakan ramah tamah untuk mempererat tali silaturahmi.
+   - Lingkaran stempel digital panitia pengundang dengan ornamen bintang delapan islami (*Rub el Hizb*).
+6. **Sistem Multi-Undangan Auto-Rotator:**
+   - Jika terdapat lebih dari 1 surat undangan yang aktif, slide secara otomatis berganti undangan setiap 14 detik dengan efek *smooth fade transition*.
+   - Disertai indikator titik *carousel dots* dan counter pill: `Undangan 1 dari X`.
+7. **Running Text Ticker:**
+   - Badge solid hitam pekat `#000000 !important` berlabel *"WARTA UKHUWAH"* dengan teks berjalan ayat Al-Qur'an/hadits tentang silaturahmi.
+
+#### E. Form Multi-Undangan Panel Admin (`web-statis/admin.html`)
+1. **Sidebar Navigation:**
+   - Ditambahkan menu item `#nav-undangan-eksternal` di kelompok menu operator/admin dengan ikon amplop terbuka `fas fa-envelope-open-text` warna biru muda `#38bdf8` dan badge `UKHUWAH`.
+2. **Section View (`#view-undangan-eksternal`):**
+   - Header bagian dengan tombol **"Tambah Undangan Baru"** dan **"Pratinjau Layar TV"**.
+   - Kartu panduan ringkas DKM untuk pengisian data undangan mitra.
+   - Tabel dinamis dengan kolom: *No, Pengundang, Acara & Penceramah, Hari/Tanggal & Waktu, Tempat/Alamat, Status TV, dan Aksi*.
+3. **Modal Form Multi-Undangan (`#modalUndanganEksternal`):**
+   - Input lengkap: *Nama Masjid/Mushola Pengundang*, *Nama Acara*, *Penceramah/Tamu*, *Hari & Tanggal*, *Waktu Pelaksanaan*, *Alamat/Tempat*, *Keterangan/Ajakan Jamaah*, *Urutan Tayang*, serta *Status Tayang di TV*.
+4. **Fungsi JavaScript Interaktif:**
+   - `loadUndanganEksternalAdmin()`: Memuat daftar undangan dari Supabase / LocalStorage.
+   - `renderUndanganEksternalTable()`: Merender baris tabel lengkap dengan badge status dan aksi.
+   - `bukaModalTambahUndangan()`: Membuka formulir dalam mode tambah data baru.
+   - `editUndanganEksternal(id)`: Mengisi form otomatis dengan data terpilih untuk diedit.
+   - `simpanUndanganEksternal(event)`: Validasi input dan penyimpanan seketika ke database & cache TV.
+   - `hapusUndanganEksternal(id)`: Menghapus undangan dengan dialog konfirmasi aman.
+   - `toggleStatusUndangan(id)`: Tombol saklar kilat untuk mengaktifkan/menonaktifkan tayangan undangan di TV dalam 1 kali klik.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi & Dibuat
+1. `database/migrations/2026_09_30_110000_create_undangan_eksternal_table.php` (Baru - Migrasi Database)
+2. `app/Models/UndanganEksternal.php` (Baru - Eloquent Model)
+3. `web-statis/js/supabase-db.js` (Diperbarui - API Helper Undangan Eksternal)
+4. `web-statis/index.html` (Diperbarui - Pemetaan Rute `/undangan-embed`)
+5. `web-statis/slides/undangan.html` (Baru - Slide TV Display Royal Islamic Undangan Luar)
+6. `web-statis/admin.html` (Diperbarui - Sidebar, View Seksi, Modal & Script CRUD Undangan)
+7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+8. `LATEST_UPDATE.md` (Diperbarui Bab 176)
