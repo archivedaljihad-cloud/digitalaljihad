@@ -7866,3 +7866,31 @@ Dibuat halaman slide visual premium dengan karakteristik:
 1. `web-statis/admin.html` (Teks deskripsi panduan Undangan Ukhuwah diperbarui)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 3. `LATEST_UPDATE.md` (Diperbarui Bab 178)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 179 - PENYEMPURNAAN TATA LETAK TOMBOL HEADER UNDANGAN UKHUWAH DI ADMIN PANEL: 1 BARIS NOWRAP & SEJAJAR RATA KANAN)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Untuk teks "+ Tambah undangan baru" di jadikan 1 baris saja, kemudian tombol menu "Pratinjau layar TV" di sejajarkan (rata kanan) dengan tombol menu "+Tambah Undangan Baru"*
+- **Kondisi Sebelumnya:**
+  Karena panjangnya kalimat subjudul dan pembungkus tombol menggunakan `flex-wrap` tanpa `flex-shrink-0`, tombol `+ Tambah Undangan Baru` terdesak sehingga kata "Baru" terpotong ke baris kedua, dan tombol `Pratinjau Layar TV` terdorong jatuh ke baris terpisah di bawahnya.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penerapan 1 Baris Utuh (*No-Wrap Text*):**
+   - Tombol **`+ Tambah Undangan Baru`** dan **`Pratinjau Layar TV`** diberikan kelas `text-nowrap` serta inline style `white-space: nowrap;` agar seluruh label teks selalu tampil utuh dalam satu baris.
+2. **Penyelarasan Sejajar Rata Kanan (*Horizontal Flush-Right Alignment*):**
+   - Kontainer kedua tombol diubah menjadi `d-flex align-items-center justify-content-end flex-shrink-0`.
+   - Tombol `Pratinjau Layar TV` kini tampil **sejajar berdampingan secara horizontal** di sebelah kanan tombol `+ Tambah Undangan Baru` (dengan jarak pemisah rapi `mr-2`), menempati posisi rata kanan (*flush right*) di header seksi.
+3. **Fleksibilitas Responsif Judul & Subdeskripsi:**
+   - Kolom kiri (judul h4 dan deskripsi pengantar) diberikan `flex-grow-1 mr-md-3` sehingga secara cerdas menyesuaikan ruang yang tersedia tanpa mempersempit ukuran tombol di sebelah kanan.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Tata letak tombol header `#view-undangan-eksternal` diperbarui)
+2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+3. `LATEST_UPDATE.md` (Diperbarui Bab 179)
