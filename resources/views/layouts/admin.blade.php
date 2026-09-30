@@ -1212,7 +1212,7 @@
             <li class="nav-item {{ request()->routeIs('keuangan.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('keuangan.index') }}">
                     <i class="fas fa-fw fa-hand-holding-heart"></i>
-                    <span>Buku Kas & Transaksi</span>
+                    <span>Kas Utama Masjid</span>
                 </a>
             </li>
 

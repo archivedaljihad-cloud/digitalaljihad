@@ -1380,7 +1380,7 @@
                 <li class="nav-item" id="nav-keuangan">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('keuangan')">
                         <i class="fas fa-fw fa-hand-holding-heart"></i>
-                        <span>Buku Kas & Transaksi</span>
+                        <span>Kas Utama Masjid</span>
                     </a>
                 </li>
 
@@ -3544,7 +3544,7 @@
                     <div id="view-keuangan" class="section-view">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <h4 class="font-weight-bold text-gray-800 mb-0">
-                                <i class="fas fa-wallet text-success mr-2"></i> Buku Kas & Transaksi Masjid
+                                <i class="fas fa-wallet text-success mr-2"></i> Kas Utama Masjid
                             </h4>
                             <div>
                                 <button class="btn btn-outline-success mr-2" onclick="exportKasExcel()">
@@ -3556,7 +3556,7 @@
                             </div>
                         </div>
 
-                        <!-- Kartu Ringkasan Saldo Terkini Buku Kas -->
+                        <!-- Kartu Ringkasan Saldo Terkini Buku Kas Utama -->
                         <div class="row mb-4">
                             <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                                 <div class="metric-card metric-card-green">
@@ -3616,10 +3616,8 @@
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <select class="form-control" id="kasFilterKat" onchange="filterKasTable()">
-                                        <option value="all">Semua Kategori Kas</option>
+                                        <option value="all">Semua Kategori Kas Utama</option>
                                         <option value="Kas Utama Masjid">Kas Utama Masjid</option>
-                                        <option value="Kas Ambulance">Kas Ambulance</option>
-                                        <option value="Program Infaq">Program Infaq</option>
                                     </select>
                                 </div>
                             </div>
@@ -7515,7 +7513,7 @@
                 console.warn('Gagal memuat slides galeri informasi dari Supabase:', err);
             }
 
-            // Refresh tabel filter kas terpadu (Kas Utama, Ambulance, Donasi Infaq)
+            // Refresh tabel filter Kas Utama Masjid murni
             if (typeof filterKasTable === 'function') {
                 filterKasTable();
             }
@@ -7549,7 +7547,7 @@
                 document.getElementById('statKasUtama').textContent = formatRupiah(totalSaldo);
             }
 
-            // Update Card Metrik di View Buku Kas & Transaksi (Saldo Terkini, Pemasukan, Pengeluaran)
+            // Update Card Metrik di View Kas Utama Masjid (Saldo Terkini, Pemasukan, Pengeluaran)
             if (document.getElementById('statSaldoKasKeuanganCard')) {
                 document.getElementById('statSaldoKasKeuanganCard').textContent = formatRupiah(totalSaldo);
             }
@@ -7595,74 +7593,38 @@
             filterKasTable();
         }
 
-        // Filter & Search Tabel Kas Terpadu (Kas Utama, Kas Ambulance, Program Infaq)
+        // Filter & Search Tabel Kas Utama Masjid (Murni Kas Utama Masjid Saja)
         // Urutan: Paling atas terbaru, paling bawah yang lama
         function filterKasTable() {
             const query = (document.getElementById('kasSearchInput')?.value || '').toLowerCase().trim();
             const typeFilter = document.getElementById('kasFilterType')?.value || 'all';
             const katFilter = document.getElementById('kasFilterKat')?.value || 'all';
 
-            // 1. Siapkan dataset yang dinormalisasi dari 3 pos keuangan
+            // 1. Siapkan dataset MURNI Kas Utama Masjid (tidak mencampur kas ambulance maupun program infaq)
             const kasUtamaItems = (cachedKasData || []).map(item => ({
                 ...item,
                 kategori: item.kategori || 'Kas Utama Masjid',
                 _sourceTable: 'keuangan'
             }));
 
-            const ambItems = (cachedAmbData || []).map(item => ({
-                ...item,
-                kategori: 'Kas Ambulance',
-                _sourceTable: 'keuangan_ambulance'
-            }));
+            let baseData = [...kasUtamaItems];
 
-            const infaqItems = (cachedDonasiInfaq || []).map(item => {
-                const isAnon = item.is_anonim === true || item.nama_donatur === 'Hamba Allah';
-                const donorName = isAnon ? 'Hamba Allah' : (item.nama_donatur || 'Hamba Allah');
-                const prog = (cachedProgramInfaq || []).find(p => p.id == item.program_infaq_id);
-                const progLabel = prog ? ` [${prog.nama_program}]` : '';
-                const desc = `Infaq: ${donorName}${progLabel}${item.keterangan ? ' - ' + item.keterangan : ''}`;
-                return {
-                    id: item.id,
-                    tanggal: item.tanggal,
-                    deskripsi: desc,
-                    uraian: desc,
-                    kategori: 'Program Infaq',
-                    pemasukan: parseFloat(item.nominal) || 0,
-                    pengeluaran: 0,
-                    _sourceTable: 'donasi_infaq',
-                    _isDonasiInfaq: true
-                };
-            });
-
-            // 2. Tentukan dataset awal berdasarkan filter kategori
-            let baseData = [];
-            let totalAvailable = 0;
-
-            if (katFilter === 'Kas Ambulance') {
-                baseData = [...ambItems];
-                totalAvailable = ambItems.length;
-            } else if (katFilter === 'Program Infaq') {
-                baseData = [...infaqItems];
-                totalAvailable = infaqItems.length;
-            } else if (katFilter === 'Kas Utama Masjid') {
-                baseData = [...kasUtamaItems];
-                totalAvailable = kasUtamaItems.length;
-            } else {
-                // 'all': Gabungkan seluruh transaksi dari ketiga pos keuangan
-                baseData = [...kasUtamaItems, ...ambItems, ...infaqItems];
-                totalAvailable = baseData.length;
+            // Filter Kategori Kas Utama jika ada
+            if (katFilter !== 'all') {
+                baseData = baseData.filter(item => (item.kategori || '').toLowerCase() === katFilter.toLowerCase());
             }
 
+            let totalAvailable = kasUtamaItems.length;
             let filtered = baseData;
 
-            // 3. Filter berdasarkan Tipe (Pemasukan / Pengeluaran)
+            // 2. Filter berdasarkan Tipe (Pemasukan / Pengeluaran)
             if (typeFilter === 'masuk') {
                 filtered = filtered.filter(item => (parseFloat(item.pemasukan) || 0) > 0);
             } else if (typeFilter === 'keluar') {
                 filtered = filtered.filter(item => (parseFloat(item.pengeluaran) || 0) > 0);
             }
 
-            // 4. Filter berdasarkan Pencarian Teks
+            // 3. Filter berdasarkan Pencarian Teks
             if (query) {
                 filtered = filtered.filter(item => {
                     const desc = (item.deskripsi || item.uraian || '').toLowerCase();
@@ -7674,7 +7636,7 @@
                 });
             }
 
-            // 5. Urutkan: Paling atas terbaru, paling bawah yang lama (Tanggal DESC, ID DESC)
+            // 4. Urutkan: Paling atas terbaru, paling bawah yang lama (Tanggal DESC, ID DESC)
             filtered = [...filtered].sort((a, b) => {
                 const dateA = new Date(a.tanggal || 0).getTime();
                 const dateB = new Date(b.tanggal || 0).getTime();
@@ -7685,10 +7647,10 @@
             // Simpan cache hasil filter aktif untuk ekspor excel
             window._lastFilteredKasData = filtered;
 
-            // 6. Update badge info status filter
+            // 5. Update badge info status filter
             const infoEl = document.getElementById('kasFilterInfo');
             if (infoEl) {
-                if (query || typeFilter !== 'all' || katFilter !== 'all') {
+                if (query || typeFilter !== 'all' || (katFilter !== 'all' && katFilter !== 'Kas Utama Masjid')) {
                     infoEl.className = 'badge badge-warning font-weight-bold';
                     infoEl.textContent = `Ditemukan: ${filtered.length} dari ${totalAvailable}`;
                 } else {
@@ -7700,12 +7662,12 @@
             renderKasTableRows(filtered);
         }
 
-        // Render Baris Tabel Kas dengan Tombol Edit & Hapus (Urutan: Paling atas terbaru, paling bawah yang lama)
+        // Render Baris Tabel Kas Utama dengan Tombol Edit & Hapus (Urutan: Paling atas terbaru, paling bawah yang lama)
         function renderKasTableRows(items) {
             const mainTbody = document.getElementById('mainKasTableBody');
             if (!mainTbody) return;
             if (!items || items.length === 0) {
-                mainTbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-search mr-1"></i> Tidak ada transaksi yang sesuai dengan filter pencarian.</td></tr>';
+                mainTbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-search mr-1"></i> Tidak ada transaksi kas utama yang sesuai dengan filter pencarian.</td></tr>';
                 return;
             }
 
@@ -7724,36 +7686,17 @@
                 const textClass = isMasuk ? 'text-success' : 'text-danger';
                 const sign = isMasuk ? '+' : '-';
                 const tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-';
-                const srcTable = item._sourceTable || 'keuangan';
-
-                let actionBtns = '';
-                if (srcTable === 'donasi_infaq') {
-                    actionBtns = `
-                        <button class="btn btn-sm btn-outline-info mr-1" onclick="switchAdminSection('infaq')" title="Kelola di Menu Program Infaq"><i class="fas fa-hand-holding-usd"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="hapusDonasiInfaq(${item.id})" title="Hapus Donasi"><i class="fas fa-trash"></i></button>
-                    `;
-                } else {
-                    actionBtns = `
-                        <button class="btn btn-sm btn-outline-warning mr-1" onclick="bukaModalEditKas(${item.id}, '${srcTable}')" title="Koreksi / Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, '${srcTable}')" title="Hapus"><i class="fas fa-trash"></i></button>
-                    `;
-                }
-
-                // Warna badge kategori kas
-                let katBadgeClass = 'badge-secondary';
-                if (item.kategori === 'Kas Ambulance') katBadgeClass = 'badge-primary';
-                else if (item.kategori === 'Program Infaq') katBadgeClass = 'badge-warning text-dark';
-                else if (item.kategori === 'Kas Utama Masjid') katBadgeClass = 'badge-success';
 
                 return `
                     <tr>
                         <td>${tgl}</td>
                         <td><strong>${escapeHtml(item.deskripsi || item.uraian || 'Infaq Kas')}</strong></td>
-                        <td><span class="badge ${katBadgeClass} px-2 py-1">${escapeHtml(item.kategori || 'Kas Utama Masjid')}</span></td>
+                        <td><span class="badge badge-success px-2 py-1">${escapeHtml(item.kategori || 'Kas Utama Masjid')}</span></td>
                         <td>${badgeHTML}</td>
                         <td class="text-right font-weight-bold ${textClass}">${sign} ${formatRupiah(nominal)}</td>
                         <td class="text-center text-nowrap">
-                            ${actionBtns}
+                            <button class="btn btn-sm btn-outline-warning mr-1" onclick="bukaModalEditKas(${item.id}, 'keuangan')" title="Koreksi / Edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="hapusTransaksi(${item.id}, 'keuangan')" title="Hapus"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                 `;

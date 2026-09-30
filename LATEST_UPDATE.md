@@ -8113,3 +8113,42 @@ Dibuat halaman slide visual premium dengan karakteristik:
 1. `web-statis/admin.html` (Penyembunyian CSS `.topbar-role-selector` dan penambahan `d-none` pada elemen topbar)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 185)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 186 - PENGUBAHAN LABEL SIDEBAR MENJADI "KAS UTAMA MASJID" & PEMURNIAN PENCATATAN ARUS KAS KHUSUS KAS UTAMA MASJID)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Dihalaman ini, Di sidebar kiri ganti "Buka Kas & Transakasi" menjadi "Kas Utama Masjid". Kemudian jangan masukkan list pemasukan dan pengeluaran dari ambulance dan program infaq di sini. Di bagian ini khusus pencatatan PEMASUKAN dan PENGELUARAN Kas Utama masjid saja. Karena untuk pemasukan dan Pengeluaran Ambulan dan Program infaq sudah ada masing-masing.*
+- **Tujuan:**
+  1. Menegaskan identitas menu pembukuan kas harian masjid di sidebar navigasi menjadi **"Kas Utama Masjid"**.
+  2. Memisahkan secara tegas (*strict segregation*) pencatatan arus kas: modul Kas Utama Masjid murni hanya menampilkan dan mengelola mutasi kas operasional masjid (tabel `keuangan`), tanpa mencampurkan transaksi operasional ambulance (tabel `keuangan_ambulance`) maupun donasi donatur terikat (tabel `donasi_infaq`).
+  3. Menjamin keselarasan antara 3 Kartu Saldo (Saldo Kas Terkini, Total Pemasukan, Total Pengeluaran) dengan isi tabel transaksi di bawahnya, sehingga bendahara tidak bingung melihat nominal ambulance atau donasi program AC/infaq lainnya masuk ke tabel kas utama.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Pembaruan Navigasi Sidebar:**
+   - Pada file `web-statis/admin.html` (elemen `#nav-keuangan`), teks menu diubah dari `Buku Kas & Transaksi` menjadi **`Kas Utama Masjid`**.
+   - Pada file template Laravel `resources/views/layouts/admin.blade.php`, teks menu pembukuan kas bendahara diselaraskan menjadi **`Kas Utama Masjid`**.
+2. **Pembaruan Header & Filter Toolbar di View Kas Utama (`#view-keuangan`):**
+   - Judul modul diubah dari `Buku Kas & Transaksi Masjid` menjadi **`Kas Utama Masjid`**.
+   - Dropdown filter kategori kas (`#kasFilterKat`) dibersihkan dari opsi `Kas Ambulance` dan `Program Infaq`, digantikan dengan opsi kas utama yang terfokus (*Semua Kategori Kas Utama* dan *Kas Utama Masjid*).
+3. **Pemurnian Dataset Arus Kas pada `filterKasTable()`:**
+   - Menghapus penggabungan dataset `ambItems` (`keuangan_ambulance`) dan `infaqItems` (`donasi_infaq`) yang sebelumnya digabungkan di Bab 170.
+   - Variabel `baseData` kini 100% murni dipetakan hanya dari `cachedKasData` (tabel Supabase `keuangan`).
+   - Fitur pencarian teks dan filter tipe (Pemasukan / Pengeluaran) tetap bekerja responsif dan presisi pada seluruh mutasi kas utama.
+4. **Penyelarasan Baris Tabel & Aksi pada `renderKasTableRows()`:**
+   - Tombol aksi pada tiap baris transaksi langsung terhubung ke fungsi koreksi `bukaModalEditKas(id, 'keuangan')` dan `hapusTransaksi(id, 'keuangan')`.
+   - Badge kategori kas diseragamkan dengan tema hijau zamrud (`badge-success`) untuk memperkuat identitas Kas Utama Masjid.
+5. **Ekspor Laporan Excel (`exportKasExcel()`):**
+   - File ekspor spreadsheet CSV yang diunduh dari modul ini secara otomatis hanya mencakup riwayat arus kas utama masjid tanpa tercampur data kas armada ambulance atau program infaq donatur.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Pembaruan teks sidebar menu `#nav-keuangan`, judul `#view-keuangan`, filter dropdown `#kasFilterKat`, fungsi `filterKasTable()`, dan `renderKasTableRows()`)
+2. `resources/views/layouts/admin.blade.php` (Penyelarasan teks sidebar navigasi menu bendahara menjadi "Kas Utama Masjid")
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 186)
