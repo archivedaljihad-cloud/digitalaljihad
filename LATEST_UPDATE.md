@@ -7740,7 +7740,7 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Kapsul tanggal & jam digital dengan border solid `2.5px solid #FFD700` dan outer glow emas 16px.
 2. **Bingkai Ornamen Islami Bertingkat (*Arabesque Royal Border*):**
    - Bingkai luar ganda (*double gold frame*) dengan ornamen lengkungan kubah masjid (*dome corner arches*) di 4 sudut.
-   - Medali stempel atas: pita keemasan melengkung bertuliskan *"SURAT UNDANGAN • WARTA UKHUWAH"*.
+   - Medali stempel atas: pita keemasan melengkung bertuliskan *"UNDANGAN •  UKHUWAH"*.
    - Kaligrafi basmalah timbul (*embossed calligraphy*) teks Arab font `Amiri` berwana emas berkilau.
 3. **Kartu Tengah Berkilau (*Centerpiece Card*):**
    - Badge pengundang berlatar hijau zamrud keemasan: *"MENGUNDANG DENGAN HORMAT JAMAAH MASJID JAMI' AL-JIHAD"*.
