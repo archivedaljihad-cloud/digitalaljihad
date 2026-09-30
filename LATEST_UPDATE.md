@@ -7764,8 +7764,9 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Menu item `#nav-undangan-eksternal` di kelompok menu operator/admin: dinamai **"Undangan Jama'ah"** dengan ikon amplop terbuka `fas fa-envelope-open-text` warna biru muda `#38bdf8` dan badge info `UKHUWAH`.
 2. **Section View (`#view-undangan-eksternal`):**
    - Judul utama diubah menjadi: **"Undangan Ukhuwah untuk para Jama'ah"**.
+   - Subjudul diubah menjadi: *"Kelola surat undangan kegiatan keagamaan dari mushola/masjid pengundang atau bisa juga untuk acara/kegiatan di Masjid Al Jihad sendiri untuk diumumkan kepada jamaah di Layar TV Display Masjid Al-Jihad."*
+   - Kartu panduan ringkas DKM disesuaikan menjadi: *"Deskripsi Undangan Ukhuwah : Formulir ini disiapkan untuk mengakomodir undangan kegiatan keagamaan (Peringatan Maulid Nabi, Isra' Mi'raj, Tabligh Akbar, Istigozah, Rebo Wekasan, Santunan Anak Yatim atau yang lainnya). Undangan yang aktif akan otomatis ditampilkan bergantian pada layar TV."*
    - Header bagian dengan tombol **"Tambah Undangan Baru"** dan **"Pratinjau Layar TV"**.
-   - Kartu panduan ringkas DKM untuk pengisian data undangan mitra.
    - Tabel dinamis dengan kolom: *No, Pengundang, Acara & Penceramah, Hari/Tanggal & Waktu, Tempat/Alamat, Status TV, dan Aksi*.
 3. **Modal Form Multi-Undangan (`#modalUndanganEksternal`):**
    - Input lengkap: *Nama Masjid/Mushola Pengundang*, *Nama Acara*, *Penceramah/Tamu*, *Hari & Tanggal*, *Waktu Pelaksanaan*, *Alamat/Tempat*, *Keterangan/Ajakan Jamaah*, *Urutan Tayang*, serta *Status Tayang di TV*.
