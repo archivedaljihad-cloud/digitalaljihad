@@ -7790,3 +7790,56 @@ Dibuat halaman slide visual premium dengan karakteristik:
 6. `web-statis/admin.html` (Diperbarui - Sidebar, View Seksi, Modal & Script CRUD Undangan)
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 8. `LATEST_UPDATE.md` (Diperbarui Bab 176)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 177 - PENINGKATAN VISUAL HEADER TV "MASJID JAMI' AL-JIHAD": IMPLEMENTASI OPSI 1 PUTIH KRISTAL BERSIH + KONTUR EMAS SOLID 1.8PX & PENYESUAIAN UKURAN FONT PROPORSIONAL)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *"Silakan di eksekusi Opsi 1: Putih Kristal + Kontur Emas, kemudian ukuran fontnya agak di kecilkan sedikit saja."*
+- **Akar Masalah Sebelumnya:**
+  Badan huruf header sebelumnya diisi warna hijau zamrud sangat tua (`#033624` / `#064e3b`) di atas latar belakang layar TV yang juga bernuansa hijau gelap (`#021a10`). Akibatnya, pada layar LED TV dengan jarak pandang 3–7 meter, badan huruf menyatu dengan latar belakang (rasio kontras sangat rendah), sehingga huruf tampak remang, "kurus", dan hanya menyisakan garis kawat tipis yang kurang tegas.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penerapan Gaya Opsi 1 (Putih Kristal + Kontur Emas):**
+   - **Warna Badan Huruf:** Diubah menjadi **Putih Kristal Bersih (`#FFFFFF !important`)** dengan `-webkit-text-fill-color: #FFFFFF !important;`. Warna putih memiliki nilai *luminance* tertinggi (rasio kontras 21:1 terhadap latar gelap), sehingga huruf memancarkan cahaya terang solid di panel LED TV.
+   - **Garis Tepi (Stroke Emas):** Diberikan kontur emas murni solid **`1.8px #FFD700 !important;`** dengan `paint-order: stroke fill !important;` yang membingkai badan huruf dengan mewah dan presisi.
+   - **Bayangan Hitam Berlapis Ganda (*Double Pitch-Black Drop Shadows*):**
+     `text-shadow: 0 3px 6px rgba(0, 0, 0, 0.98), 0 6px 18px rgba(0, 0, 0, 0.92), 0 0 25px rgba(0, 0, 0, 0.85) !important;` untuk memberikan ketegasan 3D yang kontras tinggi dan mengeliminasi efek *washout*.
+2. **Pengecilan Ukuran Font Sedikit (*Proportional Sizing*):**
+   - Ukuran font diturunkan secara proporsional dari `3.2rem` / `2.8rem` menjadi **`2.5rem` / `2.65rem`** dengan `letter-spacing: 3.5px` - `4px`.
+   - Hasilnya, header terlihat jauh lebih proporsional, seimbang dengan sub-header dan kapsul tanggal/jam, serta tidak terasa sesak (*cluttered*) di layar TV.
+3. **Penyelarasan Menyeluruh (*Universal Coverage*):**
+   - **Master Stylesheets:** `web-statis/css/display-theme.css`, `web-statis/css/partials-theme.css`, dan `public/css/display-theme.css`.
+   - **Seluruh Slide TV:** `slides/undangan.html`, `slides/utama.html`, `slides/slide.html`, `slides/infaq.html`, `slides/ambulance.html`, `slides/hikmah.html`, `slides/idul-adha.html`, `slides/idul-fitri.html`, `slides/keuangan.html`, `slides/keuangan-summary.html`, `slides/pengumuman.html`, `slides/qris.html`, `slides/qurban.html`.
+   - **Template Laravel Blade:** `resources/views/utama.blade.php` dan `resources/views/partials/display-theme.blade.php`.
+4. **Pencegahan Cache TV (*Cache Busting*):**
+   - Seluruh tautan stylesheet `display-theme.css` dan `partials-theme.css` pada `web-statis/index.html` dan seluruh slide diperbarui menjadi **`?v=20260930_05`** agar browser Smart TV langsung memuat CSS terbaru seketika.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/css/display-theme.css`
+2. `web-statis/css/partials-theme.css`
+3. `public/css/display-theme.css`
+4. `web-statis/slides/undangan.html`
+5. `web-statis/slides/slide.html`
+6. `web-statis/slides/infaq.html`
+7. `web-statis/slides/utama.html`
+8. `web-statis/slides/ambulance.html`
+9. `web-statis/slides/hikmah.html`
+10. `web-statis/slides/idul-adha.html`
+11. `web-statis/slides/idul-fitri.html`
+12. `web-statis/slides/keuangan.html`
+13. `web-statis/slides/keuangan-summary.html`
+14. `web-statis/slides/pengumuman.html`
+15. `web-statis/slides/qris.html`
+16. `web-statis/slides/qurban.html`
+17. `web-statis/index.html`
+18. `resources/views/utama.blade.php`
+19. `resources/views/partials/display-theme.blade.php`
+20. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+21. `LATEST_UPDATE.md` (Diperbarui Bab 177)

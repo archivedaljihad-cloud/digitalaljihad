@@ -258,21 +258,21 @@ body.theme-isya {
 .header-section h1,
 #nama-masjid {
     font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
-    font-size: 3.2rem !important;
+    font-size: 2.65rem !important;
     font-weight: 900 !important;
     line-height: 1.1 !important;
-    letter-spacing: 5px !important;
+    letter-spacing: 4px !important;
     text-transform: uppercase !important;
     background: none !important;
     -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: #033624 !important;
-    color: #033624 !important;
-    -webkit-text-stroke: 1.5px #FFD700 !important;
-    paint-order: stroke fill;
+    -webkit-text-fill-color: #FFFFFF !important;
+    color: #FFFFFF !important;
+    -webkit-text-stroke: 1.8px #FFD700 !important;
+    paint-order: stroke fill !important;
     text-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.95),
-        0 5px 14px rgba(0, 0, 0, 0.9),
-        0 0 20px rgba(0, 0, 0, 0.8) !important;
+        0 3px 6px rgba(0, 0, 0, 0.98),
+        0 6px 18px rgba(0, 0, 0, 0.92),
+        0 0 25px rgba(0, 0, 0, 0.85) !important;
     filter: none !important;
     margin: 0 0 -15px 0 !important;
     padding: 0 !important;
