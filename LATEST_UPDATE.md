@@ -7761,8 +7761,9 @@ Dibuat halaman slide visual premium dengan karakteristik:
 
 #### E. Form Multi-Undangan Panel Admin (`web-statis/admin.html`)
 1. **Sidebar Navigation:**
-   - Ditambahkan menu item `#nav-undangan-eksternal` di kelompok menu operator/admin dengan ikon amplop terbuka `fas fa-envelope-open-text` warna biru muda `#38bdf8` dan badge `UKHUWAH`.
+   - Menu item `#nav-undangan-eksternal` di kelompok menu operator/admin: dinamai **"Undangan Jama'ah"** dengan ikon amplop terbuka `fas fa-envelope-open-text` warna biru muda `#38bdf8` dan badge info `UKHUWAH`.
 2. **Section View (`#view-undangan-eksternal`):**
+   - Judul utama diubah menjadi: **"Undangan Ukhuwah untuk para Jama'ah"**.
    - Header bagian dengan tombol **"Tambah Undangan Baru"** dan **"Pratinjau Layar TV"**.
    - Kartu panduan ringkas DKM untuk pengisian data undangan mitra.
    - Tabel dinamis dengan kolom: *No, Pengundang, Acara & Penceramah, Hari/Tanggal & Waktu, Tempat/Alamat, Status TV, dan Aksi*.

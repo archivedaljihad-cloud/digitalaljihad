@@ -1333,11 +1333,11 @@
                     </a>
                 </li>
 
-                <!-- NAV ITEM: SURAT UNDANGAN LUAR (WARTA UKHUWAH) -->
+                <!-- NAV ITEM: UNDANGAN JAMA'AH (WARTA UKHUWAH) -->
                 <li class="nav-item" id="nav-undangan-eksternal">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('undangan-eksternal')">
                         <i class="fas fa-fw fa-envelope-open-text" style="color: #38bdf8;"></i>
-                        <span>Undangan Luar</span>
+                        <span>Undangan Jama'ah</span>
                         <span class="badge badge-info ml-1" style="font-size: 0.65rem;">UKHUWAH</span>
                     </a>
                 </li>
@@ -3267,13 +3267,13 @@
                     </div>
 
                     <!-- ==========================================
-                         VIEW: SURAT UNDANGAN LUAR (WARTA UKHUWAH)
+                         VIEW: UNDANGAN UKHUWAH UNTUK PARA JAMA'AH
                          ========================================== -->
                     <div id="view-undangan-eksternal" class="section-view">
                         <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4">
                             <div class="mb-3 mb-md-0">
                                 <h4 class="font-weight-bold text-gray-800 mb-1">
-                                    <i class="fas fa-envelope-open-text text-info mr-2"></i> Surat Undangan Luar &amp; Warta Ukhuwah
+                                    <i class="fas fa-envelope-open-text text-info mr-2"></i> Undangan Ukhuwah untuk para Jama'ah
                                 </h4>
                                 <span class="text-muted small">Kelola surat undangan kegiatan keagamaan dari mushola/masjid pengundang untuk diumumkan kepada jamaah di Layar TV Display Masjid Al-Jihad.</span>
                             </div>
@@ -5805,14 +5805,14 @@
     </div>
 
     <!-- =======================================================
-         MODAL FORM SURAT UNDANGAN LUAR (WARTA UKHUWAH)
+         MODAL FORM UNDANGAN JAMA'AH (WARTA UKHUWAH)
          ======================================================= -->
     <div class="modal fade" id="modalUndanganEksternal" tabindex="-1" role="dialog" aria-labelledby="modalUndanganTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content shadow-lg border-0" style="border-radius: 14px; overflow: hidden;">
                 <div class="modal-header text-white py-3" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
                     <h5 class="modal-title font-weight-bold" id="modalUndanganTitle">
-                        <i class="fas fa-envelope-open-text mr-2"></i> Tambah Surat Undangan Luar
+                        <i class="fas fa-envelope-open-text mr-2"></i> Tambah Undangan Jama'ah
                     </h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -12462,7 +12462,7 @@
                     <tr>
                         <td colspan="7" class="text-center text-muted py-5">
                             <i class="fas fa-envelope-open-text fa-3x text-gray-300 mb-3 d-block"></i>
-                            <span class="font-weight-bold">Belum ada Surat Undangan Luar yang diinput.</span><br>
+                            <span class="font-weight-bold">Belum ada Undangan Jama'ah yang diinput.</span><br>
                             <small class="text-muted">Klik tombol <strong>"Tambah Undangan Baru"</strong> di atas untuk memasukkan undangan kegiatan dari masjid/mushola mitra.</small>
                         </td>
                     </tr>
@@ -12525,7 +12525,7 @@
         }
 
         function bukaModalTambahUndangan() {
-            document.getElementById('modalUndanganTitle').innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Tambah Surat Undangan Luar';
+            document.getElementById('modalUndanganTitle').innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Tambah Undangan Jama\'ah';
             document.getElementById('undanganId').value = '';
             document.getElementById('undanganPengundang').value = '';
             document.getElementById('undanganAcara').value = '';
@@ -12544,7 +12544,7 @@
             const item = (cachedUndanganList || []).find(u => String(u.id) === String(id));
             if (!item) return;
 
-            document.getElementById('modalUndanganTitle').innerHTML = '<i class="fas fa-edit mr-2"></i> Edit Surat Undangan Luar';
+            document.getElementById('modalUndanganTitle').innerHTML = '<i class="fas fa-edit mr-2"></i> Edit Undangan Jama\'ah';
             document.getElementById('undanganId').value = item.id;
             document.getElementById('undanganPengundang').value = item.nama_pengundang || '';
             document.getElementById('undanganAcara').value = item.nama_acara || '';
@@ -12622,7 +12622,7 @@
 
             $('#modalUndanganEksternal').modal('hide');
             renderUndanganEksternalTable();
-            alert('Alhamdulillah! Data Surat Undangan Luar berhasil disimpan dan langsung disinkronkan ke Layar TV!');
+            alert('Alhamdulillah! Data Undangan Jama\'ah berhasil disimpan dan langsung disinkronkan ke Layar TV!');
         }
 
         async function hapusUndanganEksternal(id) {
