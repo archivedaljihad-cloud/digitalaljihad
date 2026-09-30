@@ -1273,6 +1273,14 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Logout -->
+            <li class="nav-item">
+                <a class="nav-link text-danger font-weight-bold" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-fw fa-sign-out-alt text-danger"></i>
+                    <span>Keluar (Logout)</span>
+                </a>
+            </li>
+
             @endauth
 
             <!-- Divider -->
@@ -1299,14 +1307,6 @@
                     <button id="sidebarToggleTop" class="btn btn-sidebar-toggle rounded-circle mr-3" title="Tampilkan / Sembunyikan Menu Sidebar">
                         <i class="fa fa-bars"></i>
                     </button>
-
-                    <!-- ==========================================
-                         Live Clock Widget — Islamic Material Design 3
-                         ========================================== -->
-                    <div class="topbar-clock-widget d-none d-sm-flex" id="topbarClockWidget" title="Jam & Tanggal">
-                        <div class="topbar-clock-time" id="liveClockTime">--:--:--</div>
-                        <div class="topbar-clock-date" id="liveClockDate">Memuat tanggal...</div>
-                    </div>
 
                     <!-- Topbar Search -->
                     <form
@@ -1381,36 +1381,6 @@
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500 font-weight-bold py-2" href="{{ route('notifications.index') }}"> Lihat Semua</a>
-                            </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown">
-                                <span
-                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                                <div class="img-profile rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">
-                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
-                                <a class="dropdown-item" href="{{ route('profile') }}">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-primary"></i>
-                                    Profil
-                                </a>
-                                <a class="dropdown-item" href="{{ route('settings.edit') }}">
-                                    <i class="fas fa-cog fa-sm fa-fw mr-2 text-primary"></i>
-                                    Pengaturan
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i>
-                                    Keluar
-                                </a>
                             </div>
                         </li>
 

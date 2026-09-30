@@ -7938,3 +7938,36 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. `web-statis/sw.js` (Pembaruan versi cache PWA `v3.2.0`)
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 6. `LATEST_UPDATE.md` (Diperbarui Bab 180)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 181 - PENYEDERHANAAN HEADER TOPBAR DASHBOARD: PENGHILANGAN WIDGET JAM/TANGGAL DI KIRI DAN KOTAK USER DI KANAN)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Dibagian ini (di semua dashboard) hilangkan saja kotak jam,hari,tgl,bln,tahun dipaling kiri dan kotak user di paling kanan agar tampilan lebih bersih dan lega.*
+- **Tujuan Estetika & Kenyamanan:**
+  Mengurangi kepadatan elemen di bilah atas (*topbar*) dashboard, sehingga ruang pandang (*viewport*) terlihat jauh lebih bersih, minimalis, dan lega.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penghilangan Elemen Sisi Kiri Topbar:**
+   - Menghapus kotak widget jam digital dan tanggal (`.topbar-clock-widget`).
+   - Sisi kiri kini hanya memuat tombol hamburger toggle sidebar dan kapsul informasi **"Sholat Berikutnya"**.
+2. **Penghilangan Elemen Sisi Kanan Topbar:**
+   - Menghapus kapsul informasi user dropdown (`#userDropdown`) beserta garis pemisah vertikal (`.topbar-divider`).
+   - Sisi kanan kini tampil lega dan hanya berfokus pada **Quick Role Switcher** serta tombol **"Lihat Display"**.
+3. **Preservasi Aksesibilitas Logout:**
+   - Fitur logout tetap dapat diakses dengan mudah dan nyaman melalui menu **"Keluar (Logout)"** pada bilah sisi kiri (*sidebar*), di samping perlindungan otomatis dari fitur *Auto-Logout Inactivity 3 Menit* yang telah aktif.
+4. **Penerapan Menyeluruh di Semua Dashboard (*Universal Coverage*):**
+   - Dashboard Web Statis: `web-statis/admin.html`
+   - Dashboard Laravel Backend: `resources/views/layouts/admin.blade.php`
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penghilangan widget jam/tanggal & user dropdown di topbar)
+2. `resources/views/layouts/admin.blade.php` (Penghilangan widget jam/tanggal & user dropdown di topbar)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+4. `LATEST_UPDATE.md` (Diperbarui Bab 181)
