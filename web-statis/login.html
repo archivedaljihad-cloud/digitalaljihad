@@ -275,6 +275,12 @@
             border: 1px solid #ff9999;
         }
 
+        .alert-box.alert-warning {
+            background: rgba(180, 83, 9, 0.95);
+            color: #ffffff;
+            border: 1px solid #fcd34d;
+        }
+
         .alert-box.alert-success {
             background: rgba(18, 128, 73, 0.92);
             color: #ffffff;
@@ -789,7 +795,7 @@
 
 <!-- Script BaaS & Auth -->
 <script src="js/supabase-config.js"></script>
-<script src="js/admin-auth.js?v=2.5"></script>
+<script src="js/admin-auth.js?v=2.7"></script>
 
 <script>
     // Jika ada param ?action=logout, bersihkan sesi secara tuntas dan pastikan form login tampil
@@ -797,6 +803,7 @@
     if (urlParams.get('action') === 'logout') {
         try {
             localStorage.removeItem('aljihad_auth_user');
+            localStorage.removeItem('aljihad_last_activity');
             sessionStorage.clear();
         } catch(e) {}
     } else {
@@ -804,11 +811,14 @@
         AdminAuth.redirectIfLoggedIn('admin.html');
     }
 
-    // Cek pesan redirect dari sessionStorage
+    // Cek pesan redirect dari sessionStorage atau param url reason
     const redirectReason = sessionStorage.getItem('auth_redirect_reason');
     if (redirectReason) {
-        showAlert(redirectReason, 'danger');
+        const isWarning = redirectReason.toLowerCase().includes('aktivitas') || redirectReason.toLowerCase().includes('keamanan');
+        showAlert(redirectReason, isWarning ? 'warning' : 'danger');
         sessionStorage.removeItem('auth_redirect_reason');
+    } else if (urlParams.get('reason') === 'idle_timeout') {
+        showAlert('Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.', 'warning');
     }
 
     // Role Presets
@@ -859,7 +869,13 @@
         const msg = document.getElementById('loginAlertMessage');
         box.className = 'alert-box alert-' + type;
         box.style.display = 'flex';
-        msg.innerHTML = (type === 'success' ? '<i class="fas fa-check-circle"></i> ' : '<i class="fas fa-exclamation-circle"></i> ') + message;
+        let iconHtml = '<i class="fas fa-exclamation-circle mr-2"></i> ';
+        if (type === 'success') {
+            iconHtml = '<i class="fas fa-check-circle mr-2"></i> ';
+        } else if (type === 'warning') {
+            iconHtml = '<i class="fas fa-shield-alt mr-2 text-warning"></i> ';
+        }
+        msg.innerHTML = iconHtml + message;
     }
 
     function closeAlert() {

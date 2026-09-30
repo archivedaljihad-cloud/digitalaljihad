@@ -7894,3 +7894,47 @@ Dibuat halaman slide visual premium dengan karakteristik:
 1. `web-statis/admin.html` (Tata letak tombol header `#view-undangan-eksternal` diperbarui)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 3. `LATEST_UPDATE.md` (Diperbarui Bab 179)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 180 - PENERAPAN FITUR KEAMANAN AUTO-LOGOUT INACTIVITY 3 MENIT DI DASHBOARD ADMIN WEB STATIS)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Pilihan durasi: 3 Menit*  
+  *Tindakan: Langsung logout otomatis*
+- **Tujuan Keamanan:**
+  Mencegah akses tanpa izin terhadap data penting masjid (seperti saldo kas, penerimaan infaq/donasi, data shohibul qurban, dan pengaturan TV) ketika laptop atau komputer sekretariat masjid ditinggalkan oleh pengurus/operator DKM tanpa pengawasan.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Engine Pemantau Aktivitas Pengguna (*Inactivity Idle Engine*):**
+   - Diintegrasikan langsung ke dalam `web-statis/js/admin-auth.js` (`AdminAuth.initIdleTimer()`).
+   - Secara aktif memantau interaksi pengguna: `mousemove`, `mousedown`, `keydown`, `scroll`, `touchstart`, dan `click`.
+   - Dilengkapi *throttling* 1 detik untuk menghemat penggunaan CPU.
+   - Menggunakan sinkronisasi `localStorage` (`aljihad_last_activity`), sehingga jika admin membuka beberapa tab dashboard sekaligus dan sedang aktif mengetik di salah satu tab, sesi di tab lain tidak akan terputus prematur.
+   - Dilengkapi listener `visibilitychange` dan `focus` untuk mendeteksi secara instan jika pengguna baru membuka kembali tab yang sebelumnya diminimalkan/berada di latar belakang selama lebih dari 3 menit.
+2. **Eksekusi Auto-Logout Langsung (*Direct Auto-Logout*):**
+   - Saat terdeteksi tidak ada aktivitas selama tepat 3 Menit (180.000 ms), fungsi `handleIdleTimeout()` langsung dieksekusi tanpa jeda.
+   - Sesi login (`aljihad_auth_user` dan `aljihad_last_activity`) langsung dihapus seketika dari memori browser.
+   - Sistem mencatat pesan keamanan ke `sessionStorage`:  
+     *"Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali."*
+   - Peramban dialihkan langsung (*redirect*) ke `login.html?reason=idle_timeout`.
+   - Tab lain yang masih terbuka akan mendeteksi pembersihan sesi via event `storage` dan otomatis ikut ter-logout secara serentak.
+3. **Penyempurnaan Halaman Login (`login.html`):**
+   - Ditambahkan gaya visual `.alert-box.alert-warning` bernuansa emas/amber elegan dengan ikon perisai keamanan `fas fa-shield-alt`.
+   - Menampilkan pesan notifikasi resmi bahwa sesi telah diamankan oleh sistem karena ketiadaan aktivitas.
+4. **Pembaruan Versi & Service Worker PWA:**
+   - Script `admin-auth.js` diperbarui ke versi `?v=2.7` pada `admin.html` dan `login.html`.
+   - Cache Service Worker di `sw.js` dinaikkan ke versi `aljihad-signage-v3.2.0` agar pembaruan langsung aktif di peramban tanpa terhalang cache lama.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/js/admin-auth.js` (Engine `initIdleTimer`, `handleIdleTimeout`, sinkronisasi multi-tab)
+2. `web-statis/login.html` (Styling alert warning keamanan, penangkap pesan idle timeout)
+3. `web-statis/admin.html` (Bump version script `admin-auth.js?v=2.7`)
+4. `web-statis/sw.js` (Pembaruan versi cache PWA `v3.2.0`)
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
+6. `LATEST_UPDATE.md` (Diperbarui Bab 180)

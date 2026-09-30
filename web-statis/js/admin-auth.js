@@ -501,6 +501,159 @@ const AdminAuth = {
         return !!this.getCurrentUser();
     },
 
+    // ==============================================================
+    // ENGINE KEAMANAN: AUTO-LOGOUT SAAT TIDAK ADA AKTIVITAS (3 MENIT)
+    // ==============================================================
+    IDLE_TIMEOUT_MS: 3 * 60 * 1000, // 3 Menit (180.000 ms)
+    LAST_ACTIVITY_KEY: 'aljihad_last_activity',
+    _idleTimeoutTimer: null,
+    _lastActivityTime: Date.now(),
+    _idleListenersAttached: false,
+
+    /**
+     * Inisialisasi Engine Auto-Logout Otomatis Saat Tidak Ada Aktivitas
+     * Memantau gerakan mouse, klik, ketukan keyboard, sentuhan, dan scroll.
+     * @param {number} timeoutMs Durasi idle timeout dalam milidetik (default: 3 Menit)
+     */
+    initIdleTimer(timeoutMs = 3 * 60 * 1000) {
+        if (typeof window === 'undefined' || !this.isLoggedIn()) return;
+        this.IDLE_TIMEOUT_MS = timeoutMs;
+        this._lastActivityTime = Date.now();
+
+        try {
+            localStorage.setItem(this.LAST_ACTIVITY_KEY, String(this._lastActivityTime));
+        } catch (e) {}
+
+        const recordActivity = () => {
+            const now = Date.now();
+            // Throttling 1 detik agar hemat konsumsi CPU
+            if (now - this._lastActivityTime < 1000) return;
+            this._lastActivityTime = now;
+            try {
+                localStorage.setItem(this.LAST_ACTIVITY_KEY, String(now));
+            } catch (e) {}
+            this._scheduleIdleCheck();
+        };
+
+        if (!this._idleListenersAttached) {
+            const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
+            events.forEach(evt => {
+                window.addEventListener(evt, recordActivity, { passive: true });
+            });
+
+            // Pantau saat tab browser dibuka kembali (mencegah tab background beku / throttled)
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden && this.isLoggedIn()) {
+                    this._checkAndHandleIdle();
+                }
+            });
+
+            window.addEventListener('focus', () => {
+                if (this.isLoggedIn()) {
+                    this._checkAndHandleIdle();
+                }
+            });
+
+            // Sinkronisasi lintas tab: jika tab lain logout atau idle logout, tab ini ikut logout seketika
+            window.addEventListener('storage', (e) => {
+                if (e.key === AUTH_STORAGE_KEY && !e.newValue) {
+                    try {
+                        window.location.replace('login.html?reason=idle_timeout');
+                    } catch (err) {
+                        window.location.href = 'login.html?reason=idle_timeout';
+                    }
+                } else if (e.key === this.LAST_ACTIVITY_KEY && e.newValue) {
+                    const remoteTime = parseInt(e.newValue, 10);
+                    if (!isNaN(remoteTime) && remoteTime > this._lastActivityTime) {
+                        this._lastActivityTime = remoteTime;
+                        this._scheduleIdleCheck();
+                    }
+                }
+            });
+
+            this._idleListenersAttached = true;
+        }
+
+        this._scheduleIdleCheck();
+        console.log(`🛡️ [AdminAuth] Auto-Logout Inactivity AKTIF: Sesi akan otomatis berakhir jika tidak ada aktivitas selama ${Math.round(this.IDLE_TIMEOUT_MS / 60000)} Menit.`);
+    },
+
+    /**
+     * Jadwalkan timer hitung mundur idle berikutnya
+     */
+    _scheduleIdleCheck() {
+        if (this._idleTimeoutTimer) {
+            clearTimeout(this._idleTimeoutTimer);
+            this._idleTimeoutTimer = null;
+        }
+
+        let effectiveLastTime = this._lastActivityTime;
+        try {
+            const stored = parseInt(localStorage.getItem(this.LAST_ACTIVITY_KEY) || '0', 10);
+            if (!isNaN(stored) && stored > effectiveLastTime) {
+                effectiveLastTime = stored;
+            }
+        } catch (e) {}
+
+        const elapsed = Date.now() - effectiveLastTime;
+        const remaining = this.IDLE_TIMEOUT_MS - elapsed;
+
+        if (remaining <= 0) {
+            this.handleIdleTimeout();
+        } else {
+            this._idleTimeoutTimer = setTimeout(() => {
+                this._checkAndHandleIdle();
+            }, remaining + 50);
+        }
+    },
+
+    /**
+     * Periksa durasi idle aktual dan eksekusi logout jika telah melampaui batas
+     */
+    _checkAndHandleIdle() {
+        let effectiveLastTime = this._lastActivityTime;
+        try {
+            const stored = parseInt(localStorage.getItem(this.LAST_ACTIVITY_KEY) || '0', 10);
+            if (!isNaN(stored) && stored > effectiveLastTime) {
+                effectiveLastTime = stored;
+            }
+        } catch (e) {}
+
+        const elapsed = Date.now() - effectiveLastTime;
+        if (elapsed >= this.IDLE_TIMEOUT_MS) {
+            this.handleIdleTimeout();
+        } else {
+            this._scheduleIdleCheck();
+        }
+    },
+
+    /**
+     * Eksekusi langsung Auto-Logout saat 3 menit tanpa aktivitas
+     */
+    handleIdleTimeout() {
+        if (!this.isLoggedIn()) return;
+        console.warn('🛡️ [AdminAuth] Auto-logout dipicu: Tidak ada aktivitas selama 3 menit.');
+
+        if (this._idleTimeoutTimer) {
+            clearTimeout(this._idleTimeoutTimer);
+            this._idleTimeoutTimer = null;
+        }
+
+        try {
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+            localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+            sessionStorage.setItem('auth_redirect_reason', 'Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.');
+        } catch (e) {
+            console.warn('Gagal membersihkan sesi idle:', e);
+        }
+
+        try {
+            window.location.replace('login.html?reason=idle_timeout');
+        } catch (e) {
+            window.location.href = 'login.html?reason=idle_timeout';
+        }
+    },
+
     /**
      * Proteksi halaman admin: jika belum login, lempar ke login.html
      */
@@ -511,6 +664,8 @@ const AdminAuth = {
             window.location.replace(redirectUrl);
             return null;
         }
+        // Inisialisasi otomatis engine pemantau auto-logout saat tidak ada aktivitas (3 Menit)
+        this.initIdleTimer();
         return user;
     },
 
@@ -638,8 +793,13 @@ const AdminAuth = {
      * Logout dan redirect ke login.html
      */
     logout(redirectUrl = 'login.html') {
+        if (this._idleTimeoutTimer) {
+            clearTimeout(this._idleTimeoutTimer);
+            this._idleTimeoutTimer = null;
+        }
         try {
             localStorage.removeItem(AUTH_STORAGE_KEY);
+            localStorage.removeItem(this.LAST_ACTIVITY_KEY);
             sessionStorage.removeItem('auth_redirect_reason');
         } catch (e) {
             console.warn('Gagal membersihkan storage logout:', e);
