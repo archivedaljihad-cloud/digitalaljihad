@@ -8428,3 +8428,29 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.6`)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 193)
+
+---
+
+## 📑 194. PENEMUAN AKAR MASALAH DEPLOYMENT CLOUDFLARE WORKERS STATIC ASSETS (WRANGLER DEPLOY) & VERIFIKASI KEBERHASILAN PEMBERSIHAN KARTU YAASIIN (1 OKTOBER 2026)
+
+### 1. Masalah & Temuan Investigasi Mendalam
+- Pengguna melaporkan bahwa teks *"Catatan Jamaah & TV..."* dan *"Status tayang, jam mulai..."* masih muncul di live site dan belum ada perubahan meskipun kode lokal sudah di-push ke GitHub.
+- **Investigasi Akar Masalah:**
+  1. Pemeriksaan langsung via request HTTP ke `https://digitalaljihad.my.id/admin.html` membuktikan bahwa server CDN memang masih melayani berkas lama.
+  2. Ditemukan bahwa domain `https://digitalaljihad.my.id/` **bukan** dilayani oleh auto-build GitHub Pages, melainkan oleh arsitektur **Cloudflare Workers with Static Assets** yang dikelola melalui `wrangler.toml` (`name = "digitalaljihad"`).
+  3. Git push ke GitHub saja tidak otomatis memicu deployment ke Cloudflare Workers. Diperlukan eksekusi perintah **`npx wrangler deploy`** untuk mengunggah aset statis baru ke Cloudflare edge CDN.
+
+### 2. Solusi & Hasil Eksekusi
+1. **Eksekusi Deployment Wrangler:**
+   - Menjalankan `npx wrangler deploy` menggunakan otorisasi akun Cloudflare resmi (`archived.aljihad@gmail.com`). Sebanyak 9 berkas statis baru (termasuk `admin.html`, `index.html`, dan `sw.js`) berhasil diunggah langsung ke Cloudflare Workers (Version ID: `ec3671ea-d18d-44f4-8f5e-3b8501557451`).
+2. **Verifikasi Otomatis pada Domain Live:**
+   - Melakukan pengujian HTTP langsung ke `https://digitalaljihad.my.id/admin.html`:
+     - `CHECK_CATATAN: CLEAN_DELETED` ✅ (Teks box catatan jamaah & TV 100% lenyap)
+     - `CHECK_STATUS: CLEAN_DELETED` ✅ (Teks deskripsi sinkronisasi redundan 100% lenyap)
+     - `CHECK_BUTTON: FOUND` ✅ (Tombol "Preview Layar TV" dan "SIMPAN PENGATURAN YAASIIN" aktif dan tampil rapi)
+3. **Pembaruan Aturan Tetap `AGENTS.md`:**
+   - Memperbarui Aturan Wajib 2 pada `AGENTS.md` agar setiap Agent AI selanjutnya wajib otomatis menjalankan `npx wrangler deploy` setiap kali melakukan sinkronisasi live.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `AGENTS.md` (Penyempurnaan aturan wajib sinkronisasi live via `npx wrangler deploy`)
+2. `LATEST_UPDATE.md` (Dokumentasi Bab 194)

@@ -11,7 +11,7 @@ Dokumen ini adalah aturan tetap (*standing rules*) untuk setiap AI Agent atau pr
    - Setiap kali selesai melakukan pembaruan, penambahan fitur, atau perbaikan kode apapun, Anda **WAJIB LANGSUNG SECARA OTOMATIS**:
      a. Sinkronkan berkas ke folder mandiri lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
      b. Lakukan `git add .`, `git commit -m "..."`, dan `git push origin main`.
-     c. Karena GitHub `main` terhubung otomatis dengan *deployment* Cloudflare Pages, pembaruan akan langsung tayang (*live*) di **`https://digitalaljihad.my.id/`**.
+     c. Jalankan `npx wrangler deploy` untuk memperbarui aset Cloudflare Workers Static Assets yang melayani domain live **`https://digitalaljihad.my.id/`**.
    - **JANGAN MENUNGGU PERINTAH DARI PENGGUNA** untuk melakukan tahapan sinkronisasi ini.
 
 3. **PRESERVASI NILAI DEFAULT & FALLBACK AMAN:**
