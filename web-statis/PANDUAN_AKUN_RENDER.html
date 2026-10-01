@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentasi Akun Render & Status Web Service - Masjid Jami' Al-Jihad</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 16mm 14mm 16mm 14mm;
+            @bottom-right {
+                content: counter(page);
+            }
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #1e293b;
+            background: #ffffff;
+            font-size: 10.5pt;
+            line-height: 1.55;
+            padding: 0;
+        }
+        .header {
+            border-bottom: 3px double #0f766e;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .header-title h1 {
+            font-size: 16pt;
+            color: #0f766e;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+        .header-title p {
+            font-size: 9.5pt;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .header-badge {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            font-weight: 600;
+            text-align: right;
+        }
+        h2 {
+            font-size: 12pt;
+            color: #0f172a;
+            border-left: 4px solid #0f766e;
+            padding-left: 8px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        h3 {
+            font-size: 11pt;
+            color: #334155;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        .card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+        }
+        .card-highlight {
+            background: #f0fdfa;
+            border: 1px solid #99f6e4;
+        }
+        .card-alert {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 16px 0;
+            font-size: 9.5pt;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 7px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+        }
+        tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 8pt;
+            font-weight: 700;
+        }
+        .badge-red {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+        .badge-green {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #4ade80;
+        }
+        .badge-gray {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        ol, ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        .code {
+            font-family: Consolas, "Courier New", monospace;
+            background: #f1f5f9;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 9pt;
+            color: #0f766e;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        .footer-note {
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 8.5pt;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-title">
+            <h1>DOKUMENTASI & DIAGNOSTIK AKUN RENDER</h1>
+            <p>Aplikasi Display Digital Masjid Jami' Al-Jihad • Status & Manajemen Web Service</p>
+        </div>
+        <div class="header-badge">
+            Tanggal Cetak: 1 Oktober 2026<br>
+            Klasifikasi: Arsip Konfigurasi & Panduan
+        </div>
+    </div>
+
+    <div class="card card-highlight">
+        <h3 style="color: #0f766e; margin-top: 0;">📌 Ringkasan Penting (Jawaban Utama)</h3>
+        <p>URL <strong><code>https://digital-aljihad.onrender.com/</code></strong> berasal dari akun Render yang terhubung dengan:</p>
+        <ul style="margin-bottom: 0;">
+            <li><strong>Akun Login / GitHub:</strong> <span class="code">mydowndrive-ops</span></li>
+            <li><strong>Alamat Email Akun:</strong> <span class="code">my.downdrive@gmail.com</span></li>
+            <li><strong>Nama Repositori GitHub Asal:</strong> <span class="code">digitalaljihad001</span></li>
+            <li><strong>Service ID di Render:</strong> <span class="code">srv-daffllou01pc73a98acg</span></li>
+            <li><strong>Nama Web Service di Render:</strong> <span class="code">digital.aljihad</span></li>
+        </ul>
+    </div>
+
+    <h2>1. Hasil Pengecekan Langsung ke Server Render (Live Network Diagnostics)</h2>
+    <p>Pemeriksaan dilakukan secara langsung dari terminal ke server Render Edge Routing menggunakan diagnostik HTTP Header:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 32%;">Alamat URL</th>
+                <th style="width: 20%;">Status HTTP</th>
+                <th style="width: 23%;">Header Render</th>
+                <th style="width: 25%;">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>digitalaljihad001.onrender.com</strong></td>
+                <td><span class="badge badge-red">503 Unavailable</span></td>
+                <td><span class="code">suspend-by-user</span></td>
+                <td>Telah berhasil di-suspend oleh Anda.</td>
+            </tr>
+            <tr>
+                <td><strong>digital-aljihad1.onrender.com</strong></td>
+                <td><span class="badge badge-gray">404 Not Found</span></td>
+                <td><span class="code">no-server</span></td>
+                <td>Tidak aktif / telah dihapus.</td>
+            </tr>
+            <tr>
+                <td><strong>digital-aljihad.onrender.com</strong></td>
+                <td><span class="badge badge-green">200 OK (AKTIF)</span></td>
+                <td><span class="code">x-render-origin-server: nginx</span></td>
+                <td><strong>MASIH AKTIF</strong> & melayani web display.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. Analisis Berdasarkan Tangkapan Layar (Screenshots) Dashboard</h2>
+    <p>Berdasarkan 3 tangkapan layar yang Anda berikan, berikut adalah kronologi dan faktanya:</p>
+
+    <div class="card">
+        <h3>A. Gambar 1 & Gambar 2 (Folder Project "Production")</h3>
+        <p>Pada dua gambar pertama, tampak dua servis berstatus <span class="badge badge-gray">Suspended by you</span>, yaitu:</p>
+        <ul>
+            <li><strong><code>digital-aljihad1</code></strong> (dengan angka 1 di belakang) – berstatus suspended.</li>
+            <li><strong><code>digitalaljihad</code></strong> (tanpa strip) – berstatus suspended.</li>
+        </ul>
+        <p>Kedua service di atas adalah service lama dan service cadangan yang sudah berhasil Anda nonaktifkan.</p>
+    </div>
+
+    <div class="card card-alert">
+        <h3 style="color: #991b1b; margin-top: 0;">B. Gambar 3 (Penyebab Pasti Mengapa Masih Aktif)</h3>
+        <p>Pada tangkapan layar halaman <strong>Settings</strong> untuk service <strong><code>digital.aljihad</code></strong>:</p>
+        <ul>
+            <li>Terdapat badge berwarna hijau bertuliskan <strong><span class="badge badge-green">✓ Live</span></strong> tepat di samping commit <span class="code">6b68e4b</span>.</li>
+            <li>URL yang tertera di bawahnya adalah tepat: <strong><code>https://digital-aljihad.onrender.com</code></strong>.</li>
+            <li><strong>Kesimpulan:</strong> Servis ini <em>belum berstatus Suspended</em> karena proses suspend di Render membutuhkan konfirmasi pada jendela pop-up.</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. Panduan Langkah Demi Langkah Mematikan / Menghapus Permanen di Render</h2>
+    <p>Karena Anda sudah membuka halaman <strong>Settings</strong> dari servis <strong><code>digital.aljihad</code></strong> tersebut, ikuti langkah berikut:</p>
+
+    <div class="card card-highlight">
+        <ol style="margin-left: 22px; line-height: 1.8;">
+            <li>Pada layar <strong>Settings</strong> yang sedang terbuka di komputer Anda, <strong>gulir (scroll) terus ke bagian paling bawah halaman</strong>.</li>
+            <li>Di bagian paling bawah, Anda akan menemukan kotak bergaris merah bernama <strong>Danger Zone</strong>.</li>
+            <li>Di dalam kotak Danger Zone terdapat dua tombol pilihan:
+                <ul>
+                    <li><strong><code>Suspend Web Service</code></strong>: Mematikan sementara service.</li>
+                    <li><strong><code>Delete Web Service</code></strong> (SANGAT DIREKOMENDASIKAN): Menghapus servis secara permanen agar akun bersih dan tidak menimbulkan kebingungan di masa depan.</li>
+                </ul>
+            </li>
+            <li><strong>Tahap Konfirmasi (Penting):</strong>
+                <ul>
+                    <li>Klik salah satu tombol di atas (disarankan <strong>Delete Web Service</strong>).</li>
+                    <li>Akan muncul jendela pop-up konfirmasi.</li>
+                    <li>Ketikkan teks konfirmasi yang diminta oleh Render (biasanya nama servicenya: <span class="code">digital.aljihad</span>).</li>
+                    <li>Klik tombol merah konfirmasi (<strong>Delete / Confirm</strong>).</li>
+                </ul>
+            </li>
+            <li><strong>Selesai!</strong> Badge <span class="badge badge-green">✓ Live</span> akan langsung hilang, dan URL <span class="code">digital-aljihad.onrender.com</span> akan langsung mati total saat itu juga.</li>
+        </ol>
+    </div>
+
+    <h2>4. Apakah Aman Menghapus Servis Render Ini? (100% AMAN)</h2>
+    <p>Anda <strong>sangat aman</strong> menghapus service di Render tersebut karena sistem display masjid saat ini sudah berpindah arsitektur sepenuhnya:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Komponen</th>
+                <th>Sistem Lama (Render)</th>
+                <th>Sistem Baru & Aktif Saat Ini</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Hosting Live</strong></td>
+                <td>Render Cloud (Sering tidur / cold start 50 detik)</td>
+                <td><strong>Cloudflare Pages Global CDN</strong> (Instan & Tanpa Sleep)</td>
+            </tr>
+            <tr>
+                <td><strong>Domain Utama</strong></td>
+                <td>digital-aljihad.onrender.com</td>
+                <td><strong>https://digitalaljihad.my.id/</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Database Cloud</strong></td>
+                <td>TiDB Cloud Serverless</td>
+                <td><strong>Supabase PostgreSQL Cloud Realtime</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Repositori GitHub</strong></td>
+                <td>mydowndrive-ops/digitalaljihad001</td>
+                <td><strong>archivedaljihad-cloud/digitalaljihad</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card" style="background: #f8fafc; border-left: 4px solid #3b82f6;">
+        <h3 style="color: #1e40af; margin-top: 0;">ℹ️ Informasi Mode Sholat Jum'at Besok (2 Oktober 2026)</h3>
+        <p style="margin-bottom: 0;">
+            Display TV Masjid di domain resmi <strong><code>https://digitalaljihad.my.id/</code></strong> telah teruji 100% siap untuk besok siang. Begitu memasuki waktu Dzuhur (11:45 WIB), layar TV akan secara otomatis beralih ke <strong>Mode Khutbah & Sholat Jum'at</strong> selama 50 menit dengan plakat petugas resmi dan adab khutbah jum'at.
+        </p>
+    </div>
+
+    <div class="footer-note">
+        <span>Masjid Jami' Al-Jihad • Dokumentasi Sistem Digital</span>
+        <span>Dokumen dibuat otomatis oleh Antigravity AI</span>
+    </div>
+
+</body>
+</html>

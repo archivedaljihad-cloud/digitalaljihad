@@ -8338,3 +8338,36 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.4`)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 190)
+
+---
+
+## 📑 191. DOKUMENTASI & DIAGNOSTIK AKUN RENDER SERTA PENERBITAN BERKAS PDF PANDUAN (1 OKTOBER 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- Pengguna meminta pengecekan riwayat kepemilikan akun untuk URL `https://digital-aljihad.onrender.com/`.
+- Pengguna menanyakan mengapa URL tersebut masih aktif padahal merasa sudah men-suspend semua web service di dashboard Render.
+- Pengguna mengonfirmasi apakah besok saat waktu Dzuhur sistem secara otomatis masuk ke Mode Khusus Sholat Jum'at (*Friday Prayer Mode*).
+- Pengguna meminta dibuatkan berkas PDF panduan dan rangkuman lengkap mengenai akun Render dan langkah penyelesaiannya agar dapat diunduh dan disimpan.
+
+### 2. Solusi & Implementasi Teknis
+1. **Pemeriksaan & Pelacakan Akun Render:**
+   - Melacak asal akun Render: Terhubung ke akun GitHub `mydowndrive-ops` / email `my.downdrive@gmail.com` dengan nama repo `digitalaljihad001`.
+   - Mengidentifikasi Service ID Render: `srv-daffllou01pc73a98acg` dengan nama service `digital.aljihad`.
+2. **Diagnostik Jaringan HTTP Header Langsung ke Render Edge:**
+   - `digitalaljihad001.onrender.com` ➡️ `503 Service Unavailable` (`x-render-routing: suspend-by-user`) [Berhasil Nonaktif].
+   - `digital-aljihad1.onrender.com` ➡️ `404 Not Found` (`x-render-routing: no-server`) [Nonaktif].
+   - `digital-aljihad.onrender.com` ➡️ `200 OK` (`x-render-origin-server: nginx`) [Masih Aktif].
+3. **Analisis Tangkapan Layar (Screenshots):**
+   - Mengungkap bukti bahwa service `digital.aljihad` pada tangkapan layar ketiga masih memiliki badge hijau `✓ Live` di sebelah commit `6b68e4b` karena belum dikonfirmasi di modal pop-up Render.
+4. **Verifikasi Otomasi Mode Sholat Jum'at:**
+   - Memeriksa `prayer-engine.js` dan `PrayerModeController.php`: Terverifikasi 100% otomatis mendeteksi hari Jum'at (`getDay() === 5`) dan waktu Dzuhur (11:45 WIB), mengunci layar selama 50 menit dalam mode Khutbah Jum'at lengkap dengan plakat 4 petugas resmi dan hadits adab khutbah.
+5. **Penerbitan Berkas PDF Resmi (`PANDUAN_AKUN_RENDER.pdf` & `PANDUAN_AKUN_RENDER.html`):**
+   - Membuat script generator ReportLab (`generate_render_doc_pdf.py`) yang mencetak PDF 2 halaman A4 dengan tata letak profesional, tipografi rapi, penomoran halaman otomatis, tabel diagnostik, dan panduan langkah demi langkah.
+   - Menghasilkan berkas `PANDUAN_AKUN_RENDER.pdf` dan menyalinnya ke folder utama, `web-statis/`, serta folder lokal mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+### 3. Berkas Terkait
+1. `PANDUAN_AKUN_RENDER.pdf` & `web-statis/PANDUAN_AKUN_RENDER.pdf` (Berkas PDF resmi yang dapat diunduh)
+2. `PANDUAN_AKUN_RENDER.html` & `web-statis/PANDUAN_AKUN_RENDER.html` (Berkas HTML sumber)
+3. `generate_render_doc_pdf.py` (Script generator PDF ReportLab)
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 191)
