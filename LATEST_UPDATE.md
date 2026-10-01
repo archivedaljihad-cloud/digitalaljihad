@@ -8371,3 +8371,33 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `generate_render_doc_pdf.py` (Script generator PDF ReportLab)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 191)
+
+---
+
+## 📑 192. PENYEDERHANAAN KARTU PENGATURAN SURAT YAASIIN & TAHLIL DI DASHBOARD PETUGAS/OPERATOR & PENGATURAN (1 OKTOBER 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- Pengguna meminta agar kartu **Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&Tahlil** di dashboard petugas/operator dan tab pengaturan dibuat lebih simpel dan bersih.
+- Komponen teks panjang yang diminta untuk disembunyikan/dihapus:
+  1. Box alert info: *"Catatan Jamaah & TV: Pengaturan mode dan durasi otomatis tersimpan ke Cloud Database (Supabase) dan Local Storage Browser TV. Di layar TV Surat Yaasiin juga disediakan tombol kontrol navigasi (Prev, Jeda/Lanjut, Next, dan Ganti Mode Cepat) untuk memudahkan operator masjid."*
+  2. Teks informasi sinkronisasi: *"Status tayang, jam mulai (format 24 Jam WIB), opsi model, dan durasi detik akan langsung disinkronkan ke Cloud Supabase & Layar TV."* serta heading *"Simpan Perubahan Pengaturan Surat Yaasiin"*.
+- Pengguna ingin agar di bagian bawah langsung tersaji aksi cepat: tombol **"Preview Layar TV"** dan tombol utama **"SIMPAN PENGATURAN YAASIIN"** saja agar tampilan jauh lebih rapi, simpel, dan elegan (*clean UI*).
+
+### 2. Solusi & Perubahan Teknis
+1. **Pembersihan Alert Box & Deskripsi Redundan:**
+   - Menghapus elemen `.alert-light` berisi catatan jamaah & TV dari kartu di seksi Dashboard Petugas (`#view-dashboard`) dan seksi Pengaturan Admin (`#view-settings`).
+   - Menghapus kolom judul teks *"Simpan Perubahan Pengaturan Surat Yaasiin"* dan deskripsi sinkronisasi yang bertele-tele di sisi kiri action bar bawah.
+2. **Action Bar Bawah yang Simpel & Langsung:**
+   - Mengubah layout footer action bar kartu menjadi rata kanan (`justify-content-end`) yang elegan dan modern.
+   - Hanya menyajikan 2 tombol utama:
+     - Tombol **Preview Layar TV**: `<a href="slides/yasin.html" target="_blank" class="btn btn-outline-success font-weight-bold">... Preview Layar TV</a>`
+     - Tombol **SIMPAN PENGATURAN YAASIIN**: `<button type="button" class="btn btn-success font-weight-bold shadow px-4 py-2" id="btnSaveYasinBottomDash" onclick="simpanPengaturanYasin('dash')">... SIMPAN PENGATURAN YAASIIN</button>`
+   - Mempertahankan ID button (`btnSaveYasinBottomDash` & `btnSaveYasinBottom`) sehingga fungsi interaktif `simpanPengaturanYasin` tetap berjalan 100% mulus dengan indikator loading spinner saat ditekan.
+3. **PWA Cache Version:**
+   - Menaikkan versi cache service worker di `web-statis/sw.js` menjadi `'aljihad-signage-v3.2.5'`.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penghapusan alert catatan jamaah & TV dan penyederhanaan tombol action bar)
+2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.5`)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 192)
