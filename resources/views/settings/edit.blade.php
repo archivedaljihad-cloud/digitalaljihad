@@ -101,7 +101,7 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" id="yasin-tab" data-toggle="tab" href="#yasin" role="tab" style="color: #059669;">
-							<i class="fas fa-book-quran text-success"></i> Agenda Malam Jum'at
+							<i class="fas fa-book-quran text-success"></i> Agenda Rutin Malam Jum'at
 							@if($setting->yasin_mode_enabled ?? true)
 								<span class="badge badge-success ml-1">AKTIF</span>
 							@else
@@ -1001,11 +1001,11 @@
 								<div class="col-lg-7">
 									<div class="card shadow-sm mb-4 border-0">
 										<div class="card-header font-weight-bold text-white" style="background: linear-gradient(135deg, #0d4a2b 0%, #062616 100%);">
-											<i class="fas fa-book-quran text-warning mr-2"></i> Konfigurasi Agenda Rutin Malam Jum'at
+											<i class="fas fa-book-quran text-warning mr-2"></i> Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&amp;Tahlil
 										</div>
 										<div class="card-body">
 											<div class="form-group mb-4">
-												<label class="font-weight-bold d-block text-gray-800">Aktifkan Agenda Malam Jum'at (Surat Yaasiin)</label>
+												<label class="font-weight-bold d-block text-gray-800">Aktifkan Agenda Rutin Malam Jum'at (Surat Yaasiin &amp; Tahlil)</label>
 												<label class="switch">
 													<input type="checkbox" name="yasin_mode_enabled" value="1" {{ ($setting->yasin_mode_enabled ?? true) ? 'checked' : '' }}>
 													<span class="slider round"></span>

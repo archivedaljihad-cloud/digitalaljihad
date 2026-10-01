@@ -1811,6 +1811,177 @@
                                         </div>
                                     </div>
                                 </div>
+                            <!-- CARD 5: PENGATURAN TAMPILAN SURAT YAASIIN & TAHLIL (DASHBOARD PETUGAS & ADMIN) -->
+                            <div class="col-12 mb-4">
+                                <div class="content-card border-left-success" style="border-left: 5px solid #059669; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+                                    <div class="content-card-header d-flex flex-wrap justify-content-between align-items-center" style="background: linear-gradient(135deg, #062b18 0%, #0d4a2b 100%); color: #ffffff; padding: 14px 20px; border-radius: 12px 12px 0 0; gap: 10px;">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-book-quran text-warning mr-2" style="font-size: 1.25rem;"></i>
+                                            <h6 class="content-card-title mb-0 text-white font-weight-bold">
+                                                Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&amp;Tahlil
+                                            </h6>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-wrap gap-2">
+                                            <button type="button" class="btn btn-sm btn-success font-weight-bold shadow-sm" onclick="simpanPengaturanYasin('dash')" id="btnSaveYasinTopDash" style="border-radius: 20px; font-size: 11.5px; padding: 5px 16px; background: #10b981; border: 1px solid #059669;">
+                                                <i class="fas fa-save mr-1"></i> Simpan Pengaturan Yaasiin
+                                            </button>
+                                            <a href="slides/yasin.html" target="_blank" class="btn btn-sm btn-outline-warning text-warning" style="border-radius: 20px; font-size: 11px; padding: 4px 12px; border-color: rgba(255,215,0,0.5);">
+                                                <i class="fas fa-tv mr-1"></i> Buka Layar TV Yaasiin
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="p-4" style="background: #ffffff;">
+                                        <!-- Saklar Utama & Jam Mulai (Model 24 Jam / 24H WIB) -->
+                                        <div class="row align-items-center mb-4 pb-3" style="border-bottom: 1px solid #e2e8f0;">
+                                            <div class="col-md-6 mb-3 mb-md-0">
+                                                <div class="custom-control custom-switch custom-switch-lg">
+                                                    <input type="checkbox" class="custom-control-input" id="dashYasinEnabled" checked onchange="syncYasinControl('enabled', this.checked)">
+                                                    <label class="custom-control-label font-weight-bold text-dark" for="dashYasinEnabled" style="font-size: 1rem; cursor: pointer;">
+                                                        Aktifkan Tayangan Otomatis Surat Yaasiin Setiap Kamis Malam
+                                                    </label>
+                                                </div>
+                                                <small class="text-muted d-block mt-1 pl-4">
+                                                    Layar TV masjid akan otomatis menampilkan Surat Yaasiin 83 ayat pada hari Kamis malam setelah Maghrib hingga menjelang Isya.
+                                                </small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-column align-items-md-end">
+                                                    <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
+                                                        <label for="dashYasinStartTime" class="font-weight-bold text-dark mb-0 mr-1" style="font-size: 0.9rem; white-space: nowrap;">
+                                                            <i class="far fa-clock text-success mr-1"></i> Jam Mulai (Format 24 Jam):
+                                                        </label>
+                                                        <div class="input-group shadow-sm" style="width: 160px;">
+                                                            <input type="text" class="form-control text-center font-weight-bold" id="dashYasinStartTime" value="18:30" placeholder="18:30" maxlength="5" style="border: 1.5px solid #10b981; font-size: 1.05rem; font-weight: 800; color: #064e3b; letter-spacing: 1.5px; border-radius: 8px 0 0 8px; background: #ffffff;" oninput="formatJam24H(this); syncYasinControl('time', this.value);" onblur="validateJam24H(this); syncYasinControl('time', this.value);" title="Format 24 Jam (HH:MM), contoh: 18:30">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text bg-light font-weight-bold text-success" style="font-size: 11px; border: 1.5px solid #10b981; border-left: none; border-radius: 0 8px 8px 0;">24H WIB</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Tombol Preset Cepat Format 24 Jam -->
+                                                    <div class="d-flex align-items-center justify-content-md-end mt-1 flex-wrap gap-1" style="font-size: 11px;">
+                                                        <span class="text-muted mr-1" style="font-size: 10.5px;">Pilihan cepat:</span>
+                                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" style="font-size: 11px; border-radius: 10px;" onclick="setPresetJamYasin('18:15')">18:15</button>
+                                                        <button type="button" class="btn btn-xs btn-outline-success py-0 px-2 font-weight-bold" style="font-size: 11px; border-radius: 10px;" onclick="setPresetJamYasin('18:30')">18:30</button>
+                                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" style="font-size: 11px; border-radius: 10px;" onclick="setPresetJamYasin('18:45')">18:45</button>
+                                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" style="font-size: 11px; border-radius: 10px;" onclick="setPresetJamYasin('19:00')">19:00</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- JUDUL SELEKSI DUA OPSI AUTOSWITCH -->
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <div>
+                                                <h6 class="font-weight-bold text-dark mb-1">
+                                                    <i class="fas fa-sliders-h text-success mr-1"></i> Pilih Model Tampilan Pembacaan Jamaah:
+                                                </h6>
+                                                <p class="text-muted small mb-0">
+                                                    Pilihan dilengkapi <strong>Autoswitch</strong>: memilih salah satu opsi otomatis menonaktifkan opsi lainnya. Teks 100% diam saat dibaca agar jamaah tidak pusing dan lebih khusyuk.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- 2 KARTU OPSI BERSANDING -->
+                                        <div class="row">
+                                            <!-- OPSI 1: LOMPAT HALUS PER BLOK AYAT -->
+                                            <div class="col-lg-6 mb-3">
+                                                <div class="yasin-option-card p-3 h-100 position-relative" id="dashCardYasinOption1" onclick="selectYasinOption('step')" style="border-radius: 12px; border: 2px solid #10b981; background: #f0fdf4; cursor: pointer; transition: all 0.25s ease;">
+                                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="custom-control custom-radio mr-2">
+                                                                <input type="radio" id="dashRadioYasinOption1" name="dash_yasin_display_option" value="step" class="custom-control-input" checked onchange="onYasinOptionRadioChange(this)">
+                                                                <label class="custom-control-label font-weight-bold text-dark" for="dashRadioYasinOption1" style="font-size: 1.02rem; cursor: pointer;">
+                                                                    Opsi 1: Lompat Halus per Blok Ayat
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <span class="badge badge-success px-2 py-1" style="font-size: 10px; border-radius: 10px;">DIREKOMENDASIKAN</span>
+                                                    </div>
+                                                    <p class="text-muted small mb-3" style="line-height: 1.5;">
+                                                        <strong>Teks 100% Diam saat dibaca.</strong> Menampilkan 4–5 ayat berukuran sangat besar dan jelas (Total 17 Blok Ayat). Layar berpindah halus ke blok berikutnya setelah jeda waktu selesai.
+                                                    </p>
+                                                    <div class="bg-white p-2 rounded border" style="border-color: rgba(16, 185, 129, 0.3) !important;">
+                                                        <label class="small font-weight-bold text-dark d-block mb-1">
+                                                            <i class="fas fa-stopwatch text-success mr-1"></i> Durasi Pergantian per Blok (Detik):
+                                                        </label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control" id="dashYasinStepDuration" value="20" min="5" max="180" step="5" oninput="syncYasinControl('step', this.value)" onclick="event.stopPropagation()">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text font-weight-bold">Detik / Blok</span>
+                                                            </div>
+                                                        </div>
+                                                        <small class="text-muted d-block mt-1" style="font-size: 10px;">
+                                                            Rekomendasi: <strong>15–25 Detik</strong> (17 blok × 20 detik ≈ 6-7 menit putaran).
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- OPSI 2: LEMBARAN MUSHAF STANDAR MADINAH / KEMENAG -->
+                                            <div class="col-lg-6 mb-3">
+                                                <div class="yasin-option-card p-3 h-100 position-relative" id="dashCardYasinOption2" onclick="selectYasinOption('mushaf')" style="border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; cursor: pointer; transition: all 0.25s ease;">
+                                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="custom-control custom-radio mr-2">
+                                                                <input type="radio" id="dashRadioYasinOption2" name="dash_yasin_display_option" value="mushaf" class="custom-control-input" onchange="onYasinOptionRadioChange(this)">
+                                                                <label class="custom-control-label font-weight-bold text-dark" for="dashRadioYasinOption2" style="font-size: 1.02rem; cursor: pointer;">
+                                                                    Opsi 2: Lembaran Mushaf Madinah (6 Hal)
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <span class="badge badge-secondary px-2 py-1" style="font-size: 10px; border-radius: 10px;">MUSHAF 15 BARIS</span>
+                                                    </div>
+                                                    <p class="text-muted small mb-3" style="line-height: 1.5;">
+                                                        <strong>Teks 100% Diam seperti membuka mushaf Al-Qur'an fisik.</strong> Menampilkan per halaman standar Al-Qur'an Madinah/Kemenag (Hal 440–445, Total 6 Halaman).
+                                                    </p>
+                                                    <div class="bg-white p-2 rounded border" style="border-color: #e2e8f0 !important;">
+                                                        <label class="small font-weight-bold text-dark d-block mb-1">
+                                                            <i class="fas fa-hourglass-half text-primary mr-1"></i> Durasi Pergantian per Halaman (Detik):
+                                                        </label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control" id="dashYasinMushafDuration" value="120" min="20" max="600" step="10" oninput="syncYasinControl('mushaf', this.value)" onclick="event.stopPropagation()">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text font-weight-bold">Detik / Halaman</span>
+                                                            </div>
+                                                        </div>
+                                                        <small class="text-muted d-block mt-1" style="font-size: 10px;">
+                                                            Rekomendasi: <strong>90–150 Detik</strong> (1.5 - 2.5 Menit per halaman; 6 hal ≈ 12-15 menit).
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- INFO SINKRONISASI & SAFETY LOCK -->
+                                        <div class="alert alert-light border d-flex align-items-center mt-2 mb-0 p-3" style="border-radius: 10px; background: #fafaf9; border-color: #e7e5e4 !important;">
+                                            <i class="fas fa-info-circle text-info mr-3" style="font-size: 1.25rem;"></i>
+                                            <div class="small text-muted">
+                                                <strong>Catatan Jamaah &amp; TV:</strong> Pengaturan mode dan durasi otomatis tersimpan ke <em>Cloud Database (Supabase)</em> dan <em>Local Storage Browser TV</em>. Di layar TV Surat Yaasiin juga disediakan tombol kontrol navigasi (Prev, Jeda/Lanjut, Next, dan Ganti Mode Cepat) untuk memudahkan operator masjid.
+                                            </div>
+                                        </div>
+
+                                        <!-- ACTION BAR: TOMBOL SIMPAN PENGATURAN SURAT YAASIIN -->
+                                        <div class="mt-4 pt-3 d-flex flex-wrap justify-content-between align-items-center p-3 rounded" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid #a7f3d0; border-radius: 12px; gap: 12px;">
+                                            <div class="mb-1 mb-md-0">
+                                                <div class="font-weight-bold text-success d-flex align-items-center" style="font-size: 0.98rem;">
+                                                    <i class="fas fa-check-circle mr-2" style="font-size: 1.15rem;"></i>
+                                                    <span>Simpan Perubahan Pengaturan Surat Yaasiin</span>
+                                                </div>
+                                                <small class="text-muted d-block mt-1">
+                                                    Status tayang, jam mulai (format 24 Jam WIB), opsi model, dan durasi detik akan langsung disinkronkan ke Cloud Supabase &amp; Layar TV.
+                                                </small>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-wrap gap-2">
+                                                <a href="slides/yasin.html" target="_blank" class="btn btn-outline-success font-weight-bold" style="border-radius: 8px; font-size: 13px; padding: 9px 16px;">
+                                                    <i class="fas fa-tv mr-1"></i> Preview Layar TV
+                                                </a>
+                                                <button type="button" class="btn btn-success font-weight-bold shadow px-4 py-2" id="btnSaveYasinBottomDash" onclick="simpanPengaturanYasin('dash')" style="border-radius: 8px; font-size: 13.5px; background: #059669; border-color: #047857; letter-spacing: 0.3px;">
+                                                    <i class="fas fa-save mr-2"></i> SIMPAN PENGATURAN YAASIIN
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -4638,18 +4809,18 @@
                                 </div>
                             </div>
 
-                            <!-- CARD PENGATURAN SURAT YAASIIN 83 AYAT (2 OPSI AUTOSWITCH) -->
+                            <!-- CARD PENGATURAN SURAT YAASIIN & TAHLIL (2 OPSI AUTOSWITCH) -->
                             <div class="col-12 mb-4">
                                 <div class="content-card border-left-success" style="border-left: 5px solid #059669; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
                                     <div class="content-card-header d-flex flex-wrap justify-content-between align-items-center" style="background: linear-gradient(135deg, #062b18 0%, #0d4a2b 100%); color: #ffffff; padding: 14px 20px; border-radius: 12px 12px 0 0; gap: 10px;">
                                         <div class="d-flex align-items-center">
                                             <i class="fas fa-book-quran text-warning mr-2" style="font-size: 1.25rem;"></i>
                                             <h6 class="content-card-title mb-0 text-white font-weight-bold">
-                                                Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat
+                                                Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&amp;Tahlil
                                             </h6>
                                         </div>
                                         <div class="d-flex align-items-center flex-wrap gap-2">
-                                            <button type="button" class="btn btn-sm btn-success font-weight-bold shadow-sm" onclick="simpanPengaturanYasin()" id="btnSaveYasinTop" style="border-radius: 20px; font-size: 11.5px; padding: 5px 16px; background: #10b981; border: 1px solid #059669;">
+                                            <button type="button" class="btn btn-sm btn-success font-weight-bold shadow-sm" onclick="simpanPengaturanYasin('settings')" id="btnSaveYasinTop" style="border-radius: 20px; font-size: 11.5px; padding: 5px 16px; background: #10b981; border: 1px solid #059669;">
                                                 <i class="fas fa-save mr-1"></i> Simpan Pengaturan Yaasiin
                                             </button>
                                             <a href="slides/yasin.html" target="_blank" class="btn btn-sm btn-outline-warning text-warning" style="border-radius: 20px; font-size: 11px; padding: 4px 12px; border-color: rgba(255,215,0,0.5);">
@@ -4662,7 +4833,7 @@
                                         <div class="row align-items-center mb-4 pb-3" style="border-bottom: 1px solid #e2e8f0;">
                                             <div class="col-md-6 mb-3 mb-md-0">
                                                 <div class="custom-control custom-switch custom-switch-lg">
-                                                    <input type="checkbox" class="custom-control-input" id="cfgYasinEnabled" checked>
+                                                    <input type="checkbox" class="custom-control-input" id="cfgYasinEnabled" checked onchange="syncYasinControl('enabled', this.checked)">
                                                     <label class="custom-control-label font-weight-bold text-dark" for="cfgYasinEnabled" style="font-size: 1rem; cursor: pointer;">
                                                         Aktifkan Tayangan Otomatis Surat Yaasiin Setiap Kamis Malam
                                                     </label>
@@ -4678,7 +4849,7 @@
                                                             <i class="far fa-clock text-success mr-1"></i> Jam Mulai (Format 24 Jam):
                                                         </label>
                                                         <div class="input-group shadow-sm" style="width: 160px;">
-                                                            <input type="text" class="form-control text-center font-weight-bold" id="cfgYasinStartTime" value="18:30" placeholder="18:30" maxlength="5" style="border: 1.5px solid #10b981; font-size: 1.05rem; font-weight: 800; color: #064e3b; letter-spacing: 1.5px; border-radius: 8px 0 0 8px; background: #ffffff;" oninput="formatJam24H(this)" onblur="validateJam24H(this)" title="Format 24 Jam (HH:MM), contoh: 18:30">
+                                                            <input type="text" class="form-control text-center font-weight-bold" id="cfgYasinStartTime" value="18:30" placeholder="18:30" maxlength="5" style="border: 1.5px solid #10b981; font-size: 1.05rem; font-weight: 800; color: #064e3b; letter-spacing: 1.5px; border-radius: 8px 0 0 8px; background: #ffffff;" oninput="formatJam24H(this); syncYasinControl('time', this.value);" onblur="validateJam24H(this); syncYasinControl('time', this.value);" title="Format 24 Jam (HH:MM), contoh: 18:30">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text bg-light font-weight-bold text-success" style="font-size: 11px; border: 1.5px solid #10b981; border-left: none; border-radius: 0 8px 8px 0;">24H WIB</span>
                                                             </div>
@@ -4732,7 +4903,7 @@
                                                             <i class="fas fa-stopwatch text-success mr-1"></i> Durasi Pergantian per Blok (Detik):
                                                         </label>
                                                         <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control" id="cfgYasinStepDuration" value="20" min="5" max="180" step="5" onclick="event.stopPropagation()">
+                                                            <input type="number" class="form-control" id="cfgYasinStepDuration" value="20" min="5" max="180" step="5" oninput="syncYasinControl('step', this.value)" onclick="event.stopPropagation()">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text font-weight-bold">Detik / Blok</span>
                                                             </div>
@@ -4766,7 +4937,7 @@
                                                             <i class="fas fa-hourglass-half text-primary mr-1"></i> Durasi Pergantian per Halaman (Detik):
                                                         </label>
                                                         <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control" id="cfgYasinMushafDuration" value="120" min="20" max="600" step="10" onclick="event.stopPropagation()">
+                                                            <input type="number" class="form-control" id="cfgYasinMushafDuration" value="120" min="20" max="600" step="10" oninput="syncYasinControl('mushaf', this.value)" onclick="event.stopPropagation()">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text font-weight-bold">Detik / Halaman</span>
                                                             </div>
@@ -4783,7 +4954,7 @@
                                         <div class="alert alert-light border d-flex align-items-center mt-2 mb-0 p-3" style="border-radius: 10px; background: #fafaf9; border-color: #e7e5e4 !important;">
                                             <i class="fas fa-info-circle text-info mr-3" style="font-size: 1.25rem;"></i>
                                             <div class="small text-muted">
-                                                <strong>Catatan Jamaah & TV:</strong> Pengaturan mode dan durasi otomatis tersimpan ke <em>Cloud Database (Supabase)</em> dan <em>Local Storage Browser TV</em>. Di layar TV Surat Yaasiin juga disediakan tombol kontrol navigasi (Prev, Jeda/Lanjut, Next, dan Ganti Mode Cepat) untuk memudahkan operator masjid.
+                                                <strong>Catatan Jamaah &amp; TV:</strong> Pengaturan mode dan durasi otomatis tersimpan ke <em>Cloud Database (Supabase)</em> dan <em>Local Storage Browser TV</em>. Di layar TV Surat Yaasiin juga disediakan tombol kontrol navigasi (Prev, Jeda/Lanjut, Next, dan Ganti Mode Cepat) untuk memudahkan operator masjid.
                                             </div>
                                         </div>
 
@@ -4795,14 +4966,14 @@
                                                     <span>Simpan Perubahan Pengaturan Surat Yaasiin</span>
                                                 </div>
                                                 <small class="text-muted d-block mt-1">
-                                                    Status tayang, jam mulai (format 24 Jam WIB), opsi model, dan durasi detik akan langsung disinkronkan ke Cloud Supabase & Layar TV.
+                                                    Status tayang, jam mulai (format 24 Jam WIB), opsi model, dan durasi detik akan langsung disinkronkan ke Cloud Supabase &amp; Layar TV.
                                                 </small>
                                             </div>
                                             <div class="d-flex align-items-center flex-wrap gap-2">
                                                 <a href="slides/yasin.html" target="_blank" class="btn btn-outline-success font-weight-bold" style="border-radius: 8px; font-size: 13px; padding: 9px 16px;">
                                                     <i class="fas fa-tv mr-1"></i> Preview Layar TV
                                                 </a>
-                                                <button type="button" class="btn btn-success font-weight-bold shadow px-4 py-2" id="btnSaveYasinBottom" onclick="simpanPengaturanYasin()" style="border-radius: 8px; font-size: 13.5px; background: #059669; border-color: #047857; letter-spacing: 0.3px;">
+                                                <button type="button" class="btn btn-success font-weight-bold shadow px-4 py-2" id="btnSaveYasinBottom" onclick="simpanPengaturanYasin('settings')" style="border-radius: 8px; font-size: 13.5px; background: #059669; border-color: #047857; letter-spacing: 0.3px;">
                                                     <i class="fas fa-save mr-2"></i> SIMPAN PENGATURAN YAASIIN
                                                 </button>
                                             </div>
@@ -7275,11 +7446,15 @@
                         const jumatDur = parseInt(s.prayer_mode_jumat_duration) || 50;
                         syncDurasiJumat(jumatDur);
 
-                        // Pengaturan Agenda Surat Yaasiin 83 Ayat (2 Opsi Autoswitch)
+                        // Pengaturan Agenda Surat Yaasiin & Tahlil (Sync Dashboard & Settings)
                         const yasinEnabled = (s.yasin_mode_enabled !== false);
                         if (document.getElementById('cfgYasinEnabled')) document.getElementById('cfgYasinEnabled').checked = yasinEnabled;
-                        if (document.getElementById('cfgYasinStartTime') && s.yasin_start_time) {
-                            document.getElementById('cfgYasinStartTime').value = s.yasin_start_time.substring(0, 5);
+                        if (document.getElementById('dashYasinEnabled')) document.getElementById('dashYasinEnabled').checked = yasinEnabled;
+
+                        if (s.yasin_start_time) {
+                            const yStartTimeFormatted = s.yasin_start_time.substring(0, 5);
+                            if (document.getElementById('cfgYasinStartTime')) document.getElementById('cfgYasinStartTime').value = yStartTimeFormatted;
+                            if (document.getElementById('dashYasinStartTime')) document.getElementById('dashYasinStartTime').value = yStartTimeFormatted;
                         }
 
                         let yMode = 'step';
@@ -7312,7 +7487,9 @@
                         if (localYMushafDur) yMushafDur = parseInt(localYMushafDur) || yMushafDur;
 
                         if (document.getElementById('cfgYasinStepDuration')) document.getElementById('cfgYasinStepDuration').value = yStepDur;
+                        if (document.getElementById('dashYasinStepDuration')) document.getElementById('dashYasinStepDuration').value = yStepDur;
                         if (document.getElementById('cfgYasinMushafDuration')) document.getElementById('cfgYasinMushafDuration').value = yMushafDur;
+                        if (document.getElementById('dashYasinMushafDuration')) document.getElementById('dashYasinMushafDuration').value = yMushafDur;
                         if (typeof selectYasinOption === 'function') {
                             selectYasinOption(yMode);
                         }
@@ -10802,40 +10979,68 @@
             }
         }
 
-        // Pemilihan Model Tampilan Surat Yaasiin (Autoswitch Mutually Exclusive)
+        // Pemilihan Model Tampilan Surat Yaasiin (Autoswitch Mutually Exclusive - Sync Dashboard & Settings)
         function selectYasinOption(option) {
             const r1 = document.getElementById('radioYasinOption1');
             const r2 = document.getElementById('radioYasinOption2');
             const c1 = document.getElementById('cardYasinOption1');
             const c2 = document.getElementById('cardYasinOption2');
 
+            const dr1 = document.getElementById('dashRadioYasinOption1');
+            const dr2 = document.getElementById('dashRadioYasinOption2');
+            const dc1 = document.getElementById('dashCardYasinOption1');
+            const dc2 = document.getElementById('dashCardYasinOption2');
+
             if (option === 'step') {
                 if (r1) r1.checked = true;
                 if (r2) r2.checked = false;
-                if (c1) {
-                    c1.style.border = '2px solid #10b981';
-                    c1.style.background = '#f0fdf4';
-                }
-                if (c2) {
-                    c2.style.border = '1.5px solid #cbd5e1';
-                    c2.style.background = '#f8fafc';
-                }
+                if (c1) { c1.style.border = '2px solid #10b981'; c1.style.background = '#f0fdf4'; }
+                if (c2) { c2.style.border = '1.5px solid #cbd5e1'; c2.style.background = '#f8fafc'; }
+
+                if (dr1) dr1.checked = true;
+                if (dr2) dr2.checked = false;
+                if (dc1) { dc1.style.border = '2px solid #10b981'; dc1.style.background = '#f0fdf4'; }
+                if (dc2) { dc2.style.border = '1.5px solid #cbd5e1'; dc2.style.background = '#f8fafc'; }
             } else {
                 if (r1) r1.checked = false;
                 if (r2) r2.checked = true;
-                if (c1) {
-                    c1.style.border = '1.5px solid #cbd5e1';
-                    c1.style.background = '#f8fafc';
-                }
-                if (c2) {
-                    c2.style.border = '2px solid #0284c7';
-                    c2.style.background = '#f0f9ff';
-                }
+                if (c1) { c1.style.border = '1.5px solid #cbd5e1'; c1.style.background = '#f8fafc'; }
+                if (c2) { c2.style.border = '2px solid #0284c7'; c2.style.background = '#f0f9ff'; }
+
+                if (dr1) dr1.checked = false;
+                if (dr2) dr2.checked = true;
+                if (dc1) { dc1.style.border = '1.5px solid #cbd5e1'; dc1.style.background = '#f8fafc'; }
+                if (dc2) { dc2.style.border = '2px solid #0284c7'; dc2.style.background = '#f0f9ff'; }
             }
         }
 
         function onYasinOptionRadioChange(radio) {
             selectYasinOption(radio.value);
+        }
+
+        // Sinkronisasi dua arah kontrol Yaasiin (Dashboard Petugas <-> Pengaturan Sistem Admin)
+        function syncYasinControl(type, val) {
+            if (type === 'enabled') {
+                const c1 = document.getElementById('cfgYasinEnabled');
+                const c2 = document.getElementById('dashYasinEnabled');
+                if (c1 && c1.checked !== val) c1.checked = val;
+                if (c2 && c2.checked !== val) c2.checked = val;
+            } else if (type === 'time') {
+                const t1 = document.getElementById('cfgYasinStartTime');
+                const t2 = document.getElementById('dashYasinStartTime');
+                if (t1 && t1.value !== val) t1.value = val;
+                if (t2 && t2.value !== val) t2.value = val;
+            } else if (type === 'step') {
+                const s1 = document.getElementById('cfgYasinStepDuration');
+                const s2 = document.getElementById('dashYasinStepDuration');
+                if (s1 && s1.value !== val) s1.value = val;
+                if (s2 && s2.value !== val) s2.value = val;
+            } else if (type === 'mushaf') {
+                const m1 = document.getElementById('cfgYasinMushafDuration');
+                const m2 = document.getElementById('dashYasinMushafDuration');
+                if (m1 && m1.value !== val) m1.value = val;
+                if (m2 && m2.value !== val) m2.value = val;
+            }
         }
 
         // ==========================================
@@ -10889,8 +11094,12 @@
         }
 
         function setPresetJamYasin(val) {
-            const input = document.getElementById('cfgYasinStartTime');
-            if (input) {
+            const inputs = [
+                document.getElementById('cfgYasinStartTime'),
+                document.getElementById('dashYasinStartTime')
+            ].filter(Boolean);
+
+            inputs.forEach(input => {
                 input.value = val;
                 input.style.transition = 'all 0.3s ease';
                 input.style.backgroundColor = '#ecfdf5';
@@ -10899,30 +11108,32 @@
                     input.style.backgroundColor = '#ffffff';
                     input.style.borderColor = '#10b981';
                 }, 500);
-            }
+            });
         }
 
         // ==========================================
-        // SIMPAN KHUSUS PENGATURAN SURAT YAASIIN
+        // SIMPAN KHUSUS PENGATURAN SURAT YAASIIN & TAHLIL
         // ==========================================
-        async function simpanPengaturanYasin() {
-            const btnTop = document.getElementById('btnSaveYasinTop');
-            const btnBottom = document.getElementById('btnSaveYasinBottom');
-            const origTopHtml = btnTop ? btnTop.innerHTML : '';
-            const origBottomHtml = btnBottom ? btnBottom.innerHTML : '';
+        async function simpanPengaturanYasin(source) {
+            const buttons = [
+                document.getElementById('btnSaveYasinTopDash'),
+                document.getElementById('btnSaveYasinBottomDash'),
+                document.getElementById('btnSaveYasinTop'),
+                document.getElementById('btnSaveYasinBottom')
+            ].filter(Boolean);
+            const origButtonStates = buttons.map(b => ({ btn: b, html: b.innerHTML }));
 
             try {
-                if (btnTop) {
-                    btnTop.disabled = true;
-                    btnTop.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
-                }
-                if (btnBottom) {
-                    btnBottom.disabled = true;
-                    btnBottom.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> MENYIMPAN KE CLOUD...';
-                }
+                buttons.forEach(b => {
+                    b.disabled = true;
+                    b.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
+                });
 
-                const yasinEnabled = document.getElementById('cfgYasinEnabled') ? document.getElementById('cfgYasinEnabled').checked : true;
-                let yasinStartTime = document.getElementById('cfgYasinStartTime') ? document.getElementById('cfgYasinStartTime').value.trim() : '18:30';
+                const chk = document.getElementById('cfgYasinEnabled') || document.getElementById('dashYasinEnabled');
+                const yasinEnabled = chk ? chk.checked : true;
+
+                const timeInput = document.getElementById('cfgYasinStartTime') || document.getElementById('dashYasinStartTime');
+                let yasinStartTime = timeInput ? timeInput.value.trim() : '18:30';
 
                 // Validasi format jam 24 jam (HH:MM)
                 const timeMatch = yasinStartTime.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/);
@@ -10937,15 +11148,15 @@
                     } else {
                         yasinStartTime = '18:30';
                     }
-                    if (document.getElementById('cfgYasinStartTime')) {
-                        document.getElementById('cfgYasinStartTime').value = yasinStartTime;
-                    }
                 }
+                if (document.getElementById('cfgYasinStartTime')) document.getElementById('cfgYasinStartTime').value = yasinStartTime;
+                if (document.getElementById('dashYasinStartTime')) document.getElementById('dashYasinStartTime').value = yasinStartTime;
 
-                const isYasinMushaf = document.getElementById('radioYasinOption2') && document.getElementById('radioYasinOption2').checked;
+                const isYasinMushaf = (document.getElementById('radioYasinOption2') && document.getElementById('radioYasinOption2').checked) ||
+                                      (document.getElementById('dashRadioYasinOption2') && document.getElementById('dashRadioYasinOption2').checked);
                 const yasinDisplayMode = isYasinMushaf ? 'mushaf' : 'step';
-                const yasinStepDuration = Math.max(5, parseInt(document.getElementById('cfgYasinStepDuration')?.value) || 20);
-                const yasinMushafDuration = Math.max(10, parseInt(document.getElementById('cfgYasinMushafDuration')?.value) || 120);
+                const yasinStepDuration = Math.max(5, parseInt(document.getElementById('cfgYasinStepDuration')?.value || document.getElementById('dashYasinStepDuration')?.value) || 20);
+                const yasinMushafDuration = Math.max(10, parseInt(document.getElementById('cfgYasinMushafDuration')?.value || document.getElementById('dashYasinMushafDuration')?.value) || 120);
 
                 // 1. Simpan ke LocalStorage seketika untuk responsivitas instan di TV
                 localStorage.setItem('yasin_mode_enabled', yasinEnabled);
@@ -11009,7 +11220,7 @@
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Pengaturan Yaasiin Berhasil Disimpan!',
+                        title: 'Pengaturan Yaasiin & Tahlil Berhasil Disimpan!',
                         html: `
                             <div class="text-left p-3 mt-2" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; font-size: 13.5px; line-height: 1.7;">
                                 <div><i class="fas fa-toggle-on text-success mr-2"></i><strong>Status Tayang:</strong> ${yasinEnabled ? '<span class="badge badge-success px-2 py-1">Aktif Tiap Kamis Malam</span>' : '<span class="badge badge-secondary px-2 py-1">Nonaktif</span>'}</div>
@@ -11025,20 +11236,18 @@
                         confirmButtonColor: '#059669'
                     });
                 } else {
-                    alert(`Alhamdulillah! Pengaturan Yaasiin Berhasil Disimpan.\nStatus: ${yasinEnabled ? 'Aktif' : 'Nonaktif'}\nJam Mulai: ${yasinStartTime} WIB (Format 24 Jam)\nModel: ${modeLabel}\nDurasi: ${durasiLabel}`);
+                    alert(`Alhamdulillah! Pengaturan Yaasiin & Tahlil Berhasil Disimpan.\nStatus: ${yasinEnabled ? 'Aktif' : 'Nonaktif'}\nJam Mulai: ${yasinStartTime} WIB (Format 24 Jam)\nModel: ${modeLabel}\nDurasi: ${durasiLabel}`);
                 }
             } catch (err) {
                 console.error('Error simpan pengaturan Yaasiin:', err);
                 alert('Pengaturan Yaasiin berhasil disimpan di memori lokal browser.');
             } finally {
-                if (btnTop) {
-                    btnTop.disabled = false;
-                    btnTop.innerHTML = origTopHtml;
-                }
-                if (btnBottom) {
-                    btnBottom.disabled = false;
-                    btnBottom.innerHTML = origBottomHtml;
-                }
+                origButtonStates.forEach(item => {
+                    if (item.btn) {
+                        item.btn.disabled = false;
+                        item.btn.innerHTML = item.html;
+                    }
+                });
             }
         }
 

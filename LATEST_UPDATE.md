@@ -8289,3 +8289,52 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `web-statis/sw.js` (Bump versi cache ke `aljihad-signage-v3.2.3`)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 189)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 190 - INTEGRASI PENGATURAN SURAT YAASIIN & TAHLIL KE DASHBOARD PETUGAS/OPERATOR DAN PENYELARASAN JUDUL RESMI)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  1. *Tambahkan juga setingan "Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat" ini ke dasboard petugas/oprator.*
+  2. *Ganti teks "Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat" menkadi "Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&Tahlil"*
+- **Akar Kebutuhan:**
+  1. Menu **Pengaturan Sistem** (`#nav-settings`) di sidebar admin hanya diberikan izin akses untuk peran Super Admin (`data-role="admin"`). Akun **Petugas / Operator Masjid** tidak dapat membuka menu Pengaturan Sistem, sehingga jika ada perubahan jam mulai, mode tampilan (Blok Ayat vs Lembaran Mushaf), atau durasi tayang Surat Yaasiin & Tahlil pada malam Jum'at, petugas tidak dapat menyetelnya.
+  2. Menempatkan kartu kontrol pengaturan Surat Yaasiin & Tahlil secara langsung di **Dashboard Utama (`#view-dashboard`)** pada seksi yang dapat diakses oleh peran Petugas (`data-role="admin, petugas"`).
+  3. Memperbarui terminologi judul kartu dari yang sebelumnya *"Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat"* menjadi nama yang lebih komprehensif dan resmi: **"Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&Tahlil"**.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penambahan Kartu Pengaturan Surat Yaasiin & Tahlil di Dashboard Petugas (`web-statis/admin.html`):**
+   - Di dalam seksi Dashboard Utama (`#view-dashboard`) pada baris `<div class="row mb-4" data-role="admin, petugas">`, ditambahkan **Card 5: Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&Tahlil**.
+   - Kartu ini memuat seluruh fitur kontrol penuh:
+     - **Saklar Tayangan Otomatis:** `#dashYasinEnabled`.
+     - **Jam Mulai 24 Jam (24H WIB):** Input `#dashYasinStartTime` lengkap dengan tombol preset instan `18:15`, `18:30`, `18:45`, `19:00`.
+     - **Pemilihan 2 Opsi Model Tampilan:**
+       - Opsi 1: Lompat Halus per Blok Ayat (17 Blok) (`#dashCardYasinOption1`, `#dashRadioYasinOption1`, input durasi `#dashYasinStepDuration`).
+       - Opsi 2: Lembaran Mushaf Madinah (6 Halaman) (`#dashCardYasinOption2`, `#dashRadioYasinOption2`, input durasi `#dashYasinMushafDuration`).
+     - **Tombol Simpan Responsif Ganda:** `#btnSaveYasinTopDash` di header kartu dan `#btnSaveYasinBottomDash` di action bar bawah.
+2. **Penyelarasan Judul Resmi:**
+   - Mengganti seluruh judul kartu di Dashboard Utama dan menu Pengaturan Sistem (`admin.html`) menjadi:
+     **`Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&amp;Tahlil`**.
+   - Menyelaraskan tab navigasi dan header kartu di Laravel Blade (`resources/views/settings/edit.blade.php`).
+3. **Sinkronisasi Dua Arah Real-Time (`syncYasinControl`):**
+   - Menambahkan fungsi JavaScript `syncYasinControl(type, val)` yang secara instan menyinkronkan status saklar on/off, input jam mulai 24H WIB, durasi blok, dan durasi mushaf antara kartu Dashboard Petugas dan kartu Pengaturan Sistem Admin.
+   - Memperbarui fungsi `selectYasinOption(option)` agar men-toggle styling dan status radio pada KEDUA kartu secara bersamaan.
+   - Memperbarui fungsi `setPresetJamYasin(val)` agar mengisi dan memberikan efek highlight pada kedua input jam.
+4. **Penyempurnaan Fungsi Simpan `simpanPengaturanYasin(source)` & Pemuatan Data `loadAllSupabaseData()`:**
+   - Fungsi `simpanPengaturanYasin` kini secara cerdas membaca input dengan fallback yang aman baik saat dipicu dari kartu Dashboard Petugas maupun kartu Pengaturan Sistem.
+   - Men-disable seluruh tombol simpan yang ada di halaman selama proses penyimpanan berlangsung untuk mencegah multiple requests.
+   - Pemuatan awal di `loadAllSupabaseData()` mengisi nilai ke elemen Dashboard (`dashYasin...`) maupun elemen Settings (`cfgYasin...`).
+5. **PWA Service Worker (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `'aljihad-signage-v3.2.4'`.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penambahan Card 5 di Dashboard Petugas, pembaruan judul, fungsi `syncYasinControl`, pembaruan `selectYasinOption`, `simpanPengaturanYasin`, dan `loadAllSupabaseData`)
+2. `resources/views/settings/edit.blade.php` (Penyelarasan label tab & judul kartu ke Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&Tahlil)
+3. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.4`)
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 190)
