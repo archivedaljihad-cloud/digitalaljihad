@@ -40,6 +40,7 @@ class SholatJumatController extends Controller
 			'khatib' => 'nullable|string|max:255',
 			'muadzin' => 'nullable|string|max:255',
 			'bilal' => 'nullable|string|max:255',
+			'pembaca_maklumat' => 'nullable|string|max:255',
 			'foto_imam' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
 			'tanggal' => 'required|date',
 		]);
@@ -52,10 +53,17 @@ class SholatJumatController extends Controller
 				});
 			} catch (\Throwable $e) {}
 		}
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'pembaca_maklumat')) {
+			try {
+				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+					$table->string('pembaca_maklumat')->nullable()->after('bilal');
+				});
+			} catch (\Throwable $e) {}
+		}
 		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
 			try {
 				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
-					$table->string('foto_imam')->nullable()->after('bilal');
+					$table->string('foto_imam')->nullable()->after('pembaca_maklumat');
 				});
 			} catch (\Throwable $e) {}
 		}
@@ -78,6 +86,9 @@ class SholatJumatController extends Controller
 		// Guard columns if migration failed
 		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
 			unset($data['bilal']);
+		}
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'pembaca_maklumat')) {
+			unset($data['pembaca_maklumat']);
 		}
 
 		// Handle file upload
@@ -114,6 +125,7 @@ class SholatJumatController extends Controller
 			'khatib' => 'nullable|string|max:255',
 			'muadzin' => 'nullable|string|max:255',
 			'bilal' => 'nullable|string|max:255',
+			'pembaca_maklumat' => 'nullable|string|max:255',
 			'foto_imam' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
 			'tanggal' => 'required|date',
 		]);
@@ -126,10 +138,17 @@ class SholatJumatController extends Controller
 				});
 			} catch (\Throwable $e) {}
 		}
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'pembaca_maklumat')) {
+			try {
+				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
+					$table->string('pembaca_maklumat')->nullable()->after('bilal');
+				});
+			} catch (\Throwable $e) {}
+		}
 		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'foto_imam')) {
 			try {
 				\Illuminate\Support\Facades\Schema::table('sholat_jumat', function (\Illuminate\Database\Schema\Blueprint $table) {
-					$table->string('foto_imam')->nullable()->after('bilal');
+					$table->string('foto_imam')->nullable()->after('pembaca_maklumat');
 				});
 			} catch (\Throwable $e) {}
 		}
@@ -152,6 +171,9 @@ class SholatJumatController extends Controller
 		// Guard columns if migration failed
 		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'bilal')) {
 			unset($data['bilal']);
+		}
+		if (!\Illuminate\Support\Facades\Schema::hasColumn('sholat_jumat', 'pembaca_maklumat')) {
+			unset($data['pembaca_maklumat']);
 		}
 
 		// Handle file upload or removal

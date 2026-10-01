@@ -741,15 +741,36 @@
 					</div>
 				</div>
 
+				@php
+					$bilalDisp = $sholatJumat->bilal ?? 'Belum Ditetapkan';
+					$maklumatDisp = $sholatJumat->pembaca_maklumat ?? null;
+					if (empty($maklumatDisp) && !empty($sholatJumat->bilal) && str_contains($sholatJumat->bilal, '/')) {
+						$bParts = array_map('trim', explode('/', $sholatJumat->bilal, 2));
+						$bilalDisp = $bParts[0] ?: 'Belum Ditetapkan';
+						$maklumatDisp = $bParts[1] ?: null;
+					}
+				@endphp
 				<!-- Row 4: Bilal -->
 				<div class="info-row">
 					<div class="info-box-label">
 						<i class="fas fa-bullhorn"></i> Bilal
 					</div>
 					<div class="info-box-value">
-						<span class="value">{{ $sholatJumat->bilal ?? 'Belum Ditetapkan' }}</span>
+						<span class="value">{{ $bilalDisp }}</span>
 					</div>
 				</div>
+
+				@if(!empty($maklumatDisp))
+				<!-- Row 5: Pembaca Maklumat -->
+				<div class="info-row">
+					<div class="info-box-label">
+						<i class="fas fa-scroll"></i> Pembaca Maklumat
+					</div>
+					<div class="info-box-value">
+						<span class="value">{{ $maklumatDisp }}</span>
+					</div>
+				</div>
+				@endif
 			</div>
 		</div>
 		@else

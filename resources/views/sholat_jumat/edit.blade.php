@@ -88,6 +88,15 @@
 									@enderror
 								</div>
 
+								@php
+									$currentBilal = $sholat_jumat->bilal;
+									$currentMaklumat = $sholat_jumat->pembaca_maklumat ?? '';
+									if (empty($currentMaklumat) && !empty($currentBilal) && str_contains($currentBilal, '/')) {
+										$parts = array_map('trim', explode('/', $currentBilal, 2));
+										$currentBilal = $parts[0];
+										$currentMaklumat = $parts[1];
+									}
+								@endphp
 								<div class="form-group">
 									<label for="bilal"><strong>Bilal</strong></label>
 									<div class="input-group">
@@ -95,13 +104,30 @@
 											<span class="input-group-text"><i class="fas fa-bullhorn text-danger"></i></span>
 										</div>
 										<input type="text" name="bilal" id="bilal" class="form-control @error('bilal') is-invalid @enderror" 
-										value="{{ old('bilal', $sholat_jumat->bilal) }}" placeholder="Masukkan nama bilal">
+										value="{{ old('bilal', $currentBilal) }}" placeholder="Masukkan nama bilal">
 									</div>
 									<small class="form-text text-muted">
 										<i class="fas fa-info-circle"></i> Nama bilal yang memandu sholat Jumat
 									</small>
 									@error('bilal')
-									<small class="text-danger">{{ $message }}</error>
+									<small class="text-danger">{{ $message }}</small>
+									@enderror
+								</div>
+
+								<div class="form-group">
+									<label for="pembaca_maklumat"><strong>Pembaca Maklumat</strong></label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="fas fa-scroll text-success"></i></span>
+										</div>
+										<input type="text" name="pembaca_maklumat" id="pembaca_maklumat" class="form-control @error('pembaca_maklumat') is-invalid @enderror" 
+										value="{{ old('pembaca_maklumat', $currentMaklumat) }}" placeholder="Masukkan nama pembaca maklumat">
+									</div>
+									<small class="form-text text-muted">
+										<i class="fas fa-info-circle"></i> Nama petugas yang membacakan maklumat/pengumuman sebelum khutbah
+									</small>
+									@error('pembaca_maklumat')
+									<small class="text-danger">{{ $message }}</small>
 									@enderror
 								</div>
 							</div>

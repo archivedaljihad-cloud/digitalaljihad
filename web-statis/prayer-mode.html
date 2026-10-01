@@ -1223,7 +1223,9 @@
                     document.getElementById('officerKhatib').textContent = state.jumatPetugas.khatib || 'Ustd. Khatib';
                     document.getElementById('officerImam').textContent = state.jumatPetugas.imam || 'Ustd. Imam';
                     document.getElementById('officerMuadzin').textContent = state.jumatPetugas.muadzin || 'Muadzin';
-                    document.getElementById('officerBilal').textContent = state.jumatPetugas.bilal || 'Bilal';
+                    let bilalCardName = state.jumatPetugas.bilal || 'Bilal';
+                    if (bilalCardName.includes('/')) bilalCardName = bilalCardName.split('/')[0].trim();
+                    document.getElementById('officerBilal').textContent = bilalCardName || 'Bilal';
                 }
 
                 adabNoticeEl.style.display = 'inline-flex';

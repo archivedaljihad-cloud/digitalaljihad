@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Jadwal Sholat Jumat - Display Masjid</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -183,27 +186,27 @@
         .info-stack {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 9px;
             flex: 1;
             justify-content: center;
         }
 
         .info-row {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
         }
 
         .info-box-label {
-            flex: 0 0 190px;
+            flex: 0 0 215px;
             background: rgba(4, 25, 18, 0.72);
             backdrop-filter: blur(12px);
             border-radius: 14px;
-            padding: 11px 18px;
+            padding: 9px 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.15rem;
+            gap: 10px;
+            font-size: 1.10rem;
             font-weight: 600;
             color: #ffd700;
             border: 1.5px solid rgba(255, 215, 0, 0.45);
@@ -214,7 +217,7 @@
             background: rgba(4, 25, 18, 0.72);
             backdrop-filter: blur(12px);
             border-radius: 14px;
-            padding: 11px 20px;
+            padding: 9px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -222,7 +225,7 @@
         }
 
         .info-box-value .value {
-            font-size: 1.45rem;
+            font-size: 1.38rem;
             font-weight: 700;
             color: #ffffff;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
@@ -394,7 +397,7 @@
                     <div class="title-icon-badge left-icon"><i class="fas fa-mosque"></i></div>
                     <div class="title-text-wrap">
                         <h2>Jadwal Sholat Jumat</h2>
-                        <p>Informasi Imam, Khotib, Muadzin & Bilal</p>
+                        <p>Informasi Imam, Khotib, Muadzin, Bilal & Pembaca Maklumat</p>
                         <div class="sholawat-greeting">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِ سَيِّدِنَا مُحَمَّدٍ</div>
                     </div>
                     <div class="title-icon-badge right-icon"><i class="fas fa-kaaba"></i></div>
@@ -442,6 +445,13 @@
                     <div class="info-box-label"><i class="fas fa-bullhorn"></i> Bilal</div>
                     <div class="info-box-value">
                         <span class="value" id="valBilal">Belum Ditetapkan</span>
+                    </div>
+                </div>
+
+                <div class="info-row" id="rowMaklumat" style="display: none;">
+                    <div class="info-box-label"><i class="fas fa-scroll"></i> Pembaca Maklumat</div>
+                    <div class="info-box-value">
+                        <span class="value" id="valMaklumat">Belum Ditetapkan</span>
                     </div>
                 </div>
             </div>
@@ -533,8 +543,30 @@
 
                     document.getElementById('valImamKhatib').textContent = imamKhatibStr;
                     document.getElementById('badgeImamName').textContent = imam || khatib || 'Ustd. Imam & Khotib';
+                    // Bilal & Pembaca Maklumat
+                    let rawBilal = jumat.bilal || '';
+                    let bilalStr = rawBilal;
+                    let maklumatStr = '';
+                    if (rawBilal.includes('/')) {
+                        const bParts = rawBilal.split('/').map(s => s.trim());
+                        bilalStr = bParts[0] || '';
+                        maklumatStr = bParts[1] || '';
+                    }
+                    if (!maklumatStr && settings?.running_text_pages?.jumat_maklumat) {
+                        maklumatStr = settings.running_text_pages.jumat_maklumat;
+                    }
+
                     document.getElementById('valMuadzin').textContent = jumat.muadzin || 'Belum Ditetapkan';
-                    document.getElementById('valBilal').textContent = jumat.bilal || 'Belum Ditetapkan';
+                    document.getElementById('valBilal').textContent = bilalStr || 'Belum Ditetapkan';
+
+                    const rowMaklumat = document.getElementById('rowMaklumat');
+                    const valMaklumat = document.getElementById('valMaklumat');
+                    if (maklumatStr && maklumatStr !== '-') {
+                        if (rowMaklumat) rowMaklumat.style.display = 'flex';
+                        if (valMaklumat) valMaklumat.textContent = maklumatStr;
+                    } else {
+                        if (rowMaklumat) rowMaklumat.style.display = 'none';
+                    }
 
                     // Foto
                     if (jumat.foto_imam) {

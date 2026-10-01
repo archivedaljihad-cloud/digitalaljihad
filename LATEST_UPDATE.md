@@ -8185,3 +8185,62 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `web-statis/sw.js` (Pendaftaran `slides/undangan.html` dan bump cache ke `aljihad-signage-v3.2.1`)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 187)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 188 - PEMISAHAN KOLOM BILAL & PEMBACA MAKLUMAT PADA FORM PETUGAS JUM'AT, PREVIEW TV & DISPLAY)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Tolong cek di halaman edit Petugas sholat jum'at ini. Tolong pisahkan kolom Bilal dan Pembaca Pengumuman. Ganti kata Pembaca Pengumuman" menjadi "Pembaca Maklumat"*
+- **Tujuan:**
+  1. Memisahkan kolom petugas yang sebelumnya digabung menjadi satu (*"Bilal / Pembaca Pengumuman"*) menjadi dua kolom input terpisah yang mandiri dan jelas fungsinya:
+     - **Bilal** (memandu tarhim/adzan/iqamah/muraqqi sholat Jum'at).
+     - **Pembaca Maklumat** (membacakan warta/maklumat kas & tata tertib jamaah sebelum khutbah).
+  2. Mengganti seluruh terminologi label *"Pembaca Pengumuman"* menjadi istilah yang lebih baku, islami, dan resmi di masjid: **"Pembaca Maklumat"**.
+  3. Memperbarui pratinjau TV di dashboard (*Preview Tampilan Layar TV Raudhah*), widget ringkasan Jum'at di dashboard utama, serta layar slide TV display (`slides/jumat.html` dan `resources/views/jumat.blade.php`) agar menampilkan plakat Pembaca Maklumat secara proporsional.
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Formulir Input Petugas Jum'at (`web-statis/admin.html`):**
+   - Menghapus input gabungan `Bilal / Pembaca Pengumuman`.
+   - Menambahkan input mandiri untuk **Bilal** (`#jumatBilal`).
+   - Menambahkan input mandiri untuk **Pembaca Maklumat** (`#jumatMaklumat`) lengkap dengan placeholder yang informatif.
+2. **Pratinjau Layar TV Raudhah (`web-statis/admin.html`):**
+   - Memisahkan item pratinjau menjadi 4 plakat tersendiri:
+     - `KHATIB & IMAM` (`#prevJumatKhotib`)
+     - `MUADZIN` (`#prevJumatMuadzin`)
+     - `BILAL` (`#prevJumatBilal`)
+     - `PEMBACA MAKLUMAT` (`#prevJumatMaklumat`)
+   - Menambahkan *live input listeners* (`input` & `change` events) sehingga setiap karakter yang diketikkan di form langsung memperbarui kartu pratinjau secara instan tanpa perlu reload.
+3. **Widget Overview Dashboard Utama (`web-statis/admin.html`):**
+   - Menyelaraskan kartu ringkasan Jum'at sisi kanan (`col-sm-6`) menjadi 3 baris rapi dan proporsional: Muadzin, Bilal, dan Pembaca Maklumat (`#dashJumatMaklumat`).
+4. **Logika Penyimpanan & Pemuatan Supabase (`web-statis/admin.html`):**
+   - **Pemuatan Data (`loadAllSupabaseData`):** Membaca `j.bilal`. Jika data tersimpan dengan pemisah slash (`/`), otomatis memecahnya menjadi nama Bilal dan Pembaca Maklumat. Dilengkapi fallback pengecekan dari `app_settings.running_text_pages.jumat_maklumat` dan `localStorage.getItem('cached_jumat_maklumat')`.
+   - **Penyimpanan Data (`simpanPetugasJumat`):** Menyimpan data ke tabel Supabase `sholat_jumat` dengan preservasi skema (`bilal: maklumatOnly ? `${bilalOnly} / ${maklumatOnly}` : bilalOnly`), serta menyimpan data eksplisit ke `app_settings.running_text_pages.jumat_maklumat` dan cache lokal browser.
+5. **Slide Layar TV Display (`web-statis/slides/jumat.html`):**
+   - Memperbarui sub-judul header: *"Informasi Imam, Khotib, Muadzin, Bilal & Pembaca Maklumat"*.
+   - Menambahkan baris kelima (`#rowMaklumat`) dengan ikon gulungan (*scroll*) dan nilai `#valMaklumat`. Baris ini otomatis tampil jika nama Pembaca Maklumat diisi.
+   - Menyesuaikan lebar label `.info-box-label` (215px) dan jarak baris agar 5 baris tersusun simetris dan seimbang dengan bingkai foto imam rasio 4:5.
+6. **Layar Mode Sholat (`web-statis/prayer-mode.html`):**
+   - Memastikan pembacaan nama pada plakat `BILAL` hanya mengambil nama bilal murni (tanpa embel-embel pembaca maklumat) saat mode sholat/khutbah aktif.
+7. **PWA Service Worker (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `'aljihad-signage-v3.2.2'`.
+8. **Penyelarasan Backend Laravel:**
+   - Menambahkan field `pembaca_maklumat` pada model `SholatJumat.php`, controller `SholatJumatController.php`, form `create.blade.php`, `edit.blade.php`, dan slide `jumat.blade.php`.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Pemisahan form Bilal & Pembaca Maklumat, live preview listener, widget dashboard, load/save Supabase)
+2. `web-statis/slides/jumat.html` (Baris Pembaca Maklumat, penyesuaian layout 5 baris, pembacaan data)
+3. `web-statis/prayer-mode.html` (Sanitasi nama bilal pada plakat mode khutbah)
+4. `web-statis/sw.js` (Bump cache ke `aljihad-signage-v3.2.2`)
+5. `app/Models/SholatJumat.php` (Penambahan `pembaca_maklumat` ke `$fillable`)
+6. `app/Http/Controllers/SholatJumatController.php` (Auto-provisioning & validasi `pembaca_maklumat`)
+7. `resources/views/sholat_jumat/create.blade.php` (Input pembaca maklumat)
+8. `resources/views/sholat_jumat/edit.blade.php` (Input pembaca maklumat)
+9. `resources/views/jumat.blade.php` (Baris tampilan pembaca maklumat)
+10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
+11. `LATEST_UPDATE.md` (Dokumentasi Bab 188)

@@ -92,7 +92,24 @@
 										<i class="fas fa-info-circle"></i> Nama bilal yang memandu sholat Jumat
 									</small>
 									@error('bilal')
-									<small class="text-danger">{{ $message }}</error>
+									<small class="text-danger">{{ $message }}</small>
+									@enderror
+								</div>
+
+								<div class="form-group">
+									<label for="pembaca_maklumat"><strong>Pembaca Maklumat</strong></label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="fas fa-scroll text-success"></i></span>
+										</div>
+										<input type="text" name="pembaca_maklumat" id="pembaca_maklumat" class="form-control @error('pembaca_maklumat') is-invalid @enderror" 
+										value="{{ old('pembaca_maklumat') }}" placeholder="Masukkan nama pembaca maklumat">
+									</div>
+									<small class="form-text text-muted">
+										<i class="fas fa-info-circle"></i> Nama petugas yang membacakan maklumat/pengumuman sebelum khutbah
+									</small>
+									@error('pembaca_maklumat')
+									<small class="text-danger">{{ $message }}</small>
 									@enderror
 								</div>
 							</div>
