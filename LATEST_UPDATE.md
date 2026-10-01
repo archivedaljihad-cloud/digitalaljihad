@@ -8401,3 +8401,30 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.5`)
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 192)
+
+---
+
+## 📑 193. OPTIMASI MEKANISME CACHE PWA & AUTO-RELOAD INSTAN PADA DISPLAY TV & ADMIN (1 OKTOBER 2026)
+
+### 1. Masalah & Analisis Pertanyaan Pengguna
+- Pengguna bertanya mengapa saat ada pembaruan kode, tampilan di layar TV lama baru terlihat berubah setelah di-refresh berkali-kali.
+- **Hasil Analisis Akar Masalah (Root Cause):**
+  1. **Deployment Cloudflare Pages Pipeline (Jeda ~30–60 Detik):** Setelah `git push`, Cloudflare Pages butuh jeda waktu untuk build dan propagate ke edge CDN. Refresh yang terlalu cepat masih mengenai build lama.
+  2. **Lifecycle Service Worker (PWA Offline First):** Pada arsitektur PWA standar, saat SW baru terpasang di latar belakang (*background install & activate*), tab/layar yang sedang terbuka tetap menjalankan cache lama dan browser tidak me-reload halaman secara otomatis tanpa adanya event handler.
+  3. **Aggressive Cache Browser TV:** Browser pada Android TV/Smart TV menahan dokumen HTML di memori RAM/Disk Cache lebih lama.
+
+### 2. Solusi & Perubahan Teknis
+1. **Implementasi Listener `controllerchange` Auto-Reload:**
+   - Menambahkan event listener `navigator.serviceWorker.addEventListener('controllerchange', ...)` pada `web-statis/index.html` dan `web-statis/admin.html`.
+   - Begitu Service Worker baru aktif mengambil alih klien (`self.clients.claim()`), halaman secara cerdas dan otomatis me-refresh dirinya sendiri (*single clean reload*). Operator tidak perlu lagi menekan refresh berulang kali!
+2. **Pemicu Pembaruan Instan (`reg.update()`):**
+   - Menambahkan pemanggilan `reg.update()` saat inisialisasi PWA agar browser langsung memeriksa perubahan `sw.js` ke server tanpa menunggu idle.
+3. **Peningkatan Versi Cache PWA:**
+   - Menaikkan versi cache di `web-statis/sw.js` menjadi `'aljihad-signage-v3.2.6'`.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/index.html` (Penambahan `controllerchange` auto-reload dan `reg.update()`)
+2. `web-statis/admin.html` (Penambahan `controllerchange` auto-reload dan `reg.update()`)
+3. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.6`)
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 193)
