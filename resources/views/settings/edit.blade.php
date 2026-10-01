@@ -1038,12 +1038,25 @@
 												<div class="col-md-12">
 													<div class="form-group mb-2">
 														<label for="yasin_start_time" class="font-weight-bold text-gray-800">
-															<i class="far fa-clock text-success mr-1"></i> Jam Mulai Tayang (Kamis Malam)
+															<i class="far fa-clock text-success mr-1"></i> Jam Mulai Tayang (Format 24 Jam WIB)
 														</label>
-														<input type="time" class="form-control" style="max-width: 200px;" id="yasin_start_time" name="yasin_start_time"
-															value="{{ old('yasin_start_time', $setting->yasin_start_time ?? '18:30') }}">
+														<div class="input-group shadow-sm" style="max-width: 220px;">
+															<input type="text" class="form-control text-center font-weight-bold" id="yasin_start_time" name="yasin_start_time"
+																value="{{ old('yasin_start_time', $setting->yasin_start_time ?? '18:30') }}" maxlength="5" placeholder="18:30"
+																style="border: 1.5px solid #10b981; font-size: 1.05rem; font-weight: 800; color: #064e3b; letter-spacing: 1.5px;">
+															<div class="input-group-append">
+																<span class="input-group-text bg-light font-weight-bold text-success" style="font-size: 11px; border: 1.5px solid #10b981; border-left: none;">24H WIB</span>
+															</div>
+														</div>
+														<div class="d-flex align-items-center mt-1 flex-wrap gap-1" style="font-size: 11px;">
+															<span class="text-muted mr-1" style="font-size: 10.5px;">Pilihan cepat:</span>
+															<button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" style="font-size: 11px; border-radius: 10px;" onclick="document.getElementById('yasin_start_time').value='18:15'">18:15</button>
+															<button type="button" class="btn btn-xs btn-outline-success py-0 px-2 font-weight-bold" style="font-size: 11px; border-radius: 10px;" onclick="document.getElementById('yasin_start_time').value='18:30'">18:30</button>
+															<button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" style="font-size: 11px; border-radius: 10px;" onclick="document.getElementById('yasin_start_time').value='18:45'">18:45</button>
+															<button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" style="font-size: 11px; border-radius: 10px;" onclick="document.getElementById('yasin_start_time').value='19:00'">19:00</button>
+														</div>
 														<small class="form-text text-muted">
-															Default: <strong>18:30</strong> (setelah zikir sholat Maghrib selesai).
+															Format 24 Jam (HH:MM). Default: <strong>18:30 WIB</strong> (setelah zikir sholat Maghrib selesai).
 														</small>
 													</div>
 												</div>

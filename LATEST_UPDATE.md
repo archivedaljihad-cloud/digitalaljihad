@@ -8244,3 +8244,48 @@ Dibuat halaman slide visual premium dengan karakteristik:
 9. `resources/views/jumat.blade.php` (Baris tampilan pembaca maklumat)
 10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 11. `LATEST_UPDATE.md` (Dokumentasi Bab 188)
+
+---
+
+## 🚀 UPDATE TERBARU (BAB 189 - PENYEDIAAN TOMBOL SIMPAN PENGATURAN SURAT YAASIIN & MIGRASI FORMAT JAM KE 24 JAM / 24H WIB)
+
+### 1. Latar Belakang & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  *Di pengaturan Surat Yasin ini, setelah seting "Jam Durasi" menu savenya dimana ?*  
+  *Ganti model jamnya ke 24H bukan AM/PM*
+- **Akar Masalah:**
+  1. **Tombol Simpan Tidak Terlihat di Card Yaasiin:** Sebelumnya, pengaturan Surat Yaasiin hanya tersimpan bila pengguna menekan tombol simpan global di bagian atas halaman atau di kartu lain paling bawah halaman. Pada kartu *"Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat"*, tidak tersedia tombol simpan mandiri sehingga pengguna yang baru saja menyetel durasi (misal 30 detik atau 120 detik) kebingungan di mana tombol simpannya.
+  2. **Model Jam Bawaan Browser Menampilkan AM/PM:** Input sebelumnya menggunakan elemen HTML bawaan `<input type="time">`. Pada sistem operasi Windows atau browser dengan konfigurasi locale bahasa Inggris (`en-US`), browser secara sepihak memaksakan format 12 jam dengan selector AM/PM (misalnya `06:30 PM`). Pengguna menghendaki format jam 24 Jam murni (24H WIB, misalnya `18:30`).
+
+---
+
+### 2. Solusi & Perubahan yang Diterapkan
+1. **Penambahan Tombol Simpan Mandiri di Kartu Surat Yaasiin (`web-statis/admin.html`):**
+   - **Header Card:** Ditambahkan tombol hijau elegan di header kartu Surat Yaasiin:  
+     `<button type="button" class="btn btn-sm btn-success font-weight-bold shadow-sm" onclick="simpanPengaturanYasin()" id="btnSaveYasinTop"><i class="fas fa-save mr-1"></i> Simpan Pengaturan Yaasiin</button>`
+   - **Footer Action Bar Bawah:** Tepat setelah kotak opsi durasi dan alert info catatan jamaah, ditambahkan action bar berwarna hijau lembut dengan tombol simpan utama yang sangat mencolok:  
+     `<button type="button" class="btn btn-success font-weight-bold shadow px-4 py-2" id="btnSaveYasinBottom" onclick="simpanPengaturanYasin()"><i class="fas fa-save mr-2"></i> SIMPAN PENGATURAN YAASIIN</button>`  
+     berdampingan dengan tombol *"Preview Layar TV"*.
+2. **Migrasi Model Jam ke Format 24 Jam Murni (24H WIB):**
+   - Mengganti elemen `<input type="time">` menjadi input teks terproteksi format 24 jam dengan badge `24H WIB`.
+   - Menambahkan fungsi `formatJam24H(input)` dan `validateJam24H(input)` yang secara otomatis memformat input menjadi `HH:MM`, membatasi jam antara `00`–`23` dan menit antara `00`–`59`.
+   - Menambahkan 4 tombol preset instan: `18:15`, `18:30`, `18:45`, dan `19:00` sehingga pengguna dapat menyetel jam hanya dalam 1 kali klik.
+3. **Fungsi Penyimpanan Khusus `simpanPengaturanYasin()`:**
+   - Memvalidasi keabsahan format jam 24 jam (`HH:MM`).
+   - Menyimpan seketika ke `localStorage` browser TV (`yasin_mode_enabled`, `yasin_start_time`, `yasin_display_mode`, `yasin_step_duration`, `yasin_mushaf_duration`).
+   - Mengirim request `PATCH` ke Supabase Cloud table `app_settings` (id=1) dengan payload JSON terstruktur.
+   - Mengirim broadcast remote command `UPDATE_SETTINGS` agar layar TV yang sedang aktif langsung memperbarui konfigurasinya.
+   - Memberikan notifikasi sukses interaktif melalui `Swal.fire` (SweetAlert2) yang merinci status tayang, jam mulai 24H WIB, model tampilan terpilih, serta durasi detik pergantian.
+4. **Penyelarasan Form Pengaturan Laravel Blade (`resources/views/settings/edit.blade.php`):**
+   - Mengganti input waktu menjadi format teks 24H WIB dengan badge dan tombol pilihan preset cepat yang sama.
+5. **PWA Service Worker (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi `'aljihad-signage-v3.2.3'`.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penambahan tombol simpan atas & bawah di card Yaasiin, input jam 24H, preset waktu, fungsi `simpanPengaturanYasin()`, `formatJam24H()`)
+2. `resources/views/settings/edit.blade.php` (Penyelarasan input jam 24 Jam WIB & tombol preset di form setting Laravel)
+3. `web-statis/sw.js` (Bump versi cache ke `aljihad-signage-v3.2.3`)
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 189)
