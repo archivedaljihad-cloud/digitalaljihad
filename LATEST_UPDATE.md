@@ -8487,3 +8487,33 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.7`)
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 195)
+
+---
+
+## 📑 196. PERBAIKAN INTEGRITAS DOM TREE `section-view`: MENGATASI KONTEN BLANK/KOSONG SAAT MEMILIH MENU "REMOTE TV JARAK JAUH" (2 OKTOBER 2026)
+
+### 1. Masalah & Gejala
+- Pengguna melaporkan bahwa saat menu **"Remote TV Jarak Jauh"** diklik di Dashboard Petugas/Operator, area konten dashboard menjadi **kosong/blank putih** dan footer copyright melompat ke atas.
+- **Analisis DOM Tree:**
+  1. Melalui pelacakan kedalaman tag pembuka/penutup `<div>` di `web-statis/admin.html`, ditemukan bahwa kontainer `<div id="view-dashboard" class="section-view active">` (baris 1588) **kurang satu tag penutup `</div>`** di akhir bloknya (baris 2060).
+  2. Akibat tag `<div>` yang tidak tertutup tersebut, browser menganggap seluruh seksi setelahnya (termasuk `view-jadwal-sholat`, `view-rotasi-tv`, `view-remote-tv`, `view-galeri-informasi`, `view-infaq`, dsb.) **bersarang di dalam (anak dari) `<div id="view-dashboard">`**.
+  3. Saat pengguna mengklik menu manapun selain Dashboard (misal `remote-tv`), fungsi `switchAdminSection('remote-tv')` menghapus class `.active` dari seluruh `.section-view` (`display: none`), kemudian menambahkan class `.active` ke `#view-remote-tv` (`display: block`).
+  4. Namun karena `#view-remote-tv` berada di dalam `#view-dashboard` yang telah di-`display: none`, maka `#view-remote-tv` ikut **tersembunyi secara mutlak**. Hal ini menyebabkan seluruh area konten tampak kosong/blank putih.
+  5. Selain itu, ditemukan tag penutup ekstra `</div>` di dalam `view-infaq` (baris 4245) yang menutup `view-infaq` secara prematur sebelum elemen `#emptyProgramInfaqState`.
+
+### 2. Solusi & Perbaikan Teknis
+1. **Penutupan Sempurna `view-dashboard`:**
+   - Menambahkan tag penutup `</div>` pada akhir `view-dashboard` (baris 2061) sehingga kontainer Dashboard Overview tertutup sempurna sebelum blok `view-jadwal-sholat` dimulai.
+2. **Koreksi Penutupan di `view-infaq`:**
+   - Menghapus tag penutup prematur di baris 4245 sehingga elemen kartu empty state infaq tetap berada di dalam kontainer `view-infaq` dan tertutup tepat di baris 4258.
+3. **Verifikasi Keseimbangan Hierarki DOM:**
+   - Seluruh 18 seksi (`view-dashboard`, `view-jadwal-sholat`, `view-sholat-jumat`, `view-kajian-sabtu`, `view-agenda-rutin`, `view-rotasi-tv`, `view-remote-tv`, `view-galeri-informasi`, `view-undangan-eksternal`, `view-qurban`, `view-running-text`, `view-keuangan`, `view-ambulance`, `view-infaq`, `view-qris`, `view-users`, `view-ramadhan`, `view-settings`) kini berada pada level yang sama (`div_level = 4`), langsung di bawah `<div class="container-fluid px-4">`.
+   - Tidak ada lagi seksi yang bersarang di dalam seksi lain (`unclosed = 0, extra_close = 0`).
+4. **Peningkatan Versi Cache PWA:**
+   - Versi cache Service Worker di `web-statis/sw.js` dinaikkan menjadi `'aljihad-signage-v3.2.8'`.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penyeimbangan tag div penutup pada `view-dashboard` dan `view-infaq`)
+2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.8`)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 196)
