@@ -8454,3 +8454,36 @@ Dibuat halaman slide visual premium dengan karakteristik:
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `AGENTS.md` (Penyempurnaan aturan wajib sinkronisasi live via `npx wrangler deploy`)
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 194)
+
+---
+
+## 📑 195. REPOSISI MENU SIDEBAR: PEMINDAHAN "REMOTE TV JARAK JAUH" TEPAT DI BAWAH "ROTASI TV & REORDER" (2 OKTOBER 2026)
+
+### 1. Masalah & Permintaan Pengguna
+- Pengguna meminta agar menu **"Remote TV Jarak Jauh"** di sidebar Dashboard Petugas dipindahkan posisinya menjadi **tepat di bawah menu "Rotasi TV & Reorder"**.
+- Sebelumnya, menu Remote TV berada di bawah grup navigasi *"Sesi Akun"*, sehingga terpisah dari rumpun operasional display TV lainnya.
+
+### 2. Solusi & Perubahan Teknis
+1. **Pemindahan Elemen Navigasi di `web-statis/admin.html`:**
+   - Memindahkan elemen `<li class="nav-item" id="nav-remote-tv" data-role="admin, petugas">` ke dalam rumpun grup *Operasional Display TV* (`<div data-role="admin, petugas">`), tepat setelah elemen `<li class="nav-item" id="nav-rotasi-tv">`.
+   - Menghapus elemen duplikat `nav-remote-tv` dari rumpun grup *"Sesi Akun"*.
+   - Struktur sidebar grup *Operasional Display TV* kini menjadi:
+     1. Jadwal Sholat & Durasi
+     2. Petugas Sholat Jum'at
+     3. Kajian Malam Ahad
+     4. Pusat Agenda Rutin
+     5. Teks Berjalan TV
+     6. Galeri Informasi
+     7. Undangan Jama'ah
+     8. Semarak Ramadhan
+     9. Penerimaan Qurban
+     10. **Rotasi TV & Reorder**
+     11. **Remote TV Jarak Jauh [LIVE]** ⬅️ *(Posisi baru tepat di bawah Rotasi TV)*
+2. **Peningkatan Versi Cache PWA:**
+   - Menaikkan versi cache PWA pada `web-statis/sw.js` menjadi `'aljihad-signage-v3.2.7'`.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Reposisi menu `#nav-remote-tv` tepat di bawah `#nav-rotasi-tv`)
+2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.7`)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 195)
