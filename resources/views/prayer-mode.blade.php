@@ -798,43 +798,46 @@
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             width: 100%;
-            max-width: 1050px;
+            max-width: 1100px;
             margin: 10px auto;
         }
 
         .officer-card {
-            background: linear-gradient(180deg, rgba(8, 48, 28, 0.85) 0%, rgba(2, 20, 11, 0.95) 100%);
-            border: 1.5px solid rgba(212, 175, 55, 0.4);
+            background: linear-gradient(180deg, rgba(8, 48, 28, 0.88) 0%, rgba(2, 20, 11, 0.96) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.5);
             border-radius: 18px;
-            padding: 12px 20px;
+            padding: 14px 18px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 238, 170, 0.2);
             backdrop-filter: blur(10px);
         }
 
         .officer-badge {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: clamp(15px, 1.25vw, 18px);
+            font-weight: 800;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
-            color: #D4AF37;
-            background: rgba(212, 175, 55, 0.15);
-            padding: 3px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            margin-bottom: 6px;
+            color: #FFD700;
+            margin-bottom: 8px;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+        }
+
+        .officer-badge i {
+            font-size: 1.1em;
         }
 
         .officer-name {
-            font-size: clamp(16px, 1.6vw, 22px);
-            font-weight: 700;
+            font-size: clamp(19px, 1.75vw, 24px);
+            font-weight: 800;
             color: #FFFFFF;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.25;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
+            word-break: break-word;
         }
 
         /* =====================================================

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Aktivasi Kembali Akun Render - Masjid Al-Jihad</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            padding: 30px 15px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #059669;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .title-box h1 {
+            font-size: 22px;
+            color: #064e3b;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .title-box p {
+            font-size: 13px;
+            color: #047857;
+            font-weight: 600;
+        }
+        .badge {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #b45309;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            text-align: right;
+        }
+        h2 {
+            font-size: 16px;
+            color: #064e3b;
+            margin: 25px 0 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        th {
+            background-color: #065f46;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 10px 14px;
+            text-align: left;
+            border: 1px solid #cbd5e1;
+        }
+        td {
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+        }
+        tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+        .step-card {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 16px;
+        }
+        .step-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #064e3b;
+            margin-bottom: 8px;
+        }
+        .step-card ul {
+            padding-left: 20px;
+            font-size: 13px;
+            color: #334155;
+        }
+        .step-card li {
+            margin-bottom: 6px;
+        }
+        .code-box {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .code-keyword {
+            color: #f472b6;
+        }
+        .code-string {
+            color: #a7f3d0;
+        }
+        .diff-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .diff-box {
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 12.5px;
+        }
+        .diff-box.red {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #9f1239;
+        }
+        .diff-box.green {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+        .diff-box h3 {
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .alert-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 4px solid #f59e0b;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            color: #92400e;
+            margin-top: 25px;
+        }
+        .btn-print {
+            background: #059669;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        .btn-print:hover {
+            background: #047857;
+        }
+        @media print {
+            body { background: #fff; padding: 0; }
+            .container { box-shadow: none; border: none; padding: 0; }
+            .btn-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title-box">
+                <h1>PANDUAN AKTIVASI KEMBALI AKUN RENDER</h1>
+                <p>Sistem Switcher Layar TV Digital • Masjid Jami' Al Jihad</p>
+            </div>
+            <div class="badge">
+                DOKUMEN RESMI<br/>PANDUAN PENGURUS
+            </div>
+        </div>
+
+        <h2>1. Data Konfigurasi Akun & Layanan</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Komponen</th>
+                    <th>Identitas / URL Resmi</th>
+                    <th>Keterangan Jadwal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>Akun GitHub</b></td>
+                    <td><b>mydowndrive-ops</b> (Email: <i>my.downdrive@gmail.com</i>)</td>
+                    <td>Akun pemilik repositori</td>
+                </tr>
+                <tr>
+                    <td><b>Repositori Switcher</b></td>
+                    <td>https://github.com/mydowndrive-ops/aljihad</td>
+                    <td>Tempat file <code>index.html</code></td>
+                </tr>
+                <tr>
+                    <td><b>URL Display TV</b></td>
+                    <td><b>https://mydowndrive-ops.github.io/aljihad/</b></td>
+                    <td>Tautan di Smart TV Masjid</td>
+                </tr>
+                <tr>
+                    <td><b>Render Server 1</b></td>
+                    <td>https://digitalaljihad1.onrender.com</td>
+                    <td><b>Tanggal 1 s/d 15</b> setiap bulan</td>
+                </tr>
+                <tr>
+                    <td><b>Render Server 2</b></td>
+                    <td>https://digital-aljihad.onrender.com</td>
+                    <td><b>Tanggal 16 s/d 31</b> setiap bulan</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>2. Langkah-Langkah Mengaktifkan Kembali (3 Langkah Mudah)</h2>
+        
+        <div class="step-card">
+            <div class="step-title">LANGKAH 1: Unsuspend / Resume Web Service di Dashboard Render</div>
+            <ul>
+                <li>Buka dashboard Render di browser: <b>https://dashboard.render.com</b>.</li>
+                <li>Login menggunakan akun <b>mydowndrive-ops</b> (atau email <b>my.downdrive@gmail.com</b>).</li>
+                <li>Buka service pertama: <b>digitalaljihad1</b>. Masuk ke tab <b>Settings</b>, gulir ke paling bawah, lalu klik tombol <b>Resume Service / Unsuspend</b>.</li>
+                <li>Lakukan hal yang sama untuk service kedua: <b>digital-aljihad</b>.</li>
+                <li>Pastikan kedua service telah berubah statusnya menjadi bertanda hijau <b>✓ Live</b>.</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <div class="step-title">LANGKAH 2: Mengubah Saklar MODE_PERBAIKAN di GitHub</div>
+            <ul>
+                <li>Buka repositori: <b>https://github.com/mydowndrive-ops/aljihad</b>.</li>
+                <li>Klik pada berkas <b>index.html</b>, lalu klik ikon pensil (<b>Edit this file</b>).</li>
+                <li>Cari baris saklar utama (sekitar baris ke-201):
+                    <div class="code-box"><span class="code-keyword">const</span> MODE_PERBAIKAN = <span style="color:#ef4444;font-weight:bold;">true</span>;</div>
+                </li>
+                <li>Ubah kata <b>true</b> menjadi <b>false</b> sehingga menjadi:
+                    <div class="code-box"><span class="code-keyword">const</span> MODE_PERBAIKAN = <span style="color:#10b981;font-weight:bold;">false</span>;</div>
+                </li>
+                <li>Klik tombol hijau <b>Commit changes...</b> di pojok kanan atas untuk menyimpan.</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <div class="step-title">LANGKAH 3: Pengujian di Layar TV / Browser</div>
+            <ul>
+                <li>Buka tautan: <b>https://mydowndrive-ops.github.io/aljihad/</b> di browser laptop atau TV.</li>
+                <li>Layar akan menampilkan logo Masjid Al-Jihad dengan animasi putar (splash screen).</li>
+                <li>Setelah 5–15 detik (waktu bangun server Render), tampilan akan otomatis terbuka dan menyiarkan display TV digital secara normal.</li>
+            </ul>
+        </div>
+
+        <h2>3. Perbandingan Mode Perbaikan vs Mode Normal</h2>
+        <div class="diff-grid">
+            <div class="diff-box red">
+                <h3>🔴 Mode Perbaikan (Saat Ini)</h3>
+                <code>const MODE_PERBAIKAN = true;</code>
+                <p style="margin-top:8px;">Menampilkan kartu informasi pemeliharaan dan jam digital aktif. Iframe dinonaktifkan agar tidak muncul error 503 Render.</p>
+            </div>
+            <div class="diff-box green">
+                <h3>🟢 Mode Normal (Kedua Render Aktif)</h3>
+                <code>const MODE_PERBAIKAN = false;</code>
+                <p style="margin-top:8px;">Iframe langsung memuat Server 1 (tgl 1-15) atau Server 2 (tgl 16-31). Fitur switch otomatis tengah malam aktif.</p>
+            </div>
+        </div>
+
+        <h2>4. Fitur Otomasi 24 Jam</h2>
+        <table style="margin-top: 10px;">
+            <tbody>
+                <tr>
+                    <td style="width: 35%;"><b>Auto-Switch Tengah Malam</b></td>
+                    <td>Otomatis berpindah server di jam 00:00 tanggal 16 tanpa perlu matikan/restart TV.</td>
+                </tr>
+                <tr>
+                    <td><b>Penyegaran Memori (03:15 WIB)</b></td>
+                    <td>Soft reload harian sebelum waktu Subuh agar Smart TV/STB tidak lag.</td>
+                </tr>
+                <tr>
+                    <td><b>Anti-Freeze Logo</b></td>
+                    <td>Dilengkapi penahan error sehingga jaringan bermasalah tidak akan membuat layar blank hitam.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="alert-box">
+            <b>💡 Tips Pengurus:</b> Simpan berkas ini baik versi PDF maupun tautan dokumen. Kapan pun Anda mengaktifkan kembali akun Render, Anda hanya perlu melakukan 3 langkah di atas.
+        </div>
+
+        <button class="btn-print" onclick="window.print()">🖨️ Cetak / Simpan Halaman Ini</button>
+    </div>
+</body>
+</html>

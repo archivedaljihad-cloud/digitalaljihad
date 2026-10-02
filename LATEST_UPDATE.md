@@ -8517,3 +8517,64 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.8`)
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 196)
+
+---
+
+## 📑 197. DOKUMENTASI & PANDUAN AKTIVASI KEMBALI SWITCHER RENDER PADA GITHUB PAGES `mydowndrive-ops/aljihad` (2 OKTOBER 2026)
+
+### 1. Kebutuhan & Masalah Pengguna
+- Pengguna menanyakan identitas kepemilikan akun GitHub Pages untuk URL `https://mydowndrive-ops.github.io/aljihad/`.
+- Pengguna meminta pengecekan dan penyempurnaan kode iframe switcher 2 akun Render (`digitalaljihad1.onrender.com` untuk tgl 1-15 dan `digital-aljihad.onrender.com` untuk tgl 16-31).
+- Pengguna sengaja men-suspend sementara kedua akun Render tersebut dan ingin menampilkan halaman informasi *"Sedang Dalam Perbaikan"* setelah splash screen (lengkap dengan jam digital aktif dan logo asli masjid).
+- Mengatasi kendala layar blank hitam yang disebabkan oleh infinite loop error gambar logo saat server Render berstatus 503.
+- Pengguna meminta dibuatkan dokumen PDF panduan teknis langkah aktivasi kembali akun Render agar dapat diunduh langsung untuk referensi masa depan.
+
+### 2. Solusi & Implementasi Teknis
+1. **Penyempurnaan Kode `index.html` Switcher GitHub Pages:**
+   - Menyediakan saklar kontrol utama: `const MODE_PERBAIKAN = true;` (untuk mode pemeliharaan) dan `const MODE_PERBAIKAN = false;` (untuk mode normal siaran 2 akun Render).
+   - Memulihkan tag logo asli `<img id="splash-img">` lengkap dengan animasi *spinner ring* emas.
+   - Menambahkan penahan error `this.onerror = null;` untuk mencegah *infinite recursion loop* saat file gambar eksternal mengembalikan status 404/503.
+   - Mengatur kartu pemeliharaan (`#maintenance-screen`) agar tampil langsung di balik splash screen dengan jam & tanggal digital aktif.
+   - Mempertahankan otomasi pergantian server tengah malam (jam 00:00 tgl 16) serta auto-refresh harian jam 03:15 WIB.
+2. **Penerbitan Dokumen Resmi PDF & HTML:**
+   - Membuat script generator ReportLab (`generate_render_reactivation_pdf.py`) yang mencetak PDF 2 halaman A4:
+     - `PANDUAN_MENGEMBALIKAN_AKUN_RENDER.pdf`
+     - `PANDUAN_MENGEMBALIKAN_AKUN_RENDER.html`
+   - Dokumen mencakup tabel data akun, panduan 3 langkah aktivasi (unsuspend di Render, ubah saklar di GitHub, verifikasi tampilan TV), perbandingan kode mode perbaikan vs mode normal, serta tips otomasi 24 jam.
+
+### 3. Berkas Terkait
+1. `c:\Users\anthu\Documents\【Project】\DIGITALv304\PANDUAN_MENGEMBALIKAN_AKUN_RENDER.pdf` (Berkas PDF Panduan)
+2. `c:\Users\anthu\Documents\【Project】\DIGITALv304\PANDUAN_MENGEMBALIKAN_AKUN_RENDER.html` (Berkas HTML Interaktif & Siap Cetak)
+3. `c:\Users\anthu\Documents\【Project】\DIGITALv304\generate_render_reactivation_pdf.py` (Script ReportLab PDF Generator)
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 197)
+
+---
+
+## 📑 198. PENINGKATAN TIPOGRAFI & UKURAN TEKS KARTU PETUGAS SHOLAT JUM'AT PADA MODE PRAYER (2 OKTOBER 2026)
+
+### 1. Kebutuhan & Masalah Pengguna
+- Pengguna meminta agar pada halaman **Mode Prayer Sholat Jum'at** (Layar Khutbah & Sholat Jum'at Berjamaah):
+  1. Teks judul peran petugas (**"KHATIB"**, **"IMAM"**, **"MUADZIN"**, **"BILAL"**) diperbesar agar jauh lebih terbaca dari kejauhan shaf jamaah di masjid.
+  2. Teks nama-nama petugas Sholat Jum'at (contoh: *Ust. Faiq Rido*, *Ust. Rudy*, *Ust. Fatkhurokhman*) diperbesar sedikit lagi agar lebih dominan dan jelas.
+
+### 2. Solusi & Perbaikan Teknis
+1. **Peningkatan Skala Tipografi Badge Peran (`.officer-badge`):**
+   - Mengubah ukuran teks peran dari semula statis `11px - 13px` menjadi responsif skala besar: `font-size: clamp(15px, 1.25vw, 18px);`.
+   - Menaikkan ketebalan font menjadi `font-weight: 800;` dengan `letter-spacing: 2.5px;`.
+   - Mengubah warna teks menjadi emas cerah `#FFD700` dengan pendaran cahaya lembut `text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);`.
+   - Membesarkan ukuran ikon peran di sebelah teks (`font-size: 1.1em;`) dengan `gap: 8px;`.
+2. **Peningkatan Skala Tipografi Nama Petugas (`.officer-name`):**
+   - Menaikkan ukuran font nama dari semula `clamp(16px, 1.5vw, 20px)` menjadi lebih tegas: `font-size: clamp(19px, 1.75vw, 24px);`.
+   - Menaikkan ketebalan font nama menjadi `font-weight: 800;` dengan bayangan teks tajam `text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);` dan `line-height: 1.25;`.
+3. **Peningkatan Padding Kartu Petugas (`.officer-card`):**
+   - Padding ditingkatkan menjadi `14px 18px` dengan aksen border emas `border: 1.5px solid rgba(212, 175, 55, 0.5);` agar proporsi kartu seimbang dan nyaman dilihat pada layar TV resolusi 720p, 1080p, hingga 4K.
+4. **Peningkatan Versi Cache PWA (`sw.js`):**
+   - Menaikkan versi cache PWA Service Worker menjadi `'aljihad-signage-v3.2.9'` untuk memastikan browser display TV dan PWA langsung mengunduh CSS termutakhir tanpa tertahan cache lama.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/prayer-mode.html` (Pembaruan CSS kartu petugas Jum'at versi web statis)
+2. `resources/views/prayer-mode.blade.php` (Pembaruan CSS kartu petugas Jum'at versi Laravel Blade)
+3. `public/preview-prayer-mode.html` (Pembaruan CSS kartu petugas Jum'at preview)
+4. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.9`)
+5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+6. `LATEST_UPDATE.md` (Dokumentasi Bab 198)
