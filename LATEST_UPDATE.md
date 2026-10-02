@@ -8735,3 +8735,64 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.3`)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 202)
+---
+
+## 📑 203. PENAMBAHAN MENU PENGUMUMAN SHOLAT JUM'AT & LAPORAN KAS (KHUSUS BENDAHARA) DENGAN FITUR CETAK A4, DOWNLOAD FLYER PNG, & SEBAR WHATSAPP (2 OKTOBER 2026)
+
+### 1. Kebutuhan & Permintaan Pengguna
+- **Permintaan:**
+  1. "Hanya di dashboard bendahara, tambahkan menu Pengumuman Sholat Jum'at (ilustrasi seperti di gambar 2)."
+  2. "Kemudian tambahkan fitur print dan download flyer untuk di sebarkan di groups WhatsApp."
+- **Batasan Akses (RBAC):**
+  - Menu diletakkan eksklusif di bawah grup navigasi Bendahara Kas (`data-role="admin, bendahara"`) sehingga hanya terlihat oleh Bendahara Kas (`bendahara@aljihad.com`) dan Super Admin, serta tersembunyi total dari Petugas / Operator TV (`petugas`).
+  - Dilengkapi banner pintasan interaktif di dashboard utama Bendahara (`view-dashboard`).
+- **Format Visual Lembar Kas Jum'at (Persis Gambar 2):**
+  - **Kop Surat Resmi:** Dewan Kemakmuran Masjid (DKM) Masjid Jami' Al-Jihad Simpangan, Graha Asri, Cikarang Utara, Bekasi (`img/kop_pengumuman_jumat.png`).
+  - **Judul:** `PENGUMUMAN KEGIATAN SHOLAT JUM'AT, [Tanggal]`.
+  - **Bagian I. Laporan Kas Masjid:**
+    - a. Saldo Awal (dengan kotak badge highlight kuning `#ffff00` tebal border `#cccc00`).
+    - b. Rincian Pemasukan (Daftar item dinamis berderet titik-titik `.... = Rp [Nominal]`, dan Subtotal Jumlah Pemasukan berlatar hijau neon `#00ff00`).
+    - c. Rincian Pengeluaran (Daftar biaya majlis ta'lim, operasional ambulan, operasional masjid, dan Subtotal Jumlah Pengeluaran berlatar hijau neon `#00ff00`).
+    - d. Saldo Akhir (Perhitungan otomatis `Saldo Awal + Masuk - Keluar` berlatar kuning `#ffff00`).
+  - **Bagian II. Petugas Sholat Jum'at:**
+    - a. Imam & Khotib (Gus Faiq / Ust. Faiq Rido)
+    - b. Muadzin (Ust. Rudy)
+    - c. Bilal (Bp Mansur)
+    - d. Mc Maklumat (Bp Fatkhurokhman)
+    - *Catatan Penting:* Tetap mempertahankan pemisahan tegas peran Bilal dan Mc Maklumat sesuai arahan Bab 202.
+  - **Bagian III. HIMBAUAN Jamaah:**
+    - a. Diharapkan Jamaah Mematuhi Protokol kesehatan
+    - b. Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya
+    - c. Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent
+  - **Pengesahan & Titimangsa:**
+    - Titimangsa: `Simpangan, [Tanggal]`
+    - Kolom Kiri: Mengetahui Ketua (`Hadi Prayitno`) dengan gambar stempel resmi DKM Al-Jihad & TTD transparan asli (`img/stempel_ttd_ketua_trans.png`).
+    - Kolom Kanan: Dibuat Oleh Bendahara (`Utut Priyastya`) dengan gambar TTD asli transparan (`img/ttd_bendahara_trans.png`).
+
+### 2. Fitur-Fitur Khusus yang Diimplementasikan
+1. **Formulir Editor Interaktif (Kolom Kiri):**
+   - Pengaturan tanggal judul, tanggal periode kas, dan titimangsa dokumen.
+   - Editor baris dinamis (tambah & hapus baris pemasukan/pengeluaran secara fleksibel).
+   - Perhitungan otomatis real-time (*auto-recalculation*) untuk Saldo Akhir dan badge total.
+   - Tombol "Tarik Data Terkini": Mengambil nama petugas jum'at terbaru dan saldo kas utama riil dari database.
+   - Penyimpanan lokal persisten di `localStorage.setItem('pengumuman_jumat_data', ...)`.
+2. **Live Preview Lembar Kertas A4 (Kolom Kanan):**
+   - Menampilkan lembar A4 realistis dengan bayangan kertas, border rapi, garis titik pemimpin (*dotted leader lines*), dan badge warna persis fisik aslinya.
+3. **Fitur 1: Cetak Lembar Pengumuman A4 Resmi (`cetakPengumumanJumat`):**
+   - Membuka jendela pop-up cetak bersih berstandar CSS cetak `@page { size: A4 portrait; margin: 10mm 15mm; }` dan `-webkit-print-color-adjust: exact !important;` sehingga warna kuning dan hijau tercetak jelas di printer/PDF.
+4. **Fitur 2: Download Flyer PNG Resolusi Tinggi (`downloadFlyerPengumumanJumat`):**
+   - Merender kanvas HTML5 Canvas 2D murni beresolusi 1200 × 1650 px tanpa ketergantungan library luar (*zero dependency*).
+   - Menggambar kop surat, garis hijau ganda, teks terukur rapi, highlight box warna, dotted lines, himbauan, titimangsa, dan memuat stempel DKM serta tanda tangan Ketua & Bendahara.
+   - Mengunduh otomatis berkas PNG berkualitas tajam `Pengumuman_Sholat_Jumat_[Tanggal].png`.
+5. **Fitur 3: Bagikan ke WhatsApp (`bukaModalWAPengumumanJumat`):**
+   - Membuka modal khusus dengan teks siaran WhatsApp yang diformat lengkap (teks tebal bintang, emoji, rincian kas, petugas, himbauan, dan link website resmi).
+   - Tombol **Salin Teks Pesan** (ke clipboard) & Tombol **Buka WhatsApp Web / App** langsung.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penambahan menu sidebar, section-view `view-pengumuman-jumat`, modal WA, engine canvas flyer, print A4, dan banner pintasan dashboard)
+2. `web-statis/img/kop_pengumuman_jumat.png` (Kop surat DKM resolusi tinggi transparan)
+3. `web-statis/img/stempel_ttd_ketua_trans.png` (Stempel DKM & TTD Ketua transparan)
+4. `web-statis/img/ttd_bendahara_trans.png` (TTD Bendahara transparan)
+5. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.4` dan prapendaftaran aset gambar baru)
+6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+7. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 203)
