@@ -8931,3 +8931,61 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
 1. `web-statis/admin.html` (Pembaruan total lembar preview `#pjPrintableSheet`, fungsi `pjUpdatePreview`, `cetakPengumumanJumat`, dan `downloadFlyerPengumumanJumat`).
 2. `web-statis/sw.js` (Bump versi cache ke `aljihad-signage-v3.3.6`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 205).
+
+## 📑 206. PENYELARASAN 100% TEMPLATE LEMBAR PENGUMUMAN RESMI SHOLAT JUM'AT & LAPORAN KAS SESUAI DOKUMEN DESAIN USER (KOP SURAT GAMBAR 2, JUDUL CLEAN BOLD, 4 KARTU STATISTIK KAS MINIMALIS, TABEL DUA KOLOM TEAL & SLATE, 4 KARTU PETUGAS DENGAN BORDER WARNA KHAS, SERTA HIMBAUAN PENOMORAN 1, 2, 3) (2 OKTOBER 2026)
+
+### 1. Kebutuhan & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  - *"Tolong ganti template Pengumuman dengan dokumen ini. Isinya sesuaikan saja"* (disertai unggahan file PDF/gambar dokumen template resmi DKM).
+- **Hasil Analisis Dokumen Template User:**
+  1. **Kop Surat:** Menggunakan Kop Surat Gambar 2 asli (`img/kop_pengumuman_jumat.png`, resolusi tinggi) dengan garis hijau pemisah 2.5px di bawahnya.
+  2. **Judul Dokumen:** Format teks tebal terpusat bersih (*clean bold centered*), tanpa pita gradasi:
+     - `PENGUMUMAN KEGIATAN SHOLAT JUM'AT MASJID JAMI' AL JIHAD`
+     - `TANGGAL : [TANGGAL KEGIATAN]`
+  3. **I. Laporan Keuangan Kas Masjid:**
+     - 4 Kartu Statistik Ringkas:
+       - **SALDO AWAL:** Kartu putih berbingkai tipis dengan border kiri emas (`#f59e0b`), label emas, dan nominal merah-cokelat (`#92400e`).
+       - **PEMASUKAN (+):** Kartu putih dengan border kiri hijau (`#10b981`), label & nominal hijau (`#047857`).
+       - **PENGELUARAN (-):** Kartu putih dengan border kiri merah (`#ef4444`), label & nominal merah (`#dc2626`).
+       - **SALDO AKHIR KAS:** Kartu hijau tua (`#047857`), teks atas putih/abu-abu, dan nominal rupiah kuning terang (`#facc15`).
+     - **Tabel Dua Kolom Simetris:**
+       - **Kolom Kiri (Pemasukan Kas):** Header *Teal Green* (`#0d9488`), baris transaksi bernomor, dan bar subtotal hijau mint (`#ecfdf5`).
+       - **Kolom Kanan (Pengeluaran / Biaya):** Header *Dark Slate* (`#334155`), baris transaksi bernomor dengan nominal merah, dan bar subtotal merah muda (`#fef2f2`).
+  4. **II. Petugas Ibadah Sholat Jum'at:**
+     - 4 Kartu Petugas berjajar dengan garis penegas atas (*border-top: 3px solid ...*):
+       - **IMAM & KHOTIB:** Garis hijau (`#10b981`), teks hijau, nama: `Ust. Faiq Rido`.
+       - **MUADZIN:** Garis biru (`#0284c7`), teks biru, nama: `Ust. Rudy`.
+       - **BILAL SHOLAT:** Garis emas (`#f59e0b`), teks emas, nama: `Ust. Mansur` (*khusus petugas bilal*).
+       - **MC MAKLUMAT:** Garis ungu (`#8b5cf6`), teks ungu, nama: `Ust. Fatkhurokhman` (*khusus pembaca maklumat*).
+  5. **III. Himbauan & Tata Tertib Jamaah:**
+     - Box abu-abu sangat muda (`#fafafa`, border `#e2e8f0`) dengan penomoran urut standar `1.`, `2.`, `3.`:
+       - 1. Bagi Jamaah yang masih berada diluar masjid, dipersilakan masuk ke dalam masjid karena di dalam untuk mengisi shaf yang masih kosong
+       - 2. Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya
+       - 3. Bagi Jamaah yang membawa HP dimohon di Non Aktifkan / di Silent sementara
+  6. **Pengesahan & Titimangsa Dokumen:**
+     - Titimangsa kanan: `Dibuat di : Simpangan, 02 Oktober 2026`.
+     - Tanda tangan kiri: Mengetahui, **Ketua DKM Al-Jihad** (`Hadi Prayitno`) lengkap dengan stempel DKM Al-Jihad asli dan TTD.
+     - Tanda tangan kanan: Dibuat Oleh, **Bendahara Masjid Al Jihad** (`Utut Priyastya`) lengkap dengan TTD.
+  7. **Footer Dokumen:**
+     - Kiri: `Dokumen Resmi Pengumuman Ibadah & Kas Jum'at DKM Masjid Jami' Al-Jihad Simpangan`.
+     - Kanan: `Dibuat dari Sistem Informasi Digital Al Jihad`.
+
+---
+
+### 2. Implementasi Teknis & Sinkronisasi
+1. **Lembar Cetak A4 (`pjPrintableSheet`):**
+   - Struktur DOM dirombak 100% mengikuti spesifikasi visual PDF template pengguna.
+2. **Mesin Flyer Digital PNG (`downloadFlyerPengumumanJumat`):**
+   - Canvas 2D engine beresolusi 1200 × 1720 px disesuaikan untuk menggambar kop surat, judul clean bold, 4 kartu ringkasan, tabel dua kolom teal & slate, 4 kartu petugas warna, list himbauan, titimangsa, dan stempel/TTD dengan presisi tinggi.
+3. **Penyelarasan Nilai Baku Form (*Default Form Values*):**
+   - Nama default petugas diselaraskan ke `Ust. Faiq Rido`, `Ust. Rudy`, `Ust. Mansur`, `Ust. Fatkhurokhman`.
+   - Kalimat himbauan jamaah pada textarea diselaraskan dengan 3 butir kalimat dari template PDF pengguna.
+4. **PWA Service Worker:**
+   - Versi cache dinaikkan ke `aljihad-signage-v3.3.7`.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penyelarasan HTML preview `#pjPrintableSheet`, fungsi rendering `pjUpdatePreview`, `downloadFlyerPengumumanJumat`, dan `cetakPengumumanJumat`).
+2. `web-statis/sw.js` (Bump cache name ke `aljihad-signage-v3.3.7`).
+3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 206).
