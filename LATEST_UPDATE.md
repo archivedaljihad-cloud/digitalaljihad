@@ -8601,7 +8601,7 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Dibuat fungsi canvas resolusi tinggi **1080 × 1350 piksel (aspek rasio standar postingan/flyer WhatsApp 4:5)**:
      - **Palet Visual:** Radial Gradient Emerald Green islami (`#0a4226` ke `#01150b`) berpadu dengan garis bingkai ganda aksen emas murni (*Double Gold Border* `#D4AF37` dan `#FFD700`).
      - **Ornamen Islami:** Kaligrafi Bismillah bercahaya emas, ornamen sudut, dan watermark geometri islami halus.
-     - **Identitas Masjid:** Logo resmi Masjid Jami' Al-Jihad berbentuk lingkaran (*circular clipped*) dengan cincin emas berpendar, dilengkapi nama masjid dan alamat Graha Asri Cikarang Timur.
+     - **Identitas Masjid:** Logo resmi Masjid Jami' Al-Jihad berbentuk lingkaran (*circular clipped*) dengan cincin emas berpendar, dilengkapi nama masjid dan alamat Graha Asri, Simpangan, Cikarang Utara, Bekasi.
      - **Pita Judul Emas:** Kapsul gradasi emas bertuliskan `★ JADWAL PETUGAS SHOLAT JUM'AT ★`.
      - **Informasi Waktu & Durasi:** Tanggal sholat berbahasa Indonesia, waktu khutbah (11:45 WIB), dan durasi sholat pekan ini.
      - **4 Kartu Petugas Resmi:**
@@ -8662,3 +8662,31 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.1`)
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 200)
+
+---
+
+## 📑 201. PEMBETULAN ALAMAT RESMI MASJID PADA FLYER & BROADCAST WHATSAPP PETUGAS JUM'AT (2 OKTOBER 2026)
+
+### 1. Masalah & Koreksi Pengguna
+- Pengguna mengoreksi bahwa alamat masjid pada flyer dan teks pengumuman WhatsApp sebelumnya tertulis salah: `"Perumahan Graha Asri, Jatireja, Cikarang Timur - Bekasi"`.
+- Alamat resmi dan benar dari Masjid Jami' Al-Jihad adalah: **`"Simpangan, Cikarang Utara, Bekasi"`** (Kelurahan/Desa Simpangan, Kecamatan Cikarang Utara, Kabupaten Bekasi).
+
+### 2. Solusi & Perbaikan Teknis
+1. **Pembaruan Sub-header Alamat pada Canvas 2D Flyer (`generateFlyerJumatCanvas`):**
+   - Mengubah baris teks identitas alamat masjid di bawah nama masjid pada kanvas resolusi tinggi:
+     - **Sebelum:** `ctx.fillText("Perumahan Graha Asri, Jatireja, Cikarang Timur - Bekasi", 540, 298);`
+     - **Sesudah:** `ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 298);`
+2. **Pembaruan Teks Siaran Pengumuman WhatsApp (`updateFlyerWaBroadcastText`):**
+   - Mengubah baris alamat lokasi pada salinan teks broadcast:
+     - **Sebelum:** `📍 Jatireja, Cikarang Timur - Bekasi`
+     - **Sesudah:** `📍 Simpangan, Cikarang Utara, Bekasi`
+3. **Pembersihan Bersih (Clean-sweep) Sisa Istilah Lama:**
+   - Seluruh repositori dipindai dengan `git grep` untuk memastikan tidak ada lagi teks usang `Jatireja` maupun `Cikarang Timur` yang tertinggal.
+4. **Peningkatan Versi Service Worker PWA:**
+   - Menaikkan versi cache PWA Service Worker menjadi `'aljihad-signage-v3.3.2'` pada `web-statis/sw.js` agar perangkat pengguna segera memperbarui skrip dan aset flyer tanpa tertahan cache lama.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Perbaikan teks alamat pada kanvas flyer dan generator pesan WhatsApp)
+2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.2`)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+4. `LATEST_UPDATE.md` (Koreksi Bab 199 dan dokumentasi Bab 201)
