@@ -2077,7 +2077,7 @@
                                             <div class="p-3 bg-light rounded border h-100">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                                     <span class="font-weight-bold text-dark small">
-                                                        <i class="fas fa-user-friends text-success mr-1"></i> Petugas Ibadah Sholat Jum'at:
+                                                        <i class="fas fa-user-friends text-success mr-1"></i> Petugas Sholat Jum'at Hari Ini:
                                                     </span>
                                                     <span class="badge badge-light border text-muted" style="font-size: 10px;">Tersinkron Jadwal</span>
                                                 </div>
@@ -2096,7 +2096,7 @@
                                                     </div>
                                                     <div class="col-6">
                                                         <div class="p-2 bg-white rounded border small">
-                                                            <span class="text-muted d-block" style="font-size: 10px; font-weight: 700;">BILAL SHOLAT:</span>
+                                                            <span class="text-muted d-block" style="font-size: 10px; font-weight: 700;">BILAL:</span>
                                                             <strong class="text-dark d-block text-truncate" id="dashPjBilal">Ust. Mansur</strong>
                                                         </div>
                                                     </div>
@@ -4654,9 +4654,9 @@
                                                 <input type="text" id="pjInputMuadzin" class="form-control form-control-sm" value="Ust. Rudy" oninput="pjUpdatePreview()">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label class="font-weight-bold text-gray-800 small">c. Bilal Sholat:</label>
+                                                <label class="font-weight-bold text-gray-800 small">c. Bilal:</label>
                                                 <input type="text" id="pjInputBilal" class="form-control form-control-sm" value="Ust. Mansur" oninput="pjUpdatePreview()">
-                                                <small class="text-success"><i class="fas fa-check-circle"></i> Petugas Bilal Sholat</small>
+                                                <small class="text-success"><i class="fas fa-check-circle"></i> Petugas Bilal</small>
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="font-weight-bold text-gray-800 small">d. MC Maklumat:</label>
@@ -4875,7 +4875,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                                     <div style="font-weight: 800; font-size: 13.5px; color: #047857; text-transform: uppercase; letter-spacing: 0.5px;">
                                                         I. LAPORAN KEUANGAN KAS MASJID
                                                     </div>
-                                                    <div style="font-size: 11.5px; font-weight: 600; color: #64748b;">
+                                                    <div style="font-size: 13.5px; font-weight: 700; color: #475569;">
                                                         s/d Tanggal : <span id="pjPrevTanggalKasText">02 Oktober 2026</span>
                                                     </div>
                                                 </div>
@@ -4883,30 +4883,30 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                                 <!-- 4 KARTU STATISTIK SEJAJAR -->
                                                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px;">
                                                     <!-- Saldo Awal -->
-                                                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; border-radius: 4px; padding: 10px 12px; text-align: center;">
-                                                        <div style="font-size: 10px; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.5px;">SALDO AWAL</div>
-                                                        <div style="font-size: 14px; font-weight: 800; color: #92400e; margin-top: 3px;">
+                                                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; border-radius: 4px; padding: 10px 10px; text-align: center;">
+                                                        <div style="font-size: 12.5px; font-weight: 800; color: #92400e; text-transform: uppercase; letter-spacing: 0.5px;">SALDO AWAL</div>
+                                                        <div style="font-size: 16px; font-weight: 800; color: #92400e; margin-top: 4px;">
                                                             Rp <span id="pjPrevSaldoAwal">19.379.023</span>
                                                         </div>
                                                     </div>
                                                     <!-- Pemasukan (+) -->
-                                                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #10b981; border-radius: 4px; padding: 10px 12px; text-align: center;">
-                                                        <div style="font-size: 10px; font-weight: 700; color: #047857; text-transform: uppercase; letter-spacing: 0.5px;">PEMASUKAN (+)</div>
-                                                        <div style="font-size: 14px; font-weight: 800; color: #047857; margin-top: 3px;">
+                                                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #10b981; border-radius: 4px; padding: 10px 10px; text-align: center;">
+                                                        <div style="font-size: 12.5px; font-weight: 800; color: #047857; text-transform: uppercase; letter-spacing: 0.5px;">PEMASUKAN (+)</div>
+                                                        <div style="font-size: 16px; font-weight: 800; color: #047857; margin-top: 4px;">
                                                             Rp <span id="pjPrevTotalPemasukan">3.500.000</span>
                                                         </div>
                                                     </div>
                                                     <!-- Pengeluaran (-) -->
-                                                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #ef4444; border-radius: 4px; padding: 10px 12px; text-align: center;">
-                                                        <div style="font-size: 10px; font-weight: 700; color: #dc2626; text-transform: uppercase; letter-spacing: 0.5px;">PENGELUARAN (-)</div>
-                                                        <div style="font-size: 14px; font-weight: 800; color: #dc2626; margin-top: 3px;">
+                                                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #ef4444; border-radius: 4px; padding: 10px 10px; text-align: center;">
+                                                        <div style="font-size: 12.5px; font-weight: 800; color: #dc2626; text-transform: uppercase; letter-spacing: 0.5px;">PENGELUARAN (-)</div>
+                                                        <div style="font-size: 16px; font-weight: 800; color: #dc2626; margin-top: 4px;">
                                                             Rp <span id="pjPrevTotalPengeluaran">4.137.000</span>
                                                         </div>
                                                     </div>
                                                     <!-- Saldo Akhir Kas -->
-                                                    <div style="background: #047857; border: 1px solid #047857; border-radius: 4px; padding: 10px 12px; text-align: center; color: #ffffff;">
-                                                        <div style="font-size: 10px; font-weight: 700; color: #e2e8f0; text-transform: uppercase; letter-spacing: 0.5px;">SALDO AKHIR KAS</div>
-                                                        <div style="font-size: 15px; font-weight: 800; color: #facc15; margin-top: 3px;">
+                                                    <div style="background: #047857; border: 1px solid #047857; border-radius: 4px; padding: 10px 10px; text-align: center; color: #ffffff;">
+                                                        <div style="font-size: 12.5px; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px;">SALDO AKHIR KAS</div>
+                                                        <div style="font-size: 17.5px; font-weight: 900; color: #facc15; margin-top: 4px;">
                                                             Rp <span id="pjPrevSaldoAkhir">18.742.023</span>
                                                         </div>
                                                     </div>
@@ -4951,45 +4951,45 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                                 </div>
                                             </div>
 
-                                            <!-- BAGIAN II: PETUGAS IBADAH SHOLAT JUM'AT -->
+                                            <!-- BAGIAN II: PETUGAS SHOLAT JUM'AT HARI INI -->
                                             <div style="margin-bottom: 16px;">
-                                                <div style="font-weight: 800; font-size: 13.5px; color: #047857; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
-                                                    II. PETUGAS IBADAH SHOLAT JUM'AT
+                                                <div style="font-weight: 800; font-size: 14.5px; color: #047857; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                                                    II. PETUGAS SHOLAT JUM'AT HARI INI
                                                 </div>
                                                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
                                                     <!-- Imam & Khotib -->
                                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #10b981; border-radius: 4px; padding: 8px 10px;">
-                                                        <div style="font-size: 10.5px; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                        <div style="font-size: 12px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">
                                                             IMAM & KHOTIB
                                                         </div>
-                                                        <div id="pjPrevImamKhotib" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        <div id="pjPrevImamKhotib" style="font-weight: 800; font-size: 14.5px; color: #0f172a; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                             Ust. Faiq Rido
                                                         </div>
                                                     </div>
                                                     <!-- Muadzin -->
                                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #0284c7; border-radius: 4px; padding: 8px 10px;">
-                                                        <div style="font-size: 10.5px; font-weight: 700; color: #0284c7; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                        <div style="font-size: 12px; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.5px;">
                                                             MUADZIN
                                                         </div>
-                                                        <div id="pjPrevMuadzin" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        <div id="pjPrevMuadzin" style="font-weight: 800; font-size: 14.5px; color: #0f172a; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                             Ust. Rudy
                                                         </div>
                                                     </div>
-                                                    <!-- Bilal Sholat -->
+                                                    <!-- Bilal -->
                                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #f59e0b; border-radius: 4px; padding: 8px 10px;">
-                                                        <div style="font-size: 10.5px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px;">
-                                                            BILAL SHOLAT
+                                                        <div style="font-size: 12px; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            BILAL
                                                         </div>
-                                                        <div id="pjPrevBilal" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        <div id="pjPrevBilal" style="font-weight: 800; font-size: 14.5px; color: #0f172a; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                             Ust. Mansur
                                                         </div>
                                                     </div>
                                                     <!-- Mc Maklumat -->
                                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #8b5cf6; border-radius: 4px; padding: 8px 10px;">
-                                                        <div style="font-size: 10.5px; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                        <div style="font-size: 12px; font-weight: 800; color: #7c3aed; text-transform: uppercase; letter-spacing: 0.5px;">
                                                             MC MAKLUMAT
                                                         </div>
-                                                        <div id="pjPrevMaklumat" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        <div id="pjPrevMaklumat" style="font-weight: 800; font-size: 14.5px; color: #0f172a; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                             Ust. Fatkhurokhman
                                                         </div>
                                                     </div>
@@ -15566,8 +15566,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.fillText("I. LAPORAN KEUANGAN KAS MASJID", 40, curY);
 
                 ctx.textAlign = "right";
-                ctx.fillStyle = "#64748b";
-                ctx.font = "600 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillStyle = "#475569";
+                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
                 ctx.fillText("s/d Tanggal : " + (pjData.tanggalKas || pjData.tanggalJudul || '02 Oktober 2026'), 1160, curY);
 
                 // Hitung Keuangan
@@ -15583,7 +15583,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 curY += 16;
                 const cardGap = 16;
                 const cardW = (1120 - (cardGap * 3)) / 4;
-                const cardH = 80;
+                const cardH = 84;
                 const cardY = curY;
 
                 // Card 1: Saldo Awal
@@ -15595,11 +15595,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.fillStyle = "#f59e0b";
                 ctx.fillRect(40, cardY, 6, cardH);
                 ctx.textAlign = "center";
-                ctx.font = "bold 13px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("SALDO AWAL", 40 + (cardW / 2), cardY + 28);
                 ctx.fillStyle = "#92400e";
-                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("Rp " + pjFormatRupiah(saldoAwal), 40 + (cardW / 2), cardY + 58);
+                ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("SALDO AWAL", 40 + (cardW / 2), cardY + 30);
+                ctx.font = "bold 23px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("Rp " + pjFormatRupiah(saldoAwal), 40 + (cardW / 2), cardY + 62);
 
                 // Card 2: Pemasukan (+)
                 const c2X = 40 + cardW + cardGap;
@@ -15608,11 +15608,12 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.strokeRect(c2X, cardY, cardW, cardH);
                 ctx.fillStyle = "#10b981";
                 ctx.fillRect(c2X, cardY, 6, cardH);
+                ctx.textAlign = "center";
                 ctx.fillStyle = "#047857";
-                ctx.font = "bold 13px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("PEMASUKAN (+)", c2X + (cardW / 2), cardY + 28);
-                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("Rp " + pjFormatRupiah(totalIn), c2X + (cardW / 2), cardY + 58);
+                ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("PEMASUKAN (+)", c2X + (cardW / 2), cardY + 30);
+                ctx.font = "bold 23px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("Rp " + pjFormatRupiah(totalIn), c2X + (cardW / 2), cardY + 62);
 
                 // Card 3: Pengeluaran (-)
                 const c3X = c2X + cardW + cardGap;
@@ -15621,22 +15622,24 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.strokeRect(c3X, cardY, cardW, cardH);
                 ctx.fillStyle = "#ef4444";
                 ctx.fillRect(c3X, cardY, 6, cardH);
+                ctx.textAlign = "center";
                 ctx.fillStyle = "#dc2626";
-                ctx.font = "bold 13px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("PENGELUARAN (-)", c3X + (cardW / 2), cardY + 28);
-                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("Rp " + pjFormatRupiah(totalOut), c3X + (cardW / 2), cardY + 58);
+                ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("PENGELUARAN (-)", c3X + (cardW / 2), cardY + 30);
+                ctx.font = "bold 23px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("Rp " + pjFormatRupiah(totalOut), c3X + (cardW / 2), cardY + 62);
 
                 // Card 4: Saldo Akhir Kas
                 const c4X = c3X + cardW + cardGap;
                 ctx.fillStyle = "#047857";
                 ctx.fillRect(c4X, cardY, cardW, cardH);
-                ctx.fillStyle = "#e2e8f0";
-                ctx.font = "bold 13px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("SALDO AKHIR KAS", c4X + (cardW / 2), cardY + 28);
+                ctx.textAlign = "center";
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("SALDO AKHIR KAS", c4X + (cardW / 2), cardY + 30);
                 ctx.fillStyle = "#facc15";
-                ctx.font = "bold 21px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("Rp " + pjFormatRupiah(saldoAkhir), c4X + (cardW / 2), cardY + 58);
+                ctx.font = "bold 24px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("Rp " + pjFormatRupiah(saldoAkhir), c4X + (cardW / 2), cardY + 62);
 
                 // 4. DUA TABEL: PEMASUKAN & PENGELUARAN
                 curY = cardY + cardH + 20;
@@ -15725,42 +15728,43 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.textAlign = "right";
                 ctx.fillText("Rp " + pjFormatRupiah(totalOut), outX + colW - 14, curY + tableH - 12);
 
-                // 5. BAGIAN II: PETUGAS IBADAH SHOLAT JUM'AT (Poin 9)
+                // 5. BAGIAN II: PETUGAS SHOLAT JUM'AT HARI INI (Poin 9)
                 curY += tableH + 30;
                 ctx.textAlign = "left";
                 ctx.fillStyle = "#047857";
-                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-                ctx.fillText("II. PETUGAS IBADAH SHOLAT JUM'AT", 40, curY);
+                ctx.font = "bold 21px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("II. PETUGAS SHOLAT JUM'AT HARI INI", 40, curY);
 
                 curY += 14;
                 const petCards = [
                     { label: "IMAM & KHOTIB", val: pjData.petugas.imamKhotib || 'Ust. Faiq Rido', bar: "#10b981", textCol: "#059669" },
                     { label: "MUADZIN", val: pjData.petugas.muadzin || 'Ust. Rudy', bar: "#0284c7", textCol: "#0284c7" },
-                    { label: "BILAL SHOLAT", val: pjData.petugas.bilal || 'Ust. Mansur', bar: "#f59e0b", textCol: "#d97706" },
+                    { label: "BILAL", val: pjData.petugas.bilal || 'Ust. Mansur', bar: "#f59e0b", textCol: "#d97706" },
                     { label: "MC MAKLUMAT", val: pjData.petugas.maklumat || 'Ust. Fatkhurokhman', bar: "#8b5cf6", textCol: "#7c3aed" }
                 ];
 
+                const petCardH = 74;
                 petCards.forEach((c, idx) => {
                     const px = 40 + idx * (cardW + cardGap);
                     ctx.fillStyle = "#f8fafc";
                     ctx.strokeStyle = "#e2e8f0";
-                    ctx.fillRect(px, curY, cardW, 68);
-                    ctx.strokeRect(px, curY, cardW, 68);
+                    ctx.fillRect(px, curY, cardW, petCardH);
+                    ctx.strokeRect(px, curY, cardW, petCardH);
                     ctx.fillStyle = c.bar;
                     ctx.fillRect(px, curY, cardW, 4);
 
                     ctx.textAlign = "left";
                     ctx.fillStyle = c.textCol;
-                    ctx.font = "bold 13px 'Segoe UI', Arial, sans-serif";
-                    ctx.fillText(c.label, px + 14, curY + 26);
+                    ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+                    ctx.fillText(c.label, px + 14, curY + 28);
 
                     ctx.fillStyle = "#0f172a";
-                    ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
-                    ctx.fillText(c.val, px + 14, curY + 52);
+                    ctx.font = "bold 19px 'Segoe UI', Arial, sans-serif";
+                    ctx.fillText(c.val, px + 14, curY + 56);
                 });
 
                 // 6. BAGIAN III: HIMBAUAN & TATA TERTIB JAMAAH (4 Poin Tetap)
-                curY += 68 + 30;
+                curY += petCardH + 30;
                 ctx.textAlign = "left";
                 ctx.fillStyle = "#047857";
                 ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
@@ -15972,10 +15976,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             naskah += `   Total Pengeluaran sebesar: Rp ${pjFormatRupiah(totalOut)}\n`;
             naskah += `5. Sehingga SALDO AKHIR KAS MASJID saat ini adalah sebesar: Rp ${pjFormatRupiah(saldoAkhir)}\n\n`;
 
-            naskah += `II. PETUGAS IBADAH SHOLAT JUM'AT HARI INI:\n`;
+            naskah += `II. PETUGAS SHOLAT JUM'AT HARI INI:\n`;
             naskah += `- Imam & Khotib : ${pjData.petugas.imamKhotib || 'Ust. Faiq Rido'}\n`;
             naskah += `- Muadzin       : ${pjData.petugas.muadzin || 'Ust. Rudy'}\n`;
-            naskah += `- Bilal Sholat  : ${pjData.petugas.bilal || 'Ust. Mansur'}\n`;
+            naskah += `- Bilal         : ${pjData.petugas.bilal || 'Ust. Mansur'}\n`;
             naskah += `- MC Maklumat   : ${pjData.petugas.maklumat || 'Ust. Fatkhurokhman'}\n\n`;
 
             naskah += `III. HIMBAUAN & TATA TERTIB JAMAAH:\n`;
@@ -16064,10 +16068,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             waText += `• Pengeluaran / Biaya: *Rp ${pjFormatRupiah(totalOut)}*\n`;
             waText += `• *SALDO AKHIR KAS: Rp ${pjFormatRupiah(saldoAkhir)}*\n\n`;
 
-            waText += `*II. PETUGAS IBADAH SHOLAT JUM'AT*\n`;
+            waText += `*II. PETUGAS SHOLAT JUM'AT HARI INI*\n`;
             waText += `• Imam & Khotib: *${pjData.petugas.imamKhotib || 'Ust. Faiq Rido'}*\n`;
             waText += `• Muadzin: *${pjData.petugas.muadzin || 'Ust. Rudy'}*\n`;
-            waText += `• Bilal Sholat: *${pjData.petugas.bilal || 'Ust. Mansur'}*\n`;
+            waText += `• Bilal: *${pjData.petugas.bilal || 'Ust. Mansur'}*\n`;
             waText += `• MC Maklumat: *${pjData.petugas.maklumat || 'Ust. Fatkhurokhman'}*\n\n`;
 
             waText += `*III. HIMBAUAN & TATA TERTIB JAMAAH*\n`;

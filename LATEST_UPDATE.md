@@ -9122,3 +9122,42 @@ Semua aset telah diproses, diisolasi dari latar belakang menjadi format PNG tran
 4. 'web-statis/admin.html' (Integrasi layout stempel/TTD pada '#pjPrintableSheet', 'pjUpdatePreview', dan 'downloadFlyerPengumumanJumat').
 5. 'web-statis/sw.js' (Pembaruan cache PWA ke 'aljihad-signage-v3.4.0').
 6. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 209).
+
+---
+
+## BAB 210: OPTIMALISASI TIPOGRAFI & UKURAN FONT LEMBAR PENGUMUMAN KAS & PETUGAS JUM'AT UNTUK PEMBACA SENIOR (50+ TAHUN)
+
+### 1. Ringkasan Kebutuhan
+Menindaklanjuti kebutuhan riil di mimbar masjid, di mana petugas pembaca maklumat umumnya berusia 50 tahun ke atas yang membutuhkan teks berukuran lebih besar, kontras tegas, dan mudah dibaca tanpa squinting/kesulitan melihat. Dilakukan pembesaran skala font secara menyeluruh pada 10 komponen target:
+1. **SALDO AWAL**: Label diperbesar dari 10px menjadi 12.5px (font-weight: 800), nominal angka dinaikkan dari 14px ke 16px (font-weight: 800).
+2. **PEMASUKAN (+)**: Label diperbesar dari 10px menjadi 12.5px (font-weight: 800), nominal angka dinaikkan dari 14px ke 16px (font-weight: 800).
+3. **PENGELUARAN (-)**: Label diperbesar dari 10px menjadi 12.5px (font-weight: 800), nominal angka dinaikkan dari 14px ke 16px (font-weight: 800).
+4. **SALDO AKHIR KAS**: Label diperbesar dari 10px menjadi 12.5px (font-weight: 800), nominal angka dinaikkan dari 15px ke 17.5px (font-weight: 900 kuning emas).
+5. **IMAM & KHOTIB**: Label kartu dinaikkan dari 10.5px ke 12px (font-weight: 800), nama petugas dinaikkan dari 13px ke 14.5px (font-weight: 800).
+6. **MUADZIN**: Label kartu dinaikkan dari 10.5px ke 12px (font-weight: 800), nama petugas dinaikkan dari 13px ke 14.5px (font-weight: 800).
+7. **BILAL SHOLAT**: Disempurnakan dan disederhanakan menjadi **"BILAL"** saja (pada preview A4, flyer Canvas, dashboard widget, modal form, naskah maklumat, dan pesan WA), label kartu 12px, nama petugas 14.5px (font-weight: 800).
+8. **MC MAKLUMAT**: Label kartu dinaikkan dari 10.5px ke 12px (font-weight: 800), nama petugas dinaikkan dari 13px ke 14.5px (font-weight: 800).
+9. **s/d Tanggal : [Tanggal Kas]**: Font diperbesar dari 11.5px ke 13.5px dengan ketebalan 700 dan warna lebih kontras (#475569) agar batas periode kas terbaca jelas seketika.
+10. **PETUGAS IBADAH SHOLAT JUM'AT**: Diperbarui menjadi **"PETUGAS SHOLAT JUM'AT HARI INI"** dengan ukuran font judul dinaikkan ke 14.5px bold (dan 21px bold pada mesin flyer digital Canvas 2D).
+
+---
+
+### 2. Harmonisasi Multi-Platform & Multi-Engine
+Pembaruan ini diselaraskan di seluruh komponen terkait:
+- **Lembar Cetak & Preview A4 ('#pjPrintableSheet'):** Tipografi proporsional, grid padding 10px yang tetap muat presisi dalam 1 lembar A4 tanpa turun ke halaman kedua saat dicetak (*window.print*).
+- **Mesin Generator Flyer Digital Canvas 2D ('downloadFlyerPengumumanJumat'):**
+  - Font label kartu kas dinaikkan ke bold 15px, nominal saldo naik ke bold 23px / 24px, tinggi kartu disesuaikan ke 84px.
+  - Judul seksi II diubah ke "II. PETUGAS SHOLAT JUM'AT HARI INI" (font 21px bold).
+  - Kartu petugas dinaikkan label ke 15px bold, nama ke 19px bold, label 'BILAL' mandiri, tinggi kartu disesuaikan ke 74px.
+  - Tanggal kas dinaikkan ke 17px bold.
+- **Naskah Maklumat Text ('generateNaskahMaklumatText'):** Judul seksi II menjadi "II. PETUGAS SHOLAT JUM'AT HARI INI" dan nama baris menjadi "- Bilal : ...".
+- **Format Broadcast WhatsApp ('bukaModalWAPengumumanJumat'):** Menggunakan *II. PETUGAS SHOLAT JUM'AT HARI INI* dan • Bilal: *...*.
+- **Dashboard Executive Widget Bendahara:** Menampilkan "Petugas Sholat Jum'at Hari Ini:" dan "BILAL:".
+- **Formulir Modal Kelola Pengumuman:** Label diubah menjadi "c. Bilal:" dengan petunjuk "Petugas Bilal".
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. 'web-statis/admin.html' (Pembaruan tipografi '#pjPrintableSheet', flyer Canvas 2D, dashboard widget, modal input, naskah maklumat, dan WA broadcast).
+2. 'web-statis/sw.js' (Peningkatan versi cache PWA ke 'aljihad-signage-v3.4.1').
+3. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 210).
