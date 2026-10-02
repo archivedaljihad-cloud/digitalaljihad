@@ -5015,25 +5015,31 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                                     Dibuat di : <span style="font-weight: 700;" id="pjPrevTitimangsa">Simpangan, 02 Oktober 2026</span>
                                                 </div>
 
-                                                <!-- Dua Kolom TTD: Mengetahui Ketua & Dibuat Oleh Bendahara (Bersih untuk Tanda Tangan Fisik Asli) -->
+                                                <!-- Dua Kolom TTD: Mengetahui Ketua (Stempel & TTD Asli) & Dibuat Oleh Bendahara (TTD Asli) -->
                                                 <div style="display: flex; justify-content: space-between; text-align: center;">
                                                     <!-- Kolom Kiri: Ketua DKM -->
-                                                    <div style="width: 260px;">
+                                                    <div style="width: 280px; position: relative;">
                                                         <div style="font-size: 13px; color: #0f172a;">Mengetahui,</div>
                                                         <div style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-top: 2px;">Ketua DKM MASJID AL JIHAD</div>
-                                                        <div style="height: 75px;"></div>
-                                                        <span id="pjPrevImgKetua" style="display: none;"></span>
+                                                        <div style="height: 95px; display: flex; align-items: center; justify-content: center; position: relative; margin: 4px 0;">
+                                                            <!-- Stempel DKM Masjid Al-Jihad -->
+                                                            <img id="pjPrevImgStempel" src="img/stempelDKM_trans.png" onerror="this.onerror=null; this.src='stempelDKM.png';" alt="Stempel DKM" style="position: absolute; left: 15px; top: 2px; height: 90px; width: auto; max-width: 125px; object-fit: contain; opacity: 0.92; transform: rotate(-5deg); z-index: 1;">
+                                                            <!-- Tanda Tangan Ketua DKM -->
+                                                            <img id="pjPrevImgKetua" src="img/tandatanganketuaDKM_trans.png" onerror="this.onerror=null; this.src='tandatanganketuaDKM.jpg';" alt="Tanda Tangan Ketua DKM" style="position: relative; max-height: 90px; max-width: 140px; object-fit: contain; z-index: 2; margin-left: 36px;">
+                                                        </div>
                                                         <div style="font-weight: 800; font-size: 13.5px; text-decoration: underline; color: #0f172a;" id="pjPrevNamaKetua">
                                                             Hadi Prayitno
                                                         </div>
                                                     </div>
 
                                                     <!-- Kolom Kanan: Bendahara Masjid Al Jihad -->
-                                                    <div style="width: 260px;">
+                                                    <div style="width: 280px;">
                                                         <div style="font-size: 13px; color: #0f172a;">Dibuat Oleh,</div>
                                                         <div style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-top: 2px;">Bendahara MASJID AL JIHAD</div>
-                                                        <div style="height: 75px;"></div>
-                                                        <span id="pjPrevImgBendahara" style="display: none;"></span>
+                                                        <div style="height: 95px; display: flex; align-items: center; justify-content: center; position: relative; margin: 4px 0;">
+                                                            <!-- Tanda Tangan Bendahara -->
+                                                            <img id="pjPrevImgBendahara" src="img/tantatanganbendahara_trans.png" onerror="this.onerror=null; this.src='tantatanganbendahara.jpg';" alt="Tanda Tangan Bendahara" style="max-height: 90px; max-width: 130px; object-fit: contain;">
+                                                        </div>
                                                         <div style="font-weight: 800; font-size: 13.5px; text-decoration: underline; color: #0f172a;" id="pjPrevNamaBendahara">
                                                             Utut Priyastya
                                                         </div>
@@ -15332,9 +15338,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             // Preview TTD & Stempel Ketua
             const prevNamaKetua = document.getElementById('pjPrevNamaKetua');
             const prevImgKetua = document.getElementById('pjPrevImgKetua');
+            const prevImgStempel = document.getElementById('pjPrevImgStempel');
             if (prevNamaKetua) prevNamaKetua.textContent = ketua || 'Hadi Prayitno';
             if (prevImgKetua) {
-                prevImgKetua.style.display = 'none';
+                prevImgKetua.style.display = checkKetua ? 'inline-block' : 'none';
+            }
+            if (prevImgStempel) {
+                prevImgStempel.style.display = checkKetua ? 'block' : 'none';
             }
 
             // Preview TTD Bendahara
@@ -15342,7 +15352,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const prevImgBendahara = document.getElementById('pjPrevImgBendahara');
             if (prevNamaBendahara) prevNamaBendahara.textContent = bendahara || 'Utut Priyastya';
             if (prevImgBendahara) {
-                prevImgBendahara.style.display = 'none';
+                prevImgBendahara.style.display = checkBendahara ? 'inline-block' : 'none';
             }
         }
 
@@ -15804,51 +15814,119 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
                 ctx.fillText("Bendahara MASJID AL JIHAD", 960, curY + 24);
 
-                // Ruang Bersih Tanda Tangan & Penulisan Nama Penandatangan
-                // Nama Ketua DKM (Garis Bawah)
-                ctx.fillStyle = "#0f172a";
-                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText(pjData.ttd.namaKetua || 'Hadi Prayitno', 240, curY + 130);
-                const ketuaW = ctx.measureText(pjData.ttd.namaKetua || 'Hadi Prayitno').width;
-                ctx.beginPath();
-                ctx.moveTo(240 - (ketuaW / 2), curY + 134);
-                ctx.lineTo(240 + (ketuaW / 2), curY + 134);
-                ctx.stroke();
+                // Muat dan Gambar Cap Stempel & Tanda Tangan
+                let loadedAssets = 0;
+                const totalAssets = 3;
+                function checkFinishRender() {
+                    loadedAssets++;
+                    if (loadedAssets >= totalAssets) {
+                        // Footer Dokumen
+                        ctx.strokeStyle = "#cbd5e1";
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(40, H - 46);
+                        ctx.lineTo(1160, H - 46);
+                        ctx.stroke();
 
-                // Nama Bendahara (Garis Bawah)
-                ctx.fillText(pjData.ttd.namaBendahara || 'Utut Priyastya', 960, curY + 130);
-                const benW = ctx.measureText(pjData.ttd.namaBendahara || 'Utut Priyastya').width;
-                ctx.beginPath();
-                ctx.moveTo(960 - (benW / 2), curY + 134);
-                ctx.lineTo(960 + (benW / 2), curY + 134);
-                ctx.stroke();
+                        ctx.fillStyle = "#64748b";
+                        ctx.font = "500 13px 'Segoe UI', Arial, sans-serif";
+                        ctx.textAlign = "left";
+                        ctx.fillText("Dokumen Resmi Pengumuman Ibadah & Kas Jum'at DKM Masjid Jami' Al-Jihad Simpangan", 40, H - 24);
+                        ctx.textAlign = "right";
+                        ctx.fillText("Dibuat dari Sistem Informasi Digital Al Jihad", 1160, H - 24);
 
-                // Footer Dokumen
-                ctx.strokeStyle = "#cbd5e1";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(40, H - 46);
-                ctx.lineTo(1160, H - 46);
-                ctx.stroke();
+                        // Trigger Download
+                        const cleanTgl = (pjData.tanggalJudul || 'Jumat').replace(/[^a-zA-Z0-9]/g, '_');
+                        const link = document.createElement('a');
+                        link.download = `Flyer_Pengumuman_Jumat_${cleanTgl}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
 
-                ctx.fillStyle = "#64748b";
-                ctx.font = "500 13px 'Segoe UI', Arial, sans-serif";
-                ctx.textAlign = "left";
-                ctx.fillText("Dokumen Resmi Pengumuman Ibadah & Kas Jum'at DKM Masjid Jami' Al-Jihad Simpangan", 40, H - 24);
-                ctx.textAlign = "right";
-                ctx.fillText("Dibuat dari Sistem Informasi Digital Al Jihad", 1160, H - 24);
-
-                // Trigger Download
-                const cleanTgl = (pjData.tanggalJudul || 'Jumat').replace(/[^a-zA-Z0-9]/g, '_');
-                const link = document.createElement('a');
-                link.download = `Flyer_Pengumuman_Jumat_${cleanTgl}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-
-                if (typeof showCustomToast === 'function') {
-                    showCustomToast("Flyer Pengumuman Sholat Jum'at berhasil diunduh!", 'success');
+                        if (typeof showCustomToast === 'function') {
+                            showCustomToast("Flyer Pengumuman Sholat Jum'at berhasil diunduh!", 'success');
+                        }
+                    }
                 }
+
+                // 1. Gambar Stempel DKM
+                const imgStempel = new Image();
+                imgStempel.onload = function() {
+                    if (pjData.ttd.tampilkanKetua !== false) {
+                        ctx.save();
+                        ctx.translate(195, curY + 95);
+                        ctx.rotate(-5 * Math.PI / 180);
+                        ctx.globalAlpha = 0.92;
+                        ctx.drawImage(imgStempel, -75, -55, 150, 110);
+                        ctx.restore();
+                    }
+                    checkFinishRender();
+                };
+                imgStempel.onerror = function() { checkFinishRender(); };
+                imgStempel.src = 'img/stempelDKM_trans.png';
+
+                // 2. Gambar TTD Ketua
+                const imgKetua = new Image();
+                imgKetua.onload = function() {
+                    if (pjData.ttd.tampilkanKetua !== false) {
+                        ctx.drawImage(imgKetua, 195, curY + 45, 140, 100);
+                    }
+                    // Nama Ketua DKM (Garis Bawah)
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaKetua || 'Hadi Prayitno', 240, curY + 165);
+                    const ketuaW = ctx.measureText(pjData.ttd.namaKetua || 'Hadi Prayitno').width;
+                    ctx.beginPath();
+                    ctx.moveTo(240 - (ketuaW / 2), curY + 169);
+                    ctx.lineTo(240 + (ketuaW / 2), curY + 169);
+                    ctx.stroke();
+                    checkFinishRender();
+                };
+                imgKetua.onerror = function() {
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaKetua || 'Hadi Prayitno', 240, curY + 165);
+                    const ketuaW = ctx.measureText(pjData.ttd.namaKetua || 'Hadi Prayitno').width;
+                    ctx.beginPath();
+                    ctx.moveTo(240 - (ketuaW / 2), curY + 169);
+                    ctx.lineTo(240 + (ketuaW / 2), curY + 169);
+                    ctx.stroke();
+                    checkFinishRender();
+                };
+                imgKetua.src = 'img/tandatanganketuaDKM_trans.png';
+
+                // 3. Gambar TTD Bendahara
+                const imgBen = new Image();
+                imgBen.onload = function() {
+                    if (pjData.ttd.tampilkanBendahara !== false) {
+                        ctx.drawImage(imgBen, 898, curY + 45, 125, 100);
+                    }
+                    // Nama Bendahara (Garis Bawah)
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaBendahara || 'Utut Priyastya', 960, curY + 165);
+                    const benW = ctx.measureText(pjData.ttd.namaBendahara || 'Utut Priyastya').width;
+                    ctx.beginPath();
+                    ctx.moveTo(960 - (benW / 2), curY + 169);
+                    ctx.lineTo(960 + (benW / 2), curY + 169);
+                    ctx.stroke();
+                    checkFinishRender();
+                };
+                imgBen.onerror = function() {
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaBendahara || 'Utut Priyastya', 960, curY + 165);
+                    const benW = ctx.measureText(pjData.ttd.namaBendahara || 'Utut Priyastya').width;
+                    ctx.beginPath();
+                    ctx.moveTo(960 - (benW / 2), curY + 169);
+                    ctx.lineTo(960 + (benW / 2), curY + 169);
+                    ctx.stroke();
+                    checkFinishRender();
+                };
+                imgBen.src = 'img/tantatanganbendahara_trans.png';
             };
 
             imgKop.onerror = function() {

@@ -9078,3 +9078,47 @@ Menindaklanjuti instruksi visual pengguna:
 1. 'web-statis/admin.html' (Pembersihan label form, kotak putih judul, badge poin, penghapusan gambar stempel/TTD, dan perapihan generator Canvas).
 2. 'web-statis/sw.js' (Pembaruan cache PWA ke 'aljihad-signage-v3.3.9').
 3. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 208).
+
+
+---
+
+## BAB 209: INTEGRASI STEMPEL RESMI DKM & TANDA TANGAN ASLI KETUA DKM DAN BENDAHARA
+
+### 1. Ringkasan Permintaan & Pembaruan
+Pengguna telah menyediakan berkas fisik asli stempel dan tanda tangan pada folder 'C:\Users\anthu\Documents\【Digital WebSTATIS】':
+1. 'stempelDKM.png' = Stempel oval resmi Dewan Kemakmuran Masjid Al-Jihad Simpangan Cikarang Utara (ungu & pink).
+2. 'tandatanganketuaDKM.jpg' = Tanda tangan tinta hitam Ketua DKM (Hadi Prayitno).
+3. 'tantatanganbendahara.jpg' = Tanda tangan tinta biru royal Bendahara (Utut Priyastya).
+
+Semua aset telah diproses, diisolasi dari latar belakang menjadi format PNG transparan berkualitas tinggi (retina crisp), lalu diintegrasikan secara presisi ke dalam Lembar Cetak Pengumuman A4 ('#pjPrintableSheet') dan Mesin Generator Flyer Canvas 2D.
+
+---
+
+### 2. Rincian Teknis & Pengolahan Grafis
+1. **Ekstraksi Goresan Tinta & Transparansi Presisi:**
+   - **Tanda Tangan Ketua DKM ('tandatanganketuaDKM_trans.png'):** Mengisolasi goresan tinta hitam pekat dari latar belakang kotak-kotak (checkerboard JPEG) menjadi PNG transparan kristal tanpa cacat pixel.
+   - **Tanda Tangan Bendahara ('tantatanganbendahara_trans.png'):** Mengisolasi goresan tinta biru royal asli dari tekstur kertas berpori menjadi PNG transparan dengan kontras tinggi dan tepi anti-aliasing yang lembut.
+   - **Stempel DKM ('stempelDKM_trans.png'):** Menghapus background putih solid di luar dan di sela-sela kubah masjid, menyisakan cap stempel oval ungu dan ornamen pink transparan yang siap ditindihkan ke atas dokumen.
+   - **Optimasi Ukuran Retina:** Berkas dioptimasi ke dimensi ideal layar resolusi tinggi (700px) menggunakan interpolasi Lanczos berkualitas tinggi agar waktu muat seketika (*instant load*).
+2. **Penataan Layout Kolom Tanda Tangan Dokumen Cetak ('#pjPrintableSheet'):**
+   - **Kolom Kiri (Ketua DKM MASJID AL JIHAD - Hadi Prayitno):**
+     - Stempel ditempatkan di sisi kiri agak menindih tanda tangan Ketua DKM dengan sudut rotasi alami (-5 derajat) dan opacity 92%, merefleksikan cap basah fisik resmi surat keputusan masjid di Indonesia.
+     - Tanda tangan Ketua DKM ditempatkan di atas stempel (z-index: 2) dengan proporsi lebar 140px dan tinggi 90px.
+   - **Kolom Kanan (Bendahara MASJID AL JIHAD - Utut Priyastya):**
+     - Tanda tangan Bendahara tinta biru ditempatkan rapi di tengah dengan proporsi lebar 130px dan tinggi 90px persis di atas nama bergaris bawah.
+   - **Dukungan Checkbox Toggle:** Tetap terhubung dengan checkbox formulir 'Tampilkan Cap Stempel & TTD' dan 'Tampilkan TTD Bendahara' untuk opsi cetak lembar kosong jika diperlukan.
+3. **Mesin Flyer Digital Canvas 2D ('downloadFlyerPengumumanJumat'):**
+   - Engine Canvas 2D (1200 x 1720 px) secara otomatis memuat dan merender 'img/stempelDKM_trans.png', 'img/tandatanganketuaDKM_trans.png', dan 'img/tantatanganbendahara_trans.png'.
+   - Stempel digambar dengan rotasi matriks affine '-5 deg', menghasilkan file flyer PNG yang sempurna dan sangat mewah untuk dibagikan via WhatsApp grup pengurus.
+4. **PWA Service Worker:**
+   - Versi cache dinaikkan ke 'aljihad-signage-v3.4.0'.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi & Ditambahkan
+1. 'web-statis/img/stempelDKM_trans.png' & 'web-statis/img/stempelDKM.png' (Aset stempel resmi).
+2. 'web-statis/img/tandatanganketuaDKM_trans.png' & 'web-statis/img/tandatanganketuaDKM.jpg' (Aset TTD Ketua DKM).
+3. 'web-statis/img/tantatanganbendahara_trans.png' & 'web-statis/img/tantatanganbendahara.jpg' (Aset TTD Bendahara).
+4. 'web-statis/admin.html' (Integrasi layout stempel/TTD pada '#pjPrintableSheet', 'pjUpdatePreview', dan 'downloadFlyerPengumumanJumat').
+5. 'web-statis/sw.js' (Pembaruan cache PWA ke 'aljihad-signage-v3.4.0').
+6. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 209).
