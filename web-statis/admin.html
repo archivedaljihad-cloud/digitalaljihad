@@ -2360,13 +2360,18 @@
                          VIEW 3: SHOLAT JUMAT
                          ========================================== -->
                     <div id="view-sholat-jumat" class="section-view">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap" style="gap: 10px;">
                             <h4 class="font-weight-bold text-gray-800 mb-0">
                                 <i class="fas fa-calendar-alt text-success mr-2"></i> Petugas Sholat Jum'at
                             </h4>
-                            <button class="btn btn-success" onclick="simpanPetugasJumat()">
-                                <i class="fas fa-save mr-1"></i> Simpan Petugas Jum'at
-                            </button>
+                            <div class="d-flex" style="gap: 8px;">
+                                <button class="btn btn-outline-success font-weight-bold shadow-sm" onclick="bukaModalFlyerJumat()">
+                                    <i class="fab fa-whatsapp mr-1"></i> Buat Flyer WA
+                                </button>
+                                <button class="btn btn-success font-weight-bold shadow-sm" onclick="simpanPetugasJumat()">
+                                    <i class="fas fa-save mr-1"></i> Simpan Petugas Jum'at
+                                </button>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -2469,6 +2474,32 @@
                                                 <div class="jumat-officer-name" id="prevJumatMaklumat">Ust. Fatkhurokhman</div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- KARTU FITUR AUTO GENERATE FLYER WHATSAPP -->
+                                <div class="card p-3 mt-3 shadow-sm" style="border-radius: 16px; border: 1.5px solid #86efac; background: #f0fdf4;">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center mr-2 shadow-sm" style="width: 34px; height: 34px;">
+                                            <i class="fab fa-whatsapp" style="font-size: 18px;"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-weight-bold text-success mb-0" style="font-size: 14.5px;">
+                                                Flyer WhatsApp Otomatis
+                                            </h6>
+                                            <small class="text-muted" style="font-size: 11px;">Format Siap Sebar ke DKM & Jama'ah</small>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted mb-3" style="font-size: 12.5px; line-height: 1.45;">
+                                        Generate otomatis gambar flyer beresolusi tinggi (HD 1080×1350) beserta teks pengumuman yang siap disalin/dikirim ke grup WhatsApp.
+                                    </p>
+                                    <div class="d-flex flex-column" style="gap: 8px;">
+                                        <button class="btn btn-success btn-block font-weight-bold shadow-sm py-2" onclick="downloadFlyerJumatLangsung()">
+                                            <i class="fas fa-file-download mr-1"></i> Download Gambar Flyer (PNG)
+                                        </button>
+                                        <button class="btn btn-outline-success btn-block font-weight-bold py-2" onclick="bukaModalFlyerJumat()">
+                                            <i class="fas fa-eye mr-1"></i> Preview & Bagikan ke WhatsApp
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -5034,6 +5065,82 @@
 
     </div>
     <!-- End of Page Wrapper -->
+
+    <!-- =======================================================
+         MODAL AUTO GENERATE FLYER WHATSAPP SHOLAT JUMAT
+         ======================================================= -->
+    <div class="modal fade" id="modalFlyerJumat" tabindex="-1" role="dialog" aria-labelledby="modalFlyerJumatLabel" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 20px; border: 2px solid #10b981; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.4);">
+                <div class="modal-header d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #064e3b 0%, #022c19 100%); color: #fff; padding: 16px 24px; border-bottom: 1.5px solid rgba(212, 175, 55, 0.4);">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mr-2" style="width: 38px; height: 38px; background: rgba(37, 211, 102, 0.2); border: 1.5px solid #25D366;">
+                            <i class="fab fa-whatsapp text-white" style="font-size: 20px;"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title font-weight-bold mb-0 text-white" id="modalFlyerJumatLabel" style="font-size: 1.15rem;">
+                                Flyer Petugas Sholat Jum'at
+                            </h5>
+                            <small style="color: #a7f3d0; font-size: 12px;">Format Resmi Siap Sebar ke WhatsApp Group & Media Sosial</small>
+                        </div>
+                    </div>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9; outline: none;">
+                        <span aria-hidden="true" style="font-size: 28px;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4" style="background: #f8fafc;">
+                    <div class="row">
+                        <!-- Kolom Kiri: Canvas & Gambar Preview Flyer -->
+                        <div class="col-md-6 mb-3 mb-md-0 text-center">
+                            <div class="position-relative d-inline-block shadow-lg" style="border-radius: 16px; overflow: hidden; border: 3px solid #D4AF37; background: #02180d; max-width: 100%;">
+                                <canvas id="flyerCanvas" width="1080" height="1350" style="display: none;"></canvas>
+                                <img id="flyerPreviewImg" src="" alt="Flyer Preview" class="img-fluid" style="display: block; max-height: 460px; width: auto; object-fit: contain; border-radius: 13px;">
+                                <div id="flyerLoadingSpinner" class="d-none position-absolute inset-0 d-flex flex-column align-items-center justify-content-center text-white" style="background: rgba(2, 24, 13, 0.85); top:0; left:0; right:0; bottom:0;">
+                                    <div class="spinner-border text-warning mb-2" role="status"></div>
+                                    <span class="small font-weight-bold">Menggambar Flyer HD...</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-muted" style="font-size: 11.5px;">
+                                <i class="fas fa-check-circle text-success mr-1"></i> Format Portrait HD (1080 × 1350 px)
+                            </div>
+                        </div>
+
+                        <!-- Kolom Kanan: Teks WA & Tombol Aksi -->
+                        <div class="col-md-6 d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="alert alert-success d-flex align-items-center py-2 px-3 mb-3" style="border-radius: 12px; background: #ecfdf5; border-color: #a7f3d0; color: #065f46; font-size: 12px;">
+                                    <i class="fas fa-magic mr-2" style="font-size: 16px;"></i>
+                                    <span>Flyer otomatis dibuat sesuai data petugas terbaru di form!</span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="font-weight-bold d-flex justify-content-between align-items-center text-gray-800" style="font-size: 12.5px;">
+                                        <span><i class="fas fa-comment-alt text-success mr-1"></i> Teks Pengumuman WhatsApp:</span>
+                                        <button class="btn btn-sm btn-light border py-0 px-2 text-dark font-weight-bold" onclick="salinTeksFlyerWA()" style="font-size: 11px;">
+                                            <i class="fas fa-copy text-primary mr-1"></i> Salin Teks
+                                        </button>
+                                    </label>
+                                    <textarea id="flyerWaBroadcastText" class="form-control" rows="8" style="font-family: 'Consolas', monospace; font-size: 11.5px; line-height: 1.45; border-radius: 10px; background: #ffffff; resize: none;" readonly></textarea>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column" style="gap: 8px;">
+                                <button class="btn btn-success btn-block py-2 font-weight-bold shadow-sm d-flex align-items-center justify-content-center" onclick="downloadFlyerJumat()" style="font-size: 14px; border-radius: 12px;">
+                                    <i class="fas fa-download mr-2"></i> Download Gambar Flyer (PNG)
+                                </button>
+                                <button class="btn btn-outline-success btn-block py-2 font-weight-bold d-flex align-items-center justify-content-center" onclick="shareFlyerWhatsApp()" style="font-size: 13.5px; border-radius: 12px; border-width: 1.5px;">
+                                    <i class="fab fa-whatsapp mr-2" style="font-size: 17px;"></i> Buka WhatsApp & Kirim Pesan
+                                </button>
+                                <button class="btn btn-light btn-block py-1 text-muted font-weight-bold border" data-dismiss="modal" style="font-size: 12px; border-radius: 10px;">
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- =======================================================
          MODAL TAMBAH KAS
@@ -9644,6 +9751,10 @@
                     if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = bilalOnly || '-';
                     if (document.getElementById('dashJumatMaklumat')) document.getElementById('dashJumatMaklumat').textContent = maklumatOnly || '-';
                     alert(`Alhamdulillah! Petugas Sholat Jum'at dan durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
+                    // Otomatis generate dan buka modal flyer WhatsApp
+                    setTimeout(() => {
+                        bukaModalFlyerJumat(true);
+                    }, 400);
                 } else {
                     alert(`Petugas Jum'at gagal disimpan ke database, namun durasi sholat (${jumatDur} menit) telah diperbarui.`);
                 }
@@ -9673,6 +9784,377 @@
                 }
             });
         });
+
+        // =======================================================
+        // FITUR AUTO GENERATE FLYER WHATSAPP PETUGAS JUM'AT
+        // =======================================================
+        function drawCanvasRoundRect(ctx, x, y, width, height, radius, fill, stroke) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+            if (stroke) ctx.stroke();
+            ctx.restore();
+        }
+
+        async function renderFlyerJumatCanvas() {
+            const canvas = document.getElementById('flyerCanvas');
+            const previewImg = document.getElementById('flyerPreviewImg');
+            const spinner = document.getElementById('flyerLoadingSpinner');
+            if (!canvas) return;
+
+            if (spinner) spinner.classList.remove('d-none');
+
+            canvas.width = 1080;
+            canvas.height = 1350;
+            const ctx = canvas.getContext('2d');
+
+            // Ambil data terbaru dari form input
+            const tglVal = document.getElementById('jumatTanggal')?.value || new Date().toISOString().split('T')[0];
+            const khotibImam = document.getElementById('jumatKhotib')?.value.trim() || 'Ust. Faiq Rido';
+            const muadzin = document.getElementById('jumatMuadzin')?.value.trim() || 'Ust. Rudy';
+            const bilal = document.getElementById('jumatBilal')?.value.trim() || 'Ust. Mansur';
+            const maklumat = document.getElementById('jumatMaklumat')?.value.trim() || 'Ust. Fatkhurokhman';
+            const jumatDur = parseInt(document.getElementById('jumatDurasiInput')?.value) || 50;
+
+            // Format tanggal Indonesia
+            let tglFormatted = 'Jum\'at, ' + tglVal;
+            try {
+                const parts = tglVal.split('-');
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                    tglFormatted = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                }
+            } catch (e) {}
+
+            // 1. LATAR BELAKANG: Radial Emerald Green Mewah
+            const bgGrad = ctx.createRadialGradient(540, 675, 80, 540, 675, 780);
+            bgGrad.addColorStop(0, '#0a4226');
+            bgGrad.addColorStop(0.55, '#052917');
+            bgGrad.addColorStop(1, '#01150b');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, 1080, 1350);
+
+            // Pola geometri halus latar belakang
+            ctx.save();
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.05)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 1080; i += 70) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, 1350);
+                ctx.stroke();
+            }
+            for (let j = 0; j < 1350; j += 70) {
+                ctx.beginPath();
+                ctx.moveTo(0, j);
+                ctx.lineTo(1080, j);
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // 2. BINGKAI EMAS GANDA (DOUBLE GOLD BORDER)
+            ctx.strokeStyle = '#D4AF37';
+            ctx.lineWidth = 3.5;
+            drawCanvasRoundRect(ctx, 32, 32, 1016, 1286, 32, false, true);
+
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
+            ctx.lineWidth = 1.2;
+            drawCanvasRoundRect(ctx, 44, 44, 992, 1262, 24, false, true);
+
+            // Ornamen Sudut Emas
+            const corners = [
+                [56, 56], [1024, 56], [56, 1294], [1024, 1294]
+            ];
+            ctx.fillStyle = '#FFD700';
+            corners.forEach(([cx, cy]) => {
+                ctx.beginPath();
+                ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 3. KALIGRAFI BISMILLAH
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 30px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
+            ctx.shadowColor = 'rgba(255, 215, 0, 0.4)';
+            ctx.shadowBlur = 10;
+            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 95);
+            ctx.shadowBlur = 0;
+
+            // 4. LOGO MASJID
+            await new Promise((resolve) => {
+                const logoImg = new Image();
+                logoImg.crossOrigin = 'anonymous';
+                logoImg.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(540, 175, 54, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.clip();
+                    ctx.drawImage(logoImg, 486, 121, 108, 108);
+                    ctx.restore();
+
+                    // Cincin emas logo
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(540, 175, 55, 0, Math.PI * 2);
+                    ctx.strokeStyle = '#FFD700';
+                    ctx.lineWidth = 3;
+                    ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
+                    ctx.shadowBlur = 12;
+                    ctx.stroke();
+                    ctx.restore();
+                    resolve();
+                };
+                logoImg.onerror = () => {
+                    ctx.save();
+                    ctx.fillStyle = '#064e3b';
+                    ctx.beginPath();
+                    ctx.arc(540, 175, 54, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#FFD700';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    ctx.fillStyle = '#FFD700';
+                    ctx.font = '40px "Segoe UI Symbol", sans-serif';
+                    ctx.fillText('🕌', 540, 188);
+                    ctx.restore();
+                    resolve();
+                };
+                logoImg.src = 'img/logo-aljihad-circle.png';
+            });
+
+            // 5. NAMA MASJID & ALAMAT
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '800 36px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 268);
+
+            ctx.fillStyle = '#A7F3D0';
+            ctx.font = '600 18px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText("Perumahan Graha Asri, Jatireja, Cikarang Timur - Bekasi", 540, 298);
+
+            // 6. PITA / KAPSUL JUDUL JADWAL
+            const ribbonGrad = ctx.createLinearGradient(200, 325, 880, 325);
+            ribbonGrad.addColorStop(0, '#D4AF37');
+            ribbonGrad.addColorStop(0.5, '#FFD700');
+            ribbonGrad.addColorStop(1, '#B4821E');
+            ctx.fillStyle = ribbonGrad;
+            drawCanvasRoundRect(ctx, 230, 326, 620, 50, 25, true, false);
+
+            ctx.fillStyle = '#022413';
+            ctx.font = '900 22px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('★ JADWAL PETUGAS SHOLAT JUM\'AT ★', 540, 359);
+
+            // 7. TANGGAL & ESTIMASI WAKTU
+            ctx.fillStyle = '#FFD700';
+            ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
+            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.shadowBlur = 8;
+            ctx.fillText(tglFormatted, 540, 420);
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#E2E8F0';
+            ctx.font = '600 18px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText(`⏰ Waktu Khutbah & Sholat: 11:45 WIB  •  Durasi: ${jumatDur} Menit`, 540, 452);
+
+            // 8. EMPAT KARTU PETUGAS RESMI
+            const officers = [
+                { role: '🎙️  KHATIB & IMAM SHOLAT', name: khotibImam },
+                { role: '📢  MUADZIN', name: muadzin },
+                { role: '🤲  BILAL', name: bilal || '-' },
+                { role: '📜  PEMBACA MAKLUMAT', name: maklumat || '-' }
+            ];
+
+            const cardW = 880;
+            const cardH = 88;
+            const cardX = 100;
+            let startY = 485;
+            const cardGap = 16;
+
+            officers.forEach((off, idx) => {
+                const y = startY + idx * (cardH + cardGap);
+
+                // Background kartu
+                ctx.fillStyle = 'rgba(6, 44, 25, 0.88)';
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+                ctx.lineWidth = 1.5;
+                drawCanvasRoundRect(ctx, cardX, y, cardW, cardH, 18, true, true);
+
+                // Peran Petugas (Kiri Atas)
+                ctx.textAlign = 'left';
+                ctx.fillStyle = '#FFD700';
+                ctx.font = '800 17px "Poppins", "Segoe UI", sans-serif';
+                ctx.fillText(off.role, cardX + 32, y + 33);
+
+                // Nama Petugas (Bawah)
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '800 26px "Poppins", "Segoe UI", sans-serif';
+                let displayName = off.name;
+                if (ctx.measureText(displayName).width > (cardW - 64)) {
+                    ctx.font = '800 22px "Poppins", "Segoe UI", sans-serif';
+                }
+                ctx.fillText(displayName, cardX + 32, y + 68);
+            });
+
+            // 9. PLAKAT ADAB KHUTBAH JUM'AT (HADITS BUKHARI MUSLIM)
+            const hadithY = 918;
+            const hadithH = 228;
+            ctx.fillStyle = 'rgba(2, 22, 12, 0.72)';
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
+            ctx.lineWidth = 1.2;
+            drawCanvasRoundRect(ctx, cardX, hadithY, cardW, hadithH, 20, true, true);
+
+            // Badge Adab
+            const badgeW = 460;
+            ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+            ctx.lineWidth = 1;
+            drawCanvasRoundRect(ctx, 540 - (badgeW / 2), hadithY + 16, badgeW, 36, 18, true, true);
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFF2A8';
+            ctx.font = '700 15px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('✨ Adab Khutbah: Diam, Dengarkan & Simak Khutbah', 540, hadithY + 40);
+
+            // Sabda Rasulullah
+            ctx.fillStyle = '#F0DEAA';
+            ctx.font = '600 18px "Amiri", "Traditional Arabic", "Poppins", serif';
+            ctx.fillText('Rasulullah ﷺ bersabda:', 540, hadithY + 86);
+
+            // Teks Hadits
+            ctx.fillStyle = '#F8FAFC';
+            ctx.font = 'italic 500 20px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('"Jika engkau berkata kepada sahabatmu pada hari Jum\'at: \'Diamlah!\'', 540, hadithY + 124);
+            ctx.fillText('ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."', 540, hadithY + 158);
+
+            ctx.fillStyle = '#D4AF37';
+            ctx.font = '700 16px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('(HR. Bukhari no. 934 & Muslim no. 851)', 540, hadithY + 195);
+
+            // 10. FOOTER RESMI
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.35)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(100, 1262);
+            ctx.lineTo(980, 1262);
+            ctx.stroke();
+
+            ctx.fillStyle = '#94A3B8';
+            ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('Diterbitkan oleh DKM Masjid Jami\' Al-Jihad • Sistem Informasi Digital: digitalaljihad.my.id', 540, 1290);
+
+            // Update preview image di modal
+            const dataUrl = canvas.toDataURL('image/png');
+            if (previewImg) previewImg.src = dataUrl;
+            if (spinner) spinner.classList.add('d-none');
+
+            // Update teks WhatsApp Broadcast
+            updateFlyerWaBroadcastText(tglFormatted, khotibImam, muadzin, bilal, maklumat, jumatDur);
+        }
+
+        function updateFlyerWaBroadcastText(tglFormatted, khotibImam, muadzin, bilal, maklumat, jumatDur) {
+            const waText = 
+`🕌 *JADWAL PETUGAS SHOLAT JUM'AT* 🕌
+*MASJID JAMI' AL-JIHAD (GRAHA ASRI)*
+📍 Jatireja, Cikarang Timur - Bekasi
+
+📅 *Hari / Tanggal:* ${tglFormatted}
+⏰ *Waktu Khutbah & Sholat:* 11:45 WIB
+⏳ *Estimasi Durasi Khutbah:* ${jumatDur} Menit
+
+━━━━━━━━━━━━━━━━━━━━━━
+📋 *SUSUNAN PETUGAS PEKAN INI:*
+🎙️ *Khatib & Imam:* ${khotibImam}
+📢 *Muadzin:* ${muadzin}
+🤲 *Bilal:* ${bilal || '-'}
+📜 *Pembaca Maklumat:* ${maklumat || '-'}
+━━━━━━━━━━━━━━━━━━━━━━
+
+✨ *Adab Khutbah Jum'at:*
+_Rasulullah ﷺ bersabda:_
+_"Jika engkau berkata kepada sahabatmu pada hari Jum'at: 'Diamlah!' ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."_ (HR. Bukhari no. 934 & Muslim no. 851)
+
+Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering handphone demi kekhusyukan ibadah.
+
+🌐 *Website Resmi Masjid:* https://digitalaljihad.my.id`;
+
+            const ta = document.getElementById('flyerWaBroadcastText');
+            if (ta) ta.value = waText;
+        }
+
+        async function bukaModalFlyerJumat(isAuto = false) {
+            $('#modalFlyerJumat').modal('show');
+            await renderFlyerJumatCanvas();
+        }
+
+        function downloadFlyerJumat() {
+            const canvas = document.getElementById('flyerCanvas');
+            if (!canvas) return;
+            const tglVal = document.getElementById('jumatTanggal')?.value || 'terkini';
+            const link = document.createElement('a');
+            link.download = `Flyer-Petugas-Jumat-AlJihad-${tglVal}.png`;
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        async function downloadFlyerJumatLangsung() {
+            await renderFlyerJumatCanvas();
+            downloadFlyerJumat();
+        }
+
+        function salinTeksFlyerWA() {
+            const ta = document.getElementById('flyerWaBroadcastText');
+            if (!ta) return;
+            navigator.clipboard.writeText(ta.value).then(() => {
+                alert('Teks pengumuman WhatsApp berhasil disalin ke clipboard! Silakan paste (tempel) di grup WhatsApp.');
+            }).catch(() => {
+                ta.select();
+                document.execCommand('copy');
+                alert('Teks pengumuman WhatsApp berhasil disalin!');
+            });
+        }
+
+        async function shareFlyerWhatsApp() {
+            const canvas = document.getElementById('flyerCanvas');
+            const ta = document.getElementById('flyerWaBroadcastText');
+            const textToShare = ta ? ta.value : '';
+
+            // Coba Web Share API (cocok untuk HP / browser modern yang mendukung share file gambar langsung)
+            if (navigator.canShare && canvas) {
+                try {
+                    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                    const file = new File([blob], 'Flyer-Petugas-Jumat.png', { type: 'image/png' });
+                    if (navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            title: "Jadwal Petugas Sholat Jum'at Masjid Jami' Al-Jihad",
+                            text: textToShare,
+                            files: [file]
+                        });
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Web share ditutup/dibatalkan:', e);
+                }
+            }
+
+            // Fallback: Otomatis salin teks pengumuman dan buka WhatsApp
+            salinTeksFlyerWA();
+            const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(textToShare);
+            window.open(waUrl, '_blank');
+        }
 
         // =======================================================
         // PENGAJIAN RUTIN MALAM AHAD (SABTU MALAM)

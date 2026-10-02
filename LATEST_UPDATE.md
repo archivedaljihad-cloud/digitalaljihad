@@ -8578,3 +8578,55 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.2.9`)
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 6. `LATEST_UPDATE.md` (Dokumentasi Bab 198)
+
+---
+
+## 📑 199. FITUR AUTO GENERATE FLYER WHATSAPP & PNG RESMI PETUGAS SHOLAT JUM'AT (2 OKTOBER 2026)
+
+### 1. Kebutuhan & Masalah Pengguna
+- Pengguna meminta agar di halaman pengaturan **Petugas Sholat Jum'at** pada Admin Dashboard:
+  - Ketika admin/operator selesai mengatur atau menyimpan data petugas Sholat Jum'at, sistem **secara otomatis membuat (auto generate) flyer grafis** beresolusi tinggi yang siap diunduh (*download*).
+  - Flyer ini dirancang khusus untuk keperluan penyebaran pengumuman ke grup-grup WhatsApp jamaah masjid, lengkap dengan teks siaran (*broadcast copy*) satu-klik salin atau bagikan langsung.
+
+### 2. Solusi & Implementasi Teknis
+1. **Pemicu Otomatis Pasca-Simpan (`simpanPetugasJumat`):**
+   - Setelah data petugas Sholat Jum'at berhasil tersimpan ke database Supabase dan disinkronkan ke display TV (`res.ok`), sistem otomatis memanggil:
+     ```javascript
+     setTimeout(() => {
+         bukaModalFlyerJumat(true);
+     }, 400);
+     ```
+   - Modal pop-up modern langsung terbuka menyajikan visualisasi flyer utuh siap kirim tanpa mengharuskan pengguna membuka menu tambahan.
+2. **Mesin Desain Grafis Mandiri Menggunakan HTML5 Canvas 2D:**
+   - Dibuat fungsi canvas resolusi tinggi **1080 × 1350 piksel (aspek rasio standar postingan/flyer WhatsApp 4:5)**:
+     - **Palet Visual:** Radial Gradient Emerald Green islami (`#0a4226` ke `#01150b`) berpadu dengan garis bingkai ganda aksen emas murni (*Double Gold Border* `#D4AF37` dan `#FFD700`).
+     - **Ornamen Islami:** Kaligrafi Bismillah bercahaya emas, ornamen sudut, dan watermark geometri islami halus.
+     - **Identitas Masjid:** Logo resmi Masjid Jami' Al-Jihad berbentuk lingkaran (*circular clipped*) dengan cincin emas berpendar, dilengkapi nama masjid dan alamat Graha Asri Cikarang Timur.
+     - **Pita Judul Emas:** Kapsul gradasi emas bertuliskan `★ JADWAL PETUGAS SHOLAT JUM'AT ★`.
+     - **Informasi Waktu & Durasi:** Tanggal sholat berbahasa Indonesia, waktu khutbah (11:45 WIB), dan durasi sholat pekan ini.
+     - **4 Kartu Petugas Resmi:**
+       1. 🎙️ *KHATIB & IMAM SHOLAT*
+       2. 📢 *MUADZIN*
+       3. 🤲 *BILAL*
+       4. 📜 *PEMBACA MAKLUMAT*
+     - **Plakat Hadits Adab Khutbah:** Teks hadits riwayat HR. Bukhari no. 934 & Muslim no. 851 tentang adab diam dan menyimak khutbah.
+     - **Footer Resmi DKM:** Garis separator dan identitas sistem digital `digitalaljihad.my.id`.
+3. **Modal Dialog Interaktif (`#modalFlyerJumat`):**
+   - **Pratinjau Gambar Interaktif:** Menampilkan flyer dengan tampilan responsif dan indikator loading spinner saat rendering.
+   - **Tombol Unduh Langsung (`downloadFlyerJumat`):** Mengunduh file gambar PNG dengan penamaan otomatis terstruktur: `Flyer-Petugas-Jumat-AlJihad-[Tanggal].png`.
+   - **Generator Teks Siaran WhatsApp Terintegrasi:** Menghasilkan format pesan WhatsApp lengkap dengan emoji, daftar nama petugas, hadits, dan link website.
+   - **Tombol Satu-Klik Salin Teks (`salinTeksFlyerWA`):** Menyalin teks broadcast ke clipboard dengan fallback aman.
+   - **Tombol Bagikan ke WhatsApp (`shareFlyerWhatsApp`):** Memanfaatkan Web Share API (jika didukung perangkat/smartphone untuk langsung mengirim file gambar + caption) atau fallback tautan langsung `api.whatsapp.com/send`.
+4. **Aksesibilitas Manual Fleksibel:**
+   - Menambahkan tombol **"Buat Flyer WA"** di header halaman pengaturan petugas Jum'at.
+   - Menambahkan kartu kontrol **"Publikasi & Broadcast WhatsApp"** di bawah kotak pratinjau live TV dengan dua tombol cepat:
+     - *Download Gambar Flyer (PNG)*: Render dan unduh instan tanpa membuka modal.
+     - *Preview & Bagikan ke WhatsApp*: Buka modal pratinjau flyer.
+5. **Peningkatan Versi Service Worker PWA:**
+   - Menaikkan versi cache PWA Service Worker menjadi `'aljihad-signage-v3.3.0'` pada `web-statis/sw.js`.
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Formulir, pemicu simpan, modal flyer, dan fungsi canvas 2D generator)
+2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.0`)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 199)
