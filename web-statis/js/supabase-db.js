@@ -270,7 +270,7 @@
             try {
                 const client = getClient();
                 if (client) {
-                    const { data, error } = await client.from('sholat_jumat').select('*').order('id', { ascending: false }).limit(1);
+                    const { data, error } = await client.from('sholat_jumat').select('*').order('tanggal', { ascending: false }).order('id', { ascending: false }).limit(1);
                     if (!error && data && data.length > 0) {
                         localStorage.setItem('cached_sholat_jumat', JSON.stringify(data[0]));
                         return data[0];

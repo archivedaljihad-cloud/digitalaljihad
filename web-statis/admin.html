@@ -7316,7 +7316,7 @@
             ] = await Promise.allSettled([
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?order=tanggal.desc,id.desc`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan_ambulance?order=tanggal.desc,id.desc`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc&limit=1`, { headers }),
+                fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc,id.desc&limit=1`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers }),
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=id,name,email,role_id`, { headers }),
@@ -7369,18 +7369,56 @@
                         if (document.getElementById('jumatTanggal')) document.getElementById('jumatTanggal').value = j.tanggal || '';
                         if (document.getElementById('jumatKhotib')) document.getElementById('jumatKhotib').value = namaKhotibImam;
                         if (document.getElementById('jumatImam')) document.getElementById('jumatImam').value = namaKhotibImam;
-                        let bilalVal = j.bilal || '';
+                        let bilalVal = '';
                         let maklumatVal = '';
-                        if (bilalVal.includes('/')) {
-                            const bParts = bilalVal.split('/').map(s => s.trim());
+
+                        // 1. Ekstrak dari j.bilal jika menggunakan format terpadu "Nama Bilal / Nama Maklumat"
+                        const rawBilal = (j.bilal || '').trim();
+                        if (rawBilal.includes('/')) {
+                            const bParts = rawBilal.split('/').map(s => s.trim());
                             bilalVal = bParts[0] || '';
                             maklumatVal = bParts[1] || '';
+                        } else {
+                            bilalVal = rawBilal;
                         }
+
+                        // 2. Baca dari app_settings (running_text_pages) jika ada nilai tersimpan
+                        try {
+                            if (resSetSettled.status === 'fulfilled' && resSetSettled.value.ok) {
+                                const sList = await resSetSettled.value.clone().json();
+                                if (sList && sList[0] && sList[0].running_text_pages) {
+                                    const rt = sList[0].running_text_pages;
+                                    if (rt.jumat_maklumat) maklumatVal = rt.jumat_maklumat;
+                                    if (rt.jumat_bilal) bilalVal = rt.jumat_bilal;
+                                }
+                            }
+                        } catch (e) {}
+
+                        // 3. Fallback cache localStorage tersimpan
                         if (!maklumatVal) {
+                            try { maklumatVal = localStorage.getItem('cached_jumat_maklumat') || ''; } catch (e) {}
+                        }
+                        if (!bilalVal) {
+                            try { bilalVal = localStorage.getItem('cached_jumat_bilal') || ''; } catch (e) {}
+                        }
+
+                        // 4. Default nama resmi jika kosong
+                        if (!bilalVal) bilalVal = 'Ust. Mansur';
+                        if (!maklumatVal) maklumatVal = 'Ust. Fatkhurokhman';
+
+                        // 5. PROTEKSI KETAT: BEDAKAN PETUGAS BILAL DAN PEMBACA MAKLUMAT
+                        // Jangan biarkan bilal tertimpa menjadi sama dengan maklumat akibat riwayat data duplikat lama
+                        if (bilalVal.toLowerCase() === maklumatVal.toLowerCase()) {
                             try {
-                                const localMak = localStorage.getItem('cached_jumat_maklumat');
-                                if (localMak) maklumatVal = localMak;
-                            } catch (e) {}
+                                const cachedB = localStorage.getItem('cached_jumat_bilal');
+                                if (cachedB && cachedB.toLowerCase() !== maklumatVal.toLowerCase()) {
+                                    bilalVal = cachedB;
+                                } else {
+                                    bilalVal = 'Ust. Mansur';
+                                }
+                            } catch (e) {
+                                bilalVal = 'Ust. Mansur';
+                            }
                         }
 
                         if (document.getElementById('jumatMuadzin')) document.getElementById('jumatMuadzin').value = j.muadzin || '';
@@ -9706,18 +9744,49 @@
             try {
                 localStorage.setItem('cached_jumat_bilal', bilalOnly);
                 localStorage.setItem('cached_jumat_maklumat', maklumatOnly);
+                localStorage.setItem('cached_sholat_jumat', JSON.stringify(payload));
             } catch (e) {}
 
             try {
-                // 1. Simpan petugas Jum'at ke Supabase
-                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
-                    method: 'POST',
-                    headers: {
-                        ...getSupabaseHeaders(),
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(payload)
-                });
+                // 1. Simpan petugas Jum'at ke Supabase (Gunakan PATCH jika tanggal sudah ada agar tidak menumpuk baris usang)
+                let res;
+                try {
+                    const checkRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}&select=id`, {
+                        headers: getSupabaseHeaders()
+                    });
+                    let existingRows = [];
+                    if (checkRes.ok) existingRows = await checkRes.json();
+
+                    if (Array.isArray(existingRows) && existingRows.length > 0) {
+                        res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}`, {
+                            method: 'PATCH',
+                            headers: {
+                                ...getSupabaseHeaders(),
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                    } else {
+                        res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
+                            method: 'POST',
+                            headers: {
+                                ...getSupabaseHeaders(),
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                    }
+                } catch (dbErr) {
+                    console.warn('Fallback direct POST sholat_jumat:', dbErr);
+                    res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
+                        method: 'POST',
+                        headers: {
+                            ...getSupabaseHeaders(),
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                }
 
                 // 2. Simpan durasi sholat Jum'at & maklumat ke app_settings
                 let currentRt = {};

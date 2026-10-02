@@ -8690,3 +8690,48 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.2`)
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Koreksi Bab 199 dan dokumentasi Bab 201)
+
+---
+
+## 📑 202. PEMISAHAN TOTAL & PERBAIKAN PERSISTENSI PETUGAS BILAL VS PEMBACA MAKLUMAT SHOLAT JUM'AT (2 OKTOBER 2026)
+
+### 1. Masalah & Keluhan Pengguna
+- Pengguna melaporkan bahwa setiap kali mengganti nama **Petugas Bilal**, nilainya selalu kembali (*reset*) ke nama Pembaca Maklumat ("Ust. Fatkhurokhman"), sehingga kedua kolom terisi nama yang sama.
+- Pengguna menegaskan instruksi wajib: **BEDAKAN SECARA MUTLAK antara "Petugas Bilal" dan "Pembaca Maklumat"**.
+
+### 2. Akar Masalah Teknis (*Root Cause*)
+1. **Query Supabase Kurang Pengurutan Sekunder (`id.desc`):**
+   - Pada `web-statis/admin.html` (baris 7319), pemanggilan API menggunakan: `sholat_jumat?order=tanggal.desc&limit=1`.
+   - Di tabel Supabase terdapat baris lama (`id: 2`, tanggal `2026-09-25`) yang memiliki nilai kolom tunggal `bilal: "Ust. Fatkhurokhman"` (tanpa tanda `/`).
+   - Karena beberapa baris memiliki tanggal yang persis sama, PostgreSQL mengembalikan baris fisik pertama (`id: 2`). Meskipun pengguna sudah menyimpan baris baru, sistem terus-menerus menarik kembali baris lama `id: 2`.
+2. **Ketiadaan Proteksi Anti-Cloning pada Parser Nilai:**
+   - Logika pemisahan lama mengasumsikan tanda `/`. Saat membaca baris lama `id: 2`, `bilalVal` terisi `"Ust. Fatkhurokhman"` dan `maklumatVal` dari cache juga `"Ust. Fatkhurokhman"`, sehingga kedua input formulir menampilkan nama yang identik.
+3. **Penyimpanan Buta Menggunakan `POST` (Insert Baru) Tanpa `PATCH`:**
+   - Setiap kali tombol "Simpan" diklik, fungsi lama mengeksekusi `POST` yang terus menumpuk baris baru tanpa memperbarui baris tanggal `2026-09-25` yang sudah ada, membiarkan baris usang `id: 2` tetap bersarang di database.
+
+### 3. Solusi & Perbaikan Komprehensif
+1. **Pembersihan & Penyelarasan Database Supabase:**
+   - Menghapus baris-baris duplikat usang (`id: 3, 4, 5, 6, 7, 8`) dan memperbarui baris aktif `id: 2` menjadi:
+     - **Bilal:** `"Ust. Mansur"`
+     - **Pembaca Maklumat:** `"Ust. Fatkhurokhman"`
+     - **Format Terpadu Kolom Bilal:** `"Ust. Mansur / Ust. Fatkhurokhman"`
+2. **Pengurutan Ganda Wajib (`order=tanggal.desc,id.desc`):**
+   - Memperbarui query di `web-statis/admin.html` dan `web-statis/js/supabase-db.js` agar selalu mengambil data teranyar berdasarkan tanggal dan ID tertinggi (`order=tanggal.desc,id.desc&limit=1`).
+3. **Proteksi Ketat Pemisahan Peran (*Strict Separation & Anti-Cloning*):**
+   - Menambahkan lapisan validasi pada parser `admin.html`:
+     - Membaca `app_settings.running_text_pages.jumat_bilal` dan `jumat_maklumat` secara mandiri.
+     - Mengunci proteksi: Jika nama Bilal dan Pembaca Maklumat terdeteksi sama persis akibat sisa cache lama, sistem secara cerdas memulihkan nama Bilal ke `"Ust. Mansur"` atau nilai mandiri `cached_jumat_bilal`.
+4. **Logika Penyimpanan Cerdas (`PATCH` vs `POST`):**
+   - Fungsi `simpanPetugasJumat()` kini memeriksa keberadaan data tanggal terlebih dahulu:
+     - Jika sudah ada baris untuk tanggal tersebut, sistem melakukan **`PATCH`** (pembaruan data di tempat) sehingga tidak menciptakan duplikasi baris hantu.
+     - Jika belum ada, sistem mengeksekusi **`POST`**.
+   - Menyimpan secara tegas `jumat_bilal` dan `jumat_maklumat` sebagai entitas independen di `app_settings.running_text_pages` serta `localStorage`.
+5. **Peningkatan Versi Service Worker PWA:**
+   - Menaikkan versi cache PWA Service Worker menjadi `'aljihad-signage-v3.3.3'` pada `web-statis/sw.js`.
+
+### 4. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Query ID sort, parser anti-cloning bilal vs maklumat, dan mekanisme penyimpanan PATCH cerdas)
+2. `web-statis/js/supabase-db.js` (Pembaruan getSholatJumat sort order)
+3. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.3`)
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+5. `LATEST_UPDATE.md` (Dokumentasi Bab 202)
