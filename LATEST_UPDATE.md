@@ -8796,3 +8796,76 @@ Dibuat halaman slide visual premium dengan karakteristik:
 5. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.4` dan prapendaftaran aset gambar baru)
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 7. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 203)
+
+## 📑 204. RESTRUKTURISASI TATA LETAK FORMULIR PENGUMUMAN SHOLAT JUM'AT (2 BARIS x 2 KOLOM), INPUT HIMBAUAN TUNGGAL 4-5 BARIS, KOP SURAT HD (GAMBAR 2), & PREVIEW LEMBAR A4 RESMI FULL-WIDTH DI PALING BAWAH (2 OKTOBER 2026)
+
+### 1. Kebutuhan & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  1. Disebelah kanan Kotak *"Pengaturan Tanggal & Titimangsa"* ada Kotak *"Petugas Sholat Jum'at"*.
+  2. Disebelah kanan Kotak *"Rincian Kas Masjid (Pemasukan & Pengeluaran)"* ada kotak *"Himbauan Jamaah"*.
+  3. Kotak *"Himbauan Jamaah"* dibuatkan **1 kotak isian saja** yang bisa menampung **4~5 baris kalimat**.
+  4. Halaman preview berada di **bagian paling bawah** (full-width section).
+  5. Agar terlihat lebih jelas, gunakan **Gambar 2** sebagai kop suratnya (`img/kop_pengumuman_jumat.png`, resolusi tinggi 1024 × 205 px).
+  6. Judul kotak *"Pengaturan Tanggal & Titimangsa"* diganti menjadi *"1. Tanggal Pengumuman dibuat"*.
+  7. Desain pengumuman dibuat berkelas dan profesional dengan warna dasar kertas putih A4.
+
+---
+
+### 2. Implementasi & Penyesuaian Arsitektur Antarmuka
+
+#### A. Restrukturisasi Formulir Editor (2 Baris x 2 Kolom di Bagian Atas)
+Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formulir ditata ulang menjadi grid 2x2 yang simetris dan responsif:
+- **Baris 1 (Row 1):**
+  - **Kolom Kiri (col-xl-6):** Kotak **"1. Tanggal Pengumuman dibuat"**
+    - Input Tanggal Kegiatan Sholat Jum'at (`#pjInputTanggalJudul`).
+    - Input Periode Kas Masjid s/d Tanggal (`#pjInputTanggalKas`).
+    - Input Titimangsa Dokumen Tempat & Tanggal (`#pjInputTitimangsa`).
+  - **Kolom Kanan (col-xl-6):** Kotak **"2. Petugas Sholat Jum'at"**
+    - Input a. Imam & Khotib (`#pjInputImamKhotib`).
+    - Input b. Muadzin (`#pjInputMuadzin`).
+    - Input c. Bilal (`#pjInputBilal`) - *Eksklusif Petugas Bilal Sholat*.
+    - Input d. Mc Maklumat (`#pjInputMaklumat`) - *Eksklusif Pembaca Maklumat Jum'at*.
+    - Tombol pintas *"Ambil dari Jadwal Jum'at"* untuk otomatis mengisi dari jadwal hari ini.
+
+- **Baris 2 (Row 2):**
+  - **Kolom Kiri (col-xl-6):** Kotak **"3. Rincian Kas Masjid (Pemasukan & Pengeluaran)"**
+    - a. Saldo Awal (`#pjInputSaldoAwal`) dengan badge dinamis.
+    - b. Daftar Pemasukan dinamis (tambah, edit nominal/keterangan, hapus item) & Subtotal otomatis.
+    - c. Daftar Pengeluaran dinamis (tambah, edit nominal/keterangan, hapus item) & Subtotal otomatis.
+    - d. Saldo Akhir otomatis (`Saldo Awal + Masuk - Keluar`) dengan badge highlight kuning emas.
+  - **Kolom Kanan (col-xl-6):** Kotak **"4. Himbauan Jamaah & Pengesahan"**
+    - **Kotak Isian Tunggal (1 Kolom Textarea 4~5 Baris):** `<textarea id="pjInputHimbauan" rows="5">`.
+      - Pengguna cukup mengetik tiap baris himbauan dengan enter.
+      - Sistem secara otomatis memecah per baris dan memberikan penomoran alfabetis (`a., b., c., d.`) jika belum diketikkan manual.
+    - **Pengesahan Dokumen:**
+      - Ketua DKM: Input nama ketua & checkbox stempel resmi DKM Al-Jihad.
+      - Bendahara Kas: Input nama bendahara & checkbox tanda tangan resmi bendahara.
+
+---
+
+#### B. Live Preview Lembar Kertas Putih A4 Berkelas di Paling Bawah (Full-Width, Row 3)
+- Preview lembar cetak dipindahkan ke posisi paling bawah (`col-12`) dengan kontainer berlatar abu-abu netral (`#e2e8f0`) yang memberikan efek kontras tajam.
+- Lembar kertas putih didesain berstandar dimensi A4 prestisius (`max-width: 820px; min-width: 760px; margin: 0 auto; padding: 35px 45px; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.18); border: 1px solid #d1d5db;`).
+- **Kop Surat HD Gambar 2:** Menggunakan berkas asli `img/kop_pengumuman_jumat.png` (1024 × 205 px) yang tajam, jernih, dan tidak pecah.
+- **Tipografi & Garis Pemimpin (Dotted Leaders):** Menampilkan perataan titik-titik (`....`) dari keterangan menuju nominal rupiah, dengan box highlight kuning (`#ffff00`) untuk Saldo Awal & Saldo Akhir, serta hijau neon (`#00ff00`) untuk Subtotal Jumlah Pemasukan & Pengeluaran persis gaya dokumen fisik kas Al-Jihad.
+- **Pemisahan Peran Bilal & Maklumat:** Petugas Bilal (`Bp Mansur`) dan Mc Maklumat (`Bp Fatkhurokhman`) ditampilkan terpisah secara jelas pada tabel petugas.
+
+---
+
+#### C. Sinkronisasi Canvas 2D Flyer PNG & Modal WhatsApp
+1. **Flyer PNG (HTML5 Canvas 2D Engine):**
+   - Diperbarui dengan proporsi Kop Surat Gambar 2 (1120 × 224 px) pada resolusi kanvas 1200 × 1680 px.
+   - Parsing otomatis baris himbauan dari textarea untuk digambar ke kanvas dengan font antialiased.
+   - Stempel resmi DKM Al-Jihad & TTD Ketua serta TTD Bendahara di-render transparan pada posisi simetris bawah.
+2. **Modal Siaran WhatsApp:**
+   - Membaca baris textarea himbauan dan menyusun pesan rapi berbalut emoji untuk dibagikan ke grup WhatsApp warga Graha Asri Simpangan.
+3. **PWA Service Worker:**
+   - Versi cache dinaikkan ke `aljihad-signage-v3.3.5` untuk memastikan pembaruan langsung diterima oleh peramban pengguna.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Pembaruan grid formulir 2x2, input himbauan 1 kolom textarea, pemindahan preview lembar A4 ke bawah full-width, penyesuaian JS engine parsing himbauan, kanvas flyer, dan cetak A4).
+2. `web-statis/img/kop_pengumuman_jumat.png` (Aset Kop Surat resmi beresolusi tinggi 1024 × 205 px Gambar 2).
+3. `web-statis/sw.js` (Bump cache name ke `aljihad-signage-v3.3.5`).
+4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 204).

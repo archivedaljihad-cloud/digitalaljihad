@@ -4392,6 +4392,7 @@
                          VIEW 8.5: PENGUMUMAN SHOLAT JUM'AT & LAPORAN KAS (KHUSUS BENDAHARA)
                          ========================================== -->
                     <div id="view-pengumuman-jumat" class="section-view">
+                        <!-- Top Header & Actions -->
                         <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap" style="gap: 12px;">
                             <div>
                                 <h4 class="font-weight-bold text-gray-800 mb-0">
@@ -4418,14 +4419,14 @@
                             </div>
                         </div>
 
+                        <!-- BARIS 1: KIRI = TANGGAL PENGUMUMAN DIBUAT | KANAN = PETUGAS SHOLAT JUMAT -->
                         <div class="row">
-                            <!-- KOLOM KIRI: FORM EDITOR -->
+                            <!-- KIRI: KOTAK 1 (TANGGAL PENGUMUMAN DIBUAT) -->
                             <div class="col-xl-6 col-lg-6 col-md-12 mb-4">
-                                <!-- CARD 1: PENGATURAN TANGGAL & PERIODE -->
-                                <div class="card shadow mb-4">
+                                <div class="card shadow h-100">
                                     <div class="card-header py-3 bg-gradient-success text-white d-flex align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
-                                            <i class="fas fa-calendar-alt mr-2"></i> 1. Pengaturan Tanggal & Titimangsa
+                                            <i class="fas fa-calendar-alt mr-2"></i> 1. Tanggal Pengumuman dibuat
                                         </h6>
                                     </div>
                                     <div class="card-body">
@@ -4443,12 +4444,53 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- CARD 2: LAPORAN KAS MASJID -->
-                                <div class="card shadow mb-4">
+                            <!-- KANAN: KOTAK 2 (PETUGAS SHOLAT JUMAT) -->
+                            <div class="col-xl-6 col-lg-6 col-md-12 mb-4">
+                                <div class="card shadow h-100">
                                     <div class="card-header py-3 bg-gradient-success text-white d-flex align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
-                                            <i class="fas fa-coins mr-2"></i> 2. Rincian Kas Masjid (Pemasukan & Pengeluaran)
+                                            <i class="fas fa-user-friends mr-2"></i> 2. Petugas Sholat Jum'at
+                                        </h6>
+                                        <button type="button" class="btn btn-xs btn-light text-dark font-weight-bold" onclick="pjTarikPetugasTerkini()">
+                                            <i class="fas fa-magic mr-1 text-success"></i> Ambil dari Jadwal Jum'at
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label class="font-weight-bold text-gray-800 small">a. Imam & Khotib:</label>
+                                                <input type="text" id="pjInputImamKhotib" class="form-control form-control-sm" value="Gus Faiq" oninput="pjUpdatePreview()">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="font-weight-bold text-gray-800 small">b. Muadzin:</label>
+                                                <input type="text" id="pjInputMuadzin" class="form-control form-control-sm" value="Ust. Rudy" oninput="pjUpdatePreview()">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="font-weight-bold text-gray-800 small">c. Bilal:</label>
+                                                <input type="text" id="pjInputBilal" class="form-control form-control-sm" value="Bp Mansur" oninput="pjUpdatePreview()">
+                                                <small class="text-success"><i class="fas fa-check-circle"></i> Petugas Bilal Sholat</small>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="font-weight-bold text-gray-800 small">d. Mc Maklumat:</label>
+                                                <input type="text" id="pjInputMaklumat" class="form-control form-control-sm" value="Bp Fatkhurokhman" oninput="pjUpdatePreview()">
+                                                <small class="text-info"><i class="fas fa-bullhorn"></i> Pembaca Maklumat Jum'at</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 2: KIRI = RINCIAN KAS MASJID | KANAN = HIMBAUAN JAMAAH & PENGESAHAN -->
+                        <div class="row">
+                            <!-- KIRI: KOTAK 3 (RINCIAN KAS MASJID) -->
+                            <div class="col-xl-6 col-lg-6 col-md-12 mb-4">
+                                <div class="card shadow h-100">
+                                    <div class="card-header py-3 bg-gradient-success text-white d-flex align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
+                                            <i class="fas fa-coins mr-2"></i> 3. Rincian Kas Masjid (Pemasukan & Pengeluaran)
                                         </h6>
                                     </div>
                                     <div class="card-body">
@@ -4511,244 +4553,224 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- CARD 3: PETUGAS SHOLAT JUM'AT -->
-                                <div class="card shadow mb-4">
+                            <!-- KANAN: KOTAK 4 (HIMBAUAN JAMAAH - 1 KOTAK ISIAN 4~5 BARIS & PENGESAHAN) -->
+                            <div class="col-xl-6 col-lg-6 col-md-12 mb-4">
+                                <div class="card shadow h-100">
                                     <div class="card-header py-3 bg-gradient-success text-white d-flex align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
-                                            <i class="fas fa-user-friends mr-2"></i> 3. Petugas Sholat Jum'at
-                                        </h6>
-                                        <button type="button" class="btn btn-xs btn-light text-dark font-weight-bold" onclick="pjTarikPetugasTerkini()">
-                                            <i class="fas fa-magic mr-1 text-success"></i> Ambil dari Jadwal Jum'at
-                                        </button>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6 form-group">
-                                                <label class="font-weight-bold text-gray-800 small">a. Imam & Khotib:</label>
-                                                <input type="text" id="pjInputImamKhotib" class="form-control form-control-sm" value="Gus Faiq" oninput="pjUpdatePreview()">
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label class="font-weight-bold text-gray-800 small">b. Muadzin:</label>
-                                                <input type="text" id="pjInputMuadzin" class="form-control form-control-sm" value="Ust. Rudy" oninput="pjUpdatePreview()">
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label class="font-weight-bold text-gray-800 small">c. Bilal:</label>
-                                                <input type="text" id="pjInputBilal" class="form-control form-control-sm" value="Bp Mansur" oninput="pjUpdatePreview()">
-                                                <small class="text-success"><i class="fas fa-check-circle"></i> Petugas Bilal Sholat</small>
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label class="font-weight-bold text-gray-800 small">d. Mc Maklumat:</label>
-                                                <input type="text" id="pjInputMaklumat" class="form-control form-control-sm" value="Bp Fatkhurokhman" oninput="pjUpdatePreview()">
-                                                <small class="text-info"><i class="fas fa-bullhorn"></i> Pembaca Maklumat Jum'at</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- CARD 4: HIMBAUAN JAMAAH -->
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3 bg-gradient-success text-white d-flex align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
-                                            <i class="fas fa-bullhorn mr-2"></i> 4. Himbauan Jamaah
+                                            <i class="fas fa-bullhorn mr-2"></i> 4. Himbauan Jamaah & Pengesahan
                                         </h6>
                                     </div>
                                     <div class="card-body">
+                                        <!-- Kotak Isian Tunggal Himbauan Jamaah (4~5 baris) -->
                                         <div class="form-group">
-                                            <label class="font-weight-bold text-gray-800 small">a. Himbauan 1:</label>
-                                            <input type="text" id="pjInputHimbauanA" class="form-control form-control-sm" value="Diharapkan Jamaah Mematuhi Protokol kesehatan" oninput="pjUpdatePreview()">
+                                            <label class="font-weight-bold text-gray-800 small d-flex justify-content-between align-items-center">
+                                                <span><i class="fas fa-list-ol mr-1 text-success"></i> Kalimat Himbauan Jamaah:</span>
+                                                <span class="badge badge-light border text-muted" style="font-size: 0.75rem;">1 baris per poin himbauan</span>
+                                            </label>
+                                            <textarea id="pjInputHimbauan" class="form-control" rows="5" oninput="pjUpdatePreview()" style="font-size: 13px; line-height: 1.6; resize: vertical;" placeholder="Tuliskan 4-5 baris kalimat himbauan jamaah...">Diharapkan Jamaah Mematuhi Protokol kesehatan
+Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya
+Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent</textarea>
+                                            <small class="text-muted mt-1 d-block">
+                                                <i class="fas fa-info-circle mr-1 text-info"></i> Setiap baris otomatis menjadi poin berurutan (a, b, c, d, dst) pada lembar pengumuman dan flyer.
+                                            </small>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold text-gray-800 small">b. Himbauan 2:</label>
-                                            <input type="text" id="pjInputHimbauanB" class="form-control form-control-sm" value="Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya" oninput="pjUpdatePreview()">
-                                        </div>
-                                        <div class="form-group mb-0">
-                                            <label class="font-weight-bold text-gray-800 small">c. Himbauan 3:</label>
-                                            <input type="text" id="pjInputHimbauanC" class="form-control form-control-sm" value="Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent" oninput="pjUpdatePreview()">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- CARD 5: PENGESAHAN & TTD -->
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3 bg-gradient-success text-white d-flex align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
-                                            <i class="fas fa-file-signature mr-2"></i> 5. Pengesahan & Tanda Tangan
-                                        </h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6 form-group">
-                                                <label class="font-weight-bold text-gray-800 small">Ketua DKM:</label>
-                                                <input type="text" id="pjInputNamaKetua" class="form-control form-control-sm" value="Hadi Prayitno" oninput="pjUpdatePreview()">
-                                                <div class="custom-control custom-checkbox mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="pjCheckStempelKetua" checked onchange="pjUpdatePreview()">
-                                                    <label class="custom-control-label small text-muted" for="pjCheckStempelKetua">Tampilkan Stempel & TTD Ketua</label>
+                                        <hr class="my-3">
+
+                                        <!-- Pengesahan & Tanda Tangan -->
+                                        <div>
+                                            <label class="font-weight-bold text-gray-800 small mb-2">
+                                                <i class="fas fa-file-signature mr-1 text-success"></i> Pengesahan Dokumen (Tanda Tangan & Stempel):
+                                            </label>
+                                            <div class="row">
+                                                <div class="col-md-6 form-group mb-2">
+                                                    <label class="text-gray-800 small font-weight-bold mb-1">Ketua DKM:</label>
+                                                    <input type="text" id="pjInputNamaKetua" class="form-control form-control-sm" value="Hadi Prayitno" oninput="pjUpdatePreview()">
+                                                    <div class="custom-control custom-checkbox mt-2">
+                                                        <input type="checkbox" class="custom-control-input" id="pjCheckStempelKetua" checked onchange="pjUpdatePreview()">
+                                                        <label class="custom-control-label small text-muted" for="pjCheckStempelKetua">Tampilkan Stempel & TTD Ketua</label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label class="font-weight-bold text-gray-800 small">Bendahara Kas:</label>
-                                                <input type="text" id="pjInputNamaBendahara" class="form-control form-control-sm" value="Utut Priyastya" oninput="pjUpdatePreview()">
-                                                <div class="custom-control custom-checkbox mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="pjCheckTtdBendahara" checked onchange="pjUpdatePreview()">
-                                                    <label class="custom-control-label small text-muted" for="pjCheckTtdBendahara">Tampilkan TTD Bendahara</label>
+                                                <div class="col-md-6 form-group mb-2">
+                                                    <label class="text-gray-800 small font-weight-bold mb-1">Bendahara Kas:</label>
+                                                    <input type="text" id="pjInputNamaBendahara" class="form-control form-control-sm" value="Utut Priyastya" oninput="pjUpdatePreview()">
+                                                    <div class="custom-control custom-checkbox mt-2">
+                                                        <input type="checkbox" class="custom-control-input" id="pjCheckTtdBendahara" checked onchange="pjUpdatePreview()">
+                                                        <label class="custom-control-label small text-muted" for="pjCheckTtdBendahara">Tampilkan TTD Bendahara</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- KOLOM KANAN: LIVE PREVIEW LEMBAR PENGUMUMAN (SESUAI GAMBAR 2) -->
-                            <div class="col-xl-6 col-lg-6 col-md-12 mb-4">
-                                <div class="card shadow mb-4" style="position: sticky; top: 85px;">
-                                    <div class="card-header py-3 bg-dark text-white d-flex align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
-                                            <i class="fas fa-eye mr-2"></i> Live Preview Lembar Pengumuman (Sesuai Gambar 2)
-                                        </h6>
-                                        <span class="badge badge-light text-dark font-weight-bold">A4 Siap Cetak & Flyer</span>
+                        <!-- BARIS 3: BAGIAN PALING BAWAH = PREVIEW LEMBAR PENGUMUMAN A4 RESMI BERKELAS -->
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div class="card shadow">
+                                    <div class="card-header py-3 bg-dark text-white d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
+                                        <div>
+                                            <h6 class="m-0 font-weight-bold" style="color: #ffd700 !important;">
+                                                <i class="fas fa-eye mr-2"></i> Preview Lembar Pengumuman Resmi (Standar Kertas Putih A4 Berkelas)
+                                            </h6>
+                                            <small class="text-light" style="opacity: 0.85;">Tampilan presisi lembar pengumuman fisik kertas A4 & flyer digital beresolusi tinggi.</small>
+                                        </div>
+                                        <div class="d-flex flex-wrap" style="gap: 8px;">
+                                            <button type="button" class="btn btn-primary btn-sm font-weight-bold shadow-sm" onclick="cetakPengumumanJumat()">
+                                                <i class="fas fa-print mr-1"></i> Cetak Dokumen (A4)
+                                            </button>
+                                            <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="downloadFlyerPengumumanJumat()">
+                                                <i class="fas fa-file-image mr-1"></i> Download Flyer (PNG)
+                                            </button>
+                                            <button type="button" class="btn btn-info btn-sm font-weight-bold shadow-sm" onclick="bukaModalWAPengumumanJumat()">
+                                                <i class="fab fa-whatsapp mr-1"></i> Sebarkan ke WA
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="card-body p-3 bg-secondary" style="overflow-x: auto;">
-                                        <!-- KERTAS LEMBAR PENGUMUMAN A4 -->
-                                        <div id="pjPrintableSheet" style="background: #ffffff; color: #111111; max-width: 650px; min-width: 580px; margin: 0 auto; padding: 25px 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); border-radius: 3px; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.45;">
+                                    <div class="card-body p-4" style="background: #e2e8f0; overflow-x: auto;">
+                                        <!-- KERTAS LEMBAR PENGUMUMAN A4 ASLI (BERKELAS, BERDASAR PUTIH, SHADOW MEWAH) -->
+                                        <div id="pjPrintableSheet" style="background: #ffffff; color: #111111; max-width: 820px; min-width: 760px; margin: 0 auto; padding: 35px 45px; box-shadow: 0 10px 30px rgba(0,0,0,0.18); border-radius: 4px; border: 1px solid #d1d5db; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 13.5px; line-height: 1.5;">
                                             
-                                            <!-- KOP SURAT MASJID AL-JIHAD -->
-                                            <div style="margin-bottom: 15px; border-bottom: 3px double #1b5e20; padding-bottom: 5px;">
-                                                <img src="img/kop_pengumuman_jumat.png" alt="Kop DKM Masjid Jami Al-Jihad Simpangan" style="width: 100%; height: auto; display: block;">
+                                            <!-- KOP SURAT RESMI DKM AL-JIHAD (GAMBAR 2) -->
+                                            <div style="margin-bottom: 12px;">
+                                                <img src="img/kop_pengumuman_jumat.png" alt="Kop DKM Masjid Jami' Al-Jihad Simpangan" style="width: 100%; height: auto; display: block;">
                                             </div>
 
                                             <!-- JUDUL PENGUMUMAN -->
-                                            <div style="text-align: center; font-weight: 800; font-size: 15px; text-decoration: underline; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.5px; color: #000;">
-                                                PENGUMUMAN KEGIATAN SHOLAT JUM'AT, <span id="pjPrevTanggalJudul">02 Oktober 2026</span>
+                                            <div style="text-align: center; font-weight: 800; font-size: 16px; text-decoration: underline; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.75px; color: #000000;">
+                                                PENGUMUMAN KEGIATAN SHOLAT JUM'AT, <span id="pjPrevTanggalJudul">02 OKTOBER 2026</span>
                                             </div>
 
                                             <!-- BAGIAN I: LAPORAN KAS MASJID -->
-                                            <div style="margin-bottom: 14px;">
-                                                <div style="font-weight: 700; margin-bottom: 5px; color: #000;">
+                                            <div style="margin-bottom: 16px;">
+                                                <div style="font-weight: 700; margin-bottom: 6px; color: #000000; font-size: 14px;">
                                                     I. Laporan Kas Masjid s/d tgl <span id="pjPrevTanggalKas">02 Oktober 2026</span>
                                                 </div>
                                                 
                                                 <!-- a. Saldo Awal -->
-                                                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3px;">
-                                                    <span style="white-space: nowrap;">a. Saldo Awal</span>
-                                                    <span style="flex-grow: 1; border-bottom: 1px dotted #555; margin: 0 8px; height: 1em;"></span>
+                                                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px;">
+                                                    <span style="white-space: nowrap; font-weight: 500;">a. Saldo Awal</span>
+                                                    <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
                                                     <span style="white-space: nowrap; font-weight: 600;">
-                                                        = &nbsp;<span style="background-color: #ffff00; color: #000; font-weight: 800; padding: 1px 10px; border: 1px solid #cccc00; display: inline-block;">Rp &nbsp;<span id="pjPrevSaldoAwal">19.379.023</span></span>
+                                                        = &nbsp;<span style="background-color: #ffff00; color: #000000; font-weight: 800; padding: 2px 14px; border: 1px solid #cccc00; display: inline-block; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">Rp &nbsp;<span id="pjPrevSaldoAwal">19.379.023</span></span>
                                                     </span>
                                                 </div>
 
                                                 <!-- b. Pemasukan -->
-                                                <div style="margin-top: 4px;">
+                                                <div style="margin-top: 6px;">
                                                     <div style="font-weight: 600;">b. Pemasukan</div>
-                                                    <div id="pjPrevListPemasukan" style="margin-left: 14px;">
+                                                    <div id="pjPrevListPemasukan" style="margin-left: 18px;">
                                                         <!-- Dynamic list items -->
                                                     </div>
                                                     <!-- Subtotal Pemasukan -->
-                                                    <div style="margin-left: 14px; margin-top: 3px;">
-                                                        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed #000; padding-top: 3px;">
-                                                            <span style="font-weight: 800;">Jumlah</span>
+                                                    <div style="margin-left: 18px; margin-top: 4px;">
+                                                        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed #000000; padding-top: 4px;">
+                                                            <span style="font-weight: 800; font-size: 14px;">Jumlah</span>
                                                             <span style="font-weight: 600;">
-                                                                = &nbsp;<span style="background-color: #00ff00; color: #000; font-weight: 800; padding: 1px 10px; border: 1px solid #00cc00; display: inline-block;">Rp &nbsp;<span id="pjPrevTotalPemasukan">3.500.000</span></span>
+                                                                = &nbsp;<span style="background-color: #00ff00; color: #000000; font-weight: 800; padding: 2px 14px; border: 1px solid #00cc00; display: inline-block; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">Rp &nbsp;<span id="pjPrevTotalPemasukan">3.500.000</span></span>
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- c. Pengeluaran -->
-                                                <div style="margin-top: 6px;">
+                                                <div style="margin-top: 8px;">
                                                     <div style="font-weight: 600;">c. Pengeluaran</div>
-                                                    <div id="pjPrevListPengeluaran" style="margin-left: 14px;">
+                                                    <div id="pjPrevListPengeluaran" style="margin-left: 18px;">
                                                         <!-- Dynamic list items -->
                                                     </div>
                                                     <!-- Subtotal Pengeluaran -->
-                                                    <div style="margin-left: 14px; margin-top: 3px;">
-                                                        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed #000; padding-top: 3px;">
-                                                            <span style="font-weight: 800;">Jumlah</span>
+                                                    <div style="margin-left: 18px; margin-top: 4px;">
+                                                        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed #000000; padding-top: 4px;">
+                                                            <span style="font-weight: 800; font-size: 14px;">Jumlah</span>
                                                             <span style="font-weight: 600;">
-                                                                = &nbsp;<span style="background-color: #00ff00; color: #000; font-weight: 800; padding: 1px 10px; border: 1px solid #00cc00; display: inline-block;">Rp &nbsp;<span id="pjPrevTotalPengeluaran">4.137.000</span></span>
+                                                                = &nbsp;<span style="background-color: #00ff00; color: #000000; font-weight: 800; padding: 2px 14px; border: 1px solid #00cc00; display: inline-block; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">Rp &nbsp;<span id="pjPrevTotalPengeluaran">4.137.000</span></span>
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- d. Saldo Akhir -->
-                                                <div style="margin-top: 6px;">
+                                                <div style="margin-top: 8px;">
                                                     <div style="display: flex; align-items: baseline; justify-content: space-between;">
-                                                        <span style="white-space: nowrap;">d. Saldo Akhir</span>
-                                                        <span style="flex-grow: 1; border-bottom: 1px dotted #555; margin: 0 8px; height: 1em;"></span>
+                                                        <span style="white-space: nowrap; font-weight: 500;">d. Saldo Akhir</span>
+                                                        <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
                                                     </div>
-                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
-                                                        <span style="font-size: 12px; color: #333;">Saldo Awal (+) Jumlah Pemasukan (-) Jumlah Pengeluaran</span>
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 3px;">
+                                                        <span style="font-size: 12.5px; color: #222222; font-weight: 500;">Saldo Awal (+) Jumlah Pemasukan (-) Jumlah Pengeluaran</span>
                                                         <span style="white-space: nowrap; font-weight: 600;">
-                                                            = &nbsp;<span style="background-color: #ffff00; color: #000; font-weight: 800; padding: 1px 10px; border: 1px solid #cccc00; display: inline-block; font-size: 13.5px;"><span id="pjPrevSaldoAkhir">18.742.023</span></span>
+                                                            = &nbsp;<span style="background-color: #ffff00; color: #000000; font-weight: 800; padding: 3px 16px; border: 1px solid #cccc00; display: inline-block; font-size: 14.5px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);"><span id="pjPrevSaldoAkhir">18.742.023</span></span>
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <!-- BAGIAN II: PETUGAS SHOLAT JUM'AT -->
-                                            <div style="margin-bottom: 14px;">
-                                                <div style="font-weight: 700; margin-bottom: 4px; color: #000;">
+                                            <div style="margin-bottom: 16px;">
+                                                <div style="font-weight: 700; margin-bottom: 5px; color: #000000; font-size: 14px;">
                                                     II. Petugas Sholat Jum'at
                                                 </div>
                                                 <table style="width: 100%; border-collapse: collapse; margin-left: 4px;">
                                                     <tr>
-                                                        <td style="width: 140px; vertical-align: top; padding: 1px 0;">a. Imam & Khotib</td>
-                                                        <td style="width: 15px; vertical-align: top; padding: 1px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 1px 0; font-weight: 600;" id="pjPrevImamKhotib">Gus Faiq</td>
+                                                        <td style="width: 160px; vertical-align: top; padding: 2px 0;">a. Imam & Khotib</td>
+                                                        <td style="width: 15px; vertical-align: top; padding: 2px 0;">:</td>
+                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevImamKhotib">Gus Faiq</td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="vertical-align: top; padding: 1px 0;">b. Muadzin</td>
-                                                        <td style="vertical-align: top; padding: 1px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 1px 0; font-weight: 600;" id="pjPrevMuadzin">Ust. Rudy</td>
+                                                        <td style="vertical-align: top; padding: 2px 0;">b. Muadzin</td>
+                                                        <td style="vertical-align: top; padding: 2px 0;">:</td>
+                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevMuadzin">Ust. Rudy</td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="vertical-align: top; padding: 1px 0;">c. Bilal</td>
-                                                        <td style="vertical-align: top; padding: 1px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 1px 0; font-weight: 600;" id="pjPrevBilal">Bp Mansur</td>
+                                                        <td style="vertical-align: top; padding: 2px 0;">c. Bilal</td>
+                                                        <td style="vertical-align: top; padding: 2px 0;">:</td>
+                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevBilal">Bp Mansur</td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="vertical-align: top; padding: 1px 0;">d. Mc Maklumat</td>
-                                                        <td style="vertical-align: top; padding: 1px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 1px 0; font-weight: 600;" id="pjPrevMaklumat">Bp Fatkhurokhman</td>
+                                                        <td style="vertical-align: top; padding: 2px 0;">d. Mc Maklumat</td>
+                                                        <td style="vertical-align: top; padding: 2px 0;">:</td>
+                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevMaklumat">Bp Fatkhurokhman</td>
                                                     </tr>
                                                 </table>
                                             </div>
 
                                             <!-- BAGIAN III: HIMBAUAN -->
-                                            <div style="margin-bottom: 20px;">
-                                                <div style="font-weight: 700; margin-bottom: 4px; color: #000;">
+                                            <div style="margin-bottom: 22px;">
+                                                <div style="font-weight: 700; margin-bottom: 5px; color: #000000; font-size: 14px;">
                                                     III. HIMBAUAN
                                                 </div>
-                                                <div style="margin-left: 4px; line-height: 1.45;">
-                                                    <div>a. <span id="pjPrevHimbauanA">Diharapkan Jamaah Mematuhi Protokol kesehatan</span></div>
-                                                    <div>b. <span id="pjPrevHimbauanB">Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya</span></div>
-                                                    <div>c. <span id="pjPrevHimbauanC">Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent</span></div>
+                                                <div id="pjPrevContainerHimbauan" style="margin-left: 4px; line-height: 1.55;">
+                                                    <!-- Dynamic formatted lines from textarea -->
                                                 </div>
                                             </div>
 
                                             <!-- TANDA TANGAN & STEMPEL RESMI -->
-                                            <div style="display: flex; justify-content: space-between; text-align: center; margin-top: 15px;">
+                                            <div style="display: flex; justify-content: space-between; text-align: center; margin-top: 20px;">
                                                 <!-- Kolom Kiri: Mengetahui Ketua -->
-                                                <div style="width: 230px;">
+                                                <div style="width: 250px;">
                                                     <div style="visibility: hidden;">Placeholder Titimangsa</div>
-                                                    <div style="color: #000; font-size: 13px;">Mengetahui</div>
-                                                    <div style="color: #000; font-weight: 600; font-size: 13px;">Ketua</div>
-                                                    <div style="height: 90px; display: flex; align-items: center; justify-content: center; position: relative;">
-                                                        <img id="pjPrevImgKetua" src="img/stempel_ttd_ketua_trans.png" alt="Stempel & TTD Ketua" style="max-height: 90px; max-width: 145px; object-fit: contain;">
+                                                    <div style="color: #000000; font-size: 13.5px;">Mengetahui</div>
+                                                    <div style="color: #000000; font-weight: 600; font-size: 13.5px;">Ketua</div>
+                                                    <div style="height: 95px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                                        <img id="pjPrevImgKetua" src="img/stempel_ttd_ketua_trans.png" alt="Stempel & TTD Ketua" style="max-height: 95px; max-width: 155px; object-fit: contain;">
                                                     </div>
-                                                    <div style="font-weight: 700; text-decoration: underline; color: #000; font-size: 13.5px;" id="pjPrevNamaKetua">Hadi Prayitno</div>
+                                                    <div style="font-weight: 700; text-decoration: underline; color: #000000; font-size: 14px;" id="pjPrevNamaKetua">Hadi Prayitno</div>
                                                 </div>
 
                                                 <!-- Kolom Kanan: Dibuat Oleh Bendahara -->
-                                                <div style="width: 250px;">
-                                                    <div style="color: #000; font-size: 13px;"><span id="pjPrevTitimangsa">Simpangan, 02 Oktober 2026</span></div>
-                                                    <div style="color: #000; font-size: 13px;">Dibuat Oleh,</div>
-                                                    <div style="color: #000; font-weight: 600; font-size: 13px;">Bendahara</div>
-                                                    <div style="height: 90px; display: flex; align-items: center; justify-content: center; position: relative;">
-                                                        <img id="pjPrevImgBendahara" src="img/ttd_bendahara_trans.png" alt="TTD Bendahara" style="max-height: 90px; max-width: 145px; object-fit: contain;">
+                                                <div style="width: 270px;">
+                                                    <div style="color: #000000; font-size: 13.5px;"><span id="pjPrevTitimangsa">Simpangan, 02 Oktober 2026</span></div>
+                                                    <div style="color: #000000; font-size: 13.5px;">Dibuat Oleh,</div>
+                                                    <div style="color: #000000; font-weight: 600; font-size: 13.5px;">Bendahara</div>
+                                                    <div style="height: 95px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                                        <img id="pjPrevImgBendahara" src="img/ttd_bendahara_trans.png" alt="TTD Bendahara" style="max-height: 95px; max-width: 155px; object-fit: contain;">
                                                     </div>
-                                                    <div style="font-weight: 700; text-decoration: underline; color: #000; font-size: 13.5px;" id="pjPrevNamaBendahara">Utut Priyastya</div>
+                                                    <div style="font-weight: 700; text-decoration: underline; color: #000000; font-size: 14px;" id="pjPrevNamaBendahara">Utut Priyastya</div>
                                                 </div>
                                             </div>
 
@@ -4758,45 +4780,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- MODAL SEBARKAN WHATSAPP PENGUMUMAN JUMAT -->
-                    <div class="modal fade" id="modalWAPengumumanJumat" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                            <div class="modal-content shadow-lg border-0">
-                                <div class="modal-header bg-success text-white">
-                                    <h5 class="modal-title font-weight-bold">
-                                        <i class="fab fa-whatsapp mr-2"></i> Bagikan Lembar Pengumuman Jum'at ke WhatsApp
-                                    </h5>
-                                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body p-4">
-                                    <div class="alert alert-info py-2 px-3 small">
-                                        <i class="fas fa-info-circle mr-1"></i>
-                                        <strong>Tips:</strong> Klik <b>Download Flyer (PNG)</b> untuk menyimpan gambar resolusi tinggi, lalu salin teks di bawah ini untuk dikirimkan bersama gambar flyer di Group WhatsApp Jamaah!
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="font-weight-bold text-gray-800 small">Teks Siaran WhatsApp (Auto-Formatted):</label>
-                                        <textarea id="pjTextBroadcastWA" class="form-control" rows="12" style="font-family: monospace; font-size: 12.5px; background: #fdfdfd;"></textarea>
-                                    </div>
-                                </div>
-                                <div class="modal-footer bg-light">
-                                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Tutup</button>
-                                    <button type="button" class="btn btn-primary" onclick="salinTeksPengumumanWA()">
-                                        <i class="fas fa-copy mr-1"></i> Salin Teks Pesan
-                                    </button>
-                                    <button type="button" class="btn btn-success" onclick="bukaWhatsAppPengumuman()">
-                                        <i class="fab fa-whatsapp mr-1"></i> Buka WhatsApp Web / App
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- HIDDEN CANVAS UNTUK EXPORT FLYER PNG RESOLUSI TINGGI -->
-                    <canvas id="canvasFlyerPengumumanJumat" width="1200" height="1650" style="display: none;"></canvas>
-
 
                     <!-- ==========================================
                          VIEW 9: KELOLA 3 HAK AKSES PENGGUNA (SUPER ADMIN)
@@ -4927,6 +4910,45 @@
                                 </table>
                             </div>
                         </div>
+                    
+                        <!-- MODAL SEBARKAN WHATSAPP PENGUMUMAN JUMAT -->
+                        <div class="modal fade" id="modalWAPengumumanJumat" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content shadow-lg border-0">
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title font-weight-bold">
+                                            <i class="fab fa-whatsapp mr-2"></i> Bagikan Lembar Pengumuman Jum'at ke WhatsApp
+                                        </h5>
+                                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <div class="alert alert-info py-2 px-3 small">
+                                            <i class="fas fa-info-circle mr-1"></i>
+                                            <strong>Tips:</strong> Klik <b>Download Flyer (PNG)</b> untuk menyimpan gambar resolusi tinggi, lalu salin teks di bawah ini untuk dikirimkan bersama gambar flyer di Group WhatsApp Jamaah!
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold text-gray-800 small">Teks Siaran WhatsApp (Auto-Formatted):</label>
+                                            <textarea id="pjTextBroadcastWA" class="form-control" rows="12" style="font-family: monospace; font-size: 12.5px; background: #fdfdfd;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer bg-light">
+                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Tutup</button>
+                                        <button type="button" class="btn btn-primary" onclick="salinTeksPengumumanWA()">
+                                            <i class="fas fa-copy mr-1"></i> Salin Teks Pesan
+                                        </button>
+                                        <button type="button" class="btn btn-success" onclick="bukaWhatsAppPengumuman()">
+                                            <i class="fab fa-whatsapp mr-1"></i> Buka WhatsApp Web / App
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HIDDEN CANVAS UNTUK EXPORT FLYER PNG RESOLUSI TINGGI -->
+                        <canvas id="canvasFlyerPengumumanJumat" width="1200" height="1680" style="display: none;"></canvas>
+
                     </div>
 
 
@@ -14612,6 +14634,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 "Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya",
                 "Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent"
             ],
+            himbauanText: "Diharapkan Jamaah Mematuhi Protokol kesehatan\nBagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya\nBagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent",
             ttd: {
                 namaKetua: "Hadi Prayitno",
                 tampilkanKetua: true,
@@ -14648,9 +14671,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const elMuadzin = document.getElementById('pjInputMuadzin');
             const elBilal = document.getElementById('pjInputBilal');
             const elMaklumat = document.getElementById('pjInputMaklumat');
-            const elHimA = document.getElementById('pjInputHimbauanA');
-            const elHimB = document.getElementById('pjInputHimbauanB');
-            const elHimC = document.getElementById('pjInputHimbauanC');
+            const elHim = document.getElementById('pjInputHimbauan');
             const elKetua = document.getElementById('pjInputNamaKetua');
             const elCheckKetua = document.getElementById('pjCheckStempelKetua');
             const elBendahara = document.getElementById('pjInputNamaBendahara');
@@ -14666,9 +14687,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (elBilal) elBilal.value = pjData.petugas.bilal || '';
             if (elMaklumat) elMaklumat.value = pjData.petugas.maklumat || '';
 
-            if (elHimA) elHimA.value = pjData.himbauan[0] || '';
-            if (elHimB) elHimB.value = pjData.himbauan[1] || '';
-            if (elHimC) elHimC.value = pjData.himbauan[2] || '';
+            if (elHim) {
+                if (pjData.himbauanText) {
+                    elHim.value = pjData.himbauanText;
+                } else if (Array.isArray(pjData.himbauan) && pjData.himbauan.length > 0) {
+                    elHim.value = pjData.himbauan.join('\n');
+                }
+            }
 
             if (elKetua) elKetua.value = pjData.ttd.namaKetua || '';
             if (elCheckKetua) elCheckKetua.checked = (pjData.ttd.tampilkanKetua !== false);
@@ -14815,9 +14840,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const bilal = document.getElementById('pjInputBilal')?.value || pjData.petugas.bilal;
             const maklumat = document.getElementById('pjInputMaklumat')?.value || pjData.petugas.maklumat;
 
-            const himA = document.getElementById('pjInputHimbauanA')?.value || pjData.himbauan[0];
-            const himB = document.getElementById('pjInputHimbauanB')?.value || pjData.himbauan[1];
-            const himC = document.getElementById('pjInputHimbauanC')?.value || pjData.himbauan[2];
+            // Himbauan Textarea
+            const himbauanRaw = document.getElementById('pjInputHimbauan')?.value ?? pjData.himbauanText ?? '';
+            pjData.himbauanText = himbauanRaw;
+            const lines = himbauanRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            pjData.himbauan = lines;
 
             const ketua = document.getElementById('pjInputNamaKetua')?.value || pjData.ttd.namaKetua;
             const checkKetua = document.getElementById('pjCheckStempelKetua')?.checked ?? pjData.ttd.tampilkanKetua;
@@ -14829,7 +14856,6 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             pjData.tanggalKas = tglKas;
             pjData.titimangsa = titimangsa;
             pjData.petugas = { imamKhotib: imam, muadzin: muadzin, bilal: bilal, maklumat: maklumat };
-            pjData.himbauan = [himA, himB, himC];
             pjData.ttd = { namaKetua: ketua, tampilkanKetua: checkKetua, namaBendahara: bendahara, tampilkanBendahara: checkBendahara };
 
             // Update DOM preview
@@ -14837,7 +14863,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const elPrevTglKas = document.getElementById('pjPrevTanggalKas');
             const elPrevTitimangsa = document.getElementById('pjPrevTitimangsa');
 
-            if (elPrevTglJudul) elPrevTglJudul.textContent = tglJudul;
+            if (elPrevTglJudul) elPrevTglJudul.textContent = (tglJudul || '').toUpperCase();
             if (elPrevTglKas) elPrevTglKas.textContent = tglKas;
             if (elPrevTitimangsa) elPrevTitimangsa.textContent = titimangsa;
 
@@ -14847,9 +14873,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 contPrevIn.innerHTML = pjData.pemasukan.map((item, idx) => {
                     const isLast = (idx === pjData.pemasukan.length - 1);
                     return `
-                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2px;">
+                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3px;">
                             <span style="white-space: nowrap;">- ${escapeHtml(item.ket)}</span>
-                            <span style="flex-grow: 1; border-bottom: 1px dotted #555; margin: 0 8px; height: 1em;"></span>
+                            <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
                             <span style="white-space: nowrap; font-weight: 500;">= &nbsp;Rp &nbsp;${pjFormatRupiah(item.nominal)} ${isLast ? '+' : ''}</span>
                         </div>
                     `;
@@ -14862,9 +14888,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 contPrevOut.innerHTML = pjData.pengeluaran.map((item, idx) => {
                     const isLast = (idx === pjData.pengeluaran.length - 1);
                     return `
-                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2px;">
+                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3px;">
                             <span style="white-space: nowrap;">- ${escapeHtml(item.ket)}</span>
-                            <span style="flex-grow: 1; border-bottom: 1px dotted #555; margin: 0 8px; height: 1em;"></span>
+                            <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
                             <span style="white-space: nowrap; font-weight: 500;">= &nbsp;Rp &nbsp;${pjFormatRupiah(item.nominal)} ${isLast ? '+' : ''}</span>
                         </div>
                     `;
@@ -14882,14 +14908,22 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (prevBilal) prevBilal.textContent = bilal;
             if (prevMaklumat) prevMaklumat.textContent = maklumat;
 
-            // Preview Himbauan
-            const prevHimA = document.getElementById('pjPrevHimbauanA');
-            const prevHimB = document.getElementById('pjPrevHimbauanB');
-            const prevHimC = document.getElementById('pjPrevHimbauanC');
-
-            if (prevHimA) prevHimA.textContent = himA;
-            if (prevHimB) prevHimB.textContent = himB;
-            if (prevHimC) prevHimC.textContent = himC;
+            // Preview Himbauan (4~5 baris diformat dinamis)
+            const prevContHim = document.getElementById('pjPrevContainerHimbauan');
+            if (prevContHim) {
+                if (lines.length === 0) {
+                    prevContHim.innerHTML = '<div class="text-muted font-italic">- Tidak ada himbauan khusus -</div>';
+                } else {
+                    prevContHim.innerHTML = lines.map((line, idx) => {
+                        let formattedLine = line;
+                        if (!/^[a-zA-Z0-9][.)]s*/.test(line)) {
+                            const letter = String.fromCharCode(97 + idx);
+                            formattedLine = `${letter}. ${line}`;
+                        }
+                        return `<div style="margin-bottom: 2px;">${escapeHtml(formattedLine)}</div>`;
+                    }).join('');
+                }
+            }
 
             // Preview TTD & Stempel
             const prevNamaKetua = document.getElementById('pjPrevNamaKetua');
@@ -14981,7 +15015,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         }
 
         // =========================================================================
-        // FITUR 1: CETAK LEMBAR PENGUMUMAN A4
+        // FITUR 1: CETAK LEMBAR PENGUMUMAN A4 RESMI
         // =========================================================================
         function cetakPengumumanJumat() {
             simpanDataPengumumanJumat(false);
@@ -15020,14 +15054,14 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                             padding: 20px 30px;
                             font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
                             font-size: 13.5px;
-                            line-height: 1.45;
-                            color: #000;
+                            line-height: 1.5;
+                            color: #111;
                             background: #fff;
                         }
                         .pj-dots {
                             flex-grow: 1;
-                            border-bottom: 1px dotted #444;
-                            margin: 0 8px;
+                            border-bottom: 1px dotted #555;
+                            margin: 0 10px;
                             height: 1em;
                         }
                         img {
@@ -15037,7 +15071,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     </style>
                 </head>
                 <body>
-                    <div style="max-width: 750px; margin: 0 auto;">
+                    <div style="max-width: 800px; margin: 0 auto;">
                         ${sheetHtml}
                     </div>
                     ${printScriptTag}
@@ -15065,51 +15099,42 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
             const ctx = canvas.getContext('2d');
             const W = 1200;
-            const H = 1650;
+            const H = 1680;
             canvas.width = W;
             canvas.height = H;
 
-            // Background White
+            // Background Kertas Putih Bersih
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, W, H);
 
-            // Muat Kop Surat
+            // Muat Kop Surat Resmi Gambar 2
             const imgKop = new Image();
             imgKop.crossOrigin = 'anonymous';
             imgKop.onload = function() {
-                // Gambar Kop Surat (Margin kiri 50, lebar 1100, tinggi 145)
-                ctx.drawImage(imgKop, 50, 40, 1100, 145);
+                // Gambar Kop Surat (Lebar 1120, rasio 1024 x 205 -> tinggi 224)
+                const kopW = 1120;
+                const kopH = Math.round(kopW * (205 / 1024));
+                ctx.drawImage(imgKop, 40, 25, kopW, kopH);
 
-                // Garis Ganda Bawah Kop
-                ctx.strokeStyle = '#1b5e20';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.moveTo(50, 195);
-                ctx.lineTo(1150, 195);
-                ctx.stroke();
+                let curY = 25 + kopH + 35;
 
-                ctx.strokeStyle = '#1b5e20';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(50, 200);
-                ctx.lineTo(1150, 200);
-                ctx.stroke();
-
-                // Judul
+                // Judul Pengumuman
                 ctx.fillStyle = '#000000';
                 ctx.font = 'bold 24px "Segoe UI", Arial, sans-serif';
                 ctx.textAlign = 'center';
                 const judul = "PENGUMUMAN KEGIATAN SHOLAT JUM'AT, " + (pjData.tanggalJudul || '02 OKTOBER 2026').toUpperCase();
-                ctx.fillText(judul, W / 2, 245);
+                ctx.fillText(judul, W / 2, curY);
 
                 // Garis Bawah Judul
                 const titleWidth = ctx.measureText(judul).width;
                 ctx.lineWidth = 2;
                 ctx.strokeStyle = '#000000';
                 ctx.beginPath();
-                ctx.moveTo((W / 2) - (titleWidth / 2), 253);
-                ctx.lineTo((W / 2) + (titleWidth / 2), 253);
+                ctx.moveTo((W / 2) - (titleWidth / 2), curY + 8);
+                ctx.lineTo((W / 2) + (titleWidth / 2), curY + 8);
                 ctx.stroke();
+
+                curY += 45;
 
                 // Helper Gambar Box Highlight
                 function drawHighlightBox(text, x, y, bgColor, borderColor) {
@@ -15118,9 +15143,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     const textW = ctx.measureText(text).width;
                     const padX = 14;
                     const boxW = textW + (padX * 2);
-                    const boxH = 32;
+                    const boxH = 34;
                     const boxX = x;
-                    const boxY = y - 24;
+                    const boxY = y - 25;
 
                     ctx.fillStyle = bgColor;
                     ctx.fillRect(boxX, boxY, boxW, boxH);
@@ -15152,23 +15177,27 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.textAlign = 'left';
                 ctx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
                 ctx.fillStyle = '#000000';
-                ctx.fillText("I. Laporan Kas Masjid s/d tgl " + (pjData.tanggalKas || '02 Oktober 2026'), 50, 305);
+                ctx.fillText("I. Laporan Kas Masjid s/d tgl " + (pjData.tanggalKas || '02 Oktober 2026'), 50, curY);
+
+                curY += 38;
 
                 // a. Saldo Awal
                 ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("a. Saldo Awal", 50, 345);
+                ctx.fillText("a. Saldo Awal", 50, curY);
                 const labelAwalW = ctx.measureText("a. Saldo Awal").width;
-                drawDottedLine(50 + labelAwalW + 15, 870, 340);
+                drawDottedLine(50 + labelAwalW + 15, 870, curY - 5);
 
                 ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("= ", 880, 345);
-                drawHighlightBox("Rp   " + pjFormatRupiah(pjData.saldoAwal), 910, 345, '#ffff00', '#d4d400');
+                ctx.fillText("= ", 880, curY);
+                drawHighlightBox("Rp   " + pjFormatRupiah(pjData.saldoAwal), 910, curY, '#ffff00', '#d4d400');
+
+                curY += 45;
 
                 // b. Pemasukan
                 ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("b. Pemasukan", 50, 390);
+                ctx.fillText("b. Pemasukan", 50, curY);
+                curY += 35;
 
-                let curY = 425;
                 let totalIn = 0;
                 pjData.pemasukan.forEach((p, idx) => {
                     const isLast = (idx === pjData.pemasukan.length - 1);
@@ -15244,7 +15273,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 drawHighlightBox(pjFormatRupiah(saldoAkhir), 910, curY, '#ffff00', '#d4d400');
 
                 // ==================== II. PETUGAS SHOLAT JUMAT ====================
-                curY += 65;
+                curY += 60;
                 ctx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
                 ctx.fillText("II. Petugas Sholat Jum'at", 50, curY);
 
@@ -15271,15 +15300,24 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.fillText("III. HIMBAUAN", 50, curY);
 
                 curY += 35;
-                ctx.font = 'normal 18.5px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("a. " + (pjData.himbauan[0] || 'Diharapkan Jamaah Mematuhi Protokol kesehatan'), 50, curY);
-                curY += 30;
-                ctx.fillText("b. " + (pjData.himbauan[1] || 'Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya'), 50, curY);
-                curY += 30;
-                ctx.fillText("c. " + (pjData.himbauan[2] || 'Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent'), 50, curY);
+                const hLines = (pjData.himbauan && pjData.himbauan.length > 0) ? pjData.himbauan : [
+                    "Diharapkan Jamaah Mematuhi Protokol kesehatan",
+                    "Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya",
+                    "Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent"
+                ];
+
+                hLines.forEach((line, idx) => {
+                    let formattedLine = line;
+                    if (!/^[a-zA-Z0-9][.)]s*/.test(line)) {
+                        formattedLine = String.fromCharCode(97 + idx) + ". " + line;
+                    }
+                    ctx.font = 'normal 18.5px "Segoe UI", Arial, sans-serif';
+                    ctx.fillText(formattedLine, 50, curY);
+                    curY += 30;
+                });
 
                 // ==================== TITIMANGSA & PENGESAHAN ====================
-                curY += 55;
+                curY += 45;
 
                 // Muat Gambar Stempel Ketua & TTD Bendahara
                 const imgKetua = new Image();
@@ -15391,6 +15429,19 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
             const saldoAkhir = (parseInt(pjData.saldoAwal, 10) || 0) + totalIn - totalOut;
 
+            let himbauanWa = '';
+            if (Array.isArray(pjData.himbauan) && pjData.himbauan.length > 0) {
+                pjData.himbauan.forEach((line, idx) => {
+                    let l = line;
+                    if (!/^[a-zA-Z0-9][\.\)]\s*/.test(l)) {
+                        l = (idx + 1) + '. ' + l;
+                    }
+                    himbauanWa += l + '\n';
+                });
+            } else {
+                himbauanWa = '1. Diharapkan Jamaah Mematuhi Protokol kesehatan\n2. Kunci ganda kendaraan Anda\n3. Non-aktifkan / Silent HP selama ibadah\n';
+            }
+
             const msg = `*DEWAN KEMAKMURAN MASJID (DKM)*
 *MASJID JAMI' AL - JIHAD*
 📍 Perum Graha Asri, Jl. Citarum VIII, Simpangan, Cikarang Utara, Bekasi
@@ -15419,9 +15470,7 @@ ${rincianOut}  👉 *Jumlah Pengeluaran:* Rp ${pjFormatRupiah(totalOut)}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚠️ *III. HIMBAUAN JAMAAH*
-1. ${pjData.himbauan[0] || 'Diharapkan Jamaah Mematuhi Protokol kesehatan'}
-2. ${pjData.himbauan[1] || 'Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya'}
-3. ${pjData.himbauan[2] || 'Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent'}
+${himbauanWa.trim()}
 
 ${pjData.titimangsa || 'Simpangan, 02 Oktober 2026'}
 *Mengetahui,*
@@ -15464,7 +15513,6 @@ Bendahara Kas: *${pjData.ttd.namaBendahara || 'Utut Priyastya'}*
             const url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
             window.open(url, '_blank');
         }
-
 
         // Auto render dashboard widget saat dimuat
         document.addEventListener('DOMContentLoaded', function() {
