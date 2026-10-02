@@ -4634,144 +4634,206 @@ Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent</textarea>
                                     </div>
                                     <div class="card-body p-4" style="background: #e2e8f0; overflow-x: auto;">
                                         <!-- KERTAS LEMBAR PENGUMUMAN A4 ASLI (BERKELAS, BERDASAR PUTIH, SHADOW MEWAH) -->
-                                        <div id="pjPrintableSheet" style="background: #ffffff; color: #111111; max-width: 820px; min-width: 760px; margin: 0 auto; padding: 35px 45px; box-shadow: 0 10px 30px rgba(0,0,0,0.18); border-radius: 4px; border: 1px solid #d1d5db; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 13.5px; line-height: 1.5;">
+                                        <div id="pjPrintableSheet" style="background: #ffffff; color: #0f172a; max-width: 820px; min-width: 760px; margin: 0 auto; padding: 32px 38px 28px; box-shadow: 0 15px 40px rgba(0,0,0,0.14), 0 2px 10px rgba(0,0,0,0.06); border-radius: 6px; border: 1px solid #e2e8f0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; font-size: 13px; line-height: 1.45; position: relative;">
                                             
-                                            <!-- KOP SURAT RESMI DKM AL-JIHAD (GAMBAR 2) -->
-                                            <div style="margin-bottom: 12px;">
+                                            <!-- KOP SURAT RESMI DKM AL-JIHAD (GAMBAR 2 ASLI RESOLUSI TINGGI) -->
+                                            <div style="margin-bottom: 16px; border-bottom: 2px solid #047857; padding-bottom: 8px;">
                                                 <img src="img/kop_pengumuman_jumat.png" alt="Kop DKM Masjid Jami' Al-Jihad Simpangan" style="width: 100%; height: auto; display: block;">
                                             </div>
 
-                                            <!-- JUDUL PENGUMUMAN -->
-                                            <div style="text-align: center; font-weight: 800; font-size: 16px; text-decoration: underline; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.75px; color: #000000;">
-                                                PENGUMUMAN KEGIATAN SHOLAT JUM'AT, <span id="pjPrevTanggalJudul">02 OKTOBER 2026</span>
-                                            </div>
-
-                                            <!-- BAGIAN I: LAPORAN KAS MASJID -->
-                                            <div style="margin-bottom: 16px;">
-                                                <div style="font-weight: 700; margin-bottom: 6px; color: #000000; font-size: 14px;">
-                                                    I. Laporan Kas Masjid s/d tgl <span id="pjPrevTanggalKas">02 Oktober 2026</span>
+                                            <!-- HEADER RIBBON PENGUMUMAN BERKELAS -->
+                                            <div style="background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%); color: #ffffff; border-radius: 8px; padding: 12px 18px; margin-bottom: 18px; box-shadow: 0 4px 12px rgba(6, 78, 59, 0.18); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                                <div>
+                                                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a7f3d0; font-weight: 700; margin-bottom: 2px;">
+                                                        <i class="fas fa-bullhorn mr-1 text-warning"></i> Warta Resmi DKM Masjid Jami' Al-Jihad
+                                                    </div>
+                                                    <div style="font-size: 16px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #ffffff;">
+                                                        PENGUMUMAN SHOLAT JUM'AT & LAPORAN KAS
+                                                    </div>
                                                 </div>
-                                                
-                                                <!-- a. Saldo Awal -->
-                                                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px;">
-                                                    <span style="white-space: nowrap; font-weight: 500;">a. Saldo Awal</span>
-                                                    <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
-                                                    <span style="white-space: nowrap; font-weight: 600;">
-                                                        = &nbsp;<span style="background-color: #ffff00; color: #000000; font-weight: 800; padding: 2px 14px; border: 1px solid #cccc00; display: inline-block; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">Rp &nbsp;<span id="pjPrevSaldoAwal">19.379.023</span></span>
+                                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                                    <span style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,215,0,0.4); border-radius: 20px; padding: 4px 12px; font-size: 11.5px; font-weight: 700; color: #ffd700; display: inline-flex; align-items: center;">
+                                                        <i class="fas fa-calendar-alt mr-1"></i> <span id="pjPrevTanggalJudul">02 OKTOBER 2026</span>
+                                                    </span>
+                                                    <span style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 12px; font-size: 11.5px; color: #e2e8f0; display: inline-flex; align-items: center;">
+                                                        <i class="fas fa-wallet mr-1 text-success"></i> Kas s/d <span id="pjPrevTanggalKas" class="ml-1">02 Oktober 2026</span>
                                                     </span>
                                                 </div>
-
-                                                <!-- b. Pemasukan -->
-                                                <div style="margin-top: 6px;">
-                                                    <div style="font-weight: 600;">b. Pemasukan</div>
-                                                    <div id="pjPrevListPemasukan" style="margin-left: 18px;">
-                                                        <!-- Dynamic list items -->
-                                                    </div>
-                                                    <!-- Subtotal Pemasukan -->
-                                                    <div style="margin-left: 18px; margin-top: 4px;">
-                                                        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed #000000; padding-top: 4px;">
-                                                            <span style="font-weight: 800; font-size: 14px;">Jumlah</span>
-                                                            <span style="font-weight: 600;">
-                                                                = &nbsp;<span style="background-color: #00ff00; color: #000000; font-weight: 800; padding: 2px 14px; border: 1px solid #00cc00; display: inline-block; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">Rp &nbsp;<span id="pjPrevTotalPemasukan">3.500.000</span></span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- c. Pengeluaran -->
-                                                <div style="margin-top: 8px;">
-                                                    <div style="font-weight: 600;">c. Pengeluaran</div>
-                                                    <div id="pjPrevListPengeluaran" style="margin-left: 18px;">
-                                                        <!-- Dynamic list items -->
-                                                    </div>
-                                                    <!-- Subtotal Pengeluaran -->
-                                                    <div style="margin-left: 18px; margin-top: 4px;">
-                                                        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed #000000; padding-top: 4px;">
-                                                            <span style="font-weight: 800; font-size: 14px;">Jumlah</span>
-                                                            <span style="font-weight: 600;">
-                                                                = &nbsp;<span style="background-color: #00ff00; color: #000000; font-weight: 800; padding: 2px 14px; border: 1px solid #00cc00; display: inline-block; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">Rp &nbsp;<span id="pjPrevTotalPengeluaran">4.137.000</span></span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- d. Saldo Akhir -->
-                                                <div style="margin-top: 8px;">
-                                                    <div style="display: flex; align-items: baseline; justify-content: space-between;">
-                                                        <span style="white-space: nowrap; font-weight: 500;">d. Saldo Akhir</span>
-                                                        <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
-                                                    </div>
-                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 3px;">
-                                                        <span style="font-size: 12.5px; color: #222222; font-weight: 500;">Saldo Awal (+) Jumlah Pemasukan (-) Jumlah Pengeluaran</span>
-                                                        <span style="white-space: nowrap; font-weight: 600;">
-                                                            = &nbsp;<span style="background-color: #ffff00; color: #000000; font-weight: 800; padding: 3px 16px; border: 1px solid #cccc00; display: inline-block; font-size: 14.5px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);"><span id="pjPrevSaldoAkhir">18.742.023</span></span>
-                                                        </span>
-                                                    </div>
-                                                </div>
                                             </div>
 
-                                            <!-- BAGIAN II: PETUGAS SHOLAT JUM'AT -->
+                                            <!-- BAGIAN I: LAPORAN RINGKASAN KAS MASJID (4 KARTU EKSEKUTIF) -->
                                             <div style="margin-bottom: 16px;">
-                                                <div style="font-weight: 700; margin-bottom: 5px; color: #000000; font-size: 14px;">
-                                                    II. Petugas Sholat Jum'at
+                                                <div style="font-weight: 800; font-size: 13.5px; color: #064e3b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                                                    <span><i class="fas fa-coins mr-1 text-success"></i> I. Laporan Keuangan Kas Masjid</span>
+                                                    <small style="font-size: 11px; color: #64748b; font-weight: normal; text-transform: none;">Audited & Transparan</small>
                                                 </div>
-                                                <table style="width: 100%; border-collapse: collapse; margin-left: 4px;">
-                                                    <tr>
-                                                        <td style="width: 160px; vertical-align: top; padding: 2px 0;">a. Imam & Khotib</td>
-                                                        <td style="width: 15px; vertical-align: top; padding: 2px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevImamKhotib">Gus Faiq</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="vertical-align: top; padding: 2px 0;">b. Muadzin</td>
-                                                        <td style="vertical-align: top; padding: 2px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevMuadzin">Ust. Rudy</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="vertical-align: top; padding: 2px 0;">c. Bilal</td>
-                                                        <td style="vertical-align: top; padding: 2px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevBilal">Bp Mansur</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="vertical-align: top; padding: 2px 0;">d. Mc Maklumat</td>
-                                                        <td style="vertical-align: top; padding: 2px 0;">:</td>
-                                                        <td style="vertical-align: top; padding: 2px 0; font-weight: 600;" id="pjPrevMaklumat">Bp Fatkhurokhman</td>
-                                                    </tr>
-                                                </table>
+
+                                                <!-- 4 KARTU STATISTIK KAS -->
+                                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px;">
+                                                    <!-- Saldo Awal -->
+                                                    <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 8px 10px; text-align: center; border-left: 3px solid #f59e0b;">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #b45309; text-transform: uppercase; letter-spacing: 0.5px;">Saldo Awal</div>
+                                                        <div style="font-size: 14px; font-weight: 800; color: #92400e; margin-top: 2px;">
+                                                            Rp <span id="pjPrevSaldoAwal">19.379.023</span>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Total Pemasukan -->
+                                                    <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; padding: 8px 10px; text-align: center; border-left: 3px solid #10b981;">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #047857; text-transform: uppercase; letter-spacing: 0.5px;">Pemasukan (+)</div>
+                                                        <div style="font-size: 14px; font-weight: 800; color: #065f46; margin-top: 2px;">
+                                                            Rp <span id="pjPrevTotalPemasukan">3.500.000</span>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Total Pengeluaran -->
+                                                    <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 6px; padding: 8px 10px; text-align: center; border-left: 3px solid #f43f5e;">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px;">Pengeluaran (-)</div>
+                                                        <div style="font-size: 14px; font-weight: 800; color: #9f1239; margin-top: 2px;">
+                                                            Rp <span id="pjPrevTotalPengeluaran">4.137.000</span>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Saldo Akhir -->
+                                                    <div style="background: linear-gradient(135deg, #064e3b 0%, #047857 100%); border-radius: 6px; padding: 8px 10px; text-align: center; color: #ffffff; box-shadow: 0 2px 6px rgba(6,78,59,0.25);">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #a7f3d0; text-transform: uppercase; letter-spacing: 0.5px;">Saldo Akhir Kas</div>
+                                                        <div style="font-size: 15px; font-weight: 800; color: #ffd700; margin-top: 2px;">
+                                                            Rp <span id="pjPrevSaldoAkhir">18.742.023</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- RINCIAN DUA KOLOM: PEMASUKAN & PENGELUARAN (TABEL PROFESIONAL BERSIH) -->
+                                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                                    <!-- Kolom Kiri: Rincian Pemasukan -->
+                                                    <div style="border: 1px solid #d1fae5; border-radius: 6px; overflow: hidden;">
+                                                        <div style="background: #047857; color: #ffffff; padding: 6px 10px; font-weight: 700; font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                                            <span><i class="fas fa-arrow-circle-down mr-1 text-warning"></i> Pemasukan Kas</span>
+                                                            <span style="font-size: 11px; opacity: 0.9;">Nominal (Rp)</span>
+                                                        </div>
+                                                        <div id="pjPrevListPemasukan" style="background: #ffffff; min-height: 80px; padding: 6px 8px;">
+                                                            <!-- Dynamic items -->
+                                                        </div>
+                                                        <div style="background: #ecfdf5; border-top: 1px solid #a7f3d0; padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 12px; color: #065f46;">
+                                                            <span>Total Pemasukan</span>
+                                                            <span>Rp <span id="pjPrevSubtotalIn">3.500.000</span></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Kolom Kanan: Rincian Pengeluaran -->
+                                                    <div style="border: 1px solid #fee2e2; border-radius: 6px; overflow: hidden;">
+                                                        <div style="background: #475569; color: #ffffff; padding: 6px 10px; font-weight: 700; font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                                            <span><i class="fas fa-arrow-circle-up mr-1 text-danger"></i> Pengeluaran / Biaya</span>
+                                                            <span style="font-size: 11px; opacity: 0.9;">Nominal (Rp)</span>
+                                                        </div>
+                                                        <div id="pjPrevListPengeluaran" style="background: #ffffff; min-height: 80px; padding: 6px 8px;">
+                                                            <!-- Dynamic items -->
+                                                        </div>
+                                                        <div style="background: #fef2f2; border-top: 1px solid #fecaca; padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 12px; color: #991b1b;">
+                                                            <span>Total Pengeluaran</span>
+                                                            <span>Rp <span id="pjPrevSubtotalOut">4.137.000</span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <!-- BAGIAN III: HIMBAUAN -->
-                                            <div style="margin-bottom: 22px;">
-                                                <div style="font-weight: 700; margin-bottom: 5px; color: #000000; font-size: 14px;">
-                                                    III. HIMBAUAN
+                                            <!-- BAGIAN II: PETUGAS SHOLAT JUM'AT (4 KARTU EKSEKUTIF ELEGANT) -->
+                                            <div style="margin-bottom: 16px;">
+                                                <div style="font-weight: 800; font-size: 13.5px; color: #064e3b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                                                    <i class="fas fa-user-friends mr-1 text-success"></i> II. Petugas Ibadah Sholat Jum'at
                                                 </div>
-                                                <div id="pjPrevContainerHimbauan" style="margin-left: 4px; line-height: 1.55;">
-                                                    <!-- Dynamic formatted lines from textarea -->
+                                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                                                    <!-- Imam & Khotib -->
+                                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #047857; border-radius: 6px; padding: 8px 10px;">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #047857; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            <i class="fas fa-microphone-alt mr-1"></i> Imam & Khotib
+                                                        </div>
+                                                        <div id="pjPrevImamKhotib" style="font-weight: 700; font-size: 12.5px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                            Gus Faiq
+                                                        </div>
+                                                    </div>
+                                                    <!-- Muadzin -->
+                                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #0284c7; border-radius: 6px; padding: 8px 10px;">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #0284c7; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            <i class="fas fa-volume-up mr-1"></i> Muadzin
+                                                        </div>
+                                                        <div id="pjPrevMuadzin" style="font-weight: 700; font-size: 12.5px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                            Ust. Rudy
+                                                        </div>
+                                                    </div>
+                                                    <!-- Bilal Sholat -->
+                                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #d97706; border-radius: 6px; padding: 8px 10px;">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            <i class="fas fa-pray mr-1"></i> Bilal Sholat
+                                                        </div>
+                                                        <div id="pjPrevBilal" style="font-weight: 700; font-size: 12.5px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                            Bp Mansur
+                                                        </div>
+                                                    </div>
+                                                    <!-- Mc Maklumat -->
+                                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #7c3aed; border-radius: 6px; padding: 8px 10px;">
+                                                        <div style="font-size: 10px; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            <i class="fas fa-bullhorn mr-1"></i> Mc Maklumat
+                                                        </div>
+                                                        <div id="pjPrevMaklumat" style="font-weight: 700; font-size: 12.5px; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                            Bp Fatkhurokhman
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <!-- TANDA TANGAN & STEMPEL RESMI -->
-                                            <div style="display: flex; justify-content: space-between; text-align: center; margin-top: 20px;">
-                                                <!-- Kolom Kiri: Mengetahui Ketua -->
-                                                <div style="width: 250px;">
-                                                    <div style="visibility: hidden;">Placeholder Titimangsa</div>
-                                                    <div style="color: #000000; font-size: 13.5px;">Mengetahui</div>
-                                                    <div style="color: #000000; font-weight: 600; font-size: 13.5px;">Ketua</div>
-                                                    <div style="height: 95px; display: flex; align-items: center; justify-content: center; position: relative;">
-                                                        <img id="pjPrevImgKetua" src="img/stempel_ttd_ketua_trans.png" alt="Stempel & TTD Ketua" style="max-height: 95px; max-width: 155px; object-fit: contain;">
+                                            <!-- BAGIAN III: HIMBAUAN JAMAAH (CALLOUT BULLETIN KHUSUS) -->
+                                            <div style="margin-bottom: 18px;">
+                                                <div style="font-weight: 800; font-size: 13.5px; color: #064e3b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                                                    <i class="fas fa-info-circle mr-1 text-success"></i> III. Himbauan & Tata Tertib Jamaah
+                                                </div>
+                                                <div style="background: #fdfbf7; border: 1px solid #f3e8d2; border-left: 4px solid #c5a059; border-radius: 6px; padding: 10px 14px;">
+                                                    <div id="pjPrevContainerHimbauan" style="line-height: 1.55;">
+                                                        <!-- Dynamic formatted lines -->
                                                     </div>
-                                                    <div style="font-weight: 700; text-decoration: underline; color: #000000; font-size: 14px;" id="pjPrevNamaKetua">Hadi Prayitno</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- BAGIAN IV: PENGESAHAN DOKUMEN & TANDA TANGAN RESMI -->
+                                            <div style="margin-top: 14px; padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+                                                <!-- Baris Titimangsa Kanan -->
+                                                <div style="text-align: right; font-size: 12px; color: #475569; margin-bottom: 8px;">
+                                                    Ditetapkan di: <span style="font-weight: 700; color: #0f172a;" id="pjPrevTitimangsa">Simpangan, 02 Oktober 2026</span>
                                                 </div>
 
-                                                <!-- Kolom Kanan: Dibuat Oleh Bendahara -->
-                                                <div style="width: 270px;">
-                                                    <div style="color: #000000; font-size: 13.5px;"><span id="pjPrevTitimangsa">Simpangan, 02 Oktober 2026</span></div>
-                                                    <div style="color: #000000; font-size: 13.5px;">Dibuat Oleh,</div>
-                                                    <div style="color: #000000; font-weight: 600; font-size: 13.5px;">Bendahara</div>
-                                                    <div style="height: 95px; display: flex; align-items: center; justify-content: center; position: relative;">
-                                                        <img id="pjPrevImgBendahara" src="img/ttd_bendahara_trans.png" alt="TTD Bendahara" style="max-height: 95px; max-width: 155px; object-fit: contain;">
+                                                <!-- Dua Kolom TTD: Mengetahui Ketua & Dibuat Oleh Bendahara -->
+                                                <div style="display: flex; justify-content: space-between; text-align: center;">
+                                                    <!-- Kolom Kiri: Ketua DKM -->
+                                                    <div style="width: 250px;">
+                                                        <div style="font-size: 12.5px; color: #475569;">Mengetahui,</div>
+                                                        <div style="font-size: 13px; font-weight: 700; color: #0f172a;">Ketua DKM Al-Jihad</div>
+                                                        <div style="height: 85px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                                            <img id="pjPrevImgKetua" src="img/stempel_ttd_ketua_trans.png" alt="Stempel & TTD Ketua" style="max-height: 85px; max-width: 145px; object-fit: contain;">
+                                                        </div>
+                                                        <div style="font-weight: 800; font-size: 13px; text-decoration: underline; color: #0f172a;" id="pjPrevNamaKetua">
+                                                            Hadi Prayitno
+                                                        </div>
+                                                        <small style="color: #64748b; font-size: 11px;">Ketua DKM</small>
                                                     </div>
-                                                    <div style="font-weight: 700; text-decoration: underline; color: #000000; font-size: 14px;" id="pjPrevNamaBendahara">Utut Priyastya</div>
+
+                                                    <!-- Kolom Kanan: Bendahara Kas -->
+                                                    <div style="width: 250px;">
+                                                        <div style="font-size: 12.5px; color: #475569;">Dibuat Oleh,</div>
+                                                        <div style="font-size: 13px; font-weight: 700; color: #0f172a;">Bendahara Kas Masjid</div>
+                                                        <div style="height: 85px; display: flex; align-items: center; justify-content: center; position: relative;">
+                                                            <img id="pjPrevImgBendahara" src="img/ttd_bendahara_trans.png" alt="TTD Bendahara" style="max-height: 85px; max-width: 145px; object-fit: contain;">
+                                                        </div>
+                                                        <div style="font-weight: 800; font-size: 13px; text-decoration: underline; color: #0f172a;" id="pjPrevNamaBendahara">
+                                                            Utut Priyastya
+                                                        </div>
+                                                        <small style="color: #64748b; font-size: 11px;">Bendahara Kas</small>
+                                                    </div>
                                                 </div>
+                                            </div>
+
+                                            <!-- FOOTER KEASLIAN DOKUMEN RESMI -->
+                                            <div style="border-top: 1px solid #e2e8f0; margin-top: 16px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #94a3b8;">
+                                                <span style="display: flex; align-items: center; gap: 5px;">
+                                                    <i class="fas fa-shield-alt text-success"></i> Dokumen Resmi Pengumuman Ibadah & Kas Jum'at DKM Masjid Jami' Al-Jihad Simpangan
+                                                </span>
+                                                <span>Sistem Digital v5.1 &bull; Format Standar A4 Eksekutif</span>
                                             </div>
 
                                         </div>
@@ -14843,7 +14905,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             // Himbauan Textarea
             const himbauanRaw = document.getElementById('pjInputHimbauan')?.value ?? pjData.himbauanText ?? '';
             pjData.himbauanText = himbauanRaw;
-            const lines = himbauanRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const lines = himbauanRaw.split('\\n').map(l => l.trim()).filter(l => l.length > 0);
             pjData.himbauan = lines;
 
             const ketua = document.getElementById('pjInputNamaKetua')?.value || pjData.ttd.namaKetua;
@@ -14867,34 +14929,46 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (elPrevTglKas) elPrevTglKas.textContent = tglKas;
             if (elPrevTitimangsa) elPrevTitimangsa.textContent = titimangsa;
 
-            // Preview List Pemasukan
+            // Calculate subtotals
+            let totalIn = 0;
+            pjData.pemasukan.forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
+            let totalOut = 0;
+            pjData.pengeluaran.forEach(p => { totalOut += (parseInt(p.nominal, 10) || 0); });
+
+            // Subtotals in tables
+            const elSubIn = document.getElementById('pjPrevSubtotalIn');
+            const elSubOut = document.getElementById('pjPrevSubtotalOut');
+            if (elSubIn) elSubIn.textContent = pjFormatRupiah(totalIn);
+            if (elSubOut) elSubOut.textContent = pjFormatRupiah(totalOut);
+
+            // Preview List Pemasukan (Tabel Bersih Bergaris Halus)
             const contPrevIn = document.getElementById('pjPrevListPemasukan');
             if (contPrevIn) {
-                contPrevIn.innerHTML = pjData.pemasukan.map((item, idx) => {
-                    const isLast = (idx === pjData.pemasukan.length - 1);
-                    return `
-                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3px;">
-                            <span style="white-space: nowrap;">- ${escapeHtml(item.ket)}</span>
-                            <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
-                            <span style="white-space: nowrap; font-weight: 500;">= &nbsp;Rp &nbsp;${pjFormatRupiah(item.nominal)} ${isLast ? '+' : ''}</span>
+                if (pjData.pemasukan.length === 0) {
+                    contPrevIn.innerHTML = '<div class="text-muted small p-2 text-center">- Belum ada data pemasukan -</div>';
+                } else {
+                    contPrevIn.innerHTML = pjData.pemasukan.map((item, idx) => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; border-bottom: 1px solid #f1f5f9; font-size: 12px;">
+                            <span style="color: #334155; font-weight: 500;">${idx + 1}. ${escapeHtml(item.ket)}</span>
+                            <span style="font-weight: 700; color: #047857; font-family: 'Segoe UI', monospace; white-space: nowrap;">Rp ${pjFormatRupiah(item.nominal)}</span>
                         </div>
-                    `;
-                }).join('');
+                    `).join('');
+                }
             }
 
-            // Preview List Pengeluaran
+            // Preview List Pengeluaran (Tabel Bersih Bergaris Halus)
             const contPrevOut = document.getElementById('pjPrevListPengeluaran');
             if (contPrevOut) {
-                contPrevOut.innerHTML = pjData.pengeluaran.map((item, idx) => {
-                    const isLast = (idx === pjData.pengeluaran.length - 1);
-                    return `
-                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3px;">
-                            <span style="white-space: nowrap;">- ${escapeHtml(item.ket)}</span>
-                            <span style="flex-grow: 1; border-bottom: 1px dotted #555555; margin: 0 10px; height: 1em;"></span>
-                            <span style="white-space: nowrap; font-weight: 500;">= &nbsp;Rp &nbsp;${pjFormatRupiah(item.nominal)} ${isLast ? '+' : ''}</span>
+                if (pjData.pengeluaran.length === 0) {
+                    contPrevOut.innerHTML = '<div class="text-muted small p-2 text-center">- Belum ada data pengeluaran -</div>';
+                } else {
+                    contPrevOut.innerHTML = pjData.pengeluaran.map((item, idx) => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; border-bottom: 1px solid #f1f5f9; font-size: 12px;">
+                            <span style="color: #334155; font-weight: 500;">${idx + 1}. ${escapeHtml(item.ket)}</span>
+                            <span style="font-weight: 700; color: #b91c1c; font-family: 'Segoe UI', monospace; white-space: nowrap;">Rp ${pjFormatRupiah(item.nominal)}</span>
                         </div>
-                    `;
-                }).join('');
+                    `).join('');
+                }
             }
 
             // Preview Petugas
@@ -14903,24 +14977,26 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const prevBilal = document.getElementById('pjPrevBilal');
             const prevMaklumat = document.getElementById('pjPrevMaklumat');
 
-            if (prevImam) prevImam.textContent = imam;
-            if (prevMuadzin) prevMuadzin.textContent = muadzin;
-            if (prevBilal) prevBilal.textContent = bilal;
-            if (prevMaklumat) prevMaklumat.textContent = maklumat;
+            if (prevImam) prevImam.textContent = imam || '-';
+            if (prevMuadzin) prevMuadzin.textContent = muadzin || '-';
+            if (prevBilal) prevBilal.textContent = bilal || '-';
+            if (prevMaklumat) prevMaklumat.textContent = maklumat || '-';
 
-            // Preview Himbauan (4~5 baris diformat dinamis)
+            // Preview Himbauan (Badge Lingkaran Anggun)
             const prevContHim = document.getElementById('pjPrevContainerHimbauan');
             if (prevContHim) {
                 if (lines.length === 0) {
-                    prevContHim.innerHTML = '<div class="text-muted font-italic">- Tidak ada himbauan khusus -</div>';
+                    prevContHim.innerHTML = '<div class="text-muted font-italic small">- Tidak ada himbauan khusus -</div>';
                 } else {
                     prevContHim.innerHTML = lines.map((line, idx) => {
-                        let formattedLine = line;
-                        if (!/^[a-zA-Z0-9][.)]s*/.test(line)) {
-                            const letter = String.fromCharCode(97 + idx);
-                            formattedLine = `${letter}. ${line}`;
-                        }
-                        return `<div style="margin-bottom: 2px;">${escapeHtml(formattedLine)}</div>`;
+                        let cleanText = line.replace(/^[a-zA-Z0-9][\\.\\)]\\s*/, '');
+                        const letter = String.fromCharCode(97 + idx);
+                        return `
+                            <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 5px;">
+                                <span style="background: #047857; color: #ffffff; border-radius: 50%; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0; margin-top: 1px;">${letter}</span>
+                                <span style="font-size: 12.5px; color: #334155; line-height: 1.45;">${escapeHtml(cleanText)}</span>
+                            </div>
+                        `;
                     }).join('');
                 }
             }
@@ -14959,51 +15035,40 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
                 pjUpdatePreview();
                 if (typeof showCustomToast === 'function') {
-                    showCustomToast("Data petugas Jum'at berhasil ditarik dari database!", 'success');
+                    showCustomToast("Data Petugas Sholat Jum'at berhasil disinkronkan!", 'success');
                 } else {
-                    alert("Data petugas Jum'at berhasil disinkronkan!");
+                    alert("Data Petugas Sholat Jum'at berhasil diambil dari jadwal!");
                 }
             } catch(e) {
                 console.error(e);
-                alert('Gagal menarik data petugas: ' + e.message);
             }
         }
 
         function tarikKasDanPetugasOtomatis() {
+            pjTarikPetugasTerkini();
             try {
-                // 1. Tarik Petugas
-                pjTarikPetugasTerkini();
-
-                // 2. Tarik Kas jika ada data kas utama
-                if (typeof cachedKasData !== 'undefined' && Array.isArray(cachedKasData) && cachedKasData.length > 0) {
-                    let totalPemasukan = 0;
-                    let totalPengeluaran = 0;
-                    cachedKasData.forEach(item => {
-                        const m = parseInt(item.masuk, 10) || 0;
-                        const k = parseInt(item.keluar, 10) || 0;
-                        totalPemasukan += m;
-                        totalPengeluaran += k;
-                    });
-                    const saldoReal = totalPemasukan - totalPengeluaran;
-                    if (saldoReal > 0) {
-                        if (confirm('Ditemukan Saldo Kas Utama Masjid di sistem sebesar Rp ' + saldoReal.toLocaleString('id-ID') + '. Perbarui Saldo Awal pengumuman menggunakan angka ini?')) {
-                            document.getElementById('pjInputSaldoAwal').value = saldoReal;
+                const saldoEl = document.getElementById('dashSaldoUtama');
+                if (saldoEl) {
+                    const txt = saldoEl.textContent.replace(/[^0-9]/g, '');
+                    if (txt) {
+                        const parsedSaldo = parseInt(txt, 10);
+                        if (!isNaN(parsedSaldo) && parsedSaldo > 0) {
+                            document.getElementById('pjInputSaldoAwal').value = parsedSaldo;
                             pjHitungKas();
                         }
                     }
                 }
             } catch(e) {
-                console.error(e);
+                console.warn(e);
             }
         }
 
-        function simpanDataPengumumanJumat(showToast = true) {
+        function simpanDataPengumumanJumat(tampilkanNotif = true) {
             try {
-                pjUpdatePreview();
                 localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
-                if (showToast) {
+                if (tampilkanNotif) {
                     if (typeof showCustomToast === 'function') {
-                        showCustomToast("Lembar Pengumuman Sholat Jum'at berhasil disimpan!", 'success');
+                        showCustomToast("Lembar Pengumuman Sholat Jum'at & Kas berhasil disimpan!", 'success');
                     } else {
                         alert("Lembar Pengumuman Sholat Jum'at berhasil disimpan!");
                     }
@@ -15015,7 +15080,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         }
 
         // =========================================================================
-        // FITUR 1: CETAK LEMBAR PENGUMUMAN A4 RESMI
+        // FITUR 1: CETAK LEMBAR PENGUMUMAN A4 RESMI EKSEKUTIF
         // =========================================================================
         function cetakPengumumanJumat() {
             simpanDataPengumumanJumat(false);
@@ -15038,11 +15103,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 <html lang="id">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Pengumuman Sholat Jum'at - Masjid Jami' Al-Jihad Simpangan</title>
+                    <title>Pengumuman Sholat Jum'at & Laporan Kas - Masjid Jami' Al-Jihad Simpangan</title>
                     <style>
                         @page {
                             size: A4 portrait;
-                            margin: 10mm 15mm;
+                            margin: 8mm 12mm;
                         }
                         * {
                             box-sizing: border-box;
@@ -15051,18 +15116,12 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         }
                         body {
                             margin: 0;
-                            padding: 20px 30px;
-                            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-                            font-size: 13.5px;
-                            line-height: 1.5;
-                            color: #111;
-                            background: #fff;
-                        }
-                        .pj-dots {
-                            flex-grow: 1;
-                            border-bottom: 1px dotted #555;
-                            margin: 0 10px;
-                            height: 1em;
+                            padding: 10px 15px;
+                            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+                            font-size: 13px;
+                            line-height: 1.45;
+                            color: #0f172a;
+                            background: #ffffff;
                         }
                         img {
                             max-width: 100%;
@@ -15090,7 +15149,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         }
 
         // =========================================================================
-        // FITUR 2: DOWNLOAD FLYER PNG RESOLUSI TINGGI VIA CANVAS 2D
+        // FITUR 2: DOWNLOAD FLYER PNG RESOLUSI TINGGI BERGAYA EKSEKUTIF VIA CANVAS 2D
         // =========================================================================
         function downloadFlyerPengumumanJumat() {
             simpanDataPengumumanJumat(false);
@@ -15099,13 +15158,22 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
             const ctx = canvas.getContext('2d');
             const W = 1200;
-            const H = 1680;
+            const H = 1720;
             canvas.width = W;
             canvas.height = H;
 
             // Background Kertas Putih Bersih
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, W, H);
+
+            // Border Luar Elegan A4 (Double emerald green border)
+            ctx.strokeStyle = '#047857';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(20, 20, W - 40, H - 40);
+
+            ctx.strokeStyle = '#c5a059';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(26, 26, W - 52, H - 52);
 
             // Muat Kop Surat Resmi Gambar 2
             const imgKop = new Image();
@@ -15114,210 +15182,339 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 // Gambar Kop Surat (Lebar 1120, rasio 1024 x 205 -> tinggi 224)
                 const kopW = 1120;
                 const kopH = Math.round(kopW * (205 / 1024));
-                ctx.drawImage(imgKop, 40, 25, kopW, kopH);
+                ctx.drawImage(imgKop, 40, 36, kopW, kopH);
 
-                let curY = 25 + kopH + 35;
-
-                // Judul Pengumuman
-                ctx.fillStyle = '#000000';
-                ctx.font = 'bold 24px "Segoe UI", Arial, sans-serif';
-                ctx.textAlign = 'center';
-                const judul = "PENGUMUMAN KEGIATAN SHOLAT JUM'AT, " + (pjData.tanggalJudul || '02 OKTOBER 2026').toUpperCase();
-                ctx.fillText(judul, W / 2, curY);
-
-                // Garis Bawah Judul
-                const titleWidth = ctx.measureText(judul).width;
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = '#000000';
+                // Garis Bawah Kop
+                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = '#047857';
                 ctx.beginPath();
-                ctx.moveTo((W / 2) - (titleWidth / 2), curY + 8);
-                ctx.lineTo((W / 2) + (titleWidth / 2), curY + 8);
+                ctx.moveTo(40, 36 + kopH + 10);
+                ctx.lineTo(1160, 36 + kopH + 10);
                 ctx.stroke();
 
-                curY += 45;
+                let curY = 36 + kopH + 26;
 
-                // Helper Gambar Box Highlight
-                function drawHighlightBox(text, x, y, bgColor, borderColor) {
-                    ctx.save();
-                    ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                    const textW = ctx.measureText(text).width;
-                    const padX = 14;
-                    const boxW = textW + (padX * 2);
-                    const boxH = 34;
-                    const boxX = x;
-                    const boxY = y - 25;
+                // ==================== HEADER RIBBON PENGUMUMAN ====================
+                const ribbonH = 78;
+                // Gradasi Hijau Zamrud
+                const gradRibbon = ctx.createLinearGradient(40, curY, 1160, curY + ribbonH);
+                gradRibbon.addColorStop(0, '#064e3b');
+                gradRibbon.addColorStop(0.5, '#065f46');
+                gradRibbon.addColorStop(1, '#047857');
+                ctx.fillStyle = gradRibbon;
 
-                    ctx.fillStyle = bgColor;
-                    ctx.fillRect(boxX, boxY, boxW, boxH);
-                    ctx.strokeStyle = borderColor;
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeRect(boxX, boxY, boxW, boxH);
-
-                    ctx.fillStyle = '#000000';
-                    ctx.textAlign = 'left';
-                    ctx.fillText(text, boxX + padX, y);
-                    ctx.restore();
-                    return boxW;
-                }
-
-                // Helper Gambar Dotted Line
-                function drawDottedLine(x1, x2, y) {
-                    ctx.save();
-                    ctx.strokeStyle = '#666666';
-                    ctx.lineWidth = 1.5;
-                    ctx.setLineDash([3, 4]);
+                // Rounded Rect Helper
+                function roundRect(ctx, x, y, w, h, r) {
                     ctx.beginPath();
-                    ctx.moveTo(x1, y);
-                    ctx.lineTo(x2, y);
-                    ctx.stroke();
-                    ctx.restore();
+                    ctx.moveTo(x + r, y);
+                    ctx.lineTo(x + w - r, y);
+                    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+                    ctx.lineTo(x + w, y + h - r);
+                    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                    ctx.lineTo(x + r, y + h);
+                    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+                    ctx.lineTo(x, y + r);
+                    ctx.quadraticCurveTo(x, y, x + r, y);
+                    ctx.closePath();
+                    ctx.fill();
                 }
 
-                // ==================== I. LAPORAN KAS ====================
+                roundRect(ctx, 40, curY, 1120, ribbonH, 10);
+
+                // Teks Subtitle Ribbon
+                ctx.fillStyle = '#a7f3d0';
+                ctx.font = 'bold 15px "Segoe UI", Arial, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
-                ctx.fillStyle = '#000000';
-                ctx.fillText("I. Laporan Kas Masjid s/d tgl " + (pjData.tanggalKas || '02 Oktober 2026'), 50, curY);
+                ctx.fillText("📢 WARTA RESMI DKM MASJID JAMI' AL-JIHAD", 60, curY + 28);
 
-                curY += 38;
+                // Teks Judul Utama Ribbon
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 22px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("PENGUMUMAN SHOLAT JUM'AT & LAPORAN KAS", 60, curY + 58);
 
-                // a. Saldo Awal
-                ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("a. Saldo Awal", 50, curY);
-                const labelAwalW = ctx.measureText("a. Saldo Awal").width;
-                drawDottedLine(50 + labelAwalW + 15, 870, curY - 5);
+                // Badge Tanggal di Kanan Ribbon
+                ctx.fillStyle = '#ffd700';
+                ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText("🗓️ " + (pjData.tanggalJudul || '02 OKTOBER 2026').toUpperCase(), 1130, curY + 46);
 
-                ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("= ", 880, curY);
-                drawHighlightBox("Rp   " + pjFormatRupiah(pjData.saldoAwal), 910, curY, '#ffff00', '#d4d400');
+                curY += ribbonH + 26;
 
-                curY += 45;
+                // ==================== I. LAPORAN KAS (4 KARTU STATISTIK) ====================
+                ctx.textAlign = 'left';
+                ctx.fillStyle = '#064e3b';
+                ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("I. Laporan Keuangan Kas Masjid", 40, curY);
 
-                // b. Pemasukan
-                ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("b. Pemasukan", 50, curY);
-                curY += 35;
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#64748b';
+                ctx.font = 'normal 15px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Periode s/d: " + (pjData.tanggalKas || '02 Oktober 2026'), 1160, curY);
 
+                curY += 15;
+
+                // Hitung Keuangan
                 let totalIn = 0;
-                pjData.pemasukan.forEach((p, idx) => {
-                    const isLast = (idx === pjData.pemasukan.length - 1);
-                    ctx.font = 'normal 18.5px "Segoe UI", Arial, sans-serif';
-                    ctx.fillText("- " + p.ket, 80, curY);
-
-                    ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
-                    ctx.fillText("=    Rp", 630, curY);
-                    ctx.textAlign = 'right';
-                    ctx.fillText(pjFormatRupiah(p.nominal) + (isLast ? "  +" : ""), 880, curY);
-                    ctx.textAlign = 'left';
-
-                    totalIn += (parseInt(p.nominal, 10) || 0);
-                    curY += 35;
-                });
-
-                // Garis Putus-Putus Pemasukan
-                drawDottedLine(630, 890, curY - 15);
-
-                // Subtotal Pemasukan Box Hijau
-                ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                drawHighlightBox("Jumlah", 115, curY + 12, '#00ff00', '#00cc00');
-                ctx.fillText("=    Rp", 630, curY + 12);
-                drawHighlightBox(pjFormatRupiah(totalIn), 720, curY + 12, '#00ff00', '#00cc00');
-
-                curY += 60;
-
-                // c. Pengeluaran
-                ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("c. Pengeluaran", 50, curY);
-                curY += 35;
-
+                pjData.pemasukan.forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
                 let totalOut = 0;
-                pjData.pengeluaran.forEach((p, idx) => {
-                    const isLast = (idx === pjData.pengeluaran.length - 1);
-                    ctx.font = 'normal 18.5px "Segoe UI", Arial, sans-serif';
-                    ctx.fillText("- " + p.ket, 80, curY);
+                pjData.pengeluaran.forEach(p => { totalOut += (parseInt(p.nominal, 10) || 0); });
+                const saldoAkhir = (parseInt(pjData.saldoAwal, 10) || 0) + totalIn - totalOut;
 
-                    ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
-                    ctx.fillText("=    Rp", 630, curY);
+                const cardW = 265;
+                const cardH = 80;
+                const cardY = curY + 5;
+
+                // Kartu 1: Saldo Awal
+                ctx.fillStyle = '#fffbeb';
+                roundRect(ctx, 40, cardY, cardW, cardH, 8);
+                ctx.strokeStyle = '#fde68a';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                // Bar kiri
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(40, cardY, 6, cardH);
+                ctx.fillStyle = '#b45309';
+                ctx.font = 'bold 13px "Segoe UI", Arial, sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText("SALDO AWAL KAS", 60, cardY + 28);
+                ctx.fillStyle = '#92400e';
+                ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Rp " + pjFormatRupiah(pjData.saldoAwal), 60, cardY + 60);
+
+                // Kartu 2: Total Pemasukan
+                ctx.fillStyle = '#ecfdf5';
+                roundRect(ctx, 325, cardY, cardW, cardH, 8);
+                ctx.strokeStyle = '#a7f3d0';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(325, cardY, 6, cardH);
+                ctx.fillStyle = '#047857';
+                ctx.font = 'bold 13px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("PEMASUKAN (+)", 345, cardY + 28);
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Rp " + pjFormatRupiah(totalIn), 345, cardY + 60);
+
+                // Kartu 3: Total Pengeluaran
+                ctx.fillStyle = '#fff1f2';
+                roundRect(ctx, 610, cardY, cardW, cardH, 8);
+                ctx.strokeStyle = '#fecdd3';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillRect(610, cardY, 6, cardH);
+                ctx.fillStyle = '#be123c';
+                ctx.font = 'bold 13px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("PENGELUARAN (-)", 630, cardY + 28);
+                ctx.fillStyle = '#9f1239';
+                ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Rp " + pjFormatRupiah(totalOut), 630, cardY + 60);
+
+                // Kartu 4: Saldo Akhir Kas
+                const gradSaldo = ctx.createLinearGradient(895, cardY, 1160, cardY + cardH);
+                gradSaldo.addColorStop(0, '#064e3b');
+                gradSaldo.addColorStop(1, '#047857');
+                ctx.fillStyle = gradSaldo;
+                roundRect(ctx, 895, cardY, cardW, cardH, 8);
+                ctx.fillStyle = '#a7f3d0';
+                ctx.font = 'bold 13px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("SALDO AKHIR KAS", 915, cardY + 28);
+                ctx.fillStyle = '#ffd700';
+                ctx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Rp " + pjFormatRupiah(saldoAkhir), 915, cardY + 60);
+
+                curY = cardY + cardH + 20;
+
+                // ==================== TABEL DUA KOLOM: RINCIAN KAS ====================
+                const tableW = 545;
+                const tableMaxRows = Math.max(pjData.pemasukan.length, pjData.pengeluaran.length, 3);
+                const tableBodyH = (tableMaxRows * 30) + 10;
+                const tableTotalH = 34 + tableBodyH + 34; // Header + Body + Subtotal
+
+                // Kolom Kiri: Pemasukan
+                ctx.fillStyle = '#047857';
+                roundRect(ctx, 40, curY, tableW, 34, 6);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 14px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("📥 Rincian Pemasukan Kas", 55, curY + 23);
+                ctx.textAlign = 'right';
+                ctx.fillText("Nominal (Rp)", 40 + tableW - 15, curY + 23);
+                ctx.textAlign = 'left';
+
+                // Box Body Pemasukan
+                ctx.strokeStyle = '#d1fae5';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(40, curY + 34, tableW, tableBodyH);
+
+                let inY = curY + 58;
+                pjData.pemasukan.forEach((p, idx) => {
+                    ctx.fillStyle = '#334155';
+                    ctx.font = 'normal 14px "Segoe UI", Arial, sans-serif';
+                    ctx.fillText((idx + 1) + ". " + p.ket, 55, inY);
                     ctx.textAlign = 'right';
-                    ctx.fillText(pjFormatRupiah(p.nominal) + (isLast ? "  +" : ""), 880, curY);
+                    ctx.fillStyle = '#047857';
+                    ctx.font = 'bold 14px monospace';
+                    ctx.fillText("Rp " + pjFormatRupiah(p.nominal), 40 + tableW - 15, inY);
                     ctx.textAlign = 'left';
-
-                    totalOut += (parseInt(p.nominal, 10) || 0);
-                    curY += 35;
+                    inY += 30;
                 });
 
-                // Garis Putus-Putus Pengeluaran
-                drawDottedLine(630, 890, curY - 15);
+                // Subtotal Pemasukan Bar
+                const inSubY = curY + 34 + tableBodyH;
+                ctx.fillStyle = '#ecfdf5';
+                ctx.fillRect(40, inSubY, tableW, 34);
+                ctx.strokeStyle = '#a7f3d0';
+                ctx.strokeRect(40, inSubY, tableW, 34);
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 14px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Total Pemasukan", 55, inSubY + 23);
+                ctx.textAlign = 'right';
+                ctx.fillText("Rp " + pjFormatRupiah(totalIn), 40 + tableW - 15, inSubY + 23);
+                ctx.textAlign = 'left';
 
-                // Subtotal Pengeluaran Box Hijau
-                ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                drawHighlightBox("Jumlah", 115, curY + 12, '#00ff00', '#00cc00');
-                ctx.fillText("=    Rp", 630, curY + 12);
-                drawHighlightBox(pjFormatRupiah(totalOut), 720, curY + 12, '#00ff00', '#00cc00');
+                // Kolom Kanan: Pengeluaran
+                ctx.fillStyle = '#475569';
+                roundRect(ctx, 615, curY, tableW, 34, 6);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 14px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("📤 Rincian Pengeluaran Kas", 630, curY + 23);
+                ctx.textAlign = 'right';
+                ctx.fillText("Nominal (Rp)", 615 + tableW - 15, curY + 23);
+                ctx.textAlign = 'left';
 
-                curY += 60;
+                // Box Body Pengeluaran
+                ctx.strokeStyle = '#fee2e2';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(615, curY + 34, tableW, tableBodyH);
 
-                // d. Saldo Akhir
-                ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("d. Saldo Akhir", 50, curY);
-                const labelAkhirW = ctx.measureText("d. Saldo Akhir").width;
-                drawDottedLine(50 + labelAkhirW + 15, 870, curY - 5);
+                let outY = curY + 58;
+                pjData.pengeluaran.forEach((p, idx) => {
+                    ctx.fillStyle = '#334155';
+                    ctx.font = 'normal 14px "Segoe UI", Arial, sans-serif';
+                    ctx.fillText((idx + 1) + ". " + p.ket, 630, outY);
+                    ctx.textAlign = 'right';
+                    ctx.fillStyle = '#b91c1c';
+                    ctx.font = 'bold 14px monospace';
+                    ctx.fillText("Rp " + pjFormatRupiah(p.nominal), 615 + tableW - 15, outY);
+                    ctx.textAlign = 'left';
+                    outY += 30;
+                });
 
-                curY += 35;
-                ctx.font = 'normal 18px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("Saldo Awal (+) Jumlah Pemasukan (-) Jumlah Pengeluaran", 50, curY);
+                // Subtotal Pengeluaran Bar
+                const outSubY = curY + 34 + tableBodyH;
+                ctx.fillStyle = '#fef2f2';
+                ctx.fillRect(615, outSubY, tableW, 34);
+                ctx.strokeStyle = '#fecaca';
+                ctx.strokeRect(615, outSubY, tableW, 34);
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 14px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Total Pengeluaran", 630, outSubY + 23);
+                ctx.textAlign = 'right';
+                ctx.fillText("Rp " + pjFormatRupiah(totalOut), 615 + tableW - 15, outSubY + 23);
+                ctx.textAlign = 'left';
 
-                const saldoAkhir = (parseInt(pjData.saldoAwal, 10) || 0) + totalIn - totalOut;
-                ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("= ", 880, curY);
-                drawHighlightBox(pjFormatRupiah(saldoAkhir), 910, curY, '#ffff00', '#d4d400');
+                curY = inSubY + 34 + 22;
 
-                // ==================== II. PETUGAS SHOLAT JUMAT ====================
-                curY += 60;
-                ctx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("II. Petugas Sholat Jum'at", 50, curY);
+                // ==================== II. PETUGAS SHOLAT JUMAT (4 KARTU) ====================
+                ctx.fillStyle = '#064e3b';
+                ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("II. Petugas Ibadah Sholat Jum'at", 40, curY);
 
-                curY += 35;
-                const petugasList = [
-                    { label: "a. Imam & Khotib", val: pjData.petugas.imamKhotib },
-                    { label: "b. Muadzin", val: pjData.petugas.muadzin },
-                    { label: "c. Bilal", val: pjData.petugas.bilal },
-                    { label: "d. Mc Maklumat", val: pjData.petugas.maklumat }
+                curY += 12;
+
+                const officerW = 265;
+                const officerH = 75;
+                const officerY = curY;
+
+                const officers = [
+                    { label: "IMAM & KHOTIB", val: pjData.petugas.imamKhotib, bar: "#047857" },
+                    { label: "MUADZIN", val: pjData.petugas.muadzin, bar: "#0284c7" },
+                    { label: "BILAL SHOLAT", val: pjData.petugas.bilal, bar: "#d97706" },
+                    { label: "MC MAKLUMAT", val: pjData.petugas.maklumat, bar: "#7c3aed" }
                 ];
 
-                petugasList.forEach(pt => {
-                    ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                    ctx.fillText(pt.label, 50, curY);
-                    ctx.fillText(":", 250, curY);
-                    ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
-                    ctx.fillText(pt.val || '-', 275, curY);
-                    curY += 32;
+                officers.forEach((off, idx) => {
+                    const ox = 40 + (idx * 285);
+                    ctx.fillStyle = '#f8fafc';
+                    roundRect(ctx, ox, officerY, officerW, officerH, 6);
+                    ctx.strokeStyle = '#e2e8f0';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    // Top Bar Warna
+                    ctx.fillStyle = off.bar;
+                    ctx.fillRect(ox, officerY, officerW, 4);
+
+                    // Label Peran
+                    ctx.font = 'bold 12px "Segoe UI", Arial, sans-serif';
+                    ctx.fillText(off.label, ox + 14, officerY + 26);
+
+                    // Nama Petugas
+                    ctx.fillStyle = '#0f172a';
+                    ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
+                    ctx.fillText(off.val || '-', ox + 14, officerY + 54);
                 });
 
-                // ==================== III. HIMBAUAN ====================
-                curY += 25;
-                ctx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
-                ctx.fillText("III. HIMBAUAN", 50, curY);
+                curY = officerY + officerH + 22;
 
-                curY += 35;
+                // ==================== III. HIMBAUAN JAMAAH ====================
+                ctx.fillStyle = '#064e3b';
+                ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("III. Himbauan & Tata Tertib Jamaah", 40, curY);
+
+                curY += 12;
+
                 const hLines = (pjData.himbauan && pjData.himbauan.length > 0) ? pjData.himbauan : [
                     "Diharapkan Jamaah Mematuhi Protokol kesehatan",
                     "Bagi Jamaah yang membawa kendaraan diharapkan mengunci ganda kendaraannya",
                     "Bagi Jamaah yang membawa Hp Mohon di Non Aktifkan / di Silent"
                 ];
 
+                const himBoxH = (hLines.length * 28) + 16;
+                ctx.fillStyle = '#fdfbf7';
+                roundRect(ctx, 40, curY, 1120, himBoxH, 6);
+                ctx.strokeStyle = '#f3e8d2';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                // Left bar gold
+                ctx.fillStyle = '#c5a059';
+                ctx.fillRect(40, curY, 6, himBoxH);
+
+                let himY = curY + 24;
                 hLines.forEach((line, idx) => {
-                    let formattedLine = line;
-                    if (!/^[a-zA-Z0-9][.)]s*/.test(line)) {
-                        formattedLine = String.fromCharCode(97 + idx) + ". " + line;
-                    }
-                    ctx.font = 'normal 18.5px "Segoe UI", Arial, sans-serif';
-                    ctx.fillText(formattedLine, 50, curY);
-                    curY += 30;
+                    let cleanText = line.replace(/^[a-zA-Z0-9][\\.\\)]\\s*/, '');
+                    const letter = String.fromCharCode(97 + idx);
+
+                    // Lingkaran Hijau Huruf
+                    ctx.fillStyle = '#047857';
+                    ctx.beginPath();
+                    ctx.arc(65, himY - 5, 10, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 11px "Segoe UI", Arial, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(letter, 65, himY - 1);
+
+                    // Teks Himbauan
+                    ctx.textAlign = 'left';
+                    ctx.fillStyle = '#334155';
+                    ctx.font = 'normal 15px "Segoe UI", Arial, sans-serif';
+                    ctx.fillText(cleanText, 85, himY);
+
+                    himY += 28;
                 });
 
+                curY += himBoxH + 20;
+
                 // ==================== TITIMANGSA & PENGESAHAN ====================
-                curY += 45;
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#475569';
+                ctx.font = 'normal 14.5px "Segoe UI", Arial, sans-serif';
+                ctx.fillText("Ditetapkan di: " + (pjData.titimangsa || 'Simpangan, 02 Oktober 2026'), 1160, curY);
+
+                curY += 15;
 
                 // Muat Gambar Stempel Ketua & TTD Bendahara
                 const imgKetua = new Image();
@@ -15329,49 +15526,74 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 function checkAndFinalizeCanvas() {
                     loadedCount++;
                     if (loadedCount >= 2) {
-                        // Gambar Pengesahan Kiri (Mengetahui Ketua)
+                        // Kolom Kiri: Mengetahui Ketua DKM
                         ctx.textAlign = 'center';
-                        ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                        ctx.fillText("Mengetahui", 240, curY + 25);
-                        ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
-                        ctx.fillText("Ketua", 240, curY + 52);
+                        ctx.fillStyle = '#475569';
+                        ctx.font = 'normal 14.5px "Segoe UI", Arial, sans-serif';
+                        ctx.fillText("Mengetahui,", 240, curY + 18);
+                        ctx.font = 'bold 15px "Segoe UI", Arial, sans-serif';
+                        ctx.fillStyle = '#0f172a';
+                        ctx.fillText("Ketua DKM Masjid Jami' Al-Jihad", 240, curY + 38);
 
                         if (pjData.ttd.tampilkanKetua !== false) {
-                            ctx.drawImage(imgKetua, 160, curY + 65, 160, 115);
+                            ctx.drawImage(imgKetua, 160, curY + 48, 160, 100);
                         }
 
-                        // Garis Bawah Nama Ketua
-                        ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                        ctx.fillText(pjData.ttd.namaKetua || 'Hadi Prayitno', 240, curY + 205);
+                        ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
+                        ctx.fillText(pjData.ttd.namaKetua || 'Hadi Prayitno', 240, curY + 165);
                         const ketuaW = ctx.measureText(pjData.ttd.namaKetua || 'Hadi Prayitno').width;
                         ctx.lineWidth = 1.5;
-                        ctx.strokeStyle = '#000000';
+                        ctx.strokeStyle = '#0f172a';
                         ctx.beginPath();
-                        ctx.moveTo(240 - (ketuaW / 2), curY + 210);
-                        ctx.lineTo(240 + (ketuaW / 2), curY + 210);
+                        ctx.moveTo(240 - (ketuaW / 2), curY + 170);
+                        ctx.lineTo(240 + (ketuaW / 2), curY + 170);
                         ctx.stroke();
 
-                        // Gambar Pengesahan Kanan (Dibuat Oleh Bendahara)
-                        ctx.font = 'normal 19px "Segoe UI", Arial, sans-serif';
-                        ctx.fillText(pjData.titimangsa || 'Simpangan, 02 Oktober 2026', 950, curY);
-                        ctx.fillText("Dibuat Oleh,", 950, curY + 25);
-                        ctx.font = 'bold 19px "Segoe UI", Arial, sans-serif';
-                        ctx.fillText("Bendahara", 950, curY + 52);
+                        ctx.font = 'normal 13px "Segoe UI", Arial, sans-serif';
+                        ctx.fillStyle = '#64748b';
+                        ctx.fillText("Ketua DKM", 240, curY + 188);
+
+                        // Kolom Kanan: Dibuat Oleh Bendahara Kas
+                        ctx.fillStyle = '#475569';
+                        ctx.font = 'normal 14.5px "Segoe UI", Arial, sans-serif';
+                        ctx.fillText("Dibuat Oleh,", 960, curY + 18);
+                        ctx.font = 'bold 15px "Segoe UI", Arial, sans-serif';
+                        ctx.fillStyle = '#0f172a';
+                        ctx.fillText("Bendahara Kas Masjid", 960, curY + 38);
 
                         if (pjData.ttd.tampilkanBendahara !== false) {
-                            ctx.drawImage(imgBendahara, 875, curY + 65, 150, 115);
+                            ctx.drawImage(imgBendahara, 885, curY + 48, 150, 100);
                         }
 
-                        // Garis Bawah Nama Bendahara
-                        ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-                        ctx.fillText(pjData.ttd.namaBendahara || 'Utut Priyastya', 950, curY + 205);
+                        ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
+                        ctx.fillText(pjData.ttd.namaBendahara || 'Utut Priyastya', 960, curY + 165);
                         const benW = ctx.measureText(pjData.ttd.namaBendahara || 'Utut Priyastya').width;
                         ctx.beginPath();
-                        ctx.moveTo(950 - (benW / 2), curY + 210);
-                        ctx.lineTo(950 + (benW / 2), curY + 210);
+                        ctx.moveTo(960 - (benW / 2), curY + 170);
+                        ctx.lineTo(960 + (benW / 2), curY + 170);
                         ctx.stroke();
 
-                        // TRIGGER DOWNLOAD PNG
+                        ctx.font = 'normal 13px "Segoe UI", Arial, sans-serif';
+                        ctx.fillStyle = '#64748b';
+                        ctx.fillText("Bendahara Kas", 960, curY + 188);
+
+                        // Security Footer Bar
+                        ctx.strokeStyle = '#e2e8f0';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(40, H - 50);
+                        ctx.lineTo(1160, H - 50);
+                        ctx.stroke();
+
+                        ctx.textAlign = 'left';
+                        ctx.fillStyle = '#94a3b8';
+                        ctx.font = 'normal 12px "Segoe UI", Arial, sans-serif';
+                        ctx.fillText("🛡️ Dokumen Resmi Pengumuman Ibadah & Laporan Kas Sholat Jum'at - DKM Masjid Jami' Al-Jihad", 40, H - 32);
+
+                        ctx.textAlign = 'right';
+                        ctx.fillText("digitalaljihad.my.id • Format Eksekutif Resmi", 1160, H - 32);
+
+                        // Trigger Download
                         try {
                             const dataUrl = canvas.toDataURL('image/png');
                             const a = document.createElement('a');
@@ -15383,7 +15605,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                             document.body.removeChild(a);
 
                             if (typeof showCustomToast === 'function') {
-                                showCustomToast("Flyer Pengumuman Sholat Jum'at berhasil diunduh (PNG Resolusi Tinggi)!", 'success');
+                                showCustomToast("Flyer Pengumuman Eksekutif berhasil diunduh (PNG Resolusi Tinggi)!", 'success');
                             }
                         } catch(e) {
                             console.error('Download flyer error:', e);
@@ -15407,9 +15629,6 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             imgKop.src = 'img/kop_pengumuman_jumat.png';
         }
 
-        // =========================================================================
-        // FITUR 3: SEBARKAN KE WHATSAPP (MODAL + AUTO TEXT FORMATTING)
-        // =========================================================================
         function bukaModalWAPengumumanJumat() {
             simpanDataPengumumanJumat(false);
 

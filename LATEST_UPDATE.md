@@ -8869,3 +8869,65 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
 2. `web-statis/img/kop_pengumuman_jumat.png` (Aset Kop Surat resmi beresolusi tinggi 1024 × 205 px Gambar 2).
 3. `web-statis/sw.js` (Bump cache name ke `aljihad-signage-v3.3.5`).
 4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 204).
+
+## 📑 205. REDESAIN TOTAL LEMBAR PENGUMUMAN RESMI SHOLAT JUM'AT & LAPORAN KAS A4 MENJADI FORMAT EKSEKUTIF BERKELAS (4 KARTU STATISTIK KAS, TABEL DUA KOLOM AUDITED, 4 KARTU PETUGAS ELEGAN, BULLETIN CALLOUT, & CANVAS FLYER PRESTISIUS) (2 OKTOBER 2026)
+
+### 1. Kebutuhan & Permintaan Pengguna
+- **Permintaan Pengguna:**
+  - *"Penataan kotak-kotak pengumuman sudah OK."*
+  - *"Tapi tampilan Lembar Pengumuman Resmi masih sangat standar dan jauh dari profesional."*
+  - *"Tolong buat format dengan versi anda agar terlihat berkelas dan profesional. Gunakan kop surat yang saya kirim. Isinya kurang lebih sama."*
+- **Tujuan Perubahan:**
+  - Menghilangkan tampilan standar berbasis teks polos titik-titik dan stabilo kuning/hijau neon yang mirip catatan papan tulis kuno.
+  - Mentransformasi Lembar Pengumuman Resmi menjadi **Laporan Keuangan & Warta Ibadah Eksekutif Berstandar Internasional** (*Executive Financial & Worship Bulletin*), dengan estetika islami modern berlatar kertas putih A4, aksen hijau zamrud (*emerald*), emas (*gold*), kartu statistik ringkas, tabel pembukuan bersih ganda, serta kanvas flyer beresolusi tinggi.
+
+---
+
+### 2. Rincian Desain Eksekutif Baru yang Diterapkan
+
+#### A. Header & Pita Pengumuman Elegan (*Header Ribbon Banner*)
+- **Kop Surat HD (Gambar 2):** Menampilkan kop surat resmi DKM Al-Jihad (`img/kop_pengumuman_jumat.png`, 1024 × 205 px) dengan garis bawah pemisah hijau zamrud 2.5px.
+- **Pita Judul Eksekutif (*Emerald Gradient Ribbon*):**
+  - Berlatar gradasi hijau zamrud mewah (`linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)`) dengan sudut membulat 8px dan bayangan halus.
+  - Memuat sub-header emas: `📢 WARTA RESMI DKM MASJID JAMI' AL-JIHAD`.
+  - Judul utama cetak tebal: `PENGUMUMAN SHOLAT JUM'AT & LAPORAN KAS`.
+  - Dua badge pil elegan di sebelah kanan: `🗓️ [Tanggal Judul]` dengan aksen border emas dan `Kas s/d [Tanggal Kas]`.
+
+#### B. Bagian I: Laporan Keuangan Kas Masjid (*Executive Financial Dashboard & Dual Ledger*)
+1. **4 Kartu Statistik Keuangan Utama (*Top KPI Metric Cards*):**
+   - **Saldo Awal:** Aksen kuning-emas lembut (`#fffbeb`, border `#fde68a`, garis tepi `#f59e0b`) menampilkan `Rp [Saldo Awal]`.
+   - **Total Pemasukan (+):** Aksen hijau mint lembut (`#ecfdf5`, border `#a7f3d0`, garis tepi `#10b981`) menampilkan `Rp [Total Pemasukan]`.
+   - **Total Pengeluaran (-):** Aksen mawar/koral lembut (`#fff1f2`, border `#fecdd3`, garis tepi `#f43f5e`) menampilkan `Rp [Total Pengeluaran]`.
+   - **Saldo Akhir Kas:** Kartu mewah berlatar gradasi hijau tua (`#064e3b` ke `#047857`) dengan nominal rupiah emas kuning menyala (`#ffd700`, font 800) yang menjadi fokus utama transparansi kas.
+2. **Tabel Dua Kolom Pembukuan Bersih (*Side-by-Side Itemized Ledger*):**
+   - **Kolom Kiri (Pemasukan):** Header hijau zamrud `#047857`, daftar transaksi bernomor urut rapi, font nominal monospace tabular, dan bar subtotal hijau di bagian bawah.
+   - **Kolom Kanan (Pengeluaran):** Header abu-abu elegan `#475569`, daftar transaksi bernomor urut rapi, font nominal monospace warna merah tua (`#b91c1c`), dan bar subtotal merah lembut di bagian bawah.
+   - Tata letak dua kolom ini menghemat ruang vertikal secara optimal sehingga lembar pengumuman muat dengan sempurna dalam 1 halaman kertas A4 tanpa memotong halaman (*zero overflow*).
+
+#### C. Bagian II: Petugas Ibadah Sholat Jum'at (*4 Executive Officer Cards*)
+- Menampilkan 4 kartu petugas berjajar rapi 4 kolom dalam 1 baris simetris:
+  1. **Imam & Khotib:** Aksen atas hijau zamrud (`#047857`) & ikon mikrofon.
+  2. **Muadzin:** Aksen atas biru laut (`#0284c7`) & ikon pengeras suara.
+  3. **Bilal Sholat:** Aksen atas emas amber (`#d97706`) & ikon doa (*Eksklusif Petugas Bilal*).
+  4. **Mc Maklumat:** Aksen atas ungu royal (`#7c3aed`) & ikon toa (*Eksklusif Pembaca Maklumat*).
+
+#### D. Bagian III: Himbauan & Tata Tertib Jamaah (*Callout Bulletin Box*)
+- Kontainer buletin berwarna krem elegan (`#fdfbf7`, border `#f3e8d2`) dengan garis batas emas kiri setebal 4px (`#c5a059`).
+- Setiap butir himbauan dilengkapi dengan badge lingkaran hijau zamrud (`a`, `b`, `c`, dst.) berangka/huruf putih tebal sehingga tampak sangat rapi dan mudah dibaca oleh jamaah.
+
+#### E. Bagian IV: Pengesahan Dokumen & Footer Keaslian (*Official Seals & Signatures*)
+- **Titimangsa Presisi:** Posisi kanan atas tanda tangan `Ditetapkan di: Simpangan, [Tanggal]`.
+- **Kolom Kiri:** Mengetahui, **Ketua DKM Masjid Jami' Al-Jihad** dengan stempel resmi DKM transparan dan tanda tangan asli, serta nama bergaris bawah `Hadi Prayitno`.
+- **Kolom Kanan:** Dibuat Oleh, **Bendahara Kas Masjid** dengan tanda tangan resmi transparan dan nama bergaris bawah `Utut Priyastya`.
+- **Micro-Footer Keaslian:** Catatan keamanan dokumen resmi di bagian paling bawah `Dokumen Resmi Pengumuman Ibadah & Kas Jum'at DKM Masjid Jami' Al-Jihad Simpangan | digitalaljihad.my.id • Format Standar A4 Eksekutif`.
+
+#### F. Pembaruan Mesin Flyer Canvas 2D & Cetak A4
+- **Cetak Lembar A4 (`cetakPengumumanJumat`):** Disesuaikan dengan CSS print margin 8mm-12mm sehingga mencetak format eksekutif baru secara instan dan rapi di semua peramban.
+- **Download Flyer PNG (`downloadFlyerPengumumanJumat`):** Mesin HTML5 Canvas 2D dirombak total untuk menggambar desain eksekutif baru (pita gradasi, 4 kartu ringkasan keuangan, tabel 2 kolom bergaris rapi, 4 kartu petugas warna, lingkaran badge himbauan, stempel transparan, dan footer dokumen) pada resolusi tajam 1200 × 1720 px.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Pembaruan total lembar preview `#pjPrintableSheet`, fungsi `pjUpdatePreview`, `cetakPengumumanJumat`, dan `downloadFlyerPengumumanJumat`).
+2. `web-statis/sw.js` (Bump versi cache ke `aljihad-signage-v3.3.6`).
+3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 205).
