@@ -57,7 +57,8 @@
                 { page: '/idul-fitri-embed', path: 'slides/idul-fitri.html', name: 'Petugas Sholat Idul Fitri', active: false, order: 16 },
                 { page: '/idul-adha-embed', path: 'slides/idul-adha.html', name: 'Petugas Sholat Idul Adha', active: false, order: 17 },
                 { page: '/ramadhan-embed', path: 'slides/ramadhan.html', name: 'Semarak Ramadhan & Kas Tromol', active: true, order: 18 },
-                { page: '/undangan-embed', path: 'slides/undangan.html', name: 'Undangan Luar (Ukhuwah)', active: true, order: 19 }
+                { page: '/undangan-embed', path: 'slides/undangan.html', name: 'Undangan Luar (Ukhuwah)', active: true, order: 19 },
+                { page: '/kas-jumat-embed', path: 'slides/kas-jumat.html', name: "Maklumat & Kas Jum'at (Khusus Jum'at)", active: true, order: 20 }
             ]
         },
 

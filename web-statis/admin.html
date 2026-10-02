@@ -4573,6 +4573,39 @@
                             </div>
                         </div>
 
+                        <!-- SMART SCHEDULING CARD: SLIDE LAYAR PENUH TV MAKLUMAT & KAS JUMAT -->
+                        <div class="card mb-4 shadow border-left-success" style="border-radius: 12px; background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+                            <div class="card-body py-3 px-4 d-flex flex-wrap align-items-center justify-content-between">
+                                <div class="d-flex align-items-center mb-2 mb-md-0">
+                                    <span style="width: 48px; height: 48px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1.5px solid rgba(16, 185, 129, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);" class="mr-3">
+                                        <i class="fas fa-tv"></i>
+                                    </span>
+                                    <div>
+                                        <div class="d-flex align-items-center flex-wrap">
+                                            <h6 class="m-0 font-weight-bold text-gray-900 mr-2" style="font-size: 1.05rem;">
+                                                Slide Layar Penuh TV: Maklumat & Kas Sholat Jum'at
+                                            </h6>
+                                            <span class="badge badge-warning text-dark font-weight-bold" style="font-size: 11px;">
+                                                <i class="fas fa-calendar-check mr-1"></i> Smart Scheduling: Tayang Khusus Hari Jum'at
+                                            </span>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            Laporan Keuangan Kas Masjid & Himbauan otomatis tayang penuh di TV display setiap hari Jum'at dan otomatis sembunyi di hari lainnya.
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-sm btn-outline-info font-weight-bold mr-3 shadow-sm" onclick="bukaPreviewSlide('slides/kas-jumat.html', 'Maklumat & Kas Sholat Jum\'at')">
+                                        <i class="fas fa-desktop mr-1"></i> Preview Layar TV
+                                    </button>
+                                    <div class="custom-control custom-switch custom-switch-lg">
+                                        <input type="checkbox" class="custom-control-input" id="switchSlideKasJumat" onchange="toggleSlideKasJumat(this.checked)" checked>
+                                        <label class="custom-control-label font-weight-bold text-success" for="switchSlideKasJumat" id="lblSwitchKasJumat">Tayang di TV Aktif</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- BARIS 1: KIRI = PENGATURAN TANGGAL & PERIODE | KANAN = PETUGAS SHOLAT JUMAT -->
                         <div class="row">
                             <!-- KIRI: KOTAK 1 (TANGGAL & PERIODE LAPORAN) -->
@@ -7093,7 +7126,8 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             { order: 16, name: 'Petugas Sholat Idul Fitri', path: 'slides/idul-fitri.html', url: 'slides/idul-fitri.html', page: '/idul-fitri-embed', category: 'Hari Raya', category_color: 'info', active: false },
             { order: 17, name: 'Petugas Sholat Idul Adha', path: 'slides/idul-adha.html', url: 'slides/idul-adha.html', page: '/idul-adha-embed', category: 'Hari Raya', category_color: 'info', active: false },
             { order: 18, name: 'Semarak Ramadhan & Kas Tromol', path: 'slides/ramadhan.html', url: 'slides/ramadhan.html', page: '/ramadhan-embed', category: 'Ramadhan', category_color: 'warning text-dark', active: true },
-            { order: 19, name: 'Pengajian Rutin Malam Ahad', path: 'slides/kajian.html', url: 'slides/kajian.html', page: '/kajian-embed', category: 'Kajian', category_color: 'success', active: true }
+            { order: 19, name: 'Pengajian Rutin Malam Ahad', path: 'slides/kajian.html', url: 'slides/kajian.html', page: '/kajian-embed', category: 'Kajian', category_color: 'success', active: true },
+            { order: 20, name: "Maklumat & Kas Jum'at (Khusus Jum'at)", path: 'slides/kas-jumat.html', url: 'slides/kas-jumat.html', page: '/kas-jumat-embed', category: "Jum'at", category_color: 'warning text-dark', active: true }
         ];
 
         // Helper untuk ekstrak canonical key dari URL/Path/Page slide (contoh: 'slides/utama.html' -> 'utama')
@@ -12103,7 +12137,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 'idul-fitri': 'fas fa-bullhorn',
                 'idul-adha': 'fas fa-bullhorn',
                 'ramadhan': 'fas fa-star-and-crescent',
-                'kajian': 'fas fa-graduation-cap'
+                'kajian': 'fas fa-graduation-cap',
+                'kas-jumat': 'fas fa-hand-holding-usd'
             };
 
             container.innerHTML = MASTER_ROTATION_PAGES.map((page, idx) => {
@@ -13451,6 +13486,52 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
             renderRotationTable(cachedRotationPages);
             alert(isActive ? 'Layar Semarak Ramadhan & Kas Tromol kini AKTIF di rotasi TV display.' : 'Layar Semarak Ramadhan dinonaktifkan dari rotasi TV.');
+        }
+
+        // Switch Aktif/Nonaktif Slide Layar Penuh "Maklumat & Kas Jum'at" di TV (Smart Scheduling)
+        async function toggleSlideKasJumat(isActive) {
+            if (!cachedRotationPages || cachedRotationPages.length === 0) {
+                cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
+            }
+
+            let rPage = cachedRotationPages.find(p => (p.url || p.path || '').includes('kas-jumat'));
+            if (rPage) {
+                rPage.active = isActive;
+            } else {
+                cachedRotationPages.push({
+                    order: 20,
+                    name: "Maklumat & Kas Jum'at (Khusus Jum'at)",
+                    path: 'slides/kas-jumat.html',
+                    url: 'slides/kas-jumat.html',
+                    page: '/kas-jumat-embed',
+                    category: "Jum'at",
+                    category_color: 'warning text-dark',
+                    active: isActive
+                });
+            }
+
+            cachedRotationPages = normalizeRotationPages(cachedRotationPages);
+            localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
+            const lbl = document.getElementById('lblSwitchKasJumat');
+            if (lbl) {
+                lbl.textContent = isActive ? 'Tayang di TV Aktif' : 'Tayang di TV Nonaktif';
+                lbl.className = isActive ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-secondary';
+            }
+
+            try {
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        rotation_pages: cachedRotationPages
+                    })
+                });
+            } catch (err) {
+                console.warn('Sync toggle rotasi kas-jumat Supabase:', err);
+            }
+
+            renderRotationTable(cachedRotationPages);
+            alert(isActive ? 'Alhamdulillah! Slide Khusus "Maklumat & Kas Jum\'at" kini AKTIF dan siap tayang otomatis setiap hari Jum\'at pada TV Display.' : 'Slide Maklumat & Kas Jum\'at dinonaktifkan dari rotasi TV.');
         }
 
         // Reorder Slide (Super Admin Only)
@@ -15079,6 +15160,22 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             pjRenderFormPemasukan();
             pjRenderFormPengeluaran();
             pjHitungKas();
+
+            // Sinkronkan status switch Slide Layar Penuh TV Maklumat & Kas Jumat
+            try {
+                if (!cachedRotationPages || cachedRotationPages.length === 0) {
+                    cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
+                }
+                const kjPage = cachedRotationPages.find(p => (p.url || p.path || '').includes('kas-jumat'));
+                const isKjActive = kjPage ? (kjPage.active !== false) : true;
+                const swEl = document.getElementById('switchSlideKasJumat');
+                const lblEl = document.getElementById('lblSwitchKasJumat');
+                if (swEl) swEl.checked = isKjActive;
+                if (lblEl) {
+                    lblEl.textContent = isKjActive ? 'Tayang di TV Aktif' : 'Tayang di TV Nonaktif';
+                    lblEl.className = isKjActive ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-secondary';
+                }
+            } catch(e) {}
         }
 
         // Render List Input Pemasukan di Form

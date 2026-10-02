@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Laporan Kas & Maklumat Sholat Jum'at - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261003_01">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261003_01">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background-color: #01130b;
+        }
+
+        .display-background {
+            background-image: url('../image/display/background/bg_jumat.jpg') !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+            background-size: cover !important;
+            filter: brightness(0.85) contrast(1.08) saturate(1.05) !important;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .display-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(1, 22, 14, 0.45) 0%, rgba(1, 15, 10, 0.85) 100%);
+            z-index: 2;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1680px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 24px 62px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* HEADER AREA */
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .schedule-header-section {
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 6px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .title-with-icons {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: linear-gradient(135deg, rgba(2, 28, 19, 0.92) 0%, rgba(5, 45, 30, 0.88) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.7);
+            border-radius: 35px;
+            padding: 5px 28px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .title-icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(4, 25, 18, 0.9);
+            border: 1.5px solid rgba(255, 215, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffd700;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+
+        .title-text-wrap h2 {
+            font-size: 1.55rem;
+            color: #ffffff !important;
+            letter-spacing: 1.5px;
+            font-weight: 800;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .title-text-wrap p {
+            margin: 0;
+            font-size: 0.86rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* MAIN CONTENT PANEL */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            margin: 6px 0;
+            min-height: 0;
+            gap: 10px;
+        }
+
+        /* 4 KARTU STATISTIK KAS (KPI GRID LAYAR PENUH) */
+        .kas-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        .kpi-card {
+            background: rgba(4, 25, 18, 0.82);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 10px 18px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+        }
+
+        .kpi-card-saldo-awal { border-left-color: #f59e0b; }
+        .kpi-card-saldo-awal::before { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
+        .kpi-card-saldo-awal .kpi-icon { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .kpi-card-saldo-awal .kpi-label { color: #fbbf24; }
+        .kpi-card-saldo-awal .kpi-val { color: #fde68a; }
+
+        .kpi-card-pemasukan { border-left-color: #10b981; }
+        .kpi-card-pemasukan::before { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .kpi-card-pemasukan .kpi-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .kpi-card-pemasukan .kpi-label { color: #34d399; }
+        .kpi-card-pemasukan .kpi-val { color: #a7f3d0; }
+
+        .kpi-card-pengeluaran { border-left-color: #ef4444; }
+        .kpi-card-pengeluaran::before { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .kpi-card-pengeluaran .kpi-icon { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .kpi-card-pengeluaran .kpi-label { color: #f87171; }
+        .kpi-card-pengeluaran .kpi-val { color: #fca5a5; }
+
+        .kpi-card-saldo-akhir {
+            background: linear-gradient(135deg, rgba(6, 78, 59, 0.95) 0%, rgba(4, 120, 87, 0.92) 100%) !important;
+            border: 1.5px solid rgba(255, 215, 0, 0.75) !important;
+            box-shadow: 0 6px 25px rgba(250, 204, 21, 0.3) !important;
+        }
+        .kpi-card-saldo-akhir::before { background: #facc15; box-shadow: 0 0 12px #facc15; }
+        .kpi-card-saldo-akhir .kpi-icon { background: rgba(255, 215, 0, 0.2); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.6); }
+        .kpi-card-saldo-akhir .kpi-label { color: #fef08a; }
+        .kpi-card-saldo-akhir .kpi-val {
+            color: #facc15 !important;
+            text-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
+            font-size: 1.52rem !important;
+        }
+
+        .kpi-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .kpi-body {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .kpi-label {
+            font-size: 0.80rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .kpi-val {
+            font-size: 1.40rem;
+            font-weight: 900;
+            margin-top: 1px;
+            font-family: 'Poppins', sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 2 KOLOM TABEL RINCIAN KAS (PEMASUKAN & PENGELUARAN) */
+        .kas-tables-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .table-col-card {
+            background: rgba(3, 20, 14, 0.78);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1.2px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .table-col-header {
+            padding: 8px 16px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .table-col-header.in {
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.85) 0%, rgba(15, 118, 110, 0.9) 100%);
+            color: #ffffff;
+        }
+
+        .table-col-header.out {
+            background: linear-gradient(135deg, rgba(51, 65, 85, 0.85) 0%, rgba(30, 41, 59, 0.9) 100%);
+            color: #ffffff;
+        }
+
+        .table-body-scroll {
+            padding: 8px 12px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .table-row-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.88rem;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .table-row-item:hover {
+            background: rgba(255, 215, 0, 0.08);
+        }
+
+        .table-row-item:last-child {
+            border-bottom: none;
+        }
+
+        .row-keterangan {
+            color: #e2e8f0;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 68%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .row-keterangan .row-index {
+            color: #ffd700;
+            font-weight: 700;
+            min-width: 20px;
+        }
+
+        .row-nominal {
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .row-nominal.in { color: #34d399; }
+        .row-nominal.out { color: #f87171; }
+
+        .table-col-footer {
+            padding: 8px 16px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-col-footer.in {
+            background: rgba(13, 148, 136, 0.28);
+            border-top: 1.5px solid rgba(13, 148, 136, 0.6);
+            color: #5eead4;
+        }
+
+        .table-col-footer.out {
+            background: rgba(239, 68, 68, 0.22);
+            border-top: 1.5px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+
+        /* PITA HIMBAUAN JAMAAH & ADAB JUM'AT */
+        .jumat-bottom-ribbon {
+            background: linear-gradient(135deg, rgba(2, 28, 19, 0.92) 0%, rgba(5, 45, 30, 0.88) 100%);
+            border: 1.2px solid rgba(255, 215, 0, 0.55);
+            border-radius: 25px;
+            padding: 6px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            flex-shrink: 0;
+        }
+
+        .ribbon-badge {
+            background: #ffd700;
+            color: #022013;
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .ribbon-content {
+            flex: 1;
+            font-size: 0.92rem;
+            color: #ffffff;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .ribbon-content strong {
+            color: #ffd700;
+        }
+
+        /* RUNNING TEKS MARQUEE BAWAH */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.92);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+        }
+        .running-badge {
+            background: #ffd700;
+            color: #022013;
+            padding: 7px 16px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            z-index: 22;
+        }
+        .running-text-container {
+            padding: 6px 20px;
+            overflow: hidden;
+            white-space: nowrap;
+            flex: 1;
+        }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 68s linear infinite;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* RESPONSIVE LAYOUT */
+        @media (max-width: 900px) {
+            .kas-kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .kas-tables-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
+
+    <div class="container">
+        <!-- HEADER UTAMA -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime"></div>
+
+            <div class="schedule-header-section">
+                <div class="title-with-icons">
+                    <div class="title-icon-badge left-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="title-text-wrap">
+                        <h2>Maklumat & Laporan Kas Sholat Jum'at</h2>
+                        <p>Laporan Keuangan Kas Masjid Transparan, Akuntabel & Himbauan Jamaah Hari Jum'at</p>
+                    </div>
+                    <div class="title-icon-badge right-icon"><i class="fas fa-kaaba"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT PANEL -->
+        <div class="main-content">
+            <!-- 4 KARTU STATISTIK KAS UTAMA -->
+            <div class="kas-kpi-grid">
+                <!-- Saldo Awal -->
+                <div class="kpi-card kpi-card-saldo-awal">
+                    <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">SALDO AWAL KAS</span>
+                        <div class="kpi-val" id="tvKasSaldoAwal">Rp 0</div>
+                    </div>
+                </div>
+                <!-- Pemasukan (+) -->
+                <div class="kpi-card kpi-card-pemasukan">
+                    <div class="kpi-icon"><i class="fas fa-arrow-circle-down"></i></div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">PEMASUKAN KAS (+)</span>
+                        <div class="kpi-val" id="tvKasPemasukan">+ Rp 0</div>
+                    </div>
+                </div>
+                <!-- Pengeluaran (-) -->
+                <div class="kpi-card kpi-card-pengeluaran">
+                    <div class="kpi-icon"><i class="fas fa-arrow-circle-up"></i></div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">PENGELUARAN BIAYA (-)</span>
+                        <div class="kpi-val" id="tvKasPengeluaran">- Rp 0</div>
+                    </div>
+                </div>
+                <!-- Saldo Akhir Kas -->
+                <div class="kpi-card kpi-card-saldo-akhir">
+                    <div class="kpi-icon"><i class="fas fa-coins"></i></div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">SALDO AKHIR KAS</span>
+                        <div class="kpi-val" id="tvKasSaldoAkhir">Rp 0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2 KOLOM TABEL RINCIAN KAS (PEMASUKAN & PENGELUARAN) -->
+            <div class="kas-tables-layout">
+                <!-- Kolom Pemasukan -->
+                <div class="table-col-card">
+                    <div class="table-col-header in">
+                        <span><i class="fas fa-hand-holding-usd mr-1"></i> Rincian Pemasukan Kas</span>
+                        <span>Nominal</span>
+                    </div>
+                    <div class="table-body-scroll" id="tvListPemasukan">
+                        <!-- Rows rendered dynamically -->
+                    </div>
+                    <div class="table-col-footer in">
+                        <span>Total Pemasukan</span>
+                        <span id="tvTotalInFooter">Rp 0</span>
+                    </div>
+                </div>
+
+                <!-- Kolom Pengeluaran -->
+                <div class="table-col-card">
+                    <div class="table-col-header out">
+                        <span><i class="fas fa-file-invoice mr-1"></i> Rincian Pengeluaran / Biaya</span>
+                        <span>Nominal</span>
+                    </div>
+                    <div class="table-body-scroll" id="tvListPengeluaran">
+                        <!-- Rows rendered dynamically -->
+                    </div>
+                    <div class="table-col-footer out">
+                        <span>Total Pengeluaran</span>
+                        <span id="tvTotalOutFooter">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PITA ROTATOR HIMBAUAN JAMAAH & ADAB JUM'AT -->
+            <div class="jumat-bottom-ribbon">
+                <span class="ribbon-badge" id="ribbonBadge">
+                    <i class="fas fa-bullhorn"></i> <span id="ribbonBadgeText">HIMBAUAN</span>
+                </span>
+                <div class="ribbon-content" id="ribbonContentText">
+                    Memuat himbauan jamaah sholat Jum'at...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RUNNING TEKS MARQUEE BAWAH -->
+    <div class="bottom-running-wrap">
+        <div class="running-badge"><i class="fas fa-bullhorn"></i> WARTA KAS JUM'AT</div>
+        <div class="running-text-container">
+            <div class="running-text" id="runningText">
+                <i class="fas fa-hand-holding-heart"></i> <span id="runningTextContent">Laporan Keuangan Kas Masjid Jami' Al-Jihad Sholat Jum'at. Jazakumullahu khairan katsiran kepada seluruh jamaah & muhsinin.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUPABASE & CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        function formatRupiah(num) {
+            const val = parseFloat(num) || 0;
+            return new Intl.NumberFormat('id-ID').format(val);
+        }
+
+        // List Rotator Himbauan Jamaah & Hadits
+        let himbauanList = [
+            { badge: "HIMBAUAN 1", icon: "fas fa-mobile-alt", text: "Mohon menonaktifkan atau mengatur HP dalam nada dering hening (silent mode) selama berada di dalam masjid." },
+            { badge: "HIMBAUAN 2", icon: "fas fa-child", text: "Bagi jamaah yang membawa anak kecil, mohon didampingi dan dijaga ketertibannya agar tidak mengganggu kekhusyukan jamaah lain." },
+            { badge: "ADAB JUM'AT", icon: "fas fa-volume-mute", text: '<strong>Adab Khutbah:</strong> "Jika kamu berkata kepada sahabatmu: \'Diamlah!\' di hari Jum\'at saat khatib berkhutbah, maka kamu telah berbuat sia-sia." (HR. Bukhari)' },
+            { badge: "HIMBAUAN 3", icon: "fas fa-shoe-prints", text: "Mohon meletakkan alas kaki (sandal/sepatu) dengan rapi di tempat yang telah disediakan." },
+            { badge: "HIMBAUAN 4", icon: "fas fa-trash-alt", text: "Jagalah selalu kebersihan, ketertiban, dan kesucian masjid serta lingkungan sekitarnya." },
+            { badge: "HADITS JUM'AT", icon: "fas fa-hands-praying", text: '<strong>Keutamaan Shalawat:</strong> "Perbanyaklah shalawat kepadaku di hari Jum\'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)' }
+        ];
+        let ribbonIdx = 0;
+
+        function rotateRibbon() {
+            if (!himbauanList || himbauanList.length === 0) return;
+            ribbonIdx = (ribbonIdx + 1) % himbauanList.length;
+            const item = himbauanList[ribbonIdx];
+            const badgeEl = document.getElementById('ribbonBadge');
+            const badgeTextEl = document.getElementById('ribbonBadgeText');
+            const textEl = document.getElementById('ribbonContentText');
+
+            if (textEl) {
+                textEl.style.opacity = '0';
+                setTimeout(() => {
+                    if (badgeTextEl) badgeTextEl.textContent = item.badge;
+                    if (badgeEl) {
+                        badgeEl.innerHTML = `<i class="${item.icon || 'fas fa-info-circle'}"></i> <span>${item.badge}</span>`;
+                    }
+                    textEl.innerHTML = item.text;
+                    textEl.style.opacity = '1';
+                }, 350);
+            }
+        }
+        setInterval(rotateRibbon, 8500);
+
+        // Load & Sync Data Pengumuman & Kas Jum'at
+        async function loadKasJumatData() {
+            try {
+                // 1. Settings & Nama Masjid
+                const settings = await SupabaseDB.getSettings();
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = SupabaseDB.getRunningTextForPage('/kas-jumat-embed', settings) || SupabaseDB.getRunningTextForPage('/jumat-embed', settings);
+                    if (rText) document.getElementById('runningTextContent').textContent = rText;
+                }
+
+                // 2. Data Pengumuman & Kas Jumat dari app_settings.pengumuman_jumat atau localStorage
+                let pengumumanData = null;
+                if (settings && settings.pengumuman_jumat) {
+                    pengumumanData = typeof settings.pengumuman_jumat === 'string'
+                        ? JSON.parse(settings.pengumuman_jumat)
+                        : settings.pengumuman_jumat;
+                }
+
+                if (!pengumumanData) {
+                    try {
+                        const local = localStorage.getItem('cached_pengumuman_jumat');
+                        if (local) pengumumanData = JSON.parse(local);
+                    } catch (e) {}
+                }
+
+                // Default Fallback resmi Al-Jihad jika belum ada input admin
+                if (!pengumumanData) {
+                    pengumumanData = {
+                        saldo_awal: 19379023,
+                        pemasukan: 3500000,
+                        pengeluaran: 4137000,
+                        saldo_akhir: 18742023,
+                        rincian_pemasukan: [
+                            { ket: "Pendapatan Tromol Jumat Lalu", jumlah: 3500000 }
+                        ],
+                        rincian_pengeluaran: [
+                            { ket: "Biaya Majlis Ta'lim Ibu - Ibu", jumlah: 800000 },
+                            { ket: "Biaya Alokasi Buat Operasional", jumlah: 200000 },
+                            { ket: "Biaya Operasional Masjid Jami' Al-Jihad", jumlah: 3137000 }
+                        ],
+                        himbauan: [
+                            "Mohon menonaktifkan atau mengatur HP dalam nada dering hening (silent mode).",
+                            "Bagi jamaah yang membawa anak kecil, mohon didampingi dan dijaga ketertibannya.",
+                            "Mohon meletakkan alas kaki dengan rapi di tempat yang telah disediakan.",
+                            "Jagalah selalu kebersihan, ketertiban, dan kesucian masjid."
+                        ]
+                    };
+                }
+
+                // Render 4 KPI Kas
+                const saldoAwal = parseFloat(pengumumanData.saldo_awal) || 0;
+                const pemasukan = parseFloat(pengumumanData.pemasukan) || 0;
+                const pengeluaran = parseFloat(pengumumanData.pengeluaran) || 0;
+                const saldoAkhir = pengumumanData.saldo_akhir !== undefined 
+                    ? parseFloat(pengumumanData.saldo_akhir) 
+                    : (saldoAwal + pemasukan - pengeluaran);
+
+                document.getElementById('tvKasSaldoAwal').textContent = `Rp ${formatRupiah(saldoAwal)}`;
+                document.getElementById('tvKasPemasukan').textContent = `+ Rp ${formatRupiah(pemasukan)}`;
+                document.getElementById('tvKasPengeluaran').textContent = `- Rp ${formatRupiah(pengeluaran)}`;
+                document.getElementById('tvKasSaldoAkhir').textContent = `Rp ${formatRupiah(saldoAkhir)}`;
+
+                // Render Tabel Rincian Pemasukan
+                const listInEl = document.getElementById('tvListPemasukan');
+                const listIn = Array.isArray(pengumumanData.rincian_pemasukan) && pengumumanData.rincian_pemasukan.length > 0
+                    ? pengumumanData.rincian_pemasukan
+                    : [{ ket: "Pendapatan Tromol Jumat Lalu", jumlah: pemasukan }];
+
+                listInEl.innerHTML = listIn.map((item, idx) => `
+                    <div class="table-row-item">
+                        <span class="row-keterangan" title="${escapeHtml(item.ket || '')}">
+                            <span class="row-index">${idx + 1}.</span>
+                            <span>${escapeHtml(item.ket || '-')}</span>
+                        </span>
+                        <span class="row-nominal in">Rp ${formatRupiah(item.jumlah || 0)}</span>
+                    </div>
+                `).join('');
+                document.getElementById('tvTotalInFooter').textContent = `Rp ${formatRupiah(pemasukan)}`;
+
+                // Render Tabel Rincian Pengeluaran
+                const listOutEl = document.getElementById('tvListPengeluaran');
+                const listOut = Array.isArray(pengumumanData.rincian_pengeluaran) && pengumumanData.rincian_pengeluaran.length > 0
+                    ? pengumumanData.rincian_pengeluaran
+                    : [{ ket: "Biaya Operasional Masjid Jami' Al-Jihad", jumlah: pengeluaran }];
+
+                listOutEl.innerHTML = listOut.map((item, idx) => `
+                    <div class="table-row-item">
+                        <span class="row-keterangan" title="${escapeHtml(item.ket || '')}">
+                            <span class="row-index">${idx + 1}.</span>
+                            <span>${escapeHtml(item.ket || '-')}</span>
+                        </span>
+                        <span class="row-nominal out">Rp ${formatRupiah(item.jumlah || 0)}</span>
+                    </div>
+                `).join('');
+                document.getElementById('tvTotalOutFooter').textContent = `Rp ${formatRupiah(pengeluaran)}`;
+
+                // Render Himbauan Jamaah Dinamis jika ada di data pengumuman
+                if (Array.isArray(pengumumanData.himbauan) && pengumumanData.himbauan.length > 0) {
+                    const customHimbauan = pengumumanData.himbauan.map((text, i) => ({
+                        badge: `HIMBAUAN ${i + 1}`,
+                        icon: i === 0 ? 'fas fa-mobile-alt' : (i === 1 ? 'fas fa-child' : (i === 2 ? 'fas fa-shoe-prints' : 'fas fa-trash-alt')),
+                        text: text
+                    }));
+                    // Gabungkan dengan kutipan adab khutbah dan shalawat
+                    himbauanList = [
+                        ...customHimbauan,
+                        { badge: "ADAB JUM'AT", icon: "fas fa-volume-mute", text: '<strong>Adab Khutbah:</strong> "Jika kamu berkata kepada sahabatmu: \'Diamlah!\' di hari Jum\'at saat khatib berkhutbah, maka kamu telah berbuat sia-sia." (HR. Bukhari)' },
+                        { badge: "HADITS JUM'AT", icon: "fas fa-hands-praying", text: '<strong>Keutamaan Shalawat:</strong> "Perbanyaklah shalawat kepadaku di hari Jum\'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)' }
+                    ];
+                }
+
+                // Initial ribbon paint
+                const initialItem = himbauanList[0];
+                if (initialItem) {
+                    document.getElementById('ribbonBadge').innerHTML = `<i class="${initialItem.icon}"></i> <span>${initialItem.badge}</span>`;
+                    document.getElementById('ribbonContentText').innerHTML = initialItem.text;
+                }
+
+            } catch (err) {
+                console.error('Gagal memuat data kas jumat:', err);
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m];
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadKasJumatData();
+            if (window.SupabaseDB) {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'app_settings' || payload.table === 'sholat_jumat') {
+                        loadKasJumatData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

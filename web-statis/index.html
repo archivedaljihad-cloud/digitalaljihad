@@ -546,7 +546,8 @@
             '/ramadhan-embed': 'slides/ramadhan.html',
             '/kajian-embed': 'slides/kajian.html',
             '/agenda-rutin-embed': 'slides/agenda-rutin.html',
-            '/undangan-embed': 'slides/undangan.html'
+            '/undangan-embed': 'slides/undangan.html',
+            '/kas-jumat-embed': 'slides/kas-jumat.html'
         };
 
         // Default rotation pages jika database belum memiliki susunan
@@ -597,7 +598,7 @@
             }
         }
 
-        // Resolusi daftar slide aktif dari settings (dengan pemekaran dinamis multi-program infaq)
+        // Resolusi daftar slide aktif dari settings (dengan pemekaran dinamis multi-program infaq & smart scheduling)
         function resolveActivePages(appSettings, programInfaqList = []) {
             const list = [];
             let activeInfaqPrograms = [];
@@ -614,13 +615,27 @@
                 } catch (e) {}
             }
 
+            // Smart Scheduling: Deteksi apakah hari ini adalah hari Jum'at (5)
+            const now = new Date();
+            const isFriday = (now.getDay() === 5);
+            const urlParams = new URLSearchParams(window.location.search);
+            const isForceTestJumat = urlParams.has('test_jumat') || urlParams.has('preview_all');
+
             if (appSettings && Array.isArray(appSettings.rotation_pages)) {
                 appSettings.rotation_pages.forEach(p => {
                     if (p.active !== false) {
                         const localPath = PATH_MAPPING[p.page] || p.path || p.page;
                         
-                        // Khusus untuk Slide Infaq: Periksa apakah ada program aktif
-                        if (localPath === 'slides/infaq.html' || p.page === '/infaq-embed') {
+                        // 1. Khusus Slide Maklumat & Kas Jum'at (Smart Scheduling):
+                        // Otomatis HANYA tayang pada hari Jum'at (now.getDay() === 5)
+                        if (localPath === 'slides/kas-jumat.html' || p.page === '/kas-jumat-embed') {
+                            if (isFriday || isForceTestJumat) {
+                                if (!list.includes(localPath)) list.push(localPath);
+                            }
+                            // Di luar hari Jum'at: otomatis di-skip (tidak mengganggu rotasi hari biasa)
+                        }
+                        // 2. Khusus untuk Slide Infaq: Periksa apakah ada program aktif
+                        else if (localPath === 'slides/infaq.html' || p.page === '/infaq-embed') {
                             if (activeInfaqPrograms.length > 1) {
                                 // Jika ada 2 atau lebih program penggalangan infaq aktif:
                                 // Otomatis muncul slide baru untuk setiap program (1 program per slide di TV)

@@ -9242,5 +9242,66 @@ Menindaklanjuti umpan balik visual pengguna pada tangkapan layar tampilan live s
 2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.4`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 213).
 
+---
+
+## BAB 214: RESTORASI HALAMAN PETUGAS JUM'AT & PEMBUATAN SLIDE BARU KHUSUS "MAKLUMAT & KAS JUM'AT" DENGAN SMART SCHEDULING (3 OKTOBER 2026)
+
+### 1. Ringkasan Kebutuhan Pengguna
+Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
+1. **Restorasi Halaman Petugas Sholat Jum'at:** Tampilan gabungan membuat ruang petugas terasa sempit. Oleh karena itu, halaman `slides/jumat.html` dikembalikan 100% seperti keadaan semula sebelum Opsi 1 (tampilan lapang dengan foto Imam besar di kiri dan kartu petugas di kanan).
+2. **Pembuatan Halaman Slide Baru Khusus "Maklumat & Kas Jum'at" (Layar Penuh TV):** Dibuat file slide baru mandiri `slides/kas-jumat.html` dengan tampilan mewah dan format seperti laporan kas masjid (`slides/keuangan.html`).
+3. **Smart Scheduling (Tayang Otomatis Khusus Hari Jum'at):** Slide baru ini secara otomatis hanya tayang pada hari Jum'at di rotasi TV display (`now.getDay() === 5`), dan otomatis sembunyi pada hari-hari lainnya agar tidak mengganggu rotasi display harian reguler.
+4. **Kontrol Toggle Switch Admin:** Disediakan toggle switch khusus di panel Admin (Pengumuman Jum'at dan Tabel Rotasi Master) untuk mengaktifkan atau menonaktifkan slide ini kapan saja.
+
+---
+
+### 2. Rincian Implementasi & Perubahan Kode
+1. **Restorasi Penuh `web-statis/slides/jumat.html`:**
+   - Dikembalikan ke commit `1a1ca8a` (versi asli sebelum Opsi 1).
+   - Mempertahankan layout asli yang megah: Frame foto Imam & Khotib proporsional di kiri, baris petugas (Imam & Khotib, Muadzin, Bilal, Pembaca Maklumat) di kanan, pita mutiara hadits berotasi, dan running text Warta Jum'at.
+2. **Pembuatan Slide Baru `web-statis/slides/kas-jumat.html`:**
+   - **Header Eksklusif:** Menggunakan tema Islami mewah dengan medali kaligrafi emas 3D (Muhammad SAW & Allah SWT), jam real-time masjid, dan judul berbingkai emas: *"Maklumat & Laporan Kas Sholat Jum'at"*.
+   - **4 Kartu KPI Keuangan Kas:**
+     - *SALDO AWAL KAS* (Amber Golden)
+     - *PEMASUKAN KAS (+)* (Emerald Green)
+     - *PENGELUARAN BIAYA (-)* (Coral Red)
+     - *SALDO AKHIR KAS* (Royal Emerald Gold Glow)
+   - **2 Kolom Tabel Rincian Kas:**
+     - Kolom Kiri: Rincian Pemasukan Kas (Pendapatan Tromol Jum'at lalu, donasi, dll.) beserta nominal dan total pemasukan.
+     - Kolom Kanan: Rincian Pengeluaran/Biaya Operasional (Majlis Ta'lim, alokasi, operasional, dll.) beserta total pengeluaran.
+   - **Pita Rotator Himbauan & Adab Jum'at:** Rotasi otomatis setiap 8.5 detik memuat 4 poin himbauan jamaah resmi, adab khutbah (HR. Bukhari), dan hadits keutamaan shalawat (HR. Abu Dawud).
+   - **Running Text Marquee Bawah:** Warta Kas Jum'at dengan teks hadits dan informasi amanah infaq.
+   - **Koneksi Realtime Supabase:** Membaca data dari `app_settings.pengumuman_jumat` dan berlangganan realtime WebSocket sehingga pembaruan dari Admin langsung terefleksi di layar TV tanpa reload.
+3. **Smart Scheduling di `web-statis/index.html`:**
+   - Ditambahkan canonical mapping `'/kas-jumat-embed': 'slides/kas-jumat.html'`.
+   - Pada fungsi `resolveActivePages()`:
+     ```javascript
+     if (localPath === 'slides/kas-jumat.html' || p.page === '/kas-jumat-embed') {
+         if (isFriday || isForceTestJumat) {
+             if (!list.includes(localPath)) list.push(localPath);
+         }
+     }
+     ```
+     Menjamin slide secara cerdas hanya berputar saat hari Jum'at.
+4. **Integrasi Panel Admin (`web-statis/admin.html`):**
+   - Menambahkan order ke-20 pada `MASTER_ROTATION_PAGES`: `{ order: 20, name: "Maklumat & Kas Jum'at (Khusus Jum'at)", path: 'slides/kas-jumat.html', url: 'slides/kas-jumat.html', page: '/kas-jumat-embed', category: "Jum'at", active: true }`.
+   - Menyediakan kartu kontrol Smart Scheduling dan toggle switch *"Tayang di TV Aktif"* di modul Pengumuman Sholat Jum'at, lengkap dengan tombol *"Preview Layar TV"*.
+   - Menambahkan fungsi `toggleSlideKasJumat(isActive)` yang menyinkronkan status switch ke Supabase Cloud dan `localStorage`.
+5. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
+   - Menambahkan `'slides/kas-jumat.html'` ke dalam `STATIC_ASSETS`.
+   - Menaikkan versi cache PWA menjadi **`aljihad-signage-v3.4.6`**.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/jumat.html` (Restorasi 100% ke tampilan asli sebelum Opsi 1).
+2. `web-statis/slides/kas-jumat.html` (BERKAS BARU: Slide TV layar penuh Maklumat & Kas Jum'at).
+3. `web-statis/index.html` (Implementasi Smart Scheduling Jum'at & canonical mapping `/kas-jumat-embed`).
+4. `web-statis/admin.html` (Penambahan slide ke Master Rotation, kartu switch toggle Smart Scheduling, dan fungsi `toggleSlideKasJumat`).
+5. `web-statis/js/supabase-db.js` (Pembaruan default rotation pages urutan ke-20).
+6. `web-statis/sw.js` (Registrasi aset statis slide baru & upgrade cache ke `aljihad-signage-v3.4.6`).
+7. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 214).
+
+
 
 
