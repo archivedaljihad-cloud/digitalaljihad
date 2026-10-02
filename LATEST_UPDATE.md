@@ -9040,3 +9040,41 @@ Menindaklanjuti kebutuhan resmi DKM Masjid Jami' Al-Jihad Simpangan untuk pembac
 2. `web-statis/img/kop_surat_aljihad.png` & `web-statis/KOP SURAT ALJIHAD.png` (Penyalinan aset kop surat resmi DKM).
 3. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.3.8`).
 4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 207).
+
+
+---
+
+## BAB 208: PEMBERSIHAN LABEL TEKNIS POIN, KOTAK JUDUL FORM, DAN PENGHAPUSAN POTONGAN STEMPEL/TTD UNTUK TANDA TANGAN ASLI
+
+### 1. Ringkasan Permintaan & Pembaruan
+Menindaklanjuti instruksi visual pengguna:
+1. **Penghapusan Teks Terpotong pada Screenshot:** Menghilangkan teks 'Mengetahui Ketua' dan 'angan, 02 Oktober 2026 / Dibuat Oleh, Bendahara' yang terpotong dari potongan berkas gambar stempel/TTD.
+2. **Penghapusan Potongan Gambar Stempel & Tanda Tangan:** Menghapus tag gambar 'stempel_ttd_ketua_trans.png' dan 'ttd_bendahara_trans.png' dari lembar cetak '#pjPrintableSheet' serta Canvas flyer generator, menggantikannya dengan ruang bersih vertikal (tinggi ~75px) yang rapi, profesional, dan siap untuk dibubuhi cap stempel basah dan tanda tangan pena fisik asli oleh Ketua DKM ('Hadi Prayitno') dan Bendahara ('Utut Priyastya').
+3. **Penghapusan Kotak Putih Judul Pengumuman:** Menghilangkan kotak putih statis '1. Judul Pengumuman (Poin 1 - Tetap):' pada Kotak 1 Formulir Pengumuman Sholat Jum'at agar formulir lebih ringkas dan langsung fokus pada input tanggal & periode.
+4. **Penghapusan Badge & Label Berawalan 'Poin':**
+   - Menghapus badge 'Poin 1, 2, 3', 'Poin 4 s/d 8', dan 'Poin 10, 11, 12, 13' pada header accordion formulir.
+   - Merapikan label input formulir: menghilangkan prefiks seperti '2. Tanggal...' menjadi 'Tanggal Kegiatan Sholat Jum'at (Hari H):', '3. Laporan Kas...' menjadi 'Periode Kas Masjid s/d Tanggal:', '4. Saldo Awal...' menjadi 'Saldo Awal (Rp):', '5. Pemasukan Kas...' menjadi 'Pemasukan Kas (Tromol Pekan Lalu):', dsb.
+   - Membersihkan teks nomor poin pada widget eksekutif Dashboard Bendahara ('1. Saldo Awal' menjadi 'Saldo Awal', dsb).
+
+---
+
+### 2. Rincian Teknis Perubahan
+1. **Lembar Pengumuman Resmi ('#pjPrintableSheet'):**
+   - Area tanda tangan diubah menjadi blok ruang kosong tinggi 75px di atas nama bergaris bawah 'Hadi Prayitno' dan 'Utut Priyastya'.
+   - Elemen penampung gambar ('pjPrevImgKetua' dan 'pjPrevImgBendahara') disembunyikan permanen ('display: none;') untuk menjaga kompatibilitas seluruh pemanggil ID DOM tanpa memunculkan gambar apapun.
+2. **Mesin Flyer Digital ('downloadFlyerPengumumanJumat'):**
+   - Proses rendering Canvas 2D disesuaikan: tidak lagi memuat maupun menggambar berkas bitmap stempel dan TTD yang memiliki teks bocor/terpotong.
+   - Canvas langsung mencetak nama Ketua DKM dan Bendahara bergaris bawah secara presisi dan elegan dengan ruang kosong di atasnya.
+3. **Formulir Pengumuman Sholat Jum'at:**
+   - Seluruh badge nomor poin dihilangkan dari tampilan kartu formulir.
+   - Kotak putih judul tetap dihapus sehingga tampilan form lebih lapang dan bersih.
+   - Checkbox tampilkan stempel disembunyikan dari UI pengguna.
+4. **PWA Service Worker:**
+   - Versi cache dinaikkan ke 'aljihad-signage-v3.3.9' untuk pembaruan instan pada browser client.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. 'web-statis/admin.html' (Pembersihan label form, kotak putih judul, badge poin, penghapusan gambar stempel/TTD, dan perapihan generator Canvas).
+2. 'web-statis/sw.js' (Pembaruan cache PWA ke 'aljihad-signage-v3.3.9').
+3. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 208).
