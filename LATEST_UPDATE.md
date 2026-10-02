@@ -8630,3 +8630,35 @@ Dibuat halaman slide visual premium dengan karakteristik:
 2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.0`)
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 199)
+
+---
+
+## 📑 200. PERBAIKAN HALAMAN KELOLA 3 HAK AKSES YANG BLANK AKIBAT DIV VIEW-INFAQ TIDAK TERTUTUP (2 OKTOBER 2026)
+
+### 1. Masalah Pengguna
+- Ketika pengguna mengklik menu **"Kelola 3 Hak Akses"** (`#view-users`) di bilah navigasi kiri (*sidebar*) Admin Dashboard (`admin.html`), isi halaman tampak kosong melompong (*blank* putih), seolah-olah menu tidak berfungsi.
+
+### 2. Akar Masalah Teknis (*Root Cause*)
+- Analisis struktur hierarki DOM menemukan bahwa elemen `<div id="containerDetailProgramInfaq">` (pada baris ~4060 di dalam `#view-infaq`) **lupa ditutup dengan tag `</div>`** sebelum elemen `<div id="emptyProgramInfaqState">` (baris ~4278).
+- Akibatnya:
+  1. Tag penutup `</div>` di akhir blok seksi infaq hanya menutup `#containerDetailProgramInfaq`, sementara kontainer utama seksi `<div id="view-infaq" class="section-view">` tetap terbuka (kedalaman bersarang/depth bertambah).
+  2. Semua seksi tampilan berikutnya yang berada di bawahnya (`#view-qris`, `#view-users` [Kelola 3 Hak Akses], `#view-ramadhan`, dan `#view-settings`) **secara tidak sengaja tertelan menjadi elemen anak (*nested children*) di dalam `#view-infaq`**.
+  3. Karena seluruh elemen berkelas `.section-view` memiliki aturan CSS bawaan `display: none` saat tidak aktif, maka ketika pengguna berada di luar menu Infaq, kontainer induk `#view-infaq` berstatus `display: none`.
+  4. Meskipun JavaScript berhasil menambahkan kelas `.active` pada `#view-users`, browser tetap menyembunyikan `#view-users` secara mutlak karena kontainer induknya (`#view-infaq`) sedang disembunyikan (`display: none`).
+
+### 3. Solusi & Perbaikan Komprehensif
+1. **Pemasangan Tag Penutup Div Infaq yang Hilang:**
+   - Menambahkan tag penutup `</div><!-- /#containerDetailProgramInfaq -->` tepat sebelum kontainer `#emptyProgramInfaqState` pada baris 4276 di `web-statis/admin.html`.
+   - Menguji keseimbangan seluruh tag `<div>` pada dokumen: 1.219 tag pembuka kini berpasangan sempurna dengan 1.219 tag penutup (selisih = 0).
+   - Memverifikasi hierarki DOM: Seluruh 21 seksi tampilan (`view-dashboard`, `view-jadwal-sholat`, `view-sholat-jumat`, `view-infaq`, `view-qris`, `view-users`, `view-ramadhan`, `view-settings`, dll) kini berada sejajar pada level depth 5 sebagai anak langsung dari `.container-fluid`.
+2. **Sinkronisasi 8 Kolom Baris Fallback Tabel Pengguna (`#tbodyUsersManagement`):**
+   - Pada baris fallback HTML statis, baris sebelumnya hanya memiliki 7 elemen `<td>` sementara `<thead>` mendefinisikan 8 kolom (`ID`, `Nama Pengguna`, `Username`, `Email`, `Peran (Role)`, `Ruang Lingkup Hak Akses`, `Status`, `Aksi`).
+   - Menambahkan kolom `Username` (`badge-light` bertuliskan `admin`, `bendahara`, dan `operator`) pada setiap baris fallback akun agar susunan tabel tidak bergeser (*misaligned*) jika terjadi keterlambatan inisialisasi JavaScript Supabase.
+3. **Peningkatan Versi Cache PWA Service Worker:**
+   - Menaikkan versi cache pada `web-statis/sw.js` dari `aljihad-signage-v3.3.0` menjadi `aljihad-signage-v3.3.1` agar seluruh peramban display dan klien admin langsung memuat ulang DOM bersih tanpa tertahan cache browser lama.
+
+### 4. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penutupan div `#containerDetailProgramInfaq` dan perbaikan 8 kolom fallback `#tbodyUsersManagement`)
+2. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.1`)
+3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
+4. `LATEST_UPDATE.md` (Dokumentasi Bab 200)
