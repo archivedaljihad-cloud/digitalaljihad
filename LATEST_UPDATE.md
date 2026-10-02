@@ -9187,3 +9187,35 @@ Pembaruan ini diselaraskan di seluruh komponen terkait:
 2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.2`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 211).
 
+---
+
+## BAB 212: INTEGRASI PENUH PENGUMUMAN & LAPORAN KAS SHOLAT JUM'AT KE SLIDE ROTASI TV (OPSI 1) (3 OKTOBER 2026)
+
+### 1. Ringkasan Implementasi (Opsi 1)
+Menindaklanjuti permintaan pengguna: *"Jalankan Opsi 1"* (Integrasi langsung ke slide rotasi TV `slides/jumat.html` yang sudah aktif berputar di urutan ke-3), telah dilakukan perombakan dan peningkatan visual total pada layar TV display:
+1. **Tata Letak Widescreen 2 Kolom Seimbang (Emerald & Gold Luxury Glassmorphism):**
+   - **Kolom Kiri: II. PETUGAS SHOLAT JUM'AT HARI INI**
+     - Hero box Imam & Khotib lengkap dengan foto portrait berkualitas dan badge role emas.
+     - Stack 3 Petugas Berwarna Khas: Muadzin (Biru Safir `#0284c7`), Bilal (Emas Amber `#f59e0b`), dan MC Maklumat (Ungu Amethyst `#8b5cf6`).
+     - Badge penanda tanggal dan status Jum'at (*Hari Ini / Jum'at Mendatang*).
+   - **Kolom Kanan: I. LAPORAN KEUANGAN KAS MASJID**
+     - 4 Kartu Kas Mewah (Grid 2x2): Saldo Awal (aksen emas), Pemasukan (aksen hijau cerah), Pengeluaran (aksen merah koral), dan Saldo Akhir Kas (highlight emas zamrud bercahaya `text-shadow glow`).
+     - 2 Kolom Mini Rincian Kas (Teal & Slate Glassmorphism): Menampilkan baris transaksi pemasukan dan pengeluaran serta subtotal kas.
+2. **Pita Himbauan Jamaah & Mutiara Hadits (Interactive Rotator):**
+   - Menampilkan bergantian secara mulus (*smooth opacity fade transition*) setiap 9 detik:
+     - 4 Butir Himbauan Tetap Jamaah (shaf kosong, kunci ganda kendaraan, silent HP, larangan bicara saat khutbah).
+     - Diselingi Hadits Keutamaan Shalawat di Hari Jum'at dan Adab Mendengarkan Khutbah.
+3. **Sinkronisasi Realtime Cloud Supabase & Offline-First Resiliency:**
+   - Formulir Admin (`admin.html`) kini otomatis menyimpan data pengumuman ke `SupabaseDB.saveSettings({ pengumuman_jumat: pjData })`.
+   - Layar TV (`slides/jumat.html`) terhubung ke listener realtime Supabase `app_settings` dan `sholat_jumat` sehingga pembaruan dari admin seketika tampil di layar TV tanpa reload halaman.
+   - Tetap memiliki fallback aman ke `localStorage` dan default DKM Al-Jihad jika jaringan terputus.
+
+---
+
+### 2. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/jumat.html` (Rombak layout ke format Widescreen 2 Kolom: Petugas Sholat Jum'at, 4 Kartu Kas, Mini Rincian Tabel Kas, dan Rotator Himbauan).
+2. `web-statis/admin.html` (Integrasi penyimpanan realtime `pengumuman_jumat` ke Cloud Supabase `saveSettings`).
+3. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.3`).
+4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 212).
+
+

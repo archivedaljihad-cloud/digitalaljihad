@@ -6,14 +6,14 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Jadwal Sholat Jumat - Display Masjid</title>
+    <title>Pengumuman & Laporan Kas Sholat Jum'at - Display Masjid</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20260930_05">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20260930_05">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261003_01">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261003_01">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,24 +27,44 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            background-color: #01130b;
+        }
+
+        .display-background {
+            background-image: url('../image/display/background/bg_jumat.jpg') !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+            background-size: cover !important;
+            filter: brightness(0.85) contrast(1.08) saturate(1.05) !important;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .display-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(1, 22, 14, 0.45) 0%, rgba(1, 15, 10, 0.82) 100%);
+            z-index: 2;
         }
 
         .container {
             width: 100%;
-            max-width: 1600px;
+            max-width: 1680px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px 25px 85px 25px;
+            padding: 10px 24px 62px 24px;
             position: relative;
             z-index: 5;
         }
 
+        /* HEADER AREA */
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             flex-shrink: 0;
             position: relative;
         }
@@ -52,7 +72,7 @@
         .schedule-header-section {
             text-align: center;
             flex-shrink: 0;
-            margin-top: 10px;
+            margin-top: 6px;
             display: flex;
             justify-content: center;
             width: 100%;
@@ -62,21 +82,19 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 18px;
-            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            gap: 16px;
+            background: linear-gradient(135deg, rgba(2, 28, 19, 0.92) 0%, rgba(5, 45, 30, 0.88) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.7);
             border-radius: 35px;
-            padding: 6px 26px;
+            padding: 5px 28px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         .title-icon-badge {
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: rgba(4, 25, 18, 0.9);
             border: 1.5px solid rgba(255, 215, 0, 0.6);
@@ -84,66 +102,111 @@
             align-items: center;
             justify-content: center;
             color: #ffd700;
-            font-size: 1.55rem;
+            font-size: 1.35rem;
             flex-shrink: 0;
         }
 
         .title-text-wrap h2 {
-            font-size: 1.75rem;
+            font-size: 1.55rem;
             color: #ffffff !important;
-            letter-spacing: 2px;
-            font-weight: 700;
+            letter-spacing: 1.5px;
+            font-weight: 800;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
             margin: 0;
+            text-transform: uppercase;
         }
         .title-text-wrap p {
             margin: 0;
-            font-size: 0.95rem;
+            font-size: 0.86rem;
             color: #cbd5e1;
             font-weight: 500;
         }
-        .sholawat-greeting {
-            font-family: 'Amiri', serif;
-            font-size: 1.28rem;
-            color: #fff4b8;
-            text-shadow: 0 0 12px rgba(255, 215, 0, 0.85);
-            margin-top: 3px;
-        }
 
-        /* Layout Utama 2 Kolom */
+        /* WIDESCREEN DUAL-COLUMN CONTENT LAYOUT */
         .schedule-content-layout {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 46% 54%;
+            gap: 20px;
             width: 100%;
-            max-width: 1300px;
-            margin: 0 auto;
             flex: 1;
+            align-items: stretch;
+            min-height: 0;
+            margin: 6px 0;
         }
 
-        /* Kotak Foto Imam */
-        .imam-card-box {
-            flex: 0 0 270px;
-            width: 270px;
-            background: rgba(4, 25, 18, 0.75);
+        /* SECTION HEADERS */
+        .col-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(2, 28, 19, 0.92) 0%, rgba(4, 38, 25, 0.85) 100%);
+            border: 1.2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 12px;
+            padding: 8px 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+        }
+
+        .section-title-tag {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #ffd700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .section-badge-right {
+            background: rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(16, 185, 129, 0.6);
+            color: #6ee7b7;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* KOLOM KIRI: PETUGAS SHOLAT JUM'AT */
+        .jumat-col-petugas {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .petugas-split-wrap {
+            display: grid;
+            grid-template-columns: 210px 1fr;
+            gap: 14px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* HERO CARD IMAM & KHOTIB */
+        .imam-hero-box {
+            background: rgba(4, 25, 18, 0.8);
             backdrop-filter: blur(12px);
-            border-radius: 18px;
-            border: 1.5px solid rgba(255, 215, 0, 0.45);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+            border-radius: 14px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             padding: 8px;
             display: flex;
             flex-direction: column;
-            align-self: center;
+            justify-content: space-between;
         }
 
         .imam-photo-frame {
             position: relative;
             width: 100%;
-            aspect-ratio: 4 / 5;
-            border-radius: 12px;
+            height: 100%;
+            min-height: 220px;
+            border-radius: 10px;
             overflow: hidden;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.35);
             background: #02120b;
         }
 
@@ -159,143 +222,375 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(0deg, rgba(2, 16, 11, 0.96) 0%, rgba(2, 16, 11, 0.8) 70%, transparent 100%);
-            padding: 16px 10px 8px 10px;
+            background: linear-gradient(0deg, rgba(2, 16, 11, 0.98) 0%, rgba(2, 16, 11, 0.85) 75%, transparent 100%);
+            padding: 16px 8px 8px 8px;
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 2px;
         }
 
         .imam-badge-overlay .badge-role {
-            font-size: 0.82rem;
-            font-weight: 700;
+            font-size: 0.78rem;
+            font-weight: 800;
             color: #ffd700;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
         .imam-badge-overlay .badge-name {
             font-size: 1.05rem;
-            font-weight: 700;
+            font-weight: 800;
             color: #ffffff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+            line-height: 1.3;
         }
 
-        /* Info Stack Rows */
-        .info-stack {
+        /* 3 KARTU PETUGAS LAINNYA */
+        .petugas-sub-stack {
             display: flex;
             flex-direction: column;
-            gap: 9px;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .info-row {
-            display: flex;
             gap: 10px;
-            width: 100%;
-        }
-
-        .info-box-label {
-            flex: 0 0 215px;
-            background: rgba(4, 25, 18, 0.72);
-            backdrop-filter: blur(12px);
-            border-radius: 14px;
-            padding: 9px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.10rem;
-            font-weight: 600;
-            color: #ffd700;
-            border: 1.5px solid rgba(255, 215, 0, 0.45);
-        }
-
-        .info-box-value {
-            flex: 1;
-            background: rgba(4, 25, 18, 0.72);
-            backdrop-filter: blur(12px);
-            border-radius: 14px;
-            padding: 9px 18px;
-            display: flex;
-            align-items: center;
             justify-content: space-between;
-            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            height: 100%;
         }
 
-        .info-box-value .value {
-            font-size: 1.38rem;
-            font-weight: 700;
+        .sub-petugas-card {
+            background: rgba(4, 25, 18, 0.78);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .sub-petugas-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+        }
+
+        .card-muadzin { border-color: rgba(2, 132, 199, 0.4); }
+        .card-muadzin::before { background: #0284c7; }
+        .card-muadzin .petugas-icon { color: #38bdf8; background: rgba(2, 132, 199, 0.2); }
+        .card-muadzin .petugas-role { color: #38bdf8; }
+
+        .card-bilal { border-color: rgba(245, 158, 11, 0.45); }
+        .card-bilal::before { background: #f59e0b; }
+        .card-bilal .petugas-icon { color: #fbbf24; background: rgba(245, 158, 11, 0.2); }
+        .card-bilal .petugas-role { color: #fbbf24; }
+
+        .card-maklumat { border-color: rgba(139, 92, 246, 0.4); }
+        .card-maklumat::before { background: #8b5cf6; }
+        .card-maklumat .petugas-icon { color: #c084fc; background: rgba(139, 92, 246, 0.2); }
+        .card-maklumat .petugas-role { color: #c084fc; }
+
+        .petugas-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .petugas-meta {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .petugas-role {
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .petugas-name {
+            font-size: 1.22rem;
+            font-weight: 800;
             color: #ffffff;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
         }
 
-        .jadwal-mendatang-badge {
+        /* KOLOM KANAN: LAPORAN KEUANGAN KAS MASJID */
+        .jumat-col-kas {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* 4 KARTU STATISTIK KAS (2x2 GRID) */
+        .kas-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tv-kas-card {
+            background: rgba(4, 25, 18, 0.82);
+            backdrop-filter: blur(12px);
+            border-radius: 10px;
+            padding: 8px 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tv-kas-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+        }
+
+        .tv-card-saldo-awal { border-left-color: #f59e0b; }
+        .tv-card-saldo-awal::before { background: #f59e0b; }
+        .tv-card-saldo-awal .tv-kas-label { color: #fbbf24; }
+        .tv-card-saldo-awal .tv-kas-val { color: #fde68a; }
+
+        .tv-card-pemasukan { border-left-color: #10b981; }
+        .tv-card-pemasukan::before { background: #10b981; }
+        .tv-card-pemasukan .tv-kas-label { color: #34d399; }
+        .tv-card-pemasukan .tv-kas-val { color: #a7f3d0; }
+
+        .tv-card-pengeluaran { border-left-color: #ef4444; }
+        .tv-card-pengeluaran::before { background: #ef4444; }
+        .tv-card-pengeluaran .tv-kas-label { color: #f87171; }
+        .tv-card-pengeluaran .tv-kas-val { color: #fecaca; }
+
+        .tv-card-saldo-akhir {
+            background: linear-gradient(135deg, rgba(6, 78, 59, 0.95) 0%, rgba(4, 120, 87, 0.92) 100%) !important;
+            border: 1.5px solid rgba(255, 215, 0, 0.75) !important;
+            box-shadow: 0 4px 20px rgba(250, 204, 21, 0.25) !important;
+        }
+        .tv-card-saldo-akhir::before { background: #facc15; }
+        .tv-card-saldo-akhir .tv-kas-label { color: #fef08a; }
+        .tv-card-saldo-akhir .tv-kas-val {
+            color: #facc15 !important;
+            text-shadow: 0 0 12px rgba(250, 204, 21, 0.6);
+            font-size: 1.45rem !important;
+        }
+
+        .tv-kas-label {
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .tv-kas-val {
+            font-size: 1.32rem;
+            font-weight: 900;
+            margin-top: 1px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* 2 KOLOM TABEL RINCIAN KAS */
+        .tv-kas-tables-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .tv-table-col {
+            background: rgba(3, 20, 14, 0.75);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tv-table-head {
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tv-table-head.head-in {
+            background: #0d9488;
+            color: #ffffff;
+        }
+
+        .tv-table-head.head-out {
+            background: #334155;
+            color: #ffffff;
+        }
+
+        .tv-table-body {
+            padding: 6px 10px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tv-table-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.82rem;
+        }
+
+        .tv-table-row:last-child {
+            border-bottom: none;
+        }
+
+        .tv-row-ket {
+            color: #e2e8f0;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 68%;
+        }
+
+        .tv-row-nominal {
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 0.88rem;
+            white-space: nowrap;
+        }
+
+        .tv-row-nominal.in { color: #34d399; }
+        .tv-row-nominal.out { color: #f87171; }
+
+        .tv-table-footer {
+            padding: 5px 12px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tv-table-footer.foot-in {
+            background: rgba(13, 148, 136, 0.25);
+            border-top: 1px solid rgba(13, 148, 136, 0.5);
+            color: #5eead4;
+        }
+
+        .tv-table-footer.foot-out {
+            background: rgba(239, 68, 68, 0.18);
+            border-top: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        /* PITA HIMBAUAN JAMAAH & HADITS */
+        .jumat-bottom-ribbon {
+            background: linear-gradient(135deg, rgba(2, 28, 19, 0.92) 0%, rgba(5, 45, 30, 0.88) 100%);
+            border: 1.2px solid rgba(255, 215, 0, 0.55);
+            border-radius: 25px;
+            padding: 6px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 4px 0 0 0;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+            flex-shrink: 0;
+        }
+
+        .ribbon-tag {
             background: #ffd700;
-            color: #000000 !important;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.92rem;
-            font-weight: 800 !important;
+            color: #022013;
+            padding: 3px 12px;
+            border-radius: 18px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            flex-shrink: 0;
+            text-transform: uppercase;
         }
 
-        .jadwal-mendatang-badge.badge-hari-ini {
-            background: #28a745 !important;
-            color: #ffffff !important;
-        }
-
-        /* Pita Mutiara Hadits */
-        .jumat-hadits-box {
-            margin: 10px auto 0 auto;
-            max-width: 1000px;
-            width: 100%;
-            background: linear-gradient(135deg, rgba(2, 25, 17, 0.88) 0%, rgba(4, 40, 26, 0.88) 100%);
-            border: 1.2px solid rgba(255, 215, 0, 0.55);
-            border-radius: 30px;
-            padding: 7px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            text-align: center;
-        }
-        .jumat-hadits-box i { color: #ffd700; font-size: 1.2rem; }
-        .jumat-hadits-text {
-            font-size: 1.05rem;
-            font-weight: 500;
+        .ribbon-content {
+            flex: 1;
+            font-size: 0.95rem;
             color: #ffffff;
-        }
-        .jumat-hadits-text strong { color: #ffd700; }
-
-        .display-background {
-            background-image: url('../image/display/background/bg_jumat.jpg') !important;
-            background-position: center center !important;
-            background-repeat: no-repeat !important;
-            background-size: cover !important;
-            filter: brightness(0.95) contrast(1.05) saturate(1.05) !important;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: opacity 0.4s ease-in-out;
         }
 
-        /* Fixed Running Text */
+        .ribbon-content strong {
+            color: #ffd700;
+        }
+
+        /* RUNNING TEKS MARQUEE BAWAH */
         .bottom-running-wrap {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             z-index: 20;
-            background: rgba(2, 16, 11, 0.88);
+            background: rgba(2, 16, 11, 0.92);
             border-top: 1.5px solid rgba(255, 215, 0, 0.4);
             backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
         }
-        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-badge {
+            background: #ffd700;
+            color: #022013;
+            padding: 7px 16px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            z-index: 22;
+        }
+        .running-text-container {
+            padding: 6px 20px;
+            overflow: hidden;
+            white-space: nowrap;
+            flex: 1;
+        }
         .running-text {
             display: inline-block;
             white-space: nowrap;
             animation: marquee 68s linear infinite;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 600;
             color: #ffffff;
         }
@@ -305,71 +600,15 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* =====================================================
-           RESPONSIVE VIEWPORT BREAKPOINTS (JUMAT.HTML)
-           Senior JAMstack Multi-Device Adaptation
-           ===================================================== */
-        @media (max-width: 1024px) {
-            .container {
-                padding: 10px 16px 80px 16px;
-                max-width: 100%;
-            }
+        /* RESPONSIVE LAYOUT */
+        @media (max-width: 1100px) {
             .schedule-content-layout {
-                gap: 16px;
-            }
-            .imam-card-box {
-                flex: 0 0 220px;
-                width: 220px;
-            }
-            .title-with-icons {
-                padding: 6px 18px;
-            }
-        }
-
-        @media (max-width: 767px) {
-            .container {
-                height: auto;
-                min-height: 100vh;
-                padding: 10px 12px 75px 12px;
-                justify-content: flex-start;
+                grid-template-columns: 1fr;
                 gap: 12px;
+                overflow-y: auto;
             }
-            .schedule-content-layout {
-                flex-direction: column;
-                gap: 14px;
-                flex: none;
-                width: 100%;
-            }
-            .imam-card-box {
-                flex: none;
-                width: 180px;
-            }
-            .duty-list-box {
-                width: 100%;
-                gap: 8px;
-            }
-            .title-with-icons {
-                padding: 5px 14px;
-                gap: 10px;
-            }
-            .title-icon-badge {
-                width: 38px;
-                height: 38px;
-                font-size: 1.15rem;
-            }
-            .title-text-wrap h2 {
-                font-size: 1.25rem;
-            }
-            .title-text-wrap p {
-                font-size: 0.8rem;
-            }
-            .jumat-hadits-box {
-                padding: 6px 14px;
-                gap: 8px;
-                border-radius: 18px;
-            }
-            .jumat-hadits-text {
-                font-size: 0.85rem;
+            .petugas-split-wrap {
+                grid-template-columns: 180px 1fr;
             }
         }
     </style>
@@ -378,7 +617,7 @@
     <div class="display-background"></div>
     <div class="display-overlay"></div>
 
-    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DENGAN EFEK DENYUT PELAN -->
+    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) -->
     <div class="kaligrafi-medallion kaligrafi-muhammad">
         <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
     </div>
@@ -387,6 +626,7 @@
     </div>
 
     <div class="container">
+        <!-- HEADER UTAMA -->
         <div class="header">
             <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
             <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
@@ -396,83 +636,158 @@
                 <div class="title-with-icons">
                     <div class="title-icon-badge left-icon"><i class="fas fa-mosque"></i></div>
                     <div class="title-text-wrap">
-                        <h2>Jadwal Sholat Jumat</h2>
-                        <p>Informasi Imam, Khotib, Muadzin, Bilal & Pembaca Maklumat</p>
-                        <div class="sholawat-greeting">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِ سَيِّدِنَا مُحَمَّدٍ</div>
+                        <h2>Pengumuman & Laporan Kas Sholat Jum'at</h2>
+                        <p>Petugas Sholat Jum'at Hari Ini, Keuangan Kas Masjid & Himbauan Jamaah</p>
                     </div>
                     <div class="title-icon-badge right-icon"><i class="fas fa-kaaba"></i></div>
                 </div>
             </div>
         </div>
 
+        <!-- MAIN DUAL-COLUMN CONTENT LAYOUT -->
         <div class="schedule-content-layout" id="jumatContent">
-            <!-- Kolom Foto Imam -->
-            <div class="imam-card-box">
-                <div class="imam-photo-frame">
-                    <img id="imamPhoto" src="../image/display/default_imam.jpg" alt="Foto Imam" class="imam-photo" onerror="this.onerror=null;this.src='../image/display/default_imam.jpg';">
-                    <div class="imam-badge-overlay">
-                        <span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam & Khotib</span>
-                        <span class="badge-name" id="badgeImamName">Ustd. Imam & Khotib</span>
+            <!-- KOLOM KIRI: PETUGAS SHOLAT JUM'AT HARI INI -->
+            <div class="jumat-col-petugas">
+                <div class="col-section-header">
+                    <div class="section-title-tag">
+                        <i class="fas fa-user-tie"></i>
+                        <span>II. Petugas Sholat Jum'at</span>
+                    </div>
+                    <span class="section-badge-right" id="badgeJumatStatus">
+                        <i class="fas fa-calendar-check"></i> <span id="valTanggal">02 Oktober 2026</span>
+                    </span>
+                </div>
+
+                <div class="petugas-split-wrap">
+                    <!-- Imam & Khotib (Hero Box) -->
+                    <div class="imam-hero-box">
+                        <div class="imam-photo-frame">
+                            <img id="imamPhoto" src="../image/display/default_imam.jpg" alt="Foto Imam" class="imam-photo" onerror="this.onerror=null;this.src='../image/display/default_imam.jpg';">
+                            <div class="imam-badge-overlay">
+                                <span class="badge-role"><i class="fas fa-quran mr-1"></i> IMAM & KHOTIB</span>
+                                <span class="badge-name" id="valImamKhatib">Ust. Faiq Rido</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3 Petugas: Muadzin, Bilal, MC Maklumat -->
+                    <div class="petugas-sub-stack">
+                        <!-- Muadzin -->
+                        <div class="sub-petugas-card card-muadzin">
+                            <div class="petugas-icon"><i class="fas fa-microphone-alt"></i></div>
+                            <div class="petugas-meta">
+                                <span class="petugas-role">MUADZIN</span>
+                                <span class="petugas-name" id="valMuadzin">Ust. Rudy</span>
+                            </div>
+                        </div>
+                        <!-- Bilal -->
+                        <div class="sub-petugas-card card-bilal">
+                            <div class="petugas-icon"><i class="fas fa-bullhorn"></i></div>
+                            <div class="petugas-meta">
+                                <span class="petugas-role">BILAL</span>
+                                <span class="petugas-name" id="valBilal">Ust. Mansur</span>
+                            </div>
+                        </div>
+                        <!-- MC Maklumat -->
+                        <div class="sub-petugas-card card-maklumat">
+                            <div class="petugas-icon"><i class="fas fa-scroll"></i></div>
+                            <div class="petugas-meta">
+                                <span class="petugas-role">MC MAKLUMAT</span>
+                                <span class="petugas-name" id="valMaklumat">Ust. Fatkhurokhman</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Kolom Info Rows -->
-            <div class="info-stack">
-                <div class="info-row">
-                    <div class="info-box-label"><i class="fas fa-calendar-alt"></i> Tanggal</div>
-                    <div class="info-box-value">
-                        <span class="value" id="valTanggal">Jumat Mendatang</span>
-                        <span class="jadwal-mendatang-badge" id="badgeJumatStatus"><i class="fas fa-calendar-week mr-1"></i> Jumat Mendatang</span>
+            <!-- KOLOM KANAN: I. LAPORAN KEUANGAN KAS MASJID -->
+            <div class="jumat-col-kas">
+                <div class="col-section-header">
+                    <div class="section-title-tag">
+                        <i class="fas fa-coins text-warning"></i>
+                        <span>I. Laporan Keuangan Kas Masjid</span>
+                    </div>
+                    <span class="section-badge-right" id="valKasPeriodeBadge">
+                        <i class="fas fa-clock mr-1"></i> s/d: <strong id="valTglKas">02 Oktober 2026</strong>
+                    </span>
+                </div>
+
+                <!-- 4 KARTU KAS JUM'AT (2x2 GRID) -->
+                <div class="kas-cards-grid">
+                    <!-- Saldo Awal -->
+                    <div class="tv-kas-card tv-card-saldo-awal">
+                        <div class="tv-kas-label">SALDO AWAL</div>
+                        <div class="tv-kas-val" id="tvKasSaldoAwal">Rp 19.379.023</div>
+                    </div>
+                    <!-- Pemasukan (+) -->
+                    <div class="tv-kas-card tv-card-pemasukan">
+                        <div class="tv-kas-label">PEMASUKAN (+)</div>
+                        <div class="tv-kas-val" id="tvKasPemasukan">+ Rp 3.500.000</div>
+                    </div>
+                    <!-- Pengeluaran (-) -->
+                    <div class="tv-kas-card tv-card-pengeluaran">
+                        <div class="tv-kas-label">PENGELUARAN (-)</div>
+                        <div class="tv-kas-val" id="tvKasPengeluaran">- Rp 4.137.000</div>
+                    </div>
+                    <!-- Saldo Akhir Kas -->
+                    <div class="tv-kas-card tv-card-saldo-akhir">
+                        <div class="tv-kas-label">SALDO AKHIR KAS</div>
+                        <div class="tv-kas-val" id="tvKasSaldoAkhir">Rp 18.742.023</div>
                     </div>
                 </div>
 
-                <div class="info-row">
-                    <div class="info-box-label"><i class="fas fa-user-tie"></i> Imam & Khotib</div>
-                    <div class="info-box-value">
-                        <span class="value" id="valImamKhatib">Belum Ditetapkan</span>
+                <!-- 2 KOLOM TABEL RINCIAN KAS (MINI GLASSMORPHISM) -->
+                <div class="tv-kas-tables-wrap">
+                    <!-- Tabel Pemasukan -->
+                    <div class="tv-table-col">
+                        <div class="tv-table-head head-in">
+                            <span><i class="fas fa-hand-holding-usd mr-1"></i> Pemasukan Kas</span>
+                            <span>Nominal</span>
+                        </div>
+                        <div class="tv-table-body" id="tvListPemasukan">
+                            <!-- Dynamic rows -->
+                        </div>
+                        <div class="tv-table-footer foot-in">
+                            <span>Total Pemasukan</span>
+                            <span id="tvSubtotalIn">Rp 3.500.000</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="info-row">
-                    <div class="info-box-label"><i class="fas fa-microphone-alt"></i> Muadzin</div>
-                    <div class="info-box-value">
-                        <span class="value" id="valMuadzin">Belum Ditetapkan</span>
-                    </div>
-                </div>
-
-                <div class="info-row">
-                    <div class="info-box-label"><i class="fas fa-bullhorn"></i> Bilal</div>
-                    <div class="info-box-value">
-                        <span class="value" id="valBilal">Belum Ditetapkan</span>
-                    </div>
-                </div>
-
-                <div class="info-row" id="rowMaklumat" style="display: none;">
-                    <div class="info-box-label"><i class="fas fa-scroll"></i> Pembaca Maklumat</div>
-                    <div class="info-box-value">
-                        <span class="value" id="valMaklumat">Belum Ditetapkan</span>
+                    <!-- Tabel Pengeluaran -->
+                    <div class="tv-table-col">
+                        <div class="tv-table-head head-out">
+                            <span><i class="fas fa-receipt mr-1"></i> Pengeluaran / Biaya</span>
+                            <span>Nominal</span>
+                        </div>
+                        <div class="tv-table-body" id="tvListPengeluaran">
+                            <!-- Dynamic rows -->
+                        </div>
+                        <div class="tv-table-footer foot-out">
+                            <span>Total Pengeluaran</span>
+                            <span id="tvSubtotalOut">Rp 4.137.000</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Pita Mutiara Hadits Jumat -->
-        <div class="jumat-hadits-box">
-            <i class="fas fa-quran"></i>
-            <div class="jumat-hadits-text" id="jumatHaditsRotator">
-                <strong>Keutamaan Hari Jum'at:</strong> "Perbanyaklah shalawat kepadaku di hari Jum'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)
+        <!-- PITA HIMBAUAN JAMAAH & HADITS ROTATOR -->
+        <div class="jumat-bottom-ribbon">
+            <div class="ribbon-tag">
+                <i class="fas fa-bullhorn mr-1"></i> <span id="ribbonTagText">HIMBAUAN</span>
             </div>
-            <i class="fas fa-hands-praying"></i>
+            <div class="ribbon-content" id="jumatHimbauanRotator">
+                1. Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong
+            </div>
         </div>
     </div>
 
-    <!-- Running Teks Marquee Bawah -->
+    <!-- RUNNING TEKS MARQUEE BAWAH -->
     <div class="bottom-running-wrap">
-        <div class="running-badge"><i class="fas fa-user-tie"></i> WARTA JUM'AT</div>
+        <div class="running-badge"><i class="fas fa-bullhorn mr-1"></i> WARTA JUM'AT</div>
         <div class="running-text-container">
             <div class="running-text" id="runningText">
-                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">Selamat Datang di Masjid Jami' Al-Jihad. Luruskan dan rapatkan shaf saat sholat berjamaah. Jagalah kebersihan dan kesucian masjid.</span>
+                <i class="fas fa-mosque"></i> <span id="runningTextContent">Selamat Datang di Masjid Jami' Al-Jihad Simpangan. Luruskan dan rapatkan shaf saat sholat berjamaah. Dimohon menonaktifkan nada dering ponsel.</span>
             </div>
         </div>
     </div>
@@ -484,21 +799,43 @@
     <script src="../js/display-clock-ambient.js"></script>
 
     <script>
-        const haditsQuotes = [
-            '<strong>Keutamaan Hari Jum\'at:</strong> "Perbanyaklah shalawat kepadaku di hari Jum\'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)',
-            '<strong>Adab Khutbah Jum\'at:</strong> "Jika kamu berkata kepada sahabatmu: \'Diamlah!\' di hari Jum\'at ketika imam berkhutbah, maka kamu telah berbuat sia-sia." (HR. Bukhari)',
-            '<strong>Waktu Mustajab:</strong> "Di hari Jum\'at terdapat suatu waktu, tidaklah seorang hamba muslim berdoa memohon kebaikan melainkan Allah kabulkan." (HR. Bukhari & Muslim)'
+        // Helper Format Angka Rupiah
+        function tvFormatRupiah(angka) {
+            return (angka || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // List Rotator Himbauan Jamaah & Hadits
+        let himbauanItems = [
+            { type: 'HIMBAUAN', text: '1. Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong' },
+            { type: 'HIMBAUAN', text: '2. Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya' },
+            { type: 'HIMBAUAN', text: '3. Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara' },
+            { type: 'HIMBAUAN', text: '4. Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu' },
+            { type: 'HADITS JUM\'AT', text: '<strong>Keutamaan Shalawat:</strong> "Perbanyaklah shalawat kepadaku di hari Jum\'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)' },
+            { type: 'ADAB JUM\'AT', text: '<strong>Adab Khutbah:</strong> "Jika kamu berkata kepada sahabatmu: \'Diamlah!\' di hari Jum\'at saat khatib berkhutbah, maka kamu telah berbuat sia-sia." (HR. Bukhari)' }
         ];
-        let haditsIdx = 0;
-        setInterval(() => {
-            haditsIdx = (haditsIdx + 1) % haditsQuotes.length;
-            const el = document.getElementById('jumatHaditsRotator');
-            if (el) el.innerHTML = haditsQuotes[haditsIdx];
-        }, 12000);
+        let himbauanIdx = 0;
+
+        function startHimbauanRotator() {
+            setInterval(() => {
+                if (himbauanItems.length === 0) return;
+                himbauanIdx = (himbauanIdx + 1) % himbauanItems.length;
+                const elContent = document.getElementById('jumatHimbauanRotator');
+                const elTag = document.getElementById('ribbonTagText');
+                if (elContent) {
+                    elContent.style.opacity = '0';
+                    setTimeout(() => {
+                        const item = himbauanItems[himbauanIdx];
+                        if (elTag) elTag.textContent = item.type;
+                        elContent.innerHTML = item.text;
+                        elContent.style.opacity = '1';
+                    }, 350);
+                }
+            }, 9000);
+        }
 
         async function loadJumatData() {
             try {
-                // 1. Settings
+                // 1. Settings Umum dari Supabase
                 const settings = await SupabaseDB.getSettings();
                 if (settings) {
                     if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
@@ -507,82 +844,169 @@
                     if (rText) document.getElementById('runningTextContent').textContent = rText;
                 }
 
-                // 2. Sholat Jumat
-                const jumat = await SupabaseDB.getSholatJumat();
-                if (jumat) {
-                    // Tanggal
-                    if (jumat.tanggal) {
-                        const d = new Date(jumat.tanggal);
-                        const hariList = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
-                        const bulanList = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
-                        const str = `${hariList[d.getDay()]}, ${d.getDate()} ${bulanList[d.getMonth()]} '${String(d.getFullYear()).slice(-2)}`;
-                        document.getElementById('valTanggal').textContent = str;
+                // 2. Ambil Data Pengumuman Kas & Petugas Sholat Jum'at
+                // Prioritas: settings.pengumuman_jumat -> localStorage -> SupabaseDB.getSholatJumat() -> Default
+                let pjData = null;
+                if (settings && settings.pengumuman_jumat) {
+                    pjData = typeof settings.pengumuman_jumat === 'string' 
+                        ? JSON.parse(settings.pengumuman_jumat) 
+                        : settings.pengumuman_jumat;
+                }
+                if (!pjData) {
+                    try {
+                        const saved = localStorage.getItem('pengumuman_jumat_data');
+                        if (saved) pjData = JSON.parse(saved);
+                    } catch(e) {}
+                }
 
-                        // Check is today
-                        const now = new Date();
-                        const isToday = d.toDateString() === now.toDateString();
-                        const badgeEl = document.getElementById('badgeJumatStatus');
-                        if (isToday) {
-                            badgeEl.className = 'jadwal-mendatang-badge badge-hari-ini';
-                            badgeEl.innerHTML = '<i class="fas fa-clock mr-1"></i> Hari Ini';
-                        } else {
-                            badgeEl.className = 'jadwal-mendatang-badge';
-                            badgeEl.innerHTML = '<i class="fas fa-calendar-week mr-1"></i> Jumat Mendatang';
-                        }
-                    }
+                // Default fallback jika data belum ada
+                if (!pjData) {
+                    pjData = {
+                        tanggalJudul: "02 Oktober 2026",
+                        tanggalKas: "02 Oktober 2026",
+                        saldoAwal: 19379023,
+                        pemasukan: [
+                            { ket: "Pendapatan Tromol Jumat ( 25 Sept 2026 )", nominal: 3500000 }
+                        ],
+                        pengeluaran: [
+                            { ket: "Biaya Majlis Ta'lim Ibu - Ibu Selama 4 Minggu", nominal: 800000 },
+                            { ket: "Biaya Alokasi Buat Operasional Ambulan", nominal: 200000 },
+                            { ket: "Biaya Operasional Masjid Periode Tanggal 02 sd 04 Okt 2026", nominal: 3137000 }
+                        ],
+                        petugas: {
+                            imamKhotib: "Ust. Faiq Rido",
+                            muadzin: "Ust. Rudy",
+                            bilal: "Ust. Mansur",
+                            maklumat: "Ust. Fatkhurokhman"
+                        },
+                        himbauan: [
+                            "Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong",
+                            "Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya",
+                            "Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.",
+                            "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
+                        ]
+                    };
+                }
 
-                    // Petugas
-                    const imam = jumat.imam || '';
-                    const khatib = jumat.khatib || '';
-                    let imamKhatibStr = 'Belum Ditetapkan';
-                    if (imam && khatib && imam !== khatib) {
-                        imamKhatibStr = `${imam} / ${khatib}`;
-                    } else {
-                        imamKhatibStr = imam || khatib || 'Belum Ditetapkan';
-                    }
-
-                    document.getElementById('valImamKhatib').textContent = imamKhatibStr;
-                    document.getElementById('badgeImamName').textContent = imam || khatib || 'Ustd. Imam & Khotib';
-                    // Bilal & Pembaca Maklumat
-                    let rawBilal = jumat.bilal || '';
-                    let bilalStr = rawBilal;
-                    let maklumatStr = '';
-                    if (rawBilal.includes('/')) {
-                        const bParts = rawBilal.split('/').map(s => s.trim());
-                        bilalStr = bParts[0] || '';
-                        maklumatStr = bParts[1] || '';
-                    }
-                    if (!maklumatStr && settings?.running_text_pages?.jumat_maklumat) {
-                        maklumatStr = settings.running_text_pages.jumat_maklumat;
-                    }
-
-                    document.getElementById('valMuadzin').textContent = jumat.muadzin || 'Belum Ditetapkan';
-                    document.getElementById('valBilal').textContent = bilalStr || 'Belum Ditetapkan';
-
-                    const rowMaklumat = document.getElementById('rowMaklumat');
-                    const valMaklumat = document.getElementById('valMaklumat');
-                    if (maklumatStr && maklumatStr !== '-') {
-                        if (rowMaklumat) rowMaklumat.style.display = 'flex';
-                        if (valMaklumat) valMaklumat.textContent = maklumatStr;
-                    } else {
-                        if (rowMaklumat) rowMaklumat.style.display = 'none';
-                    }
-
-                    // Foto
-                    if (jumat.foto_imam) {
-                        const photoUrl = jumat.foto_imam.startsWith('http') 
-                            ? jumat.foto_imam 
-                            : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${jumat.foto_imam}`;
+                // Cek juga dari tabel sholat_jumat untuk foto imam resmi
+                const jumatRow = await SupabaseDB.getSholatJumat();
+                if (jumatRow) {
+                    if (jumatRow.foto_imam) {
+                        const photoUrl = jumatRow.foto_imam.startsWith('http') 
+                            ? jumatRow.foto_imam 
+                            : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${jumatRow.foto_imam}`;
                         document.getElementById('imamPhoto').src = photoUrl;
                     }
+                    // Jika di pjData petugas belum diisi, gunakan dari jumatRow
+                    if (!pjData.petugas) pjData.petugas = {};
+                    if (!pjData.petugas.imamKhotib && jumatRow.imam) {
+                        pjData.petugas.imamKhotib = jumatRow.imam + (jumatRow.khatib && jumatRow.khatib !== jumatRow.imam ? ' / ' + jumatRow.khatib : '');
+                    }
+                    if (!pjData.petugas.muadzin && jumatRow.muadzin) pjData.petugas.muadzin = jumatRow.muadzin;
+                    if (!pjData.petugas.bilal && jumatRow.bilal) {
+                        let b = jumatRow.bilal;
+                        if (b.includes('/')) b = b.split('/')[0].trim();
+                        pjData.petugas.bilal = b;
+                    }
                 }
+
+                // 3. RENDER DATA KE LAYAR DISPLAY TV
+                // A. Tanggal & Periode
+                const tglJudul = pjData.tanggalJudul || '02 Oktober 2026';
+                const tglKas = pjData.tanggalKas || tglJudul;
+                document.getElementById('valTanggal').textContent = tglJudul;
+                document.getElementById('valTglKas').textContent = tglKas;
+
+                // B. Petugas
+                document.getElementById('valImamKhatib').textContent = pjData.petugas?.imamKhotib || 'Ust. Faiq Rido';
+                document.getElementById('valMuadzin').textContent = pjData.petugas?.muadzin || 'Ust. Rudy';
+                document.getElementById('valBilal').textContent = pjData.petugas?.bilal || 'Ust. Mansur';
+                document.getElementById('valMaklumat').textContent = pjData.petugas?.maklumat || 'Ust. Fatkhurokhman';
+
+                // C. Kalkulasi Kas
+                const saldoAwal = parseInt(pjData.saldoAwal, 10) || 0;
+                let totalIn = 0;
+                (pjData.pemasukan || []).forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
+                let totalOut = 0;
+                (pjData.pengeluaran || []).forEach(p => { totalOut += (parseInt(p.nominal, 10) || 0); });
+                const saldoAkhir = (saldoAwal + totalIn) - totalOut;
+
+                document.getElementById('tvKasSaldoAwal').textContent = `Rp ${tvFormatRupiah(saldoAwal)}`;
+                document.getElementById('tvKasPemasukan').textContent = `+ Rp ${tvFormatRupiah(totalIn)}`;
+                document.getElementById('tvKasPengeluaran').textContent = `- Rp ${tvFormatRupiah(totalOut)}`;
+                document.getElementById('tvKasSaldoAkhir').textContent = `Rp ${tvFormatRupiah(saldoAkhir)}`;
+                document.getElementById('tvSubtotalIn').textContent = `Rp ${tvFormatRupiah(totalIn)}`;
+                document.getElementById('tvSubtotalOut').textContent = `Rp ${tvFormatRupiah(totalOut)}`;
+
+                // D. Rincian Baris Tabel Pemasukan
+                const contIn = document.getElementById('tvListPemasukan');
+                if (contIn) {
+                    const itemsIn = (pjData.pemasukan || []).slice(0, 4); // maksimal 4 baris agar pas di layar TV
+                    if (itemsIn.length === 0) {
+                        contIn.innerHTML = '<div class="text-muted small text-center p-2">- Belum ada data pemasukan -</div>';
+                    } else {
+                        contIn.innerHTML = itemsIn.map((item, idx) => `
+                            <div class="tv-table-row">
+                                <span class="tv-row-ket">${idx + 1}. ${escapeHtml(item.ket)}</span>
+                                <span class="tv-row-nominal in">Rp ${tvFormatRupiah(item.nominal)}</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // E. Rincian Baris Tabel Pengeluaran
+                const contOut = document.getElementById('tvListPengeluaran');
+                if (contOut) {
+                    const itemsOut = (pjData.pengeluaran || []).slice(0, 4); // maksimal 4 baris agar pas di layar TV
+                    if (itemsOut.length === 0) {
+                        contOut.innerHTML = '<div class="text-muted small text-center p-2">- Belum ada data pengeluaran -</div>';
+                    } else {
+                        contOut.innerHTML = itemsOut.map((item, idx) => `
+                            <div class="tv-table-row">
+                                <span class="tv-row-ket">${idx + 1}. ${escapeHtml(item.ket)}</span>
+                                <span class="tv-row-nominal out">Rp ${tvFormatRupiah(item.nominal)}</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // F. Update Array Rotator Himbauan Jamaah
+                if (Array.isArray(pjData.himbauan) && pjData.himbauan.length > 0) {
+                    const newHimList = pjData.himbauan.map((line, idx) => {
+                        let clean = line.replace(/^[a-zA-Z0-9][\.\)]\s*/, '');
+                        return {
+                            type: 'HIMBAUAN',
+                            text: `${idx + 1}. ${escapeHtml(clean)}`
+                        };
+                    });
+                    newHimList.push(
+                        { type: 'HADITS JUM\'AT', text: '<strong>Keutamaan Shalawat:</strong> "Perbanyaklah shalawat kepadaku di hari Jum\'at, karena shalawatmu disampaikan kepadaku." (HR. Abu Dawud)' },
+                        { type: 'ADAB JUM\'AT', text: '<strong>Adab Khutbah:</strong> "Jika kamu berkata kepada sahabatmu: \'Diamlah!\' di hari Jum\'at saat khatib berkhutbah, maka kamu telah berbuat sia-sia." (HR. Bukhari)' }
+                    );
+                    himbauanItems = newHimList;
+                }
+
             } catch (err) {
-                console.error('Gagal memuat data sholat jumat:', err);
+                console.error('Gagal memuat data sholat jumat TV:', err);
             }
+        }
+
+        // Helper Escape HTML
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             loadJumatData();
+            startHimbauanRotator();
+
+            // Realtime Sync dari Supabase
             if (window.SupabaseDB) {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload.table === 'sholat_jumat' || payload.table === 'app_settings') {

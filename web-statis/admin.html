@@ -15017,8 +15017,16 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         }
 
         // Inisialisasi Modul Pengumuman Jum'at
-        function initPengumumanJumat() {
+        async function initPengumumanJumat() {
             try {
+                if (window.SupabaseDB) {
+                    const settings = await SupabaseDB.getSettings();
+                    if (settings && settings.pengumuman_jumat) {
+                        const parsedCloud = typeof settings.pengumuman_jumat === 'string' ? JSON.parse(settings.pengumuman_jumat) : settings.pengumuman_jumat;
+                        pjData = Object.assign({}, pjData, parsedCloud);
+                        localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
+                    }
+                }
                 const saved = localStorage.getItem('pengumuman_jumat_data');
                 if (saved) {
                     const parsed = JSON.parse(saved);
@@ -15419,14 +15427,17 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             }
         }
 
-        function simpanDataPengumumanJumat(tampilkanNotif = true) {
+        async function simpanDataPengumumanJumat(tampilkanNotif = true) {
             try {
                 localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
+                if (window.SupabaseDB) {
+                    await SupabaseDB.saveSettings({ pengumuman_jumat: pjData });
+                }
                 if (tampilkanNotif) {
                     if (typeof showCustomToast === 'function') {
-                        showCustomToast("Lembar Pengumuman Sholat Jum'at & Kas berhasil disimpan!", 'success');
+                        showCustomToast("Lembar Pengumuman Sholat Jum'at & Kas berhasil disimpan & disinkronkan ke Layar TV!", 'success');
                     } else {
-                        alert("Lembar Pengumuman Sholat Jum'at berhasil disimpan!");
+                        alert("Lembar Pengumuman Sholat Jum'at & Kas berhasil disimpan & disinkronkan ke Layar TV!");
                     }
                 }
             } catch(e) {
