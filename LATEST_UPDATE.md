@@ -9161,3 +9161,29 @@ Pembaruan ini diselaraskan di seluruh komponen terkait:
 1. 'web-statis/admin.html' (Pembaruan tipografi '#pjPrintableSheet', flyer Canvas 2D, dashboard widget, modal input, naskah maklumat, dan WA broadcast).
 2. 'web-statis/sw.js' (Peningkatan versi cache PWA ke 'aljihad-signage-v3.4.1').
 3. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 210).
+
+---
+
+## BAB 211: PENYESUAIAN REDAKSI HIMBAUAN, PENINGKATAN FONT TABEL KAS, REFINEMENT TTD BENDAHARA HD, & VERIFIKASI UKURAN TITIMANGSA (3 OKTOBER 2026)
+
+### 1. Ringkasan Kebutuhan & Hasil Pemeriksaan
+1. **Verifikasi Ukuran Font Titimangsa & Pengesahan Dokumen:**
+   - Dilakukan pengecekan komparatif antara teks `"Mengetahui,"`, `"Dibuat Oleh,"`, dan teks titimangsa `"Simpangan, 02 Oktober 2026"`.
+   - **Hasil:** Baik pada lembar cetak HTML/preview A4 (`font-size: 13px`) maupun pada mesin flyer Canvas 2D (`font: 16px 'Segoe UI'`), ukuran font teks `"Mengetahui,"` dan `"Dibuat Oleh,"` sudah **sama persis** dengan ukuran font teks `"Simpangan, 02 Oktober 2026"`. Sesuai instruksi pengguna (*"kalau sudah sama biarkan saja jangan dirubah"*), ukuran font dipertahankan tetap sama dan tidak diubah.
+2. **Penyederhanaan Judul Bagian III:**
+   - Teks `"III. HIMBAUAN & TATA TERTIB JAMAAH"` diubah resmi menjadi **`III. HIMBAUAN`** secara menyeluruh (di preview lembar A4, mesin flyer Canvas 2D, naskah bacaan maklumat Jum'at, dan draf siaran WhatsApp).
+3. **Penyempurnaan Ukuran Tanda Tangan Bendahara (Anti Pecah / Blur):**
+   - Ukuran tampilan gambar tanda tangan bendahara (`tantatanganbendahara_trans.png`) disesuaikan lebih proporsional dari `max-height: 90px; max-width: 130px` menjadi **`max-height: 72px; max-width: 105px`** pada HTML preview / cetak A4, dan pada mesin flyer Canvas 2D disesuaikan menjadi **`96 × 78 px`** (sebelumnya `125 × 100 px`). Hal ini membuat guratan tanda tangan tampak jauh lebih tajam, solid, tidak pecah atau mengalami artefak pembesaran, serta berada tepat di tengah nama Bendahara.
+4. **Pembesaran Teks Header & Subtotal Tabel Kas:**
+   - Teks `"Pemasukan Kas"` dan `"Pengeluaran / Biaya"` dinaikkan dari `12.5px font-bold 700` ke **`14px font-extrabold 800`** (dan **`17px bold`** pada mesin flyer Canvas 2D).
+   - Teks `"Total Pemasukan"` dinaikkan dari `12px` ke **`14px font-extrabold 800`** (dan **`17px bold`** pada mesin flyer Canvas 2D).
+   - Teks `"SALDO (Awal + Masuk)"` dinaikkan ke **`14px font-extrabold 800`** (dan **`17px bold`** pada mesin flyer Canvas 2D).
+   - Teks `"Total Pengeluaran"` dinaikkan dari `12.5px` ke **`14px font-extrabold 800`** (dan **`17px bold`** pada mesin flyer Canvas 2D).
+
+---
+
+### 2. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Penyesuaian preview `#pjPrintableSheet`, skala font tabel kas, ukuran TTD bendahara, judul bagian III, serta penyelarasan flyer Canvas 2D, naskah maklumat, dan draf broadcast WA).
+2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.2`).
+3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 211).
+
