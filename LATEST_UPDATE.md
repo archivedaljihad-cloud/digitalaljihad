@@ -8989,3 +8989,54 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
 1. `web-statis/admin.html` (Penyelarasan HTML preview `#pjPrintableSheet`, fungsi rendering `pjUpdatePreview`, `downloadFlyerPengumumanJumat`, dan `cetakPengumumanJumat`).
 2. `web-statis/sw.js` (Bump cache name ke `aljihad-signage-v3.3.7`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 206).
+
+---
+
+## BAB 207: IMPLEMENTASI FORMULIR 13 UNSUR PENGUMUMAN JUM'AT & EXECUTIVE WIDGET DASHBOARD BENDAHARA
+
+### 1. Ringkasan Pembaruan
+Menindaklanjuti kebutuhan resmi DKM Masjid Jami' Al-Jihad Simpangan untuk pembacaan maklumat mimbar sholat Jum'at, telah diimplementasikan struktur formulir lengkap dengan 13 unsur kebutuhan, penggunaan Kop Surat resolusi tinggi (`KOP SURAT ALJIHAD.png`), integrasi naskah bacaan maklumat siap saji, serta pemasangan **Executive Widget Pengumuman Sholat Jum'at & Laporan Kas** langsung pada Dashboard Bendahara (`data-role="admin, bendahara"`).
+
+---
+
+### 2. Rincian 13 Unsur Pengumuman Jum'at
+1. **Judul:** `PENGUMUMAN KEGIATAN SHOLAT JUM’AT MASJID JAMI’ AL JIHAD` (Standar Baku DKM).
+2. **Tanggal Hari H:** Otomatis diambil dan tersinkron dari form Petugas Sholat Jum'at (`jumatTanggal`), terformat resmi Bahasa Indonesia (contoh: `02 Oktober 2026`).
+3. **Laporan Kas s/d Tanggal:** Mengikuti tanggal hari H Jum'at saat maklumat dibacakan (`s/d Tanggal : 02 Oktober 2026`).
+4. **Saldo Awal:** Diinput manual oleh Bendahara/Admin (default: `Rp 19.379.023`).
+5. **Pemasukan Tromol Jum'at:** Tanggal pekan lalu dihitung otomatis 7 hari sebelum Hari H (`25 Sept 2026`) dengan nominal diinput manual (`Rp 3.500.000`) dan opsi tambah pemasukan donasi lain.
+6. **SALDO (Awal + Masuk):** Dijumlahkan secara otomatis (`Saldo Awal + Pemasukan = SALDO Rp 22.879.023`), ditampilkan pada kartu formulir beraksen hijau dan baris tabel pemasukan.
+7. **PENGELUARAN:** Dilengkapi tombol merah `+ Tambah Pengeluaran` (Add Button) dengan baris rincian keterangan, nominal, dan tombol hapus. Total terhitung otomatis (`Rp 4.137.000`).
+8. **SALDO AKHIR KAS:** Dihitung otomatis `(Saldo Awal + Pemasukan) - Total Pengeluaran = Rp 18.742.023`. Ditampilkan pada kartu blok hijau pekat teks emas (`#facc15`).
+9. **Petugas Sholat Jum'at (Hari H):** Tersinkron otomatis dari form Petugas Jum'at: Imam & Khotib (`Ust. Faiq Rido`), Muadzin (`Ust. Rudy`), Bilal Sholat (`Ust. Mansur`), dan MC Maklumat (`Ust. Fatkhurokhman`).
+10. **HIMBAUAN (4 Poin Standar Tetap):**
+    - 1. Masuk ke dalam masjid untuk mengisi shaf kosong.
+    - 2. Parkir rapi dan kunci ganda kendaraan.
+    - 3. Nonaktifkan / silent HP sementara.
+    - 4. Tidak berbicara saat khatib naik mimbar.
+11. **Tempat Pengumuman Dibuat:** `Simpangan` (bersifat tetap).
+12. **Mengetahui:** Ketua DKM MASJID AL JIHAD = `Hadi Prayitno` (lengkap cap stempel resmi & TTD).
+13. **Dibuat Oleh:** Bendahara MASJID AL JIHAD = `Utut Priyastya` (lengkap TTD).
+
+---
+
+### 3. Kop Surat Baru & Naskah Pembaca Maklumat
+- **KOP SURAT:** Memuat berkas `KOP SURAT ALJIHAD.png` resolusi tinggi (2482 × 498 px) dari folder `Digital WebSTATIS` baik pada lembar preview A4 maupun engine flyer Canvas 2D.
+- **Naskah Bacaan Maklumat (`#modalTeksMaklumat`):** Modal khusus bagi Pembaca Maklumat yang merangkai teks pidato siap baca melalui mikrofon mimbar masjid lengkap dengan tombol salin naskah (*Copy to Clipboard*).
+
+---
+
+### 4. Executive Widget pada Dashboard Bendahara
+- Menggantikan banner alert sederhana pada Section B Dashboard (`data-role="admin, bendahara"`) dengan kartu ringkasan eksekutif:
+  - 5 Kartu Indikator Kas Jum'at (Saldo Awal, Pemasukan Tromol, SALDO Subtotal, Pengeluaran, Saldo Akhir).
+  - Grid Petugas Sholat Jum'at & 4 Himbauan Tetap Jamaah.
+  - Tombol Aksi Cepat: Cetak Lembar A4, Unduh Flyer PNG, Naskah Maklumat, Kelola Form, dan Kirim WA Pengurus.
+  - Sinkronisasi realtime melalui fungsi `renderDashPengumumanJumatWidget()`.
+
+---
+
+### 5. Berkas Terkait yang Dimodifikasi
+1. `web-statis/admin.html` (Integrasi formulir 13 unsur, widget Dashboard Bendahara, modal naskah maklumat, engine flyer Canvas, print CSS).
+2. `web-statis/img/kop_surat_aljihad.png` & `web-statis/KOP SURAT ALJIHAD.png` (Penyalinan aset kop surat resmi DKM).
+3. `web-statis/sw.js` (Pembaruan cache PWA ke `aljihad-signage-v3.3.8`).
+4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 207).
