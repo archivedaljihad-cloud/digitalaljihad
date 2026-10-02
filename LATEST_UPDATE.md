@@ -9218,4 +9218,29 @@ Menindaklanjuti permintaan pengguna: *"Jalankan Opsi 1"* (Integrasi langsung ke 
 3. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.3`).
 4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 212).
 
+---
+
+## BAB 213: PENYEMPURNAAN URUTAN SEKSI & PROPORSI KOTAK PETUGAS SLIDE ROTASI TV (3 OKTOBER 2026)
+
+### 1. Ringkasan Kebutuhan & Perubahan
+Menindaklanjuti umpan balik visual pengguna pada tangkapan layar tampilan live slide TV (`slides/jumat.html`), dilakukan penyempurnaan tipografi, penomoran seksi, dan penataan rasio grid:
+1. **Penyelarasan Nomor Urut Header Kolom:**
+   - Kolom Kiri: Diubah dari `"II. Petugas Sholat Jum'at"` menjadi **`"I. Petugas Sholat Jum'at"`**.
+   - Kolom Kanan: Diubah dari `"I. Laporan Keuangan Kas Masjid"` menjadi **`"II. Laporan Keuangan Kas Masjid"`**.
+2. **Pembesaran Ukuran Font Label Role Petugas:**
+   - Teks `"IMAM & KHOTIB"`, `"MUADZIN"`, `"BILAL"`, dan `"MC MAKLUMAT"` diperbesar dari `0.78rem` menjadi **`1.02rem (font-weight: 900)`** dengan *letter-spacing* tegas `1.2px` agar sangat terbaca jelas dari jarak pandang TV.
+   - Nama petugas imam (`1.25rem bold`) dan sub-petugas (`1.28rem bold`) tampil proporsional dan gagah.
+3. **Pelebaran Kotak "IMAM & KHOTIB" & Pengurangan Panjang Kotak 3 Petugas:**
+   - Kolom Petugas (`.petugas-split-wrap`) diubah dari `210px 1fr` menjadi **`320px 1fr`**.
+   - Rasio 2 kolom utama (`.schedule-content-layout`) disesuaikan menjadi **`49% 51%`**.
+   - **Dampak Positif:** Kotak "IMAM & KHOTIB" bertambah lebar +110px (+52%) sehingga nama ustadz/imam yang panjang tidak akan terpotong, sedangkan panjang horizontal kotak "MUADZIN", "BILAL", dan "MC MAKLUMAT" berkurang seimbang dan tampak sangat rapi.
+
+---
+
+### 2. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/jumat.html` (Penomoran seksi I & II, skala font role petugas 1.02rem bold, pelebaran hero box imam 320px, dan penyesuaian panjang 3 kartu petugas).
+2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.4`).
+3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 213).
+
+
 
