@@ -9302,6 +9302,52 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
 6. `web-statis/sw.js` (Registrasi aset statis slide baru & upgrade cache ke `aljihad-signage-v3.4.6`).
 7. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 214).
 
+---
+
+## BAB 215: PERBAIKAN LAYOUT RESPONSIF SLIDE KAJIAN MALAM AHAD (`slides/kajian.html`) — PENANGANAN KOTAK DAN TEKS TERPOTONG PADA KOLOM KIRI (4 OKTOBER 2026)
+
+### 1. Ringkasan Masalah & Analisis
+- **Keluhan Pengguna:** Pada tayangan display TV **Pengajian Rutin Malam Ahad** (`slides/kajian.html`), kotak paling kiri (Profil Pemateri) dan teksnya mengalami pemotongan (*terpotong/clipped*).
+- **Hasil Investigasi Visual & Teknis:**
+  1. Pada resolusi layar laptop/tablet (seperti `1024x639`, `1366x768`, atau layar 1080p dengan skala DPI Windows 125%-150%), tinggi container sebelumnya menggunakan ukuran pixel statis yang terlalu besar:
+     - Foto pemateri dikunci pada `height: 180px`.
+     - Header atas dan judul pengajian memakan ruang hingga ~220px.
+     - Kolom tengah memuat rincian kitab, tema panjang 2-3 baris, dan plakat hadits panjang.
+     - Container timeline 1 bulan (`.kajian-timeline-container`) memakan ruang ~145px di bawah.
+     - Padding bawah container dikunci pada `75px` (melebihi tinggi ticker bawah 48px).
+  2. Akibatnya, tinggi total elemen melebihi tinggi viewport (`100vh`), menyebabkan `.container` meluap (*overflow*) ke bawah dan tertutup oleh running text ticker (`.bottom-running-wrap`, `z-index: 1000`).
+  3. Pada Kolom 1 (kiri), pill `WAKTU PELAKSANAAN` terpotong horizontal tepat pada garis dasar teks (*baseline*), teks jam/waktu pelaksanaan tersembunyi total, dan garis lengkung bawah kartu terpotong. Selain itu, container timeline bawah sempat terdorong ke luar layar.
+
+---
+
+### 2. Rincian Solusi & Perubahan Kode
+1. **Penerapan Skala Dinamis Responsif (`clamp()` & `vh/vw`):**
+   - Mengganti seluruh ukuran pixel statis pada `slides/kajian.html` dengan fungsi fluid CSS `clamp()` yang otomatis beradaptasi dengan tinggi layar viewport (baik `1024x639`, `1366x768`, maupun `1920x1080` Full HD).
+2. **Perbaikan Kolom 1 (Profil Pemateri & Waktu Pelaksanaan):**
+   - Frame foto pemateri disesuaikan menjadi dinamis: `height: clamp(95px, 17vh, 165px)`.
+   - Nama Ustadz (`.ustadz-name-title`) menggunakan `font-size: clamp(1.05rem, 1.8vh, 1.25rem)` dengan `line-height: 1.2`.
+   - Kapsul info Waktu Pelaksanaan (`.waktu-kajian-pill`): Diberikan `flex-shrink: 0`, margin otomatis bawah, serta kelas semantik `.waktu-label` dan `.waktu-val` sehingga teks judul label dan jam pelaksanaan (`Ba'da Sholat Maghrib s/d Menjelang Isya`) selalu 100% utuh, tegas, dan tidak akan pernah terpotong.
+   - Kartu (`#cardKolom1`) memiliki sudut lengkung berbingkai emas utuh dengan jarak aman (*breathing room*) yang lapang di atas timeline dan ticker.
+3. **Penyelarasan Kolom 2 (Kitab, Tema, & Hadits) & Kolom 3 (Countdown & QR):**
+   - Kotak Kitab dan Tema menggunakan padding dan font fleksibel (`clamp()`), mencegah pembengkakan kartu saat judul tema panjang.
+   - Kotak Hadits dilengkapi `min-height: 0` dan `-webkit-line-clamp` adaptif agar teks Arab, terjemahan, dan riwayat hadits tampil rapi tanpa mendorong kartu keluar layar.
+   - Kotak hitung mundur Isya dan QR code tanya jawab disesuaikan proporsinya agar seimbang dan elegan.
+4. **Penyempurnaan Timeline 1 Bulan (`.kajian-timeline-container`):**
+   - Menggunakan padding responsif dan ukuran kartu mini yang ringkas pada viewport kecil sehingga kartu Pekan 1 s/d 5 tetap tampil presisi di atas ticker.
+   - Ditambahkan media query `@media (max-height: 700px)` dan `@media (max-height: 560px)` untuk fallback layout ultra-kompak.
+5. **Penyempurnaan Spasi Jam & Tanggal Header:**
+   - Ditambahkan `display: inline-flex !important; align-items: center !important; gap: 12px !important;` pada `.header .datetime` agar tanggal dan jam WIB selalu memiliki spasi pemisah yang jelas.
+   - Spasi dan *line-height* shalawat/hadits pada banner pengajian disempurnakan (`gap: 2px`, `margin-top: 3px`).
+6. **Pembaruan Cache Service Worker PWA (`web-statis/sw.js`):**
+   - Menaikkan versi cache PWA menjadi **`aljihad-signage-v3.4.7`** agar seluruh TV dan browser klien langsung memuat pembaruan slide ini secara instan.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/slides/kajian.html` (Perombakan total CSS responsif, perbaikan pill waktu pelaksanaan kolom 1, penyesuaian gap jam header).
+2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.7`).
+3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 215).
+
 
 
 

@@ -34,23 +34,45 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 8px 24px 75px 24px;
+            padding: clamp(4px, 1vh, 8px) clamp(12px, 1.5vw, 24px) clamp(50px, 5.5vh, 56px) clamp(12px, 1.5vw, 24px);
             position: relative;
             z-index: 5;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 4px;
+            margin-bottom: clamp(2px, 0.5vh, 4px);
             flex-shrink: 0;
             position: relative;
+        }
+
+        .header h1, #nama-masjid {
+            font-size: clamp(1.6rem, 2.3vw, 2.35rem) !important;
+            margin: 0 0 -10px 0 !important;
+        }
+
+        .header h3.sub-header {
+            font-size: clamp(0.75rem, 1.1vw, 1.05rem) !important;
+            margin-top: clamp(3px, 0.6vh, 6px) !important;
+            margin-bottom: clamp(2px, 0.4vh, 4px) !important;
+        }
+
+        .header .datetime {
+            font-size: clamp(0.95rem, 1.3vw, 1.25rem) !important;
+            padding: clamp(2px, 0.4vh, 4px) clamp(14px, 1.5vw, 24px) !important;
+            margin: 2px auto 0 auto !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 12px !important;
         }
 
         .schedule-header-section {
             text-align: center;
             flex-shrink: 0;
-            margin-top: 6px;
+            margin-top: clamp(2px, 0.5vh, 5px);
             display: flex;
             justify-content: center;
             width: 100%;
@@ -60,19 +82,19 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 16px;
+            gap: clamp(8px, 1.2vw, 16px);
             background: linear-gradient(135deg, rgba(2, 25, 17, 0.9) 0%, rgba(4, 40, 26, 0.85) 100%);
             border: 1.5px solid rgba(255, 215, 0, 0.7);
             border-radius: 35px;
-            padding: 6px 26px;
+            padding: clamp(3px, 0.5vh, 6px) clamp(14px, 1.5vw, 24px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 215, 0, 0.25);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
         .title-icon-badge {
-            width: 48px;
-            height: 48px;
+            width: clamp(32px, 4.2vh, 44px);
+            height: clamp(32px, 4.2vh, 44px);
             border-radius: 50%;
             background: rgba(3, 22, 15, 0.95);
             border: 1.5px solid rgba(255, 215, 0, 0.65);
@@ -80,54 +102,65 @@
             align-items: center;
             justify-content: center;
             color: #ffd700;
-            font-size: 1.5rem;
+            font-size: clamp(1rem, 1.8vh, 1.35rem);
             flex-shrink: 0;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
+        .title-text-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
         .title-text-wrap h2 {
-            font-size: 1.65rem;
+            font-size: clamp(1.15rem, 1.8vh, 1.5rem);
             color: #ffffff !important;
             letter-spacing: 2px;
             font-weight: 800;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
             margin: 0;
             text-transform: uppercase;
+            line-height: 1.2;
         }
         .title-text-wrap p {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: clamp(0.72rem, 1.1vh, 0.85rem);
             color: #ffd700;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
+            line-height: 1.25;
         }
         .sholawat-greeting {
             font-family: 'Amiri', serif;
-            font-size: 1.15rem;
+            font-size: clamp(0.85rem, 1.4vh, 1.08rem);
             color: #fff4b8;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.75);
-            margin-top: 2px;
+            margin-top: 3px;
             letter-spacing: 0.5px;
+            line-height: 1.4;
         }
 
         /* 3-Column Layout */
         .kajian-main-layout {
             display: grid;
-            grid-template-columns: 360px 1fr 340px;
-            gap: 20px;
+            grid-template-columns: minmax(270px, 340px) 1fr minmax(250px, 320px);
+            gap: clamp(10px, 1.3vw, 18px);
             align-items: stretch;
             width: 100%;
             flex: 1;
-            margin: 8px auto 0 auto;
+            min-height: 0;
+            margin: clamp(4px, 0.8vh, 8px) auto 0 auto;
         }
 
         /* Glassmorphism Cards */
         .kajian-card {
             background: linear-gradient(135deg, rgba(6, 32, 22, 0.9) 0%, rgba(2, 18, 12, 0.94) 100%);
             border: 1.5px solid rgba(212, 175, 55, 0.55);
-            border-radius: 18px;
-            padding: 16px 18px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 238, 170, 0.25);
+            border-radius: 16px;
+            padding: clamp(10px, 1.5vh, 16px) clamp(12px, 1.3vw, 18px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 238, 170, 0.25);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             display: flex;
@@ -135,6 +168,7 @@
             justify-content: space-between;
             position: relative;
             overflow: hidden;
+            min-height: 0;
             transition: opacity 0.35s ease, transform 0.35s ease;
         }
 
@@ -152,14 +186,15 @@
         /* Kolom Kiri: Pemateri / Ustadz */
         .ustadz-photo-container {
             width: 100%;
-            height: 180px;
-            border-radius: 14px;
+            height: clamp(95px, 17vh, 165px);
+            border-radius: 12px;
             overflow: hidden;
             border: 2px solid rgba(255, 215, 0, 0.65);
             position: relative;
             background: #02130c;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-            margin-bottom: 10px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+            margin-bottom: clamp(6px, 1vh, 10px);
+            flex-shrink: 0;
         }
         .ustadz-photo {
             width: 100%;
@@ -170,47 +205,66 @@
         }
         .ustadz-badge-floating {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            background: rgba(2, 20, 13, 0.92);
+            bottom: clamp(4px, 0.8vh, 8px);
+            left: 8px;
+            right: 8px;
+            background: rgba(2, 20, 13, 0.94);
             border: 1px solid #ffd700;
-            padding: 6px 10px;
-            border-radius: 10px;
+            padding: clamp(3px, 0.5vh, 5px) 8px;
+            border-radius: 8px;
             text-align: center;
         }
         .ustadz-badge-role {
-            font-size: 0.75rem;
+            font-size: clamp(0.68rem, 1vh, 0.75rem);
             color: #ffd700;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             display: block;
         }
         .ustadz-name-title {
-            font-size: 1.25rem;
+            font-size: clamp(1.05rem, 1.8vh, 1.25rem);
             font-weight: 800;
             color: #ffffff;
             line-height: 1.2;
-            margin-bottom: 4px;
+            margin-bottom: clamp(2px, 0.4vh, 4px);
             text-shadow: 0 2px 6px rgba(0,0,0,0.8);
         }
         .ustadz-spec {
-            font-size: 0.85rem;
+            font-size: clamp(0.72rem, 1.1vh, 0.82rem);
             color: #86efac;
             font-weight: 500;
-            margin-bottom: 12px;
+            margin-bottom: clamp(6px, 1vh, 10px);
+            line-height: 1.25;
         }
         .waktu-kajian-pill {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.18);
+            border: 1px solid rgba(16, 185, 129, 0.45);
             border-radius: 10px;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            color: #e2e8f0;
+            padding: clamp(6px, 1vh, 9px) clamp(8px, 1vw, 12px);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+        .waktu-kajian-pill i {
+            font-size: clamp(1.1rem, 1.8vh, 1.3rem);
+            flex-shrink: 0;
+        }
+        .waktu-kajian-pill .waktu-label {
+            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            line-height: 1.1;
+        }
+        .waktu-kajian-pill .waktu-val {
+            font-size: clamp(0.78rem, 1.3vh, 0.92rem);
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
         }
 
         /* Kolom Tengah: Kitab & Tema */
@@ -218,34 +272,35 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: clamp(4px, 0.8vh, 8px);
+            flex-shrink: 0;
         }
         .pekan-badge {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: #ffffff;
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 1.1vh, 0.8rem);
             font-weight: 800;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
         }
         .live-status-badge {
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid rgba(239, 68, 68, 0.6);
             color: #fca5a5;
-            font-size: 0.78rem;
+            font-size: clamp(0.68rem, 1vh, 0.76rem);
             font-weight: 700;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
         .live-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: #ef4444;
             box-shadow: 0 0 8px #ef4444;
@@ -259,27 +314,30 @@
         .kitab-box {
             background: rgba(0, 0, 0, 0.35);
             border: 1.5px solid rgba(255, 215, 0, 0.4);
-            border-radius: 14px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
+            border-radius: 12px;
+            padding: clamp(6px, 1vh, 9px) clamp(10px, 1vw, 14px);
+            margin-bottom: clamp(5px, 0.8vh, 8px);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            flex-shrink: 0;
         }
         .kitab-icon {
-            font-size: 1.8rem;
+            font-size: clamp(1.3rem, 2.2vh, 1.65rem);
             color: #ffd700;
             filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+            flex-shrink: 0;
         }
         .kitab-label {
-            font-size: 0.75rem;
+            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
             color: #cbd5e1;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             font-weight: 600;
+            line-height: 1.1;
         }
         .kitab-title {
-            font-size: 1.25rem;
+            font-size: clamp(0.95rem, 1.6vh, 1.18rem);
             font-weight: 800;
             color: #ffd700;
             line-height: 1.2;
@@ -288,139 +346,149 @@
         .tema-box {
             background: rgba(2, 28, 18, 0.7);
             border-left: 4px solid #10b981;
-            border-radius: 0 14px 14px 0;
-            padding: 14px 18px;
-            margin-bottom: 14px;
+            border-radius: 0 12px 12px 0;
+            padding: clamp(6px, 1.1vh, 10px) clamp(10px, 1vw, 14px);
+            margin-bottom: clamp(5px, 0.8vh, 8px);
+            flex-shrink: 0;
         }
         .tema-label {
-            font-size: 0.78rem;
+            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
             color: #86efac;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            line-height: 1.1;
         }
         .tema-title {
-            font-size: 1.45rem;
+            font-size: clamp(0.95rem, 1.7vh, 1.25rem);
             font-weight: 800;
             color: #ffffff;
-            line-height: 1.3;
+            line-height: 1.25;
             text-shadow: 0 2px 6px rgba(0,0,0,0.8);
         }
 
         .hadits-box {
             background: rgba(0, 0, 0, 0.4);
             border: 1px dashed rgba(255, 215, 0, 0.45);
-            border-radius: 14px;
-            padding: 12px 16px;
+            border-radius: 12px;
+            padding: clamp(6px, 1vh, 10px) clamp(10px, 1vw, 14px);
             flex: 1;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            overflow: hidden;
         }
         .hadits-arab {
             font-family: 'Amiri', serif;
-            font-size: 1.25rem;
+            font-size: clamp(0.95rem, 1.6vh, 1.18rem);
             color: #fff4b8;
             text-align: right;
             direction: rtl;
-            line-height: 1.6;
-            margin-bottom: 6px;
+            line-height: 1.45;
+            margin-bottom: 3px;
         }
         .hadits-arti {
-            font-size: 0.85rem;
+            font-size: clamp(0.68rem, 1.1vh, 0.82rem);
             color: #e2e8f0;
-            line-height: 1.4;
+            line-height: 1.3;
             font-style: italic;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .hadits-riwayat {
-            font-size: 0.75rem;
+            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
             color: #ffd700;
             font-weight: 700;
             text-align: right;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         /* Kolom Kanan: Tanya Jawab QR & Countdown Isya */
         .countdown-isya-box {
             background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(153, 27, 27, 0.3) 100%);
             border: 1.5px solid rgba(248, 113, 113, 0.6);
-            border-radius: 14px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: clamp(6px, 1vh, 10px);
             text-align: center;
-            margin-bottom: 14px;
+            margin-bottom: clamp(6px, 1vh, 10px);
+            flex-shrink: 0;
         }
         .cd-label {
-            font-size: 0.78rem;
+            font-size: clamp(0.68rem, 1vh, 0.75rem);
             color: #fca5a5;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .cd-time {
-            font-size: 2.1rem;
+            font-size: clamp(1.4rem, 2.4vh, 1.95rem);
             font-weight: 800;
             color: #ffffff;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             font-family: monospace;
             text-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
             line-height: 1;
         }
         .cd-sub {
-            font-size: 0.75rem;
+            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
             color: #e2e8f0;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .qa-card-box {
             background: rgba(0, 0, 0, 0.45);
             border: 1.5px solid rgba(255, 215, 0, 0.5);
-            border-radius: 14px;
-            padding: 14px;
+            border-radius: 12px;
+            padding: clamp(6px, 1.2vh, 12px);
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             flex: 1;
+            min-height: 0;
         }
         .qa-badge {
             background: rgba(255, 215, 0, 0.15);
             border: 1px solid rgba(255, 215, 0, 0.5);
             color: #ffd700;
-            font-size: 0.75rem;
+            font-size: clamp(0.65rem, 1vh, 0.72rem);
             font-weight: 800;
-            padding: 4px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
+            letter-spacing: 0.8px;
+            margin-bottom: clamp(3px, 0.6vh, 6px);
         }
         .qa-qr-img {
-            width: 110px;
-            height: 110px;
+            width: clamp(68px, 10.5vh, 100px);
+            height: clamp(68px, 10.5vh, 100px);
             background: #ffffff;
-            padding: 6px;
-            border-radius: 10px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.6);
-            margin-bottom: 8px;
+            padding: 4px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            margin-bottom: clamp(3px, 0.6vh, 6px);
         }
         .qa-instruction {
-            font-size: 0.82rem;
+            font-size: clamp(0.7rem, 1.1vh, 0.8rem);
             font-weight: 700;
             color: #ffffff;
-            line-height: 1.25;
-            margin-bottom: 4px;
+            line-height: 1.2;
+            margin-bottom: 2px;
         }
         .qa-subtext {
-            font-size: 0.72rem;
+            font-size: clamp(0.62rem, 0.92vh, 0.68rem);
             color: #cbd5e1;
-            line-height: 1.3;
+            line-height: 1.2;
         }
 
         /* TIMELINE STRIP 1 BULAN PENUH (PEKAN 1 - 5) */
@@ -428,12 +496,12 @@
             width: 100%;
             background: linear-gradient(135deg, rgba(2, 24, 16, 0.95) 0%, rgba(1, 15, 10, 0.98) 100%);
             border: 1.5px solid rgba(212, 175, 55, 0.65);
-            border-radius: 16px;
-            padding: 8px 16px 10px 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255, 238, 170, 0.25);
+            border-radius: 14px;
+            padding: clamp(3px, 0.7vh, 7px) clamp(8px, 1.2vw, 14px) clamp(4px, 0.8vh, 7px) clamp(8px, 1.2vw, 14px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255, 238, 170, 0.25);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            margin-top: 8px;
+            margin-top: clamp(4px, 0.7vh, 7px);
             flex-shrink: 0;
             position: relative;
         }
@@ -442,26 +510,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: clamp(2px, 0.4vh, 4px);
         }
         .timeline-title {
-            font-size: 0.82rem;
+            font-size: clamp(0.68rem, 1vh, 0.8rem);
             font-weight: 800;
             color: #ffd700;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
         }
         .timeline-subtext {
-            font-size: 0.72rem;
+            font-size: clamp(0.62rem, 0.9vh, 0.7rem);
             color: #94a3b8;
         }
         .rotator-pill {
             background: rgba(16, 185, 129, 0.2);
             border: 1px solid rgba(16, 185, 129, 0.5);
             color: #86efac;
-            font-size: 0.7rem;
+            font-size: clamp(0.62rem, 0.9vh, 0.68rem);
             font-weight: 700;
-            padding: 2px 10px;
+            padding: 1px 8px;
             border-radius: 20px;
             display: inline-flex;
             align-items: center;
@@ -470,14 +538,14 @@
         .timeline-cards-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: clamp(4px, 0.8vw, 8px);
         }
 
         .timeline-mini-card {
             background: rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(255, 215, 0, 0.25);
-            border-radius: 10px;
-            padding: 6px 10px;
+            border-radius: 8px;
+            padding: clamp(3px, 0.5vh, 5px) clamp(5px, 0.7vw, 8px);
             cursor: pointer;
             transition: all 0.35s ease;
             position: relative;
@@ -485,6 +553,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: clamp(46px, 7.5vh, 64px);
         }
 
         .timeline-mini-card:hover {
@@ -503,43 +572,43 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
         .timeline-pekan-badge {
-            font-size: 0.68rem;
+            font-size: clamp(0.58rem, 0.85vh, 0.66rem);
             font-weight: 800;
             color: #ffd700;
             text-transform: uppercase;
         }
         .timeline-date-text {
-            font-size: 0.7rem;
+            font-size: clamp(0.6rem, 0.88vh, 0.68rem);
             font-weight: 700;
             color: #ffffff;
         }
         .timeline-ustadz-text {
-            font-size: 0.75rem;
+            font-size: clamp(0.62rem, 0.92vh, 0.72rem);
             font-weight: 700;
             color: #ffffff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            line-height: 1.2;
+            line-height: 1.15;
         }
         .timeline-tema-text {
-            font-size: 0.65rem;
+            font-size: clamp(0.56rem, 0.82vh, 0.64rem);
             color: #cbd5e1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            line-height: 1.2;
+            line-height: 1.15;
         }
         .timeline-status-pill {
-            font-size: 0.6rem;
+            font-size: clamp(0.52rem, 0.75vh, 0.58rem);
             font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 10px;
+            padding: 1px 4px;
+            border-radius: 6px;
             display: inline-block;
-            margin-top: 2px;
+            margin-top: 1px;
             align-self: flex-start;
         }
         .status-pill-live {
@@ -565,7 +634,7 @@
             height: 3px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
-            margin-top: 6px;
+            margin-top: clamp(2px, 0.4vh, 4px);
             overflow: hidden;
         }
         .timeline-progress-fill {
@@ -582,12 +651,31 @@
 
         @media (max-width: 1200px) {
             .kajian-main-layout {
-                grid-template-columns: 300px 1fr 280px;
-                gap: 15px;
+                grid-template-columns: minmax(240px, 280px) 1fr minmax(230px, 260px);
+                gap: 12px;
             }
-            .title-text-wrap h2 { font-size: 1.4rem; }
-            .tema-title { font-size: 1.2rem; }
-            .cd-time { font-size: 1.7rem; }
+        }
+
+        @media (max-height: 700px) {
+            .timeline-subtext {
+                display: none;
+            }
+            .timeline-mini-card {
+                min-height: 42px;
+                padding: 2px 4px;
+            }
+            .timeline-tema-text {
+                display: none;
+            }
+            .ustadz-photo-container {
+                height: 90px;
+            }
+        }
+
+        @media (max-height: 560px) {
+            .kajian-timeline-container {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -639,10 +727,10 @@
                 </div>
 
                 <div class="waktu-kajian-pill">
-                    <i class="fas fa-clock text-warning" style="font-size: 1.2rem;"></i>
+                    <i class="fas fa-clock text-warning"></i>
                     <div>
-                        <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase;">Waktu Pelaksanaan</div>
-                        <div style="font-weight: 700; color: #ffffff;" id="valWaktuPelaksanaan">Ba'da Sholat Maghrib s/d Isya</div>
+                        <div class="waktu-label">Waktu Pelaksanaan</div>
+                        <div class="waktu-val" id="valWaktuPelaksanaan">Ba'da Sholat Maghrib s/d Isya</div>
                     </div>
                 </div>
             </div>
