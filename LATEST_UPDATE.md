@@ -9348,6 +9348,58 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
 2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.7`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 215).
 
+---
+
+## BAB 216: PENYELARASAN HEADER MODE SHOLAT (`prayer-mode.html`) IDENTIK DENGAN HEADER ROTASI DISPLAY TV (4 OKTOBER 2026)
+
+### 1. Ringkasan Permintaan Pengguna
+- **Permintaan Pengguna:** Di halaman **Prayer Mode** (`prayer-mode.html`), ganti headernya dan samakan headernya seperti halaman rotasi display TV, dengan sedikit memperkecil ukuran hari, tanggal, bulan, tahun, dan jamnya agar proporsional dan hemat ruang vertikal.
+- **Latar Belakang & Analisis:**
+  - Sebelumnya, halaman mode sholat menggunakan header sederhana `.masjid-header` (`<div class="masjid-title" id="masjidTitle">MASJID JAMI' AL JIHAD</div>` diapit dua ikon masjid).
+  - Sementara itu, seluruh slide rotasi display TV (`slides/utama.html`, `slides/kajian.html`, `slides/kas-jumat.html`, dsb.) menggunakan tata letak header standar berwibawa:
+    1. Judul masjid `h1#nama-masjid`: Tipografi custom font *Masking Renta*, warna putih dengan outline keemasan mewah (`-webkit-text-stroke: 1.8px #FFD700`) dan drop-shadow berlapis.
+    2. Sub-judul `h3.sub-header#sub-header`: "SISTEM INFORMASI DIGITAL", font Poppins uppercase dengan letter-spacing 3.5px dan bayangan hitam tegas.
+    3. Kapsul Waktu & Penanggalan `.datetime#datetime`: Kapsul kaca emerald gelap berbingkai emas bercahaya, memuat Tanggal Masehi, Penanggalan Hijriah emas ber-glow, serta Jam:Menit:Detik WIB.
+  - Untuk mode sholat, ukuran teks hari, tgl, bulan, tahun, dan jamnya sengaja sedikit diperkecil (*compact scale*) dibandingkan slide rotasi (dari `1.55rem` menjadi `clamp(0.88rem, 1.1vw, 1.12rem)`) agar menyisakan ruang vertikal yang lega untuk badge waktu sholat, 4 kartu petugas Jum'at, hadits, dan pesan hening.
+
+---
+
+### 2. Rincian Perubahan yang Diterapkan
+1. **Registrasi Custom Font `Masking Renta` & Montserrat:**
+   - Menambahkan `@font-face` untuk font *Masking Renta* (`fonts/MaskingRenta.otf`) serta tautan Google Fonts Montserrat di `<head>`.
+2. **Penggantian Struktur Markup Header:**
+   - Mengganti `<div class="masjid-header">...</div>` dengan:
+     ```html
+     <div class="header">
+         <h1 id="nama-masjid">MASJID JAMI' AL-JIHAD</h1>
+         <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+         <div class="datetime" id="datetime"></div>
+     </div>
+     ```
+3. **Penyelarasan Styling CSS Header & Datetime Capsule Kompak:**
+   - `h1#nama-masjid`: Mengadopsi font *Masking Renta*, teks stroke emas 1.8px, dan bayangan berlapis khas rotasi (`clamp(1.65rem, 2.3vw, 2.45rem)`).
+   - `h3#sub-header`: Sub-header Poppins serasi berjarak rapat dan elegan.
+   - `.datetime`: Menggunakan styling kapsul kaca emerald (`linear-gradient(135deg, rgba(2, 22, 15, 0.94) 0%, rgba(3, 34, 23, 0.90) 100%)`), border emas 2px, bayangan glow keemasan, dengan ukuran font proporsional `clamp(0.88rem, 1.1vw, 1.12rem)` dan padding `clamp(3px, 0.4vh, 5px) clamp(14px, 1.5vw, 22px)` yang hemat ruang.
+   - Mengoptimalkan padding container `.prayer-container` menjadi `clamp(8px, 1.4vh, 16px) 20px clamp(10px, 1.6vh, 16px) 20px` agar jarak vertikal seluruh elemen seimbang dan tidak sesak di semua resolusi TV.
+4. **Integrasi Engine Jam Real-time (`display-clock-ambient.js`):**
+   - Menautkan `<script src="js/display-clock-ambient.js"></script>` agar kapsul `#datetime` otomatis menghitung dan merender tanggal Masehi, penanggalan Hijriah (Ummul Qura / algoritma astronomis Islam), dan Jam WIB secara presisi detik-demi-detik.
+5. **Dukungan Dinamis Pengaturan Nama Masjid:**
+   - Memperbarui fungsi `init()` agar sinkronisasi data dari Supabase otomatis mengisi `nama-masjid` dan `sub-header` secara reaktif.
+6. **Penyelarasan Seluruh File Pratinjau & PWA:**
+   - Memperbarui berkas `web-statis/prayer-mode.html` dan `public/preview-prayer-mode.html`.
+   - Menaikkan versi cache Service Worker pada `web-statis/sw.js` ke **`aljihad-signage-v3.4.8`**.
+   - Menyinkronkan perubahan ke folder lokal mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/prayer-mode.html` (Penggantian header masjid, integrasi Masking Renta, penambahan kapsul datetime kompak, dan pemuatan `display-clock-ambient.js`).
+2. `public/preview-prayer-mode.html` (Penyelarasan berkas demo publik pratinjau mode sholat).
+3. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.8`).
+4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\prayer-mode.html` & `sw.js` (Sinkronisasi lokal mandiri).
+5. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 216).
+
+
 
 
 

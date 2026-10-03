@@ -7,10 +7,18 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Montserrat:wght@800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
 
     <style>
+        /* CUSTOM FONT: Masking Renta (Sesuai Halaman Rotasi) */
+        @font-face {
+            font-family: 'Masking Renta';
+            src: url('fonts/MaskingRenta.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
         :root {
             --gold-light: #FFF8E1;
             --gold-primary: #D4AF37;
@@ -74,33 +82,135 @@
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            padding: 24px 20px 20px 20px;
+            padding: clamp(8px, 1.4vh, 16px) 20px clamp(10px, 1.6vh, 16px) 20px;
             box-sizing: border-box;
         }
 
-        /* 1. HEADER MASJID */
-        .masjid-header {
+        /* 1. HEADER MASJID UNIFIED (IDENTIK DENGAN HALAMAN ROTASI) */
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: clamp(4px, 0.7vh, 8px);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 15;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 6px;
+            width: 100%;
         }
 
-        .masjid-icon {
-            font-size: 26px;
-            color: #D4AF37;
-            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+        .header h1,
+        #nama-masjid {
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
+            font-size: clamp(1.65rem, 2.3vw, 2.45rem) !important;
+            font-weight: 900 !important;
+            line-height: 1.1 !important;
+            letter-spacing: 4px !important;
+            text-transform: uppercase !important;
+            background: none !important;
+            -webkit-background-clip: initial !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow:
+                0 3px 6px rgba(0, 0, 0, 0.98),
+                0 6px 18px rgba(0, 0, 0, 0.92),
+                0 0 25px rgba(0, 0, 0, 0.85) !important;
+            filter: none !important;
+            margin: 0 0 -8px 0 !important;
+            padding: 0 !important;
         }
 
-        .masjid-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(22px, 2.4vw, 34px);
-            font-weight: 800;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #FFFFFF;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.3);
+        .header h3.sub-header,
+        #sub-header {
+            font-family: 'Poppins', sans-serif !important;
+            font-size: clamp(0.72rem, 1vw, 1rem) !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+            letter-spacing: 3.5px !important;
+            color: #ffffff !important;
+            text-transform: uppercase !important;
+            opacity: 1 !important;
+            text-shadow:
+                1px 1px 0 #000000,
+                -1px 1px 0 #000000,
+                1px -1px 0 #000000,
+                -1px -1px 0 #000000,
+                2px 2px 0 #000000,
+                -2px 2px 0 #000000,
+                2px -2px 0 #000000,
+                -2px -2px 0 #000000,
+                0 2px 8px rgba(0, 0, 0, 0.95) !important;
+            margin-top: clamp(4px, 0.6vh, 7px) !important;
+            margin-bottom: clamp(3px, 0.4vh, 5px) !important;
+            padding: 0 !important;
+        }
+
+        /* DATETIME CAPSULE (Sedikit diperkecil hari, tgl, bulan, tahun dan jamnya sesuai instruksi) */
+        .header .datetime,
+        .datetime {
+            font-size: clamp(0.88rem, 1.1vw, 1.12rem) !important;
+            background: linear-gradient(135deg, rgba(2, 22, 15, 0.94) 0%, rgba(3, 34, 23, 0.90) 100%) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: clamp(3px, 0.4vh, 5px) clamp(14px, 1.5vw, 22px) !important;
+            border-radius: 30px !important;
+            margin: clamp(2px, 0.3vh, 4px) auto 0 auto !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.6px !important;
+            border: 2px solid #FFD700 !important;
+            box-shadow: 0 0 14px rgba(255, 215, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+            white-space: nowrap !important;
+            box-sizing: border-box !important;
+        }
+
+        .datetime .dt-date-row {
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+
+        .datetime .masehi-date {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+
+        .datetime .hijri-date {
+            color: #ffd700 !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.8px !important;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.65), 0 0 20px rgba(255, 170, 0, 0.35) !important;
+            padding: 0 2px !important;
+        }
+
+        .datetime .dt-time-row {
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+
+        .datetime .jam-time {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-variant-numeric: tabular-nums !important;
+        }
+
+        .datetime .dt-sep {
+            color: #ffd700 !important;
+            opacity: 0.85 !important;
+            margin: 0 7px !important;
+            font-weight: bold !important;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
+        }
+
+        .datetime .dt-sep-time {
+            margin: 0 9px !important;
         }
 
         /* 2. FASE TITLE & PRAYER BADGE */
@@ -829,11 +939,11 @@
     </div>
 
     <div class="prayer-container">
-        <!-- 1. HEADER MASJID -->
-        <div class="masjid-header">
-            <i class="fas fa-mosque masjid-icon"></i>
-            <div class="masjid-title" id="masjidTitle">MASJID JAMI' AL JIHAD</div>
-            <i class="fas fa-mosque masjid-icon"></i>
+        <!-- 1. HEADER MASJID UNIFIED (IDENTIK DENGAN HALAMAN ROTASI) -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL-JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime"></div>
         </div>
 
         <!-- 2. FASE TITLE & PRAYER BADGE -->
@@ -946,6 +1056,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/supabase-db.js"></script>
+    <script src="js/display-clock-ambient.js"></script>
     <script src="js/prayer-engine.js"></script>
     <script src="js/anti-idle.js"></script>
 
@@ -1253,7 +1364,12 @@
                     jumatPetugas = await SupabaseDB.getSholatJumat();
 
                     if (settings && settings.nama_aplikasi) {
-                        document.getElementById('masjidTitle').textContent = settings.nama_aplikasi.toUpperCase();
+                        const elNama = document.getElementById('nama-masjid') || document.getElementById('masjidTitle');
+                        if (elNama) elNama.textContent = settings.nama_aplikasi.toUpperCase();
+                        const elSub = document.getElementById('sub-header');
+                        if (elSub && (settings.tagline_aplikasi || settings.sub_header)) {
+                            elSub.textContent = (settings.tagline_aplikasi || settings.sub_header).toUpperCase();
+                        }
                         const elFooter = document.getElementById('masjidFooter');
                         if (elFooter) elFooter.textContent = '© ' + settings.nama_aplikasi.toUpperCase();
                     }
