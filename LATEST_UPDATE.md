@@ -4,9 +4,22 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 00:10 WIB)
+
+### 💎 Desain Baru Flyer WhatsApp: Resolusi Ultra HD 1080p (Tajam & Tidak Pecah), Hapus Durasi Sholat, Hilangkan Kotak Petugas & Format Teks Rata Tengah Lebih Besar
+
+**Latar Belakang & Permintaan Pengguna:**
+1. **Resolusi Tajam Tidak Pecah:** Resolusi flyer dinaikkan kembali menjadi **Ultra HD 1080 × 1350 px (default)** dan opsi Super Tajam 2K (1440 × 1800 px) agar teks sangat jernih dan tajam ketika dibagikan ke WhatsApp maupun media sosial.
+2. **Hapus Teks Durasi:** Menghapus teks `"• Durasi: 38 Menit"` pada baris waktu sholat di gambar flyer (kini hanya menampilkan `"⏰ Waktu Khutbah & Sholat: 11:45 WIB"`). Begitu pula pada teks pengumuman WhatsApp.
+3. **Hilangkan Kotak-Kotak Petugas:** Menghapus kotak bingkai latar belakang persegi panjang pada 4 posisi petugas (Khatib & Imam, Muadzin, Bilal, Pembaca Maklumat) agar tampilan lebih bersih, minimalis, dan elegan.
+4. **Format Teks Rata Tengah & Lebih Besar:** Seluruh peran petugas (`#FFD700`, font 21px) dan nama petugas (`#FFFFFF`, font 34px) kini diatur **center/rata tengah** dengan garis aksen emas halus antar petugas, memberikan estetika tipografi Islami yang mewah dan mudah dibaca sekilas.
+
+**Berkas Terkait:**
+- `web-statis/admin.html` (Modal `#modalFlyerJumat`, canvas `flyerCanvas` 1080x1350, resolusi select, skrip `renderFlyerJumatCanvas()`, `updateFlyerWaBroadcastText()`, `downloadFlyerJumat()`)
+
 ---
 
-## ✨ UPDATE TERBARU — 4 Oktober 2026 (Pukul 23:55 WIB)
+## ✨ UPDATE SEBELUMNYA — 4 Oktober 2026 (Pukul 23:55 WIB)
 
 ### 🚀 Perbaikan Spinner Macet, Unduh Instan JPG/PNG & Fitur Edit Bebas "Teks Pengumuman WhatsApp"
 
