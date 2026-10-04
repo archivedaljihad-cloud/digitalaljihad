@@ -9568,10 +9568,28 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `AGENTS.md` (Penetapan resmi Cloudflare Workers & GitHub sebagai Data Center Utama).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 219 & panduan konfigurasi Fully Kiosk Browser).
 
+---
 
+## BAB 220: PENERBITAN DOKUMEN PANDUAN RESMI PENGATURAN FULLY KIOSK BROWSER DI SMART TV FORMAT PDF (4 OKTOBER 2026)
 
+### 1. Ringkasan Kebutuhan & Hasil Kerja
+- **Kebutuhan Pengguna:** Pengguna meminta dokumen panduan pengaturan aplikasi Fully Kiosk Browser di Smart TV dalam format PDF siap unduh, cetak, dan dibawa untuk eksekusi penyetelan TV masjid besok hari.
+- **Hasil Dokumen PDF:** Dibuat berkas PDF resmi berkualitas tinggi (*high-resolution vector print*) bernama:
+  `PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf`
+- **Spesifikasi Dokumen:**
+  - Menggunakan ReportLab Python Engine dengan tata letak A4 elegan, palet warna *Emerald Green & Gold* khas Masjid Al-Jihad, tipografi profesional, penomoran halaman dinamis (*NumberedCanvas*), tabel ringkas ber-badge warna, dan lembar checklist pengerjaan 5 menit di lokasi.
+  - Berisi solusi tuntas mengatasi tampilan terpotong/auto zoom-in di TV 55"–75" (Initial Scale 75%/50%, Viewport Meta ON, Text Zoom 100%, Desktop Mode), pengaturan cache anti-usang, startup on boot, kiosk mode, remote administration port 2323, dan remote reload via Supabase WebSocket.
 
+### 2. Ketersediaan Berkas PDF:
+1. **Lokal Utama:** `c:\Users\anthu\Documents\【Project】\DIGITALv304\PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf`
+2. **Web Statis (Cloudflare):** `c:\Users\anthu\Documents\【Project】\DIGITALv304\web-statis\PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf`
+   - *Tautan Unduh Langsung:* `https://digitalaljihad.my.id/PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf` (dapat langsung dibuka/diunduh dari smartphone pengurus kapan saja).
+3. **Cadangan Lokal (*Cold Backup*):** `C:\Users\anthu\Documents\【Digital WebSTATIS】\PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf`
 
-
-
+### 3. Berkas yang Terkait:
+1. `generate_fully_kiosk_guide_pdf.py` (Script generator ReportLab).
+2. `panduan_fully_kiosk.html` (Template referensi HTML).
+3. `PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf` (Dokumen PDF final).
+4. `web-statis/PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf` (Distribusi web).
+5. `LATEST_UPDATE.md` (Dokumentasi pembaruan Bab 220).
 

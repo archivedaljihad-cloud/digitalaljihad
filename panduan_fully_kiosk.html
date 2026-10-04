@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Panduan Pengaturan Fully Kiosk Browser - Masjid Jami' Al-Jihad</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm 15mm 15mm 15mm;
+        }
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            font-size: 10pt;
+            line-height: 1.5;
+            background-color: #ffffff;
+        }
+        
+        /* Header Banner */
+        .header-card {
+            background: linear-gradient(135deg, #062b1b 0%, #0d5334 100%);
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border-bottom: 4px solid #c9a03d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-title h1 {
+            margin: 0;
+            font-size: 16pt;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffd700;
+        }
+        .header-title p {
+            margin: 4px 0 0 0;
+            font-size: 9pt;
+            color: #e2e8f0;
+        }
+        .header-badge {
+            background: rgba(201, 160, 61, 0.25);
+            border: 1px solid #c9a03d;
+            color: #ffd700;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        /* Callout Box */
+        .callout {
+            background-color: #f8fafc;
+            border-left: 4px solid #0d5334;
+            padding: 10px 14px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 14px;
+            font-size: 9pt;
+        }
+        .callout strong {
+            color: #062b1b;
+        }
+        .callout-warning {
+            background-color: #fffbeb;
+            border-left-color: #f59e0b;
+        }
+
+        /* Section Headings */
+        h2 {
+            font-size: 11pt;
+            color: #062b1b;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 4px;
+            margin-top: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-num {
+            background-color: #0d5334;
+            color: #ffd700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8.5pt;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            font-size: 8.5pt;
+        }
+        th, td {
+            padding: 6px 10px;
+            border: 1px solid #cbd5e1;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #0f3d27;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .col-menu {
+            width: 28%;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .col-val {
+            width: 24%;
+            font-weight: 700;
+        }
+        .col-desc {
+            width: 48%;
+            color: #334155;
+        }
+
+        /* Badges */
+        .val-badge {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 8pt;
+            font-family: monospace;
+        }
+        .val-green {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
+        }
+        .val-amber {
+            background-color: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+        .val-blue {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        /* Page Break */
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* Checklist Box */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            font-size: 8.5pt;
+        }
+        .check-box {
+            width: 13px;
+            height: 13px;
+            border: 1.5px solid #0d5334;
+            border-radius: 3px;
+            margin-right: 8px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .footer {
+            margin-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 8px;
+            font-size: 7.5pt;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HALAMAN 1 -->
+    <div class="header-card">
+        <div class="header-title">
+            <h1>PANDUAN SETINGAN FULLY KIOSK BROWSER</h1>
+            <p>Smart TV & Android TV Box Display Masjid Jami' Al-Jihad Graha Asri</p>
+        </div>
+        <div class="header-badge">
+            DATA CENTER UTAMA<br>
+            <span style="font-size: 10pt; color: #fff;">Cloudflare & GitHub</span>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>🌐 URL Produksi Utama (Start URL):</strong> <code style="font-size: 9.5pt; color: #0d5334; font-weight: bold;">https://digitalaljihad.my.id/</code><br>
+        <strong>⚡ Karakteristik:</strong> Web statis ultra-cepat tersaji via Cloudflare Edge Indonesia, terhubung langsung ke Supabase Realtime Database. Seluruh perbaikan data petugas masjid langsung sinkron seketika.
+    </div>
+
+    <h2><span class="badge-num">1</span> Mengatasi Tampilan Kebesaran / Terpotong (TV 55" – 75" / 4K)</h2>
+    <p style="margin: 0 0 6px 0; font-size: 8.5pt; color: #475569;">
+        <em>Penyebab:</em> Sistem Android TV secara bawaan memiliki kepadatan piksel (DPI) tinggi sehingga WebView otomatis melakukan <strong>auto zoom-in 150%–200%</strong>. Atur opsi di bawah agar tampilan kembali pas dan proporsional:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-menu">Menu di Fully Kiosk</th>
+                <th class="col-val">Nilai yang Dipilih</th>
+                <th class="col-desc">Fungsi & Catatan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-menu">Web Content &gt;<br><strong>Initial Scale</strong></td>
+                <td><span class="val-badge val-amber">75%</span> atau <span class="val-badge val-amber">50%</span></td>
+                <td><strong>KUNCI UTAMA:</strong> Menurunkan zoom webview. Untuk TV 55"–75", coba <strong>75%</strong> lebih dulu. Jika masih terasa terpotong di tepi, gunakan <strong>50%</strong>.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Content &gt;<br><strong>Enable Viewport Meta Tag</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Memerintahkan browser mematuhi skala responsif yang sudah dibuat di kodingan website masjid.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Content &gt;<br><strong>Text Zoom</strong></td>
+                <td><span class="val-badge val-blue">100%</span></td>
+                <td>Mengunci ukuran teks agar tidak dibesarkan paksa oleh sistem Android TV.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Browsing &gt;<br><strong>View Mode</strong></td>
+                <td><span class="val-badge val-green">Desktop Mode</span></td>
+                <td><strong>WAJIB:</strong> Memastikan TV dirender sebagai layar lebar PC/TV (16:9), bukan mode handphone (Mobile).</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2><span class="badge-num">2</span> Pengaturan Cache (Agar Data Selalu Realtime dari Cloudflare)</h2>
+    <p style="margin: 0 0 6px 0; font-size: 8.5pt; color: #475569;">
+        Mencegah TV menahan cache file lama sehingga perubahan jadwal sholat, pengumuman, dan petugas Jum'at langsung tayang seketika.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-menu">Menu di Fully Kiosk</th>
+                <th class="col-val">Nilai yang Dipilih</th>
+                <th class="col-desc">Fungsi & Catatan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-menu">Web Browsing &gt;<br><strong>Webview Cache Mode</strong></td>
+                <td><span class="val-badge val-green">LOAD_DEFAULT</span></td>
+                <td><strong>PENTING:</strong> Jangan pilih <em>LOAD_CACHE_ONLY</em> atau <em>LOAD_CACHE_ELSE_NETWORK</em> karena akan membuat TV enggan mengambil data baru.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Browsing &gt;<br><strong>Clear Cache on Reload</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Setiap kali halaman di-reload, memori cache WebView langsung dibersihkan dan aset ditarik segar dari Cloudflare.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Browsing &gt;<br><strong>Enable DOM Storage</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Wajib aktif untuk menyimpan preferensi sesi lokal di memori TV.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Browsing &gt;<br><strong>Enable Third Party Cookies</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Dibutuhkan untuk menjaga kontinuitas koneksi WebSocket Supabase Realtime.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Browsing &gt;<br><strong>Clear Cache Now</strong></td>
+                <td><span class="val-badge val-amber">[ KLIK 1 KALI ]</span></td>
+                <td>Tekan tombol ini sekali saat pertama kali mengatur TV untuk membuang seluruh cache usang terdahulu.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <span>Masjid Jami' Al-Jihad Graha Asri — Dokumentasi Resmi Operasional TV</span>
+        <span>Halaman 1 dari 2</span>
+    </div>
+
+    <!-- PINDAH KE HALAMAN 2 -->
+    <div class="page-break"></div>
+
+    <h2><span class="badge-num">3</span> Pengaturan Startup & Kiosk Mode (Otomatis & Stabil 24 Jam)</h2>
+    <p style="margin: 0 0 6px 0; font-size: 8.5pt; color: #475569;">
+        Membuat TV beroperasi layaknya media signage profesional: langsung menyala otomatis ke layar masjid tanpa gangguan status bar Android.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-menu">Menu di Fully Kiosk</th>
+                <th class="col-val">Nilai yang Dipilih</th>
+                <th class="col-desc">Fungsi & Catatan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-menu">Web Content &gt;<br><strong>Start URL</strong></td>
+                <td><code style="font-size: 7.5pt; font-weight: bold; color: #0d5334;">https://digitalaljihad.my.id/</code></td>
+                <td>Alamat web utama yang langsung dimuat saat aplikasi dibuka.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Device Management &gt;<br><strong>Launch on Boot</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Ketika TV atau Android TV Box dihidupkan (misal setelah listrik padam), aplikasi otomatis terbuka sendiri.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Device Management &gt;<br><strong>Keep Screen On</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Mencegah layar TV masuk mode tidur/sleep/mati saat sedang jam operasional.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Kiosk Mode &gt;<br><strong>Enable Kiosk Mode</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Mengunci aplikasi agar jamaah atau anak-anak tidak bisa keluar ke menu Android sembarangan.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Browsing &gt;<br><strong>Pull to Refresh</strong></td>
+                <td><span class="val-badge val-amber">DISABLE (OFF)</span></td>
+                <td>Matikan fitur geser ke bawah agar tampilan layar tidak bergeser tidak sengaja saat interaksi.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Auto Reload &gt;<br><strong>Periodic Web Reload</strong></td>
+                <td><span class="val-badge val-blue">86400 detik</span></td>
+                <td>Otomatis refresh 1 kali per 24 jam (biasanya tengah malam) untuk menjaga performa memori TV tetap segar.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Web Auto Reload &gt;<br><strong>Reload on Network Reconnect</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span></td>
+                <td>Jika Wi-Fi masjid sempat mati lalu tersambung lagi, TV otomatis reload tanpa perlu disentuh.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2><span class="badge-num">4</span> Remote Control TV dari Meja Sekretariat (Fitur Plus)</h2>
+    <div class="callout callout-warning">
+        <strong>💡 Cara Praktis:</strong> Pengurus DKM tidak perlu mencari remote TV fisik untuk me-reload layar!
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-menu">Menu di Fully Kiosk</th>
+                <th class="col-val">Pengaturan</th>
+                <th class="col-desc">Langkah Akses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-menu">Remote Administration &gt;<br><strong>Enable Remote Admin</strong></td>
+                <td><span class="val-badge val-green">ENABLE (ON)</span><br>Port: <code>2323</code><br>Password: Buat sandi DKM</td>
+                <td>Buka laptop/HP yang satu Wi-Fi dengan TV, ketik di browser:<br>
+                <code style="font-weight: bold; color: #b45309;">http://[IP_TV_MASJID]:2323</code><br>
+                Pengurus bisa langsung klik <strong>Reload</strong>, <strong>Clear Cache</strong>, atau screenshot TV secara live.</td>
+            </tr>
+            <tr>
+                <td class="col-menu">Dashboard Admin Web &gt;<br><strong>Menu Remote TV</strong></td>
+                <td>Akses:<br><code>admin.html#view-remote-tv</code></td>
+                <td>Di dashboard Super Admin, terdapat tombol <strong>"Muat Ulang TV (Reload)"</strong>. Cukup tekan tombol tersebut dari HP Anda, sinyal WebSocket akan menyuruh TV reload seketika.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2><span class="badge-num">5</span> Lembar Checklist Pengujian di Lokasi (5 Menit)</h2>
+    <div style="background: #f1f5f9; padding: 10px 14px; border-radius: 8px; margin-top: 6px;">
+        <div class="checklist-item">
+            <div class="check-box"></div>
+            <div><strong>Pastikan Start URL benar:</strong> Tampil logo Masjid Jami' Al-Jihad dengan jam digital berjalan.</div>
+        </div>
+        <div class="checklist-item">
+            <div class="check-box"></div>
+            <div><strong>Cek Skala Layar:</strong> Seluruh kartu jadwal sholat 5 waktu dan teks berjalan bawah terlihat utuh (tidak terpotong).</div>
+        </div>
+        <div class="checklist-item">
+            <div class="check-box"></div>
+            <div><strong>Uji Tes Sinkronisasi:</strong> Coba update salah satu teks pengumuman dari HP pengurus di <code>https://digitalaljihad.my.id/admin.html</code>, lalu pastikan tampilan TV berubah dalam beberapa detik.</div>
+        </div>
+        <div class="checklist-item">
+            <div class="check-box"></div>
+            <div><strong>Simpan Pengaturan:</strong> Tekan Back di Fully Kiosk dan pastikan aplikasi berjalan dalam Kiosk Mode.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>Masjid Jami' Al-Jihad Graha Asri — Dokumentasi Resmi Operasional TV</span>
+        <span>Halaman 2 dari 2</span>
+    </div>
+
+</body>
+</html>
