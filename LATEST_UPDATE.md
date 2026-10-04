@@ -4,7 +4,36 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 05:15 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 05:50 WIB)
+
+### 🚀 Perbaikan Freeze Modal "Sebarkan ke WA" & "Teks Bacaan Maklumat" pada Dashboard Bendahara
+
+**Latar Belakang Masalah:**
+Pada Dashboard Bendahara bagian **"PENGUMUMAN SHOLAT JUM'AT"** -> **"Preview Lembar Pengumuman Resmi (Standar Kertas Putih A4 Berkelas)"**, ketika tombol **"Sebarkan ke WA"** (`bukaModalWAPengumumanJumat()`) diklik, sistem tidak memunculkan modal apapun dan seluruh halaman terasa macet / *freeze* (tidak bisa diklik).
+
+**Penyebab Masalah (Root Cause Analysis):**
+1. **Misplaced Modals:** Elemen `#modalWAPengumumanJumat` dan `#modalTeksMaklumat` sebelumnya tanpa sengaja diletakkan di dalam container `<div id="view-users" class="section-view">`.
+2. Pada arsitektur SPA (*Single Page Application*), saat pengguna membuka tampilan Dashboard atau Pengumuman Jum'at, container `#view-users` berstatus `display: none`.
+3. Ketika fungsi Bootstrap `$('#modalWAPengumumanJumat').modal('show')` dijalankan, Bootstrap menambahkan lapisan overlay gelap `.modal-backdrop` secara global ke `<body>`. Namun, karena elemen dialog modal berada di dalam kontainer yang `display: none`, modal menjadi tidak tampak sama sekali, sementara seluruh layar tertutup oleh backdrop. Akibatnya, pengguna tidak dapat mengklik elemen apapun dan halaman tampak membeku (*freeze*).
+4. Tombol "Salin Teks Pesan" pada modal WA sebelumnya memanggil fungsi `salinTeksPengumumanWA()` yang belum terdefinisi di JavaScript.
+
+**Solusi & Perubahan yang Diterapkan (`web-statis/admin.html`):**
+1. **Relokasi Modal ke Root Container:**
+   - Memindahkan `#modalWAPengumumanJumat`, `#modalTeksMaklumat`, dan canvas `#canvasFlyerPengumumanJumat` keluar dari `#view-users` ke area modal global di luar `#wrapper` (sejajar dengan `#modalFlyerJumat`).
+   - Menambahkan styling `style="z-index: 1060;"` pada kedua modal agar selalu tampil di lapisan teratas di atas backdrop Bootstrap.
+2. **Definisi Fungsi `salinTeksPengumumanWA()`:**
+   - Mengimplementasikan fungsi salin teks siaran WhatsApp ke clipboard dengan feedback visual notifikasi/toast.
+   - Menyediakan fungsi fallback salin teks menggunakan `document.execCommand('copy')` jika API clipboard browser tidak memiliki izin/diblokir.
+3. **Penguatan & Safe Guarding `bukaModalWAPengumumanJumat()`:**
+   - Menambahkan blok `try...catch` serta validasi null-safe (`pjData?.pemasukan`, dsb.) agar modal selalu dapat terbuka secara andal meskipun ada field data yang belum terisi.
+
+**Berkas Terkait:**
+- `web-statis/admin.html`
+- `LATEST_UPDATE.md`
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 05:15 WIB)
 
 ### 🕌 Flyer Sholat Jum'at Presisi, Maklumat & Laporan Sholat Jum'at Tajam TV, serta Form Bendahara dengan Date Picker & Auto Bullets
 

@@ -5311,77 +5311,6 @@
                                 </table>
                             </div>
                         </div>
-                    
-                        <!-- MODAL SEBARKAN WHATSAPP PENGUMUMAN JUMAT -->
-                        
-                        <!-- MODAL TEKS BACAAN MAKLUMAT SHOLAT JUM'AT (UNTUK PEMBACA MAKLUMAT) -->
-                        <div class="modal fade" id="modalTeksMaklumat" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden;">
-                                    <div class="modal-header py-3 bg-gradient-success text-white">
-                                        <h5 class="modal-title font-weight-bold" style="font-size: 1.15rem; color: #ffffff;">
-                                            <i class="fas fa-bullhorn mr-2" style="color: #ffd700;"></i> Naskah Bacaan Maklumat Sholat Jum'at
-                                        </h5>
-                                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body p-4" style="background: #f8fafc;">
-                                        <div class="alert alert-info py-2 px-3 small mb-3 d-flex align-items-center">
-                                            <i class="fas fa-microphone-alt mr-2 text-info fa-lg"></i>
-                                            <span>Naskah di bawah ini telah diformat khusus agar mudah, lugas, dan nyaman dibacakan oleh <strong>Pembaca Maklumat</strong> melalui mikrofon mimbar masjid.</span>
-                                        </div>
-                                        <div id="kontenTeksMaklumat" class="p-3 bg-white rounded border shadow-sm" style="font-size: 14.5px; line-height: 1.8; color: #1e293b; max-height: 520px; overflow-y: auto; font-family: 'Segoe UI', Arial, sans-serif;">
-                                            <!-- Dynamically populated reading text -->
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer bg-light py-2">
-                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
-                                        <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="salinTeksMaklumat()">
-                                            <i class="fas fa-copy mr-1"></i> Salin Naskah
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-<div class="modal fade" id="modalWAPengumumanJumat" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                <div class="modal-content shadow-lg border-0">
-                                    <div class="modal-header bg-success text-white">
-                                        <h5 class="modal-title font-weight-bold">
-                                            <i class="fab fa-whatsapp mr-2"></i> Bagikan Lembar Pengumuman Jum'at ke WhatsApp
-                                        </h5>
-                                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body p-4">
-                                        <div class="alert alert-info py-2 px-3 small">
-                                            <i class="fas fa-info-circle mr-1"></i>
-                                            <strong>Tips:</strong> Klik <b>Download Flyer (PNG)</b> untuk menyimpan gambar resolusi tinggi, lalu salin teks di bawah ini untuk dikirimkan bersama gambar flyer di Group WhatsApp Jamaah!
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold text-gray-800 small">Teks Siaran WhatsApp (Auto-Formatted):</label>
-                                            <textarea id="pjTextBroadcastWA" class="form-control" rows="12" style="font-family: monospace; font-size: 12.5px; background: #fdfdfd;"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer bg-light">
-                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Tutup</button>
-                                        <button type="button" class="btn btn-primary" onclick="salinTeksPengumumanWA()">
-                                            <i class="fas fa-copy mr-1"></i> Salin Teks Pesan
-                                        </button>
-                                        <button type="button" class="btn btn-success" onclick="bukaWhatsAppPengumuman()">
-                                            <i class="fab fa-whatsapp mr-1"></i> Buka WhatsApp Web / App
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- HIDDEN CANVAS UNTUK EXPORT FLYER PNG RESOLUSI TINGGI -->
-                        <canvas id="canvasFlyerPengumumanJumat" width="1200" height="1680" style="display: none;"></canvas>
-
                     </div>
 
 
@@ -5957,6 +5886,82 @@
 
     </div>
     <!-- End of Page Wrapper -->
+
+    <!-- =======================================================
+         MODAL TEKS BACAAN MAKLUMAT SHOLAT JUM'AT (PEMBACA MAKLUMAT)
+         ======================================================= -->
+    <div class="modal fade" id="modalTeksMaklumat" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header py-3 bg-gradient-success text-white">
+                    <h5 class="modal-title font-weight-bold" style="font-size: 1.15rem; color: #ffffff;">
+                        <i class="fas fa-bullhorn mr-2" style="color: #ffd700;"></i> Naskah Bacaan Maklumat Sholat Jum'at
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4" style="background: #f8fafc;">
+                    <div class="alert alert-info py-2 px-3 small mb-3 d-flex align-items-center">
+                        <i class="fas fa-microphone-alt mr-2 text-info fa-lg"></i>
+                        <span>Naskah di bawah ini telah diformat khusus agar mudah, lugas, dan nyaman dibacakan oleh <strong>Pembaca Maklumat</strong> melalui mikrofon mimbar masjid.</span>
+                    </div>
+                    <div id="kontenTeksMaklumat" class="p-3 bg-white rounded border shadow-sm" style="font-size: 14.5px; line-height: 1.8; color: #1e293b; max-height: 520px; overflow-y: auto; font-family: 'Segoe UI', Arial, sans-serif;">
+                        <!-- Dynamically populated reading text -->
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-2">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="salinTeksMaklumat()">
+                        <i class="fas fa-copy mr-1"></i> Salin Naskah
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================
+         MODAL SEBARKAN WHATSAPP PENGUMUMAN JUM'AT & KAS
+         ======================================================= -->
+    <div class="modal fade" id="modalWAPengumumanJumat" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header bg-success text-white py-3">
+                    <h5 class="modal-title font-weight-bold" style="font-size: 1.15rem;">
+                        <i class="fab fa-whatsapp mr-2"></i> Bagikan Lembar Pengumuman Jum'at ke WhatsApp
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4" style="background: #f8fafc;">
+                    <div class="alert alert-info py-2 px-3 small mb-3">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        <strong>Tips:</strong> Klik <b>Download Flyer (PNG)</b> untuk menyimpan gambar resolusi tinggi, lalu salin teks di bawah ini untuk dikirimkan bersama gambar flyer di Group WhatsApp Jamaah!
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="font-weight-bold text-gray-800 small mb-2 d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-comment-alt text-success mr-1"></i> Teks Siaran WhatsApp (Auto-Formatted):</span>
+                            <span class="badge badge-success px-2 py-1"><i class="fas fa-magic mr-1"></i> Otomatis dari Data</span>
+                        </label>
+                        <textarea id="pjTextBroadcastWA" class="form-control shadow-sm" rows="12" style="font-family: monospace; font-size: 12.5px; background: #ffffff; border-radius: 8px; border: 1.5px solid #cbd5e1;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-2">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary btn-sm font-weight-bold shadow-sm" onclick="salinTeksPengumumanWA()">
+                        <i class="fas fa-copy mr-1"></i> Salin Teks Pesan
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="bukaWhatsAppPengumuman()">
+                        <i class="fab fa-whatsapp mr-1"></i> Buka WhatsApp Web / App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HIDDEN CANVAS UNTUK EXPORT FLYER PNG RESOLUSI TINGGI -->
+    <canvas id="canvasFlyerPengumumanJumat" width="1200" height="1680" style="display: none;"></canvas>
 
     <!-- =======================================================
          MODAL AUTO GENERATE FLYER WHATSAPP SHOLAT JUMAT
@@ -16879,76 +16884,133 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
         function salinTeksMaklumat() {
             const naskah = generateNaskahMaklumatText();
-            navigator.clipboard.writeText(naskah).then(() => {
-                if (typeof showCustomToast === 'function') {
-                    showCustomToast("Naskah Pembaca Maklumat berhasil disalin ke clipboard!", 'success');
-                } else {
-                    alert("Naskah Pembaca Maklumat berhasil disalin!");
-                }
-            }).catch(e => {
-                alert('Gagal menyalin teks: ' + e.message);
-            });
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(naskah).then(() => {
+                    if (typeof showCustomToast === 'function') {
+                        showCustomToast("Naskah Pembaca Maklumat berhasil disalin ke clipboard!", 'success');
+                    } else {
+                        alert("Naskah Pembaca Maklumat berhasil disalin!");
+                    }
+                }).catch(e => {
+                    fallbackSalinTeks(naskah, "Naskah Pembaca Maklumat berhasil disalin!");
+                });
+            } else {
+                fallbackSalinTeks(naskah, "Naskah Pembaca Maklumat berhasil disalin!");
+            }
         }
 
         // =========================================================================
         // FITUR 4: BROADCAST WHATSAPP PENGUMUMAN SHOLAT JUMAT
         // =========================================================================
         function bukaModalWAPengumumanJumat() {
-            pjUpdatePreview();
-            let totalIn = 0;
-            pjData.pemasukan.forEach(p => {
-                totalIn += (parseInt(p.nominal, 10) || 0);
-            });
+            try {
+                if (typeof pjUpdatePreview === 'function') {
+                    pjUpdatePreview();
+                }
+                let totalIn = 0;
+                if (pjData && Array.isArray(pjData.pemasukan)) {
+                    pjData.pemasukan.forEach(p => {
+                        totalIn += (parseInt(p.nominal, 10) || 0);
+                    });
+                }
 
-            let totalOut = 0;
-            pjData.pengeluaran.forEach(p => {
-                totalOut += (parseInt(p.nominal, 10) || 0);
-            });
+                let totalOut = 0;
+                if (pjData && Array.isArray(pjData.pengeluaran)) {
+                    pjData.pengeluaran.forEach(p => {
+                        totalOut += (parseInt(p.nominal, 10) || 0);
+                    });
+                }
 
-            const saldoAwal = parseInt(pjData.saldoAwal, 10) || 0;
-            const subtotalSaldo = saldoAwal + totalIn;
-            const saldoAkhir = subtotalSaldo - totalOut;
+                const saldoAwal = parseInt(pjData?.saldoAwal, 10) || 0;
+                const subtotalSaldo = saldoAwal + totalIn;
+                const saldoAkhir = subtotalSaldo - totalOut;
 
-            let waText = `*PENGUMUMAN KEGIATAN SHOLAT JUM’AT MASJID JAMI’ AL JIHAD*\n`;
-            waText += `*TANGGAL : ${(pjData.tanggalJudul || '02 OKTOBER 2026').toUpperCase()}*\n\n`;
+                let waText = `*PENGUMUMAN KEGIATAN SHOLAT JUM’AT MASJID JAMI’ AL JIHAD*\n`;
+                waText += `*TANGGAL : ${(pjData?.tanggalJudul || '02 OKTOBER 2026').toUpperCase()}*\n\n`;
 
-            waText += `*I. LAPORAN KEUANGAN KAS MASJID*\n`;
-            waText += `• Saldo Awal: *Rp ${pjFormatRupiah(saldoAwal)}*\n`;
-            waText += `• Pemasukan Tromol & Kas: *Rp ${pjFormatRupiah(totalIn)}*\n`;
-            waText += `• *SALDO (Awal + Pemasukan): Rp ${pjFormatRupiah(subtotalSaldo)}*\n`;
-            waText += `• Pengeluaran / Biaya: *Rp ${pjFormatRupiah(totalOut)}*\n`;
-            waText += `• *SALDO AKHIR KAS: Rp ${pjFormatRupiah(saldoAkhir)}*\n\n`;
+                waText += `*I. LAPORAN KEUANGAN KAS MASJID*\n`;
+                waText += `• Saldo Awal: *Rp ${typeof pjFormatRupiah === 'function' ? pjFormatRupiah(saldoAwal) : saldoAwal.toLocaleString('id-ID')}*\n`;
+                waText += `• Pemasukan Tromol & Kas: *Rp ${typeof pjFormatRupiah === 'function' ? pjFormatRupiah(totalIn) : totalIn.toLocaleString('id-ID')}*\n`;
+                waText += `• *SALDO (Awal + Pemasukan): Rp ${typeof pjFormatRupiah === 'function' ? pjFormatRupiah(subtotalSaldo) : subtotalSaldo.toLocaleString('id-ID')}*\n`;
+                waText += `• Pengeluaran / Biaya: *Rp ${typeof pjFormatRupiah === 'function' ? pjFormatRupiah(totalOut) : totalOut.toLocaleString('id-ID')}*\n`;
+                waText += `• *SALDO AKHIR KAS: Rp ${typeof pjFormatRupiah === 'function' ? pjFormatRupiah(saldoAkhir) : saldoAkhir.toLocaleString('id-ID')}*\n\n`;
 
-            waText += `*II. PETUGAS SHOLAT JUM'AT HARI INI*\n`;
-            waText += `• Imam & Khotib: *${pjData.petugas.imamKhotib || 'Ust. Faiq Rido'}*\n`;
-            waText += `• Muadzin: *${pjData.petugas.muadzin || 'Ust. Rudy'}*\n`;
-            waText += `• Bilal: *${pjData.petugas.bilal || 'Ust. Mansur'}*\n`;
-            waText += `• MC Maklumat: *${pjData.petugas.maklumat || 'Ust. Fatkhurokhman'}*\n\n`;
+                waText += `*II. PETUGAS SHOLAT JUM'AT HARI INI*\n`;
+                waText += `• Imam & Khotib: *${pjData?.petugas?.imamKhotib || 'Ust. Faiq Rido'}*\n`;
+                waText += `• Muadzin: *${pjData?.petugas?.muadzin || 'Ust. Rudy'}*\n`;
+                waText += `• Bilal: *${pjData?.petugas?.bilal || 'Ust. Mansur'}*\n`;
+                waText += `• MC Maklumat: *${pjData?.petugas?.maklumat || 'Ust. Fatkhurokhman'}*\n\n`;
 
-            waText += `*III. HIMBAUAN*\n`;
-            if (Array.isArray(pjData.himbauan) && pjData.himbauan.length > 0) {
-                pjData.himbauan.forEach((line, idx) => {
-                    let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/, '');
-                    waText += `${idx + 1}. ${clean}\n`;
+                waText += `*III. HIMBAUAN*\n`;
+                if (pjData && Array.isArray(pjData.himbauan) && pjData.himbauan.length > 0) {
+                    pjData.himbauan.forEach((line, idx) => {
+                        let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/, '');
+                        waText += `${idx + 1}. ${clean}\n`;
+                    });
+                } else {
+                    waText += `1. Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong\n`;
+                    waText += `2. Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya\n`;
+                    waText += `3. Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.\n`;
+                    waText += `4. Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu\n`;
+                }
+
+                waText += `\n_Dibuat di : ${pjData?.titimangsa || 'Simpangan, 02 Oktober 2026'}_\n`;
+                waText += `_Mengetahui: Ketua DKM (${pjData?.ttd?.namaKetua || 'Hadi Prayitno'})_\n`;
+                waText += `_Dibuat Oleh: Bendahara (${pjData?.ttd?.namaBendahara || 'Utut Priyastya'})_\n\n`;
+                waText += `*Sistem Informasi Digital Masjid Jami' Al-Jihad Simpangan*`;
+
+                const elText = document.getElementById('pjTextBroadcastWA');
+                if (elText) elText.value = waText;
+
+                if (window.$ && $('#modalWAPengumumanJumat').length) {
+                    $('#modalWAPengumumanJumat').modal('show');
+                }
+            } catch(err) {
+                console.error('Error saat membuka modal WA pengumuman jumat:', err);
+                alert('Terjadi kesalahan saat memproses data WA: ' + err.message);
+            }
+        }
+
+        function salinTeksPengumumanWA() {
+            const elText = document.getElementById('pjTextBroadcastWA');
+            if (!elText) return;
+            const text = elText.value;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    if (typeof showCustomToast === 'function') {
+                        showCustomToast("Teks Siaran WhatsApp berhasil disalin ke clipboard!", 'success');
+                    } else {
+                        alert("Teks Siaran WhatsApp berhasil disalin!");
+                    }
+                }).catch(e => {
+                    fallbackSalinTeks(text, "Teks Siaran WhatsApp berhasil disalin!");
                 });
             } else {
-                waText += `1. Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong\n`;
-                waText += `2. Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya\n`;
-                waText += `3. Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.\n`;
-                waText += `4. Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu\n`;
+                fallbackSalinTeks(text, "Teks Siaran WhatsApp berhasil disalin!");
             }
+        }
 
-            waText += `\n_Dibuat di : ${pjData.titimangsa || 'Simpangan, 02 Oktober 2026'}_\n`;
-            waText += `_Mengetahui: Ketua DKM (${pjData.ttd.namaKetua || 'Hadi Prayitno'})_\n`;
-            waText += `_Dibuat Oleh: Bendahara (${pjData.ttd.namaBendahara || 'Utut Priyastya'})_\n\n`;
-            waText += `*Sistem Informasi Digital Masjid Jami' Al-Jihad Simpangan*`;
-
-            const elText = document.getElementById('pjTextBroadcastWA');
-            if (elText) elText.value = waText;
-
-            if (window.$ && $('#modalWAPengumumanJumat').length) {
-                $('#modalWAPengumumanJumat').modal('show');
+        function fallbackSalinTeks(text, successMsg) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                if (typeof showCustomToast === 'function') {
+                    showCustomToast(successMsg, 'success');
+                } else {
+                    alert(successMsg);
+                }
+            } catch (err) {
+                console.error('Fallback salin gagal: ', err);
+                alert('Gagal menyalin teks secara otomatis. Silakan salin manual.');
             }
+            document.body.removeChild(textArea);
         }
         
         
