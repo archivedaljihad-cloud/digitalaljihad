@@ -355,10 +355,10 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
-        /* HEADER KOLOM DAFTAR DONATUR (No & Nama, Keterangan, Nominal) */
+        /* HEADER KOLOM DAFTAR DONATUR (Nama Donatur, Keterangan Dekat Nominal, Nominal) */
         .donatur-header-row {
             display: grid;
-            grid-template-columns: minmax(0, 1.4fr) minmax(130px, 0.85fr) minmax(150px, auto);
+            grid-template-columns: minmax(0, 1.8fr) minmax(100px, auto) minmax(140px, auto);
             gap: 12px;
             padding: 4px 14px 6px 14px;
             font-size: 0.88rem;
@@ -380,7 +380,9 @@
         .donatur-header-row .head-ket {
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             gap: 6px;
+            text-align: right;
         }
 
         .donatur-header-row .head-val {
@@ -420,7 +422,7 @@
 
         .donatur-item {
             display: grid;
-            grid-template-columns: minmax(0, 1.4fr) minmax(130px, 0.85fr) minmax(150px, auto);
+            grid-template-columns: minmax(0, 1.8fr) minmax(100px, auto) minmax(140px, auto);
             align-items: center;
             padding: 8px 14px;
             border-radius: 10px;
@@ -435,26 +437,12 @@
         .donatur-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             min-width: 0;
         }
 
         .donatur-no {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 34px;
-            height: 30px;
-            padding: 0 6px;
-            border-radius: 8px;
-            background: rgba(255, 215, 0, 0.2);
-            border: 1.5px solid rgba(255, 215, 0, 0.55);
-            color: #ffd700;
-            font-weight: 800;
-            font-size: 1.05rem;
-            flex-shrink: 0;
-            font-family: monospace;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+            display: none !important; /* Dihilangkan sesuai permintaan user agar nama donatur terlihat full & lengkap */
         }
 
         .donatur-name {
@@ -467,7 +455,7 @@
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             min-width: 0;
         }
 
@@ -480,7 +468,7 @@
         .donatur-ket-wrap {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: flex-end;
             min-width: 0;
             overflow: hidden;
         }
@@ -690,7 +678,7 @@
                         <div class="icon-box"><i class="fas fa-users"></i></div>
                         <div class="stat-info">
                             <span class="stat-label">Total Donatur</span>
-                            <span class="stat-value" id="valDonatur">142 Muhsinin</span>
+                            <span class="stat-value" id="valDonatur">142 Donatur</span>
                         </div>
                     </div>
                 </div>
@@ -715,15 +703,14 @@
                             <span>Daftar Donatur</span>
                         </div>
                         <div class="donatur-header-row">
-                            <div class="head-left"><i class="fas fa-user-circle"></i> Nama Muhsinin</div>
-                            <div class="head-ket"><i class="fas fa-tag"></i> Keterangan</div>
-                            <div class="head-val"><i class="fas fa-money-bill-wave"></i> Nominal Donasi</div>
+                            <div class="head-left"><i class="fas fa-user-circle"></i> NAMA DONATUR</div>
+                            <div class="head-ket"><i class="fas fa-tag"></i> KETERANGAN</div>
+                            <div class="head-val"><i class="fas fa-money-bill-wave"></i> NOMINAL</div>
                         </div>
                         <div class="donatur-scroll-wrapper" id="donaturScrollWrapper">
                             <div class="donatur-list" id="donaturList">
                                 <div class="donatur-item">
                                     <div class="donatur-left">
-                                        <span class="donatur-no">1</span>
                                         <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah (Kel. H. Syahrul)</span>
                                     </div>
                                     <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RW.007</span></div>
@@ -731,7 +718,6 @@
                                 </div>
                                 <div class="donatur-item">
                                     <div class="donatur-left">
-                                        <span class="donatur-no">2</span>
                                         <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah</span>
                                     </div>
                                     <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RT.02</span></div>
@@ -739,7 +725,6 @@
                                 </div>
                                 <div class="donatur-item">
                                     <div class="donatur-left">
-                                        <span class="donatur-no">3</span>
                                         <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Bpk. Rahmat Hidayat</span>
                                     </div>
                                     <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RW.011</span></div>
@@ -747,7 +732,6 @@
                                 </div>
                                 <div class="donatur-item">
                                     <div class="donatur-left">
-                                        <span class="donatur-no">4</span>
                                         <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah</span>
                                     </div>
                                     <div class="donatur-ket-wrap"><span class="donatur-ket-empty">-</span></div>
@@ -755,7 +739,6 @@
                                 </div>
                                 <div class="donatur-item">
                                     <div class="donatur-left">
-                                        <span class="donatur-no">5</span>
                                         <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Majelis Taklim Ummahat</span>
                                     </div>
                                     <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> Blok C</span></div>
@@ -989,7 +972,7 @@
                 document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #ffd700 100%)';
             }
 
-            document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Muhsinin';
+            document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Donatur';
 
             // Render Donatur List Dinamis (Urutan: yang terlama di atas, yang terbaru di paling bawah)
             const donaturContainer = document.getElementById('donaturList');
@@ -1007,7 +990,7 @@
                         return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
                     });
 
-                    // Render semua donatur (tanpa memotong slice 5 agar seluruh muhsinin tampil)
+                    // Render semua donatur (tanpa kotak nomor agar nama donatur tampil penuh & utuh)
                     const donaturItemsHtml = sortedAsc.map((d, idx) => {
                         const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
                         const hasKet = d.keterangan && d.keterangan.trim() !== '' && d.keterangan.trim() !== '-';
@@ -1017,7 +1000,6 @@
                         return `
                             <div class="donatur-item">
                                 <div class="donatur-left">
-                                    <span class="donatur-no">${idx + 1}</span>
                                     <span class="donatur-name"><i class="fas fa-user-circle text-warning"></i> ${escapeHtml(nama)}</span>
                                 </div>
                                 ${ketHtml}

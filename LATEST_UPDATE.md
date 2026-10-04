@@ -4,7 +4,46 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:25 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:45 WIB)
+
+### 🌟 Penyempurnaan 5 Slide TV Display: Kategori Utuh (Kas Masjid & Ambulance), Ikon Kitab (Kajian & Pengumuman), QRIS Transparan 100%, dan Layout Donatur Pengadaan AC Baru
+
+**Latar Belakang & Permintaan Pengguna:**
+Pengguna meminta perbaikan visual menyeluruh pada 5 slide TV display:
+1. **Slide "RINCIAN KEUANGAN KAS MASJID" (`slides/keuangan.html`):** Kolom Kategori sebelumnya terpotong/tidak terlihat utuh karena porsi kolom sempit (11%).
+2. **Slide "KAJIAN DAN INFORMASI KEGIATAN" (`slides/pengumuman.html`):** Mengganti ikon "MAJELIS ILMU" di dalam kotak dengan gambar ikon `kitab.png` dari folder `C:\Users\anthu\Documents\【Digital WebSTATIS】\ikonkitab.png`.
+3. **Slide "INFAQ & SHODAQOH DIGITAL QRIS" (`slides/qris.html`):** Membuat kotak besar QRIS (`.qris-card`) transparan 100% agar halaman terlihat lega dan gambar background islami tidak terhalang. Serta memindahkan posisi judul halaman ("INFAQ & SHODAQOH DIGITAL QRIS") tepat di atas kotak teks instruksi "Bagi para jamaah yang ingin berinfaq dan sedekah secara digital, silahkan scan QRIS ini".
+4. **Slide "LAPORAN KAS MOBIL AMBULANCE" (`slides/ambulance.html`):** Kolom Kategori sebelumnya terpotong/tidak terlihat utuh.
+5. **Slide "PENGADAAN AC BARU" (`slides/infaq.html`):** Menggeser posisi kolom keterangan mendekati kolom nominal, menghilangkan kotak angka nomor donatur (`.donatur-no`) agar nama donatur/muhsinin terlihat lengkap/full tanpa terpotong.
+6. **Penyesuaian Label Teks:** Mengganti "NOMINAL DONASI" menjadi "NOMINAL", dan mengganti "NAMA MUHSININ" menjadi "NAMA DONATUR" (serta stat pill "142 Donatur").
+
+**Rincian Perubahan:**
+1. **`web-statis/slides/keuangan.html` & `web-statis/slides/ambulance.html`:**
+   - Proporsi kolom tabel diperbarui: `.col-tgl: 11%`, `.col-desc: 29%`, `.col-masuk: 14%`, `.col-keluar: 14%`, `.col-saldo: 15%`, dan `.col-kat: 17%` (meningkat signifikan dari 11%).
+   - `.badge-kategori-pill` disetel `white-space: normal; word-break: break-word; line-height: 1.25; max-width: 100%;` sehingga seluruh nama kategori panjang tampil utuh dan jelas tanpa terpotong.
+2. **`web-statis/slides/pengumuman.html`:**
+   - Ikon fallback Majelis Ilmu diganti dengan gambar `../img/ikonkitab.png` yang disalin dari folder cadangan lokal pengguna (`C:\Users\anthu\Documents\【Digital WebSTATIS】\ikonkitab.png`) ke `web-statis/img/ikonkitab.png` dan `public/img/ikonkitab.png`.
+   - Diberikan styling `.ikon-kitab-img` dengan efek drop-shadow dan breathing animation halus.
+3. **`web-statis/slides/qris.html`:**
+   - `.qris-card` dibuat transparan 100% (`background: transparent; border: none; box-shadow: none; backdrop-filter: none;`). Kotak frame putih QRIS (`.qris-frame`) tetap dipertahankan dengan border emas tajam agar kode QR mudah dipindai.
+   - Judul halaman dipindahkan ke atas kotak deskripsi instruksi scan QRIS dengan format `.qris-page-title` (font 1.8rem bold putih dengan icon emas bersinar).
+   - Teks instruksi disesuaikan menjadi "Bagi para jamaah yang ingin berinfaq dan sedekah secara digital, silahkan scan QRIS ini".
+4. **`web-statis/slides/infaq.html`:**
+   - Kotak nomor urut donatur (`.donatur-no`) disembunyikan (`display: none !important;`) dan dihapus dari template render dinamis & list demo statis, membebaskan ruang horizontal lebih dari 44px.
+   - Grid donatur diubah menjadi `minmax(0, 1.8fr) minmax(100px, auto) minmax(140px, auto);` dengan `.head-ket` dan `.donatur-ket-wrap` di-align `justify-content: flex-end;` sehingga kolom keterangan merapat ke kolom nominal, dan nama donatur memiliki ruang 1.8fr yang sangat lapang.
+   - Header kolom diubah menjadi `NAMA DONATUR`, `KETERANGAN`, dan `NOMINAL`. Stat pill dan render dinamis menggunakan `Donatur`.
+
+**Berkas Terkait:**
+- `web-statis/slides/keuangan.html`
+- `web-statis/slides/ambulance.html`
+- `web-statis/slides/pengumuman.html`
+- `web-statis/slides/qris.html`
+- `web-statis/slides/infaq.html`
+- `web-statis/img/ikonkitab.png` & `public/img/ikonkitab.png`
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 01:25 WIB)
 
 ### 🎨 Flyer WhatsApp Sholat Jum'at: Penataan Ulang Teks Arab ke Frame Hijau, Relokasi Kotak Hadits & Teks Footer
 
