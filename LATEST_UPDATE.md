@@ -1,9 +1,25 @@
-# LATEST UPDATE - SISTEM INFORMASI DISPLAY MASJID (DIGITALv304)
+﻿# LATEST UPDATE - SISTEM INFORMASI DISPLAY MASJID (DIGITALv304)
 
 > **Catatan Penting untuk AI Agent / Pengembang Baru:**  
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 1. INFORMASI UMUM PROYEK
 
@@ -20,7 +36,23 @@
     - `maatwebsite/excel`: Export laporan excel
 - **Tujuan Sistem:** Menampilkan informasi jadwal sholat 5 waktu, laporan kas & keuangan, pengumuman, siaran langsung Makkah/Madinah, siaran CCTV mimbar saat khutbah, dan mode sholat otomatis (*Prayer Mode*) di TV layar masjid secara elegan, modern, dan profesional.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🏛️ 2. FITUR-FITUR UTAMA & ARSITEKTUR SISTEM
 
@@ -58,7 +90,23 @@
   - **Super Admin (`role: admin / superadmin`)**: Memiliki tombol interaktif **Naik (▲)** dan **Turun (▼)** untuk memindah susunan urutan putaran siaran TV.
   - **Operator / Petugas (`role: petugas / user`)**: Urutan dikunci (*read-only*). Operator hanya diizinkan mencentang aktif/nonaktif tanpa bisa mengacak nomor urut halaman.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🌐 3. DAFTAR RUTE LENGKAP (ROUTES)
 
@@ -99,7 +147,23 @@
 | `/program-infaq`| `ProgramInfaqController` | Program infaq pembangunan/donasi |
 | `/slides` | `SlideController` | Upload poster & gambar pengumuman |
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🗄️ 4. STRUKTUR BASIS DATA KUNCI (`app_settings`)
 
@@ -126,7 +190,23 @@ Tabel `app_settings` adalah konfigurasi pusat sistem. Kolom-kolom penting mutakh
 | `yasin_start_time` | `string` | Jam mulai pembacaan Yaasiin tiap Kamis malam (default: '18:30') |
 | `yasin_scroll_speed` | `string` | Kecepatan gulir teks Arab: slow, medium, fast (default: 'medium') |
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 5. CARA MENJALANKAN DI PC / LAPTOP BARU
 
@@ -163,7 +243,23 @@ Jika proyek ini di-*clone* ke komputer atau laptop baru:
    ```
    Aplikasi siap diakses di `http://localhost:8000`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📹 6. INTEGRASI CCTV MIMBAR (DVR KABEL BNC)
 
@@ -174,7 +270,23 @@ Untuk menghubungkan kamera analog kabel BNC yang sudah ada di mimbar:
     - File PDF Resmi: [`USER GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.pdf`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/USER%20GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.pdf)
     - File HTML Cetak: [`USER GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.html`](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/USER%20GUIDE/TUTORIAL_CCTV_MIMBAR_TV_LUAR.html)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🛠️ 7. SISTEM SINKRONISASI MIGRASI DATABASE (HOSTING / RENDER / TIDB)
 
@@ -186,9 +298,41 @@ Untuk mencegah error `1054 Unknown column` (seperti saat menyimpan URL Live Makk
    - Rute: `GET /settings/migrate` (nama: `settings.migrate`).
    - Tombol **"Sinkronkan Database (Migrate)"** tersedia di pojok kanan atas halaman Pengaturan Aplikasi (`/settings`). Cukup klik tombol tersebut, Laravel di server hosting akan menjalankan migrasi database secara instan tanpa perlu akses terminal SSH.
 
----
 
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
+
+
+---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🎨 9. REDESAIN DASHBOARD ADMIN (Islamic Material Design 3 — v4.0)
 
@@ -218,7 +362,23 @@ Redesain premium dashboard admin panel dengan filosofi **Islamic Material Design
 - **JS DOMContentLoaded**: Icon chip di-inject saat DOM siap (tidak perlu ubah setiap `nav-link`)
 - **PHP/Blade Logic**: Tidak ada perubahan — semua RBAC, fallback `??`, dan rute tetap utuh
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📝 10. PEMBARUAN BESAR HALAMAN TENTANG APLIKASI (`/about`) — v4.0
 
@@ -262,7 +422,23 @@ Halaman **Tentang Aplikasi (`/about`)** diperbarui total 100% selaras dengan kon
 7. **Teks Sambutan & Ungkapan Rasa Syukur Pengembang:**
    - Bagian awal pengantar sistem disempurnakan dengan doa basmalah, salam pembuka, tahmid dan shalawat berbahasa Arab berformat **rata tengah (*center*)**, diikuti ungkapan rasa syukur, ikhtiar dedikasi untuk Masjid Al-Jihad, permohonan maaf atas kekurangan, serta doa keberkahan amal jariyah bagi seluruh pengurus masjid dan jamaah.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🤖 11. INTEGRASI GOOGLE GEMINI AI (PENGUMUMAN & MUTIARA HADITS TV) — v4.1
 
@@ -319,7 +495,23 @@ Fitur kecerdasan buatan (*Artificial Intelligence*) resmi diintegrasikan ke dala
 - **Environment:**
   - `.env.example` ditambahkan `GEMINI_API_KEY=` dan `GEMINI_MODEL=gemini-1.5-flash`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📢 12. FITUR TEKS BERJALAN KHUSUS TIAP HALAMAN DISPLAY (OPSI 3) — v4.2
 
@@ -366,9 +558,41 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
   - `resources/views/partials/bottom-section.blade.php` (Logika seleksi pesan per halaman & animasi mulus).
   - `resources/views/hikmah-embed.blade.php` (Integrasi partial bottom section).
 
----
 
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
+
+
+---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 13. PERBAIKAN BUG: PENGECUALIAN SYURUK & IMSAK DARI MODE SHOLAT (v4.2.1)
 
@@ -399,7 +623,23 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `resources/views/rotator.blade.php`
 - `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🧭 14. RELOKASI BADGE KAPSUL SHOLAT BERIKUTNYA & HEADER JADWAL SHOLAT (v4.2.2)
 
@@ -429,7 +669,23 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `resources/views/utama.blade.php`
 - `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 👥 15. HAK AKSES TEKS BERJALAN UNTUK OPERATOR/PETUGAS & PERBAIKAN KONTRAS PANEL ACCORDION (v4.2.3)
 
@@ -459,7 +715,23 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `resources/views/settings/edit.blade.php` (Perbaikan kontras header accordion, proteksi tombol migrate, dan judul ramah operator)
 - `LATEST_UPDATE.md` (Pencatatan riwayat pembaruan v4.2.3)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🔒 16. PROTEKSI PENGUNCIAN 'NAMA APLIKASI' & 'FOOTER TEXT' UNTUK OPERATOR (v4.2.4)
 
@@ -486,7 +758,23 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `app/Http/Controllers/AppSettingController.php`
 - `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🎨 17. PENATAAN ULANG FORM PENGATURAN UMUM & TEKS BERJALAN (v4.2.5)
 
@@ -514,7 +802,23 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `resources/views/settings/edit.blade.php` (Penataan ulang grid layout tab general, single-line footer text, col-12 running text, dan penghapusan teks gembok)
 - `LATEST_UPDATE.md` (Pencatatan riwayat pembaruan v4.2.5)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🤖 18. DOKUMENTASI FITUR AI GEMINI DI HALAMAN ABOUT, PENYEMPURNAAN PRAYER MODE & REPOSISI BADGE SHOLAT (v4.2.6)
 
@@ -548,9 +852,41 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `resources/views/about.blade.php` (Penambahan dokumentasi lengkap Google Gemini AI, banner showcase, panduan pengoperasian, dan changelog v4.2.6)
 - `LATEST_UPDATE.md` (Pencatatan riwayat pembaruan v4.2.6)
 
----
 
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
+
+
+---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📺 19. PERBAIKAN TAMPILAN MONITOR TV: WARNA KONTRAS TINGGI NOMINAL UANG & RESOLUSI IKON FONT AWESOME LOKAL/SVG (v4.2.7)
 
@@ -602,7 +938,23 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `resources/views/partials/bottom-section.blade.php` (Penyelarasan selektor svg running text marquee)
 - `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.7)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📺 20. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.2.8): PENINGKATAN VISUAL KALIGRAFI EMAS & DOT PULSE KAPSUL DI LAYAR TV
 
@@ -634,7 +986,23 @@ Sistem Teks Berjalan (*Running Text*) ditingkatkan secara cerdas dengan menerapk
 - `public/image/display/background/BG3.jpg` (Aset gambar background baru resolusi tinggi)
 - `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.8 & reposisi kapsul Jumat)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📢 21. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.2.9): PEMUSATAN & PENYEDERHANAAN PENGATURAN TEKS BERJALAN TIAP HALAMAN DISPLAY TV
 
@@ -659,7 +1027,23 @@ Pengurus/operator masjid memerlukan kejelasan dan kesederhanaan dalam mengelola 
 - `app/Http/Controllers/AppSettingController.php` (Sinkronisasi otomatis kolom `running_text` dari halaman utama)
 - `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.2.9)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🔒 22. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.3.0): PROTEKSI PENGUNCIAN FAVICON, LOGO APLIKASI, & BACKGROUND SIDEBAR UNTUK OPERATOR/PETUGAS
 
@@ -682,7 +1066,23 @@ Untuk menjaga konsistensi identitas visual dan branding resmi masjid, elemen gra
 - `app/Http/Controllers/AppSettingController.php` (Penguncian backend upload file favicon, logo, dan background khusus Super Admin)
 - `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.3.0)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🧹 23. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.3.1): PENYEMBUNYIAN KOLOM IDENTITAS MASJID & MEDIA UNTUK OPERATOR (ANTARMUKA BERSIH & FOKUS 100%)
 
@@ -704,7 +1104,23 @@ Alih-alih sekadar menampilkan kolom nonaktif dengan ikon gembok yang berpotensi 
 - `app/Http/Controllers/AppSettingController.php` (Penyelarasan validasi nama_aplikasi dan pengamanan nilai simpan)
 - `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis v4.3.1)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🛠️ 24. CATATAN PEMBARUAN TERAKHIR (16 SEPTEMBER 2026 - v4.3.2): PERBAIKAN STRUKTUR HTML FOOTER KEMBALI KE POSISI BAWAH LAYAR
 
@@ -725,7 +1141,23 @@ Pada halaman pengaturan saat diakses oleh akun Operator, elemen `<footer class="
 - `resources/views/settings/edit.blade.php` (Penyeimbangan kontainer row dan tag div untuk alur layout SB Admin 2)
 - `LATEST_UPDATE.md` (Pencatatan dokumentasi rilis perbaikan layout v4.3.2)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📖 25. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.0): FITUR AGENDA MALAM JUM'AT (PEMBACAAN SURAT YAASIIN AUTO-SCROLL FULL ARAB)
 
@@ -771,7 +1203,23 @@ Setiap hari Kamis malam (malam Jum'at) ba'da Maghrib (pukul 18:30) hingga masuk 
 - `resources/views/settings/edit.blade.php` (Tab & form pengaturan agenda malam Jum'at)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.0)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🎨 26. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.1): PENINGKATAN VISIBILITAS KAPSUL PRAYER MODE (EFEK DENYUT EMAS & NAMA SHOLAT PUTIH KONTRAST TINGGI)
 
@@ -796,7 +1244,23 @@ Pada tampilan **Mode Sholat (*Prayer Mode*)**, tulisan nama sholat di dalam kota
 - `public/preview-prayer-mode.html` (Penyelarasan demo offline)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.1)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 💎 27. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.2): TAMPILAN AWAL STARTUP/SPLASH TV HIJAU ZAMRUD GELAP & LOGO MASJID AL-JIHAD
 
@@ -828,7 +1292,23 @@ Saat layar TV masjid pertama kali dinyalakan (*TV ON* / startup boot) atau memua
 - `scratch/preview_splash.html` (Pratinjau HTML mandiri)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.2)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 28. CATATAN PEMBARUAN TERAKHIR (17 SEPTEMBER 2026 - v4.4.3): SENTRALISASI PENGATURAN WAKTU & MODE SHOLAT KE "JUM'AT PRAYER MODE" (OPSI A)
 
@@ -863,7 +1343,23 @@ Operator/petugas masjid melaporkan kebingungan akibat adanya duplikasi kolom pen
 - `app/Http/Controllers/AppSettingController.php` (Penyempurnaan penyimpanan parameter waktu sholat)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.3)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## ⚡ 29. CATATAN PEMBARUAN TERAKHIR (20 SEPTEMBER 2026 - v4.4.4): PENAMBAHAN ROUTE PING UNTUK OPTIMASI BANDWIDTH UPTIME ROBOT
 
@@ -880,7 +1376,23 @@ Monitoring uptime server (misalnya melalui layanan Uptime Robot atau monitor kes
 - `routes/web.php` (Penambahan route `/ping`)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.4)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## ⚡ 30. CATATAN PEMBARUAN TERAKHIR (22 SEPTEMBER 2026 - v4.4.5): MIGRASI REMOTE GITHUB KE AKUN BARU
 
@@ -985,7 +1497,23 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `vercel.json` (Deklarasi services container runtime & preservasi env vars)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.8)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 34. UPDATE v4.4.9: RESOLUSI EXCEPTION 'TOO FEW ARGUMENTS TO FUNCTION CREATE DRIVER' PADA CONTAINER VERCEL
 
@@ -1032,7 +1560,23 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `vercel.json` (Penambahan default env drivers)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.9)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 35. UPDATE v4.4.10: RESOLUSI TYPE ERROR 'UNSUPPORTED OPERAND TYPES: STRING * INT' PADA SESSION MIDDLEWARE
 
@@ -1057,7 +1601,23 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `vercel.json` (Penetapan SESSION_LIFETIME: "120")
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.10)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 36. UPDATE v4.4.11: RESOLUSI EXCEPTION 'BCRYPT HASHING NOT SUPPORTED' PADA LOGIN
 
@@ -1094,7 +1654,23 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - **`GET /home`**: HTTP 200 (Dashboard Admin `MASJID JAMI' AL JIHAD - Panel Admin` berhasil diakses secara penuh).
 - **Hardening Keamanan**: Nilai `APP_DEBUG` pada `vercel.json` telah dikembalikan ke `"false"` untuk standar produksi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 38. UPDATE v4.4.12: RESOLUSI 500 SERVER ERROR PADA PEMBUATAN AKUN (`/users/create`)
 
@@ -1137,7 +1713,23 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `resources/views/users/edit.blade.php` (Proteksi `@forelse` dropdown role pada form edit akun)
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.12)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 39. UPDATE v4.4.13: OPTIMISASI DRASTIS KECEPATAN LOGIN & WAKTU RESPON APLIKASI
 
@@ -1182,7 +1774,23 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `vercel.json` (Penyesuaian BCRYPT_ROUNDS: "10")
 - `LATEST_UPDATE.md` (Pencatatan rilis v4.4.13)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 👥 40. PENJAMINAN & PENAMPILAN LENGKAP ROLE PETUGAS / OPERATOR PADA FORM TAMBAH & EDIT AKUN (22 September 2026)
 
@@ -1229,7 +1837,23 @@ Beralih dari runtime serverless komunitas `vercel-php` yang usang/rusak ke **Ver
 - `routes/web.php` (Pemberian izin akses middleware role:admin,petugas,operator)
 - `LATEST_UPDATE.md` (Dokumentasi pembaruan)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## ⚡ 42. AUDIT MENYELURUH, REFACTORING KODE & OPTIMASI PERFORMA TINGGI (PERFORMANCE ARCHITECTURE OVERHAUL) (22 September 2026)
 
@@ -1253,7 +1877,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 7. **Dead Polling AJAX 404 pada Dashboard Admin:**
    - Di `layouts/admin.blade.php`, terdapat fungsi `updatePrayerTimes()` yang memanggil `/api/prayer-times` setiap 60 detik. Rute tersebut tidak ada di Laravel, sehingga terus-menerus memproduksi error HTTP 404 di konsol browser.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### B. Solusi & Implementasi Arsitektur Performa
 
@@ -1301,7 +1941,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 - **Universal Form Submit Spinner & Anti Double-Submit:**
   - Menambahkan proteksi form submission global di `layouts/admin.blade.php`: setiap kali tombol form ditekan, tombol langsung dinonaktifkan (`disabled = true`) dan menampilkan animasi loading spinner, mencegah duplikasi entri data dan memberikan feedback instan ke pengguna.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### C. Berkas yang Diperbarui:
 1. `vercel.json` (Konfigurasi CACHE_DRIVER: file)
@@ -1339,7 +1995,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 33. `resources/views/layouts/admin.blade.php` (Pembersihan duplikat CDN, hapus dead 404 AJAX polling, pasang universal submit feedback)
 34. `LATEST_UPDATE.md` (Dokumentasi lengkap pembaruan performa arsitektur v4.5.0)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 44. PEMULIHAN & PENYEMPURNAAN FORM PENGATURAN DURASI ADZAN, IQAMAH, SHOLAT & WAKTU SISTEM PADA HALAMAN JADWAL SHOLAT (`/jadwal_sholat`) (22 September 2026)
 
@@ -1374,7 +2046,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 - `app/Http/Controllers/JadwalSholatController.php` (Penggunaan AppSetting::getCached() & passing $setting ke view)
 - `LATEST_UPDATE.md` (Pencatatan pembaruan v4.5.1)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 45. PERBAIKAN AMBANG BATAS DURASI INTERVAL ROTASI TV (v4.5.2 - 22 September 2026)
 
@@ -1421,7 +2109,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 - `app/Http/Controllers/WelcomeController.php` (Header no-store pada getRotationSettings)
 - `LATEST_UPDATE.md` (Pencatatan pembaruan v4.5.2)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 46. PEMBARUAN FOTO DEFAULT JADWAL SHOLAT JUM'AT MENJADI LOGO MASJID AL-JIHAD (v4.5.3 - 23 September 2026)
 
@@ -1460,7 +2164,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 - `resources/views/idul-adha-embed.blade.php`
 - `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 47. PENYEMPURNAAN UI ROTASI LAYAR & PINTASAN PENGATURAN DURASI PRAYER MODE (v4.5.4 - 24 September 2026)
 
@@ -1493,7 +2213,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 - `resources/views/jadwal_sholat/index.blade.php`
 - `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 48. PERBAIKAN TOTAL ISOLASI PERAN BENDAHARA VS OPERATOR & AUTO-CORRECTION DATABASE (v4.5.5 - 24 September 2026)
 
@@ -1524,11 +2260,43 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
 - `database/migrations/2026_09_24_000001_fix_user_roles_assignment.php`
 - `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 49. PRINSIP PENGEMBANGAN BERIKUTNYA (ATURAN WAJIB)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## ⚡ 50. IMPLEMENTASI ARSITEKTUR: KONVERSI WEB STATIS (CLOUDFLARE PAGES + SUPABASE REALTIME) — FASE 1 (v5.0.0 - 25 September 2026)
 
@@ -1587,7 +2355,23 @@ Setelah dilakukan audit menyeluruh pada codebase (backend Laravel, database Supa
    - **Build output directory:** `web-statis`
 4. Klik **Save and Deploy**. Web akan online dalam hitungan detik dan gratis selamanya!
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 51. KONSOLIDASI AKUN TUNGGAL & MIGRASI REMOTE GITHUB (25 September 2026)
 
@@ -1612,7 +2396,23 @@ Pengguna memutuskan untuk menyatukan kontrol proyek ke dalam **1 akun terpadu**:
 6. **Status Live Deployment:**
    - Website Display TV resmi mengudara (*LIVE*) di: `https://digitalaljihad.archived-aljihad.workers.dev` dengan status stabil, cepat (Edge Jakarta), dan terhubung ke Supabase.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📋 52. CATATAN HANDOVER SESI BERIKUTNYA: PANEL ADMIN STATIS (v5.1.0)
 
@@ -1635,7 +2435,23 @@ Pengguna memutuskan untuk menyatukan kontrol proyek ke dalam **1 akun terpadu**:
 4. Menerapkan RBAC (Role-Based Access Control) dinamis untuk 3 peran.
 5. Menghubungkan form edit data langsung ke Supabase REST API (otomatis realtime ke TV).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 53. IMPLEMENTASI PANEL ADMIN STATIS (v5.1.0) - LOGIN & DASHBOARD RBAC 3 PERAN (25 September 2026)
 
@@ -1675,7 +2491,23 @@ Telah berhasil dibangun antarmuka otentikasi dan panel kendali admin statis (*se
 - **Bendahara:** Email `bendahara@aljihad.com` | Password `bendahara123`
 - **Operator:** Email `operator@aljihad.com` | Password `operator123`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 54. PENYEMPURNAAN PANEL KENDALI ADMIN (admin.html) DENGAN INTEGRASI SUPABASE REALTIME CRUD & FITUR LENGKAP (25 September 2026)
 
@@ -1721,7 +2553,23 @@ Panel Kendali Admin (`admin.html`) telah disempurnakan secara menyeluruh dari se
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 💎 55. FINALISASI 100% PARIPURNA PANEL KENDALI ADMIN (MODAL EDIT KAS, PENCARIAN & FILTER MULTI-KRITERIA, SINKRONISASI JADWAL SHOLAT DATABASE, DAN MODAL TAMBAH PENGURUS DKM) (25 September 2026)
 
@@ -1768,7 +2616,23 @@ Panel Kendali Admin (`admin.html`) telah mencapai status **100% Paripurna (*Feat
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📺 56. PENYELESAIAN 100% PARIPURNA KONVERSI 16 SLIDE TV DISPLAY DIGITAL MANDIRI (25 September 2026)
 
@@ -1777,7 +2641,23 @@ Panel Kendali Admin (`admin.html`) telah mencapai status **100% Paripurna (*Feat
 ### Ringkasan Pencapaian:
 Seluruh 16 template halaman slide TV Display Digital yang dipetakan pada sistem rotasi utama (`web-statis/index.html` via `PATH_MAPPING`) telah berhasil dikonversi dan dibangun 100% mandiri (*client-side pure static*) di dalam folder `web-statis/slides/`. Setiap slide dirancang dengan standar visual ultra-elegan, lock-pixel header masjid, jam digital realtime, background dinamis, font modern islami (*Amiri*, *Poppins*, *Scheherazade New*), integrasi Supabase BaaS dengan fallback memori offline seketika, serta bilah warta berjalan (*running text bar*) yang responsif.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Rincian 16 Halaman Slide TV Display Digital (`web-statis/slides/`):
 
@@ -1831,7 +2711,23 @@ Seluruh 16 template halaman slide TV Display Digital yang dipetakan pada sistem 
 16. **`slides/idul-adha.html` (`/idul-adha-embed`):**
     - **Jadwal & Petugas Sholat Idul Adha:** Ornamen hewan qurban sapi & kambing, partikel emas mengambang, kartu foto Imam & Khotib, waktu sholat Id 10 Dzulhijjah, muadzin, bilal, ucapan selamat hari raya, dan warta qurban berjalan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Pembaruan Supabase DB Helper (`web-statis/js/supabase-db.js`):
 - Ditambahkan fungsi:
@@ -1842,12 +2738,44 @@ Seluruh 16 template halaman slide TV Display Digital yang dipetakan pada sistem 
   - `getSlides()`: Membaca daftar slide poster kegiatan.
 - Pengujian sintaks JavaScript menggunakan `node -c` tervalidasi sukses 100% tanpa error.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 57. PENYELARASAN 100% PARIPURNA PRAYER MODE DIGITAL DENGAN VERSI ASLI (25 September 2026)
 
@@ -1856,7 +2784,23 @@ Seluruh 16 template halaman slide TV Display Digital yang dipetakan pada sistem 
 ### Ringkasan Penyelarasan:
 Sistem **Mode Sholat (Prayer Mode)** pada web statis (`web-statis/prayer-mode.html` & `web-statis/js/prayer-engine.js`) telah diperiksa, disempurnakan, dan diselaraskan **100% identik dengan versi Laravel terdahulu (`resources/views/prayer-mode.blade.php`)**. Seluruh kemewahan tampilan visual, ornamen islami, dan alur timing sholat telah diadopsi seutuhnya dengan keunggulan tambahan: **beroperasi 100% client-side tanpa butuh server PHP**, tetap berjalan mulus saat jaringan internet terputus berkat memori lokal browser.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Alur Kerja & 5 Fase Prayer Mode (Identik Versi Lama):
 1. **Fase 1: Menuju Adzan (Countdown Tarhim):**
@@ -1886,7 +2830,23 @@ Sistem **Mode Sholat (Prayer Mode)** pada web statis (`web-statis/prayer-mode.ht
      - Kartu Bilal
    - **Adab Khutbah:** Plakat adab mendengarkan khutbah dan hadits larangan berkata *"Diamlah"* saat imam sedang berkhutbah (HR. Bukhari no. 934 & Muslim no. 851).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Perbandingan Teknis: Versi Lama (Laravel) vs Versi Baru (Web Statis):
 | Aspek Sistem | Versi Lama (Laravel Blade) | Versi Baru (Web Statis Mandiri) |
@@ -1897,14 +2857,46 @@ Sistem **Mode Sholat (Prayer Mode)** pada web statis (`web-statis/prayer-mode.ht
 | **Dukungan Audio** | Mengandalkan audio controller backend | HTML5 Audio API mandiri dengan fail-safe browser unlock |
 | **Keseragaman Visual** | Dual-tile flip timer, plakat hadits, watermark Ka'bah | Identik 100% mengadopsi seluruh CSS & komponen Blade asli |
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Sinkronisasi Berkas:
 - Berkas `web-statis/prayer-mode.html` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\prayer-mode.html`.
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📖 58. IMPLEMENTASI OTOMATISASI AGENDA MALAM JUM'AT (SURAT YAASIIN) PADA ROTATOR TV DISPLAY STATIS (25 September 2026)
 
@@ -1913,7 +2905,23 @@ Sistem **Mode Sholat (Prayer Mode)** pada web statis (`web-statis/prayer-mode.ht
 ### Ringkasan Pencapaian:
 Fitur **Mode Malam Jum'at (Penampilan Otomatis Surat Yaasiin)** telah diintegrasikan secara cerdas pada sistem display TV mandiri (`web-statis/index.html` dan `web-statis/js/prayer-engine.js`). Logika penayangan diselaraskan persis dengan fungsionalitas Laravel terdahulu (`PrayerModeController.php` & `rotator.blade.php`), di mana sistem secara otomatis mengunci rotasi slide TV dan menampilkan pembacaan 83 ayat Surat Yaasiin setiap malam Jum'at.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Alur Kerja & Mekanisme Otomatisasi:
 1. **Pendeteksian Hari & Waktu:**
@@ -1934,20 +2942,68 @@ Fitur **Mode Malam Jum'at (Penampilan Otomatis Surat Yaasiin)** telah diintegras
    - Hitung mundur waktu Isya realtime di bilah atas.
    - Membaca data mandiri lokal `web-statis/data/surah_yasin.json` (100% offline-ready).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Pengujian Teknis (Simulasi Node.js):
 - **Uji Hari Kamis 18:45 (Malam Jum'at ba'da Maghrib):** Hasil evaluasi `PrayerEngine.isYasinActive(...)` mengembalikan `true` (Surat Yaasiin otomatis mengunci layar).
 - **Uji Hari Kamis 19:18 (Menjelang Adzan Isya):** Hasil evaluasi mengembalikan `false` (Prioritas beralih ke Prayer Mode Isya).
 - **Uji Hari Biasa (Rabu 18:45):** Hasil evaluasi mengembalikan `false` (Rotasi slide TV berjalan normal).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 - Berkas `web-statis/js/prayer-engine.js`, `web-statis/index.html`, dan `web-statis/slides/yasin.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🎵 59. PENYELARASAN FITUR AUDIO TARHIM OTOMATIS BERDASARKAN WAKTU SHOLAT & DURASI TRIGGER (25 September 2026)
 
@@ -1956,7 +3012,23 @@ Fitur **Mode Malam Jum'at (Penampilan Otomatis Surat Yaasiin)** telah diintegras
 ### Ringkasan Pencapaian:
 Fitur **Audio Tarhim Otomatis** pada sistem display TV statis (`web-statis/prayer-mode.html`) telah disempurnakan dan diselaraskan persis dengan fungsionalitas Laravel terdahulu (`prayer-mode.blade.php`). Audio tarhim berputar secara cerdas menyesuaikan waktu sholat fardhu yang bersangkutan, menghormati konfigurasi trigger countdown detik di database, serta otomatis berhenti begitu waktu adzan tiba.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Alur Kerja & Mekanisme Audio Tarhim:
 1. **Pendeteksian Waktu Sholat & Pemilihan Berkas Audio:**
@@ -1975,14 +3047,46 @@ Fitur **Audio Tarhim Otomatis** pada sistem display TV statis (`web-statis/praye
 5. **Penanganan Autoplay Policy Browser (Fail-Safe Unlock):**
    - Jika browser TV/PC menahan pemutaran otomatis (*autoplay policy*), sistem memasang *one-time event listener* pada interaksi pertama (klik/sentuh) untuk membuka kunci audio secara transparan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Sinkronisasi Berkas:
 - Berkas `web-statis/prayer-mode.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\prayer-mode.html`.
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 60. UPGRADE SISTEM ROYAL MOSQUE DUAL PULSE, OUTER GLOW & METALLIC SHIMMER PADA KARTU JADWAL SHOLAT (25 September 2026)
 
@@ -1993,7 +3097,23 @@ Fitur kartu jadwal jam sholat pada slide display utama (`web-statis/slides/utama
 
 Fitur ini menghidupkan kembali dan melipatgandakan kualitas visual fitur di versi lama ("web jadul"), menghadirkan efek denyutan berirama lembut (*breathing pulse*), pendaran luar neon emas-zamrud (*dynamic outer glow*), sapuan cahaya metalik (*crystal shimmer sweep*), serta lencana status mengambang dinamis (*floating status badge*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Inovasi & Keunggulan Desain Visual:
 1. **Sistem Deteksi 2-Fase Cerdas (*Dual-Stage State Machine*):**
@@ -2019,7 +3139,23 @@ Fitur ini menghidupkan kembali dan melipatgandakan kualitas visual fitur di vers
 4. **Keterbacaan Jarak Jauh Optimal (TV 5-15 Meter):**
    - Kontras warna telah diuji untuk keterbacaan sempurna dari jarak jauh di ruangan masjid yang luas.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Diperbarui:
 1. `web-statis/slides/utama.html`:
@@ -2029,14 +3165,46 @@ Fitur ini menghidupkan kembali dan melipatgandakan kualitas visual fitur di vers
 2. `resources/views/utama.blade.php`:
    - Penyelarasan identik CSS, markup Blade, dan fungsi JavaScript `updateDateTime()` pada versi Laravel.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Sinkronisasi Berkas:
 - Berkas `web-statis/slides/utama.html` disalin dan disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\utama.html`.
 - Berkas `LATEST_UPDATE.md` disalin dan disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\LATEST_UPDATE.md`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🐂 61. SLIDE DISPLAY PENERIMAAN HEWAN QURBAN IDUL ADHA DENGAN AUTO-CALCULATED KPI & MODUL KENDALI ROTASI ADMIN (25 September 2026)
 
@@ -2047,7 +3215,23 @@ Telah dibuat dan diintegrasikan satu halaman display TV baru khusus: **Penerimaa
 
 Halaman ini didesain dengan visual **Royal Mosque Luxury** yang sangat mewah, berkelas, dan interaktif. Seluruh ringkasan jumlah hewan qurban (**Sapi**, **Kambing/Domba**) dan total infaq dihitung secara **otomatis (*auto-calculated*)** langsung dari daftar shohibul qurban tanpa perlu input manual ganda. Halaman ini juga dilengkapi tombol switch aktif/nonaktif di daftar rotasi TV sehingga pengurus masjid dapat menyalakannya saat musim Idul Adha dan menonaktifkannya di luar musim kurban.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Fitur Unggulan Slide Qurban (`slides/qurban.html`):
 1. **Header Lock-Pixel Identik Display Utama:**
@@ -2069,7 +3253,23 @@ Halaman ini didesain dengan visual **Royal Mosque Luxury** yang sangat mewah, be
    - Sinkronisasi realtime melalui Supabase key `qurban_data`.
    - Disertai 18 data shohibul qurban realistis bawaan (*fallback offline*) jika database belum terisi atau koneksi internet offline.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Integrasi Manajemen di Panel Kendali Admin (`web-statis/admin.html`):
 1. **Menu Sidebar & Hak Akses:**
@@ -2086,7 +3286,23 @@ Halaman ini didesain dengan visual **Royal Mosque Luxury** yang sangat mewah, be
    - Slide qurban terdaftar di tabel pengaturan rotasi TV display (`/qurban-embed` -> `slides/qurban.html`).
    - Admin dapat menggeser switch toggle ON/OFF kapan saja tanpa perlu menyentuh kode. Perubahan disimpan permanen ke Supabase dan `localStorage`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Dibuat & Dimodifikasi:
 1. `web-statis/slides/qurban.html` (BERKAS BARU): Slide TV display penerimaan hewan qurban.
@@ -2095,13 +3311,45 @@ Halaman ini didesain dengan visual **Royal Mosque Luxury** yang sangat mewah, be
 4. `web-statis/admin.html`: Penambahan menu sidebar, view `#view-qurban`, modal tambah qurban, fungsi manajemen JavaScript, dan auto-detect slide qurban pada tabel rotasi.
 5. `LATEST_UPDATE.md`: Pencatatan dokumentasi komprehensif Bab 61.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Sinkronisasi Berkas:
 - Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## ⏰ 62. AKTIVASI KOTAK JADWAL IMSAK & SYURUK PADA SLIDE UTAMA DISPLAY TV BESERTA SWITCH KENDALI DI PANEL ADMIN (25 September 2026)
 
@@ -2116,7 +3364,23 @@ Masalah ini telah diselesaikan secara tuntas:
 3. **Switch Kendali di Panel Admin (`admin.html`):** Pengurus masjid kini diberikan kendali penuh melalui switch toggle **"Aktif"** di samping input waktu Imsak dan Syuruk. Pengurus dapat dengan mudah menampilkan atau menyembunyikan kotak Imsak/Syuruk kapan saja (misal: menyalakan Imsak saat Ramadhan atau menyembunyikannya sesuai preferensi).
 4. **Keamanan Filter Prayer Engine:** Waktu non-fardhu (Imsak dan Syuruk/Terbit) tetap terisolasi dengan aman pada `prayer-engine.js` dan tidak akan memicu countdown adzan/iqamah palsu, sehingga operasional sholat fardhu masjid tetap 100% akurat.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Diperbarui:
 1. `web-statis/slides/utama.html`:
@@ -2127,13 +3391,45 @@ Masalah ini telah diselesaikan secara tuntas:
    - Peningkatan fungsi pemuatan data dan fungsi `simpanJadwalSholat()` agar menyinkronkan status toggle ke `localStorage` dan waktu ke Supabase.
 3. `LATEST_UPDATE.md`: Pencatatan dokumentasi Bab 62.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Sinkronisasi Berkas:
 - Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 63. SINKRONISASI JADWAL SHOLAT RESMI BIMAS ISLAM KEMENAG RI WILAYAH BEKASI & SISTEM AUTO-UPDATE HARIAN (25 September 2026)
 
@@ -2162,7 +3458,23 @@ Telah dihubungkan dan disinkronkan secara resmi jadwal sholat display masjid den
    - Layar TV secara otomatis mendeteksi jika tanggal kalender berganti ke hari berikutnya.
    - Sistem melakukan background fetch transparan ke API Kemenag RI dan memperbarui database Supabase tanpa mengganggu tayangan layar TV.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Diperbarui:
 1. `web-statis/admin.html`:
@@ -2171,13 +3483,45 @@ Telah dihubungkan dan disinkronkan secara resmi jadwal sholat display masjid den
    - Penambahan fungsi auto-sync harian cerdas `checkAutoSyncKemenag()` yang berjalan otomatis saat pergantian tanggal.
 3. `LATEST_UPDATE.md`: Pencatatan dokumentasi Bab 63.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Sinkronisasi Berkas:
 - Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📺 64. FITUR LIVE TV PREVIEW & SIMULATOR MONITOR PADA TABEL ROTASI SLIDE PANEL ADMIN (25 September 2026)
 
@@ -2186,7 +3530,23 @@ Telah dihubungkan dan disinkronkan secara resmi jadwal sholat display masjid den
 ### Ringkasan Pencapaian:
 Telah dibuatkan fitur **Live TV Monitor Preview** langsung di dalam **Panel Admin (`web-statis/admin.html`)** pada menu **"Rotasi Slide TV"**. Pengurus masjid kini dapat melihat pratinjau setiap slide secara instan sebelum tayang di TV, baik melalui modal simulator monitor TV interaktif maupun membukanya langsung di tab baru secara fullscreen.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Cara Mengakses Pratinjau (Preview) Halaman:
 1. **Di Panel Admin (Menu "Rotasi Slide TV"):**
@@ -2211,7 +3571,23 @@ Telah dibuatkan fitur **Live TV Monitor Preview** langsung di dalam **Panel Admi
    - Sholat Idul Adha: `web-statis/slides/idul-adha.html`
    - Prayer Mode (Adzan & Sholat): `web-statis/prayer-mode.html`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Diperbarui:
 1. `web-statis/admin.html`:
@@ -2220,20 +3596,68 @@ Telah dibuatkan fitur **Live TV Monitor Preview** langsung di dalam **Panel Admi
    - Penambahan fungsi kontrol: `bukaPreviewSlide()`, `refreshPreviewIframe()`, dan `fullscreenPreviewIframe()`.
 2. `LATEST_UPDATE.md`: Pencatatan dokumentasi Bab 64.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Sinkronisasi Berkas:
 - Seluruh berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📱 65. AUDIT ARSITEKTUR SENIOR JAMSTACK, RESPONSIVITAS MULTI-DEVICE (MOBILE, TABLET, PC, SMART TV), DAN PWA RESILIENCE KELAS KOMERSIAL
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Senior JAMstack Architect & AI Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan Eksekutif & Analisis Arsitektur JAMstack
 Sebagai Senior JAMstack Developer dengan pengalaman skala enterprise, dilakukan audit menyeluruh terhadap arsitektur web `DIGITALv304` (`web-statis`) untuk mentransformasikan sistem ini dari sekadar penampil TV statis menjadi **aplikasi digital signage dan manajemen masjid kelas komersial (Production & Commercial SaaS Ready)**.
@@ -2259,7 +3683,23 @@ Sebagai Senior JAMstack Developer dengan pengalaman skala enterprise, dilakukan 
 5. **Interaktivitas Layar Sentuh (Touch Gesture Swipe Navigation):**
    - Di `index.html`, ditambahkan deteksi gestur sentuh (*touch swipe gesture listener*). Ketika takmir atau pengurus masjid membuka display di tablet atau HP, mereka dapat menggeser (*swipe*) layar ke kiri atau kanan untuk berpindah slide secara instan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Rincian Perubahan Berkas:
 
@@ -2303,20 +3743,68 @@ Sebagai Senior JAMstack Developer dengan pengalaman skala enterprise, dilakukan 
    - Penambahan listener koneksi offline/online OSD toast.
    - Penambahan dukungan interaksi gestur sentuh (*swipe navigation*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Sinkronisasi:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` pada branch `main` disinkronkan 100%.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🌟 66. PENGGANTIAN MEDALI KALIGRAFI TEKS DENGAN GAMBAR PNG (MEDALI BINTANG 12 HIJAU-EMAS) & EFEK DENYUT PELAN MEMANCARKAN CAHAYA EMAS
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Senior JAMstack Architect & AI Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan Pembaruan:
 Atas permintaan pengguna, teks kaligrafi biasa di sudut kiri atas (*Muhammad*) dan kanan atas (*Allah*) pada layar display TV telah digantikan dengan **Gambar Medali Bintang 12 Hijau-Emas 3D Asli** yang diunggah oleh pengguna, dilengkapi dengan sistem animasi denyut lembut (*slow royal pulse*) yang memancarkan pendaran gelombang cahaya emas memukau.
@@ -2341,7 +3829,23 @@ Diimplementasikan di `css/display-theme.css` dan `css/partials-theme.css`:
 - Pada tablet: Otomatis diskalakan menjadi 80px-85px.
 - Pada smartphone: Otomatis diskalakan menjadi 46px-50px dengan margin aman sehingga tidak pernah menabrak judul masjid.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Diperbarui:
 1. `web-statis/image/display/medallion/allah_3d.png` (Diperbarui dengan gambar PNG unggahan pengguna).
@@ -2354,20 +3858,68 @@ Diimplementasikan di `css/display-theme.css` dan `css/partials-theme.css`:
 8. `web-statis/slides/jumat.html` (Pemasangan elemen medali kaligrafi emas 3D).
 9. `LATEST_UPDATE.md` (Dokumentasi Bab 66).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Sinkronisasi:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## ⚡ 67. AKTIVASI & KONFIGURASI FITUR CACHING CLOUDFLARE PAGES & EDGE CDN HEADERS
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Senior JAMstack Architect & AI Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan Pembaruan:
 Menjawab pertanyaan pengguna mengenai status aktivasi caching Cloudflare pada web statis, serta melakukan audit dan implementasi file konfigurasi `_headers` standar enterprise untuk **Cloudflare Pages / Cloudflare Workers Static Assets**.
@@ -2395,27 +3947,91 @@ Menjawab pertanyaan pengguna mengenai status aktivasi caching Cloudflare pada we
   - `X-Frame-Options: SAMEORIGIN`
   - `Referrer-Policy: strict-origin-when-cross-origin`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Dibuat / Diperbarui:
 1. `web-statis/_headers` (Konfigurasi Cloudflare Pages caching rules & HTTP security headers).
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\_headers` (Sinkronisasi ke folder mandiri).
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 67).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Sinkronisasi:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📅 68. PENYEDERHANAAN FORMAT HARI & BULAN MASEHI (MAKSIMAL 4 KARAKTER)
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Senior JAMstack Architect & AI Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan Pembaruan:
 Atas permintaan pengguna untuk menghemat ruang pada *header section* layar display TV masjid agar tidak memadati tampilan dan tidak terjadi *text-wrapping*, format penanggalan hari dan bulan Masehi disederhanakan dengan aturan:
@@ -2438,7 +4054,23 @@ Atas permintaan pengguna untuk menghemat ruang pada *header section* layar displ
    - Sekarang: `Jum'at, 25 Sept 2026 • 14 Rabiul Akhir 1448 H • 10:22:11 WIB`
    - Menghemat lebih dari 6-8 karakter per baris, memberikan ruang lega bagi ornamen kaligrafi medali dan judul masjid.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Diperbarui:
 1. `web-statis/js/display-clock-ambient.js` (Fungsi utama `getStandardMasjidDateTime` disesuaikan dengan singkatan bulan 4 karakter).
@@ -2459,20 +4091,68 @@ Atas permintaan pengguna untuk menghemat ruang pada *header section* layar displ
 16. `web-statis/admin.html` (Sinkronisasi placeholder tanggal preview Jum'at).
 17. `LATEST_UPDATE.md` (Dokumentasi Bab 68).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Sinkronisasi:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 👤 69. FITUR EDIT PENGGUNA (NAMA, EMAIL, KATA SANDI) KHUSUS SUPER ADMIN
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Senior JAMstack Architect & AI Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan Pembaruan:
 Sesuai permintaan pengguna, telah ditambahkan fitur manajemen akun pengguna di Dashboard Admin (`web-statis/admin.html`) dan perlindungan tingkat server (`app/Http/Controllers/UserController.php`) yang memungkinkan pengubahan **Nama Lengkap**, **Alamat Email**, dan **Kata Sandi (Password)** dengan aturan keamanan ketat: **HANYA BISA DIAKSES DAN DILAKUKAN OLEH SUPER ADMIN**.
@@ -2504,7 +4184,23 @@ Sesuai permintaan pengguna, telah ditambahkan fitur manajemen akun pengguna di D
      `if (!Auth::user()->hasRole('admin')) { abort(403, 'Akses Ditolak: Hanya Super Admin yang berhak mengelola data pengguna.'); }`
    - Memastikan endpoint `/users` tidak dapat diakses atau dimanipulasi oleh peran selain Super Admin di level server Laravel.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Dibuat / Diperbarui:
 1. `web-statis/js/admin-auth.js` (Logika `getUsers`, `isSuperAdmin`, `updateUser`, login dinamis).
@@ -2513,20 +4209,68 @@ Sesuai permintaan pengguna, telah ditambahkan fitur manajemen akun pengguna di D
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】` (Sinkronisasi berkas web statis).
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 69).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Sinkronisasi:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📺 70. PENAMPILAN LENGKAP SELURUH 17 HALAMAN ROTASI TV DI DASHBOARD SUPER ADMIN
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Senior JAMstack Architect & AI Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan Pembaruan:
 Menjawab kendala di mana menu **Rotasi TV & Reorder** di Dashboard Admin sebelumnya hanya menampilkan 1 baris statis (*Jadwal Sholat 5 Waktu*), telah dilakukan pembaruan arsitektur pada mesin manajemen rotasi display TV (`web-statis/admin.html` dan `web-statis/js/supabase-db.js`). Kini **seluruh 17 halaman display TV ditampilkan secara lengkap, detail, dan interaktif** di tabel manajemen rotasi untuk diatur susunan urutannya (▲/▼) maupun saklar aktif/nonaktifnya oleh Super Admin.
@@ -2567,7 +4311,23 @@ Menjawab kendala di mana menu **Rotasi TV & Reorder** di Dashboard Admin sebelum
    - Folder Lokal Mandiri: `C:\Users\anthu\Documents\【Digital WebSTATIS】` telah dimutakhirkan.
    - GitHub Remote: Telah disinkronkan ke branch `main`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Dibuat / Diperbarui:
 1. `web-statis/admin.html` (Master list 17 slide, normalisasi, tombol aksi massal, reorder presisi).
@@ -2575,14 +4335,46 @@ Menjawab kendala di mana menu **Rotasi TV & Reorder** di Dashboard Admin sebelum
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】` (Sinkronisasi berkas mandiri).
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 70).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Sinkronisasi:
 - Seluruh berkas telah disinkronkan ke direktori mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 - Cloud Supabase database `app_settings` tabel ID 1 telah disinkronkan langsung via REST API PATCH.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 71: ELIMINASI KESAN BIROKRASI (HILANGKAN TEKS SUPER ADMIN DI PERAN BENDAHARA & OPERATOR), PERBAIKAN DROPDOWN PROFIL ANTI-CLIPPING POJOK KANAN ATAS, SERTA FITUR SHOW / HIDE SIDEBAR UNIVERSAL DI SEMUA DASHBOARD
 
@@ -2594,7 +4386,23 @@ Pembaruan ini menjawab tiga permintaan penting dari pengguna untuk kenyamanan op
 2. **Perbaikan Tampilan Kotak/Menu Petugas di Pojok Kanan Atas (Anti-Clipping & Anti-Overflow):** Mengatasi masalah dropdown akun Petugas yang sebelumnya terpotong keluar layar (*clipped off-screen*) akibat barisan topbar yang terlalu padat dan ketiadaan pembatas lebar (*text truncation*).
 3. **Fitur Show / Hide Sidebar Universal di Semua Dashboard:** Menyediakan tombol hamburger toggle sidebar (`☰`) yang selalu aktif dan terlihat di semua ukuran layar (Desktop, Laptop, Tablet, Smartphone) baik pada antarmuka Web Statis (`web-statis/admin.html`) maupun Laravel Blade (`resources/views/layouts/admin.blade.php`), lengkap dengan penyimpanan preferensi di `localStorage` dan shortcut keyboard universal `Ctrl+B`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Rincian Implementasi & Solusi:
 
@@ -2671,7 +4479,23 @@ Pembaruan ini menjawab tiga permintaan penting dari pengguna untuk kenyamanan op
     - Menambahkan styling CSS collapse desktop (`margin-left: -14rem !important;` dan transisi 0.3s).
     - Memasang listener jQuery dan persistensi `localStorage` (`aljihad_blade_sidebar_collapsed`) agar saat berpindah halaman Laravel status sidebar tetap tersimpan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Diperbarui:
 1. `web-statis/admin.html`
@@ -2687,14 +4511,46 @@ Pembaruan ini menjawab tiga permintaan penting dari pengguna untuk kenyamanan op
 5. `LATEST_UPDATE.md`
    - Dokumentasi lengkap Bab 71.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Sinkronisasi:
 - Seluruh perubahan telah lolos validasi sintaks JavaScript (`node -c`) dan PHP (`php -l`).
 - Berkas telah disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】`.
 - Repositori GitHub `archivedaljihad-cloud/digitalaljihad` branch `main` disinkronkan via Git commit & push.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 72: PERBAIKAN TEKS ALAMAT DUMMY (KEBON JERUK) & OPTIMASI RESPONSIVITAS HEADER LAYAR HP (MOBILE)
 
@@ -2703,7 +4559,23 @@ Pembaruan ini menjawab tiga permintaan penting dari pengguna untuk kenyamanan op
 Pengguna melaporkan bahwa saat web display dibuka di layar ponsel (HP), muncul teks yang tampak seperti teks latar belakang / watermark bertuliskan:
 `"JL.MELATI NO.12 KEBON JERUK, JAKARTA BARAT"` dan `"DISPLAY MASJID"`, yang bertumpukan di belakang kapsul tanggal dan kartu jadwal sholat.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Analisis Akar Masalah (Root Cause Analysis):
 1. **Sumber Teks Dummy:**
@@ -2718,7 +4590,23 @@ Pengguna melaporkan bahwa saat web display dibuka di layar ponsel (HP), muncul t
    - Karena `partials-theme.css` dimuat setelah `display-theme.css` dan menggunakan `!important` **tanpa adanya media query responsif mobile**, aturan desktop raksasa ini menimpa seluruh styling di smartphone (< 768px).
    - Pada layar smartphone berlebar 360–412px, dua medali raksasa (125px kiri dan kanan) menjepit teks judul dan alamat. Ditambah dengan margin negatif `-15px`, kapsul tanggal (`.datetime`) dan kartu jadwal sholat tertarik ke atas dan menimpa teks alamat tersebut dari depan, sehingga teks dummy tampak bocor di baliknya layaknya watermark / background text.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi Komprehensif yang Diterapkan:
 
@@ -2757,7 +4645,23 @@ Pengguna melaporkan bahwa saat web display dibuka di layar ponsel (HP), muncul t
   - `<h1 id="nama-masjid">MASJID JAMI' AL-JIHAD</h1>`
   - `<h3 class="sub-header" id="sub-header">Graha Asri, Cikarang Utara, Bekasi</h3>`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/js/supabase-db.js`
@@ -2774,14 +4678,46 @@ Pengguna melaporkan bahwa saat web display dibuka di layar ponsel (HP), muncul t
 6. `LATEST_UPDATE.md`
    - Dokumentasi Bab 72.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Hasil Akhir:
 - Teks dummy `"JL. MELATI NO. 12, KEBON JERUK, JAKARTA BARAT"` telah dihapus 100% dari seluruh sistem.
 - Alamat resmi `"Graha Asri, Cikarang Utara, Bekasi"` dan nama `"MASJID JAMI' AL-JIHAD"` kini tampil konsisten dan elegan di semua perangkat.
 - Pada tampilan ponsel (HP), header masjid tertata sangat rapi dan proporsional: medali kaligrafi berukuran pas di sudut atas, judul dan alamat berada di tengah dengan ukuran seimbang, dan tidak ada lagi elemen yang saling bertumpuk ataupun menyerupai background text bocor.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 73: PENYEMPURNAAN DASHBOARD PETUGAS & AKTIVASI FUNGSI SHOW / HIDE SIDEBAR UNIVERSAL
 
@@ -2792,7 +4728,23 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
 2. Tombol Show/Hide Sidebar belum aktif / belum bisa toggle sidebar.
 3. Ganti teks subtitle rotasi *"Kelola urutan dan status aktif seluruh 17 halaman tayang slide TV. Super Admin dapat memindah urutan (▲/▼), Operator hanya aktif/nonaktif"* menjadi *"Untuk mengelola/mengatur urutan halaman rotasi, silakan menghubungi Admin"*.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi Komprehensif yang Diterapkan:
 
@@ -2843,7 +4795,23 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
     - `#sidebarToggle`: `onclick="toggleSidebarUniversal(event)"`
   - **Shortcut Keyboard Universal:** Mendukung tombol pintas `Ctrl+B` (atau `Cmd+B`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 74: PERBAIKAN TABEL KELOLA HAK AKSES PENGGUNA & RESTORASI IKON DROPDOWN TOPBAR DI SEMUA DASHBOARD
 
@@ -2860,7 +4828,23 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
      - Ikon menggunakan tag `<i class="fas fa-chevron-down ... d-none d-sm-inline"></i>`. Class `d-none` secara eksplisit menyembunyikan ikon pada resolusi mobile/HP (< 576px).
      - Ketergantungan pada font webfont FontAwesome lokal dapat mengalami kendala render (*cross-origin security block*) saat file dibuka melalui protokol lokal (`file:///`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi & Perubahan yang Diterapkan:
 
@@ -2898,7 +4882,23 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
   - Warna default `#64748b` (slate gray), berubah menjadi `#0f172a` saat hover, dan hijau `#10b981` saat menu terbuka.
   - Transisi rotasi 180 derajat ke atas yang mulus saat dropdown dibuka (`.user-profile-card[aria-expanded="true"] .user-chevron`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html`
@@ -2913,7 +4913,23 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
 4. `LATEST_UPDATE.md`
    - Dokumentasi lengkap Bab 74.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Pengujian:
 - ✅ Sintaks JavaScript `admin-auth.js` dan inline script `admin.html` lolos validasi `node -e` (0 syntax error).
@@ -2922,14 +4938,46 @@ Pengguna mengajukan 3 perbaikan spesifik pada antarmuka Dashboard Petugas / Rota
 - ✅ Uji SVG ikon chevron: Terverifikasi hadir tanpa `d-none` dan siap ditampilkan di semua dashboard.
 - ✅ Repositori lokal disinkronkan ke folder mandiri dan di-push ke GitHub remote `main`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🌙 BAB 75: FITUR KHUSUS BULAN SUCI RAMADHAN & SHOLAT TARAWIH: MANAJEMEN PETUGAS ISYA/TARAWIH/KULTUM (TEMA KULTUM OPSIONAL), TRANSPARANSI KAS TROMOL (PENDAPATAN, PENGELUARAN, SALDO), DAN SLIDE TV ISLAMIC GLASSMORPHISM
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Antigravity AI Senior Architect & Fullstack Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan & Latar Belakang Pembaruan:
 Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian informasi ibadah malam yang terpadu dan transparan di layar TV Display Masjid. Tiga kebutuhan esensial yang dihadapi pengurus setiap malam Ramadhan:
@@ -2941,7 +4989,23 @@ Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian infor
    - **Sisa Saldo Kas Ramadhan (=):** Posisi saldo bersih riil yang siap dilaporkan secara transparan ke jamaah setiap malam.
    - **Tabel Mutasi Transaksi Terkini:** Riwayat pos penerimaan/pengeluaran lengkap dengan tanggal, uraian, dan badge warna.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Rincian Arsitektur & Fitur yang Diterapkan:
 
@@ -2984,7 +5048,23 @@ Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian infor
 - **Database & Offline PWA Cache (`supabase-db.js` & `sw.js`):**
   - Terdaftar di `DEFAULT_PAGES` konfigurasi Supabase dan daftar `STATIC_ASSETS` Service Worker untuk ketahanan offline (*offline resilience*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/slides/ramadhan.html` *(Berkas Baru)*: Slide display TV Semarak Ramadhan & Kas Tromol Infaq.
@@ -2999,7 +5079,23 @@ Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian infor
 5. `web-statis/sw.js`: Penambahan `slides/ramadhan.html` ke dalam pre-cache Service Worker.
 6. `LATEST_UPDATE.md`: Dokumentasi Bab 75.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Pengujian & Validasi Kualitas:
 - ✅ **Sintaks JavaScript (Node.js):** Seluruh file (`admin.html`, `slides/ramadhan.html`, `index.html`, `supabase-db.js`, `sw.js`) divalidasi dengan Node.js Compiler: **0 Syntax Error**.
@@ -3008,14 +5104,46 @@ Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian infor
 - ✅ **Uji Metrik Keuangan Tromol:** Total pemasukan, pengeluaran, dan saldo terhitung akurat sesuai formula matematis `saldo = pemasukan - pengeluaran`.
 - ✅ **SOP Sinkronisasi Otomatis:** Berkas disinkronkan ke folder mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\`, di-commit dan di-push ke GitHub remote `main`, dan langsung aktif di domain live `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## ☁️ BAB 76: OTORISASI REMOTE WRANGLER CLI & PENYELARASAN CLOUDFLARE PAGES / WORKERS STATIC ASSETS PADA DOMAIN DIGITALALJIHAD.MY.ID
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Antigravity AI Cloudflare Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan & Hasil Integrasi:
 1. **Otorisasi Penuh Cloudflare Wrangler CLI:**
@@ -3031,14 +5159,46 @@ Menyambut bulan suci Ramadhan, pengurus DKM membutuhkan sarana penyampaian infor
    - **Subdomain Workers.dev:** `https://digitalaljihad.archived-aljihad.workers.dev` (Status HTTP 200 OK)
    - **Kesimpulan Domain:** Pengguna **TIDAK PERLU** merubah settingan apapun pada registrar domain karena rute domain `digitalaljihad.my.id` sudah terhubung dan melayani seluruh aset statis Pages dengan optimal.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🧹 BAB 77: PERAPIAN ANTARMUKA HALAMAN LOGIN: PENGHILANGAN KOTAK KAPSUL PERAN (SUPER ADMIN, BENDAHARA, OPERATOR) & ELIMINASI TEKS CLOUDFLARE PAGES DI BADGE ORANGE FOOTER
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Antigravity AI UI/UX Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Ringkasan & Permintaan Pengguna:
 Berdasarkan arahan pengguna untuk membuat tampilan halaman login lebih bersih (*clean*), privat, dan bebas dari elemen demo yang tidak diperlukan dalam lingkungan produksi:
@@ -3052,7 +5212,23 @@ Berdasarkan arahan pengguna untuk membuat tampilan halaman login lebih bersih (*
    - Menghapus teks `• CLOUDFLARE PAGES` dari kotak badge orange (`.attribution-version-badge`) di bagian bawah dekat footer.
    - Badge kini hanya menampilkan versi sistem yang rapi: `⚡ WEB STATIS v5.1.0`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/login.html` (Penghapusan elemen `quick-role-picker` dan penyelarasan badge `.attribution-version-badge`).
@@ -3060,26 +5236,90 @@ Berdasarkan arahan pengguna untuk membuat tampilan halaman login lebih bersih (*
 3. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
 4. Cloudflare Deployment & Git Remote Repository (`digitalaljihad.my.id`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Status Pengujian:
 - ✅ Sintaks JavaScript `login.html` terverifikasi valid (0 syntax error).
 - ✅ Markup HTML bersih dan struktur kartu login terverifikasi proporsional.
 - ✅ Sinkronisasi otomatis ke lokal mandiri, Git remote `main`, dan live deployment Cloudflare.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🔧 BAB 78: PERBAIKAN BUG MODAL EDIT AKUN FREEZE: RESTORASI PENUTUP TAG MODAL QURBAN & ISOLASI MODAL EDIT USER DENGAN Z-INDEX 1060
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Pengembang: Antigravity AI UI/UX Specialist
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Gejala Masalah:
 Saat Super Admin mengklik tombol **"Edit Akun"** berwarna kuning pada tabel **Kelola Hak Akses Pengguna** (`view-users`), halaman mendadak membeku (*freeze*), layar tertutup lapisan transparan gelap, dan tidak muncul dialog apapun sehingga seluruh klik menjadi tidak merespons.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Akar Masalah (*Root Cause*):
 1. **Kurangnya Tag Penutup `</div>` pada Modal Sebelumnya:**
@@ -3091,7 +5331,23 @@ Saat Super Admin mengklik tombol **"Edit Akun"** berwarna kuning pada tabel **Ke
    - Namun, karena elemen dialog `#modalEditUser` terkurung di dalam elemen induk yang berstatus `display: none`, dialog tidak dapat tampil ke layar.
    - Layar pengguna pun tertutup backdrop gelap tanpa ada tombol yang bisa diklik untuk menutupnya (*halaman tampak membeku / freeze*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi & Perbaikan yang Diterapkan:
 1. **Penambahan Penutup `</div>` pada `#modalTambahQurban`:**
@@ -3103,7 +5359,23 @@ Saat Super Admin mengklik tombol **"Edit Akun"** berwarna kuning pada tabel **Ke
 3. **Pengujian Fungsionalitas:**
    - Ketika tombol "Edit Akun" diklik, modal edit kredensial (Nama, Email, Password Baru, Role) muncul seketika di tengah layar dengan animasi halus dan latar belakang *Islamic Gold & Dark Green*.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html` (Restorasi penutup `</div>` dan penyesuaian z-index `#modalEditUser`).
@@ -3111,21 +5383,69 @@ Saat Super Admin mengklik tombol **"Edit Akun"** berwarna kuning pada tabel **Ke
 3. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html`.
 4. Cloudflare Deployment & Git Remote Repository (`digitalaljihad.my.id`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 79: ELIMINASI DUPLIKASI ROTASI TV (ANTI-DUPLICATE & IDEMPOTENT 18 SLIDE MASTER)
 
 ### Tanggal Pembaruan: 25 September 2026
 ### Status: SELESAI (100% Tuntas & Live di Cloudflare)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Gejala Masalah (*Problem Statement*):
 Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), jumlah halaman slide terdeteksi membengkak menjadi berlipat ganda:
 - Badge statistik menampilkan **"43 dari 53 Halaman Aktif di TV"** (padahal seharusnya hanya 18 halaman master display TV).
 - Daftar tabel memunculkan baris slide berulang kali, sehingga membingungkan Super Admin saat mengatur urutan tayang display TV.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Akar Masalah (*Root Cause Analysis*):
 1. **Kecocokan Parsial (*Partial Substring Matching*) pada Fungsi Normalisasi:**
@@ -3141,7 +5461,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
    - Setiap kali halaman di-refresh, data dari `localStorage` (atau Supabase) yang sudah terkontaminasi diproses ulang oleh `normalizeRotationPages()`, menambah 12 item baru di setiap iterasi:
      - 17 item awal -> Iterasi 1: 29 item -> Iterasi 2: 41 item -> Iterasi 3: **53 item persis** seperti pada screenshot pengguna!
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi & Perbaikan yang Diterapkan:
 1. **Helper Ekstraksi Canonical Key Presisi (`getCanonicalSlideKey`):**
@@ -3161,7 +5497,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
    - Pada event `DOMContentLoaded`, cache lokal `localStorage.cached_rotation_pages` yang kotor otomatis difilter dan ditimpa dengan 18 item bersih.
    - Database Supabase (`app_settings` id=1 kolom `rotation_pages`) telah di-update langsung menjadi 18 slide unik standar (termasuk slide ke-18 `slides/ramadhan.html`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html` (Fungsi `getCanonicalSlideKey`, `normalizeRotationPages`, header card, reset dialog, dan sinkronisasi `cached_rotation_pages`).
@@ -3171,7 +5523,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 5. Cloudflare Pages / Workers Static Assets Deployment (`digitalaljihad.my.id`).
 6. `LATEST_UPDATE.md` (Dokumentasi Bab 79).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 80. IMPLEMENTASI PENGATURAN PRAYER MODE OTOMATIS & DURASI SHOLAT JUM'AT DINAMIS OPERATOR (WEB STATIS & DISPLAY TV)
 
@@ -3188,7 +5556,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
    - Durasi khutbah Jum'at di masjid dapat bervariasi setiap pekannya tergantung tema khutbah dan khatib yang bertugas (misal: 35 menit, 45 menit, 50 menit, hingga 60 menit).
    - Pengguna meminta agar durasi Sholat Jum'at dapat diedit secara bebas oleh **Petugas / Operator Masjid** tiap pekannya tanpa terhalang pembatasan izin hak akses.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi & Rincian Teknis yang Diterapkan:
 1. **Pemasangan Switch Prayer Mode & Interval Rotasi di `#view-jadwal-sholat` (`admin.html`):**
@@ -3226,7 +5610,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
    - Engine deteksi sholat di layar TV otomatis mengecek hari Jum'at (`now.getDay() === 5`) pada waktu Dzuhur.
    - Layar TV langsung mengunci rotasi ke Mode Khutbah Jum'at (menampilkan nama Khatib, Imam, Muadzin, Bilal, hadits adab khutbah) selama durasi dinamis `prayer_mode_jumat_duration` yang telah diatur oleh petugas.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html` (Form `#view-jadwal-sholat`, Form `#view-sholat-jumat`, helper `syncDurasiJumat`, fungsi `simpanPetugasJumat`, fungsi `simpanJadwalSholat`, dan `loadAllSupabaseData`).
@@ -3236,7 +5636,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 5. Cloudflare Pages / Static Assets Deployment (`digitalaljihad.my.id`).
 6. `LATEST_UPDATE.md` (Dokumentasi Bab 80).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 81. PENGHAPUSAN DROPDOWN PERAN / TINGKAT AKSES (ROLE) PADA MODAL EDIT KREDENSIAL PENGGUNA
 
@@ -3264,7 +5680,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 3. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 81).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 82. PENINGKATAN KETAJAMAN & KONTRAST FONT HEADER "MASJID JAMI' AL JIHAD" (MENIADAKAN GLOW BIAS)
 
@@ -3301,7 +5733,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 6. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
 7. `LATEST_UPDATE.md` (Dokumentasi Bab 82).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 83. FITUR PENGAJIAN RUTIN MALAM AHAD (KAJIAN SABTU BA'DA MAGHRIB S/D ISYA) — AUTO-SWITCH TV & WEB ADMIN
 
@@ -3319,7 +5767,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
   3. Menyediakan menu khusus di Web Admin (`admin.html`) lengkap dengan preset siklus 1–5 pekan, form edit instan, pratinjau live TV, dan saklar auto-switch.
   4. Terdaftar sebagai halaman ke-19 dalam rotasi TV display (`MASTER_ROTATION_PAGES`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi & Rincian Arsitektur yang Diterapkan:
 
@@ -3359,7 +5823,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 - **Slide ke-19 pada Rotasi TV Display:**
   - Terdaftar resmi dalam `MASTER_ROTATION_PAGES` dengan urutan 19 (`slides/kajian.html`, kategori: `Kajian`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/slides/kajian.html` (Slide display TV baru khusus kajian malam Ahad).
@@ -3370,7 +5850,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 6. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
 7. `LATEST_UPDATE.md` (Dokumentasi Bab 83).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🏛️ 84. IMPLEMENTASI HALAMAN TENTANG SISTEM DIGITAL & PANDUAN LENGKAP (ABOUT.HTML) DENGAN TABEL KOMPARASI HEAD-TO-HEAD
 
@@ -3389,7 +5885,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
   5. Menambahkan tautan langsung di sidebar Web Admin (`admin.html`) di bawah "Sesi Akun".
   6. Mengabadikan catatan sejarah perjuangan pembelian TV, bracket, dan GAZZZ SamSoe 3 slop.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Solusi & Rincian Teknis yang Diterapkan:
 1. **Pembuatan Berkas `web-statis/about.html`:**
@@ -3405,7 +5917,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
    - Git commit & push origin main.
    - Deployment live Cloudflare Pages/Workers (`npx wrangler deploy`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### Berkas yang Terkait / Diperbarui:
 1. `web-statis/about.html` (Berkas halaman baru Tentang Aplikasi & Panduan Lengkap).
@@ -3414,7 +5942,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 4. Cloudflare Workers / Static Assets Deployment (`digitalaljihad.my.id`).
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 84).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 PEMBARUAN TERAKHIR (BAB 85): PERBAIKAN KOTAK KAPSUL JAM AGAR 100% CENTER DI APLIKASI FULL APK & BROWSER HP
 
@@ -3456,7 +6000,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 6. Folder Mandiri Lokal: `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
 7. `LATEST_UPDATE.md` (Dokumentasi Bab 85).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🤖 BAB 86: INTEGRASI FITUR KECERDASAN BUATAN (GOOGLE GEMINI AI) DI WEB STATIS DISPLAY MASJID
 
@@ -3508,7 +6068,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 3. `web-statis/slides/hikmah.html` (Penyematan hadits harian Gemini AI).
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 86).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🌙 BAB 87: INTEGRASI SINKRONISASI JADWAL SHOLAT LEMBAGA FALAKIYAH NAHDLATUL ULAMA (LF PBNU)
 
@@ -3554,7 +6130,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 2. `web-statis/slides/utama.html` (Penyempurnaan auto-sync harian multi-source di layar TV).
 3. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 87).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 88: REDESAIN TATA LETAK SINKRONISASI JADWAL SHOLAT SESUAI ILUSTRASI & PENYERAGAMAN TOMBOL KEMENAG RI
 
@@ -3585,7 +6177,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 1. `web-statis/admin.html` (Penataan ulang grid layout kartu jadwal sholat & penyeragaman teks tombol Kemenag RI).
 2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 88).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 89: REDESAIN TATA LETAK KARTU "DURASI SHOLAT JUM'AT (KHUTBAH & SHOLAT)" LEBIH LEGA & BERSIH
 
@@ -3615,7 +6223,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 3. `resources/views/settings/edit.blade.php` (Pembaruan kartu Durasi Sholat Jum'at).
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 89).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 90: REVISI PRESISI TATA LETAK SINKRONISASI WAKTU SHOLAT (2 BARIS HORIZONTAL PENUH)
 
@@ -3642,7 +6266,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 1. `web-statis/admin.html` (Revisi tata letak presisi header kartu Waktu Sholat Hari Ini).
 2. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 90).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 91: PENINGKATAN KETEGASAN & KONTRAS TIPOGRAFI HEADER MASJID PADA LAYAR TV DISPLAY (OPSI A: ISLAMIC GOLD METALLIC & MULTI-LAYER BLACK OUTLINE)
 
@@ -3695,7 +6335,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 18. `public/css/display-theme.css`
 19. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 91).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 92: PENYESUAIAN LABEL & KATEGORI KAS DARI "INFAQ RENOVASI" MENJADI "PENGGALANGAN INFAQ" PADA DASHBOARD BENDAHARA
 
@@ -3723,7 +6379,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 92).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 93: FITUR MANAJEMEN MULTI-PROGRAM PENGGALANGAN INFAQ & DONASI KHUSUS PADA DASHBOARD BENDAHARA & LAYAR TV DISPLAY
 
@@ -3760,7 +6432,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 2. `web-statis/slides/infaq.html`
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 93).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 94: FORMAT OTOMATIS TITIK RUPIAH PADA INPUT DANA & PENYERAGAMAN JENIS TRANSAKSI KAS MENJADI "PEMASUKAN" & "PENGELUARAN"
 
@@ -3794,7 +6482,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 94).
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html` (Sinkronisasi lokal).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 95: RESTRUKTURISASI SISTEM PENGGALANGAN INFAQ & DONATUR MENJADI IDENTIK DENGAN WEB DINAMIS (GAMBAR 2 & GAMBAR 3)
 
@@ -3844,7 +6548,23 @@ Pada menu **Rotasi TV & Reorder** di Dashboard Admin (`web-statis/admin.html`), 
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 95).
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 96: PENYELARASAN SAPAAN WAKTU REAL-TIME (PAGI/SIANG/SORE/MALAM), GELAR RESMI PENGURUS MASJID JAMI' AL JIHAD, & PEMBERSIHAN BADGE STATUS HERO BANNER
 
@@ -3893,7 +6613,23 @@ Pengguna menginginkan agar banner sapaan pada dashboard admin diselaraskan denga
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 96).
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 97: ELIMINASI DUPLIKASI AKUN NO 1 (ADMINSHOLEH) & IMPLEMENTASI PENGATURAN NAMA SAPAAN DASHBOARD DINAMIS 100% MELALUI MODAL EDIT AKUN SUPER ADMIN
 
@@ -3953,7 +6689,23 @@ Pengguna menginginkan agar banner sapaan pada dashboard admin diselaraskan denga
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 97.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 98: AUDIT MENYELURUH DAN PEMBERSIHAN JEJAK APLIKASI LAMA (ALI MOCHTAR & ADMINSHOLEH) SERTA PEMBAHARUAN KREDENSIAL RESMI DKM AL-JIHAD
 
@@ -3987,7 +6739,23 @@ Pengguna menanyakan status kebersihan sistem dari jejak pengembang lama maupun d
 9. `LATEST_UPDATE.md`: Dokumentasi Bab 98.
 10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 99: PENYELARASAN EMAIL ADMIN UTAMA KE ARCHIVED.ALJIHAD@GMAIL.COM & PENULISAN ULANG TOTAL SEJARAH LAHIRNYA WEB STATIS DI README.MD
 
@@ -4021,7 +6789,23 @@ Pengguna menegaskan bahwa Web Statis ini telah berevolusi total hingga 1000% dar
 5. `README.md`: Penulisan ulang total dokumen sejarah dan identitas sistem.
 6. `LATEST_UPDATE.md`: Dokumentasi Bab 99.
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal.
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 100: ARSITEKTUR MULTI-SLIDE DINAMIS PROGRAM PENGGALANGAN INFAQ DI LAYAR TV & FITUR EXPORT LAPORAN DONASI RESMI (EXCEL & PDF)
 
@@ -4039,7 +6823,23 @@ Untuk mengantisipasi situasi di mana masjid mengadakan lebih dari satu program p
    - **Download Excel (.CSV):** Format CSV ber-BOM UTF-8 siap buka di Microsoft Excel, mencakup ringkasan target, total dana terkumpul, sisa dana, serta tabel rincian donatur (No, Tanggal, Nama Donatur, Nominal Infaq, Keterangan/Niat).
    - **Cetak Laporan Resmi (PDF):** Jendela cetak standar dokumen formal berkop surat *DKM Masjid Jami' Al-Jihad*, detail identitas program, tabel muhsinin, serta lembar tanda tangan ganda Ketua DKM dan Bendahara (*Bpk. H. Utut Priastya*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Implementasi & Perubahan Berkas
 
@@ -4065,7 +6865,23 @@ Untuk mengantisipasi situasi di mana masjid mengadakan lebih dari satu program p
    - **Penanganan Program Ditutup:** Jika seluruh program infaq berstatus nonaktif/ditutup, slide infaq otomatis dilewati dari rotasi TV.
    - **Realtime Supabase Listener:** Menambahkan pendengar event pada tabel `program_infaq` sehingga setiap penambahan program, aktivasi, maupun penutupan program langsung merestrukturisasi antrean slide TV tanpa perlu me-reload peramban.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html`: Penambahan aksi toggle TV, dropdown export, fungsi `exportLaporanInfaqCSV()`, dan cetak PDF.
@@ -4074,7 +6890,23 @@ Untuk mengantisipasi situasi di mana masjid mengadakan lebih dari satu program p
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 100.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📡 BAB 101: LAYANAN REMOT TV & DIAGNOSTIK JARAK JAUH (REALTIME CLOUD WEBSOCKET & PRESENCE TRACKER)
 
@@ -4088,7 +6920,23 @@ Untuk menjawab kebutuhan tersebut secara paripurna tanpa menambah biaya perangka
 4. **Siaran Darurat OSD (On-Screen Display Alert):** Super Admin dapat menyiarkan pesan darurat (misal: kendaraan menghalangi jalur ambulans, anak terpisah, gempa/cuaca, atau pengumuman takmir) yang langsung melayang elegan di atas layar TV masjid dengan berbagai pilihan tema warna dan auto-dismiss.
 5. **Pemulihan Mandiri Jarak Jauh (Remote Reload & Ping):** Layar TV dapat dimuat ulang (*reload*) dari jauh tanpa operator masjid harus memanjat dinding atau mencabut colokan TV.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Arsitektur & Fitur yang Diimplementasikan
 
@@ -4121,7 +6969,23 @@ Untuk menjawab kebutuhan tersebut secara paripurna tanpa menambah biaya perangka
    - **Pengalihan Darurat IP Kamera CCTV:** Tombol 1-klik untuk mengalihkan CCTV lokal ke Live Ka'bah atau Live Nabawi saat IP lokal kamera masjid offline.
    - **Log Aktivitas Perintah:** Tabel riwayat perintah remote yang terkirim beserta waktu dan status konfirmasinya.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Terkait / Diperbarui:
 1. `web-statis/js/supabase-db.js`: Penambahan API Remote Broadcast & Device Presence Tracking.
@@ -4131,7 +6995,23 @@ Untuk menjawab kebutuhan tersebut secara paripurna tanpa menambah biaya perangka
 5. `LATEST_UPDATE.md`: Dokumentasi Bab 101.
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🔒 BAB 102: PERBAIKAN TOTAL FITUR LOGOUT PENGURUS & INTEGRASI MODAL DIALOG RESMI (SUPER ADMIN, BENDAHARA, & PETUGAS)
 
@@ -4142,7 +7022,23 @@ Setelah dilakukan audit menyeluruh pada engine JavaScript, ditemukan akar masala
 2. **Dampak Penghentian Eksekusi Skrip:** Karena JavaScript di dalam peramban bersifat kompilasi per-blok `<script>`, satu kesalahan sintaks `SyntaxError: Invalid or unexpected token` tersebut mengakibatkan peramban menghentikan parsing seluruh blok script utama di `admin.html`.
 3. **Fungsi `confirmLogout()` Tidak Terdefinisi:** Akibat penghentian tersebut, fungsi `confirmLogout()` dan method-method lainnya tidak terdaftar ke global scope, sehingga setiap kali tombol *"Keluar (Logout)"* di sidebar maupun dropdown profil atas ditekan pada peran mana pun (Super Admin, Bendahara, maupun Petugas), sistem tidak dapat mengeksekusi logout.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perbaikan yang Diterapkan
 
@@ -4161,7 +7057,23 @@ Setelah dilakukan audit menyeluruh pada engine JavaScript, ditemukan akar masala
    - Membersihkan kunci otentikasi di `localStorage` sekaligus `sessionStorage`.
    - Menggunakan penanganan `try-catch` ganda dengan fallback `window.location.href = redirectUrl` untuk menjamin redirect berhasil di seluruh jenis peramban modern (Chrome, Safari iOS, Edge, Samsung Internet).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html`: Perbaikan sintaks ES6 di `cetakLaporanInfaqPDF`, penambahan markup `#logoutModal`, penyempurnaan fungsi `confirmLogout()` dan `eksekusiLogout()`.
@@ -4170,7 +7082,23 @@ Setelah dilakukan audit menyeluruh pada engine JavaScript, ditemukan akar masala
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 102.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 103: PEMBEBASAN MODAL LOGOUT DARI SARANG MODAL LAIN, PEMBAHARUAN SERVICE WORKER v2.0, & CACHE BUSTING
 
@@ -4183,7 +7111,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 2. **Cache Service Worker (PWA Stale Cache):**
    - Service Worker browser sebelumnya (`aljihad-signage-v1.3`) menerapkan *stale-while-revalidate* pada berkas statis, sehingga peramban pengguna masih menyajikan berkas HTML/JS lama dari memori cache peramban.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Tindakan Perbaikan Paripurna
 
@@ -4200,7 +7144,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
    - Memasang aturan **Network-First** khusus untuk berkas-berkas administratif (`admin.html`, `login.html`, `admin-auth.js`) agar peramban selalu mengambil versi terbaru langsung dari server cloud.
    - Melakukan *cache-busting* query versioning pada skrip otentikasi: `js/admin-auth.js?v=2.3`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html`: Penyeimbangan tag modal, penambahan `data-toggle="modal"`, dan bump versi `admin-auth.js?v=2.3`.
@@ -4209,7 +7169,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 103.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🌙 BAB 104: PENGGANTIAN NAMA MENU "SEMARAK RAMADHAN" & IMPLEMENTASI JADWAL KAJIAN MALAM AHAD 1 BULAN PENUH DENGAN ROTASI TV BERGILIRAN
 
@@ -4220,7 +7196,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
    - **Pada Hari Sabtu (Malam Ahad):** Secara cerdas memprioritaskan jadwal pekan yang jatuh pada hari tersebut dengan badge status aktif `🔴 HARI INI • SEDANG BERLANGSUNG`.
    - **Pada Hari Biasa (Senin s/d Jum'at & Ahad):** Menayangkan etalase seluruh jadwal pekan di bulan berjalan secara bergiliran (rotasi halus beranimasi fade setiap 9 detik), dilengkapi bilah navigasi kartu mini (*bottom timeline cards*) dan progress bar dinamis.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan Arsitektur
 
@@ -4246,7 +7238,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
    - **Interaktivitas:** Kartu mini di timeline dapat diklik secara manual untuk langsung beralih melihat jadwal pekan tertentu.
    - **Integrasi Countdown Isya:** Tetap mempertahankan hitung mundur akurat menuju adzan Isya yang sinkron dengan jadwal sholat Supabase.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Terkait / Diperbarui:
 1. `web-statis/admin.html`: Penggantian label menu "Semarak Ramadhan", perombakan total view `#view-kajian-sabtu` menjadi formulir 1 bulan penuh, integrasi generator tanggal Sabtu, preset siklus kajian, tabel rekap, dan live preview.
@@ -4254,7 +7262,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 3. `LATEST_UPDATE.md`: Dokumentasi Bab 104.
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 105: PENYESUAIAN LABEL "PROGRAM INFAQ", JUDUL UTAMA "PROGRAM INFAQ & DONASI KHUSUS", SERTA REPOSISI TOMBOL "BUAT PROGRAM BARU" BERWARNA HIJAU NU / ZAMRUD GELAP
 
@@ -4270,7 +7294,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. **Sentuhan Warna Islami (Hijau NU / Zamrud Gelap):**
    - Mengubah latar belakang tombol **"Buat Program Baru"** menggunakan class khusus `.btn-nu-emerald` dengan kode warna **Hijau NU / Hijau Zamrud Agak Gelap** (`#0d6e38` dengan efek hover `#085228`, teks putih berbobot tebal `font-weight: 700`, dan bayangan pendaran lembut) sehingga mencolok, berwibawa, dan sangat mudah terlihat oleh admin.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Berkas yang Diperbarui:
 1. `web-statis/admin.html`:
@@ -4289,7 +7329,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 105.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 106: PENYESUAIAN METODE URUTAN LIST DONATUR PROGRAM INFAQ (PALING ATAS YANG LAMA, PALING BAWAH YANG TERBARU)
 
@@ -4299,7 +7355,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
   - **Paling Bawah:** Donatur / donasi yang paling baru (terkini masuk).
 - Dengan susunan kronologis menaik (*ascending* by date & id), nomor urut (No. 1, 2, 3...) mencerminkan deretan donatur pertama yang mengawali program hingga donatur terbaru di urutan akhir.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan Arsitektur:
 1. **Pembaruan Query & Logika Sort Admin (`web-statis/admin.html`):**
@@ -4322,7 +7394,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 3. **Preservasi Tampilan Layar TV Signage (`web-statis/slides/infaq.html`):**
    - Pada kartu *"Daftar Donatur Terkini"* di slide TV, data tetap disortir secara cerdas (*recent 5 items*) agar TV selalu menampilkan nama-nama donatur dermawan yang baru saja berdonasi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Query fetch `tanggal.asc,id.asc`, sorting ascending `donasiList`, `push` pada donasi baru, serta ekspor CSV & PDF.
@@ -4331,7 +7419,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `LATEST_UPDATE.md`: Dokumentasi Bab 106.
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚑 BAB 107: PENYESUAIAN TEKS INFORMASI LAYANAN DRIVER AMBULANCE RW.007, RW.011, & RW.013 PADA MODUL KAS AMBULANCE
 
@@ -4339,19 +7443,67 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 - Pengguna meminta agar teks informasi pada panel kartu **"Info Layanan & Kontak Darurat Ambulance"** di modul Kas Ambulance (`#view-ambulance`) diperbarui.
 - Teks lama yang mencantumkan *"Nomor Hotline / WA Driver: 0877-5876-7000 (Siaga 24 Jam) Layanan antar-jemput pasien gawat darurat dan pengantaran jenazah untuk warga jamaah dan kaum dhuafa secara gratis (disubsidi dari Kas Ambulance Masjid Jami' Al-Jihad)."* diganti dengan narasi kesepakatan rapat DKM dan pengurus 3 wilayah RW (RW.007, RW.011, dan RW.013).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Teks Baru yang Diterapkan:
 > *"Sesuai keputusan rapat antara Pengurus DKM dan pengurus diketiga wilayah (RW.007,RW.011 dan RW.013), setiap RW menyiapkan 1(satu) orang warganya khusus untuk layanan driver antar-jemput pasien gawat darurat dan pengantaran jenazah untuk warga jamaah."*
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Pembaruan teks informasi kartu layanan ambulance pada baris 2883-2887.
 2. `LATEST_UPDATE.md`: Dokumentasi Bab 107.
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 💰 BAB 108: PENAMBAHAN KARTU SALDO TERKINI BUKU KAS & PENYELARASAN METODE URUTAN DESCENDING (TERBARU DI ATAS) PADA BUKU KAS DAN KAS AMBULANCE
 
@@ -4360,7 +7512,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 - Pengguna meminta agar metode penyusunan daftar catatan (*list record*) pada **Buku Kas & Transaksi** diatur dengan urutan **paling atas terbaru dan paling bawah yang lama** (kronologis terbalik / descending).
 - Pengguna juga meminta agar aturan urutan yang sama diterapkan pada menu **Kas Ambulance** (**paling atas terbaru dan paling bawah yang lama**).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 1. **Penambahan Row Kartu Metrik Saldo Terkini di `#view-keuangan` (`web-statis/admin.html`):**
@@ -4394,7 +7562,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
      });
      ```
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Penambahan kartu saldo terkini, kartu pemasukan & pengeluaran di `#view-keuangan`, kalkulasi real-time di `renderKasTables`, dan pengurutan descending di `filterKasTable`, `renderKasTableRows`, serta `renderAmbulanceData`.
@@ -4402,7 +7586,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 109: PENAMBAHAN MEDALI KALIGRAFI EMAS 3D (MUHAMMAD SAW & ALLAH SWT) PADA HEADER SLIDE PROGRAM INFAQ DISPLAY TV
 
@@ -4410,7 +7610,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 - Pada halaman tayangan TV **Program Infaq (`web-statis/slides/infaq.html`)**, tampilan ornamen medali kaligrafi islami di sisi kanan dan kiri atas header belum muncul (tidak ada).
 - Pengguna meminta agar kaligrafi di sebelah kanan-kiri header ditampilkan selaras dengan slide TV lainnya (seperti slide utama, keuangan kas, dan jadwal jum'at).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 1. **Penyisipan Markup Medali Kaligrafi 3D (`web-statis/slides/infaq.html`):**
@@ -4426,7 +7642,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
      ```
    - Class `.kaligrafi-medallion`, `.kaligrafi-muhammad` (kiri atas), dan `.kaligrafi-allah` (kanan atas) telah terintegrasi sempurna dengan CSS tema display (`../css/partials-theme.css` dan `../css/display-theme.css`), lengkap dengan animasi denyut pelan (*slow pulse*), pendaran aura emas berkilau (*golden radial glow*), dan posisi absolut pixel-perfect.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/slides/infaq.html`: Penambahan elemen medali kaligrafi Muhammad SAW & Allah SWT di header.
@@ -4434,7 +7666,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📱 BAB 110: PENAMBAHAN MODUL MANAJEMEN QRIS DONASI PADA PANEL ADMIN WEB STATIS & SINKRONISASI TAMPILAN DISPLAY TV
 
@@ -4456,7 +7704,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
      - Atas Nama Rekening (misal: DKM Jami Al Jihad).
      - Status Penayangan (Aktif / Nonaktif).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 1. **Pembaruan Navigasi Sidebar (`web-statis/admin.html`):**
@@ -4493,7 +7757,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
    - Menambahkan **Medali Kaligrafi Emas 3D (Muhammad SAW & Allah SWT)** di sisi kiri dan kanan header layar TV.
    - Menjadikan seluruh teks pada slide (keterangan, nama bank, nomor rekening, atas nama, dan gambar barcode QRIS) bergerak dinamis membaca data QRIS yang sedang aktif dari database cloud / lokal storage, serta merespons perubahan secara real-time via event `storage` dan WebSocket Supabase.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Penambahan menu sidebar `#nav-qris`, view `#view-qris`, modal `#modalQris`, modal `#modalDetailQris`, dan fungsi JavaScript `renderQrisTable`, `simpanDataQris`, `setAktifQris`, `hapusQris`.
@@ -4502,7 +7782,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 111: PERBAIKAN LOGIN MULTI-IDENTIFIER (NAMA/USERNAME/EMAIL) & PENAMBAHAN FITUR TAMBAH AKUN PENGURUS BARU (SUPER ADMIN)
 
@@ -4522,7 +7818,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 2. **Kebutuhan Fitur Tambah Akun Baru Pengurus:**
    - Pengguna meminta agar dashboard Super Admin dilengkapi fitur tombol **"+ Tambah Akun Baru"** untuk mendaftarkan akun pengurus-pengurus masjid lainnya (misal: pengurus RW 007, RW 011, RW 013, bendahara pembantu, operator TV cadangan, dsb).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4566,13 +7878,45 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 4. **Pembaruan Cache-Buster & Keamanan:**
    - Memperbarui query version tag skrip `<script src="js/admin-auth.js?v=2.5"></script>` pada `web-statis/login.html` dan `web-statis/admin.html` guna mencegah browser menggunakan skrip lama dari cache lokal.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/js/admin-auth.js`: Penambahan `isUserMatch`, refaktor `getUsers` multi-user, implementasi `createUser`, `updateUser` dengan username eksplisit, `deleteUser`, dan penyelarasan proses `login`.
 2. `web-statis/admin.html`: Tombol `#btnTambahAkunBaru`, modal `#modalTambahUser`, pembaruan `#modalEditUser`, fungsi `renderUsersTable`, `bukaModalTambahUser`, `simpanAkunUserBaru`, `bukaModalEditUser`, `simpanPerubahanUser`, `hapusAkunUser`, dan update skrip `admin-auth.js?v=2.5`.
 3. `web-statis/login.html`: Pembaruan skrip cache-buster `admin-auth.js?v=2.5`.
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 112: PERBAIKAN MENU LOGOUT BERSIH & INTEGRASI PENUH SUPABASE REMOTE CONTROL ENGINE
 
@@ -4589,7 +7933,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
      - Pada berkas `web-statis/admin.html`, library eksternal `@supabase/supabase-js@2` dan skrip `js/supabase-db.js` belum dimuat di tag `<script>`.
      - Karena skrip belum diimpor, objek global `window.SupabaseDB` tidak terbentuk di halaman admin, sehingga method `SupabaseDB.sendRemoteCommand` dan `SupabaseDB.subscribeDevicePresence` berstatus `undefined`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4618,12 +7978,44 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
    - Menaikkan versi cache PWA menjadi `aljihad-signage-v2.1` dan mendaftarkan `js/supabase-db.js` ke dalam `STATIC_ASSETS`.
    - Memperbarui versi query string menjadi `admin-auth.js?v=2.6` dan `supabase-db.js?v=2.6` agar peramban langsung mengambil berkas termutakhir dari server.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Penghapusan bentrok atribut modal logout, pembaruan fungsi `confirmLogout` & `eksekusiLogout`, impor `@supabase/supabase-js` dan `supabase-db.js?v=2.6`, serta penyelarasan penanganan respons perintah remote.
 2. `web-statis/js/supabase-db.js`: Penambahan flag `success: true` pada pengembalian method `sendRemoteCommand`.
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📌 BAB 113: OPTIMALISASI STATUS PRESENSI REALTIME LAYAR TV & DETAK JANTUNG OTOMATIS (PRESENCE HEARTBEAT)
 
@@ -4637,7 +8029,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
   2. **Pancaran Status Layar TV Masih Satu Kali (`index.html`):** Layar TV display sebelumnya hanya mengirim status kehadiran 1 kali saat halaman pertama kali dibuka tanpa ada pengiriman berkala (*heartbeat*) dan tanpa pembaruan saat slide berganti.
   3. **Event Listener Presence:** Pada `supabase-db.js`, event handler presence hanya mendengarkan `'sync'`, padahal Supabase juga menembakkan event `'join'` dan `'leave'` ketika ada tab/layar TV yang baru bergabung atau terputus.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4659,7 +8067,23 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
    - Menyelaraskan `trackDevicePresence` agar mengecek status `channel.state === 'joined'` terlebih dahulu untuk menghindari panggilan gantung.
    - Menambahkan listener event lengkap `'sync'`, `'join'`, dan `'leave'` pada `subscribeDevicePresence`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Parser objek presensi multiformat, fungsi `refreshRemoteMonitor`, dan tombol cepat *"Buka Layar TV"*.
@@ -4669,14 +8093,46 @@ Meskipun sintaks skrip telah valid, menu logout masih sempat tidak memunculkan d
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 114: IMPLEMENTASI HALAMAN GALERI INFORMASI & ARSIP DOKUMENTASI MASJID PADA WEB STATIS & LAYAR DISPLAY TV
 
 ### 1. Latar Belakang & Permintaan Pengguna:
 Pengguna meminta penambahan fitur dari web Laravel versi lama yaitu halaman **Slide Informasi** ke dalam web statis ini untuk menampilkan hal-hal penting/arsip dokumentasi di masjid (seperti Sertifikat Arah Kiblat, Sertifikat Rasdhul Qiblat, dan Surat Keterangan Tanda Daftar SIMAS Kemenag). Pengguna juga secara khusus meminta: **Ganti nama "Slide Informasi" menjadi "Galeri Informasi"**.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4706,7 +8162,23 @@ Pengguna meminta penambahan fitur dari web Laravel versi lama yaitu halaman **Sl
    - Mesin rotasi waktu mandiri (`scheduleNextSlide()`) yang memutar setiap dokumen sesuai durasi detiknya masing-masing.
    - Path resolver cerdas yang mendukung gambar dari direktori lokal, path relatif, base64, maupun tautan internet.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Penambahan modul Galeri Informasi (sidebar, tabel, modal form CRUD, dan modal zoom preview).
@@ -4717,14 +8189,46 @@ Pengguna meminta penambahan fitur dari web Laravel versi lama yaitu halaman **Sl
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 115: REPOSISI SIARAN PENGUMUMAN DARURAT (ON-SCREEN ALERT) KE TENGAH LAYAR TV DENGAN BACKDROP BLUR & DESAIN ISLAMI MAJESTIK
 
 ### 1. Latar Belakang & Permintaan Pengguna:
 Pengguna meminta agar posisi **Siaran Pengumuman Darurat (On-Screen Alert)** pada Layar TV Masjid dipindahkan ke **tengah-tengah halaman TV**. Sebelumnya banner peringatan muncul di bagian atas (menutupi nama masjid dan jam). Dengan memposisikannya di tengah layar secara tegas, pesan darurat dapat langsung menarik perhatian jamaah dan pengunjung masjid secara maksimal.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4746,7 +8250,23 @@ Pengguna meminta agar posisi **Siaran Pengumuman Darurat (On-Screen Alert)** pad
    - Mendukung 4 tema visual: 🔴 Merah Tegas (Darurat), 🟡 Emas (Default DKM), 🟢 Hijau (Agenda/Kabar Gembira), dan 🔵 Biru (Informasi Umum).
    - Parser durasi cerdas yang menangani format detik maupun milidetik secara akurat.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/index.html`: Pembaruan tata letak, CSS backdrop, modal pengumuman tengah layar, dan logika timer alert.
@@ -4754,14 +8274,46 @@ Pengguna meminta agar posisi **Siaran Pengumuman Darurat (On-Screen Alert)** pad
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 116: PENAMBAHAN TOMBOL & FITUR "BERSIHKAN LOG" PADA RIWAYAT AKTIVITAS PERINTAH REMOTE TV
 
 ### 1. Latar Belakang & Permintaan Pengguna:
 Pengguna menanyakan bagaimana cara menghapus atau membersihkan daftar riwayat pada tabel **"Log Aktivitas Perintah Remote Terkirim"** di menu *Layanan Remot TV & Diagnostik Jarak Jauh*. Sebelumnya belum tersedia tombol pembersih di antarmuka tabel tersebut.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4777,7 +8329,23 @@ Pengguna menanyakan bagaimana cara menghapus atau membersihkan daftar riwayat pa
 3. **Karakteristik Log Aktivitas Sesi:**
    - Log aktivitas ini bersifat dinamis per-sesi tab browser. Selain menggunakan tombol pembersih ini, me-refresh/memuat ulang browser (tekan F5) juga secara otomatis membersihkan daftar log.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Penambahan tombol dan fungsi `clearRemoteCommandLog()`.
@@ -4785,14 +8353,46 @@ Pengguna menanyakan bagaimana cara menghapus atau membersihkan daftar riwayat pa
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 117: PEROMBAKAN TAMPILAN LOG AKTIVITAS REMOTE MENJADI TERMINAL CONSOLE SCROLL COMPACT & PENAMBAHAN MENU "DOWNLOAD LOG"
 
 ### 1. Latar Belakang & Permintaan Pengguna:
 Pengguna meminta perombakan tampilan **"Log Aktivitas Perintah Remote Terkirim"** agar halaman tidak terlihat penuh dan panjang ke bawah. Pengguna melampirkan referensi antarmuka berupa jendela *console log viewer* minimalis dengan model scroll, serta meminta penambahan tombol menu **"Download Log"** yang sejajar dengan tombol **"Bersihkan Log"**.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4815,7 +8415,23 @@ Pengguna meminta perombakan tampilan **"Log Aktivitas Perintah Remote Terkirim"*
    - Tombol **"Download Log"** (`btn-outline-primary`) ditempatkan rapi bersanding dengan tombol **"Bersihkan Log"** (`btn-outline-danger`) di baris header kartu.
    - **Fungsi `downloadRemoteCommandLog()`:** Menghasilkan berkas teks `.log` terstruktur (contoh: `remote-tv-log-20260927-171500.log`) yang memuat kop resmi Masjid Jami' Al-Jihad, waktu ekspor, nama operator pengurus, serta rekaman seluruh baris perintah remote.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`: Penerapan CSS terminal log, markup jendela konsol, tombol Download Log, dan fungsi unduh berkas log.
@@ -4823,14 +8439,46 @@ Pengguna meminta perombakan tampilan **"Log Aktivitas Perintah Remote Terkirim"*
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 118: PENERAPAN EFEK TRANSISI "CARD FLIP TRANSITION (3D GRID FLIP)" PADA PERGANTIAN GAMBAR GALERI INFORMASI
 
 ### 1. Latar Belakang & Permintaan Pengguna:
 Pengguna meminta penambahan efek transisi visual **"Card Flip Transition (3D Grid Flip)"** pada setiap pergantian gambar dokumen/arsip pada halaman Galeri Informasi masjid. Efek ini bertujuan memberikan pengalaman visual modern, elegan, dan menarik perhatian jamaah saat layar TV display masjid menampilkan sertifikat atau pengumuman penting.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan:
 
@@ -4851,7 +8499,23 @@ Pengguna meminta penambahan efek transisi visual **"Card Flip Transition (3D Gri
    - Panel teks informasi di sisi kanan (`.slide-card`) dan bingkai poster kiri merespons secara harmonis dengan sedikit mengangkat (`flip-lifting`) selama proses flip berlangsung.
    - Titik-titik navigasi slide (*indicator dots*) kini bersifat interaktif (dapat diklik langsung) untuk menguji dan memicu efek 3D Grid Flip secara manual.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/slides/slide.html`: Mesin CSS 3D Grid Flip, markup kontainer ubin, dan fungsi `perform3DGridFlip()`.
@@ -4859,7 +8523,23 @@ Pengguna meminta penambahan efek transisi visual **"Card Flip Transition (3D Gri
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 119: PERBAIKAN TAMPILAN GAMBAR & DATA GALERI INFORMASI PADA TV DISPLAY SERTA SINKRONISASI CLOUD DATABASE SUPABASE
 
@@ -4890,7 +8570,23 @@ Pengguna melaporkan bahwa gambar galeri informasi tidak tampil di layar TV masji
 6. **Integrasi Pemuatan Galeri di Dashboard Admin (`admin.html`):**
    - Menambahkan pemuatan otomatis tabel `slides` pada fungsi `loadAllSupabaseData()` saat halaman admin dibuka.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 4. Berkas yang Diperbarui:
 1. `web-statis/slides/slide.html`: Markup awal default aktif, inline slides fallback, inisialisasi instan tanpa jeda, penanganan cerdas `handlePosterError()`, dan script tag versioning.
@@ -4901,7 +8597,23 @@ Pengguna melaporkan bahwa gambar galeri informasi tidak tampil di layar TV masji
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 120: PENERAPAN BORDERLESS FLOATING POSTER (TRANSPARANSI BINGKAI GAMBAR GALERI TV)
 
@@ -4922,7 +8634,23 @@ Pengguna meminta agar tampilan Galeri Informasi di TV display terlihat lebih rap
 4. **Pembaruan Cache-Buster Script (`?v=20260927_02`):**
    - Menaikkan versi query string pada `slide.html` agar Smart TV masjid langsung memuat CSS dan JavaScript versi teranyar tanpa tertahan oleh cache browser.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/slides/slide.html`: Transformasi `.poster-frame` menjadi borderless transparan, penambahan drop-shadow gambar, dan versioning script `v=20260927_02`.
@@ -4930,7 +8658,23 @@ Pengguna meminta agar tampilan Galeri Informasi di TV display terlihat lebih rap
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 121: PERBAIKAN PEMETAAN GAMBAR DOKUMEN GALERI, PENYELARASAN UPLOAD GAMBAR BASE64 CLOUD SUPABASE, DAN PENAMBAHAN MEDALI KALIGRAFI EMAS 3D HEADER TV
 
@@ -4978,7 +8722,23 @@ Pengguna meminta agar tampilan Galeri Informasi di TV display terlihat lebih rap
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 122: PENGHILANGAN KOTAK KAPSUL KATEGORI "GALERI INFORMASI" PADA KARTU DETAIL SLIDE TV DISPLAY
 
@@ -5002,7 +8762,23 @@ Pengguna meminta agar elemen kotak kapsul (*pill badge*) bertuliskan *"GALERI IN
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 123: REPOSISI MENU "REMOTE TV JARAK JAUH" KE BAGIAN PALING BAWAH SIDEBAR ADMIN
 
@@ -5022,7 +8798,23 @@ Pengguna meminta agar posisi menu *"Remote TV Jarak Jauh"* di sidebar dashboard 
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 124: PENJAJARAN KOTAK HITAM PETUGAS SHOLAT JUM'AT DENGAN KARTU DISPLAY TV DAN KHOTIB PADA DASHBOARD ADMIN
 
@@ -5056,7 +8848,23 @@ Sebelumnya, saat akun Takmir/Operator login, kartu-kartu keuangan (Kas Utama, Ka
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 125: PENYERAGAMAN UKURAN & REDESAIN ELEGAN 4 KOTAK STATUS DIAGNOSTIK REMOTE TV SERTA PENJELASAN PERBEDAAN RENDER URL
 
@@ -5089,7 +8897,23 @@ Sebelumnya, saat akun Takmir/Operator login, kartu-kartu keuangan (Kas Utama, Ka
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 126: OPTIMASI TRANSPARANSI TOTAL (BORDERLESS) & TEKS CENTER PADA SLIDE GALERI INFORMASI DISPLAY TV
 
@@ -5121,7 +8945,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 127: FITUR DUA OPSI TAMPILAN SURAT YAASIIN 83 AYAT (AUTOSWITCH) & PENGATURAN DURASI INDEPENDEN
 
@@ -5135,7 +8975,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
    - **Mekanisme Autoswitch Saling Mengunci (*Mutually Exclusive*):** Jika Opsi 1 dipilih/aktif maka otomatis Opsi 2 nonaktif, dan sebaliknya (tidak dapat aktif keduanya secara bersamaan).
    - **Durasi Pergantian Independen yang Dapat Diedit:** Durasi pergantian ayat/blok di Opsi 1 (misal 15–25 detik) dan durasi pergantian halaman di Opsi 2 (misal 90–150 detik) dapat diatur dan diedit secara bebas melalui panel Admin sesuai kecepatan imam/jamaah masjid.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Arsitektur & Logika Teknis yang Diterapkan:
 
@@ -5199,7 +9055,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
    - Tombol Spasi / Enter: Jeda / Lanjut (*Pause/Play*).
    - Tombol M: Pintasan keyboard untuk Autoswitch berganti mode.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Diperbarui:
 1. `web-statis/admin.html`:
@@ -5218,7 +9090,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\`: Sinkronisasi berkas lokal mandiri.
 8. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 128. SENTRALISASI PENUH PENGATURAN SURAT YAASIIN HANYA DI HALAMAN ADMIN & PEMBERSIHAN TOTAL FLOATING BAR PADA LAYAR DISPLAY TV (28 September 2026)
 
@@ -5232,7 +9120,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
   - Pengguna bertanya dan menyetujui: *"Apakah untuk setingan pilihan surat yasin bisa diatur di halaman admin saja?"* -> **"Ya"**.
   - **Keputusan Desain:** Seluruh konfigurasi (Opsi 1: 17 Blok Ayat vs Opsi 2: 6 Lembar Mushaf Madinah, serta durasi detik pergantian masing-masing) **100% diputuskan dan dikontrol terpusat oleh Takmir / Admin melalui Dashboard Pengaturan Admin**. Layar TV dijadikan penampil murni (*pure display presentation*) yang bersih, hening, dan megah.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Perubahan & Pembaruan Sistem:
 
@@ -5264,7 +9168,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
   - **Laravel Engine:** `resources/views/settings/edit.blade.php` (Admin) & `resources/views/yasin-embed.blade.php` (TV Display).
   - **Web Statis Engine:** `web-statis/admin.html` (Admin) & `web-statis/slides/yasin.html` (TV Display).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Terkait:
 1. `web-statis/slides/yasin.html`:
@@ -5281,7 +9201,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
    - Sinkronisasi folder mandiri lokal.
 7. Git Repository & Live Deployment Cloudflare Pages:
    - `https://digitalaljihad.my.id/`.
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 129. IMPLEMENTASI PUSAT AGENDA RUTIN MASJID (4 KEGIATAN MINGGUAN & DWI-MINGGUAN) DENGAN 1-CLICK DAY PICKER TAHSIN AL-QUR'AN PADA DASHBOARD PETUGAS & SLIDE TV DISPLAY (28 September 2026)
 
@@ -5302,7 +9238,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
     - Menyematkan widget pengingat & form pembaruan langsung di **Dashboard Petugas & Admin** pada sistem Laravel maupun Web Statis.
     - Merancang **Slide TV Full HD / 4K Khusus Agenda Rutin** (`/agenda-rutin-embed` & `slides/agenda-rutin.html`) yang secara otomatis mendeteksi hari ini dan memberikan pendaran lencana emas berdenyut (*pulsing gold badge*) **"HARI INI / MALAM INI"** saat kegiatan berlangsung.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Teknis & Arsitektur Implementasi:
 
@@ -5380,7 +9332,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
      - **Kotak 4:** Dari *"Kajian Tafsir Al-Qur'an Tematik"* menjadi `Kajian Umum` (baris 1) di bawahnya `Tafsir Al-Qur'an` (baris 2) (kata "Tematik" resmi dihilangkan).
    - Penataan judul menggunakan Flexbox column terpusat (`display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center !important;`) sehingga tampil seimbang, simetris, dan rapi di semua resolusi TV Digital.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dibuat & Dimodifikasi:
 1. `database/migrations/2026_09_28_004230_add_kegiatan_rutin_settings_to_app_settings.php` (BARU).
@@ -5398,7 +9366,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 13. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN).
 14. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🏛️ BAB 130: PENAMBAHAN MASTER PERSISTENT FOOTER COPYRIGHT 2026 & KONTROL EKSKLUSIF SUPER ADMIN
 
@@ -5406,7 +9390,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 - **Permintaan:** Menambahkan teks footer resmi copyright: `© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved` di **setiap halaman rotasi web display TV**, dan teks footer ini **hanya dapat diedit secara eksklusif dari dashboard Super Admin** (dikunci dari petugas/bendahara).
 - **Tantangan Arsitektur:** Layar TV menggunakan *Dual Iframe Crossfade Engine* di mana setiap slide memiliki konten dan running text ticker masing-masing. Footer harus persisten melintasi seluruh pergantian halaman tanpa berkedip (*flicker-free*) dan tanpa menutupi running text bawaan slide di dalam iframe.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Implementasi & Solusi Arsitektur
 
@@ -5452,7 +9452,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 3. **Database App Setting:**
    - Kolom `footer` pada database SQLite/MySQL `app_settings` telah diperbarui menjadi `"© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved"`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Terkait & Dimodifikasi:
 1. `web-statis/index.html` (DIMODIFIKASI - Menambahkan CSS `.master-display-footer`, markup persistent footer, `height: calc(100% - 24px)` pada `.iframe-container`, pemuatan `settings.footer`, dan sinkronisasi realtime).
@@ -5464,7 +9480,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (DISINKRONKAN OTOMATIS).
 8. Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🏛️ BAB 131: SISTEM TEKS BERJALAN KHUSUS TIAP HALAMAN ROTASI TV (MULTI-PAGE BROADCAST TICKER) & PENGHAPUSAN RUNNING TEXT GLOBAL
 
@@ -5475,7 +9507,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
   3. Teks berjalan umum (global) resmi **dihilangkan**.
   4. Model dan tipografi teks berjalan diubah menjadi tampak elegan, berkelas, dan profesional layaknya tampilan siaran televisi profesional (*broadcast news ticker*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Implementasi & Solusi Arsitektur
 
@@ -5494,7 +9542,23 @@ Sebelumnya, sisi kanan memiliki panel kartu besar berwarna hijau tua pekat (`.sl
    - Titik pemisah emas peluru (`•`) bercahaya (`text-shadow: 0 0 8px rgba(255,215,0,0.7)`).
    - Animasi linier ultra halus: `@keyframes tvTickerScroll { 0% { transform: translate3d(100vw, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 #### B. Integrasi Seluruh 19 Halaman Rotasi Display TV
 Setiap halaman rotasi kini memiliki badge tematik dan teks hadits/warta kontekstual khusus:
@@ -5518,7 +9582,23 @@ Setiap halaman rotasi kini memiliki badge tematik dan teks hadits/warta kontekst
 18. **Semarak Ramadhan & Tromol (`slides/ramadhan.html`):** `<i class="fas fa-star-and-crescent"></i> RAMADHAN` — Keutamaan puasa Ramadhan & laporan kas tromol tarawih harian.
 19. **Pengajian Rutin Malam Ahad (`slides/kajian.html`):** `<i class="fas fa-graduation-cap"></i> KAJIAN ILMU` — Warta kajian ta'lim ba'da maghrib, hadits menuntut ilmu, dan QR tanya jawab digital.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 #### C. Panel Pengaturan Baru di Admin Web Statis (`web-statis/admin.html`)
 1. **Penghapusan Form Teks Global:**
@@ -5535,7 +9615,23 @@ Setiap halaman rotasi kini memiliki badge tematik dan teks hadits/warta kontekst
    - Fungsi `simpanRunningText()` merangkum seluruh inputan 19 halaman ke dalam format JSON objek `running_text_pages` dan mengirimkan `PATCH` ke tabel `app_settings` Supabase ID 1.
    - Didukung tombol **"Buka / Tutup Semua Panel"** dan **"✨ Isi Seluruh Rekomendasi Hadits"** untuk efisiensi operator masjid.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi:
 1. `web-statis/js/supabase-db.js` (Menambahkan `DEFAULT_RUNNING_TEXTS` untuk ke-19 slide rotasi, memperbarui `getRunningTextForPage` agar membaca mapping tanpa fallback ke teks global monoton).
@@ -5567,7 +9663,23 @@ Setiap halaman rotasi kini memiliki badge tematik dan teks hadits/warta kontekst
 
 
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 132 — Reorder Sidebar Menu Admin & Sembunyikan Kolom Aksi Reorder untuk Petugas (28 Sep 2026)
 
@@ -5584,7 +9696,23 @@ Class eorder-col ditambahkan ke th header dan td baris tabel Rotasi TV. JS end
 4. Git Repository & Cloudflare Pages live: https://digitalaljihad.my.id/
 
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 133 — Fitur Edit Rekening Saluran Transfer Donasi via Panel Admin (28 Sep 2026)
 
@@ -5605,14 +9733,46 @@ Admin → Menu Infaq Donasi → Card `Pengaturan Rekening & Saluran Donasi` (kli
 4. Git push & Cloudflare Pages live
 
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 134 — Audit Komprehensif Arsitektur Kode, Keamanan, & Optimalisasi Performa Multi-Fase (Fase 1, 2, & 3) (28 Sep 2026)
 
 ### 1. Ringkasan Eksekutif
 Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lapisan arsitektur (backend Laravel, front-end display TV, panel admin, serta integrasi Supabase & PWA), telah dilaksanakan tindakan perbaikan menyeluruh yang terbagi ke dalam 3 fase strategis:
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Fase 1: Keamanan Login, Sanitasi XSS, & Stabilitas Resiliensi Offline
 1. **Keamanan Login (web-statis/login.html):**
@@ -5633,7 +9793,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 5. **Safe Parsing Jadwal Sholat (web-statis/js/prayer-engine.js):**
    - Menambahkan pengamanan null-coalescing pada item.waktu (typeof item.waktu === 'string') agar waktu sholat tidak melempar *TypeError: substring of undefined* saat terjadi keterlambatan sinkronisasi API Kemenag / Falakiyah NU.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Fase 2: Optimalisasi Kinerja & Responsivitas (Speed & Concurrency)
 1. **Paralelisasi Fetch Data Admin (web-statis/admin.html):**
@@ -5654,7 +9830,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. **Cache-Busting Query String (web-statis/index.html):**
    - Menambahkan parameter versi ?v=3.0.6 pada tag CSS (display-theme.css, partials-theme.css) dan skrip inti (supabase-config.js, supabase-db.js, prayer-engine.js) guna memastikan browser TV dan Cloudflare CDN selalu memuat berkas logika terbaru tanpa tersangkut cache lama.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 4. Fase 3: Clean Code & Dead Code Elimination
 1. **Pembersihan Aset Duplikat (Dead Directory):**
@@ -5665,7 +9857,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. **Perbaikan Fallback Gambar Ikon (web-statis/slides/idul-adha.html & idul-fitri.html):**
    - Mengalihkan dan mengamankan penanganan onerror gambar ikon hewan qurban, bedug, ketupat, dan foto imam agar menggunakan handler aman tanpa merujuk ke folder assets/ yang sudah dihapus.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 5. Berkas yang Terkait dalam Pembaruan Ini
 1. web-statis/login.html (MODIFIKASI - Penghapusan hardcoded credentials form login).
@@ -5686,7 +9894,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 16. LATEST_UPDATE.md (DIMODIFIKASI - Dokumentasi Bab 134).
 17. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
 18. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 135 — Redesain Splash Screen TV: Shimmering Gold Typography & Eliminasi Kotak Kapsul Loading (28 Sep 2026)
 
@@ -5695,7 +9919,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 - Kotak kapsul lonjong bertuliskan "MEMUAT DATA SUPABASE..." dirasa terlalu teknis dan kurang sesuai dengan estetika sakral dan agung sebuah rumah ibadah.
 - Pengguna meminta agar teks di bawah logo diberi animasi berkelas yang memukau, serta kotak kapsul dan teksnya dihilangkan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi Desain & Eksekusi Mewah (Luxury Mosque Edition)
 1. **Eliminasi Kotak Kapsul Loading:**
@@ -5714,7 +9954,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 5. **Pembaruan Versi Cache (v3.0.7):**
    - Menaikkan versi cache PWA Service Worker (web-statis/sw.js) dan query parameter skrip/stylesheet di web-statis/index.html menjadi ?v=3.0.7 agar browser TV langsung memperbarui tampilan tanpa tertahan cache lama.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. web-statis/index.html (CSS splash screen baru, struktur HTML splash baru, bump versi ?v=3.0.7).
@@ -5722,7 +9978,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. LATEST_UPDATE.md (Dokumentasi Bab 135).
 4. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
 5. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 136 — Perapian Tata Letak Grid Simetris Header "Waktu Sholat Hari Ini" di Panel Admin (28 Sep 2026)
 
@@ -5730,7 +10002,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 - Pada card header **"Waktu Sholat Hari Ini"** di panel admin, elemen dropdown lembaga hisab, tombol sinkronisasi Kemenag RI & Falakiyah NU, serta dropdown kota sebelumnya menggunakan pembungkus d-flex flex-wrap justify-content-between.
 - Pada resolusi layar standar (laptop atau tablet), elemen-elemen tersebut membungkus (*wrap*) secara tidak simetris: tombol sinkronisasi bertumpuk vertikal di kanan atas, dropdown lembaga hisab jatuh ke kiri bawah, dan dropdown kota melorot sendirian di pojok kanan bawah, menciptakan tampilan yang asimetris dan kurang profesional.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perbaikan Tata Letak Simetris (Symmetrical Grid Edition)
 1. **Header Card Bersih & Proporsional:**
@@ -5750,7 +10038,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 4. **Penambahan Event Handler Kota Otomatis (handleCityChange):**
    - Menambahkan fungsi JavaScript handleCityChange(cityId) yang langsung menyimpan ID dan nama kota ke localStorage, memperbarui teks badge adgeKemenagCity, dan otomatis menarik jadwal hisab terkini sesuai lembaga hisab yang aktif.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. web-statis/admin.html (Redesain HTML card header waktu sholat ke grid simetris 2 kolom & penambahan fungsi handleCityChange).
@@ -5758,7 +10062,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. C:\Users\anthu\Documents\【Digital WebSTATIS】\ (DISINKRONKAN OTOMATIS).
 4. Git Repository & Live Deployment Cloudflare Pages: https://digitalaljihad.my.id/.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 137 — Perbaikan Sinkronisasi Rekening Saluran Donasi Infaq (Supabase JSON/Cloud & LocalStorage) & Pembaruan Footer Resmi Graha Asri (28 Sep 2026)
 
@@ -5770,7 +10090,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 2. **Penyelarasan Teks Footer Hak Cipta Display TV:**
    - Permintaan penambahan teks `(GRAHA ASRI)` pada footer resmi display TV: dari `"© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved"` menjadi `"© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved"` di seluruh komponen (Blade views, display TV, panel admin, dan database cloud).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perbaikan Komprehensif
 1. **Penyimpanan Rekening Dinamis via Kolom `running_text_pages` di Supabase:**
@@ -5791,7 +10127,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
    - `resources/views/rotator.blade.php`, `resources/views/rotator-outdoor.blade.php`, `resources/views/settings/edit.blade.php`: Fallback Blade view diperbarui ke `(GRAHA ASRI)`.
    - Database Supabase `app_settings` (ID 1) kolom `footer` telah diperbarui secara langsung menjadi `"© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved"`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Perbaikan `simpanRekeningInfaq()`, `loadRekeningInfaqToForm()`, penambahan `oninput="updateRekeningPreview()"`, pembaruan footer Graha Asri).
@@ -5804,7 +10156,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 8. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 9. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 138 — Redesain Total Tata Letak Panel Jadwal Sholat: Memisahkan Header Card & Kontrol Sinkronisasi Hisab (28 Sep 2026)
 
@@ -5813,7 +10181,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 - Karena `.content-card-header` di CSS memiliki aturan baku `display: flex; flex-direction: row; justify-content: space-between;`, browser memaksa judul, dropdown hisab, dropdown kota, dan kedua tombol sinkronisasi berjejer horizontal dalam satu baris sempit.
 - Akibatnya, seluruh elemen menciut dan teksnya terpotong menjadi *"Fc"* (Falakiyah), *"Kc"* (Kab. Bekasi), *"Kemen RI"*, dan *"Falakiy NU"*, sangat berantakan, menumpuk, dan membingungkan operator masjid saat hendak mengatur jadwal sholat.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Desain Ergonomis Baru (Dedicated Hisab Control Panel)
 1. **Restorasi Kemurnian Header Card (`.content-card-header`):**
@@ -5833,7 +10217,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. **Panel Status Sumber Aktif Terintegrasi:**
    - Panel alert sumber aktif diletakkan di bawah kontrol hisab, menampilkan lembaga aktif, kota terpilih, dan status tanggal sinkronisasi terkini secara proporsional.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Restorasi header card waktu sholat & pemindahan kontrol hisab ke panel terpisah di card body).
@@ -5841,7 +10241,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 139 — Penambahan Medali Kaligrafi Arab Emas 3D Nabi Muhammad ﷺ & Lafadz Allah ﷻ pada Layar Mode Sholat (Prayer Mode) (28 Sep 2026)
 
@@ -5849,7 +10265,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 - Pada halaman **Prayer Mode** (layar hitung mundur menjelang sholat / adzan / iqamah), pengguna menginginkan ditampilkannya kaligrafi Arab sakral di sisi kanan dan kiri layar.
 - **Ketentuan Khusus:** Header nama masjid di bagian tengah atas (`MASJID JAMI' AL JIHAD` beserta ornamen kubah masjid) **tidak boleh diubah/diganti**.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Desain Visual yang Diterapkan
 1. **Medali Kaligrafi Arab Emas 3D Simetris & Sakral:**
@@ -5863,7 +10295,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 3. **Responsif Multi-Layar TV & Monitor:**
    - Diatur dengan breakpoint `@media (max-width: 1400px)`, `(max-width: 1024px)`, dan `(max-width: 768px)` agar ukuran medali mengecil secara proporsional dan tidak pernah menabrak teks judul masjid di perangkat resolusi berapapun.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/prayer-mode.html` (Penambahan CSS animasi dan elemen medali kaligrafi Arab 3D di kiri dan kanan).
@@ -5873,7 +10321,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 140 — Peningkatan Visibilitas Gambar Ka'bah & Penghapusan Footer Duplikat di Belakang Master Footer Emas pada Halaman Prayer Mode (28 Sep 2026)
 
@@ -5885,7 +10349,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
    - Terdapat teks footer bawaan `prayer-mode.html` bertuliskan `"© MASJID JAMI' AL-JIHAD"` di bagian bawah yang bertabrakan dan berada tepat di belakang master display footer emas (`© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). ALL RIGHTS RESERVED`).
    - Pengguna meminta untuk menghilangkan footer `"MASJID JAMI' AL-JIHAD"` tersebut.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perbaikan yang Diterapkan
 1. **Peningkatan Kualitas & Visibilitas Gambar Ka'bah (`.bg-kaabah`):**
@@ -5898,7 +10378,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
    - Memperbarui skrip inisialisasi agar *null-safe* terhadap elemen `masjidFooter`.
    - Sekarang hanya satu master footer emas resmi di bagian bawah layar yang tampil bersih dan elegan tanpa tumpang tindih teks lagi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/prayer-mode.html` (Peningkatan styling `.bg-kaabah`, penghapusan `#masjidFooter`, CSS & JS null-safe).
@@ -5908,7 +10404,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 141 — Pemasangan Engine Anti-Idle & Screen Keep-Awake 24 Jam Nonstop Menggunakan HTML5 Screen Wake Lock API & Smart Fallback Looper (28 Sep 2026)
 
@@ -5917,7 +10429,23 @@ Berdasarkan tinjauan mendalam (*comprehensive code review*) terhadap seluruh lap
 - Meskipun rotasi slide TV berjalan lancar via JavaScript, sistem operasi perangkat (Windows PC, Android TV Box, Linux, Smart TV OS) tidak menganggap perpindahan slide atau animasi CSS sebagai interaksi fisik pengguna.
 - Akibatnya, pada perangkat yang memiliki kebijakan daya bawaan (*Power & Sleep / Screensaver*), layar TV bisa otomatis meredup (*dim*), mengaktifkan screensaver, atau mati masuk mode standby/sleep setelah 10-30 menit tanpa aktivitas remote.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Arsitektur Engine Anti-Idle yang Dibangun
 Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis perlindungan:
@@ -5932,7 +10460,23 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
 5. **Heartbeat Monitoring Berkala (Tiap 30 Detik):**
    - Skrip secara rutin memastikan bahwa status Wake Lock tetap aktif saat halaman berada di latar depan (*foreground*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi & Ditambahkan
 1. `web-statis/js/anti-idle.js` (Modul engine utama Anti-Idle untuk web statis).
@@ -5948,7 +10492,23 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
 11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 142 — Pembaruan Halaman Kas Ambulance: Penghapusan Kapsul Hotline Siaga & Penggantian Ikon Judul dengan Animasi Ambulance.gif (28 Sep 2026)
 
@@ -5957,7 +10517,23 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
   1. Menghilangkan kotak kapsul merah hotline siaga beserta teks di dalamnya: `"SIAGA 24 JAM: 0877-5876-7000"`.
   2. Mengganti ikon ambulance FontAwesome sebelumnya (`<i class="fas fa-ambulance"></i>`) di sebelah teks *"Laporan Kas Mobil Ambulance"* dengan berkas animasi **`Ambulance.gif`** yang telah disediakan di folder `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penempatan & Replikasi Berkas Aset:**
@@ -5972,7 +10548,23 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
    - Mengganti ikon di `ambulance-embed.blade.php` dengan `<img src="{{ asset('img/Ambulance.gif') }}" ...>`.
    - Menambahkan aturan CSS `.keuangan-title .ambulance-gif-icon` dengan dimensi proporsional (`height: 38px; width: auto; max-width: 52px;`) serta drop-shadow pendaran emas lembut agar serasi dan harmonis dengan tema kartu hijau zamrud-emas.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi & Ditambahkan
 1. `web-statis/img/Ambulance.gif` (Aset gambar animasi baru).
@@ -5983,7 +10575,23 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 143 — Penambahan Mode Pratinjau Mandiri (Standalone Preview Toolbar) & Panduan Lokasi Halaman Prayer Mode (28 Sep 2026)
 
@@ -5993,7 +10601,23 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
   - File `web-statis/prayer-mode.html` memiliki logika proteksi: jika jam saat ini bukan waktu sholat fardhu (`!state.active`), script otomatis menjalankan `window.location.href = 'index.html'`.
   - Akibatnya, saat operator/pengguna mencoba membuka file `prayer-mode.html` di browser pada jam-jam biasa, halaman seketika terlempar (*auto-redirect*) kembali ke slide display utama, sehingga tampilan Prayer Mode tidak bisa diinspeksi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Dukungan Pratinjau Mandiri (*Standalone & URL Preview Mode*):**
@@ -6014,7 +10638,23 @@ Diciptakan modul independen berkinerja tinggi **`anti-idle.js`** dengan 3 lapis 
 5. **Penyelarasan File Demo:**
    - Menyelaraskan `public/preview-prayer-mode.html` dengan salinan `web-statis/prayer-mode.html` terbaru.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Panduan Lokasi Halaman Prayer Mode
 Halaman Mode Sholat kini dapat diakses melalui:
@@ -6029,7 +10669,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 5. **Otomatis pada Display TV Utama:**
    - Muncul otomatis di layar penuh saat jam dinding masjid memasuki waktu sholat (Subuh, Dzuhur, Ashar, Maghrib, Isya, dan Jum'at).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 4. Berkas yang Dimodifikasi & Ditambahkan
 1. `web-statis/prayer-mode.html` (Penambahan CSS Toolbar Pratinjau, logika deteksi standalone, simulasi pergantian fase interaktif).
@@ -6038,7 +10694,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 144 — Efek Denyut Halus & Pendaran Aura Keemasan pada Kotak Kapsul Sholat (Prayer Badge) (28 Sep 2026)
 
@@ -6047,7 +10719,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
   1. **Efek denyut halus (*smooth breathing pulse*)** agar kapsul terasa hidup dan anggun.
   2. **Efek keemasan yang memancar di pinggiran kotak kapsulnya (*radiant golden outer halo & glow*)**.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Animasi Denyut Organik (`@keyframes prayerBadgeGoldenPulse`):**
@@ -6065,7 +10753,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Diterapkan pada `public/preview-prayer-mode.html` (Pratinjau Publik).
    - Diterapkan pada `resources/views/prayer-mode.blade.php` (Blade Laravel).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi & Ditambahkan
 1. `web-statis/prayer-mode.html` (Penambahan CSS denyut emas dan pendaran aura pinggiran).
@@ -6075,7 +10779,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 145 — Panduan Simpan Kajian Malam Ahad & Pemindahan Tombol Simpan Agenda ke Bawah Rekap (28 Sep 2026)
 
@@ -6084,7 +10804,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 - **Pertanyaan 2:** Tombol *"Terapkan Preset 5 Pekan DKM"* di kanan atas untuk apa?
 - **Permintaan Penataan Posisi:** Karena halaman panjang, pengguna meminta tombol menu *"Simpan Agenda 1 Bulan"* dipindahkan ke **bawahnya kotak "Rekap Kajian Bulan Ini"** dan sejajar dengan kolom isian/formulir di sebelah kiri agar mudah dilihat dan tidak membingungkan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penjelasan Mekanisme Penyimpanan:**
@@ -6098,7 +10834,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. **Penjelasan Fungsi *"Terapkan Preset 5 Pekan DKM"*:**
    - Tombol jalan pintas 1-klik untuk memasukkan kurikulum silabus kajian rutin Sabtu malam Masjid Jami' Al-Jihad selama 5 pekan sekaligus (Pekan 1: Kitab Bidayatul Hidayah / Ust. Ahmad Sholeh; Pekan 2: Tafsir Ibnu Katsir / Ust. Dr. Faisal; Pekan 3: Kitab Al-Adab Al-Mufrad / Ust. M. Syahrul Ramadhan; Pekan 4: Kitab Riyadhus Shalihin / Ust. Ahmad Sholeh; Pekan 5: Kajian Tematik Sirah Nabawiyah & Muamalah Kontemporer / Dai Tamu DKM).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Reposisi tombol Simpan Agenda 1 Bulan ke bawah kotak Rekap Kajian Bulan Ini sejajar form kiri).
@@ -6106,7 +10858,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 146 — Integrasi Panduan Pengoperasian Lengkap & Pembaruan Sistem v5.5.0 ke Menu "Tentang & Panduan" (28 Sep 2026)
 
@@ -6117,7 +10885,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
   - Riwayat changelog pada timeline masih terhenti di versi `v5.1.0` (Bab 85).
   - Seluruh modul mutakhir yang telah dibangun (Bab 86 s/d Bab 145) seperti **Pusat Agenda Rutin (4 Pilar Dakwah)**, **Jadwal Sholat & Durasi Falakiyah NU/Kemenag**, **Semarak Ramadhan & Kas Tromol Tarawih**, **Program Infaq & Donasi Khusus Multi-Program**, **Buku Kas & Transaksi Realtime**, serta **Kajian Malam Ahad 1 Bulan Penuh** belum tercakup dalam halaman panduan resmi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembaruan Menyeluruh Bagian 6: Panduan Pengoperasian Sistem (`#guideAccordion` & `#usageGuide`):**
@@ -6134,7 +10918,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Memperbarui badge versi di header hero `about.html` dan `about.blade.php` menjadi **`v5.5.0 (Rilis Terkini)`**.
    - Menambahkan entri rilis terkini pada Bagian 7: Timeline Riwayat Pembaruan Sistem yang merangkum pencapaian besar Bab 110 hingga 146.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/about.html` (Pembaruan lengkap 8 panduan modul operasional, badge v5.5.0, dan timeline riwayat mutakhir).
@@ -6143,7 +10943,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 147 — Pembaruan Badge Kapsul Header: "SMART Full Auto Self-Running", "IoT Remote Access", & Versi Terkini v5.5.0 (29 Sep 2026)
 
@@ -6152,7 +10968,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 - Menambahkan kotak kapsul baru yang berisi teks dan ikon `"Internet of Things (IoT) Remote Access"` (`<i class="fas fa-wifi"></i>`).
 - Memastikan seluruh kotak kapsul dan badge versi di header menampilkan versi terbaru (`v5.5.0` & `Versi 5.5.0 (Rilis Terkini)`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembaruan Badge Kapsul Header di `web-statis/about.html` & `resources/views/about.blade.php`:**
@@ -6163,7 +10995,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Diterapkan pada `web-statis/about.html` (Web Statis Cloudflare Pages).
    - Diterapkan pada `resources/views/about.blade.php` (Blade Laravel).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/about.html` (Penggantian badge "SMART Full Auto Self-Running" dan penambahan badge "IoT Remote Access").
@@ -6172,7 +11020,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 148 — Penyesuaian Catatan Sejarah Versi 5.0.0 pada Riwayat Pembaruan Sistem (29 Sep 2026)
 
@@ -6181,14 +11045,46 @@ Halaman Mode Sholat kini dapat diakses melalui:
   - **Sebelumnya:** *"Migrasi arsitektur total dari PHP Laravel ke Web Statis Modern. Waktu build terpangkas dari 8 menit menjadi 15 detik, nol cold-start, dan ketahanan offline penuh jika Wi-Fi masjid terputus."*
   - **Menjadi:** *"Migrasi total arsitektur, dari PHP-Laravel-MySQL (yang sangat merepotkan dalam proses deploy dan mencari hosting) ke Web Statis Modern. Waktu build terpangkas dari 8 menit menjadi 15 detik, nol cold-start, dan ketahanan offline penuh jika Wi-Fi masjid terputus."*
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembaruan Deskripsi Riwayat Versi 5.0.0:**
    - Diterapkan pada `web-statis/about.html` pada elemen `.timeline-item` Versi 5.0.0.
    - Diterapkan pada `resources/views/about.blade.php` untuk keselarasan penuh.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/about.html` (Pembaruan teks narasi Versi 5.0.0).
@@ -6197,14 +11093,46 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 149 — Pembaruan Kolom Jam Mulai Kajian Malam Ahad ke Format 24 Jam (24H WIB) (29 Sep 2026)
 
 ### 1. Kebutuhan Pengguna
 - Pada halaman Pengaturan **Pengajian Rutin Malam Ahad (1 Bulan Penuh)** di panel Admin (`web-statis/admin.html`), mengganti kolom input **"Jam Mulai (WIB)"** dari model bawaan browser AM/PM (yang sebelumnya menampilkan contoh `06:25 PM` dengan ikon jam bawaan OS) menjadi model **"24H"** (contoh: `18:25`) agar lebih intuitif, ramah operasional, dan mudah dipahami oleh petugas masjid di Indonesia tanpa kebingungan format waktu.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembaruan Struktur UI Input Jam di `web-statis/admin.html`:**
@@ -6227,7 +11155,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. **Kompatibilitas Penuh dengan Mesin Sholat (`prayer-engine.js`):**
    - Nilai waktu tetap tersimpan dalam format standar `HH:MM` (misalnya `18:25`), sehingga kompatibilitas dengan fungsi penghitung durasi tayang otomatis `isKajianSabtuActive()` di `prayer-engine.js` berjalan 100% mulus tanpa risiko galat.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Penggantian model input jam dari AM/PM ke format 24H, penambahan dropdown presets cepat, dan fungsi validasi waktu 24 jam).
@@ -6235,7 +11179,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 150 — Perbaikan Tombol "Simpan Agenda 1 Bulan" Kajian Malam Ahad & Penambahan State Interaktif (29 Sep 2026)
 
@@ -6246,7 +11206,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
   2. Validasi `hasValidEntry` sebelumnya mewajibkan kedua field `ustadz_nama` dan `tema_kajian` terisi secara kaku. Jika petugas hanya mengisi judul Kitab Rujukan (misalnya `Tafsir Al Qur'an` atau `Kitab Safinatunnajah`) tanpa menuliskan tema terpisah, data tidak lolos simpan.
   3. Belum adanya *loading state* (indikator putar/spinner) saat tombol diklik.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perbaikan yang Diterapkan
 1. **Deklarasi Variabel Global `NAMA_BULAN_INDONESIA`:**
@@ -6261,7 +11237,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. **Bungkus Error Handling Komprehensif (`try-catch-finally`):**
    - Seluruh alur fungsi `simpanKajianSabtu()` dibungkus secara menyeluruh dengan penanganan pesan error yang informatif jika terjadi kegagalan jaringan atau parsing data.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Deklarasi `NAMA_BULAN_INDONESIA`, perbaikan `simpanKajianSabtu`, penambahan ID `btnSimpanKajian`, dan penanganan loading state).
@@ -6269,7 +11261,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal otomatis).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 151 — Perbaikan Kerusakan Layout Tampilan Display TV Kajian Malam Ahad (`slides/kajian.html`) (29 Sep 2026)
 
@@ -6281,7 +11289,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
   - Akibat potongan tag ini, 4 tag penutup `</div>` penting (`right-icon`, `title-with-icons`, `schedule-header-section`, dan `header`) hilang/tidak tertutup.
   - Hal ini menyebabkan seluruh grid utama (`.kajian-main-layout`) serta strip timeline 5 pekan (`.kajian-timeline-container`) terkurung masuk ke dalam badge ikon header yang memiliki properti `inline-flex` dan `border-radius: 35px`. Akibatnya, seluruh layout kartu kolaps, memanjang secara tidak wajar, dan bertumpukan menutupi header masjid.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perbaikan yang Diterapkan
 1. **Restorasi Tag Header & Ikon FontAwesome:**
@@ -6297,7 +11321,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Menyalin berkas perbaikan ke folder lokal `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\kajian.html`.
    - Melakukan commit dan push ke GitHub `main` agar perbaikan langsung aktif di Cloudflare Pages `https://digitalaljihad.my.id/slides/kajian.html`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/slides/kajian.html` (Perbaikan tag penutup header dan sintaks fontawesome icon).
@@ -6305,7 +11345,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 4. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 152 — Implementasi Tombol "Ambil Jadwal Pekan Ini" & Sinkronisasi Otomatis Kajian Malam Ahad ke Pusat Agenda Rutin (29 Sep 2026)
 
@@ -6313,7 +11369,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 - Petugas/Operator masjid yang telah selesai mengisi jadwal Kajian Malam Ahad 1 Bulan Penuh (Pekan 1 s/d Pekan 5) di menu **Kajian Malam Ahad** mendapati bahwa kotak nomor 2 (*Kajian Malam Ahad*) di menu **Pusat Agenda Rutin** isinya tidak berubah dan masih berupa data contoh / teks lama.
 - Kondisi ini menimbulkan kebingungan bagi operator karena data harus diketik ulang dua kali di dua menu yang berbeda.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Fitur Baru yang Diterapkan
 1. **Fitur Sinkronisasi Otomatis Dua Arah (`syncKajianPekanIniKeAgendaRutin`):**
@@ -6329,7 +11401,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 3. **Badge Status Sinkronisasi Real-Time:**
    - Menambahkan kotak status di bawah input: `Tersinkronisasi dari Pekan X (Tanggal): Nama Ustadz` sehingga operator selalu mengetahui dengan pasti dari pekan mana data tersebut diambil.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Penambahan tombol *Ambil Jadwal Pekan Ini*, fungsi `syncKajianPekanIniKeAgendaRutin`, integrasi auto-sync di `simpanKajianSabtu`, dan status indikator di `loadAgendaRutinAdmin`).
@@ -6338,7 +11426,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 5. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 153 — Penyempurnaan Kontras Tipografi Header Nama Masjid: Hijau Zamrud Pekat (#064e3b) dengan Hairline Outline 1 pt Kuning Emas (#FFD700) (29 Sep 2026)
 
@@ -6347,7 +11451,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 - Pada foto tersebut, teks judul header **"MASJID JAMI' AL-JIHAD"** tampak kurang tegas dan silau/berbaur karena tepat di belakang tulisan terdapat pendaran awan terang (*sunburst flare/halo*) dari latar belakang Ka'bah Masjidil Haram dan pantulan cahaya pendaran medali kaligrafi emas.
 - Pengguna meminta agar warna font judul header **"MASJID JAMI' ALJIHAD"** diubah menjadi **warna hijau zamrud yang pekat (*deep emerald green*)** dipadukan dengan **Hairline Outline 1 pt warna kuning emas (*gold*)** agar kontras, tajam, dan sangat mudah terbaca dari jarak jamaah (5–15 meter).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan Teknis yang Diterapkan
 1. **Pewarnaan Font Hijau Zamrud Pekat (*Deep Emerald Green*):**
@@ -6367,7 +11487,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Memperbarui query parameter berkas CSS menjadi `?v=3.0.8` pada `web-statis/index.html` dan `web-statis/slides/utama.html`.
    - Menaikkan versi cache PWA pada `web-statis/sw.js` menjadi `aljihad-signage-v3.0.8` agar browser TV langsung mengambil berkas CSS terbaru tanpa terhambat cache browser.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/css/partials-theme.css` (Pembaruan aturan `.header h1, .header-section h1, #nama-masjid` desktop dan mobile).
@@ -6383,7 +11519,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 154 — Efek Transisi Antar Halaman Layar TV (Fade-Out Lembut & Fade-In Meluncur Halus dari Samping) dan Penyesuaian Kecepatan Running Text (29 Sep 2026)
 
@@ -6395,7 +11547,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Kecepatan teks berjalan sebelumnya dirasa agak terlalu cepat bagi jamaah masjid untuk membaca ayat, hadits, maupun maklumat pengumuman secara tuntas.
    - Pengguna meminta agar kecepatan teks berjalan sedikit dikurangi (*slowed down*) agar nyaman dan mudah dibaca oleh jamaah dari kejauhan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan Teknis yang Diterapkan
 1. **Arsitektur Dual-Iframe Transition Engine (Fade Out Lembut & Slide Fade In Samping):**
@@ -6427,7 +11595,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
      - Blade partials: `resources/views/partials/display-theme.blade.php` dan `resources/views/live-stream.blade.php`.
      - Seluruh berkas slide mandiri TV: `ambulance.html`, `hikmah.html`, `idul-adha.html`, `idul-fitri.html`, `infaq.html`, `jumat.html`, `keuangan.html`, `keuangan-summary.html`, `live-madinah.html`, `live-mekah.html`, `live-mimbar.html`, `pengumuman.html`, `qris.html`, `qurban.html`, `slide.html`, dan `utama.html`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/index.html` (CSS transisi `iframe.incoming`, `iframe.active`, `iframe.outgoing` dan logika `switchSlide` & `jumpToSlideUrl`).
@@ -6441,7 +11625,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 9. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 10. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 155 — Peningkatan Ketebalan Outline Header Emas (2.5 pt) & Pembaruan Teks Sub-Header Menjadi "SISTEM INFORMASI DIGITAL" (29 Sep 2026)
 
@@ -6453,7 +11653,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Pada slide Jadwal Sholat Utama (`slides/utama.html`), teks sub-header masih bertuliskan **"Graha Asri, Cikarang Utara, Bekasi"**.
    - Pengguna meminta teks tersebut diseragamkan menjadi **"SISTEM INFORMASI DIGITAL"** sebagaimana telah digunakan pada slide-slide informasi lainnya.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan Teknis yang Diterapkan
 1. **Peningkatan Ketebalan Outline Header Kuning Emas (2.5 pt & Golden Glow):**
@@ -6476,7 +11692,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
    - Menaikkan query version CSS menjadi `?v=3.0.9` pada `web-statis/index.html` dan `web-statis/slides/utama.html`.
    - Menaikkan versi cache PWA pada `web-statis/sw.js` menjadi `aljihad-signage-v3.0.9`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/css/display-theme.css` (Peningkatan stroke outline menjadi 2.5pt dan penambahan glow emas).
@@ -6493,7 +11725,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 12. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi lokal mandiri).
 13. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## Bab 156 - Investigasi Mendalam & Perbaikan Total Masalah Rotasi Slide TV yang Terhenti (29 Sep 2026)
 
@@ -6548,7 +11796,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi berkas lokal).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 157: PERBAIKAN SINKRONISASI INTERVAL DURASI ROTASI TV (5 DETIK), PENYELESAIAN DUPLIKASI INPUT ADMIN, REALTIME BROADCAST, DAN PEMBERSIHAN BARIS SUPABASE
 
@@ -6556,7 +11820,23 @@ Halaman Mode Sholat kini dapat diakses melalui:
 - **Laporan Pengguna:** Pengguna mengatur "Interval Rotasi Halaman TV" menjadi **5 detik** di panel admin dan notifikasi sukses menyimpan muncul, namun secara aktual durasi tayang setiap slide di layar TV tetap berdurasi 10 detik atau mengalami jeda awal 10 detik sebelum mengadopsi konfigurasi baru.
 - **Dampak:** Pengguna merasa pengaturan interval tidak efektif atau diabaikan oleh sistem tampilan TV.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Analisis & Akar Masalah (Root Causes)
 Melalui audit menyeluruh pada berkas antarmuka TV (`web-statis/index.html`), panel admin (`web-statis/admin.html`), basis data Supabase, dan pengujian DevTools CDP, ditemukan 5 akar masalah:
@@ -6589,7 +11869,23 @@ Melalui audit menyeluruh pada berkas antarmuka TV (`web-statis/index.html`), pan
 5. **Ketiadaan Sinyal Siaran Jarak Jauh (*Instant Remote Broadcast*):**
    - Sebelumnya, tombol simpan hanya mengandalkan pembaruan tabel REST API Supabase. Display TV harus menunggu siklus polling atau event stream tanpa pemaksaan eksekusi instan di level runtime TV.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Rincian Solusi & Perbaikan Komprehensif
 
@@ -6655,7 +11951,23 @@ Melalui audit menyeluruh pada berkas antarmuka TV (`web-statis/index.html`), pan
 7. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.1` agar browser TV segera memperbarui skrip dan aset teranyar.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 4. Hasil Verifikasi Nyata (CDP Automation)
 Pengujian durasi rotasi dilakukan langsung pada instance browser display TV (`scratch/poll_slide_switches.js`):
@@ -6664,7 +11976,23 @@ Pengujian durasi rotasi dilakukan langsung pada instance browser display TV (`sc
 - **Slide 3 (`slides/keuangan-summary.html`) ➔ Slide 4 (`slides/qris.html`):** Berganti tepat dalam **5,0 detik**.
 - Seluruh pergantian slide kini terbukti akurat, presisi, dan stabil pada durasi 5 detik sesuai pengaturan pengguna.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 5. Berkas yang Dimodifikasi
 1. `web-statis/index.html` (Inisialisasi sinkron 0 ms dari localStorage, immediate reschedule pada Realtime listener, handler `UPDATE_SETTINGS`).
@@ -6675,7 +12003,23 @@ Pengujian durasi rotasi dilakukan langsung pada instance browser display TV (`sc
 6. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi berkas lokal otomatis).
 7. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 158: INVESTIGASI MENDALAM & PERBAIKAN PERSISTENSI ROTASI TV DI INCOGNITO WINDOW: ELIMINASI ERROR PGRST204 SUPABASE, TOMBOL SIMPAN & AUTO-SAVE DEBOUNCED DURASI TV, SERTA SANITASI SKEMA BODY API
 
@@ -6683,7 +12027,23 @@ Pengujian durasi rotasi dilakukan langsung pada instance browser display TV (`sc
 - **Laporan Pengguna:** Saat dilakukan pengujian di **jendela penyamaran (*Incognito / InPrivate window*)**, nilai durasi rotasi di dashboard admin disetel ke **10 detik**. Namun hasilnya, halaman TV display tetap berputar pada durasi **5 detik** (seperti konfigurasi sebelumnya). Padahal seharusnya, durasi rotasi halaman TV wajib patuh secara presisi mengikuti nilai durasi yang sudah disetel oleh operator di dashboard.
 - **Tingkat Urgensi:** Kritis (*High Priority*) – Inkonsistensi antara tampilan dashboard dan tampilan TV display di lingkungan tanpa cache (*clean state*) mengindikasikan kegagalan persistensi data ke database cloud.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Investigasi Mendalam Senior DevOps (Root Cause Analysis - 300 Tahun Standar Keandalan)
 Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan inspeksi skema tabel database Supabase, ditemukan 3 akar masalah fundamental:
@@ -6714,7 +12074,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 3. **Inisialisasi Nilai Default Tertinggal (5 Detik) di Form Cadangan (`cfgIntervalTVSystem`):**
    - Form input `cfgIntervalTVSystem` di Pengaturan Sistem masih memiliki `value="5"`. Jika form ini di-submit, nilai 5 detik berpotensi menimpa nilai 10 detik yang disetel di kartu utama.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Solusi & Rekayasa Arsitektur yang Diterapkan
 
@@ -6758,7 +12134,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 6. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.2` agar seluruh browser klien dan display TV langsung melakukan invalidasi cache lama dan menggunakan skrip terbaru.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 4. Hasil Verifikasi Nyata (Live Cloud API Testing)
 - Pengujian eksekusi PATCH REST API langsung ke Supabase `https://xskusfacwsclbgdtgier.supabase.co/rest/v1/app_settings?id=eq.1`:
@@ -6769,7 +12161,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
     - Baris `id: 3` ➔ `rotation_interval: 10`
 - Setiap instance baru, termasuk Incognito window dengan storage kosong, kini dijamin 100% membaca nilai `rotation_interval: 10` dari cloud Supabase saat pertama kali inisialisasi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 5. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Penambahan tombol & fungsi `simpanPengaturanDurasiTV`, auto-save debounced 600 ms, perbaikan payload di `simpanJadwalSholat`, pembaruan nilai default `cfgIntervalTVSystem`).
@@ -6781,7 +12189,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 8. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 BAB 159: KESERAGAMAN MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DAN REKAYASA TRANSISI ROTASI SLIDE TV TANPA HENTAKAN (CINEMATIC CROSS-DISSOLVE & PRE-PAINT BUFFER)
 
@@ -6793,7 +12217,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
   - Menghadirkan medali kaligrafi emas 3D seragam di kanan (Allah SWT) dan kiri (Muhammad SAW) di halaman hadits serta seluruh slide informasi yang belum memilikinya.
   - Mengeliminasi hentakan visual dan micro-stutter pada transisi pergantian slide TV sehingga perpindahan antar halaman berlangsung sangat mulus, anggun, dan berkelas stasiun televisi profesional.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Analisis & Akar Masalah (Root Causes)
 
@@ -6811,7 +12251,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
    - **Ketiadaan Forced Reflow & Double rAF:**
      - Mengubah kelas dari `.incoming` (`transition: none !important`) ke `.active` tanpa forced reflow (`void offsetWidth`) dan double `requestAnimationFrame` menyebabkan mesin perender Chromium kadang memulai interpolasi animasi dari posisi yang melompat.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Solusi & Rekayasa Sistem yang Diterapkan
 
@@ -6857,7 +12313,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 4. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.3` agar display TV dan peramban klien langsung mengunduh pembaruan berkas secara instan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 4. Hasil Verifikasi Nyata
 - **Tampilan Kaligrafi:**
@@ -6865,7 +12337,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 - **Kualitas Transisi Perpindahan Slide:**
   - Uji perpindahan halaman menunjukkan tidak ada lagi hentakan horizontal (*no shearing/tearing*). Header masjid tetap kokoh di tempatnya, dan kartu konten melebur (*cross-dissolve*) dengan sangat halus dan lembut (*buttery-smooth*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 5. Berkas yang Dimodifikasi
 1. `web-statis/slides/hikmah.html` (Penambahan medali kaligrafi 3D Muhammad & Allah).
@@ -6882,7 +12370,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 12. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 13. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📅 BAB 160: UNIFIKASI PETUGAS SHOLAT JUM'AT (PENGGABUNGAN KHOTIB & IMAM MENJADI 1 KOLOM TERPADU)
 
@@ -6893,7 +12397,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
   - Sebelumnya, pada menu **Petugas Sholat Jum'at**, terdapat dua form input terpisah: `Khotib Jum'at` dan `Imam Sholat`. Hal ini membuat operator harus mengetikkan nama yang sama dua kali, serta tampilan preview dan tabel riwayat membagi data menjadi dua kolom terpisah yang redundan.
   - Pengguna meminta agar bagian Khotib dan Imam disatukan ke dalam **1 kolom saja** untuk mempermudah entri data, membuat tampilan form lebih ringkas, dan selaras dengan layout display TV yang sudah menggabungkan info *"Imam & Khotib"*.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rekayasa & Penyesuaian Sistem yang Diterapkan
 
@@ -6931,7 +12451,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 5. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.4`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/admin.html` (Penyatuan input Khotib & Imam menjadi 1 kolom terpadu, update preview TV, update dashboard box, dan sinkronisasi JS).
@@ -6944,7 +12480,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 8. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 9. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📺 BAB 161: ELIMINASI KOTAK KAPSUL OSD SLIDE TV (PENGHILANGAN KOTAK URUTAN & JUMLAH SLIDE POJOK KANAN ATAS)
 
@@ -6955,7 +12507,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
   - Setiap kali siklus perpindahan slide berlangsung, skrip rotator menjalankan pemanggilan `showOsd('Slide ' + (currentIndex + 1) + '/' + activePages.length)`.
   - Hal ini memunculkan kotak kapsul hitam bertepi emas berisi teks urutan slide (seperti *"Slide 5/10"*). Kotak ini menutupi dan bertabrakan dengan ornamen **Medali Kaligrafi Emas 3D Allah SWT** yang berada persis di sisi kanan atas layar masjid, sehingga merusak ketenangan dan keindahan estetika visual TV display.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Rekayasa yang Diterapkan
 
@@ -6985,7 +12553,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 4. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi `aljihad-signage-v3.1.5` agar display TV dan peramban klien langsung mengunduh pembaruan berkas tanpa menyimpan cache lama.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/index.html` (Penghilangan total kapsul OSD nomor slide di pojok kanan atas, CSS display:none !important, netralisasi showOsd).
@@ -6995,7 +12579,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 6. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 162: RESTRUKTURISASI & PEMISAHAN KAS UTAMA MASJID SECARA MANDIRI / INDEPENDEN DARI PROGRAM PENGGALANGAN INFAQ & POS DANA LAINNYA
 
@@ -7006,7 +12606,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
   2. Pada tabel `keuangan` di Supabase, terdapat baris transaksi historis (ID: 2) dengan deskripsi *"Bpk. H. Utut Priastya RW.007"* berlabel kategori *"Penggalangan Infaq"* nominal Rp 500.000. Padahal, data donasi tersebut sudah tercatat resmi dan mandiri di tabel `donasi_infaq` (ID: 2, `program_infaq_id: 4`).
   3. Akibatnya, pada layar TV display kas masjid, uang donasi program penggalangan tersebut ikut terdaftar di tabel mutasi dan menambah angka Total Pemasukan Kas Masjid menjadi Rp 20.879.023 dan Saldo menjadi Rp 19.879.023, yang berpotensi membingungkan jamaah karena pos program infaq bercampur dengan kas operasional harian masjid.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan Teknis yang Diterapkan
 
@@ -7063,7 +12679,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 6. **Pembaruan Service Worker PWA (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi **`aljihad-signage-v3.1.6`** agar seluruh display TV fisik dan browser pengguna langsung memperbarui cache slide keuangan secara instan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/slides/keuangan.html` (Penerapan filter independensi `isKasUtamaMasjid`, penyelarasan badge kategori, integrasi `getKeuanganKasUtama`).
@@ -7079,7 +12711,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 11. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis seluruh berkas mandiri).
 12. Git Repository & Live Deployment Cloudflare Pages: `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🕌 BAB 163: OPTIMASI DISPLAY PROGRAM INFAQ — MODE DONATUR TERBARU DI BAWAH, EFEK DENYUT PELAN TARGET DANA, LABEL HEADER BERSIH, & SEAMLESS INFINITE VERTICAL AUTO-SCROLL
 
@@ -7091,7 +12739,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
   3. Menyederhanakan teks header dari *"Daftar Donatur Terkini"* menjadi *"Daftar Donatur"* agar lebih formal, ringkas, dan proporsional.
   4. Menjawab dan mengimplementasikan mekanisme penanganan daftar donatur jika jumlahnya melampaui tinggi kotak kontainer layar TV display.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan Teknis yang Diterapkan
 
@@ -7183,7 +12847,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
        - Karena elemen diduplikasi persis, transisi saat mencapai `-50%` dan kembali ke `0%` berlangsung secara **100% mulus (seamless)** tanpa lompatan grafis (*zero visual jump*).
        - Menambahkan `animation-play-state: paused` saat kursor berada di atas list (`:hover`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/slides/infaq.html`:
@@ -7202,7 +12882,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 6. Git Repository & Live Deployment Cloudflare Pages:
    - `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 164: PENEBALAN & PENINGKATAN KETERBACAAN TEKS KOTAK KUNING BADGE TICKER POJOK KIRI BAWAH DI SEMUA HALAMAN
 
@@ -7213,7 +12909,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 - **Kebutuhan Pengguna:**
   - Mempertebal teks dan ikon di dalam kotak kuning pojok kiri bawah agar lebih jelas, tegas, tajam, dan kontras di semua halaman/slide display.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Implementasi & Solusi
 1. **Peningkatan Bobot Huruf & Penambahan Stroke Fisik:**
@@ -7242,7 +12954,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
    - Seluruh 20 slide kini memuat varian Poppins 900 secara native.
    - Versi cache buster CSS diperbarui ke `?v=3.1.0` dan cache service worker ke `v3.1.9`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas yang Dimodifikasi
 1. `web-statis/css/display-theme.css`:
@@ -7268,7 +12996,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 11. Git Repository & Live Deployment Cloudflare Pages:
     - `https://digitalaljihad.my.id/`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 165 - PENYEMPURNAAN LIVE STREAMING MEKAH & MADINAHDAN FORM INPUT LIVE NABAWI)
 
@@ -7313,7 +13057,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 6. `resources/views/live-stream.blade.php`
 7. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 166 - PEMBARUAN TEKS FOOTER DASHBOARD ADMIN)
 
@@ -7326,7 +13086,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 167 - PERBAIKAN PRATINJAU SLIDE LIVE STREAMING & FAST INSTANT LOADER)
 
@@ -7367,7 +13143,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 5. `web-statis/js/supabase-db.js`
 6. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 168 - RESOLVER OTOMATIS LINK MAKKAH LIVE & SIARAN RESMI 24 JAM SAUDI QURAN/SUNNAH TV)
 
@@ -7404,7 +13196,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 4. `web-statis/admin.html`
 5. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 169 - PEMBARUAN TEKS FOOTER DASHBOARD ADMIN GRAHA ASRI)
 
@@ -7417,7 +13225,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 170 - INTEGRASI TERPADU FILTER BUKU KAS: DUKUNGAN KAS AMBULANCE & PROGRAM INFAQ)
 
@@ -7438,7 +13262,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
      - **Pembersihan Data Ketat Saat Fetching:** Saat data tabel `keuangan` dimuat dari Supabase, terdapat kode sanitasi ketat yang membuang record berlabel `ambulance`, `ambulans`, `program infaq`, `renovasi`, dll., dari array `cachedKasData`. Tujuannya agar metrik *Saldo Kas Terkini Masjid* (Rp 19.379.023) murni hanya menghitung kas operasional masjid.
      - **Akar Masalah Filter:** Fungsi JavaScript `filterKasTable()` sebelumnya hanya memfilter array tunggal `cachedKasData`. Karena seluruh data ambulance sudah dikeluarkan sejak awal dari `cachedKasData`, maka ketika pengguna memilih filter `katFilter === 'Kas Ambulance'`, pencarian mencari kategori ambulance pada array yang sudah tidak memiliki record ambulance sama sekali. Hasilnya selalu array kosong `[]` sehingga muncul pesan: *"Tidak ada transaksi yang sesuai dengan filter pencarian."*
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perbaikan yang Diterapkan
 
@@ -7471,13 +13311,45 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 5. **Sinkronisasi Reaktif Otomatis:**
    - Memanggil `filterKasTable()` otomatis setelah seluruh query paralel di `loadAllSupabaseData()` selesai dieksekusi, serta saat ada penghapusan donasi infaq.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait
 1. `web-statis/admin.html`
 2. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 171 - EFEK PULS FASE KEBALIKAN / COUNTER-PHASE PADA KOTAK KEKURANGAN PROGRAM INFAQ)
 
@@ -7496,7 +13368,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 2. `resources/views/infaq-embed.blade.php`
 3. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 172 - PENAMBAHAN KOLOM NO / ANGKA URUT PADA DAFTAR DONATUR PROGRAM INFAQ)
 
@@ -7520,7 +13408,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 1. `web-statis/slides/infaq.html`
 2. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 173 - PENANGANAN PERINGATAN KEAMANAN SUPABASE: ROW LEVEL SECURITY & PROTEKSI DATA SENSITIF)
 
@@ -7533,7 +13437,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
   - **Proyek A (`digitalaljihad` / `jhukhvxpgezbftbxgdgbc`):** Database PostgreSQL untuk backend Laravel (`DB_HOST=aws-0-ap-south-1.pooler.supabase.com`).
   - **Proyek B (`digitalaljihad-cloud's Project` / `xskusfacwsclbgdtgier`):** Database cloud BaaS untuk website statis & display TV Cloudflare Pages (`digitalaljihad.my.id`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Tindakan Solusi yang Telah Diterapkan
 
@@ -7558,7 +13478,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
      - Membatasi izin akses kolom sensitif agar password hash tidak bisa diintip melalui REST API publik, sementara hash tetap aman di database untuk autentikasi backend.
      - Menyematkan kebijakan akses (*RLS Policies*) terbuka bagi tabel-tabel display masjid (`app_settings`, `jadwal_sholat`, `sholat_jumat`, `pengumuman`, `keuangan`, `qris`, `slides`, dll.) agar TV Display dan Web Admin tetap dapat membaca dan memperbarui data secara lancar.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dibuat / Dimodifikasi
 1. `database/migrations/2026_09_30_060000_enable_row_level_security_on_public_tables.php` (Baru)
@@ -7567,7 +13503,23 @@ Melalui pengujian simulasi API tingkat rendah (*low-level fetch tracing*) dan in
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\admin.html` (Tersinkronisasi)
 5. `LATEST_UPDATE.md` (Diperbarui)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 174 - OPTIMASI TAMPILAN TV DISPLAY: PENAJAMAN KONTRAS HEADER HIJAU ZAMRUD, OUTLINE EMAS KAPSUL WAKTU 2.5PX, DAN BADGE RUNNING TEXT HITAM PEKAT)
 
@@ -7580,7 +13532,23 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
 3. **Outline / Garis Kotak Kapsul Tanggal & Jam Kurang Terlihat:**
    - **Penyebab:** Kotak kapsul `.datetime` sebelumnya menggunakan `border: 1.5px solid rgba(255, 215, 0, 0.5);` (hanya tebal 1.5px dan ber-opacity 50% transparan) dengan bayangan tipis ke bawah saja. Ketika bertumpuk dengan gambar kubah hijau masjid dan background bernuansa gelap, garis transparan 1.5px tersebut tenggelam dan sulit terbedakan dari kejauhan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penajaman Header Masjid (`#nama-masjid` / `.header h1`):**
@@ -7608,7 +13576,23 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
 4. **Pencegahan Cache TV (*Cache Busting*):**
    - Seluruh tautan stylesheet `display-theme.css` dan `partials-theme.css` pada `index.html`, `slides/utama.html`, dan `slides/slide.html` diperbarui versinya dengan parameter `?v=20260930_03` agar browser Smart TV langsung mengunduh versi CSS terbaru tanpa tersangkut cache lama.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/slides/slide.html`
@@ -7623,7 +13607,23 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
 10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\css\display-theme.css` (Sinkron)
 11. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 175 - OPTIMASI TAMPILAN SLIDE PROGRAM INFAQ: PEMBESARAN UKURAN FONT DAFTAR DONATUR & PENYEMATAN SPASI 1 BARIS ANTARA AKHIR DAN AWAL PUTARAN LIST)
 
@@ -7634,7 +13634,23 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
   1. Pada halaman Program Infaq (`web-statis/slides/infaq.html`), font daftar donatur sebelumnya hanya berukuran `0.90rem` (~14.4px) dengan nomor badge `0.80rem` (~12.8px). Di layar TV resolusi 1080p/4K dengan jarak pandang 3–7 meter di aula masjid, ukuran tersebut sangat kecil dan menyulitkan jamaah untuk membaca nama serta nominal infaq donatur.
   2. Saat daftar donatur bergulir vertikal (*seamless vertical marquee loop*), elemen anak digandakan secara beruntun sehingga donatur paling akhir (#5 atau #N) langsung menempel rapat dengan donatur pertama (#1) dari putaran kloning berikutnya dengan jarak hanya `6px`. Hal ini menyebabkan daftar terlihat menumpuk (*cramped/cluttered*) dan membingungkan jamaah untuk membedakan batas akhir dan awal perulangan daftar.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembesaran Signifikan Ukuran Font Daftar Donatur (+35% s/d +40%):**
@@ -7665,7 +13681,23 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
    - Menyelaraskan ukuran font tabel `td` menjadi `1.25rem` dan nominal menjadi `1.30rem`.
    - Menyematkan `spacerRow` (`height: 42px;`) pada logika auto-scroll tabel agar konsisten saat diakses via Laravel.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/slides/infaq.html`
@@ -7673,7 +13705,23 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\slides\infaq.html` (Sinkron)
 4. `LATEST_UPDATE.md`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 176 - IMPLEMENTASI TAHAP 1: MODUL SURAT UNDANGAN KEGIATAN LUAR & WARTA UKHUWAH ANTAR MASJID UNTUK JAMAAH DENGAN TAMPILAN DISPLAY TV ROYAL ISLAMIC & FORM MULTI-UNDANGAN)
 
@@ -7695,7 +13743,23 @@ Pengguna mengirimkan foto aktual layar TV fisik yang menampilkan slide *Arah Qib
   4. *Tampilan di Layar TV Display:* Dibuat menyerupai desain undangan pada umumnya namun **full bertema Islamic Royal berkelas dan profesional** (arabesque gold borders, wax seal / crest, basmalah calligraphy, layout seimbang, kontras tinggi).
   5. *Form Admin Multi-Undangan:* Disediakan form di Panel Kontrol Admin agar pengurus DKM dapat membuat, mengedit, mengaktifkan/menonaktifkan, dan menghapus beberapa undangan sekaligus (multi-undangan CRUD).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 
@@ -7779,7 +13843,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - `hapusUndanganEksternal(id)`: Menghapus undangan dengan dialog konfirmasi aman.
    - `toggleStatusUndangan(id)`: Tombol saklar kilat untuk mengaktifkan/menonaktifkan tayangan undangan di TV dalam 1 kali klik.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi & Dibuat
 1. `database/migrations/2026_09_30_110000_create_undangan_eksternal_table.php` (Baru - Migrasi Database)
@@ -7791,7 +13871,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 7. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 8. `LATEST_UPDATE.md` (Diperbarui Bab 176)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 177 - PENINGKATAN VISUAL HEADER TV "MASJID JAMI' AL-JIHAD": IMPLEMENTASI OPSI 1 PUTIH KRISTAL BERSIH + KONTUR EMAS SOLID 1.8PX & PENYESUAIAN UKURAN FONT PROPORSIONAL)
 
@@ -7801,7 +13897,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 - **Akar Masalah Sebelumnya:**
   Badan huruf header sebelumnya diisi warna hijau zamrud sangat tua (`#033624` / `#064e3b`) di atas latar belakang layar TV yang juga bernuansa hijau gelap (`#021a10`). Akibatnya, pada layar LED TV dengan jarak pandang 3–7 meter, badan huruf menyatu dengan latar belakang (rasio kontras sangat rendah), sehingga huruf tampak remang, "kurus", dan hanya menyisakan garis kawat tipis yang kurang tegas.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penerapan Gaya Opsi 1 (Putih Kristal + Kontur Emas):**
@@ -7819,7 +13931,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. **Pencegahan Cache TV (*Cache Busting*):**
    - Seluruh tautan stylesheet `display-theme.css` dan `partials-theme.css` pada `web-statis/index.html` dan seluruh slide diperbarui menjadi **`?v=20260930_05`** agar browser Smart TV langsung memuat CSS terbaru seketika.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/css/display-theme.css`
@@ -7844,7 +13972,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 20. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 21. `LATEST_UPDATE.md` (Diperbarui Bab 177)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 178 - PENAMBAHAN PETUNJUK OPERASIONAL PADA DESKRIPSI KARTU PANDUAN UNDANGAN UKHUWAH DI ADMIN PANEL)
 
@@ -7852,7 +13996,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 - **Permintaan Pengguna:**
   *Tolong dibagian teks ini "Deskripsi Undangan Ukhuwah : Formulir ini disiapkan untuk mengakomodir undangan kegiatan keagamaan (Peringatan Maulid Nabi, Isra' Mi'raj, Tabligh Akbar, Istigozah, Rebo Wekasan, Santunan Anak Yatim atau yang lainnya). Undangan yang aktif akan otomatis ditampilkan bergantian pada layar TV." ditambahkan kalimat " Untuk mengaktifkan/meNONAKTIFKAN undangan ini, silakan di klik ikon mata di kolom AKSI dan lihat statusnya di kolom STATUS TV"*
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembaruan Kartu Informasi Panduan Pengisian Undangan Ukhuwah (`#view-undangan-eksternal`):**
@@ -7860,14 +14020,46 @@ Dibuat halaman slide visual premium dengan karakteristik:
      *"Deskripsi Undangan Ukhuwah : Formulir ini disiapkan untuk mengakomodir undangan kegiatan keagamaan (Peringatan Maulid Nabi, Isra' Mi'raj, Tabligh Akbar, Istigozah, Rebo Wekasan, Santunan Anak Yatim atau yang lainnya). Undangan yang aktif akan otomatis ditampilkan bergantian pada layar TV. Untuk mengaktifkan/meNONAKTIFKAN undangan ini, silakan di klik ikon mata di kolom AKSI dan lihat statusnya di kolom STATUS TV."*
    - Memudahkan operator memahami langsung fungsi ikon mata di kolom **AKSI** untuk beralih antara status *Aktif di TV* (hijau) dan *Nonaktif* (abu-abu/kuning) tanpa perlu bingung mencari tombol pengaturan terpisah.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Teks deskripsi panduan Undangan Ukhuwah diperbarui)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 3. `LATEST_UPDATE.md` (Diperbarui Bab 178)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 179 - PENYEMPURNAAN TATA LETAK TOMBOL HEADER UNDANGAN UKHUWAH DI ADMIN PANEL: 1 BARIS NOWRAP & SEJAJAR RATA KANAN)
 
@@ -7877,7 +14069,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 - **Kondisi Sebelumnya:**
   Karena panjangnya kalimat subjudul dan pembungkus tombol menggunakan `flex-wrap` tanpa `flex-shrink-0`, tombol `+ Tambah Undangan Baru` terdesak sehingga kata "Baru" terpotong ke baris kedua, dan tombol `Pratinjau Layar TV` terdorong jatuh ke baris terpisah di bawahnya.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penerapan 1 Baris Utuh (*No-Wrap Text*):**
@@ -7888,14 +14096,46 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. **Fleksibilitas Responsif Judul & Subdeskripsi:**
    - Kolom kiri (judul h4 dan deskripsi pengantar) diberikan `flex-grow-1 mr-md-3` sehingga secara cerdas menyesuaikan ruang yang tersedia tanpa mempersempit ukuran tombol di sebelah kanan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Tata letak tombol header `#view-undangan-eksternal` diperbarui)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 3. `LATEST_UPDATE.md` (Diperbarui Bab 179)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 180 - PENERAPAN FITUR KEAMANAN AUTO-LOGOUT INACTIVITY 3 MENIT DI DASHBOARD ADMIN WEB STATIS)
 
@@ -7906,7 +14146,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 - **Tujuan Keamanan:**
   Mencegah akses tanpa izin terhadap data penting masjid (seperti saldo kas, penerimaan infaq/donasi, data shohibul qurban, dan pengaturan TV) ketika laptop atau komputer sekretariat masjid ditinggalkan oleh pengurus/operator DKM tanpa pengawasan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Engine Pemantau Aktivitas Pengguna (*Inactivity Idle Engine*):**
@@ -7929,7 +14185,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Script `admin-auth.js` diperbarui ke versi `?v=2.7` pada `admin.html` dan `login.html`.
    - Cache Service Worker di `sw.js` dinaikkan ke versi `aljihad-signage-v3.2.0` agar pembaruan langsung aktif di peramban tanpa terhalang cache lama.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/js/admin-auth.js` (Engine `initIdleTimer`, `handleIdleTimeout`, sinkronisasi multi-tab)
@@ -7939,7 +14211,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 6. `LATEST_UPDATE.md` (Diperbarui Bab 180)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 181 - PENYEDERHANAAN HEADER TOPBAR DASHBOARD: PENGHILANGAN WIDGET JAM/TANGGAL DI KIRI DAN KOTAK USER DI KANAN)
 
@@ -7949,7 +14237,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 - **Tujuan Estetika & Kenyamanan:**
   Mengurangi kepadatan elemen di bilah atas (*topbar*) dashboard, sehingga ruang pandang (*viewport*) terlihat jauh lebih bersih, minimalis, dan lega.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penghilangan Elemen Sisi Kiri Topbar:**
@@ -7964,7 +14268,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Dashboard Web Statis: `web-statis/admin.html`
    - Dashboard Laravel Backend: `resources/views/layouts/admin.blade.php`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penghilangan widget jam/tanggal & user dropdown di topbar)
@@ -7972,7 +14292,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 4. `LATEST_UPDATE.md` (Diperbarui Bab 181)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 182 - TATA LETAK REKAP KAJIAN BULAN INI DIBUAT BERDERET SECARA HORIZONTAL 5 PEKAN TANPA SCROLL VERTIKAL)
 
@@ -7984,7 +14320,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   - Tabel 5 pekan yang memuat tanggal, waktu, ustadz, kitab, dan tema membuat halaman memanjang ke bawah (~800px+), sementara kolom kiri (Form Input Pekan) sudah selesai di tengah layar sehingga menyisakan ruang kosong besar di bawahnya.
   - Untuk melihat Pekan 4, Pekan 5, dan menekan tombol hijau *"Simpan Agenda 1 Bulan"*, pengurus/operator harus banyak melakukan scroll mouse ke bawah.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Restrukturisasi Tata Letak 2 Baris Seimbang & Ergonomis:**
@@ -8006,14 +14358,46 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. **Penyempurnaan Engine JavaScript (`web-statis/admin.html`):**
    - Fungsi `renderKajianRekapTable()` diperbarui untuk mengisi kontainer kartu `#kajianRekapCardsContainer` secara dinamis saat pergantian bulan, generate tanggal, pemilihan tab, edit teks, atau simpan data.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Reposisi layout baris atas-bawah, pemindahan tombol simpan di bawah preview TV, kontainer horizontal `#kajianRekapCardsContainer`, CSS `.kajian-rekap-card`, dan pembaruan fungsi `renderKajianRekapTable`)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas disinkronkan secara otomatis)
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 182)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 183 - PENYESUAIAN TEKS PENGINGAT MENU SAVE & REPOSISI KALIGRAFI ARAB "أَهْلًا وَسَهْلًا" KE PINGGIR KANAN KOTAK BANNER DASHBOARD UTAMA)
 
@@ -8026,7 +14410,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   1. Memberikan pesan pengingat yang sangat tegas dan jelas kepada pengurus/operator agar selalu menekan tombol SAVE setelah selesai menginput/mengedit data.
   2. Mempercantik tata letak kartu hero selamat datang (*Welcome Hero Banner*), di mana teks latin dihilangkan dan kaligrafi Arab emas `"أَهْلًا وَسَهْلًا"` diposisikan megah di sisi pinggir kanan kotak.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembaruan Teks Deskripsi Pengingat Menu SAVE:**
@@ -8040,14 +14440,46 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Kaligrafi Arab `"أَهْلًا وَسَهْلًا"` kini ditempatkan di wadah khusus sisi kanan (`.hero-arabic-right-container`) dengan font berukuran `2.3rem`, warna emas islami terang (`#ffd700`), serta bayangan pendaran halus.
    - Di layar desktop/tablet, kaligrafi bertengger anggun di sebelah pinggir kanan kotak; di layar smartphone, posisinya beradaptasi otomatis secara responsif.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Markup banner `.welcome-hero-banner`, penghilangan teks latin, reposisi teks Arab ke pinggir kanan, teks pengingat SAVE, dan CSS `.hero-sub-desc`)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 183)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 184 - PENYESUAIAN ELEMEN TOPBAR: MENGEMBALIKAN JAM, HARI/TANGGAL & PROFIL AKUN DENGAN MENGHILANGKAN KOTAK PEMBUNGKUSNYA)
 
@@ -8058,7 +14490,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   - Teks jam digital dan hari/tanggal tetap aktif dan terbaca jelas oleh pengurus, tetapi tidak lagi dibatasi oleh bingkai/kotak card abu-abu/putih (`border: none; background: transparent; box-shadow: none;`).
   - Informasi akun pengurus (nama, peran, avatar inisial, dan panah dropdown) tetap muncul lengkap dan berfungsi normal, tetapi kotak kapsul pembungkusnya dihilangkan sehingga menyatu mulus dan bersih dengan latar belakang topbar.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penyesuaian Widget Jam & Kalender di Sisi Kiri Topbar (`.topbar-clock-widget`):**
@@ -8075,7 +14523,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Dashboard Web Statis: `web-statis/admin.html`
    - Dashboard Laravel Backend: `resources/views/layouts/admin.blade.php`
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (CSS `.topbar-clock-widget` & `.user-profile-card` borderless/transparent, dan penempatan kembali markup jam/tanggal & user dropdown)
@@ -8083,7 +14547,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 184)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 185 - PENYEMBUNYIAN KOTAK SWITCH PERAN BENDAHARA / OPERATOR DI TENGAH ATAS TOPBAR DASHBOARD)
 
@@ -8094,7 +14574,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   - Membersihkan area tengah bilah atas (*topbar*) dashboard dari kapsul pengalih peran (*Quick Role Switcher: Bendahara / Operator*).
   - Memberikan ruang yang lebih lega dan fokus pada navigasi utama: waktu sholat berikutnya, tombol *"Lihat Display"*, dan informasi akun pengguna di ujung kanan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penyembunyian CSS `.topbar-role-selector` (`web-statis/admin.html`):**
@@ -8107,14 +14603,46 @@ Dibuat halaman slide visual premium dengan karakteristik:
    - Sisi Tengah: Bersih dan lega tanpa tombol switch peran.
    - Sisi Kanan: Tombol hijau *"Lihat Display"* + Garis Pemisah + Profil Akun Pengurus (tanpa kotak pembungkus).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penyembunyian CSS `.topbar-role-selector` dan penambahan `d-none` pada elemen topbar)
 2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 3. `LATEST_UPDATE.md` (Dokumentasi Bab 185)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 186 - PENGUBAHAN LABEL SIDEBAR MENJADI "KAS UTAMA MASJID" & PEMURNIAN PENCATATAN ARUS KAS KHUSUS KAS UTAMA MASJID)
 
@@ -8126,7 +14654,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   2. Memisahkan secara tegas (*strict segregation*) pencatatan arus kas: modul Kas Utama Masjid murni hanya menampilkan dan mengelola mutasi kas operasional masjid (tabel `keuangan`), tanpa mencampurkan transaksi operasional ambulance (tabel `keuangan_ambulance`) maupun donasi donatur terikat (tabel `donasi_infaq`).
   3. Menjamin keselarasan antara 3 Kartu Saldo (Saldo Kas Terkini, Total Pemasukan, Total Pengeluaran) dengan isi tabel transaksi di bawahnya, sehingga bendahara tidak bingung melihat nominal ambulance atau donasi program AC/infaq lainnya masuk ke tabel kas utama.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Pembaruan Navigasi Sidebar:**
@@ -8145,7 +14689,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 5. **Ekspor Laporan Excel (`exportKasExcel()`):**
    - File ekspor spreadsheet CSV yang diunduh dari modul ini secara otomatis hanya mencakup riwayat arus kas utama masjid tanpa tercampur data kas armada ambulance atau program infaq donatur.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Pembaruan teks sidebar menu `#nav-keuangan`, judul `#view-keuangan`, filter dropdown `#kasFilterKat`, fungsi `filterKasTable()`, dan `renderKasTableRows()`)
@@ -8153,7 +14713,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Seluruh berkas web statis disinkronkan otomatis)
 4. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 186)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 187 - PENYELARASAN TEXT-ALIGN CENTER PADA KOLOM KETERANGAN / AJAKAN JAMAAH DI FORM EDIT UNDANGAN & SLIDE TV DISPLAY)
 
@@ -8164,7 +14740,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   1. Membuat isian textarea pada formulir modal edit Undangan Jama'ah (`#undanganKeterangan`) menjadi rata tengah (*center*) agar tampilan pengetikan dan redaksi ajakan/himbauan tampak lebih seimbang, estetik, dan rapi.
   2. Menyelaraskan hasil tampilan pesan kutipan keterangan/ajakan tersebut pada layar Slide TV Display (`slides/undangan.html`) agar terpusat simetris (*text-align: center*) di dalam kotak penutup kartu undangan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Modal Form Edit Undangan Jama'ah (`web-statis/admin.html`):**
@@ -8177,7 +14769,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. **PWA Service Worker (`web-statis/sw.js`):**
    - Mendaftarkan `'slides/undangan.html'` ke dalam `STATIC_ASSETS` dan menaikkan versi cache menjadi `'aljihad-signage-v3.2.1'` untuk memicu pembaruan cache otomatis pada seluruh layar TV dan perangkat klien.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penambahan styling `text-center` dan `style="text-align: center;"` pada textarea `#undanganKeterangan`)
@@ -8186,7 +14794,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 187)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 188 - PEMISAHAN KOLOM BILAL & PEMBACA MAKLUMAT PADA FORM PETUGAS JUM'AT, PREVIEW TV & DISPLAY)
 
@@ -8200,7 +14824,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   2. Mengganti seluruh terminologi label *"Pembaca Pengumuman"* menjadi istilah yang lebih baku, islami, dan resmi di masjid: **"Pembaca Maklumat"**.
   3. Memperbarui pratinjau TV di dashboard (*Preview Tampilan Layar TV Raudhah*), widget ringkasan Jum'at di dashboard utama, serta layar slide TV display (`slides/jumat.html` dan `resources/views/jumat.blade.php`) agar menampilkan plakat Pembaca Maklumat secara proporsional.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Formulir Input Petugas Jum'at (`web-statis/admin.html`):**
@@ -8230,7 +14870,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 8. **Penyelarasan Backend Laravel:**
    - Menambahkan field `pembaca_maklumat` pada model `SholatJumat.php`, controller `SholatJumatController.php`, form `create.blade.php`, `edit.blade.php`, dan slide `jumat.blade.php`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Pemisahan form Bilal & Pembaca Maklumat, live preview listener, widget dashboard, load/save Supabase)
@@ -8245,7 +14901,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 10. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 11. `LATEST_UPDATE.md` (Dokumentasi Bab 188)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 189 - PENYEDIAAN TOMBOL SIMPAN PENGATURAN SURAT YAASIIN & MIGRASI FORMAT JAM KE 24 JAM / 24H WIB)
 
@@ -8257,7 +14929,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   1. **Tombol Simpan Tidak Terlihat di Card Yaasiin:** Sebelumnya, pengaturan Surat Yaasiin hanya tersimpan bila pengguna menekan tombol simpan global di bagian atas halaman atau di kartu lain paling bawah halaman. Pada kartu *"Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat"*, tidak tersedia tombol simpan mandiri sehingga pengguna yang baru saja menyetel durasi (misal 30 detik atau 120 detik) kebingungan di mana tombol simpannya.
   2. **Model Jam Bawaan Browser Menampilkan AM/PM:** Input sebelumnya menggunakan elemen HTML bawaan `<input type="time">`. Pada sistem operasi Windows atau browser dengan konfigurasi locale bahasa Inggris (`en-US`), browser secara sepihak memaksakan format 12 jam dengan selector AM/PM (misalnya `06:30 PM`). Pengguna menghendaki format jam 24 Jam murni (24H WIB, misalnya `18:30`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penambahan Tombol Simpan Mandiri di Kartu Surat Yaasiin (`web-statis/admin.html`):**
@@ -8281,7 +14969,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 5. **PWA Service Worker (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi `'aljihad-signage-v3.2.3'`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penambahan tombol simpan atas & bawah di card Yaasiin, input jam 24H, preset waktu, fungsi `simpanPengaturanYasin()`, `formatJam24H()`)
@@ -8290,7 +14994,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 189)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 🚀 UPDATE TERBARU (BAB 190 - INTEGRASI PENGATURAN SURAT YAASIIN & TAHLIL KE DASHBOARD PETUGAS/OPERATOR DAN PENYELARASAN JUDUL RESMI)
 
@@ -8303,7 +15023,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   2. Menempatkan kartu kontrol pengaturan Surat Yaasiin & Tahlil secara langsung di **Dashboard Utama (`#view-dashboard`)** pada seksi yang dapat diakses oleh peran Petugas (`data-role="admin, petugas"`).
   3. Memperbarui terminologi judul kartu dari yang sebelumnya *"Agenda Malam Jum'at — Pengaturan Tampilan Surat Yaasiin 83 Ayat"* menjadi nama yang lebih komprehensif dan resmi: **"Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin&Tahlil"**.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Solusi & Perubahan yang Diterapkan
 1. **Penambahan Kartu Pengaturan Surat Yaasiin & Tahlil di Dashboard Petugas (`web-statis/admin.html`):**
@@ -8330,7 +15066,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 5. **PWA Service Worker (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi `'aljihad-signage-v3.2.4'`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penambahan Card 5 di Dashboard Petugas, pembaruan judul, fungsi `syncYasinControl`, pembaruan `selectYasinOption`, `simpanPengaturanYasin`, dan `loadAllSupabaseData`)
@@ -8339,7 +15091,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 190)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 191. DOKUMENTASI & DIAGNOSTIK AKUN RENDER SERTA PENERBITAN BERKAS PDF PANDUAN (1 OKTOBER 2026)
 
@@ -8372,7 +15140,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 191)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 192. PENYEDERHANAAN KARTU PENGATURAN SURAT YAASIIN & TAHLIL DI DASHBOARD PETUGAS/OPERATOR & PENGATURAN (1 OKTOBER 2026)
 
@@ -8402,7 +15186,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis berkas mandiri)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 192)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 193. OPTIMASI MEKANISME CACHE PWA & AUTO-RELOAD INSTAN PADA DISPLAY TV & ADMIN (1 OKTOBER 2026)
 
@@ -8429,7 +15229,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 193)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 194. PENEMUAN AKAR MASALAH DEPLOYMENT CLOUDFLARE WORKERS STATIC ASSETS (WRANGLER DEPLOY) & VERIFIKASI KEBERHASILAN PEMBERSIHAN KARTU YAASIIN (1 OKTOBER 2026)
 
@@ -8455,7 +15271,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 1. `AGENTS.md` (Penyempurnaan aturan wajib sinkronisasi live via `npx wrangler deploy`)
 2. `LATEST_UPDATE.md` (Dokumentasi Bab 194)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 195. REPOSISI MENU SIDEBAR: PEMINDAHAN "REMOTE TV JARAK JAUH" TEPAT DI BAWAH "ROTASI TV & REORDER" (2 OKTOBER 2026)
 
@@ -8488,7 +15320,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 195)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 196. PERBAIKAN INTEGRITAS DOM TREE `section-view`: MENGATASI KONTEN BLANK/KOSONG SAAT MEMILIH MENU "REMOTE TV JARAK JAUH" (2 OKTOBER 2026)
 
@@ -8518,7 +15366,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 196)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 197. DOKUMENTASI & PANDUAN AKTIVASI KEMBALI SWITCHER RENDER PADA GITHUB PAGES `mydowndrive-ops/aljihad` (2 OKTOBER 2026)
 
@@ -8548,7 +15412,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `c:\Users\anthu\Documents\【Project】\DIGITALv304\generate_render_reactivation_pdf.py` (Script ReportLab PDF Generator)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 197)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 198. PENINGKATAN TIPOGRAFI & UKURAN TEKS KARTU PETUGAS SHOLAT JUM'AT PADA MODE PRAYER (2 OKTOBER 2026)
 
@@ -8579,7 +15459,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 5. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 6. `LATEST_UPDATE.md` (Dokumentasi Bab 198)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 199. FITUR AUTO GENERATE FLYER WHATSAPP & PNG RESMI PETUGAS SHOLAT JUM'AT (2 OKTOBER 2026)
 
@@ -8631,7 +15527,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 199)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 200. PERBAIKAN HALAMAN KELOLA 3 HAK AKSES YANG BLANK AKIBAT DIV VIEW-INFAQ TIDAK TERTUTUP (2 OKTOBER 2026)
 
@@ -8663,7 +15575,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Dokumentasi Bab 200)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 201. PEMBETULAN ALAMAT RESMI MASJID PADA FLYER & BROADCAST WHATSAPP PETUGAS JUM'AT (2 OKTOBER 2026)
 
@@ -8691,7 +15619,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 4. `LATEST_UPDATE.md` (Koreksi Bab 199 dan dokumentasi Bab 201)
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 202. PEMISAHAN TOTAL & PERBAIKAN PERSISTENSI PETUGAS BILAL VS PEMBACA MAKLUMAT SHOLAT JUM'AT (2 OKTOBER 2026)
 
@@ -8735,7 +15679,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
 3. `web-statis/sw.js` (Bump versi cache PWA ke `aljihad-signage-v3.3.3`)
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Sinkronisasi otomatis lokal)
 5. `LATEST_UPDATE.md` (Dokumentasi Bab 202)
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## 📑 203. PENAMBAHAN MENU PENGUMUMAN SHOLAT JUM'AT & LAPORAN KAS (KHUSUS BENDAHARA) DENGAN FITUR CETAK A4, DOWNLOAD FLYER PNG, & SEBAR WHATSAPP (2 OKTOBER 2026)
 
@@ -8809,7 +15769,23 @@ Dibuat halaman slide visual premium dengan karakteristik:
   6. Judul kotak *"Pengaturan Tanggal & Titimangsa"* diganti menjadi *"1. Tanggal Pengumuman dibuat"*.
   7. Desain pengumuman dibuat berkelas dan profesional dengan warna dasar kertas putih A4.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Implementasi & Penyesuaian Arsitektur Antarmuka
 
@@ -8841,7 +15817,23 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
       - Ketua DKM: Input nama ketua & checkbox stempel resmi DKM Al-Jihad.
       - Bendahara Kas: Input nama bendahara & checkbox tanda tangan resmi bendahara.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 #### B. Live Preview Lembar Kertas Putih A4 Berkelas di Paling Bawah (Full-Width, Row 3)
 - Preview lembar cetak dipindahkan ke posisi paling bawah (`col-12`) dengan kontainer berlatar abu-abu netral (`#e2e8f0`) yang memberikan efek kontras tajam.
@@ -8850,7 +15842,23 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
 - **Tipografi & Garis Pemimpin (Dotted Leaders):** Menampilkan perataan titik-titik (`....`) dari keterangan menuju nominal rupiah, dengan box highlight kuning (`#ffff00`) untuk Saldo Awal & Saldo Akhir, serta hijau neon (`#00ff00`) untuk Subtotal Jumlah Pemasukan & Pengeluaran persis gaya dokumen fisik kas Al-Jihad.
 - **Pemisahan Peran Bilal & Maklumat:** Petugas Bilal (`Bp Mansur`) dan Mc Maklumat (`Bp Fatkhurokhman`) ditampilkan terpisah secara jelas pada tabel petugas.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 #### C. Sinkronisasi Canvas 2D Flyer PNG & Modal WhatsApp
 1. **Flyer PNG (HTML5 Canvas 2D Engine):**
@@ -8862,7 +15870,23 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
 3. **PWA Service Worker:**
    - Versi cache dinaikkan ke `aljihad-signage-v3.3.5` untuk memastikan pembaruan langsung diterima oleh peramban pengguna.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Pembaruan grid formulir 2x2, input himbauan 1 kolom textarea, pemindahan preview lembar A4 ke bawah full-width, penyesuaian JS engine parsing himbauan, kanvas flyer, dan cetak A4).
@@ -8881,7 +15905,23 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
   - Menghilangkan tampilan standar berbasis teks polos titik-titik dan stabilo kuning/hijau neon yang mirip catatan papan tulis kuno.
   - Mentransformasi Lembar Pengumuman Resmi menjadi **Laporan Keuangan & Warta Ibadah Eksekutif Berstandar Internasional** (*Executive Financial & Worship Bulletin*), dengan estetika islami modern berlatar kertas putih A4, aksen hijau zamrud (*emerald*), emas (*gold*), kartu statistik ringkas, tabel pembukuan bersih ganda, serta kanvas flyer beresolusi tinggi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Desain Eksekutif Baru yang Diterapkan
 
@@ -8925,7 +15965,23 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
 - **Cetak Lembar A4 (`cetakPengumumanJumat`):** Disesuaikan dengan CSS print margin 8mm-12mm sehingga mencetak format eksekutif baru secara instan dan rapi di semua peramban.
 - **Download Flyer PNG (`downloadFlyerPengumumanJumat`):** Mesin HTML5 Canvas 2D dirombak total untuk menggambar desain eksekutif baru (pita gradasi, 4 kartu ringkasan keuangan, tabel 2 kolom bergaris rapi, 4 kartu petugas warna, lingkaran badge himbauan, stempel transparan, dan footer dokumen) pada resolusi tajam 1200 × 1720 px.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Pembaruan total lembar preview `#pjPrintableSheet`, fungsi `pjUpdatePreview`, `cetakPengumumanJumat`, dan `downloadFlyerPengumumanJumat`).
@@ -8970,7 +16026,23 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
      - Kiri: `Dokumen Resmi Pengumuman Ibadah & Kas Jum'at DKM Masjid Jami' Al-Jihad Simpangan`.
      - Kanan: `Dibuat dari Sistem Informasi Digital Al Jihad`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Implementasi Teknis & Sinkronisasi
 1. **Lembar Cetak A4 (`pjPrintableSheet`):**
@@ -8983,21 +16055,69 @@ Untuk meningkatkan alur kerja bendahara dan estetika antarmuka, tata letak formu
 4. **PWA Service Worker:**
    - Versi cache dinaikkan ke `aljihad-signage-v3.3.7`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penyelarasan HTML preview `#pjPrintableSheet`, fungsi rendering `pjUpdatePreview`, `downloadFlyerPengumumanJumat`, dan `cetakPengumumanJumat`).
 2. `web-statis/sw.js` (Bump cache name ke `aljihad-signage-v3.3.7`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 206).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 207: IMPLEMENTASI FORMULIR 13 UNSUR PENGUMUMAN JUM'AT & EXECUTIVE WIDGET DASHBOARD BENDAHARA
 
 ### 1. Ringkasan Pembaruan
 Menindaklanjuti kebutuhan resmi DKM Masjid Jami' Al-Jihad Simpangan untuk pembacaan maklumat mimbar sholat Jum'at, telah diimplementasikan struktur formulir lengkap dengan 13 unsur kebutuhan, penggunaan Kop Surat resolusi tinggi (`KOP SURAT ALJIHAD.png`), integrasi naskah bacaan maklumat siap saji, serta pemasangan **Executive Widget Pengumuman Sholat Jum'at & Laporan Kas** langsung pada Dashboard Bendahara (`data-role="admin, bendahara"`).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian 13 Unsur Pengumuman Jum'at
 1. **Judul:** `PENGUMUMAN KEGIATAN SHOLAT JUM’AT MASJID JAMI’ AL JIHAD` (Standar Baku DKM).
@@ -9018,13 +16138,45 @@ Menindaklanjuti kebutuhan resmi DKM Masjid Jami' Al-Jihad Simpangan untuk pembac
 12. **Mengetahui:** Ketua DKM MASJID AL JIHAD = `Hadi Prayitno` (lengkap cap stempel resmi & TTD).
 13. **Dibuat Oleh:** Bendahara MASJID AL JIHAD = `Utut Priyastya` (lengkap TTD).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Kop Surat Baru & Naskah Pembaca Maklumat
 - **KOP SURAT:** Memuat berkas `KOP SURAT ALJIHAD.png` resolusi tinggi (2482 × 498 px) dari folder `Digital WebSTATIS` baik pada lembar preview A4 maupun engine flyer Canvas 2D.
 - **Naskah Bacaan Maklumat (`#modalTeksMaklumat`):** Modal khusus bagi Pembaca Maklumat yang merangkai teks pidato siap baca melalui mikrofon mimbar masjid lengkap dengan tombol salin naskah (*Copy to Clipboard*).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 4. Executive Widget pada Dashboard Bendahara
 - Menggantikan banner alert sederhana pada Section B Dashboard (`data-role="admin, bendahara"`) dengan kartu ringkasan eksekutif:
@@ -9033,7 +16185,23 @@ Menindaklanjuti kebutuhan resmi DKM Masjid Jami' Al-Jihad Simpangan untuk pembac
   - Tombol Aksi Cepat: Cetak Lembar A4, Unduh Flyer PNG, Naskah Maklumat, Kelola Form, dan Kirim WA Pengurus.
   - Sinkronisasi realtime melalui fungsi `renderDashPengumumanJumatWidget()`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 5. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Integrasi formulir 13 unsur, widget Dashboard Bendahara, modal naskah maklumat, engine flyer Canvas, print CSS).
@@ -9042,7 +16210,23 @@ Menindaklanjuti kebutuhan resmi DKM Masjid Jami' Al-Jihad Simpangan untuk pembac
 4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 207).
 
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 208: PEMBERSIHAN LABEL TEKNIS POIN, KOTAK JUDUL FORM, DAN PENGHAPUSAN POTONGAN STEMPEL/TTD UNTUK TANDA TANGAN ASLI
 
@@ -9056,7 +16240,23 @@ Menindaklanjuti instruksi visual pengguna:
    - Merapikan label input formulir: menghilangkan prefiks seperti '2. Tanggal...' menjadi 'Tanggal Kegiatan Sholat Jum'at (Hari H):', '3. Laporan Kas...' menjadi 'Periode Kas Masjid s/d Tanggal:', '4. Saldo Awal...' menjadi 'Saldo Awal (Rp):', '5. Pemasukan Kas...' menjadi 'Pemasukan Kas (Tromol Pekan Lalu):', dsb.
    - Membersihkan teks nomor poin pada widget eksekutif Dashboard Bendahara ('1. Saldo Awal' menjadi 'Saldo Awal', dsb).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Teknis Perubahan
 1. **Lembar Pengumuman Resmi ('#pjPrintableSheet'):**
@@ -9072,7 +16272,23 @@ Menindaklanjuti instruksi visual pengguna:
 4. **PWA Service Worker:**
    - Versi cache dinaikkan ke 'aljihad-signage-v3.3.9' untuk pembaruan instan pada browser client.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. 'web-statis/admin.html' (Pembersihan label form, kotak putih judul, badge poin, penghapusan gambar stempel/TTD, dan perapihan generator Canvas).
@@ -9080,7 +16296,23 @@ Menindaklanjuti instruksi visual pengguna:
 3. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 208).
 
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 209: INTEGRASI STEMPEL RESMI DKM & TANDA TANGAN ASLI KETUA DKM DAN BENDAHARA
 
@@ -9092,7 +16324,23 @@ Pengguna telah menyediakan berkas fisik asli stempel dan tanda tangan pada folde
 
 Semua aset telah diproses, diisolasi dari latar belakang menjadi format PNG transparan berkualitas tinggi (retina crisp), lalu diintegrasikan secara presisi ke dalam Lembar Cetak Pengumuman A4 ('#pjPrintableSheet') dan Mesin Generator Flyer Canvas 2D.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Teknis & Pengolahan Grafis
 1. **Ekstraksi Goresan Tinta & Transparansi Presisi:**
@@ -9113,7 +16361,23 @@ Semua aset telah diproses, diisolasi dari latar belakang menjadi format PNG tran
 4. **PWA Service Worker:**
    - Versi cache dinaikkan ke 'aljihad-signage-v3.4.0'.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi & Ditambahkan
 1. 'web-statis/img/stempelDKM_trans.png' & 'web-statis/img/stempelDKM.png' (Aset stempel resmi).
@@ -9123,7 +16387,23 @@ Semua aset telah diproses, diisolasi dari latar belakang menjadi format PNG tran
 5. 'web-statis/sw.js' (Pembaruan cache PWA ke 'aljihad-signage-v3.4.0').
 6. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 209).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 210: OPTIMALISASI TIPOGRAFI & UKURAN FONT LEMBAR PENGUMUMAN KAS & PETUGAS JUM'AT UNTUK PEMBACA SENIOR (50+ TAHUN)
 
@@ -9140,7 +16420,23 @@ Menindaklanjuti kebutuhan riil di mimbar masjid, di mana petugas pembaca makluma
 9. **s/d Tanggal : [Tanggal Kas]**: Font diperbesar dari 11.5px ke 13.5px dengan ketebalan 700 dan warna lebih kontras (#475569) agar batas periode kas terbaca jelas seketika.
 10. **PETUGAS IBADAH SHOLAT JUM'AT**: Diperbarui menjadi **"PETUGAS SHOLAT JUM'AT HARI INI"** dengan ukuran font judul dinaikkan ke 14.5px bold (dan 21px bold pada mesin flyer digital Canvas 2D).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Harmonisasi Multi-Platform & Multi-Engine
 Pembaruan ini diselaraskan di seluruh komponen terkait:
@@ -9155,14 +16451,46 @@ Pembaruan ini diselaraskan di seluruh komponen terkait:
 - **Dashboard Executive Widget Bendahara:** Menampilkan "Petugas Sholat Jum'at Hari Ini:" dan "BILAL:".
 - **Formulir Modal Kelola Pengumuman:** Label diubah menjadi "c. Bilal:" dengan petunjuk "Petugas Bilal".
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. 'web-statis/admin.html' (Pembaruan tipografi '#pjPrintableSheet', flyer Canvas 2D, dashboard widget, modal input, naskah maklumat, dan WA broadcast).
 2. 'web-statis/sw.js' (Peningkatan versi cache PWA ke 'aljihad-signage-v3.4.1').
 3. 'LATEST_UPDATE.md' (Pencatatan riwayat Bab 210).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 211: PENYESUAIAN REDAKSI HIMBAUAN, PENINGKATAN FONT TABEL KAS, REFINEMENT TTD BENDAHARA HD, & VERIFIKASI UKURAN TITIMANGSA (3 OKTOBER 2026)
 
@@ -9180,14 +16508,46 @@ Pembaruan ini diselaraskan di seluruh komponen terkait:
    - Teks `"SALDO (Awal + Masuk)"` dinaikkan ke **`14px font-extrabold 800`** (dan **`17px bold`** pada mesin flyer Canvas 2D).
    - Teks `"Total Pengeluaran"` dinaikkan dari `12.5px` ke **`14px font-extrabold 800`** (dan **`17px bold`** pada mesin flyer Canvas 2D).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Berkas Terkait yang Dimodifikasi
 1. `web-statis/admin.html` (Penyesuaian preview `#pjPrintableSheet`, skala font tabel kas, ukuran TTD bendahara, judul bagian III, serta penyelarasan flyer Canvas 2D, naskah maklumat, dan draf broadcast WA).
 2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.2`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 211).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 212: INTEGRASI PENUH PENGUMUMAN & LAPORAN KAS SHOLAT JUM'AT KE SLIDE ROTASI TV (OPSI 1) (3 OKTOBER 2026)
 
@@ -9210,7 +16570,23 @@ Menindaklanjuti permintaan pengguna: *"Jalankan Opsi 1"* (Integrasi langsung ke 
    - Layar TV (`slides/jumat.html`) terhubung ke listener realtime Supabase `app_settings` dan `sholat_jumat` sehingga pembaruan dari admin seketika tampil di layar TV tanpa reload halaman.
    - Tetap memiliki fallback aman ke `localStorage` dan default DKM Al-Jihad jika jaringan terputus.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Berkas Terkait yang Dimodifikasi
 1. `web-statis/slides/jumat.html` (Rombak layout ke format Widescreen 2 Kolom: Petugas Sholat Jum'at, 4 Kartu Kas, Mini Rincian Tabel Kas, dan Rotator Himbauan).
@@ -9218,7 +16594,23 @@ Menindaklanjuti permintaan pengguna: *"Jalankan Opsi 1"* (Integrasi langsung ke 
 3. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.3`).
 4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 212).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 213: PENYEMPURNAAN URUTAN SEKSI & PROPORSI KOTAK PETUGAS SLIDE ROTASI TV (3 OKTOBER 2026)
 
@@ -9235,14 +16627,46 @@ Menindaklanjuti umpan balik visual pengguna pada tangkapan layar tampilan live s
    - Rasio 2 kolom utama (`.schedule-content-layout`) disesuaikan menjadi **`49% 51%`**.
    - **Dampak Positif:** Kotak "IMAM & KHOTIB" bertambah lebar +110px (+52%) sehingga nama ustadz/imam yang panjang tidak akan terpotong, sedangkan panjang horizontal kotak "MUADZIN", "BILAL", dan "MC MAKLUMAT" berkurang seimbang dan tampak sangat rapi.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Berkas Terkait yang Dimodifikasi
 1. `web-statis/slides/jumat.html` (Penomoran seksi I & II, skala font role petugas 1.02rem bold, pelebaran hero box imam 320px, dan penyesuaian panjang 3 kartu petugas).
 2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.4`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 213).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 214: RESTORASI HALAMAN PETUGAS JUM'AT & PEMBUATAN SLIDE BARU KHUSUS "MAKLUMAT & KAS JUM'AT" DENGAN SMART SCHEDULING (3 OKTOBER 2026)
 
@@ -9253,7 +16677,23 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
 3. **Smart Scheduling (Tayang Otomatis Khusus Hari Jum'at):** Slide baru ini secara otomatis hanya tayang pada hari Jum'at di rotasi TV display (`now.getDay() === 5`), dan otomatis sembunyi pada hari-hari lainnya agar tidak mengganggu rotasi display harian reguler.
 4. **Kontrol Toggle Switch Admin:** Disediakan toggle switch khusus di panel Admin (Pengumuman Jum'at dan Tabel Rotasi Master) untuk mengaktifkan atau menonaktifkan slide ini kapan saja.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Implementasi & Perubahan Kode
 1. **Restorasi Penuh `web-statis/slides/jumat.html`:**
@@ -9291,7 +16731,23 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
    - Menambahkan `'slides/kas-jumat.html'` ke dalam `STATIC_ASSETS`.
    - Menaikkan versi cache PWA menjadi **`aljihad-signage-v3.4.6`**.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/slides/jumat.html` (Restorasi 100% ke tampilan asli sebelum Opsi 1).
@@ -9302,7 +16758,23 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
 6. `web-statis/sw.js` (Registrasi aset statis slide baru & upgrade cache ke `aljihad-signage-v3.4.6`).
 7. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 214).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 215: PERBAIKAN LAYOUT RESPONSIF SLIDE KAJIAN MALAM AHAD (`slides/kajian.html`) — PENANGANAN KOTAK DAN TEKS TERPOTONG PADA KOLOM KIRI (4 OKTOBER 2026)
 
@@ -9318,7 +16790,23 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
   2. Akibatnya, tinggi total elemen melebihi tinggi viewport (`100vh`), menyebabkan `.container` meluap (*overflow*) ke bawah dan tertutup oleh running text ticker (`.bottom-running-wrap`, `z-index: 1000`).
   3. Pada Kolom 1 (kiri), pill `WAKTU PELAKSANAAN` terpotong horizontal tepat pada garis dasar teks (*baseline*), teks jam/waktu pelaksanaan tersembunyi total, dan garis lengkung bawah kartu terpotong. Selain itu, container timeline bawah sempat terdorong ke luar layar.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Solusi & Perubahan Kode
 1. **Penerapan Skala Dinamis Responsif (`clamp()` & `vh/vw`):**
@@ -9341,14 +16829,46 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
 6. **Pembaruan Cache Service Worker PWA (`web-statis/sw.js`):**
    - Menaikkan versi cache PWA menjadi **`aljihad-signage-v3.4.7`** agar seluruh TV dan browser klien langsung memuat pembaruan slide ini secara instan.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/slides/kajian.html` (Perombakan total CSS responsif, perbaikan pill waktu pelaksanaan kolom 1, penyesuaian gap jam header).
 2. `web-statis/sw.js` (Peningkatan versi cache PWA ke `aljihad-signage-v3.4.7`).
 3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 215).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 216: PENYELARASAN HEADER MODE SHOLAT (`prayer-mode.html`) IDENTIK DENGAN HEADER ROTASI DISPLAY TV (4 OKTOBER 2026)
 
@@ -9362,7 +16882,23 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
     3. Kapsul Waktu & Penanggalan `.datetime#datetime`: Kapsul kaca emerald gelap berbingkai emas bercahaya, memuat Tanggal Masehi, Penanggalan Hijriah emas ber-glow, serta Jam:Menit:Detik WIB.
   - Untuk mode sholat, ukuran teks hari, tgl, bulan, tahun, dan jamnya sengaja sedikit diperkecil (*compact scale*) dibandingkan slide rotasi (dari `1.55rem` menjadi `clamp(0.88rem, 1.1vw, 1.12rem)`) agar menyisakan ruang vertikal yang lega untuk badge waktu sholat, 4 kartu petugas Jum'at, hadits, dan pesan hening.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Perubahan yang Diterapkan
 1. **Registrasi Custom Font `Masking Renta` & Montserrat:**
@@ -9390,7 +16926,23 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
    - Menaikkan versi cache Service Worker pada `web-statis/sw.js` ke **`aljihad-signage-v3.4.8`**.
    - Menyinkronkan perubahan ke folder lokal mandiri `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/prayer-mode.html` (Penggantian header masjid, integrasi Masking Renta, penambahan kapsul datetime kompak, dan pemuatan `display-clock-ambient.js`).
@@ -9399,7 +16951,23 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\prayer-mode.html` & `sw.js` (Sinkronisasi lokal mandiri).
 5. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 216).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 217: PERBAIKAN MENYELURUH SINKRONISASI MULTI-DEVICE: RBAC LOGIN CLOUD, ARSITEKTUR MULTI-ROW APP_SETTINGS, REALTIME TV SYNC, DAN PEMBERSIHAN CACHE STALE (4 OKTOBER 2026)
 
@@ -9417,7 +16985,23 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
 4. **Cache Browser & Cloudflare Menahan File Skrip Kadaluwarsa Selama 1 Tahun:**
    - Berkas `web-statis/_headers` menetapkan `Cache-Control: public, max-age=31536000, immutable` pada folder `/js/*` dan `/css/*`, serta Service Worker memakai strategi `Stale-While-Revalidate` pada JS, menyebabkan peramban dan Cloudflare Edge mengeksekusi kode usang tanpa mengecek pembaruan server.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Rincian Solusi & Perbaikan Kode
 
@@ -9464,7 +17048,23 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
   - Menambahkan handler pembersihan cache versi usang secara agresif pada event `activate`.
 - Query string pemanggil seluruh script JavaScript di `index.html`, `login.html`, `slides/*.html` dinaikkan menjadi `?v=5.3.0`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/_headers` (Pembersihan cache 1 tahun Cloudflare).
@@ -9479,7 +17079,23 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
 10. `web-statis/index.html` (Broadcast to active frames, remote sync router, update script version v5.3.0).
 11. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 217).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 218: PENYELESAIAN TUNTAS PERSISTENSI KREDENSIAL AKUN SUPER USER ("SUWARDI") & BUSTING DISK CACHE ADMIN (4 OKTOBER 2026)
 
@@ -9490,7 +17106,23 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
   2. **Penimpaan Balik (*Race Condition Overwrite*) oleh `login.html`:** Ketika pengguna membuka `login.html`, halaman login memanggil `syncUsersFromCloud()`. Karena di Supabase data belum terupdate (masih password lama `admin123`), data lama dari Supabase ditarik dan menimpa kembali `localStorage` pengguna menjadi `admin123`.
   3. **Verifikasi Status HTTP pada `saveUsersToCloud`:** Sebelumnya belum ada penanganan exception ketat bila request simpan ke Supabase menghasilkan status non-200.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Tindakan Perbaikan yang Diterapkan
 1. **Pembaruan Langsung Kredensial Super User di Supabase Cloud:**
@@ -9509,7 +17141,23 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
    - Menghapus logika partial substring match yang ambigu pada `isUserMatch` sehingga hanya mencocokkan exact username, email, nama lengkap, atau nama panggilan resmi tanpa gelar kehormatan.
    - Memperbarui `DEFAULT_AUTH_USERS` bawaan agar Super Admin fallback secara default adalah `Suwardi` dengan password `SuperUser1971`, serta tetap mendukung fallback darurat `admin123`.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `web-statis/js/admin-auth.js` (Penyempurnaan saveUsersToCloud, isUserMatch, dan DEFAULT_AUTH_USERS).
@@ -9518,7 +17166,23 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
 4. `web-statis/sw.js` (Peningkatan cache version ke `aljihad-signage-v5.3.1`).
 5. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 218).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 219: PENETAPAN CLOUDFLARE & GITHUB SEBAGAI DATA CENTER UTAMA SERTA PANDUAN KONFIGURASI FULLY KIOSK BROWSER DI TV DISPLAY (4 OKTOBER 2026)
 
@@ -9529,7 +17193,23 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
   - Setiap perubahan dan rilis kode langsung diprioritaskan deploy ke Cloudflare dan push ke GitHub agar seluruh pengurus/petugas yang mengakses dari smartphone dan laptop masing-masing selalu mendapatkan versi termutakhir secara realtime 100%.
   - Dokumen aturan tetap [AGENTS.md](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/AGENTS.md) telah diperbarui untuk mencerminkan hierarki data center ini.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 2. Panduan Pengaturan Aplikasi Fully Kiosk Browser di Layar TV
 Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tampilan terkini langsung dari Cloudflare tanpa tertahan oleh cache WebView Android:
@@ -9562,13 +17242,45 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
    - Terdapat tombol **"Muat Ulang TV (Reload)"**.
    - Ketika tombol ini diklik, sinyal realtime WebSocket akan memerintahkan TV untuk `location.reload()`. Dikombinasikan dengan fitur *Clear Cache on Reload* di Fully Kiosk, TV akan langsung memuat aset terbaru dari Cloudflare dalam hitungan detik.
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ### 3. Berkas Terkait yang Dimodifikasi
 1. `AGENTS.md` (Penetapan resmi Cloudflare Workers & GitHub sebagai Data Center Utama).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 219 & panduan konfigurasi Fully Kiosk Browser).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 220: PENERBITAN DOKUMEN PANDUAN RESMI PENGATURAN FULLY KIOSK BROWSER DI SMART TV FORMAT PDF (4 OKTOBER 2026)
 
@@ -9593,7 +17305,23 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 4. `web-statis/PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf` (Distribusi web).
 5. `LATEST_UPDATE.md` (Dokumentasi pembaruan Bab 220).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 221: PENYEMPURNAAN TABEL "DAFTAR DONATUR" & FITUR EDIT DONASI INFAQ PADA DASHBOARD BENDAHARA (4 OKTOBER 2026)
 
@@ -9632,7 +17360,23 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/admin.html` (Pembaruan judul "Daftar Donatur", tabel compact list, tombol edit, modal `#modalEditDonasiInfaq`, dan fungsi JS).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 221).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 222: OPTIMALISASI TAMPILAN DISPLAY TV SLIDE PROGRAM INFAQ — PENYESUAIAN LEBAR KOTAK SALURAN TRANSFER & PENAYANGAN KOLOM KETERANGAN DONATUR SECARA PRESISI
 
@@ -9674,7 +17418,23 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/slides/infaq.html` (Rasio grid 2.1fr 1fr, CSS header kolom, CSS grid donatur item, badge keterangan, HTML placeholder, dan JavaScript dynamic render).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 222).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 223: PERBAIKAN SISTEM PEMBUATAN AKUN BARU (ELIMINASI MODAL DUPLIKAT & NOTIFIKASI PALSU SESI LOKAL) SERTA PENYEDERHANAAN KOLOM USERNAME & EMAIL MENJADI 2 BARIS PADA TABEL KELOLA HAK AKSES PENGGUNA
 
@@ -9716,7 +17476,23 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/admin.html` (Penghapusan modal usang, penggabungan kolom Username & Email 2 baris pada thead/dummy/renderUsersTable, pembaruan versi script ke `?v=5.3.3`).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 223).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 224: OPTIMALISASI KONTRAST DISPLAY TV SLIDE PROGRAM INFAQ & PENGADAAN AC — PEMBARUAN WARNA FONT NOMINAL DONATUR MENJADI ORANYE AMBER (#FF9900) & PEMBESARAN TEKS STAT CARDS (TARGET DANA / PEMASUKAN, TERKUMPUL, KEKURANGAN, TOTAL DONATUR)
 
@@ -9759,7 +17535,23 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/slides/infaq.html` (CSS stat-pill, stat-label, stat-value, donatur-val, donatur-header-row, JS render font size, dan script version).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 224).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 225: PERBAIKAN BUG IDENTITAS LOGIN MULTI-AKUN — PENANGANAN PENIMPAAN NAMA AKUN BARU OLEH AKUN DEFAULT DAN RESTORASI IDENTITAS ASLI AKUN DI TOPBAR & HERO GREETING
 
@@ -9793,7 +17585,23 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 3. `web-statis/login.html` (Pembaruan role preset petugas dan script version `?v=5.3.4`).
 4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 225).
 
+
 ---
+
+## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+
+### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
+
+**Masalah:** Password di-hash dua kali karena User model punya casts() dengan `'password' => 'hashed'` sekaligus UserController sudah memanggil `Hash::make()` manual. Akun Bendahara dan Petugas yang baru dibuat tidak bisa login.
+
+**Perbaikan:** Hapus `'password' => 'hashed'` dari `casts()` di `app/Models/User.php`.
+
+**Akun di-reset:** `bendahara@aljihad.com` dan `dkm@aljihad.com` → password sementara: **`Aljihad2024`** (ganti segera!)
+
+> ⚠️ **Agent berikutnya:** Jangan tambah `'password' => 'hashed'` di `casts()` selama `UserController` pakai `Hash::make()` manual.
+
+---
+
 
 ## BAB 226: PENAMBAHAN FITUR UPLOAD FOTO IMAM & KHOTIB SHOLAT JUM'AT DI FORM ADMIN, DILENGKAPI PRATINJAU REALTIME DISPLAY TV RAUDHAH & SINKRONISASI CLOUD SUPABASE
 
