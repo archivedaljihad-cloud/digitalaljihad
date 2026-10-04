@@ -9759,6 +9759,41 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/slides/infaq.html` (CSS stat-pill, stat-label, stat-value, donatur-val, donatur-header-row, JS render font size, dan script version).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 224).
 
+---
+
+## BAB 225: PERBAIKAN BUG IDENTITAS LOGIN MULTI-AKUN — PENANGANAN PENIMPAAN NAMA AKUN BARU OLEH AKUN DEFAULT DAN RESTORASI IDENTITAS ASLI AKUN DI TOPBAR & HERO GREETING
+
+### 1. Masalah & Kebutuhan Pengguna
+- **Nama Akun Baru Tertimpa Akun Lama:** Saat pengguna membuat akun baru (contoh: *"DKM Al Jihad"* dengan peran Petugas/Operator TV) lalu login dengan kredensial tersebut, nama yang muncul di topbar dashboard bukanlah "DKM Al Jihad", melainkan nama akun default lama: **"Bpk. Ust. Ahmad"** dengan avatar inisial **"U"**.
+- **Akar Masalah Teknis:**
+  - Pada fungsi `AdminAuth.getCurrentUser()` di `web-statis/js/admin-auth.js` serta skrip inline sapaan di `web-statis/admin.html`, terdapat logika pencarian usang:
+    `const matched = list.find(u => String(u.id) === String(user.id) || (u.role && u.role === user.role));`
+  - Klausa `|| (u.role && u.role === user.role)` merupakan peninggalan kode masa lalu saat sistem hanya mengizinkan 1 akun per role. Ketika sistem kini mendukung multi-akun, klausa tersebut menyebabkan user yang login dengan role `'petugas'` selalu dicocokkan dengan akun pertama yang memiliki role `'petugas'` di dalam daftar (yaitu akun bawaan ID 2 lama yang bernama *"Bpk. Ust. Ahmad"*).
+  - Akibatnya, properti `user.name` dari akun baru ("DKM Al Jihad") ditimpa secara paksa menjadi "Bpk. Ust. Ahmad", dan inisial avatar topbar mengambil huruf 'U' dari gelar Ust.
+
+### 2. Solusi & Perubahan Teknis
+1. **Eliminasi Pencocokan Berdasarkan Role pada Sesi Pengguna:**
+   - Menghapus tuntas klausa `|| (u.role && u.role === user.role)` pada `AdminAuth.getCurrentUser()` di `web-statis/js/admin-auth.js` dan skrip inline di `web-statis/admin.html`.
+   - Pencocokan profil pengguna yang sedang login kini murni dan ketat hanya berdasarkan identitas unik:
+     `String(u.id) === String(user.id) || (u.username === user.username) || (u.email === user.email)`.
+2. **Restorasi Nama Asli Akun & Avatar Inisial di Topbar/Sidebar:**
+   - Memperbarui `AdminAuth.applyRBAC(user)` agar elemen profil `.auth-user-name` di topbar dan sidebar langsung menampilkan nama asli akun (`user.name`, contoh: **"DKM Al Jihad"**).
+   - Inisial avatar `.auth-user-initial` kini mengekstrak huruf pertama dari nama akun tersebut (contoh: huruf **"D"** dari "DKM Al Jihad").
+3. **Penyempurnaan Gelar Kehormatan (`getFormattedGreeting`):**
+   - Menambahkan filter pendeteksi nama institusi/organisasi (seperti DKM, Pengurus, Panitia, Tim, Sekretariat, Yayasan) agar tidak diberi awalan personal *"Bpk."* yang kurang pas (sehingga sapaan menjadi *"Selamat Datang, DKM Al Jihad (Pengurus / Operator Masjid Jami' Al Jihad)!"*).
+4. **Pembaruan Akun Bawaan ID 2:**
+   - Menyelaraskan data akun default ID 2 di `DEFAULT_AUTH_USERS` dari nama lama *"Bpk. Ust. Ahmad"* menjadi nama pengurus resmi terkini: *"Bpk. Ust. Hadi Prayitno (KETUA DKM)"* (`dkmsatu@aljihad.com` / `ketua`).
+5. **Pembaruan Presets & Versi Cache-Busting:**
+   - Memperbarui preset role petugas di `web-statis/login.html`.
+   - Menaikkan versi tag script pada `admin.html` dan `login.html` ke `?v=5.3.4` agar seluruh browser pengurus langsung memuat logika autentikasi mutakhir tanpa cache usang.
+
+### 3. Berkas Terkait yang Dimodifikasi:
+1. `web-statis/js/admin-auth.js` (Eliminasi role matching, update DEFAULT_AUTH_USERS, handling nama organisasi, penataan inisial avatar).
+2. `web-statis/admin.html` (Eliminasi role matching di inline script, perbaikan fallback nama, update script ke `?v=5.3.4`).
+3. `web-statis/login.html` (Pembaruan role preset petugas dan script version `?v=5.3.4`).
+4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 225).
+
+
 
 
 

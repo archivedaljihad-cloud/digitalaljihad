@@ -1627,7 +1627,9 @@
                                                 var ul = JSON.parse(rawList);
                                                 if (Array.isArray(ul)) {
                                                     var m = ul.find(function(item) {
-                                                        return String(item.id) === String(u.id) || item.role === u.role;
+                                                        return (item.id && u.id && String(item.id) === String(u.id)) ||
+                                                               (item.username && u.username && item.username.toLowerCase() === u.username.toLowerCase()) ||
+                                                               (item.email && u.email && item.email.toLowerCase() === u.email.toLowerCase());
                                                     });
                                                     if (m && m.name) u.name = m.name;
                                                 }
@@ -1644,11 +1646,12 @@
                                         var rawName = (u.name || '').trim();
                                         var cleanName = rawName.replace(/\s*\([^)]*\)\s*$/g, '').trim();
                                         if (!cleanName) {
-                                            cleanName = (r === 'admin' ? 'Bpk. H. M. Sholeh' : (r === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Ahmad'));
+                                            cleanName = (r === 'admin' ? 'Suwardi' : (r === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Hadi Prayitno'));
                                         }
                                         var displayName = cleanName;
                                         var lower = cleanName.toLowerCase();
-                                        if (!lower.startsWith('bpk.') && !lower.startsWith('bpk ') && !lower.startsWith('bapak') && !lower.startsWith('ust.') && !lower.startsWith('ustadz') && !lower.startsWith('ibu') && !lower.startsWith('hj.')) {
+                                        var isOrg = lower.startsWith('dkm') || lower.startsWith('pengurus') || lower.startsWith('panitia') || lower.startsWith('tim') || lower.startsWith('sekretariat') || lower.startsWith('takmir') || lower.startsWith('yayasan');
+                                        if (!isOrg && !lower.startsWith('bpk.') && !lower.startsWith('bpk ') && !lower.startsWith('bapak') && !lower.startsWith('ust.') && !lower.startsWith('ustadz') && !lower.startsWith('ibu') && !lower.startsWith('hj.') && !lower.startsWith('h.')) {
                                             displayName = 'Bpk. ' + cleanName;
                                         }
                                         var roleSuffix = (r === 'bendahara') ? "(Bendahara Masjid Jami' Al Jihad)" :
@@ -7141,10 +7144,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=5.3.3"></script>
-    <script src="js/supabase-db.js?v=5.3.3"></script>
-    <script src="js/admin-auth.js?v=5.3.3"></script>
-    <script src="js/gemini-ai.js?v=5.3.3"></script>
+    <script src="js/supabase-config.js?v=5.3.4"></script>
+    <script src="js/supabase-db.js?v=5.3.4"></script>
+    <script src="js/admin-auth.js?v=5.3.4"></script>
+    <script src="js/gemini-ai.js?v=5.3.4"></script>
 
     <script>
         // 1. Verifikasi Autentikasi Pengguna saat halaman dimuat

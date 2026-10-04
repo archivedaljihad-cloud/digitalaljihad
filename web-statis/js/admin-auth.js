@@ -36,9 +36,9 @@ const DEFAULT_AUTH_USERS = [
     },
     {
         id: 2,
-        name: 'Bpk. Ust. Ahmad',
-        email: 'petugas@aljihad.com',
-        username: 'operator',
+        name: 'Bpk. Ust. Hadi Prayitno (KETUA DKM)',
+        email: 'dkmsatu@aljihad.com',
+        username: 'ketua',
         password: 'operator123',
         role: 'petugas',
         role_id: 2,
@@ -105,9 +105,9 @@ const AdminAuth = {
                         try { cloudUsers = JSON.parse(cloudUsers); } catch(e) {}
                     }
                     if (Array.isArray(cloudUsers) && cloudUsers.length > 0) {
-                        // Pastikan akun bawaan (admin, bendahara, petugas) tetap lengkap
+                        // Pastikan akun bawaan resmi (ID 3, 1, 2) tetap ada jika belum terdaftar
                         DEFAULT_AUTH_USERS.forEach(def => {
-                            const exists = cloudUsers.some(u => (u.role === def.role) || (String(u.id) === String(def.id)));
+                            const exists = cloudUsers.some(u => (u.id && String(u.id) === String(def.id)) || (u.email && def.email && u.email.toLowerCase() === def.email.toLowerCase()));
                             if (!exists) {
                                 cloudUsers.push(Object.assign({}, def));
                             }
@@ -262,10 +262,10 @@ const AdminAuth = {
             finalUsers.push(normalizedUser);
         });
 
-        // Pastikan minimal ada 1 Super Admin, 1 Bendahara, 1 Petugas bawaan jika akun belum lengkap
+        // Pastikan akun bawaan resmi (ID 3, 1, 2) tetap tersedia jika belum ada di sistem
         DEFAULT_AUTH_USERS.forEach(def => {
-            const hasRole = finalUsers.some(u => u.role === def.role);
-            if (!hasRole && !existingEmails.has(def.email.toLowerCase())) {
+            const exists = finalUsers.some(u => (u.id && String(u.id) === String(def.id)) || (u.email && def.email && u.email.toLowerCase() === def.email.toLowerCase()));
+            if (!exists && !existingEmails.has(def.email.toLowerCase())) {
                 finalUsers.push(Object.assign({}, def));
                 existingEmails.add(def.email.toLowerCase());
             }
@@ -529,10 +529,20 @@ const AdminAuth = {
                 if (rawList) {
                     const list = JSON.parse(rawList);
                     if (Array.isArray(list)) {
-                        const matched = list.find(u => String(u.id) === String(user.id) || (u.role && u.role === user.role));
-                        if (matched && matched.name) {
-                            user.name = matched.name;
+                        // HANYA cocokkan berdasarkan ID unik, Username, atau Email persis (JANGAN PERNAH berdasarkan role!)
+                        const matched = list.find(u => 
+                            (u.id && user.id && String(u.id) === String(user.id)) ||
+                            (u.username && user.username && u.username.toLowerCase() === user.username.toLowerCase()) ||
+                            (u.email && user.email && u.email.toLowerCase() === user.email.toLowerCase())
+                        );
+                        if (matched) {
+                            if (matched.name) user.name = matched.name;
                             if (matched.email) user.email = matched.email;
+                            if (matched.username) user.username = matched.username;
+                            if (matched.role) user.role = matched.role;
+                            if (matched.role_label) user.role_label = matched.role_label;
+                            if (matched.role_icon) user.role_icon = matched.role_icon;
+                            if (matched.color) user.color = matched.color;
                         }
                     }
                 }
@@ -931,17 +941,18 @@ const AdminAuth = {
 
         // Jika belum diset namanya, gunakan fallback default
         if (!rawName) {
-            rawName = (role === 'admin' ? 'Bpk. H. M. Sholeh' : (role === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Ahmad'));
+            rawName = (role === 'admin' ? 'Suwardi' : (role === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Hadi Prayitno'));
         }
 
         // 1. Bersihkan tanda kurung peran sebelumnya di nama jika ada (misal "H. Utut Priyastya (Bendahara)" -> "H. Utut Priyastya")
         let cleanName = rawName.replace(/\s*\([^)]*\)\s*$/g, '').trim();
         if (!cleanName) cleanName = rawName;
 
-        // 2. Beri sapaan kehormatan Bpk. jika belum ada awalan Bpk./Bapak/Ust./Ustadz/Hj./Ibu
+        // 2. Beri sapaan kehormatan Bpk. jika belum ada awalan personal & bukan nama institusi/organisasi
         let displayName = cleanName;
         const lower = cleanName.toLowerCase();
-        if (!lower.startsWith('bpk.') && !lower.startsWith('bpk ') && !lower.startsWith('bapak') && !lower.startsWith('ust.') && !lower.startsWith('ustadz') && !lower.startsWith('ibu') && !lower.startsWith('hj.')) {
+        const isOrg = lower.startsWith('dkm') || lower.startsWith('pengurus') || lower.startsWith('panitia') || lower.startsWith('tim') || lower.startsWith('sekretariat') || lower.startsWith('takmir') || lower.startsWith('yayasan');
+        if (!isOrg && !lower.startsWith('bpk.') && !lower.startsWith('bpk ') && !lower.startsWith('bapak') && !lower.startsWith('ust.') && !lower.startsWith('ustadz') && !lower.startsWith('ibu') && !lower.startsWith('hj.') && !lower.startsWith('h.')) {
             displayName = 'Bpk. ' + cleanName;
         }
 
@@ -999,11 +1010,12 @@ const AdminAuth = {
             heroTitleEl.innerHTML = `Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">${greetingData.displayName} ${greetingData.roleSuffix}</span>!`;
         }
 
-        // 3. Update Label Profil di Sidebar dan Topbar
+        // 3. Update Label Profil di Sidebar dan Topbar (Gunakan nama asli akun pengguna)
+        const accountRealName = (user.name || '').trim();
         document.querySelectorAll('.auth-user-name').forEach(el => {
             // Jangan timpa jika elemen berada di dalam hero banner
             if (el.closest && el.closest('.welcome-hero-banner')) return;
-            el.textContent = greetingData.displayName || user.name || 'Pengurus Masjid';
+            el.textContent = accountRealName || greetingData.displayName || 'Pengurus Masjid';
         });
 
         document.querySelectorAll('.auth-user-role-label').forEach(el => {
@@ -1011,8 +1023,8 @@ const AdminAuth = {
         });
 
         document.querySelectorAll('.auth-user-initial').forEach(el => {
-            const cleanStr = (greetingData.displayName || user.name || 'U').replace(/^Bpk\.\s*/i, '').trim();
-            const firstLetter = cleanStr.charAt(0).toUpperCase() || 'U';
+            const cleanStr = accountRealName.replace(/^(bpk\.|ust\.|h\.|ibu|haji|ustadz|kyai|bapak|hj\.)\s+/i, '').trim();
+            const firstLetter = cleanStr.charAt(0).toUpperCase() || accountRealName.charAt(0).toUpperCase() || 'U';
             el.textContent = firstLetter;
         });
 
