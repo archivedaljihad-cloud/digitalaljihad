@@ -2572,6 +2572,43 @@
                                             <input type="hidden" id="jumatImam" value="Ust. Dr. H. Faisal, M.Ag">
                                             <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i> Khotib dan Imam sholat dijadikan 1 kolom petugas (atau pisahkan dengan ' / ' jika berbeda orang).</small>
                                         </div>
+
+                                        <!-- INPUT UPLOAD FOTO IMAM & KHOTIB JUMAT -->
+                                        <div class="form-group mb-3 p-3 rounded shadow-sm" style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 14px;">
+                                            <label class="font-weight-bold d-flex align-items-center justify-content-between mb-2">
+                                                <span><i class="fas fa-camera text-success mr-1"></i> Foto Imam & Khotib (Display TV)</span>
+                                                <span class="badge badge-success px-2 py-1"><i class="fas fa-tv mr-1"></i> Tayang di Layar TV</span>
+                                            </label>
+                                            
+                                            <div class="d-flex align-items-center flex-wrap" style="gap: 14px;">
+                                                <div class="position-relative" style="width: 82px; height: 102px; border-radius: 10px; overflow: hidden; border: 2px solid #10b981; background: #02120b; box-shadow: 0 4px 10px rgba(0,0,0,0.15); flex-shrink: 0;">
+                                                    <img id="jumatFotoPreviewImg" src="image/display/default_imam.jpg" alt="Foto Imam" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='image/display/default_imam.jpg';">
+                                                    <span id="jumatFotoBadge" class="badge badge-success position-absolute" style="bottom: 2px; left: 2px; right: 2px; font-size: 8.5px; padding: 2px 4px; border-radius: 4px; text-align: center;">Terkini</span>
+                                                </div>
+                                                
+                                                <div style="flex: 1; min-width: 200px;">
+                                                    <input type="file" id="jumatFotoFile" class="d-none" accept="image/*" onchange="handleJumatFotoUpload(event)">
+                                                    <div class="btn-group btn-group-sm mb-2 w-100 flex-wrap" style="gap: 6px;">
+                                                        <label for="jumatFotoFile" class="btn btn-success font-weight-bold mb-0 shadow-sm" style="cursor: pointer; border-radius: 8px !important;">
+                                                            <i class="fas fa-upload mr-1"></i> Upload / Ganti Foto
+                                                        </label>
+                                                        <button type="button" class="btn btn-outline-danger font-weight-bold shadow-sm" onclick="resetJumatFoto()" style="border-radius: 8px !important;" title="Gunakan Foto Standar">
+                                                            <i class="fas fa-undo mr-1"></i> Reset Default
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text bg-white text-muted"><i class="fas fa-link"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="jumatFotoUrlInput" placeholder="Atau tautan URL / jalur foto (opsional)" onchange="handleJumatFotoUrlChange(this.value)">
+                                                    </div>
+                                                    <small class="text-muted mt-1 d-block" style="font-size: 11px;">
+                                                        <i class="fas fa-info-circle mr-1"></i> Format PNG, JPG, JPEG, WEBP. Otomatis dikompresi ringan & tajam untuk layar TV.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Muadzin</label>
                                             <input type="text" class="form-control" id="jumatMuadzin" value="Ust. Rudy" placeholder="Masukkan nama Muadzin">
@@ -2633,9 +2670,18 @@
                                             <div class="badge badge-success px-3 py-1 font-weight-bold mb-3" id="prevJumatDurasiBadge" style="font-size: 11px;">
                                                 <i class="fas fa-hourglass-half mr-1"></i> Durasi TV: 50 Menit
                                             </div>
-                                            <div class="jumat-officer-item text-left">
-                                                <div class="jumat-officer-label">Khatib & Imam</div>
-                                                <div class="jumat-officer-name" id="prevJumatKhotib">Ust. Faiq Rido</div>
+                                            <!-- KOTAK PRATINJAU FOTO IMAM & KHOTIB PERSIS DISPLAY TV -->
+                                            <div class="d-flex align-items-center mb-2 text-left" style="gap: 12px; background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 10px; border: 1.2px solid rgba(255, 215, 0, 0.45);">
+                                                <div style="flex: 0 0 76px; width: 76px; height: 95px; border-radius: 8px; overflow: hidden; border: 1.5px solid #ffd700; background: #02120b; box-shadow: 0 4px 10px rgba(0,0,0,0.5); position: relative;">
+                                                    <img id="prevJumatImamPhoto" src="image/display/default_imam.jpg" alt="Foto Imam" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='image/display/default_imam.jpg';">
+                                                    <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(2, 16, 11, 0.9); font-size: 8px; color: #ffd700; font-weight: 800; text-align: center; padding: 2px; text-transform: uppercase;">IMAM & KHOTIB</div>
+                                                </div>
+                                                <div style="flex: 1; min-width: 0;">
+                                                    <div class="jumat-officer-item text-left m-0 p-2" style="background: transparent; border: none;">
+                                                        <div class="jumat-officer-label" style="color: #ffd700; font-size: 11px;">Khatib & Imam Sholat</div>
+                                                        <div class="jumat-officer-name text-truncate" id="prevJumatKhotib" style="color: #ffffff; font-size: 14.5px; font-weight: 700;">Ust. Faiq Rido</div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="jumat-officer-item text-left mt-2">
                                                 <div class="jumat-officer-label">Muadzin</div>
@@ -8294,6 +8340,34 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         if (document.getElementById('jumatBilal')) document.getElementById('jumatBilal').value = bilalVal;
                         if (document.getElementById('jumatMaklumat')) document.getElementById('jumatMaklumat').value = maklumatVal;
 
+                        // 6. Muat Foto Imam & Khotib (Display TV)
+                        let fotoImamSrc = (j.foto_imam || '').trim();
+                        try {
+                            if (resSetSettled.status === 'fulfilled' && resSetSettled.value.ok) {
+                                const sList = await resSetSettled.value.clone().json();
+                                if (sList && sList[0] && sList[0].running_text_pages && sList[0].running_text_pages.jumat_foto_imam_b64) {
+                                    fotoImamSrc = sList[0].running_text_pages.jumat_foto_imam_b64;
+                                }
+                            }
+                        } catch (e) {}
+
+                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded') {
+                            try {
+                                const cachedF = localStorage.getItem('cached_jumat_foto_imam');
+                                if (cachedF) fotoImamSrc = cachedF;
+                            } catch (e) {}
+                        }
+
+                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded') {
+                            fotoImamSrc = 'image/display/default_imam.jpg';
+                        }
+
+                        if (document.getElementById('jumatFotoPreviewImg')) document.getElementById('jumatFotoPreviewImg').src = fotoImamSrc;
+                        if (document.getElementById('prevJumatImamPhoto')) document.getElementById('prevJumatImamPhoto').src = fotoImamSrc;
+                        if (document.getElementById('jumatFotoUrlInput') && j.foto_imam && j.foto_imam !== 'custom_uploaded' && !j.foto_imam.startsWith('data:')) {
+                            document.getElementById('jumatFotoUrlInput').value = j.foto_imam;
+                        }
+
                         // Update Dashboard & Preview
                         if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = namaKhotibImam || '-';
                         if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = namaKhotibImam || '-';
@@ -10635,6 +10709,104 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             }
         }
 
+        // =======================================================
+        // PENGELOLAAN UPLOAD FOTO IMAM & KHOTIB JUMAT
+        // =======================================================
+        let jumatFotoImamBase64 = null;
+
+        function handleJumatFotoUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 8 * 1024 * 1024) {
+                alert('Ukuran berkas foto terlalu besar! Maksimal 8MB.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // Kompresi otomatis proporsional (maks 550x700 px, kualitas 0.82)
+                    const canvas = document.createElement('canvas');
+                    let w = img.width;
+                    let h = img.height;
+                    const maxW = 550;
+                    const maxH = 700;
+                    if (w > maxW || h > maxH) {
+                        if (w / h > maxW / maxH) {
+                            h = Math.round((h * maxW) / w);
+                            w = maxW;
+                        } else {
+                            w = Math.round((w * maxH) / h);
+                            h = maxH;
+                        }
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+
+                    const compressed = canvas.toDataURL('image/jpeg', 0.82);
+                    jumatFotoImamBase64 = compressed;
+
+                    const prevForm = document.getElementById('jumatFotoPreviewImg');
+                    const prevTv = document.getElementById('prevJumatImamPhoto');
+                    if (prevForm) prevForm.src = compressed;
+                    if (prevTv) prevTv.src = compressed;
+
+                    const badge = document.getElementById('jumatFotoBadge');
+                    if (badge) {
+                        badge.className = 'badge badge-primary position-absolute';
+                        badge.textContent = 'Foto Baru';
+                    }
+
+                    const urlInput = document.getElementById('jumatFotoUrlInput');
+                    if (urlInput) urlInput.value = '';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleJumatFotoUrlChange(url) {
+            const clean = (url || '').trim();
+            if (!clean) return;
+            jumatFotoImamBase64 = null;
+
+            const prevForm = document.getElementById('jumatFotoPreviewImg');
+            const prevTv = document.getElementById('prevJumatImamPhoto');
+            if (prevForm) prevForm.src = clean;
+            if (prevTv) prevTv.src = clean;
+
+            const badge = document.getElementById('jumatFotoBadge');
+            if (badge) {
+                badge.className = 'badge badge-info position-absolute';
+                badge.textContent = 'URL Web';
+            }
+        }
+
+        function resetJumatFoto() {
+            jumatFotoImamBase64 = '';
+            const fileInput = document.getElementById('jumatFotoFile');
+            if (fileInput) fileInput.value = '';
+            const urlInput = document.getElementById('jumatFotoUrlInput');
+            if (urlInput) urlInput.value = '';
+
+            const defaultSrc = 'image/display/default_imam.jpg';
+            const prevForm = document.getElementById('jumatFotoPreviewImg');
+            const prevTv = document.getElementById('prevJumatImamPhoto');
+            if (prevForm) prevForm.src = defaultSrc;
+            if (prevTv) prevTv.src = defaultSrc;
+
+            const badge = document.getElementById('jumatFotoBadge');
+            if (badge) {
+                badge.className = 'badge badge-secondary position-absolute';
+                badge.textContent = 'Default';
+            }
+        }
+
         // Simpan Petugas Sholat Jum'at & Durasi Sholat Jum'at Khusus Pekan Ini
         async function simpanPetugasJumat() {
             const tgl = document.getElementById('jumatTanggal')?.value;
@@ -10643,6 +10815,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             const bilalOnly = document.getElementById('jumatBilal')?.value.trim() || '';
             const maklumatOnly = document.getElementById('jumatMaklumat')?.value.trim() || '';
             const jumatDur = parseInt(document.getElementById('jumatDurasiInput')?.value) || 50;
+            const urlInput = document.getElementById('jumatFotoUrlInput')?.value.trim() || '';
 
             if (!khotibImam || !tgl) {
                 alert('Harap lengkapi nama Khotib & Imam, serta Tanggal Jum\'at!');
@@ -10667,18 +10840,41 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 combinedBilal = bilalOnly ? `${bilalOnly} / ${maklumatOnly}` : `- / ${maklumatOnly}`;
             }
 
+            // Tentukan foto_imam
+            let fotoImamVal = 'image/display/default_imam.jpg';
+            if (jumatFotoImamBase64) {
+                fotoImamVal = 'custom_uploaded';
+            } else if (urlInput) {
+                fotoImamVal = urlInput;
+            } else {
+                try {
+                    const cached = localStorage.getItem('cached_jumat_foto_imam');
+                    if (cached && cached !== 'image/display/default_imam.jpg') {
+                        fotoImamVal = cached.startsWith('data:') ? 'custom_uploaded' : cached;
+                    }
+                } catch (e) {}
+            }
+
             const payload = {
                 tanggal: tgl,
                 khatib: finalKhatib,
                 imam: finalImam,
                 muadzin: muadzin,
-                bilal: combinedBilal
+                bilal: combinedBilal,
+                foto_imam: fotoImamVal
             };
 
             // Simpan juga ke cache lokal
             try {
                 localStorage.setItem('cached_jumat_bilal', bilalOnly);
                 localStorage.setItem('cached_jumat_maklumat', maklumatOnly);
+                if (jumatFotoImamBase64) {
+                    localStorage.setItem('cached_jumat_foto_imam', jumatFotoImamBase64);
+                } else if (urlInput) {
+                    localStorage.setItem('cached_jumat_foto_imam', urlInput);
+                } else if (jumatFotoImamBase64 === '') {
+                    localStorage.removeItem('cached_jumat_foto_imam');
+                }
                 localStorage.setItem('cached_sholat_jumat', JSON.stringify(payload));
             } catch (e) {}
 
@@ -10723,7 +10919,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     });
                 }
 
-                // 2. Simpan durasi sholat Jum'at & maklumat ke app_settings
+                // 2. Simpan durasi sholat Jum'at, maklumat & foto imam base64 ke app_settings
                 let currentRt = {};
                 try {
                     const rtRaw = localStorage.getItem('cached_running_text_pages');
@@ -10731,6 +10927,11 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 } catch (e) {}
                 currentRt.jumat_maklumat = maklumatOnly;
                 currentRt.jumat_bilal = bilalOnly;
+                if (jumatFotoImamBase64) {
+                    currentRt.jumat_foto_imam_b64 = jumatFotoImamBase64;
+                } else if (jumatFotoImamBase64 === '') {
+                    delete currentRt.jumat_foto_imam_b64;
+                }
                 try { localStorage.setItem('cached_running_text_pages', JSON.stringify(currentRt)); } catch (e) {}
 
                 await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
@@ -10758,7 +10959,14 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = muadzin;
                     if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = bilalOnly || '-';
                     if (document.getElementById('dashJumatMaklumat')) document.getElementById('dashJumatMaklumat').textContent = maklumatOnly || '-';
-                    alert(`Alhamdulillah! Petugas Sholat Jum'at dan durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
+                    
+                    const badge = document.getElementById('jumatFotoBadge');
+                    if (badge) {
+                        badge.className = 'badge badge-success position-absolute';
+                        badge.textContent = 'Tersimpan';
+                    }
+
+                    alert(`Alhamdulillah! Petugas Sholat Jum'at, foto Imam & Khotib, serta durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
                     // Otomatis generate dan buka modal flyer WhatsApp
                     setTimeout(() => {
                         bukaModalFlyerJumat(true);

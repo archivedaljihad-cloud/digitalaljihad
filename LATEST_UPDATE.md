@@ -9793,6 +9793,48 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 3. `web-statis/login.html` (Pembaruan role preset petugas dan script version `?v=5.3.4`).
 4. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 225).
 
+---
+
+## BAB 226: PENAMBAHAN FITUR UPLOAD FOTO IMAM & KHOTIB SHOLAT JUM'AT DI FORM ADMIN, DILENGKAPI PRATINJAU REALTIME DISPLAY TV RAUDHAH & SINKRONISASI CLOUD SUPABASE
+
+### 1. Masalah & Kebutuhan Pengguna
+- **Pertanyaan Pengguna:** *"Dihalaman Petugas sholat jum'at, dimana bisa mengupload foto Imam&Khotibnya ?"*
+- **Kondisi Sebelumnya:**
+  - Pada slide TV Jum'at (`web-statis/slides/jumat.html`), sistem sebenarnya sudah memiliki wadah tampilan bingkai foto Imam & Khotib (`.imam-card-box` dan `#imamPhoto`), serta kolom `foto_imam` di database.
+  - Namun di halaman form admin (`web-statis/admin.html` pada View Petugas Sholat Jum'at), **belum disediakan elemen input / tombol untuk mengunggah foto Imam & Khotib**, dan pada kotak *Preview Tampilan Layar TV Raudhah* di sisi kanan form juga belum menampilkan bingkai foto. Akibatnya pengguna/petugas masjid tidak dapat mengganti foto ustadz yang akan bertugas.
+
+### 2. Solusi & Perubahan Teknis
+1. **Penambahan Bagian Unggah Foto Imam & Khotib di Form Admin (`web-statis/admin.html`):**
+   - Menambahkan kotak input upload foto yang elegan dan responsif tepat di bawah kolom *Khotib & Imam Sholat*:
+     - **Pratinjau Thumbnail (`#jumatFotoPreviewImg`):** Menampilkan foto imam terkini dengan bingkai hijau emerald, sudut membulat, dan badge status ("Terkini", "Foto Baru", "URL Web", atau "Default").
+     - **Tombol Upload (`#jumatFotoFile`):** Menggunakan elemen input file tersembunyi dengan tombol pemicu berlabel *Upload / Ganti Foto* (`btn-success`).
+     - **Tombol Reset Default (`resetJumatFoto()`):** Mengembalikan foto seketika ke foto standar masjid (`image/display/default_imam.jpg`).
+     - **Input Tautan / Jalur Foto (`#jumatFotoUrlInput`):** Opsi fleksibel jika petugas ingin memasukkan URL gambar web atau jalur aset foto lokal.
+2. **Kompresi Otomatis di Sisi Klien (HTML5 Canvas):**
+   - Fungsi `handleJumatFotoUpload(event)` secara cerdas mengompresi gambar yang diunggah ke ukuran maksimal 550x700 px (kualitas JPEG 0.82). Hal ini menghasilkan string data gambar berkualitas jernih dan tajam namun berbobot sangat ringan (~25–50 KB), sehingga tidak membebani kuota jaringan dan layar TV memuatnya tanpa jeda (*zero lag*).
+3. **Penyempurnaan Kotak Preview Layar TV Raudhah:**
+   - Memperbarui kotak pratinjau TV di sebelah kanan form admin agar menampilkan dua kolom persis seperti tata letak layar TV Raudhah:
+     - Sisi kiri: Bingkai foto Imam & Khotib (`#prevJumatImamPhoto`) dengan ornamen border emas dan label "IMAM & KHOTIB".
+     - Sisi kanan: Detail nama Khatib & Imam, Muadzin, Bilal, dan Pembaca Maklumat.
+   - Saat petugas mengunggah foto baru, foto di dalam kotak pratinjau TV ini langsung berganti secara real-time.
+4. **Penyimpanan Multi-Layer (Supabase & App Settings JSON):**
+   - Nilai foto disimpan secara aman:
+     - Jika berupa foto file unggahan lokal, base64 disimpan di `app_settings.running_text_pages.jumat_foto_imam_b64` dan kolom `sholat_jumat.foto_imam` disetel ke `'custom_uploaded'`.
+     - Jika berupa URL atau path lokal (<= 255 karakter), disimpan langsung ke `sholat_jumat.foto_imam`.
+     - Disimpan juga ke cache browser lokal (`localStorage.setItem('cached_jumat_foto_imam', ...)`).
+5. **Pembaruan Loader Foto di Slide TV Display (`web-statis/slides/jumat.html`):**
+   - Fungsi `loadJumatData()` diperbarui agar memeriksa secara berurutan:
+     1. Properti `jumat.foto_imam` (URL eksternal `http`, path lokal `image/...` atau `../image/...`).
+     2. Properti `settings.running_text_pages.jumat_foto_imam_b64` (foto base64 hasil unggahan).
+     3. Fallback `cached_jumat_foto_imam` dari localStorage.
+     4. Fallback foto standar: `../image/display/default_imam.jpg`.
+   - Menggunakan penanganan error gambar `onerror` yang aman agar tidak terjadi broken image jika koneksi lambat.
+
+### 3. Berkas Terkait yang Dimodifikasi:
+1. `web-statis/admin.html` (Penambahan form upload foto imam, pratinjau display TV raudhah, pemuatan data awal foto, dan fungsi `simpanPetugasJumat` terintegrasi).
+2. `web-statis/slides/jumat.html` (Penyempurnaan pembacaan foto imam berbasis multi-source base64/URL/path lokal).
+3. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 226).
+
 
 
 

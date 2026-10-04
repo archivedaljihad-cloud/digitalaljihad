@@ -568,12 +568,31 @@
                         if (rowMaklumat) rowMaklumat.style.display = 'none';
                     }
 
-                    // Foto
-                    if (jumat.foto_imam) {
-                        const photoUrl = jumat.foto_imam.startsWith('http') 
-                            ? jumat.foto_imam 
-                            : `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${jumat.foto_imam}`;
-                        document.getElementById('imamPhoto').src = photoUrl;
+                    // Foto Imam & Khotib (Display TV)
+                    let photoUrl = '';
+                    if (jumat.foto_imam && jumat.foto_imam !== 'custom_uploaded') {
+                        if (jumat.foto_imam.startsWith('http') || jumat.foto_imam.startsWith('data:')) {
+                            photoUrl = jumat.foto_imam;
+                        } else if (jumat.foto_imam.startsWith('image/') || jumat.foto_imam.startsWith('img/')) {
+                            photoUrl = '../' + jumat.foto_imam;
+                        } else if (jumat.foto_imam.startsWith('../')) {
+                            photoUrl = jumat.foto_imam;
+                        } else {
+                            photoUrl = `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${jumat.foto_imam}`;
+                        }
+                    }
+                    if (!photoUrl && settings?.running_text_pages?.jumat_foto_imam_b64) {
+                        photoUrl = settings.running_text_pages.jumat_foto_imam_b64;
+                    }
+                    if (!photoUrl) {
+                        try {
+                            const cachedPhoto = localStorage.getItem('cached_jumat_foto_imam');
+                            if (cachedPhoto) photoUrl = cachedPhoto;
+                        } catch (e) {}
+                    }
+                    const elImamPhoto = document.getElementById('imamPhoto');
+                    if (elImamPhoto) {
+                        elImamPhoto.src = photoUrl || '../image/display/default_imam.jpg';
                     }
                 }
             } catch (err) {
