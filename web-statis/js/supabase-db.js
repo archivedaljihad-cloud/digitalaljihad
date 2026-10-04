@@ -740,6 +740,11 @@
             } catch (err) {
                 console.warn('Gagal sync galeri ke Supabase:', err);
             }
+
+            if (typeof this.broadcastChange === 'function') {
+                this.broadcastChange('slides', 'UPDATE', { list: slidesList }, 'Admin Galeri');
+            }
+
             return slidesList;
         },
 
@@ -1466,9 +1471,61 @@
                 console.warn('Gagal sinkronisasi undangan_eksternal ke Supabase:', err);
             }
 
+            if (typeof this.broadcastChange === 'function') {
+                this.broadcastChange('undangan', 'UPDATE', { list: undanganList }, 'Admin Undangan');
+            }
+
             return true;
+        },
+
+        /**
+         * Pembersih Cache Usang & Optimasi Responsivitas Browser
+         * Menghapus kunci storage yang sudah tidak relevan, menyinkronkan format lama ke baru,
+         * dan mengosongkan cache Service Worker usang.
+         */
+        cleanupObsoleteCache() {
+            const removed = [];
+            try {
+                // 1. Kunci LocalStorage yang sudah usang atau usang redundant
+                const obsoleteKeys = [
+                    'cached_prayer_mode_enabled',
+                    'cached_prayer_mode_jumat_duration',
+                    'nu_last_sync_date'
+                ];
+
+                obsoleteKeys.forEach(k => {
+                    if (localStorage.getItem(k) !== null) {
+                        localStorage.removeItem(k);
+                        removed.push(k);
+                    }
+                });
+
+                // 2. Periksa base64 foto imam di localStorage (jika > 500KB dibersihkan agar storage tidak bocor)
+                const cachedPhoto = localStorage.getItem('cached_jumat_foto_imam');
+                if (cachedPhoto && cachedPhoto.length > 500000) {
+                    localStorage.removeItem('cached_jumat_foto_imam');
+                    removed.push('cached_jumat_foto_imam (oversized >500KB)');
+                }
+
+                // 3. Bersihkan Service Worker Cache usang via message jika controller aktif
+                if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ action: 'clearCache' });
+                }
+
+                if (removed.length > 0) {
+                    console.log('🧹 [SupabaseDB] Pembersihan cache usang berhasil:', removed);
+                }
+            } catch (e) {
+                console.warn('[SupabaseDB] Cleanup cache warning:', e);
+            }
+            return removed;
         }
     };
+
+    // Jalankan auto-cleanup ringan saat inisialisasi
+    try {
+        SupabaseDB.cleanupObsoleteCache();
+    } catch(e) {}
 
     window.SupabaseDB = SupabaseDB;
 })(window);

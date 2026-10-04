@@ -341,7 +341,26 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadCctvSettings();
 
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'cctv_mimbar' || msg.table === 'live_tv' || msg.table === 'sholat_jumat' || msg.table === 'app_settings')) {
+                    loadCctvSettings();
+                } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadCctvSettings();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'cctv_mimbar' || tbl === 'live_tv' || tbl === 'sholat_jumat' || tbl === 'app_settings') {
+                        loadCctvSettings();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload.table === 'app_settings' || payload.table === 'sholat_jumat') {
                         loadCctvSettings();

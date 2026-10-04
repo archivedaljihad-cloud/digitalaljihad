@@ -5869,6 +5869,37 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                 </div>
                             </div>
                         </div>
+
+                        <!-- KARTU OPTIMALISASI & PEMBERSIHAN CACHE USANG -->
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div class="card shadow border-left-danger">
+                                    <div class="card-header py-3 d-flex align-items-center justify-content-between flex-wrap">
+                                        <h6 class="m-0 font-weight-bold text-danger">
+                                            <i class="fas fa-broom mr-2"></i> Pembersihan Cache Usang & Optimalisasi Responsivitas
+                                        </h6>
+                                        <span class="badge badge-danger px-3 py-1">Mode Siap Publikasi & Display Realtime</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-lg-8 mb-3 mb-lg-0">
+                                                <p class="mb-1 text-dark font-weight-bold">
+                                                    Pembersihan Menyeluruh Memori Cache & Service Worker v5.4.0
+                                                </p>
+                                                <p class="text-muted small mb-0">
+                                                    Menghapus entri cache usang (kunci pengaturan lama, durasi legacy, cache base64 usang), memperbarui Service Worker, dan menyegarkan memori TV Display secara seketika (&lt; 100ms) tanpa menghapus data aktif masjid.
+                                                </p>
+                                            </div>
+                                            <div class="col-lg-4 text-lg-right">
+                                                <button type="button" class="btn btn-outline-danger btn-block-sm" id="btnBersihkanCacheSistem" onclick="bersihkanCacheSistem()">
+                                                    <i class="fas fa-trash-alt mr-1"></i> Bersihkan Cache Usang & Refresh TV
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -9355,7 +9386,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
             if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
                 SupabaseDB.broadcastChange('donasi_infaq', 'INSERT', payload, 'Petugas Infaq');
-                SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { program_infaq_id: progId }, 'Petugas Infaq');
+                SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { program_infaq_id: selectedProgramInfaqId }, 'Petugas Infaq');
             }
 
             // Reset Form Donasi
@@ -9610,6 +9641,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     if (!patchRes.ok) {
                         throw new Error('Supabase response status ' + patchRes.status);
                     }
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', { running_text_pages: { infaq_rekening: rekData } }, 'Petugas Infaq');
+                    SupabaseDB.broadcastChange('rekening_infaq', 'UPDATE', payloadCompat, 'Petugas Infaq');
                 }
                 if (alert) { alert.textContent = '✅ Berhasil disimpan! Layar TV diperbarui otomatis.'; alert.style.display='inline'; alert.style.color='#16a34a'; }
             } catch (err) {
@@ -10364,8 +10399,11 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
             // Sync ke Supabase (jika terhubung)
             try {
+                const activeQris = (cachedQrisList || []).find(q => q.status === 'aktif') || (cachedQrisList || [])[0];
+                if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
+                    await SupabaseDB.saveSettingItem('cached_qris_list', cachedQrisList);
+                }
                 if (SUPABASE_CONFIG.url) {
-                    const activeQris = cachedQrisList.find(q => q.status === 'aktif') || cachedQrisList[0];
                     if (activeQris && status === 'aktif') {
                         // Sinkronkan ke app_settings agar slide TV otomatis mengadopsi
                         await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
@@ -10375,6 +10413,12 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                 qris_image: activeQris.gambar.startsWith('data:') ? 'image/qris.png' : activeQris.gambar
                             })
                         });
+                    }
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('qris', 'UPDATE', { list: cachedQrisList }, 'Admin QRIS');
+                    if (activeQris && status === 'aktif') {
+                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', { qris_image: activeQris.gambar }, 'Admin QRIS');
                     }
                 }
             } catch (err) {
@@ -10399,6 +10443,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             localStorage.setItem('cached_qris_list', JSON.stringify(cachedQrisList));
 
             try {
+                if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
+                    await SupabaseDB.saveSettingItem('cached_qris_list', cachedQrisList);
+                }
                 if (SUPABASE_CONFIG.url) {
                     await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                         method: 'PATCH',
@@ -10408,13 +10455,17 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         })
                     });
                 }
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('qris', 'UPDATE', { list: cachedQrisList }, 'Admin QRIS');
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', { qris_image: item.gambar }, 'Admin QRIS');
+                }
             } catch (err) {}
 
             renderQrisTable();
             alert(`"${item.nama}" sekarang aktif ditayangkan di Layar TV Display.`);
         }
 
-        function hapusQris(id) {
+        async function hapusQris(id) {
             const item = (cachedQrisList || []).find(q => q.id == id);
             if (!item) return;
 
@@ -10433,6 +10484,29 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             }
 
             localStorage.setItem('cached_qris_list', JSON.stringify(cachedQrisList));
+
+            try {
+                if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
+                    await SupabaseDB.saveSettingItem('cached_qris_list', cachedQrisList);
+                }
+                if (wasActive && cachedQrisList.length > 0 && SUPABASE_CONFIG.url) {
+                    const newActive = cachedQrisList[0];
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: getSupabaseHeaders(),
+                        body: JSON.stringify({
+                            qris_image: newActive.gambar.startsWith('data:') ? 'image/qris.png' : newActive.gambar
+                        })
+                    }).catch(() => {});
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('qris', 'DELETE', { list: cachedQrisList }, 'Admin QRIS');
+                    if (wasActive && cachedQrisList.length > 0) {
+                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', { qris_image: cachedQrisList[0].gambar }, 'Admin QRIS');
+                    }
+                }
+            } catch (e) {}
+
             renderQrisTable();
             alert(`Data "${item.nama}" berhasil dihapus.`);
         }
@@ -12556,6 +12630,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 }
 
                 // Kirim sinyal broadcast remote ke Display TV
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', cleanPayload, 'Admin Display TV');
+                }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
                     SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', cleanPayload).catch(() => {});
                 }
@@ -13139,6 +13216,16 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     cloudSaved = res.ok;
 
                     // Broadcast sinyal remote jika aktif
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange('yasin', 'UPDATE', {
+                            yasin_mode_enabled: yasinEnabled,
+                            yasin_start_time: yasinStartTime,
+                            yasin_display_mode: yasinDisplayMode,
+                            step_duration: yasinStepDuration,
+                            mushaf_duration: yasinMushafDuration
+                        }, 'Admin Yaasiin');
+                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', patchPayload, 'Admin Yaasiin');
+                    }
                     if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
                         SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', {
                             yasin_mode_enabled: yasinEnabled,
@@ -13273,6 +13360,14 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 }).catch(() => {});
 
                 // Kirim sinyal Remote Broadcast UPDATE_SETTINGS agar display TV langsung mengadopsi interval & streaming baru tanpa jeda
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', patchPayload, 'Admin Pengaturan Sistem');
+                    SupabaseDB.broadcastChange('live_tv', 'UPDATE', {
+                        live_makkah_url: liveMekah,
+                        live_madinah_url: liveMadinah,
+                        cctv_mimbar_url: cctv
+                    }, 'Admin Pengaturan Sistem');
+                }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
                     SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', { 
                         rotation_interval: interval,
@@ -13288,6 +13383,109 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 }
             } catch (err) {
                 alert('Tersimpan secara lokal di browser ini.');
+            }
+        }
+
+        /**
+         * Pembersihan menyeluruh cache usang, purge CacheStorage lama,
+         * refresh Service Worker v5.4.0, dan sinkronisasi realtime ke seluruh layar TV Display
+         */
+        async function bersihkanCacheSistem() {
+            const btn = document.getElementById('btnBersihkanCacheSistem');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Membersihkan Cache...';
+            }
+
+            try {
+                // 1. Jalankan pembersihan cache internal SupabaseDB
+                let removedItems = [];
+                if (window.SupabaseDB && typeof SupabaseDB.cleanupObsoleteCache === 'function') {
+                    removedItems = SupabaseDB.cleanupObsoleteCache();
+                } else {
+                    const obsoleteKeys = [
+                        'cached_prayer_mode_enabled',
+                        'cached_prayer_mode_jumat_duration',
+                        'nu_last_sync_date',
+                        'cached_ramadhan_legacy',
+                        'cached_tarhim_legacy'
+                    ];
+                    obsoleteKeys.forEach(k => {
+                        if (localStorage.getItem(k) !== null) {
+                            localStorage.removeItem(k);
+                            removedItems.push(k);
+                        }
+                    });
+                }
+
+                // 2. Bersihkan CacheStorage Service Worker
+                if ('caches' in window) {
+                    try {
+                        const cacheNames = await caches.keys();
+                        await Promise.all(
+                            cacheNames.map(name => {
+                                if (name !== 'aljihad-signage-v5.4.0') {
+                                    console.log('🗑️ Menghapus cache usang:', name);
+                                    return caches.delete(name);
+                                }
+                            })
+                        );
+                    } catch (cErr) {
+                        console.warn('Gagal membersihkan cache storage:', cErr);
+                    }
+                }
+
+                // 3. Perbarui Service Worker
+                if ('serviceWorker' in navigator) {
+                    try {
+                        const regs = await navigator.serviceWorker.getRegistrations();
+                        for (let reg of regs) {
+                            await reg.update().catch(() => {});
+                        }
+                    } catch (swErr) {}
+                }
+
+                // 4. Siarkan sinyal remote RELOAD / REFRESH ke seluruh layar TV Display
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('app_settings', 'RELOAD', { timestamp: Date.now() }, 'Admin Maintenance');
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
+                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.4.0' }).catch(() => {});
+                }
+
+                // 5. Muat ulang data terbaru dari Supabase
+                if (typeof loadAllSupabaseData === 'function') {
+                    await loadAllSupabaseData();
+                }
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cache Berhasil Dibersihkan!',
+                        html: `
+                            <p class="text-left mb-2">Seluruh cache usang dan memori usang telah dibersihkan:</p>
+                            <ul class="text-left small text-muted mb-3 pl-3">
+                                <li>Service Worker diperbarui ke <b>v5.4.0</b></li>
+                                <li>Kunci memori lama yang dibersihkan: <b>${removedItems.length > 0 ? removedItems.join(', ') : 'Bersih (Sudah Optimal)'}</b></li>
+                                <li>Sinyal refresh TV telah dipancarkan secara realtime (&lt; 100ms) ke seluruh layar</li>
+                            </ul>
+                            <div class="alert alert-success py-2 px-3 small font-weight-bold mb-0">
+                                Responsivitas Web Statis & TV Display kini meningkat optimal!
+                            </div>
+                        `,
+                        confirmButtonColor: '#10b981'
+                    });
+                } else {
+                    alert('Alhamdulillah! Seluruh cache usang berhasil dibersihkan dan sinyal sinkronisasi telah dikirimkan ke Layar TV.');
+                }
+            } catch (err) {
+                console.error('Error saat bersihkanCacheSistem:', err);
+                alert('Pemberitahuan pembersihan cache: ' + err.message);
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-trash-alt mr-1"></i> Bersihkan Cache Usang & Refresh TV';
+                }
             }
         }
 

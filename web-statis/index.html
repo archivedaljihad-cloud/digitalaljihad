@@ -510,7 +510,7 @@
 
     <!-- Master Persistent Footer TV (Diatur Super Admin) -->
     <footer class="master-display-footer" id="masterDisplayFooter">
-        <span id="masterFooterContent">© 2026 MASJID JAMI' AL JIHAD (GRAHA ASRI). All Rights Reserved</span>
+        <span id="masterFooterContent">© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved</span>
     </footer>
 
     <!-- Prayer Mode Frame (Diaktifkan Otomatis Saat Waktu Sholat) -->
@@ -518,10 +518,10 @@
 
     <!-- SUPABASE & CORE SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=5.3.0"></script>
-    <script src="js/supabase-db.js?v=5.3.0"></script>
-    <script src="js/prayer-engine.js?v=5.3.0"></script>
-    <script src="js/anti-idle.js?v=5.3.0"></script>
+    <script src="js/supabase-config.js?v=5.4.0"></script>
+    <script src="js/supabase-db.js?v=5.4.0"></script>
+    <script src="js/prayer-engine.js?v=5.4.0"></script>
+    <script src="js/anti-idle.js?v=5.4.0"></script>
 
     <script>
         // Pemetaan rute canonical ke path file statis
@@ -1091,14 +1091,27 @@
                         'sholat_jumat': ['jumat', 'kas-jumat', 'utama'],
                         'pengumuman_jumat': ['jumat', 'kas-jumat'],
                         'program_infaq': ['infaq', 'utama'],
-                        'donasi_infaq': ['infaq'],
+                        'donasi_infaq': ['infaq', 'utama'],
                         'kajian': ['kajian', 'utama'],
                         'agenda_rutin': ['agenda-rutin', 'utama'],
                         'ramadhan': ['ramadhan', 'utama'],
-                        'qurban': ['qurban'],
+                        'qurban': ['qurban', 'utama'],
                         'qris': ['qris'],
                         'slides': ['slide'],
-                        'undangan': ['undangan']
+                        'undangan': ['undangan'],
+                        'yasin': ['yasin'],
+                        'yasin_settings': ['yasin'],
+                        'sholat_idul_fitri': ['idul-fitri'],
+                        'idul_fitri': ['idul-fitri'],
+                        'sholat_idul_adha': ['idul-adha'],
+                        'idul_adha': ['idul-adha'],
+                        'hikmah': ['hikmah'],
+                        'live_tv': ['live-mekah', 'live-madinah', 'live-mimbar'],
+                        'live_mekah': ['live-mekah'],
+                        'live_madinah': ['live-madinah'],
+                        'cctv_mimbar': ['live-mimbar'],
+                        'jadwal_sholat': ['utama', 'jumat', 'yasin', 'kajian', 'kas-jumat'],
+                        'app_settings': ['utama', 'keuangan', 'ambulance', 'jumat', 'kas-jumat', 'pengumuman', 'keuangan-summary', 'qris', 'slide', 'infaq', 'hikmah', 'qurban', 'yasin', 'live-mekah', 'live-madinah', 'live-mimbar', 'idul-fitri', 'idul-adha', 'ramadhan', 'kajian', 'agenda-rutin', 'undangan']
                     };
 
                     const relatedKeywords = tableSlideMapping[table] || [];

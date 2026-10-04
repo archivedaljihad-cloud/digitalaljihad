@@ -793,8 +793,26 @@
 
 		loadData();
 
-		// Supabase Realtime Listener
-		if (window.SupabaseDB) {
+		// 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+		window.addEventListener('message', (event) => {
+			const msg = event.data;
+			if (!msg) return;
+			if (msg.type === 'DATA_UPDATED' && (msg.table === 'sholat_idul_fitri' || msg.table === 'app_settings')) {
+				loadData();
+			} else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+				loadData();
+			}
+		});
+
+		// 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+		if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+			SupabaseDB.onDataChange((payload) => {
+				const tbl = (payload.table || '').toLowerCase();
+				if (tbl === 'sholat_idul_fitri' || tbl === 'idul_fitri' || tbl === 'app_settings') {
+					loadData();
+				}
+			});
+		} else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
 			SupabaseDB.subscribeRealtime(() => {
 				loadData();
 			});

@@ -321,7 +321,26 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadStreamSettings();
 
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'live_tv' || msg.table === 'live_madinah' || msg.table === 'app_settings')) {
+                    loadStreamSettings();
+                } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadStreamSettings();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'live_tv' || tbl === 'live_madinah' || tbl === 'app_settings') {
+                        loadStreamSettings();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload.table === 'app_settings') {
                         loadStreamSettings();

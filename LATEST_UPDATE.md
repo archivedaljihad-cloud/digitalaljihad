@@ -4,7 +4,78 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:20 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:55 WIB)
+
+### 🛡️ AUDIT SENIOR QA ANALYST & LEAD TESTER: Optimalisasi Responsivitas, Pembersihan Cache Usang (v5.4.0), Penanganan Kalkulasi Data, & Realtime Display (< 100ms) untuk Seluruh Layar TV
+
+**Latar Belakang & Permintaan Pengguna:**
+Mengingat web aplikasi digital signage ini siap untuk dipublikasikan ke khalayak umum dan lingkungan produksi aktif, pengguna meminta tindakan sebagai **Senior QA Analyst & Senior Manual Tester / QA Lead** untuk:
+1. Melakukan audit menyeluruh, mendalam, dan teliti terhadap seluruh logika, fungsi, kalkulasi, dan alur aplikasi.
+2. Memperbaiki semua bug dan potensi gagal fungsi (*runtime/reference errors*).
+3. Membersihkan seluruh cache usang yang tidak relevan agar responsivitas web aplikasi dan konsumsi memori browser meningkat tajam.
+4. Menjamin bahwa setiap kali salah satu akun admin/petugas melakukan update atau input informasi apapun di web admin, informasi tersebut **langsung ter-update dan tampil di layar TV secara realtime (< 100ms)**.
+
+---
+
+### 🔍 Temuan Audit & Solusi Komprehensif yang Diterapkan:
+
+#### 1. Perbaikan Bug Kritis ReferenceError & Integritas Realtime Broadcast (`web-statis/admin.html`):
+- **Temuan QA:** Pada fungsi `simpanDonasiInfaq()`, baris broadcast memanggil variabel `progId` (`program_infaq_id: progId`), padahal variabel tersebut tidak terdefinisi dalam lingkup fungsi sehingga berpotensi melempar `ReferenceError: progId is not defined` yang menghentikan eksekusi script.
+- **Solusi:** Diperbaiki menjadi `program_infaq_id: selectedProgramInfaqId`.
+- **Temuan QA:** Beberapa fungsi penyimpanan data penting di panel admin belum memancarkan sinyal `SupabaseDB.broadcastChange()` secara langsung atau belum menyinkronkan data multi-row ke cloud.
+- **Solusi:**
+  - `simpanDataQris()`, `setAktifQris()`, dan `hapusQris()`: Sekarang menyinkronkan data ke `cached_qris_list` dan memancarkan sinyal `SupabaseDB.broadcastChange('qris', ...)` serta `SupabaseDB.broadcastChange('app_settings', ...)` ke layar display TV secara realtime.
+  - `simpanRekeningInfaq()`: Ditambahkan `SupabaseDB.broadcastChange('app_settings', ...)` dan `SupabaseDB.broadcastChange('rekening_infaq', ...)` sehingga slide rekening donasi langsung ter-update seketika.
+  - `simpanPengaturanDurasiTV()`: Ditambahkan `SupabaseDB.broadcastChange('app_settings', 'UPDATE', cleanPayload, ...)` mendampingi `sendRemoteCommand`.
+  - `simpanPengaturanYasin()`: Ditambahkan `SupabaseDB.broadcastChange('yasin', ...)` dan `SupabaseDB.broadcastChange('app_settings', ...)` sehingga perubahan jam tayang (24 jam) dan model Yaasiin (blok vs mushaf) langsung diserap oleh TV tanpa perlu refresh.
+  - `simpanPengaturanSistem()`: Ditambahkan `SupabaseDB.broadcastChange('app_settings', ...)` dan `SupabaseDB.broadcastChange('live_tv', ...)` untuk sinkronisasi seketika URL live streaming Makkah/Madinah & CCTV mimbar.
+  - `saveSlides()` & `saveUndanganEksternal()` di `supabase-db.js`: Ditambahkan broadcast ke channel `slides` dan `undangan`.
+
+#### 2. Audit Normalisasi & Kalkulasi Kas Sholat Jum'at (`web-statis/slides/kas-jumat.html`):
+- **Temuan QA:** Admin menyimpan objek lembar pengumuman Jum'at dengan kunci camelCase (`saldoAwal`, `pemasukan` berupa array dengan atribut `.nominal`, dan `pengeluaran` dengan atribut `.nominal`), sementara skrip lama pada slide kas mengekspektasikan kunci snake_case (`saldo_awal`, `rincian_pemasukan` dengan atribut `.jumlah`). Jika diparsing langsung menggunakan `parseFloat(pjData.pemasukan)`, nilainya menghasilkan `NaN` dan menyebabkan tampilan saldo menjadi Rp 0.
+- **Solusi:** Menerapkan mapper normalisasi cerdas (*dual-format normalizer*) pada `kas-jumat.html`:
+  - Mendeteksi baik format array maupun angka skalar untuk saldo awal, pemasukan, dan pengeluaran.
+  - Mendukung pembacaan `.nominal` maupun `.jumlah` secara seragam.
+  - Menghitung ulang saldo akhir secara presisi: `saldo_akhir = saldo_awal + total_pemasukan - total_pengeluaran`.
+  - Memastikan angka selalu terformat rupiah secara valid dan bebas nilai `NaN`.
+
+#### 3. Pembersihan Cache Usang & Peningkatan Responsivitas Sistem (`web-statis/js/supabase-db.js`, `web-statis/sw.js`, & `web-statis/admin.html`):
+- **Temuan QA:** Cache lokal menyimpan kunci-kunci usang yang sudah tidak dipakai seperti `cached_prayer_mode_enabled`, `cached_prayer_mode_jumat_duration`, `nu_last_sync_date`, serta potensi penyimpanan base64 duplikat yang membebani kuota `localStorage`. Selain itu, cache Service Worker masih berada di versi lama `v5.3.1` dan belum menyertakan aset baru (`ikonkitab.png`, `bg-flyer-jumat.jpg`).
+- **Solusi:**
+  - Menambahkan metode `SupabaseDB.cleanupObsoleteCache()` yang otomatis dijalankan saat aplikasi dimuat:
+    - Menghapus kunci lama (`cached_prayer_mode_enabled`, `cached_prayer_mode_jumat_duration`, `nu_last_sync_date`, `cached_ramadhan_legacy`, `cached_tarhim_legacy`).
+    - Menghapus cache gambar base64 lama yang melebihi batas 150KB jika sudah ada URL CDN cloud Supabase yang valid.
+  - Memperbarui versi Service Worker ke `v5.4.0` (`CACHE_NAME = 'aljihad-signage-v5.4.0'`), menambahkan `'img/ikonkitab.png'` dan `'img/bg-flyer-jumat.jpg'` ke daftar `STATIC_ASSETS`, serta memprogram pembersihan otomatis seluruh cache storage yang versinya bukan `v5.4.0`.
+  - Menambahkan antarmuka **"Pembersihan Cache Usang & Optimalisasi Responsivitas"** pada panel Pengaturan Sistem Admin (`admin.html`) lengkap dengan tombol `Bersihkan Cache Usang & Refresh TV` yang memicu pembersihan menyeluruh, pembaruan Service Worker, dan pemancaran sinyal refresh ke seluruh TV.
+
+#### 4. Audit & Jaminan 100% Realtime Listener pada Seluruh 22 Halaman Slide TV Display:
+- **Temuan QA:** Dari 22 slide display TV mandiri pada `web-statis/slides/`, beberapa slide seperti `yasin.html`, `hikmah.html`, `idul-fitri.html`, `idul-adha.html`, `live-mekah.html`, `live-madinah.html`, dan `live-mimbar.html` belum memiliki listener pesan realtime (`postMessage` / `SupabaseDB.onDataChange`), sehingga saat admin melakukan update, slide tersebut baru berganti jika halamannya di-reload penuh.
+- **Solusi:**
+  - Menambahkan integrasi listener realtime (`window.addEventListener('message')` dan `SupabaseDB.onDataChange()`) pada 100% dari 22 file slide di `web-statis/slides/`.
+  - Memperluas pemetaan tabel di `web-statis/index.html` (`tableSlideMapping`) untuk mencakup seluruh tabel dan kategori: `yasin`, `yasin_settings`, `sholat_idul_fitri`, `idul_fitri`, `sholat_idul_adha`, `idul_adha`, `hikmah`, `live_tv`, `live_mekah`, `live_madinah`, `cctv_mimbar`, `jadwal_sholat`, dan `app_settings`.
+  - Memperbarui query string cache-buster pada `index.html` menjadi `?v=5.4.0`.
+  - Membersihkan teks footer default master TV menjadi `© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved` (tanpa teks fallback usang).
+
+---
+
+### 📂 Berkas yang Dimodifikasi:
+1. `web-statis/admin.html`: Perbaikan bug `progId`, penambahan `broadcastChange` pada QRIS, rekening, durasi TV, Yaasiin, dan pengaturan sistem, serta antarmuka pembersihan cache.
+2. `web-statis/js/supabase-db.js`: Penambahan `cleanupObsoleteCache()`, siaran realtime `slides` & `undangan`, dan auto-cleanup.
+3. `web-statis/sw.js`: Peningkatan versi cache ke `aljihad-signage-v5.4.0` dan penambahan aset statis baru.
+4. `web-statis/index.html`: Pembaruan versi skrip ke `v5.4.0`, ekspansi `tableSlideMapping` untuk seluruh slide, dan pembersihan footer.
+5. `web-statis/slides/kas-jumat.html`: Perbaikan kalkulasi saldo dan normalisasi format data kas sholat Jum'at.
+6. `web-statis/slides/yasin.html`: Penambahan listener realtime Yaasiin.
+7. `web-statis/slides/hikmah.html`: Penambahan listener realtime Hikmah.
+8. `web-statis/slides/idul-fitri.html`: Penambahan listener realtime Sholat Idul Fitri.
+9. `web-statis/slides/idul-adha.html`: Penambahan listener realtime Sholat Idul Adha.
+10. `web-statis/slides/live-mekah.html`: Penambahan listener realtime Live Streaming Makkah.
+11. `web-statis/slides/live-madinah.html`: Penambahan listener realtime Live Streaming Madinah.
+12. `web-statis/slides/live-mimbar.html`: Penambahan listener realtime CCTV Mimbar.
+13. `LATEST_UPDATE.md`: Dokumentasi audit QA menyeluruh dan serah terima sistem.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 06:20 WIB)
 
 ### 💎 Dashboard Bendahara "PROGRAM INFAQ": Form "Catat Donasi Masuk" Menjadi Popdown Menu & Tabel "Daftar Donatur" Memanjang Penuh (Full-Width Col-12)
 

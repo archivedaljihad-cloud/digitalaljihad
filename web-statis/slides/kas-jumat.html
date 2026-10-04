@@ -648,7 +648,7 @@
 
                 if (!pengumumanData) {
                     try {
-                        const local = localStorage.getItem('cached_pengumuman_jumat');
+                        const local = localStorage.getItem('pengumuman_jumat_data') || localStorage.getItem('cached_pengumuman_jumat');
                         if (local) pengumumanData = JSON.parse(local);
                     } catch (e) {}
                 }
@@ -677,12 +677,47 @@
                     };
                 }
 
-                // Render 4 KPI Kas
-                const saldoAwal = parseFloat(pengumumanData.saldo_awal) || 0;
-                const pemasukan = parseFloat(pengumumanData.pemasukan) || 0;
-                const pengeluaran = parseFloat(pengumumanData.pengeluaran) || 0;
-                const saldoAkhir = pengumumanData.saldo_akhir !== undefined 
-                    ? parseFloat(pengumumanData.saldo_akhir) 
+                // Normalisasi Data (Mendukung format admin pjData camelCase maupun format legacy snake_case)
+                const saldoAwal = parseFloat(pengumumanData.saldo_awal ?? pengumumanData.saldoAwal ?? 0) || 0;
+
+                // Rincian Pemasukan
+                let listIn = [];
+                if (Array.isArray(pengumumanData.pemasukan)) {
+                    listIn = pengumumanData.pemasukan;
+                } else if (Array.isArray(pengumumanData.rincian_pemasukan)) {
+                    listIn = pengumumanData.rincian_pemasukan;
+                }
+
+                let pemasukan = 0;
+                if (typeof pengumumanData.pemasukan === 'number') {
+                    pemasukan = pengumumanData.pemasukan;
+                } else if (typeof pengumumanData.total_pemasukan === 'number') {
+                    pemasukan = pengumumanData.total_pemasukan;
+                } else if (listIn.length > 0) {
+                    listIn.forEach(item => { pemasukan += (parseFloat(item.nominal ?? item.jumlah ?? 0) || 0); });
+                }
+
+                // Rincian Pengeluaran
+                let listOut = [];
+                if (Array.isArray(pengumumanData.pengeluaran)) {
+                    listOut = pengumumanData.pengeluaran;
+                } else if (Array.isArray(pengumumanData.rincian_pengeluaran)) {
+                    listOut = pengumumanData.rincian_pengeluaran;
+                }
+
+                let pengeluaran = 0;
+                if (typeof pengumumanData.pengeluaran === 'number') {
+                    pengeluaran = pengumumanData.pengeluaran;
+                } else if (typeof pengumumanData.total_pengeluaran === 'number') {
+                    pengeluaran = pengumumanData.total_pengeluaran;
+                } else if (listOut.length > 0) {
+                    listOut.forEach(item => { pengeluaran += (parseFloat(item.nominal ?? item.jumlah ?? 0) || 0); });
+                }
+
+                const saldoAkhir = (pengumumanData.saldo_akhir !== undefined && typeof pengumumanData.saldo_akhir === 'number')
+                    ? pengumumanData.saldo_akhir
+                    : (pengumumanData.saldoAkhir !== undefined && typeof pengumumanData.saldoAkhir === 'number')
+                    ? pengumumanData.saldoAkhir
                     : (saldoAwal + pemasukan - pengeluaran);
 
                 document.getElementById('tvKasSaldoAwal').textContent = `Rp ${formatRupiah(saldoAwal)}`;
@@ -692,34 +727,34 @@
 
                 // Render Tabel Rincian Pemasukan
                 const listInEl = document.getElementById('tvListPemasukan');
-                const listIn = Array.isArray(pengumumanData.rincian_pemasukan) && pengumumanData.rincian_pemasukan.length > 0
-                    ? pengumumanData.rincian_pemasukan
+                const renderListIn = listIn.length > 0
+                    ? listIn
                     : [{ ket: "Pendapatan Tromol Jumat Lalu", jumlah: pemasukan }];
 
-                listInEl.innerHTML = listIn.map((item, idx) => `
+                listInEl.innerHTML = renderListIn.map((item, idx) => `
                     <div class="table-row-item">
                         <span class="row-keterangan" title="${escapeHtml(item.ket || '')}">
                             <span class="row-index">${idx + 1}.</span>
                             <span>${escapeHtml(item.ket || '-')}</span>
                         </span>
-                        <span class="row-nominal in">Rp ${formatRupiah(item.jumlah || 0)}</span>
+                        <span class="row-nominal in">Rp ${formatRupiah(item.nominal ?? item.jumlah ?? 0)}</span>
                     </div>
                 `).join('');
                 document.getElementById('tvTotalInFooter').textContent = `Rp ${formatRupiah(pemasukan)}`;
 
                 // Render Tabel Rincian Pengeluaran
                 const listOutEl = document.getElementById('tvListPengeluaran');
-                const listOut = Array.isArray(pengumumanData.rincian_pengeluaran) && pengumumanData.rincian_pengeluaran.length > 0
-                    ? pengumumanData.rincian_pengeluaran
+                const renderListOut = listOut.length > 0
+                    ? listOut
                     : [{ ket: "Biaya Operasional Masjid Jami' Al-Jihad", jumlah: pengeluaran }];
 
-                listOutEl.innerHTML = listOut.map((item, idx) => `
+                listOutEl.innerHTML = renderListOut.map((item, idx) => `
                     <div class="table-row-item">
                         <span class="row-keterangan" title="${escapeHtml(item.ket || '')}">
                             <span class="row-index">${idx + 1}.</span>
                             <span>${escapeHtml(item.ket || '-')}</span>
                         </span>
-                        <span class="row-nominal out">Rp ${formatRupiah(item.jumlah || 0)}</span>
+                        <span class="row-nominal out">Rp ${formatRupiah(item.nominal ?? item.jumlah ?? 0)}</span>
                     </div>
                 `).join('');
                 document.getElementById('tvTotalOutFooter').textContent = `Rp ${formatRupiah(pengeluaran)}`;

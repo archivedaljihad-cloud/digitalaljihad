@@ -860,6 +860,33 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadSettingsAndPrayer();
             loadSurahYasin();
+
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'yasin' || msg.table === 'app_settings' || msg.table === 'jadwal_sholat')) {
+                    loadSettingsAndPrayer();
+                } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadSettingsAndPrayer();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'yasin' || tbl === 'app_settings' || tbl === 'jadwal_sholat') {
+                        loadSettingsAndPrayer();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'app_settings' || payload.table === 'jadwal_sholat') {
+                        loadSettingsAndPrayer();
+                    }
+                });
+            }
         });
     </script>
 </body>

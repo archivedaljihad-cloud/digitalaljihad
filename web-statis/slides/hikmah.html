@@ -454,7 +454,26 @@
             await loadHikmahData();
             await loadDailyAiHikmah();
 
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'hikmah' || msg.table === 'app_settings')) {
+                    loadHikmahData();
+                } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadHikmahData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'hikmah' || tbl === 'app_settings') {
+                        loadHikmahData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload.table === 'app_settings') {
                         loadHikmahData();
