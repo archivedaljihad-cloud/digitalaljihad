@@ -9632,4 +9632,46 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/admin.html` (Pembaruan judul "Daftar Donatur", tabel compact list, tombol edit, modal `#modalEditDonasiInfaq`, dan fungsi JS).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 221).
 
+---
+
+## BAB 222: OPTIMALISASI TAMPILAN DISPLAY TV SLIDE PROGRAM INFAQ — PENYESUAIAN LEBAR KOTAK SALURAN TRANSFER & PENAYANGAN KOLOM KETERANGAN DONATUR SECARA PRESISI
+
+### 1. Masalah & Kebutuhan Pengguna
+- **Kolom Keterangan Donatur Tidak Terlihat:** Pada display TV slide program infaq (`web-statis/slides/infaq.html`), kolom Keterangan donatur (misalnya catatan asal wilayah seperti RW.007, RT.02, peruntukan khusus, wakaf atas nama orang tua, dll.) tidak terlihat sama sekali. Akar masalahnya adalah pada fungsi JavaScript `renderSingleProgram()`, template string pemetaan data `sortedAsc.map()` sebelumnya hanya merender No, Nama Donatur, dan Nominal tanpa menyertakan variabel `d.keterangan`.
+- **Kotak "Saluran Transfer Donasi" Terlalu Panjang/Lebar:** Kotak informasi rekening transfer di sebelah kanan sebelumnya memakan porsi lebar yang terlalu besar (~45-50% layar) dengan banyak ruang kosong tak terpakai (*wasted white space*), sementara kotak "Daftar Donatur" di sisi kiri terhimpit sehingga tidak memiliki ruang cukup untuk menampilkan kolom keterangan secara leluasa.
+- **Kebutuhan Pengguna:** Memperpendek (membuat lebih ramping dan proporsional secukupnya) ukuran kotak "Saluran Transfer Donasi", serta menyesuaikan lebar kotak "Daftar Donatur" agar kolom Keterangan terlihat jelas, rapi, dan mudah dibaca dari jarak jauh di layar TV masjid.
+
+### 2. Solusi & Perubahan Teknis
+1. **Penyesuaian Rasio Lebar Kotak (`.bottom-split-row`):**
+   - Mengubah pembagian grid 2 kolom bawah dari rasio lama menjadi `grid-template-columns: 2.1fr 1fr;`.
+   - Kotak "Daftar Donatur" kini mendapatkan porsi dominan (~68% lebar layar atau ~920px+ pada panel Full HD), sedangkan kotak "Saluran Transfer Donasi" dibuat ramping (~32% atau ~440px), pas dan cukup untuk menampung nama Bank, Nomor Rekening, Atas Nama, dan Nomor WhatsApp konfirmasi tanpa teks terpotong.
+2. **Penyusunan Sistem Grid 3 Kolom pada Daftar Donatur (`.donatur-item`):**
+   - Mengubah layout baris donatur dari flexbox menjadi CSS Grid presisi:
+     `grid-template-columns: minmax(0, 1.4fr) minmax(130px, 0.85fr) minmax(150px, auto); gap: 12px;`
+   - Kolom 1 (Kiri): Nomor urut badge emas + Ikon & Nama Muhsinin/Donatur.
+   - Kolom 2 (Tengah): Kolom Keterangan khusus yang selalu sejajar lurus secara vertikal dari atas ke bawah.
+   - Kolom 3 (Kanan): Nilai nominal donasi (Rp) rata kanan dengan font monospace hijau cerah bersinar.
+3. **Pemberian Header Kolom Khusus (`.donatur-header-row`):**
+   - Menambahkan baris penanda kolom elegan di bagian atas kotak Daftar Donatur (di luar scroll wrapper):
+     `Nama Muhsinin` | `Keterangan` | `Nominal Donasi`.
+   - Header kolom ini tetap diam di atas (*pinned/sticky*) saat daftar donatur berputar vertikal secara otomatis (*seamless vertical marquee loop*).
+4. **Desain Badge Keterangan Berkelas (`.donatur-ket` & `.donatur-ket-empty`):**
+   - Jika donatur memiliki keterangan: Ditampilkan dengan badge emas tembus pandang (`background: rgba(255, 215, 0, 0.14)`, border emas halus `border: 1px solid rgba(255, 215, 0, 0.45)`, teks emas `color: #ffd700`, ikon `<i class="fas fa-tag"></i>`, padding halus, dan rounded 7px).
+   - Jika donatur tidak mengisi keterangan atau kosong: Ditampilkan strip lembut rapi (`<span class="donatur-ket-empty">-</span>`) agar integritas kolom tetap konsisten dan tidak bolong.
+5. **Pembaruan Template String JavaScript & Sinkronisasi Realtime:**
+   - Pada fungsi `renderSingleProgram()` di `web-statis/slides/infaq.html`:
+     ```javascript
+     const hasKet = d.keterangan && d.keterangan.trim() !== '' && d.keterangan.trim() !== '-';
+     const ketHtml = hasKet 
+         ? `<div class="donatur-ket-wrap"><span class="donatur-ket" title="${escapeHtml(d.keterangan)}"><i class="fas fa-tag mr-1" style="font-size: 0.78rem; opacity: 0.85;"></i> ${escapeHtml(d.keterangan)}</span></div>` 
+         : `<div class="donatur-ket-wrap"><span class="donatur-ket-empty">-</span></div>`;
+     ```
+   - Seluruh data donasi yang ditarik secara live dari Supabase tabel `donasi_infaq` kini langsung menampilkan keterangan yang dicatat oleh bendahara secara instan.
+6. **Pembaruan Placeholder / Initial State HTML:**
+   - Kelima baris dummy donatur pada struktur awal HTML telah disesuaikan dengan 3 kolom lengkap berikut badge keterangan (`RW.007`, `RT.02`, `RW.011`, `-`, `Blok C`).
+
+### 3. Berkas Terkait yang Dimodifikasi:
+1. `web-statis/slides/infaq.html` (Rasio grid 2.1fr 1fr, CSS header kolom, CSS grid donatur item, badge keterangan, HTML placeholder, dan JavaScript dynamic render).
+2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 222).
+
 
