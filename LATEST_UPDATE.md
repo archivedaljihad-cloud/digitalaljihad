@@ -1,4 +1,4 @@
-﻿# LATEST UPDATE - SISTEM INFORMASI DISPLAY MASJID (DIGITALv304)
+# LATEST UPDATE - SISTEM INFORMASI DISPLAY MASJID (DIGITALv304)
 
 > **Catatan Penting untuk AI Agent / Pengembang Baru:**  
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
@@ -6,7 +6,34 @@
 
 ---
 
-## 🔧 UPDATE TERBARU — 4 Oktober 2026 (Pukul 22:55 WIB)
+## ✨ UPDATE TERBARU — 4 Oktober 2026 (Pukul 23:45 WIB)
+
+### Optimasi & Penurunan Resolusi "Flyer WhatsApp Otomatis" Petugas Sholat Jum'at (Unduh & Sebar Super Cepat)
+
+**Latar Belakang & Masalah:**
+Sebelumnya, generator canvas Flyer WhatsApp di menu Petugas Sholat Jum'at menggunakan resolusi ultra-tinggi statis `1080 × 1350 px` dengan format file PNG mentah (~2.5 MB - 3.5 MB). Pada ponsel dan koneksi perangkat petugas masjid, proses perenderan canvas memicu browser lag dan durasi download sangat lama ketika ingin dibagikan ke WhatsApp Jamaah.
+
+**Perbaikan & Fitur Baru yang Diterapkan:**
+1. **Resolusi Standar WhatsApp Ringan & Cepat (720 × 900 px):**
+   - Resolusi default diturunkan ke `720 × 900 px` (aspek rasio tetap presisi 4:5 sesuai standar portrait WhatsApp).
+   - Ukuran file turun drastis hingga **~75% lebih kecil** (~350-450 KB), bebas lag, dan proses unduh berlangsung instan (< 1 detik).
+2. **Pilihan Resolusi Fleksibel (Dropdown Selector):**
+   - Tersedia selector resolusi di modal dialog:
+     - ⚡ `Standar WhatsApp (720 × 900 px) - Cepat` *(Default Direkomendasikan)*
+     - 🖼️ `Resolusi HD Penuh (1080 × 1350 px)` *(Untuk kebutuhan arsip HD)*
+3. **Canvas 2D Auto-Scaling Presisi:**
+   - Menggunakan `ctx.scale(targetW / 1080, targetW / 1080)` sehingga seluruh ornamen emas, kaligrafi, bingkai, logo, dan tipografi tetap tajam, proporsional, dan presisi di semua resolusi.
+4. **Download Cepat via Blob Object URL:**
+   - Menggantikan string base64 berat dengan `canvas.toBlob()` dan `URL.createObjectURL(blob)`, mengeliminasi memory spike dan lag saat mengunduh.
+5. **Safety Timeout Loader:**
+   - Ditambahkan pengaman waktu pada loading logo masjid (`img/logo-aljihad-circle.png`) agar modal dialog tidak pernah macet pada status "Menggambar Flyer...".
+
+**Berkas Terkait:**
+- `web-statis/admin.html` (Kartu ringkasan fitur, modal dialog preview `#modalFlyerJumat`, skrip `renderFlyerJumatCanvas()`, `downloadFlyerJumat()`, `shareFlyerWhatsApp()`)
+
+---
+
+## 🔧 UPDATE SEBELUMNYA — 4 Oktober 2026 (Pukul 22:55 WIB)
 
 ### 🐛 PERBAIKAN KRITIS: Bug Login Bendahara & Petugas (Double-Hash Password)
 

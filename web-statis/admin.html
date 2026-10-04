@@ -2713,11 +2713,11 @@
                                         </div>
                                     </div>
                                     <p class="text-muted mb-3" style="font-size: 12.5px; line-height: 1.45;">
-                                        Generate otomatis gambar flyer beresolusi tinggi (HD 1080×1350) beserta teks pengumuman yang siap disalin/dikirim ke grup WhatsApp.
+                                        Generate otomatis gambar flyer cepat & ringan (Standar WhatsApp 720×900) beserta teks pengumuman yang siap disalin/dikirim ke grup WhatsApp.
                                     </p>
                                     <div class="d-flex flex-column" style="gap: 8px;">
                                         <button class="btn btn-success btn-block font-weight-bold shadow-sm py-2" onclick="downloadFlyerJumatLangsung()">
-                                            <i class="fas fa-file-download mr-1"></i> Download Gambar Flyer (PNG)
+                                            <i class="fas fa-file-download mr-1"></i> Download Gambar Flyer (Cepat & Ringan)
                                         </button>
                                         <button class="btn btn-outline-success btn-block font-weight-bold py-2" onclick="bukaModalFlyerJumat()">
                                             <i class="fas fa-eye mr-1"></i> Preview & Bagikan ke WhatsApp
@@ -5979,15 +5979,19 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         <!-- Kolom Kiri: Canvas & Gambar Preview Flyer -->
                         <div class="col-md-6 mb-3 mb-md-0 text-center">
                             <div class="position-relative d-inline-block shadow-lg" style="border-radius: 16px; overflow: hidden; border: 3px solid #D4AF37; background: #02180d; max-width: 100%;">
-                                <canvas id="flyerCanvas" width="1080" height="1350" style="display: none;"></canvas>
+                                <canvas id="flyerCanvas" width="720" height="900" style="display: none;"></canvas>
                                 <img id="flyerPreviewImg" src="" alt="Flyer Preview" class="img-fluid" style="display: block; max-height: 460px; width: auto; object-fit: contain; border-radius: 13px;">
                                 <div id="flyerLoadingSpinner" class="d-none position-absolute inset-0 d-flex flex-column align-items-center justify-content-center text-white" style="background: rgba(2, 24, 13, 0.85); top:0; left:0; right:0; bottom:0;">
                                     <div class="spinner-border text-warning mb-2" role="status"></div>
-                                    <span class="small font-weight-bold">Menggambar Flyer HD...</span>
+                                    <span class="small font-weight-bold">Menggambar Flyer WhatsApp...</span>
                                 </div>
                             </div>
-                            <div class="mt-2 text-muted" style="font-size: 11.5px;">
-                                <i class="fas fa-check-circle text-success mr-1"></i> Format Portrait HD (1080 × 1350 px)
+                            <div class="mt-2 d-flex align-items-center justify-content-center flex-wrap" style="gap: 8px;">
+                                <span class="badge badge-success px-2 py-1" style="font-size: 11px;"><i class="fas fa-bolt mr-1"></i> Mode Cepat</span>
+                                <select id="flyerResolutionSelect" class="custom-select custom-select-sm d-inline-block w-auto font-weight-bold shadow-sm" onchange="renderFlyerJumatCanvas()" style="font-size: 11.5px; border-radius: 8px; cursor: pointer;">
+                                    <option value="720" selected>⚡ Standar WhatsApp (720 × 900 px) - Cepat</option>
+                                    <option value="1080">🖼️ Resolusi HD Penuh (1080 × 1350 px)</option>
+                                </select>
                             </div>
                         </div>
 
@@ -6012,7 +6016,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
                             <div class="d-flex flex-column" style="gap: 8px;">
                                 <button class="btn btn-success btn-block py-2 font-weight-bold shadow-sm d-flex align-items-center justify-content-center" onclick="downloadFlyerJumat()" style="font-size: 14px; border-radius: 12px;">
-                                    <i class="fas fa-download mr-2"></i> Download Gambar Flyer (PNG)
+                                    <i class="fas fa-download mr-2"></i> Download Gambar Flyer (Cepat & Ringan)
                                 </button>
                                 <button class="btn btn-outline-success btn-block py-2 font-weight-bold d-flex align-items-center justify-content-center" onclick="shareFlyerWhatsApp()" style="font-size: 13.5px; border-radius: 12px; border-width: 1.5px;">
                                     <i class="fab fa-whatsapp mr-2" style="font-size: 17px;"></i> Buka WhatsApp & Kirim Pesan
@@ -11030,9 +11034,19 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
             if (spinner) spinner.classList.remove('d-none');
 
-            canvas.width = 1080;
-            canvas.height = 1350;
+            // Resolusi default cepat untuk WhatsApp: 720 x 900 px (aspek rasio 4:5, unduh instan & hemat kuota)
+            const resSelect = document.getElementById('flyerResolutionSelect');
+            const targetW = resSelect ? (parseInt(resSelect.value) || 720) : 720;
+            const targetH = Math.round(targetW * 1.25); // 720x900 atau 1080x1350
+
+            canvas.width = targetW;
+            canvas.height = targetH;
             const ctx = canvas.getContext('2d');
+
+            // Skalakan canvas agar rendering gambar tajam, cepat, dan presisi di segala resolusi
+            const scale = targetW / 1080;
+            ctx.save();
+            ctx.scale(scale, scale);
 
             // Ambil data terbaru dari form input
             const tglVal = document.getElementById('jumatTanggal')?.value || new Date().toISOString().split('T')[0];
@@ -11107,11 +11121,21 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 95);
             ctx.shadowBlur = 0;
 
-            // 4. LOGO MASJID
+            // 4. LOGO MASJID (Dengan Safety Timeout agar tidak pernah macet saat load)
             await new Promise((resolve) => {
+                let resolved = false;
+                const done = () => {
+                    if (!resolved) {
+                        resolved = true;
+                        resolve();
+                    }
+                };
+                const timer = setTimeout(done, 1200);
+
                 const logoImg = new Image();
                 logoImg.crossOrigin = 'anonymous';
                 logoImg.onload = () => {
+                    clearTimeout(timer);
                     ctx.save();
                     ctx.beginPath();
                     ctx.arc(540, 175, 54, 0, Math.PI * 2);
@@ -11130,9 +11154,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     ctx.shadowBlur = 12;
                     ctx.stroke();
                     ctx.restore();
-                    resolve();
+                    done();
                 };
                 logoImg.onerror = () => {
+                    clearTimeout(timer);
                     ctx.save();
                     ctx.fillStyle = '#064e3b';
                     ctx.beginPath();
@@ -11145,7 +11170,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     ctx.font = '40px "Segoe UI Symbol", sans-serif';
                     ctx.fillText('🕌', 540, 188);
                     ctx.restore();
-                    resolve();
+                    done();
                 };
                 logoImg.src = 'img/logo-aljihad-circle.png';
             });
@@ -11270,6 +11295,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
             ctx.fillText('Diterbitkan oleh DKM Masjid Jami\' Al-Jihad • Sistem Informasi Digital: digitalaljihad.my.id', 540, 1290);
 
+            // Restore canvas transformation
+            ctx.restore();
+
             // Update preview image di modal
             const dataUrl = canvas.toDataURL('image/png');
             if (previewImg) previewImg.src = dataUrl;
@@ -11318,12 +11346,38 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const canvas = document.getElementById('flyerCanvas');
             if (!canvas) return;
             const tglVal = document.getElementById('jumatTanggal')?.value || 'terkini';
-            const link = document.createElement('a');
-            link.download = `Flyer-Petugas-Jumat-AlJihad-${tglVal}.png`;
-            link.href = canvas.toDataURL('image/png');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const curW = canvas.width || 720;
+            const resTag = (curW <= 720) ? 'WA-720p' : 'HD-1080p';
+            const filename = `Flyer-Petugas-Jumat-AlJihad-${tglVal}-${resTag}.png`;
+
+            if (canvas.toBlob) {
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        const link = document.createElement('a');
+                        link.download = filename;
+                        link.href = canvas.toDataURL('image/png');
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        return;
+                    }
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = url;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(url), 3000);
+                }, 'image/png');
+            } else {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
 
         async function downloadFlyerJumatLangsung() {
@@ -11349,17 +11403,19 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const textToShare = ta ? ta.value : '';
 
             // Coba Web Share API (cocok untuk HP / browser modern yang mendukung share file gambar langsung)
-            if (navigator.canShare && canvas) {
+            if (navigator.canShare && canvas && canvas.toBlob) {
                 try {
                     const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-                    const file = new File([blob], 'Flyer-Petugas-Jumat.png', { type: 'image/png' });
-                    if (navigator.canShare({ files: [file] })) {
-                        await navigator.share({
-                            title: "Jadwal Petugas Sholat Jum'at Masjid Jami' Al-Jihad",
-                            text: textToShare,
-                            files: [file]
-                        });
-                        return;
+                    if (blob) {
+                        const file = new File([blob], 'Flyer-Petugas-Jumat-AlJihad.png', { type: 'image/png' });
+                        if (navigator.canShare({ files: [file] })) {
+                            await navigator.share({
+                                title: "Jadwal Petugas Sholat Jum'at Masjid Jami' Al-Jihad",
+                                text: textToShare,
+                                files: [file]
+                            });
+                            return;
+                        }
                     }
                 } catch (e) {
                     console.log('Web share ditutup/dibatalkan:', e);
