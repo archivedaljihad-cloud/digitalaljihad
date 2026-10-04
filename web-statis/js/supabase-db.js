@@ -38,6 +38,13 @@
             cctv_mimbar_url: '',
             running_text: 'Selamat Datang di Masjid Jami\' Al-Jihad. Luruskan dan rapatkan shaf saat sholat berjamaah. Jagalah kebersihan dan kesucian masjid.',
             running_text_pages: {},
+            kajian_sabtu_enabled: true,
+            kajian_sabtu_start_time: '18:25',
+            kajian_sabtu_data: null,
+            kegiatan_rutin_settings: null,
+            pengumuman_jumat: null,
+            ramadhan_infaq: [],
+            rbac_users_list: [],
             rotation_pages: [
                 { page: '/utama-embed', path: 'slides/utama.html', name: 'Jadwal Sholat 5 Waktu', active: true, order: 1 },
                 { page: '/keuangan-embed', path: 'slides/keuangan.html', name: 'Rincian Kas Masjid', active: true, order: 2 },
@@ -63,18 +70,30 @@
         },
 
         /**
-         * Ambil pengaturan umum (app_settings)
+         * Ambil pengaturan umum (app_settings) dari Supabase Cloud
+         * Mengambil seluruh baris konfigurasi (row 1 + baris key-value dinamis)
          */
         async getSettings() {
             try {
                 const client = getClient();
                 if (client) {
-                    const { data, error } = await client.from('app_settings').select('*').order('id', { ascending: true }).limit(5);
+                    const { data, error } = await client.from('app_settings').select('*').order('id', { ascending: true });
                     if (!error && data && data.length > 0) {
-                        // Prioritaskan baris id 1 jika ada
-                        const row = data.find(r => r.id === 1) || data[0];
-                        const settings = Object.assign({}, this.defaultSettings, row);
-                        
+                        // Baris utama id = 1
+                        const row1 = data.find(r => r.id === 1) || data[0];
+                        const settings = Object.assign({}, this.defaultSettings, row1);
+
+                        // Gabungkan baris key-value tambahan dari Supabase
+                        data.forEach(r => {
+                            if (r.key && r.id !== 1 && r.value !== null && r.value !== undefined) {
+                                let parsedVal = r.value;
+                                if (typeof r.value === 'string' && (r.value.startsWith('{') || r.value.startsWith('['))) {
+                                    try { parsedVal = JSON.parse(r.value); } catch(e) {}
+                                }
+                                settings[r.key] = parsedVal;
+                            }
+                        });
+
                         // Parse JSON fields jika bertipe string
                         if (typeof settings.rotation_pages === 'string') {
                             try { settings.rotation_pages = JSON.parse(settings.rotation_pages); } catch (e) {}
@@ -91,11 +110,32 @@
                             settings.sub_header = 'SISTEM INFORMASI DIGITAL';
                         }
 
-                        // Simpan ke cache lokal browser & pastikan display_rotation_interval tersinkronisasi
-                        localStorage.setItem('cached_app_settings', JSON.stringify(settings));
-                        if (settings.rotation_interval) {
-                            localStorage.setItem('display_rotation_interval', settings.rotation_interval);
-                        }
+                        // Simpan ke cache lokal browser untuk offline resilience
+                        try {
+                            localStorage.setItem('cached_app_settings', JSON.stringify(settings));
+                            if (settings.rotation_interval) {
+                                localStorage.setItem('display_rotation_interval', settings.rotation_interval);
+                            }
+                            if (settings.kajian_sabtu_data) {
+                                localStorage.setItem('cached_kajian_sabtu', typeof settings.kajian_sabtu_data === 'string' ? settings.kajian_sabtu_data : JSON.stringify(settings.kajian_sabtu_data));
+                            }
+                            if (settings.kajian_sabtu_enabled !== undefined) {
+                                localStorage.setItem('cached_kajian_sabtu_enabled', settings.kajian_sabtu_enabled);
+                            }
+                            if (settings.kajian_sabtu_start_time) {
+                                localStorage.setItem('cached_kajian_sabtu_start_time', settings.kajian_sabtu_start_time);
+                            }
+                            if (settings.kegiatan_rutin_settings) {
+                                localStorage.setItem('agenda_rutin_settings', typeof settings.kegiatan_rutin_settings === 'string' ? settings.kegiatan_rutin_settings : JSON.stringify(settings.kegiatan_rutin_settings));
+                            }
+                            if (settings.pengumuman_jumat) {
+                                localStorage.setItem('pengumuman_jumat_data', typeof settings.pengumuman_jumat === 'string' ? settings.pengumuman_jumat : JSON.stringify(settings.pengumuman_jumat));
+                            }
+                            if (settings.rbac_users_list) {
+                                localStorage.setItem('aljihad_users_list', typeof settings.rbac_users_list === 'string' ? settings.rbac_users_list : JSON.stringify(settings.rbac_users_list));
+                            }
+                        } catch (e) {}
+
                         return settings;
                     }
                 }
@@ -109,7 +149,6 @@
             if (cached) {
                 try {
                     const parsed = JSON.parse(cached);
-                    // Sanitasi cache browser lama
                     if (!parsed.nama_aplikasi || parsed.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || parsed.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
                         parsed.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';
                     }
@@ -123,11 +162,126 @@
             if (localRot && !isNaN(parseInt(localRot))) {
                 fallbackSettings.rotation_interval = Math.max(1, parseInt(localRot));
             }
+            // Lengkapi dengan local cache spesifik jika belum terisi
+            try {
+                if (!fallbackSettings.kajian_sabtu_data && localStorage.getItem('cached_kajian_sabtu')) {
+                    fallbackSettings.kajian_sabtu_data = JSON.parse(localStorage.getItem('cached_kajian_sabtu'));
+                }
+                if (!fallbackSettings.kegiatan_rutin_settings && localStorage.getItem('agenda_rutin_settings')) {
+                    fallbackSettings.kegiatan_rutin_settings = JSON.parse(localStorage.getItem('agenda_rutin_settings'));
+                }
+                if (!fallbackSettings.pengumuman_jumat && localStorage.getItem('pengumuman_jumat_data')) {
+                    fallbackSettings.pengumuman_jumat = JSON.parse(localStorage.getItem('pengumuman_jumat_data'));
+                }
+            } catch (e) {}
+
             return fallbackSettings;
         },
 
         /**
-         * Simpan / Perbarui app_settings ke Cloud Supabase (id=1)
+         * Simpan / Perbarui satu item pengaturan key-value ke Cloud Supabase
+         * @param {string} key
+         * @param {any} value
+         */
+        async saveSettingItem(key, value) {
+            if (!key) return false;
+            try {
+                const valStr = typeof value === 'string' ? value : JSON.stringify(value);
+                const headers = {
+                    'apikey': SUPABASE_CONFIG.anonKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                };
+
+                const checkRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.${key}&select=id`, {
+                    headers: { 'apikey': SUPABASE_CONFIG.anonKey, 'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}` }
+                });
+                if (checkRes.ok) {
+                    const existing = await checkRes.json();
+                    if (existing && existing.length > 0) {
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.${key}`, {
+                            method: 'PATCH',
+                            headers: headers,
+                            body: JSON.stringify({ value: valStr })
+                        });
+                        return true;
+                    }
+                }
+
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ key: key, value: valStr })
+                });
+                return true;
+            } catch (e) {
+                console.warn(`[SupabaseDB] Gagal saveSettingItem (${key}):`, e);
+                return false;
+            }
+        },
+
+        /**
+         * Simpan / Perbarui data jadwal Kajian Rutin Malam Ahad 1 Bulan Penuh
+         */
+        async saveKajianData(payloadData, enabled = true, jamMulai = '18:25') {
+            try {
+                localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
+                localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
+                localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
+
+                await Promise.all([
+                    this.saveSettingItem('kajian_sabtu_data', payloadData),
+                    this.saveSettingItem('kajian_sabtu_enabled', enabled),
+                    this.saveSettingItem('kajian_sabtu_start_time', jamMulai)
+                ]);
+
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_KAJIAN', { data: payloadData, enabled, jamMulai });
+                }
+                return true;
+            } catch (err) {
+                console.warn('[SupabaseDB] Gagal saveKajianData:', err);
+                return false;
+            }
+        },
+
+        /**
+         * Simpan / Perbarui agenda rutin masjid (Yasin, Kajian, Tahsin, Tafsir)
+         */
+        async saveAgendaRutin(payload) {
+            try {
+                localStorage.setItem('agenda_rutin_settings', JSON.stringify(payload));
+                await this.saveSettingItem('kegiatan_rutin_settings', payload);
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_AGENDA_RUTIN', payload);
+                }
+                return true;
+            } catch (err) {
+                console.warn('[SupabaseDB] Gagal saveAgendaRutin:', err);
+                return false;
+            }
+        },
+
+        /**
+         * Simpan / Perbarui lembar pengumuman sholat jumat & kas
+         */
+        async savePengumumanJumat(pjData) {
+            try {
+                localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
+                await this.saveSettingItem('pengumuman_jumat', pjData);
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_PENGUMUMAN_JUMAT', pjData);
+                }
+                return true;
+            } catch (err) {
+                console.warn('[SupabaseDB] Gagal savePengumumanJumat:', err);
+                return false;
+            }
+        },
+
+        /**
+         * Simpan / Perbarui app_settings ke Cloud Supabase (id=1 dan key-value dinamis)
          * Mendukung pembaruan sebagian (partial update) dan pembaruan menyeluruh
          * @param {Object} updatedFields
          */
@@ -149,7 +303,36 @@
                 console.warn('[SupabaseDB] Gagal update cached_app_settings lokal:', e);
             }
 
-            // 2. Kirim update ke Cloud Supabase (id=1 dan baris cadangan id>1)
+            // 2. Pisahkan field kolom row 1 vs key-value baris tambahan
+            const validRow1Columns = [
+                'id', 'key', 'value', 'nama_aplikasi', 'footer', 'live_makkah_url', 'live_madinah_url', 'cctv_mimbar_url',
+                'gemini_api_key', 'gemini_model', 'rotation_interval', 'prayer_mode_before_adzan',
+                'prayer_mode_adzan_duration', 'prayer_mode_iqamah_duration', 'prayer_mode_after_prayer',
+                'prayer_mode_jumat_duration', 'audio_tarhim', 'tarhim_trigger_seconds', 'yasin_mode_enabled',
+                'yasin_start_time', 'yasin_scroll_speed', 'auto_switch_views', 'rotation_pages', 'running_text_pages',
+                'enable_dynamic_theme', 'enable_next_prayer_bar', 'cctv_mimbar_enabled', 'cctv_auto_switch_khutbah',
+                'running_text', 'daily_hikmah_cache', 'daily_hikmah_date'
+            ];
+
+            const row1Payload = {};
+            const keyValuePayloads = {};
+
+            for (const [k, v] of Object.entries(updatedFields)) {
+                if (validRow1Columns.includes(k)) {
+                    row1Payload[k] = v;
+                } else {
+                    keyValuePayloads[k] = v;
+                }
+            }
+
+            if (updatedFields.prayer_mode_enabled !== undefined) {
+                row1Payload.value = updatedFields.prayer_mode_enabled ? '1' : '0';
+            }
+            if (updatedFields.prayer_mode_duration !== undefined) {
+                row1Payload.prayer_mode_after_prayer = updatedFields.prayer_mode_duration;
+            }
+
+            // 3. Kirim update ke Cloud Supabase
             try {
                 if (SUPABASE_CONFIG && SUPABASE_CONFIG.url) {
                     const headers = {
@@ -159,36 +342,19 @@
                         'Prefer': 'return=representation'
                     };
 
-                    // Salin dan sanitasi payload agar hanya kolom yang valid di tabel app_settings Supabase yang dikirim
-                    // Mencegah error PGRST204 (Could not find column in schema cache)
-                    const cleanPayload = Object.assign({}, updatedFields);
-                    if (cleanPayload.prayer_mode_enabled !== undefined) {
-                        cleanPayload.value = cleanPayload.prayer_mode_enabled ? '1' : '0';
-                        delete cleanPayload.prayer_mode_enabled;
-                    }
-                    if (cleanPayload.prayer_mode_duration !== undefined) {
-                        cleanPayload.prayer_mode_after_prayer = cleanPayload.prayer_mode_duration;
-                        delete cleanPayload.prayer_mode_duration;
-                    }
-                    const validColumns = [
-                        'id', 'key', 'value', 'nama_aplikasi', 'footer', 'live_makkah_url', 'live_madinah_url', 'cctv_mimbar_url',
-                        'gemini_api_key', 'gemini_model', 'rotation_interval', 'prayer_mode_before_adzan',
-                        'prayer_mode_adzan_duration', 'prayer_mode_iqamah_duration', 'prayer_mode_after_prayer',
-                        'prayer_mode_jumat_duration', 'audio_tarhim', 'tarhim_trigger_seconds', 'yasin_mode_enabled',
-                        'yasin_start_time', 'yasin_scroll_speed', 'auto_switch_views', 'rotation_pages'
-                    ];
-                    const filteredPayload = {};
-                    for (const k of Object.keys(cleanPayload)) {
-                        if (validColumns.includes(k)) {
-                            filteredPayload[k] = cleanPayload[k];
-                        }
+                    // Update row 1 jika ada field row 1
+                    if (Object.keys(row1Payload).length > 0) {
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                            method: 'PATCH',
+                            headers: headers,
+                            body: JSON.stringify(row1Payload)
+                        });
                     }
 
-                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                        method: 'PATCH',
-                        headers: headers,
-                        body: JSON.stringify(filteredPayload)
-                    });
+                    // Update / Upsert key-value items
+                    for (const [key, val] of Object.entries(keyValuePayloads)) {
+                        await this.saveSettingItem(key, val);
+                    }
 
                     // Sinkronkan juga baris cadangan jika rotation_interval berubah
                     if (updatedFields.rotation_interval) {
@@ -204,14 +370,8 @@
                         this.sendRemoteCommand('UPDATE_SETTINGS', updatedFields).catch(() => {});
                     }
 
-                    if (res.ok) {
-                        const data = await res.json().catch(() => null);
-                        console.log('✅ [SupabaseDB] Sukses sinkronisasi settings ke cloud:', updatedFields);
-                        return { success: true, data };
-                    } else {
-                        const errText = await res.text().catch(() => '');
-                        console.warn('⚠️ [SupabaseDB] Gagal update app_settings cloud:', res.status, errText);
-                    }
+                    console.log('✅ [SupabaseDB] Sukses sinkronisasi settings ke cloud:', updatedFields);
+                    return { success: true };
                 }
             } catch (err) {
                 console.warn('⚠️ [SupabaseDB] Jaringan error saat saveSettings:', err);

@@ -11537,19 +11537,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
                 localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
 
-                // Simpan ke app_settings Supabase
+                // Simpan ke app_settings Supabase secara multi-row aman & broadcast realtime
                 let sbSuccess = false;
                 try {
-                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                        method: 'PATCH',
-                        headers: getSupabaseHeaders(),
-                        body: JSON.stringify({
-                            kajian_sabtu_enabled: enabled,
-                            kajian_sabtu_start_time: jamMulai,
-                            kajian_sabtu_data: JSON.stringify(payloadData)
-                        })
-                    });
-                    sbSuccess = res.ok;
+                    if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveKajianData === 'function') {
+                        const sbRes = await SupabaseDB.saveKajianData(payloadData, enabled, jamMulai);
+                        sbSuccess = !!sbRes;
+                    }
                 } catch (fetchErr) {
                     console.warn('Gagal sync ke Supabase (offline/network):', fetchErr);
                 }
@@ -14738,7 +14732,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
                 localStorage.setItem('agenda_rutin_settings', JSON.stringify(currentAgenda));
 
-                if (typeof SUPABASE_CONFIG !== 'undefined' && typeof getSupabaseHeaders === 'function') {
+                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveAgendaRutin === 'function') {
+                    SupabaseDB.saveAgendaRutin(currentAgenda).catch(e => console.warn('Sync Supabase agenda rutin gagal:', e));
+                } else if (typeof SUPABASE_CONFIG !== 'undefined' && typeof getSupabaseHeaders === 'function') {
                     fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                         method: 'PATCH',
                         headers: getSupabaseHeaders(),
@@ -14931,8 +14927,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             // Simpan ke LocalStorage
             localStorage.setItem('agenda_rutin_settings', JSON.stringify(payload));
 
-            // Simpan ke Supabase jika tersedia
-            if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSettings === 'function') {
+            // Simpan ke Supabase jika tersedia (Multi-row key-value + Realtime Broadcast)
+            if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveAgendaRutin === 'function') {
+                SupabaseDB.saveAgendaRutin(payload);
+            } else if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSettings === 'function') {
                 SupabaseDB.saveSettings({ kegiatan_rutin_settings: payload });
             }
 
@@ -15528,7 +15526,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             try {
                 localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
                 if (window.SupabaseDB) {
-                    await SupabaseDB.saveSettings({ pengumuman_jumat: pjData });
+                    if (typeof SupabaseDB.savePengumumanJumat === 'function') {
+                        await SupabaseDB.savePengumumanJumat(pjData);
+                    } else {
+                        await SupabaseDB.saveSettings({ pengumuman_jumat: pjData });
+                    }
                 }
                 if (tampilkanNotif) {
                     if (typeof showCustomToast === 'function') {

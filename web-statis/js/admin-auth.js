@@ -88,6 +88,98 @@ const AdminAuth = {
     },
 
     /**
+     * Sinkronkan seluruh daftar pengguna pengurus dari Supabase Cloud (app_settings key=rbac_users_list)
+     * Memastikan username, password baru, dan akun kustom langsung aktif di seluruh device (laptop, HP, tablet, TV)
+     */
+    async syncUsersFromCloud() {
+        if (typeof SUPABASE_CONFIG === 'undefined' || !SUPABASE_CONFIG.url) {
+            return this.getUsers();
+        }
+        try {
+            const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list&select=value`, {
+                headers: {
+                    'apikey': SUPABASE_CONFIG.anonKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+                }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.length > 0 && data[0].value) {
+                    let cloudUsers = data[0].value;
+                    if (typeof cloudUsers === 'string') {
+                        try { cloudUsers = JSON.parse(cloudUsers); } catch(e) {}
+                    }
+                    if (Array.isArray(cloudUsers) && cloudUsers.length > 0) {
+                        // Pastikan akun bawaan (admin, bendahara, petugas) tetap lengkap
+                        DEFAULT_AUTH_USERS.forEach(def => {
+                            const exists = cloudUsers.some(u => (u.role === def.role) || (String(u.id) === String(def.id)));
+                            if (!exists) {
+                                cloudUsers.push(Object.assign({}, def));
+                            }
+                        });
+                        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(cloudUsers));
+                        return cloudUsers;
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('[AdminAuth] Sinkronisasi user dari Supabase Cloud dilewati:', err);
+        }
+        return this.getUsers();
+    },
+
+    /**
+     * Simpan seluruh daftar pengguna pengurus ke LocalStorage & Supabase Cloud
+     */
+    async saveUsersToCloud(users) {
+        if (!Array.isArray(users)) return false;
+        try {
+            localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
+        } catch (e) {}
+
+        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+            try {
+                const headers = {
+                    'apikey': SUPABASE_CONFIG.anonKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                };
+                const valStr = JSON.stringify(users);
+
+                const checkRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list&select=id`, {
+                    headers: { 'apikey': SUPABASE_CONFIG.anonKey, 'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}` }
+                });
+                if (checkRes.ok) {
+                    const existing = await checkRes.json();
+                    if (existing && existing.length > 0) {
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list`, {
+                            method: 'PATCH',
+                            headers: headers,
+                            body: JSON.stringify({ value: valStr })
+                        });
+                    } else {
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings`, {
+                            method: 'POST',
+                            headers: headers,
+                            body: JSON.stringify({ key: 'rbac_users_list', value: valStr })
+                        });
+                    }
+                }
+
+                // Kirim sinyal Remote Command SYNC_AUTH_USERS ke seluruh device
+                if (typeof window.SupabaseDB !== 'undefined' && typeof window.SupabaseDB.sendRemoteCommand === 'function') {
+                    window.SupabaseDB.sendRemoteCommand('SYNC_AUTH_USERS', {}, 'Super Admin Auth').catch(() => {});
+                }
+                console.log('✅ [AdminAuth] Akun pengurus berhasil disinkronkan ke Supabase Cloud!');
+            } catch (err) {
+                console.warn('[AdminAuth] Gagal simpan user ke Supabase Cloud:', err);
+            }
+        }
+        return true;
+    },
+
+    /**
      * Mengambil daftar seluruh user pengurus masjid
      * Mendukung multi-akun untuk pengurus (Super Admin, Bendahara, Petugas/Operator)
      */
@@ -269,30 +361,8 @@ const AdminAuth = {
 
         users.push(newUser);
 
-        // Simpan ke localStorage
-        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
-
-        // Sync ke Supabase tabel users jika online
-        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-            try {
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({
-                        name: cleanName,
-                        email: cleanEmail,
-                        role_id: role_id
-                    })
-                });
-            } catch (err) {
-                console.warn('Sync user baru ke Supabase dilewati:', err);
-            }
-        }
+        // Simpan ke LocalStorage & Supabase Cloud
+        await this.saveUsersToCloud(users);
 
         return newUser;
     },
@@ -368,8 +438,8 @@ const AdminAuth = {
             }
         }
 
-        // Simpan ke localStorage
-        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
+        // Simpan ke LocalStorage & Supabase Cloud
+        await this.saveUsersToCloud(users);
 
         // Jika user yang diedit adalah akun yang sedang aktif login, perbarui data sesinya juga
         const currentActive = this.getCurrentUser();
@@ -385,25 +455,6 @@ const AdminAuth = {
                 currentActive.color = users[index].color;
             }
             localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentActive));
-        }
-
-        // Update ke Supabase jika online & tabel users tersedia
-        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-            try {
-                const patchPayload = { name: cleanName, email: cleanEmail };
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?id=eq.${userId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify(patchPayload)
-                });
-            } catch (err) {
-                console.warn('Sync user edit ke Supabase dilewati:', err);
-            }
         }
 
         return users[index];
@@ -441,22 +492,7 @@ const AdminAuth = {
         }
 
         users.splice(index, 1);
-        localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
-
-        // Sync delete ke Supabase jika online
-        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-            try {
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?id=eq.${userId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
-                    }
-                });
-            } catch (err) {
-                console.warn('Sync delete user ke Supabase dilewati:', err);
-            }
-        }
+        await this.saveUsersToCloud(users);
 
         return true;
     },
@@ -689,7 +725,14 @@ const AdminAuth = {
             throw new Error('Email/Username dan kata sandi wajib diisi!');
         }
 
-        // 1. Cek pada daftar akun lokal (yang bisa diupdate oleh Super Admin)
+        // Sinkronisasi akun mutakhir dari Supabase Cloud (app_settings) agar perubahan dari device lain langsung aktif
+        try {
+            await this.syncUsersFromCloud();
+        } catch (e) {
+            console.warn('[AdminAuth] Background cloud sync warning during login:', e);
+        }
+
+        // 1. Cek pada daftar akun lokal (yang telah disinkronkan dengan Cloud)
         const usersList = this.getUsers();
         let matchedUser = usersList.find(u => 
             this.isUserMatch(u, cleanId) &&

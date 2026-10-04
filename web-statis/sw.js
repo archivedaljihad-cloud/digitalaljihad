@@ -2,7 +2,7 @@
    SERVICE WORKER - AL-JIHAD DIGITAL SIGNAGE PWA
    Offline-First Resiliency & Intelligent Caching
    ===================================================== */
-const CACHE_NAME = 'aljihad-signage-v3.4.8';
+const CACHE_NAME = 'aljihad-signage-v5.3.0';
 const STATIC_ASSETS = [
     './',
     'index.html',
@@ -64,34 +64,50 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// 2. Activate Event: Cleanup Old Caches
+// 2. Activate Event: Cleanup All Old Caches
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
-                keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+                keys.filter((key) => key !== CACHE_NAME).map((key) => {
+                    console.log('[SW] Menghapus cache lama:', key);
+                    return caches.delete(key);
+                })
             );
         }).then(() => self.clients.claim())
     );
 });
 
-// 3. Fetch Event: Network-First with Cache Fallback for Pages & Cache-First for Assets
+// Message Event: Force cache purge or skip waiting
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.action === 'skipWaiting') {
+        self.skipWaiting();
+    }
+    if (event.data && event.data.action === 'clearCache') {
+        caches.keys().then((keys) => {
+            return Promise.all(keys.map((key) => caches.delete(key)));
+        });
+    }
+});
+
+// 3. Fetch Event: Network-First for HTML, Scripts & Slides; Stale-While-Revalidate for Heavy Media
 self.addEventListener('fetch', (event) => {
     const request = event.request;
 
     // Abaikan request non-GET atau protokol non-http (chrome-extension dsb.)
     if (request.method !== 'GET' || !request.url.startsWith('http')) return;
 
-    // Untuk API calls Supabase / REST API: biarkan fetch jaringan langsung (fallback ditangani di JS app via localStorage)
+    // Untuk API calls Supabase / REST API: biarkan fetch jaringan langsung
     if (request.url.includes('/rest/v1/') || request.url.includes('supabase.co')) {
         return;
     }
 
-    // Strategi untuk Halaman HTML, Slide, & Script Admin/Auth (Network-First -> Cache Fallback)
+    // Strategi untuk Halaman HTML, Slide, & Script Logic (Network-First -> Cache Fallback)
     const isHtml = request.headers.get('accept') && request.headers.get('accept').includes('text/html');
+    const isScript = request.url.includes('/js/') || request.url.endsWith('.js');
     const isAdminAsset = request.url.includes('admin') || request.url.includes('login') || request.url.includes('auth');
 
-    if (isHtml || isAdminAsset) {
+    if (isHtml || isScript || isAdminAsset) {
         event.respondWith(
             fetch(request)
                 .then((networkResponse) => {
@@ -116,7 +132,7 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Strategi untuk Static Assets (CSS, JS, Fonts, Images) -> Stale-While-Revalidate
+    // Strategi untuk Static Assets (CSS, Fonts, Images) -> Stale-While-Revalidate
     event.respondWith(
         caches.match(request).then((cachedResponse) => {
             const fetchPromise = fetch(request).then((networkResponse) => {

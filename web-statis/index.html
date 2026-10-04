@@ -518,10 +518,10 @@
 
     <!-- SUPABASE & CORE SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=3.0.7"></script>
-    <script src="js/supabase-db.js?v=3.0.7"></script>
-    <script src="js/prayer-engine.js?v=3.0.7"></script>
-    <script src="js/anti-idle.js?v=3.0.7"></script>
+    <script src="js/supabase-config.js?v=5.3.0"></script>
+    <script src="js/supabase-db.js?v=5.3.0"></script>
+    <script src="js/prayer-engine.js?v=5.3.0"></script>
+    <script src="js/anti-idle.js?v=5.3.0"></script>
 
     <script>
         // Pemetaan rute canonical ke path file statis
@@ -1008,6 +1008,22 @@
             initDisplay();
             setInterval(checkPrayerMode, 1000);
 
+            // Helper Broadcast Data ke Iframes yang Sedang Aktif di Layar TV
+            function broadcastToActiveFrames(message) {
+                try {
+                    const f1 = document.getElementById('frame1');
+                    const f2 = document.getElementById('frame2');
+                    if (f1 && f1.contentWindow) {
+                        f1.contentWindow.postMessage(message, '*');
+                    }
+                    if (f2 && f2.contentWindow) {
+                        f2.contentWindow.postMessage(message, '*');
+                    }
+                } catch(e) {
+                    console.warn('[Display TV] Broadcast to active frames warning:', e);
+                }
+            }
+
             // Pasang Realtime WebSocket Listener Supabase
             if (window.SupabaseDB) {
                 SupabaseDB.subscribeRealtime((payload) => {
@@ -1024,18 +1040,27 @@
                                 updateMasterFooter(settings.footer);
                             }
                             activePages = resolveActivePages(settings, progs);
+                            // Broadcast ke semua slide aktif agar update tanpa jeda
+                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'app_settings', payload: payload });
                             showOsd(`⚡ Durasi Rotasi: ${settings.rotation_interval || 10} detik`);
                         });
                     } else if (payload.table === 'program_infaq') {
                         Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
                             if (currSettings) settings = currSettings;
                             activePages = resolveActivePages(settings, progs);
+                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'program_infaq', payload: payload });
                             showOsd('⚡ Rotasi Program Infaq Diperbarui (Realtime)');
                         });
                     } else if (payload.table === 'jadwal_sholat') {
-                        SupabaseDB.getJadwalSholat().then(list => jadwalList = list);
+                        SupabaseDB.getJadwalSholat().then(list => {
+                            jadwalList = list;
+                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'jadwal_sholat' });
+                        });
                     } else if (payload.table === 'sholat_jumat') {
-                        SupabaseDB.getSholatJumat().then(petugas => jumatPetugas = petugas);
+                        SupabaseDB.getSholatJumat().then(petugas => {
+                            jumatPetugas = petugas;
+                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'sholat_jumat' });
+                        });
                     }
                 });
             }
@@ -1048,6 +1073,18 @@
                     console.log('📡 [TV Remote Command Received]:', cmd, d);
 
                     switch (cmd) {
+                        case 'SYNC_KAJIAN':
+                            broadcastToActiveFrames({ type: 'SYNC_KAJIAN', data: d });
+                            break;
+                        case 'SYNC_AGENDA_RUTIN':
+                            broadcastToActiveFrames({ type: 'SYNC_AGENDA_RUTIN', data: d });
+                            break;
+                        case 'SYNC_PENGUMUMAN_JUMAT':
+                            broadcastToActiveFrames({ type: 'SYNC_PENGUMUMAN_JUMAT', data: d });
+                            break;
+                        case 'SYNC_RAMADHAN':
+                            broadcastToActiveFrames({ type: 'SYNC_RAMADHAN', data: d });
+                            break;
                         case 'UPDATE_SETTINGS':
                             if (d.rotation_interval) {
                                 rotationInterval = Math.max(1, parseInt(d.rotation_interval)) * 1000;
@@ -1058,6 +1095,7 @@
                             if (d.footer) {
                                 updateMasterFooter(d.footer);
                             }
+                            broadcastToActiveFrames({ type: 'UPDATE_SETTINGS', data: d });
                             break;
                         case 'NEXT':
                             nextPage();

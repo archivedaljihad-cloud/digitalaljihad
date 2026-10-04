@@ -783,52 +783,61 @@
                 renderTromolInfaq(DEFAULT_RAMADHAN_INFAQ);
             }
 
-            // 2. Coba fetch dari Supabase Cloud app_settings
-            if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-                try {
-                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                        headers: {
-                            'apikey': SUPABASE_CONFIG.anonKey,
-                            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+            // 2. Fetch dari Supabase Cloud (Multi-row key-value app_settings)
+            try {
+                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.getSettings === 'function') {
+                    const s = await SupabaseDB.getSettings();
+                    if (s) {
+                        if (s.ramadhan_petugas) {
+                            const pet = (typeof s.ramadhan_petugas === 'string') ? JSON.parse(s.ramadhan_petugas) : s.ramadhan_petugas;
+                            renderPetugasRamadhan(pet);
+                            localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(pet));
                         }
-                    });
-                    if (res.ok) {
-                        const list = await res.json();
-                        if (list && list.length > 0) {
-                            const s = list[0];
-                            if (s.ramadhan_petugas) {
-                                const pet = (typeof s.ramadhan_petugas === 'string') ? JSON.parse(s.ramadhan_petugas) : s.ramadhan_petugas;
-                                renderPetugasRamadhan(pet);
-                                localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(pet));
-                            }
-                            if (s.ramadhan_infaq) {
-                                const inf = (typeof s.ramadhan_infaq === 'string') ? JSON.parse(s.ramadhan_infaq) : s.ramadhan_infaq;
-                                renderTromolInfaq(inf);
-                                localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(inf));
-                            }
+                        if (s.ramadhan_infaq) {
+                            const inf = (typeof s.ramadhan_infaq === 'string') ? JSON.parse(s.ramadhan_infaq) : s.ramadhan_infaq;
+                            renderTromolInfaq(inf);
+                            localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(inf));
+                        }
 
-                            // Teks Berjalan Layar Ramadhan
-                            if (typeof SupabaseDB !== 'undefined') {
-                                const rText = SupabaseDB.getRunningTextForPage('/ramadhan-embed', s);
-                                if (rText && document.getElementById('runningTextContent')) {
-                                    document.getElementById('runningTextContent').textContent = rText;
-                                }
-                            }
+                        // Teks Berjalan Layar Ramadhan
+                        const rText = SupabaseDB.getRunningTextForPage('/ramadhan-embed', s);
+                        if (rText && document.getElementById('runningTextContent')) {
+                            document.getElementById('runningTextContent').textContent = rText;
                         }
                     }
-                } catch (err) {
-                    console.warn('Sync Ramadhan Supabase dilewati:', err);
                 }
-            } else if (typeof SupabaseDB !== 'undefined') {
-                const rText = SupabaseDB.getRunningTextForPage('/ramadhan-embed', {});
-                if (rText && document.getElementById('runningTextContent')) {
-                    document.getElementById('runningTextContent').textContent = rText;
-                }
+            } catch (err) {
+                console.warn('Sync Ramadhan Supabase dilewati:', err);
             }
+        }
+
+        // Setup Realtime & Broadcast Listener
+        function setupRamadhanRealtime() {
+            try {
+                if (typeof SupabaseDB !== 'undefined') {
+                    if (typeof SupabaseDB.subscribeRealtime === 'function') {
+                        SupabaseDB.subscribeRealtime(() => loadRamadhanData());
+                    }
+                    if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
+                        SupabaseDB.subscribeRemoteCommands((cmd) => {
+                            if (cmd === 'SYNC_RAMADHAN' || cmd === 'UPDATE_SETTINGS' || cmd === 'REFRESH') {
+                                loadRamadhanData();
+                            }
+                        });
+                    }
+                }
+            } catch (e) {}
+
+            window.addEventListener('message', (event) => {
+                if (event.data && (event.data.type === 'SYNC_RAMADHAN' || event.data.type === 'DATA_UPDATED')) {
+                    loadRamadhanData();
+                }
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             loadRamadhanData();
+            setupRamadhanRealtime();
             initRamadhanCountdown();
         });
     </script>

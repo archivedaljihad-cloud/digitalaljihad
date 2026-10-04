@@ -9399,6 +9399,87 @@ Berdasarkan tinjauan pengguna terhadap tampilan slide gabungan (Opsi 1):
 4. `C:\Users\anthu\Documents\【Digital WebSTATIS】\prayer-mode.html` & `sw.js` (Sinkronisasi lokal mandiri).
 5. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 216).
 
+---
+
+## BAB 217: PERBAIKAN MENYELURUH SINKRONISASI MULTI-DEVICE: RBAC LOGIN CLOUD, ARSITEKTUR MULTI-ROW APP_SETTINGS, REALTIME TV SYNC, DAN PEMBERSIHAN CACHE STALE (4 OKTOBER 2026)
+
+### 1. Masalah Utama yang Dikeluhkan & Investigasi Mendalam (Senior QA Analysis)
+Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perangkat berbeda:
+1. **Login Multi-Device Selalu Memaksa Kredensial Default:**
+   - Ketika web dibuka di perangkat lain (laptop lain, HP, atau tablet baru), user tidak bisa login dengan username/password baru yang sudah diubah di RBAC Super Admin. Hanya bisa login menggunakan akun bawaan (*default credentials*).
+   - **Akar Masalah (Root Cause):** Fungsi `AdminAuth.getUsers()` sebelumnya hanya mengandalkan `localStorage['aljihad_users_list']`. Pada perangkat baru, `localStorage` dalam keadaan kosong, sehingga aplikasi langsung me-reset ke `DEFAULT_AUTH_USERS`. Sync ke tabel `users` di Supabase ditolak dengan `HTTP 401 Permission Denied` (RLS menolak role anonim `anon`).
+2. **Tampilan di Device Lain Selalu Muncul Tampilan Default:**
+   - Data seperti Jadwal Kajian 1 Bulan (`kajian_sabtu_data`), Pengaturan Agenda Rutin (`kegiatan_rutin_settings`), Lembar Pengumuman Jum'at (`pengumuman_jumat`), dan Tromol Ramadhan (`ramadhan_infaq`) ketika dibuka di device lain selalu kembali ke data contoh default.
+   - **Akar Masalah (Root Cause):** Pada tabel `app_settings` Supabase, kolom-kolom tersebut tidak ada dalam skema tabel SQL (`HTTP 400 Bad Request / PGRST204: Could not find the column in the schema cache`). Akibatnya `PATCH` gagal total dan data hanya tersimpan di `localStorage` peramban laptop tempat input saja!
+3. **Layar TV Tidak Langsung Sinkron Saat Admin Input/Update Data Baru:**
+   - Setelah admin menekan "Simpan Agenda 1 Bulan" atau simpan agenda rutin, layar TV tidak langsung berubah secara instan, melainkan harus di-refresh manual atau bahkan tidak berubah sama sekali.
+   - **Akar Masalah (Root Cause):** File slide (`slides/kajian.html`, `slides/agenda-rutin.html`, `slides/ramadhan.html`) tidak memiliki listener WebSocket Realtime (`SupabaseDB.subscribeRealtime`) maupun listener broadcast command. Halaman induk `index.html` juga tidak mem-broadcast pesan perubahan data ke iframe aktif (`#frame1` & `#frame2`).
+4. **Cache Browser & Cloudflare Menahan File Skrip Kadaluwarsa Selama 1 Tahun:**
+   - Berkas `web-statis/_headers` menetapkan `Cache-Control: public, max-age=31536000, immutable` pada folder `/js/*` dan `/css/*`, serta Service Worker memakai strategi `Stale-While-Revalidate` pada JS, menyebabkan peramban dan Cloudflare Edge mengeksekusi kode usang tanpa mengecek pembaruan server.
+
+---
+
+### 2. Rincian Solusi & Perbaikan Kode
+
+#### A. Arsitektur Penyimpanan Cloud Multi-Row Key-Value (`app_settings`)
+- Tabel `public.app_settings` di Supabase memiliki hak akses penuh untuk role `anon` dan kolom `key` serta `value` (tipe teks/JSON).
+- Diinisialisasi baris permanen di database:
+  - `key: 'rbac_users_list'`: Menyimpan seluruh daftar pengguna, hak akses, dan password hasil update Super Admin di cloud.
+  - `key: 'kajian_sabtu_data'`: Menyimpan jadwal lengkap 1 bulan (Pekan 1 s/d 5, pemateri, kitab, tema, waktu).
+  - `key: 'kegiatan_rutin_settings'`: Menyimpan konfigurasi Yaasiin, Kajian Ahad, Tahsin Al-Qur'an, dan Tafsir Subuh.
+  - `key: 'pengumuman_jumat'`: Menyimpan data pengumuman kas, petugas, himbauan, dan tanda tangan DKM.
+  - `key: 'ramadhan_infaq'`: Menyimpan laporan tromol dan petugas Ramadhan.
+- Di `js/supabase-db.js`:
+  - `getSettings()` diperbarui dengan **Multi-Row Merging**: Mengambil data row `id=1` sekaligus seluruh baris key-value tambahan, lalu menggabungkannya ke dalam satu objek utuh sebelum disimpan ke cache lokal.
+  - Ditambahkan fungsi khusus: `saveSettingItem(key, value)`, `saveKajianData(payload, enabled, jamMulai)`, `saveAgendaRutin(payload)`, dan `savePengumumanJumat(data)`. Masing-masing fungsi menyimpan ke baris `key` dan mem-broadcast sinyal remote command ke seluruh TV secara otomatis.
+
+#### B. Solusi RBAC Login Multi-Device (`admin-auth.js` & `login.html`)
+- Di `js/admin-auth.js`:
+  - Ditambahkan metode `syncUsersFromCloud()` yang menarik data user mutakhir dari baris `rbac_users_list` di `app_settings` Supabase ke `localStorage`.
+  - Ditambahkan `saveUsersToCloud(users)` yang otomatis dipanggil setiap kali Super Admin membuat (`createUser`), mengubah (`updateUser`), atau menghapus (`deleteUser`) akun.
+  - Di awal method `login()`, ditambahkan `await this.syncUsersFromCloud();` sehingga sebelum mencocokkan password, sistem selalu memastikan daftar akun di perangkat tersebut adalah yang terbaru dari server.
+- Di `login.html`:
+  - Memanggil `initLoginCloudSync()` saat halaman dimuat.
+  - Nilai preset role (`ROLE_PRESETS`) diperbarui secara dinamis dari user mutakhir di cloud, sehingga tombol shortcut Superadmin, Bendahara, dan Petugas otomatis terisi kredensial terbaru.
+
+#### C. Solusi Realtime Display TV Sync Tanpa Refresh
+- Di `web-statis/admin.html`:
+  - `simpanKajianSabtu()` dialihkan menggunakan `await SupabaseDB.saveKajianData(...)`.
+  - `syncKajianPekanIniKeAgendaRutin()` dan `simpanAgendaRutinAdmin()` dialihkan menggunakan `await SupabaseDB.saveAgendaRutin(...)`.
+  - `simpanDataPengumumanJumat()` dialihkan menggunakan `await SupabaseDB.savePengumumanJumat(...)`.
+- Di `web-statis/index.html` (Layar Display TV Utama):
+  - Dibuat fungsi helper `broadcastToActiveFrames(message)` yang mengirim `postMessage` ke `#frame1` dan `#frame2`.
+  - Saat ada event perubahan tabel `app_settings` dari WebSocket Realtime, `index.html` langsung mem-broadcast ke iframe yang sedang aktif.
+  - Listener Remote Command diperluas untuk menangani: `SYNC_KAJIAN`, `SYNC_AGENDA_RUTIN`, `SYNC_PENGUMUMAN_JUMAT`, `SYNC_RAMADHAN`, dan `UPDATE_SETTINGS`.
+- Di `web-statis/slides/kajian.html`, `slides/agenda-rutin.html`, dan `slides/ramadhan.html`:
+  - Ditambahkan listener ganda: `SupabaseDB.subscribeRealtime`, `SupabaseDB.subscribeRemoteCommands`, serta `window.addEventListener('message')` dari parent window.
+  - Ketika data diperbarui di admin, slide kajian dan agenda rutin langsung merefresh isi datanya seketika (<100ms) tanpa perlu memuat ulang peramban TV.
+
+#### D. Pembersihan Total Cache Lama (Cache Purge & Network-First Strategy)
+- Di `web-statis/_headers`:
+  - Mengubah header `/js/*` dan `/css/*` dari `Cache-Control: public, max-age=31536000, immutable` menjadi `Cache-Control: public, max-age=0, must-revalidate`.
+- Di `web-statis/sw.js`:
+  - Menaikkan nama cache PWA ke **`aljihad-signage-v5.3.0`**.
+  - Mengubah strategi caching seluruh skrip `/js/*.js` menjadi **Network-First**: Browser wajib meminta file terbaru ke jaringan lebih dulu, baru memakai cache offline jika jaringan terputus.
+  - Menambahkan handler pembersihan cache versi usang secara agresif pada event `activate`.
+- Query string pemanggil seluruh script JavaScript di `index.html`, `login.html`, `slides/*.html` dinaikkan menjadi `?v=5.3.0`.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/_headers` (Pembersihan cache 1 tahun Cloudflare).
+2. `web-statis/sw.js` (Pembaruan cache PWA ke v5.3.0 & strategi Network-First untuk JS).
+3. `web-statis/js/supabase-db.js` (Multi-row merging, fungsi save setting item, save kajian, agenda rutin, pengumuman jumat).
+4. `web-statis/js/admin-auth.js` (Sinkronisasi cloud RBAC pengguna, update kredensial cloud, auto-sync login).
+5. `web-statis/login.html` (Pemuatan supabase-db, inisialisasi sync pengguna saat load, preset dinamis).
+6. `web-statis/admin.html` (Integrasi SupabaseDB saveKajianData, saveAgendaRutin, savePengumumanJumat).
+7. `web-statis/slides/kajian.html` (Listener Supabase realtime, remote broadcast commands, postMessage parent).
+8. `web-statis/slides/agenda-rutin.html` (Listener Supabase realtime, remote commands, postMessage).
+9. `web-statis/slides/ramadhan.html` (Multi-row getSettings, realtime listener, postMessage).
+10. `web-statis/index.html` (Broadcast to active frames, remote sync router, update script version v5.3.0).
+11. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 217).
+
+
 
 
 

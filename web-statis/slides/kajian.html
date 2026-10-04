@@ -1199,7 +1199,45 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadKajianData);
+        // Setup Realtime Subscription untuk update instan di layar TV saat admin menyimpan jadwal baru
+        function setupKajianRealtimeListener() {
+            try {
+                if (typeof SupabaseDB !== 'undefined') {
+                    // 1. Dengarkan Postgres Realtime Changes pada tabel app_settings
+                    if (typeof SupabaseDB.subscribeRealtime === 'function') {
+                        SupabaseDB.subscribeRealtime((payload) => {
+                            console.log('[SlideKajian] Realtime table change detected:', payload);
+                            loadKajianData();
+                        });
+                    }
+
+                    // 2. Dengarkan Remote Commands Broadcast (SYNC_KAJIAN, UPDATE_SETTINGS, REFRESH)
+                    if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
+                        SupabaseDB.subscribeRemoteCommands((cmd, data) => {
+                            console.log('[SlideKajian] Remote command received:', cmd, data);
+                            if (cmd === 'SYNC_KAJIAN' || cmd === 'UPDATE_SETTINGS' || cmd === 'REFRESH') {
+                                loadKajianData();
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                console.warn('[SlideKajian] Realtime setup failed:', e);
+            }
+
+            // 3. Dengarkan postMessage dari parent window (Display TV index.html)
+            window.addEventListener('message', (event) => {
+                if (event.data && (event.data.type === 'SYNC_KAJIAN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data')) {
+                    console.log('[SlideKajian] postMessage received from parent TV:', event.data);
+                    loadKajianData();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadKajianData();
+            setupKajianRealtimeListener();
+        });
     </script>
 </body>
 </html>

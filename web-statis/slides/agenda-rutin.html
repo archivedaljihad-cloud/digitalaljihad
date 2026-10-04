@@ -762,15 +762,49 @@
             renderCards(activeConfig);
         }
 
+        // Listener Realtime Supabase & Remote Broadcast
+        function setupAgendaRealtimeListener() {
+            try {
+                if (typeof SupabaseDB !== 'undefined') {
+                    if (typeof SupabaseDB.subscribeRealtime === 'function') {
+                        SupabaseDB.subscribeRealtime((payload) => {
+                            console.log('[SlideAgendaRutin] Realtime table change detected:', payload);
+                            loadAgendaData();
+                        });
+                    }
+
+                    if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
+                        SupabaseDB.subscribeRemoteCommands((cmd, data) => {
+                            console.log('[SlideAgendaRutin] Remote command received:', cmd, data);
+                            if (cmd === 'SYNC_AGENDA_RUTIN' || cmd === 'UPDATE_SETTINGS' || cmd === 'REFRESH') {
+                                loadAgendaData();
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                console.warn('[SlideAgendaRutin] Realtime setup failed:', e);
+            }
+
+            // Listener postMessage dari window induk (Display TV index.html)
+            window.addEventListener('message', (event) => {
+                if (event.data && (event.data.type === 'SYNC_AGENDA_RUTIN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data')) {
+                    console.log('[SlideAgendaRutin] postMessage received from parent TV:', event.data);
+                    loadAgendaData();
+                }
+            });
+        }
+
         // Listener Realtime Storage (Jika Takmir Update dari Admin Tab Sebelah)
         window.addEventListener('storage', (e) => {
-            if (e.key === 'agenda_rutin_settings') {
+            if (e.key === 'agenda_rutin_settings' || e.key === 'cached_kajian_sabtu') {
                 loadAgendaData();
             }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
             loadAgendaData();
+            setupAgendaRealtimeListener();
 
             // Refresh tiap 30 detik agar jika melewati pergantian hari/pekan otomatis ter-update
             setInterval(loadAgendaData, 30000);
