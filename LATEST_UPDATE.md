@@ -4,7 +4,40 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:00 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:10 WIB)
+
+### 🔍 Peningkatan Tipografi & Kejelasan Layar TV: Perbesar Font "Mutasi Kas Terakhir" (Grafik Kas Masjid) & "List Operasional Kas Ambulance"
+
+**Latar Belakang & Permintaan Pengguna:**
+Pengguna meminta agar tulisan pada slide TV Display diperbesar dan dipertegas agar mudah dibaca dari kejauhan jamaah:
+1. **Slide "Grafik Kas Masjid" (`slides/keuangan-summary.html`):** Memperbesar font pada kolom "Mutasi Kas Terakhir" agar angka nominal, uraian transaksi, dan tanggal terlihat tajam dan jelas.
+2. **Slide "Laporan Kas Ambulance" (`slides/ambulance.html`):** Memperbesar font pada daftar list bawah mutasi operasional ambulance (tabel kas) agar terbaca jelas dan tegas.
+
+**Rincian Peningkatan:**
+1. **`web-statis/slides/keuangan-summary.html` (Grafik Kas Masjid):**
+   - Judul `.box-title`: Dinaikkan dari `1.12rem` menjadi `1.28rem` (font-weight 800) dengan icon emas `1.35rem` dan aksen pembatas emas yang lebih kontras.
+   - Uraian transaksi `.trans-desc`: Dinaikkan dari `0.90rem` menjadi `1.10rem` (font-weight 700) dengan text-shadow tajam.
+   - Tanggal & kategori `.trans-date`: Dinaikkan dari `0.74rem` menjadi `0.85rem` (font-weight 500).
+   - Nominal angka transaksi `.trans-val`: Dinaikkan dari `0.95rem` menjadi `1.18rem` (font-weight 800, tabular-nums). Warna pemasukan diberi glow hijau zamrud `#00e676` dan pengeluaran diberi warna merah koral `#ff6b6b` untuk keterbacaan instan.
+   - Lingkaran icon transaksi `.trans-icon-circle`: Diperbesar dari `32px` menjadi `36px` dengan icon `1rem`.
+
+2. **`web-statis/slides/ambulance.html` (Laporan Kas Ambulance):**
+   - Font dasar tabel `.keuangan-table`: Dinaikkan dari `1.05rem` menjadi `1.18rem`.
+   - Header tabel `thead`: Dinaikkan menjadi `1.15rem` (font-weight 800) dengan aksen emas `2.5px solid rgba(255, 215, 0, 0.75)` dan padding `11px 12px`.
+   - Tanggal `.col-tgl`: Dinaikkan menjadi `1.12rem` (font-weight 600).
+   - Uraian operasional `.col-desc`: Dinaikkan menjadi `1.20rem` (font-weight 700, line-height 1.35) dengan text-shadow kontras.
+   - Nominal pemasukan `.amount-income-val`: Dinaikkan dari `1.08rem` menjadi `1.25rem` (font-weight 800).
+   - Nominal pengeluaran `.amount-expense-val`: Dinaikkan dari `1.08rem` menjadi `1.25rem` (font-weight 800).
+   - Saldo kas berjalan `.amount-saldo-val`: Dinaikkan dari `1.12rem` menjadi `1.28rem` (font-weight 800).
+   - Badge kategori `.badge-kategori-pill`: Dinaikkan dari `0.78rem` menjadi `0.92rem` (font-weight 700, padding 3px 12px).
+
+**Berkas Terkait:**
+- `web-statis/slides/keuangan-summary.html`
+- `web-statis/slides/ambulance.html`
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 01:00 WIB)
 
 ### 🛡️ AUDIT SENIOR QA ANALYST & UNIVERSAL REALTIME CROSS-ACCOUNT SYNC ENGINE (DISPLAY TV & ADMIN)
 
