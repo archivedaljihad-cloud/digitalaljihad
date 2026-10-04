@@ -9479,6 +9479,46 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
 10. `web-statis/index.html` (Broadcast to active frames, remote sync router, update script version v5.3.0).
 11. `LATEST_UPDATE.md` (Dokumentasi lengkap Bab 217).
 
+---
+
+## BAB 218: PENYELESAIAN TUNTAS PERSISTENSI KREDENSIAL AKUN SUPER USER ("SUWARDI") & BUSTING DISK CACHE ADMIN (4 OKTOBER 2026)
+
+### 1. Masalah Utama & Analisis Mendalam
+- **Gejala:** Pengguna mengganti username dan password akun Super User (Nama: "Suwardi", Username: "admin", Password: "SuperUser1971"). Modal memberikan konfirmasi sukses *"Kredensial akun Suwardi berhasil diperbarui oleh Super Admin"*, namun saat login kembali menggunakan password baru tersebut, kredensial dinyatakan tidak valid / gagal login.
+- **Akar Masalah (Root Cause):**
+  1. **Disk Cache pada `admin.html`:** File `admin.html` sebelumnya memanggil `<script src="js/admin-auth.js?v=2.7">`. Akibat versi query parameter tidak dinaikkan, peramban pengguna mengeksekusi berkas `admin-auth.js` lama dari cache browser yang **belum memiliki integrasi `saveUsersToCloud`**. Akibatnya data hanya tersimpan sementara di memory/localStorage sesi admin saat itu.
+  2. **Penimpaan Balik (*Race Condition Overwrite*) oleh `login.html`:** Ketika pengguna membuka `login.html`, halaman login memanggil `syncUsersFromCloud()`. Karena di Supabase data belum terupdate (masih password lama `admin123`), data lama dari Supabase ditarik dan menimpa kembali `localStorage` pengguna menjadi `admin123`.
+  3. **Verifikasi Status HTTP pada `saveUsersToCloud`:** Sebelumnya belum ada penanganan exception ketat bila request simpan ke Supabase menghasilkan status non-200.
+
+---
+
+### 2. Tindakan Perbaikan yang Diterapkan
+1. **Pembaruan Langsung Kredensial Super User di Supabase Cloud:**
+   - Kredensial akun Super Admin di baris `rbac_users_list` Supabase telah diupdate dan diverifikasi:
+     - Nama: `Suwardi`
+     - Username: `admin`
+     - Email: `archived.aljihad@gmail.com`
+     - Password: `SuperUser1971`
+     - Role: `admin` (Super Admin - Akses Penuh 100%)
+2. **Pembaruan Query String Cache-Busting (`?v=5.3.1`):**
+   - Di `web-statis/admin.html`: Seluruh script (`supabase-config.js`, `supabase-db.js`, `admin-auth.js`, `gemini-ai.js`) dinaikkan versinya ke `?v=5.3.1` untuk memaksa peramban membuang disk cache lama.
+   - Di `web-statis/login.html`: Tag script dinaikkan ke `?v=5.3.1`.
+   - Di `web-statis/sw.js`: Nama cache PWA dinaikkan ke **`aljihad-signage-v5.3.1`**.
+3. **Penyempurnaan `saveUsersToCloud` & `isUserMatch` pada `admin-auth.js`:**
+   - Menambahkan pengecekan status respons HTTP (`saveRes.ok`). Jika Supabase menolak request, sistem melempar error transparan ke modal form edit.
+   - Menghapus logika partial substring match yang ambigu pada `isUserMatch` sehingga hanya mencocokkan exact username, email, nama lengkap, atau nama panggilan resmi tanpa gelar kehormatan.
+   - Memperbarui `DEFAULT_AUTH_USERS` bawaan agar Super Admin fallback secara default adalah `Suwardi` dengan password `SuperUser1971`, serta tetap mendukung fallback darurat `admin123`.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `web-statis/js/admin-auth.js` (Penyempurnaan saveUsersToCloud, isUserMatch, dan DEFAULT_AUTH_USERS).
+2. `web-statis/admin.html` (Cache-busting script version `?v=5.3.1`).
+3. `web-statis/login.html` (Cache-busting `?v=5.3.1`, preset admin fallback `SuperUser1971`).
+4. `web-statis/sw.js` (Peningkatan cache version ke `aljihad-signage-v5.3.1`).
+5. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 218).
+
+
 
 
 

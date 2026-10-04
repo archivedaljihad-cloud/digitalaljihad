@@ -12,10 +12,10 @@
 const DEFAULT_AUTH_USERS = [
     {
         id: 3,
-        name: 'Bpk. H. M. Sholeh',
+        name: 'Suwardi',
         email: 'archived.aljihad@gmail.com',
         username: 'admin',
-        password: 'admin123',
+        password: 'SuperUser1971',
         role: 'admin',
         role_id: 3,
         role_label: 'Super Admin',
@@ -73,16 +73,11 @@ const AdminAuth = {
 
         // 4. Cocok dengan nama tanpa gelar kehormatan (Bpk., Ust., H., Haji, Ustadz, Kyai, Bapak, Ibu)
         const nameWithoutTitle = nm.replace(/^(bpk\.|ust\.|h\.|ibu|haji|ustadz|kyai|bapak|dkm)\s+/i, '').trim();
-        if (nameWithoutTitle === cleanId) return true;
+        if (nameWithoutTitle && nameWithoutTitle === cleanId) return true;
 
-        // 5. Cocok jika input identifier sama dengan salah satu kata dalam nama (misal "suwardi" dari "Bpk. Suwardi")
+        // 5. Cocok jika input identifier sama persis dengan salah satu kata dalam nama (misal "suwardi" dari "Bpk. Suwardi")
         const words = nm.split(/[\s,.-]+/).map(w => w.toLowerCase()).filter(w => w.length >= 2);
         if (words.includes(cleanId)) return true;
-
-        // 6. Partial match jika input identifier >= 3 karakter
-        if (cleanId.length >= 3) {
-            if (nm.includes(cleanId) || (un && un.includes(cleanId))) return true;
-        }
 
         return false;
     },
@@ -133,10 +128,15 @@ const AdminAuth = {
      */
     async saveUsersToCloud(users) {
         if (!Array.isArray(users)) return false;
+        
+        // 1. Simpan langsung ke LocalStorage perangkat saat ini
         try {
             localStorage.setItem(USERS_LIST_STORAGE_KEY, JSON.stringify(users));
-        } catch (e) {}
+        } catch (e) {
+            console.warn('[AdminAuth] Gagal simpan ke localStorage:', e);
+        }
 
+        // 2. Simpan secara permanen ke Supabase Cloud (app_settings key=rbac_users_list)
         if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
             try {
                 const headers = {
@@ -150,21 +150,34 @@ const AdminAuth = {
                 const checkRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list&select=id`, {
                     headers: { 'apikey': SUPABASE_CONFIG.anonKey, 'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}` }
                 });
+
+                let saveRes;
                 if (checkRes.ok) {
                     const existing = await checkRes.json();
                     if (existing && existing.length > 0) {
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list`, {
+                        saveRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list`, {
                             method: 'PATCH',
                             headers: headers,
                             body: JSON.stringify({ value: valStr })
                         });
                     } else {
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings`, {
+                        saveRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings`, {
                             method: 'POST',
                             headers: headers,
                             body: JSON.stringify({ key: 'rbac_users_list', value: valStr })
                         });
                     }
+                } else {
+                    saveRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings`, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify({ key: 'rbac_users_list', value: valStr })
+                    });
+                }
+
+                if (!saveRes || !saveRes.ok) {
+                    const errTxt = saveRes ? await saveRes.text() : 'No response';
+                    throw new Error(`Gagal menyimpan akun ke Cloud Supabase (${saveRes ? saveRes.status : 'Error'}): ${errTxt}`);
                 }
 
                 // Kirim sinyal Remote Command SYNC_AUTH_USERS ke seluruh device
@@ -172,8 +185,10 @@ const AdminAuth = {
                     window.SupabaseDB.sendRemoteCommand('SYNC_AUTH_USERS', {}, 'Super Admin Auth').catch(() => {});
                 }
                 console.log('✅ [AdminAuth] Akun pengurus berhasil disinkronkan ke Supabase Cloud!');
+                return true;
             } catch (err) {
-                console.warn('[AdminAuth] Gagal simpan user ke Supabase Cloud:', err);
+                console.error('[AdminAuth] Error saat menyimpan user ke Supabase Cloud:', err);
+                throw err;
             }
         }
         return true;
