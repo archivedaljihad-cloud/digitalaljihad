@@ -9518,6 +9518,57 @@ Pengguna melaporkan 3 anomali kritis saat mengakses web dan layar TV dari perang
 4. `web-statis/sw.js` (Peningkatan cache version ke `aljihad-signage-v5.3.1`).
 5. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 218).
 
+---
+
+## BAB 219: PENETAPAN CLOUDFLARE & GITHUB SEBAGAI DATA CENTER UTAMA SERTA PANDUAN KONFIGURASI FULLY KIOSK BROWSER DI TV DISPLAY (4 OKTOBER 2026)
+
+### 1. Penetapan Arsitektur: Cloudflare & GitHub Sebagai Data Center Utama
+- Sesuai arahan takmir/pengurus masjid:
+  - **Data Center Produksi Utama:** **Cloudflare Workers (`https://digitalaljihad.my.id/`)**, **GitHub (`main`)**, dan **Supabase Cloud Database**.
+  - **Folder Lokal:** Bersifat sebagai salinan cadangan arsip (*cold backup*).
+  - Setiap perubahan dan rilis kode langsung diprioritaskan deploy ke Cloudflare dan push ke GitHub agar seluruh pengurus/petugas yang mengakses dari smartphone dan laptop masing-masing selalu mendapatkan versi termutakhir secara realtime 100%.
+  - Dokumen aturan tetap [AGENTS.md](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/AGENTS.md) telah diperbarui untuk mencerminkan hierarki data center ini.
+
+---
+
+### 2. Panduan Pengaturan Aplikasi Fully Kiosk Browser di Layar TV
+Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tampilan terkini langsung dari Cloudflare tanpa tertahan oleh cache WebView Android:
+
+1. **Pengaturan Cache (Web Browsing Settings):**
+   - Buka menu samping Fully Kiosk Browser (geser dari kiri layar atau tekan tombol menu di remote).
+   - Masuk ke **Settings** -> **Web Browsing Settings**:
+     - **Webview Cache Mode**: Pilih **`LOAD_DEFAULT`** (Hindari opsi `LOAD_CACHE_ONLY` atau `LOAD_CACHE_ELSE_NETWORK`).
+     - **Clear Cache on Reload**: Aktifkan (**ENABLE / Centang**). *Setiap kali halaman dimuat ulang, cache WebView langsung dibersihkan dan aset ditarik baru dari Cloudflare.*
+     - **Enable DOM Storage**: Wajib **ENABLE**.
+     - **Enable Third Party Cookies**: Wajib **ENABLE** (untuk mendukung WebSocket Realtime Supabase).
+     - **Clear Cache**: Klik tombol ini sekali saat pertama kali menerapkan pengaturan untuk membuang seluruh cache lama.
+
+2. **Pengaturan Start URL (Web Content Settings):**
+   - **Start URL**: Masukkan `https://digitalaljihad.my.id/`
+
+3. **Pengaturan Auto Reload Berkala (Web Auto Reload):**
+   - Masuk ke **Settings** -> **Web Auto Reload**:
+     - **Periodic Web Reload**: Setel ke `86400` detik (otomatis refresh 1x setiap 24 jam) atau biarkan `0` jika mengandalkan tombol Remote Reload dari dashboard admin.
+
+4. **Remote Administration (Fitur Remote dari Laptop Pengurus):**
+   - Masuk ke **Settings** -> **Remote Administration (PLUS)**:
+     - **Enable Remote Admin**: Aktifkan (**Centang**).
+     - **Remote Admin Password**: Buat password pengurus (misal: `aljihad2026`).
+     - **Remote Admin Port**: `2323`.
+   - *Manfaat:* Pengurus masjid dapat membuka `http://<IP_TV>:2323` di browser laptop untuk mereload halaman, membuang cache, atau memantau layar TV secara live dari meja sekretariat tanpa perlu menyentuh TV.
+
+5. **Fitur Remote Control Bawaan Web Dashboard:**
+   - Di dashboard Super Admin web ([admin.html](file:///c:/Users/anthu/Documents/【Project】/DIGITALv304/web-statis/admin.html)) pada menu **Remote TV**:
+   - Terdapat tombol **"Muat Ulang TV (Reload)"**.
+   - Ketika tombol ini diklik, sinyal realtime WebSocket akan memerintahkan TV untuk `location.reload()`. Dikombinasikan dengan fitur *Clear Cache on Reload* di Fully Kiosk, TV akan langsung memuat aset terbaru dari Cloudflare dalam hitungan detik.
+
+---
+
+### 3. Berkas Terkait yang Dimodifikasi
+1. `AGENTS.md` (Penetapan resmi Cloudflare Workers & GitHub sebagai Data Center Utama).
+2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 219 & panduan konfigurasi Fully Kiosk Browser).
+
+
 
 
 
