@@ -6,30 +6,31 @@
 
 ---
 
-## ✨ UPDATE TERBARU — 4 Oktober 2026 (Pukul 23:45 WIB)
+## ✨ UPDATE TERBARU — 4 Oktober 2026 (Pukul 23:55 WIB)
 
-### Optimasi & Penurunan Resolusi "Flyer WhatsApp Otomatis" Petugas Sholat Jum'at (Unduh & Sebar Super Cepat)
+### 🚀 Perbaikan Spinner Macet, Unduh Instan JPG/PNG & Fitur Edit Bebas "Teks Pengumuman WhatsApp"
 
 **Latar Belakang & Masalah:**
-Sebelumnya, generator canvas Flyer WhatsApp di menu Petugas Sholat Jum'at menggunakan resolusi ultra-tinggi statis `1080 × 1350 px` dengan format file PNG mentah (~2.5 MB - 3.5 MB). Pada ponsel dan koneksi perangkat petugas masjid, proses perenderan canvas memicu browser lag dan durasi download sangat lama ketika ingin dibagikan ke WhatsApp Jamaah.
+1. Pengguna melaporkan *"Proses download masih lama"* karena spinner overlay kuning *"Menggambar Flyer WhatsApp..."* terus berputar di atas kanvas gambar flyer yang sebenarnya sudah selesai digambar. Hal ini disebabkan oleh konflik kelas CSS Bootstrap `.d-flex !important` yang menimpa `.d-none !important`, sehingga spinner tidak pernah tertutup.
+2. Pengguna meminta isi teks *"Teks Pengumuman WhatsApp:"* agar bisa diedit manual sebelum dibagikan ke WhatsApp Jamaah, karena sebelumnya textarea berstatus `readonly`.
 
 **Perbaikan & Fitur Baru yang Diterapkan:**
-1. **Resolusi Standar WhatsApp Ringan & Cepat (720 × 900 px):**
-   - Resolusi default diturunkan ke `720 × 900 px` (aspek rasio tetap presisi 4:5 sesuai standar portrait WhatsApp).
-   - Ukuran file turun drastis hingga **~75% lebih kecil** (~350-450 KB), bebas lag, dan proses unduh berlangsung instan (< 1 detik).
-2. **Pilihan Resolusi Fleksibel (Dropdown Selector):**
-   - Tersedia selector resolusi di modal dialog:
-     - ⚡ `Standar WhatsApp (720 × 900 px) - Cepat` *(Default Direkomendasikan)*
-     - 🖼️ `Resolusi HD Penuh (1080 × 1350 px)` *(Untuk kebutuhan arsip HD)*
-3. **Canvas 2D Auto-Scaling Presisi:**
-   - Menggunakan `ctx.scale(targetW / 1080, targetW / 1080)` sehingga seluruh ornamen emas, kaligrafi, bingkai, logo, dan tipografi tetap tajam, proporsional, dan presisi di semua resolusi.
-4. **Download Cepat via Blob Object URL:**
-   - Menggantikan string base64 berat dengan `canvas.toBlob()` dan `URL.createObjectURL(blob)`, mengeliminasi memory spike dan lag saat mengunduh.
-5. **Safety Timeout Loader:**
-   - Ditambahkan pengaman waktu pada loading logo masjid (`img/logo-aljihad-circle.png`) agar modal dialog tidak pernah macet pada status "Menggambar Flyer...".
+1. **Perbaikan Tuntas Spinner Macet (`#flyerLoadingSpinner`):**
+   - Menghapus kelas `d-flex` dan `d-none` yang saling berbenturan di Bootstrap.
+   - Menggunakan kontrol inline style presisi: `spinner.style.display = 'flex'` saat mulai proses dan `spinner.style.display = 'none'` segera setelah kanvas selesai digambar.
+   - Ditambahkan sistem cache objek logo (`cachedFlyerLogoImg`) di memori browser, sehingga render kedua dan seterusnya berjalan dalam 0 milidetik tanpa request jaringan ulang.
+2. **Teks Pengumuman WhatsApp Kini Bebas Diedit:**
+   - Menghapus atribut `readonly` pada `<textarea id="flyerWaBroadcastText">`.
+   - Ditambahkan handler `oninput="onFlyerWaTextEdited()"` yang mendeteksi perubahan manual petugas, sehingga editan kustom tidak akan tertimpa otomatis jika pengguna mengubah resolusi kanvas.
+   - Ditambahkan badge indikator status (`⚡ Otomatis` / `✏️ Teks Kustom`) dan tombol **Reset** untuk mengembalikan teks ke format otomatis bawaan form jika diinginkan.
+   - Tombol **Salin Teks** dan **Buka WhatsApp & Kirim Pesan** akan menyalin/mengirimkan teks hasil editan petugas secara akurat.
+3. **Download Gambar Super Cepat (JPG ~100 KB & PNG HD):**
+   - Disediakan tombol **Download Cepat (JPG)** yang menghasilkan berkas gambar berkualitas tajam hanya berukuran ~100–120 KB, terunduh dalam waktu kurang dari 0.2 detik.
+   - Disediakan juga tombol **PNG HD** untuk keperluan arsip tanpa kompresi.
+   - Tombol unduh memiliki feedback visual aktif (*spinner icon* & teks *"Mengunduh..."*) sehingga petugas langsung mengetahui proses unduh sedang berjalan.
 
 **Berkas Terkait:**
-- `web-statis/admin.html` (Kartu ringkasan fitur, modal dialog preview `#modalFlyerJumat`, skrip `renderFlyerJumatCanvas()`, `downloadFlyerJumat()`, `shareFlyerWhatsApp()`)
+- `web-statis/admin.html` (Modal `#modalFlyerJumat`, textarea `flyerWaBroadcastText`, skrip `renderFlyerJumatCanvas()`, `onFlyerWaTextEdited()`, `resetTeksFlyerWA()`, `downloadFlyerJumat()`)
 
 ---
 

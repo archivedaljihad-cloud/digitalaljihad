@@ -2716,7 +2716,7 @@
                                         Generate otomatis gambar flyer cepat & ringan (Standar WhatsApp 720×900) beserta teks pengumuman yang siap disalin/dikirim ke grup WhatsApp.
                                     </p>
                                     <div class="d-flex flex-column" style="gap: 8px;">
-                                        <button class="btn btn-success btn-block font-weight-bold shadow-sm py-2" onclick="downloadFlyerJumatLangsung()">
+                                        <button class="btn btn-success btn-block font-weight-bold shadow-sm py-2" onclick="downloadFlyerJumatLangsung(this)">
                                             <i class="fas fa-file-download mr-1"></i> Download Gambar Flyer (Cepat & Ringan)
                                         </button>
                                         <button class="btn btn-outline-success btn-block font-weight-bold py-2" onclick="bukaModalFlyerJumat()">
@@ -5981,7 +5981,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                             <div class="position-relative d-inline-block shadow-lg" style="border-radius: 16px; overflow: hidden; border: 3px solid #D4AF37; background: #02180d; max-width: 100%;">
                                 <canvas id="flyerCanvas" width="720" height="900" style="display: none;"></canvas>
                                 <img id="flyerPreviewImg" src="" alt="Flyer Preview" class="img-fluid" style="display: block; max-height: 460px; width: auto; object-fit: contain; border-radius: 13px;">
-                                <div id="flyerLoadingSpinner" class="d-none position-absolute inset-0 d-flex flex-column align-items-center justify-content-center text-white" style="background: rgba(2, 24, 13, 0.85); top:0; left:0; right:0; bottom:0;">
+                                <div id="flyerLoadingSpinner" class="position-absolute" style="display: none; background: rgba(2, 24, 13, 0.85); top:0; left:0; right:0; bottom:0; z-index: 10; flex-direction: column; align-items: center; justify-content: center; color: white;">
                                     <div class="spinner-border text-warning mb-2" role="status"></div>
                                     <span class="small font-weight-bold">Menggambar Flyer WhatsApp...</span>
                                 </div>
@@ -6005,19 +6005,37 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
                                 <div class="form-group mb-3">
                                     <label class="font-weight-bold d-flex justify-content-between align-items-center text-gray-800" style="font-size: 12.5px;">
-                                        <span><i class="fas fa-comment-alt text-success mr-1"></i> Teks Pengumuman WhatsApp:</span>
-                                        <button class="btn btn-sm btn-light border py-0 px-2 text-dark font-weight-bold" onclick="salinTeksFlyerWA()" style="font-size: 11px;">
-                                            <i class="fas fa-copy text-primary mr-1"></i> Salin Teks
-                                        </button>
+                                        <span>
+                                            <i class="fas fa-comment-alt text-success mr-1"></i> Teks Pengumuman WhatsApp:
+                                            <span id="badgeWaTextStatus" class="badge badge-success font-weight-bold ml-1" style="font-size: 10px;">
+                                                <i class="fas fa-magic mr-1"></i> Otomatis
+                                            </span>
+                                        </span>
+                                        <div class="d-flex" style="gap: 5px;">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 font-weight-bold" onclick="resetTeksFlyerWA()" title="Kembalikan ke format teks otomatis" style="font-size: 11px;">
+                                                <i class="fas fa-undo mr-1"></i> Reset
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-primary py-0 px-2 font-weight-bold" onclick="salinTeksFlyerWA()" style="font-size: 11px;">
+                                                <i class="fas fa-copy mr-1"></i> Salin Teks
+                                            </button>
+                                        </div>
                                     </label>
-                                    <textarea id="flyerWaBroadcastText" class="form-control" rows="8" style="font-family: 'Consolas', monospace; font-size: 11.5px; line-height: 1.45; border-radius: 10px; background: #ffffff; resize: none;" readonly></textarea>
+                                    <textarea id="flyerWaBroadcastText" class="form-control" rows="8" oninput="onFlyerWaTextEdited()" style="font-family: 'Consolas', monospace; font-size: 12px; line-height: 1.5; border-radius: 10px; background: #ffffff; resize: vertical; border: 1.5px solid #86efac;" placeholder="Tulis atau edit teks pengumuman WhatsApp di sini..."></textarea>
+                                    <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                        <i class="fas fa-pen text-success mr-1"></i> <b>Bisa diedit:</b> Silakan ubah atau tambahkan pesan khusus sebelum dibagikan ke WhatsApp.
+                                    </small>
                                 </div>
                             </div>
 
                             <div class="d-flex flex-column" style="gap: 8px;">
-                                <button class="btn btn-success btn-block py-2 font-weight-bold shadow-sm d-flex align-items-center justify-content-center" onclick="downloadFlyerJumat()" style="font-size: 14px; border-radius: 12px;">
-                                    <i class="fas fa-download mr-2"></i> Download Gambar Flyer (Cepat & Ringan)
-                                </button>
+                                <div class="d-flex" style="gap: 8px;">
+                                    <button class="btn btn-success flex-grow-1 py-2 font-weight-bold shadow-sm d-flex align-items-center justify-content-center" onclick="downloadFlyerJumat('jpg', this)" style="font-size: 13.5px; border-radius: 12px;" title="Unduh gambar JPG (~120 KB, sangat cepat & ringan)">
+                                        <i class="fas fa-bolt mr-2 text-warning"></i> Download Cepat (JPG)
+                                    </button>
+                                    <button class="btn btn-outline-success py-2 px-3 font-weight-bold shadow-sm d-flex align-items-center justify-content-center" onclick="downloadFlyerJumat('png', this)" style="font-size: 13px; border-radius: 12px;" title="Unduh gambar PNG HD">
+                                        <i class="fas fa-image mr-1"></i> PNG HD
+                                    </button>
+                                </div>
                                 <button class="btn btn-outline-success btn-block py-2 font-weight-bold d-flex align-items-center justify-content-center" onclick="shareFlyerWhatsApp()" style="font-size: 13.5px; border-radius: 12px; border-width: 1.5px;">
                                     <i class="fab fa-whatsapp mr-2" style="font-size: 17px;"></i> Buka WhatsApp & Kirim Pesan
                                 </button>
@@ -11026,13 +11044,53 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.restore();
         }
 
+        // =======================================================
+        // FITUR AUTO GENERATE FLYER WHATSAPP PETUGAS JUM'AT
+        // =======================================================
+        let cachedFlyerLogoImg = null;
+        let flyerUserEditedText = false;
+
+        function onFlyerWaTextEdited() {
+            flyerUserEditedText = true;
+            const badge = document.getElementById('badgeWaTextStatus');
+            if (badge) {
+                badge.className = 'badge badge-warning text-dark font-weight-bold ml-1';
+                badge.innerHTML = '<i class="fas fa-pen mr-1"></i> Teks Kustom';
+            }
+        }
+
+        function resetTeksFlyerWA() {
+            flyerUserEditedText = false;
+            const badge = document.getElementById('badgeWaTextStatus');
+            if (badge) {
+                badge.className = 'badge badge-success font-weight-bold ml-1';
+                badge.innerHTML = '<i class="fas fa-magic mr-1"></i> Otomatis';
+            }
+            const tglVal = document.getElementById('jumatTanggal')?.value || new Date().toISOString().split('T')[0];
+            const khotibImam = document.getElementById('jumatKhotib')?.value.trim() || 'Ust. Faiq Rido';
+            const muadzin = document.getElementById('jumatMuadzin')?.value.trim() || 'Ust. Rudy';
+            const bilal = document.getElementById('jumatBilal')?.value.trim() || 'Ust. Mansur';
+            const maklumat = document.getElementById('jumatMaklumat')?.value.trim() || 'Ust. Fatkhurokhman';
+            const jumatDur = parseInt(document.getElementById('jumatDurasiInput')?.value) || 50;
+            let tglFormatted = 'Jum\'at, ' + tglVal;
+            try {
+                const parts = tglVal.split('-');
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                    tglFormatted = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                }
+            } catch (e) {}
+            updateFlyerWaBroadcastText(tglFormatted, khotibImam, muadzin, bilal, maklumat, jumatDur, true);
+        }
+
         async function renderFlyerJumatCanvas() {
             const canvas = document.getElementById('flyerCanvas');
             const previewImg = document.getElementById('flyerPreviewImg');
             const spinner = document.getElementById('flyerLoadingSpinner');
             if (!canvas) return;
 
-            if (spinner) spinner.classList.remove('d-none');
+            // Tampilkan spinner loading secara presisi (inline style)
+            if (spinner) spinner.style.display = 'flex';
 
             // Resolusi default cepat untuk WhatsApp: 720 x 900 px (aspek rasio 4:5, unduh instan & hemat kuota)
             const resSelect = document.getElementById('flyerResolutionSelect');
@@ -11121,59 +11179,66 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 95);
             ctx.shadowBlur = 0;
 
-            // 4. LOGO MASJID (Dengan Safety Timeout agar tidak pernah macet saat load)
-            await new Promise((resolve) => {
-                let resolved = false;
-                const done = () => {
-                    if (!resolved) {
-                        resolved = true;
-                        resolve();
-                    }
-                };
-                const timer = setTimeout(done, 1200);
+            // 4. LOGO MASJID (Dengan image cache & safety timeout)
+            if (!cachedFlyerLogoImg) {
+                await new Promise((resolve) => {
+                    let resolved = false;
+                    const done = () => {
+                        if (!resolved) {
+                            resolved = true;
+                            resolve();
+                        }
+                    };
+                    const timer = setTimeout(done, 800);
 
-                const logoImg = new Image();
-                logoImg.crossOrigin = 'anonymous';
-                logoImg.onload = () => {
-                    clearTimeout(timer);
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(540, 175, 54, 0, Math.PI * 2);
-                    ctx.closePath();
-                    ctx.clip();
-                    ctx.drawImage(logoImg, 486, 121, 108, 108);
-                    ctx.restore();
+                    const logoImg = new Image();
+                    logoImg.crossOrigin = 'anonymous';
+                    logoImg.onload = () => {
+                        clearTimeout(timer);
+                        cachedFlyerLogoImg = logoImg;
+                        done();
+                    };
+                    logoImg.onerror = () => {
+                        clearTimeout(timer);
+                        done();
+                    };
+                    logoImg.src = 'img/logo-aljihad-circle.png';
+                });
+            }
 
-                    // Cincin emas logo
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(540, 175, 55, 0, Math.PI * 2);
-                    ctx.strokeStyle = '#FFD700';
-                    ctx.lineWidth = 3;
-                    ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
-                    ctx.shadowBlur = 12;
-                    ctx.stroke();
-                    ctx.restore();
-                    done();
-                };
-                logoImg.onerror = () => {
-                    clearTimeout(timer);
-                    ctx.save();
-                    ctx.fillStyle = '#064e3b';
-                    ctx.beginPath();
-                    ctx.arc(540, 175, 54, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.strokeStyle = '#FFD700';
-                    ctx.lineWidth = 3;
-                    ctx.stroke();
-                    ctx.fillStyle = '#FFD700';
-                    ctx.font = '40px "Segoe UI Symbol", sans-serif';
-                    ctx.fillText('🕌', 540, 188);
-                    ctx.restore();
-                    done();
-                };
-                logoImg.src = 'img/logo-aljihad-circle.png';
-            });
+            if (cachedFlyerLogoImg && cachedFlyerLogoImg.complete && cachedFlyerLogoImg.naturalWidth > 0) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(540, 175, 54, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(cachedFlyerLogoImg, 486, 121, 108, 108);
+                ctx.restore();
+
+                // Cincin emas logo
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(540, 175, 55, 0, Math.PI * 2);
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 3;
+                ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
+                ctx.shadowBlur = 12;
+                ctx.stroke();
+                ctx.restore();
+            } else {
+                ctx.save();
+                ctx.fillStyle = '#064e3b';
+                ctx.beginPath();
+                ctx.arc(540, 175, 54, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                ctx.fillStyle = '#FFD700';
+                ctx.font = '40px "Segoe UI Symbol", sans-serif';
+                ctx.fillText('🕌', 540, 188);
+                ctx.restore();
+            }
 
             // 5. NAMA MASJID & ALAMAT
             ctx.textAlign = 'center';
@@ -11299,15 +11364,26 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.restore();
 
             // Update preview image di modal
-            const dataUrl = canvas.toDataURL('image/png');
-            if (previewImg) previewImg.src = dataUrl;
-            if (spinner) spinner.classList.add('d-none');
+            try {
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+                if (previewImg) previewImg.src = dataUrl;
+            } catch (e) {
+                console.warn('Canvas toDataURL fallback:', e);
+            }
 
-            // Update teks WhatsApp Broadcast
+            // Sembunyikan spinner loading secara instan & tuntas
+            if (spinner) spinner.style.display = 'none';
+
+            // Update teks WhatsApp Broadcast (hanya jika belum diedit manual oleh user)
             updateFlyerWaBroadcastText(tglFormatted, khotibImam, muadzin, bilal, maklumat, jumatDur);
         }
 
-        function updateFlyerWaBroadcastText(tglFormatted, khotibImam, muadzin, bilal, maklumat, jumatDur) {
+        function updateFlyerWaBroadcastText(tglFormatted, khotibImam, muadzin, bilal, maklumat, jumatDur, force = false) {
+            const ta = document.getElementById('flyerWaBroadcastText');
+            if (!ta) return;
+            if (flyerUserEditedText && !force) {
+                return; // Jangan ditimpa jika sudah diedit manual oleh petugas
+            }
             const waText = 
 `🕌 *JADWAL PETUGAS SHOLAT JUM'AT* 🕌
 *MASJID JAMI' AL-JIHAD (GRAHA ASRI)*
@@ -11333,8 +11409,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
 🌐 *Website Resmi Masjid:* https://digitalaljihad.my.id`;
 
-            const ta = document.getElementById('flyerWaBroadcastText');
-            if (ta) ta.value = waText;
+            ta.value = waText;
         }
 
         async function bukaModalFlyerJumat(isAuto = false) {
@@ -11342,23 +11417,42 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             await renderFlyerJumatCanvas();
         }
 
-        function downloadFlyerJumat() {
+        function downloadFlyerJumat(format = 'jpg', btnEl = null) {
             const canvas = document.getElementById('flyerCanvas');
             if (!canvas) return;
+
+            let origBtnHtml = '';
+            if (btnEl) {
+                origBtnHtml = btnEl.innerHTML;
+                btnEl.disabled = true;
+                btnEl.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengunduh...';
+            }
+
             const tglVal = document.getElementById('jumatTanggal')?.value || 'terkini';
+            const isJpeg = (format === 'jpg' || format === 'jpeg');
+            const mime = isJpeg ? 'image/jpeg' : 'image/png';
+            const ext = isJpeg ? 'jpg' : 'png';
             const curW = canvas.width || 720;
-            const resTag = (curW <= 720) ? 'WA-720p' : 'HD-1080p';
-            const filename = `Flyer-Petugas-Jumat-AlJihad-${tglVal}-${resTag}.png`;
+            const resTag = (curW <= 720) ? '720p' : 'HD';
+            const filename = `Flyer-Petugas-Jumat-AlJihad-${tglVal}-${resTag}.${ext}`;
+
+            const finishDownload = () => {
+                if (btnEl) {
+                    btnEl.disabled = false;
+                    btnEl.innerHTML = origBtnHtml;
+                }
+            };
 
             if (canvas.toBlob) {
                 canvas.toBlob((blob) => {
                     if (!blob) {
                         const link = document.createElement('a');
                         link.download = filename;
-                        link.href = canvas.toDataURL('image/png');
+                        link.href = canvas.toDataURL(mime, isJpeg ? 0.92 : undefined);
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
+                        finishDownload();
                         return;
                     }
                     const url = URL.createObjectURL(blob);
@@ -11368,21 +11462,37 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    setTimeout(() => URL.revokeObjectURL(url), 3000);
-                }, 'image/png');
+                    setTimeout(() => {
+                        URL.revokeObjectURL(url);
+                        finishDownload();
+                    }, 800);
+                }, mime, isJpeg ? 0.92 : undefined);
             } else {
                 const link = document.createElement('a');
                 link.download = filename;
-                link.href = canvas.toDataURL('image/png');
+                link.href = canvas.toDataURL(mime, isJpeg ? 0.92 : undefined);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                finishDownload();
             }
         }
 
-        async function downloadFlyerJumatLangsung() {
+        async function downloadFlyerJumatLangsung(btnEl = null) {
+            let origHtml = '';
+            if (btnEl) {
+                origHtml = btnEl.innerHTML;
+                btnEl.disabled = true;
+                btnEl.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengunduh...';
+            }
             await renderFlyerJumatCanvas();
-            downloadFlyerJumat();
+            downloadFlyerJumat('jpg', btnEl);
+            if (btnEl) {
+                setTimeout(() => {
+                    btnEl.disabled = false;
+                    btnEl.innerHTML = origHtml;
+                }, 1000);
+            }
         }
 
         function salinTeksFlyerWA() {
@@ -11405,9 +11515,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             // Coba Web Share API (cocok untuk HP / browser modern yang mendukung share file gambar langsung)
             if (navigator.canShare && canvas && canvas.toBlob) {
                 try {
-                    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.92));
                     if (blob) {
-                        const file = new File([blob], 'Flyer-Petugas-Jumat-AlJihad.png', { type: 'image/png' });
+                        const file = new File([blob], 'Flyer-Petugas-Jumat-AlJihad.jpg', { type: 'image/jpeg' });
                         if (navigator.canShare({ files: [file] })) {
                             await navigator.share({
                                 title: "Jadwal Petugas Sholat Jum'at Masjid Jami' Al-Jihad",
