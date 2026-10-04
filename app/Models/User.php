@@ -30,14 +30,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+
 
     /**
      * Get the user's full name.
@@ -56,6 +49,9 @@ class User extends Authenticatable
 
     /**
      * Get the attributes that should be cast.
+     * CATATAN: Jangan tambahkan 'password' => 'hashed' di sini
+     * karena password sudah di-hash secara manual via Hash::make() di controller.
+     * Jika ditambahkan, password akan di-hash dua kali (double-hash) dan login akan selalu gagal.
      *
      * @return array<string, string>
      */
@@ -63,7 +59,6 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
     }
 
