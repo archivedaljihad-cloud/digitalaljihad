@@ -4395,65 +4395,68 @@
                                 </div>
                             </div>
 
-                            <!-- Baris Form Donasi Masuk & Tabel Donatur -->
+                            <!-- Baris Form Donasi Masuk (Popdown Menu) & Tabel Donatur Memanjang Penuh -->
                             <div class="row">
-                                <!-- Kolom Kiri: Form Catat Donasi Masuk -->
-                                <div class="col-lg-4 mb-4">
-                                    <div class="card shadow">
-                                        <div class="card-header py-3" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
-                                            <h6 class="m-0 font-weight-bold text-white d-flex align-items-center">
-                                                <i class="fas fa-hand-holding-heart text-warning mr-2"></i> Catat Donasi Masuk
+                                <!-- Popdown Menu / Collapsible Card: Form Catat Donasi Masuk -->
+                                <div class="col-12 mb-3 collapse" id="collapseCatatDonasi">
+                                    <div class="card shadow border-left-success" style="border-radius: 12px; overflow: hidden; border: 1.5px solid rgba(16, 185, 129, 0.35);">
+                                        <div class="card-header py-2.5 px-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); border-bottom: 2px solid #ffd700;">
+                                            <h6 class="m-0 font-weight-bold text-white d-flex align-items-center" style="font-size: 0.95rem;">
+                                                <i class="fas fa-hand-holding-heart text-warning mr-2"></i> Formulir Catat Donasi Masuk
                                             </h6>
+                                            <button type="button" class="btn btn-sm btn-outline-light py-0.5 px-2.5" data-toggle="collapse" data-target="#collapseCatatDonasi" title="Tutup Formulir" style="font-size: 0.8rem; border-radius: 6px;">
+                                                <i class="fas fa-times mr-1"></i> Tutup Formulir
+                                            </button>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="card-body p-3 p-md-4" style="background: #f8fafc;">
                                             <form id="formCatatDonasiInfaq" onsubmit="event.preventDefault(); simpanDonasiInfaq();">
-                                                <div class="form-group">
-                                                    <label class="font-weight-bold text-gray-800">Tanggal Infaq <span class="text-danger">*</span></label>
-                                                    <input type="date" id="donasiTanggal" class="form-control" required>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="font-weight-bold text-gray-800">Nama Donatur</label>
-                                                    <input type="text" id="donasiNama" class="form-control" placeholder="Contoh: H. Ahmad, Ibu Fatimah">
-                                                    <small class="text-muted d-block mt-1">Kosongkan jika ingin otomatis dicatat sebagai Hamba Allah.</small>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="donasiIsAnonim" onchange="toggleAnonimDonasi(this)">
-                                                        <label class="custom-control-label font-weight-bold text-success" for="donasiIsAnonim">
-                                                            <i class="fas fa-user-secret mr-1"></i> Hamba Allah (Sembunyikan Nama di Layar TV)
-                                                        </label>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-3 col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-gray-800 small mb-1">Tanggal Infaq <span class="text-danger">*</span></label>
+                                                        <input type="date" id="donasiTanggal" class="form-control form-control-sm font-weight-bold" required>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label class="font-weight-bold text-gray-800">Nominal Infaq (Rp) <span class="text-danger">*</span></label>
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text font-weight-bold">Rp</span>
+                                                    <div class="form-group col-md-5 col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-gray-800 small mb-1">Nama Donatur</label>
+                                                        <input type="text" id="donasiNama" class="form-control form-control-sm" placeholder="Contoh: H. Ahmad, Ibu Fatimah">
+                                                        <div class="custom-control custom-checkbox mt-1">
+                                                            <input type="checkbox" class="custom-control-input" id="donasiIsAnonim" onchange="toggleAnonimDonasi(this)">
+                                                            <label class="custom-control-label font-weight-bold text-success small" for="donasiIsAnonim">
+                                                                <i class="fas fa-user-secret mr-1"></i> Hamba Allah (Sembunyikan Nama di Layar TV)
+                                                            </label>
                                                         </div>
-                                                        <input type="text" id="donasiNominal" class="form-control font-weight-bold text-success" 
-                                                            placeholder="0" oninput="formatRupiahInput(this)" autocomplete="off" style="font-size: 1.1rem;" required>
                                                     </div>
-                                                    <small class="text-muted d-block mt-1">Titik pemisah ribuan otomatis.</small>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label class="font-weight-bold text-gray-800">Keterangan / Doa / Catatan (Opsional)</label>
-                                                    <textarea id="donasiKeterangan" class="form-control" rows="2" placeholder="Contoh: Wakaf atas nama orang tua, Infaq jariyah hamba Allah"></textarea>
-                                                </div>
+                                                    <div class="form-group col-md-4 col-sm-12 mb-3">
+                                                        <label class="font-weight-bold text-gray-800 small mb-1">Nominal Infaq (Rp) <span class="text-danger">*</span></label>
+                                                        <div class="input-group input-group-sm">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text font-weight-bold text-success">Rp</span>
+                                                            </div>
+                                                            <input type="text" id="donasiNominal" class="form-control form-control-sm font-weight-bold text-success" 
+                                                                placeholder="0" oninput="formatRupiahInput(this)" autocomplete="off" style="font-size: 1.05rem;" required>
+                                                        </div>
+                                                        <small class="text-muted d-block mt-0.5">Titik pemisah ribuan otomatis.</small>
+                                                    </div>
 
-                                                <button type="submit" class="btn btn-success btn-block shadow-sm font-weight-bold py-2">
-                                                    <i class="fas fa-save mr-1"></i> Simpan Donasi Infaq
-                                                </button>
+                                                    <div class="form-group col-md-9 col-sm-8 mb-2 mb-md-0">
+                                                        <label class="font-weight-bold text-gray-800 small mb-1">Keterangan / Doa / Catatan (Opsional)</label>
+                                                        <input type="text" id="donasiKeterangan" class="form-control form-control-sm" placeholder="Contoh: Wakaf atas nama orang tua, Infaq jariyah hamba Allah">
+                                                    </div>
+
+                                                    <div class="form-group col-md-3 col-sm-4 mb-0 d-flex align-items-end">
+                                                        <button type="submit" class="btn btn-success btn-block shadow-sm font-weight-bold btn-sm py-2" style="font-size: 0.9rem;">
+                                                            <i class="fas fa-save mr-1"></i> Simpan Donasi Infaq
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Kolom Kanan: Daftar Donatur -->
-                                <div class="col-lg-8 mb-4">
+                                <!-- Kolom Penuh: Daftar Donatur (Memanjang Penuh dari Kiri ke Kanan) -->
+                                <div class="col-12 mb-4">
                                     <div class="card shadow border-0" style="border-radius: 12px; overflow: hidden;">
                                         <div class="card-header py-2.5 px-3 d-flex flex-wrap align-items-center justify-content-between" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); border-bottom: 2px solid #ffd700;">
                                             <div class="d-flex align-items-center mb-1 mb-md-0">
@@ -4465,6 +4468,9 @@
                                                 </h6>
                                             </div>
                                             <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
+                                                <button type="button" class="btn btn-sm btn-success font-weight-bold text-white shadow-sm py-1.5 px-3" data-toggle="collapse" data-target="#collapseCatatDonasi" aria-expanded="false" aria-controls="collapseCatatDonasi" style="font-size: 0.82rem; border-radius: 6px;" title="Buka/Tutup Menu Catat Donasi Masuk">
+                                                    <i class="fas fa-plus-circle mr-1 text-warning"></i> Catat Donasi Masuk <i class="fas fa-chevron-down ml-1"></i>
+                                                </button>
                                                 <button type="button" class="btn btn-sm btn-light font-weight-bold text-success shadow-sm py-1 px-2.5" style="font-size: 0.8rem;" onclick="exportLaporanInfaqCSV()" title="Download Laporan Format Excel/CSV">
                                                     <i class="fas fa-file-excel mr-1 text-success"></i> Export Excel (.CSV)
                                                 </button>
@@ -4474,16 +4480,16 @@
                                             </div>
                                         </div>
                                         <div class="card-body p-0">
-                                            <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
-                                                <table class="table table-sm table-hover mb-0 text-center" id="tableDonaturInfaq" width="100%" cellspacing="0" style="font-size: 0.83rem;">
+                                            <div class="table-responsive" style="max-height: 540px; overflow-y: auto;">
+                                                <table class="table table-sm table-hover mb-0 text-center" id="tableDonaturInfaq" width="100%" cellspacing="0" style="font-size: 0.88rem;">
                                                     <thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); position: sticky; top: 0; z-index: 10;">
                                                         <tr>
-                                                            <th style="width: 6%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 4px;">No</th>
-                                                            <th style="width: 15%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 6px;">Tanggal</th>
-                                                            <th style="width: 33%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 8px; text-align: left;">Nama Donatur</th>
-                                                            <th style="width: 20%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 8px; text-align: right;">Nominal (Rp)</th>
-                                                            <th style="width: 14%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 6px; text-align: left;">Keterangan</th>
-                                                            <th style="width: 12%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 4px;">Aksi</th>
+                                                            <th style="width: 5%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.82rem; padding: 9px 6px;">No</th>
+                                                            <th style="width: 13%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.82rem; padding: 9px 8px;">Tanggal</th>
+                                                            <th style="width: 30%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.82rem; padding: 9px 10px; text-align: left;">Nama Donatur</th>
+                                                            <th style="width: 18%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.82rem; padding: 9px 10px; text-align: right;">Nominal (Rp)</th>
+                                                            <th style="width: 24%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.82rem; padding: 9px 10px; text-align: left;">Keterangan</th>
+                                                            <th style="width: 10%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.82rem; padding: 9px 6px;">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tableDonaturInfaqBody">
@@ -9223,7 +9229,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                     Belum ada catatan infaq untuk program ini
                                 </h6>
                                 <p class="text-gray-600 small mb-0 font-weight-500">
-                                    Gunakan formulir di sebelah kiri untuk mencatat donasi masuk.
+                                    Klik tombol <span class="badge badge-success px-2 py-1"><i class="fas fa-plus-circle mr-1"></i> Catat Donasi Masuk</span> di atas untuk membuka formulir dan mencatat donasi masuk.
                                 </p>
                             </td>
                         </tr>
@@ -9233,28 +9239,28 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         const tglStr = formatDateIndo(d.tanggal);
                         const isAnon = d.is_anonim === true || d.nama_donatur === 'Hamba Allah';
                         const namaBadge = isAnon 
-                            ? `<span class="badge badge-success px-1.5 py-0.5" style="font-size: 0.76rem; font-weight: 600;"><i class="fas fa-user-secret mr-1"></i> Hamba Allah</span>`
-                            : `<span style="font-size: 0.83rem; font-weight: 600; color: #1e293b;"><i class="fas fa-user-circle text-primary mr-1" style="font-size: 0.78rem;"></i> ${escapeHtml(d.nama_donatur || 'Hamba Allah')}</span>`;
+                            ? `<span class="badge badge-success px-2 py-1" style="font-size: 0.82rem; font-weight: 600;"><i class="fas fa-user-secret mr-1"></i> Hamba Allah</span>`
+                            : `<span style="font-size: 0.88rem; font-weight: 600; color: #1e293b;"><i class="fas fa-user-circle text-primary mr-1" style="font-size: 0.82rem;"></i> ${escapeHtml(d.nama_donatur || 'Hamba Allah')}</span>`;
 
                         return `
                             <tr style="border-bottom: 1px solid #f1f5f9;">
-                                <td class="align-middle text-muted" style="padding: 6px 4px; font-size: 0.78rem;">${idx + 1}</td>
-                                <td class="align-middle" style="white-space: nowrap; padding: 6px 6px; font-size: 0.8rem; color: #475569;">
-                                    <i class="far fa-calendar-alt text-success mr-1" style="font-size: 0.75rem;"></i>${tglStr}
+                                <td class="align-middle text-muted font-weight-bold" style="padding: 9px 6px; font-size: 0.84rem;">${idx + 1}</td>
+                                <td class="align-middle" style="white-space: nowrap; padding: 9px 8px; font-size: 0.85rem; color: #334155; font-weight: 600;">
+                                    <i class="far fa-calendar-alt text-success mr-1" style="font-size: 0.8rem;"></i>${tglStr}
                                 </td>
-                                <td class="text-left align-middle" style="padding: 6px 8px;">${namaBadge}</td>
-                                <td class="text-right align-middle" style="padding: 6px 8px;">
-                                    <span style="font-size: 0.84rem; font-weight: 700; color: #16a34a;">${formatRupiah(d.nominal)}</span>
+                                <td class="text-left align-middle" style="padding: 9px 10px;">${namaBadge}</td>
+                                <td class="text-right align-middle" style="padding: 9px 10px;">
+                                    <span style="font-size: 0.94rem; font-weight: 800; color: #047857;">${formatRupiah(d.nominal)}</span>
                                 </td>
-                                <td class="text-left align-middle" style="padding: 6px 6px;">
-                                    <span style="font-size: 0.78rem; color: #64748b;">${escapeHtml(d.keterangan || '-')}</span>
+                                <td class="text-left align-middle" style="padding: 9px 10px;">
+                                    <span style="font-size: 0.84rem; color: #475569; font-weight: 500;">${escapeHtml(d.keterangan || '-')}</span>
                                 </td>
-                                <td class="align-middle" style="padding: 5px 4px; white-space: nowrap;">
-                                    <button class="btn btn-warning btn-sm p-0 shadow-sm mr-1" style="width: 25px; height: 25px; line-height: 25px; border-radius: 4px;" onclick="bukaModalEditDonasiInfaq(${d.id})" title="Edit Donatur">
-                                        <i class="fas fa-edit text-dark" style="font-size: 0.72rem;"></i>
+                                <td class="align-middle" style="padding: 7px 6px; white-space: nowrap;">
+                                    <button class="btn btn-warning btn-sm p-0 shadow-sm mr-1.5" style="width: 28px; height: 28px; line-height: 28px; border-radius: 6px;" onclick="bukaModalEditDonasiInfaq(${d.id})" title="Edit Donatur">
+                                        <i class="fas fa-edit text-dark" style="font-size: 0.76rem;"></i>
                                     </button>
-                                    <button class="btn btn-danger btn-sm p-0 shadow-sm" style="width: 25px; height: 25px; line-height: 25px; border-radius: 4px;" onclick="hapusDonasiInfaq(${d.id})" title="Hapus Donatur">
-                                        <i class="fas fa-trash" style="font-size: 0.72rem;"></i>
+                                    <button class="btn btn-danger btn-sm p-0 shadow-sm" style="width: 28px; height: 28px; line-height: 28px; border-radius: 6px;" onclick="hapusDonasiInfaq(${d.id})" title="Hapus Donatur">
+                                        <i class="fas fa-trash" style="font-size: 0.76rem;"></i>
                                     </button>
                                 </td>
                             </tr>

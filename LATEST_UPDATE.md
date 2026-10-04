@@ -4,7 +4,44 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:15 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:20 WIB)
+
+### 💎 Dashboard Bendahara "PROGRAM INFAQ": Form "Catat Donasi Masuk" Menjadi Popdown Menu & Tabel "Daftar Donatur" Memanjang Penuh (Full-Width Col-12)
+
+**Latar Belakang & Permintaan Pengguna:**
+Pada dashboard bendahara bagian **"PROGRAM INFAQ"**, tata letak sebelumnya membagi layar menjadi 2 kolom (Kolom Kiri 4/12 untuk formulir "Catat Donasi Masuk" dan Kolom Kanan 8/12 untuk tabel "Daftar Donatur"). Hal ini membuat tabel donatur terasa sempit. Pengguna meminta agar model "Catat Donasi Masuk" diubah menjadi model *popdown menu* (collapsible) saja, sehingga tabel "Daftar Donatur" dapat memanjang penuh dari kiri ke kanan (lebar 100%) dan jauh lebih enak dipandang serta dicek.
+
+**Rincian Perubahan yang Diterapkan (`web-statis/admin.html` & `resources/views/program_infaq/index.blade.php`):**
+1. **Model Popdown Menu untuk "Catat Donasi Masuk" (`#collapseCatatDonasi`):**
+   - Mengubah kartu formulir donasi statis di kolom samping menjadi kartu lipat / popdown menu yang anggun di atas tabel menggunakan Bootstrap collapse.
+   - Menambahkan tombol pemicu popdown **"Catat Donasi Masuk"** berbalut aksen emas/hijau (`<button class="btn btn-sm btn-success font-weight-bold" data-toggle="collapse" data-target="#collapseCatatDonasi"><i class="fas fa-plus-circle text-warning mr-1"></i> Catat Donasi Masuk <i class="fas fa-chevron-down ml-1"></i></button>`) pada card-header "Daftar Donatur".
+   - Menyediakan tombol cepat **"Tutup Formulir"** di header panel popdown untuk kenyamanan petugas.
+   - Tata letak input di dalam popdown diformat horizontal (`form-row`):
+     - Tanggal Infaq (`col-md-3`)
+     - Nama Donatur + Checkbox Hamba Allah / Anonim (`col-md-5`)
+     - Nominal Infaq Rp (`col-md-4`)
+     - Keterangan / Doa (`col-md-9`)
+     - Tombol Simpan Donasi Infaq (`col-md-3`)
+2. **Tabel "Daftar Donatur" Memanjang Penuh (`col-12`):**
+   - Menjadikan wadah tabel berlebar penuh 100% (`col-12`).
+   - Proporsi kolom tabel disesuaikan agar lega dan elegan:
+     - No: 5%
+     - Tanggal: 13-14% (dengan ikon kalender)
+     - Nama Donatur: 30-32% (dengan badge Hamba Allah / avatar)
+     - Nominal (Rp): 18-21% (font tebal hijau emerald 800)
+     - Keterangan: 18-24%
+     - Aksi: 10% (tombol edit & hapus proporsional)
+   - Ukuran font dan padding baris ditingkatkan secara proporsional sehingga data donasi sangat nyaman dibaca dan diverifikasi oleh bendahara.
+   - Memperbarui teks *empty state* jika belum ada donasi agar mengarahkan pengguna mengklik tombol *"Catat Donasi Masuk"* di atas.
+
+**Berkas Terkait:**
+- `web-statis/admin.html`
+- `resources/views/program_infaq/index.blade.php`
+- `LATEST_UPDATE.md`
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 06:15 WIB)
 
 ### 📢 Penggantian Menu "Sebarkan ke WA" Menjadi Fitur Download "Teks Maklumat" (.txt) pada Dashboard Bendahara
 
