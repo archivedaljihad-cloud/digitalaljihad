@@ -4,7 +4,31 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:05 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:15 WIB)
+
+### 📢 Penggantian Menu "Sebarkan ke WA" Menjadi Fitur Download "Teks Maklumat" (.txt) pada Dashboard Bendahara
+
+**Latar Belakang & Permintaan Pengguna:**
+Pada dashboard bendahara bagian **"PENGUMUMAN SHOLAT JUM'AT"**, menu/tombol **"Sebarkan ke WA"** dihapus dan digantikan dengan fitur download naskah **"Teks Maklumat"** dalam format file teks (`.txt`). Naskah ini digunakan langsung oleh Pembaca Maklumat / MC Sholat Jum'at dari mimbar masjid ataupun disimpan untuk arsip digital.
+
+**Rincian Perubahan yang Diterapkan (`web-statis/admin.html`):**
+1. **Penggantian Tombol di Seluruh Titik Akses Dashboard:**
+   - **Overview Widget Dashboard (`#view-dashboard`):** Mengganti tautan *"Kirim Format WA"* menjadi `<a onclick="downloadTeksMaklumat()"><i class="fas fa-file-download mr-1"></i> Download Teks Maklumat</a>`.
+   - **Header Action Toolbar Pengumuman Jum'at (`#view-pengumuman-jumat`):** Mengganti tombol *"Sebarkan ke WA"* dengan tombol `<button class="btn btn-info btn-sm shadow-sm font-weight-bold" onclick="downloadTeksMaklumat()"><i class="fas fa-file-download mr-1"></i> Download Teks Maklumat</button>`.
+   - **Preview Lembar Pengumuman Resmi A4 Toolbar (`#pjPrintableSheet`):** Mengganti tombol *"Sebarkan ke WA"* dengan tombol *"Download Teks Maklumat"*.
+   - **Modal Teks Maklumat (`#modalTeksMaklumat`):** Menambahkan tombol aksi tambahan `Download Teks (.txt)` di sebelah tombol `Salin Naskah` di bagian footer modal.
+2. **Implementasi Fungsi `downloadTeksMaklumat()`:**
+   - Mengambil susunan naskah resmi maklumat yang sudah di-generate lengkap secara rapi melalui `generateNaskahMaklumatText()`, mencakup pembukaan salam, rincian laporan kas lengkap (Saldo Awal, Pemasukan Kas, Subtotal Saldo, Pengeluaran Kas, dan Saldo Akhir), nama-nama Petugas Sholat Jum'at (Imam & Khotib, Muadzin, Bilal, MC Maklumat), daftar himbauan jamaah yang sudah bersih dari format ganda, serta penutupan salam.
+   - Menghasilkan file teks `.txt` bertipe `text/plain;charset=utf-8` dengan nama file dinamis mengikuti tanggal pelaksanaan: `Naskah_Maklumat_Jumat_[Tanggal_Judul].txt`.
+   - Otomatis men-trigger dialog download peramban dan memberikan notifikasi toast sukses kepada pengguna.
+
+**Berkas Terkait:**
+- `web-statis/admin.html`
+- `LATEST_UPDATE.md`
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 06:05 WIB)
 
 ### 📋 Flyer Pengumuman Sholat Jum'at: Kotak Kas Memanjang Penuh (Full-Width), Teks Utuh Tanpa Terpotong, Font Proporsional & Auto-Numerik Bersih
 
