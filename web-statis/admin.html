@@ -4869,14 +4869,14 @@
                                         <div class="form-group">
                                             <label class="font-weight-bold text-gray-800 small d-flex justify-content-between align-items-center">
                                                 <span><i class="fas fa-list-ol mr-1 text-success"></i> Kalimat Himbauan Jamaah:</span>
-                                                <span class="badge badge-success" style="font-size: 10.5px;"><i class="fas fa-magic mr-1"></i> Auto Bullets</span>
+                                                <span class="badge badge-info" style="font-size: 10.5px;"><i class="fas fa-sort-numeric-down mr-1"></i> Auto-Numerik (1, 2, 3...)</span>
                                             </label>
-                                            <textarea id="pjInputHimbauan" class="form-control" rows="5" oninput="pjUpdatePreview()" style="font-size: 13px; line-height: 1.6; resize: vertical;" placeholder="Tuliskan kalimat himbauan jamaah (otomatis bullet •)...">• Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong
-• Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya
-• Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.
-• Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu</textarea>
+                                            <textarea id="pjInputHimbauan" class="form-control" rows="5" oninput="pjUpdatePreview()" style="font-size: 13.5px; line-height: 1.6; resize: vertical;" placeholder="Tuliskan poin-poin himbauan jamaah (1 baris per poin)...">Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong
+Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya
+Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.
+Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu</textarea>
                                             <small class="text-muted mt-1 d-block">
-                                                <i class="fas fa-info-circle mr-1 text-info"></i> Otomatis menambahkan bullet (•) di setiap baris baru. Tekan Enter untuk membuat poin himbauan baru.
+                                                <i class="fas fa-info-circle mr-1 text-info"></i> Tulis satu kalimat per baris. Nomor urut (1, 2, 3, dst.) akan otomatis ditambahkan secara rapi pada lembar pengumuman dan flyer.
                                             </small>
                                         </div>
 
@@ -5000,38 +5000,38 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- DUA KOLOM: PEMASUKAN & PENGELUARAN -->
-                                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                                                    <!-- Kolom Kiri: Pemasukan Kas -->
-                                                    <div style="border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
-                                                        <div style="background: #0d9488; color: #ffffff; padding: 7px 12px; font-weight: 800; font-size: 14px; display: flex; justify-content: space-between; align-items: center;">
-                                                            <span>Pemasukan Kas</span>
+                                                <!-- DUA KOTAK KAS MEMANJANG PENUH DARI KIRI KE KANAN (PEMASUKAN & PENGELUARAN TERSUSUN KE BAWAH) -->
+                                                <div style="display: flex; flex-direction: column; gap: 14px;">
+                                                    <!-- Kotak 1: Pemasukan Kas (Full Width) -->
+                                                    <div style="border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column;">
+                                                        <div style="background: #0d9488; color: #ffffff; padding: 8px 14px; font-weight: 800; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                                            <span><i class="fas fa-arrow-circle-down mr-1"></i> Pemasukan Kas</span>
                                                             <span>Nominal (Rp)</span>
                                                         </div>
-                                                        <div id="pjPrevListPemasukan" style="background: #ffffff; flex-grow: 1; padding: 8px 10px;">
+                                                        <div id="pjPrevListPemasukan" style="background: #ffffff; padding: 8px 14px;">
                                                             <!-- Dynamic rows -->
                                                         </div>
-                                                        <div style="background: #ecfdf5; border-top: 1px solid #a7f3d0; padding: 7px 12px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; color: #047857;">
+                                                        <div style="background: #ecfdf5; border-top: 1px solid #a7f3d0; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 15px; color: #047857;">
                                                             <span>Total Pemasukan</span>
                                                             <span>Rp <span id="pjPrevSubtotalIn">3.500.000</span></span>
                                                         </div>
-                                                        <!-- Poin 6: Baris SALDO (Saldo Awal + Masuk) -->
-                                                        <div style="background: #d1fae5; border-top: 1.5px solid #059669; padding: 7px 12px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; color: #047857;">
+                                                        <!-- Baris SALDO (Saldo Awal + Masuk) -->
+                                                        <div style="background: #d1fae5; border-top: 1.5px solid #059669; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 15.5px; color: #047857;">
                                                             <span>SALDO (Awal + Masuk)</span>
                                                             <span>Rp <span id="pjPrevSubtotalSaldo">22.879.023</span></span>
                                                         </div>
                                                     </div>
 
-                                                    <!-- Kolom Kanan: Pengeluaran / Biaya -->
-                                                    <div style="border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column;">
-                                                        <div style="background: #334155; color: #ffffff; padding: 7px 12px; font-weight: 800; font-size: 14px; display: flex; justify-content: space-between; align-items: center;">
-                                                            <span>Pengeluaran / Biaya</span>
+                                                    <!-- Kotak 2: Pengeluaran / Biaya (Tepat di Bawah Pemasukan Kas, Full Width) -->
+                                                    <div style="border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column;">
+                                                        <div style="background: #334155; color: #ffffff; padding: 8px 14px; font-weight: 800; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                                            <span><i class="fas fa-arrow-circle-up mr-1"></i> Pengeluaran / Biaya</span>
                                                             <span>Nominal (Rp)</span>
                                                         </div>
-                                                        <div id="pjPrevListPengeluaran" style="background: #ffffff; flex-grow: 1; padding: 8px 10px;">
+                                                        <div id="pjPrevListPengeluaran" style="background: #ffffff; padding: 8px 14px;">
                                                             <!-- Dynamic rows -->
                                                         </div>
-                                                        <div style="background: #fef2f2; border-top: 1px solid #fecaca; padding: 7px 12px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; color: #dc2626;">
+                                                        <div style="background: #fef2f2; border-top: 1px solid #fecaca; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 15.5px; color: #dc2626;">
                                                             <span>Total Pengeluaran</span>
                                                             <span>Rp <span id="pjPrevSubtotalOut">4.137.000</span></span>
                                                         </div>
@@ -5041,7 +5041,7 @@
 
                                             <!-- BAGIAN II: PETUGAS SHOLAT JUM'AT HARI INI -->
                                             <div style="margin-bottom: 16px;">
-                                                <div style="font-weight: 800; font-size: 14.5px; color: #047857; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                                                <div style="font-weight: 800; font-size: 15px; color: #047857; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
                                                     II. PETUGAS SHOLAT JUM'AT HARI INI
                                                 </div>
                                                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
@@ -5084,13 +5084,13 @@
                                                 </div>
                                             </div>
 
-                                            <!-- BAGIAN III: HIMBAUAN & TATA TERTIB JAMAAH (4 POIN TETAP) -->
+                                            <!-- BAGIAN III: HIMBAUAN & TATA TERTIB JAMAAH (NOMOR URUT OTOMATIS) -->
                                             <div style="margin-bottom: 20px;">
-                                                <div style="font-weight: 800; font-size: 14.5px; color: #047857; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                                                <div style="font-weight: 800; font-size: 15px; color: #047857; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
                                                     III. HIMBAUAN
                                                 </div>
-                                                <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 4px; padding: 12px 16px;">
-                                                    <div id="pjPrevContainerHimbauan" style="line-height: 1.6; font-size: 12.5px; color: #334155;">
+                                                <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px 18px;">
+                                                    <div id="pjPrevContainerHimbauan" style="line-height: 1.65; font-size: 14.5px; color: #1e293b;">
                                                         <!-- Dynamic numbered lines -->
                                                     </div>
                                                 </div>
@@ -15774,70 +15774,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             }
         }
 
-        // Handler Auto Bullets untuk Kolom Isian Kalimat Himbauan Jamaah
+        // Auto Bullets dihilangkan sesuai permintaan pengguna karena sudah menggunakan sistem Auto-Numerik (1, 2, 3...)
         function setupAutoBulletsHimbauan() {
-            const ta = document.getElementById('pjInputHimbauan');
-            if (!ta || ta.dataset.autoBulletsBound) return;
-            ta.dataset.autoBulletsBound = 'true';
-
-            // Pastikan setiap baris yang belum memiliki bullet diberi bullet
-            if (ta.value) {
-                const lines = ta.value.split('\n');
-                const formattedLines = lines.map(line => {
-                    const trimmed = line.trim();
-                    if (!trimmed) return '';
-                    if (/^[•\-\*]/.test(trimmed)) return trimmed;
-                    return `• ${trimmed}`;
-                });
-                ta.value = formattedLines.join('\n');
-            }
-
-            ta.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    const pos = this.selectionStart;
-                    const val = this.value;
-                    const lineStart = val.lastIndexOf('\n', pos - 1) + 1;
-                    const currentLine = val.substring(lineStart, pos);
-
-                    if (/^[•\-\*]\s*$/.test(currentLine.trim())) {
-                        // Jika baris saat ini cuma berisi bullet kosong, hapus bullet tersebut (keluar dari mode bullet)
-                        e.preventDefault();
-                        this.value = val.substring(0, lineStart) + val.substring(pos);
-                        this.selectionStart = this.selectionEnd = lineStart;
-                        if (typeof pjUpdatePreview === 'function') pjUpdatePreview();
-                        return;
-                    }
-
-                    // Tambahkan baris baru dengan auto bullet
-                    e.preventDefault();
-                    const insertText = '\n• ';
-                    const before = val.substring(0, pos);
-                    const after = val.substring(this.selectionEnd);
-                    this.value = before + insertText + after;
-                    this.selectionStart = this.selectionEnd = pos + insertText.length;
-                    this.dispatchEvent(new Event('input', { bubbles: true }));
-                } else if (e.key === 'Backspace') {
-                    const pos = this.selectionStart;
-                    if (pos === this.selectionEnd) {
-                        const val = this.value;
-                        const lineStart = val.lastIndexOf('\n', pos - 1) + 1;
-                        const linePrefix = val.substring(lineStart, pos);
-                        if (linePrefix === '• ') {
-                            e.preventDefault();
-                            this.value = val.substring(0, lineStart) + val.substring(pos);
-                            this.selectionStart = this.selectionEnd = lineStart;
-                            this.dispatchEvent(new Event('input', { bubbles: true }));
-                        }
-                    }
-                }
-            });
-
-            ta.addEventListener('focus', function() {
-                if (!this.value.trim()) {
-                    this.value = '• ';
-                    this.selectionStart = this.selectionEnd = 2;
-                }
-            });
+            // No-op (dinonaktifkan agar tidak ada bullet ganda)
         }
 
         // Inisialisasi Modul Pengumuman Jum'at
@@ -15888,11 +15827,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (elMaklumat) elMaklumat.value = pjData.petugas.maklumat || 'Ust. Fatkhurokhman';
 
             if (elHim) {
-                if (pjData.himbauanText) {
-                    elHim.value = pjData.himbauanText;
-                } else if (Array.isArray(pjData.himbauan) && pjData.himbauan.length > 0) {
-                    elHim.value = pjData.himbauan.join('\n');
-                }
+                let rawText = pjData.himbauanText || (Array.isArray(pjData.himbauan) ? pjData.himbauan.join('\n') : '');
+                // Bersihkan bullet sisa jika tersimpan sebelumnya
+                rawText = rawText.split('\n').map(l => l.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim()).filter(l => l.length > 0).join('\n');
+                elHim.value = rawText;
             }
 
             if (elKetua) elKetua.value = pjData.ttd.namaKetua || 'Hadi Prayitno';
@@ -15903,7 +15841,6 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             pjRenderFormPemasukan();
             pjRenderFormPengeluaran();
             pjHitungKas();
-            setupAutoBulletsHimbauan();
 
             // Sinkronkan status switch Slide Layar Penuh TV Maklumat & Kas Jumat
             try {
@@ -16125,31 +16062,31 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (elSubSaldo) elSubSaldo.textContent = pjFormatRupiah(subtotalSaldo);
             if (elSubOut) elSubOut.textContent = pjFormatRupiah(totalOut);
 
-            // Preview List Pemasukan (Tabel Bersih Persis Template PDF)
+            // Preview List Pemasukan (Tabel Bersih Memanjang Penuh & Font Tajam)
             const contPrevIn = document.getElementById('pjPrevListPemasukan');
             if (contPrevIn) {
                 if (pjData.pemasukan.length === 0) {
                     contPrevIn.innerHTML = '<div class="text-muted small p-2 text-center">- Belum ada data pemasukan -</div>';
                 } else {
                     contPrevIn.innerHTML = pjData.pemasukan.map((item, idx) => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 4px; border-bottom: 1px solid #f1f5f9; font-size: 12.5px;">
-                            <span style="color: #1e293b; font-weight: 500;">${idx + 1}. ${escapeHtml(item.ket)}</span>
-                            <span style="font-weight: 700; color: #047857; font-family: monospace; white-space: nowrap;">Rp ${pjFormatRupiah(item.nominal)}</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 6px; border-bottom: 1px solid #f1f5f9; font-size: 14.5px;">
+                            <span style="color: #1e293b; font-weight: 600;">${idx + 1}. ${escapeHtml(item.ket)}</span>
+                            <span style="font-weight: 800; color: #047857; font-family: monospace; font-size: 15px; white-space: nowrap; margin-left: 14px;">Rp ${pjFormatRupiah(item.nominal)}</span>
                         </div>
                     `).join('');
                 }
             }
 
-            // Preview List Pengeluaran (Tabel Bersih Persis Template PDF)
+            // Preview List Pengeluaran (Tabel Bersih Memanjang Penuh di Bawah Pemasukan & Font Tajam)
             const contPrevOut = document.getElementById('pjPrevListPengeluaran');
             if (contPrevOut) {
                 if (pjData.pengeluaran.length === 0) {
                     contPrevOut.innerHTML = '<div class="text-muted small p-2 text-center">- Belum ada data pengeluaran -</div>';
                 } else {
                     contPrevOut.innerHTML = pjData.pengeluaran.map((item, idx) => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 4px; border-bottom: 1px solid #f1f5f9; font-size: 12.5px;">
-                            <span style="color: #1e293b; font-weight: 500;">${idx + 1}. ${escapeHtml(item.ket)}</span>
-                            <span style="font-weight: 700; color: #dc2626; font-family: monospace; white-space: nowrap;">Rp ${pjFormatRupiah(item.nominal)}</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 6px; border-bottom: 1px solid #f1f5f9; font-size: 14.5px;">
+                            <span style="color: #1e293b; font-weight: 600;">${idx + 1}. ${escapeHtml(item.ket)}</span>
+                            <span style="font-weight: 800; color: #dc2626; font-family: monospace; font-size: 15px; white-space: nowrap; margin-left: 14px;">Rp ${pjFormatRupiah(item.nominal)}</span>
                         </div>
                     `).join('');
                 }
@@ -16166,18 +16103,19 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (prevBilal) prevBilal.textContent = bilal || 'Ust. Mansur';
             if (prevMaklumat) prevMaklumat.textContent = maklumat || 'Ust. Fatkhurokhman';
 
-            // Preview Himbauan (4 Poin Tetap bernomor urut 1, 2, 3, 4)
+            // Preview Himbauan (Nomor urut otomatis 1, 2, 3, 4 tanpa bullet)
             const prevContHim = document.getElementById('pjPrevContainerHimbauan');
             if (prevContHim) {
                 if (lines.length === 0) {
                     prevContHim.innerHTML = '<div class="text-muted font-italic small">- Tidak ada himbauan khusus -</div>';
                 } else {
                     prevContHim.innerHTML = lines.map((line, idx) => {
-                        let cleanText = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/, '');
+                        let cleanText = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim();
+                        cleanText = cleanText.replace(/^[•\-\*]\s*/g, '').trim();
                         return `
-                            <div style="margin-bottom: 6px; display: flex; align-items: flex-start; gap: 6px;">
-                                <span style="font-weight: 700; min-width: 18px; color: #047857;">${idx + 1}.</span>
-                                <span style="color: #1e293b;">${escapeHtml(cleanText)}</span>
+                            <div style="margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; font-size: 14.5px;">
+                                <span style="font-weight: 800; min-width: 22px; color: #047857;">${idx + 1}.</span>
+                                <span style="color: #1e293b; font-weight: 500;">${escapeHtml(cleanText)}</span>
                             </div>
                         `;
                     }).join('');
@@ -16497,95 +16435,141 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 ctx.font = "bold 24px 'Segoe UI', Arial, sans-serif";
                 ctx.fillText("Rp " + pjFormatRupiah(saldoAkhir), c4X + (cardW / 2), cardY + 62);
 
-                // 4. DUA TABEL: PEMASUKAN & PENGELUARAN
+                // =====================================================================
+                // 4. KOTAK PEMASUKAN KAS (MEMANJANG PENUH DARI KIRI KE KANAN 1120px)
+                // =====================================================================
                 curY = cardY + cardH + 20;
-                const colW = (1120 - 18) / 2;
-                const tableH = 185;
+                const fullColW = 1120;
+                const rowItemH = 34;
+                const headerH = 38;
+                const subRowH = 36;
+                const saldoRowH = 38;
+                
+                // Tinggi total kotak Pemasukan
+                const inTableH = headerH + (pjData.pemasukan.length * rowItemH) + subRowH + saldoRowH;
 
-                // Tabel Kiri: Pemasukan Kas
-                ctx.strokeStyle = "#e2e8f0";
-                ctx.strokeRect(40, curY, colW, tableH);
+                ctx.strokeStyle = "#cbd5e1";
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(40, curY, fullColW, inTableH);
+
+                // Header Pemasukan Kas
                 ctx.fillStyle = "#0d9488";
-                ctx.fillRect(40, curY, colW, 36);
+                ctx.fillRect(40, curY, fullColW, headerH);
                 ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                ctx.font = "bold 19.5px 'Segoe UI', Arial, sans-serif";
                 ctx.textAlign = "left";
-                ctx.fillText("Pemasukan Kas", 54, curY + 24);
+                ctx.fillText("Pemasukan Kas", 56, curY + 26);
                 ctx.textAlign = "right";
-                ctx.fillText("Nominal (Rp)", 40 + colW - 14, curY + 24);
+                ctx.fillText("Nominal (Rp)", 40 + fullColW - 16, curY + 26);
 
-                let inRowY = curY + 36 + 26;
-                ctx.font = "500 15px 'Segoe UI', Arial, sans-serif";
+                let inRowY = curY + headerH + 24;
                 pjData.pemasukan.forEach((p, idx) => {
                     ctx.textAlign = "left";
                     ctx.fillStyle = "#1e293b";
-                    ctx.fillText((idx + 1) + ". " + p.ket, 54, inRowY);
+                    ctx.font = "600 17.5px 'Segoe UI', Arial, sans-serif";
+                    ctx.fillText((idx + 1) + ". " + p.ket, 56, inRowY);
+
                     ctx.textAlign = "right";
                     ctx.fillStyle = "#047857";
-                    ctx.font = "bold 15px monospace";
-                    ctx.fillText("Rp " + pjFormatRupiah(p.nominal), 40 + colW - 14, inRowY);
-                    ctx.font = "500 15px 'Segoe UI', Arial, sans-serif";
-                    inRowY += 28;
+                    ctx.font = "bold 18.5px monospace";
+                    ctx.fillText("Rp " + pjFormatRupiah(p.nominal), 40 + fullColW - 16, inRowY);
+                    
+                    if (idx < pjData.pemasukan.length - 1) {
+                        ctx.strokeStyle = "#f1f5f9";
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(40, inRowY + 10);
+                        ctx.lineTo(40 + fullColW, inRowY + 10);
+                        ctx.stroke();
+                    }
+                    inRowY += rowItemH;
                 });
 
-                // Baris Subtotal Pemasukan & SALDO
+                // Baris Total Pemasukan
+                const subInY = curY + headerH + (pjData.pemasukan.length * rowItemH);
                 ctx.fillStyle = "#ecfdf5";
-                ctx.fillRect(40, curY + tableH - 68, colW, 34);
+                ctx.fillRect(40, subInY, fullColW, subRowH);
                 ctx.fillStyle = "#047857";
-                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                ctx.font = "bold 18.5px 'Segoe UI', Arial, sans-serif";
                 ctx.textAlign = "left";
-                ctx.fillText("Total Pemasukan", 54, curY + tableH - 46);
+                ctx.fillText("Total Pemasukan", 56, subInY + 24);
                 ctx.textAlign = "right";
-                ctx.fillText("Rp " + pjFormatRupiah(totalIn), 40 + colW - 14, curY + tableH - 46);
+                ctx.font = "bold 19.5px monospace";
+                ctx.fillText("Rp " + pjFormatRupiah(totalIn), 40 + fullColW - 16, subInY + 24);
 
+                // Baris SALDO (Awal + Masuk)
+                const saldoInY = subInY + subRowH;
                 ctx.fillStyle = "#d1fae5";
-                ctx.fillRect(40, curY + tableH - 34, colW, 34);
+                ctx.fillRect(40, saldoInY, fullColW, saldoRowH);
                 ctx.fillStyle = "#047857";
-                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                ctx.font = "bold 18.5px 'Segoe UI', Arial, sans-serif";
                 ctx.textAlign = "left";
-                ctx.fillText("SALDO (Awal + Masuk)", 54, curY + tableH - 12);
+                ctx.fillText("SALDO (Awal + Masuk)", 56, saldoInY + 25);
                 ctx.textAlign = "right";
-                ctx.fillText("Rp " + pjFormatRupiah(subtotalSaldo), 40 + colW - 14, curY + tableH - 12);
+                ctx.font = "bold 20px monospace";
+                ctx.fillText("Rp " + pjFormatRupiah(subtotalSaldo), 40 + fullColW - 16, saldoInY + 25);
 
-                // Tabel Kanan: Pengeluaran / Biaya
-                const outX = 40 + colW + 18;
-                ctx.strokeRect(outX, curY, colW, tableH);
+                // =====================================================================
+                // 5. KOTAK PENGELUARAN / BIAYA (TEPAT DI BAWAHNYA, MEMANJANG PENUH 1120px)
+                // =====================================================================
+                curY += inTableH + 16;
+
+                const outTableH = headerH + (pjData.pengeluaran.length * rowItemH) + saldoRowH;
+
+                ctx.strokeStyle = "#cbd5e1";
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(40, curY, fullColW, outTableH);
+
+                // Header Pengeluaran / Biaya
                 ctx.fillStyle = "#334155";
-                ctx.fillRect(outX, curY, colW, 36);
+                ctx.fillRect(40, curY, fullColW, headerH);
                 ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                ctx.font = "bold 19.5px 'Segoe UI', Arial, sans-serif";
                 ctx.textAlign = "left";
-                ctx.fillText("Pengeluaran / Biaya", outX + 14, curY + 24);
+                ctx.fillText("Pengeluaran / Biaya", 56, curY + 26);
                 ctx.textAlign = "right";
-                ctx.fillText("Nominal (Rp)", outX + colW - 14, curY + 24);
+                ctx.fillText("Nominal (Rp)", 40 + fullColW - 16, curY + 26);
 
-                let outRowY = curY + 36 + 26;
-                ctx.font = "500 14px 'Segoe UI', Arial, sans-serif";
+                let outRowY = curY + headerH + 24;
                 pjData.pengeluaran.forEach((p, idx) => {
                     ctx.textAlign = "left";
                     ctx.fillStyle = "#1e293b";
-                    let shortKet = p.ket;
-                    if (shortKet.length > 44) shortKet = shortKet.substring(0, 42) + '...';
-                    ctx.fillText((idx + 1) + ". " + shortKet, outX + 14, outRowY);
+                    ctx.font = "600 17.5px 'Segoe UI', Arial, sans-serif";
+                    // Teks utuh tanpa pemotongan / ellipsis karena lebar 1120px sangat luas
+                    ctx.fillText((idx + 1) + ". " + p.ket, 56, outRowY);
+
                     ctx.textAlign = "right";
                     ctx.fillStyle = "#dc2626";
-                    ctx.font = "bold 14px monospace";
-                    ctx.fillText("Rp " + pjFormatRupiah(p.nominal), outX + colW - 14, outRowY);
-                    ctx.font = "500 14px 'Segoe UI', Arial, sans-serif";
-                    outRowY += 28;
+                    ctx.font = "bold 18.5px monospace";
+                    ctx.fillText("Rp " + pjFormatRupiah(p.nominal), 40 + fullColW - 16, outRowY);
+
+                    if (idx < pjData.pengeluaran.length - 1) {
+                        ctx.strokeStyle = "#f1f5f9";
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(40, outRowY + 10);
+                        ctx.lineTo(40 + fullColW, outRowY + 10);
+                        ctx.stroke();
+                    }
+                    outRowY += rowItemH;
                 });
 
+                // Baris Total Pengeluaran
+                const subOutY = curY + headerH + (pjData.pengeluaran.length * rowItemH);
                 ctx.fillStyle = "#fef2f2";
-                ctx.fillRect(outX, curY + tableH - 34, colW, 34);
+                ctx.fillRect(40, subOutY, fullColW, saldoRowH);
                 ctx.fillStyle = "#dc2626";
-                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+                ctx.font = "bold 18.5px 'Segoe UI', Arial, sans-serif";
                 ctx.textAlign = "left";
-                ctx.fillText("Total Pengeluaran", outX + 14, curY + tableH - 12);
+                ctx.fillText("Total Pengeluaran", 56, subOutY + 25);
                 ctx.textAlign = "right";
-                ctx.fillText("Rp " + pjFormatRupiah(totalOut), outX + colW - 14, curY + tableH - 12);
+                ctx.font = "bold 20px monospace";
+                ctx.fillText("Rp " + pjFormatRupiah(totalOut), 40 + fullColW - 16, subOutY + 25);
 
-                // 5. BAGIAN II: PETUGAS SHOLAT JUM'AT HARI INI (Poin 9)
-                curY += tableH + 30;
+                // =====================================================================
+                // 6. BAGIAN II: PETUGAS SHOLAT JUM'AT HARI INI
+                // =====================================================================
+                curY += outTableH + 26;
                 ctx.textAlign = "left";
                 ctx.fillStyle = "#047857";
                 ctx.font = "bold 21px 'Segoe UI', Arial, sans-serif";
@@ -16599,7 +16583,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     { label: "MC MAKLUMAT", val: pjData.petugas.maklumat || 'Ust. Fatkhurokhman', bar: "#8b5cf6", textCol: "#7c3aed" }
                 ];
 
-                const petCardH = 74;
+                const petCardH = 76;
                 petCards.forEach((c, idx) => {
                     const px = 40 + idx * (cardW + cardGap);
                     ctx.fillStyle = "#f8fafc";
@@ -16616,14 +16600,16 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
                     ctx.fillStyle = "#0f172a";
                     ctx.font = "bold 19px 'Segoe UI', Arial, sans-serif";
-                    ctx.fillText(c.val, px + 14, curY + 56);
+                    ctx.fillText(c.val, px + 14, curY + 58);
                 });
 
-                // 6. BAGIAN III: HIMBAUAN (4 Poin Tetap)
-                curY += petCardH + 30;
+                // =====================================================================
+                // 7. BAGIAN III: HIMBAUAN (FONT DIPERBESAR & HANYA NOMOR URUT)
+                // =====================================================================
+                curY += petCardH + 26;
                 ctx.textAlign = "left";
                 ctx.fillStyle = "#047857";
-                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+                ctx.font = "bold 21px 'Segoe UI', Arial, sans-serif";
                 ctx.fillText("III. HIMBAUAN", 40, curY);
 
                 curY += 14;
@@ -16634,30 +16620,35 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
                 ];
 
-                const himBoxH = 30 + (hLines.length * 30);
+                const himLineH = 36;
+                const himBoxH = 22 + (hLines.length * himLineH);
                 ctx.fillStyle = "#fafafa";
                 ctx.strokeStyle = "#e2e8f0";
                 ctx.fillRect(40, curY, 1120, himBoxH);
                 ctx.strokeRect(40, curY, 1120, himBoxH);
 
-                let himY = curY + 28;
-                ctx.font = "500 16px 'Segoe UI', Arial, sans-serif";
+                let himY = curY + 30;
                 hLines.forEach((line, idx) => {
-                    let clean = line.replace(/^[a-zA-Z0-9][\.\)]\s*/, '');
+                    let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim();
+                    clean = clean.replace(/^[•\-\*]\s*/g, '').trim();
+
                     ctx.fillStyle = "#047857";
-                    ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                    ctx.font = "bold 19px 'Segoe UI', Arial, sans-serif";
                     ctx.fillText((idx + 1) + ".", 58, himY);
+
                     ctx.fillStyle = "#1e293b";
-                    ctx.font = "500 16px 'Segoe UI', Arial, sans-serif";
-                    ctx.fillText(clean, 82, himY);
-                    himY += 30;
+                    ctx.font = "500 18.5px 'Segoe UI', Arial, sans-serif";
+                    ctx.fillText(clean, 88, himY);
+                    himY += himLineH;
                 });
 
-                // 7. PENGESAHAN DOKUMEN & TITIMANGSA (Poin 11, 12, 13)
+                // =====================================================================
+                // 8. PENGESAHAN DOKUMEN & TITIMANGSA
+                // =====================================================================
                 curY += himBoxH + 34;
                 ctx.textAlign = "right";
                 ctx.fillStyle = "#0f172a";
-                ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
                 ctx.fillText("Dibuat di : " + (pjData.titimangsa || 'Simpangan, 02 Oktober 2026'), 1160, curY);
 
                 curY += 26;
@@ -16846,7 +16837,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
             ];
             hLines.forEach((line, idx) => {
-                let clean = line.replace(/^[a-zA-Z0-9][\.\)]\s*/, '');
+                let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim();
+                clean = clean.replace(/^[•\-\*]\s*/g, '').trim();
                 naskah += `${idx + 1}. ${clean}\n`;
             });
 
@@ -17073,7 +17065,6 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         // Auto render dashboard widget saat dimuat
         document.addEventListener('DOMContentLoaded', function() {
             try {
-                setupAutoBulletsHimbauan();
                 renderDashAgendaRutinWidget();
                 renderDashPengumumanJumatWidget();
             } catch(e) {}

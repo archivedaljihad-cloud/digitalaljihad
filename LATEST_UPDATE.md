@@ -4,7 +4,41 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 05:50 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:05 WIB)
+
+### 📋 Flyer Pengumuman Sholat Jum'at: Kotak Kas Memanjang Penuh (Full-Width), Teks Utuh Tanpa Terpotong, Font Proporsional & Auto-Numerik Bersih
+
+**Latar Belakang & Permintaan Pengguna:**
+1. **Kotak Pengeluaran / Biaya Terpotong:** Sebelumnya kotak "Pemasukan Kas" dan "Pengeluaran / Biaya" diletakkan berdampingan 2 kolom (masing-masing 50% lebar), sehingga keterangan pengeluaran yang panjang terpotong dengan tanda titik-titik (`...`). Karena area bawah halaman masih memiliki ruang kosong yang cukup luas, pengguna meminta:
+   - Kotak "Pengeluaran / Biaya" dipindahkan tepat di bawah kotak "Pemasukan Kas".
+   - Kedua kotak dibiarkan memanjang penuh dari kiri ke kanan (lebar 100% / 1120px) agar semua teks keterangan transaksi tampil utuh dan jelas tanpa terpotong.
+2. **Proporsi Font Diperbesar:** Memperbesar ukuran font header, teks baris, dan nominal di dalam kotak "Pemasukan Kas" dan "Pengeluaran / Biaya" secara proporsional.
+3. **Penyempurnaan List Himbauan:**
+   - Memperbesar ukuran font daftar/list himbauan agar lebih tegas dan mudah dibaca.
+   - Menghilangkan *auto bullets* (`• `) karena sistem penomoran sudah memiliki auto-numerik (1, 2, 3...) sehingga tidak terjadi tampilan bullet ganda (`1. • ...`).
+
+**Rincian Perubahan yang Diterapkan (`web-statis/admin.html`):**
+1. **Download Flyer Canvas (`downloadFlyerPengumumanJumat`):**
+   - **Tabel Pemasukan Kas:** Memanjang penuh dengan lebar `1120px` (`X = 40` s/d `1160`). Font header dinaikkan ke `bold 19.5px`, font item baris ke `600 17.5px`, font nominal ke `bold 18.5px monospace`, dan baris Total/Saldo ke `bold 18.5px` & `bold 20px monospace`.
+   - **Tabel Pengeluaran / Biaya:** Ditempatkan tepat di bawah tabel Pemasukan Kas dengan jarak `16px`, memanjang penuh `1120px`. Menghapus pemotongan teks/ellipsis sehingga teks panjang seperti *"Biaya Operasional Masjid Periode Tanggal 02 sd 04 Okt 2026"* tampil 100% utuh dan leluasa.
+   - **Bagian III Himbauan:** Font nomor urut dinaikkan ke `bold 19px` (warna hijau emerald `#047857`), font teks himbauan dinaikkan ke `500 18.5px`, line-height/step `36px`, dan menerapkan regex pembersih bullet ganda (`clean.replace(/^[•\-\*]\s*/g, '')`).
+   - **Distribusi Vertikal:** Tata letak disesuaikan dengan proporsi kertas A4 berkelas sehingga ruang kosong di bagian bawah terisi secara harmonis dan seimbang dengan tanda tangan serta stempel.
+2. **Preview Lembar Pengumuman Resmi A4 & Cetak Dokumen (`#pjPrintableSheet`):**
+   - Struktur grid 2 kolom diganti menjadi flex column vertikal dengan masing-masing kotak berlebar penuh 100%.
+   - Ukuran font header tabel dinaikkan ke `15px`, baris data ke `14.5px` (font-weight 600), dan nominal ke `15px` (font-weight 800).
+   - Ukuran font himbauan dinaikkan ke `14.5px` (line-height 1.65).
+3. **Formulir Input Himbauan:**
+   - Mengubah badge menjadi `Auto-Numerik (1, 2, 3...)`.
+   - Menghilangkan simbol bullet `• ` pada default textarea dan menonaktifkan fungsi `setupAutoBulletsHimbauan()` agar pengguna dapat mengetik bebas tanpa dipaksa menyisipkan bullet.
+   - Sinkronisasi naskah pembaca maklumat (`generateNaskahMaklumatText`) dan teks broadcast WhatsApp (`bukaModalWAPengumumanJumat`) otomatis membersihkan simbol bullet ganda.
+
+**Berkas Terkait:**
+- `web-statis/admin.html`
+- `LATEST_UPDATE.md`
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 05:50 WIB)
 
 ### 🚀 Perbaikan Freeze Modal "Sebarkan ke WA" & "Teks Bacaan Maklumat" pada Dashboard Bendahara
 
