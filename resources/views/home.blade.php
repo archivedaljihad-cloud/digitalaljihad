@@ -791,6 +791,196 @@
     </div>
 </div>
 
+{{-- ================================================================
+     WIDGET KHUSUS PETUGAS: AGENDA RUTIN MALAM JUM'AT
+     Pengaturan Tampilan Surat Yaasiin & Tahlil di Layar TV
+     ================================================================ --}}
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow border-0" style="border-radius: 14px; overflow: hidden; border: 2px solid #10b981 !important;">
+
+            {{-- Header Panel --}}
+            <div class="card-header py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between"
+                 style="background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%);">
+                <div>
+                    <h6 class="m-0 font-weight-bold text-white" style="font-size: 1rem;">
+                        <i class="fas fa-book-open mr-2" style="color: #ffd700;"></i>
+                        Agenda Rutin Malam Jum'at &mdash; Pengaturan Tampilan Surat Yaasiin &amp; Tahlil
+                    </h6>
+                    <small class="text-white-50">
+                        <i class="fas fa-tv mr-1"></i>
+                        Atur tampilan informasi Yaasiin &amp; Tahlil yang muncul otomatis di Layar TV Display setiap Malam Jum'at (Kamis malam).
+                    </small>
+                </div>
+                <div class="mt-2 mt-sm-0 d-flex align-items-center" style="gap: 8px;">
+                    @if($isYasinToday)
+                    <span class="badge badge-warning text-dark font-weight-bold px-3 py-2" style="font-size: 0.8rem; border-radius: 20px;">
+                        <i class="fas fa-bell mr-1"></i> MALAM INI!
+                    </span>
+                    @endif
+                    <a href="{{ route('agenda_rutin.index') }}" class="btn btn-outline-light btn-sm shadow-sm" style="border-radius: 8px; font-size: 0.8rem;">
+                        <i class="fas fa-cogs mr-1"></i> Pengaturan Lengkap
+                    </a>
+                </div>
+            </div>
+
+            {{-- Form Inline Yaasiin --}}
+            <form action="{{ route('agenda_rutin.store') }}" method="POST" id="formYasinDashboard">
+                @csrf
+
+                {{-- Hidden fields: simpan semua data agenda lain agar tidak tertimpa saat save --}}
+                @if($rutinSettings['kajian_ahad']['enabled'] ?? true)<input type="hidden" name="kajian_ahad_enabled" value="1">@endif
+                <input type="hidden" name="kajian_ahad_judul"      value="{{ $rutinSettings['kajian_ahad']['judul'] ?? 'Kajian Malam Ahad' }}">
+                <input type="hidden" name="kajian_ahad_waktu"      value="{{ $rutinSettings['kajian_ahad']['waktu'] ?? 'Ba\'da Maghrib s/d Isya' }}">
+                <input type="hidden" name="kajian_ahad_pembimbing" value="{{ $rutinSettings['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh Al-Hafidz' }}">
+                <input type="hidden" name="kajian_ahad_keterangan" value="{{ $rutinSettings['kajian_ahad']['keterangan'] ?? '' }}">
+                <input type="hidden" name="kajian_ahad_lokasi"     value="{{ $rutinSettings['kajian_ahad']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}">
+
+                @if($rutinSettings['tahsin']['enabled'] ?? true)<input type="hidden" name="tahsin_enabled" value="1">@endif
+                <input type="hidden" name="tahsin_judul"           value="{{ $rutinSettings['tahsin']['judul'] ?? 'Bimbingan Tahsin Al-Qur\'an' }}">
+                <input type="hidden" name="tahsin_waktu"           value="{{ $rutinSettings['tahsin']['waktu'] ?? 'Ba\'da Sholat Isya' }}">
+                <input type="hidden" name="tahsin_pembimbing"      value="{{ $rutinSettings['tahsin']['pembimbing'] ?? 'Ustadz Tahsin' }}">
+                <input type="hidden" name="tahsin_keterangan"      value="{{ $rutinSettings['tahsin']['keterangan'] ?? '' }}">
+                <input type="hidden" name="tahsin_lokasi"          value="{{ $rutinSettings['tahsin']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}">
+                <input type="hidden" name="tahsin_catatan_khusus"  value="{{ $rutinSettings['tahsin']['catatan_khusus'] ?? '' }}">
+                @foreach(($rutinSettings['tahsin']['hari_aktif'] ?? ['senin','rabu','sabtu']) as $ht)
+                <input type="hidden" name="tahsin_hari[]" value="{{ $ht }}">
+                @endforeach
+
+                @if($rutinSettings['tafsir']['enabled'] ?? true)<input type="hidden" name="tafsir_enabled" value="1">@endif
+                <input type="hidden" name="tafsir_judul"           value="{{ $rutinSettings['tafsir']['judul'] ?? 'Tafsir Al-Qur\'an' }}">
+                <input type="hidden" name="tafsir_hari"            value="{{ $rutinSettings['tafsir']['hari'] ?? 'ahad' }}">
+                <input type="hidden" name="tafsir_waktu"           value="{{ $rutinSettings['tafsir']['waktu'] ?? 'Ba\'da Subuh' }}">
+                <input type="hidden" name="tafsir_pembimbing"      value="{{ $rutinSettings['tafsir']['pembimbing'] ?? 'Ustadz / Imam Masjid' }}">
+                <input type="hidden" name="tafsir_keterangan"      value="{{ $rutinSettings['tafsir']['keterangan'] ?? '' }}">
+                <input type="hidden" name="tafsir_lokasi"          value="{{ $rutinSettings['tafsir']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}">
+                @foreach(($rutinSettings['tafsir']['pekan_aktif'] ?? [1,3]) as $pt)
+                <input type="hidden" name="tafsir_pekan[]" value="{{ $pt }}">
+                @endforeach
+
+                <div class="card-body bg-white px-4 pt-3 pb-4">
+
+                    {{-- Info tip otomatis --}}
+                    <div class="p-2 mb-3 rounded d-flex align-items-start" style="background: #f0fdf4; border-left: 4px solid #10b981; font-size: 0.85rem;">
+                        <i class="fas fa-magic text-success mt-1 mr-2 flex-shrink-0"></i>
+                        <span>
+                            <strong>Otomatis Tayang:</strong>
+                            Informasi ini muncul di Layar TV Display setiap <strong>Malam Jum'at (Kamis malam)</strong> ba'da Maghrib secara otomatis.
+                            Ubah detail di bawah lalu klik <strong>"Simpan &amp; Update TV"</strong> agar langsung tampil.
+                        </span>
+                    </div>
+
+                    <div class="row align-items-stretch">
+
+                        {{-- Kolom Kiri: Toggle ON/OFF + Badge Status --}}
+                        <div class="col-md-3 mb-3 mb-md-0 d-flex">
+                            <div class="card border-0 w-100 text-center p-3"
+                                 style="border-radius: 12px; background: #f0fdf4; border: 1.5px solid #bbf7d0 !important;">
+                                <div class="mb-2">
+                                    <i class="fas fa-tv fa-2x text-success"></i>
+                                </div>
+                                <div class="font-weight-bold text-dark mb-2" style="font-size: 0.82rem;">Status di Layar TV</div>
+                                <div class="custom-control custom-switch d-flex justify-content-center mb-2">
+                                    <input type="checkbox" class="custom-control-input" id="dashSwYasin"
+                                           name="yasin_enabled" value="1"
+                                           {{ ($rutinSettings['yasin']['enabled'] ?? true) ? 'checked' : '' }}>
+                                    <label class="custom-control-label font-weight-bold" for="dashSwYasin" style="cursor: pointer; font-size: 0.85rem;">
+                                        <span id="dashSwYasinLabel"
+                                              class="{{ ($rutinSettings['yasin']['enabled'] ?? true) ? 'text-success' : 'text-secondary' }}">
+                                            {{ ($rutinSettings['yasin']['enabled'] ?? true) ? 'AKTIF' : 'NONAKTIF' }}
+                                        </span>
+                                    </label>
+                                </div>
+                                <small class="text-muted" style="font-size: 11px;">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Geser toggle untuk mengaktifkan/menonaktifkan tampilan di TV.
+                                </small>
+                            </div>
+                        </div>
+
+                        {{-- Kolom Kanan: Form Fields --}}
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-12 form-group mb-2">
+                                    <label class="font-weight-bold small text-gray-700 mb-1">
+                                        <i class="fas fa-heading text-success mr-1"></i> Nama / Judul Kegiatan
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm" name="yasin_judul"
+                                           value="{{ $rutinSettings['yasin']['judul'] ?? 'Pembacaan Surat Yaasiin & Tahlil' }}" required
+                                           placeholder="Contoh: Pembacaan Surat Yaasiin &amp; Tahlil">
+                                </div>
+                                <div class="col-md-6 form-group mb-2">
+                                    <label class="font-weight-bold small text-gray-700 mb-1">
+                                        <i class="fas fa-clock text-warning mr-1"></i> Waktu Pelaksanaan
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm" name="yasin_waktu"
+                                           value="{{ $rutinSettings['yasin']['waktu'] ?? 'Ba\'da Maghrib s/d Isya' }}" required
+                                           placeholder="Contoh: Ba'da Maghrib s/d Isya">
+                                </div>
+                                <div class="col-md-6 form-group mb-2">
+                                    <label class="font-weight-bold small text-gray-700 mb-1">
+                                        <i class="fas fa-user-tie text-info mr-1"></i> Imam / Pembimbing
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm" name="yasin_pembimbing"
+                                           value="{{ $rutinSettings['yasin']['pembimbing'] ?? 'Imam Rawatib / Asatidz Masjid' }}"
+                                           placeholder="Nama Imam atau Pembimbing">
+                                </div>
+                                <div class="col-md-6 form-group mb-0">
+                                    <label class="font-weight-bold small text-gray-700 mb-1">
+                                        <i class="fas fa-map-marker-alt text-danger mr-1"></i> Lokasi Kegiatan
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm" name="yasin_lokasi"
+                                           value="{{ $rutinSettings['yasin']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}"
+                                           placeholder="Lokasi pelaksanaan">
+                                </div>
+                                <div class="col-md-6 form-group mb-0">
+                                    <label class="font-weight-bold small text-gray-700 mb-1">
+                                        <i class="fas fa-comment-dots text-secondary mr-1"></i> Keterangan Tambahan
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm" name="yasin_keterangan"
+                                           value="{{ $rutinSettings['yasin']['keterangan'] ?? 'Rutin Setiap Malam Jum\'at Bersama Seluruh Jamaah' }}"
+                                           placeholder="Keterangan singkat">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Footer: Tombol --}}
+                    <div class="d-flex justify-content-between align-items-center pt-3 mt-3 border-top" style="gap: 10px;">
+                        <a href="{{ route('agenda-rutin.embed') }}" target="_blank"
+                           class="btn btn-outline-success btn-sm" style="border-radius: 8px;">
+                            <i class="fas fa-tv mr-1"></i> Pratinjau Layar TV
+                        </a>
+                        <button type="submit" class="btn btn-success btn-sm font-weight-bold shadow-sm" style="border-radius: 8px; min-width: 150px; padding: 8px 20px;">
+                            <i class="fas fa-save mr-1"></i> Simpan &amp; Update TV
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{{-- Script toggle label AKTIF/NONAKTIF --}}
+<script>
+(function() {
+    var sw = document.getElementById('dashSwYasin');
+    var lbl = document.getElementById('dashSwYasinLabel');
+    if (sw && lbl) {
+        sw.addEventListener('change', function () {
+            if (this.checked) {
+                lbl.textContent = 'AKTIF';
+                lbl.className = 'text-success';
+            } else {
+                lbl.textContent = 'NONAKTIF';
+                lbl.className = 'text-secondary';
+            }
+        });
+    }
+})();
+</script>
+
 <!-- Jadwal Sholat Hari Ini -->
 <div class="row">
     <div class="col-lg-12 mb-4">
