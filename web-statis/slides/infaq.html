@@ -148,22 +148,22 @@
         .stat-pill {
             background: rgba(0, 0, 0, 0.45);
             border-radius: 12px;
-            padding: 8px 14px;
+            padding: 9px 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            gap: 13px;
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
         }
 
         .stat-pill .icon-box {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
+            width: 46px;
+            height: 46px;
+            border-radius: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.45rem;
             flex-shrink: 0;
         }
 
@@ -262,12 +262,26 @@
         }
 
         .stat-info { display: flex; flex-direction: column; min-width: 0; }
-        .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; color: rgba(255, 255, 255, 0.85); }
-        .stat-value { font-size: 1.15rem; font-weight: 800; font-family: monospace; white-space: nowrap; }
-        .stat-pill.target .stat-value { color: #00b4d8; }
-        .stat-pill.terkumpul .stat-value { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
-        .stat-pill.kekurangan .stat-value { color: #ff5252; }
-        .stat-pill.donatur .stat-value { color: #ffd700; }
+        .stat-label { 
+            font-size: 0.88rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.8px; 
+            font-weight: 700; 
+            color: rgba(255, 255, 255, 0.95); 
+            margin-bottom: 2px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+        }
+        .stat-value { 
+            font-size: 1.36rem; 
+            font-weight: 800; 
+            font-family: monospace; 
+            white-space: nowrap; 
+            letter-spacing: 0.3px;
+        }
+        .stat-pill.target .stat-value { color: #00b4d8; text-shadow: 0 0 10px rgba(0, 180, 216, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
+        .stat-pill.terkumpul .stat-value { color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9); }
+        .stat-pill.kekurangan .stat-value { color: #ff5252; text-shadow: 0 0 10px rgba(255, 82, 82, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
+        .stat-pill.donatur .stat-value { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
 
         /* PROGRESS BAR */
         .progress-section {
@@ -347,9 +361,9 @@
             grid-template-columns: minmax(0, 1.4fr) minmax(130px, 0.85fr) minmax(150px, auto);
             gap: 12px;
             padding: 4px 14px 6px 14px;
-            font-size: 0.82rem;
+            font-size: 0.88rem;
             font-weight: 700;
-            color: rgba(255, 215, 0, 0.85);
+            color: rgba(255, 215, 0, 0.92);
             letter-spacing: 0.5px;
             text-transform: uppercase;
             border-bottom: 1px dashed rgba(255, 215, 0, 0.25);
@@ -498,12 +512,13 @@
 
         .donatur-val {
             font-weight: 800;
-            font-size: 1.25rem;
-            color: #00e676;
+            font-size: 1.32rem;
+            color: #ff9900;
             font-family: monospace;
             white-space: nowrap;
-            text-shadow: 0 0 12px rgba(0, 230, 118, 0.45), 0 2px 4px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 0 14px rgba(255, 153, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.9);
             text-align: right;
+            letter-spacing: 0.3px;
         }
 
         /* Spasi 1 Baris Antara Terakhir dan Pertama */
@@ -796,9 +811,9 @@
 
     <!-- CORE SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js"></script>
-    <script src="../js/supabase-db.js"></script>
-    <script src="../js/display-clock-ambient.js"></script>
+    <script src="../js/supabase-config.js?v=5.3.3"></script>
+    <script src="../js/supabase-db.js?v=5.3.3"></script>
+    <script src="../js/display-clock-ambient.js?v=5.3.3"></script>
 
     <script>
         function formatRupiah(num) {
@@ -963,7 +978,7 @@
             document.getElementById('valTerkumpul').textContent = 'Rp ' + formatRupiah(terkumpul);
 
             if (isTercapai) {
-                document.getElementById('valKekurangan').innerHTML = '<span style="color:#00e676; font-size:1rem;">Rp 0 (Terpenuhi)</span>';
+                document.getElementById('valKekurangan').innerHTML = '<span style="color:#00e676; font-size:1.25rem; font-weight:800;">Rp 0 (Terpenuhi)</span>';
                 document.getElementById('progressPercent').innerHTML = '<span style="color:#00e676;"><i class="fas fa-check-circle"></i> 100% Target Terpenuhi</span>';
                 document.getElementById('progressBarFill').style.width = '100%';
                 document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #00b4d8 100%)';

@@ -9716,5 +9716,49 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/admin.html` (Penghapusan modal usang, penggabungan kolom Username & Email 2 baris pada thead/dummy/renderUsersTable, pembaruan versi script ke `?v=5.3.3`).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 223).
 
+---
+
+## BAB 224: OPTIMALISASI KONTRAST DISPLAY TV SLIDE PROGRAM INFAQ & PENGADAAN AC — PEMBARUAN WARNA FONT NOMINAL DONATUR MENJADI ORANYE AMBER (#FF9900) & PEMBESARAN TEKS STAT CARDS (TARGET DANA / PEMASUKAN, TERKUMPUL, KEKURANGAN, TOTAL DONATUR)
+
+### 1. Masalah & Kebutuhan Pengguna
+1. **Warna Font Nilai Nominal Donatur Kurang Terlihat:**
+   - Pada layar display TV masjid di halaman slide program infaq / Pengadaan AC (`web-statis/slides/infaq.html`), warna font nilai nominal donatur (`.donatur-val`) yang sebelumnya menggunakan warna hijau terang (`#00e676`) dirasa kurang terlihat jelas dan kurang kontras terhadap latar belakang gelap jika dilihat dari jarak jauh oleh jamaah.
+   - Pengguna meminta agar warna font nilai nominal donasi diganti menjadi warna seperti pada Gambar 2, yaitu warna **oranye / amber keemasan menyala** (`#ff9900`).
+2. **Ukuran Teks Kolom Ringkasan Perlu Diperbesar:**
+   - Teks pada 4 kolom ringkasan di atas (Target Dana / Pemasukan, Terkumpul, Kekurangan, dan Total Donatur) ukurannya masih terlalu kecil (`.stat-label` hanya 0.72rem dan `.stat-value` 1.15rem), sehingga kurang tegas saat ditayangkan di layar TV ukuran besar.
+   - Pengguna meminta agar teks di keempat kolom tersebut sedikit diperbesar lagi agar terlihat jauh lebih jelas.
+
+### 2. Solusi & Perubahan Teknis
+1. **Pembaruan Warna & Styling Nominal Donatur (`.donatur-val`):**
+   - Mengubah warna font dari hijau `#00e676` menjadi warna oranye / amber keemasan menyala **`#ff9900`** (RGB: 255, 153, 0) yang diekstrak langsung secara presisi dari Gambar 2.
+   - Menaikkan ukuran font dari `1.25rem` menjadi `1.32rem` dengan `letter-spacing: 0.3px;` dan menambahkan efek pendaran lembut:
+     `text-shadow: 0 0 14px rgba(255, 153, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.9);`
+   - Nilai nominal donasi kini terlihat sangat kontras, tegas, terang, dan sangat mudah dibaca dari kejauhan di layar TV masjid.
+2. **Pembesaran Teks 4 Kolom Stat Cards (Target Dana, Terkumpul, Kekurangan, Total Donatur):**
+   - **Label Judul Kolom (`.stat-label`):**
+     - Ukuran font dinaikkan dari `0.72rem` ke **`0.88rem`** (peningkatan ~22%).
+     - Ketebalan font dinaikkan menjadi `font-weight: 700;` dengan warna putih kontras tinggi `rgba(255, 255, 255, 0.95)`, `letter-spacing: 0.8px;`, dan `text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);`.
+     - Label "TARGET DANA", "TERKUMPUL", "KEKURANGAN", dan "TOTAL DONATUR" kini terlihat sangat jelas dan mudah dibedakan.
+   - **Nilai Angka Nominal (`.stat-value`):**
+     - Ukuran font dinaikkan dari `1.15rem` ke **`1.36rem`** (peningkatan ~18%) dengan `font-weight: 800;` dan `letter-spacing: 0.3px;`.
+     - Efek pendaran teks diperkuat untuk setiap kartu:
+       - Target Dana: `#00b4d8` dengan cyan glow.
+       - Terkumpul: `#ffffff` putih menyala dengan glow `rgba(255, 255, 255, 0.6)`.
+       - Kekurangan: `#ff5252` merah tegas dengan glow `rgba(255, 82, 82, 0.45)`.
+       - Total Donatur: `#ffd700` emas terang dengan glow `rgba(255, 215, 0, 0.45)`.
+   - **Kotak Ikon (`.icon-box`):**
+     - Disesuaikan dari `42px` menjadi `46px` dengan ukuran ikon `1.45rem` (dari sebelumnya `1.3rem`) agar seimbang dengan font yang membesar.
+   - **Header Kolom Donatur (`.donatur-header-row`):**
+     - Ukuran font header dinaikkan dari `0.82rem` menjadi `0.88rem` dengan warna emas cerah `rgba(255, 215, 0, 0.92)`.
+3. **Penyempurnaan Kondisi Target Terpenuhi:**
+   - Pada fungsi `renderSingleProgram()`, ukuran font status `Rp 0 (Terpenuhi)` saat target tercapai 100% dinaikkan menjadi `1.25rem` dan `font-weight: 800;`.
+4. **Cache-Busting Versioning:**
+   - Script di `web-statis/slides/infaq.html` diberikan query version `?v=5.3.3` agar perubahan langsung termuat di layar TV tanpa tersangkut cache browser.
+
+### 3. Berkas Terkait yang Dimodifikasi:
+1. `web-statis/slides/infaq.html` (CSS stat-pill, stat-label, stat-value, donatur-val, donatur-header-row, JS render font size, dan script version).
+2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 224).
+
+
 
 
