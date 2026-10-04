@@ -9674,4 +9674,47 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 1. `web-statis/slides/infaq.html` (Rasio grid 2.1fr 1fr, CSS header kolom, CSS grid donatur item, badge keterangan, HTML placeholder, dan JavaScript dynamic render).
 2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 222).
 
+---
+
+## BAB 223: PERBAIKAN SISTEM PEMBUATAN AKUN BARU (ELIMINASI MODAL DUPLIKAT & NOTIFIKASI PALSU SESI LOKAL) SERTA PENYEDERHANAAN KOLOM USERNAME & EMAIL MENJADI 2 BARIS PADA TABEL KELOLA HAK AKSES PENGGUNA
+
+### 1. Masalah & Kebutuhan Pengguna
+1. **Kegagalan Pembuatan Akun Baru (Gambar 1 & Gambar 2):**
+   - Saat Super Admin mencoba membuat akun akses baru untuk pengurus/role (misal: *"DKM Al Jihad"* dengan role Petugas/Operator TV), muncul pesan notifikasi browser:
+     `"Alhamdulillah! Akun pengurus 'DKM Al Jihad' berhasil disimpan di sesi lokal."`
+   - Setelah menekan OK, akun tersebut **sama sekali tidak muncul di daftar tabel "Kelola Hak Akses Pengguna"** dan tidak tersimpan ke Cloud Supabase.
+   - **Akar Masalah Teknis:** Ditemukan modal lama usang `#modalTambahUser` di baris atas dokumen HTML (`admin.html`) yang menimpa/membajak modal resmi Super Admin. Modal usang tersebut memiliki tombol simpan yang memanggil fungsi usang `simpanPengurusBaru()`. Fungsi tersebut mencoba mengirim request `POST` ke endpoint mati `/rest/v1/users` (tabel yang tidak ada di Supabase). Karena request `res.ok` selalu `false`, ia langsung masuk ke blok `else` yang memicu `alert('...berhasil disimpan di sesi lokal')` tanpa menyimpan data ke `localStorage` ataupun Cloud Database Supabase.
+2. **Tampilan Tabel Terlalu Penuh & Berjejal (Gambar 2):**
+   - Kolom "Username" dan "Email" sebelumnya dipisah menjadi 2 kolom mandiri, menyebabkan tabel memiliki 8 kolom yang lebar dan memicu *horizontal scrollbar* (bilah geser ke samping).
+   - Pengguna menginginkan tampilan tabel yang lebih simpel, bersih, tidak penuh/bloated, dengan menggabungkan kolom "Username" dan "Email" menjadi satu kolom saja di mana isinya dibuat dalam format 2 baris (Baris 1: Username, tepat di bawahnya Baris 2: Email).
+
+### 2. Solusi & Perubahan Teknis
+1. **Pembersihan Modal Duplikat & Restorasi Alur RBAC Resmi:**
+   - Menghapus bersih modal lama duplikat `#modalTambahUser` yang memanggil `simpanPengurusBaru()`.
+   - Mengarahkan tombol **"+ Tambah Akun Baru"** (`#btnTambahAkunBaru`) secara eksklusif ke modal Super Admin resmi (`id="modalTambahUser"` baris 6361).
+   - Modal resmi ini menggunakan formulir `#formTambahUser` dengan handler event `simpanAkunUserBaru(event)` yang memanggil modul arsitektur `AdminAuth.createUser({ name, username, email, password, role })`.
+   - Data akun baru secara otomatis:
+     a. Diberikan ID numerik unik yang aman.
+     b. Disimpan secara atomik ke `localStorage['aljihad_users_list']`.
+     c. Disimpan secara permanen ke Cloud Database Supabase pada tabel `app_settings` (key: `rbac_users_list`).
+     d. Memancarkan *Remote Realtime Command* `SYNC_AUTH_USERS` ke seluruh TV/layar.
+     e. Langsung me-refresh dan merender akun baru seketika di tabel via `renderUsersTable()`.
+     f. Menampilkan notifikasi SweetAlert2 sukses yang elegan.
+2. **Penyederhanaan Kolom Tabel (Username & Email 2 Baris):**
+   - Menggabungkan kolom `Username` dan `Email` menjadi satu kolom: `Username & Email`.
+   - **Baris 1 (Username):** Menggunakan badge berlatar terang dengan ikon `@` (`badge badge-light font-weight-bold`).
+   - **Baris 2 (Email):** Ditampilkan tepat di bawahnya dengan ikon amplop (`fas fa-envelope text-secondary`), font monospace rapi, dan warna teks lembut abu-abu.
+   - Mengubah kelas tabel menjadi `<table class="table table-custom table-hover table-sm mb-0">` untuk mengurangi tinggi padding baris.
+   - Memberikan batasan lebar yang presisi pada kolom Ruang Lingkup Hak Akses (`max-width: 280px; line-height: 1.35;`) dan merampingkan avatar profil (`32px x 32px`).
+   - Hasilnya, tabel kini memiliki 7 kolom yang sangat proporsional, pas di layar, tanpa ada *horizontal scrollbar* sama sekali.
+3. **Sinkronisasi Otomatis Supabase Cloud saat Admin Dibuka:**
+   - Pada bagian inisialisasi `loadAllSupabaseData()` (Bagian F), ditambahkan pemanggilan otomatis `await AdminAuth.syncUsersFromCloud();` sehingga setiap kali halaman admin dibuka atau direfresh, daftar akun pengurus dari Cloud Supabase selalu up-to-date.
+4. **Cache-Busting Versioning:**
+   - Seluruh tag script modul di `web-statis/admin.html` dinaikkan ke versi `?v=5.3.3` (`supabase-config.js`, `supabase-db.js`, `admin-auth.js`, `gemini-ai.js`).
+
+### 3. Berkas Terkait yang Dimodifikasi:
+1. `web-statis/admin.html` (Penghapusan modal usang, penggabungan kolom Username & Email 2 baris pada thead/dummy/renderUsersTable, pembaruan versi script ke `?v=5.3.3`).
+2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 223).
+
+
 

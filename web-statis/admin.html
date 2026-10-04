@@ -5134,86 +5134,121 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-custom table-hover">
+                                <table class="table table-custom table-hover table-sm mb-0">
                                     <thead>
                                         <tr>
-                                            <th style="width: 50px;">ID</th>
-                                            <th>Nama Pengguna</th>
-                                            <th>Username</th>
-                                            <th>Email</th>
-                                            <th>Peran (Role)</th>
-                                            <th>Ruang Lingkup Hak Akses</th>
-                                            <th>Status</th>
-                                            <th class="text-center" style="width: 170px;">Aksi</th>
+                                            <th style="width: 45px; text-align: center; vertical-align: middle;">ID</th>
+                                            <th style="min-width: 150px; vertical-align: middle;">Nama Pengguna</th>
+                                            <th style="min-width: 180px; vertical-align: middle;">Username & Email</th>
+                                            <th style="min-width: 130px; vertical-align: middle;">Peran (Role)</th>
+                                            <th style="vertical-align: middle;">Ruang Lingkup Hak Akses</th>
+                                            <th style="width: 75px; text-align: center; vertical-align: middle;">Status</th>
+                                            <th class="text-center" style="width: 120px; vertical-align: middle;">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyUsersManagement">
                                         <tr>
-                                            <td class="font-weight-bold">3</td>
-                                            <td>
+                                            <td class="font-weight-bold text-center text-muted" style="vertical-align: middle;">3</td>
+                                            <td style="vertical-align: middle;">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:#ffd700; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                                        A
+                                                    <div class="avatar-circle mr-2" style="width:32px; height:32px; border-radius:50%; background:#ffd700; color:#04261a; font-weight:800; font-size: 0.85rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow: 0 1px 3px rgba(0,0,0,0.15);">
+                                                        S
                                                     </div>
                                                     <div>
-                                                        <strong class="text-gray-900">Administrator</strong>
+                                                        <strong class="text-gray-900" style="font-size: 0.9rem;">Suwardi</strong>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc;"><i class="fas fa-at text-muted mr-1"></i>admin</span></td>
-                                            <td><code>archived.aljihad@gmail.com</code></td>
-                                            <td><span class="badge badge-warning font-weight-bold px-2 py-1"><i class="fas fa-crown mr-1"></i> Super Admin</span></td>
-                                            <td><small class="text-muted">Akses Penuh 100% (Display TV, Pengaturan Slide, Keuangan, Pengguna, Sistem)</small></td>
-                                            <td><span class="badge badge-success">Aktif</span></td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(3)" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 4px 10px;">
-                                                    <i class="fas fa-user-edit mr-1"></i> Edit Akun
+                                            <td style="vertical-align: middle;">
+                                                <div class="d-flex flex-column" style="gap: 3px;">
+                                                    <div>
+                                                        <span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc; font-size: 0.8rem;">
+                                                            <i class="fas fa-at text-muted mr-1"></i>admin
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <small class="text-muted font-weight-bold" style="font-size: 0.8rem; font-family: monospace;">
+                                                            <i class="fas fa-envelope mr-1 text-secondary"></i>archived.aljihad@gmail.com
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align: middle;"><span class="badge badge-warning font-weight-bold px-2 py-1"><i class="fas fa-crown mr-1"></i> Super Admin</span></td>
+                                            <td style="vertical-align: middle;"><small class="text-muted" style="line-height: 1.35; display: inline-block; max-width: 280px;">Akses Penuh 100% (Display TV, Pengaturan Slide, Keuangan, Pengguna, Sistem)</small></td>
+                                            <td class="text-center" style="vertical-align: middle;"><span class="badge badge-success px-2 py-1">Aktif</span></td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(3)" title="Edit Akun" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 4px 10px;">
+                                                    <i class="fas fa-user-edit mr-1"></i> Edit
                                                 </button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="font-weight-bold">1</td>
-                                            <td>
+                                            <td class="font-weight-bold text-center text-muted" style="vertical-align: middle;">1</td>
+                                            <td style="vertical-align: middle;">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:#10b981; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                                    <div class="avatar-circle mr-2" style="width:32px; height:32px; border-radius:50%; background:#10b981; color:#04261a; font-weight:800; font-size: 0.85rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow: 0 1px 3px rgba(0,0,0,0.15);">
                                                         H
                                                     </div>
                                                     <div>
-                                                        <strong class="text-gray-900">H. Utut Priyastya (Bendahara)</strong>
+                                                        <strong class="text-gray-900" style="font-size: 0.9rem;">H. Utut Priyastya (Bendahara)</strong>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc;"><i class="fas fa-at text-muted mr-1"></i>bendahara</span></td>
-                                            <td><code>bendahara@aljihad.com</code></td>
-                                            <td><span class="badge badge-success font-weight-bold px-2 py-1"><i class="fas fa-wallet mr-1"></i> Bendahara</span></td>
-                                            <td><small class="text-muted">Buku Kas Utama, Kas Ambulance, Infaq & Donasi, Laporan Keuangan</small></td>
-                                            <td><span class="badge badge-success">Aktif</span></td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(1)" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 4px 10px;">
-                                                    <i class="fas fa-user-edit mr-1"></i> Edit Akun
+                                            <td style="vertical-align: middle;">
+                                                <div class="d-flex flex-column" style="gap: 3px;">
+                                                    <div>
+                                                        <span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc; font-size: 0.8rem;">
+                                                            <i class="fas fa-at text-muted mr-1"></i>bendahara
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <small class="text-muted font-weight-bold" style="font-size: 0.8rem; font-family: monospace;">
+                                                            <i class="fas fa-envelope mr-1 text-secondary"></i>bendahara@aljihad.com
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align: middle;"><span class="badge badge-success font-weight-bold px-2 py-1"><i class="fas fa-wallet mr-1"></i> Bendahara</span></td>
+                                            <td style="vertical-align: middle;"><small class="text-muted" style="line-height: 1.35; display: inline-block; max-width: 280px;">Buku Kas Utama, Kas Ambulance, Infaq & Donasi, Laporan Keuangan</small></td>
+                                            <td class="text-center" style="vertical-align: middle;"><span class="badge badge-success px-2 py-1">Aktif</span></td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(1)" title="Edit Akun" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 4px 10px;">
+                                                    <i class="fas fa-user-edit mr-1"></i> Edit
                                                 </button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="font-weight-bold">2</td>
-                                            <td>
+                                            <td class="font-weight-bold text-center text-muted" style="vertical-align: middle;">2</td>
+                                            <td style="vertical-align: middle;">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:#38bdf8; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                                        U
+                                                    <div class="avatar-circle mr-2" style="width:32px; height:32px; border-radius:50%; background:#38bdf8; color:#04261a; font-weight:800; font-size: 0.85rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow: 0 1px 3px rgba(0,0,0,0.15);">
+                                                        B
                                                     </div>
                                                     <div>
-                                                        <strong class="text-gray-900">Ust. Ahmad (Operator DKM)</strong>
+                                                        <strong class="text-gray-900" style="font-size: 0.9rem;">Bpk. Ust. Hadi Prayitno (KETUA DKM)</strong>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc;"><i class="fas fa-at text-muted mr-1"></i>operator</span></td>
-                                            <td><code>petugas@aljihad.com</code></td>
-                                            <td><span class="badge badge-info font-weight-bold px-2 py-1"><i class="fas fa-tv mr-1"></i> Operator TV</span></td>
-                                            <td><small class="text-muted">Jadwal Sholat, Petugas Jum'at, Pengumuman, Teks Berjalan, Slide TV</small></td>
-                                            <td><span class="badge badge-success">Aktif</span></td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(2)" title="Edit Nama, Email & Password" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 4px 10px;">
-                                                    <i class="fas fa-user-edit mr-1"></i> Edit Akun
+                                            <td style="vertical-align: middle;">
+                                                <div class="d-flex flex-column" style="gap: 3px;">
+                                                    <div>
+                                                        <span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc; font-size: 0.8rem;">
+                                                            <i class="fas fa-at text-muted mr-1"></i>ketua
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <small class="text-muted font-weight-bold" style="font-size: 0.8rem; font-family: monospace;">
+                                                            <i class="fas fa-envelope mr-1 text-secondary"></i>dkmsatu@aljihad.com
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align: middle;"><span class="badge badge-info font-weight-bold px-2 py-1"><i class="fas fa-tv mr-1"></i> Operator TV</span></td>
+                                            <td style="vertical-align: middle;"><small class="text-muted" style="line-height: 1.35; display: inline-block; max-width: 280px;">Jadwal Sholat, Petugas Jum'at, Pengumuman, Teks Berjalan, Slide TV</small></td>
+                                            <td class="text-center" style="vertical-align: middle;"><span class="badge badge-success px-2 py-1">Aktif</span></td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <button class="btn btn-sm btn-warning font-weight-bold" onclick="bukaModalEditUser(2)" title="Edit Akun" style="box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 4px 10px;">
+                                                    <i class="fas fa-user-edit mr-1"></i> Edit
                                                 </button>
                                             </td>
                                         </tr>
@@ -6253,50 +6288,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalTambahUser" tabindex="-1" role="dialog" aria-labelledby="modalTambahUserLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title font-weight-bold" id="modalTambahUserLabel">
-                        <i class="fas fa-user-plus mr-2"></i> Tambah Akun Pengurus DKM
-                    </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formTambahUser">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Nama Lengkap Pengurus</label>
-                            <input type="text" class="form-control" id="newUserName" placeholder="Contoh: Ust. H. Ridwan" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="font-weight-bold">Email / Username Login</label>
-                            <input type="email" class="form-control" id="newUserEmail" placeholder="Contoh: ridwan@aljihad.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="font-weight-bold">Peran (Role) Hak Akses</label>
-                            <select class="form-control" id="newUserRole" required>
-                                <option value="petugas">Operator TV Display (Jadwal Sholat, Petugas Jum'at, Teks Berjalan)</option>
-                                <option value="bendahara">Bendahara (Buku Kas, Kas Ambulance, Infaq, Laporan)</option>
-                                <option value="admin">Super Admin (Akses Penuh 100% Seluruh Sistem)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="font-weight-bold">Kata Sandi (Password)</label>
-                            <input type="password" class="form-control" id="newUserPassword" placeholder="Minimal 6 karakter" required minlength="6">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success font-weight-bold" onclick="simpanPengurusBaru()">
-                        <i class="fas fa-check-circle mr-1"></i> Daftarkan Akun
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- =======================================================
          MODAL TAMBAH SHOHIBUL QURBAN BARU
@@ -7149,10 +7141,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=5.3.2"></script>
-    <script src="js/supabase-db.js?v=5.3.2"></script>
-    <script src="js/admin-auth.js?v=5.3.2"></script>
-    <script src="js/gemini-ai.js?v=5.3.2"></script>
+    <script src="js/supabase-config.js?v=5.3.3"></script>
+    <script src="js/supabase-db.js?v=5.3.3"></script>
+    <script src="js/admin-auth.js?v=5.3.3"></script>
+    <script src="js/gemini-ai.js?v=5.3.3"></script>
 
     <script>
         // 1. Verifikasi Autentikasi Pengguna saat halaman dimuat
@@ -7732,23 +7724,35 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     const cleanUsername = u.username || (u.email ? u.email.split('@')[0] : 'user');
 
                     tr.innerHTML = `
-                        <td class="font-weight-bold">${u.id || (idx + 1)}</td>
-                        <td>
+                        <td class="font-weight-bold text-center text-muted" style="vertical-align: middle;">${u.id || (idx + 1)}</td>
+                        <td style="vertical-align: middle;">
                             <div class="d-flex align-items-center">
-                                <div class="avatar-circle mr-2" style="width:34px; height:34px; border-radius:50%; background:${u.color || '#ffd700'}; color:#04261a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <div class="avatar-circle mr-2" style="width:32px; height:32px; border-radius:50%; background:${u.color || '#ffd700'}; color:#04261a; font-weight:800; font-size: 0.85rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow: 0 1px 3px rgba(0,0,0,0.15);">
                                     ${initialLetter}
                                 </div>
-                                <div>
-                                    <strong class="text-gray-900">${escapeHtml(u.name || '-')}</strong>
+                                <div style="line-height: 1.25;">
+                                    <strong class="text-gray-900" style="font-size: 0.9rem;">${escapeHtml(u.name || '-')}</strong>
                                 </div>
                             </div>
                         </td>
-                        <td><span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc;"><i class="fas fa-at text-muted mr-1"></i>${escapeHtml(cleanUsername)}</span></td>
-                        <td><code>${escapeHtml(u.email || '-')}</code></td>
-                        <td>${roleBadge}</td>
-                        <td><small class="text-muted">${scopeDesc}</small></td>
-                        <td><span class="badge badge-success">Aktif</span></td>
-                        <td class="text-center">${actionHtml}</td>
+                        <td style="vertical-align: middle;">
+                            <div class="d-flex flex-column" style="gap: 3px;">
+                                <div>
+                                    <span class="badge badge-light px-2 py-1 font-weight-bold text-dark" style="border: 1px solid #cbd5e1; background: #f8fafc; font-size: 0.8rem;">
+                                        <i class="fas fa-at text-muted mr-1"></i>${escapeHtml(cleanUsername)}
+                                    </span>
+                                </div>
+                                <div>
+                                    <small class="text-muted font-weight-bold" style="font-size: 0.8rem; font-family: monospace;">
+                                        <i class="fas fa-envelope mr-1 text-secondary"></i>${escapeHtml(u.email || '-')}
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="vertical-align: middle;">${roleBadge}</td>
+                        <td style="vertical-align: middle;"><small class="text-muted" style="line-height: 1.35; display: inline-block; max-width: 280px;">${scopeDesc}</small></td>
+                        <td class="text-center" style="vertical-align: middle;"><span class="badge badge-success px-2 py-1">Aktif</span></td>
+                        <td class="text-center" style="vertical-align: middle;">${actionHtml}</td>
                     `;
 
                     tbody.appendChild(tr);
@@ -8611,32 +8615,15 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 renderAdminQurbanTable(DEFAULT_ADMIN_QURBAN_DATA);
             }
 
-            // F. Muat Akun Pengguna dari Supabase jika ada & sinkronkan (Hanya 3 Akun Resmi)
+            // F. Muat Akun Pengguna & Sinkronkan dengan Supabase Cloud (app_settings: rbac_users_list)
             try {
-                if (resUsersSettled.status === 'fulfilled' && resUsersSettled.value.ok) {
-                    const sbUsers = await resUsersSettled.value.json();
-                    if (Array.isArray(sbUsers) && sbUsers.length > 0) {
-                        let currentUsers = (typeof AdminAuth !== 'undefined') ? AdminAuth.getUsers() : [...DEFAULT_AUTH_USERS];
-                        sbUsers.forEach(sbu => {
-                            if (!sbu || !sbu.email) return;
-                            const em = sbu.email.toLowerCase().trim();
-                            // Tolak keras akun lama / duplikat adminsholeh@admin.com
-                            if (em === 'adminsholeh@admin.com' || em === 'admin@admin.com') return;
-
-                            // Jika email cocok dengan salah satu akun resmi, sinkronkan nama terbarunya dari Supabase
-                            const matched = currentUsers.find(u => u && u.email && u.email.toLowerCase() === em);
-                            if (matched && sbu.name && sbu.name.trim()) {
-                                matched.name = sbu.name.trim();
-                            }
-                        });
-                        try {
-                            localStorage.setItem('aljihad_users_list', JSON.stringify(currentUsers));
-                        } catch (e) {}
-                        renderUsersTable();
-                    }
+                if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
+                    await AdminAuth.syncUsersFromCloud();
                 }
+                renderUsersTable();
             } catch (err) {
-                console.warn('Gagal memuat users dari Supabase:', err);
+                console.warn('Gagal sinkronisasi users dari Supabase Cloud:', err);
+                renderUsersTable();
             }
 
             // F. Program Penggalangan Infaq & Donasi Khusus
@@ -10565,48 +10552,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             }
         }
 
-        // Daftarkan Pengurus Baru ke Supabase
-        async function simpanPengurusBaru() {
-            const name = document.getElementById('newUserName')?.value.trim();
-            const email = document.getElementById('newUserEmail')?.value.trim();
-            const role = document.getElementById('newUserRole')?.value;
-            const password = document.getElementById('newUserPassword')?.value;
-
-            if (!name || !email || !password) {
-                alert('Harap lengkapi semua data pengurus baru!');
-                return;
-            }
-
-            try {
-                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users`, {
-                    method: 'POST',
-                    headers: {
-                        ...getSupabaseHeaders(),
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        email: email,
-                        role: role,
-                        password: password,
-                        is_active: true
-                    })
-                });
-
-                if (res.ok) {
-                    $('#modalTambahUser').modal('hide');
-                    document.getElementById('newUserName').value = '';
-                    document.getElementById('newUserEmail').value = '';
-                    document.getElementById('newUserPassword').value = '';
-                    alert(`Alhamdulillah! Akun pengurus "${name}" berhasil didaftarkan ke Supabase dengan peran ${role}.`);
-                } else {
-                    alert(`Alhamdulillah! Akun pengurus "${name}" berhasil disimpan di sesi lokal.`);
-                    $('#modalTambahUser').modal('hide');
-                }
-            } catch (err) {
-                alert(`Akun pengurus "${name}" tersimpan di sesi lokal.`);
-                $('#modalTambahUser').modal('hide');
-            }
+        // Redirect legacy simpanPengurusBaru ke sistem RBAC resmi
+        function simpanPengurusBaru() {
+            bukaModalTambahUser();
         }
 
         // =======================================================
