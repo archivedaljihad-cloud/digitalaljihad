@@ -4,7 +4,25 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 00:10 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 00:25 WIB)
+
+### 🕌 Desain Mewah Baru Flyer WhatsApp: Background Islamic Arch Mihrab (Gambar 1), Teks Arab Assalamu'alaikum Lengkap & Kotak Adab Khutbah (Gambar 2)
+
+**Latar Belakang & Permintaan Pengguna:**
+1. **Desain Background Gambar 1:** Latar belakang flyer diganti menggunakan ornamen kubah mihrab hijau zamrud mewah berhiaskan kaligrafi emas dan 4 lentera gantung (*fanous*) sesuai berkas `web-statis/img/bg-flyer-jumat.jpg`. Aspek rasio kanvas disesuaikan presisi menjadi **1080 × 1620 px (rasio 2:3)** agar gambar latar terpasang utuh tanpa terdistorsi.
+2. **Teks Arab Assalamu'alaikum Lengkap:** Di bawah kaligrafi Bismillah, ditambahkan teks doa salam lengkap bertulisan Arab:
+   > `السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ` (font kaligrafi Arab emas berkilau).
+   Serta salam pembuka ditambahkan juga pada teks pengumuman broadcast WhatsApp.
+3. **Pertahankan Kotak & Teks Gambar 2:** Bagian bawah flyer tetap mempertahankan kotak plakat hadits Adab Khutbah Jum'at (HR. Bukhari & Muslim) lengkap dengan badge adab, sabda Rasulullah ﷺ, dan footer resmi DKM Masjid Jami' Al-Jihad.
+4. **4 Petugas Resmi Tetap Terbuka & Center:** Nama dan peran 4 petugas (Khatib & Imam, Muadzin, Bilal, Pembaca Maklumat) tetap dalam format terbuka tanpa kotak kartu dengan teks rata tengah yang besar dan garis aksen pemisah emas.
+
+**Berkas Terkait:**
+- `web-statis/img/bg-flyer-jumat.jpg` & `public/img/bg-flyer-jumat.jpg` (Aset latar belakang baru Gambar 1)
+- `web-statis/admin.html` (Canvas `flyerCanvas` 1080x1620, resolusi select, skrip `renderFlyerJumatCanvas()`, `cachedFlyerBgImg`, `updateFlyerWaBroadcastText()`)
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 00:10 WIB)
 
 ### 💎 Desain Baru Flyer WhatsApp: Resolusi Ultra HD 1080p (Tajam & Tidak Pecah), Hapus Durasi Sholat, Hilangkan Kotak Petugas & Format Teks Rata Tengah Lebih Besar
 

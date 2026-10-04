@@ -5979,8 +5979,8 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         <!-- Kolom Kiri: Canvas & Gambar Preview Flyer -->
                         <div class="col-md-6 mb-3 mb-md-0 text-center">
                             <div class="position-relative d-inline-block shadow-lg" style="border-radius: 16px; overflow: hidden; border: 3px solid #D4AF37; background: #02180d; max-width: 100%;">
-                                <canvas id="flyerCanvas" width="1080" height="1350" style="display: none;"></canvas>
-                                <img id="flyerPreviewImg" src="" alt="Flyer Preview" class="img-fluid" style="display: block; max-height: 460px; width: auto; object-fit: contain; border-radius: 13px;">
+                                <canvas id="flyerCanvas" width="1080" height="1620" style="display: none;"></canvas>
+                                <img id="flyerPreviewImg" src="" alt="Flyer Preview" class="img-fluid" style="display: block; max-height: 480px; width: auto; object-fit: contain; border-radius: 13px;">
                                 <div id="flyerLoadingSpinner" class="position-absolute" style="display: none; background: rgba(2, 24, 13, 0.85); top:0; left:0; right:0; bottom:0; z-index: 10; flex-direction: column; align-items: center; justify-content: center; color: white;">
                                     <div class="spinner-border text-warning mb-2" role="status"></div>
                                     <span class="small font-weight-bold">Menggambar Flyer WhatsApp...</span>
@@ -5989,9 +5989,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                             <div class="mt-2 d-flex align-items-center justify-content-center flex-wrap" style="gap: 8px;">
                                 <span class="badge badge-success px-2 py-1" style="font-size: 11px;"><i class="fas fa-check-circle mr-1"></i> Jernih & Tajam</span>
                                 <select id="flyerResolutionSelect" class="custom-select custom-select-sm d-inline-block w-auto font-weight-bold shadow-sm" onchange="renderFlyerJumatCanvas()" style="font-size: 11.5px; border-radius: 8px; cursor: pointer;">
-                                    <option value="1080" selected>💎 Resolusi Tajam Ultra HD (1080 × 1350 px)</option>
-                                    <option value="1440">👑 Super Tajam 2K (1440 × 1800 px)</option>
-                                    <option value="720">⚡ Standar WhatsApp Ringan (720 × 900 px)</option>
+                                    <option value="1080" selected>💎 Resolusi Tajam Ultra HD (1080 × 1620 px)</option>
+                                    <option value="1440">👑 Super Tajam 2K (1440 × 2160 px)</option>
+                                    <option value="720">⚡ Standar WhatsApp Ringan (720 × 1080 px)</option>
                                 </select>
                             </div>
                         </div>
@@ -11048,6 +11048,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
         // =======================================================
         // FITUR AUTO GENERATE FLYER WHATSAPP PETUGAS JUM'AT
         // =======================================================
+        let cachedFlyerBgImg = null;
         let cachedFlyerLogoImg = null;
         let flyerUserEditedText = false;
 
@@ -11093,10 +11094,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             // Tampilkan spinner loading secara presisi (inline style)
             if (spinner) spinner.style.display = 'flex';
 
-            // Resolusi default tajam & tidak pecah: 1080 x 1350 px (aspek rasio 4:5 HD)
+            // Resolusi default tajam & tidak pecah: 1080 x 1620 px (aspek rasio 2:3 sesuai latar belakang)
             const resSelect = document.getElementById('flyerResolutionSelect');
             const targetW = resSelect ? (parseInt(resSelect.value) || 1080) : 1080;
-            const targetH = Math.round(targetW * 1.25); // 1080x1350, 1440x1800, atau 720x900
+            const targetH = Math.round(targetW * 1.5); // 1080x1620, 1440x2160, atau 720x1080
 
             canvas.width = targetW;
             canvas.height = targetH;
@@ -11125,62 +11126,62 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 }
             } catch (e) {}
 
-            // 1. LATAR BELAKANG: Radial Emerald Green Mewah
-            const bgGrad = ctx.createRadialGradient(540, 675, 80, 540, 675, 780);
-            bgGrad.addColorStop(0, '#0a4226');
-            bgGrad.addColorStop(0.55, '#052917');
-            bgGrad.addColorStop(1, '#01150b');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, 1080, 1350);
+            // 1. LATAR BELAKANG GAMBAR 1 (ISLAMIC ARCH EMERALD GOLD FRAME)
+            if (!cachedFlyerBgImg) {
+                await new Promise((resolve) => {
+                    let resolved = false;
+                    const done = () => {
+                        if (!resolved) {
+                            resolved = true;
+                            resolve();
+                        }
+                    };
+                    const timer = setTimeout(done, 1200);
 
-            // Pola geometri halus latar belakang
-            ctx.save();
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.05)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < 1080; i += 70) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, 1350);
-                ctx.stroke();
+                    const bgImg = new Image();
+                    bgImg.crossOrigin = 'anonymous';
+                    bgImg.onload = () => {
+                        clearTimeout(timer);
+                        cachedFlyerBgImg = bgImg;
+                        done();
+                    };
+                    bgImg.onerror = () => {
+                        clearTimeout(timer);
+                        done();
+                    };
+                    bgImg.src = 'img/bg-flyer-jumat.jpg';
+                });
             }
-            for (let j = 0; j < 1350; j += 70) {
-                ctx.beginPath();
-                ctx.moveTo(0, j);
-                ctx.lineTo(1080, j);
-                ctx.stroke();
+
+            if (cachedFlyerBgImg && cachedFlyerBgImg.complete && cachedFlyerBgImg.naturalWidth > 0) {
+                ctx.drawImage(cachedFlyerBgImg, 0, 0, 1080, 1620);
+            } else {
+                // Fallback jika gambar latar belum termuat: Radial Emerald Green Mewah
+                const bgGrad = ctx.createRadialGradient(540, 810, 80, 540, 810, 850);
+                bgGrad.addColorStop(0, '#0a4226');
+                bgGrad.addColorStop(0.55, '#052917');
+                bgGrad.addColorStop(1, '#01150b');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, 1080, 1620);
             }
-            ctx.restore();
 
-            // 2. BINGKAI EMAS GANDA (DOUBLE GOLD BORDER)
-            ctx.strokeStyle = '#D4AF37';
-            ctx.lineWidth = 3.5;
-            drawCanvasRoundRect(ctx, 32, 32, 1016, 1286, 32, false, true);
-
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
-            ctx.lineWidth = 1.2;
-            drawCanvasRoundRect(ctx, 44, 44, 992, 1262, 24, false, true);
-
-            // Ornamen Sudut Emas
-            const corners = [
-                [56, 56], [1024, 56], [56, 1294], [1024, 1294]
-            ];
-            ctx.fillStyle = '#FFD700';
-            corners.forEach(([cx, cy]) => {
-                ctx.beginPath();
-                ctx.arc(cx, cy, 5, 0, Math.PI * 2);
-                ctx.fill();
-            });
-
-            // 3. KALIGRAFI BISMILLAH
+            // 2. KALIGRAFI BISMILLAH & ASSALAMU'ALAIKUM LENGKAP
             ctx.textAlign = 'center';
             ctx.fillStyle = '#FFD700';
-            ctx.font = 'bold 30px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
-            ctx.shadowColor = 'rgba(255, 215, 0, 0.4)';
-            ctx.shadowBlur = 10;
-            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 95);
+            ctx.font = 'bold 32px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+            ctx.shadowBlur = 8;
+            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 115);
+
+            // Teks Arab Assalamu'alaikum Lengkap di Bawah Teks Arab
+            ctx.fillStyle = '#FFF2A8';
+            ctx.font = 'bold 26px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+            ctx.shadowBlur = 8;
+            ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 160);
             ctx.shadowBlur = 0;
 
-            // 4. LOGO MASJID (Dengan image cache & safety timeout)
+            // 3. LOGO MASJID (Dengan image cache & safety timeout)
             if (!cachedFlyerLogoImg) {
                 await new Promise((resolve) => {
                     let resolved = false;
@@ -11207,75 +11208,81 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 });
             }
 
+            const logoCenterY = 226;
+            const logoRadius = 42;
+
             if (cachedFlyerLogoImg && cachedFlyerLogoImg.complete && cachedFlyerLogoImg.naturalWidth > 0) {
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(540, 175, 54, 0, Math.PI * 2);
+                ctx.arc(540, logoCenterY, logoRadius, 0, Math.PI * 2);
                 ctx.closePath();
                 ctx.clip();
-                ctx.drawImage(cachedFlyerLogoImg, 486, 121, 108, 108);
+                ctx.drawImage(cachedFlyerLogoImg, 540 - logoRadius, logoCenterY - logoRadius, logoRadius * 2, logoRadius * 2);
                 ctx.restore();
 
                 // Cincin emas logo
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(540, 175, 55, 0, Math.PI * 2);
+                ctx.arc(540, logoCenterY, logoRadius + 1, 0, Math.PI * 2);
                 ctx.strokeStyle = '#FFD700';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 2.5;
                 ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
-                ctx.shadowBlur = 12;
+                ctx.shadowBlur = 10;
                 ctx.stroke();
                 ctx.restore();
             } else {
                 ctx.save();
                 ctx.fillStyle = '#064e3b';
                 ctx.beginPath();
-                ctx.arc(540, 175, 54, 0, Math.PI * 2);
+                ctx.arc(540, logoCenterY, logoRadius, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.strokeStyle = '#FFD700';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 2.5;
                 ctx.stroke();
                 ctx.fillStyle = '#FFD700';
-                ctx.font = '40px "Segoe UI Symbol", sans-serif';
-                ctx.fillText('🕌', 540, 188);
+                ctx.font = '36px "Segoe UI Symbol", sans-serif';
+                ctx.fillText('🕌', 540, logoCenterY + 12);
                 ctx.restore();
             }
 
-            // 5. NAMA MASJID & ALAMAT
+            // 4. NAMA MASJID & ALAMAT
             ctx.textAlign = 'center';
             ctx.fillStyle = '#FFFFFF';
-            ctx.font = '800 36px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 268);
+            ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+            ctx.shadowBlur = 8;
+            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 298);
 
             ctx.fillStyle = '#A7F3D0';
-            ctx.font = '600 18px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 298);
+            ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 326);
+            ctx.shadowBlur = 0;
 
-            // 6. PITA / KAPSUL JUDUL JADWAL
-            const ribbonGrad = ctx.createLinearGradient(200, 325, 880, 325);
+            // 5. PITA / KAPSUL JUDUL JADWAL
+            const ribbonGrad = ctx.createLinearGradient(250, 348, 830, 348);
             ribbonGrad.addColorStop(0, '#D4AF37');
             ribbonGrad.addColorStop(0.5, '#FFD700');
             ribbonGrad.addColorStop(1, '#B4821E');
             ctx.fillStyle = ribbonGrad;
-            drawCanvasRoundRect(ctx, 230, 326, 620, 50, 25, true, false);
+            drawCanvasRoundRect(ctx, 250, 348, 580, 46, 23, true, false);
 
             ctx.fillStyle = '#022413';
-            ctx.font = '900 22px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('★ JADWAL PETUGAS SHOLAT JUM\'AT ★', 540, 359);
+            ctx.font = '900 20px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('★ JADWAL PETUGAS SHOLAT JUM\'AT ★', 540, 379);
 
-            // 7. TANGGAL & ESTIMASI WAKTU
+            // 6. TANGGAL & WAKTU SHOLAT
             ctx.fillStyle = '#FFD700';
             ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
-            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
             ctx.shadowBlur = 8;
-            ctx.fillText(tglFormatted, 540, 420);
+            ctx.fillText(tglFormatted, 540, 434);
             ctx.shadowBlur = 0;
 
             ctx.fillStyle = '#E2E8F0';
-            ctx.font = '600 20px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('⏰ Waktu Khutbah & Sholat: 11:45 WIB', 540, 455);
+            ctx.font = '600 19px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('⏰ Waktu Khutbah & Sholat: 11:45 WIB', 540, 466);
 
-            // 8. EMPAT PETUGAS RESMI (RATA TENGAH, TANPA KOTAK, TEKS LEBIH BESAR & TAJAM)
+            // 7. EMPAT PETUGAS RESMI (RATA TENGAH, TANPA KOTAK, TEKS LEBIH BESAR & TAJAM)
             const officers = [
                 { role: '🎙️  KHATIB & IMAM SHOLAT', name: khotibImam },
                 { role: '📢  MUADZIN', name: muadzin },
@@ -11283,8 +11290,8 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 { role: '📜  PEMBACA MAKLUMAT', name: maklumat || '-' }
             ];
 
-            const officerStartY = 506;
-            const officerStep = 98;
+            const officerStartY = 516;
+            const officerStep = 108;
 
             officers.forEach((off, idx) => {
                 const yBase = officerStartY + idx * officerStep;
@@ -11293,18 +11300,18 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#FFD700';
                 ctx.font = '800 21px "Poppins", "Segoe UI", sans-serif';
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
-                ctx.shadowBlur = 4;
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+                ctx.shadowBlur = 5;
                 ctx.fillText(off.role, 540, yBase);
                 ctx.shadowBlur = 0;
 
                 // Nama Petugas (Rata Tengah, Putih Bersih, Font Diperbesar & Jelas)
                 ctx.fillStyle = '#FFFFFF';
                 ctx.font = '800 34px "Poppins", "Segoe UI", sans-serif';
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
                 ctx.shadowBlur = 8;
                 let displayName = off.name;
-                if (ctx.measureText(displayName).width > 860) {
+                if (ctx.measureText(displayName).width > 840) {
                     ctx.font = '800 28px "Poppins", "Segoe UI", sans-serif';
                 }
                 ctx.fillText(displayName, 540, yBase + 40);
@@ -11312,13 +11319,13 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
                 // Garis aksen emas halus antar petugas (tanpa kotak)
                 if (idx < officers.length - 1) {
-                    const divY = yBase + 58;
+                    const divY = yBase + 64;
                     const divGrad = ctx.createLinearGradient(300, divY, 780, divY);
                     divGrad.addColorStop(0, 'rgba(212, 175, 55, 0)');
                     divGrad.addColorStop(0.5, 'rgba(212, 175, 55, 0.35)');
                     divGrad.addColorStop(1, 'rgba(212, 175, 55, 0)');
                     ctx.strokeStyle = divGrad;
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = 1.2;
                     ctx.beginPath();
                     ctx.moveTo(300, divY);
                     ctx.lineTo(780, divY);
@@ -11326,18 +11333,21 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 }
             });
 
-            // 9. PLAKAT ADAB KHUTBAH JUM'AT (HADITS BUKHARI MUSLIM)
-            const hadithY = 918;
+            // 8. PLAKAT ADAB KHUTBAH JUM'AT (KOTAK & TEKS SEPERTI GAMBAR 2)
+            const cardX = 120;
+            const cardW = 840;
+            const hadithY = 960;
             const hadithH = 228;
-            ctx.fillStyle = 'rgba(2, 22, 12, 0.72)';
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
-            ctx.lineWidth = 1.2;
+
+            ctx.fillStyle = 'rgba(2, 22, 12, 0.78)';
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.55)';
+            ctx.lineWidth = 1.4;
             drawCanvasRoundRect(ctx, cardX, hadithY, cardW, hadithH, 20, true, true);
 
-            // Badge Adab
+            // Badge Adab Khutbah
             const badgeW = 460;
-            ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+            ctx.fillStyle = 'rgba(212, 175, 55, 0.22)';
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)';
             ctx.lineWidth = 1;
             drawCanvasRoundRect(ctx, 540 - (badgeW / 2), hadithY + 16, badgeW, 36, 18, true, true);
 
@@ -11361,17 +11371,17 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.font = '700 16px "Poppins", "Segoe UI", sans-serif';
             ctx.fillText('(HR. Bukhari no. 934 & Muslim no. 851)', 540, hadithY + 195);
 
-            // 10. FOOTER RESMI
+            // 9. FOOTER RESMI (SEPERTI GAMBAR 2)
             ctx.strokeStyle = 'rgba(212, 175, 55, 0.35)';
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.moveTo(100, 1262);
-            ctx.lineTo(980, 1262);
+            ctx.moveTo(140, 1235);
+            ctx.lineTo(940, 1235);
             ctx.stroke();
 
-            ctx.fillStyle = '#94A3B8';
+            ctx.fillStyle = '#CBD5E1';
             ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('Diterbitkan oleh DKM Masjid Jami\' Al-Jihad • Sistem Informasi Digital: digitalaljihad.my.id', 540, 1290);
+            ctx.fillText('Diterbitkan oleh DKM Masjid Jami\' Al-Jihad • Sistem Informasi Digital: digitalaljihad.my.id', 540, 1262);
 
             // Restore canvas transformation
             ctx.restore();
@@ -11401,6 +11411,8 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 `🕌 *JADWAL PETUGAS SHOLAT JUM'AT* 🕌
 *MASJID JAMI' AL-JIHAD (GRAHA ASRI)*
 📍 Simpangan, Cikarang Utara, Bekasi
+
+_Assalamu'alaikum Warahmatullahi Wabarakatuh_
 
 📅 *Hari / Tanggal:* ${tglFormatted}
 ⏰ *Waktu Khutbah & Sholat:* 11:45 WIB
