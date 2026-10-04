@@ -791,9 +791,28 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadUndanganData();
 
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'undangan_eksternal' || msg.table === 'app_settings' || msg.table === 'undangan')) {
+                    loadUndanganData();
+                } else if (msg.type === 'SYNC_UNDANGAN' || msg.force_reload) {
+                    loadUndanganData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'undangan_eksternal' || tbl === 'app_settings' || tbl === 'undangan') {
+                        loadUndanganData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'undangan_eksternal' || payload.table === 'app_settings') {
+                    if (payload.table === 'undangan_eksternal' || payload.table === 'app_settings' || payload.table === 'undangan') {
                         loadUndanganData();
                     }
                 });

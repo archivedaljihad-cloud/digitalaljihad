@@ -1214,8 +1214,19 @@
                     // 2. Dengarkan Remote Commands Broadcast (SYNC_KAJIAN, UPDATE_SETTINGS, REFRESH)
                     if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
                         SupabaseDB.subscribeRemoteCommands((cmd, data) => {
-                            console.log('[SlideKajian] Remote command received:', cmd, data);
-                            if (cmd === 'SYNC_KAJIAN' || cmd === 'UPDATE_SETTINGS' || cmd === 'REFRESH') {
+                            const commandName = typeof cmd === 'string' ? cmd : (cmd?.command || '');
+                            console.log('[SlideKajian] Remote command received:', commandName, data);
+                            if (commandName === 'SYNC_KAJIAN' || commandName === 'UPDATE_SETTINGS' || commandName === 'REFRESH') {
+                                loadKajianData();
+                            }
+                        });
+                    }
+
+                    // 3. Dengarkan Universal onDataChange
+                    if (typeof SupabaseDB.onDataChange === 'function') {
+                        SupabaseDB.onDataChange((payload) => {
+                            const tbl = (payload.table || '').toLowerCase();
+                            if (tbl === 'kajian' || tbl === 'app_settings' || tbl === 'jadwal_sholat') {
                                 loadKajianData();
                             }
                         });
@@ -1225,9 +1236,9 @@
                 console.warn('[SlideKajian] Realtime setup failed:', e);
             }
 
-            // 3. Dengarkan postMessage dari parent window (Display TV index.html)
+            // 4. Dengarkan postMessage dari parent window (Display TV index.html)
             window.addEventListener('message', (event) => {
-                if (event.data && (event.data.type === 'SYNC_KAJIAN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data')) {
+                if (event.data && (event.data.type === 'SYNC_KAJIAN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data' || event.data.force_reload)) {
                     console.log('[SlideKajian] postMessage received from parent TV:', event.data);
                     loadKajianData();
                 }

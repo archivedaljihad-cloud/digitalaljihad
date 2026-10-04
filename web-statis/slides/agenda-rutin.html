@@ -775,8 +775,18 @@
 
                     if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
                         SupabaseDB.subscribeRemoteCommands((cmd, data) => {
-                            console.log('[SlideAgendaRutin] Remote command received:', cmd, data);
-                            if (cmd === 'SYNC_AGENDA_RUTIN' || cmd === 'UPDATE_SETTINGS' || cmd === 'REFRESH') {
+                            const commandName = typeof cmd === 'string' ? cmd : (cmd?.command || '');
+                            console.log('[SlideAgendaRutin] Remote command received:', commandName, data);
+                            if (commandName === 'SYNC_AGENDA_RUTIN' || commandName === 'UPDATE_SETTINGS' || commandName === 'REFRESH') {
+                                loadAgendaData();
+                            }
+                        });
+                    }
+
+                    if (typeof SupabaseDB.onDataChange === 'function') {
+                        SupabaseDB.onDataChange((payload) => {
+                            const tbl = (payload.table || '').toLowerCase();
+                            if (tbl === 'agenda_rutin' || tbl === 'app_settings' || tbl === 'kajian') {
                                 loadAgendaData();
                             }
                         });
@@ -788,7 +798,7 @@
 
             // Listener postMessage dari window induk (Display TV index.html)
             window.addEventListener('message', (event) => {
-                if (event.data && (event.data.type === 'SYNC_AGENDA_RUTIN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data')) {
+                if (event.data && (event.data.type === 'SYNC_AGENDA_RUTIN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data' || event.data.force_reload)) {
                     console.log('[SlideAgendaRutin] postMessage received from parent TV:', event.data);
                     loadAgendaData();
                 }

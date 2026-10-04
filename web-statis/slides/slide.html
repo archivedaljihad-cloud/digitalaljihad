@@ -827,7 +827,26 @@
         function initSlideApp() {
             loadSlidesFromCloud();
 
-            if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'slides' || msg.table === 'app_settings')) {
+                    loadSlidesFromCloud();
+                } else if (msg.type === 'SYNC_SLIDES' || msg.force_reload) {
+                    loadSlidesFromCloud();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'slides' || tbl === 'app_settings') {
+                        loadSlidesFromCloud();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload && (payload.table === 'slides' || payload.table === 'app_settings')) {
                         console.log('⚡ Menerima update data realtime untuk Galeri Informasi');

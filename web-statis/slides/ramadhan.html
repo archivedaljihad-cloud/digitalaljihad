@@ -820,7 +820,16 @@
                     }
                     if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
                         SupabaseDB.subscribeRemoteCommands((cmd) => {
-                            if (cmd === 'SYNC_RAMADHAN' || cmd === 'UPDATE_SETTINGS' || cmd === 'REFRESH') {
+                            const c = typeof cmd === 'string' ? cmd : (cmd?.command || '');
+                            if (c === 'SYNC_RAMADHAN' || c === 'UPDATE_SETTINGS' || c === 'REFRESH') {
+                                loadRamadhanData();
+                            }
+                        });
+                    }
+                    if (typeof SupabaseDB.onDataChange === 'function') {
+                        SupabaseDB.onDataChange((payload) => {
+                            const tbl = (payload.table || '').toLowerCase();
+                            if (tbl === 'ramadhan' || tbl === 'app_settings') {
                                 loadRamadhanData();
                             }
                         });
@@ -829,7 +838,7 @@
             } catch (e) {}
 
             window.addEventListener('message', (event) => {
-                if (event.data && (event.data.type === 'SYNC_RAMADHAN' || event.data.type === 'DATA_UPDATED')) {
+                if (event.data && (event.data.type === 'SYNC_RAMADHAN' || event.data.type === 'DATA_UPDATED' || event.data.force_reload)) {
                     loadRamadhanData();
                 }
             });

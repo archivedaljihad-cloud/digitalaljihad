@@ -754,9 +754,29 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             loadKasJumatData();
-            if (window.SupabaseDB) {
+
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'sholat_jumat' || msg.table === 'keuangan' || msg.table === 'pengumuman_jumat')) {
+                    loadKasJumatData();
+                } else if (msg.type === 'SYNC_JUMAT' || msg.type === 'SYNC_PENGUMUMAN_JUMAT' || msg.force_reload) {
+                    loadKasJumatData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'app_settings' || tbl === 'sholat_jumat' || tbl === 'keuangan' || tbl === 'pengumuman_jumat') {
+                        loadKasJumatData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'app_settings' || payload.table === 'sholat_jumat') {
+                    if (payload.table === 'app_settings' || payload.table === 'sholat_jumat' || payload.table === 'keuangan' || payload.table === 'pengumuman_jumat') {
                         loadKasJumatData();
                     }
                 });

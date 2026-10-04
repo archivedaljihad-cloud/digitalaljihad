@@ -1024,44 +1024,113 @@
                 }
             }
 
-            // Pasang Realtime WebSocket Listener Supabase
-            if (window.SupabaseDB) {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    console.log('⚡ [Realtime Index] Perubahan terdeteksi:', payload.table);
-                    if (payload.table === 'app_settings') {
-                        Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
-                            settings = newSettings;
-                            if (settings && settings.rotation_interval) {
-                                rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
-                                localStorage.setItem('display_rotation_interval', settings.rotation_interval);
-                                scheduleNextRotation(); // Langsung reschedule timer rotasi
-                            }
-                            if (settings && settings.footer) {
-                                updateMasterFooter(settings.footer);
-                            }
-                            activePages = resolveActivePages(settings, progs);
-                            // Broadcast ke semua slide aktif agar update tanpa jeda
-                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'app_settings', payload: payload });
-                            showOsd(`⚡ Durasi Rotasi: ${settings.rotation_interval || 10} detik`);
-                        });
-                    } else if (payload.table === 'program_infaq') {
-                        Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
-                            if (currSettings) settings = currSettings;
-                            activePages = resolveActivePages(settings, progs);
-                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'program_infaq', payload: payload });
-                            showOsd('⚡ Rotasi Program Infaq Diperbarui (Realtime)');
-                        });
-                    } else if (payload.table === 'jadwal_sholat') {
-                        SupabaseDB.getJadwalSholat().then(list => {
-                            jadwalList = list;
-                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'jadwal_sholat' });
-                        });
-                    } else if (payload.table === 'sholat_jumat') {
-                        SupabaseDB.getSholatJumat().then(petugas => {
-                            jumatPetugas = petugas;
-                            broadcastToActiveFrames({ type: 'DATA_UPDATED', table: 'sholat_jumat' });
-                        });
+            // =====================================================
+            // UNIVERSAL REALTIME DATA HANDLER UNTUK DISPLAY TV
+            // =====================================================
+            function handleUniversalDataUpdate(event) {
+                const table = (event.table || '').toLowerCase();
+                const action = event.action || 'UPDATE';
+                const data = event.data || {};
+                console.log(`⚡ [Display TV Realtime Update]: table=${table}, action=${action}`, data);
+
+                // 1. Sebarkan ke seluruh active frame (frameA & frameB)
+                broadcastToActiveFrames({
+                    type: 'DATA_UPDATED',
+                    table: table,
+                    action: action,
+                    data: data,
+                    payload: event
+                });
+
+                // 2. Refresh komponen internal TV master jika berkaitan
+                if (table === 'app_settings') {
+                    Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
+                        settings = newSettings;
+                        if (settings && settings.rotation_interval) {
+                            rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
+                            localStorage.setItem('display_rotation_interval', settings.rotation_interval);
+                            scheduleNextRotation();
+                        }
+                        if (settings && settings.footer) {
+                            updateMasterFooter(settings.footer);
+                        }
+                        activePages = resolveActivePages(settings, progs);
+                        showOsd(`⚡ Pengaturan TV Diperbarui`);
+                    });
+                } else if (table === 'program_infaq' || table === 'donasi_infaq') {
+                    Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
+                        if (currSettings) settings = currSettings;
+                        activePages = resolveActivePages(settings, progs);
+                        showOsd('⚡ Infaq Diperbarui (Realtime)');
+                    });
+                } else if (table === 'jadwal_sholat') {
+                    SupabaseDB.getJadwalSholat().then(list => {
+                        jadwalList = list;
+                        if (typeof updatePrayerTimesBar === 'function') {
+                            updatePrayerTimesBar();
+                        }
+                        showOsd('⚡ Jadwal Sholat Diperbarui');
+                    });
+                } else if (table === 'sholat_jumat') {
+                    SupabaseDB.getSholatJumat().then(petugas => {
+                        jumatPetugas = petugas;
+                    });
+                } else if (table === 'running_text') {
+                    if (data && data.text) {
+                        updateMasterFooter(data.text);
                     }
+                }
+
+                // 3. SEGERA RE-RENDER JIKA SLIDE YANG SEDANG TAYANG DI TV RELEVAN DENGAN DATA
+                // Agar penginputan data di laptop/HP seketika (<100ms) tayang di layar TV masjid
+                try {
+                    const currentUrl = (activePages && activePages[currentIndex]) ? activePages[currentIndex].toLowerCase() : '';
+                    const tableSlideMapping = {
+                        'keuangan': ['keuangan', 'kas-jumat', 'keuangan-summary', 'utama'],
+                        'keuangan_ambulance': ['ambulance', 'utama'],
+                        'sholat_jumat': ['jumat', 'kas-jumat', 'utama'],
+                        'pengumuman_jumat': ['jumat', 'kas-jumat'],
+                        'program_infaq': ['infaq', 'utama'],
+                        'donasi_infaq': ['infaq'],
+                        'kajian': ['kajian', 'utama'],
+                        'agenda_rutin': ['agenda-rutin', 'utama'],
+                        'ramadhan': ['ramadhan', 'utama'],
+                        'qurban': ['qurban'],
+                        'qris': ['qris'],
+                        'slides': ['slide'],
+                        'undangan': ['undangan']
+                    };
+
+                    const relatedKeywords = tableSlideMapping[table] || [];
+                    const isCurrentSlideRelated = relatedKeywords.some(kw => currentUrl.includes(kw));
+
+                    if (isCurrentSlideRelated) {
+                        const activeFrame = isFrameAActive ? frameA : frameB;
+                        if (activeFrame && activeFrame.contentWindow) {
+                            activeFrame.contentWindow.postMessage({
+                                type: 'DATA_UPDATED',
+                                table: table,
+                                action: action,
+                                data: data,
+                                force_reload: true
+                            }, '*');
+                        }
+                    }
+                } catch (e) {
+                    console.warn('[Display TV] Quick refresh active slide error:', e);
+                }
+            }
+
+            // Pasang Pendengar Universal Realtime (Postgres Changes, Remote Broadcast, Local Channel, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange(handleUniversalDataUpdate);
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    handleUniversalDataUpdate({
+                        table: payload.table,
+                        action: payload.eventType || 'UPDATE',
+                        data: payload.new || payload.old || {}
+                    });
                 });
             }
 
@@ -1073,19 +1142,43 @@
                     console.log('📡 [TV Remote Command Received]:', cmd, d);
 
                     switch (cmd) {
+                        case 'DATA_UPDATED':
+                            handleUniversalDataUpdate({
+                                table: d.table,
+                                action: d.action || 'UPDATE',
+                                data: d.data || {}
+                            });
+                            break;
+                        case 'SYNC_KEUANGAN':
+                            handleUniversalDataUpdate({ table: 'keuangan', action: 'SYNC', data: d });
+                            break;
+                        case 'SYNC_AMBULANCE':
+                            handleUniversalDataUpdate({ table: 'keuangan_ambulance', action: 'SYNC', data: d });
+                            break;
+                        case 'SYNC_JUMAT':
+                            handleUniversalDataUpdate({ table: 'sholat_jumat', action: 'SYNC', data: d });
+                            break;
+                        case 'SYNC_INFAQ':
+                            handleUniversalDataUpdate({ table: 'program_infaq', action: 'SYNC', data: d });
+                            break;
                         case 'SYNC_KAJIAN':
+                            handleUniversalDataUpdate({ table: 'kajian', action: 'SYNC', data: d });
                             broadcastToActiveFrames({ type: 'SYNC_KAJIAN', data: d });
                             break;
                         case 'SYNC_AGENDA_RUTIN':
+                            handleUniversalDataUpdate({ table: 'agenda_rutin', action: 'SYNC', data: d });
                             broadcastToActiveFrames({ type: 'SYNC_AGENDA_RUTIN', data: d });
                             break;
                         case 'SYNC_PENGUMUMAN_JUMAT':
+                            handleUniversalDataUpdate({ table: 'pengumuman_jumat', action: 'SYNC', data: d });
                             broadcastToActiveFrames({ type: 'SYNC_PENGUMUMAN_JUMAT', data: d });
                             break;
                         case 'SYNC_RAMADHAN':
+                            handleUniversalDataUpdate({ table: 'ramadhan', action: 'SYNC', data: d });
                             broadcastToActiveFrames({ type: 'SYNC_RAMADHAN', data: d });
                             break;
                         case 'UPDATE_SETTINGS':
+                            handleUniversalDataUpdate({ table: 'app_settings', action: 'UPDATE', data: d });
                             if (d.rotation_interval) {
                                 rotationInterval = Math.max(1, parseInt(d.rotation_interval)) * 1000;
                                 localStorage.setItem('display_rotation_interval', d.rotation_interval);

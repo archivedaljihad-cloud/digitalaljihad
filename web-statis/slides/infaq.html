@@ -1064,7 +1064,26 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadProgramInfaqData();
 
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'program_infaq' || msg.table === 'donasi_infaq' || msg.table === 'app_settings')) {
+                    loadProgramInfaqData();
+                } else if (msg.type === 'SYNC_INFAQ' || msg.force_reload) {
+                    loadProgramInfaqData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'program_infaq' || tbl === 'donasi_infaq' || tbl === 'app_settings') {
+                        loadProgramInfaqData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload.table === 'program_infaq' || payload.table === 'donasi_infaq' || payload.table === 'app_settings') {
                         loadProgramInfaqData();

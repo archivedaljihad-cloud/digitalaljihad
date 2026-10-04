@@ -936,11 +936,29 @@
             setInterval(updateCardsActiveState, 1000);
             setInterval(checkAutoSyncKemenag, 3600000); // Cek pembaruan harian setiap 1 jam
 
-            // Pasang Supabase Realtime WebSocket listener
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'jadwal_sholat' || msg.table === 'running_text')) {
+                    loadData();
+                } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'app_settings' || tbl === 'jadwal_sholat' || tbl === 'running_text') {
+                        loadData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     console.log('⚡ Realtime update diterima di slide Utama:', payload.table);
-                    if (payload.table === 'app_settings' || payload.table === 'jadwal_sholat') {
+                    if (payload.table === 'app_settings' || payload.table === 'jadwal_sholat' || payload.table === 'running_text') {
                         loadData();
                     }
                 });

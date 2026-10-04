@@ -896,11 +896,29 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
 
-            // Realtime WebSocket listener
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'qurban')) {
+                    loadData();
+                } else if (msg.type === 'SYNC_QURBAN' || msg.force_reload) {
+                    loadData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'app_settings' || tbl === 'qurban') {
+                        loadData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     console.log('⚡ Realtime update diterima di slide Qurban:', payload.table);
-                    if (payload.table === 'app_settings') {
+                    if (payload.table === 'app_settings' || payload.table === 'qurban') {
                         loadData();
                     }
                 });

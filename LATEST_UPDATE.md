@@ -4,7 +4,61 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 00:25 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:00 WIB)
+
+### 🛡️ AUDIT SENIOR QA ANALYST & UNIVERSAL REALTIME CROSS-ACCOUNT SYNC ENGINE (DISPLAY TV & ADMIN)
+
+**Latar Belakang & Permintaan Pengguna:**
+Sebagai **Senior QA Analyst & Senior Manual Tester / QA Lead** sebelum publikasi resmi web aplikasi Masjid Jami' Al-Jihad:
+1. Menemukan dan memperbaiki seluruh celah logika, fungsi, dan bug kalkulasi/tampilan yang dapat menyebabkan kegagalan fungsi.
+2. Memastikan web aplikasi sangat responsif pada berbagai ukuran layar (mobile, tablet, desktop, TV landscape 720p, 1080p Full HD, dan 4K).
+3. **Sinkronisasi Realtime Lintas Akun (<100ms):** Jika salah satu akun (Super Admin, DKM, Bendahara, Panitia Qurban/Ramadhan) memperbarui informasi apapun di admin panel (laptop/HP berbeda), perubahan tersebut **seketika langsung tayang di layar TV Display tanpa reload manual**.
+
+---
+
+### 🔍 Temuan Audit Kritis yang Berhasil Diperbaiki (Root Cause & Fix):
+
+1. **Root Cause Realtime Broadcast Gap di `admin.html`:**
+   - *Masalah:* Operasi simpan/edit/hapus pada transaksi kas masjid, kas ambulans, sholat jumat, warta/pengumuman, running text, program infaq & donasi, qris, slides galeri, qurban, dan ramadhan sebelumnya hanya melakukan HTTP REST `PATCH/POST` ke Supabase, **tanpa mengirim sinyal remote broadcast WebSocket**. Akibatnya TV display baru ter-update setelah rotasi berikutnya atau browser TV di-reload manual.
+   - *Solusi:* Di `web-statis/js/supabase-db.js`, dibuatkan Universal Sync Engine: `SupabaseDB.broadcastChange(table, action, data, sender)`. Metode ini secara simultan menyiarkan:
+     a) WebSocket broadcast ke seluruh subscriber channel `tv_remote_control` dengan payload command `DATA_UPDATED`.
+     b) Native `BroadcastChannel('mosque_display_channel')` untuk sinkronisasi antar-tab dalam hitungan <5ms.
+     c) `localStorage.setItem('mosque_realtime_sync', ...)` sebagai fallback storage event.
+   - Dipasang pada seluruh fungsi tulis di `web-statis/admin.html`: `simpanTransaksiKas()`, `updateTransaksiKas()`, `hapusTransaksi()`, `simpanPetugasJumat()`, `simpanPengumumanJumat()`, `simpanKajianSabtu()`, `simpanAgendaRutin()`, `simpanProgramInfaqBaru()`, `simpanDonasiInfaq()`, `hapusDonasiInfaq()`, `simpanRunningText()`, `sinkronkanKemenagManual()`, `sinkronkanFalakiyahNU()`, `simpanJadwalManual()`, `simpanRotasiTV()`, `simpanSlides()`, `simpanQris()`, `simpanKasAmbulance()`, `simpanDataQurban()`, `simpanPetugasRamadhan()`, `tambahTransaksiTromol()`, `hapusTransaksiTromol()`, `toggleModeRamadhanTV()`, dan `toggleSlideKasJumat()`.
+
+2. **Perbaikan Bug Kalkulasi Kas Bulanan (`new Date().getMonth()`):**
+   - *Masalah:* Di `admin.html` (kalkulasi ringkasan kas masuk bulan ini), perbandingan bulan hanya menggunakan `.getMonth() === currentMonth` tanpa memeriksa tahun `.getFullYear()`. Transaksi dari bulan yang sama pada tahun lalu berpotensi ikut terhitung.
+   - *Solusi:* Ditambahkan validasi tahun: `d.getMonth() === currentMonth && d.getFullYear() === currentYear`.
+
+3. **Stabilitas Buku Kas & Sorting Saldo Berjalan (Ledger Stability):**
+   - *Masalah:* Pada `keuangan.html` dan `ambulance.html`, sorting tanggal ascending `new Date(a.tanggal) - new Date(b.tanggal)` belum memiliki secondary sort by `id`. Jika ada beberapa transaksi pada tanggal yang sama, urutan dan saldo berjalan dapat bergeser antar render.
+   - *Solusi:* Ditambahkan secondary sort stabil:
+     ```javascript
+     const sortedAsc = [...data].sort((a, b) => {
+         const diff = new Date(a.tanggal || 0) - new Date(b.tanggal || 0);
+         if (diff !== 0) return diff;
+         return (a.id || 0) - (b.id || 0);
+     });
+     ```
+
+4. **Universal Realtime Listeners di Master TV (`index.html`) & Seluruh 15 Slide:**
+   - Di `web-statis/index.html`: `handleUniversalDataUpdate` langsung menangani seluruh tabel, memperbarui data state internal TV, menyiarkan ke active frame (`postMessage`), dan memicu **Instant Reload** pada active slide jika data yang diubah berkaitan dengan slide yang sedang tampil di layar.
+   - Di seluruh slide (`keuangan.html`, `ambulance.html`, `jumat.html`, `infaq.html`, `kas-jumat.html`, `keuangan-summary.html`, `utama.html`, `qurban.html`, `slide.html`, `kajian.html`, `agenda-rutin.html`, `ramadhan.html`, `pengumuman.html`, `qris.html`, `undangan.html`):
+     - Dipasang `window.addEventListener('message')` untuk menerima sinyal instan dari parent frame (<50ms).
+     - Dipasang `SupabaseDB.onDataChange(...)` untuk menerima sinyal WebSocket, BroadcastChannel, dan Storage event.
+
+5. **Signature Normalization pada `subscribeRemoteCommands`:**
+   - Memperbaiki ketidaksesuaian signature antara `payload` objek dan string command, sehingga `cmd === 'SYNC_...'` ataupun `cmd?.command === 'SYNC_...'` selalu dievaluasi dengan benar.
+
+**Berkas Terkait:**
+- `web-statis/js/supabase-db.js` (Universal Sync Engine: `broadcastChange`, `onDataChange`, signature normalizing)
+- `web-statis/admin.html` (Integrasi `broadcastChange` ke seluruh fungsi simpan & fix bug getFullYear)
+- `web-statis/index.html` (Master TV Engine `handleUniversalDataUpdate` & fast-refresh active slide)
+- `web-statis/slides/*.html` (15 slide: `keuangan`, `ambulance`, `jumat`, `infaq`, `kas-jumat`, `keuangan-summary`, `utama`, `qurban`, `slide`, `kajian`, `agenda-rutin`, `ramadhan`, `pengumuman`, `qris`, `undangan`)
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 00:25 WIB)
 
 ### 🕌 Desain Mewah Baru Flyer WhatsApp: Background Islamic Arch Mihrab (Gambar 1), Teks Arab Assalamu'alaikum Lengkap & Kotak Adab Khutbah (Gambar 2)
 

@@ -505,7 +505,26 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadQrisData();
 
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'qris' || msg.table === 'app_settings')) {
+                    loadQrisData();
+                } else if (msg.type === 'SYNC_QRIS' || msg.force_reload) {
+                    loadQrisData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'qris' || tbl === 'app_settings') {
+                        loadQrisData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload.table === 'app_settings' || payload.table === 'qris') {
                         loadQrisData();

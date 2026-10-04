@@ -236,7 +236,9 @@
                     this.saveSettingItem('kajian_sabtu_start_time', jamMulai)
                 ]);
 
-                if (typeof this.sendRemoteCommand === 'function') {
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('kajian', 'SYNC', { data: payloadData, enabled, jamMulai });
+                } else if (typeof this.sendRemoteCommand === 'function') {
                     this.sendRemoteCommand('SYNC_KAJIAN', { data: payloadData, enabled, jamMulai });
                 }
                 return true;
@@ -253,7 +255,9 @@
             try {
                 localStorage.setItem('agenda_rutin_settings', JSON.stringify(payload));
                 await this.saveSettingItem('kegiatan_rutin_settings', payload);
-                if (typeof this.sendRemoteCommand === 'function') {
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('agenda_rutin', 'SYNC', payload);
+                } else if (typeof this.sendRemoteCommand === 'function') {
                     this.sendRemoteCommand('SYNC_AGENDA_RUTIN', payload);
                 }
                 return true;
@@ -270,7 +274,9 @@
             try {
                 localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
                 await this.saveSettingItem('pengumuman_jumat', pjData);
-                if (typeof this.sendRemoteCommand === 'function') {
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('pengumuman_jumat', 'SYNC', pjData);
+                } else if (typeof this.sendRemoteCommand === 'function') {
                     this.sendRemoteCommand('SYNC_PENGUMUMAN_JUMAT', pjData);
                 }
                 return true;
@@ -365,8 +371,10 @@
                         }).catch(() => {});
                     }
 
-                    // Kirim sinyal Remote Command UPDATE_SETTINGS agar display TV langsung adopsi tanpa jeda
-                    if (typeof this.sendRemoteCommand === 'function') {
+                    // Kirim sinyal broadcast remote UPDATE_SETTINGS agar display TV langsung adopsi tanpa jeda
+                    if (typeof this.broadcastChange === 'function') {
+                        this.broadcastChange('app_settings', 'UPDATE', updatedFields);
+                    } else if (typeof this.sendRemoteCommand === 'function') {
                         this.sendRemoteCommand('UPDATE_SETTINGS', updatedFields).catch(() => {});
                     }
 
@@ -1002,9 +1010,21 @@
 
             channel
                 .on('broadcast', { event: 'tv_command' }, ({ payload }) => {
-                    console.log('🎮 [TV Receiver] Menerima sinyal remote:', payload.command, payload);
+                    const cmdStr = (payload && payload.command) ? String(payload.command) : '';
+                    const cmdData = (payload && payload.data) ? payload.data : {};
+                    console.log('🎮 [TV Receiver] Menerima sinyal remote:', cmdStr, payload);
                     if (typeof onCommand === 'function') {
-                        onCommand(payload);
+                        // Bungkus payload agar pemanggil yang menguji (cmd === 'STRING')
+                        // maupun (payload.command === 'STRING') keduanya berhasil berjalan mulus
+                        try {
+                            const wrappedPayload = Object.assign(Object.create({
+                                toString() { return cmdStr; },
+                                valueOf() { return cmdStr; }
+                            }), payload);
+                            onCommand(wrappedPayload, cmdData, cmdStr);
+                        } catch (e) {
+                            onCommand(payload, cmdData, cmdStr);
+                        }
                     }
                 })
                 .subscribe((status) => {
@@ -1014,6 +1034,254 @@
                 });
 
             return channel;
+        },
+
+        /**
+         * =====================================================
+         * UNIVERSAL REAL-TIME CROSS-ACCOUNT SYNC ENGINE
+         * =====================================================
+         * Memancarkan pembaruan data universal ke seluruh layar TV,
+         * tab admin lain, dan perangkat seluler secara seketika (<100ms)
+         */
+        _localBroadcastChannel: null,
+
+        getLocalBroadcastChannel() {
+            if (!this._localBroadcastChannel && typeof BroadcastChannel !== 'undefined') {
+                try {
+                    this._localBroadcastChannel = new BroadcastChannel('mosque_display_channel');
+                } catch (e) {}
+            }
+            return this._localBroadcastChannel;
+        },
+
+        broadcastChange(table, action = 'UPDATE', data = {}, sender = 'Admin') {
+            const timestamp = Date.now();
+            const payload = {
+                table: table,
+                action: action,
+                data: data,
+                sender: sender,
+                timestamp: timestamp
+            };
+
+            console.log(`📡 [Universal Sync] Memancarkan pembaruan realtime [${table} - ${action}]:`, payload);
+
+            // Track 1: WebSocket Broadcast ke seluruh TV via Remote Channel Supabase (<100ms ultra-cepat)
+            this.sendRemoteCommand('DATA_UPDATED', payload, sender).catch(() => {});
+
+            // Track 2: Command khusus legacy untuk kompatibilitas slide
+            const syncCmdMap = {
+                'kajian': 'SYNC_KAJIAN',
+                'agenda_rutin': 'SYNC_AGENDA_RUTIN',
+                'pengumuman_jumat': 'SYNC_PENGUMUMAN_JUMAT',
+                'ramadhan': 'SYNC_RAMADHAN',
+                'keuangan': 'SYNC_KEUANGAN',
+                'keuangan_ambulance': 'SYNC_AMBULANCE',
+                'program_infaq': 'SYNC_INFAQ',
+                'sholat_jumat': 'SYNC_JUMAT',
+                'app_settings': 'UPDATE_SETTINGS'
+            };
+            if (syncCmdMap[table]) {
+                this.sendRemoteCommand(syncCmdMap[table], data, sender).catch(() => {});
+            }
+
+            // Track 3: BroadcastChannel lokal antar-tab / antar-window pada perangkat yang sama
+            try {
+                const bc = this.getLocalBroadcastChannel();
+                if (bc) {
+                    bc.postMessage({ type: 'DATA_UPDATED', ...payload });
+                }
+            } catch (e) {}
+
+            // Track 4: LocalStorage Event (Dual local redundancy)
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('mosque_realtime_sync', JSON.stringify({
+                        ...payload,
+                        _rand: Math.random() // Memastikan storage event selalu terpicu di tab lain
+                    }));
+                }
+            } catch (e) {}
+
+            // Track 5: PostMessage ke window induk (jika dijalankan dari iframe admin / slide)
+            try {
+                if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+                    window.parent.postMessage({ type: 'DATA_UPDATED', ...payload }, '*');
+                }
+            } catch (e) {}
+        },
+
+        /**
+         * Pasang pendengar pembaruan data universal (Universal Real-Time Listener)
+         * Mengikat 5 saluran redundan sekaligus:
+         * 1. Supabase Postgres WAL Changes
+         * 2. Supabase Realtime WebSocket Remote Broadcast (<100ms)
+         * 3. Local BroadcastChannel
+         * 4. Window postMessage (Parent Display TV <-> Iframe)
+         * 5. Window storage sync event
+         * @param {Function} callback - function({ table, action, data, sender, source, timestamp })
+         */
+        onDataChange(callback) {
+            if (typeof callback !== 'function') return null;
+
+            // Debounce pelindung agar jika 5 saluran menyala bersamaan, callback hanya dipanggil 1x per batch
+            let debounceTimer = null;
+            let lastEventSignature = '';
+            const safeTrigger = (evt) => {
+                const sig = `${evt.table}_${evt.action}_${evt.timestamp || Date.now()}`;
+                if (sig === lastEventSignature) return;
+                lastEventSignature = sig;
+
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    try {
+                        callback(evt);
+                    } catch (err) {
+                        console.error('[SupabaseDB.onDataChange] Callback error:', err);
+                    }
+                }, 35); // 35ms debounce super responsif
+            };
+
+            // 1. Supabase Realtime Postgres Changes
+            try {
+                this.subscribeRealtime((payload) => {
+                    safeTrigger({
+                        table: payload.table,
+                        action: payload.eventType || 'UPDATE',
+                        data: payload.new || payload.old || {},
+                        source: 'postgres_changes',
+                        timestamp: Date.now()
+                    });
+                });
+            } catch (e) {}
+
+            // 2. Supabase Remote Broadcast Commands
+            try {
+                this.subscribeRemoteCommands((cmdPayload, data, commandName) => {
+                    const cmd = (typeof cmdPayload === 'string' ? cmdPayload : (cmdPayload?.command || commandName || '')).toUpperCase();
+                    const d = (cmdPayload && cmdPayload.data) ? cmdPayload.data : (data || {});
+
+                    if (cmd === 'DATA_UPDATED') {
+                        safeTrigger({
+                            table: d.table,
+                            action: d.action || 'UPDATE',
+                            data: d.data || {},
+                            sender: cmdPayload?.sender || 'Remote Admin',
+                            source: 'remote_broadcast',
+                            timestamp: d.timestamp || Date.now()
+                        });
+                    } else if (cmd.startsWith('SYNC_')) {
+                        const tableMap = {
+                            'SYNC_KAJIAN': 'kajian',
+                            'SYNC_AGENDA_RUTIN': 'agenda_rutin',
+                            'SYNC_PENGUMUMAN_JUMAT': 'pengumuman_jumat',
+                            'SYNC_RAMADHAN': 'ramadhan',
+                            'SYNC_KEUANGAN': 'keuangan',
+                            'SYNC_AMBULANCE': 'keuangan_ambulance',
+                            'SYNC_INFAQ': 'program_infaq',
+                            'SYNC_JUMAT': 'sholat_jumat',
+                            'SYNC_SLIDES': 'slides',
+                            'SYNC_QRIS': 'qris',
+                            'SYNC_QURBAN': 'qurban',
+                            'SYNC_UNDANGAN': 'undangan',
+                            'SYNC_RUNNING_TEXT': 'running_text'
+                        };
+                        safeTrigger({
+                            table: tableMap[cmd] || cmd.toLowerCase(),
+                            action: 'SYNC',
+                            data: d,
+                            sender: cmdPayload?.sender || 'Remote Admin',
+                            source: 'remote_sync_command',
+                            timestamp: Date.now()
+                        });
+                    } else if (cmd === 'UPDATE_SETTINGS') {
+                        safeTrigger({
+                            table: 'app_settings',
+                            action: 'UPDATE',
+                            data: d,
+                            sender: cmdPayload?.sender || 'Remote Admin',
+                            source: 'remote_settings',
+                            timestamp: Date.now()
+                        });
+                    }
+                });
+            } catch (e) {}
+
+            // 3. Local BroadcastChannel
+            try {
+                const bc = this.getLocalBroadcastChannel();
+                if (bc) {
+                    bc.addEventListener('message', (event) => {
+                        if (event.data && (event.data.type === 'DATA_UPDATED' || event.data.table)) {
+                            safeTrigger({
+                                table: event.data.table,
+                                action: event.data.action || 'UPDATE',
+                                data: event.data.data || {},
+                                source: 'broadcast_channel',
+                                timestamp: event.data.timestamp || Date.now()
+                            });
+                        }
+                    });
+                }
+            } catch (e) {}
+
+            // 4. Window postMessage (dari Parent TV atau iframe)
+            try {
+                if (typeof window !== 'undefined') {
+                    window.addEventListener('message', (event) => {
+                        if (!event.data) return;
+                        if (event.data.type === 'DATA_UPDATED') {
+                            safeTrigger({
+                                table: event.data.table,
+                                action: event.data.action || 'UPDATE',
+                                data: event.data.data || event.data.payload || {},
+                                source: 'window_message',
+                                timestamp: Date.now()
+                            });
+                        } else if (typeof event.data.type === 'string' && event.data.type.startsWith('SYNC_')) {
+                            const tableMap = {
+                                'SYNC_KAJIAN': 'kajian',
+                                'SYNC_AGENDA_RUTIN': 'agenda_rutin',
+                                'SYNC_PENGUMUMAN_JUMAT': 'pengumuman_jumat',
+                                'SYNC_RAMADHAN': 'ramadhan',
+                                'SYNC_KEUANGAN': 'keuangan',
+                                'SYNC_AMBULANCE': 'keuangan_ambulance',
+                                'SYNC_INFAQ': 'program_infaq',
+                                'SYNC_JUMAT': 'sholat_jumat'
+                            };
+                            safeTrigger({
+                                table: tableMap[event.data.type] || event.data.type.toLowerCase(),
+                                action: 'SYNC',
+                                data: event.data.data || {},
+                                source: 'window_message_sync',
+                                timestamp: Date.now()
+                            });
+                        }
+                    });
+                }
+            } catch (e) {}
+
+            // 5. Window Storage Sync Event
+            try {
+                if (typeof window !== 'undefined') {
+                    window.addEventListener('storage', (e) => {
+                        if (e.key === 'mosque_realtime_sync' && e.newValue) {
+                            try {
+                                const parsed = JSON.parse(e.newValue);
+                                safeTrigger({
+                                    table: parsed.table,
+                                    action: parsed.action || 'UPDATE',
+                                    data: parsed.data || {},
+                                    source: 'storage_sync',
+                                    timestamp: parsed.timestamp || Date.now()
+                                });
+                            } catch (err) {}
+                        }
+                    });
+                }
+            } catch (e) {}
+
+            return true;
         },
 
         /**

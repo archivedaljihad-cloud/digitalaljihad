@@ -649,8 +649,12 @@
             let totMasuk = 0;
             let totKeluar = 0;
 
-            // Sorting tanggal ascending untuk hitung saldo berjalan
-            const sortedAsc = [...data].sort((a, b) => new Date(a.tanggal || 0) - new Date(b.tanggal || 0));
+            // Sorting tanggal ascending untuk hitung saldo berjalan stabil
+            const sortedAsc = [...data].sort((a, b) => {
+                const diff = new Date(a.tanggal || 0) - new Date(b.tanggal || 0);
+                if (diff !== 0) return diff;
+                return (a.id || 0) - (b.id || 0);
+            });
             let runningBalance = 0;
             const computedRows = sortedAsc.map(item => {
                 const masuk = parseFloat(item.pemasukan) || 0;
@@ -748,8 +752,26 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadAmbulanceData();
 
-            // Dengarkan perubahan realtime Supabase
-            if (window.SupabaseDB) {
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'keuangan_ambulance' || msg.table === 'app_settings')) {
+                    loadAmbulanceData();
+                } else if (msg.type === 'SYNC_AMBULANCE' || msg.force_reload) {
+                    loadAmbulanceData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'keuangan_ambulance' || tbl === 'app_settings') {
+                        loadAmbulanceData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     if (payload.table === 'keuangan_ambulance' || payload.table === 'app_settings') {
                         loadAmbulanceData();

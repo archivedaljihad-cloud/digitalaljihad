@@ -8839,7 +8839,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             let totalPemasukan = 0;
             let totalPengeluaran = 0;
             let totalMasukBulanIni = 0;
-            const currentMonth = new Date().getMonth();
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
 
             (data || []).forEach(item => {
                 const masuk = parseFloat(item.pemasukan) || 0;
@@ -8849,8 +8851,8 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 totalPengeluaran += keluar;
 
                 if (item.tanggal) {
-                    const itemMonth = new Date(item.tanggal).getMonth();
-                    if (itemMonth === currentMonth) {
+                    const itemDate = new Date(item.tanggal);
+                    if (itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear) {
                         totalMasukBulanIni += masuk;
                     }
                 }
@@ -9331,6 +9333,11 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
 
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('donasi_infaq', 'INSERT', payload, 'Petugas Infaq');
+                SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { program_infaq_id: progId }, 'Petugas Infaq');
+            }
+
             // Reset Form Donasi
             if (document.getElementById('donasiNama')) {
                 document.getElementById('donasiNama').value = '';
@@ -9359,6 +9366,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
             cachedDonasiInfaq = cachedDonasiInfaq.filter(d => d.id != id);
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('donasi_infaq', 'DELETE', { id }, 'Petugas Infaq');
+                SupabaseDB.broadcastChange('program_infaq', 'UPDATE', {}, 'Petugas Infaq');
+            }
             renderProgramInfaqSection();
             if (typeof filterKasTable === 'function') {
                 filterKasTable();
@@ -9476,6 +9487,11 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             }
 
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
+
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('donasi_infaq', 'UPDATE', payload, 'Petugas Infaq');
+                SupabaseDB.broadcastChange('program_infaq', 'UPDATE', {}, 'Petugas Infaq');
+            }
 
             $('#modalEditDonasiInfaq').modal('hide');
             renderProgramInfaqSection();
@@ -9694,6 +9710,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
                 selectedProgramInfaqId = savedId;
                 localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('program_infaq', 'INSERT', payload, 'Petugas Infaq');
+                }
                 $('#modalTambahProgramInfaq').modal('hide');
                 renderProgramInfaqSection();
                 alert(`Alhamdulillah! Program penggalangan infaq "${nama}" berhasil dibuat ${isActive ? 'dan langsung aktif di Layar TV' : ''}.`);
@@ -9711,6 +9730,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 cachedProgramInfaq.unshift(localItem);
                 selectedProgramInfaqId = newId;
                 localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('program_infaq', 'INSERT', localItem, 'Petugas Infaq');
+                }
                 renderProgramInfaqSection();
                 $('#modalTambahProgramInfaq').modal('hide');
                 alert(`Program penggalangan infaq "${nama}" berhasil disimpan.`);
@@ -9784,6 +9806,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             }
 
             selectedProgramInfaqId = id;
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { id, nama_program: nama, is_active: isActive }, 'Petugas Infaq');
+            }
             renderProgramInfaqSection();
             $('#modalEditProgramInfaq').modal('hide');
             alert('Alhamdulillah! Perubahan program penggalangan infaq berhasil disimpan.');
@@ -9811,6 +9836,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             prog.is_active = newStatus;
             selectedProgramInfaqId = id;
             localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { id, is_active: newStatus }, 'Petugas Infaq');
+            }
             renderProgramInfaqSection();
 
             if (newStatus) {
@@ -9849,6 +9877,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             selectedProgramInfaqId = cachedProgramInfaq[0].id;
             localStorage.setItem('cached_program_infaq', JSON.stringify(cachedProgramInfaq));
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('program_infaq', 'DELETE', { id }, 'Petugas Infaq');
+                SupabaseDB.broadcastChange('donasi_infaq', 'DELETE', { program_infaq_id: id }, 'Petugas Infaq');
+            }
             renderProgramInfaqSection();
             alert('Program penggalangan infaq berhasil dihapus.');
         }
@@ -10641,6 +10673,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
                 if (res.ok) {
                     $('#modalEditKas').modal('hide');
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange(table, 'UPDATE', payload, 'Bendahara Kas');
+                    }
                     await loadAllSupabaseData();
                     alert('Alhamdulillah! Koreksi transaksi kas berhasil disimpan ke Supabase.');
                 } else {
@@ -10698,6 +10733,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     $('#modalTambahKas').modal('hide');
                     document.getElementById('kasUraian').value = '';
                     document.getElementById('kasNominal').value = '';
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange(targetTable, 'INSERT', payload, 'Bendahara Kas');
+                    }
                     await loadAllSupabaseData();
                     alert('Alhamdulillah! Transaksi kas berhasil dicatat dan disinkronkan ke Supabase.');
                 } else {
@@ -10722,6 +10760,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 });
 
                 if (res.ok) {
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange(table, 'DELETE', { id }, 'Bendahara Kas');
+                    }
                     await loadAllSupabaseData();
                     alert('Catatan transaksi berhasil dihapus.');
                 } else {
@@ -10987,6 +11028,11 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     if (badge) {
                         badge.className = 'badge badge-success position-absolute';
                         badge.textContent = 'Tersimpan';
+                    }
+
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange('sholat_jumat', 'UPDATE', payload, 'DKM Sholat Jumat');
+                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', { prayer_mode_jumat_duration: jumatDur, running_text_pages: currentRt }, 'DKM Sholat Jumat');
                     }
 
                     alert(`Alhamdulillah! Petugas Sholat Jum'at, foto Imam & Khotib, serta durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
@@ -12232,6 +12278,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 const infoEl = document.getElementById('infoKemenagTanggal');
                 if (infoEl) infoEl.textContent = `Sinkronisasi Kemenag: ${jadwal.tanggal} (Terkini)`;
 
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('jadwal_sholat', 'UPDATE', { list: cachedJadwal, source: 'kemenag' }, 'Admin Jadwal Sholat');
+                }
+
                 alert(`Alhamdulillah! Jadwal sholat berhasil disinkronkan resmi dengan Bimas Islam Kemenag RI (${cityName}) untuk ${jadwal.tanggal}.\n\nLayar TV Display otomatis ter-update.`);
             } catch (err) {
                 alert('Gagal menyinkronkan dengan Kemenag: ' + err.message + '\nSilakan periksa koneksi internet.');
@@ -12369,6 +12419,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 if (badgeCity) badgeCity.textContent = cityName;
                 const infoEl = document.getElementById('infoKemenagTanggal');
                 if (infoEl) infoEl.textContent = `Sinkronisasi Falakiyah NU: ${jadwalTimes.tanggal} (Terkini)`;
+
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('jadwal_sholat', 'UPDATE', { list: cachedJadwal, source: 'nu' }, 'Admin Jadwal Sholat');
+                }
 
                 alert(`Alhamdulillah! Jadwal sholat berhasil disinkronkan resmi dengan metode hisab Lembaga Falakiyah Nahdlatul Ulama (LF PBNU - ${cityName}) untuk tanggal ${jadwalTimes.tanggal}.\n\nLayar TV Display otomatis ter-update.`);
             } catch (err) {
@@ -12623,6 +12677,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 }));
                 localStorage.setItem('cached_jadwal_sholat', JSON.stringify(cachedJadwal));
 
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', cleanPayload, 'Admin Jadwal Sholat');
+                    SupabaseDB.broadcastChange('jadwal_sholat', 'UPDATE', { list: cachedJadwal }, 'Admin Jadwal Sholat');
+                }
+
                 alert('Alhamdulillah! Jadwal sholat, switch prayer mode TV, dan durasi sholat (termasuk Sholat Jum\'at) berhasil disinkronkan ke Supabase & Layar TV Display.');
             } catch (err) {
                 alert('Tersimpan di sesi lokal (koneksi offline).');
@@ -12824,6 +12883,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 });
 
                 if (res.ok) {
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange('running_text', 'UPDATE', { pages: pagesObj }, 'Admin DKM');
+                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', { running_text_pages: pagesObj }, 'Admin DKM');
+                    }
                     alert('Alhamdulillah! Teks Berjalan untuk SELURUH 19 Halaman Rotasi berhasil disimpan ke Supabase dan seketika tayang di layar TV.');
                 } else {
                     alert('Gagal memperbarui ke server Supabase, namun telah disimpan di sesi lokal browser.');
@@ -13545,6 +13608,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 });
 
                 if (res.ok) {
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', { rotation_pages: cleanPages }, 'Super Admin');
+                    }
                     alert('Alhamdulillah! Susunan rotasi seluruh ' + updatedPages.length + ' halaman slide TV berhasil disimpan ke Supabase Cloud dan seketika aktif pada layar display TV.');
                     
                     // Update status badge di panel Qurban jika ada
@@ -13722,6 +13788,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 localStorage.setItem('cached_qurban_data', JSON.stringify(cachedQurbanData));
 
                 if (res.ok) {
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange('qurban', 'UPDATE', { qurban_data: cachedQurbanData }, 'Panitia Qurban');
+                    }
                     alert('Alhamdulillah! Seluruh data penerimaan hewan qurban dan jadwal penyembelihan berhasil disimpan ke Supabase & seketika tayang di layar TV display.');
                 } else {
                     alert('Data qurban berhasil disimpan di cache lokal browser (offline-ready).');
@@ -13887,6 +13956,12 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 });
 
                 if (res.ok) {
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        SupabaseDB.broadcastChange('ramadhan', 'UPDATE', { ramadhan_petugas: dataPetugas }, 'Panitia Ramadhan');
+                    }
+                    if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
+                        SupabaseDB.sendRemoteCommand('SYNC_RAMADHAN', { ramadhan_petugas: dataPetugas });
+                    }
                     alert('Alhamdulillah! Jadwal petugas tarawih & kultum Ramadhan berhasil disimpan dan langsung tayang di TV Display.');
                 } else {
                     alert('Tersimpan di cache lokal browser (offline-ready).');
@@ -13940,6 +14015,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 console.warn('Sync tromol Supabase dilewati:', err);
             }
 
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('ramadhan', 'UPDATE', { ramadhan_infaq: cachedRamadhanInfaq }, 'Panitia Ramadhan');
+            }
+            if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
+                SupabaseDB.sendRemoteCommand('SYNC_RAMADHAN', { ramadhan_infaq: cachedRamadhanInfaq });
+            }
+
             // Reset field formulir
             if (document.getElementById('inputTromolUraian')) document.getElementById('inputTromolUraian').value = '';
             if (document.getElementById('inputTromolNominal')) document.getElementById('inputTromolNominal').value = '';
@@ -13964,6 +14046,12 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     });
                 } catch (err) {
                     console.warn('Sync hapus tromol Supabase:', err);
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('ramadhan', 'UPDATE', { ramadhan_infaq: cachedRamadhanInfaq }, 'Panitia Ramadhan');
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
+                    SupabaseDB.sendRemoteCommand('SYNC_RAMADHAN', { ramadhan_infaq: cachedRamadhanInfaq });
                 }
                 renderAdminRamadhanView();
             }
@@ -14010,6 +14098,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 console.warn('Sync toggle rotasi ramadhan Supabase:', err);
             }
 
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('app_settings', 'UPDATE', { rotation_pages: cachedRotationPages }, 'Panitia Ramadhan');
+            }
+
             renderRotationTable(cachedRotationPages);
             alert(isActive ? 'Layar Semarak Ramadhan & Kas Tromol kini AKTIF di rotasi TV display.' : 'Layar Semarak Ramadhan dinonaktifkan dari rotasi TV.');
         }
@@ -14054,6 +14146,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 });
             } catch (err) {
                 console.warn('Sync toggle rotasi kas-jumat Supabase:', err);
+            }
+
+            if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                SupabaseDB.broadcastChange('app_settings', 'UPDATE', { rotation_pages: cachedRotationPages }, 'Petugas Jumat');
             }
 
             renderRotationTable(cachedRotationPages);
