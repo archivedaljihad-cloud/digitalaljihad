@@ -4403,38 +4403,38 @@
                                     </div>
                                 </div>
 
-                                <!-- Kolom Kanan: Daftar Penerimaan Infaq Donatur -->
+                                <!-- Kolom Kanan: Daftar Donatur -->
                                 <div class="col-lg-8 mb-4">
-                                    <div class="card shadow">
-                                        <div class="card-header py-3 d-flex flex-wrap align-items-center justify-content-between" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); border-bottom: 2px solid #ffd700;">
+                                    <div class="card shadow border-0" style="border-radius: 12px; overflow: hidden;">
+                                        <div class="card-header py-2.5 px-3 d-flex flex-wrap align-items-center justify-content-between" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); border-bottom: 2px solid #ffd700;">
                                             <div class="d-flex align-items-center mb-1 mb-md-0">
-                                                <h6 class="m-0 font-weight-bold text-white d-flex align-items-center" style="font-size: 1.05rem;">
-                                                    <i class="fas fa-clipboard-list text-warning mr-2"></i> Daftar Penerimaan Infaq Donatur
-                                                    <span class="badge badge-warning text-dark font-weight-bold ml-2 px-2 py-1" id="badgeCountDonatur" style="font-size: 0.85rem; border-radius: 6px;">
+                                                <h6 class="m-0 font-weight-bold text-white d-flex align-items-center" style="font-size: 0.98rem;">
+                                                    <i class="fas fa-users text-warning mr-2"></i> Daftar Donatur
+                                                    <span class="badge badge-warning text-dark font-weight-bold ml-2 px-2 py-0.5" id="badgeCountDonatur" style="font-size: 0.8rem; border-radius: 6px;">
                                                         0 Data
                                                     </span>
                                                 </h6>
                                             </div>
                                             <div class="d-flex align-items-center flex-wrap" style="gap: 6px;">
-                                                <button type="button" class="btn btn-sm btn-light font-weight-bold text-success shadow-sm" onclick="exportLaporanInfaqCSV()" title="Download Laporan Format Excel/CSV">
+                                                <button type="button" class="btn btn-sm btn-light font-weight-bold text-success shadow-sm py-1 px-2.5" style="font-size: 0.8rem;" onclick="exportLaporanInfaqCSV()" title="Download Laporan Format Excel/CSV">
                                                     <i class="fas fa-file-excel mr-1 text-success"></i> Export Excel (.CSV)
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark shadow-sm" onclick="cetakLaporanInfaqPDF()" title="Cetak Rekap Resmi / Simpan PDF">
+                                                <button type="button" class="btn btn-sm btn-warning font-weight-bold text-dark shadow-sm py-1 px-2.5" style="font-size: 0.8rem;" onclick="cetakLaporanInfaqPDF()" title="Cetak Rekap Resmi / Simpan PDF">
                                                     <i class="fas fa-print mr-1"></i> Cetak Laporan
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered table-hover text-center" id="tableDonaturInfaq" width="100%" cellspacing="0">
-                                                    <thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%);">
+                                        <div class="card-body p-0">
+                                            <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+                                                <table class="table table-sm table-hover mb-0 text-center" id="tableDonaturInfaq" width="100%" cellspacing="0" style="font-size: 0.83rem;">
+                                                    <thead style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); position: sticky; top: 0; z-index: 10;">
                                                         <tr>
-                                                            <th style="width: 5%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">No</th>
-                                                            <th style="width: 16%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Tanggal</th>
-                                                            <th style="width: 32%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Nama Donatur</th>
-                                                            <th style="width: 23%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Nominal (Rp)</th>
-                                                            <th style="width: 14%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Keterangan</th>
-                                                            <th style="width: 10%; color: #ffffff !important; font-weight: 700; vertical-align: middle; border: none; font-size: 0.9rem;">Aksi</th>
+                                                            <th style="width: 6%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 4px;">No</th>
+                                                            <th style="width: 15%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 6px;">Tanggal</th>
+                                                            <th style="width: 33%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 8px; text-align: left;">Nama Donatur</th>
+                                                            <th style="width: 20%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 8px; text-align: right;">Nominal (Rp)</th>
+                                                            <th style="width: 14%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 6px; text-align: left;">Keterangan</th>
+                                                            <th style="width: 12%; color: #ffffff !important; font-weight: 600; vertical-align: middle; border: none; font-size: 0.8rem; padding: 7px 4px;">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tableDonaturInfaqBody">
@@ -6190,8 +6190,69 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
     </div>
 
     <!-- =======================================================
-         MODAL TAMBAH PENGURUS BARU
+         MODAL EDIT DATA DONATUR INFAQ
          ======================================================= -->
+    <div class="modal fade" id="modalEditDonasiInfaq" tabindex="-1" role="dialog" aria-labelledby="modalEditDonasiInfaqLabel" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 14px; overflow: hidden;">
+                <div class="modal-header py-3 px-4" style="background: linear-gradient(135deg, #1e5a3a 0%, #0a2e1f 100%); border-bottom: 2px solid #ffd700;">
+                    <h5 class="modal-title font-weight-bold text-white mb-0" id="modalEditDonasiInfaqLabel" style="font-size: 1.05rem;">
+                        <i class="fas fa-user-edit text-warning mr-2"></i> Edit Data Donatur Infaq
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4" style="background: #ffffff;">
+                    <form id="formEditDonasiInfaq" onsubmit="event.preventDefault(); simpanEditDonasiInfaq();">
+                        <input type="hidden" id="editDonasiId">
+                        <input type="hidden" id="editDonasiProgramId">
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold text-gray-800 small mb-1">Tanggal Donasi <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control form-control-sm" id="editDonasiTanggal" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="font-weight-bold text-gray-800 small mb-0">Nama Donatur <span class="text-danger">*</span></label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="editDonasiIsAnonim" onchange="toggleAnonimEditDonasi(this)">
+                                    <label class="custom-control-label small font-weight-bold text-success" for="editDonasiIsAnonim" style="cursor: pointer;">
+                                        Hamba Allah
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="editDonasiNama" placeholder="Contoh: Bpk. H. Utut Priastya" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="font-weight-bold text-gray-800 small mb-1">Nominal Donasi (Rp) <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold text-success">Rp</span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm font-weight-bold text-success" id="editDonasiNominal" placeholder="Contoh: 500.000" oninput="formatRupiahInput(this)" autocomplete="off" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-1">
+                            <label class="font-weight-bold text-gray-800 small mb-1">Keterangan / Asal Wilayah</label>
+                            <input type="text" class="form-control form-control-sm" id="editDonasiKeterangan" placeholder="Contoh: RW.007 / Blok B3">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light py-2 px-3 d-flex justify-content-between align-items-center">
+                    <button type="button" class="btn btn-sm btn-secondary font-weight-bold px-3" data-dismiss="modal">
+                        <i class="fas fa-times mr-1"></i> Batal
+                    </button>
+                    <button type="button" class="btn btn-sm btn-warning text-dark font-weight-bold px-3 shadow-sm" onclick="simpanEditDonasiInfaq()">
+                        <i class="fas fa-save mr-1"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="modalTambahUser" tabindex="-1" role="dialog" aria-labelledby="modalTambahUserLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -7088,10 +7149,10 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=5.3.1"></script>
-    <script src="js/supabase-db.js?v=5.3.1"></script>
-    <script src="js/admin-auth.js?v=5.3.1"></script>
-    <script src="js/gemini-ai.js?v=5.3.1"></script>
+    <script src="js/supabase-config.js?v=5.3.2"></script>
+    <script src="js/supabase-db.js?v=5.3.2"></script>
+    <script src="js/admin-auth.js?v=5.3.2"></script>
+    <script src="js/gemini-ai.js?v=5.3.2"></script>
 
     <script>
         // 1. Verifikasi Autentikasi Pengguna saat halaman dimuat
@@ -9069,25 +9130,28 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         const tglStr = formatDateIndo(d.tanggal);
                         const isAnon = d.is_anonim === true || d.nama_donatur === 'Hamba Allah';
                         const namaBadge = isAnon 
-                            ? `<span class="badge badge-success px-2 py-1 font-weight-bold" style="font-size: 0.85rem;"><i class="fas fa-user-secret mr-1"></i> Hamba Allah</span>`
-                            : `<span class="font-weight-bold text-dark" style="font-size: 0.95rem;"><i class="fas fa-user-circle text-primary mr-1"></i> ${escapeHtml(d.nama_donatur || 'Hamba Allah')}</span>`;
+                            ? `<span class="badge badge-success px-1.5 py-0.5" style="font-size: 0.76rem; font-weight: 600;"><i class="fas fa-user-secret mr-1"></i> Hamba Allah</span>`
+                            : `<span style="font-size: 0.83rem; font-weight: 600; color: #1e293b;"><i class="fas fa-user-circle text-primary mr-1" style="font-size: 0.78rem;"></i> ${escapeHtml(d.nama_donatur || 'Hamba Allah')}</span>`;
 
                         return `
-                            <tr>
-                                <td class="font-weight-bold text-dark align-middle">${idx + 1}</td>
-                                <td class="align-middle" style="white-space: nowrap;">
-                                    <span class="font-weight-bold text-dark"><i class="far fa-calendar-alt text-success mr-1"></i> ${tglStr}</span>
+                            <tr style="border-bottom: 1px solid #f1f5f9;">
+                                <td class="align-middle text-muted" style="padding: 6px 4px; font-size: 0.78rem;">${idx + 1}</td>
+                                <td class="align-middle" style="white-space: nowrap; padding: 6px 6px; font-size: 0.8rem; color: #475569;">
+                                    <i class="far fa-calendar-alt text-success mr-1" style="font-size: 0.75rem;"></i>${tglStr}
                                 </td>
-                                <td class="text-left align-middle">${namaBadge}</td>
-                                <td class="text-right align-middle">
-                                    <span class="font-weight-bold text-success" style="font-size: 1rem;">${formatRupiah(d.nominal)}</span>
+                                <td class="text-left align-middle" style="padding: 6px 8px;">${namaBadge}</td>
+                                <td class="text-right align-middle" style="padding: 6px 8px;">
+                                    <span style="font-size: 0.84rem; font-weight: 700; color: #16a34a;">${formatRupiah(d.nominal)}</span>
                                 </td>
-                                <td class="text-left align-middle">
-                                    <span class="font-weight-bold text-dark small">${escapeHtml(d.keterangan || '-')}</span>
+                                <td class="text-left align-middle" style="padding: 6px 6px;">
+                                    <span style="font-size: 0.78rem; color: #64748b;">${escapeHtml(d.keterangan || '-')}</span>
                                 </td>
-                                <td class="align-middle">
-                                    <button class="btn btn-danger btn-circle btn-sm shadow-sm" onclick="hapusDonasiInfaq(${d.id})" title="Hapus Donasi">
-                                        <i class="fas fa-trash"></i>
+                                <td class="align-middle" style="padding: 5px 4px; white-space: nowrap;">
+                                    <button class="btn btn-warning btn-sm p-0 shadow-sm mr-1" style="width: 25px; height: 25px; line-height: 25px; border-radius: 4px;" onclick="bukaModalEditDonasiInfaq(${d.id})" title="Edit Donatur">
+                                        <i class="fas fa-edit text-dark" style="font-size: 0.72rem;"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm p-0 shadow-sm" style="width: 25px; height: 25px; line-height: 25px; border-radius: 4px;" onclick="hapusDonasiInfaq(${d.id})" title="Hapus Donatur">
+                                        <i class="fas fa-trash" style="font-size: 0.72rem;"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -9213,6 +9277,125 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 filterKasTable();
             }
             alert('Catatan donasi berhasil dihapus.');
+        }
+
+        // Buka Modal Edit Donasi Infaq
+        function bukaModalEditDonasiInfaq(id) {
+            const donasi = (cachedDonasiInfaq || []).find(d => d.id == id);
+            if (!donasi) {
+                alert('Data donatur tidak ditemukan.');
+                return;
+            }
+
+            const inputId = document.getElementById('editDonasiId');
+            const inputProgId = document.getElementById('editDonasiProgramId');
+            const inputTgl = document.getElementById('editDonasiTanggal');
+            const chkAnon = document.getElementById('editDonasiIsAnonim');
+            const inputNama = document.getElementById('editDonasiNama');
+            const inputNominal = document.getElementById('editDonasiNominal');
+            const inputKet = document.getElementById('editDonasiKeterangan');
+
+            if (inputId) inputId.value = donasi.id;
+            if (inputProgId) inputProgId.value = donasi.program_infaq_id || selectedProgramInfaqId || '';
+            if (inputTgl) inputTgl.value = donasi.tanggal ? donasi.tanggal.split('T')[0] : new Date().toISOString().split('T')[0];
+
+            const isAnon = donasi.is_anonim === true || donasi.nama_donatur === 'Hamba Allah';
+            if (chkAnon) chkAnon.checked = isAnon;
+            if (inputNama) {
+                inputNama.value = donasi.nama_donatur || '';
+                if (isAnon) {
+                    inputNama.value = 'Hamba Allah';
+                    inputNama.setAttribute('disabled', 'disabled');
+                } else {
+                    inputNama.removeAttribute('disabled');
+                }
+            }
+
+            if (inputNominal) {
+                inputNominal.value = Number(donasi.nominal || 0).toLocaleString('id-ID');
+            }
+
+            if (inputKet) {
+                inputKet.value = donasi.keterangan || '';
+            }
+
+            $('#modalEditDonasiInfaq').modal('show');
+        }
+
+        // Toggle Checkbox Hamba Allah pada Modal Edit Donasi
+        function toggleAnonimEditDonasi(checkbox) {
+            const input = document.getElementById('editDonasiNama');
+            if (!input) return;
+            if (checkbox.checked) {
+                input.value = 'Hamba Allah';
+                input.setAttribute('disabled', 'disabled');
+            } else {
+                if (input.value === 'Hamba Allah') input.value = '';
+                input.removeAttribute('disabled');
+                input.focus();
+            }
+        }
+
+        // Simpan Perubahan Data Donatur Infaq (PATCH ke Supabase & Local Cache)
+        async function simpanEditDonasiInfaq() {
+            const id = document.getElementById('editDonasiId')?.value;
+            if (!id) {
+                alert('ID data donasi tidak valid.');
+                return;
+            }
+
+            const tgl = document.getElementById('editDonasiTanggal')?.value || new Date().toISOString().split('T')[0];
+            const isAnonim = document.getElementById('editDonasiIsAnonim')?.checked === true;
+            let nama = document.getElementById('editDonasiNama')?.value.trim();
+            if (isAnonim || !nama) nama = 'Hamba Allah';
+            const nominal = parseRupiahInput(document.getElementById('editDonasiNominal')?.value);
+            const ket = document.getElementById('editDonasiKeterangan')?.value.trim() || '';
+
+            if (nominal <= 0) {
+                alert('Harap isi nominal donasi infaq dengan benar!');
+                return;
+            }
+
+            const payload = {
+                nama_donatur: nama,
+                is_anonim: isAnonim,
+                nominal: nominal,
+                tanggal: tgl,
+                keterangan: ket
+            };
+
+            try {
+                if (SUPABASE_CONFIG.url) {
+                    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?id=eq.${id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            ...getSupabaseHeaders(),
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                }
+            } catch (err) {
+                console.warn('Gagal PATCH ke Supabase donasi_infaq:', err);
+            }
+
+            // Update in cachedDonasiInfaq
+            const idx = (cachedDonasiInfaq || []).findIndex(d => d.id == id);
+            if (idx !== -1) {
+                cachedDonasiInfaq[idx] = {
+                    ...cachedDonasiInfaq[idx],
+                    ...payload
+                };
+            }
+
+            localStorage.setItem('cached_donasi_infaq', JSON.stringify(cachedDonasiInfaq));
+
+            $('#modalEditDonasiInfaq').modal('hide');
+            renderProgramInfaqSection();
+            if (typeof filterKasTable === 'function') {
+                filterKasTable();
+            }
+            alert(`Alhamdulillah, data donatur "${nama}" berhasil diperbarui.`);
         }
 
         // =====================================================================

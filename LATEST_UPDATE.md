@@ -9593,3 +9593,43 @@ Agar Fully Kiosk Browser pada Android TV / TV Box selalu menyajikan data dan tam
 4. `web-statis/PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf` (Distribusi web).
 5. `LATEST_UPDATE.md` (Dokumentasi pembaruan Bab 220).
 
+---
+
+## BAB 221: PENYEMPURNAAN TABEL "DAFTAR DONATUR" & FITUR EDIT DONASI INFAQ PADA DASHBOARD BENDAHARA (4 OKTOBER 2026)
+
+### 1. Masalah & Kebutuhan Pengguna
+- **Judul Header:** Di Dashboard Bendahara (modul Program Infaq), judul tabel sebelumnya adalah *"Daftar Penerimaan Infaq Donatur"*. Pengguna meminta disederhanakan menjadi **"Daftar Donatur"**.
+- **Ketiadaan Fitur Edit Donatur:** Sebelumnya pada kolom aksi hanya tersedia tombol hapus (tong sampah merah). Jika bendahara salah menginput nama donatur, nominal, atau keterangan, mereka terpaksa menghapus dan mengetik ulang dari awal.
+- **Tampilan Terlalu Penuh / Bloated:** Baris tabel sebelumnya memiliki padding yang sangat tebal, font besar, dan ikon berukuran besar sehingga memakan banyak ruang layar secara vertikal dan membuat halaman menu terlihat sesak/penuh.
+- **Ketegasan Lingkup (Scope):** Perubahan desain ini **hanya berlaku pada Dashboard Bendahara (`admin.html`)**, sedangkan tampilan di layar TV Display (`slides/infaq.html`) **tetap dipertahankan 100% tanpa perubahan**.
+
+### 2. Solusi & Implementasi Teknis
+1. **Pembaruan Judul & Desain Header Card:**
+   - Di `web-statis/admin.html`: Judul kartu diubah menjadi `Daftar Donatur` dengan ikon `<i class="fas fa-users text-warning mr-2"></i>`.
+   - Badge jumlah data diperkecil proporsional agar header lebih rapi dan ringkas.
+2. **Desain List Biasa yang Kompak (Compact Financial List Layout):**
+   - Menambahkan class `table-sm` dengan font size proporsional (`0.83rem` / ~13px), padding sel yang ramping (`padding: 6px 8px`), serta sticky header (`position: sticky; top: 0;`).
+   - Membatasi tinggi tabel dengan scroll vertikal halus (`max-height: 520px; overflow-y: auto;`) agar halaman tidak memanjang ke bawah dan tetap nyaman dipantau.
+   - Tipografi nomor, tanggal, nama donatur, nominal rupiah, dan keterangan dibuat rapi dan tidak memakan ruang berlebih.
+3. **Penambahan Tombol Edit di Kolom Aksi:**
+   - Di setiap baris data donatur kini terdapat tombol **Edit (kuning/emas)** berdampingan dengan tombol **Hapus (merah)**:
+     `<button class="btn btn-warning btn-sm p-0 shadow-sm mr-1" onclick="bukaModalEditDonasiInfaq(${d.id})" title="Edit Donatur">`
+4. **Pembuatan Modal Edit Donatur (`#modalEditDonasiInfaq`):**
+   - Modal elegan dengan formulir lengkap:
+     - Tanggal Donasi (`#editDonasiTanggal`)
+     - Nama Donatur (`#editDonasiNama`)
+     - Checkbox toggle Hamba Allah (`#editDonasiIsAnonim`) dengan auto-disable input nama jika dicentang
+     - Input nominal rupiah bertitik otomatis (`#editDonasiNominal`)
+     - Keterangan / Asal Wilayah (`#editDonasiKeterangan`)
+5. **Logika JavaScript & Supabase Persistence:**
+   - Fungsi `bukaModalEditDonasiInfaq(id)`: Mengambil data donatur dari memori, memuat ke form modal, dan membuka modal.
+   - Fungsi `toggleAnonimEditDonasi(checkbox)`: Logika switch anonim/nama donatur.
+   - Fungsi `simpanEditDonasiInfaq()`: Mengirim request `PATCH` ke Supabase REST API `donasi_infaq?id=eq.${id}`, memperbarui data di `cachedDonasiInfaq` dan `localStorage`, menghitung ulang akumulasi dana dan sisa target program, me-refresh tabel secara instan, dan memberikan notifikasi sukses.
+6. **Cache-Busting Versioning:**
+   - Seluruh tag script di `admin.html` dinaikkan ke versi `?v=5.3.2`.
+
+### 3. Berkas Terkait yang Dimodifikasi:
+1. `web-statis/admin.html` (Pembaruan judul "Daftar Donatur", tabel compact list, tombol edit, modal `#modalEditDonasiInfaq`, dan fungsi JS).
+2. `LATEST_UPDATE.md` (Pencatatan riwayat Bab 221).
+
+
