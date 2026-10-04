@@ -4,7 +4,78 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:45 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 05:15 WIB)
+
+### 🕌 Flyer Sholat Jum'at Presisi, Maklumat & Laporan Sholat Jum'at Tajam TV, serta Form Bendahara dengan Date Picker & Auto Bullets
+
+**Latar Belakang & Permintaan Pengguna:**
+Pengguna memberikan koreksi dan peningkatan pada 4 area fungsional:
+1. **Flyer Sholat Jum'at (`web-statis/admin.html`):**
+   - Menurunkan sedikit lagi posisi semua teks (logo, kaligrafi, nama masjid, ribbon jadwal, tanggal, waktu, dan 4 petugas).
+   - Kotak "Adab Khutbah: Diam, Dengarkan & Simak Khutbah" posisinya dipertahankan (`Y = 1100`), kotaknya dibuat full transparan (menghilangkan kotak pembatas dan latar belakang gelap pekat agar motif mihrab menyatu anggun) dengan teks hadits tetap tajam dan kontras.
+   - Footer flyer diubah menjadi 2 baris:
+     - Baris 1: `Diterbitkan oleh DKM Masjid Jami' Al Jihad`
+     - Baris 2: `Sistem Informasi Digital (http://digitalaljihad.my.id)`
+2. **Slide Display TV "MAKLUMAT & LAPORAN SHOLAT JUM'AT" (`slides/kas-jumat.html`):**
+   - Mengganti judul halaman dari *"Maklumat & Laporan Kas Sholat Jum'at"* menjadi *"Maklumat & Laporan Sholat Jum'at"*.
+   - Mengganti header tabel kolom kiri menjadi *"Rincian Keuangan Kas"*.
+   - Memperbesar ukuran font, ketebalan, dan kontras di dalam kotak *"RINCIAN KEUANGAN KAS"* dan *"RINCIAN PENGELUARAN/BIAYA"* secara proporsional agar terlihat tajam dan mudah dibaca oleh para jamaah dari kejauhan.
+3. **Dashboard Bendahara - PENGUMUMAN SHOLAT JUM'AT (`web-statis/admin.html`):**
+   - Menambahkan fitur Date Picker pada field *"Periode Kas Masjid s/d Tanggal:"* untuk memudahkan bendahara memilih tanggal secara visual kalender tanpa repot mengetik manual.
+   - Menghapus badge abu-abu bertuliskan *"Tempat: Simpangan (Tetap)"* dan *"Dilengkapi TTD & Stempel Resmi"*.
+   - Menambahkan fitur *Auto Bullets* pada kolom isian *"Kalimat Himbauan Jamaah:"* sehingga setiap baris otomatis diawali simbol bullet (`• `) dan saat menekan tombol `Enter` baris baru otomatis memiliki bullet.
+
+**Rincian Perubahan & Koordinat Layout Canvas (1080 × 1620 px):**
+1. **Flyer Sholat Jum'at:**
+   - **Logo Masjid:** `logoCenterY = 240` (radius 38), posisi tepat di kubah hijau.
+   - **Bismillah:** `Y = 311` (font `bold 28px "Traditional Arabic"`, emas `#FFD700`).
+   - **Salam Assalamu'alaikum:** `Y = 351` (font `bold 23px "Traditional Arabic"`, `#FFF2A8`).
+   - **Nama Masjid:** `Y = 403` (font `800 32px "Poppins"`, putih `#FFFFFF`).
+   - **Alamat Masjid:** `Y = 431` (font `600 16px "Poppins"`, hijau mint `#A7F3D0`).
+   - **Pita Judul Jadwal:** `Y = 459 s.d. 503` (height 44px), teks `★ JADWAL PETUGAS SHOLAT JUM'AT ★` di `Y = 489`.
+   - **Tanggal Sholat Jum'at:** `Y = 541` (font `800 32px "Poppins"`, emas `#FFD700`).
+   - **Waktu Khutbah:** `Y = 573` (font `600 19px "Poppins"`, `#E2E8F0`).
+   - **4 Petugas Resmi (`officerStartY = 630`, step 108):**
+     - Petugas 1 (Khatib & Imam): Role `Y = 630`, Nama `Y = 670` (divider `Y = 694`).
+     - Petugas 2 (Muadzin): Role `Y = 738`, Nama `Y = 778` (divider `Y = 802`).
+     - Petugas 3 (Bilal): Role `Y = 846`, Nama `Y = 886` (divider `Y = 910`).
+     - Petugas 4 (Pembaca Maklumat): Role `Y = 954`, Nama `Y = 994`.
+   - **Adab Khutbah Jum'at (Full Transparan / Tanpa Kotak di `Y = 1100`):**
+     - Judul Adab: `Y = 1134` (font `700 17px "Poppins"`, `#FFD700`, drop-shadow pekat).
+     - Sabda Rasulullah: `Y = 1176` (font `600 19px "Amiri"`, `#F0DEAA`).
+     - Sabda Baris 1: `Y = 1218` (font `italic 500 21px "Poppins"`, `#FFFFFF`).
+     - Sabda Baris 2: `Y = 1254` (font `italic 500 21px "Poppins"`, `#FFFFFF`).
+     - Riwayat: `Y = 1295` (font `700 17px "Poppins"`, `#FFD700`).
+   - **Footer 2 Baris:**
+     - Garis divider emas: `Y = 1400`.
+     - Baris 1: `Diterbitkan oleh DKM Masjid Jami' Al Jihad` di `Y = 1436` (font `700 17px "Poppins"`, putih `#FFFFFF`).
+     - Baris 2: `Sistem Informasi Digital (http://digitalaljihad.my.id)` di `Y = 1466` (font `600 15px "Poppins"`, hijau toska muda `#A7F3D0`).
+
+2. **Slide Layar TV "Maklumat & Laporan Sholat Jum'at" (`web-statis/slides/kas-jumat.html`):**
+   - Title tag dan `<h2>` diubah menjadi `Maklumat & Laporan Sholat Jum'at`.
+   - Header tabel kiri: `Rincian Keuangan Kas`.
+   - Header tabel kanan: `Rincian Pengeluaran / Biaya`.
+   - `.table-col-header`: dinaikkan ke `1.05rem` (font-weight 800) dengan padding `9px 18px`.
+   - `.table-row-item`: dinaikkan dari `0.88rem` ke `1.05rem` dengan padding `8px 10px` dan border-radius `6px`.
+   - `.row-keterangan`: dinaikkan ke `1.02rem` (font-weight 600, putih `#ffffff`) dengan text-shadow kontras `0 1px 3px rgba(0,0,0,0.85)`.
+   - `.row-index`: dinaikkan ke `1.05rem` (font-weight 800, emas `#ffd700`).
+   - `.row-nominal`: dinaikkan dari `0.95rem` ke `1.12rem` (font-weight 800, text-shadow `0 1px 4px rgba(0,0,0,0.95)`).
+   - `.table-col-footer`: dinaikkan ke `1.05rem` (font-weight 800, padding `9px 18px`).
+   - Teks himbauan pada rotator ribbon bawah otomatis membersihkan simbol bullet (`•`) agar tidak terjadi duplikasi styling badge.
+
+3. **Dashboard Bendahara (`web-statis/admin.html`):**
+   - Field `Periode Kas Masjid s/d Tanggal:` dilengkapi tombol `Pilih Tanggal` dan hidden native date picker dengan sinkronisasi dua arah otomatis ke format Indonesia `DD MMMM YYYY`.
+   - Menghapus badge abu-abu `Tempat: Simpangan (Tetap)` dan `Dilengkapi TTD & Stempel Resmi`.
+   - Textarea `Kalimat Himbauan Jamaah:` mengimplementasikan fungsi `setupAutoBulletsHimbauan()` yang otomatis memberi simbol `• ` pada awal baris, auto-insert saat menekan tombol `Enter`, auto-clear saat Enter pada bullet kosong, dan auto-remove saat menekan `Backspace`.
+
+**Berkas Terkait:**
+- `web-statis/admin.html`
+- `web-statis/slides/kas-jumat.html`
+- `LATEST_UPDATE.md`
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 01:45 WIB)
 
 ### 🌟 Penyempurnaan 5 Slide TV Display: Kategori Utuh (Kas Masjid & Ambulance), Ikon Kitab (Kajian & Pengumuman), QRIS Transparan 100%, dan Layout Donatur Pengadaan AC Baru
 

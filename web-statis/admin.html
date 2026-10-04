@@ -4644,7 +4644,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <button type="button" class="btn btn-sm btn-outline-info font-weight-bold mr-3 shadow-sm" onclick="bukaPreviewSlide('slides/kas-jumat.html', 'Maklumat & Kas Sholat Jum\'at')">
+                                    <button type="button" class="btn btn-sm btn-outline-info font-weight-bold mr-3 shadow-sm" onclick="bukaPreviewSlide('slides/kas-jumat.html', 'Maklumat & Laporan Sholat Jum\'at')">
                                         <i class="fas fa-desktop mr-1"></i> Preview Layar TV
                                     </button>
                                     <div class="custom-control custom-switch custom-switch-lg">
@@ -4692,7 +4692,15 @@
                                             <label class="font-weight-bold text-gray-800 small">
                                                 <i class="fas fa-file-invoice text-info mr-1"></i> Periode Kas Masjid s/d Tanggal:
                                             </label>
-                                            <input type="text" id="pjInputTanggalKas" class="form-control form-control-sm font-weight-bold text-dark" value="02 Oktober 2026" oninput="pjUpdatePreview()" placeholder="Contoh: 02 Oktober 2026">
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" id="pjInputTanggalKas" class="form-control font-weight-bold text-dark" value="02 Oktober 2026" oninput="pjUpdatePreview()" placeholder="Contoh: 02 Oktober 2026">
+                                                <input type="date" id="pjPickerTanggalKas" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;" onchange="pjOnDatePickerKasChange(this.value)">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-info font-weight-bold" type="button" onclick="pjBukaDatePickerKas()" title="Pilih tanggal dari kalender">
+                                                        <i class="fas fa-calendar-alt mr-1"></i> Pilih Tanggal
+                                                    </button>
+                                                </div>
+                                            </div>
                                             <small class="text-muted mt-1 d-block">
                                                 Diisi tanggal hari H Sholat Jum'at saat maklumat dibacakan.
                                             </small>
@@ -4700,9 +4708,8 @@
 
                                         <!-- Titimangsa & Tempat (Poin 11) -->
                                         <div class="form-group mb-0">
-                                            <label class="font-weight-bold text-gray-800 small d-flex justify-content-between align-items-center">
-                                                <span><i class="fas fa-map-marker-alt text-danger mr-1"></i> Titimangsa Dokumen (Tempat, Tanggal):</span>
-                                                <span class="badge badge-light border text-muted" style="font-size: 10px;">Tempat: Simpangan (Tetap)</span>
+                                            <label class="font-weight-bold text-gray-800 small">
+                                                <i class="fas fa-map-marker-alt text-danger mr-1"></i> Titimangsa Dokumen (Tempat, Tanggal):
                                             </label>
                                             <input type="text" id="pjInputTitimangsa" class="form-control form-control-sm" value="Simpangan, 02 Oktober 2026" oninput="pjUpdatePreview()" placeholder="Contoh: Simpangan, 02 Oktober 2026">
                                         </div>
@@ -4862,14 +4869,14 @@
                                         <div class="form-group">
                                             <label class="font-weight-bold text-gray-800 small d-flex justify-content-between align-items-center">
                                                 <span><i class="fas fa-list-ol mr-1 text-success"></i> Kalimat Himbauan Jamaah:</span>
-                                                <span class="badge badge-success" style="font-size: 10.5px;"><i class="fas fa-lock mr-1"></i> 4 Poin Tetap DKM</span>
+                                                <span class="badge badge-success" style="font-size: 10.5px;"><i class="fas fa-magic mr-1"></i> Auto Bullets</span>
                                             </label>
-                                            <textarea id="pjInputHimbauan" class="form-control" rows="5" oninput="pjUpdatePreview()" style="font-size: 13px; line-height: 1.6; resize: vertical;" placeholder="Tuliskan 4 baris kalimat himbauan jamaah...">Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong
-Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya
-Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.
-Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu</textarea>
+                                            <textarea id="pjInputHimbauan" class="form-control" rows="5" oninput="pjUpdatePreview()" style="font-size: 13px; line-height: 1.6; resize: vertical;" placeholder="Tuliskan kalimat himbauan jamaah (otomatis bullet •)...">• Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong
+• Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya
+• Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.
+• Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu</textarea>
                                             <small class="text-muted mt-1 d-block">
-                                                <i class="fas fa-info-circle mr-1 text-info"></i> 4 poin standar DKM: a) Shaf kosong, b) Kunci ganda kendaraan, c) Silent HP, d) Tidak berbicara saat khatib naik mimbar.
+                                                <i class="fas fa-info-circle mr-1 text-info"></i> Otomatis menambahkan bullet (•) di setiap baris baru. Tekan Enter untuk membuat poin himbauan baru.
                                             </small>
                                         </div>
 
@@ -4877,9 +4884,8 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
                                         <!-- Poin 12 & 13: Mengetahui & Dibuat (Bersifat tetap tidak berubah) -->
                                         <div>
-                                            <label class="font-weight-bold text-gray-800 small mb-2 d-flex justify-content-between align-items-center">
-                                                <span><i class="fas fa-file-signature mr-1 text-success"></i> Pengesahan Dokumen:</span>
-                                                <span class="badge badge-light border text-muted" style="font-size: 10px;">Dilengkapi TTD & Stempel Resmi</span>
+                                            <label class="font-weight-bold text-gray-800 small mb-2">
+                                                <i class="fas fa-file-signature mr-1 text-success"></i> Pengesahan Dokumen:
                                             </label>
                                             <div class="row">
                                                 <div class="col-md-6 form-group mb-2">
@@ -11238,7 +11244,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 });
             }
 
-            const logoCenterY = 205;
+            const logoCenterY = 240;
             const logoRadius = 38;
 
             if (cachedFlyerLogoImg && cachedFlyerLogoImg.complete && cachedFlyerLogoImg.naturalWidth > 0) {
@@ -11281,14 +11287,14 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.font = 'bold 28px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 8;
-            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 276);
+            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 311);
 
             // Teks Arab Assalamu'alaikum Lengkap di Bawah Bismillah
             ctx.fillStyle = '#FFF2A8';
             ctx.font = 'bold 23px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 8;
-            ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 316);
+            ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 351);
             ctx.shadowBlur = 0;
 
             // 4. NAMA MASJID & ALAMAT
@@ -11297,36 +11303,36 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
             ctx.shadowBlur = 8;
-            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 368);
+            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 403);
 
             ctx.fillStyle = '#A7F3D0';
             ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 396);
+            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 431);
             ctx.shadowBlur = 0;
 
             // 5. PITA / KAPSUL JUDUL JADWAL
-            const ribbonGrad = ctx.createLinearGradient(250, 424, 830, 424);
+            const ribbonGrad = ctx.createLinearGradient(250, 459, 830, 459);
             ribbonGrad.addColorStop(0, '#D4AF37');
             ribbonGrad.addColorStop(0.5, '#FFD700');
             ribbonGrad.addColorStop(1, '#B4821E');
             ctx.fillStyle = ribbonGrad;
-            drawCanvasRoundRect(ctx, 250, 424, 580, 44, 22, true, false);
+            drawCanvasRoundRect(ctx, 250, 459, 580, 44, 22, true, false);
 
             ctx.fillStyle = '#022413';
             ctx.font = '900 19px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('★ JADWAL PETUGAS SHOLAT JUM\'AT ★', 540, 454);
+            ctx.fillText('★ JADWAL PETUGAS SHOLAT JUM\'AT ★', 540, 489);
 
             // 6. TANGGAL & WAKTU SHOLAT
             ctx.fillStyle = '#FFD700';
             ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
             ctx.shadowBlur = 8;
-            ctx.fillText(tglFormatted, 540, 506);
+            ctx.fillText(tglFormatted, 540, 541);
             ctx.shadowBlur = 0;
 
             ctx.fillStyle = '#E2E8F0';
             ctx.font = '600 19px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('⏰ Waktu Khutbah & Sholat: 11:45 WIB', 540, 538);
+            ctx.fillText('⏰ Waktu Khutbah & Sholat: 11:45 WIB', 540, 573);
 
             // 7. EMPAT PETUGAS RESMI (RATA TENGAH, TANPA KOTAK, TEKS BESAR & TAJAM)
             const officers = [
@@ -11336,7 +11342,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 { role: '📜  PEMBACA MAKLUMAT', name: maklumat || '-' }
             ];
 
-            const officerStartY = 595;
+            const officerStartY = 630;
             const officerStep = 108;
 
             officers.forEach((off, idx) => {
@@ -11379,55 +11385,55 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 }
             });
 
-            // 8. PLAKAT ADAB KHUTBAH JUM'AT (DIPINDAHKAN KE POSISI KOTAK BIRU USER)
-            const cardX = 120;
-            const cardW = 840;
+            // 8. PLAKAT ADAB KHUTBAH JUM'AT (POSISI KOTAK SUDAH BENAR, DIBUAT FULL TRANSPARAN TANPA KOTAK)
             const hadithY = 1100;
-            const hadithH = 230;
 
-            ctx.fillStyle = 'rgba(2, 22, 12, 0.82)';
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.55)';
-            ctx.lineWidth = 1.4;
-            drawCanvasRoundRect(ctx, cardX, hadithY, cardW, hadithH, 20, true, true);
-
-            // Badge Adab Khutbah
-            const badgeW = 460;
-            ctx.fillStyle = 'rgba(212, 175, 55, 0.22)';
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)';
-            ctx.lineWidth = 1;
-            drawCanvasRoundRect(ctx, 540 - (badgeW / 2), hadithY + 16, badgeW, 36, 18, true, true);
-
+            // Judul Adab Khutbah (Teks Emas Mewah dengan Shadow Tajam)
             ctx.textAlign = 'center';
-            ctx.fillStyle = '#FFF2A8';
-            ctx.font = '700 15px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('✨ Adab Khutbah: Diam, Dengarkan & Simak Khutbah', 540, hadithY + 40);
+            ctx.fillStyle = '#FFD700';
+            ctx.font = '700 17px "Poppins", "Segoe UI", sans-serif';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 8;
+            ctx.fillText('✨ Adab Khutbah: Diam, Dengarkan & Simak Khutbah', 540, hadithY + 34);
 
             // Sabda Rasulullah
             ctx.fillStyle = '#F0DEAA';
-            ctx.font = '600 18px "Amiri", "Traditional Arabic", "Poppins", serif';
-            ctx.fillText('Rasulullah ﷺ bersabda:', 540, hadithY + 86);
+            ctx.font = '600 19px "Amiri", "Traditional Arabic", "Poppins", serif';
+            ctx.fillText('Rasulullah ﷺ bersabda:', 540, hadithY + 76);
 
-            // Teks Hadits
-            ctx.fillStyle = '#F8FAFC';
-            ctx.font = 'italic 500 20px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('"Jika engkau berkata kepada sahabatmu pada hari Jum\'at: \'Diamlah!\'', 540, hadithY + 124);
-            ctx.fillText('ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."', 540, hadithY + 158);
+            // Teks Hadits (Putih Bersih Kontras Tinggi)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'italic 500 21px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('"Jika engkau berkata kepada sahabatmu pada hari Jum\'at: \'Diamlah!\'', 540, hadithY + 118);
+            ctx.fillText('ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."', 540, hadithY + 154);
 
-            ctx.fillStyle = '#D4AF37';
-            ctx.font = '700 16px "Poppins", "Segoe UI", sans-serif';
+            // Sumber Riwayat
+            ctx.fillStyle = '#FFD700';
+            ctx.font = '700 17px "Poppins", "Segoe UI", sans-serif';
             ctx.fillText('(HR. Bukhari no. 934 & Muslim no. 851)', 540, hadithY + 195);
+            ctx.shadowBlur = 0;
 
-            // 9. FOOTER RESMI (DIPINDAHKAN KE POSISI GARIS MERAH USER)
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+            // 9. FOOTER RESMI (2 BARIS SESUAI PERMINTAAN USER)
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
             ctx.lineWidth = 1.2;
             ctx.beginPath();
-            ctx.moveTo(140, 1425);
-            ctx.lineTo(940, 1425);
+            ctx.moveTo(180, 1400);
+            ctx.lineTo(900, 1400);
             ctx.stroke();
 
-            ctx.fillStyle = '#CBD5E1';
-            ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('Diterbitkan oleh DKM Masjid Jami\' Al-Jihad • Sistem Informasi Digital: digitalaljihad.my.id', 540, 1455);
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 6;
+            // Baris 1: Diterbitkan oleh DKM Masjid Jami' Al Jihad
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '700 17px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText("Diterbitkan oleh DKM Masjid Jami' Al Jihad", 540, 1436);
+
+            // Baris 2: Sistem Informasi Digital (http://digitalaljihad.my.id)
+            ctx.fillStyle = '#A7F3D0';
+            ctx.font = '600 15px "Poppins", "Segoe UI", sans-serif';
+            ctx.fillText('Sistem Informasi Digital (http://digitalaljihad.my.id)', 540, 1466);
+            ctx.shadowBlur = 0;
 
             // Restore canvas transformation
             ctx.restore();
@@ -15723,6 +15729,112 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             pjHitungKas();
         }
 
+        // Buka Native Date Picker untuk Tanggal Kas
+        function pjBukaDatePickerKas() {
+            const picker = document.getElementById('pjPickerTanggalKas');
+            const input = document.getElementById('pjInputTanggalKas');
+            if (!picker) return;
+            if (input && input.value) {
+                try {
+                    const d = pjParseIndoDate(input.value);
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    picker.value = `${yyyy}-${mm}-${dd}`;
+                } catch(e) {}
+            }
+            try {
+                if (picker.showPicker) {
+                    picker.showPicker();
+                } else {
+                    picker.click();
+                }
+            } catch(e) {
+                picker.click();
+            }
+        }
+
+        // Handler saat User Memilih Tanggal dari Date Picker Kas
+        function pjOnDatePickerKasChange(isoVal) {
+            if (!isoVal) return;
+            const parts = isoVal.split('-');
+            if (parts.length === 3) {
+                const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12, 0, 0);
+                const formatted = pjFormatIndoDate(d, false);
+                const el = document.getElementById('pjInputTanggalKas');
+                if (el) {
+                    el.value = formatted;
+                    pjUpdatePreview();
+                }
+            }
+        }
+
+        // Handler Auto Bullets untuk Kolom Isian Kalimat Himbauan Jamaah
+        function setupAutoBulletsHimbauan() {
+            const ta = document.getElementById('pjInputHimbauan');
+            if (!ta || ta.dataset.autoBulletsBound) return;
+            ta.dataset.autoBulletsBound = 'true';
+
+            // Pastikan setiap baris yang belum memiliki bullet diberi bullet
+            if (ta.value) {
+                const lines = ta.value.split('\n');
+                const formattedLines = lines.map(line => {
+                    const trimmed = line.trim();
+                    if (!trimmed) return '';
+                    if (/^[•\-\*]/.test(trimmed)) return trimmed;
+                    return `• ${trimmed}`;
+                });
+                ta.value = formattedLines.join('\n');
+            }
+
+            ta.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const pos = this.selectionStart;
+                    const val = this.value;
+                    const lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+                    const currentLine = val.substring(lineStart, pos);
+
+                    if (/^[•\-\*]\s*$/.test(currentLine.trim())) {
+                        // Jika baris saat ini cuma berisi bullet kosong, hapus bullet tersebut (keluar dari mode bullet)
+                        e.preventDefault();
+                        this.value = val.substring(0, lineStart) + val.substring(pos);
+                        this.selectionStart = this.selectionEnd = lineStart;
+                        if (typeof pjUpdatePreview === 'function') pjUpdatePreview();
+                        return;
+                    }
+
+                    // Tambahkan baris baru dengan auto bullet
+                    e.preventDefault();
+                    const insertText = '\n• ';
+                    const before = val.substring(0, pos);
+                    const after = val.substring(this.selectionEnd);
+                    this.value = before + insertText + after;
+                    this.selectionStart = this.selectionEnd = pos + insertText.length;
+                    this.dispatchEvent(new Event('input', { bubbles: true }));
+                } else if (e.key === 'Backspace') {
+                    const pos = this.selectionStart;
+                    if (pos === this.selectionEnd) {
+                        const val = this.value;
+                        const lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+                        const linePrefix = val.substring(lineStart, pos);
+                        if (linePrefix === '• ') {
+                            e.preventDefault();
+                            this.value = val.substring(0, lineStart) + val.substring(pos);
+                            this.selectionStart = this.selectionEnd = lineStart;
+                            this.dispatchEvent(new Event('input', { bubbles: true }));
+                        }
+                    }
+                }
+            });
+
+            ta.addEventListener('focus', function() {
+                if (!this.value.trim()) {
+                    this.value = '• ';
+                    this.selectionStart = this.selectionEnd = 2;
+                }
+            });
+        }
+
         // Inisialisasi Modul Pengumuman Jum'at
         async function initPengumumanJumat() {
             try {
@@ -15786,6 +15898,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             pjRenderFormPemasukan();
             pjRenderFormPengeluaran();
             pjHitungKas();
+            setupAutoBulletsHimbauan();
 
             // Sinkronkan status switch Slide Layar Penuh TV Maklumat & Kas Jumat
             try {
@@ -16055,7 +16168,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     prevContHim.innerHTML = '<div class="text-muted font-italic small">- Tidak ada himbauan khusus -</div>';
                 } else {
                     prevContHim.innerHTML = lines.map((line, idx) => {
-                        let cleanText = line.replace(/^[a-zA-Z0-9][\.\)]\s*/, '');
+                        let cleanText = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/, '');
                         return `
                             <div style="margin-bottom: 6px; display: flex; align-items: flex-start; gap: 6px;">
                                 <span style="font-weight: 700; min-width: 18px; color: #047857;">${idx + 1}.</span>
@@ -16815,7 +16928,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             waText += `*III. HIMBAUAN*\n`;
             if (Array.isArray(pjData.himbauan) && pjData.himbauan.length > 0) {
                 pjData.himbauan.forEach((line, idx) => {
-                    let clean = line.replace(/^[a-zA-Z0-9][\.\)]\s*/, '');
+                    let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/, '');
                     waText += `${idx + 1}. ${clean}\n`;
                 });
             } else {
@@ -16898,6 +17011,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         // Auto render dashboard widget saat dimuat
         document.addEventListener('DOMContentLoaded', function() {
             try {
+                setupAutoBulletsHimbauan();
                 renderDashAgendaRutinWidget();
                 renderDashPengumumanJumatWidget();
             } catch(e) {}
