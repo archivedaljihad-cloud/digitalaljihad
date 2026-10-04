@@ -4,7 +4,57 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:10 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 01:25 WIB)
+
+### 🎨 Flyer WhatsApp Sholat Jum'at: Penataan Ulang Teks Arab ke Frame Hijau, Relokasi Kotak Hadits & Teks Footer
+
+**Latar Belakang & Permintaan Pengguna:**
+Berdasarkan hasil unduhan flyer terbaru dan coretan panduan visual pada gambar ilustrasi:
+1. **Kedua Teks Arab (Bismillah & Assalamu'alaikum):** Sebelumnya posisinya di `Y = 115` & `Y = 160` (di atas frame / di luar zona hijau) sehingga menimpa ukiran motif emas kubah mihrab atas dan tidak terbaca.
+2. **Atur Ulang Semua Teks ke Dalam Frame (Area Hijau):** Masukkan dan tata ulang seluruh teks agar berada di dalam bingkai area hijau emerald gelap pekat, kontras tinggi, tajam, dan terbaca dengan sangat jelas.
+3. **Pindahkan Posisi Kotak & Teks Hadits:** Dipindahkan turun ke posisi kotak ilustrasi warna biru pengguna (zona hijau bawah di `Y = 1100 s.d. 1330`).
+4. **Pindahkan Posisi Teks Footer:** Dipindahkan turun ke posisi garis ilustrasi warna merah pengguna (lekukan hijau paling bawah sebelum ornamen dasar di `Y = 1425 s.d. 1455`).
+
+**Rincian Perubahan & Koordinat Layout Canvas (1080 × 1620 px):**
+1. **Logo Masjid (`logoCenterY = 205`, `logoRadius = 38`):**
+   - Diposisikan tepat di puncak kubah lengkung hijau atas (pointed arch), dikelilingi cincin emas menyala (`#FFD700`, blur 10px).
+2. **Kaligrafi Bismillah (`Y = 276`):**
+   - Dipindahkan masuk ke dalam frame hijau bersih (lebar area hijau mencapai 470px).
+   - Teks Arab `بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ` (font `bold 28px "Traditional Arabic", "Amiri", serif`, warna `#FFD700` dengan drop-shadow pekat). Tidak lagi bertabrakan dengan motif emas kubah.
+3. **Salam Assalamu'alaikum (`Y = 316`):**
+   - Dipindahkan masuk ke bawah Bismillah pada area hijau dengan lebar >500px.
+   - Teks Arab `السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ` (font `bold 23px "Traditional Arabic", "Amiri", serif`, warna `#FFF2A8`).
+4. **Nama Masjid & Alamat:**
+   - "MASJID JAMI' AL-JIHAD": `Y = 368` (font `800 32px "Poppins"`, putih bersih `#FFFFFF`).
+   - Alamat: `Y = 396` (font `600 16px "Poppins"`, hijau mint `#A7F3D0`).
+5. **Pita Judul Jadwal:**
+   - Kapsul emas gradasi: `Y = 424 s.d. 468` (height 44px).
+   - Teks `★ JADWAL PETUGAS SHOLAT JUM'AT ★`: `Y = 454` (font `900 19px "Poppins"`, warna `#022413`).
+6. **Tanggal & Waktu Sholat:**
+   - Tanggal Sholat Jum'at: `Y = 506` (font `800 32px "Poppins"`, emas `#FFD700`).
+   - Waktu Khutbah: `Y = 538` (font `600 19px "Poppins"`, abu-abu terang `#E2E8F0`).
+7. **Empat Petugas Resmi (Spacing Seimbang & Tajam):**
+   - `officerStartY = 595`, `officerStep = 108`.
+   - Petugas 1 (Khatib & Imam): Role `Y = 595`, Nama `Y = 635` (divider `Y = 659`).
+   - Petugas 2 (Muadzin): Role `Y = 703`, Nama `Y = 743` (divider `Y = 767`).
+   - Petugas 3 (Bilal): Role `Y = 811`, Nama `Y = 851` (divider `Y = 875`).
+   - Petugas 4 (Pembaca Maklumat): Role `Y = 919`, Nama `Y = 959`.
+8. **Plakat Hadits Adab Khutbah (Relokasi ke Kotak Biru User):**
+   - `cardX = 120, cardW = 840, hadithY = 1100, hadithH = 230` (berakhir di `Y = 1330`).
+   - Badge Adab Khutbah: `hadithY + 16` (`Y = 1116`), teks di `hadithY + 40` (`Y = 1140`).
+   - Sabda Rasulullah: `hadithY + 86` (`Y = 1186`).
+   - Teks Sabda: Baris 1 `Y = 1224`, Baris 2 `Y = 1258`.
+   - Riwayat: `Y = 1295`.
+9. **Footer Resmi DKM (Relokasi ke Garis Merah User):**
+   - Garis aksen emas: `moveTo(140, 1425)` ke `lineTo(940, 1425)`.
+   - Teks footer: `Y = 1455` (font `600 16px "Poppins"`, `#CBD5E1`).
+
+**Berkas Terkait:**
+- `web-statis/admin.html` (Fungsi `renderFlyerJumatCanvas()`)
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 01:10 WIB)
 
 ### 🔍 Peningkatan Tipografi & Kejelasan Layar TV: Perbesar Font "Mutasi Kas Terakhir" (Grafik Kas Masjid) & "List Operasional Kas Ambulance"
 
