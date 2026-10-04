@@ -21,6 +21,32 @@
 ---
 
 
+
+---
+
+## ✨ UPDATE — 4 Oktober 2026 (Pukul 23:20 WIB)
+
+### Tambah Widget **Agenda Rutin Malam Jum'at — Pengaturan Tampilan Surat Yaasiin & Tahlil** di Dashboard Petugas/Operator
+
+**Deskripsi:** Widget panel baru muncul langsung di halaman Dashboard akun Petugas/Operator (setelah kartu ringkasan Agenda Rutin). Petugas bisa mengubah dan menyimpan pengaturan tampilan Surat Yaasiin & Tahlil di Layar TV tanpa harus pergi ke halaman terpisah.
+
+**Fitur Widget:**
+- Toggle ON/OFF tampilan Yaasiin di Layar TV Display
+- Edit Judul/Nama Kegiatan
+- Edit Waktu Pelaksanaan
+- Edit Nama Imam / Pembimbing
+- Edit Lokasi Kegiatan
+- Edit Keterangan Tambahan
+- Badge **MALAM INI!** muncul otomatis setiap Kamis malam
+- Tombol **Simpan & Update TV** langsung memperbarui tampilan TV
+- Tombol **Pratinjau Layar TV** untuk preview hasil
+- Hidden fields menjaga data agenda lain (Kajian Ahad, Tahsin, Tafsir) tidak ikut tertimpa
+
+**File:** `resources/views/home.blade.php`  
+**Posisi:** Antara kartu ringkasan Agenda Rutin dan tabel Jadwal Sholat Hari Ini (khusus role petugas/operator)
+
+---
+
 ## 📌 1. INFORMASI UMUM PROYEK
 
 - **Nama Aplikasi:** Sistem Informasi Display Masjid (Digital Signage Masjid)
