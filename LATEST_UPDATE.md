@@ -4,7 +4,26 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 12:15 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 16:30 WIB)
+
+### 🧹 PENGHAPUSAN TOMBOL KAPSUL PERAN (BENDAHARA, SUPER ADMIN, PETUGAS) DI HALAMAN LOGIN:
+1. **Pembersihan Tombol Kapsul Peran (*Role Pill Buttons Removal*):**
+   - Menghilangkan kontainer `.quick-role-picker` dan tombol kapsul peran ("Bendahara", "Super Admin", "Petugas") dari halaman login:
+     - `web-statis/login.html`
+     - `resources/views/auth/login.blade.php`
+   - Membersihkan CSS terkait `.quick-role-picker` dan `.role-pill-btn`.
+2. **Penyelarasan Teks Petunjuk Kredensial:**
+   - Mengubah teks di `.credential-guide-pill` dari:
+     - *"Masukkan kredensial atau pilih peran untuk akses cepat"*
+     - Menjadi: *"Masukkan kredensial akun pengurus untuk masuk"*
+3. **Pembersihan Logika Auto-Preset Input:**
+   - Menghapus pemanggilan otomatis `selectRolePreset('bendahara')` saat `DOMContentLoaded` di kedua file login, sehingga input field Email/Username dan Kata Sandi tetap bersih (*clean*) dan siap diketikkan manual atau melalui pengisian otomatis (*autofill*) browser pengurus.
+4. **Service Worker Cache Invalidation:**
+   - Cache dinaikkan ke **`v5.5.4`** (`aljihad-signage-v5.5.4`) di `web-statis/sw.js` agar seluruh perangkat HP, TV, dan laptop pengurus langsung memuat halaman login mutakhir tanpa sisa cache tombol kapsul lama.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 12:15 WIB)
 
 ### 🛡️ PEMBERSIHAN TOTAL AKUN & KATA SANDI LAMA SERTA PENETAPAN KREDENSIAL RESMI DEFAULT:
 1. **Pembersihan Total Akun & Sandi Lama (*Full Deprecation & Purge*):**

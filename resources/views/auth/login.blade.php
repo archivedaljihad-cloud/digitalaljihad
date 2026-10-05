@@ -187,48 +187,6 @@
         font-size: 0.98rem;
     }
 
-    /* QUICK ROLE SELECTOR (PILIH ROLE CEPAT) */
-    .quick-role-picker {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 12px;
-    }
-
-    .role-pill-btn {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        padding: 7px 8px;
-        background: rgba(4, 40, 24, 0.75);
-        border: 1px solid rgba(0, 230, 118, 0.35);
-        border-radius: 20px;
-        color: #e0f2fe;
-        font-size: 0.78rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.25s ease;
-        backdrop-filter: blur(6px);
-        user-select: none;
-    }
-
-    .role-pill-btn:hover {
-        background: rgba(0, 230, 118, 0.25);
-        border-color: #ffd700;
-        color: #ffffff;
-        transform: translateY(-2px);
-    }
-
-    .role-pill-btn.active {
-        background: linear-gradient(135deg, rgba(201, 160, 61, 0.35), rgba(16, 185, 129, 0.45));
-        border-color: #ffd700;
-        color: #ffd700;
-        box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
-    }
 
     /* CARD FORMULIR LOGIN - RAMPING & PRESISI */
     .login-form-card {
@@ -663,35 +621,7 @@
                 <!-- 3. Pill Petunjuk Masukkan Kredensial -->
                 <div class="credential-guide-pill">
                     <i class="fas fa-key"></i>
-                    <span>Masukkan kredensial atau pilih peran untuk akses cepat</span>
-                </div>
-
-                <!-- PILIH PERAN CEPAT (1-Tap Quick Login Selector) -->
-                <div class="quick-role-picker" id="quickRolePicker" role="group" aria-label="Pilih Cepat Peran Pengurus">
-                    <button type="button" 
-                            class="role-pill-btn active" 
-                            data-role="bendahara" 
-                            onclick="selectRolePresetLaravel('bendahara')" 
-                            title="Klik untuk memilih akun Bendahara Kas">
-                        <i class="fas fa-wallet" style="color: #10b981;"></i>
-                        <span>Bendahara</span>
-                    </button>
-                    <button type="button" 
-                            class="role-pill-btn" 
-                            data-role="admin" 
-                            onclick="selectRolePresetLaravel('admin')" 
-                            title="Klik untuk memilih akun Super Admin">
-                        <i class="fas fa-shield-alt" style="color: #ffd700;"></i>
-                        <span>Super Admin</span>
-                    </button>
-                    <button type="button" 
-                            class="role-pill-btn" 
-                            data-role="petugas" 
-                            onclick="selectRolePresetLaravel('petugas')" 
-                            title="Klik untuk memilih akun Petugas/DKM">
-                        <i class="fas fa-tv" style="color: #38bdf8;"></i>
-                        <span>Petugas</span>
-                    </button>
+                    <span>Masukkan kredensial akun pengurus untuk masuk</span>
                 </div>
 
                 <!-- Notifikasi Alert Session & Validation Errors -->
@@ -832,41 +762,6 @@
 </div>
 
 <script>
-    const LARAVEL_ROLE_PRESETS = {
-        bendahara: {
-            identifier: 'bendahara@aljihad.com',
-            password: '#1.Bendahara'
-        },
-        admin: {
-            identifier: 'archived.aljihad@gmail.com',
-            password: 'SuperUser1971'
-        },
-        petugas: {
-            identifier: 'ketuadkm@aljihad.com',
-            password: '*dkm1#aljihad'
-        }
-    };
-
-    function selectRolePresetLaravel(roleKey) {
-        document.querySelectorAll('.role-pill-btn').forEach(btn => btn.classList.remove('active'));
-        const btn = document.querySelector(`.role-pill-btn[data-role="${roleKey}"]`);
-        if (btn) btn.classList.add('active');
-
-        const preset = LARAVEL_ROLE_PRESETS[roleKey];
-        if (preset) {
-            const emailInput = document.querySelector('input[name="email"]');
-            const pwdInput = document.getElementById('loginPasswordInput');
-            if (emailInput) emailInput.value = preset.identifier;
-            if (pwdInput) pwdInput.value = preset.password;
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const emailInput = document.querySelector('input[name="email"]');
-        if (emailInput && !emailInput.value.trim()) {
-            selectRolePresetLaravel('bendahara');
-        }
-    });
 
     function togglePasswordVisibilityLogin() {
         const input = document.getElementById('loginPasswordInput');

@@ -189,48 +189,6 @@
             text-transform: uppercase;
         }
 
-        /* QUICK ROLE SELECTOR (PILIH ROLE CEPAT) */
-        .quick-role-picker {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .role-pill-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 7px 8px;
-            background: rgba(4, 40, 24, 0.75);
-            border: 1px solid rgba(0, 230, 118, 0.35);
-            border-radius: 20px;
-            color: #e0f2fe;
-            font-size: 0.78rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            backdrop-filter: blur(6px);
-            user-select: none;
-        }
-
-        .role-pill-btn:hover {
-            background: rgba(0, 230, 118, 0.25);
-            border-color: #ffd700;
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-
-        .role-pill-btn.active {
-            background: linear-gradient(135deg, rgba(201, 160, 61, 0.35), rgba(16, 185, 129, 0.45));
-            border-color: #ffd700;
-            color: #ffd700;
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
-        }
 
         /* PILL PANDUAN KREDENSIAL */
         .credential-guide-pill {
@@ -630,9 +588,6 @@
                 padding: 16px 14px;
             }
 
-            .quick-role-picker {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -672,35 +627,7 @@
                 <!-- 4. Pill Petunjuk Masukkan Kredensial -->
                 <div class="credential-guide-pill">
                     <i class="fas fa-key"></i>
-                    <span>Masukkan kredensial atau pilih peran untuk akses cepat</span>
-                </div>
-
-                <!-- PILIH PERAN CEPAT (1-Tap Quick Login Selector) -->
-                <div class="quick-role-picker" id="quickRolePicker" role="group" aria-label="Pilih Cepat Peran Pengurus">
-                    <button type="button" 
-                            class="role-pill-btn active" 
-                            data-role="bendahara" 
-                            onclick="selectRolePreset('bendahara', event)" 
-                            title="Klik untuk memilih otomatis akun Bendahara Kas">
-                        <i class="fas fa-wallet" style="color: #10b981;"></i>
-                        <span>Bendahara</span>
-                    </button>
-                    <button type="button" 
-                            class="role-pill-btn" 
-                            data-role="admin" 
-                            onclick="selectRolePreset('admin', event)" 
-                            title="Klik untuk memilih otomatis akun Super Admin">
-                        <i class="fas fa-shield-alt" style="color: #ffd700;"></i>
-                        <span>Super Admin</span>
-                    </button>
-                    <button type="button" 
-                            class="role-pill-btn" 
-                            data-role="petugas" 
-                            onclick="selectRolePreset('petugas', event)" 
-                            title="Klik untuk memilih otomatis akun Petugas/DKM">
-                        <i class="fas fa-tv" style="color: #38bdf8;"></i>
-                        <span>Petugas</span>
-                    </button>
+                    <span>Masukkan kredensial akun pengurus untuk masuk</span>
                 </div>
 
                 <!-- Box Notifikasi Alert Error/Success -->
@@ -850,79 +777,19 @@
         showAlert('Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.', 'warning');
     }
 
-    // Role Presets Resmi (Default Fallback & Cloud Aligned)
-    const ROLE_PRESETS = {
-        bendahara: {
-            identifier: 'bendahara@aljihad.com',
-            password: '#1.Bendahara'
-        },
-        admin: {
-            identifier: 'archived.aljihad@gmail.com',
-            password: 'SuperUser1971'
-        },
-        petugas: {
-            identifier: 'ketuadkm@aljihad.com',
-            password: '*dkm1#aljihad'
-        }
-    };
-
     // Sinkronisasi data user dari Cloud Supabase saat halaman dimuat di device apapun
     async function initLoginCloudSync() {
         try {
             if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
                 await AdminAuth.syncUsersFromCloud();
-                const users = AdminAuth.getUsers();
-                if (Array.isArray(users)) {
-                    const adminUser = users.find(u => u.role === 'admin' || u.role === 'superadmin');
-                    const bendaharaUser = users.find(u => u.role === 'bendahara');
-                    const petugasUser = users.find(u => u.role === 'petugas');
-
-                    if (adminUser) {
-                        ROLE_PRESETS.admin.identifier = adminUser.email || adminUser.username || ROLE_PRESETS.admin.identifier;
-                        ROLE_PRESETS.admin.password = adminUser.password || ROLE_PRESETS.admin.password;
-                    }
-                    if (bendaharaUser) {
-                        ROLE_PRESETS.bendahara.identifier = bendaharaUser.email || bendaharaUser.username || ROLE_PRESETS.bendahara.identifier;
-                        ROLE_PRESETS.bendahara.password = bendaharaUser.password || ROLE_PRESETS.bendahara.password;
-                    }
-                    if (petugasUser) {
-                        ROLE_PRESETS.petugas.identifier = petugasUser.email || petugasUser.username || ROLE_PRESETS.petugas.identifier;
-                        ROLE_PRESETS.petugas.password = petugasUser.password || ROLE_PRESETS.petugas.password;
-                    }
-                }
             }
         } catch (e) {
             console.warn('[Login] Sync users from cloud error:', e);
-        }
-
-        // Jika input masih kosong, isi otomatis peran Bendahara sebagai default yang paling sering digunakan pengurus di HP
-        const idInput = document.getElementById('loginIdentifier');
-        if (idInput && !idInput.value.trim()) {
-            selectRolePreset('bendahara');
-        }
-    }
-
-    function selectRolePreset(roleKey, evt) {
-        document.querySelectorAll('.role-pill-btn').forEach(btn => btn.classList.remove('active'));
-        if (evt && evt.currentTarget) {
-            evt.currentTarget.classList.add('active');
-        } else {
-            const btn = document.querySelector(`.role-pill-btn[data-role="${roleKey}"]`);
-            if (btn) btn.classList.add('active');
-        }
-
-        const preset = ROLE_PRESETS[roleKey];
-        if (preset) {
-            const idInput = document.getElementById('loginIdentifier');
-            const pwdInput = document.getElementById('loginPassword');
-            if (idInput) idInput.value = preset.identifier;
-            if (pwdInput) pwdInput.value = preset.password;
         }
     }
 
     // Inisialisasi awal saat DOM siap
     document.addEventListener('DOMContentLoaded', () => {
-        selectRolePreset('bendahara');
         initLoginCloudSync();
     });
 
