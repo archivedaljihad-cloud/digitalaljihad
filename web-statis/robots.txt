@@ -1,0 +1,24 @@
+# ==============================================================================
+# ROBOTS.TXT - MASJID JAMI' AL JIHAD DIGITAL SIGNAGE (https://digitalaljihad.my.id/)
+# Kepatuhan SEO & Perlindungan Keamanan Panel Pengurus
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /about.html
+Allow: /slides/*
+Allow: /prayer-mode.html
+Allow: /img/*
+Allow: /image/*
+Allow: /css/*
+Allow: /js/*
+Allow: /fonts/*
+
+# Proteksi Panel Administrasi & Otentikasi
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /PANDUAN_*
+
+# Peta Situs Resmi (XML Sitemap)
+Sitemap: https://digitalaljihad.my.id/sitemap.xml

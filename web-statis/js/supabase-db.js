@@ -102,6 +102,15 @@
                             try { settings.running_text_pages = JSON.parse(settings.running_text_pages); } catch (e) {}
                         }
 
+                        // Normalisasi aman status prayer_mode_enabled dari kolom value row 1 atau key-value
+                        if (settings.value !== undefined && settings.value !== null) {
+                            settings.prayer_mode_enabled = (settings.value === '1' || settings.value === 1 || settings.value === true);
+                        } else if (settings.prayer_mode_enabled !== undefined) {
+                            settings.prayer_mode_enabled = (settings.prayer_mode_enabled === true || settings.prayer_mode_enabled === '1' || settings.prayer_mode_enabled === 1);
+                        } else {
+                            settings.prayer_mode_enabled = true;
+                        }
+
                         // Sanitasi nama masjid & sub header agar tidak ada nilai dummy lama
                         if (!settings.nama_aplikasi || settings.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || settings.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
                             settings.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';

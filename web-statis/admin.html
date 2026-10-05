@@ -5884,7 +5884,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                         <div class="row align-items-center">
                                             <div class="col-lg-8 mb-3 mb-lg-0">
                                                 <p class="mb-1 text-dark font-weight-bold">
-                                                    Pembersihan Menyeluruh Memori Cache & Service Worker v5.4.0
+                                                    Pembersihan Menyeluruh Memori Cache & Service Worker v5.5.0 (SRE Production)
                                                 </p>
                                                 <p class="text-muted small mb-0">
                                                     Menghapus entri cache usang (kunci pengaturan lama, durasi legacy, cache base64 usang), memperbarui Service Worker, dan menyegarkan memori TV Display secara seketika (&lt; 100ms) tanpa menghapus data aktif masjid.
@@ -13388,7 +13388,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
         /**
          * Pembersihan menyeluruh cache usang, purge CacheStorage lama,
-         * refresh Service Worker v5.4.0, dan sinkronisasi realtime ke seluruh layar TV Display
+         * refresh Service Worker v5.5.0, dan sinkronisasi realtime ke seluruh layar TV Display
          */
         async function bersihkanCacheSistem() {
             const btn = document.getElementById('btnBersihkanCacheSistem');
@@ -13424,7 +13424,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.4.0') {
+                                if (name !== 'aljihad-signage-v5.5.0') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
@@ -13450,7 +13450,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     SupabaseDB.broadcastChange('app_settings', 'RELOAD', { timestamp: Date.now() }, 'Admin Maintenance');
                 }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.4.0' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.5.0' }).catch(() => {});
                 }
 
                 // 5. Muat ulang data terbaru dari Supabase
@@ -13465,7 +13465,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         html: `
                             <p class="text-left mb-2">Seluruh cache usang dan memori usang telah dibersihkan:</p>
                             <ul class="text-left small text-muted mb-3 pl-3">
-                                <li>Service Worker diperbarui ke <b>v5.4.0</b></li>
+                                <li>Service Worker diperbarui ke <b>v5.5.0</b></li>
                                 <li>Kunci memori lama yang dibersihkan: <b>${removedItems.length > 0 ? removedItems.join(', ') : 'Bersih (Sudah Optimal)'}</b></li>
                                 <li>Sinyal refresh TV telah dipancarkan secara realtime (&lt; 100ms) ke seluruh layar</li>
                             </ul>

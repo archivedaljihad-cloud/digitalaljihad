@@ -3,13 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Masjid - Layar TV Utama</title>
+    <title>Display Masjid - Layar TV Utama | Masjid Jami' Al-Jihad</title>
+    
+    <!-- Kepatuhan SEO & Meta Standar -->
+    <meta name="description" content="Sistem Informasi Digital Signage & Jadwal Sholat Realtime Layar TV Masjid Jami' Al Jihad. Menampilkan jadwal sholat akurat, laporan kas transparan, kajian rutin, dan siaran langsung.">
+    <meta name="keywords" content="masjid jami al jihad, jadwal sholat, digital signage masjid, display tv masjid, tv masjid, jadwal adzan, laporan kas masjid, jadwal kajian">
+    <meta name="author" content="DKM Masjid Jami' Al-Jihad">
+    <link rel="canonical" href="https://digitalaljihad.my.id/">
+    
+    <!-- Open Graph / Facebook Meta -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://digitalaljihad.my.id/">
+    <meta property="og:site_name" content="Masjid Jami' Al-Jihad">
+    <meta property="og:title" content="Display TV Masjid Jami' Al-Jihad - Sistem Informasi Digital">
+    <meta property="og:description" content="Sistem Informasi Digital Signage & Jadwal Sholat Realtime Layar TV Masjid Jami' Al Jihad. Menampilkan jadwal sholat akurat, laporan kas transparan, dan kajian rutin.">
+    <meta property="og:image" content="https://digitalaljihad.my.id/img/logo-aljihad.png">
+    
+    <!-- Twitter Card Meta -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://digitalaljihad.my.id/">
+    <meta name="twitter:title" content="Display TV Masjid Jami' Al-Jihad - Sistem Informasi Digital">
+    <meta name="twitter:description" content="Sistem Informasi Digital Signage & Jadwal Sholat Realtime Layar TV Masjid Jami' Al Jihad.">
+    <meta name="twitter:image" content="https://digitalaljihad.my.id/img/logo-aljihad.png">
+
+    <!-- PWA & Mobile Icons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#062b2b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="img/logo-aljihad-circle.png">
+    
+    <!-- Resource Hints & CDN Preconnect (Performa & LCP) -->
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -465,13 +492,13 @@
 </head>
 <body>
     <!-- Splash Screen Awal - Luxury Mosque Edition -->
-    <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-overlay" id="loadingOverlay" role="status" aria-live="polite">
         <div class="splash-card">
             <div class="splash-logo-wrapper">
                 <div class="splash-logo-halo"></div>
                 <div class="splash-spinner-ring"></div>
                 <div class="splash-inner-ring"></div>
-                <img src="image/display/logo_aljihad.png" alt="Logo Masjid" class="splash-logo-img" onerror="this.onerror=null;this.src='img/logo-aljihad-circle.png';">
+                <img src="image/display/logo_aljihad.png" alt="Logo Masjid Jami Al-Jihad" class="splash-logo-img" onerror="this.onerror=null;this.src='img/logo-aljihad-circle.png';">
             </div>
             <div class="splash-title" id="splashTitle">MASJID JAMI' AL JIHAD</div>
             <div class="splash-divider-wrap">
@@ -487,8 +514,8 @@
     <div class="tv-osd" id="tvOsd" style="display: none !important;"></div>
 
     <!-- Remote Emergency Alert Overlay Backdrop & Modal Center -->
-    <div id="emergencyBackdrop" class="emergency-backdrop" onclick="hideEmergencyAlert()"></div>
-    <div id="emergencyBanner" class="emergency-banner-overlay" onclick="hideEmergencyAlert()">
+    <div id="emergencyBackdrop" class="emergency-backdrop" onclick="hideEmergencyAlert()" aria-hidden="true"></div>
+    <div id="emergencyBanner" class="emergency-banner-overlay" onclick="hideEmergencyAlert()" role="alert" aria-live="assertive" aria-modal="true">
         <div class="emergency-header-badge">
             <i class="fas fa-bullhorn emergency-icon" id="emergencyIcon"></i>
             <span id="emergencyBadgeTitle">SIARAN PENGUMUMAN PENTING DKM</span>
@@ -503,27 +530,69 @@
     </div>
 
     <!-- Dual Iframe Crossfade Engine -->
-    <div class="iframe-container">
-        <iframe id="frame1" class="active" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        <iframe id="frame2" class="incoming" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
+    <main class="iframe-container" role="main" aria-label="Area Penayangan Slide Display Utama">
+        <iframe id="frame1" class="active" src="about:blank" title="Layar Tampilan Utama Display" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe id="frame2" class="incoming" src="about:blank" title="Layar Tampilan Standby Display" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </main>
 
     <!-- Master Persistent Footer TV (Diatur Super Admin) -->
-    <footer class="master-display-footer" id="masterDisplayFooter">
+    <footer class="master-display-footer" id="masterDisplayFooter" role="contentinfo" aria-label="Informasi Hak Cipta Display Masjid">
         <span id="masterFooterContent">© 2026 MASJID JAMI' AL JIHAD. All Rights Reserved</span>
     </footer>
 
     <!-- Prayer Mode Frame (Diaktifkan Otomatis Saat Waktu Sholat) -->
-    <iframe id="prayerFrame" src="prayer-mode.html"></iframe>
+    <iframe id="prayerFrame" src="prayer-mode.html" title="Layar Mode Sholat Fullscreen" aria-label="Layar Tampilan Mode Sholat dan Adzan"></iframe>
 
     <!-- SUPABASE & CORE SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=5.4.0"></script>
-    <script src="js/supabase-db.js?v=5.4.0"></script>
-    <script src="js/prayer-engine.js?v=5.4.0"></script>
-    <script src="js/anti-idle.js?v=5.4.0"></script>
+    <script src="js/supabase-config.js?v=5.5.0"></script>
+    <script src="js/supabase-db.js?v=5.5.0"></script>
+    <script src="js/prayer-engine.js?v=5.5.0"></script>
+    <script src="js/anti-idle.js?v=5.5.0"></script>
 
     <script>
+        // =========================================================================
+        // SRE TELEMETRY, OBSERVABILITY & ERROR BOUNDARY (SRE / DEVSECOPS)
+        // =========================================================================
+        window.__SRE_TELEMETRY__ = {
+            version: '5.5.0',
+            startTime: Date.now(),
+            lastSlideSwitchTime: Date.now(),
+            totalRotations: 0,
+            errorCount: 0,
+            events: [],
+            log(type, message, details = null) {
+                const entry = {
+                    timestamp: new Date().toISOString(),
+                    type,
+                    message,
+                    details
+                };
+                this.events.unshift(entry);
+                if (this.events.length > 50) this.events.pop();
+                console.log(`[SRE Telemetry][${type}] ${message}`, details || '');
+            }
+        };
+
+        window.addEventListener('error', (event) => {
+            if (window.__SRE_TELEMETRY__) {
+                window.__SRE_TELEMETRY__.errorCount++;
+                window.__SRE_TELEMETRY__.log('ERROR', event.message, {
+                    filename: event.filename,
+                    lineno: event.lineno,
+                    colno: event.colno
+                });
+            }
+            return false;
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            if (window.__SRE_TELEMETRY__) {
+                window.__SRE_TELEMETRY__.errorCount++;
+                window.__SRE_TELEMETRY__.log('UNHANDLED_REJECTION', event.reason ? (event.reason.message || String(event.reason)) : 'Promise rejected');
+            }
+        });
+
         // Pemetaan rute canonical ke path file statis
         const PATH_MAPPING = {
             '/utama-embed': 'slides/utama.html',
@@ -695,6 +764,11 @@
                         currentFrame = currentFrame === 1 ? 2 : 1;
                         // OSD nomor slide di pojok kanan atas dihilangkan agar tampilan syahdu & tidak mengganggu
                         broadcastTvState();
+
+                        if (window.__SRE_TELEMETRY__) {
+                            window.__SRE_TELEMETRY__.lastSlideSwitchTime = Date.now();
+                            window.__SRE_TELEMETRY__.totalRotations++;
+                        }
 
                         // Setelah transisi selesai sempurna (1.4s), bersihkan kelas outgoing menjadi standby
                         setTimeout(() => {
@@ -1323,6 +1397,19 @@
                     }
                 }
             }, { passive: true });
+
+            // SRE Rotation Watchdog (Mencegah Layar TV Freeze Akibat Background Sleep / Tab Throttling)
+            setInterval(() => {
+                if (isPaused || isPrayerModeActive) return;
+                const elapsed = Date.now() - (window.__SRE_TELEMETRY__ ? window.__SRE_TELEMETRY__.lastSlideSwitchTime : Date.now());
+                if (elapsed > (rotationInterval + 15000)) {
+                    if (window.__SRE_TELEMETRY__) {
+                        window.__SRE_TELEMETRY__.log('WATCHDOG', `Rotasi tertahan selama ${Math.round(elapsed/1000)} detik, memicu auto-recovery...`);
+                    }
+                    nextPage();
+                    scheduleNextRotation();
+                }
+            }, 5000);
         });
     </script>
 </body>

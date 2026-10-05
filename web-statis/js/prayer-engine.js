@@ -31,7 +31,13 @@
             const now = customNow || new Date();
             const setting = settings || {};
 
-            if (!setting.prayer_mode_enabled) {
+            const isEnabled = setting.prayer_mode_enabled !== false &&
+                              setting.prayer_mode_enabled !== '0' &&
+                              setting.prayer_mode_enabled !== 'false' &&
+                              setting.value !== '0' &&
+                              setting.value !== 0;
+
+            if (!isEnabled) {
                 return {
                     active: false,
                     phase: PHASES.INACTIVE,

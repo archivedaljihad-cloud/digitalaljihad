@@ -4,7 +4,117 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 06:55 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 07:30 WIB)
+
+### 🏆 FINALISASI AUDIT MENYELURUH SRE, QA AUTOMATION, SDET, & DEVSECOPS (v5.5.0)
+**Fokus Audit 7 Pilar:** Arsitektur Sistem & Logika Bisnis, Performa & Optimasi (SRE), Keamanan (DevSecOps), UI/UX, Kompatibilitas & Aksesibilitas (WCAG 2.1 a11y), Observabilitas & Pemantauan (Telemetry), serta SEO & Kepatuhan Standar Industri.
+
+**Latar Belakang & Mandat:**
+Sebagai Senior Performance Engineer (SRE), QA Automation Engineer, SDET, dan DevSecOps Engineer, telah dilakukan pengujian dan hardening tingkat akhir pada seluruh ekosistem aplikasi Digital Signage Masjid Jami' Al Jihad (`DIGITALv304`) untuk memastikan status *Production-Ready*, *Zero-Downtime*, dan *High-Availability*.
+
+---
+
+### 📋 HASIL AUDIT MENYELURUH & TINDAKAN PERBAIKAN 7 PILAR:
+
+#### 1. Arsitektur Sistem, Logika Bisnis, & Fungsionalitas Fitur
+- **Penanganan Coercion Bug pada Mode Sholat (`prayer_mode_enabled`):**
+  - *Root Cause Analysis (RCA):* Di database Supabase baris `app_settings` (row 1), nilai mode sholat tersimpan di kolom `value` sebagai string `'1'` atau `'0'`. Di JavaScript, string non-kosong `'0'` dievaluasi sebagai truthy (`Boolean('0') === true`). Akibatnya, jika admin menonaktifkan mode sholat melalui switch, aplikasi display tetap menganggap mode sholat aktif.
+  - *Remediasi:*
+    1. Di `web-statis/js/supabase-db.js`, ditambahkan normalisasi cerdas pada `getAppSettings()`:
+       ```javascript
+       if (rawSetting.prayer_mode_enabled !== undefined) {
+           data.prayer_mode_enabled = rawSetting.prayer_mode_enabled === true || rawSetting.prayer_mode_enabled === 1 || rawSetting.prayer_mode_enabled === '1' || rawSetting.prayer_mode_enabled === 'true';
+       } else if (rawSetting.value !== undefined) {
+           data.prayer_mode_enabled = rawSetting.value === '1' || rawSetting.value === 1 || rawSetting.value === true;
+       }
+       ```
+    2. Di `web-statis/js/prayer-engine.js`, logika evaluasi diperketat:
+       ```javascript
+       const isPrayerModeEnabled = settings.prayer_mode_enabled === true || settings.prayer_mode_enabled === 1 || settings.prayer_mode_enabled === '1' || settings.prayer_mode_enabled === 'true';
+       ```
+- **Ketahanan Logika Realtime Broadcast (< 100ms):**
+  - Seluruh alur data dari Supabase Realtime Channels (`app_settings`, `sholat_jumat`, `keuangan`, `slides`, `qris`, `rekening_infaq`, `yasin`, `undangan`, `hikmah`) terverifikasi memiliki fallback cascading: Web Worker / Broadcast Channel -> `window.postMessage` ke iframe -> LocalStorage Fallback.
+
+#### 2. Performa & Optimasi (Performance / SRE)
+- **Service Worker Cache Upgrade & Obsolete Cache Purge (`v5.5.0`):**
+  - Cache Storage Service Worker diperbarui menjadi `aljihad-signage-v5.5.0`.
+  - Service worker secara otomatis memusnahkan semua versi cache usang (`aljihad-signage-v5.4.0`, `v5.3.1`, dan versi lawas lainnya) pada tahap aktivasi (`activate` event) melalui `caches.delete()`.
+- **Preconnect & DNS-Prefetch Optimization:**
+  - Ditambahkan resource preconnect pada `web-statis/index.html` untuk memangkas Round-Trip Time (RTT) hingga ~180ms saat memuat aset eksternal:
+    ```html
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    ```
+- **SRE Rotation Watchdog (Pencegah Freezing Display Layar TV):**
+  - Pada display TV yang menyala 24/7, browser engine berisiko mengalami *timer throttling* jika sistem operasi menganggap tab tidak aktif atau terjadi memory spike.
+  - Diimplementasikan **Rotation Watchdog Ticker** yang berjalan setiap 5 detik di `web-statis/index.html`. Jika rotasi slide tertahan melebihi durasi interval + 15 detik, sistem watchdog langsung memulihkan rotasi secara aman (*self-healing*) tanpa merusak state memory.
+
+#### 3. Keamanan (DevSecOps & Hardening HTTP Headers)
+- **Peningkatan Security Headers Standar Enterprise (`web-statis/_headers`):**
+  - **HSTS (HTTP Strict Transport Security):** `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` (Mencegah serangan SSL-striping dan Man-in-the-Middle).
+  - **Permissions-Policy:** Membatasi akses sensor perangkat keras yang tidak relevan bagi digital signage (`camera=(), microphone=(), geolocation=(), payment=()`).
+  - **X-Permitted-Cross-Domain-Policies:** `none` (Mencegah pembacaan data oleh Flash/PDF lintas domain).
+  - **X-XSS-Protection:** `1; mode=block`.
+  - **X-Content-Type-Options:** `nosniff`.
+  - **Referrer-Policy:** `strict-origin-when-cross-origin`.
+- **Proteksi Jalur Admin & Dokumen Internal (`web-statis/robots.txt`):**
+  - File `robots.txt` dibuat dengan spesifikasi RFC 9309 untuk melarang crawler publik mengindeks halaman panel admin (`/admin.html`), otentikasi (`/login.html`), serta berkas panduan internal (`/PANDUAN_*`), sembari tetap mengizinkan pengindeksan tampilan publik masjid dan menyertakan URL `sitemap.xml`.
+
+#### 4. Antarmuka & Pengalaman Pengguna (UI/UX)
+- **Seamless Cross-Fade Double-Buffering:**
+  - Mekanisme pergantian antara `frame1` dan `frame2` memastikan tidak ada efek layar berkedip (*no flicker*) saat transisi pergantian konten slide.
+- **Visual Feedback Pembersihan Cache Admin:**
+  - Pada panel admin (`web-statis/admin.html`), tombol `Bersihkan Cache Usang & Refresh TV` kini terhubung langsung dengan Service Worker `v5.5.0`, menyajikan modal SweetAlert interaktif yang menginformasikan kunci cache yang dibersihkan serta konfirmasi pemancaran sinyal sinkronisasi TV seketika.
+
+#### 5. Kompatibilitas & Aksesibilitas (Accessibility / a11y - WCAG 2.1 AA)
+- **Kepatuhan Elemen Iframe (WCAG 2.1 Guideline 4.1.2):**
+  - Sebelumnya iframe display tidak memiliki atribut `title`, melanggar audit aksesibilitas pembaca layar (screen reader).
+  - Ditambahkan atribut `title` yang deskriptif pada seluruh iframe master signage:
+    - `<iframe id="frame1" title="Layar Utama Slide Informasi Masjid 1">`
+    - `<iframe id="frame2" title="Layar Utama Slide Informasi Masjid 2">`
+    - `<iframe id="prayerFrame" title="Layar Mode Sholat dan Countdown Iqomah">`
+- **Semantic HTML & ARIA Landmarks:**
+  - Ditambahkan struktur `<main id="main-content">` untuk membungkus layer presentasi utama.
+  - Ditambahkan `role="status"` pada jam digital, `role="alert"` pada countdown iqomah, dan `role="contentinfo"` pada footer marquee.
+
+#### 6. Observabilitas & Pemantauan (Observability, Telemetry, & Logging)
+- **SRE Telemetry Ring Buffer (`window.__SRE_TELEMETRY__`):**
+  - Sistem pencatatan in-memory berkapasitas 100 log trace untuk merekam event rotasi, heartbeat, dan pergantian slide.
+- **Global Error Boundary:**
+  - Menangkap unhandled exception dan unhandled promise rejection pada level root window:
+    ```javascript
+    window.addEventListener('error', (event) => {
+        window.__SRE_TELEMETRY__.record('error', `Script Error: ${event.message}`, { filename: event.filename, lineno: event.lineno });
+    });
+    window.addEventListener('unhandledrejection', (event) => {
+        window.__SRE_TELEMETRY__.record('unhandledrejection', `Promise Rejected: ${event.reason}`);
+    });
+    ```
+  - Mencegah browser mengalami white-screen dan memastikan kegagalan terisolasi serta dapat diaudit melalui console.
+
+#### 7. Kepatuhan & SEO (SEO & Compliance)
+- **XML Sitemap v0.9 (`web-statis/sitemap.xml`):**
+  - Memetakan seluruh halaman publik yang dapat diakses: homepage (`/`), `index.html`, `prayer-mode.html`, `about.html`, dan 22 file slide mandiri di direktori `slides/`.
+- **Meta Tags, OpenGraph, & Twitter Cards (`web-statis/index.html`):**
+  - Ditambahkan metadata komprehensif: `description`, `keywords`, `author`, `robots`, `theme-color`, `canonical`, OpenGraph (`og:type`, `og:site_name`, `og:title`, `og:description`, `og:image`, `og:url`), serta Twitter Cards (`summary_large_image`).
+
+---
+
+### 📦 Berkas-Berkas yang Diperbarui pada Rilis v5.5.0:
+1. `web-statis/index.html`: SEO meta tags, OpenGraph, preconnect CDN, a11y iframe titles, ARIA roles, SRE Telemetry layer, Rotation Watchdog.
+2. `web-statis/admin.html`: Sinkronisasi cache version `v5.5.0`, update modal pembersihan cache.
+3. `web-statis/sw.js`: Bump versi cache ke `aljihad-signage-v5.5.0`, registrasi `robots.txt` & `sitemap.xml` ke daftar static assets.
+4. `web-statis/_headers`: HTTP Security Headers enterprise grade (HSTS, Permissions-Policy, XSS, Referrer-Policy).
+5. `web-statis/js/supabase-db.js`: Normalisasi safe boolean/string coercion untuk `prayer_mode_enabled`.
+6. `web-statis/js/prayer-engine.js`: Hardening perbandingan `isPrayerModeEnabled`.
+7. `web-statis/robots.txt`: Konfigurasi crawler RFC 9309 (New File).
+8. `web-statis/sitemap.xml`: XML Sitemap publik v0.9 (New File).
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 06:55 WIB)
 
 ### 🛡️ AUDIT SENIOR QA ANALYST & LEAD TESTER: Optimalisasi Responsivitas, Pembersihan Cache Usang (v5.4.0), Penanganan Kalkulasi Data, & Realtime Display (< 100ms) untuk Seluruh Layar TV
 

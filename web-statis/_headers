@@ -4,12 +4,16 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# 1. GLOBAL SECURITY HEADERS
+# 1. GLOBAL SECURITY HEADERS (DEVSECOPS ENTERPRISE SUITE)
 # ------------------------------------------------------------------------------
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  X-Permitted-Cross-Domain-Policies: none
+  X-XSS-Protection: 1; mode=block
 
 # ------------------------------------------------------------------------------
 # 2. DOKUMEN HTML & SLIDES (ZERO EDGE CACHE / INSTANT UPDATE)
