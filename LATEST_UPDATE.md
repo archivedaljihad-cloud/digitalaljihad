@@ -4,7 +4,24 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 16:50 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 05:50 WIB)
+
+### 🛠️ PERBAIKAN NESTING DIV DASHBOARD UTAMA BENDAHARA & PEMUNCULAN WIDGET FINANSIAL:
+1. **Identifikasi Masalah & Akar Masalah (*Root Cause*):**
+   - Di halaman `web-statis/admin.html`, kartu *Pusat Agenda Rutin Masjid* (line ~1756) kehilangan tag penutup `</div>` untuk kontainer kolom (`<div class="col-12 mb-4">`).
+   - Akibatnya, tag penutup di line ~1978 hanya menutup kontainer kolom tersebut dan membiarkan kontainer operasional TV (`<div class="row mb-4" data-role="admin, petugas">`) tetap terbuka.
+   - Dampaknya, seluruh blok manajemen keuangan (`<div data-role="admin, bendahara">`) secara tidak sengaja terkurung di dalam blok `data-role="admin, petugas"`.
+   - Ketika Bendahara Kas (`Bpk. H. Utut Priastya`) login, script `admin-auth.js` mengeksekusi `display: none` pada elemen `data-role="admin, petugas"`, yang secara otomatis ikut menyembunyikan seluruh modul dan kartu keuangan di bawahnya, menyebabkan dashboard bendahara tampak kosong melompong hanya menyisakan banner selamat datang.
+2. **Perbaikan Struktur HTML (*DOM Hierarchy Fix*):**
+   - Menambahkan tag penutup `</div>` yang presisi setelah kartu *Pusat Agenda Rutin* di line ~1825.
+   - Menghapus 1 tag penutup berlebih sebelum penanda `<!-- End of View Dashboard -->` di line ~2236.
+   - Seluruh blok `data-role="admin, bendahara"` kini mandiri sebagai *direct child* dari `#view-dashboard`, sehingga modul keuangan (Pengumuman Kas Sholat Jum'at, Saldo Kas Utama, Saldo Kas Ambulance, dan Tabel Mutasi Terkini) langsung muncul utuh saat akun Bendahara login.
+3. **Invalidasi Cache Service Worker:**
+   - Cache dinaikkan ke **`v5.5.6`** (`aljihad-signage-v5.5.6`) di `web-statis/sw.js`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 16:50 WIB)
 
 ### 🧹 PENGOSONGAN DATA DEFAULT DUMMY KAJIAN MALAM AHAD (UST. H. AHMAD SHOLEH AL-HAFIDZ -> BLANK):
 1. **Identifikasi Penyebab (*Root Cause*):**
