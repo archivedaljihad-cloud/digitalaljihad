@@ -247,8 +247,8 @@ class AppSetting extends Model
                 'judul' => 'Kajian Malam Ahad',
                 'hari' => 'Sabtu (Malam Ahad)',
                 'waktu' => 'Ba\'da Maghrib s/d Isya',
-                'pembimbing' => 'Ust. H. Ahmad Sholeh Al-Hafidz',
-                'keterangan' => 'Kajian Kitab Bidayatul Hidayah & Fiqih Keseharian',
+                'pembimbing' => '',
+                'keterangan' => '',
                 'lokasi' => 'Ruang Utama Masjid Jami\' Al Jihad'
             ],
             'tahsin' => [

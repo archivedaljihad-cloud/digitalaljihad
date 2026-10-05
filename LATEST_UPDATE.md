@@ -4,7 +4,27 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 16:30 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 16:50 WIB)
+
+### 🧹 PENGOSONGAN DATA DEFAULT DUMMY KAJIAN MALAM AHAD (UST. H. AHMAD SHOLEH AL-HAFIDZ -> BLANK):
+1. **Identifikasi Penyebab (*Root Cause*):**
+   - Di dashboard pengurus (`admin.html`), input HTML (`kajianUstadzNama`, `kajianKitabRujukan`, `kajianTemaPembahasan`, dsb.) dan memori JavaScript (`currentKajianBulanData`) memiliki nilai inisial bawaan hardcoded berupa nama *"Ust. H. Ahmad Sholeh Al-Hafidz"*, *"Kitab Riyadhus Shalihin"*, dan *"Kajian Fiqih Ibadah & Adab Keseharian Seorang Muslim"*.
+   - Saat database Supabase Cloud (`app_settings` key `kajian_sabtu_data`) bernilai `{}` (kosong/belum pernah diinput agenda khusus), sistem secara otomatis memunculkan data preset dummy tersebut ke form input, preview TV, serta subtext tab pekan 1 s/d 5.
+   - Hal serupa juga terjadi pada slide display TV (`slides/kajian.html`, `slides/agenda-rutin.html`), Pusat Agenda Rutin, dan view Laravel.
+2. **Pembersihan Total Menjadi Blank (*Clean Initial State*):**
+   - **Form Input Kajian (`web-statis/admin.html`):** Seluruh input nama ustadz, gelar, kitab rujukan, tema pembahasan, dan tanggal kini berstatus blank (kosong dengan placeholder panduan).
+   - **Pratinjau Layar TV (`web-statis/admin.html`):** Default nama pemateri menjadi `-`, kitab `-`, dan tema *"Tema Kajian Belum Diatur"*.
+   - **Memori State JS (`currentKajianBulanData`):** Diinisialisasi dengan 5 pekan berstatus string kosong `""` secara default.
+   - **Pembersihan Cache Browser:** Otomatis membersihkan sisa `cached_kajian_sabtu` lokal jika masih memuat teks dummy lama.
+   - **Pusat Agenda Rutin (`web-statis/admin.html` & `app/Models/AppSetting.php`):** Field pembimbing dan keterangan kajian ahad dikosongkan secara default.
+   - **Slide Kajian TV (`web-statis/slides/kajian.html` & `web-statis/slides/agenda-rutin.html`):** Mengganti fallback hardcoded menjadi string kosong / `-`.
+   - **Laravel Blade Views:** Menyelaraskan `home.blade.php`, `agenda_rutin/index.blade.php`, dan `agenda-rutin-embed.blade.php`.
+3. **Invalidasi Service Worker Cache:**
+   - Cache dinaikkan ke **`v5.5.5`** (`aljihad-signage-v5.5.5`) di `web-statis/sw.js`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 16:30 WIB)
 
 ### 🧹 PENGHAPUSAN TOMBOL KAPSUL PERAN (BENDAHARA, SUPER ADMIN, PETUGAS) DI HALAMAN LOGIN:
 1. **Pembersihan Tombol Kapsul Peran (*Role Pill Buttons Removal*):**

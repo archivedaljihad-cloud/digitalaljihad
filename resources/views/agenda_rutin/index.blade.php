@@ -123,7 +123,7 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="font-weight-bold small text-gray-700">Pemateri / Ustadz</label>
-                            <input type="text" class="form-control" id="bladeKajianPembimbing" name="kajian_ahad_pembimbing" value="{{ $kegiatan['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh Al-Hafidz' }}">
+                            <input type="text" class="form-control" id="bladeKajianPembimbing" name="kajian_ahad_pembimbing" value="{{ $kegiatan['kajian_ahad']['pembimbing'] ?? '' }}" placeholder="Nama Ustadz Pemateri">
                         </div>
                     </div>
 
@@ -134,7 +134,7 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="font-weight-bold small text-gray-700">Kitab / Pembahasan</label>
-                            <input type="text" class="form-control" id="bladeKajianKet" name="kajian_ahad_keterangan" value="{{ $kegiatan['kajian_ahad']['keterangan'] ?? 'Kajian Kitab Bidayatul Hidayah & Tanya Jawab Fiqih' }}">
+                            <input type="text" class="form-control" id="bladeKajianKet" name="kajian_ahad_keterangan" value="{{ $kegiatan['kajian_ahad']['keterangan'] ?? '' }}" placeholder="Kitab / Tema Pembahasan">
                         </div>
                     </div>
                     <div id="bladeKajianSyncStatus" class="p-1 px-2 rounded small mt-1" style="display: none; background: #e0f2fe; color: #0369a1; font-size: 11px; border-left: 3px solid #0284c7;">

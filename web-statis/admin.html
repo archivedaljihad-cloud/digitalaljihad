@@ -2928,25 +2928,25 @@
 
                                         <div class="form-group">
                                             <label class="font-weight-bold">Nama Ustadz Pemateri <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control font-weight-bold" id="kajianUstadzNama" value="Ust. H. Ahmad Sholeh Al-Hafidz" placeholder="Contoh: Ust. Dr. Faisal, M.Ag" oninput="onKajianFieldChanged()">
+                                            <input type="text" class="form-control font-weight-bold" id="kajianUstadzNama" value="" placeholder="Contoh: Ust. Dr. Faisal, M.Ag" oninput="onKajianFieldChanged()">
                                         </div>
 
                                         <div class="form-group">
                                             <label class="font-weight-bold">Gelar / Bidang Keahlian Ustadz</label>
-                                            <input type="text" class="form-control" id="kajianUstadzGelar" value="Dewan Asatidz DKM Masjid Jami' Al-Jihad" placeholder="Contoh: Pakar Fiqih Muamalah / Dosen Pascasarjana" oninput="onKajianFieldChanged()">
+                                            <input type="text" class="form-control" id="kajianUstadzGelar" value="" placeholder="Contoh: Pakar Fiqih Muamalah / Dosen Pascasarjana" oninput="onKajianFieldChanged()">
                                         </div>
 
                                         <div class="form-group">
                                             <label class="font-weight-bold">Kitab Rujukan Utama</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-book-quran text-warning"></i></span></div>
-                                                <input type="text" class="form-control font-weight-bold" id="kajianKitabRujukan" value="Kitab Riyadhus Shalihin (Imam An-Nawawi)" placeholder="Contoh: Bulughul Maram / Tafsir Ibnu Katsir" oninput="onKajianFieldChanged()">
+                                                <input type="text" class="form-control font-weight-bold" id="kajianKitabRujukan" value="" placeholder="Contoh: Bulughul Maram / Tafsir Ibnu Katsir" oninput="onKajianFieldChanged()">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="font-weight-bold">Tema Pembahasan Pekan Ini <span class="text-danger">*</span></label>
-                                            <textarea class="form-control font-weight-bold" id="kajianTemaPembahasan" rows="2" placeholder="Contoh: Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga" oninput="onKajianFieldChanged()">Kajian Fiqih Ibadah & Adab Keseharian Seorang Muslim</textarea>
+                                            <textarea class="form-control font-weight-bold" id="kajianTemaPembahasan" rows="2" placeholder="Contoh: Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga" oninput="onKajianFieldChanged()"></textarea>
                                         </div>
 
                                         <div class="d-flex justify-content-between align-items-center pt-2 border-top">
@@ -2975,11 +2975,11 @@
                                             <span class="badge badge-success font-weight-bold px-3 py-1 mb-2" id="prevKajianPekanBadge">
                                                 <i class="fas fa-calendar-week mr-1"></i> PEKAN KE-1 (SABTU MALAM)
                                             </span>
-                                            <div class="font-weight-bold text-white mb-1" id="prevKajianUstadz" style="font-size: 1.15rem;">Ust. H. Ahmad Sholeh Al-Hafidz</div>
-                                            <div class="text-warning small font-weight-bold mb-2" id="prevKajianKitab">Kitab Bidayatul Hidayah</div>
+                                            <div class="font-weight-bold text-white mb-1" id="prevKajianUstadz" style="font-size: 1.15rem;">-</div>
+                                            <div class="text-warning small font-weight-bold mb-2" id="prevKajianKitab">-</div>
                                             <div class="p-2 rounded mb-2" style="background: rgba(0,0,0,0.4); border-left: 3px solid #10b981; text-align: left;">
                                                 <div class="small text-muted font-weight-bold" style="font-size: 10px;">TEMA PEKAN INI:</div>
-                                                <div class="small font-weight-bold text-white" id="prevKajianTema">Kajian Fiqih Ibadah & Adab Keseharian Seorang Muslim</div>
+                                                <div class="small font-weight-bold text-white" id="prevKajianTema">Tema Kajian Belum Diatur</div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center text-muted small" style="font-size: 11px;">
                                                 <span><i class="fas fa-clock text-warning mr-1"></i> <span id="prevKajianWaktu">Ba'da Maghrib - Isya</span></span>
@@ -3130,12 +3130,12 @@
                                             </div>
                                             <div class="col-md-6 form-group mb-2">
                                                 <label class="small font-weight-bold text-dark mb-1">Pemateri / Ustadz</label>
-                                                <input type="text" class="form-control form-control-sm" id="wsKajianAhadPembimbing" value="Ust. H. Ahmad Sholeh Al-Hafidz">
+                                                <input type="text" class="form-control form-control-sm" id="wsKajianAhadPembimbing" value="" placeholder="Nama Ustadz Pemateri">
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="small font-weight-bold text-dark mb-1">Kitab / Tema</label>
-                                            <input type="text" class="form-control form-control-sm" id="wsKajianAhadKet" value="Kitab Bidayatul Hidayah & Tanya Jawab Fiqih">
+                                            <input type="text" class="form-control form-control-sm" id="wsKajianAhadKet" value="" placeholder="Kitab / Tema Pembahasan">
                                         </div>
                                         <div id="wsKajianAhadSyncStatus" class="p-1 px-2 rounded small" style="display: none; background: #e0f2fe; color: #0369a1; font-size: 11px; border-left: 3px solid #0284c7;">
                                         </div>
@@ -8713,46 +8713,52 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                 if (typeof validateTime24H === 'function') validateTime24H(document.getElementById('kajianJamMulai'));
                             }
                         }
+                        // Bersihkan cache lama jika masih memuat preset dummy Ahmad Sholeh
+                        try {
+                            const rawCacheKajian = localStorage.getItem('cached_kajian_sabtu');
+                            if (rawCacheKajian && rawCacheKajian.includes('Ahmad Sholeh')) {
+                                localStorage.removeItem('cached_kajian_sabtu');
+                            }
+                        } catch (e) {}
+
                         let kData = s.kajian_sabtu_data;
                         if (typeof kData === 'string') {
                             try { kData = JSON.parse(kData); } catch (e) {}
                         }
-                        if (!kData) {
+                        if (!kData || Object.keys(kData).length === 0) {
                             try { kData = JSON.parse(localStorage.getItem('cached_kajian_sabtu')); } catch (e) {}
                         }
-                        if (kData) {
-                            if (kData.jadwal_list && Array.isArray(kData.jadwal_list) && kData.jadwal_list.length > 0) {
-                                currentKajianBulanData.jadwal_list = kData.jadwal_list;
-                                if (kData.bulan_num) currentKajianBulanData.bulan_num = parseInt(kData.bulan_num);
-                                if (kData.tahun) currentKajianBulanData.tahun = parseInt(kData.tahun);
-                            } else {
-                                // Kompatibilitas data single item lama
-                                const pNum = parseInt((kData.pekan_label || 'Pekan 1').replace(/\D/g, '')) || 1;
-                                if (currentKajianBulanData.jadwal_list[pNum - 1]) {
-                                    if (kData.tanggal) currentKajianBulanData.jadwal_list[pNum - 1].tanggal = kData.tanggal;
-                                    if (kData.ustadz_nama) currentKajianBulanData.jadwal_list[pNum - 1].ustadz_nama = kData.ustadz_nama;
-                                    if (kData.ustadz_gelar) currentKajianBulanData.jadwal_list[pNum - 1].ustadz_gelar = kData.ustadz_gelar;
-                                    if (kData.kitab_rujukan) currentKajianBulanData.jadwal_list[pNum - 1].kitab_rujukan = kData.kitab_rujukan;
-                                    if (kData.tema_kajian) currentKajianBulanData.jadwal_list[pNum - 1].tema_kajian = kData.tema_kajian;
-                                    if (kData.waktu_pelaksanaan) currentKajianBulanData.jadwal_list[pNum - 1].waktu_pelaksanaan = kData.waktu_pelaksanaan;
-                                }
+                        if (kData && kData.jadwal_list && Array.isArray(kData.jadwal_list) && kData.jadwal_list.length > 0) {
+                            currentKajianBulanData.jadwal_list = kData.jadwal_list;
+                            if (kData.bulan_num) currentKajianBulanData.bulan_num = parseInt(kData.bulan_num);
+                            if (kData.tahun) currentKajianBulanData.tahun = parseInt(kData.tahun);
+                        } else if (kData && (kData.ustadz_nama || kData.tema_kajian || kData.kitab_rujukan)) {
+                            // Kompatibilitas data single item lama
+                            const pNum = parseInt((kData.pekan_label || 'Pekan 1').replace(/\D/g, '')) || 1;
+                            if (currentKajianBulanData.jadwal_list[pNum - 1]) {
+                                if (kData.tanggal) currentKajianBulanData.jadwal_list[pNum - 1].tanggal = kData.tanggal;
+                                if (kData.ustadz_nama) currentKajianBulanData.jadwal_list[pNum - 1].ustadz_nama = kData.ustadz_nama;
+                                if (kData.ustadz_gelar) currentKajianBulanData.jadwal_list[pNum - 1].ustadz_gelar = kData.ustadz_gelar;
+                                if (kData.kitab_rujukan) currentKajianBulanData.jadwal_list[pNum - 1].kitab_rujukan = kData.kitab_rujukan;
+                                if (kData.tema_kajian) currentKajianBulanData.jadwal_list[pNum - 1].tema_kajian = kData.tema_kajian;
+                                if (kData.waktu_pelaksanaan) currentKajianBulanData.jadwal_list[pNum - 1].waktu_pelaksanaan = kData.waktu_pelaksanaan;
                             }
-                            if (document.getElementById('kajianBulanSelect') && currentKajianBulanData.bulan_num) {
-                                document.getElementById('kajianBulanSelect').value = currentKajianBulanData.bulan_num;
-                            }
-                            if (document.getElementById('kajianTahunSelect') && currentKajianBulanData.tahun) {
-                                document.getElementById('kajianTahunSelect').value = currentKajianBulanData.tahun;
-                            }
-                            // Auto-generate tanggal Sabtu jika belum ada satupun tanggal terisi
-                            const hasAnyDate = currentKajianBulanData.jadwal_list.some(j => j.tanggal);
-                            if (!hasAnyDate && typeof generateTanggalSabtuBulan === 'function') {
-                                generateTanggalSabtuBulan(false);
-                            } else {
-                                if (typeof muatDataPekanKeForm === 'function') muatDataPekanKeForm(currentKajianPekanActive);
-                                if (typeof renderKajianPekanTabsUI === 'function') renderKajianPekanTabsUI();
-                                if (typeof renderKajianRekapTable === 'function') renderKajianRekapTable();
-                                if (typeof updateKajianPreview === 'function') updateKajianPreview();
-                            }
+                        }
+                        if (document.getElementById('kajianBulanSelect') && currentKajianBulanData.bulan_num) {
+                            document.getElementById('kajianBulanSelect').value = currentKajianBulanData.bulan_num;
+                        }
+                        if (document.getElementById('kajianTahunSelect') && currentKajianBulanData.tahun) {
+                            document.getElementById('kajianTahunSelect').value = currentKajianBulanData.tahun;
+                        }
+                        // Auto-generate tanggal Sabtu jika belum ada satupun tanggal terisi
+                        const hasAnyDate = currentKajianBulanData.jadwal_list.some(j => j.tanggal);
+                        if (!hasAnyDate && typeof generateTanggalSabtuBulan === 'function') {
+                            generateTanggalSabtuBulan(false);
+                        } else {
+                            if (typeof muatDataPekanKeForm === 'function') muatDataPekanKeForm(currentKajianPekanActive);
+                            if (typeof renderKajianPekanTabsUI === 'function') renderKajianPekanTabsUI();
+                            if (typeof renderKajianRekapTable === 'function') renderKajianRekapTable();
+                            if (typeof updateKajianPreview === 'function') updateKajianPreview();
                         }
                     }
 
@@ -11753,11 +11759,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             bulan_num: (new Date()).getMonth() + 1,
             tahun: (new Date()).getFullYear(),
             jadwal_list: [
-                { pekan: 1, pekan_label: "Pekan 1", tanggal: "", ustadz_nama: KAJIAN_PRESETS[1].ustadz, ustadz_gelar: KAJIAN_PRESETS[1].gelar, kitab_rujukan: KAJIAN_PRESETS[1].kitab, tema_kajian: KAJIAN_PRESETS[1].tema, waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
-                { pekan: 2, pekan_label: "Pekan 2", tanggal: "", ustadz_nama: KAJIAN_PRESETS[2].ustadz, ustadz_gelar: KAJIAN_PRESETS[2].gelar, kitab_rujukan: KAJIAN_PRESETS[2].kitab, tema_kajian: KAJIAN_PRESETS[2].tema, waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
-                { pekan: 3, pekan_label: "Pekan 3", tanggal: "", ustadz_nama: KAJIAN_PRESETS[3].ustadz, ustadz_gelar: KAJIAN_PRESETS[3].gelar, kitab_rujukan: KAJIAN_PRESETS[3].kitab, tema_kajian: KAJIAN_PRESETS[3].tema, waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
-                { pekan: 4, pekan_label: "Pekan 4", tanggal: "", ustadz_nama: KAJIAN_PRESETS[4].ustadz, ustadz_gelar: KAJIAN_PRESETS[4].gelar, kitab_rujukan: KAJIAN_PRESETS[4].kitab, tema_kajian: KAJIAN_PRESETS[4].tema, waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
-                { pekan: 5, pekan_label: "Pekan 5", tanggal: "", ustadz_nama: KAJIAN_PRESETS[5].ustadz, ustadz_gelar: KAJIAN_PRESETS[5].gelar, kitab_rujukan: KAJIAN_PRESETS[5].kitab, tema_kajian: KAJIAN_PRESETS[5].tema, waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" }
+                { pekan: 1, pekan_label: "Pekan 1", tanggal: "", ustadz_nama: "", ustadz_gelar: "", kitab_rujukan: "", tema_kajian: "", waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
+                { pekan: 2, pekan_label: "Pekan 2", tanggal: "", ustadz_nama: "", ustadz_gelar: "", kitab_rujukan: "", tema_kajian: "", waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
+                { pekan: 3, pekan_label: "Pekan 3", tanggal: "", ustadz_nama: "", ustadz_gelar: "", kitab_rujukan: "", tema_kajian: "", waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
+                { pekan: 4, pekan_label: "Pekan 4", tanggal: "", ustadz_nama: "", ustadz_gelar: "", kitab_rujukan: "", tema_kajian: "", waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" },
+                { pekan: 5, pekan_label: "Pekan 5", tanggal: "", ustadz_nama: "", ustadz_gelar: "", kitab_rujukan: "", tema_kajian: "", waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya" }
             ]
         };
 
@@ -11988,7 +11994,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 }
 
                 if (subtextEl && item) {
-                    subtextEl.textContent = item.kitab_rujukan ? item.kitab_rujukan.split('(')[0].trim() : (KAJIAN_PRESETS[i]?.kitab?.split('(')[0] || '');
+                    subtextEl.textContent = item.kitab_rujukan ? item.kitab_rujukan.split('(')[0].trim() : (item.tema_kajian ? item.tema_kajian.substring(0, 24) : 'Belum diatur');
                 }
             }
         }
@@ -12088,13 +12094,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 document.getElementById('prevKajianDateBadge').textContent = item.tanggal ? formatTanggalIndoKajian(item.tanggal) : 'Sabtu, -';
             }
             if (document.getElementById('prevKajianUstadz')) {
-                document.getElementById('prevKajianUstadz').textContent = item.ustadz_nama || 'Ust. H. Ahmad Sholeh Al-Hafidz';
+                document.getElementById('prevKajianUstadz').textContent = item.ustadz_nama || '-';
             }
             if (document.getElementById('prevKajianKitab')) {
-                document.getElementById('prevKajianKitab').textContent = item.kitab_rujukan || 'Kitab Riyadhus Shalihin';
+                document.getElementById('prevKajianKitab').textContent = item.kitab_rujukan || '-';
             }
             if (document.getElementById('prevKajianTema')) {
-                document.getElementById('prevKajianTema').textContent = item.tema_kajian || 'Keutamaan Menjaga Hak Sesama Muslim';
+                document.getElementById('prevKajianTema').textContent = item.tema_kajian || 'Tema Kajian Belum Diatur';
             }
             if (document.getElementById('prevKajianWaktu')) {
                 document.getElementById('prevKajianWaktu').textContent = item.waktu_pelaksanaan || "Ba'da Maghrib - Isya";
@@ -15394,8 +15400,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     judul: 'Kajian Malam Ahad',
                     hari_teks: 'Setiap Malam Ahad (Sabtu Malam)',
                     waktu: 'Ba\'da Maghrib s/d Isya',
-                    pembimbing: 'Ust. H. Ahmad Sholeh Al-Hafidz',
-                    keterangan: 'Kitab Bidayatul Hidayah & Tanya Jawab Fiqih'
+                    pembimbing: '',
+                    keterangan: ''
                 },
                 tahsin: {
                     enabled: true,
@@ -15749,8 +15755,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     judul: (document.getElementById('wsKajianAhadJudul') ? document.getElementById('wsKajianAhadJudul').value : '').trim() || 'Kajian Malam Ahad',
                     hari_teks: 'Setiap Malam Ahad (Sabtu Malam)',
                     waktu: (document.getElementById('wsKajianAhadWaktu') ? document.getElementById('wsKajianAhadWaktu').value : '').trim() || 'Ba\'da Maghrib s/d Isya',
-                    pembimbing: (document.getElementById('wsKajianAhadPembimbing') ? document.getElementById('wsKajianAhadPembimbing').value : '').trim() || 'Ust. H. Ahmad Sholeh Al-Hafidz',
-                    keterangan: (document.getElementById('wsKajianAhadKet') ? document.getElementById('wsKajianAhadKet').value : '').trim() || 'Kitab Bidayatul Hidayah & Tanya Jawab Fiqih'
+                    pembimbing: (document.getElementById('wsKajianAhadPembimbing') ? document.getElementById('wsKajianAhadPembimbing').value : '').trim(),
+                    keterangan: (document.getElementById('wsKajianAhadKet') ? document.getElementById('wsKajianAhadKet').value : '').trim()
                 },
                 tahsin: {
                     enabled: document.getElementById('wsTahsinEnabled') ? document.getElementById('wsTahsinEnabled').checked : true,

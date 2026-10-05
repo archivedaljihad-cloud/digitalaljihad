@@ -546,12 +546,12 @@
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pemateri :</div>
-                            <div class="info-value">{{ $kegiatan['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh Al-Hafidz' }}</div>
+                            <div class="info-value">{{ $kegiatan['kajian_ahad']['pembimbing'] ?? '-' }}</div>
                         </div>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-book-open"></i> Kitab / Tema :</div>
-                            <div class="info-value">{{ $kegiatan['kajian_ahad']['keterangan'] ?? 'Kitab Bidayatul Hidayah & Fiqih' }}</div>
+                            <div class="info-value">{{ $kegiatan['kajian_ahad']['keterangan'] ?? '-' }}</div>
                         </div>
                     </div>
                     <div class="card-bottom">

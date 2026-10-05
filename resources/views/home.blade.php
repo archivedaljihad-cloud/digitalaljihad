@@ -743,7 +743,7 @@
                             </div>
                             <div class="font-weight-bold text-dark" style="font-size: 0.92rem;">Kajian Umum Ahad</div>
                             <small class="text-muted d-block mt-1"><i class="fas fa-clock mr-1 text-warning"></i> Ba'da Maghrib s/d Isya</small>
-                            <small class="text-muted d-block"><i class="fas fa-user-tie mr-1 text-primary"></i> {{ Str::limit($rutinSettings['kajian_ahad']['pembimbing'] ?? 'Ust. Ahmad Sholeh', 18) }}</small>
+                            <small class="text-muted d-block"><i class="fas fa-user-tie mr-1 text-primary"></i> {{ Str::limit($rutinSettings['kajian_ahad']['pembimbing'] ?? '-', 18) }}</small>
                         </div>
                     </div>
 
@@ -832,7 +832,7 @@
                 @if($rutinSettings['kajian_ahad']['enabled'] ?? true)<input type="hidden" name="kajian_ahad_enabled" value="1">@endif
                 <input type="hidden" name="kajian_ahad_judul"      value="{{ $rutinSettings['kajian_ahad']['judul'] ?? 'Kajian Malam Ahad' }}">
                 <input type="hidden" name="kajian_ahad_waktu"      value="{{ $rutinSettings['kajian_ahad']['waktu'] ?? 'Ba\'da Maghrib s/d Isya' }}">
-                <input type="hidden" name="kajian_ahad_pembimbing" value="{{ $rutinSettings['kajian_ahad']['pembimbing'] ?? 'Ust. H. Ahmad Sholeh Al-Hafidz' }}">
+                <input type="hidden" name="kajian_ahad_pembimbing" value="{{ $rutinSettings['kajian_ahad']['pembimbing'] ?? '' }}">
                 <input type="hidden" name="kajian_ahad_keterangan" value="{{ $rutinSettings['kajian_ahad']['keterangan'] ?? '' }}">
                 <input type="hidden" name="kajian_ahad_lokasi"     value="{{ $rutinSettings['kajian_ahad']['lokasi'] ?? 'Ruang Utama Masjid Jami\' Al Jihad' }}">
 

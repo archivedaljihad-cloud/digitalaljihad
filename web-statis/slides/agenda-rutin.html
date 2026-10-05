@@ -485,8 +485,8 @@
                 judul: 'Kajian Malam Ahad',
                 hari: 'Sabtu (Malam Ahad)',
                 waktu: 'Ba\'da Sholat Maghrib s/d Isya',
-                pembimbing: 'Ust. H. Ahmad Sholeh Al-Hafidz',
-                keterangan: 'Kitab Bidayatul Hidayah & Tanya Jawab Fiqih',
+                pembimbing: '',
+                keterangan: '',
                 lokasi: 'Ruang Utama Masjid Jami\' Al Jihad'
             },
             tahsin: {
@@ -626,12 +626,12 @@
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pemateri :</div>
-                            <div class="info-value">${data.kajian_ahad.pembimbing || 'Ust. H. Ahmad Sholeh Al-Hafidz'}</div>
+                            <div class="info-value">${data.kajian_ahad.pembimbing || '-'}</div>
                         </div>
 
                         <div class="info-item">
                             <div class="info-label"><i class="fa-solid fa-book-open"></i> Kitab / Tema :</div>
-                            <div class="info-value">${data.kajian_ahad.keterangan || 'Kitab Bidayatul Hidayah & Fiqih'}</div>
+                            <div class="info-value">${data.kajian_ahad.keterangan || '-'}</div>
                         </div>
                     </div>
                     <div class="card-bottom">

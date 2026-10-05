@@ -722,8 +722,8 @@
                             <span class="ustadz-badge-role"><i class="fas fa-chalkboard-teacher mr-1"></i> Pemateri Kajian</span>
                         </div>
                     </div>
-                    <div class="ustadz-name-title" id="valUstadzName">Ust. H. Ahmad Sholeh Al-Hafidz</div>
-                    <div class="ustadz-spec" id="valUstadzSpec">Dewan Asatidz DKM Masjid Jami' Al-Jihad</div>
+                    <div class="ustadz-name-title" id="valUstadzName">-</div>
+                    <div class="ustadz-spec" id="valUstadzSpec">Majelis Ta'lim & Kajian Rutin</div>
                 </div>
 
                 <div class="waktu-kajian-pill">
@@ -749,13 +749,13 @@
                         <i class="fas fa-book-quran kitab-icon"></i>
                         <div>
                             <div class="kitab-label">Kitab Rujukan Utama</div>
-                            <div class="kitab-title" id="valKitabRujukan">Kitab Riyadhus Shalihin</div>
+                            <div class="kitab-title" id="valKitabRujukan">-</div>
                         </div>
                     </div>
 
                     <div class="tema-box">
                         <div class="tema-label"><i class="fas fa-bookmark mr-1"></i> Tema Pembahasan Pekan Ini</div>
-                        <div class="tema-title" id="valTemaKajian">Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga</div>
+                        <div class="tema-title" id="valTemaKajian">Jadwal Kajian Belum Diatur</div>
                     </div>
                 </div>
 
@@ -831,10 +831,10 @@
 
         // Default Data Kajian Malam Ahad
         const DEFAULT_KAJIAN = {
-            ustadz_nama: "Ust. H. Ahmad Sholeh Al-Hafidz",
-            ustadz_gelar: "Dewan Asatidz DKM Masjid Jami' Al-Jihad",
-            kitab_rujukan: "Kitab Riyadhus Shalihin (Imam An-Nawawi)",
-            tema_kajian: "Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga",
+            ustadz_nama: "",
+            ustadz_gelar: "",
+            kitab_rujukan: "",
+            tema_kajian: "",
             pekan_label: "Pekan 1",
             waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya",
             tanggal: ""
@@ -990,22 +990,22 @@
 
             setTimeout(() => {
                 // Update teks kartu pemateri
-                if (d.ustadz_nama && document.getElementById('valUstadzName')) {
-                    document.getElementById('valUstadzName').textContent = d.ustadz_nama;
+                if (document.getElementById('valUstadzName')) {
+                    document.getElementById('valUstadzName').textContent = d.ustadz_nama || '-';
                 }
-                if (d.ustadz_gelar && document.getElementById('valUstadzSpec')) {
-                    document.getElementById('valUstadzSpec').textContent = d.ustadz_gelar;
+                if (document.getElementById('valUstadzSpec')) {
+                    document.getElementById('valUstadzSpec').textContent = d.ustadz_gelar || 'Majelis Ta\'lim & Kajian Rutin';
                 }
-                if (d.waktu_pelaksanaan && document.getElementById('valWaktuPelaksanaan')) {
-                    document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan;
+                if (document.getElementById('valWaktuPelaksanaan')) {
+                    document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Isya";
                 }
 
                 // Update teks kartu kitab & tema
-                if (d.kitab_rujukan && document.getElementById('valKitabRujukan')) {
-                    document.getElementById('valKitabRujukan').textContent = d.kitab_rujukan;
+                if (document.getElementById('valKitabRujukan')) {
+                    document.getElementById('valKitabRujukan').textContent = d.kitab_rujukan || '-';
                 }
-                if (d.tema_kajian && document.getElementById('valTemaKajian')) {
-                    document.getElementById('valTemaKajian').textContent = d.tema_kajian;
+                if (document.getElementById('valTemaKajian')) {
+                    document.getElementById('valTemaKajian').textContent = d.tema_kajian || 'Jadwal Kajian Belum Diatur';
                 }
 
                 // Update badge pekan
