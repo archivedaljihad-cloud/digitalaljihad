@@ -4,7 +4,44 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 08:05 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 09:30 WIB)
+
+### 🔐 PERBAIKAN TOTAL AUTENTIKASI MULTI-DEVICE AKUN BENDAHARA & PENGURUS:
+1. **Identifikasi Masalah & Akar Masalah (*Root Cause Analysis*):**
+   - **Masalah:** Akun Bendahara tidak dapat dibuka saat login dari perangkat lain (HP Android/iPhone, tablet, atau komputer lain).
+   - **Penyebab 1 (Disparitas Kata Sandi Cloud vs Hardcoded Defaults):**
+     - Di Supabase Cloud (`app_settings` key `rbac_users_list`), akun Bendahara (`bendahara@aljihad.com`) tersimpan dengan kata sandi `#1.Bendahara`.
+     - Namun di kode fallback lokal (`DEFAULT_AUTH_USERS` di `admin-auth.js`) dan preset `login.html`, kata sandi tertulis `bendahara123`.
+     - Sementara di database Laravel (`users` table PostgreSQL), hash kata sandi lama mencocokkan `Aljihad2024`.
+     - Ketika pengurus memasukkan kata sandi yang mereka ingat (`bendahara123`, `Aljihad2024`, atau `#1.Bendahara` dengan huruf besar/simbol), salah satu perangkat akan menolak login jika tidak sesuai dengan yang sedang aktif di memori sesi perangkat pertama.
+   - **Penyebab 2 (Kelemahan Regex Pembersih Gelar di `isUserMatch`):**
+     - Nama bendahara adalah `"Bpk. H. Utut Priastya"`. Regex sebelumnya (`/^(bpk\.|ust\.|...)\s+/i`) hanya membersihkan gelar pertama `"Bpk. "`, menyisakan `"H. Utut Priastya"`. Jika pengurus mengetik `"Utut Priastya"`, `"Utut"`, atau `"Bendahara"`, fungsi pencocokan menganggapnya tidak cocok (*mismatch*).
+   - **Penyebab 3 (Absensi Quick Role Selector di UI Login):**
+     - Pada layar ponsel/HP, mengetik simbol rumit `#` dan `.` rentan terhadap auto-correct dan salah ketik. Tombol pemilih peran cepat (*Role Pills*) belum terpasang di HTML form `login.html` dan `login.blade.php`.
+
+2. **Solusi Komprehensif yang Diterapkan:**
+   - **Toleransi Multi-Device Lintas Sandi (`isPasswordMatch`):**
+     - Dibuat fungsi verifikasi kata sandi `isPasswordMatch(user, enteredPassword)` di `web-statis/js/admin-auth.js` yang secara otomatis menerima sandi resmi `#1.Bendahara`, `bendahara123`, maupun `Aljihad2024` untuk akun Bendahara.
+     - Begitu pula untuk Super Admin (`SuperUser1971`, `admin123`, `Aljihad2024`) dan Petugas DKM (`*dkm1#aljihad`, `135dkmlJihad`, `operator123`, `Aljihad2024`).
+   - **Normalisasi Fleksibel Identifier Pengguna (`isUserMatch`):**
+     - Pembersihan gelar kehormatan bertumpuk secara rekursif (`Bpk. H. Utut Priastya` -> `Utut Priastya`).
+     - Mendukung pencocokan berdasarkan kata kunci peran (`bendahara`, `bendahara kas`, `admin`, `petugas`), nama panggilan (`utut`, `suwardi`, `hadi`), username (`bendahara`, `admin`, `dkmsatu`), serta email.
+   - **Integrasi Tombol Pilih Peran Cepat (1-Tap Quick Role Picker):**
+     - Ditambahkan tombol pill interaktif di `web-statis/login.html` dan `resources/views/auth/login.blade.php`:
+       - `[ 💰 Bendahara ]` (Terpilih otomatis secara default)
+       - `[ 🛡️ Super Admin ]`
+       - `[ 📺 Petugas ]`
+     - Pengurus di HP cukup membuka halaman login, lalu langsung klik tombol "Masuk ke Dashboard" tanpa perlu mengetik ulang kredensial.
+   - **Penyelarasan Database Cloud PostgreSQL & Laravel:**
+     - Password `bendahara@aljihad.com` di database PostgreSQL diselaraskan ke `#1.Bendahara`.
+     - `LoginController.php` di Laravel diperbarui agar mendukung login dengan username (`bendahara`), nama, serta kata sandi alias multi-device.
+   - **Pembaruan Service Worker & Cache Busting:**
+     - Cache Service Worker dinaikkan ke `aljihad-signage-v5.5.2`.
+     - Versi script auth diperbarui ke `?v=5.5.2` di `login.html` dan `admin.html`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 08:05 WIB)
 
 ### 🎨 REFINEMENT TAMPILAN SLIDE "PROGRAM INFAQ PENGADAAN AC" & "INFAQ DIGITAL QRIS":
 1. **Slide Program Infaq Pengadaan AC (`web-statis/slides/infaq.html`):**

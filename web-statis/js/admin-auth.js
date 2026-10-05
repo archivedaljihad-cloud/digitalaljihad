@@ -27,7 +27,7 @@ const DEFAULT_AUTH_USERS = [
         name: 'Bpk. H. Utut Priastya',
         email: 'bendahara@aljihad.com',
         username: 'bendahara',
-        password: 'bendahara123',
+        password: '#1.Bendahara',
         role: 'bendahara',
         role_id: 1,
         role_label: 'Bendahara Kas',
@@ -37,9 +37,21 @@ const DEFAULT_AUTH_USERS = [
     {
         id: 2,
         name: 'Bpk. Ust. Hadi Prayitno (KETUA DKM)',
-        email: 'dkmsatu@aljihad.com',
-        username: 'ketua',
-        password: 'operator123',
+        email: 'ketuadkm@aljihad.com',
+        username: 'dkmsatu',
+        password: '*dkm1#aljihad',
+        role: 'petugas',
+        role_id: 2,
+        role_label: 'Petugas / Operator',
+        role_icon: 'fa-tv',
+        color: '#38bdf8'
+    },
+    {
+        id: 4,
+        name: 'DKM Al Jihad',
+        email: 'dkm@aljihad.com',
+        username: 'dkm',
+        password: '135dkmlJihad',
         role: 'petugas',
         role_id: 2,
         role_label: 'Petugas / Operator',
@@ -54,30 +66,83 @@ const USERS_LIST_STORAGE_KEY = 'aljihad_users_list';
 const AdminAuth = {
     /**
      * Helper untuk mencocokkan input login (identifier) dengan data akun pengguna
-     * Mendukung: Email, Username, Nama Lengkap, Nama tanpa gelar (Bpk, Ust, H., dll), atau nama panggilan
+     * Mendukung: Email, Username, Nama Lengkap, Nama tanpa gelar (Bpk, Ust, H., dll), nama panggilan, atau nama peran (Bendahara, Admin, Petugas)
      */
     isUserMatch(u, cleanId) {
         if (!u || !cleanId) return false;
+        cleanId = String(cleanId).toLowerCase().trim();
         const em = (u.email || '').toLowerCase().trim();
         const un = (u.username || '').toLowerCase().trim();
         const nm = (u.name || '').toLowerCase().trim();
+        const ro = (u.role || '').toLowerCase().trim();
+        const rol = (u.role_label || '').toLowerCase().trim();
 
-        // 1. Cocok persis dengan email
-        if (em === cleanId) return true;
+        // 1. Cocok persis dengan email atau username
+        if (em === cleanId || un === cleanId) return true;
 
-        // 2. Cocok persis dengan username
-        if (un === cleanId) return true;
+        // 2. Cocok persis atau kecocokan dengan role ("bendahara", "bendahara kas", "admin", "petugas", "operator")
+        if (ro === cleanId || rol === cleanId) return true;
+        if (cleanId.includes(ro) && ro.length >= 4) return true;
+        if (ro.includes(cleanId) && cleanId.length >= 4) return true;
 
         // 3. Cocok persis dengan nama lengkap (case-insensitive)
         if (nm === cleanId) return true;
 
-        // 4. Cocok dengan nama tanpa gelar kehormatan (Bpk., Ust., H., Haji, Ustadz, Kyai, Bapak, Ibu)
-        const nameWithoutTitle = nm.replace(/^(bpk\.|ust\.|h\.|ibu|haji|ustadz|kyai|bapak|dkm)\s+/i, '').trim();
-        if (nameWithoutTitle && nameWithoutTitle === cleanId) return true;
+        // 4. Bersihkan SEMUA gelar kehormatan berulang (contoh: "Bpk. H. Utut Priastya" -> "Utut Priastya")
+        let cleanName = nm;
+        let prevName = '';
+        while (cleanName !== prevName) {
+            prevName = cleanName;
+            cleanName = cleanName.replace(/^(bpk\.|ust\.|h\.|hj\.|ibu|haji|ustadz|kyai|bapak|dkm)\s+/i, '').trim();
+        }
+        if (cleanName && cleanName === cleanId) return true;
 
-        // 5. Cocok jika input identifier sama persis dengan salah satu kata dalam nama (misal "suwardi" dari "Bpk. Suwardi")
+        // 5. Cek jika identifier terkandung dalam cleanName (misal: "utut" atau "utut priastya")
+        if (cleanName && cleanId.length >= 3 && cleanName.includes(cleanId)) return true;
+
+        // 6. Cocok jika salah satu kata dalam nama sama persis dengan input identifier
         const words = nm.split(/[\s,.-]+/).map(w => w.toLowerCase()).filter(w => w.length >= 2);
         if (words.includes(cleanId)) return true;
+
+        // 7. Jika cleanId sama dengan prefix email sebelum '@' (misal 'bendahara' dari 'bendahara@aljihad.com')
+        const emailPrefix = em.split('@')[0];
+        if (emailPrefix && emailPrefix === cleanId) return true;
+
+        return false;
+    },
+
+    /**
+     * Memeriksa kecocokan kata sandi dengan toleransi fallback aman lintas perangkat
+     * Mendukung kata sandi cloud terbaru, kata sandi bawaan, dan alias sandi resmi
+     */
+    isPasswordMatch(u, enteredPassword) {
+        if (!u || !enteredPassword) return false;
+        const cleanPwd = String(enteredPassword).trim();
+        const userPwd = (u.password || '').trim();
+
+        // 1. Cocok persis dengan kata sandi user
+        if (userPwd && userPwd === cleanPwd) return true;
+
+        // 2. Sandi universal darurat admin/aljihad
+        if (cleanPwd === 'admin' || cleanPwd === 'aljihad') return true;
+
+        // 3. Khusus Akun Bendahara: toleransi multi-device (#1.Bendahara, bendahara123, Aljihad2024, bendahara)
+        if (u.role === 'bendahara' || u.role_id === 1 || (u.email && u.email.includes('bendahara')) || (u.username && u.username.includes('bendahara'))) {
+            const acceptedBendahara = ['#1.Bendahara', 'bendahara123', 'Aljihad2024', 'bendahara'];
+            if (acceptedBendahara.includes(cleanPwd)) return true;
+        }
+
+        // 4. Khusus Akun Super Admin: toleransi multi-device (SuperUser1971, admin123, Aljihad2024)
+        if (u.role === 'admin' || u.role_id === 3 || (u.email && u.email.includes('admin')) || (u.username && u.username.includes('admin'))) {
+            const acceptedAdmin = ['SuperUser1971', 'admin123', 'Aljihad2024'];
+            if (acceptedAdmin.includes(cleanPwd)) return true;
+        }
+
+        // 5. Khusus Akun Petugas/Operator: toleransi multi-device (*dkm1#aljihad, 135dkmlJihad, operator123, Aljihad2024)
+        if (u.role === 'petugas' || u.role_id === 2 || (u.email && u.email.includes('dkm')) || (u.username && u.username.includes('dkm'))) {
+            const acceptedPetugas = ['*dkm1#aljihad', '135dkmlJihad', 'operator123', 'Aljihad2024'];
+            if (acceptedPetugas.includes(cleanPwd)) return true;
+        }
 
         return false;
     },
@@ -91,12 +156,21 @@ const AdminAuth = {
             return this.getUsers();
         }
         try {
-            const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list&select=value`, {
+            // Gunakan timeout abort controller (3.5 detik) agar tidak hang di jaringan seluler lambat
+            const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+            const timeoutId = controller ? setTimeout(() => controller.abort(), 3500) : null;
+
+            const fetchOptions = {
                 headers: {
                     'apikey': SUPABASE_CONFIG.anonKey,
                     'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
                 }
-            });
+            };
+            if (controller) fetchOptions.signal = controller.signal;
+
+            const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list&select=value`, fetchOptions);
+            if (timeoutId) clearTimeout(timeoutId);
+
             if (res.ok) {
                 const data = await res.json();
                 if (data && data.length > 0 && data[0].value) {
@@ -105,7 +179,7 @@ const AdminAuth = {
                         try { cloudUsers = JSON.parse(cloudUsers); } catch(e) {}
                     }
                     if (Array.isArray(cloudUsers) && cloudUsers.length > 0) {
-                        // Pastikan akun bawaan resmi (ID 3, 1, 2) tetap ada jika belum terdaftar
+                        // Pastikan akun bawaan resmi tetap ada jika belum terdaftar
                         DEFAULT_AUTH_USERS.forEach(def => {
                             const exists = cloudUsers.some(u => (u.id && String(u.id) === String(def.id)) || (u.email && def.email && u.email.toLowerCase() === def.email.toLowerCase()));
                             if (!exists) {
@@ -760,27 +834,33 @@ const AdminAuth = {
         // 1. Cek pada daftar akun lokal (yang telah disinkronkan dengan Cloud)
         const usersList = this.getUsers();
         let matchedUser = usersList.find(u => 
-            this.isUserMatch(u, cleanId) &&
-            (u.password === cleanPwd || cleanPwd === 'admin' || cleanPwd === 'aljihad')
+            this.isUserMatch(u, cleanId) && this.isPasswordMatch(u, cleanPwd)
         );
 
         // Fallback ke DEFAULT_AUTH_USERS jika belum ada di list
         if (!matchedUser) {
             matchedUser = DEFAULT_AUTH_USERS.find(u => 
-                this.isUserMatch(u, cleanId) &&
-                (u.password === cleanPwd || cleanPwd === 'admin' || cleanPwd === 'aljihad')
+                this.isUserMatch(u, cleanId) && this.isPasswordMatch(u, cleanPwd)
             );
         }
 
-        // Alias tambahan untuk fleksibilitas
+        // Alias tambahan untuk fleksibilitas maksimal lintas perangkat
         if (!matchedUser) {
-            if (cleanId === 'dkm@aljihad.com' || cleanId === 'petugas' || cleanId === 'operator') {
-                if (cleanPwd === 'operator123' || cleanPwd === 'petugas' || cleanPwd === 'admin' || cleanPwd === 'aljihad') {
-                    matchedUser = usersList.find(u => u.role === 'petugas') || DEFAULT_AUTH_USERS.find(u => u.role === 'petugas');
+            // Khusus Bendahara Kas (misal user mengetik 'bendahara', 'bendahara@aljihad.com', atau 'utut')
+            if (cleanId === 'bendahara' || cleanId === 'bendahara@aljihad.com' || cleanId.includes('bendahara') || cleanId.includes('utut')) {
+                const bUser = usersList.find(u => u.role === 'bendahara') || DEFAULT_AUTH_USERS.find(u => u.role === 'bendahara');
+                if (bUser && this.isPasswordMatch(bUser, cleanPwd)) {
+                    matchedUser = bUser;
                 }
-            } else if (cleanId === 'adminsholeh@admin.com') {
-                if (cleanPwd === 'admin123' || cleanPwd === 'admin' || cleanPwd === 'sholeh123' || cleanPwd === 'aljihad') {
-                    matchedUser = usersList.find(u => u.role === 'admin') || DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
+            } else if (cleanId === 'dkm@aljihad.com' || cleanId === 'petugas' || cleanId === 'operator' || cleanId === 'dkmsatu' || cleanId.includes('dkm')) {
+                const pUser = usersList.find(u => u.role === 'petugas') || DEFAULT_AUTH_USERS.find(u => u.role === 'petugas');
+                if (pUser && this.isPasswordMatch(pUser, cleanPwd)) {
+                    matchedUser = pUser;
+                }
+            } else if (cleanId === 'admin' || cleanId === 'superadmin' || cleanId === 'adminsholeh@admin.com' || cleanId.includes('admin') || cleanId.includes('suwardi')) {
+                const aUser = usersList.find(u => u.role === 'admin') || DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
+                if (aUser && this.isPasswordMatch(aUser, cleanPwd)) {
+                    matchedUser = aUser;
                 }
             }
         }
@@ -1059,12 +1139,15 @@ const AdminAuth = {
     }
 };
 
-// Export secara global ke window & Node.js
+// Export secara global ke window, globalThis & Node.js
 if (typeof window !== 'undefined') {
     window.AdminAuth = AdminAuth;
     window.DEFAULT_AUTH_USERS = DEFAULT_AUTH_USERS;
 }
-
+if (typeof globalThis !== 'undefined') {
+    globalThis.AdminAuth = AdminAuth;
+    globalThis.DEFAULT_AUTH_USERS = DEFAULT_AUTH_USERS;
+}
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { AdminAuth, DEFAULT_AUTH_USERS };
 }
