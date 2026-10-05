@@ -4,7 +4,27 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 07:30 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 08:05 WIB)
+
+### 🎨 REFINEMENT TAMPILAN SLIDE "PROGRAM INFAQ PENGADAAN AC" & "INFAQ DIGITAL QRIS":
+1. **Slide Program Infaq Pengadaan AC (`web-statis/slides/infaq.html`):**
+   - **Label Nomor Rekening:** Diubah dari `"Nomor Rekening"` menjadi `"Nomor Rek."` agar tata letak kotak Saluran Transfer Donasi lebih ringkas, rapi, dan tidak berhimpitan dengan nomor rekening.
+   - **Harmonisasi Warna Nominal Target Dana:** Warna font nominal pada kartu *TARGET DANA* (`#valTarget`) diselaraskan menjadi warna emas/oranye amber (`#ff9900`) dengan efek *text-shadow* menyala (`0 0 14px rgba(255, 153, 0, 0.55)`), persis identik dengan warna font angka nominal di kolom daftar donatur (`.donatur-val`).
+   - **Ekspansi Ruang Vertikal Daftar Donatur:** Teks header `"Daftar Donatur"` (`.box-title`) di dalam kotak donatur dihilangkan, sehingga kontainer scroll daftar donatur memperoleh ruang vertikal ekstra (~40px) dan mampu menampilkan lebih banyak baris donatur secara bersamaan.
+   - **Penyesuaian Kecepatan Gulir (*Scrollup Speed*):** Kecepatan gulir vertikal otomatis daftar donatur diperlambat secara signifikan dari 3.8 detik/baris menjadi **6.8 detik/baris** (durasi minimum dinaikkan menjadi 35–50 detik). Hal ini membuat pergerakan nama-nama donatur jauh lebih tenang, stabil, dan sangat nyaman dibaca oleh jamaah di layar TV.
+
+2. **Slide Infaq & Shodaqoh Digital QRIS (`web-statis/slides/qris.html`):**
+   - **Perbesaran Font Kotak Rekening Donasi:**
+     - Judul *"Rekening Resmi Donasi Masjid"*: Diperbesar menjadi `1.25rem` (font-weight: 800) berbalut warna emas `#ffd700` dengan aksen garis bawah.
+     - Label *"Bank Jawa Barat (BJB)"* & *"Atas Nama"*: Diperbesar menjadi `1.20rem` (font-weight: 700) dengan warna putih perak terang `#f8fafc`.
+     - Nomor Rekening *"011 686 685 4100"*: Diperbesar menjadi `1.38rem` (font-weight: 800) dengan font monospace emas bergradasi dan efek *glow*.
+     - Pemilik *"DKM Jami Al Jihad"*: Diperbesar menjadi `1.25rem` (font-weight: 800) warna emas `#ffd700`.
+   - **Peningkatan Kontras & Kejelasan Kotak Verifikasi Penerima:**
+     - Kotak verifikasi `"Pastikan nama penerima tertera: DKM Jami Al Jihad"` ditingkatkan kontrasnya dengan background gelap berbingkai emas ganda, ikon centang diperbesar menjadi `1.45rem`, teks pengantar berukuran `1.15rem` warna putih solid (`#ffffff`), dan nama penerima `DKM Jami Al Jihad` disorot tebal (`1.25rem`, `#ffd700` glow) sehingga sangat tajam dan terbaca jelas dari kejauhan.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 07:30 WIB)
 
 ### 🏆 FINALISASI AUDIT MENYELURUH SRE, QA AUTOMATION, SDET, & DEVSECOPS (v5.5.0)
 **Fokus Audit 7 Pilar:** Arsitektur Sistem & Logika Bisnis, Performa & Optimasi (SRE), Keamanan (DevSecOps), UI/UX, Kompatibilitas & Aksesibilitas (WCAG 2.1 a11y), Observabilitas & Pemantauan (Telemetry), serta SEO & Kepatuhan Standar Industri.

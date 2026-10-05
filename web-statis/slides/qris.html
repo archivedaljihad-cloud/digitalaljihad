@@ -160,47 +160,92 @@
         }
 
         .qris-alert-box {
-            background: linear-gradient(135deg, rgba(255, 170, 0, 0.16), rgba(255, 82, 82, 0.18));
-            border-left: 4px solid #ffd700;
-            border-radius: 8px;
-            padding: 8px 12px;
+            background: rgba(3, 20, 15, 0.92);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            border-left: 5px solid #ffd700;
+            border-radius: 10px;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.65), inset 0 0 12px rgba(255, 215, 0, 0.12);
         }
 
-        .qris-alert-box i { color: #ffd700; font-size: 1.2rem; }
-        .qris-alert-text { font-size: 0.95rem; color: #ffffff; }
+        .qris-alert-box i { 
+            color: #ffd700; 
+            font-size: 1.45rem; 
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+            flex-shrink: 0;
+        }
+
+        .qris-alert-text { 
+            font-size: 1.15rem; 
+            color: #ffffff; 
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95);
+        }
+
+        .qris-alert-text strong {
+            color: #ffd700 !important;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 14px rgba(255, 215, 0, 0.85), 0 2px 4px rgba(0, 0, 0, 0.95);
+        }
 
         .bank-info-card {
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 12px;
-            padding: 12px 18px;
-            border-left: 5px solid #ffd700;
+            background: rgba(3, 20, 15, 0.82);
+            border-radius: 14px;
+            padding: 15px 22px;
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            border-left: 6px solid #ffd700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
 
         .bank-title {
             color: #ffd700;
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 6px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 6px;
         }
 
         .bank-detail-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.92rem;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 1.18rem;
         }
 
         .bank-detail-row:last-child { border-bottom: none; }
-        .bank-label { color: #cbd5e1; }
-        .bank-val { font-weight: 700; color: #ffffff; font-family: monospace; font-size: 1.05rem; letter-spacing: 0.5px; }
+        .bank-label { 
+            color: #f8fafc; 
+            font-size: 1.20rem; 
+            font-weight: 700; 
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); 
+        }
+        .bank-val { 
+            font-weight: 800; 
+            color: #ffd700; 
+            font-family: monospace; 
+            font-size: 1.38rem; 
+            letter-spacing: 0.8px; 
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.95); 
+        }
+        .bank-val.owner-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            letter-spacing: 0.3px;
+        }
 
         .qris-gratitude {
             font-size: 1.05rem;
@@ -319,7 +364,7 @@
                             <div class="qris-alert-box">
                                 <i class="fas fa-check-circle"></i>
                                 <div class="qris-alert-text">
-                                    Pastikan nama penerima tertera: <strong style="color: #ffd700;" id="qrisAtasNamaAlert">MASJID JAMI' AL-JIHAD</strong>
+                                    Pastikan nama penerima tertera: <strong id="qrisAtasNamaAlert">DKM Jami Al Jihad</strong>
                                 </div>
                             </div>
                         </div>
@@ -330,12 +375,12 @@
                                 <span>Rekening Resmi Donasi Masjid</span>
                             </div>
                             <div class="bank-detail-row">
-                                <span class="bank-label" id="qrisBankLabel">Bank Syariah Indonesia (BSI)</span>
-                                <span class="bank-val" id="qrisBankAcc">7123-456-789</span>
+                                <span class="bank-label" id="qrisBankLabel">Bank Jawa Barat (BJB)</span>
+                                <span class="bank-val" id="qrisBankAcc">011 686 685 4100</span>
                             </div>
                             <div class="bank-detail-row">
                                 <span class="bank-label">Atas Nama</span>
-                                <span class="bank-val" style="color: #ffd700;" id="qrisBankOwner">Masjid Jami' Al-Jihad</span>
+                                <span class="bank-val owner-name" id="qrisBankOwner">DKM Jami Al Jihad</span>
                             </div>
                         </div>
 
