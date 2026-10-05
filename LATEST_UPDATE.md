@@ -4,7 +4,22 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 06:05 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 06:15 WIB)
+
+### 💰 PEMBUATAN FORMAT OTOMATIS PEMISAH RIBUAN TITIK DI FORM KAS PENGUMUMAN JUM'AT:
+1. **Penyesuaian Input Saldo Awal (`web-statis/admin.html`):**
+   - Mengubah elemen `#pjInputSaldoAwal` dari input bertipe `type="number"` (yang memblokir tanda titik pemisah) menjadi `type="text"` dengan pemformatan mata uang otomatis saat diketik (`oninput="pjOnSaldoAwalInput(this)"`).
+   - Angka nominal kini secara otomatis terformat dengan pemisah ribuan titik standar Indonesia (misal: `19379023` langsung terformat otomatis menjadi `19.379.023`).
+   - Placeholder diselaraskan menjadi `Contoh: 19.379.023`.
+2. **Penyelarasan Pemformatan Input Baris Pemasukan & Pengeluaran:**
+   - Baris dinamis input nominal pemasukan (`#pjContainerFormPemasukan`) dan pengeluaran (`#pjContainerFormPengeluaran`) kini juga menggunakan `type="text"` dengan format titik ribuan otomatis (`pjOnPemasukanNominalInput` dan `pjOnPengeluaranNominalInput`).
+   - Seluruh perhitungan kas otomatis (`pjHitungKas`), badge subtotal saldo, saldo akhir kas, hingga sinkronisasi data ke layar TV tetap akurat menghitung nilai numerik murni tanpa terpengaruh simbol titik pemisah.
+3. **Invalidasi Cache Service Worker:**
+   - Cache dinaikkan ke **`v5.5.8`** (`aljihad-signage-v5.5.8`) di `web-statis/sw.js`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 06:05 WIB)
 
 ### 🧹 PENGHAPUSAN MENU "QRIS DONASI" DARI HAK AKSES BENDAHARA:
 1. **Penyesuaian Akses Menu Sidebar (`web-statis/admin.html`):**

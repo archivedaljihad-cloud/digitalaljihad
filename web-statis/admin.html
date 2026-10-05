@@ -4784,7 +4784,7 @@
                                             </label>
                                             <div class="input-group input-group-sm">
                                                 <div class="input-group-prepend"><span class="input-group-text font-weight-bold">Rp</span></div>
-                                                <input type="number" id="pjInputSaldoAwal" class="form-control font-weight-bold" value="19379023" oninput="pjHitungKas()" placeholder="Masukkan angka saldo awal tanpa titik">
+                                                <input type="text" id="pjInputSaldoAwal" class="form-control font-weight-bold" value="19.379.023" oninput="pjOnSaldoAwalInput(this)" placeholder="Contoh: 19.379.023" autocomplete="off">
                                             </div>
                                         </div>
 
@@ -16040,7 +16040,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (elTglJudul) elTglJudul.value = pjData.tanggalJudul || '02 Oktober 2026';
             if (elTglKas) elTglKas.value = pjData.tanggalKas || '02 Oktober 2026';
             if (elTitimangsa) elTitimangsa.value = pjData.titimangsa || 'Simpangan, 02 Oktober 2026';
-            if (elSaldoAwal) elSaldoAwal.value = pjData.saldoAwal || 19379023;
+            if (elSaldoAwal) {
+                const sVal = (pjData.saldoAwal !== undefined && pjData.saldoAwal !== null) ? pjData.saldoAwal : 19379023;
+                const cleanSVal = parseInt(sVal.toString().replace(/[^0-9]/g, ''), 10) || 0;
+                elSaldoAwal.value = cleanSVal ? pjFormatRupiah(cleanSVal) : '0';
+            }
 
             if (elImam) elImam.value = pjData.petugas.imamKhotib || 'Ust. Faiq Rido';
             if (elMuadzin) elMuadzin.value = pjData.petugas.muadzin || 'Ust. Rudy';
@@ -16090,7 +16094,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     <input type="text" class="form-control form-control-sm" value="${escapeHtml(item.ket)}" placeholder="Keterangan Pemasukan" oninput="pjUpdatePemasukanKet(${idx}, this.value)" style="flex: 2;">
                     <div class="input-group input-group-sm" style="flex: 1.4; min-width: 130px;">
                         <div class="input-group-prepend"><span class="input-group-text font-weight-bold">Rp</span></div>
-                        <input type="number" class="form-control font-weight-bold" value="${item.nominal}" placeholder="0" oninput="pjUpdatePemasukanNominal(${idx}, this.value)">
+                        <input type="text" class="form-control font-weight-bold" value="${item.nominal ? pjFormatRupiah(item.nominal) : '0'}" placeholder="0" oninput="pjOnPemasukanNominalInput(${idx}, this)" autocomplete="off">
                     </div>
                     <button type="button" class="btn btn-xs btn-outline-danger" onclick="pjHapusBarisPemasukan(${idx})" title="Hapus baris" ${pjData.pemasukan.length <= 1 ? 'disabled' : ''}>
                         <i class="fas fa-trash-alt"></i>
@@ -16109,7 +16113,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     <input type="text" class="form-control form-control-sm" value="${escapeHtml(item.ket)}" placeholder="Keterangan Pengeluaran" oninput="pjUpdatePengeluaranKet(${idx}, this.value)" style="flex: 2;">
                     <div class="input-group input-group-sm" style="flex: 1.4; min-width: 130px;">
                         <div class="input-group-prepend"><span class="input-group-text font-weight-bold">Rp</span></div>
-                        <input type="number" class="form-control font-weight-bold" value="${item.nominal}" placeholder="0" oninput="pjUpdatePengeluaranNominal(${idx}, this.value)">
+                        <input type="text" class="form-control font-weight-bold" value="${item.nominal ? pjFormatRupiah(item.nominal) : '0'}" placeholder="0" oninput="pjOnPengeluaranNominalInput(${idx}, this)" autocomplete="off">
                     </div>
                     <button type="button" class="btn btn-xs btn-outline-danger" onclick="pjHapusBarisPengeluaran(${idx})" title="Hapus baris" ${pjData.pengeluaran.length <= 1 ? 'disabled' : ''}>
                         <i class="fas fa-trash-alt"></i>
@@ -16122,13 +16126,23 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (pjData.pemasukan[idx]) {
                 pjData.pemasukan[idx].ket = val;
                 pjUpdatePreview();
-            renderDashPengumumanJumatWidget();
+                renderDashPengumumanJumatWidget();
+            }
+        }
+
+        function pjOnPemasukanNominalInput(idx, el) {
+            if (!el) return;
+            formatRupiahInput(el);
+            const valNum = parseInt((el.value || '').replace(/[^0-9]/g, ''), 10) || 0;
+            if (pjData.pemasukan[idx]) {
+                pjData.pemasukan[idx].nominal = valNum;
+                pjHitungKas();
             }
         }
 
         function pjUpdatePemasukanNominal(idx, val) {
             if (pjData.pemasukan[idx]) {
-                pjData.pemasukan[idx].nominal = parseInt(val, 10) || 0;
+                pjData.pemasukan[idx].nominal = parseInt((val || '').toString().replace(/[^0-9]/g, ''), 10) || 0;
                 pjHitungKas();
             }
         }
@@ -16156,9 +16170,19 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             }
         }
 
+        function pjOnPengeluaranNominalInput(idx, el) {
+            if (!el) return;
+            formatRupiahInput(el);
+            const valNum = parseInt((el.value || '').replace(/[^0-9]/g, ''), 10) || 0;
+            if (pjData.pengeluaran[idx]) {
+                pjData.pengeluaran[idx].nominal = valNum;
+                pjHitungKas();
+            }
+        }
+
         function pjUpdatePengeluaranNominal(idx, val) {
             if (pjData.pengeluaran[idx]) {
-                pjData.pengeluaran[idx].nominal = parseInt(val, 10) || 0;
+                pjData.pengeluaran[idx].nominal = parseInt((val || '').toString().replace(/[^0-9]/g, ''), 10) || 0;
                 pjHitungKas();
             }
         }
@@ -16180,17 +16204,29 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             pjHitungKas();
         }
 
+        // Handler saat Saldo Awal diinput pengguna (dengan titik ribuan otomatis)
+        function pjOnSaldoAwalInput(el) {
+            if (!el) return;
+            formatRupiahInput(el);
+            pjHitungKas();
+        }
+
         // Hitung Otomatis Kas Masjid (Poin 4, 5, 6, 7, 8)
         function pjHitungKas() {
             const elSaldoAwal = document.getElementById('pjInputSaldoAwal');
-            const saldoAwal = parseInt(elSaldoAwal ? elSaldoAwal.value : pjData.saldoAwal, 10) || 0;
+            const rawSaldoVal = elSaldoAwal ? (elSaldoAwal.value || '').toString().replace(/[^0-9]/g, '') : '';
+            const saldoAwal = rawSaldoVal ? (parseInt(rawSaldoVal, 10) || 0) : (parseInt((pjData.saldoAwal || 0).toString().replace(/[^0-9]/g, ''), 10) || 0);
             pjData.saldoAwal = saldoAwal;
 
             let totalIn = 0;
-            pjData.pemasukan.forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
+            pjData.pemasukan.forEach(p => { 
+                totalIn += (parseInt((p.nominal || 0).toString().replace(/[^0-9]/g, ''), 10) || 0); 
+            });
 
             let totalOut = 0;
-            pjData.pengeluaran.forEach(p => { totalOut += (parseInt(p.nominal, 10) || 0); });
+            pjData.pengeluaran.forEach(p => { 
+                totalOut += (parseInt((p.nominal || 0).toString().replace(/[^0-9]/g, ''), 10) || 0); 
+            });
 
             // POIN 6: SALDO = Saldo Awal + Total Pemasukan
             const subtotalSaldo = saldoAwal + totalIn;
@@ -16417,7 +16453,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     if (txt) {
                         const parsedSaldo = parseInt(txt, 10);
                         if (!isNaN(parsedSaldo) && parsedSaldo > 0) {
-                            document.getElementById('pjInputSaldoAwal').value = parsedSaldo;
+                            document.getElementById('pjInputSaldoAwal').value = pjFormatRupiah(parsedSaldo);
                             pjHitungKas();
                         }
                     }
