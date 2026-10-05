@@ -1406,13 +1406,6 @@
                     </a>
                 </li>
 
-                <li class="nav-item" id="nav-qris">
-                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('qris')">
-                        <i class="fas fa-fw fa-qrcode"></i>
-                        <span>QRIS Donasi</span>
-                    </a>
-                </li>
-
                 <li class="nav-item" id="nav-pengumuman-jumat">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('pengumuman-jumat')">
                         <i class="fas fa-fw fa-file-invoice-dollar text-warning"></i>
@@ -1430,6 +1423,13 @@
                 <div class="sidebar-heading">
                     <i class="fas fa-shield-alt"></i> Kontrol Super Admin
                 </div>
+
+                <li class="nav-item" id="nav-qris">
+                    <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('qris')">
+                        <i class="fas fa-fw fa-qrcode"></i>
+                        <span>QRIS Donasi (TV Display)</span>
+                    </a>
+                </li>
 
                 <li class="nav-item" id="nav-users">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('users')">
@@ -2223,7 +2223,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>23/09/2026</td>
-                                                        <td>Infaq Donasi QRIS Bank Syariah</td>
+                                                        <td>Infaq Transfer Bank Syariah (BSI)</td>
                                                         <td><span class="badge-masuk">Pemasukan</span></td>
                                                         <td class="text-right font-weight-bold text-success">+ Rp 2.200.000</td>
                                                     </tr>
@@ -4518,9 +4518,9 @@
                     </div>
 
                     <!-- ==========================================
-                         VIEW: MANAJEMEN QRIS DONASI DIGITAL
+                         VIEW: MANAJEMEN QRIS DONASI DIGITAL (KHUSUS SUPER ADMIN)
                          ========================================== -->
-                    <div id="view-qris" class="section-view">
+                    <div id="view-qris" class="section-view" data-role="admin">
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <div>
@@ -7700,6 +7700,13 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
         // 4. Navigasi Seksi Antara Menu
         function switchAdminSection(sectionName) {
+            // Guard: Batasi akses menu QRIS & Super Admin khusus peran admin
+            const currentUser = (typeof AdminAuth !== 'undefined') ? AdminAuth.getCurrentUser() : null;
+            const currentRole = currentUser ? (currentUser.role || 'petugas') : 'petugas';
+            if (sectionName === 'qris' && currentRole !== 'admin') {
+                sectionName = (currentRole === 'bendahara') ? 'keuangan' : 'dashboard';
+            }
+
             document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('#accordionSidebar .nav-item').forEach(el => el.classList.remove('active'));
 

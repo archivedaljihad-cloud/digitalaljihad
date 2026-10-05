@@ -4,7 +4,27 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 05:50 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 06:05 WIB)
+
+### 🧹 PENGHAPUSAN MENU "QRIS DONASI" DARI HAK AKSES BENDAHARA:
+1. **Penyesuaian Akses Menu Sidebar (`web-statis/admin.html`):**
+   - Menghapus item menu `QRIS Donasi` (`#nav-qris`) dari grup *Manajemen Keuangan* (`data-role="admin, bendahara"`).
+   - Memindahkan menu `QRIS Donasi (TV Display)` ke dalam grup *Kontrol Super Admin* (`data-role="admin"`).
+   - Dengan perubahan ini, akun **Bendahara Kas (Bpk. H. Utut Priastya)** kini hanya memiliki menu inti pengelolaan arus kas nyata:
+     - 🪙 **Kas Utama Masjid**
+     - 🚑 **Kas Ambulance**
+     - 🎁 **Program Infaq**
+     - 📜 **Pengumuman Sholat Jum'at**
+2. **Proteksi Keamanan Rute & Seksi (`switchAdminSection` & `view-qris`):**
+   - Menambahkan atribut `data-role="admin"` pada `<div id="view-qris">` sehingga secara otomatis tersembunyi dari akun Bendahara dan Petugas.
+   - Menambahkan pengecekan *guard* pada fungsi `switchAdminSection('qris')`: jika peran pengguna bukan `admin`, sistem secara otomatis mengalihkan navigasi ke `keuangan` (untuk bendahara) atau `dashboard`.
+   - Mengubah rincian teks contoh transaksi di tabel mutasi dashboard dari *"Infaq Donasi QRIS Bank Syariah"* menjadi *"Infaq Transfer Bank Syariah (BSI)"*.
+3. **Invalidasi Cache Service Worker:**
+   - Cache dinaikkan ke **`v5.5.7`** (`aljihad-signage-v5.5.7`) di `web-statis/sw.js`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 05:50 WIB)
 
 ### 🛠️ PERBAIKAN NESTING DIV DASHBOARD UTAMA BENDAHARA & PEMUNCULAN WIDGET FINANSIAL:
 1. **Identifikasi Masalah & Akar Masalah (*Root Cause*):**
