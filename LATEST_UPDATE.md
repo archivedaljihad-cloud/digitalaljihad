@@ -4,7 +4,39 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 09:30 WIB)
+## ✨ UPDATE TERBARU — 5 Oktober 2026 (Pukul 12:15 WIB)
+
+### 🛡️ PEMBERSIHAN TOTAL AKUN & KATA SANDI LAMA SERTA PENETAPAN KREDENSIAL RESMI DEFAULT:
+1. **Pembersihan Total Akun & Sandi Lama (*Full Deprecation & Purge*):**
+   - Seluruh akun usang dan duplikat lama (`adminsholeh@admin.com`, `admin@admin.com`, `demo@aljihad.com`) telah **dihapus permanen** dari Supabase Cloud (`app_settings` key `rbac_users_list`), database Laravel PostgreSQL (`users` table), serta diblokir secara otomatis dari LocalStorage browser pengurus manapun (`BLACKLISTED_EMAILS`).
+   - Seluruh kata sandi lama/usang (`bendahara123`, `operator123`, `admin123`, `Aljihad2024`, `sholeh123`, `password`, `123456`) dan backdoor darurat universal (`admin`, `aljihad`) telah **dihapus dan ditutup secara total**. Percobaan login dengan kata sandi lama tersebut kini mutlak ditolak (*rejected*).
+
+2. **Daftar 4 Akun Resmi & Kata Sandi Default Mutakhir (*Single Source of Truth*):**
+   | Peran (*Role*) | Nama Pengurus | Email Resmi | Username | Kata Sandi Resmi Default |
+   | :--- | :--- | :--- | :--- | :--- |
+   | **Bendahara Kas** | `Bpk. H. Utut Priastya` | `bendahara@aljihad.com` | `bendahara` | `"#1.Bendahara"` |
+   | **Super Admin** | `Suwardi` | `archived.aljihad@gmail.com` | `admin` | `"SuperUser1971"` |
+   | **Ketua DKM** | `Bpk. Ust. Hadi Prayitno` | `ketuadkm@aljihad.com` | `dkmsatu` | `"*dkm1#aljihad"` |
+   | **Petugas DKM** | `DKM Al Jihad` | `dkm@aljihad.com` | `dkm` | `"135dkmlJihad"` |
+
+3. **Sinkronisasi Lintas Ekosistem (Cloud, Database, Web Statis, & Laravel):**
+   - **Supabase Cloud (`app_settings` key `rbac_users_list`):** Telah diperbarui langsung ke Cloud REST API dengan 4 akun resmi di atas.
+   - **PostgreSQL Database (`users` table):** Seluruh record pengguna di database telah disinkronkan dengan Bcrypt hash terverifikasi untuk ke-4 kata sandi default di atas.
+   - **PWA Web Statis (`admin-auth.js`):**
+     - `DEFAULT_AUTH_USERS` diisi persis 4 akun resmi.
+     - LocalStorage scrubber otomatis mendeteksi dan menghapus kata sandi usang yang tersimpan di HP/laptop pengurus saat mereka membuka web, lalu otomatis menyetel ke kata sandi resmi default.
+     - `isUserMatch()` memperketat pengecekan email (jika memuat `@`, wajib cocok persis dengan alamat email akun untuk mencegah bentrok substring).
+     - `isPasswordMatch()` hanya menerima kata sandi resmi mutakhir atau password kustom yang diubah oleh Super Admin.
+   - **Form Login Cepat (`login.html` & `login.blade.php`):**
+     - Preset peran cepat (*Role Pills*) otomatis mengisikan:
+       - **Bendahara:** `bendahara@aljihad.com` & `#1.Bendahara`
+       - **Super Admin:** `archived.aljihad@gmail.com` & `SuperUser1971`
+       - **Petugas:** `ketuadkm@aljihad.com` & `*dkm1#aljihad`
+     - Service Worker cache dinaikkan ke **`v5.5.3`** (`aljihad-signage-v5.5.3`).
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 5 Oktober 2026 (Pukul 09:30 WIB)
 
 ### 🔐 PERBAIKAN TOTAL AUTENTIKASI MULTI-DEVICE AKUN BENDAHARA & PENGURUS:
 1. **Identifikasi Masalah & Akar Masalah (*Root Cause Analysis*):**

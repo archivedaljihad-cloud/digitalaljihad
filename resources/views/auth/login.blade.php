@@ -842,8 +842,8 @@
             password: 'SuperUser1971'
         },
         petugas: {
-            identifier: 'dkm@aljihad.com',
-            password: 'Aljihad2024'
+            identifier: 'ketuadkm@aljihad.com',
+            password: '*dkm1#aljihad'
         }
     };
 

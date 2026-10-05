@@ -34,7 +34,7 @@ class LoginController extends Controller
         return $this->redirectTo;
     }
 
-    // Override credentials to support username / role identifier (e.g. 'bendahara', 'admin', 'dkm')
+    // Override credentials to support username / role identifier (e.g. 'bendahara', 'admin', 'dkmsatu', 'dkm')
     protected function credentials(Request $request)
     {
         $input = trim((string) $request->input($this->username()));
@@ -44,7 +44,9 @@ class LoginController extends Controller
                 $input = 'bendahara@aljihad.com';
             } elseif ($inputLower === 'admin' || str_contains($inputLower, 'super') || str_contains($inputLower, 'suwardi')) {
                 $input = 'archived.aljihad@gmail.com';
-            } elseif ($inputLower === 'dkm' || $inputLower === 'petugas' || $inputLower === 'operator' || str_contains($inputLower, 'hadi')) {
+            } elseif ($inputLower === 'dkmsatu' || $inputLower === 'ketua' || str_contains($inputLower, 'dkmsatu') || str_contains($inputLower, 'hadi')) {
+                $input = 'ketuadkm@aljihad.com';
+            } elseif ($inputLower === 'dkm' || $inputLower === 'petugas' || $inputLower === 'operator') {
                 $input = 'dkm@aljihad.com';
             } else {
                 $found = \App\Models\User::where('name', 'ilike', "%{$input}%")->first();
@@ -59,53 +61,35 @@ class LoginController extends Controller
         ];
     }
 
-    // Override attemptLogin to support multi-device password aliases
+    // Override attemptLogin to authenticate strictly with current canonical default passwords
     protected function attemptLogin(Request $request)
     {
         $credentials = $this->credentials($request);
         $email = strtolower($credentials['email'] ?? '');
         $password = (string) ($credentials['password'] ?? '');
 
-        // Standard auth attempt
+        // 1. Standard auth attempt against database hash
         if ($this->guard()->attempt($credentials, $request->filled('remember'))) {
             return true;
         }
 
-        // Fallback for Bendahara with accepted password aliases (#1.Bendahara, bendahara123, Aljihad2024)
-        if ($email === 'bendahara@aljihad.com') {
-            $accepted = ['#1.Bendahara', 'bendahara123', 'Aljihad2024', 'bendahara'];
-            if (in_array($password, $accepted)) {
-                $user = \App\Models\User::where('email', 'bendahara@aljihad.com')->first();
-                if ($user) {
-                    $user->password = \Illuminate\Support\Facades\Hash::make('#1.Bendahara');
+        // 2. Canonical default passwords fallback (Semua password lama dibersihkan secara permanen)
+        $canonicalDefaults = [
+            'bendahara@aljihad.com' => '#1.Bendahara',
+            'archived.aljihad@gmail.com' => 'SuperUser1971',
+            'ketuadkm@aljihad.com' => '*dkm1#aljihad',
+            'dkm@aljihad.com' => '135dkmlJihad',
+        ];
+
+        if (isset($canonicalDefaults[$email]) && $password === $canonicalDefaults[$email]) {
+            $user = \App\Models\User::where('email', $email)->first();
+            if ($user) {
+                if (!\Illuminate\Support\Facades\Hash::check($password, $user->password)) {
+                    $user->password = \Illuminate\Support\Facades\Hash::make($password);
                     $user->save();
-                    $this->guard()->login($user, $request->filled('remember'));
-                    return true;
                 }
-            }
-        }
-
-        // Fallback for Super Admin
-        if ($email === 'archived.aljihad@gmail.com') {
-            $accepted = ['SuperUser1971', 'admin123', 'Aljihad2024'];
-            if (in_array($password, $accepted)) {
-                $user = \App\Models\User::where('email', 'archived.aljihad@gmail.com')->first();
-                if ($user) {
-                    $this->guard()->login($user, $request->filled('remember'));
-                    return true;
-                }
-            }
-        }
-
-        // Fallback for DKM / Petugas
-        if ($email === 'dkm@aljihad.com') {
-            $accepted = ['*dkm1#aljihad', '135dkmlJihad', 'operator123', 'Aljihad2024'];
-            if (in_array($password, $accepted)) {
-                $user = \App\Models\User::where('email', 'dkm@aljihad.com')->first();
-                if ($user) {
-                    $this->guard()->login($user, $request->filled('remember'));
-                    return true;
-                }
+                $this->guard()->login($user, $request->filled('remember'));
+                return true;
             }
         }
 

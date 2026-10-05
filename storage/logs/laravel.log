@@ -93887,3 +93887,36 @@ Did you mean one of these?
 #3 C:/Users/anthu/Documents/【Project】/DIGITALv304/artisan(35): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
 #4 {main}
 "} 
+[2026-10-05 12:13:17] local.ERROR: SQLSTATE[23502]: Not null violation: 7 ERROR:  null value in column "last_name" of relation "users" violates not-null constraint
+DETAIL:  Failing row contains (4, Bpk. Ust. Hadi Prayitno, null, ketuadkm@aljihad.com, null, $2y$12$QO5RbkoX6q.cj3EhYbo4guhl8.mcKASlnsy1agwoPWyqEKg4NI8MC, null, 2026-10-05 12:13:17, 2026-10-05 12:13:17, 2). (Connection: pgsql, Host: aws-0-ap-south-1.pooler.supabase.com, Port: 5432, Database: postgres, SQL: insert into "users" ("email", "name", "role_id", "password", "id", "updated_at", "created_at") values (ketuadkm@aljihad.com, Bpk. Ust. Hadi Prayitno, 2, $2y$12$QO5RbkoX6q.cj3EhYbo4guhl8.mcKASlnsy1agwoPWyqEKg4NI8MC, 4, 2026-10-05 12:13:17, 2026-10-05 12:13:17) returning "id") {"exception":"[object] (Illuminate\\Database\\QueryException(code: 23502): SQLSTATE[23502]: Not null violation: 7 ERROR:  null value in column \"last_name\" of relation \"users\" violates not-null constraint
+DETAIL:  Failing row contains (4, Bpk. Ust. Hadi Prayitno, null, ketuadkm@aljihad.com, null, $2y$12$QO5RbkoX6q.cj3EhYbo4guhl8.mcKASlnsy1agwoPWyqEKg4NI8MC, null, 2026-10-05 12:13:17, 2026-10-05 12:13:17, 2). (Connection: pgsql, Host: aws-0-ap-south-1.pooler.supabase.com, Port: 5432, Database: postgres, SQL: insert into \"users\" (\"email\", \"name\", \"role_id\", \"password\", \"id\", \"updated_at\", \"created_at\") values (ketuadkm@aljihad.com, Bpk. Ust. Hadi Prayitno, 2, $2y$12$QO5RbkoX6q.cj3EhYbo4guhl8.mcKASlnsy1agwoPWyqEKg4NI8MC, 4, 2026-10-05 12:13:17, 2026-10-05 12:13:17) returning \"id\") at C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php:857)
+[stacktrace]
+#0 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(813): Illuminate/Database/Connection->runQueryCallback('insert into \"us...', Array, Object(Closure))
+#1 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(426): Illuminate/Database/Connection->run('insert into \"us...', Array, Object(Closure))
+#2 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(412): Illuminate/Database/Connection->select('insert into \"us...', Array, false)
+#3 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/PostgresProcessor.php(24): Illuminate/Database/Connection->selectFromWriteConnection('insert into \"us...', Array)
+#4 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4257): Illuminate/Database/Query/Processors/PostgresProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into \"us...', Array, 'id')
+#5 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2281): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#6 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1687): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#7 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1603): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#8 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1407): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#9 C:/Users/anthu/.gemini/antigravity-ide/brain/e3404485-3ffd-4152-976c-f841e5f1871b/scratch/sync_canonical_db_users.php(50): Illuminate/Database/Eloquent/Model->save()
+#10 {main}
+
+[previous exception] [object] (PDOException(code: 23502): SQLSTATE[23502]: Not null violation: 7 ERROR:  null value in column \"last_name\" of relation \"users\" violates not-null constraint
+DETAIL:  Failing row contains (4, Bpk. Ust. Hadi Prayitno, null, ketuadkm@aljihad.com, null, $2y$12$QO5RbkoX6q.cj3EhYbo4guhl8.mcKASlnsy1agwoPWyqEKg4NI8MC, null, 2026-10-05 12:13:17, 2026-10-05 12:13:17, 2). at C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php:440)
+[stacktrace]
+#0 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(440): PDOStatement->execute()
+#1 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(846): Illuminate/Database/Connection->Illuminate/Database/{closure}('insert into \"us...', Array)
+#2 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(813): Illuminate/Database/Connection->runQueryCallback('insert into \"us...', Array, Object(Closure))
+#3 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(426): Illuminate/Database/Connection->run('insert into \"us...', Array, Object(Closure))
+#4 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Connection.php(412): Illuminate/Database/Connection->select('insert into \"us...', Array, false)
+#5 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/PostgresProcessor.php(24): Illuminate/Database/Connection->selectFromWriteConnection('insert into \"us...', Array)
+#6 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4257): Illuminate/Database/Query/Processors/PostgresProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into \"us...', Array, 'id')
+#7 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2281): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#8 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1687): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#9 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1603): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#10 C:/Users/anthu/Documents/【Project】/DIGITALv304/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1407): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#11 C:/Users/anthu/.gemini/antigravity-ide/brain/e3404485-3ffd-4152-976c-f841e5f1871b/scratch/sync_canonical_db_users.php(50): Illuminate/Database/Eloquent/Model->save()
+#12 {main}
+"} 

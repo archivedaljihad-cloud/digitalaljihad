@@ -77,18 +77,22 @@ const AdminAuth = {
         const ro = (u.role || '').toLowerCase().trim();
         const rol = (u.role_label || '').toLowerCase().trim();
 
-        // 1. Cocok persis dengan email atau username
-        if (em === cleanId || un === cleanId) return true;
+        // 1. Jika input berformat email (memuat '@'), HANYA cocokkan persis dengan alamat email
+        if (cleanId.includes('@')) {
+            return em === cleanId;
+        }
 
-        // 2. Cocok persis atau kecocokan dengan role ("bendahara", "bendahara kas", "admin", "petugas", "operator")
+        // 2. Cocok persis dengan username
+        if (un === cleanId) return true;
+
+        // 3. Cocok persis dengan nama peran ("bendahara", "bendahara kas", "admin", "petugas", "operator")
         if (ro === cleanId || rol === cleanId) return true;
-        if (cleanId.includes(ro) && ro.length >= 4) return true;
-        if (ro.includes(cleanId) && cleanId.length >= 4) return true;
+        if (cleanId === 'operator' && ro === 'petugas') return true;
 
-        // 3. Cocok persis dengan nama lengkap (case-insensitive)
+        // 4. Cocok persis dengan nama lengkap (case-insensitive)
         if (nm === cleanId) return true;
 
-        // 4. Bersihkan SEMUA gelar kehormatan berulang (contoh: "Bpk. H. Utut Priastya" -> "Utut Priastya")
+        // 5. Bersihkan SEMUA gelar kehormatan berulang (contoh: "Bpk. H. Utut Priastya" -> "Utut Priastya")
         let cleanName = nm;
         let prevName = '';
         while (cleanName !== prevName) {
@@ -97,51 +101,46 @@ const AdminAuth = {
         }
         if (cleanName && cleanName === cleanId) return true;
 
-        // 5. Cek jika identifier terkandung dalam cleanName (misal: "utut" atau "utut priastya")
+        // 6. Cek jika identifier terkandung dalam cleanName (misal: "utut" atau "utut priastya")
         if (cleanName && cleanId.length >= 3 && cleanName.includes(cleanId)) return true;
 
-        // 6. Cocok jika salah satu kata dalam nama sama persis dengan input identifier
+        // 7. Cocok jika salah satu kata dalam nama sama persis dengan input identifier
         const words = nm.split(/[\s,.-]+/).map(w => w.toLowerCase()).filter(w => w.length >= 2);
         if (words.includes(cleanId)) return true;
-
-        // 7. Jika cleanId sama dengan prefix email sebelum '@' (misal 'bendahara' dari 'bendahara@aljihad.com')
-        const emailPrefix = em.split('@')[0];
-        if (emailPrefix && emailPrefix === cleanId) return true;
 
         return false;
     },
 
     /**
-     * Memeriksa kecocokan kata sandi dengan toleransi fallback aman lintas perangkat
-     * Mendukung kata sandi cloud terbaru, kata sandi bawaan, dan alias sandi resmi
+     * Memeriksa kecocokan kata sandi resmi default
+     * Seluruh kata sandi lama/usang (bendahara123, operator123, Aljihad2024, admin123, password) telah dibersihkan permanen
      */
     isPasswordMatch(u, enteredPassword) {
         if (!u || !enteredPassword) return false;
         const cleanPwd = String(enteredPassword).trim();
         const userPwd = (u.password || '').trim();
 
-        // 1. Cocok persis dengan kata sandi user
+        // 1. Cocok persis dengan kata sandi akun saat ini
         if (userPwd && userPwd === cleanPwd) return true;
 
-        // 2. Sandi universal darurat admin/aljihad
-        if (cleanPwd === 'admin' || cleanPwd === 'aljihad') return true;
-
-        // 3. Khusus Akun Bendahara: toleransi multi-device (#1.Bendahara, bendahara123, Aljihad2024, bendahara)
-        if (u.role === 'bendahara' || u.role_id === 1 || (u.email && u.email.includes('bendahara')) || (u.username && u.username.includes('bendahara'))) {
-            const acceptedBendahara = ['#1.Bendahara', 'bendahara123', 'Aljihad2024', 'bendahara'];
-            if (acceptedBendahara.includes(cleanPwd)) return true;
+        // 2. Khusus Akun Bendahara: hanya password resmi default mutakhir (#1.Bendahara)
+        if (u.email === 'bendahara@aljihad.com' || u.username === 'bendahara') {
+            return cleanPwd === '#1.Bendahara';
         }
 
-        // 4. Khusus Akun Super Admin: toleransi multi-device (SuperUser1971, admin123, Aljihad2024)
-        if (u.role === 'admin' || u.role_id === 3 || (u.email && u.email.includes('admin')) || (u.username && u.username.includes('admin'))) {
-            const acceptedAdmin = ['SuperUser1971', 'admin123', 'Aljihad2024'];
-            if (acceptedAdmin.includes(cleanPwd)) return true;
+        // 3. Khusus Akun Super Admin: hanya password resmi default mutakhir (SuperUser1971)
+        if (u.email === 'archived.aljihad@gmail.com' || u.username === 'admin') {
+            return cleanPwd === 'SuperUser1971';
         }
 
-        // 5. Khusus Akun Petugas/Operator: toleransi multi-device (*dkm1#aljihad, 135dkmlJihad, operator123, Aljihad2024)
-        if (u.role === 'petugas' || u.role_id === 2 || (u.email && u.email.includes('dkm')) || (u.username && u.username.includes('dkm'))) {
-            const acceptedPetugas = ['*dkm1#aljihad', '135dkmlJihad', 'operator123', 'Aljihad2024'];
-            if (acceptedPetugas.includes(cleanPwd)) return true;
+        // 4. Khusus Akun Ketua DKM: hanya password resmi default mutakhir (*dkm1#aljihad)
+        if (u.email === 'ketuadkm@aljihad.com' || u.username === 'dkmsatu') {
+            return cleanPwd === '*dkm1#aljihad';
+        }
+
+        // 5. Khusus Akun Petugas DKM Al Jihad: hanya password resmi default mutakhir (135dkmlJihad)
+        if (u.email === 'dkm@aljihad.com' || u.username === 'dkm') {
+            return cleanPwd === '135dkmlJihad';
         }
 
         return false;
@@ -274,6 +273,9 @@ const AdminAuth = {
      */
     getUsers() {
         let storedUsers = [];
+        const OBSOLETE_PASSWORDS = ['bendahara123', 'operator123', 'admin123', 'sholeh123', 'Aljihad2024', 'password', '123456'];
+        const BLACKLISTED_EMAILS = ['adminsholeh@admin.com', 'admin@admin.com', 'demo@aljihad.com'];
+
         try {
             const raw = localStorage.getItem(USERS_LIST_STORAGE_KEY);
             if (raw) {
@@ -283,7 +285,7 @@ const AdminAuth = {
                         if (!u || typeof u !== 'object') return false;
                         const em = (u.email || '').toLowerCase().trim();
                         // Bersihkan akun usang duplikat lama
-                        if (em === 'adminsholeh@admin.com' || em === 'admin@admin.com') return false;
+                        if (BLACKLISTED_EMAILS.includes(em)) return false;
                         return true;
                     });
                 }
@@ -301,33 +303,43 @@ const AdminAuth = {
             return storedUsers;
         }
 
-        // Pastikan akun resmi default (ID 3, 1, 2) tetap ada jika belum pernah dibuat
+        // Pastikan 4 akun resmi default selalu ada dan kata sandi usang dibersihkan
         const finalUsers = [];
         const existingIds = new Set();
         const existingEmails = new Set();
 
         storedUsers.forEach(u => {
-            const r = (u.role || (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas'))).toLowerCase();
+            const em = (u.email || '').toLowerCase().trim();
+            if (BLACKLISTED_EMAILS.includes(em)) return;
+
+            const defMatch = DEFAULT_AUTH_USERS.find(d => d.email.toLowerCase() === em || (d.id && String(d.id) === String(u.id)));
+
+            const r = (u.role || (defMatch ? defMatch.role : (u.role_id === 3 ? 'admin' : (u.role_id === 1 ? 'bendahara' : 'petugas')))).toLowerCase();
             const role_id = (r === 'admin' ? 3 : (r === 'bendahara' ? 1 : 2));
             const role_label = (r === 'admin' ? 'Super Admin' : (r === 'bendahara' ? 'Bendahara Kas' : 'Petugas / Operator'));
             const role_icon = (r === 'admin' ? 'fa-shield-alt' : (r === 'bendahara' ? 'fa-wallet' : 'fa-tv'));
             const color = (r === 'admin' ? '#ffd700' : (r === 'bendahara' ? '#10b981' : '#38bdf8'));
 
-            const em = (u.email || '').toLowerCase().trim();
-            const un = (u.username || (em ? em.split('@')[0] : (u.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''))).toLowerCase().trim();
+            const un = (u.username || (defMatch ? defMatch.username : (em ? em.split('@')[0] : (u.name || '').toLowerCase().replace(/[^a-z0-9]/g, '')))).toLowerCase().trim();
+
+            // Bersihkan password lama: jika password di storage adalah password usang atau kosong, jadikan password resmi default
+            let resolvedPwd = (u.password || '').trim();
+            if (!resolvedPwd || OBSOLETE_PASSWORDS.includes(resolvedPwd)) {
+                resolvedPwd = defMatch ? defMatch.password : '#1.AlJihad';
+            }
 
             const normalizedUser = {
-                id: u.id || (Date.now() + Math.floor(Math.random() * 1000)),
-                name: u.name || 'Pengurus Masjid',
+                id: u.id || (defMatch ? defMatch.id : (Date.now() + Math.floor(Math.random() * 1000))),
+                name: u.name || (defMatch ? defMatch.name : 'Pengurus Masjid'),
                 email: u.email || `${un}@aljihad.com`,
                 username: un,
-                password: u.password || 'admin123',
+                password: resolvedPwd,
                 role: r,
                 role_id: role_id,
                 role_label: role_label,
                 role_icon: role_icon,
                 color: color,
-                is_custom: !!u.is_custom,
+                is_custom: defMatch ? false : !!u.is_custom,
                 created_at: u.created_at || new Date().toISOString()
             };
 
@@ -336,7 +348,7 @@ const AdminAuth = {
             finalUsers.push(normalizedUser);
         });
 
-        // Pastikan akun bawaan resmi (ID 3, 1, 2) tetap tersedia jika belum ada di sistem
+        // Pastikan seluruh 4 akun resmi default (ID 3, 1, 2, 4) mutlak tersedia
         DEFAULT_AUTH_USERS.forEach(def => {
             const exists = finalUsers.some(u => (u.id && String(u.id) === String(def.id)) || (u.email && def.email && u.email.toLowerCase() === def.email.toLowerCase()));
             if (!exists && !existingEmails.has(def.email.toLowerCase())) {
@@ -846,19 +858,30 @@ const AdminAuth = {
 
         // Alias tambahan untuk fleksibilitas maksimal lintas perangkat
         if (!matchedUser) {
-            // Khusus Bendahara Kas (misal user mengetik 'bendahara', 'bendahara@aljihad.com', atau 'utut')
-            if (cleanId === 'bendahara' || cleanId === 'bendahara@aljihad.com' || cleanId.includes('bendahara') || cleanId.includes('utut')) {
-                const bUser = usersList.find(u => u.role === 'bendahara') || DEFAULT_AUTH_USERS.find(u => u.role === 'bendahara');
+            // 1. Khusus Bendahara Kas (misal user mengetik 'bendahara', 'bendahara@aljihad.com', atau 'utut')
+            if (cleanId === 'bendahara' || cleanId === 'bendahara@aljihad.com' || (!cleanId.includes('@') && (cleanId.includes('bendahara') || cleanId.includes('utut')))) {
+                const bUser = usersList.find(u => u.email === 'bendahara@aljihad.com' || u.username === 'bendahara') || DEFAULT_AUTH_USERS.find(u => u.role === 'bendahara');
                 if (bUser && this.isPasswordMatch(bUser, cleanPwd)) {
                     matchedUser = bUser;
                 }
-            } else if (cleanId === 'dkm@aljihad.com' || cleanId === 'petugas' || cleanId === 'operator' || cleanId === 'dkmsatu' || cleanId.includes('dkm')) {
-                const pUser = usersList.find(u => u.role === 'petugas') || DEFAULT_AUTH_USERS.find(u => u.role === 'petugas');
+            } 
+            // 2. Khusus Ketua DKM (misal user mengetik 'dkmsatu', 'ketuadkm@aljihad.com', 'ketua', atau 'hadi')
+            else if (cleanId === 'dkmsatu' || cleanId === 'ketuadkm@aljihad.com' || (!cleanId.includes('@') && (cleanId.includes('dkmsatu') || cleanId.includes('ketua') || cleanId.includes('hadi')))) {
+                const kdUser = usersList.find(u => u.email === 'ketuadkm@aljihad.com' || u.username === 'dkmsatu') || DEFAULT_AUTH_USERS.find(u => u.username === 'dkmsatu');
+                if (kdUser && this.isPasswordMatch(kdUser, cleanPwd)) {
+                    matchedUser = kdUser;
+                }
+            }
+            // 3. Khusus Petugas / Operator DKM (misal user mengetik 'dkm', 'dkm@aljihad.com', 'petugas', atau 'operator')
+            else if (cleanId === 'dkm' || cleanId === 'dkm@aljihad.com' || cleanId === 'petugas' || cleanId === 'operator') {
+                const pUser = usersList.find(u => u.email === 'dkm@aljihad.com' || u.username === 'dkm') || DEFAULT_AUTH_USERS.find(u => u.email === 'dkm@aljihad.com');
                 if (pUser && this.isPasswordMatch(pUser, cleanPwd)) {
                     matchedUser = pUser;
                 }
-            } else if (cleanId === 'admin' || cleanId === 'superadmin' || cleanId === 'adminsholeh@admin.com' || cleanId.includes('admin') || cleanId.includes('suwardi')) {
-                const aUser = usersList.find(u => u.role === 'admin') || DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
+            } 
+            // 4. Khusus Super Admin (misal user mengetik 'admin', 'superadmin', 'archived.aljihad@gmail.com', atau 'suwardi')
+            else if (cleanId === 'admin' || cleanId === 'superadmin' || cleanId === 'archived.aljihad@gmail.com' || (!cleanId.includes('@') && (cleanId.includes('admin') || cleanId.includes('suwardi')))) {
+                const aUser = usersList.find(u => u.email === 'archived.aljihad@gmail.com' || u.username === 'admin') || DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
                 if (aUser && this.isPasswordMatch(aUser, cleanPwd)) {
                     matchedUser = aUser;
                 }
