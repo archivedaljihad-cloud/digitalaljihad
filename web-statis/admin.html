@@ -5929,32 +5929,72 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
          MODAL TEKS BACAAN MAKLUMAT SHOLAT JUM'AT (PEMBACA MAKLUMAT)
          ======================================================= -->
     <div class="modal fade" id="modalTeksMaklumat" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1060;">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden;">
-                <div class="modal-header py-3 bg-gradient-success text-white">
-                    <h5 class="modal-title font-weight-bold" style="font-size: 1.15rem; color: #ffffff;">
-                        <i class="fas fa-bullhorn mr-2" style="color: #ffd700;"></i> Naskah Bacaan Maklumat Sholat Jum'at
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden; background: #0b1912;">
+                <div class="modal-header py-3 bg-gradient-success text-white border-bottom border-success">
+                    <h5 class="modal-title font-weight-bold d-flex align-items-center flex-wrap" style="font-size: 1.15rem; color: #ffffff; gap: 8px;">
+                        <span><i class="fas fa-bullhorn mr-1" style="color: #ffd700;"></i> Maklumat Sholat Jum'at</span>
+                        <span class="badge badge-warning text-dark font-weight-bold px-2 py-0.5" style="font-size: 11px;">Format Flyer Profesional</span>
                     </h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body p-4" style="background: #f8fafc;">
-                    <div class="alert alert-info py-2 px-3 small mb-3 d-flex align-items-center">
-                        <i class="fas fa-microphone-alt mr-2 text-info fa-lg"></i>
-                        <span>Naskah di bawah ini telah diformat khusus agar mudah, lugas, dan nyaman dibacakan oleh <strong>Pembaca Maklumat</strong> melalui mikrofon mimbar masjid.</span>
+                <div class="modal-body p-3 p-md-4" style="background: #081d14;">
+                    <!-- Nav Tabs / View Switcher -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap" style="gap: 10px;">
+                        <ul class="nav nav-pills bg-dark p-1 rounded shadow-sm border border-secondary" id="tabMaklumatFlyer" role="tablist" style="background: rgba(4, 38, 22, 0.8) !important; border-color: rgba(212, 175, 55, 0.4) !important;">
+                            <li class="nav-item">
+                                <a class="nav-link active font-weight-bold text-white py-1 px-3" id="tab-flyer-btn" data-toggle="pill" href="#tab-maklumat-flyer" role="tab" style="font-size: 12.5px; border-radius: 6px;">
+                                    <i class="fas fa-magic text-warning mr-1"></i> 👑 Format Flyer Profesional
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold text-white-50 py-1 px-3" id="tab-naskah-btn" data-toggle="pill" href="#tab-maklumat-naskah" role="tab" style="font-size: 12.5px; border-radius: 6px;">
+                                    <i class="fas fa-microphone-alt text-success mr-1"></i> 🎙️ Naskah Narasi Mimbar
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="d-flex align-items-center" style="gap: 8px;">
+                            <button type="button" class="btn btn-warning text-dark btn-sm font-weight-bold shadow-sm" onclick="cetakFlyerMaklumatModal()" title="Cetak atau Simpan PDF Flyer Maklumat">
+                                <i class="fas fa-print mr-1"></i> Cetak Flyer
+                            </button>
+                            <button type="button" class="btn btn-info btn-sm font-weight-bold shadow-sm" onclick="downloadTeksMaklumat()" title="Download Naskah Teks (.txt)">
+                                <i class="fas fa-file-download mr-1"></i> Unduh .txt
+                            </button>
+                            <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="salinTeksMaklumat()" title="Salin Teks Maklumat">
+                                <i class="fas fa-copy mr-1"></i> Salin Teks
+                            </button>
+                        </div>
                     </div>
-                    <div id="kontenTeksMaklumat" class="p-3 bg-white rounded border shadow-sm" style="font-size: 14.5px; line-height: 1.8; color: #1e293b; max-height: 520px; overflow-y: auto; font-family: 'Segoe UI', Arial, sans-serif;">
-                        <!-- Dynamically populated reading text -->
+
+                    <div class="tab-content" id="tabMaklumatContent">
+                        <!-- TAB 1: FORMAT FLYER PROFESIONAL (DEFAULT UTAMA) -->
+                        <div class="tab-pane fade show active" id="tab-maklumat-flyer" role="tabpanel" style="max-height: 720px; overflow-y: auto; padding-right: 4px;">
+                            <div id="kontenFlyerMaklumat">
+                                <!-- Populated dynamically by renderFlyerMaklumatHtml() -->
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: NASKAH TEKS BACAAN MIMBAR -->
+                        <div class="tab-pane fade" id="tab-maklumat-naskah" role="tabpanel">
+                            <div class="alert alert-info py-2 px-3 small mb-2 d-flex align-items-center" style="background: rgba(6, 78, 59, 0.4); color: #a7f3d0; border-color: rgba(16, 185, 129, 0.3);">
+                                <i class="fas fa-info-circle mr-2 fa-lg text-warning"></i>
+                                <span>Format naskah narasi siap baca melalui mikrofon mimbar masjid oleh Pembaca Maklumat.</span>
+                            </div>
+                            <div id="kontenTeksMaklumat" class="p-3 bg-white rounded border shadow-sm" style="font-size: 15px; line-height: 1.85; color: #1e293b; max-height: 640px; overflow-y: auto; font-family: 'Segoe UI', Arial, sans-serif;">
+                                <!-- Populated dynamically by generateNaskahMaklumatText() -->
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer bg-light py-2">
+                <div class="modal-footer py-2 bg-dark border-top border-secondary" style="background: #05140d !important;">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-info btn-sm font-weight-bold shadow-sm" onclick="downloadTeksMaklumat()">
-                        <i class="fas fa-file-download mr-1"></i> Download Teks (.txt)
+                    <button type="button" class="btn btn-warning text-dark btn-sm font-weight-bold shadow-sm" onclick="cetakFlyerMaklumatModal()">
+                        <i class="fas fa-print mr-1"></i> Cetak Flyer
                     </button>
                     <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="salinTeksMaklumat()">
-                        <i class="fas fa-copy mr-1"></i> Salin Naskah
+                        <i class="fas fa-copy mr-1"></i> Salin Teks Naskah
                     </button>
                 </div>
             </div>
@@ -17105,11 +17145,315 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             return naskah;
         }
 
+        // =========================================================================
+        // FORMAT FLYER PROFESIONAL TEKS MAKLUMAT JUM'AT (DESAIN ISLAMIC MODERN)
+        // =========================================================================
+        function renderFlyerMaklumatHtml() {
+            if (typeof pjUpdatePreview === 'function') {
+                pjUpdatePreview();
+            }
+            let totalIn = 0;
+            pjData.pemasukan.forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
+            let totalOut = 0;
+            pjData.pengeluaran.forEach(p => { totalOut += (parseInt(p.nominal, 10) || 0); });
+            const saldoAwal = parseInt(pjData.saldoAwal, 10) || 0;
+            const subtotalSaldo = saldoAwal + totalIn;
+            const saldoAkhir = subtotalSaldo - totalOut;
+
+            const tglHariH = pjData.tanggalJudul || '02 Oktober 2026';
+            const tglKas = pjData.tanggalKas || tglHariH;
+            const tglFormatted = tglHariH.toLowerCase().includes('jum') ? tglHariH : ('Jum\'at, ' + tglHariH);
+
+            const hLines = (pjData.himbauan && pjData.himbauan.length > 0) ? pjData.himbauan : [
+                "Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong",
+                "Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya",
+                "Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.",
+                "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
+            ];
+
+            const himbauanIcons = ['🕌', '🚗', '📴', '🤫', '✨', '📢'];
+
+            let html = `
+            <div class="flyer-maklumat-card shadow-lg" style="background: radial-gradient(circle at 50% 0%, #0a4226 0%, #052917 45%, #01150b 100%); border: 2.5px solid #D4AF37; border-radius: 18px; padding: 28px 24px; color: #ffffff; box-shadow: 0 15px 40px rgba(0,0,0,0.5); font-family: 'Poppins', 'Outfit', sans-serif; position: relative;">
+                <!-- Border aksen atas emas -->
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #D4AF37, #FFD700, #D4AF37); border-radius: 18px 18px 0 0;"></div>
+
+                <!-- 1. HEADER FLYER MEWAH -->
+                <div class="text-center mb-4">
+                    <div class="d-inline-block position-relative mb-2">
+                        <img src="img/logo-aljihad-circle.png" onerror="this.onerror=null; this.src='img/logo-aljihad-trans.png';" alt="Logo Masjid Al-Jihad" style="width: 76px; height: 76px; border-radius: 50%; border: 2.5px solid #FFD700; box-shadow: 0 0 18px rgba(255, 215, 0, 0.45); object-fit: cover; background: #064e3b; display: block; margin: 0 auto;">
+                    </div>
+                    
+                    <!-- Kaligrafi Bismillah Emas -->
+                    <div style="font-family: 'Amiri', 'Traditional Arabic', serif; font-size: 32px; font-weight: 700; color: #FFD700; text-shadow: 0 2px 8px rgba(0,0,0,0.9); line-height: 1.35; margin-top: 6px;">
+                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                    </div>
+                    <!-- Kaligrafi Salam -->
+                    <div style="font-family: 'Amiri', 'Traditional Arabic', serif; font-size: 23px; font-weight: 700; color: #FFF2A8; text-shadow: 0 2px 8px rgba(0,0,0,0.9); line-height: 1.35; margin-top: 2px;">
+                        السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ
+                    </div>
+
+                    <!-- Nama Masjid & Lokasi -->
+                    <div style="font-size: 23px; font-weight: 800; color: #ffffff; letter-spacing: 0.6px; margin-top: 10px; text-shadow: 0 2px 6px rgba(0,0,0,0.8);">
+                        MASJID JAMI' AL-JIHAD
+                    </div>
+                    <div style="font-size: 13px; color: #a7f3d0; font-weight: 500;">
+                        Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi
+                    </div>
+
+                    <!-- Kapsul Pita Emas -->
+                    <div class="mt-3">
+                        <span style="display: inline-block; background: linear-gradient(90deg, #D4AF37 0%, #FFD700 50%, #B4821E 100%); color: #022413; font-weight: 900; font-size: 13px; padding: 6px 24px; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.35); text-transform: uppercase; letter-spacing: 0.8px;">
+                            ★ NASKAH MAKLUMAT RESMI SHOLAT JUM'AT ★
+                        </span>
+                    </div>
+
+                    <!-- Tanggal & Waktu -->
+                    <div style="font-size: 19px; font-weight: 800; color: #FFD700; margin-top: 10px; text-shadow: 0 2px 6px rgba(0,0,0,0.8);">
+                        ${escapeHtml(tglFormatted)}
+                    </div>
+                    <div style="font-size: 13.5px; color: #e2e8f0; font-weight: 600;">
+                        <i class="far fa-clock text-warning mr-1"></i> Waktu Khutbah & Sholat: 11:45 WIB
+                    </div>
+                </div>
+
+                <!-- 2. BAGIAN I: LAPORAN KEUANGAN KAS MASJID -->
+                <div class="mb-4" style="background: rgba(2, 22, 13, 0.75); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 14px; padding: 18px 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.25);">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap" style="gap: 8px; border-bottom: 1.5px solid rgba(212, 175, 55, 0.3); padding-bottom: 8px;">
+                        <span style="font-size: 15px; font-weight: 800; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i class="fas fa-coins mr-1.5"></i> I. LAPORAN KEUANGAN KAS MASJID
+                        </span>
+                        <span style="font-size: 12px; color: #a7f3d0; font-weight: 600;">
+                            s/d Tanggal: ${escapeHtml(tglKas)}
+                        </span>
+                    </div>
+
+                    <!-- 4 Kartu Kas Sejajar -->
+                    <div class="row no-gutters mb-3" style="gap: 10px;">
+                        <div class="col" style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: 10px; padding: 10px; text-align: center;">
+                            <div style="font-size: 11px; font-weight: 700; color: #fcd34d; text-transform: uppercase;">SALDO AWAL</div>
+                            <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; margin-top: 3px;">Rp ${pjFormatRupiah(saldoAwal)}</div>
+                        </div>
+                        <div class="col" style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 10px; padding: 10px; text-align: center;">
+                            <div style="font-size: 11px; font-weight: 700; color: #6ee7b7; text-transform: uppercase;">PEMASUKAN (+)</div>
+                            <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; margin-top: 3px;">Rp ${pjFormatRupiah(totalIn)}</div>
+                        </div>
+                        <div class="col" style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.45); border-radius: 10px; padding: 10px; text-align: center;">
+                            <div style="font-size: 11px; font-weight: 700; color: #fca5a5; text-transform: uppercase;">PENGELUARAN (-)</div>
+                            <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; margin-top: 3px;">Rp ${pjFormatRupiah(totalOut)}</div>
+                        </div>
+                        <div class="col" style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); border: 2px solid #FFD700; box-shadow: 0 4px 14px rgba(255, 215, 0, 0.3); border-radius: 10px; padding: 10px; text-align: center;">
+                            <div style="font-size: 11px; font-weight: 800; color: #FFD700; text-transform: uppercase;">SALDO AKHIR KAS</div>
+                            <div style="font-size: 16.5px; font-weight: 900; color: #fef08a; margin-top: 3px;">Rp ${pjFormatRupiah(saldoAkhir)}</div>
+                        </div>
+                    </div>
+
+                    <!-- Rincian Pemasukan & Pengeluaran 2 Kolom -->
+                    <div class="row">
+                        <div class="col-md-6 mb-2 mb-md-0">
+                            <div style="background: rgba(6, 78, 59, 0.35); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 10px 14px; height: 100%;">
+                                <div class="font-weight-bold text-success mb-2" style="font-size: 12.5px;">
+                                    <i class="fas fa-arrow-circle-down mr-1"></i> Rincian Pemasukan Kas:
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                    ${pjData.pemasukan.length > 0 ? pjData.pemasukan.map(p => `
+                                        <div class="d-flex justify-content-between align-items-center py-1" style="border-bottom: 1px dashed rgba(255,255,255,0.12); font-size: 12.5px;">
+                                            <span style="color: #cbd5e1;"><i class="fas fa-check-circle text-success mr-1.5" style="font-size: 10px;"></i> ${escapeHtml(p.ket || 'Pemasukan')}</span>
+                                            <span class="font-weight-bold text-white">Rp ${pjFormatRupiah(p.nominal)}</span>
+                                        </div>
+                                    `).join('') : '<div class="text-white-50 small">- Tidak ada rincian -</div>'}
+                                </div>
+                                <div class="d-flex justify-content-between font-weight-bold text-white pt-2 mt-2" style="border-top: 1px solid rgba(255,255,255,0.2); font-size: 12.5px;">
+                                    <span>Total Pemasukan:</span>
+                                    <span class="text-warning">Rp ${pjFormatRupiah(totalIn)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="background: rgba(127, 29, 29, 0.25); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 10px; padding: 10px 14px; height: 100%;">
+                                <div class="font-weight-bold text-danger mb-2" style="font-size: 12.5px;">
+                                    <i class="fas fa-arrow-circle-up mr-1"></i> Rincian Pengeluaran Kas:
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 4px;">
+                                    ${pjData.pengeluaran.length > 0 ? pjData.pengeluaran.map((p, idx) => `
+                                        <div class="d-flex justify-content-between align-items-center py-1" style="border-bottom: 1px dashed rgba(255,255,255,0.12); font-size: 12.5px;">
+                                            <span style="color: #cbd5e1;"><i class="fas fa-minus-circle text-danger mr-1.5" style="font-size: 10px;"></i> ${idx + 1}. ${escapeHtml(p.ket || 'Pengeluaran')}</span>
+                                            <span class="font-weight-bold text-white">Rp ${pjFormatRupiah(p.nominal)}</span>
+                                        </div>
+                                    `).join('') : '<div class="text-white-50 small">- Tidak ada rincian -</div>'}
+                                </div>
+                                <div class="d-flex justify-content-between font-weight-bold text-white pt-2 mt-2" style="border-top: 1px solid rgba(255,255,255,0.2); font-size: 12.5px;">
+                                    <span>Total Pengeluaran:</span>
+                                    <span class="text-danger font-weight-bold">Rp ${pjFormatRupiah(totalOut)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Highlight Narasi Bacaan Mimbar -->
+                    <div class="mt-3 p-2.5 rounded" style="background: rgba(255, 215, 0, 0.08); border: 1px solid rgba(255, 215, 0, 0.3); font-size: 12.5px; color: #fef3c7; line-height: 1.6;">
+                        <i class="fas fa-volume-up text-warning mr-1"></i> <strong>Panduan Lafal Bacaan Mimbar:</strong>
+                        "Laporan keuangan kas masjid s/d hari ini: Saldo Awal sebesar <strong>Rp ${pjFormatRupiah(saldoAwal)}</strong>. Total Pemasukan sebesar <strong>Rp ${pjFormatRupiah(totalIn)}</strong>. Saldo awal ditambah pemasukan berjumlah <strong>Rp ${pjFormatRupiah(subtotalSaldo)}</strong>. Total Pengeluaran sebesar <strong>Rp ${pjFormatRupiah(totalOut)}</strong>. Sehingga <strong>SALDO AKHIR KAS MASJID</strong> saat ini adalah sebesar <strong>Rp ${pjFormatRupiah(saldoAkhir)}</strong>."
+                    </div>
+                </div>
+
+                <!-- 3. BAGIAN II: PETUGAS SHOLAT JUM'AT -->
+                <div class="mb-4" style="background: rgba(2, 22, 13, 0.75); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 14px; padding: 18px 20px;">
+                    <div style="font-size: 15px; font-weight: 800; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1.5px solid rgba(212, 175, 55, 0.3); padding-bottom: 8px; margin-bottom: 14px;">
+                        <i class="fas fa-user-tie mr-1.5"></i> II. PETUGAS SHOLAT JUM'AT HARI INI
+                    </div>
+
+                    <div class="row" style="row-gap: 10px;">
+                        <!-- Khatib & Imam -->
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
+                                    🎙️
+                                </div>
+                                <div style="overflow: hidden;">
+                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">KHATIB & IMAM SHOLAT</div>
+                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.imamKhotib || 'Ust. Faiq Rido')}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Muadzin -->
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
+                                    📢
+                                </div>
+                                <div style="overflow: hidden;">
+                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">MUADZIN</div>
+                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.muadzin || 'Ust. Rudy')}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bilal -->
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
+                                    🤲
+                                </div>
+                                <div style="overflow: hidden;">
+                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">BILAL</div>
+                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.bilal || 'Ust. Mansur')}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pembaca Maklumat -->
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
+                                    📜
+                                </div>
+                                <div style="overflow: hidden;">
+                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">PEMBACA MAKLUMAT</div>
+                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.maklumat || 'Ust. Fatkhurokhman')}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. BAGIAN III: HIMBAUAN JAMAAH & ADAB KHUTBAH -->
+                <div class="mb-4" style="background: rgba(2, 22, 13, 0.75); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 14px; padding: 18px 20px;">
+                    <div style="font-size: 15px; font-weight: 800; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1.5px solid rgba(212, 175, 55, 0.3); padding-bottom: 8px; margin-bottom: 14px;">
+                        <i class="fas fa-bullhorn mr-1.5"></i> III. HIMBAUAN KEPADA SELURUH JAMAAH
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        ${hLines.map((line, idx) => {
+                            let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim();
+                            clean = clean.replace(/^[•\-\*]\s*/g, '').trim();
+                            const icon = himbauanIcons[idx % himbauanIcons.length] || '•';
+                            return `
+                                <div style="background: rgba(6, 78, 59, 0.35); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 8px 12px; display: flex; align-items: flex-start; gap: 10px;">
+                                    <span style="font-size: 15px; line-height: 1.4; flex-shrink: 0;">${icon}</span>
+                                    <div style="font-size: 13px; color: #f1f5f9; line-height: 1.5;">
+                                        <strong style="color: #FFD700;">${idx + 1}.</strong> ${escapeHtml(clean)}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- Plakat Hadits Adab Khutbah -->
+                    <div class="mt-3 p-3 rounded text-center" style="background: rgba(2, 16, 9, 0.85); border: 1.5px solid rgba(212, 175, 55, 0.5); border-radius: 12px;">
+                        <div style="color: #FFD700; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            ✨ Adab Khutbah: Diam, Dengarkan & Simak Khutbah
+                        </div>
+                        <div style="font-family: 'Amiri', serif; color: #F0DEAA; font-size: 15px; margin: 3px 0;">
+                            Rasulullah ﷺ bersabda:
+                        </div>
+                        <div style="font-style: italic; color: #ffffff; font-size: 13.5px; line-height: 1.55;">
+                            "Jika engkau berkata kepada sahabatmu pada hari Jum'at: 'Diamlah!' ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."
+                        </div>
+                        <div style="color: #FFD700; font-weight: 700; font-size: 12px; margin-top: 4px;">
+                            (HR. Bukhari no. 934 & Muslim no. 851)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. PENUTUP & TANDA TANGAN DKM -->
+                <div class="pt-3 text-center" style="border-top: 1.5px solid rgba(212, 175, 55, 0.35);">
+                    <div style="font-size: 13.5px; color: #e2e8f0; font-style: italic; margin-bottom: 4px;">
+                        "Demikian maklumat pengumuman ini kami sampaikan, terima kasih atas perhatian seluruh jamaah."
+                    </div>
+                    <div style="font-family: 'Amiri', serif; font-size: 21px; font-weight: 700; color: #FFF2A8; margin-bottom: 16px;">
+                        وَالسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ
+                    </div>
+
+                    <!-- Tanda Tangan DKM -->
+                    <div class="d-flex justify-content-between align-items-center mt-3 px-2 px-md-5">
+                        <div class="text-center" style="min-width: 140px;">
+                            <div style="font-size: 12px; color: #a7f3d0; font-weight: 600;">Ketua DKM Al-Jihad</div>
+                            <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin: 4px 0;">
+                                <img src="img/tandatanganketuaDKM_trans.png" onerror="this.style.display='none'" alt="TTD Ketua" style="max-height: 42px; filter: brightness(0) invert(1);">
+                            </div>
+                            <div style="font-weight: 800; font-size: 13.5px; color: #FFD700; border-bottom: 1.5px solid #FFD700; display: inline-block; padding-bottom: 2px;">
+                                ${escapeHtml(pjData.ttd.namaKetua || 'Hadi Prayitno')}
+                            </div>
+                        </div>
+                        <div class="text-center d-none d-sm-block">
+                            <img src="img/stempelDKM_trans.png" onerror="this.style.display='none'" alt="Stempel DKM" style="height: 58px; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4)); opacity: 0.95;">
+                        </div>
+                        <div class="text-center" style="min-width: 140px;">
+                            <div style="font-size: 12px; color: #a7f3d0; font-weight: 600;">Bendahara DKM Al-Jihad</div>
+                            <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin: 4px 0;">
+                                <img src="img/tantatanganbendahara_trans.png" onerror="this.style.display='none'" alt="TTD Bendahara" style="max-height: 42px; filter: brightness(0) invert(1);">
+                            </div>
+                            <div style="font-weight: 800; font-size: 13.5px; color: #FFD700; border-bottom: 1.5px solid #FFD700; display: inline-block; padding-bottom: 2px;">
+                                ${escapeHtml(pjData.ttd.namaBendahara || 'Utut Priyastya')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Caption -->
+                    <div class="mt-4 pt-2 text-muted" style="font-size: 11px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        Diterbitkan oleh DKM Masjid Jami' Al Jihad • Sistem Informasi Digital (digitalaljihad.my.id)
+                    </div>
+                </div>
+            </div>
+            `;
+
+            return html;
+        }
+
         function bukaModalTeksMaklumat() {
+            if (typeof pjUpdatePreview === 'function') {
+                pjUpdatePreview();
+            }
+
+            // 1. Render Format Flyer Profesional ke tab #kontenFlyerMaklumat
+            const elFlyer = document.getElementById('kontenFlyerMaklumat');
+            if (elFlyer) {
+                elFlyer.innerHTML = renderFlyerMaklumatHtml();
+            }
+
+            // 2. Render Naskah Teks Bacaan Mimbar ke tab #kontenTeksMaklumat
             const naskah = generateNaskahMaklumatText();
             const elKonten = document.getElementById('kontenTeksMaklumat');
             if (elKonten) {
-                // Format teks ke HTML yang sangat nyaman dibaca
                 elKonten.innerHTML = naskah
                     .split('\n')
                     .map(line => {
@@ -17126,9 +17470,50 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     })
                     .join('');
             }
+
+            // 3. Pastikan tab flyer aktif secara default
+            if (window.$ && $('#tab-flyer-btn').length) {
+                $('#tab-flyer-btn').tab('show');
+            }
+
+            // 4. Buka Modal
             if (window.$ && $('#modalTeksMaklumat').length) {
                 $('#modalTeksMaklumat').modal('show');
             }
+        }
+
+        function cetakFlyerMaklumatModal() {
+            const el = document.getElementById('kontenFlyerMaklumat');
+            if (!el) return;
+            const w = window.open('', '_blank');
+            if (!w) {
+                alert('Pop-up terblokir. Izinkan pop-up untuk mencetak flyer maklumat.');
+                return;
+            }
+            w.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>Flyer Maklumat Sholat Jum'at - Masjid Jami' Al-Jihad</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+                    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+                    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+                    <style>
+                        @page { size: A4 portrait; margin: 8mm; }
+                        body { margin: 0; padding: 12px; background: #031c10 !important; font-family: 'Poppins', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        .flyer-maklumat-card { box-shadow: none !important; border-width: 2px !important; }
+                    </style>
+                </head>
+                <body>
+                    ${el.innerHTML}
+                    <script>
+                        setTimeout(() => { window.print(); }, 600);
+                    <\/script>
+                </body>
+                </html>
+            `);
+            w.document.close();
         }
 
         function salinTeksMaklumat() {

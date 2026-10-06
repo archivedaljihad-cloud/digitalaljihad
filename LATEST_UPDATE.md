@@ -4,7 +4,32 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 12:50 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 13:15 WIB)
+
+### 📢 TRANSFORMASI TEKS MAKLUMAT JUM'AT MENJADI FORMAT FLYER PROFESIONAL ISLAMI (`web-statis/admin.html`):
+1. **Transformasi Tampilan Teks Maklumat Bendahara Menjadi Format Flyer:**
+   - Menjawab permintaan bendahara agar teks maklumat sholat Jum'at tidak hanya berupa teks biasa di kotak textarea, modal Maklumat kini diubah total menjadi **Format Flyer Profesional Berestetika Islami Mewah** (*Royal Islamic Emerald & Gold Card*).
+   - **Elemen Flyer Profesional Lengkap:**
+     - **Header Mewah:** Logo lingkaran Masjid Jami' Al-Jihad berkilau emas, kaligrafi Arab Bismillah (`بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ`) dan Salam emas (`السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ`), identitas masjid, pita kapsul resmi maklumat, serta tanggal & waktu sholat Jum'at.
+     - **Bagian I — Laporan Keuangan Kas Masjid:** Kartu ringkasan 4 pilar (Saldo Awal, Total Penerimaan, Total Pengeluaran, Saldo Akhir) dengan styling angka emas tebal, dilengkapi tabel rincian transaksi kas secara transparan dan rapi.
+     - **Bagian II — Jadwal Petugas Sholat Jum'at:** Kartu petugas resmi (Khatib, Imam, Muadzin, Bilal, dan Pembaca Maklumat) dengan ikon islami dan tata letak elegan.
+     - **Bagian III — Himbauan Jamaah & Adab Khutbah:** Poin-poin tata tertib jamaah dan plakat hadits Nabi SAW tentang adab mendengarkan khutbah Jum'at.
+     - **Pengesahan Digital:** Kolom tanda tangan digital Ketua DKM dan Bendahara lengkap dengan stempel resmi.
+2. **Dual-Mode View Switcher (Flyer vs Naskah Mimbar):**
+   - **Tab 1: 👑 Format Flyer Profesional (Default):** Ditampilkan otomatis saat tombol dibuka, memberikan pratinjau flyer visual yang siap cetak atau dibagikan ke media sosial / status WhatsApp.
+   - **Tab 2: 🎙️ Naskah Narasi Mimbar:** Menyediakan format narasi teks terstruktur bagi petugas yang ingin langsung membaca via mikrofon mimbar.
+3. **Fitur Cetak Flyer Cepat (`cetakFlyerMaklumatModal`):**
+   - Menyediakan tombol "Cetak Flyer" di header dan footer modal yang membuka jendela cetak khusus A4 Portrait dengan styling warna background dan emas yang dipertahankan (*exact print color adjust*).
+4. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.3`** (`aljihad-signage-v5.6.3`) di `web-statis/sw.js`.
+5. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 12:50 WIB)
 
 ### 🕌 PEMBESARAN PROPORSIONAL LOGO MASJID AL-JIHAD & PENURUNAN KEDUA TEKS ARAB (`web-statis/admin.html`):
 1. **Pembesaran Proporsional Logo Lingkaran Masjid Al-Jihad:**
