@@ -859,29 +859,29 @@
 
         .jumat-quran-arabic {
             font-family: 'Amiri', 'Scheherazade New', serif;
-            font-size: clamp(23px, 2.4vw, 34px);
+            font-size: clamp(25px, 2.6vw, 36px);
             font-weight: 700;
             line-height: 1.55;
             color: #FFD700;
             text-shadow: 0 0 16px rgba(255, 215, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.9);
             direction: rtl;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .jumat-quran-arti {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(14px, 1.3vw, 18px);
-            font-weight: 500;
-            line-height: 1.45;
+            font-size: clamp(17px, 1.65vw, 24px);
+            font-weight: 600;
+            line-height: 1.5;
             color: #FFFFFF;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-            max-width: 980px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
+            max-width: 1040px;
             margin: 0 auto;
         }
 
         .jumat-quran-surat {
             color: #FFD700;
-            font-weight: 700;
+            font-weight: 800;
             font-style: normal;
         }
 

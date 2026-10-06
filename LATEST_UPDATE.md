@@ -14,15 +14,15 @@
      3. `IkonSilent.png` — Adab menonaktifkan dering / mengheningkan telepon genggam.
      4. `IkonNelpon.png` — Adab dilarang menerima maupun melakukan panggilan telepon.
    - **Tampilan Visual:** Ditampilkan dalam badge squircle elegan berlatar putih bersih dengan bingkai emas kilau (`border: 2px solid #FFD700; border-radius: 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 215, 0, 0.35)`), sangat kontras dan terlihat tegas di atas latar gradasi hijau zamrud kotak pesan.
-2. **Penerapan Teks Firman Allah SWT (Surat Al-A’raf, Ayat 204):**
-   - **Lafadz Bahasa Arab:** Menggunakan tipografi kaligrafi Arab monumental `Amiri` beraksen emas bercahaya:
+2. **Penerapan & Pembesaran Teks Firman Allah SWT (Surat Al-A’raf, Ayat 204):**
+   - **Lafadz Bahasa Arab:** Menggunakan tipografi kaligrafi Arab monumental `Amiri` beraksen emas bercahaya (`clamp(25px, 2.6vw, 36px)`):
      > **وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ**
-   - **Terjemahan Bahasa Indonesia:** Ditata secara proporsional dengan font `Poppins`:
+   - **Terjemahan Bahasa Indonesia:** Sesuai permintaan CEO, ukuran font ditingkatkan menjadi lebih besar dan berbobot semi-bold (`clamp(17px, 1.65vw, 24px); font-weight: 600`) dengan font `Poppins` berdaya keterbacaan optimal dari kejauhan:
      > “Apabila dibacakan Al-Quran (khutbah), maka dengarkanlah baik-baik, dan perhatikanlah dengan tenang agar kamu mendapat rahmat,” (Surat Al-A’raf, ayat 204)
 3. **Penyempurnaan Arsitektur Multi-Platform & Offline-First:**
    - Diperbarui pada `web-statis/prayer-mode.html`, `public/preview-prayer-mode.html`, dan `resources/views/prayer-mode.blade.php`.
    - Berkas 4 ikon didaftarkan ke `STATIC_ASSETS` di `web-statis/sw.js` untuk jaminan 100% pre-caching offline di Smart TV masjid.
-   - Cache Service Worker dinaikkan ke **`v5.7.1`** (`aljihad-signage-v5.7.1`).
+   - Cache Service Worker dinaikkan ke **`v5.7.2`** (`aljihad-signage-v5.7.2`).
 4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
    - **Cold Backup Lokal:** Salinan berkas disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
    - **GitHub:** Komit dan push ke branch `main`.
