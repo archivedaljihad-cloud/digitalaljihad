@@ -4,7 +4,22 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 07:22 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 07:25 WIB)
+
+### 📋 PENETAPAN SOP TETAP PENGEMBANGAN PROYEK (`AGENTS.md`):
+1. **Penetapan Mandat SOP Utama:**
+   - Menambahkan kalimat instruksi resmi pengguna ke dalam file acuan tetap **`AGENTS.md`**:  
+     > *"Segera sinkronisasi data dengan cloudflare, supabase, github dan folder mandiri lokal sehingga tampilan di TV tersinkron secepatnya secara realtime."*
+2. **Standardisasi 4 Pilar Siklus Kerja:**
+   - Setiap AI Agent maupun pengembang yang bekerja pada repositori ini diwajibkan secara mutlak untuk menjalankan 4 langkah sinkronisasi otomatis tanpa menunggu perintah pengguna setiap kali ada perubahan/fitur baru:
+     a. Sinkronisasi data/skema ke **Supabase Cloud Database**.
+     b. Commit dan Push ke repositori **GitHub** (`main`).
+     c. Deploy aset ke **Cloudflare Workers Live** (`https://digitalaljihad.my.id/`).
+     d. Salin arsip cadangan ke folder lokal **`C:\Users\anthu\Documents\【Digital WebSTATIS】\`**.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 07:22 WIB)
 
 ### 🔄 SINKRONISASI MENYELURUH CLOUD PRODUCTION (CLOUDFLARE & SUPABASE), GITHUB, & LOKAL BACKUP:
 1. **Sinkronisasi Supabase Cloud Database (`app_settings` & Realtime):**
