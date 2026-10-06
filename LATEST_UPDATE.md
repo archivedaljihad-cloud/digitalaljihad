@@ -4,7 +4,33 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 18:05 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 18:30 WIB)
+
+### 🧹 PENEMPATAN TOMBOL CEPAT "BERSIHKAN CACHE USANG & REFRESH TV" DI TOPBAR & SIDEBAR ADMIN (`web-statis/admin.html` & `web-statis/index.html`):
+1. **Identifikasi Masalah (*Root Cause Analysis*):**
+   - Sebelumnya tombol "Bersihkan Cache Usang & Refresh TV" hanya terletak di dalam view `view-settings` (Pengaturan Sistem) pada bagian kartu paling bawah.
+   - Menu `Pengaturan Sistem` di sidebar dibatasi oleh atribut `data-role="admin"`, sehingga pengguna yang login sebagai **Bendahara** (`bendahara@aljihad.com`) atau **Petugas DKM** (`dkm@aljihad.com`) tidak melihat menu tersebut sama sekali.
+   - Bahkan jika login sebagai Admin, pengguna harus menavigasi ke menu Pengaturan Sistem dan menggulir (*scroll*) jauh ke bawah halaman untuk menemukannya.
+2. **Solusi & Penempatan Akses Cepat 1-Klik:**
+   - **Topbar Admin (Navigasi Atas):**
+     - Menambahkan tombol pintas berikon sapu `[ 🧹 Bersihkan Cache & Refresh TV ]` tepat di samping tombol "Lihat Display".
+     - Tombol selalu terlihat di semua halaman admin (Dashboard, Kas, Agenda, Pengumuman, dll.) dan dapat diakses oleh semua peran pengguna tanpa batasan peran (*RBAC bypass for maintenance*).
+   - **Sidebar Navigasi Kiri:**
+     - Menambahkan item menu tetap berwarna kuning emas `Bersihkan Cache & Refresh TV` tepat di bawah item "Buka Layar TV Display" (sebelum menu Keluar).
+   - **User Profile Dropdown:**
+     - Menambahkan item aksi cepat di dalam dropdown akun pengguna di pojok kanan atas.
+3. **Penyempurnaan Fungsi & Sinyal Realtime Remote TV:**
+   - Menghubungkan tombol topbar dan tombol kartu ke fungsi terpadu `bersihkanCacheSistem()`, dengan indikator loading animasi ganda (*dual spinner*).
+   - Memperbarui target penghapusan cache Service Worker ke versi aktif **`aljihad-signage-v5.6.5`**.
+   - Menambahkan penanganan sinyal remote `REFRESH_DISPLAY` di `web-statis/index.html` (berdampingan dengan `RELOAD`), sehingga saat tombol ditekan di Admin, seluruh Smart TV di masjid menampilkan notifikasi OSD *"🔄 Remote: Memuat Ulang TV..."* dan otomatis me-refresh layarnya dalam 1.2 detik secara serentak via Supabase Realtime WebSocket (<100ms).
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 18:05 WIB)
 
 ### 🔲 PERBAIKAN TOTAL TAMPILAN FONT BADGE KUNING POJOK KIRI BAWAH DI TV (PUTIH -> HITAM PEKAT SOLID):
 1. **Identifikasi Penyebab Utama (*Root Cause Analysis*):**

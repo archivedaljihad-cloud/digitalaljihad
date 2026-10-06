@@ -1470,6 +1470,13 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link text-warning font-weight-bold" href="javascript:void(0)" onclick="bersihkanCacheSistem()" title="Bersihkan cache memori browser dan segarkan TV Display seketika">
+                    <i class="fas fa-fw fa-broom text-warning"></i>
+                    <span>Bersihkan Cache & Refresh TV</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link text-danger font-weight-bold" href="javascript:void(0)" onclick="confirmLogout(event)">
                     <i class="fas fa-fw fa-sign-out-alt text-danger"></i>
                     <span>Keluar (Logout)</span>
@@ -1537,11 +1544,20 @@
                         </li>
 
                         <!-- Tombol Pintas Layar TV -->
-                        <li class="nav-item mx-2">
-                            <a href="index.html" target="_blank" class="btn-live-disp">
+                        <li class="nav-item mx-1">
+                            <a href="index.html" target="_blank" class="btn-live-disp" title="Buka Layar TV Display di tab baru">
                                 <i class="fas fa-tv"></i>
                                 <span>Lihat Display</span>
                             </a>
+                        </li>
+
+                        <!-- Tombol Pintas Bersihkan Cache & Refresh TV -->
+                        <li class="nav-item mx-1">
+                            <button type="button" class="btn btn-sm btn-outline-warning font-weight-bold d-inline-flex align-items-center" onclick="bersihkanCacheSistem()" id="btnTopbarBersihkanCache" title="Bersihkan cache memori browser dan segarkan TV Display seketika" style="height: 38px; border-radius: 8px; gap: 6px; padding: 0 12px; border-width: 1.5px; background: rgba(245, 158, 11, 0.08); color: #b45309; border-color: #f59e0b;">
+                                <i class="fas fa-broom"></i>
+                                <span class="d-none d-lg-inline">Bersihkan Cache & Refresh TV</span>
+                                <span class="d-inline d-lg-none">Refresh TV</span>
+                            </button>
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -1572,6 +1588,10 @@
                                 <a class="dropdown-item d-flex align-items-center" href="javascript:void(0)" onclick="switchAdminSection('dashboard')">
                                     <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-primary"></i> 
                                     <span>Dashboard Utama</span>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center text-warning font-weight-bold" href="javascript:void(0)" onclick="bersihkanCacheSistem()">
+                                    <i class="fas fa-broom fa-sm fa-fw mr-2 text-warning"></i> 
+                                    <span>Bersihkan Cache & Refresh TV</span>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center text-danger font-weight-bold" href="javascript:void(0)" onclick="confirmLogout(event)">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i> 
@@ -5921,7 +5941,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                         <div class="row align-items-center">
                                             <div class="col-lg-8 mb-3 mb-lg-0">
                                                 <p class="mb-1 text-dark font-weight-bold">
-                                                    Pembersihan Menyeluruh Memori Cache & Service Worker v5.5.0 (SRE Production)
+                                                    Pembersihan Menyeluruh Memori Cache & Service Worker v5.6.5 (SRE Production)
                                                 </p>
                                                 <p class="text-muted small mb-0">
                                                     Menghapus entri cache usang (kunci pengaturan lama, durasi legacy, cache base64 usang), memperbarui Service Worker, dan menyegarkan memori TV Display secara seketika (&lt; 100ms) tanpa menghapus data aktif masjid.
@@ -13451,13 +13471,18 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
         /**
          * Pembersihan menyeluruh cache usang, purge CacheStorage lama,
-         * refresh Service Worker v5.5.0, dan sinkronisasi realtime ke seluruh layar TV Display
+         * refresh Service Worker v5.6.5, dan sinkronisasi realtime ke seluruh layar TV Display
          */
         async function bersihkanCacheSistem() {
             const btn = document.getElementById('btnBersihkanCacheSistem');
+            const topBtn = document.getElementById('btnTopbarBersihkanCache');
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Membersihkan Cache...';
+            }
+            if (topBtn) {
+                topBtn.disabled = true;
+                topBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="d-none d-lg-inline">Membersihkan...</span><span class="d-inline d-lg-none">Proses...</span>';
             }
 
             try {
@@ -13481,13 +13506,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     });
                 }
 
-                // 2. Bersihkan CacheStorage Service Worker
+                // 2. Bersihkan CacheStorage Service Worker (sisakan v5.6.5)
                 if ('caches' in window) {
                     try {
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.5.0') {
+                                if (name !== 'aljihad-signage-v5.6.5') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
@@ -13508,12 +13533,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     } catch (swErr) {}
                 }
 
-                // 4. Siarkan sinyal remote RELOAD / REFRESH ke seluruh layar TV Display
+                // 4. Siarkan sinyal remote RELOAD & REFRESH ke seluruh layar TV Display
                 if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
                     SupabaseDB.broadcastChange('app_settings', 'RELOAD', { timestamp: Date.now() }, 'Admin Maintenance');
                 }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.5.0' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('RELOAD', { reason: 'Pembersihan cache sistem v5.6.5' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.6.5' }).catch(() => {});
                 }
 
                 // 5. Muat ulang data terbaru dari Supabase
@@ -13528,7 +13554,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         html: `
                             <p class="text-left mb-2">Seluruh cache usang dan memori usang telah dibersihkan:</p>
                             <ul class="text-left small text-muted mb-3 pl-3">
-                                <li>Service Worker diperbarui ke <b>v5.5.0</b></li>
+                                <li>Service Worker diperbarui ke <b>v5.6.5</b></li>
                                 <li>Kunci memori lama yang dibersihkan: <b>${removedItems.length > 0 ? removedItems.join(', ') : 'Bersih (Sudah Optimal)'}</b></li>
                                 <li>Sinyal refresh TV telah dipancarkan secara realtime (&lt; 100ms) ke seluruh layar</li>
                             </ul>
@@ -13548,6 +13574,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 if (btn) {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-trash-alt mr-1"></i> Bersihkan Cache Usang & Refresh TV';
+                }
+                if (topBtn) {
+                    topBtn.disabled = false;
+                    topBtn.innerHTML = '<i class="fas fa-broom mr-1"></i> <span class="d-none d-lg-inline">Bersihkan Cache & Refresh TV</span><span class="d-inline d-lg-none">Refresh TV</span>';
                 }
             }
         }

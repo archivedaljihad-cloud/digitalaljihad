@@ -1300,8 +1300,15 @@
                             jumpToSlideUrl(d.url, d.name);
                             break;
                         case 'RELOAD':
+                        case 'REFRESH_DISPLAY':
                             showOsd('🔄 Remote: Memuat Ulang TV...');
-                            setTimeout(() => location.reload(), 1200);
+                            setTimeout(() => {
+                                try {
+                                    window.location.reload(true);
+                                } catch(e) {
+                                    window.location.reload();
+                                }
+                            }, 1200);
                             break;
                         case 'EMERGENCY_ALERT':
                             showEmergencyAlert(d.text, d.theme, d.duration || 30);
