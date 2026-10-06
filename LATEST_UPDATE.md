@@ -4,7 +4,29 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 07:25 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 12:35 WIB)
+
+### 🕌 PENYEMPURNAAN UKURAN KEDUA FONT ARAB FLYER JUM'AT (`web-statis/admin.html`):
+1. **Pembesaran Font Kaligrafi Bismillah & Salam:**
+   - **Teks Bismillah (`بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ`):**
+     - Ukuran font dinaikkan dari `bold 28px` menjadi **`bold 42px`** (+50% lebih besar).
+     - Koordinat vertikal diselaraskan ke `Y = 316` dengan shadow kontras tinggi (`rgba(0, 0, 0, 0.95)`, blur 8) berwarna emas `#FFD700`.
+   - **Teks Salam (`السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ`):**
+     - Ukuran font dinaikkan dari `bold 23px` menjadi **`bold 33px`** (+43% lebih besar).
+     - Koordinat vertikal diselaraskan ke `Y = 358` berwarna emas lembut `#FFF2A8`.
+2. **Penyelarasan Proporsi Vertikal & Breathing Room Elemen Flyer:**
+   - Titik pusat logo lingkaran diselaraskan ke `logoCenterY = 236` (radius 38, tepi bawah 274) agar memberikan jarak bernapas yang lega (*breathing room*) terhadap kaligrafi Bismillah di bawahnya.
+   - Posisi nama masjid ("MASJID JAMI' AL-JIHAD") diselaraskan ke `Y = 405`, dan alamat ke `Y = 432`, menjaga ritme simetris proporsional tanpa saling menabrak.
+3. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.0`** (`aljihad-signage-v5.6.0`) di `web-statis/sw.js`.
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 07:25 WIB)
 
 ### 📋 PENETAPAN SOP TETAP PENGEMBANGAN PROYEK (`AGENTS.md`):
 1. **Penetapan Mandat SOP Utama:**

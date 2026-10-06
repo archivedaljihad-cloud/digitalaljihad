@@ -11346,7 +11346,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 });
             }
 
-            const logoCenterY = 240;
+            const logoCenterY = 236;
             const logoRadius = 38;
 
             if (cachedFlyerLogoImg && cachedFlyerLogoImg.complete && cachedFlyerLogoImg.naturalWidth > 0) {
@@ -11383,20 +11383,20 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 ctx.restore();
             }
 
-            // 3. KALIGRAFI BISMILLAH & ASSALAMU'ALAIKUM (DI DALAM FRAME AREA HIJAU, TAJAM & BERSIH)
+            // 3. KALIGRAFI BISMILLAH & ASSALAMU'ALAIKUM (DI DALAM FRAME AREA HIJAU, DIPERBESAR & ELEGAN)
             ctx.textAlign = 'center';
             ctx.fillStyle = '#FFD700';
-            ctx.font = 'bold 28px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
+            ctx.font = 'bold 42px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 8;
-            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 311);
+            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 316);
 
-            // Teks Arab Assalamu'alaikum Lengkap di Bawah Bismillah
+            // Teks Arab Assalamu'alaikum Lengkap di Bawah Bismillah (Font Diperbesar)
             ctx.fillStyle = '#FFF2A8';
-            ctx.font = 'bold 23px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
+            ctx.font = 'bold 33px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 8;
-            ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 351);
+            ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 358);
             ctx.shadowBlur = 0;
 
             // 4. NAMA MASJID & ALAMAT
@@ -11405,11 +11405,11 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
             ctx.shadowBlur = 8;
-            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 403);
+            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 405);
 
             ctx.fillStyle = '#A7F3D0';
             ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 431);
+            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 432);
             ctx.shadowBlur = 0;
 
             // 5. PITA / KAPSUL JUDUL JADWAL
