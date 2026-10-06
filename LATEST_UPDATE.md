@@ -4,7 +4,31 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 06:15 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 07:22 WIB)
+
+### 🔄 SINKRONISASI MENYELURUH CLOUD PRODUCTION (CLOUDFLARE & SUPABASE), GITHUB, & LOKAL BACKUP:
+1. **Sinkronisasi Supabase Cloud Database (`app_settings` & Realtime):**
+   - Melakukan sinkronisasi data mutakhir lembar DKM `pengumuman_jumat` ke Supabase Cloud REST API (`table: app_settings, key: pengumuman_jumat`).
+   - Menyertakan data lengkap terstandarisasi DKM:
+     - **Saldo Awal:** Rp 19.379.023
+     - **Pemasukan:** Tromol Jum'at Rp 3.500.000
+     - **Pengeluaran:** Biaya Majlis Ta'lim (Rp 800.000), Biaya Ambulance (Rp 200.000), Operasional Masjid (Rp 3.137.000)
+     - **Saldo Akhir:** Rp 18.742.023
+     - **Petugas Jum'at:** Imam/Khotib: Ust. Faiq Rido, Muadzin: Ust. Rudy, Bilal: Ust. Mansur, Maklumat: Ust. Fatkhurokhman.
+2. **Peningkatan Ketahanan & Resiliensi Slide TV Display (`slides/kas-jumat.html` & `slides/jumat.html`):**
+   - Menambahkan pengamanan parsing data kosong (`!pengumumanData || Object.keys(pengumumanData).length === 0`) agar slide TV tidak merender angka nol (0) jika data cloud sedang dalam inisialisasi awal.
+   - Mengimplementasikan fallback otomatis ke nilai resmi DKM Al-Jihad (`saldo_awal ?? saldoAwal ?? 19379023`).
+   - Mengintegrasikan pembaruan real-time lintas kanal di slide `jumat.html` dan `kas-jumat.html` dengan menambahkan penanganan pesan `SYNC_PENGUMUMAN_JUMAT`, `UPDATE_SETTINGS`, dan sinkronisasi petugas dari modul pengumuman.
+3. **Invalidasi Cache Service Worker:**
+   - Cache dinaikkan ke **`v5.5.9`** (`aljihad-signage-v5.5.9`) di `web-statis/sw.js`.
+4. **Penyebaran (*Deploy & Mirror*) ke Semua Lingkungan:**
+   - **GitHub:** Repositori branch `main` sinkron 100%.
+   - **Cloudflare Workers Production Live:** `https://digitalaljihad.my.id/` terbarui via `wrangler deploy`.
+   - **Arsip Cadangan Lokal (*Cold Backup*):** Disalin penuh ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 06:15 WIB)
 
 ### 💰 PEMBUATAN FORMAT OTOMATIS PEMISAH RIBUAN TITIK DI FORM KAS PENGUMUMAN JUM'AT:
 1. **Penyesuaian Input Saldo Awal (`web-statis/admin.html`):**

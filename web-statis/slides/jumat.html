@@ -509,9 +509,24 @@
 
                 // 2. Sholat Jumat
                 const jumat = await SupabaseDB.getSholatJumat();
-                if (jumat) {
+
+                // 3. Fallback / Sinergi dengan Pengumuman Jum'at
+                let pj = null;
+                if (settings && settings.pengumuman_jumat) {
+                    try {
+                        pj = typeof settings.pengumuman_jumat === 'string' ? JSON.parse(settings.pengumuman_jumat) : settings.pengumuman_jumat;
+                    } catch (e) {}
+                }
+                if (!pj) {
+                    try {
+                        const localPj = localStorage.getItem('pengumuman_jumat_data') || localStorage.getItem('cached_pengumuman_jumat');
+                        if (localPj) pj = JSON.parse(localPj);
+                    } catch (e) {}
+                }
+
+                if (jumat || pj) {
                     // Tanggal
-                    if (jumat.tanggal) {
+                    if (jumat && jumat.tanggal) {
                         const d = new Date(jumat.tanggal);
                         const hariList = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
                         const bulanList = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
@@ -529,11 +544,13 @@
                             badgeEl.className = 'jadwal-mendatang-badge';
                             badgeEl.innerHTML = '<i class="fas fa-calendar-week mr-1"></i> Jumat Mendatang';
                         }
+                    } else if (pj && (pj.tanggalJudul || pj.tanggalKas)) {
+                        document.getElementById('valTanggal').textContent = `Jum'at, ${pj.tanggalJudul || pj.tanggalKas}`;
                     }
 
                     // Petugas
-                    const imam = jumat.imam || '';
-                    const khatib = jumat.khatib || '';
+                    const imam = (jumat && jumat.imam) ? jumat.imam : (pj?.petugas?.imamKhotib || '');
+                    const khatib = (jumat && jumat.khatib) ? jumat.khatib : (pj?.petugas?.imamKhotib || '');
                     let imamKhatibStr = 'Belum Ditetapkan';
                     if (imam && khatib && imam !== khatib) {
                         imamKhatibStr = `${imam} / ${khatib}`;
@@ -544,19 +561,19 @@
                     document.getElementById('valImamKhatib').textContent = imamKhatibStr;
                     document.getElementById('badgeImamName').textContent = imam || khatib || 'Ustd. Imam & Khotib';
                     // Bilal & Pembaca Maklumat
-                    let rawBilal = jumat.bilal || '';
+                    let rawBilal = (jumat && jumat.bilal) ? jumat.bilal : (pj?.petugas?.bilal || '');
                     let bilalStr = rawBilal;
-                    let maklumatStr = '';
+                    let maklumatStr = pj?.petugas?.maklumat || '';
                     if (rawBilal.includes('/')) {
                         const bParts = rawBilal.split('/').map(s => s.trim());
                         bilalStr = bParts[0] || '';
-                        maklumatStr = bParts[1] || '';
+                        if (!maklumatStr) maklumatStr = bParts[1] || '';
                     }
                     if (!maklumatStr && settings?.running_text_pages?.jumat_maklumat) {
                         maklumatStr = settings.running_text_pages.jumat_maklumat;
                     }
 
-                    document.getElementById('valMuadzin').textContent = jumat.muadzin || 'Belum Ditetapkan';
+                    document.getElementById('valMuadzin').textContent = (jumat && jumat.muadzin) ? jumat.muadzin : (pj?.petugas?.muadzin || 'Belum Ditetapkan');
                     document.getElementById('valBilal').textContent = bilalStr || 'Belum Ditetapkan';
 
                     const rowMaklumat = document.getElementById('rowMaklumat');
@@ -570,7 +587,7 @@
 
                     // Foto Imam & Khotib (Display TV)
                     let photoUrl = '';
-                    if (jumat.foto_imam && jumat.foto_imam !== 'custom_uploaded') {
+                    if (jumat && jumat.foto_imam && jumat.foto_imam !== 'custom_uploaded') {
                         if (jumat.foto_imam.startsWith('http') || jumat.foto_imam.startsWith('data:')) {
                             photoUrl = jumat.foto_imam;
                         } else if (jumat.foto_imam.startsWith('image/') || jumat.foto_imam.startsWith('img/')) {
@@ -607,9 +624,9 @@
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'DATA_UPDATED' && (msg.table === 'sholat_jumat' || msg.table === 'app_settings')) {
+                if (msg.type === 'DATA_UPDATED' && (msg.table === 'sholat_jumat' || msg.table === 'app_settings' || msg.table === 'pengumuman_jumat')) {
                     loadJumatData();
-                } else if (msg.type === 'SYNC_JUMAT' || msg.force_reload) {
+                } else if (msg.type === 'SYNC_JUMAT' || msg.type === 'SYNC_PENGUMUMAN_JUMAT' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                     loadJumatData();
                 }
             });
@@ -618,13 +635,13 @@
             if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
                 SupabaseDB.onDataChange((payload) => {
                     const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'sholat_jumat' || tbl === 'app_settings') {
+                    if (tbl === 'sholat_jumat' || tbl === 'app_settings' || tbl === 'pengumuman_jumat') {
                         loadJumatData();
                     }
                 });
             } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'sholat_jumat' || payload.table === 'app_settings') {
+                    if (payload.table === 'sholat_jumat' || payload.table === 'app_settings' || payload.table === 'pengumuman_jumat') {
                         loadJumatData();
                     }
                 });
