@@ -4,7 +4,26 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 01:25 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 01:38 WIB)
+
+### 🚑 PENYESUAIAN TIPOGRAFI LIST "URAIAN OPERASIONAL" PADA LAPORAN KAS MOBIL AMBULANCE (`web-statis/slides/ambulance.html`):
+1. **Penyesuaian Font Sesuai Instruksi CEO:**
+   - **Latar Belakang:** CEO menginstruksikan agar font isi daftar di bawah kolom "Uraian Operasional" tidak ditebalkan dan disamakan dengan font tanggal di sebelah kirinya agar tampilan tidak berlebihan (*clean & harmonious*).
+   - **Perubahan Gaya CSS:**
+     - Mengubah `.col-desc` dari `font-size: 1.20rem; font-weight: 700;` menjadi `font-size: 1.12rem; font-weight: 600; color: #f1f5f9;` (sama persis dengan kelas `.col-tgl`).
+     - Membatasi bobot huruf `strong` / `b` pada tabel body `.keuangan-table tbody td.col-desc` agar tetap `font-weight: 600`.
+   - **Perubahan Markup JS:**
+     - Mengganti pembungkus teks `<strong>` menjadi `<span>` pada render baris tabel sehingga teks deskripsi mengalir elegan tanpa ketebalan berlebih.
+2. **Eksekusi SOP Pembersihan Cache Usang (SOP #2):**
+   - Cache Service Worker dinaikkan ke **`v5.7.3`** (`aljihad-signage-v5.7.3`) di `web-statis/sw.js` dan `web-statis/admin.html` agar TV display dan gawai lain langsung membuang cache lama dan memuat tampilan teranyar secara realtime.
+3. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **Cold Backup Lokal:** Berkas `ambulance.html`, `sw.js`, dan `admin.html` disalin ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers:** Deploy melalui `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 01:25 WIB)
 
 ### 📋 PENAMBAHAN RESMI STANDING SOP DI `AGENTS.md` (PEMBERSIHAN & INVALIDASI CACHE USANG):
 1. **Penetapan SOP Baru oleh CEO:**

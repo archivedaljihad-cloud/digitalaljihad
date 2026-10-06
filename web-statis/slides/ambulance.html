@@ -401,7 +401,11 @@
 
         /* Kolom Proporsi Lebar (Kategori Utuh & Tidak Terpotong) */
         .col-tgl { width: 11%; text-align: center; white-space: nowrap; font-size: 1.12rem; font-weight: 600; color: #f1f5f9; }
-        .col-desc { width: 29%; text-align: left; font-size: 1.20rem; font-weight: 700; line-height: 1.35; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85); }
+        .col-desc { width: 29%; text-align: left; font-size: 1.12rem; font-weight: 600; line-height: 1.35; color: #f1f5f9; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85); }
+        .keuangan-table thead th.col-desc { font-weight: 800; font-size: 1.15rem; color: #ffd700; }
+        .keuangan-table tbody td.col-desc { font-weight: 600; font-size: 1.12rem; color: #f1f5f9; }
+        .keuangan-table tbody td.col-desc strong,
+        .keuangan-table tbody td.col-desc b { font-weight: 600; font-size: 1.12rem; color: #f1f5f9; }
         .col-masuk { width: 14%; text-align: right; white-space: nowrap; }
         .col-keluar { width: 14%; text-align: right; white-space: nowrap; }
         .col-saldo { width: 15%; text-align: right; white-space: nowrap; }
@@ -722,7 +726,7 @@
                         <td class="col-tgl">${tglFormatted}</td>
                         <td class="col-desc">
                             <i class="fas ${isIncome ? 'fa-arrow-up' : 'fa-arrow-down'}" style="color: ${isIncome ? '#00e676' : '#ff6b6b'}; margin-right: 6px;"></i>
-                            <strong>${escapeHtml(item.deskripsi || item.uraian || 'Operasional Ambulance')}</strong>
+                            <span>${escapeHtml(item.deskripsi || item.uraian || 'Operasional Ambulance')}</span>
                         </td>
                         <td class="col-masuk">
                             ${masuk > 0 ? `<span class="rp-prefix">Rp</span><span class="amount-income-val">${formatRupiah(masuk)}</span>` : '<span class="dash-empty">-</span>'}
