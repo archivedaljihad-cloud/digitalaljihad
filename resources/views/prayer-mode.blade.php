@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&family=Space+Grotesk:wght@700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v=3.0.4">
     <style>
@@ -589,77 +589,186 @@
             padding: 6px 12px;
         }
 
+        /* 3. DUAL-TILE 3D MECHANICAL FLIP CLOCK COUNTDOWN (OPSI 1 + FONT SPACE GROTESK) */
         .countdown-tiles-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 18px;
+            gap: 20px;
+            perspective: 1200px;
         }
 
         .countdown-tile {
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 8px;
         }
 
-        .tile-face {
+        .flip-card-box {
             position: relative;
-            width: clamp(130px, 13vw, 190px);
-            height: clamp(95px, 9.5vw, 135px);
-            background: linear-gradient(180deg, rgba(8, 48, 28, 0.92) 0%, rgba(2, 20, 11, 0.98) 100%);
-            border: 1.5px solid rgba(212, 175, 55, 0.45);
+            background: #01140a;
             border-radius: 20px;
-            box-shadow:
-                0 16px 36px rgba(0, 0, 0, 0.65),
-                0 0 28px rgba(212, 175, 55, 0.16),
-                inset 0 2px 0 rgba(255, 240, 185, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.75);
+            box-shadow: 
+                0 18px 42px rgba(0, 0, 0, 0.8),
+                0 0 32px rgba(255, 215, 0, 0.25),
+                inset 0 1px 2px rgba(255, 255, 255, 0.35);
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            width: clamp(140px, 15vw, 210px);
+            height: clamp(100px, 11vw, 150px);
         }
 
-        /* Garis Horisontal Crease (Mewah seperti flip clock) */
-        .tile-crease {
+        .flip-card-box .flip-digit-text {
+            font-family: 'Space Grotesk', 'Poppins', sans-serif;
+            font-size: clamp(64px, 7vw, 96px);
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #FFFFFF;
+            user-select: none;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .flip-card-half {
             position: absolute;
             left: 0;
             right: 0;
+            width: 100%;
+            height: 50%;
+            overflow: hidden;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, #052d1b 0%, #021a10 100%);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .flip-card-half.top {
+            top: 0;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.85);
+            transform-origin: 50% 100%;
+        }
+
+        .flip-card-half.bottom {
             top: 50%;
-            height: 1px;
-            background: rgba(0, 0, 0, 0.45);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom-left-radius: inherit;
+            border-bottom-right-radius: inherit;
+            border-top: 1px solid rgba(255, 215, 0, 0.25);
+            transform-origin: 50% 0%;
+        }
+
+        .flip-card-half .flip-digit-text {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .flip-card-half.top .flip-digit-text {
+            top: 0;
+        }
+
+        .flip-card-half.bottom .flip-digit-text {
+            top: -100%;
+        }
+
+        /* Flaps default hidden saat idle */
+        .flip-card-box .flap-top,
+        .flip-card-box .flap-bottom {
+            display: none;
+        }
+
+        .flip-card-half.static-top,
+        .flip-card-half.static-bottom {
+            z-index: 1;
+        }
+
+        /* Saat animasi flip aktif */
+        .flip-card-box.is-flipping .flap-top,
+        .flip-card-box.is-flipping .flap-bottom {
+            display: block;
+        }
+
+        .flip-card-box.is-flipping .flap-top {
+            z-index: 4;
+            animation: flipFlapTop 0.24s cubic-bezier(0.4, 0, 0.7, 1) forwards;
+        }
+
+        .flip-card-box.is-flipping .flap-bottom {
+            z-index: 5;
+            transform: rotateX(90deg);
+            animation: flipFlapBottom 0.24s cubic-bezier(0.3, 0, 0.6, 1) 0.24s forwards;
+        }
+
+        @keyframes flipFlapTop {
+            0% { transform: rotateX(0deg); filter: brightness(1); }
+            100% { transform: rotateX(-90deg); filter: brightness(0.5); }
+        }
+
+        @keyframes flipFlapBottom {
+            0% { transform: rotateX(90deg); filter: brightness(0.6); }
+            100% { transform: rotateX(0deg); filter: brightness(1); }
+        }
+
+        /* Engsel & Pin Hardware */
+        .hinge-bar {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #000000;
+            box-shadow: 0 1px 1px rgba(255, 215, 0, 0.4), 0 -1px 1px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+            transform: translateY(-50%);
             pointer-events: none;
         }
 
-        .tile-number {
-            font-family: 'Cinzel', 'Poppins', sans-serif;
-            font-size: clamp(62px, 6.2vw, 92px);
-            font-weight: 800;
-            line-height: 1;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 14px rgba(212, 175, 55, 0.45));
-            letter-spacing: 2px;
+        .hinge-pin {
+            position: absolute;
+            top: 50%;
+            width: 8px;
+            height: 12px;
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            border: 1px solid #ffffff;
+            border-radius: 3px;
+            transform: translateY(-50%);
+            z-index: 11;
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
+            pointer-events: none;
         }
+        .hinge-pin.left { left: 4px; }
+        .hinge-pin.right { right: 4px; }
 
         .tile-label {
             font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 4px;
-            color: #D4AF37;
-            margin-top: 8px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #FFD700;
+            margin-top: 4px;
             text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
         }
 
         .countdown-separator {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(52px, 5vw, 76px);
-            font-weight: 800;
-            color: #D4AF37;
-            text-shadow: 0 0 18px rgba(212, 175, 55, 0.6);
+            font-family: 'Space Grotesk', 'Cinzel', monospace;
+            font-size: clamp(48px, 5.5vw, 76px);
+            font-weight: 900;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
             margin-bottom: 24px;
-            animation: pulseGlow 1.8s infinite;
+            animation: pulseDots 1s infinite alternate;
+        }
+
+        @keyframes pulseDots {
+            0% { opacity: 0.4; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1.05); }
         }
 
         /* =====================================================
@@ -1195,22 +1304,32 @@
                 </div>
 
                 <div class="countdown-tiles-wrapper">
-                    <!-- TILE MENIT -->
+                    <!-- TILE MENIT (3D MECHANICAL FLIP CLOCK OPSI 1) -->
                     <div class="countdown-tile">
-                        <div class="tile-face">
-                            <span class="tile-number" id="timerMinutes">00</span>
-                            <div class="tile-crease"></div>
+                        <div class="flip-card-box size-large" id="flipMinutes">
+                            <div class="flip-card-half top static-top"><span class="flip-digit-text digit" id="timerMinutes">00</span></div>
+                            <div class="flip-card-half bottom static-bottom"><span class="flip-digit-text digit">00</span></div>
+                            <div class="flip-card-half top flap-top"><span class="flip-digit-text digit">00</span></div>
+                            <div class="flip-card-half bottom flap-bottom"><span class="flip-digit-text digit">00</span></div>
+                            <div class="hinge-bar"></div>
+                            <div class="hinge-pin left"></div>
+                            <div class="hinge-pin right"></div>
                         </div>
                         <div class="tile-label">MENIT</div>
                     </div>
 
                     <div class="countdown-separator">:</div>
 
-                    <!-- TILE DETIK -->
+                    <!-- TILE DETIK (3D MECHANICAL FLIP CLOCK OPSI 1) -->
                     <div class="countdown-tile">
-                        <div class="tile-face">
-                            <span class="tile-number" id="timerSeconds">00</span>
-                            <div class="tile-crease"></div>
+                        <div class="flip-card-box size-large" id="flipSeconds">
+                            <div class="flip-card-half top static-top"><span class="flip-digit-text digit" id="timerSeconds">00</span></div>
+                            <div class="flip-card-half bottom static-bottom"><span class="flip-digit-text digit">00</span></div>
+                            <div class="flip-card-half top flap-top"><span class="flip-digit-text digit">00</span></div>
+                            <div class="flip-card-half bottom flap-bottom"><span class="flip-digit-text digit">00</span></div>
+                            <div class="hinge-bar"></div>
+                            <div class="hinge-pin left"></div>
+                            <div class="hinge-pin right"></div>
                         </div>
                         <div class="tile-label">DETIK</div>
                     </div>
@@ -1392,6 +1511,55 @@
             }
         }
 
+        // -------------------------------------------------------------
+        // MESIN 3D MECHANICAL FLIP CLOCK CONTROLLER (OPSI 1)
+        // -------------------------------------------------------------
+        let prevFlipM = -1;
+        let prevFlipS = -1;
+
+        function setFlipBoxInstant(boxEl, val) {
+            if (!boxEl) return;
+            if (boxEl._flipTimer) {
+                clearTimeout(boxEl._flipTimer);
+                boxEl._flipTimer = null;
+            }
+            boxEl.classList.remove('is-flipping');
+            boxEl.querySelectorAll('.digit').forEach(el => el.textContent = val);
+        }
+
+        function animateFlipBox(boxEl, oldVal, newVal) {
+            if (!boxEl || oldVal === newVal) return;
+            if (boxEl._flipTimer) {
+                clearTimeout(boxEl._flipTimer);
+                boxEl._flipTimer = null;
+                const prevBtm = boxEl.querySelector('.static-bottom .digit');
+                if (prevBtm && boxEl._pendingVal) prevBtm.textContent = boxEl._pendingVal;
+                boxEl.classList.remove('is-flipping');
+            }
+            boxEl._pendingVal = newVal;
+
+            const staticTop = boxEl.querySelector('.static-top .digit');
+            const staticBottom = boxEl.querySelector('.static-bottom .digit');
+            const flapTop = boxEl.querySelector('.flap-top .digit');
+            const flapBottom = boxEl.querySelector('.flap-bottom .digit');
+
+            if (staticTop) staticTop.textContent = newVal;
+            if (staticBottom) staticBottom.textContent = oldVal;
+            if (flapTop) flapTop.textContent = oldVal;
+            if (flapBottom) flapBottom.textContent = newVal;
+
+            boxEl.classList.remove('is-flipping');
+            void boxEl.offsetWidth;
+            boxEl.classList.add('is-flipping');
+
+            boxEl._flipTimer = setTimeout(() => {
+                if (staticBottom) staticBottom.textContent = newVal;
+                boxEl.classList.remove('is-flipping');
+                boxEl._flipTimer = null;
+                boxEl._pendingVal = null;
+            }, 480);
+        }
+
         function updateCountdown() {
             if (isTransitioning) return;
 
@@ -1406,8 +1574,29 @@
             const minStr = formatTwoDigits(minutes);
             const secStr = formatTwoDigits(seconds);
 
-            if (elMinutes) elMinutes.textContent = minStr;
-            if (elSeconds) elSeconds.textContent = secStr;
+            const flipMinutesEl = document.getElementById('flipMinutes');
+            const flipSecondsEl = document.getElementById('flipSeconds');
+
+            if (flipMinutesEl) {
+                if (prevFlipM !== minStr) {
+                    if (prevFlipM !== -1) animateFlipBox(flipMinutesEl, prevFlipM, minStr);
+                    else setFlipBoxInstant(flipMinutesEl, minStr);
+                    prevFlipM = minStr;
+                }
+            } else if (elMinutes) {
+                elMinutes.textContent = minStr;
+            }
+
+            if (flipSecondsEl) {
+                if (prevFlipS !== secStr) {
+                    if (prevFlipS !== -1) animateFlipBox(flipSecondsEl, prevFlipS, secStr);
+                    else setFlipBoxInstant(flipSecondsEl, secStr);
+                    prevFlipS = secStr;
+                }
+            } else if (elSeconds) {
+                elSeconds.textContent = secStr;
+            }
+
             if (elHidden) elHidden.textContent = minStr + ':' + secStr;
 
             // AUDIO TARHIM (Menuju Adzan / Countdown phase)

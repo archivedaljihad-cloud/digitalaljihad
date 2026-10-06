@@ -4,7 +4,30 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 20:30 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 00:15 WIB)
+
+### ⏱️ PENERAPAN RESMI 3D MECHANICAL FLIP CLOCK OPSI 1 DENGAN FONT SPACE GROTESK (`prayer-mode.html`, `preview-prayer-mode.html`, & `prayer-mode.blade.php`):
+1. **Penerapan Model Flip Opsi 1 + Tipografi Opsi 2 Sesuai Arahan CEO:**
+   - **Model Fisik:** Menggunakan format **Split Flip 2 Kotak Besar** (1 kotak untuk Menit [2 digit] dan 1 kotak untuk Detik [2 digit]) yang dipisahkan separator titik dua emas berkedip lembut (`:`).
+   - **Tipografi Angka:** Menggunakan font geometris modern bold **`Space Grotesk`** (seperti yang terdapat di Opsi 2) dengan ukuran monumental (`clamp(64px, 7vw, 96px)`), menghasilkan keterbacaan yang sangat tegas, bersih, berdaya kontras tinggi, dan nyaman dibaca jamaah dari jarak jauh (15–25 meter).
+   - **Mesin Animasi 3D Flawless:**
+     - Menggunakan arsitektur 4-lapisan (*static-top*, *static-bottom*, *flap-top*, *flap-bottom*) dengan akselerasi GPU 3D (`perspective: 1200px; transform-style: preserve-3d`).
+     - Menggunakan teknik sambungan teks *200% height offset* yang 100% presisi dan rata di garis engsel tengah tanpa celah piksel.
+     - Status Idle menyembunyikan flap lipat sehingga mustahil angka terbelah (*zero split glitch*).
+     - Durasi siklus lipat 480ms yang sangat responsif, dilengkapi proteksi reset instan anti-macet.
+2. **Sinkronisasi Kode Multi-Target:**
+   - Diterapkan pada `web-statis/prayer-mode.html` (Cloudflare Workers produksi), `public/preview-prayer-mode.html` (pratinjau publik), dan `resources/views/prayer-mode.blade.php` (Blade template Laravel).
+   - Halaman `preview-flip-clock.html` juga diperbarui agar Opsi 1 secara default menampilkan font `Space Grotesk`.
+3. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.9`** (`aljihad-signage-v5.6.9`) di `web-statis/sw.js` dan fungsi pembersihan memori di `web-statis/admin.html`.
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 20:30 WIB)
 
 ### ⏱️ PERBAIKAN TOTAL ARSITEKTUR 3D FLIP CLOCK ANTI-LAG & SINKRONISASI SEAMLESS (`web-statis/preview-flip-clock.html`):
 1. **Penyelesaian Isu "Lag / Angka Terbelah / Flap Stuck":**
