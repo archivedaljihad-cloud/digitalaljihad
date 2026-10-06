@@ -802,10 +802,10 @@
            ===================================================== */
         .jumat-officers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: 1.85fr 1.05fr 1.05fr;
             gap: 16px;
             width: 100%;
-            max-width: 1100px;
+            max-width: 1120px;
             margin: 10px auto;
         }
 
@@ -817,6 +817,12 @@
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 238, 170, 0.2);
             backdrop-filter: blur(10px);
+            min-width: 0;
+        }
+
+        .officer-card.officer-card-main {
+            border: 1.8px solid rgba(255, 215, 0, 0.75);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 215, 0, 0.2);
         }
 
         .officer-badge {
@@ -831,6 +837,7 @@
             color: #FFD700;
             margin-bottom: 8px;
             text-shadow: 0 0 16px rgba(255, 215, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9);
+            white-space: nowrap;
         }
 
         .officer-badge i {
@@ -844,7 +851,9 @@
             letter-spacing: 0.5px;
             line-height: 1.25;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
-            word-break: break-word;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* =====================================================
@@ -1127,21 +1136,21 @@
         <!-- 3. COUNTDOWN TIMER (SPLIT DUAL-TILE) / JUMAT OFFICERS GRID -->
         @if($phase == 'khutbah')
             <div class="jumat-officers-grid">
-                <div class="officer-card">
+                <div class="officer-card officer-card-main">
                     <div class="officer-badge">
-                        <i class="fa-solid fa-microphone"></i> KHATIB
+                        <i class="fa-solid fa-microphone"></i> KHOTIB &amp; IMAM
                     </div>
                     <div class="officer-name">
-                        {{ !empty($jumatPetugas->khatib) ? $jumatPetugas->khatib : 'Ustadz / Khatib Jum\'at' }}
-                    </div>
-                </div>
-
-                <div class="officer-card">
-                    <div class="officer-badge">
-                        <i class="fa-solid fa-user-tie"></i> IMAM
-                    </div>
-                    <div class="officer-name">
-                        {{ !empty($jumatPetugas->imam) ? $jumatPetugas->imam : 'Imam Rawatib / Jum\'at' }}
+                        @php
+                            $khatibNama = !empty($jumatPetugas->khatib) ? trim($jumatPetugas->khatib) : '';
+                            $imamNama = !empty($jumatPetugas->imam) ? trim($jumatPetugas->imam) : '';
+                            if ($khatibNama && $imamNama && $khatibNama != $imamNama) {
+                                $khotibImamTeks = $khatibNama . ' / ' . $imamNama;
+                            } else {
+                                $khotibImamTeks = $khatibNama ?: ($imamNama ?: 'Ustadz / Khatib & Imam');
+                            }
+                        @endphp
+                        {{ $khotibImamTeks }}
                     </div>
                 </div>
 

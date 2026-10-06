@@ -610,13 +610,13 @@
             color: #D4AF37;
         }
 
-        /* 6. JUMAT OFFICERS GRID */
+        /* 6. JUMAT OFFICERS GRID (Khotib & Imam Memanjang 1 Baris) */
         .jumat-officers-grid {
             display: none;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 1.85fr 1.05fr 1.05fr;
             gap: 16px;
             width: 100%;
-            max-width: 1050px;
+            max-width: 1120px;
             margin: 10px auto;
         }
 
@@ -631,6 +631,12 @@
             padding: 14px 18px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            min-width: 0;
+        }
+
+        .officer-card.officer-card-main {
+            border: 1.8px solid rgba(255, 215, 0, 0.75);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 215, 0, 0.2);
         }
 
         .officer-badge {
@@ -645,6 +651,7 @@
             justify-content: center;
             gap: 10px;
             text-shadow: 0 0 16px rgba(255, 215, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9);
+            white-space: nowrap;
         }
 
         .officer-badge i {
@@ -658,7 +665,9 @@
             line-height: 1.25;
             letter-spacing: 0.5px;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
-            word-break: break-word;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* 7. FOOTER MASJID */
@@ -993,15 +1002,11 @@
             </div>
         </div>
 
-        <!-- 3B. KHUSUS JUMAT: 4 KARTU PETUGAS JUMAT -->
+        <!-- 3B. KHUSUS JUMAT: 3 KARTU PETUGAS JUMAT (KHOTIB & IMAM MEMANJANG) -->
         <div class="jumat-officers-grid" id="jumatOfficersGrid">
-            <div class="officer-card">
-                <div class="officer-badge"><i class="fas fa-microphone"></i> KHATIB</div>
-                <div class="officer-name" id="officerKhatib">Ustd. Khatib</div>
-            </div>
-            <div class="officer-card">
-                <div class="officer-badge"><i class="fas fa-user-tie"></i> IMAM</div>
-                <div class="officer-name" id="officerImam">Ustd. Imam</div>
+            <div class="officer-card officer-card-main">
+                <div class="officer-badge"><i class="fas fa-microphone"></i> KHOTIB &amp; IMAM</div>
+                <div class="officer-name" id="officerKhatibImam">Ustd. Khatib &amp; Imam</div>
             </div>
             <div class="officer-card">
                 <div class="officer-badge"><i class="fas fa-bullhorn"></i> MUADZIN</div>
@@ -1345,12 +1350,28 @@
                 prayerModeTextEl.innerHTML = '<span style="display: block; margin-bottom: 6px;">Sedang Berlangsung Khutbah &amp; Sholat Jum\'at Berjamaah.</span><span style="display: block;">Harap Tenang, Dengarkan Khutbah &amp; Nonaktifkan Nada Dering HP.</span>';
 
                 if (state.jumatPetugas) {
-                    document.getElementById('officerKhatib').textContent = state.jumatPetugas.khatib || 'Ustd. Khatib';
-                    document.getElementById('officerImam').textContent = state.jumatPetugas.imam || 'Ustd. Imam';
-                    document.getElementById('officerMuadzin').textContent = state.jumatPetugas.muadzin || 'Muadzin';
+                    const khatib = (state.jumatPetugas.khatib || '').trim();
+                    const imam = (state.jumatPetugas.imam || '').trim();
+                    let namaKhotibImam = '';
+                    if (khatib && imam && khatib !== imam) {
+                        namaKhotibImam = `${khatib} / ${imam}`;
+                    } else {
+                        namaKhotibImam = khatib || imam || 'Ustd. Khatib & Imam';
+                    }
+
+                    const elKhatibImam = document.getElementById('officerKhatibImam') || document.getElementById('officerKhatib');
+                    if (elKhatibImam) elKhatibImam.textContent = namaKhotibImam;
+
+                    const elImam = document.getElementById('officerImam');
+                    if (elImam) elImam.textContent = imam || khatib || 'Ustd. Imam';
+
+                    const elMuadzin = document.getElementById('officerMuadzin');
+                    if (elMuadzin) elMuadzin.textContent = state.jumatPetugas.muadzin || 'Muadzin';
+
                     let bilalCardName = state.jumatPetugas.bilal || 'Bilal';
                     if (bilalCardName.includes('/')) bilalCardName = bilalCardName.split('/')[0].trim();
-                    document.getElementById('officerBilal').textContent = bilalCardName || 'Bilal';
+                    const elBilal = document.getElementById('officerBilal');
+                    if (elBilal) elBilal.textContent = bilalCardName || 'Bilal';
                 }
 
                 adabNoticeEl.style.display = 'inline-flex';

@@ -4,7 +4,29 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 19:20 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 19:40 WIB)
+
+### 🎙️ PENGGABUNGAN KARTU "KHOTIB & IMAM" MEMANJANG (SINGLE-LINE ELGANT LAYOUT) (`web-statis/prayer-mode.html`, `public/preview-prayer-mode.html`, & `resources/views/prayer-mode.blade.php`):
+1. **Penggabungan 2 Kotak Menjadi 1 Kotak Terpadu (*Unified Officer Card*):**
+   - Kotak "KHOTIB" dan "IMAM" yang sebelumnya terpisah kini disatukan menjadi 1 kotak terpadu berlabel **`KHOTIB & IMAM`** (`.officer-card-main`).
+   - Grid petugas Jumat kini terdiri dari 3 kartu:
+     1. **`KHOTIB & IMAM`** (Alokasi lebar dominan: `1.85fr` / ~45% dari total grid ~1120px).
+     2. **`MUADZIN`** (`1.05fr`).
+     3. **`BILAL`** (`1.05fr`).
+2. **Desain Memanjang Khusus Nama Panjang (*Single-Line Guarantee*):**
+   - Kotak `KHOTIB & IMAM` memiliki lebar lapang (~500px pada layar Full HD) dengan aturan `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`.
+   - Nama panjang asatidz beserta gelar akademik/kehormatan (misal *"Ust. Jamal Haris, S.Ag."*) kini muat lega dan elegan dalam **1 baris saja** tanpa terpotong ke bawah (*no wrapping*).
+   - Logika JavaScript otomatis mendeteksi: jika nama Khatib dan Imam sama di database, nama otomatis ditampilkan 1 kali saja tanpa duplikasi; jika nama berbeda, otomatis diformat berdampingan (`Nama Khatib / Nama Imam`).
+3. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.8`** (`aljihad-signage-v5.6.8`) di `web-statis/sw.js` dan fungsi `bersihkanCacheSistem()` di `web-statis/admin.html`.
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 19:20 WIB)
 
 ### 🕌 OPTIMALISASI TAMPILAN MODE PRAYER SHOLAT JUM'AT (`web-statis/prayer-mode.html`, `public/preview-prayer-mode.html`, & `resources/views/prayer-mode.blade.php`):
 1. **Perbesaran Kotak Kapsul & Teks Tanggal/Jam (*Datetime Capsule Enlargement*):**
