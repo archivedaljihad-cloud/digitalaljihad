@@ -11347,7 +11347,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             }
 
             const logoCenterY = 236;
-            const logoRadius = 38;
+            const logoRadius = 50;
 
             if (cachedFlyerLogoImg && cachedFlyerLogoImg.complete && cachedFlyerLogoImg.naturalWidth > 0) {
                 ctx.save();
@@ -11358,14 +11358,14 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 ctx.drawImage(cachedFlyerLogoImg, 540 - logoRadius, logoCenterY - logoRadius, logoRadius * 2, logoRadius * 2);
                 ctx.restore();
 
-                // Cincin emas logo
+                // Cincin emas logo (Proporsional & Lebih Mewah)
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(540, logoCenterY, logoRadius + 1, 0, Math.PI * 2);
                 ctx.strokeStyle = '#FFD700';
-                ctx.lineWidth = 2.5;
-                ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
-                ctx.shadowBlur = 10;
+                ctx.lineWidth = 3;
+                ctx.shadowColor = 'rgba(255, 215, 0, 0.65)';
+                ctx.shadowBlur = 12;
                 ctx.stroke();
                 ctx.restore();
             } else {
@@ -11375,28 +11375,28 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 ctx.arc(540, logoCenterY, logoRadius, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.strokeStyle = '#FFD700';
-                ctx.lineWidth = 2.5;
+                ctx.lineWidth = 3;
                 ctx.stroke();
                 ctx.fillStyle = '#FFD700';
-                ctx.font = '36px "Segoe UI Symbol", sans-serif';
-                ctx.fillText('🕌', 540, logoCenterY + 12);
+                ctx.font = '46px "Segoe UI Symbol", sans-serif';
+                ctx.fillText('🕌', 540, logoCenterY + 16);
                 ctx.restore();
             }
 
-            // 3. KALIGRAFI BISMILLAH & ASSALAMU'ALAIKUM (DI DALAM FRAME AREA HIJAU, DIPERBESAR & ELEGAN)
+            // 3. KALIGRAFI BISMILLAH & ASSALAMU'ALAIKUM (DI DALAM FRAME AREA HIJAU, DIPERBESAR & DITURUNKAN SEDIKIT)
             ctx.textAlign = 'center';
             ctx.fillStyle = '#FFD700';
             ctx.font = 'bold 42px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 8;
-            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 316);
+            ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 338);
 
-            // Teks Arab Assalamu'alaikum Lengkap di Bawah Bismillah (Font Diperbesar)
+            // Teks Arab Assalamu'alaikum Lengkap di Bawah Bismillah (Font Diperbesar & Diturunkan Sedikit)
             ctx.fillStyle = '#FFF2A8';
             ctx.font = 'bold 33px "Traditional Arabic", "Amiri", "Scheherazade", "Segoe UI", serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
             ctx.shadowBlur = 8;
-            ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 358);
+            ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 382);
             ctx.shadowBlur = 0;
 
             // 4. NAMA MASJID & ALAMAT (DITURUNKAN AGAR TEPAT CENTER DI ANTARA TEKS ARAB & ADAB KHUTBAH)

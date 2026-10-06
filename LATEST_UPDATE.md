@@ -4,7 +4,26 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 12:45 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 12:50 WIB)
+
+### 🕌 PEMBESARAN PROPORSIONAL LOGO MASJID AL-JIHAD & PENURUNAN KEDUA TEKS ARAB (`web-statis/admin.html`):
+1. **Pembesaran Proporsional Logo Lingkaran Masjid Al-Jihad:**
+   - Radius logo (`logoRadius`) diperbesar dari `38px` menjadi **`50px`** (diameter meningkat dari 76px menjadi **100px**, sekitar +32% lebih besar dan +73% area visual).
+   - Ketebalan cincin emas diperkuat menjadi `lineWidth = 3px` dengan pancaran pendaran cahaya (*golden glow shadow*) `shadowBlur = 12` (`rgba(255, 215, 0, 0.65)`).
+   - Ukuran font ikon kubah fallback dinaikkan menjadi `46px` agar tetap serasi dan megah.
+2. **Penurunan Posisi Kedua Kaligrafi Arab (Bismillah & Salam):**
+   - **Kaligrafi Bismillah (`بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ`):** Diturunkan posisinya dari `Y = 316` menjadi **`Y = 338`** (+22px), memberikan spasi bernapas yang pas (~23px) tepat di bawah cincin logo emas.
+   - **Kaligrafi Salam (`السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ`):** Diturunkan posisinya dari `Y = 358` menjadi **`Y = 382`** (+24px), menciptakan jeda berirama yang harmonis terhadap nama masjid di bawahnya.
+3. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.2`** (`aljihad-signage-v5.6.2`) di `web-statis/sw.js`.
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 12:45 WIB)
 
 ### 📐 PENATAAN PRESISI CENTER BLOK TENGAH FLYER JUM'AT (`web-statis/admin.html`):
 1. **Penurunan Posisi Blok Teks (Mulai MASJID JAMI' AL JIHAD sampai Petugas Agus Purwanto):**
