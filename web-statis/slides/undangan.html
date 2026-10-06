@@ -12,8 +12,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Scheherazade+New:wght@600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20260930_05">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20260930_05">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -435,11 +435,12 @@
         }
 
         .running-badge {
+            color-scheme: only light !important;
             background: linear-gradient(135deg, #ffd700, #ffb300) !important;
             color: #000000 !important;
             -webkit-text-fill-color: #000000 !important;
             font-weight: 900 !important;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+            text-shadow: none !important;
             clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%) !important;
             border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
             display: inline-flex !important;
@@ -452,9 +453,17 @@
             letter-spacing: 1px !important;
         }
 
+        .running-badge,
+        .running-badge *,
         .running-badge i {
+            color-scheme: only light !important;
             color: #000000 !important;
             -webkit-text-fill-color: #000000 !important;
+            text-shadow: none !important;
+            filter: none !important;
+        }
+
+        .running-badge i {
             font-size: 1.15rem !important;
         }
 

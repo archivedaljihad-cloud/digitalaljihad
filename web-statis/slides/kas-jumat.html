@@ -414,17 +414,30 @@
             align-items: center;
         }
         .running-badge {
-            background: #ffd700;
-            color: #022013;
-            padding: 7px 16px;
-            font-size: 0.85rem;
-            font-weight: 800;
+            color-scheme: only light !important;
+            background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            padding: 7px 20px;
+            font-size: 0.95rem;
+            font-weight: 900;
             letter-spacing: 1px;
             display: flex;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
             z-index: 22;
+            text-shadow: none !important;
+            filter: none !important;
+        }
+        .running-badge,
+        .running-badge *,
+        .running-badge i {
+            color-scheme: only light !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            text-shadow: none !important;
+            filter: none !important;
         }
         .running-text-container {
             padding: 6px 20px;

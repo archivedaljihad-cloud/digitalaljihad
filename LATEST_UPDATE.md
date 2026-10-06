@@ -4,7 +4,44 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 13:30 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 18:05 WIB)
+
+### 🔲 PERBAIKAN TOTAL TAMPILAN FONT BADGE KUNING POJOK KIRI BAWAH DI TV (PUTIH -> HITAM PEKAT SOLID):
+1. **Identifikasi Penyebab Utama (*Root Cause Analysis*):**
+   - **Penyebab 1 (Cache Statis Query String Usang di Browser TV):**
+     - Pada seluruh 22 slide (`slides/*.html`) dan `index.html`, tag pemanggilan stylesheet eksternal masih tertahan di versi lama `?v=20260930_05` (versi 30 September).
+     - Browser Smart TV (Android TV/WebOS/Tizen) memiliki *aggressive caching* di mana berkas CSS lama di-cache permanen di storage TV. Di laptop, pengembang selalu melakukan *hard reload* atau memiliki "Disable cache", sehingga di laptop tampak hitam, sedangkan di TV tetap memuat cache CSS usang yang mewarisi `body { color: #ffffff; }`.
+   - **Penyebab 2 (Auto Dark-Mode / Contrast Inversion Engine di Browser TV):**
+     - Browser Android TV / Smart TV Chromium memiliki algoritma otomatis: elemen teks yang berada di dalam bilah footer gelap (`.bottom-running-wrap` berwarna hijau tua/hitam) otomatis dipaksa (*inverted*) menjadi **warna putih** agar "terbaca".
+     - Tanpa deklarasi eksplisit `color-scheme: only light !important;` dan `-webkit-text-fill-color: #000000 !important;`, browser TV menimpa warna teks hitam menjadi putih.
+   - **Penyebab 3 (White Text-Shadow Bleeding pada Backlight TV):**
+     - Pada beberapa slide (`infaq.html`, `idul-fitri.html`, `idul-adha.html`), terdapat sisa aturan `text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;` yang memancarkan pendaran putih di layar LED TV berkecerahan tinggi (300–500 nits), membuat teks tampak menyala putih (*optical washout*).
+2. **Solusi & Perbaikan Komprehensif yang Diterapkan:**
+   - **Penguncian Warna Hitam Pekat Anti Inversi TV (`display-theme.css`, `display-theme.blade.php`, dan slide-slide terkait):**
+     - Menambahkan `color-scheme: only light !important;` untuk mematikan paksaan Force Dark Mode / Invert Text di browser TV.
+     - Menerapkan pewarnaan solid tingkat tertinggi:
+       ```css
+       .running-badge, .running-badge *, .running-badge i, .running-badge span {
+           color-scheme: only light !important;
+           color: #000000 !important;
+           -webkit-text-fill-color: #000000 !important;
+           text-shadow: none !important;
+           filter: none !important;
+       }
+       ```
+     - Menghapus seluruh bayangan putih `text-shadow` di `infaq.html`, `idul-fitri.html`, `idul-adha.html`, dan `undangan.html`.
+   - **Cache-Busting Massal di Seluruh 22 Slide TV Display & `index.html`:**
+     - Seluruh query string stylesheet diperbarui serentak dari `?v=20260930_05` menjadi **`?v=20261006_06`**.
+   - **Invalidasi Cache Service Worker:**
+     - Versi Service Worker dinaikkan ke **`v5.6.5`** (`aljihad-signage-v5.6.5`) di `web-statis/sw.js` agar TV otomatis memusnahkan seluruh cache lama saat aplikasi dibuka.
+3. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 13:30 WIB)
 
 ### 🎙️ RESTORASI MODAL NASKAH MAKLUMAT & PENAMBAHAN FITUR UNDUH MULTI-FORMAT (PDF, PNG, DOC, TXT) (`web-statis/admin.html`):
 1. **Restorasi Tampilan Asli Modal Teks Maklumat:**

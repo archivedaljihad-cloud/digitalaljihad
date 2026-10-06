@@ -257,8 +257,10 @@ body.theme-isya {
 }
 
 .running-badge {
+    color-scheme: only light !important;
     background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
     color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
     height: 100% !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -274,20 +276,29 @@ body.theme-isya {
     box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
     z-index: 10 !important;
     clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
-    -webkit-text-stroke: 0.45px #000000 !important;
+    -webkit-text-stroke: 0.4px #000000 !important;
     paint-order: stroke fill !important;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+    text-shadow: none !important;
+    filter: none !important;
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
     text-rendering: optimizeLegibility !important;
 }
 
-.running-badge i {
+.running-badge,
+.running-badge *,
+.running-badge i,
+.running-badge span {
+    color-scheme: only light !important;
     color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+.running-badge i {
     font-size: 1.15rem !important;
     font-weight: 900 !important;
-    -webkit-text-stroke: 0.45px #000000 !important;
-    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
     margin-right: 2px !important;
 }
 

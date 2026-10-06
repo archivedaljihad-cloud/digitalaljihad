@@ -9,8 +9,8 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-	<link rel="stylesheet" href="../css/display-theme.css?v=20260930_05">
-	<link rel="stylesheet" href="../css/partials-theme.css?v=20260930_05">
+	<link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
+	<link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
 
 	<style>
 		* {
@@ -501,8 +501,10 @@
 		}
 
 		.running-badge {
+			color-scheme: only light !important;
 			background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
 			color: #000000 !important;
+			-webkit-text-fill-color: #000000 !important;
 			height: 100% !important;
 			display: inline-flex !important;
 			align-items: center !important;
@@ -518,17 +520,25 @@
 			box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
 			z-index: 10 !important;
 			clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
-			-webkit-text-stroke: 0.45px #000000 !important;
+			-webkit-text-stroke: 0.4px #000000 !important;
 			paint-order: stroke fill !important;
-			text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+			text-shadow: none !important;
+			filter: none !important;
+		}
+
+		.running-badge,
+		.running-badge *,
+		.running-badge i {
+			color-scheme: only light !important;
+			color: #000000 !important;
+			-webkit-text-fill-color: #000000 !important;
+			text-shadow: none !important;
+			filter: none !important;
 		}
 
 		.running-badge i {
-			color: #000000 !important;
 			font-size: 1.15rem !important;
 			font-weight: 900 !important;
-			-webkit-text-stroke: 0.45px #000000 !important;
-			filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45)) !important;
 			margin-right: 2px !important;
 		}
 
