@@ -4,7 +4,29 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 13:15 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 13:30 WIB)
+
+### 🎙️ RESTORASI MODAL NASKAH MAKLUMAT & PENAMBAHAN FITUR UNDUH MULTI-FORMAT (PDF, PNG, DOC, TXT) (`web-statis/admin.html`):
+1. **Restorasi Tampilan Asli Modal Teks Maklumat:**
+   - Menjawab arahan pengguna untuk mengembalikan tampilan modal Maklumat ke kondisi bersih sebelumnya (tanpa kartu flyer hijau gelap ganda atau tab rumit).
+   - Modal kembali ke ukuran standar proporsional (`modal-lg`) dengan header hijau gradien islami lembut dan kotak naskah bacaan mimbar `#f8fafc` berlatar putih bersih dengan tipografi terstruktur yang sangat nyaman dan fokus dibaca oleh petugas mimbar.
+2. **Fitur Unduh Naskah Narasi Mimbar Multi-Format (Bukan Hanya .txt):**
+   - **Cetak / Dokumen PDF (A4):** Menghasilkan dokumen cetak resmi A4 ber-kop surat asli Masjid Jami' Al-Jihad (`img/kop_surat_aljihad.png`), judul naskah maklumat, teks narasi terstruktur dengan daftar kas transparan, nama petugas, tata tertib jamaah, serta tanda tangan Ketua DKM & Bendahara Al-Jihad dengan stempel resmi. Otomatis memicu jendela cetak browser yang dapat langsung disimpan sebagai file PDF (*Save as PDF*).
+   - **Unduh Gambar Naskah Lengkap (PNG):** Merender seluruh naskah narasi mimbar ke dalam gambar beresolusi tinggi (1200 x 2100 px) dengan kop surat resmi dan tanda tangan digital, siap dibagikan via WhatsApp dan dibaca langsung dari galeri HP petugas maklumat di mimbar tanpa memerlukan aplikasi pembaca dokumen.
+   - **Unduh Dokumen Word (.doc):** Menghasilkan berkas dokumen Microsoft Word / WPS Office lengkap dengan format paragraf rapi dan tabel kas bergaris tipis profesional, siap dibuka dan diedit di komputer DKM.
+   - **Unduh .txt & Salin Naskah:** Tetap dipertahankan sebagai opsi alternatif cepat untuk menyalin ke clipboard atau menyimpan file teks biasa.
+3. **Penyempurnaan Toolbar Halaman Pengumuman Jum'at:**
+   - Mengubah tombol unduh tunggal menjadi dropdown interaktif "Unduh Naskah Maklumat" di baris tombol atas dan di atas lembar preview A4, memberikan akses instan ke seluruh format unduhan (PDF, PNG, DOC, TXT).
+4. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.4`** (`aljihad-signage-v5.6.4`) di `web-statis/sw.js`.
+5. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 13:15 WIB)
 
 ### 📢 TRANSFORMASI TEKS MAKLUMAT JUM'AT MENJADI FORMAT FLYER PROFESIONAL ISLAMI (`web-statis/admin.html`):
 1. **Transformasi Tampilan Teks Maklumat Bendahara Menjadi Format Flyer:**

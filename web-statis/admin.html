@@ -4617,9 +4617,27 @@
                                 <button type="button" class="btn btn-warning text-dark btn-sm shadow-sm font-weight-bold" onclick="bukaModalTeksMaklumat()">
                                     <i class="fas fa-bullhorn mr-1"></i> Teks Bacaan Maklumat
                                 </button>
-                                <button type="button" class="btn btn-info btn-sm shadow-sm font-weight-bold" onclick="downloadTeksMaklumat()" title="Download Naskah Teks Maklumat (.txt)">
-                                    <i class="fas fa-file-download mr-1"></i> Download Teks Maklumat
-                                </button>
+                                <div class="dropdown d-inline-block">
+                                    <button type="button" class="btn btn-info btn-sm shadow-sm font-weight-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Pilih Format Unduh Naskah Maklumat">
+                                        <i class="fas fa-file-download mr-1"></i> Unduh Naskah Maklumat
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right shadow border-0" style="border-radius: 10px; font-size: 13px; z-index: 1050;">
+                                        <h6 class="dropdown-header text-success font-weight-bold"><i class="fas fa-bullhorn mr-1"></i> Format Naskah Mimbar</h6>
+                                        <a class="dropdown-item py-2" href="javascript:void(0)" onclick="cetakNaskahMaklumatPDF()">
+                                            <i class="fas fa-file-pdf text-danger mr-2"></i> Cetak / Dokumen PDF (A4)
+                                        </a>
+                                        <a class="dropdown-item py-2" href="javascript:void(0)" onclick="downloadNaskahMaklumatPNG()">
+                                            <i class="fas fa-file-image text-success mr-2"></i> Unduh Gambar Naskah (PNG)
+                                        </a>
+                                        <a class="dropdown-item py-2" href="javascript:void(0)" onclick="downloadNaskahMaklumatDoc()">
+                                            <i class="fas fa-file-word text-primary mr-2"></i> Unduh Dokumen Word (.doc)
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item py-2 text-muted" href="javascript:void(0)" onclick="downloadTeksMaklumat()">
+                                            <i class="fas fa-file-alt text-secondary mr-2"></i> Unduh Format Teks (.txt)
+                                        </a>
+                                    </div>
+                                </div>
                                 <button type="button" class="btn btn-outline-success btn-sm shadow-sm font-weight-bold" onclick="tarikKasDanPetugasOtomatis()">
                                     <i class="fas fa-sync-alt mr-1"></i> Tarik Data Terkini
                                 </button>
@@ -4939,9 +4957,27 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                             <button type="button" class="btn btn-warning text-dark btn-sm font-weight-bold shadow-sm" onclick="bukaModalTeksMaklumat()">
                                                 <i class="fas fa-bullhorn mr-1"></i> Teks Maklumat
                                             </button>
-                                            <button type="button" class="btn btn-info btn-sm font-weight-bold shadow-sm" onclick="downloadTeksMaklumat()" title="Download Naskah Teks Maklumat (.txt)">
-                                                <i class="fas fa-file-download mr-1"></i> Download Teks Maklumat
-                                            </button>
+                                            <div class="dropdown d-inline-block">
+                                                <button type="button" class="btn btn-info btn-sm font-weight-bold shadow-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Pilih Format Unduh Naskah Maklumat">
+                                                    <i class="fas fa-file-download mr-1"></i> Unduh Naskah Maklumat
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right shadow border-0" style="border-radius: 10px; font-size: 13px; z-index: 1050;">
+                                                    <h6 class="dropdown-header text-success font-weight-bold"><i class="fas fa-bullhorn mr-1"></i> Format Naskah Mimbar</h6>
+                                                    <a class="dropdown-item py-2" href="javascript:void(0)" onclick="cetakNaskahMaklumatPDF()">
+                                                        <i class="fas fa-file-pdf text-danger mr-2"></i> Cetak / Dokumen PDF (A4)
+                                                    </a>
+                                                    <a class="dropdown-item py-2" href="javascript:void(0)" onclick="downloadNaskahMaklumatPNG()">
+                                                        <i class="fas fa-file-image text-success mr-2"></i> Unduh Gambar Naskah (PNG)
+                                                    </a>
+                                                    <a class="dropdown-item py-2" href="javascript:void(0)" onclick="downloadNaskahMaklumatDoc()">
+                                                        <i class="fas fa-file-word text-primary mr-2"></i> Unduh Dokumen Word (.doc)
+                                                    </a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item py-2 text-muted" href="javascript:void(0)" onclick="downloadTeksMaklumat()">
+                                                        <i class="fas fa-file-alt text-secondary mr-2"></i> Unduh Format Teks (.txt)
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-body p-4" style="background: #e2e8f0; overflow-x: auto;">
@@ -5929,73 +5965,46 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
          MODAL TEKS BACAAN MAKLUMAT SHOLAT JUM'AT (PEMBACA MAKLUMAT)
          ======================================================= -->
     <div class="modal fade" id="modalTeksMaklumat" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1060;">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden; background: #0b1912;">
-                <div class="modal-header py-3 bg-gradient-success text-white border-bottom border-success">
-                    <h5 class="modal-title font-weight-bold d-flex align-items-center flex-wrap" style="font-size: 1.15rem; color: #ffffff; gap: 8px;">
-                        <span><i class="fas fa-bullhorn mr-1" style="color: #ffd700;"></i> Maklumat Sholat Jum'at</span>
-                        <span class="badge badge-warning text-dark font-weight-bold px-2 py-0.5" style="font-size: 11px;">Format Flyer Profesional</span>
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header py-3 bg-gradient-success text-white">
+                    <h5 class="modal-title font-weight-bold" style="font-size: 1.15rem; color: #ffffff;">
+                        <i class="fas fa-bullhorn mr-2" style="color: #ffd700;"></i> Naskah Bacaan Maklumat Sholat Jum'at
                     </h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 0.9;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body p-3 p-md-4" style="background: #081d14;">
-                    <!-- Nav Tabs / View Switcher -->
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap" style="gap: 10px;">
-                        <ul class="nav nav-pills bg-dark p-1 rounded shadow-sm border border-secondary" id="tabMaklumatFlyer" role="tablist" style="background: rgba(4, 38, 22, 0.8) !important; border-color: rgba(212, 175, 55, 0.4) !important;">
-                            <li class="nav-item">
-                                <a class="nav-link active font-weight-bold text-white py-1 px-3" id="tab-flyer-btn" data-toggle="pill" href="#tab-maklumat-flyer" role="tab" style="font-size: 12.5px; border-radius: 6px;">
-                                    <i class="fas fa-magic text-warning mr-1"></i> 👑 Format Flyer Profesional
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link font-weight-bold text-white-50 py-1 px-3" id="tab-naskah-btn" data-toggle="pill" href="#tab-maklumat-naskah" role="tab" style="font-size: 12.5px; border-radius: 6px;">
-                                    <i class="fas fa-microphone-alt text-success mr-1"></i> 🎙️ Naskah Narasi Mimbar
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="d-flex align-items-center" style="gap: 8px;">
-                            <button type="button" class="btn btn-warning text-dark btn-sm font-weight-bold shadow-sm" onclick="cetakFlyerMaklumatModal()" title="Cetak atau Simpan PDF Flyer Maklumat">
-                                <i class="fas fa-print mr-1"></i> Cetak Flyer
-                            </button>
-                            <button type="button" class="btn btn-info btn-sm font-weight-bold shadow-sm" onclick="downloadTeksMaklumat()" title="Download Naskah Teks (.txt)">
-                                <i class="fas fa-file-download mr-1"></i> Unduh .txt
-                            </button>
-                            <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="salinTeksMaklumat()" title="Salin Teks Maklumat">
-                                <i class="fas fa-copy mr-1"></i> Salin Teks
-                            </button>
-                        </div>
+                <div class="modal-body p-4" style="background: #f8fafc;">
+                    <div class="alert alert-info py-2 px-3 small mb-3 d-flex align-items-center">
+                        <i class="fas fa-microphone-alt mr-2 text-info fa-lg"></i>
+                        <span>Naskah di bawah ini telah diformat khusus agar mudah, lugas, dan nyaman dibacakan oleh <strong>Pembaca Maklumat</strong> melalui mikrofon mimbar masjid.</span>
                     </div>
-
-                    <div class="tab-content" id="tabMaklumatContent">
-                        <!-- TAB 1: FORMAT FLYER PROFESIONAL (DEFAULT UTAMA) -->
-                        <div class="tab-pane fade show active" id="tab-maklumat-flyer" role="tabpanel" style="max-height: 720px; overflow-y: auto; padding-right: 4px;">
-                            <div id="kontenFlyerMaklumat">
-                                <!-- Populated dynamically by renderFlyerMaklumatHtml() -->
-                            </div>
-                        </div>
-
-                        <!-- TAB 2: NASKAH TEKS BACAAN MIMBAR -->
-                        <div class="tab-pane fade" id="tab-maklumat-naskah" role="tabpanel">
-                            <div class="alert alert-info py-2 px-3 small mb-2 d-flex align-items-center" style="background: rgba(6, 78, 59, 0.4); color: #a7f3d0; border-color: rgba(16, 185, 129, 0.3);">
-                                <i class="fas fa-info-circle mr-2 fa-lg text-warning"></i>
-                                <span>Format naskah narasi siap baca melalui mikrofon mimbar masjid oleh Pembaca Maklumat.</span>
-                            </div>
-                            <div id="kontenTeksMaklumat" class="p-3 bg-white rounded border shadow-sm" style="font-size: 15px; line-height: 1.85; color: #1e293b; max-height: 640px; overflow-y: auto; font-family: 'Segoe UI', Arial, sans-serif;">
-                                <!-- Populated dynamically by generateNaskahMaklumatText() -->
-                            </div>
-                        </div>
+                    <div id="kontenTeksMaklumat" class="p-3 bg-white rounded border shadow-sm" style="font-size: 14.5px; line-height: 1.85; color: #1e293b; max-height: 540px; overflow-y: auto; font-family: 'Segoe UI', Arial, sans-serif;">
+                        <!-- Dynamically populated reading text -->
                     </div>
                 </div>
-                <div class="modal-footer py-2 bg-dark border-top border-secondary" style="background: #05140d !important;">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-warning text-dark btn-sm font-weight-bold shadow-sm" onclick="cetakFlyerMaklumatModal()">
-                        <i class="fas fa-print mr-1"></i> Cetak Flyer
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="salinTeksMaklumat()">
-                        <i class="fas fa-copy mr-1"></i> Salin Teks Naskah
-                    </button>
+                <div class="modal-footer bg-light py-2 d-flex justify-content-between flex-wrap" style="gap: 8px;">
+                    <div>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                    </div>
+                    <div class="d-flex flex-wrap" style="gap: 6px;">
+                        <button type="button" class="btn btn-primary btn-sm font-weight-bold shadow-sm" onclick="cetakNaskahMaklumatPDF()" title="Cetak atau Simpan sebagai PDF Naskah Siap Baca">
+                            <i class="fas fa-file-pdf mr-1"></i> Cetak / Simpan PDF
+                        </button>
+                        <button type="button" class="btn btn-success btn-sm font-weight-bold shadow-sm" onclick="downloadNaskahMaklumatPNG()" title="Unduh Gambar Naskah Lengkap (PNG) untuk Dibaca di HP">
+                            <i class="fas fa-file-image mr-1"></i> Unduh Gambar (PNG)
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm font-weight-bold shadow-sm" onclick="downloadNaskahMaklumatDoc()" title="Unduh File Dokumen Word (.doc)">
+                            <i class="fas fa-file-word mr-1"></i> Unduh Word (.doc)
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm font-weight-bold" onclick="downloadTeksMaklumat()" title="Unduh File Teks (.txt)">
+                            <i class="fas fa-file-alt mr-1"></i> Unduh .txt
+                        </button>
+                        <button type="button" class="btn btn-dark btn-sm font-weight-bold shadow-sm" onclick="salinTeksMaklumat()" title="Salin Naskah Lengkap ke Clipboard">
+                            <i class="fas fa-copy mr-1"></i> Salin Naskah
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -17146,12 +17155,11 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         }
 
         // =========================================================================
-        // FORMAT FLYER PROFESIONAL TEKS MAKLUMAT JUM'AT (DESAIN ISLAMIC MODERN)
+        // FITUR 3B: CETAK / SIMPAN PDF NASKAH BACAAN MAKLUMAT JUM'AT (A4 DOKUMEN RESMI)
         // =========================================================================
-        function renderFlyerMaklumatHtml() {
-            if (typeof pjUpdatePreview === 'function') {
-                pjUpdatePreview();
-            }
+        function cetakNaskahMaklumatPDF() {
+            if (typeof pjUpdatePreview === 'function') pjUpdatePreview();
+            const tglHariH = pjData.tanggalJudul || '02 Oktober 2026';
             let totalIn = 0;
             pjData.pemasukan.forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
             let totalOut = 0;
@@ -17160,297 +17168,549 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             const subtotalSaldo = saldoAwal + totalIn;
             const saldoAkhir = subtotalSaldo - totalOut;
 
-            const tglHariH = pjData.tanggalJudul || '02 Oktober 2026';
-            const tglKas = pjData.tanggalKas || tglHariH;
-            const tglFormatted = tglHariH.toLowerCase().includes('jum') ? tglHariH : ('Jum\'at, ' + tglHariH);
+            const w = window.open('', '_blank');
+            if (!w) {
+                alert('Pop-up terblokir. Silakan izinkan pop-up peramban untuk mencetak/menyimpan PDF.');
+                return;
+            }
 
-            const hLines = (pjData.himbauan && pjData.himbauan.length > 0) ? pjData.himbauan : [
-                "Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong",
-                "Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya",
-                "Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.",
-                "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
-            ];
+            const html = `
+            <!DOCTYPE html>
+            <html lang="id">
+            <head>
+                <meta charset="utf-8">
+                <title>Naskah Maklumat Sholat Jum'at - ${escapeHtml(tglHariH)}</title>
+                <style>
+                    @page {
+                        size: A4 portrait;
+                        margin: 12mm 15mm;
+                    }
+                    * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                    body {
+                        font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+                        font-size: 13.5px;
+                        line-height: 1.6;
+                        color: #0f172a;
+                        margin: 0;
+                        padding: 10px;
+                        background: #ffffff;
+                    }
+                    .kop-img { width: 100%; max-height: 110px; object-fit: contain; display: block; margin-bottom: 6px; }
+                    .garis-kop { height: 3px; background: #047857; margin-bottom: 14px; }
+                    .judul-maklumat { text-align: center; margin-bottom: 16px; }
+                    .judul-maklumat h2 { margin: 0; font-size: 16px; font-weight: 800; text-transform: uppercase; color: #047857; letter-spacing: 0.5px; }
+                    .judul-maklumat .tgl { font-size: 14px; font-weight: 700; color: #1e293b; margin-top: 2px; }
+                    .pembuka { margin-bottom: 12px; font-weight: 600; font-size: 14px; }
+                    .section-title { font-size: 14px; font-weight: 800; color: #047857; margin-top: 14px; margin-bottom: 6px; border-bottom: 1.5px solid #a7f3d0; padding-bottom: 2px; }
+                    .kas-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; margin: 8px 0; }
+                    .kas-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+                    .kas-highlight { font-weight: 800; color: #065f46; background: #ecfdf5; padding: 4px 8px; border-radius: 4px; margin: 4px 0; border-left: 3px solid #10b981; }
+                    .petugas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
+                    .petugas-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; }
+                    .petugas-label { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+                    .petugas-nama { font-size: 13.5px; font-weight: 700; color: #0f172a; }
+                    .himbauan-list { margin: 6px 0; padding-left: 20px; }
+                    .himbauan-list li { margin-bottom: 4px; }
+                    .penutup { margin-top: 14px; font-weight: 600; }
+                    .ttd-container { display: flex; justify-content: space-between; margin-top: 24px; page-break-inside: avoid; }
+                    .ttd-col { text-align: center; width: 220px; }
+                    .ttd-jabatan { font-size: 12px; font-weight: 600; color: #475569; }
+                    .ttd-img-box { height: 55px; display: flex; align-items: center; justify-content: center; margin: 4px 0; }
+                    .ttd-img-box img { max-height: 50px; }
+                    .ttd-nama { font-weight: 800; font-size: 13.5px; border-bottom: 1.5px solid #0f172a; display: inline-block; padding-bottom: 2px; }
+                </style>
+            </head>
+            <body>
+                <img src="img/kop_surat_aljihad.png" onerror="this.onerror=null; this.src='img/kop_pengumuman_jumat.png';" class="kop-img" alt="Kop Surat DKM Al-Jihad">
+                <div class="garis-kop"></div>
 
-            const himbauanIcons = ['🕌', '🚗', '📴', '🤫', '✨', '📢'];
+                <div class="judul-maklumat">
+                    <h2>Naskah Bacaan Maklumat Sholat Jum'at</h2>
+                    <div class="tgl">Hari ini, Jum'at, ${escapeHtml(tglHariH)}</div>
+                </div>
 
-            let html = `
-            <div class="flyer-maklumat-card shadow-lg" style="background: radial-gradient(circle at 50% 0%, #0a4226 0%, #052917 45%, #01150b 100%); border: 2.5px solid #D4AF37; border-radius: 18px; padding: 28px 24px; color: #ffffff; box-shadow: 0 15px 40px rgba(0,0,0,0.5); font-family: 'Poppins', 'Outfit', sans-serif; position: relative;">
-                <!-- Border aksen atas emas -->
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #D4AF37, #FFD700, #D4AF37); border-radius: 18px 18px 0 0;"></div>
+                <div class="pembuka">
+                    <div>Bismillahirrohmanirrohim...</div>
+                    <div>Assalamu'alaikum Warahmatullahi Wabarakatuh.</div>
+                </div>
 
-                <!-- 1. HEADER FLYER MEWAH -->
-                <div class="text-center mb-4">
-                    <div class="d-inline-block position-relative mb-2">
-                        <img src="img/logo-aljihad-circle.png" onerror="this.onerror=null; this.src='img/logo-aljihad-trans.png';" alt="Logo Masjid Al-Jihad" style="width: 76px; height: 76px; border-radius: 50%; border: 2.5px solid #FFD700; box-shadow: 0 0 18px rgba(255, 215, 0, 0.45); object-fit: cover; background: #064e3b; display: block; margin: 0 auto;">
+                <div class="section-title">I. LAPORAN KEUANGAN KAS MASJID</div>
+                <div style="margin-bottom: 6px;">Laporan keuangan kas masjid sampai dengan hari ini Jum'at, ${escapeHtml(tglHariH)}:</div>
+                <div class="kas-box">
+                    <div class="kas-row"><span>1. Saldo Awal Kas Masjid:</span> <strong>Rp ${pjFormatRupiah(saldoAwal)}</strong></div>
+                    <div style="margin: 4px 0 2px; font-weight: 600;">2. Pemasukan Kas:</div>
+                    ${pjData.pemasukan.map(p => `<div class="kas-row" style="padding-left: 14px; font-size: 12.5px;"><span>• ${escapeHtml(p.ket)}</span> <span>Rp ${pjFormatRupiah(p.nominal)}</span></div>`).join('')}
+                    <div class="kas-row" style="font-weight: 700; border-top: 1px dashed #cbd5e1; padding-top: 3px; margin-top: 3px;">
+                        <span>Total Pemasukan:</span> <span>Rp ${pjFormatRupiah(totalIn)}</span>
                     </div>
-                    
-                    <!-- Kaligrafi Bismillah Emas -->
-                    <div style="font-family: 'Amiri', 'Traditional Arabic', serif; font-size: 32px; font-weight: 700; color: #FFD700; text-shadow: 0 2px 8px rgba(0,0,0,0.9); line-height: 1.35; margin-top: 6px;">
-                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                    <div class="kas-highlight">
+                        3. SALDO (Saldo Awal + Pemasukan): Rp ${pjFormatRupiah(subtotalSaldo)}
                     </div>
-                    <!-- Kaligrafi Salam -->
-                    <div style="font-family: 'Amiri', 'Traditional Arabic', serif; font-size: 23px; font-weight: 700; color: #FFF2A8; text-shadow: 0 2px 8px rgba(0,0,0,0.9); line-height: 1.35; margin-top: 2px;">
-                        السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ
+                    <div style="margin: 6px 0 2px; font-weight: 600;">4. Pengeluaran Kas Masjid:</div>
+                    ${pjData.pengeluaran.map((p, idx) => `<div class="kas-row" style="padding-left: 14px; font-size: 12.5px;"><span>${idx + 1}. ${escapeHtml(p.ket)}</span> <span>Rp ${pjFormatRupiah(p.nominal)}</span></div>`).join('')}
+                    <div class="kas-row" style="font-weight: 700; border-top: 1px dashed #cbd5e1; padding-top: 3px; margin-top: 3px;">
+                        <span>Total Pengeluaran:</span> <span>Rp ${pjFormatRupiah(totalOut)}</span>
                     </div>
-
-                    <!-- Nama Masjid & Lokasi -->
-                    <div style="font-size: 23px; font-weight: 800; color: #ffffff; letter-spacing: 0.6px; margin-top: 10px; text-shadow: 0 2px 6px rgba(0,0,0,0.8);">
-                        MASJID JAMI' AL-JIHAD
-                    </div>
-                    <div style="font-size: 13px; color: #a7f3d0; font-weight: 500;">
-                        Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi
-                    </div>
-
-                    <!-- Kapsul Pita Emas -->
-                    <div class="mt-3">
-                        <span style="display: inline-block; background: linear-gradient(90deg, #D4AF37 0%, #FFD700 50%, #B4821E 100%); color: #022413; font-weight: 900; font-size: 13px; padding: 6px 24px; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.35); text-transform: uppercase; letter-spacing: 0.8px;">
-                            ★ NASKAH MAKLUMAT RESMI SHOLAT JUM'AT ★
-                        </span>
-                    </div>
-
-                    <!-- Tanggal & Waktu -->
-                    <div style="font-size: 19px; font-weight: 800; color: #FFD700; margin-top: 10px; text-shadow: 0 2px 6px rgba(0,0,0,0.8);">
-                        ${escapeHtml(tglFormatted)}
-                    </div>
-                    <div style="font-size: 13.5px; color: #e2e8f0; font-weight: 600;">
-                        <i class="far fa-clock text-warning mr-1"></i> Waktu Khutbah & Sholat: 11:45 WIB
+                    <div class="kas-highlight" style="background: #fef3c7; color: #92400e; border-left-color: #f59e0b; margin-top: 6px;">
+                        5. Sehingga SALDO AKHIR KAS MASJID saat ini adalah: Rp ${pjFormatRupiah(saldoAkhir)}
                     </div>
                 </div>
 
-                <!-- 2. BAGIAN I: LAPORAN KEUANGAN KAS MASJID -->
-                <div class="mb-4" style="background: rgba(2, 22, 13, 0.75); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 14px; padding: 18px 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.25);">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap" style="gap: 8px; border-bottom: 1.5px solid rgba(212, 175, 55, 0.3); padding-bottom: 8px;">
-                        <span style="font-size: 15px; font-weight: 800; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">
-                            <i class="fas fa-coins mr-1.5"></i> I. LAPORAN KEUANGAN KAS MASJID
-                        </span>
-                        <span style="font-size: 12px; color: #a7f3d0; font-weight: 600;">
-                            s/d Tanggal: ${escapeHtml(tglKas)}
-                        </span>
+                <div class="section-title">II. PETUGAS SHOLAT JUM'AT HARI INI</div>
+                <div class="petugas-grid">
+                    <div class="petugas-item">
+                        <div class="petugas-label">Imam & Khotib</div>
+                        <div class="petugas-nama">${escapeHtml(pjData.petugas.imamKhotib || 'Ust. Faiq Rido')}</div>
                     </div>
-
-                    <!-- 4 Kartu Kas Sejajar -->
-                    <div class="row no-gutters mb-3" style="gap: 10px;">
-                        <div class="col" style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: 10px; padding: 10px; text-align: center;">
-                            <div style="font-size: 11px; font-weight: 700; color: #fcd34d; text-transform: uppercase;">SALDO AWAL</div>
-                            <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; margin-top: 3px;">Rp ${pjFormatRupiah(saldoAwal)}</div>
-                        </div>
-                        <div class="col" style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 10px; padding: 10px; text-align: center;">
-                            <div style="font-size: 11px; font-weight: 700; color: #6ee7b7; text-transform: uppercase;">PEMASUKAN (+)</div>
-                            <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; margin-top: 3px;">Rp ${pjFormatRupiah(totalIn)}</div>
-                        </div>
-                        <div class="col" style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.45); border-radius: 10px; padding: 10px; text-align: center;">
-                            <div style="font-size: 11px; font-weight: 700; color: #fca5a5; text-transform: uppercase;">PENGELUARAN (-)</div>
-                            <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; margin-top: 3px;">Rp ${pjFormatRupiah(totalOut)}</div>
-                        </div>
-                        <div class="col" style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); border: 2px solid #FFD700; box-shadow: 0 4px 14px rgba(255, 215, 0, 0.3); border-radius: 10px; padding: 10px; text-align: center;">
-                            <div style="font-size: 11px; font-weight: 800; color: #FFD700; text-transform: uppercase;">SALDO AKHIR KAS</div>
-                            <div style="font-size: 16.5px; font-weight: 900; color: #fef08a; margin-top: 3px;">Rp ${pjFormatRupiah(saldoAkhir)}</div>
-                        </div>
+                    <div class="petugas-item">
+                        <div class="petugas-label">Muadzin</div>
+                        <div class="petugas-nama">${escapeHtml(pjData.petugas.muadzin || 'Ust. Rudy')}</div>
                     </div>
-
-                    <!-- Rincian Pemasukan & Pengeluaran 2 Kolom -->
-                    <div class="row">
-                        <div class="col-md-6 mb-2 mb-md-0">
-                            <div style="background: rgba(6, 78, 59, 0.35); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 10px 14px; height: 100%;">
-                                <div class="font-weight-bold text-success mb-2" style="font-size: 12.5px;">
-                                    <i class="fas fa-arrow-circle-down mr-1"></i> Rincian Pemasukan Kas:
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                    ${pjData.pemasukan.length > 0 ? pjData.pemasukan.map(p => `
-                                        <div class="d-flex justify-content-between align-items-center py-1" style="border-bottom: 1px dashed rgba(255,255,255,0.12); font-size: 12.5px;">
-                                            <span style="color: #cbd5e1;"><i class="fas fa-check-circle text-success mr-1.5" style="font-size: 10px;"></i> ${escapeHtml(p.ket || 'Pemasukan')}</span>
-                                            <span class="font-weight-bold text-white">Rp ${pjFormatRupiah(p.nominal)}</span>
-                                        </div>
-                                    `).join('') : '<div class="text-white-50 small">- Tidak ada rincian -</div>'}
-                                </div>
-                                <div class="d-flex justify-content-between font-weight-bold text-white pt-2 mt-2" style="border-top: 1px solid rgba(255,255,255,0.2); font-size: 12.5px;">
-                                    <span>Total Pemasukan:</span>
-                                    <span class="text-warning">Rp ${pjFormatRupiah(totalIn)}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div style="background: rgba(127, 29, 29, 0.25); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 10px; padding: 10px 14px; height: 100%;">
-                                <div class="font-weight-bold text-danger mb-2" style="font-size: 12.5px;">
-                                    <i class="fas fa-arrow-circle-up mr-1"></i> Rincian Pengeluaran Kas:
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                    ${pjData.pengeluaran.length > 0 ? pjData.pengeluaran.map((p, idx) => `
-                                        <div class="d-flex justify-content-between align-items-center py-1" style="border-bottom: 1px dashed rgba(255,255,255,0.12); font-size: 12.5px;">
-                                            <span style="color: #cbd5e1;"><i class="fas fa-minus-circle text-danger mr-1.5" style="font-size: 10px;"></i> ${idx + 1}. ${escapeHtml(p.ket || 'Pengeluaran')}</span>
-                                            <span class="font-weight-bold text-white">Rp ${pjFormatRupiah(p.nominal)}</span>
-                                        </div>
-                                    `).join('') : '<div class="text-white-50 small">- Tidak ada rincian -</div>'}
-                                </div>
-                                <div class="d-flex justify-content-between font-weight-bold text-white pt-2 mt-2" style="border-top: 1px solid rgba(255,255,255,0.2); font-size: 12.5px;">
-                                    <span>Total Pengeluaran:</span>
-                                    <span class="text-danger font-weight-bold">Rp ${pjFormatRupiah(totalOut)}</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="petugas-item">
+                        <div class="petugas-label">Bilal Jum'at</div>
+                        <div class="petugas-nama">${escapeHtml(pjData.petugas.bilal || 'Ust. Mansur')}</div>
                     </div>
-
-                    <!-- Highlight Narasi Bacaan Mimbar -->
-                    <div class="mt-3 p-2.5 rounded" style="background: rgba(255, 215, 0, 0.08); border: 1px solid rgba(255, 215, 0, 0.3); font-size: 12.5px; color: #fef3c7; line-height: 1.6;">
-                        <i class="fas fa-volume-up text-warning mr-1"></i> <strong>Panduan Lafal Bacaan Mimbar:</strong>
-                        "Laporan keuangan kas masjid s/d hari ini: Saldo Awal sebesar <strong>Rp ${pjFormatRupiah(saldoAwal)}</strong>. Total Pemasukan sebesar <strong>Rp ${pjFormatRupiah(totalIn)}</strong>. Saldo awal ditambah pemasukan berjumlah <strong>Rp ${pjFormatRupiah(subtotalSaldo)}</strong>. Total Pengeluaran sebesar <strong>Rp ${pjFormatRupiah(totalOut)}</strong>. Sehingga <strong>SALDO AKHIR KAS MASJID</strong> saat ini adalah sebesar <strong>Rp ${pjFormatRupiah(saldoAkhir)}</strong>."
+                    <div class="petugas-item">
+                        <div class="petugas-label">Pembaca Maklumat (MC)</div>
+                        <div class="petugas-nama">${escapeHtml(pjData.petugas.maklumat || 'Ust. Fatkhurokhman')}</div>
                     </div>
                 </div>
 
-                <!-- 3. BAGIAN II: PETUGAS SHOLAT JUM'AT -->
-                <div class="mb-4" style="background: rgba(2, 22, 13, 0.75); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 14px; padding: 18px 20px;">
-                    <div style="font-size: 15px; font-weight: 800; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1.5px solid rgba(212, 175, 55, 0.3); padding-bottom: 8px; margin-bottom: 14px;">
-                        <i class="fas fa-user-tie mr-1.5"></i> II. PETUGAS SHOLAT JUM'AT HARI INI
-                    </div>
+                <div class="section-title">III. HIMBAUAN KEPADA SELURUH JAMAAH</div>
+                <ol class="himbauan-list">
+                    ${(pjData.himbauan && pjData.himbauan.length > 0 ? pjData.himbauan : [
+                        "Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong",
+                        "Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya",
+                        "Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.",
+                        "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
+                    ]).map(h => `<li>${escapeHtml(h.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim())}</li>`).join('')}
+                </ol>
 
-                    <div class="row" style="row-gap: 10px;">
-                        <!-- Khatib & Imam -->
-                        <div class="col-md-6">
-                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
-                                    🎙️
-                                </div>
-                                <div style="overflow: hidden;">
-                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">KHATIB & IMAM SHOLAT</div>
-                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.imamKhotib || 'Ust. Faiq Rido')}</div>
-                                </div>
-                            </div>
+                <div class="penutup">
+                    <div>Demikian maklumat pengumuman ini kami sampaikan, terima kasih atas perhatian seluruh jamaah.</div>
+                    <div style="margin-top: 4px;">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</div>
+                </div>
+
+                <div class="ttd-container">
+                    <div class="ttd-col">
+                        <div class="ttd-jabatan">Ketua DKM Masjid Jami' Al Jihad</div>
+                        <div class="ttd-img-box">
+                            <img src="img/tandatanganketuaDKM_trans.png" alt="TTD Ketua" onerror="this.style.display='none'">
                         </div>
-                        <!-- Muadzin -->
-                        <div class="col-md-6">
-                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
-                                    📢
-                                </div>
-                                <div style="overflow: hidden;">
-                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">MUADZIN</div>
-                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.muadzin || 'Ust. Rudy')}</div>
-                                </div>
-                            </div>
+                        <div class="ttd-nama">${escapeHtml(pjData.ttd.namaKetua || 'Agus Purwanto, S.Kom.')}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <img src="img/stempelDKM_trans.png" alt="Stempel DKM" style="height: 60px; opacity: 0.85;" onerror="this.style.display='none'">
+                    </div>
+                    <div class="ttd-col">
+                        <div class="ttd-jabatan">Bendahara DKM Al-Jihad</div>
+                        <div class="ttd-img-box">
+                            <img src="img/tantatanganbendahara_trans.png" alt="TTD Bendahara" onerror="this.style.display='none'">
                         </div>
-                        <!-- Bilal -->
-                        <div class="col-md-6">
-                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
-                                    🤲
-                                </div>
-                                <div style="overflow: hidden;">
-                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">BILAL</div>
-                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.bilal || 'Ust. Mansur')}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Pembaca Maklumat -->
-                        <div class="col-md-6">
-                            <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(2, 44, 25, 0.7) 100%); border: 1.5px solid rgba(212, 175, 55, 0.45); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255, 215, 0, 0.15); color: #FFD700; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 215, 0, 0.3); flex-shrink: 0;">
-                                    📜
-                                </div>
-                                <div style="overflow: hidden;">
-                                    <div style="font-size: 11px; font-weight: 700; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px;">PEMBACA MAKLUMAT</div>
-                                    <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${escapeHtml(pjData.petugas.maklumat || 'Ust. Fatkhurokhman')}</div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="ttd-nama">${escapeHtml(pjData.ttd.namaBendahara || 'Utut Priyastya')}</div>
                     </div>
                 </div>
 
-                <!-- 4. BAGIAN III: HIMBAUAN JAMAAH & ADAB KHUTBAH -->
-                <div class="mb-4" style="background: rgba(2, 22, 13, 0.75); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 14px; padding: 18px 20px;">
-                    <div style="font-size: 15px; font-weight: 800; color: #FFD700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1.5px solid rgba(212, 175, 55, 0.3); padding-bottom: 8px; margin-bottom: 14px;">
-                        <i class="fas fa-bullhorn mr-1.5"></i> III. HIMBAUAN KEPADA SELURUH JAMAAH
-                    </div>
-
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        ${hLines.map((line, idx) => {
-                            let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim();
-                            clean = clean.replace(/^[•\-\*]\s*/g, '').trim();
-                            const icon = himbauanIcons[idx % himbauanIcons.length] || '•';
-                            return `
-                                <div style="background: rgba(6, 78, 59, 0.35); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 8px 12px; display: flex; align-items: flex-start; gap: 10px;">
-                                    <span style="font-size: 15px; line-height: 1.4; flex-shrink: 0;">${icon}</span>
-                                    <div style="font-size: 13px; color: #f1f5f9; line-height: 1.5;">
-                                        <strong style="color: #FFD700;">${idx + 1}.</strong> ${escapeHtml(clean)}
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-
-                    <!-- Plakat Hadits Adab Khutbah -->
-                    <div class="mt-3 p-3 rounded text-center" style="background: rgba(2, 16, 9, 0.85); border: 1.5px solid rgba(212, 175, 55, 0.5); border-radius: 12px;">
-                        <div style="color: #FFD700; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
-                            ✨ Adab Khutbah: Diam, Dengarkan & Simak Khutbah
-                        </div>
-                        <div style="font-family: 'Amiri', serif; color: #F0DEAA; font-size: 15px; margin: 3px 0;">
-                            Rasulullah ﷺ bersabda:
-                        </div>
-                        <div style="font-style: italic; color: #ffffff; font-size: 13.5px; line-height: 1.55;">
-                            "Jika engkau berkata kepada sahabatmu pada hari Jum'at: 'Diamlah!' ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."
-                        </div>
-                        <div style="color: #FFD700; font-weight: 700; font-size: 12px; margin-top: 4px;">
-                            (HR. Bukhari no. 934 & Muslim no. 851)
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. PENUTUP & TANDA TANGAN DKM -->
-                <div class="pt-3 text-center" style="border-top: 1.5px solid rgba(212, 175, 55, 0.35);">
-                    <div style="font-size: 13.5px; color: #e2e8f0; font-style: italic; margin-bottom: 4px;">
-                        "Demikian maklumat pengumuman ini kami sampaikan, terima kasih atas perhatian seluruh jamaah."
-                    </div>
-                    <div style="font-family: 'Amiri', serif; font-size: 21px; font-weight: 700; color: #FFF2A8; margin-bottom: 16px;">
-                        وَالسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ
-                    </div>
-
-                    <!-- Tanda Tangan DKM -->
-                    <div class="d-flex justify-content-between align-items-center mt-3 px-2 px-md-5">
-                        <div class="text-center" style="min-width: 140px;">
-                            <div style="font-size: 12px; color: #a7f3d0; font-weight: 600;">Ketua DKM Al-Jihad</div>
-                            <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin: 4px 0;">
-                                <img src="img/tandatanganketuaDKM_trans.png" onerror="this.style.display='none'" alt="TTD Ketua" style="max-height: 42px; filter: brightness(0) invert(1);">
-                            </div>
-                            <div style="font-weight: 800; font-size: 13.5px; color: #FFD700; border-bottom: 1.5px solid #FFD700; display: inline-block; padding-bottom: 2px;">
-                                ${escapeHtml(pjData.ttd.namaKetua || 'Hadi Prayitno')}
-                            </div>
-                        </div>
-                        <div class="text-center d-none d-sm-block">
-                            <img src="img/stempelDKM_trans.png" onerror="this.style.display='none'" alt="Stempel DKM" style="height: 58px; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4)); opacity: 0.95;">
-                        </div>
-                        <div class="text-center" style="min-width: 140px;">
-                            <div style="font-size: 12px; color: #a7f3d0; font-weight: 600;">Bendahara DKM Al-Jihad</div>
-                            <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin: 4px 0;">
-                                <img src="img/tantatanganbendahara_trans.png" onerror="this.style.display='none'" alt="TTD Bendahara" style="max-height: 42px; filter: brightness(0) invert(1);">
-                            </div>
-                            <div style="font-weight: 800; font-size: 13.5px; color: #FFD700; border-bottom: 1.5px solid #FFD700; display: inline-block; padding-bottom: 2px;">
-                                ${escapeHtml(pjData.ttd.namaBendahara || 'Utut Priyastya')}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Footer Caption -->
-                    <div class="mt-4 pt-2 text-muted" style="font-size: 11px; border-top: 1px solid rgba(255,255,255,0.1);">
-                        Diterbitkan oleh DKM Masjid Jami' Al Jihad • Sistem Informasi Digital (digitalaljihad.my.id)
-                    </div>
-                </div>
-            </div>
+                <script>
+                    setTimeout(() => { window.print(); }, 400);
+                <\/script>
+            </body>
+            </html>
             `;
 
-            return html;
+            w.document.open();
+            w.document.write(html);
+            w.document.close();
+        }
+
+        // =========================================================================
+        // FITUR 3C: DOWNLOAD GAMBAR NASKAH MAKLUMAT (PNG RESOLUSI TINGGI 1200 x 2100 PX)
+        // =========================================================================
+        function downloadNaskahMaklumatPNG() {
+            if (typeof pjUpdatePreview === 'function') pjUpdatePreview();
+            let canvas = document.getElementById('canvasNaskahMaklumatJumat');
+            if (!canvas) {
+                canvas = document.createElement('canvas');
+                canvas.id = 'canvasNaskahMaklumatJumat';
+                canvas.style.display = 'none';
+                document.body.appendChild(canvas);
+            }
+
+            const W = 1200;
+            const H = 2100;
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.strokeStyle = "#e2e8f0";
+            ctx.lineWidth = 4;
+            ctx.strokeRect(10, 10, W - 20, H - 20);
+
+            let totalIn = 0;
+            pjData.pemasukan.forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
+            let totalOut = 0;
+            pjData.pengeluaran.forEach(p => { totalOut += (parseInt(p.nominal, 10) || 0); });
+            const saldoAwal = parseInt(pjData.saldoAwal, 10) || 0;
+            const subtotalSaldo = saldoAwal + totalIn;
+            const saldoAkhir = subtotalSaldo - totalOut;
+            const tglHariH = pjData.tanggalJudul || '02 Oktober 2026';
+
+            const imgKop = new Image();
+            imgKop.crossOrigin = "anonymous";
+            imgKop.onload = function() {
+                const kopW = 1120;
+                const kopH = kopW * (imgKop.naturalHeight / imgKop.naturalWidth);
+                ctx.drawImage(imgKop, 40, 36, kopW, kopH);
+
+                let curY = 36 + kopH + 12;
+                ctx.strokeStyle = "#047857";
+                ctx.lineWidth = 3.5;
+                ctx.beginPath();
+                ctx.moveTo(40, curY);
+                ctx.lineTo(1160, curY);
+                ctx.stroke();
+
+                curY += 36;
+                ctx.fillStyle = "#047857";
+                ctx.font = "bold 26px 'Segoe UI', Arial, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("NASKAH BACAAN MAKLUMAT SHOLAT JUM'AT", W / 2, curY);
+
+                curY += 28;
+                ctx.fillStyle = "#0f172a";
+                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("MASJID JAMI' AL JIHAD - GRAHA ASRI", W / 2, curY);
+
+                curY += 26;
+                ctx.fillStyle = "#475569";
+                ctx.font = "600 17px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText(`Hari ini, Jum'at, ${tglHariH}`, W / 2, curY);
+
+                curY += 40;
+                ctx.fillStyle = "#0f172a";
+                ctx.font = "bold 18px 'Segoe UI', Arial, sans-serif";
+                ctx.textAlign = "left";
+                ctx.fillText("Bismillahirrohmanirrohim...", 50, curY);
+                curY += 26;
+                ctx.fillText("Assalamu'alaikum Warahmatullahi Wabarakatuh.", 50, curY);
+
+                curY += 38;
+                ctx.fillStyle = "#047857";
+                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("I. LAPORAN KEUANGAN KAS MASJID:", 50, curY);
+
+                curY += 26;
+                ctx.fillStyle = "#334155";
+                ctx.font = "500 16.5px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText(`Laporan keuangan kas masjid sampai dengan hari ini Jum'at, ${tglHariH}:`, 50, curY);
+
+                curY += 14;
+                const boxStartY = curY;
+                const boxH = 260 + (pjData.pemasukan.length * 22) + (pjData.pengeluaran.length * 22);
+                ctx.fillStyle = "#f8fafc";
+                ctx.fillRect(50, curY, 1100, boxH);
+                ctx.strokeStyle = "#cbd5e1";
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(50, curY, 1100, boxH);
+
+                let kasY = curY + 28;
+                ctx.fillStyle = "#0f172a";
+                ctx.font = "600 16px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("1. Saldo Awal Kas Masjid:", 70, kasY);
+                ctx.textAlign = "right";
+                ctx.fillText(`Rp ${pjFormatRupiah(saldoAwal)}`, 1130, kasY);
+                ctx.textAlign = "left";
+
+                kasY += 24;
+                ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("2. Pemasukan Kas:", 70, kasY);
+                ctx.font = "500 15px 'Segoe UI', Arial, sans-serif";
+                pjData.pemasukan.forEach(p => {
+                    kasY += 22;
+                    ctx.fillText(`   - ${p.ket}`, 70, kasY);
+                    ctx.textAlign = "right";
+                    ctx.fillText(`Rp ${pjFormatRupiah(p.nominal)}`, 1130, kasY);
+                    ctx.textAlign = "left";
+                });
+
+                kasY += 24;
+                ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("   Total Pemasukan:", 70, kasY);
+                ctx.textAlign = "right";
+                ctx.fillText(`Rp ${pjFormatRupiah(totalIn)}`, 1130, kasY);
+                ctx.textAlign = "left";
+
+                kasY += 26;
+                ctx.fillStyle = "#ecfdf5";
+                ctx.fillRect(65, kasY - 18, 1070, 26);
+                ctx.fillStyle = "#065f46";
+                ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("3. SALDO (Saldo Awal ditambah Pemasukan):", 75, kasY);
+                ctx.textAlign = "right";
+                ctx.fillText(`Rp ${pjFormatRupiah(subtotalSaldo)}`, 1125, kasY);
+                ctx.textAlign = "left";
+
+                kasY += 28;
+                ctx.fillStyle = "#0f172a";
+                ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("4. Pengeluaran Kas Masjid:", 70, kasY);
+                ctx.font = "500 15px 'Segoe UI', Arial, sans-serif";
+                pjData.pengeluaran.forEach((p, idx) => {
+                    kasY += 22;
+                    ctx.fillText(`   ${idx + 1}. ${p.ket}`, 70, kasY);
+                    ctx.textAlign = "right";
+                    ctx.fillText(`Rp ${pjFormatRupiah(p.nominal)}`, 1130, kasY);
+                    ctx.textAlign = "left";
+                });
+
+                kasY += 24;
+                ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("   Total Pengeluaran:", 70, kasY);
+                ctx.textAlign = "right";
+                ctx.fillText(`Rp ${pjFormatRupiah(totalOut)}`, 1130, kasY);
+                ctx.textAlign = "left";
+
+                kasY += 26;
+                ctx.fillStyle = "#fef3c7";
+                ctx.fillRect(65, kasY - 18, 1070, 26);
+                ctx.fillStyle = "#92400e";
+                ctx.font = "bold 16.5px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("5. Sehingga SALDO AKHIR KAS MASJID saat ini adalah:", 75, kasY);
+                ctx.textAlign = "right";
+                ctx.fillText(`Rp ${pjFormatRupiah(saldoAkhir)}`, 1125, kasY);
+                ctx.textAlign = "left";
+
+                curY = boxStartY + boxH + 28;
+
+                ctx.fillStyle = "#047857";
+                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("II. PETUGAS SHOLAT JUM'AT HARI INI:", 50, curY);
+
+                curY += 24;
+                ctx.fillStyle = "#0f172a";
+                ctx.font = "600 16px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText(`• Imam & Khotib : ${pjData.petugas.imamKhotib || 'Ust. Faiq Rido'}`, 70, curY);
+                curY += 22;
+                ctx.fillText(`• Muadzin       : ${pjData.petugas.muadzin || 'Ust. Rudy'}`, 70, curY);
+                curY += 22;
+                ctx.fillText(`• Bilal         : ${pjData.petugas.bilal || 'Ust. Mansur'}`, 70, curY);
+                curY += 22;
+                ctx.fillText(`• MC Maklumat   : ${pjData.petugas.maklumat || 'Ust. Fatkhurokhman'}`, 70, curY);
+
+                curY += 34;
+                ctx.fillStyle = "#047857";
+                ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("III. HIMBAUAN KEPADA SELURUH JAMAAH:", 50, curY);
+
+                const hLines = (pjData.himbauan && pjData.himbauan.length > 0) ? pjData.himbauan : [
+                    "Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong",
+                    "Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya",
+                    "Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.",
+                    "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
+                ];
+
+                hLines.forEach((line, idx) => {
+                    curY += 22;
+                    let clean = line.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim();
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "500 15px 'Segoe UI', Arial, sans-serif";
+                    ctx.fillText(`${idx + 1}. ${clean}`, 70, curY);
+                });
+
+                curY += 30;
+                ctx.fillStyle = "#334155";
+                ctx.font = "italic 15px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("Demikian maklumat pengumuman ini kami sampaikan, terima kasih atas perhatian seluruh jamaah.", 50, curY);
+                curY += 24;
+                ctx.fillStyle = "#0f172a";
+                ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                ctx.fillText("Wassalamu'alaikum Warahmatullahi Wabarakatuh.", 50, curY);
+
+                let ttdLoaded = 0;
+                function finishExport() {
+                    ttdLoaded++;
+                    if (ttdLoaded >= 3) {
+                        const cleanTgl = (pjData.tanggalJudul || 'Jumat').replace(/[^a-zA-Z0-9]/g, '_');
+                        const link = document.createElement('a');
+                        link.download = `Naskah_Maklumat_Jumat_${cleanTgl}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        if (typeof showCustomToast === 'function') {
+                            showCustomToast("Gambar Naskah Maklumat berhasil diunduh!", 'success');
+                        }
+                    }
+                }
+
+                const ttdBaseY = H - 220;
+
+                const imgStempel = new Image();
+                imgStempel.onload = function() {
+                    ctx.save();
+                    ctx.translate(210, ttdBaseY + 60);
+                    ctx.rotate(-5 * Math.PI / 180);
+                    ctx.globalAlpha = 0.88;
+                    ctx.drawImage(imgStempel, -70, -50, 140, 100);
+                    ctx.restore();
+                    finishExport();
+                };
+                imgStempel.onerror = finishExport;
+                imgStempel.src = 'img/stempelDKM_trans.png';
+
+                const imgKetua = new Image();
+                imgKetua.onload = function() {
+                    ctx.drawImage(imgKetua, 200, ttdBaseY + 15, 120, 80);
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaKetua || 'Agus Purwanto, S.Kom.', 260, ttdBaseY + 115);
+                    ctx.textAlign = "left";
+                    finishExport();
+                };
+                imgKetua.onerror = function() {
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaKetua || 'Agus Purwanto, S.Kom.', 260, ttdBaseY + 115);
+                    ctx.textAlign = "left";
+                    finishExport();
+                };
+                imgKetua.src = 'img/tandatanganketuaDKM_trans.png';
+
+                const imgBen = new Image();
+                imgBen.onload = function() {
+                    ctx.drawImage(imgBen, 880, ttdBaseY + 15, 120, 80);
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaBendahara || 'Utut Priyastya', 940, ttdBaseY + 115);
+                    ctx.textAlign = "left";
+                    finishExport();
+                };
+                imgBen.onerror = function() {
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 16px 'Segoe UI', Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(pjData.ttd.namaBendahara || 'Utut Priyastya', 940, ttdBaseY + 115);
+                    ctx.textAlign = "left";
+                    finishExport();
+                };
+                imgBen.src = 'img/tantatanganbendahara_trans.png';
+
+                ctx.fillStyle = "#475569";
+                ctx.font = "600 15px 'Segoe UI', Arial, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("Ketua DKM Masjid Jami' Al Jihad", 260, ttdBaseY);
+                ctx.fillText("Bendahara DKM Al-Jihad", 940, ttdBaseY);
+                ctx.textAlign = "left";
+            };
+
+            imgKop.onerror = function() {
+                alert("Gagal memuat kop surat untuk ekspor gambar naskah.");
+            };
+            imgKop.src = 'img/kop_surat_aljihad.png';
+        }
+
+        // =========================================================================
+        // FITUR 3D: DOWNLOAD DOKUMEN WORD NASKAH MAKLUMAT (.DOC)
+        // =========================================================================
+        function downloadNaskahMaklumatDoc() {
+            if (typeof pjUpdatePreview === 'function') pjUpdatePreview();
+            const tglHariH = pjData.tanggalJudul || '02 Oktober 2026';
+            let totalIn = 0;
+            pjData.pemasukan.forEach(p => { totalIn += (parseInt(p.nominal, 10) || 0); });
+            let totalOut = 0;
+            pjData.pengeluaran.forEach(p => { totalOut += (parseInt(p.nominal, 10) || 0); });
+            const saldoAwal = parseInt(pjData.saldoAwal, 10) || 0;
+            const subtotalSaldo = saldoAwal + totalIn;
+            const saldoAkhir = subtotalSaldo - totalOut;
+
+            const docContent = `
+            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+            <head><meta charset='utf-8'><title>Naskah Maklumat Sholat Jum'at</title>
+            <style>
+                body { font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #000000; }
+                h1 { font-size: 14pt; color: #047857; text-align: center; margin-bottom: 2pt; }
+                h2 { font-size: 12pt; color: #047857; margin-top: 12pt; margin-bottom: 4pt; border-bottom: 1pt solid #047857; padding-bottom: 2pt; }
+                .sub { text-align: center; font-size: 11pt; font-weight: bold; margin-bottom: 14pt; }
+                .kas-table { width: 100%; border-collapse: collapse; margin: 8pt 0; }
+                .kas-table td { padding: 4pt 6pt; font-size: 10.5pt; }
+                .highlight { background-color: #ecfdf5; font-weight: bold; }
+                .highlight-gold { background-color: #fef3c7; font-weight: bold; }
+                .ttd-table { width: 100%; margin-top: 24pt; border: none; }
+                .ttd-table td { text-align: center; font-size: 10.5pt; }
+            </style>
+            </head>
+            <body>
+                <h1>PENGUMUMAN KEGIATAN SHOLAT JUM'AT MASJID JAMI' AL JIHAD</h1>
+                <div class='sub'>Hari ini, Jum'at, ${escapeHtml(tglHariH)}</div>
+                <p><b>Bismillahirrohmanirrohim...</b><br><b>Assalamu'alaikum Warahmatullahi Wabarakatuh.</b></p>
+                
+                <h2>I. LAPORAN KEUANGAN KAS MASJID</h2>
+                <p>Laporan keuangan kas masjid sampai dengan hari ini Jum'at, ${escapeHtml(tglHariH)}:</p>
+                <table class='kas-table'>
+                    <tr><td><b>1. Saldo Awal Kas Masjid</b></td><td align='right'><b>Rp ${pjFormatRupiah(saldoAwal)}</b></td></tr>
+                    <tr><td colspan='2'><b>2. Pemasukan Kas:</b></td></tr>
+                    ${pjData.pemasukan.map(p => `<tr><td style='padding-left: 20pt;'>- ${escapeHtml(p.ket)}</td><td align='right'>Rp ${pjFormatRupiah(p.nominal)}</td></tr>`).join('')}
+                    <tr><td style='padding-left: 20pt;'><b>Total Pemasukan</b></td><td align='right'><b>Rp ${pjFormatRupiah(totalIn)}</b></td></tr>
+                    <tr class='highlight'><td><b>3. SALDO (Saldo Awal + Pemasukan)</b></td><td align='right'><b>Rp ${pjFormatRupiah(subtotalSaldo)}</b></td></tr>
+                    <tr><td colspan='2'><b>4. Pengeluaran Kas Masjid:</b></td></tr>
+                    ${pjData.pengeluaran.map((p, idx) => `<tr><td style='padding-left: 20pt;'>${idx + 1}. ${escapeHtml(p.ket)}</td><td align='right'>Rp ${pjFormatRupiah(p.nominal)}</td></tr>`).join('')}
+                    <tr><td style='padding-left: 20pt;'><b>Total Pengeluaran</b></td><td align='right'><b>Rp ${pjFormatRupiah(totalOut)}</b></td></tr>
+                    <tr class='highlight-gold'><td><b>5. Sehingga SALDO AKHIR KAS MASJID</b></td><td align='right'><b>Rp ${pjFormatRupiah(saldoAkhir)}</b></td></tr>
+                </table>
+
+                <h2>II. PETUGAS SHOLAT JUM'AT HARI INI</h2>
+                <p>
+                    - <b>Imam & Khotib :</b> ${escapeHtml(pjData.petugas.imamKhotib || 'Ust. Faiq Rido')}<br>
+                    - <b>Muadzin       :</b> ${escapeHtml(pjData.petugas.muadzin || 'Ust. Rudy')}<br>
+                    - <b>Bilal Jum'at  :</b> ${escapeHtml(pjData.petugas.bilal || 'Ust. Mansur')}<br>
+                    - <b>MC Maklumat   :</b> ${escapeHtml(pjData.petugas.maklumat || 'Ust. Fatkhurokhman')}
+                </p>
+
+                <h2>III. HIMBAUAN KEPADA SELURUH JAMAAH</h2>
+                <ol>
+                    ${(pjData.himbauan && pjData.himbauan.length > 0 ? pjData.himbauan : [
+                        "Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong",
+                        "Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya",
+                        "Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.",
+                        "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
+                    ]).map(h => `<li>${escapeHtml(h.replace(/^([•\-\*]|\d+[\.\)]|[a-zA-Z][\.\)])\s*/g, '').trim())}</li>`).join('')}
+                </ol>
+
+                <p>Demikian maklumat pengumuman ini kami sampaikan, terima kasih atas perhatian seluruh jamaah.<br><b>Wassalamu'alaikum Warahmatullahi Wabarakatuh.</b></p>
+
+                <table class='ttd-table'>
+                    <tr>
+                        <td width='50%'>Ketua DKM Masjid Jami' Al Jihad<br><br><br><br><b><u>${escapeHtml(pjData.ttd.namaKetua || 'Agus Purwanto, S.Kom.')}</u></b></td>
+                        <td width='50%'>Bendahara DKM Al-Jihad<br><br><br><br><b><u>${escapeHtml(pjData.ttd.namaBendahara || 'Utut Priyastya')}</u></b></td>
+                    </tr>
+                </table>
+            </body></html>
+            `;
+
+            const blob = new Blob(['\ufeff', docContent], { type: 'application/msword;charset=utf-8' });
+            const cleanTgl = (pjData.tanggalJudul || 'Jumat').replace(/[^a-zA-Z0-9]/g, '_');
+            const filename = `Naskah_Maklumat_Jumat_${cleanTgl}.doc`;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+
+            if (typeof showCustomToast === 'function') {
+                showCustomToast(`Dokumen Naskah Maklumat berhasil diunduh (${filename})!`, 'success');
+            }
         }
 
         function bukaModalTeksMaklumat() {
             if (typeof pjUpdatePreview === 'function') {
                 pjUpdatePreview();
             }
-
-            // 1. Render Format Flyer Profesional ke tab #kontenFlyerMaklumat
-            const elFlyer = document.getElementById('kontenFlyerMaklumat');
-            if (elFlyer) {
-                elFlyer.innerHTML = renderFlyerMaklumatHtml();
-            }
-
-            // 2. Render Naskah Teks Bacaan Mimbar ke tab #kontenTeksMaklumat
             const naskah = generateNaskahMaklumatText();
             const elKonten = document.getElementById('kontenTeksMaklumat');
             if (elKonten) {
@@ -17471,49 +17731,9 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     .join('');
             }
 
-            // 3. Pastikan tab flyer aktif secara default
-            if (window.$ && $('#tab-flyer-btn').length) {
-                $('#tab-flyer-btn').tab('show');
-            }
-
-            // 4. Buka Modal
             if (window.$ && $('#modalTeksMaklumat').length) {
                 $('#modalTeksMaklumat').modal('show');
             }
-        }
-
-        function cetakFlyerMaklumatModal() {
-            const el = document.getElementById('kontenFlyerMaklumat');
-            if (!el) return;
-            const w = window.open('', '_blank');
-            if (!w) {
-                alert('Pop-up terblokir. Izinkan pop-up untuk mencetak flyer maklumat.');
-                return;
-            }
-            w.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="utf-8">
-                    <title>Flyer Maklumat Sholat Jum'at - Masjid Jami' Al-Jihad</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-                    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-                    <link href="css/sb-admin-2.min.css" rel="stylesheet">
-                    <style>
-                        @page { size: A4 portrait; margin: 8mm; }
-                        body { margin: 0; padding: 12px; background: #031c10 !important; font-family: 'Poppins', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                        .flyer-maklumat-card { box-shadow: none !important; border-width: 2px !important; }
-                    </style>
-                </head>
-                <body>
-                    ${el.innerHTML}
-                    <script>
-                        setTimeout(() => { window.print(); }, 600);
-                    <\/script>
-                </body>
-                </html>
-            `);
-            w.document.close();
         }
 
         function salinTeksMaklumat() {
