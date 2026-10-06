@@ -11399,42 +11399,42 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             ctx.fillText('السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ', 540, 358);
             ctx.shadowBlur = 0;
 
-            // 4. NAMA MASJID & ALAMAT
+            // 4. NAMA MASJID & ALAMAT (DITURUNKAN AGAR TEPAT CENTER DI ANTARA TEKS ARAB & ADAB KHUTBAH)
             ctx.textAlign = 'center';
             ctx.fillStyle = '#FFFFFF';
             ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
             ctx.shadowBlur = 8;
-            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 405);
+            ctx.fillText("MASJID JAMI' AL-JIHAD", 540, 457);
 
             ctx.fillStyle = '#A7F3D0';
             ctx.font = '600 16px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 432);
+            ctx.fillText("Perumahan Graha Asri, Simpangan, Cikarang Utara - Bekasi", 540, 484);
             ctx.shadowBlur = 0;
 
             // 5. PITA / KAPSUL JUDUL JADWAL
-            const ribbonGrad = ctx.createLinearGradient(250, 459, 830, 459);
+            const ribbonGrad = ctx.createLinearGradient(250, 511, 830, 511);
             ribbonGrad.addColorStop(0, '#D4AF37');
             ribbonGrad.addColorStop(0.5, '#FFD700');
             ribbonGrad.addColorStop(1, '#B4821E');
             ctx.fillStyle = ribbonGrad;
-            drawCanvasRoundRect(ctx, 250, 459, 580, 44, 22, true, false);
+            drawCanvasRoundRect(ctx, 250, 511, 580, 44, 22, true, false);
 
             ctx.fillStyle = '#022413';
             ctx.font = '900 19px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('★ JADWAL PETUGAS SHOLAT JUM\'AT ★', 540, 489);
+            ctx.fillText('★ JADWAL PETUGAS SHOLAT JUM\'AT ★', 540, 541);
 
             // 6. TANGGAL & WAKTU SHOLAT
             ctx.fillStyle = '#FFD700';
             ctx.font = '800 32px "Poppins", "Segoe UI", sans-serif';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
             ctx.shadowBlur = 8;
-            ctx.fillText(tglFormatted, 540, 541);
+            ctx.fillText(tglFormatted, 540, 593);
             ctx.shadowBlur = 0;
 
             ctx.fillStyle = '#E2E8F0';
             ctx.font = '600 19px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('⏰ Waktu Khutbah & Sholat: 11:45 WIB', 540, 573);
+            ctx.fillText('⏰ Waktu Khutbah & Sholat: 11:45 WIB', 540, 625);
 
             // 7. EMPAT PETUGAS RESMI (RATA TENGAH, TANPA KOTAK, TEKS BESAR & TAJAM)
             const officers = [
@@ -11444,7 +11444,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 { role: '📜  PEMBACA MAKLUMAT', name: maklumat || '-' }
             ];
 
-            const officerStartY = 630;
+            const officerStartY = 682;
             const officerStep = 108;
 
             officers.forEach((off, idx) => {

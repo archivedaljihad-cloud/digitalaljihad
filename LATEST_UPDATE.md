@@ -4,7 +4,31 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 12:35 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 12:45 WIB)
+
+### 📐 PENATAAN PRESISI CENTER BLOK TENGAH FLYER JUM'AT (`web-statis/admin.html`):
+1. **Penurunan Posisi Blok Teks (Mulai MASJID JAMI' AL JIHAD sampai Petugas Agus Purwanto):**
+   - Menurunkan seluruh rangkaian elemen informasi tengah sejauh **+52 pixel** agar tepat berada di posisi tengah (*perfect optical vertical center*) antara teks kaligrafi Arab di atas dan bagian Adab Khutbah di bawah:
+     - **Nama Masjid ("MASJID JAMI' AL-JIHAD"):** Disesuaikan dari `Y = 405` menjadi **`Y = 457`**.
+     - **Alamat Masjid:** Disesuaikan dari `Y = 432` menjadi **`Y = 484`**.
+     - **Pita Kapsul Emas ("★ JADWAL PETUGAS SHOLAT JUM'AT ★"):** Posisi Y diturunkan dari `459` menjadi **`511`**, dan teks judul dari `489` menjadi **`541`**.
+     - **Tanggal Sholat Jum'at:** Diturunkan dari `541` menjadi **`593`**.
+     - **Waktu Sholat & Khutbah:** Diturunkan dari `573` menjadi **`625`**.
+     - **Empat Petugas Resmi (Khatib s/d Agus Purwanto):** Posisi awal `officerStartY` diturunkan dari `630` menjadi **`682`**, sehingga nama petugas terakhir (Pembaca Maklumat: Ust. Agus Purwanto) kini berada di baseline **`1046`**.
+2. **Keseimbangan Simetri Vertikal (Perfect Equal Margins):**
+   - Jarak spasi atas (dari teks Arab Salam ke Nama Masjid): **65 px**.
+   - Jarak spasi bawah (dari teks Agus Purwanto ke judul Adab Khutbah): **65 px**.
+   - Hasil layout kini 100% presisi di tengah (*true center*), tidak lagi terlalu mepet ke atas dan tidak menyisakan ruang kosong berlebih di bawah.
+3. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.1`** (`aljihad-signage-v5.6.1`) di `web-statis/sw.js`.
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 12:35 WIB)
 
 ### 🕌 PENYEMPURNAAN UKURAN KEDUA FONT ARAB FLYER JUM'AT (`web-statis/admin.html`):
 1. **Pembesaran Font Kaligrafi Bismillah & Salam:**
