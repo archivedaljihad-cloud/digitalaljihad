@@ -4,7 +4,33 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 00:40 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 01:10 WIB)
+
+### 🕌 PENERAPAN IKON ADAB JUM'AT & AYAT AL-QUR'AN PADA KOTAK PESAN MODE PRAYER JUM'AT (`prayer-mode.html`, `preview-prayer-mode.html`, & `prayer-mode.blade.php`):
+1. **Penerapan 4 Ikon Adab Khutbah Jum'at Sesuai Urutan Instruksi CEO:**
+   - **Sumber Berkas:** Mengimpor 4 berkas ikon yang telah disiapkan CEO di `C:\Users\anthu\Documents\【Digital WebSTATIS】\` ke repositori `web-statis/img/` dan `public/img/`:
+     1. `IkonBicara.png` — Adab dilarang berbicara saat khutbah.
+     2. `IkonNgobrol.png` — Adab dilarang mengobrol / bercakap-cakap dengan jamaah lain.
+     3. `IkonSilent.png` — Adab menonaktifkan dering / mengheningkan telepon genggam.
+     4. `IkonNelpon.png` — Adab dilarang menerima maupun melakukan panggilan telepon.
+   - **Tampilan Visual:** Ditampilkan dalam badge squircle elegan berlatar putih bersih dengan bingkai emas kilau (`border: 2px solid #FFD700; border-radius: 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 215, 0, 0.35)`), sangat kontras dan terlihat tegas di atas latar gradasi hijau zamrud kotak pesan.
+2. **Penerapan Teks Firman Allah SWT (Surat Al-A’raf, Ayat 204):**
+   - **Lafadz Bahasa Arab:** Menggunakan tipografi kaligrafi Arab monumental `Amiri` beraksen emas bercahaya:
+     > **وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ**
+   - **Terjemahan Bahasa Indonesia:** Ditata secara proporsional dengan font `Poppins`:
+     > “Apabila dibacakan Al-Quran (khutbah), maka dengarkanlah baik-baik, dan perhatikanlah dengan tenang agar kamu mendapat rahmat,” (Surat Al-A’raf, ayat 204)
+3. **Penyempurnaan Arsitektur Multi-Platform & Offline-First:**
+   - Diperbarui pada `web-statis/prayer-mode.html`, `public/preview-prayer-mode.html`, dan `resources/views/prayer-mode.blade.php`.
+   - Berkas 4 ikon didaftarkan ke `STATIC_ASSETS` di `web-statis/sw.js` untuk jaminan 100% pre-caching offline di Smart TV masjid.
+   - Cache Service Worker dinaikkan ke **`v5.7.1`** (`aljihad-signage-v5.7.1`).
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **Cold Backup Lokal:** Salinan berkas disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 00:40 WIB)
 
 ### ⏱️ PENGEMBALIAN FONT 3D MECHANICAL FLIP CLOCK KE CINZEL ASLI SESUAI INSTRUKSI CEO (`prayer-mode.html`, `preview-prayer-mode.html`, `prayer-mode.blade.php`, & `preview-flip-clock.html`):
 1. **Pengembalian Jenis Font Angka ke Font Asli ('Cinzel', Monospace):**

@@ -832,6 +832,59 @@
             font-size: 34px;
         }
 
+        .prayer-mode-box.jumat-box {
+            padding: clamp(14px, 1.8vh, 20px) clamp(20px, 2.5vw, 36px);
+        }
+
+        .prayer-mode-box .icons-row.jumat-icons-row {
+            gap: clamp(16px, 2.4vw, 32px);
+            margin-bottom: 14px;
+        }
+
+        .jumat-adab-icon {
+            width: clamp(56px, 5.8vw, 82px);
+            height: clamp(56px, 5.8vw, 82px);
+            object-fit: contain;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 5px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 215, 0, 0.35);
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .jumat-adab-icon:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .jumat-quran-arabic {
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: clamp(23px, 2.4vw, 34px);
+            font-weight: 700;
+            line-height: 1.55;
+            color: #FFD700;
+            text-shadow: 0 0 16px rgba(255, 215, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.9);
+            direction: rtl;
+            margin-bottom: 6px;
+        }
+
+        .jumat-quran-arti {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(14px, 1.3vw, 18px);
+            font-weight: 500;
+            line-height: 1.45;
+            color: #FFFFFF;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .jumat-quran-surat {
+            color: #FFD700;
+            font-weight: 700;
+            font-style: normal;
+        }
+
         /* =====================================================
            BAGIAN 5: HADITH VIGNETTE PLAKAT
            ===================================================== */
@@ -1360,14 +1413,16 @@
             @endphp
 
             @if($phase == 'khutbah')
-                <div class="prayer-mode-box">
-                    <div class="icons-row">
-                        <i class="fa-solid fa-volume-xmark" title="Matikan Suara HP"></i>
-                        <i class="fa-solid fa-ear-listen" title="Dengarkan Khutbah"></i>
-                        <i class="fa-solid fa-people-arrows" title="Rapatkan Shaf"></i>
+                <div class="prayer-mode-box jumat-box" style="display: block;">
+                    <div class="icons-row jumat-icons-row" id="prayerIconsRow">
+                        <img src="{{ asset('img/IkonBicara.png') }}" alt="Dilarang Bicara" class="jumat-adab-icon" title="Dilarang Bicara">
+                        <img src="{{ asset('img/IkonNgobrol.png') }}" alt="Dilarang Ngobrol" class="jumat-adab-icon" title="Dilarang Ngobrol">
+                        <img src="{{ asset('img/IkonSilent.png') }}" alt="Silent HP" class="jumat-adab-icon" title="Silent HP">
+                        <img src="{{ asset('img/IkonNelpon.png') }}" alt="Dilarang Menelpon" class="jumat-adab-icon" title="Dilarang Menelpon">
                     </div>
-                    <div class="message-text">
-                        {!! nl2br(e($displayMessage)) !!}
+                    <div class="message-text" id="prayerModeText">
+                        <div class="jumat-quran-arabic">وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ</div>
+                        <div class="jumat-quran-arti">“Apabila dibacakan Al-Quran (khutbah), maka dengarkanlah baik-baik, dan perhatikanlah dengan tenang agar kamu mendapat rahmat,” <span class="jumat-quran-surat">(Surat Al-A’raf, ayat 204)</span></div>
                     </div>
                 </div>
             @elseif($phase == 'prayer')

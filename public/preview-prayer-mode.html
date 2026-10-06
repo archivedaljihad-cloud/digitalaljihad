@@ -651,6 +651,59 @@
             font-size: 32px;
         }
 
+        .prayer-mode-box.jumat-box {
+            padding: clamp(14px, 1.8vh, 20px) clamp(20px, 2.5vw, 36px);
+        }
+
+        .prayer-mode-box .icons-row.jumat-icons-row {
+            gap: clamp(16px, 2.4vw, 32px);
+            margin-bottom: 14px;
+        }
+
+        .jumat-adab-icon {
+            width: clamp(56px, 5.8vw, 82px);
+            height: clamp(56px, 5.8vw, 82px);
+            object-fit: contain;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 5px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 215, 0, 0.35);
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .jumat-adab-icon:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .jumat-quran-arabic {
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: clamp(23px, 2.4vw, 34px);
+            font-weight: 700;
+            line-height: 1.55;
+            color: #FFD700;
+            text-shadow: 0 0 16px rgba(255, 215, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.9);
+            direction: rtl;
+            margin-bottom: 6px;
+        }
+
+        .jumat-quran-arti {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(14px, 1.3vw, 18px);
+            font-weight: 500;
+            line-height: 1.45;
+            color: #FFFFFF;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .jumat-quran-surat {
+            color: #FFD700;
+            font-weight: 700;
+            font-style: normal;
+        }
+
         /* 5. HADITH VIGNETTE PLAKAT */
         .hadith-plakat {
             position: relative;
@@ -1152,7 +1205,7 @@
             </div>
 
             <div class="prayer-mode-box" id="prayerModeBox">
-                <div class="icons-row">
+                <div class="icons-row" id="prayerIconsRow">
                     <i class="fas fa-volume-xmark" title="Matikan HP"></i>
                     <i class="fas fa-people-arrows" title="Rapatkan Shaf"></i>
                     <i class="fas fa-mosque"></i>
@@ -1533,6 +1586,18 @@
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'none';
                 prayerModeBoxEl.classList.add('active');
+                prayerModeBoxEl.classList.remove('jumat-box');
+
+                const prayerIconsRowEl = document.getElementById('prayerIconsRow');
+                if (prayerIconsRowEl) {
+                    prayerIconsRowEl.className = 'icons-row';
+                    prayerIconsRowEl.innerHTML = `
+                        <i class="fas fa-volume-xmark" title="Matikan HP"></i>
+                        <i class="fas fa-people-arrows" title="Rapatkan Shaf"></i>
+                        <i class="fas fa-mosque"></i>
+                    `;
+                }
+
                 prayerModeTextEl.textContent = 'Iqamah Segera Dikumandangkan. Mari Bersiap Mengisi Shaf Terdepan, Luruskan dan Rapatkan Shaf.';
 
                 adabNoticeEl.style.display = 'inline-flex';
@@ -1547,7 +1612,23 @@
                 jumatGridEl.classList.add('active');
                 messageBannerEl.style.display = 'none';
                 prayerModeBoxEl.classList.add('active');
-                prayerModeTextEl.innerHTML = '<span style="display: block; margin-bottom: 6px;">Sedang Berlangsung Khutbah &amp; Sholat Jum\'at Berjamaah.</span><span style="display: block;">Harap Tenang, Dengarkan Khutbah &amp; Nonaktifkan Nada Dering HP.</span>';
+                prayerModeBoxEl.classList.add('jumat-box');
+
+                const prayerIconsRowEl = document.getElementById('prayerIconsRow');
+                if (prayerIconsRowEl) {
+                    prayerIconsRowEl.className = 'icons-row jumat-icons-row';
+                    prayerIconsRowEl.innerHTML = `
+                        <img src="img/IkonBicara.png" alt="Dilarang Bicara" class="jumat-adab-icon" title="Dilarang Bicara">
+                        <img src="img/IkonNgobrol.png" alt="Dilarang Ngobrol" class="jumat-adab-icon" title="Dilarang Ngobrol">
+                        <img src="img/IkonSilent.png" alt="Silent HP" class="jumat-adab-icon" title="Silent HP">
+                        <img src="img/IkonNelpon.png" alt="Dilarang Menelpon" class="jumat-adab-icon" title="Dilarang Menelpon">
+                    `;
+                }
+
+                prayerModeTextEl.innerHTML = `
+                    <div class="jumat-quran-arabic">وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ</div>
+                    <div class="jumat-quran-arti">“Apabila dibacakan Al-Quran (khutbah), maka dengarkanlah baik-baik, dan perhatikanlah dengan tenang agar kamu mendapat rahmat,” <span class="jumat-quran-surat">(Surat Al-A’raf, ayat 204)</span></div>
+                `;
 
                 if (state.jumatPetugas) {
                     const khatib = (state.jumatPetugas.khatib || '').trim();
