@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quick Mode Mobile - Masjid Jami' Al-Jihad</title>
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#021a13">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="img/logo-aljihad-circle.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-bg: #021a13;
+            --emerald-surface: #063d2e;
+            --emerald-card: #084c3a;
+            --gold-accent: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.45);
+            --text-main: #ffffff;
+            --text-sub: #cbd5e1;
+            --btn-green: #10b981;
+            --btn-green-hover: #059669;
+            --border-gold: rgba(255, 215, 0, 0.38);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, #021812 0%, #04291f 40%, #02140f 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px 14px 80px 14px;
+        }
+
+        /* CONTAINER MOBILE */
+        .app-container {
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* HEADER MASJID */
+        .header-panel {
+            background: linear-gradient(135deg, rgba(6, 61, 46, 0.95), rgba(4, 38, 29, 0.98));
+            border: 2px solid var(--gold-accent);
+            border-radius: 22px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 16px var(--gold-glow);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .mosque-icon-badge {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #022c22;
+            font-size: 1.6rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .header-text h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .header-text p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gold-accent);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.25);
+            border: 1.5px solid #10b981;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #6ee7b7;
+        }
+
+        .pulse-dot {
+            width: 9px;
+            height: 9px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.85); }
+        }
+
+        /* BANNER PETUNJUK LANSIA */
+        .senior-guide-box {
+            background: linear-gradient(135deg, rgba(8, 76, 58, 0.85), rgba(4, 46, 35, 0.9));
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        .guide-icon {
+            font-size: 1.8rem;
+            color: var(--gold-accent);
+            margin-top: 2px;
+        }
+
+        .guide-content h2 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .guide-content p {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.45;
+        }
+
+        /* 10 BIG TILES MENU */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .big-card-btn {
+            background: linear-gradient(135deg, var(--emerald-surface) 0%, var(--emerald-card) 100%);
+            border: 2.5px solid var(--border-gold);
+            border-radius: 22px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+            user-select: none;
+            position: relative;
+        }
+
+        .big-card-btn:active {
+            transform: scale(0.97);
+            border-color: var(--gold-accent);
+            background: linear-gradient(135deg, #095843 0%, #064032 100%);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 215, 0, 0.3);
+        }
+
+        .card-icon-round {
+            width: 62px;
+            height: 62px;
+            min-width: 62px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.85rem;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .bg-jumat { background: linear-gradient(135deg, #10b981, #047857); }
+        .bg-ahad { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .bg-tahsin { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+        .bg-tafsir { background: linear-gradient(135deg, #06b6d4, #0e7490); }
+        .bg-ramadhan { background: linear-gradient(135deg, #f59e0b, #b45309); }
+        .bg-qurban { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+        .bg-kas-utama { background: linear-gradient(135deg, #10b981, #065f46); }
+        .bg-ambulance { background: linear-gradient(135deg, #e11d48, #9f1239); }
+        .bg-infaq { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+        .bg-pengumuman { background: linear-gradient(135deg, #f97316, #c2410c); }
+
+        .card-text-wrap {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text-sub);
+            line-height: 1.35;
+        }
+
+        .card-arrow {
+            color: var(--gold-accent);
+            font-size: 1.4rem;
+            padding-right: 4px;
+        }
+
+        /* MODAL SHEET FORM POPUP (RAMAH LANSIA) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-sheet {
+            background: linear-gradient(160deg, #033327 0%, #054a39 100%);
+            border: 3px solid var(--gold-accent);
+            border-bottom: none;
+            border-radius: 32px 32px 0 0;
+            width: 100%;
+            max-width: 600px;
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 24px 20px 40px 20px;
+            box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.9), 0 0 30px var(--gold-glow);
+            animation: slideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 14px;
+            margin-bottom: 20px;
+        }
+
+        .sheet-title-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sheet-title-box i {
+            font-size: 1.8rem;
+            color: var(--gold-accent);
+        }
+
+        .sheet-title-box h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .btn-sheet-close {
+            background: rgba(239, 68, 68, 0.25);
+            border: 2px solid #ef4444;
+            color: #fca5a5;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-sheet-close:active {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* FORM FIELD GEDE & JELAS */
+        .form-block {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label-big {
+            display: block;
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--gold-accent);
+            margin-bottom: 8px;
+        }
+
+        .form-input-big {
+            width: 100%;
+            background: rgba(2, 22, 17, 0.98);
+            border: 2.5px solid rgba(255, 215, 0, 0.5);
+            border-radius: 16px;
+            padding: 16px 18px;
+            font-size: 1.15rem;
+            color: #ffffff;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input-big:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+            background: rgba(2, 32, 24, 1);
+        }
+
+        /* TOMBOL SIMPAN RAKSASA */
+        .btn-giant-save {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: 2.5px solid var(--gold-accent);
+            border-radius: 20px;
+            padding: 18px 24px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5), 0 0 20px rgba(255, 215, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 26px;
+            transition: all 0.2s;
+        }
+
+        .btn-giant-save:active {
+            transform: scale(0.97);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        /* NOTIFIKASI TOAST SUKSES */
+        .toast-notif {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: linear-gradient(135deg, #065f46, #047857);
+            border: 3px solid var(--gold-accent);
+            color: #ffffff;
+            padding: 18px 28px;
+            border-radius: 40px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 215, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 9999;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            pointer-events: none;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .toast-notif.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* FOOTER RESMI SESUAI ARAHAN CEO */
+        .footer-note {
+            margin-top: 35px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 22px 14px 40px 14px;
+            border-top: 1.5px solid rgba(255, 215, 0, 0.25);
+            width: 100%;
+        }
+
+        .footer-quick-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1.5px solid var(--gold-accent);
+            color: var(--gold-accent);
+            font-size: 0.88rem;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            padding: 5px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 215, 0, 0.2);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .footer-sub-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #94a3b8;
+            letter-spacing: 0.6px;
+        }
+
+        .footer-mosque-name {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.2);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- HEADER MASJID -->
+        <header class="header-panel">
+            <div class="header-brand">
+                <div class="mosque-icon-badge">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <div class="header-text">
+                    <h1>Masjid Jami' Al-Jihad</h1>
+                    <p>Mode Petugas Cepat (Mobile)</p>
+                </div>
+            </div>
+            <div class="status-badge" id="tvStatusIndicator">
+                <div class="pulse-dot"></div> TV Siap
+            </div>
+        </header>
+
+        <!-- PANDUAN RINGKAS PETUGAS -->
+        <div class="senior-guide-box">
+            <i class="fas fa-hand-pointer guide-icon"></i>
+            <div class="guide-content">
+                <h2>Assalamu'alaikum, Bapak Petugas 👋</h2>
+                <p>Sentuh salah satu kotak di bawah untuk mengubah jadwal atau laporan kas. Data akan langsung terpasang di layar TV masjid secara realtime.</p>
+            </div>
+        </div>
+
+        <!-- DAFTAR 10 KOTAK MENU RAKSASA -->
+        <main class="cards-list">
+
+            <!-- 1. Jadwal Jumat -->
+            <div class="big-card-btn" onclick="openModule('jumat')">
+                <div class="card-icon-round bg-jumat"><i class="fas fa-kaaba"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">1. Jadwal Sholat Jum'at</div>
+                    <div class="card-desc" id="sub-jumat">Khatib: Memuat data...</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 2. Kajian Malam Ahad -->
+            <div class="big-card-btn" onclick="openModule('ahad')">
+                <div class="card-icon-round bg-ahad"><i class="fas fa-moon"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">2. Kajian Malam Ahad</div>
+                    <div class="card-desc" id="sub-ahad">Tema: Memuat data...</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 3. Tahsin Al-Qur'an -->
+            <div class="big-card-btn" onclick="openModule('tahsin')">
+                <div class="card-icon-round bg-tahsin"><i class="fas fa-book-quran"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">3. Tahsin Al-Qur'an</div>
+                    <div class="card-desc" id="sub-tahsin">Jadwal: Setiap Selasa & Kamis</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 4. Kajian Umum Tafsir -->
+            <div class="big-card-btn" onclick="openModule('tafsir')">
+                <div class="card-icon-round bg-tafsir"><i class="fas fa-book-open"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">4. Kajian Umum Tafsir Al-Qur'an</div>
+                    <div class="card-desc" id="sub-tafsir">Kitab: Tafsir Ibnu Katsir</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 5. Semarak Ramadhan -->
+            <div class="big-card-btn" onclick="openModule('ramadhan')">
+                <div class="card-icon-round bg-ramadhan"><i class="fas fa-star-and-crescent"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">5. Semarak Ramadhan</div>
+                    <div class="card-desc" id="sub-ramadhan">Imam Tarawih & Jadwal Buka Bersama</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 6. Penerimaan Qurban -->
+            <div class="big-card-btn" onclick="openModule('qurban')">
+                <div class="card-icon-round bg-qurban"><i class="fas fa-cow"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">6. Penerimaan Qurban</div>
+                    <div class="card-desc" id="sub-qurban">Terkumpul: 14 Sapi, 32 Kambing</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 7. Kas Utama Masjid -->
+            <div class="big-card-btn" onclick="openModule('kas-utama')">
+                <div class="card-icon-round bg-kas-utama"><i class="fas fa-wallet"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">7. Kas Utama Masjid</div>
+                    <div class="card-desc" id="sub-kas-utama">Saldo Kas: Memuat saldo...</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 8. Kas Mobil Ambulance -->
+            <div class="big-card-btn" onclick="openModule('ambulance')">
+                <div class="card-icon-round bg-ambulance"><i class="fas fa-ambulance"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">8. Kas Mobil Ambulance</div>
+                    <div class="card-desc" id="sub-ambulance">Saldo Siaga: Memuat saldo...</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 9. Program Infaq -->
+            <div class="big-card-btn" onclick="openModule('infaq')">
+                <div class="card-icon-round bg-infaq"><i class="fas fa-hand-holding-heart"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">9. Program Infaq & Wakaf</div>
+                    <div class="card-desc" id="sub-infaq">Infaq Karpet & Perluasan Wudhu</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 10. Pengumuman Sholat Jumat -->
+            <div class="big-card-btn" onclick="openModule('pengumuman')">
+                <div class="card-icon-round bg-pengumuman"><i class="fas fa-bullhorn"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">10. Pengumuman Sholat Jum'at</div>
+                    <div class="card-desc" id="sub-pengumuman">Rapatkan Shaf & Heningkan HP</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+        </main>
+
+        <!-- FOOTER RESMI SESUAI ARAHAN CEO -->
+        <footer class="footer-note">
+            <div class="footer-quick-badge">QUICK MODE MOBILE</div>
+            <div class="footer-sub-title">Sistem Informasi Digital</div>
+            <div class="footer-mosque-name">MASJID JAMI' AL JIHAD</div>
+        </footer>
+
+    </div>
+
+    <!-- MODAL BOTTOM SHEET -->
+    <div class="modal-overlay" id="sheetOverlay">
+        <div class="modal-sheet">
+            <div class="sheet-header">
+                <div class="sheet-title-box">
+                    <i class="fas fa-kaaba" id="sheetIcon"></i>
+                    <h3 id="sheetTitle">Edit Jadwal Sholat Jum'at</h3>
+                </div>
+                <button class="btn-sheet-close" onclick="closeSheet()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="sheetFormFields">
+                <!-- Fields are injected dynamically -->
+            </div>
+
+            <button class="btn-giant-save" onclick="handleSaveModule()">
+                <i class="fas fa-check-circle"></i> SIMPAN KE TV SEKARANG
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST SUKSES -->
+    <div class="toast-notif" id="toastSuccess">
+        <i class="fas fa-check-circle" style="color: #ffd700; font-size: 1.8rem;"></i>
+        <span id="toastText">Alhamdulillah, data berhasil disimpan & langsung tampil di TV!</span>
+    </div>
+
+    <!-- SUPABASE REALTIME CORE SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-db.js"></script>
+
+    <!-- LOGIKA INTERAKTIF & SINKRONISASI DATABASE -->
+    <script>
+        const modules = {
+            'jumat': {
+                title: "Jadwal Sholat Jum'at",
+                icon: "fa-kaaba",
+                summaryField: 1,
+                prefix: "Khatib: ",
+                fields: [
+                    { id: "f_tgl_jumat", label: "Tanggal Jum'at", type: "text", val: "Jumat, 10 Oktober 2026", placeholder: "Contoh: Jumat, 10 Oktober 2026" },
+                    { id: "f_khatib", label: "Nama Khatib", type: "text", val: "Ust. Dr. H. Ahmad Dahlan, MA", placeholder: "Nama lengkap Khatib" },
+                    { id: "f_imam", label: "Nama Imam", type: "text", val: "Ust. Muhammad Ridwan, Al-Hafizh", placeholder: "Nama lengkap Imam" },
+                    { id: "f_muadzin", label: "Nama Muadzin / Bilal", type: "text", val: "Ustadz Bilal Ramadhan", placeholder: "Nama Muadzin" }
+                ]
+            },
+            'ahad': {
+                title: "Kajian Malam Ahad",
+                icon: "fa-moon",
+                summaryField: 0,
+                prefix: "Tema: ",
+                fields: [
+                    { id: "f_tema_ahad", label: "Tema / Judul Kajian", type: "text", val: "Adab & Akhlak Penuntut Ilmu", placeholder: "Judul kajian" },
+                    { id: "f_ustadz_ahad", label: "Nama Pemateri / Ustadz", type: "text", val: "Ust. H. Abdul Somad, Lc., MA", placeholder: "Nama Ustadz" },
+                    { id: "f_waktu_ahad", label: "Waktu Kajian", type: "text", val: "Ba'da Sholat Maghrib s/d Isya", placeholder: "Contoh: Ba'da Maghrib" }
+                ]
+            },
+            'tahsin': {
+                title: "Tahsin Al-Qur'an",
+                icon: "fa-book-quran",
+                summaryField: 1,
+                prefix: "Jadwal: ",
+                fields: [
+                    { id: "f_ustadz_tahsin", label: "Nama Pengajar / Ustadz", type: "text", val: "Ust. Ahmad Fauzan, SQ", placeholder: "Nama Pengajar" },
+                    { id: "f_jadwal_tahsin", label: "Jadwal & Hari", type: "text", val: "Setiap Selasa & Kamis Ba'da Ashar", placeholder: "Hari & Jam" },
+                    { id: "f_tempat_tahsin", label: "Tempat / Ruang", type: "text", val: "Ruang Utama Masjid Al-Jihad", placeholder: "Lokasi belajar" }
+                ]
+            },
+            'tafsir': {
+                title: "Kajian Umum Tafsir Al-Qur'an",
+                icon: "fa-book-open",
+                summaryField: 0,
+                prefix: "Kitab: ",
+                fields: [
+                    { id: "f_kitab_tafsir", label: "Kitab / Surat yang Dibahas", type: "text", val: "Tafsir Ibnu Katsir - Surat Al-Baqarah", placeholder: "Nama kitab/surat" },
+                    { id: "f_pemateri_tafsir", label: "Nama Pemateri", type: "text", val: "Dr. KH. M. Luqman Hakim", placeholder: "Nama pemateri" },
+                    { id: "f_jadwal_tafsir", label: "Jadwal Pelaksanaan", type: "text", val: "Ahad Pagi Pukul 06.00 WIB (Kajian Subuh)", placeholder: "Jadwal pelaksanaan" }
+                ]
+            },
+            'ramadhan': {
+                title: "Semarak Ramadhan",
+                icon: "fa-star-and-crescent",
+                summaryField: 0,
+                prefix: "Imam: ",
+                fields: [
+                    { id: "f_imam_tarawih", label: "Imam Tarawih Malam Ini", type: "text", val: "Syaikh Mahmud Al-Mishri", placeholder: "Nama Imam Tarawih" },
+                    { id: "f_penceramah_kultum", label: "Penceramah Kultum", type: "text", val: "Ust. Syamsuddin Noor, M.Ag", placeholder: "Nama Penceramah" },
+                    { id: "f_porsi_bukber", label: "Porsi Buka Puasa Bersama", type: "text", val: "Siap 350 Porsi Nasi Kotak & Takjil", placeholder: "Jumlah porsi takjil" }
+                ]
+            },
+            'qurban': {
+                title: "Penerimaan Hewan Qurban",
+                icon: "fa-cow",
+                summaryField: 0,
+                prefix: "Hewan: ",
+                fields: [
+                    { id: "f_sapi", label: "Jumlah Sapi Terkumpul", type: "number", val: "14", placeholder: "Jumlah Sapi" },
+                    { id: "f_kambing", label: "Jumlah Kambing Terkumpul", type: "number", val: "32", placeholder: "Jumlah Kambing" },
+                    { id: "f_donatur", label: "Total Donatur / Shohibul Qurban", type: "number", val: "130", placeholder: "Jumlah peserta" }
+                ]
+            },
+            'kas-utama': {
+                title: "Laporan Kas Utama Masjid",
+                icon: "fa-wallet",
+                summaryField: 2,
+                prefix: "Saldo: Rp ",
+                fields: [
+                    { id: "f_kas_masuk", label: "Total Donasi / Infaq Masuk (Rp)", type: "text", val: "165.250.000", placeholder: "Nominal pemasukan" },
+                    { id: "f_kas_keluar", label: "Total Pengeluaran Operasional (Rp)", type: "text", val: "16.750.000", placeholder: "Nominal pengeluaran" },
+                    { id: "f_kas_saldo", label: "Sisa Saldo Kas Siaga (Rp)", type: "text", val: "148.500.000", placeholder: "Sisa saldo akhir" }
+                ]
+            },
+            'ambulance': {
+                title: "Laporan Kas Mobil Ambulance",
+                icon: "fa-ambulance",
+                summaryField: 2,
+                prefix: "Saldo Siaga: Rp ",
+                fields: [
+                    { id: "f_amb_masuk", label: "Total Donasi Ambulance (Rp)", type: "text", val: "5.137.800", placeholder: "Total donasi" },
+                    { id: "f_amb_keluar", label: "Biaya Operasional, BBM & Servis (Rp)", type: "text", val: "3.965.600", placeholder: "Biaya operasional" },
+                    { id: "f_amb_saldo", label: "Sisa Saldo Kas Ambulance (Rp)", type: "text", val: "1.172.200", placeholder: "Saldo kas ambulance" }
+                ]
+            },
+            'infaq': {
+                title: "Program Infaq & Sedekah",
+                icon: "fa-hand-holding-heart",
+                summaryField: 0,
+                prefix: "Program: ",
+                fields: [
+                    { id: "f_nama_infaq", label: "Nama Program Infaq", type: "text", val: "Infaq Karpet & Perluasan Tempat Wudhu", placeholder: "Nama program" },
+                    { id: "f_target_infaq", label: "Target Dana yang Dibutuhkan (Rp)", type: "text", val: "85.000.000", placeholder: "Target dana" },
+                    { id: "f_terkumpul_infaq", label: "Dana yang Sudah Terkumpul (Rp)", type: "text", val: "62.450.000", placeholder: "Dana terkumpul" }
+                ]
+            },
+            'pengumuman': {
+                title: "Pengumuman Sholat Jum'at",
+                icon: "fa-bullhorn",
+                summaryField: 0,
+                prefix: "Pengumuman: ",
+                fields: [
+                    { id: "f_pesan_1", label: "Pengumuman Baris 1", type: "text", val: "Harap merapatkan dan meluruskan shaf sholat.", placeholder: "Pesan pertama" },
+                    { id: "f_pesan_2", label: "Pengumuman Baris 2", type: "text", val: "Mohon nonaktifkan atau heningkan nada dering telepon genggam.", placeholder: "Pesan kedua" },
+                    { id: "f_pesan_3", label: "Pengumuman Baris 3", type: "text", val: "Dilarang berbicara atau mengobrol saat khutbah berlangsung.", placeholder: "Pesan ketiga" }
+                ]
+            }
+        };
+
+        let currentActiveModule = null;
+
+        // Inisialisasi & Muat Data Aktual dari Supabase
+        async function initLiveDatabase() {
+            try {
+                // Pulihkan data tersimpan lokal lebih dulu
+                const localSaved = localStorage.getItem('quick_petugas_state');
+                if (localSaved) {
+                    const parsed = JSON.parse(localSaved);
+                    Object.keys(parsed).forEach(k => {
+                        if (modules[k]) {
+                            modules[k].fields.forEach((f, idx) => {
+                                if (parsed[k][idx] !== undefined) f.val = parsed[k][idx];
+                            });
+                        }
+                    });
+                }
+
+                // Ambil data dari Supabase jika koneksi aktif
+                if (window.SupabaseDB) {
+                    // 1. Sholat Jumat
+                    const sj = await window.SupabaseDB.getSholatJumat();
+                    if (sj) {
+                        if (sj.khatib) modules['jumat'].fields[1].val = sj.khatib;
+                        if (sj.imam) modules['jumat'].fields[2].val = sj.imam;
+                        if (sj.muadzin) modules['jumat'].fields[3].val = sj.muadzin;
+                    }
+
+                    // 2. Kas Utama
+                    const kasList = await window.SupabaseDB.getKeuanganKasUtama();
+                    if (kasList && kasList.length > 0) {
+                        let totM = 0, totK = 0;
+                        kasList.forEach(item => {
+                            totM += parseFloat(item.pemasukan || 0);
+                            totK += parseFloat(item.pengeluaran || 0);
+                        });
+                        const sld = totM - totK;
+                        modules['kas-utama'].fields[0].val = formatRupiah(totM);
+                        modules['kas-utama'].fields[1].val = formatRupiah(totK);
+                        modules['kas-utama'].fields[2].val = formatRupiah(sld);
+                    }
+
+                    // 3. Kas Ambulance
+                    const ambList = await window.SupabaseDB.getKeuanganAmbulance();
+                    if (ambList && ambList.length > 0) {
+                        let totM = 0, totK = 0;
+                        ambList.forEach(item => {
+                            totM += parseFloat(item.pemasukan || 0);
+                            totK += parseFloat(item.pengeluaran || 0);
+                        });
+                        const sld = totM - totK;
+                        modules['ambulance'].fields[0].val = formatRupiah(totM);
+                        modules['ambulance'].fields[1].val = formatRupiah(totK);
+                        modules['ambulance'].fields[2].val = formatRupiah(sld);
+                    }
+                }
+            } catch (err) {
+                console.warn('Inisialisasi data realtime:', err);
+            } finally {
+                updateAllCardPreviews();
+            }
+        }
+
+        function formatRupiah(num) {
+            return new Intl.NumberFormat('id-ID').format(num);
+        }
+
+        function updateAllCardPreviews() {
+            Object.keys(modules).forEach(k => {
+                const mod = modules[k];
+                const subEl = document.getElementById('sub-' + k);
+                if (subEl && mod.fields[mod.summaryField]) {
+                    if (k === 'qurban') {
+                        subEl.textContent = `Terkumpul: ${mod.fields[0].val} Sapi, ${mod.fields[1].val} Kambing`;
+                    } else {
+                        subEl.textContent = mod.prefix + mod.fields[mod.summaryField].val;
+                    }
+                }
+            });
+        }
+
+        function openModule(moduleId) {
+            currentActiveModule = moduleId;
+            const mod = modules[moduleId];
+            if (!mod) return;
+
+            document.getElementById('sheetTitle').textContent = "Ubah " + mod.title;
+            const iconElem = document.getElementById('sheetIcon');
+            iconElem.className = 'fas ' + mod.icon;
+
+            const formContainer = document.getElementById('sheetFormFields');
+            formContainer.innerHTML = mod.fields.map(f => `
+                <div class="form-block">
+                    <label class="form-label-big" for="${f.id}">${f.label}</label>
+                    <input type="${f.type}" id="${f.id}" class="form-input-big" value="${escapeHtml(f.val)}" placeholder="${f.placeholder}">
+                </div>
+            `).join('');
+
+            document.getElementById('sheetOverlay').classList.add('active');
+        }
+
+        function closeSheet() {
+            document.getElementById('sheetOverlay').classList.remove('active');
+        }
+
+        async function handleSaveModule() {
+            if (!currentActiveModule) return;
+            const mod = modules[currentActiveModule];
+
+            // 1. Simpan nilai lokal
+            mod.fields.forEach(f => {
+                const el = document.getElementById(f.id);
+                if (el) f.val = el.value.trim();
+            });
+
+            // 2. Simpan ke LocalStorage State
+            const stateToSave = {};
+            Object.keys(modules).forEach(k => {
+                stateToSave[k] = modules[k].fields.map(f => f.val);
+            });
+            localStorage.setItem('quick_petugas_state', JSON.stringify(stateToSave));
+
+            // 3. Simpan ke Supabase jika tersedia
+            try {
+                if (window.SupabaseDB) {
+                    const payload = {
+                        module: currentActiveModule,
+                        updated_at: new Date().toISOString(),
+                        values: mod.fields.map(f => f.val)
+                    };
+                    await window.SupabaseDB.setAppSetting(`quick_petugas_${currentActiveModule}`, payload);
+                    
+                    // Kirim sinyal broadcast ultra-cepat (<100ms) ke Smart TV
+                    if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                        window.SupabaseDB.broadcastChange('quick_petugas', 'UPDATE', payload, 'Petugas Mobile');
+                    }
+                }
+            } catch (e) {
+                console.warn('Sinkronisasi Supabase:', e);
+            }
+
+            updateAllCardPreviews();
+            closeSheet();
+            showToastSuccess();
+        }
+
+        function showToastSuccess() {
+            const toast = document.getElementById('toastSuccess');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // Tutup modal jika area luar ditekan
+        document.getElementById('sheetOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'sheetOverlay') {
+                closeSheet();
+            }
+        });
+
+        // Jalankan saat halaman siap
+        window.addEventListener('DOMContentLoaded', () => {
+            initLiveDatabase();
+        });
+    </script>
+</body>
+</html>

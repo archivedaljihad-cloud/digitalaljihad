@@ -4,7 +4,46 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 01:38 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 05:50 WIB)
+
+### 📱 IMPLEMENTASI RESMI "QUICK MODE MOBILE" (`web-statis/petugas.html`) UNTUK PETUGAS MASJID USIA 55+ TAHUN:
+1. **Latar Belakang & Persetujuan CEO:**
+   - Menjawab kendala operasional petugas senior masjid (usia 55 tahun ke atas) yang sering kesulitan mencari menu dan tombol simpan di dashboard admin biasa saat menggunakan ponsel.
+   - CEO menyetujui implementasi **Opsi 1: Mode HP Petugas Cepat (Quick Mode Mobile)** dengan penyesuaian footer khusus.
+2. **Spesifikasi Antarmuka `petugas.html`:**
+   - **Footer Resmi Sesuai Arahan CEO:**
+     ```
+     QUICK MODE MOBILE
+     Sistem Informasi Digital
+     MASJID JAMI' AL JIHAD
+     ```
+   - **10 Kotak Menu Kartu Raksasa Touch-Friendly (Min-Height 85px):**
+     1. 🕌 Jadwal Sholat Jum'at (Khatib, Imam, Muadzin, Tanggal)
+     2. 🌙 Kajian Malam Ahad (Tema, Ustadz, Waktu)
+     3. 📖 Tahsin Al-Qur'an (Pengajar, Hari & Jam, Ruangan)
+     4. 📚 Kajian Umum Tafsir Al-Qur'an (Kitab/Surat, Pemateri, Jadwal)
+     5. 🌙 Semarak Ramadhan (Imam Tarawih, Kultum, Porsi Bukber)
+     6. 🐑 Penerimaan Qurban (Jumlah Sapi, Kambing, Donatur)
+     7. 💰 Kas Utama Masjid (Pemasukan, Pengeluaran, Saldo Kas)
+     8. 🚑 Kas Mobil Ambulance (Donasi Masuk, BBM/Servis, Saldo Siaga)
+     9. 🤝 Program Infaq & Wakaf (Nama Program, Target Dana, Terkumpul)
+     10. 📢 Pengumuman Sholat Jum'at (Baris 1, 2, dan 3)
+   - **Formulir Lansia & Tombol Simpan Raksasa:**
+     - Modal *bottom-sheet* dengan huruf besar (18-20px), kontras tinggi, dan tombol hijau besar `[ 💾 SIMPAN KE TV SEKARANG ]`.
+3. **Integrasi Supabase Database & Realtime Broadcast:**
+   - Membaca data aktual dari Supabase (`sholat_jumat`, `keuangan`, `keuangan_ambulance`, `program_infaq`, `pengumuman`, dan `app_settings`).
+   - Menyimpan pembaruan dan mengirimkan sinyal broadcast Realtime (`<100ms`) ke seluruh Smart TV display masjid.
+4. **Pembaruan Service Worker & Invalidation Cache Usang (SOP #2):**
+   - Menambahkan `petugas.html` ke `STATIC_ASSETS` di `web-statis/sw.js` agar mendukung akses PWA offline.
+   - Cache dinaikkan ke **`v5.7.4`** (`aljihad-signage-v5.7.4`).
+5. **Eksekusi 4 Pilar Sinkronisasi SOP:**
+   - Salin ke Cold Backup `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit & push `main`.
+   - Deploy ke Cloudflare Workers produksi (`https://digitalaljihad.my.id/petugas.html`).
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 01:38 WIB)
 
 ### 🚑 PENYESUAIAN TIPOGRAFI LIST "URAIAN OPERASIONAL" PADA LAPORAN KAS MOBIL AMBULANCE (`web-statis/slides/ambulance.html`):
 1. **Penyesuaian Font Sesuai Instruksi CEO:**
