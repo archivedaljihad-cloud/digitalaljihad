@@ -4,7 +4,23 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 18:30 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 18:38 WIB)
+
+### 🕌 PENYEMPURNAAN HEADER SLIDE "MAKLUMAT & LAPORAN SHOLAT JUM'AT" (`web-statis/slides/kas-jumat.html`):
+1. **Penghapusan Subjudul (*Subtitle Cleanup*):**
+   - Menghapus teks subjudul: `Laporan Keuangan Kas Masjid Transparan, Akuntabel & Himbauan Jamaah Hari Jum'at` pada kapsul header slide *Maklumat & Laporan Sholat Jum'at*.
+   - Judul utama `Maklumat & Laporan Sholat Jum'at` kini berdiri tunggal di tengah kapsul hijau berbingkai emas dengan posisi vertikal yang sangat presisi, simetris, dan sejajar elegan dengan ikon donasi di kiri dan ikon ka'bah di kanan.
+2. **Invalidasi Cache & Cache-Busting:**
+   - Query string stylesheet `kas-jumat.html` dinaikkan ke **`?v=20261006_07`**.
+   - Versi Service Worker dinaikkan ke **`v5.6.6`** (`aljihad-signage-v5.6.6`) di `web-statis/sw.js` dan fungsi `bersihkanCacheSistem()` di `web-statis/admin.html`.
+3. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 18:30 WIB)
 
 ### 🧹 PENEMPATAN TOMBOL CEPAT "BERSIHKAN CACHE USANG & REFRESH TV" DI TOPBAR & SIDEBAR ADMIN (`web-statis/admin.html` & `web-statis/index.html`):
 1. **Identifikasi Masalah (*Root Cause Analysis*):**
