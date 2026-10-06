@@ -4,7 +4,21 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 01:10 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 01:25 WIB)
+
+### 📋 PENAMBAHAN RESMI STANDING SOP DI `AGENTS.md` (PEMBERSIHAN & INVALIDASI CACHE USANG):
+1. **Penetapan SOP Baru oleh CEO:**
+   - Ditambahkan aturan mandatori: *"Setelah 4 Pilar Sinkronisasi Otomatis selesai dilakukan, wajib cek cache usang/sudah tidak digunakan lagi. Jika menemukan cache yang usang/sudah tidak terpakai lagi, segera hapus agar tampilan di TV dan di device lain yang sedang membuka web ini selalu mendapatkan data yang terbaru dan realtime."*
+2. **Prosedur Baku Pembersihan Cache Usang:**
+   - **Service Worker (`web-statis/sw.js`)**: Versi cache (`CACHE_NAME`) wajib dinaikkan setiap ada perubahan frontend. Siklus `activate` wajib memusnahkan seluruh cache lama (`caches.delete()`).
+   - **Panel Admin (`web-statis/admin.html`)**: Logika pembersihan cache lokal disinkronkan dengan versi Service Worker terbaru.
+   - **Cloudflare Edge Headers (`web-statis/_headers`)**: Memastikan cache-control dokumen HTML, slide, dan `sw.js` adalah `max-age=0, must-revalidate`.
+3. **Pembaruan Berkas Terkait:**
+   - `AGENTS.md`: Diperbarui dengan klausul SOP baru pada poin nomor 2.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 01:10 WIB)
 
 ### 🕌 PENERAPAN IKON ADAB JUM'AT & AYAT AL-QUR'AN PADA KOTAK PESAN MODE PRAYER JUM'AT (`prayer-mode.html`, `preview-prayer-mode.html`, & `prayer-mode.blade.php`):
 1. **Penerapan 4 Ikon Adab Khutbah Jum'at Sesuai Urutan Instruksi CEO:**
