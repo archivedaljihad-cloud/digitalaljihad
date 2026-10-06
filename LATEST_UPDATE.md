@@ -4,7 +4,26 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 20:15 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 20:30 WIB)
+
+### ⏱️ PERBAIKAN TOTAL ARSITEKTUR 3D FLIP CLOCK ANTI-LAG & SINKRONISASI SEAMLESS (`web-statis/preview-flip-clock.html`):
+1. **Penyelesaian Isu "Lag / Angka Terbelah / Flap Stuck":**
+   - **Akar Masalah:** Sebelumnya, flap animasi tidak di-*hide* saat status idle, dan waktu reset timeout (600ms) tidak dibersihkan saat interaksi cepat, menyebabkan paruh atas menampilkan angka lama (`val-curr`) sedangkan paruh bawah menampilkan angka baru (`val-next`) sehingga kartu terlihat terbelah (misal atas `05`, bawah `04`) atau flap tersangkut di tengah putaran.
+   - **Solusi Arsitektur Baru (Flawless Idle & Flip Cycle):**
+     - Pada status **Idle**, flap animasi (`.flap-top`, `.flap-bottom`) otomatis diatur `display: none;`. Kartu hanya menampilkan `.static-top` dan `.static-bottom` yang dipastikan 100% memuat angka yang sama (`newVal`), sehingga mustahil angka terbelah saat diam.
+     - Perhitungan posisi teks menggunakan metode **200% height offset** (`top: 0` untuk paruh atas dan `top: -100%` untuk paruh bawah), menghasilkan sambungan potongan angka yang 100% presisi dan mulus tanpa jeda piksel.
+     - Durasi animasi dipercepat dan disinkronkan ke **480ms** (240ms paruh atas melipat ke bawah + 240ms paruh bawah membuka ke posisi datar), menyisakan 520ms jeda tenang sebelum detik berikutnya berganti.
+     - Penambahan proteksi pembersihan `_flipTimer`: jika tombol diklik cepat atau hitungan berganti, animasi sebelumnya langsung diselesaikan seketika tanpa ada flap yang macet atau lag.
+2. **Penambahan Tombol Uji Khusus Menit:**
+   - Menambahkan tombol **`⚡ Tes Pergantian Menit (3 Detik)`** di toolbar controller untuk menguji detik 03 langsung melipat menit dari `01` ke `00` secara dramatis dan mulus di hadapan penguji.
+3. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\preview-flip-clock.html`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 20:15 WIB)
 
 ### ⏱️ HALAMAN PREVIEW LIVE SIMULASI KOMPARASI FLIP CLOCK 3D (OPSI 1 VS OPSI 2) (`web-statis/preview-flip-clock.html`):
 1. **Pembuatan Halaman Simulasi Interaktif Flip Clock 3D (`preview-flip-clock.html`):**
