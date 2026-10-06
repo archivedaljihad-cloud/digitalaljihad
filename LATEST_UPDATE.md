@@ -4,7 +4,31 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 00:15 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 00:40 WIB)
+
+### ⏱️ PENGEMBALIAN FONT 3D MECHANICAL FLIP CLOCK KE CINZEL ASLI SESUAI INSTRUKSI CEO (`prayer-mode.html`, `preview-prayer-mode.html`, `prayer-mode.blade.php`, & `preview-flip-clock.html`):
+1. **Pengembalian Jenis Font Angka ke Font Asli ('Cinzel', Monospace):**
+   - **Latar Belakang:** Sesuai instruksi langsung dari CEO ("Ganti jenis fontnya seperti yang aslinya"), jenis font angka countdown pada model 3D Mechanical Flip Clock dikembalikan dari `Space Grotesk` ke font monumental masjid Nabawi asli yaitu **`'Cinzel', monospace`**.
+   - **Estetika Elegan & Mewah:**
+     - Karakter angka `Cinzel` serif monumental berbobot 900 (`font-weight: 900; letter-spacing: 2px`) berpadu sempurna dengan bayangan cahaya keemasan `text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5)`.
+     - Separator titik dua (`:`) juga kembali menggunakan font **`'Cinzel', monospace`** dengan warna emas berkilau `#FFD700`.
+   - **Stabilitas Mesin Flip 3D Tetap Dipertahankan:**
+     - Mesin 3D Mechanical Flip Clock Opsi 1 (2 kotak besar) tetap bekerja dengan arsitektur 4-lapisan anti-lag, siklus 480ms, dan *200% height offset* yang mulus dan tanpa kendala angka terbelah.
+2. **Sinkronisasi Kode Multi-Target:**
+   - `web-statis/prayer-mode.html` (Cloudflare Workers produksi utama).
+   - `public/preview-prayer-mode.html` (Pratinjau publik live).
+   - `resources/views/prayer-mode.blade.php` (Blade template Laravel).
+   - `web-statis/preview-flip-clock.html` (Pratinjau Flip Clock Opsi 1).
+3. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.7.0`** (`aljihad-signage-v5.7.0`) di `web-statis/sw.js` dan fungsi pembersihan memori di `web-statis/admin.html` agar Smart TV masjid dan browser klien langsung mengambil pembaruan font tanpa terhalang cache lama.
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 00:15 WIB)
 
 ### ⏱️ PENERAPAN RESMI 3D MECHANICAL FLIP CLOCK OPSI 1 DENGAN FONT SPACE GROTESK (`prayer-mode.html`, `preview-prayer-mode.html`, & `prayer-mode.blade.php`):
 1. **Penerapan Model Flip Opsi 1 + Tipografi Opsi 2 Sesuai Arahan CEO:**

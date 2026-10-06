@@ -589,7 +589,7 @@
             padding: 6px 12px;
         }
 
-        /* 3. DUAL-TILE 3D MECHANICAL FLIP CLOCK COUNTDOWN (OPSI 1 + FONT SPACE GROTESK) */
+        /* 3. DUAL-TILE 3D MECHANICAL FLIP CLOCK COUNTDOWN (OPSI 1 + FONT CINZEL ASLI) */
         .countdown-tiles-wrapper {
             display: flex;
             align-items: center;
@@ -621,13 +621,13 @@
         }
 
         .flip-card-box .flip-digit-text {
-            font-family: 'Space Grotesk', 'Poppins', sans-serif;
+            font-family: 'Cinzel', monospace;
             font-size: clamp(64px, 7vw, 96px);
-            font-weight: 800;
+            font-weight: 900;
             letter-spacing: 2px;
             color: #FFFFFF;
             user-select: none;
-            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(255, 215, 0, 0.4);
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
         }
 
         .flip-card-half {
@@ -757,7 +757,7 @@
         }
 
         .countdown-separator {
-            font-family: 'Space Grotesk', 'Cinzel', monospace;
+            font-family: 'Cinzel', monospace;
             font-size: clamp(48px, 5.5vw, 76px);
             font-weight: 900;
             color: #FFD700;
