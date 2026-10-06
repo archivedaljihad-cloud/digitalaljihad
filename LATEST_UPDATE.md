@@ -4,7 +4,30 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 19:40 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 20:15 WIB)
+
+### ⏱️ HALAMAN PREVIEW LIVE SIMULASI KOMPARASI FLIP CLOCK 3D (OPSI 1 VS OPSI 2) (`web-statis/preview-flip-clock.html`):
+1. **Pembuatan Halaman Simulasi Interaktif Flip Clock 3D (`preview-flip-clock.html`):**
+   - Menghadirkan simulator interaktif mekanik *Flip Clock* 3D berakselerasi GPU (`transform-style: preserve-3d; perspective: 1200px`) untuk perbandingan desain hitung mundur (*countdown timer*) waktu sholat/iqomah.
+   - **Opsi 1: Split Flip Per Satuan (2 Kotak: Menit & Detik):**
+     - Menggunakan 2 plat mekanik besar untuk Menit (2 digit) dan Detik (2 digit) dengan font monumental `Cinzel` emas bernuansa masjid Nabawi.
+     - Keunggulan: Angka sangat besar, keterbacaan optimal (*high visibility*) dari jarak 15–25 meter di dalam ruangan masjid.
+   - **Opsi 2: Split Flap Individual 4 Digit (`[M1][M2] : [S1][S2]`):**
+     - Menggunakan 4 plat kartu independen bergaya retro-modern (*Space Grotesk* font) yang membalik secara individual setiap perubahan digit.
+     - Keunggulan: Sentuhan mekanik presisi yang sangat dinamis dan realistis.
+2. **Fitur Pengendali Interaktif Simulator:**
+   - Dilengkapi tombol toolbar: *Pause / Lanjutkan Countdown*, *Reset (05:00)*, dan *Tes Cepat 10 Detik* (untuk mengamati momen transisi menit berganti saat detik mencapai 00).
+   - Mockup perbandingan frame TV Display 16:9 yang mensimulasikan penempatan di layar nyata Smart TV.
+3. **Akses Langsung Produksi:**
+   - Halaman dapat diakses publik di: **`https://digitalaljihad.my.id/preview-flip-clock.html`**.
+4. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\preview-flip-clock.html`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 19:40 WIB)
 
 ### 🎙️ PENGGABUNGAN KARTU "KHOTIB & IMAM" MEMANJANG (SINGLE-LINE ELGANT LAYOUT) (`web-statis/prayer-mode.html`, `public/preview-prayer-mode.html`, & `resources/views/prayer-mode.blade.php`):
 1. **Penggabungan 2 Kotak Menjadi 1 Kotak Terpadu (*Unified Officer Card*):**
