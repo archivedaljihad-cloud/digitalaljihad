@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quick Mode Mobile - Masjid Jami' Al-Jihad</title>
+    <title>QUICK INPUT MODE by MOBILE - Masjid Jami' Al-Jihad</title>
     <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#021a13">
@@ -22,12 +22,12 @@
             --emerald-surface: #063d2e;
             --emerald-card: #084c3a;
             --gold-accent: #ffd700;
-            --gold-glow: rgba(255, 215, 0, 0.45);
+            --gold-glow: rgba(255, 215, 0, 0.4);
             --text-main: #ffffff;
             --text-sub: #cbd5e1;
             --btn-green: #10b981;
             --btn-green-hover: #059669;
-            --border-gold: rgba(255, 215, 0, 0.38);
+            --border-gold: rgba(255, 215, 0, 0.32);
         }
 
         * {
@@ -45,81 +45,90 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 14px 14px 80px 14px;
+            padding: 12px 12px 60px 12px;
+            font-size: 0.88rem;
         }
 
-        /* CONTAINER MOBILE */
         .app-container {
             width: 100%;
-            max-width: 580px;
+            max-width: 540px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
-        /* HEADER MASJID */
+        /* HEADER PANEL */
         .header-panel {
             background: linear-gradient(135deg, rgba(6, 61, 46, 0.95), rgba(4, 38, 29, 0.98));
-            border: 2px solid var(--gold-accent);
-            border-radius: 22px;
-            padding: 16px 18px;
+            border: 1.5px solid var(--gold-accent);
+            border-radius: 18px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 16px var(--gold-glow);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 12px var(--gold-glow);
         }
 
         .header-brand {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
         .mosque-icon-badge {
-            width: 52px;
-            height: 52px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, #ffd700, #b8860b);
-            border-radius: 16px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #022c22;
-            font-size: 1.6rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            font-size: 1.35rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
 
         .header-text h1 {
-            font-size: 1.25rem;
+            font-size: 0.98rem;
             font-weight: 800;
             color: #ffffff;
             line-height: 1.2;
+            letter-spacing: 0.5px;
         }
 
         .header-text p {
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-size: 0.72rem;
+            font-weight: 700;
             color: var(--gold-accent);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .status-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(16, 185, 129, 0.25);
-            border: 1.5px solid #10b981;
-            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 800;
+            font-size: 0.72rem;
+            font-weight: 700;
             color: #6ee7b7;
         }
 
         .pulse-dot {
-            width: 9px;
-            height: 9px;
+            width: 7px;
+            height: 7px;
             background: #10b981;
             border-radius: 50%;
-            box-shadow: 0 0 10px #10b981;
+            box-shadow: 0 0 8px #10b981;
             animation: pulse 1.5s infinite;
         }
 
@@ -128,78 +137,104 @@
             50% { opacity: 0.35; transform: scale(0.85); }
         }
 
-        /* BANNER PETUNJUK LANSIA */
-        .senior-guide-box {
-            background: linear-gradient(135deg, rgba(8, 76, 58, 0.85), rgba(4, 46, 35, 0.9));
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            border-radius: 20px;
-            padding: 16px 18px;
+        .btn-lock-auth {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .guide-icon {
-            font-size: 1.8rem;
+        .btn-lock-auth:active {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* BANNER RESMI SESUAI ARAHAN CEO */
+        .senior-guide-box {
+            background: linear-gradient(135deg, rgba(8, 76, 58, 0.85), rgba(4, 46, 35, 0.9));
+            border: 1.5px solid rgba(255, 215, 0, 0.35);
+            border-radius: 18px;
+            padding: 14px 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .guide-mode-tag {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.18);
+            border: 1px solid var(--gold-accent);
             color: var(--gold-accent);
-            margin-top: 2px;
+            font-size: 0.70rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
         .guide-content h2 {
-            font-size: 1.15rem;
+            font-size: 0.96rem;
             font-weight: 800;
             color: #ffffff;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .guide-content p {
-            font-size: 0.95rem;
+            font-size: 0.80rem;
             color: #e2e8f0;
             line-height: 1.45;
         }
 
-        /* 10 BIG TILES MENU */
+        /* 10 KOTAK MENU RAKSASA (PROPORSI RAMPING) */
         .cards-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 10px;
         }
 
         .big-card-btn {
             background: linear-gradient(135deg, var(--emerald-surface) 0%, var(--emerald-card) 100%);
-            border: 2.5px solid var(--border-gold);
-            border-radius: 22px;
-            padding: 18px 20px;
+            border: 1.6px solid var(--border-gold);
+            border-radius: 14px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 13px;
             cursor: pointer;
             text-align: left;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
             user-select: none;
-            position: relative;
         }
 
         .big-card-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
             border-color: var(--gold-accent);
             background: linear-gradient(135deg, #095843 0%, #064032 100%);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 215, 0, 0.3);
         }
 
         .card-icon-round {
-            width: 62px;
-            height: 62px;
-            min-width: 62px;
-            border-radius: 18px;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.85rem;
+            font-size: 1.35rem;
             color: #ffffff;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
         }
 
         .bg-jumat { background: linear-gradient(135deg, #10b981, #047857); }
@@ -218,27 +253,27 @@
         }
 
         .card-title {
-            font-size: 1.18rem;
-            font-weight: 800;
+            font-size: 0.92rem;
+            font-weight: 700;
             color: #ffffff;
-            line-height: 1.3;
-            margin-bottom: 4px;
+            line-height: 1.25;
+            margin-bottom: 3px;
         }
 
         .card-desc {
-            font-size: 0.92rem;
+            font-size: 0.76rem;
             font-weight: 500;
             color: var(--text-sub);
-            line-height: 1.35;
+            line-height: 1.3;
         }
 
         .card-arrow {
             color: var(--gold-accent);
-            font-size: 1.4rem;
-            padding-right: 4px;
+            font-size: 1rem;
+            opacity: 0.8;
         }
 
-        /* MODAL SHEET FORM POPUP (RAMAH LANSIA) */
+        /* MODAL BOTTOM SHEET */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -246,7 +281,7 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(6px);
             z-index: 1000;
             display: none;
             align-items: flex-end;
@@ -259,16 +294,16 @@
 
         .modal-sheet {
             background: linear-gradient(160deg, #033327 0%, #054a39 100%);
-            border: 3px solid var(--gold-accent);
+            border: 2px solid var(--gold-accent);
             border-bottom: none;
-            border-radius: 32px 32px 0 0;
+            border-radius: 24px 24px 0 0;
             width: 100%;
-            max-width: 600px;
-            max-height: 92vh;
+            max-width: 540px;
+            max-height: 90vh;
             overflow-y: auto;
-            padding: 24px 20px 40px 20px;
-            box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.9), 0 0 30px var(--gold-glow);
-            animation: slideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 18px 16px 32px 16px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9), 0 0 25px var(--gold-glow);
+            animation: slideUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes slideUp {
@@ -280,41 +315,40 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
-            padding-bottom: 14px;
-            margin-bottom: 20px;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .sheet-title-box {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .sheet-title-box i {
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             color: var(--gold-accent);
         }
 
         .sheet-title-box h3 {
-            font-size: 1.3rem;
+            font-size: 1rem;
             font-weight: 800;
             color: #ffffff;
         }
 
         .btn-sheet-close {
-            background: rgba(239, 68, 68, 0.25);
-            border: 2px solid #ef4444;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1.5px solid #ef4444;
             color: #fca5a5;
-            width: 44px;
-            height: 44px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.3rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
         }
 
         .btn-sheet-close:active {
@@ -322,27 +356,37 @@
             color: #ffffff;
         }
 
-        /* FORM FIELD GEDE & JELAS */
+        /* FORM FIELD SESUAI DASHBOARD (FONT NYAMAN & PROPORSIONAL) */
         .form-block {
-            margin-bottom: 20px;
+            margin-bottom: 13px;
             text-align: left;
         }
 
+        .form-label-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
         .form-label-big {
-            display: block;
-            font-size: 1.08rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--gold-accent);
-            margin-bottom: 8px;
+        }
+
+        .form-label-hint {
+            font-size: 0.68rem;
+            color: #94a3b8;
         }
 
         .form-input-big {
             width: 100%;
             background: rgba(2, 22, 17, 0.98);
-            border: 2.5px solid rgba(255, 215, 0, 0.5);
-            border-radius: 16px;
-            padding: 16px 18px;
-            font-size: 1.15rem;
+            border: 1.6px solid rgba(255, 215, 0, 0.45);
+            border-radius: 11px;
+            padding: 10px 13px;
+            font-size: 0.88rem;
             color: #ffffff;
             font-family: inherit;
             outline: none;
@@ -351,60 +395,193 @@
 
         .form-input-big:focus {
             border-color: #10b981;
-            box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
-            background: rgba(2, 32, 24, 1);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+            background: rgba(2, 30, 22, 1);
+        }
+
+        textarea.form-input-big {
+            min-height: 70px;
+            resize: vertical;
         }
 
         /* TOMBOL SIMPAN RAKSASA */
         .btn-giant-save {
             width: 100%;
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border: 2.5px solid var(--gold-accent);
-            border-radius: 20px;
-            padding: 18px 24px;
-            font-size: 1.35rem;
+            border: 1.8px solid var(--gold-accent);
+            border-radius: 14px;
+            padding: 13px 18px;
+            font-size: 0.98rem;
             font-weight: 800;
             color: #ffffff;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5), 0 0 20px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4), 0 0 12px rgba(255, 215, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-top: 26px;
+            gap: 10px;
+            margin-top: 18px;
             transition: all 0.2s;
         }
 
         .btn-giant-save:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
         }
 
-        /* NOTIFIKASI TOAST SUKSES */
+        /* MODAL KUNCI KEAMANAN (PASSWORD GATE) */
+        .auth-gate-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(2, 18, 13, 0.94);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .auth-gate-card {
+            background: linear-gradient(145deg, #042f23, #074533);
+            border: 2px solid var(--gold-accent);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px var(--gold-glow);
+            animation: popGate 0.25s ease-out;
+        }
+
+        @keyframes popGate {
+            from { transform: scale(0.94); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .auth-icon-circle {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 50%;
+            margin: 0 auto 14px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #022c22;
+            font-size: 1.8rem;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
+        .auth-gate-card h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .auth-gate-card p {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .auth-input-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .auth-password-input {
+            width: 100%;
+            background: rgba(2, 20, 15, 0.95);
+            border: 2px solid var(--gold-accent);
+            border-radius: 14px;
+            padding: 14px 44px 14px 16px;
+            font-size: 1.05rem;
+            color: #ffffff;
+            outline: none;
+            letter-spacing: 1px;
+            font-family: inherit;
+        }
+
+        .auth-password-input:focus {
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.5);
+        }
+
+        .auth-toggle-eye {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold-accent);
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .auth-error-msg {
+            display: none;
+            color: #fca5a5;
+            font-size: 0.82rem;
+            font-weight: 600;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .btn-auth-unlock {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: 1.8px solid var(--gold-accent);
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 1.08rem;
+            font-weight: 800;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            transition: all 0.2s;
+        }
+
+        .btn-auth-unlock:active {
+            transform: scale(0.98);
+        }
+
+        /* NOTIFIKASI TOAST */
         .toast-notif {
             position: fixed;
-            bottom: 30px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%) translateY(120px);
             background: linear-gradient(135deg, #065f46, #047857);
-            border: 3px solid var(--gold-accent);
+            border: 2px solid var(--gold-accent);
             color: #ffffff;
-            padding: 18px 28px;
-            border-radius: 40px;
-            font-size: 1.15rem;
+            padding: 14px 22px;
+            border-radius: 35px;
+            font-size: 0.95rem;
             font-weight: 800;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 215, 0, 0.5);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             z-index: 9999;
             transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0;
             pointer-events: none;
             width: 90%;
-            max-width: 480px;
-            text-align: center;
+            max-width: 440px;
             justify-content: center;
+            text-align: center;
         }
 
         .toast-notif.show {
@@ -412,53 +589,64 @@
             opacity: 1;
         }
 
-        /* FOOTER RESMI SESUAI ARAHAN CEO */
+        /* FOOTER RESMI SESUAI PERINTAH CEO */
         .footer-note {
-            margin-top: 35px;
+            margin-top: 30px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            padding: 22px 14px 40px 14px;
-            border-top: 1.5px solid rgba(255, 215, 0, 0.25);
+            gap: 3px;
+            padding: 20px 10px 10px 10px;
+            border-top: 1.2px solid rgba(255, 215, 0, 0.25);
             width: 100%;
         }
 
-        .footer-quick-badge {
-            display: inline-block;
-            background: rgba(255, 215, 0, 0.15);
-            border: 1.5px solid var(--gold-accent);
-            color: var(--gold-accent);
-            font-size: 0.88rem;
-            font-weight: 800;
-            letter-spacing: 2.5px;
-            padding: 5px 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 215, 0, 0.2);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
         .footer-sub-title {
-            font-size: 0.95rem;
+            font-size: 0.80rem;
             font-weight: 500;
             color: #94a3b8;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
         }
 
         .footer-mosque-name {
-            font-size: 1.25rem;
-            font-weight: 900;
+            font-size: 1.02rem;
+            font-weight: 800;
             color: #ffffff;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.2);
+            letter-spacing: 1.2px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
             text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
+    <!-- SECURITY GATE (PASSWORD DASHBOARD ADMIN) -->
+    <div class="auth-gate-overlay" id="authGateOverlay">
+        <div class="auth-gate-card">
+            <div class="auth-icon-circle">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h2>Kunci Keamanan Input</h2>
+            <p>Silakan masukkan password yang biasa digunakan untuk login ke Dashboard Admin demi keamanan.</p>
+
+            <div class="auth-error-msg" id="authErrorMsg">
+                <i class="fas fa-exclamation-triangle mr-1"></i> Password salah. Silakan masukkan password akun dashboard.
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)">
+                <div class="auth-input-wrapper">
+                    <input type="password" id="authPasswordInput" class="auth-password-input" placeholder="Masukkan password..." autocomplete="current-password" required>
+                    <i class="fas fa-eye auth-toggle-eye" id="authEyeIcon" onclick="togglePasswordVisibility()"></i>
+                </div>
+                <button type="submit" class="btn-auth-unlock">
+                    <i class="fas fa-unlock"></i> BUKA KUNCI AKSES
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
     <div class="app-container">
         
         <!-- HEADER MASJID -->
@@ -469,24 +657,30 @@
                 </div>
                 <div class="header-text">
                     <h1>Masjid Jami' Al-Jihad</h1>
-                    <p>Mode Petugas Cepat (Mobile)</p>
+                    <p>Quick Input Mode</p>
                 </div>
             </div>
-            <div class="status-badge" id="tvStatusIndicator">
-                <div class="pulse-dot"></div> TV Siap
+            <div class="header-actions">
+                <div class="status-badge" id="tvStatusIndicator">
+                    <div class="pulse-dot"></div> TV Siap
+                </div>
+                <button class="btn-lock-auth" onclick="lockSecurityGate()" title="Kunci Akses">
+                    <i class="fas fa-lock"></i>
+                </button>
             </div>
         </header>
 
-        <!-- PANDUAN RINGKAS PETUGAS -->
+        <!-- BANNER SAMBUTAN RESMI SESUAI ARAHAN CEO -->
         <div class="senior-guide-box">
-            <i class="fas fa-hand-pointer guide-icon"></i>
+            <div class="guide-mode-tag">QUICK INPUT MODE by MOBILE</div>
             <div class="guide-content">
-                <h2>Assalamu'alaikum, Bapak Petugas 👋</h2>
-                <p>Sentuh salah satu kotak di bawah untuk mengubah jadwal atau laporan kas. Data akan langsung terpasang di layar TV masjid secara realtime.</p>
+                <h2>Assalamu'alaikum, 👋</h2>
+                <p>Selamat datang di Sistem Informasi Digital-Masjid Jami' Al JIhad (QUICK INPUT MODE).<br>
+                Silakan pilih salah satu kotak di bawah untuk mengubah jadwal atau laporan kas. Data akan langsung ditampilkan di layar TV masjid secara realtime.</p>
             </div>
         </div>
 
-        <!-- DAFTAR 10 KOTAK MENU RAKSASA -->
+        <!-- DAFTAR 10 KOTAK MENU DENGAN FIELD SESUAI DASHBOARD -->
         <main class="cards-list">
 
             <!-- 1. Jadwal Jumat -->
@@ -593,7 +787,6 @@
 
         <!-- FOOTER RESMI SESUAI ARAHAN CEO -->
         <footer class="footer-note">
-            <div class="footer-quick-badge">QUICK MODE MOBILE</div>
             <div class="footer-sub-title">Sistem Informasi Digital</div>
             <div class="footer-mosque-name">MASJID JAMI' AL JIHAD</div>
         </footer>
@@ -625,17 +818,26 @@
 
     <!-- TOAST SUKSES -->
     <div class="toast-notif" id="toastSuccess">
-        <i class="fas fa-check-circle" style="color: #ffd700; font-size: 1.8rem;"></i>
+        <i class="fas fa-check-circle" style="color: #ffd700; font-size: 1.6rem;"></i>
         <span id="toastText">Alhamdulillah, data berhasil disimpan & langsung tampil di TV!</span>
     </div>
 
-    <!-- SUPABASE REALTIME CORE SDK -->
+    <!-- SUPABASE CORE SDK & AUTH -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/supabase-db.js"></script>
+    <script src="js/admin-auth.js"></script>
 
-    <!-- LOGIKA INTERAKTIF & SINKRONISASI DATABASE -->
     <script>
+        // DAFTAR PASSWORD VALID RESMI DASHBOARD
+        const VALID_PASSWORDS = [
+            'SuperUser1971',  // Super Admin
+            '#1.Bendahara',   // Bendahara
+            '*dkm1#aljihad',  // DKM 1
+            '135dkmlJihad'    // DKM 2
+        ];
+
+        // 10 MODUL DENGAN FIELD LENGKAP PERSIS SEPERTI DI DASHBOARD ADMIN
         const modules = {
             'jumat': {
                 title: "Jadwal Sholat Jum'at",
@@ -643,10 +845,12 @@
                 summaryField: 1,
                 prefix: "Khatib: ",
                 fields: [
-                    { id: "f_tgl_jumat", label: "Tanggal Jum'at", type: "text", val: "Jumat, 10 Oktober 2026", placeholder: "Contoh: Jumat, 10 Oktober 2026" },
-                    { id: "f_khatib", label: "Nama Khatib", type: "text", val: "Ust. Dr. H. Ahmad Dahlan, MA", placeholder: "Nama lengkap Khatib" },
-                    { id: "f_imam", label: "Nama Imam", type: "text", val: "Ust. Muhammad Ridwan, Al-Hafizh", placeholder: "Nama lengkap Imam" },
-                    { id: "f_muadzin", label: "Nama Muadzin / Bilal", type: "text", val: "Ustadz Bilal Ramadhan", placeholder: "Nama Muadzin" }
+                    { id: "f_tgl_jumat", label: "Tanggal Jum'at", type: "text", val: "Jumat, 10 Oktober 2026", placeholder: "Contoh: Jumat, 10 Oktober 2026", hint: "Format: Hari, Tanggal Bulan Tahun" },
+                    { id: "f_khatib", label: "Nama Khatib & Imam", type: "text", val: "Ust. Dr. H. Ahmad Dahlan, MA", placeholder: "Nama lengkap Khatib & Gelar", hint: "Khatib sekaligus Imam" },
+                    { id: "f_muadzin", label: "Nama Muadzin", type: "text", val: "Ustadz Bilal Ramadhan", placeholder: "Nama Muadzin Adzan", hint: "Pengumandangkan adzan Jumat" },
+                    { id: "f_bilal", label: "Nama Bilal / Tarhim", type: "text", val: "Ust. Ahmad Farhan", placeholder: "Nama Bilal", hint: "Petugas bilal Jumat" },
+                    { id: "f_maklumat", label: "Pembaca Maklumat / Keuangan", type: "text", val: "Bpk. H. Utut Priastya", placeholder: "Nama Petugas Maklumat", hint: "Membaca kas & maklumat DKM" },
+                    { id: "f_tema_khutbah", label: "Tema / Judul Khutbah", type: "text", val: "Membangun Generasi Rabbani di Era Digital", placeholder: "Judul khutbah (opsional)", hint: "Ditampilkan di layar TV" }
                 ]
             },
             'ahad': {
@@ -655,9 +859,11 @@
                 summaryField: 0,
                 prefix: "Tema: ",
                 fields: [
-                    { id: "f_tema_ahad", label: "Tema / Judul Kajian", type: "text", val: "Adab & Akhlak Penuntut Ilmu", placeholder: "Judul kajian" },
-                    { id: "f_ustadz_ahad", label: "Nama Pemateri / Ustadz", type: "text", val: "Ust. H. Abdul Somad, Lc., MA", placeholder: "Nama Ustadz" },
-                    { id: "f_waktu_ahad", label: "Waktu Kajian", type: "text", val: "Ba'da Sholat Maghrib s/d Isya", placeholder: "Contoh: Ba'da Maghrib" }
+                    { id: "f_tema_ahad", label: "Tema / Judul Kajian", type: "text", val: "Adab & Akhlak Penuntut Ilmu", placeholder: "Judul kajian", hint: "Materi kajian rutin" },
+                    { id: "f_ustadz_ahad", label: "Nama Penceramah / Ustadz", type: "text", val: "Ust. H. Abdul Somad, Lc., MA", placeholder: "Nama Ustadz & Gelar", hint: "Pemateri kajian" },
+                    { id: "f_kitab_ahad", label: "Kitab Rujukan", type: "text", val: "Kitab Riyadhus Shalihin", placeholder: "Nama Kitab / Rujukan", hint: "Buku panduan kajian" },
+                    { id: "f_pekan_ahad", label: "Pekan Pelaksanaan", type: "text", val: "Pekan ke-1", placeholder: "Contoh: Pekan 1 / Pekan 2", hint: "Urutan pekan bulanan" },
+                    { id: "f_waktu_ahad", label: "Waktu Pelaksanaan", type: "text", val: "Ba'da Sholat Maghrib s/d Isya", placeholder: "Contoh: Ba'da Maghrib", hint: "Jadwal jam tayang" }
                 ]
             },
             'tahsin': {
@@ -666,9 +872,10 @@
                 summaryField: 1,
                 prefix: "Jadwal: ",
                 fields: [
-                    { id: "f_ustadz_tahsin", label: "Nama Pengajar / Ustadz", type: "text", val: "Ust. Ahmad Fauzan, SQ", placeholder: "Nama Pengajar" },
-                    { id: "f_jadwal_tahsin", label: "Jadwal & Hari", type: "text", val: "Setiap Selasa & Kamis Ba'da Ashar", placeholder: "Hari & Jam" },
-                    { id: "f_tempat_tahsin", label: "Tempat / Ruang", type: "text", val: "Ruang Utama Masjid Al-Jihad", placeholder: "Lokasi belajar" }
+                    { id: "f_ustadz_tahsin", label: "Nama Pengajar / Ustadz", type: "text", val: "Ust. Ahmad Fauzan, SQ", placeholder: "Nama Pengajar Tahsin", hint: "Ustadz pembimbing makhorijul huruf" },
+                    { id: "f_jadwal_tahsin", label: "Hari & Jam Belajar", type: "text", val: "Setiap Selasa & Kamis Ba'da Ashar", placeholder: "Hari & Jam", hint: "Waktu pertemuan rutin" },
+                    { id: "f_tempat_tahsin", label: "Tempat / Ruang", type: "text", val: "Ruang Utama Masjid Al-Jihad", placeholder: "Lokasi belajar", hint: "Area sholat / serbaguna" },
+                    { id: "f_peserta_tahsin", label: "Kategori Peserta", type: "text", val: "Ikhwan, Akhwat & Remaja (Umum)", placeholder: "Kategori peserta", hint: "Terbuka umum / kelas khusus" }
                 ]
             },
             'tafsir': {
@@ -677,9 +884,10 @@
                 summaryField: 0,
                 prefix: "Kitab: ",
                 fields: [
-                    { id: "f_kitab_tafsir", label: "Kitab / Surat yang Dibahas", type: "text", val: "Tafsir Ibnu Katsir - Surat Al-Baqarah", placeholder: "Nama kitab/surat" },
-                    { id: "f_pemateri_tafsir", label: "Nama Pemateri", type: "text", val: "Dr. KH. M. Luqman Hakim", placeholder: "Nama pemateri" },
-                    { id: "f_jadwal_tafsir", label: "Jadwal Pelaksanaan", type: "text", val: "Ahad Pagi Pukul 06.00 WIB (Kajian Subuh)", placeholder: "Jadwal pelaksanaan" }
+                    { id: "f_kitab_tafsir", label: "Kitab & Surat yang Dikaji", type: "text", val: "Tafsir Ibnu Katsir - Surat Al-Baqarah", placeholder: "Nama kitab & surat", hint: "Rujukan tafsir ayat" },
+                    { id: "f_pemateri_tafsir", label: "Nama Pemateri / Ustadz", type: "text", val: "Dr. KH. M. Luqman Hakim", placeholder: "Nama Pemateri", hint: "Narasumber tafsir" },
+                    { id: "f_jadwal_tafsir", label: "Jadwal Pelaksanaan", type: "text", val: "Ahad Pagi Ba'da Subuh (06.00 WIB)", placeholder: "Jadwal waktu", hint: "Waktu kajian tafsir" },
+                    { id: "f_keterangan_tafsir", label: "Catatan Jamaah", type: "text", val: "Harap membawa mushaf Al-Qur'an & alat tulis", placeholder: "Pesan untuk jamaah", hint: "Himbauan DKM" }
                 ]
             },
             'ramadhan': {
@@ -688,9 +896,10 @@
                 summaryField: 0,
                 prefix: "Imam: ",
                 fields: [
-                    { id: "f_imam_tarawih", label: "Imam Tarawih Malam Ini", type: "text", val: "Syaikh Mahmud Al-Mishri", placeholder: "Nama Imam Tarawih" },
-                    { id: "f_penceramah_kultum", label: "Penceramah Kultum", type: "text", val: "Ust. Syamsuddin Noor, M.Ag", placeholder: "Nama Penceramah" },
-                    { id: "f_porsi_bukber", label: "Porsi Buka Puasa Bersama", type: "text", val: "Siap 350 Porsi Nasi Kotak & Takjil", placeholder: "Jumlah porsi takjil" }
+                    { id: "f_imam_tarawih", label: "Nama Imam Sholat Tarawih", type: "text", val: "Syaikh Mahmud Al-Mishri", placeholder: "Nama Imam Tarawih", hint: "Pemimpin sholat tarawih & witir" },
+                    { id: "f_penceramah_kultum", label: "Penceramah Kultum Tarawih", type: "text", val: "Ust. Syamsuddin Noor, M.Ag", placeholder: "Nama Penceramah", hint: "Kultum 7 menit sebelum tarawih" },
+                    { id: "f_tema_kultum", label: "Tema Kultum Ramadhan", type: "text", val: "Meraih Berkah Lailatul Qadar", placeholder: "Tema ceramah", hint: "Judul kultum malam ini" },
+                    { id: "f_porsi_bukber", label: "Porsi Buka Puasa Bersama (Takjil)", type: "text", val: "Siap 350 Porsi Nasi Kotak & Takjil", placeholder: "Jumlah porsi", hint: "Disediakan gratis setiap hari" }
                 ]
             },
             'qurban': {
@@ -699,9 +908,10 @@
                 summaryField: 0,
                 prefix: "Hewan: ",
                 fields: [
-                    { id: "f_sapi", label: "Jumlah Sapi Terkumpul", type: "number", val: "14", placeholder: "Jumlah Sapi" },
-                    { id: "f_kambing", label: "Jumlah Kambing Terkumpul", type: "number", val: "32", placeholder: "Jumlah Kambing" },
-                    { id: "f_donatur", label: "Total Donatur / Shohibul Qurban", type: "number", val: "130", placeholder: "Jumlah peserta" }
+                    { id: "f_sapi", label: "Jumlah Sapi Terkumpul (Ekor)", type: "number", val: "14", placeholder: "Jumlah Sapi", hint: "Hewan sapi yang diterima" },
+                    { id: "f_kambing", label: "Jumlah Kambing / Domba (Ekor)", type: "number", val: "32", placeholder: "Jumlah Kambing", hint: "Hewan kambing/domba" },
+                    { id: "f_donatur", label: "Total Donatur / Shohibul Qurban", type: "number", val: "130", placeholder: "Jumlah peserta qurban", hint: "Warga yang berqurban" },
+                    { id: "f_paket_distribusi", label: "Target Distribusi Paket Daging", type: "text", val: "1.250 Paket Daging Mustahik", placeholder: "Target paket", hint: "Sasaran warga dhuafa & sekitar" }
                 ]
             },
             'kas-utama': {
@@ -710,9 +920,10 @@
                 summaryField: 2,
                 prefix: "Saldo: Rp ",
                 fields: [
-                    { id: "f_kas_masuk", label: "Total Donasi / Infaq Masuk (Rp)", type: "text", val: "165.250.000", placeholder: "Nominal pemasukan" },
-                    { id: "f_kas_keluar", label: "Total Pengeluaran Operasional (Rp)", type: "text", val: "16.750.000", placeholder: "Nominal pengeluaran" },
-                    { id: "f_kas_saldo", label: "Sisa Saldo Kas Siaga (Rp)", type: "text", val: "148.500.000", placeholder: "Sisa saldo akhir" }
+                    { id: "f_tgl_kas", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", placeholder: "Contoh: Oktober 2026", hint: "Bulan pembukuan aktif" },
+                    { id: "f_kas_masuk", label: "Total Donasi / Infaq Masuk (Rp)", type: "text", val: "165.250.000", placeholder: "Nominal pemasukan", hint: "Kotak infaq jumat & transfer" },
+                    { id: "f_kas_keluar", label: "Total Pengeluaran Operasional (Rp)", type: "text", val: "16.750.000", placeholder: "Nominal pengeluaran", hint: "Listrik, marbot, kebersihan" },
+                    { id: "f_kas_saldo", label: "Sisa Saldo Kas Siaga (Rp)", type: "text", val: "148.500.000", placeholder: "Sisa saldo kas", hint: "Saldo kas akhir masjid" }
                 ]
             },
             'ambulance': {
@@ -721,41 +932,108 @@
                 summaryField: 2,
                 prefix: "Saldo Siaga: Rp ",
                 fields: [
-                    { id: "f_amb_masuk", label: "Total Donasi Ambulance (Rp)", type: "text", val: "5.137.800", placeholder: "Total donasi" },
-                    { id: "f_amb_keluar", label: "Biaya Operasional, BBM & Servis (Rp)", type: "text", val: "3.965.600", placeholder: "Biaya operasional" },
-                    { id: "f_amb_saldo", label: "Sisa Saldo Kas Ambulance (Rp)", type: "text", val: "1.172.200", placeholder: "Saldo kas ambulance" }
+                    { id: "f_tgl_amb", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", placeholder: "Bulan laporan", hint: "Bulan pembukuan ambulance" },
+                    { id: "f_amb_masuk", label: "Total Donasi Masuk Ambulance (Rp)", type: "text", val: "5.137.800", placeholder: "Total donasi", hint: "Infaq khusus ambulance" },
+                    { id: "f_amb_keluar", label: "Biaya Operasional, BBM & Servis (Rp)", type: "text", val: "3.965.600", placeholder: "Biaya operasional", hint: "Pengeluaran bbm & perawatan" },
+                    { id: "f_amb_saldo", label: "Sisa Saldo Kas Siaga Ambulance (Rp)", type: "text", val: "1.172.200", placeholder: "Saldo kas siaga", hint: "Saldo siap pakai ambulance" },
+                    { id: "f_amb_hotline", label: "Nomor Hotline Siaga Ambulance", type: "text", val: "0877-5876-7000", placeholder: "Nomor telepon/WA", hint: "Layanan siaga 24 jam" }
                 ]
             },
             'infaq': {
-                title: "Program Infaq & Sedekah",
+                title: "Program Infaq & Wakaf",
                 icon: "fa-hand-holding-heart",
                 summaryField: 0,
                 prefix: "Program: ",
                 fields: [
-                    { id: "f_nama_infaq", label: "Nama Program Infaq", type: "text", val: "Infaq Karpet & Perluasan Tempat Wudhu", placeholder: "Nama program" },
-                    { id: "f_target_infaq", label: "Target Dana yang Dibutuhkan (Rp)", type: "text", val: "85.000.000", placeholder: "Target dana" },
-                    { id: "f_terkumpul_infaq", label: "Dana yang Sudah Terkumpul (Rp)", type: "text", val: "62.450.000", placeholder: "Dana terkumpul" }
+                    { id: "f_nama_infaq", label: "Nama Program Penggalangan Infaq", type: "text", val: "Infaq Karpet & Perluasan Tempat Wudhu", placeholder: "Nama program", hint: "Program pembangunan masjid" },
+                    { id: "f_target_infaq", label: "Target Dana yang Dibutuhkan (Rp)", type: "text", val: "85.000.000", placeholder: "Target dana", hint: "Estimasi total RAB" },
+                    { id: "f_terkumpul_infaq", label: "Dana yang Sudah Terkumpul (Rp)", type: "text", val: "62.450.000", placeholder: "Dana terkumpul", hint: "Realisasi donasi masuk" },
+                    { id: "f_rekening_infaq", label: "Nomor Rekening Infaq", type: "text", val: "BSI (Bank Syariah Indonesia) 7123-456-789 a.n. Masjid Al-Jihad", placeholder: "No Rekening", hint: "Tujuan transfer jamaah" }
                 ]
             },
             'pengumuman': {
                 title: "Pengumuman Sholat Jum'at",
                 icon: "fa-bullhorn",
                 summaryField: 0,
-                prefix: "Pengumuman: ",
+                prefix: "Pesan: ",
                 fields: [
-                    { id: "f_pesan_1", label: "Pengumuman Baris 1", type: "text", val: "Harap merapatkan dan meluruskan shaf sholat.", placeholder: "Pesan pertama" },
-                    { id: "f_pesan_2", label: "Pengumuman Baris 2", type: "text", val: "Mohon nonaktifkan atau heningkan nada dering telepon genggam.", placeholder: "Pesan kedua" },
-                    { id: "f_pesan_3", label: "Pengumuman Baris 3", type: "text", val: "Dilarang berbicara atau mengobrol saat khutbah berlangsung.", placeholder: "Pesan ketiga" }
+                    { id: "f_pesan_1", label: "Pengumuman Baris 1 (Shaf)", type: "text", val: "Harap merapatkan dan meluruskan shaf sholat.", placeholder: "Pesan pertama", hint: "Imbauan kerapian shaf" },
+                    { id: "f_pesan_2", label: "Pengumuman Baris 2 (HP)", type: "text", val: "Mohon nonaktifkan atau heningkan nada dering telepon genggam.", placeholder: "Pesan kedua", hint: "Ketenangan ibadah" },
+                    { id: "f_pesan_3", label: "Pengumuman Baris 3 (Adab Khutbah)", type: "text", val: "Dilarang berbicara atau mengobrol saat khutbah berlangsung.", placeholder: "Pesan ketiga", hint: "Adab mendengarkan khutbah" },
+                    { id: "f_pesan_4", label: "Pengumuman Tambahan DKM", type: "text", val: "Parkir kendaraan harap dikunci ganda demi keamanan bersama.", placeholder: "Pesan tambahan", hint: "Ketertiban lingkungan masjid" }
                 ]
             }
         };
 
         let currentActiveModule = null;
 
-        // Inisialisasi & Muat Data Aktual dari Supabase
+        /* =========================================================================
+           SISTEM AUTENTIKASI KUNCI KEAMANAN (PASSWORD GATE)
+           ========================================================================= */
+        function checkSecurityAuth() {
+            const isAuth = sessionStorage.getItem('quick_petugas_authenticated');
+            const overlay = document.getElementById('authGateOverlay');
+            if (isAuth === 'true') {
+                overlay.style.display = 'none';
+            } else {
+                overlay.style.display = 'flex';
+                document.getElementById('authPasswordInput').focus();
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const inputVal = document.getElementById('authPasswordInput').value.trim();
+            const errBox = document.getElementById('authErrorMsg');
+
+            // Cek kecocokan password dengan akun terdaftar di AdminAuth / Default
+            let matched = false;
+
+            if (VALID_PASSWORDS.includes(inputVal)) {
+                matched = true;
+            } else if (window.AdminAuth && typeof window.AdminAuth.getUsers === 'function') {
+                const users = window.AdminAuth.getUsers();
+                matched = users.some(u => u.password === inputVal);
+            }
+
+            if (matched) {
+                sessionStorage.setItem('quick_petugas_authenticated', 'true');
+                document.getElementById('authGateOverlay').style.display = 'none';
+                errBox.style.display = 'none';
+                showToastSuccess("Kunci dibuka! Selamat datang di Quick Input Mode.");
+            } else {
+                errBox.style.display = 'block';
+                document.getElementById('authPasswordInput').value = '';
+                document.getElementById('authPasswordInput').focus();
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const pInput = document.getElementById('authPasswordInput');
+            const eye = document.getElementById('authEyeIcon');
+            if (pInput.type === 'password') {
+                pInput.type = 'text';
+                eye.className = 'fas fa-eye-slash auth-toggle-eye';
+            } else {
+                pInput.type = 'password';
+                eye.className = 'fas fa-eye auth-toggle-eye';
+            }
+        }
+
+        function lockSecurityGate() {
+            sessionStorage.removeItem('quick_petugas_authenticated');
+            document.getElementById('authPasswordInput').value = '';
+            document.getElementById('authErrorMsg').style.display = 'none';
+            document.getElementById('authGateOverlay').style.display = 'flex';
+            document.getElementById('authPasswordInput').focus();
+        }
+
+        /* =========================================================================
+           LOGIKA AMBIL & SIMPAN DATA REALTIME SUPABASE
+           ========================================================================= */
         async function initLiveDatabase() {
             try {
-                // Pulihkan data tersimpan lokal lebih dulu
+                // Ambil state lokal tersimpan lebih dulu
                 const localSaved = localStorage.getItem('quick_petugas_state');
                 if (localSaved) {
                     const parsed = JSON.parse(localSaved);
@@ -768,14 +1046,16 @@
                     });
                 }
 
-                // Ambil data dari Supabase jika koneksi aktif
+                // Ambil data langsung dari Supabase
                 if (window.SupabaseDB) {
                     // 1. Sholat Jumat
                     const sj = await window.SupabaseDB.getSholatJumat();
                     if (sj) {
+                        if (sj.tanggal) modules['jumat'].fields[0].val = sj.tanggal;
                         if (sj.khatib) modules['jumat'].fields[1].val = sj.khatib;
-                        if (sj.imam) modules['jumat'].fields[2].val = sj.imam;
-                        if (sj.muadzin) modules['jumat'].fields[3].val = sj.muadzin;
+                        if (sj.muadzin) modules['jumat'].fields[2].val = sj.muadzin;
+                        if (sj.bilal) modules['jumat'].fields[3].val = sj.bilal;
+                        if (sj.maklumat) modules['jumat'].fields[4].val = sj.maklumat;
                     }
 
                     // 2. Kas Utama
@@ -787,9 +1067,9 @@
                             totK += parseFloat(item.pengeluaran || 0);
                         });
                         const sld = totM - totK;
-                        modules['kas-utama'].fields[0].val = formatRupiah(totM);
-                        modules['kas-utama'].fields[1].val = formatRupiah(totK);
-                        modules['kas-utama'].fields[2].val = formatRupiah(sld);
+                        modules['kas-utama'].fields[1].val = formatRupiah(totM);
+                        modules['kas-utama'].fields[2].val = formatRupiah(totK);
+                        modules['kas-utama'].fields[3].val = formatRupiah(sld);
                     }
 
                     // 3. Kas Ambulance
@@ -801,9 +1081,9 @@
                             totK += parseFloat(item.pengeluaran || 0);
                         });
                         const sld = totM - totK;
-                        modules['ambulance'].fields[0].val = formatRupiah(totM);
-                        modules['ambulance'].fields[1].val = formatRupiah(totK);
-                        modules['ambulance'].fields[2].val = formatRupiah(sld);
+                        modules['ambulance'].fields[1].val = formatRupiah(totM);
+                        modules['ambulance'].fields[2].val = formatRupiah(totK);
+                        modules['ambulance'].fields[3].val = formatRupiah(sld);
                     }
                 }
             } catch (err) {
@@ -832,6 +1112,12 @@
         }
 
         function openModule(moduleId) {
+            // Pastikan terotentikasi sebelum bisa input
+            if (sessionStorage.getItem('quick_petugas_authenticated') !== 'true') {
+                checkSecurityAuth();
+                return;
+            }
+
             currentActiveModule = moduleId;
             const mod = modules[moduleId];
             if (!mod) return;
@@ -843,7 +1129,10 @@
             const formContainer = document.getElementById('sheetFormFields');
             formContainer.innerHTML = mod.fields.map(f => `
                 <div class="form-block">
-                    <label class="form-label-big" for="${f.id}">${f.label}</label>
+                    <div class="form-label-box">
+                        <label class="form-label-big" for="${f.id}">${f.label}</label>
+                        ${f.hint ? `<span class="form-label-hint">${f.hint}</span>` : ''}
+                    </div>
                     <input type="${f.type}" id="${f.id}" class="form-input-big" value="${escapeHtml(f.val)}" placeholder="${f.placeholder}">
                 </div>
             `).join('');
@@ -859,7 +1148,7 @@
             if (!currentActiveModule) return;
             const mod = modules[currentActiveModule];
 
-            // 1. Simpan nilai lokal
+            // 1. Simpan nilai lokal dari form
             mod.fields.forEach(f => {
                 const el = document.getElementById(f.id);
                 if (el) f.val = el.value.trim();
@@ -896,8 +1185,9 @@
             showToastSuccess();
         }
 
-        function showToastSuccess() {
+        function showToastSuccess(customMsg) {
             const toast = document.getElementById('toastSuccess');
+            document.getElementById('toastText').textContent = customMsg || "Alhamdulillah, data berhasil disimpan & langsung tampil di TV!";
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
@@ -918,6 +1208,7 @@
 
         // Jalankan saat halaman siap
         window.addEventListener('DOMContentLoaded', () => {
+            checkSecurityAuth();
             initLiveDatabase();
         });
     </script>

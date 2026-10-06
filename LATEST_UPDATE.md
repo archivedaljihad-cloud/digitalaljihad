@@ -4,7 +4,60 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 05:50 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 06:10 WIB)
+
+### 🔒 PROTEKSI PASSWORD DASHBOARD, PENYELARASAN FIELD INPUT DENGAN DASHBOARD, PENYESUAIAN UKURAN FONT, DAN FOOTER RESMI PADA QUICK INPUT MODE BY MOBILE (`web-statis/petugas.html`):
+1. **Latar Belakang & Instruksi Lengkap CEO:**
+   - **Sinkronisasi Field Dashboard:** Menyamakan seluruh field input di setiap menu `petugas.html` agar selaras 100% dengan formulir isian yang ada di Dashboard Admin (`admin.html`).
+   - **Penyesuaian Font:** Memperkecil ukuran huruf form, label, kartu, dan tombol agar tidak berlebihan (*compact, neat & comfortable*).
+   - **Kunci Keamanan Input (Password Gate):** Menambahkan proteksi keamanan sebelum pengguna dapat melakukan input, mewajibkan memasukkan password yang biasa digunakan untuk login ke Dashboard Admin (`VALID_PASSWORDS`: `SuperUser1971`, `#1.Bendahara`, `*dkm1#aljihad`, `135dkmlJihad` serta akun Supabase).
+   - **Banner Sambutan Resmi:**
+     ```
+     QUICK INPUT MODE by MOBILE
+
+     Assalamu'alaikum, 👋
+     Selamat datang di Sistem Informasi Digital-Masjid Jami' Al JIhad (QUICK INPUT MODE).
+     Silakan pilih salah satu kotak di bawah untuk mengubah jadwal atau laporan kas. Data akan langsung ditampilkan di layar TV masjid secara realtime.
+     ```
+   - **Footer 2 Baris Resmi:**
+     ```
+     Sistem Informasi Digital
+     MASJID JAMI' AL JIHAD
+     ```
+
+2. **Rincian Penyesuaian Antarmuka & Fitur Baru:**
+   - **Security Gate Overlay (`authGateOverlay`):** Menampilkan modal pelindung transparan dengan backdrop blur saat halaman dibuka jika sesi belum terotentikasi di `sessionStorage`. Dilengkapi ikon toggle visibilitas password (`fa-eye` / `fa-eye-slash`), deteksi error, serta tombol gembok di header atas untuk mengunci kembali (`lockSecurityGate()`).
+   - **Penyesuaian Proporsi Tipografi Font:**
+     - Font label form diturunkan ke `0.82rem`, font input ke `0.88rem`, hint ke `0.68rem`.
+     - Judul kartu modul diatur ke `0.92rem` dan deskripsi ke `0.76rem`.
+     - Tombol simpan utama ditata ke `0.98rem` dengan padding yang lebih ergonomis.
+     - Footer teks sub-title `0.80rem` dan nama masjid `1.02rem`.
+   - **10 Modul Form dengan Field Lengkap Setara Dashboard:**
+     1. *Jadwal Sholat Jum'at:* Tanggal, Khatib & Imam, Muadzin, Bilal, Pembaca Maklumat, Tema Khutbah.
+     2. *Kajian Malam Ahad:* Tema Kajian, Penceramah/Ustadz, Kitab Rujukan, Pekan Pelaksanaan, Waktu.
+     3. *Tahsin Al-Qur'an:* Pengajar, Hari & Jam, Tempat/Ruangan, Kategori Peserta.
+     4. *Kajian Umum Tafsir:* Kitab & Surat, Pemateri, Jadwal, Catatan Jamaah.
+     5. *Semarak Ramadhan:* Imam Tarawih, Penceramah Kultum, Tema Kultum, Porsi Takjil.
+     6. *Penerimaan Qurban:* Jumlah Sapi, Kambing, Total Donatur, Target Paket Distribusi.
+     7. *Kas Utama Masjid:* Tanggal/Periode, Total Infaq Masuk, Pengeluaran, Saldo Kas Siaga.
+     8. *Kas Mobil Ambulance:* Periode Laporan, Total Donasi Masuk, Biaya Operasional/BBM, Saldo Siaga, Hotline Siaga.
+     9. *Program Infaq & Wakaf:* Nama Program, Target Dana, Dana Terkumpul, Nomor Rekening Infaq.
+     10. *Pengumuman Sholat Jum'at:* Pesan Baris 1 (Shaf), Pesan Baris 2 (HP), Pesan Baris 3 (Adab Khutbah), Pesan Baris 4 (Tambahan DKM).
+
+3. **Penyelarasan Salinan Aset (`public/petugas.html`):**
+   - Menyelaraskan seluruh kode mutakhir dari `web-statis/petugas.html` ke berkas `public/petugas.html`.
+
+4. **Eksekusi Bumping Cache Service Worker (SOP #2):**
+   - Versi Service Worker dinaikkan dari `v5.7.4` ke **`v5.7.5`** (`aljihad-signage-v5.7.5`) di `web-statis/sw.js` dan skrip pembersihan cache otomatis di `web-statis/admin.html` agar TV display dan ponsel klien segera membersihkan cache lama dan memuat versi terbaru seketika.
+
+5. **Eksekusi 4 Pilar Sinkronisasi SOP:**
+   - Cold Backup ke folder `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit & push `main`.
+   - Cloudflare Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 05:50 WIB)
 
 ### 📱 IMPLEMENTASI RESMI "QUICK MODE MOBILE" (`web-statis/petugas.html`) UNTUK PETUGAS MASJID USIA 55+ TAHUN:
 1. **Latar Belakang & Persetujuan CEO:**
