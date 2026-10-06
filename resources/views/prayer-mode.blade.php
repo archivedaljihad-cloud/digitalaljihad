@@ -704,6 +704,13 @@
             border-radius: 28px;
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.35);
             animation: pulseGlow 4s infinite;
+            text-align: center;
+        }
+
+        .prayer-mode-box .message-text {
+            text-align: center !important;
+            line-height: 1.45 !important;
+            margin: 0 auto;
         }
 
         .prayer-mode-box .icons-row {
@@ -816,18 +823,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-size: clamp(15px, 1.25vw, 18px);
-            font-weight: 800;
-            letter-spacing: 2.5px;
+            gap: 10px;
+            font-size: clamp(18px, 1.65vw, 24px);
+            font-weight: 900;
+            letter-spacing: 2.8px;
             text-transform: uppercase;
             color: #FFD700;
             margin-bottom: 8px;
-            text-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+            text-shadow: 0 0 16px rgba(255, 215, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9);
         }
 
         .officer-badge i {
-            font-size: 1.1em;
+            font-size: 1.15em;
         }
 
         .officer-name {
@@ -1216,7 +1223,7 @@
                 } elseif ($phase == 'iqamah') {
                     $displayMessage = $setting->Hitung_Mundur_Iqamah ?? 'Menuju Waktu Iqamah';
                 } elseif ($phase == 'khutbah') {
-                    $displayMessage = "Sedang Berlangsung Khutbah & Sholat Jum'at Berjamaah.\nHarap Tenang, Dengarkan Khutbah & Nonaktifkan Nada Dering HP";
+                    $displayMessage = "Sedang Berlangsung Khutbah & Sholat Jum'at Berjamaah.\nHarap Tenang, Dengarkan Khutbah & Nonaktifkan Nada Dering HP.";
                 } elseif ($phase == 'prayer') {
                     $displayMessage = 'Iqamah Segera Dikumandangkan. Mari Bersiap Mengisi Shaf Terdepan Yang Masih Kosong, Luruskan dan Rapatkan shaf sholat';
                 } else {

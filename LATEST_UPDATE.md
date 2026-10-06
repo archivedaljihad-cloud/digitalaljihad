@@ -4,7 +4,30 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 18:38 WIB)
+## ✨ UPDATE TERBARU — 6 Oktober 2026 (Pukul 19:20 WIB)
+
+### 🕌 OPTIMALISASI TAMPILAN MODE PRAYER SHOLAT JUM'AT (`web-statis/prayer-mode.html`, `public/preview-prayer-mode.html`, & `resources/views/prayer-mode.blade.php`):
+1. **Perbesaran Kotak Kapsul & Teks Tanggal/Jam (*Datetime Capsule Enlargement*):**
+   - Ukuran font teks tanggal masehi, tanggal hijriah keemasan, dan jam digital dinaikkan dari `clamp(0.88rem, 1.1vw, 1.12rem)` menjadi **`clamp(1.08rem, 1.38vw, 1.35rem) !important`**.
+   - Padding kapsul diperbesar dari `3-5px / 14-22px` menjadi **`clamp(6px, 0.8vh, 10px) clamp(22px, 2.2vw, 36px) !important`** dengan radius kelengkungan kapsul `35px` serta pendaran border emas `#FFD700` yang lebih kuat di TV Display.
+2. **Perbesaran Label Petugas Jum'at ("KHOTIB", "IMAM", "MUADZIN", "BILAL"):**
+   - Ukuran font badge petugas dinaikkan dari `clamp(15px, 1.25vw, 18px)` menjadi **`clamp(18px, 1.65vw, 24px)`**.
+   - Ketebalan font dinaikkan ke **`font-weight: 900`** (*extra bold*), spasi huruf (*letter-spacing*) dilebarkan ke **`2.8px`**, serta bayangan teks emas dipertajam (`text-shadow: 0 0 16px rgba(255, 215, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9)`) sehingga nama gelar tugas terlihat sangat tegas dan kontras dari kejauhan.
+3. **Format 2 Baris Center Tengah untuk Pesan Khutbah Jum'at:**
+   - Pesan himbauan pada fase Khutbah diformat menjadi 2 baris terpusat simetris (*center aligned*):
+     - **Baris 1:** `"Sedang Berlangsung Khutbah & Sholat Jum'at Berjamaah."`
+     - **Baris 2:** `"Harap Tenang, Dengarkan Khutbah & Nonaktifkan Nada Dering HP."`
+   - Kontainer `.prayer-mode-box` dan teks `.message-text` dipastikan memiliki `text-align: center;` dan `line-height: 1.45`.
+4. **Invalidasi Cache Service Worker:**
+   - Versi Service Worker dinaikkan ke **`v5.6.7`** (`aljihad-signage-v5.6.7`) di `web-statis/sw.js` dan fungsi `bersihkanCacheSistem()` di `web-statis/admin.html`.
+5. **Sinkronisasi Otomatis 4 Pilar Sesuai SOP `AGENTS.md`:**
+   - **GitHub:** Komit dan push ke branch `main`.
+   - **Cloudflare Workers Production:** Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal:** Sinkronisasi berkas ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 6 Oktober 2026 (Pukul 18:38 WIB)
 
 ### 🕌 PENYEMPURNAAN HEADER SLIDE "MAKLUMAT & LAPORAN SHOLAT JUM'AT" (`web-statis/slides/kas-jumat.html`):
 1. **Penghapusan Subjudul (*Subtitle Cleanup*):**
