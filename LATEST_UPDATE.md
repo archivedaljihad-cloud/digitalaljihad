@@ -4,7 +4,26 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 12:25 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 13:05 WIB)
+
+### 🔙 PERBAIKAN NAVIGASI TOMBOL BACK MOBILE (`petugas.html` & `modeinput.html`):
+1. **Latar Belakang & Keluhan CEO:**
+   - CEO menyampaikan: *"pada saat ditekan back/kembali aplikasi langsung menutup seharusnya saat di tekan back/kembali maka akan kembali ke halaman/pilihan sebelumnya."*
+   - Di smartphone, saat pengguna sedang membuka modal formulir salah satu modul (misal: Kas Utama, Jadwal Sholat, Petugas Jumat, dll.) lalu menekan tombol Back fisik/gesture HP, browser sebelumnya langsung menganggapnya mundur keluar dari aplikasi/tab karena belum adanya entri History API.
+
+2. **Solusi & Logika yang Diterapkan:**
+   - **Integrasi Native History API (`pushState` & `popstate`):**
+     - Setiap kali salah satu modul dibuka (`openModule(moduleId)`), sistem secara otomatis mendorong state riwayat modal: `history.pushState({ modalOpen: true, moduleId: moduleId }, '', window.location.href)`.
+     - Ketika tombol Back HP ditekan (memicu event `popstate`), sistem mendeteksi modal yang sedang aktif dan menutup modal (`closeSheet(true)`) sehingga pengguna kembali dengan mulus ke layar utama daftar 11 modul pilihan. **Aplikasi tidak akan menutup atau keluar!**
+     - Ketika pengguna menutup modal lewat tombol silang (`X`), tombol simpan, atau klik di luar modal, stack history disinkronkan secara otomatis (`history.back()`).
+     - Ditambahkan juga shortcut tombol `Escape` keyboard untuk kenyamanan pengujian di desktop/laptop.
+
+3. **Pilar Bumping Cache & Service Worker (SOP #2):**
+   - Service Worker di `web-statis/sw.js` dinaikkan ke **`v5.8.0`** (`aljihad-signage-v5.8.0`).
+   - Logika invalidasi cache usang di `web-statis/admin.html` disinkronkan ke `aljihad-signage-v5.8.0`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 12:25 WIB)
 
 ### 🕌 PEMBARUAN LOGO MASJID JAMI' AL-JIHAD & PERATAAN TENGAH (CENTER) KOTAK SAMBUTAN PADA MODE QUICK INPUT MOBILE (`petugas.html` & `modeinput.html`):
 1. **Latar Belakang & Arahan Khusus CEO:**

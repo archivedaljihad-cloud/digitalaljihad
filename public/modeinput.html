@@ -1527,6 +1527,7 @@
         };
 
         let currentActiveModule = null;
+        let isSheetOpen = false;
 
         /* =========================================================================
            SISTEM AUTENTIKASI KUNCI KEAMANAN (PASSWORD GATE)
@@ -2006,11 +2007,37 @@
             });
 
             formContainer.innerHTML = html;
-            document.getElementById('sheetOverlay').classList.add('active');
+            const overlay = document.getElementById('sheetOverlay');
+            if (overlay) overlay.classList.add('active');
+            isSheetOpen = true;
+
+            // Integrasi Native History API agar tombol Back HP kembali ke pilihan menu modul
+            try {
+                if (!window.history.state || !window.history.state.modalOpen) {
+                    window.history.pushState({ modalOpen: true, moduleId: moduleId }, '', window.location.href);
+                }
+            } catch (e) {
+                console.warn('History pushState error:', e);
+            }
         }
 
-        function closeSheet() {
-            document.getElementById('sheetOverlay').classList.remove('active');
+        function closeSheet(fromPopState = false) {
+            const overlay = document.getElementById('sheetOverlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+            }
+            currentActiveModule = null;
+
+            // Jika penutupan dilakukan bukan oleh tombol Back HP (misal klik X, luar modal, atau Simpan),
+            // mundurkan history stack 1 langkah agar kembali sinkron.
+            if (!fromPopState && isSheetOpen) {
+                if (window.history.state && window.history.state.modalOpen) {
+                    try {
+                        window.history.back();
+                    } catch (e) {}
+                }
+            }
+            isSheetOpen = false;
         }
 
         /* =========================================================================
@@ -2759,6 +2786,21 @@
 
         document.getElementById('sheetOverlay').addEventListener('click', (e) => {
             if (e.target.id === 'sheetOverlay') {
+                closeSheet();
+            }
+        });
+
+        // Event listener saat tombol Back HP / browser ditekan
+        window.addEventListener('popstate', (event) => {
+            if (isSheetOpen) {
+                // Menutup modal form dan kembali ke pilihan menu modul utama tanpa keluar aplikasi
+                closeSheet(true);
+            }
+        });
+
+        // Event listener tombol Escape keyboard
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isSheetOpen) {
                 closeSheet();
             }
         });
