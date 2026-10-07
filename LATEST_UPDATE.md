@@ -4,7 +4,39 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 11:55 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 12:15 WIB)
+
+### 💰 INTEGRASI FORM PENCATATAN TRANSAKSI KAS PADA VERSI MOBILE (`petugas.html`) SINKRON 1:1 DENGAN DASHBOARD BENDAHARA (GAMBAR 2 & 4):
+1. **Latar Belakang & Keluhan CEO:**
+   - CEO mengirimkan 4 tangkapan layar perbandingan:
+     - **Gambar 1 (Versi Mobile Ambulance)** vs **Gambar 2 (Dashboard Bendahara - Modal Catat Transaksi Kas Ambulance)**.
+     - **Gambar 3 (Versi Mobile Kas Utama)** vs **Gambar 4 (Dashboard Bendahara - Modal Catat Transaksi Kas Utama)**.
+   - Pada versi mobile sebelumnya, form kas hanya berisi kolom total/saldo tanpa fitur pencatatan transaksi masuk/keluar baru dan riwayat transaksi.
+2. **Penyempurnaan & Fitur Baru yang Telah Dipasang:**
+   - **Formulir Catat Transaksi Kas Lengkap di Mobile (`kas_subform`):**
+     - Pada **Modul Kas Utama Masjid** & **Modul Kas Mobil Ambulance**, kini terpasang sub-form *"Catat Transaksi Kas"* dengan field identik dashboard bendahara:
+       1. **Tanggal Transaksi:** Date picker (default tanggal hari ini YYYY-MM-DD).
+       2. **Jenis Transaksi:** Dropdown pilihan `PEMASUKAN` atau `PENGELUARAN`.
+       3. **Akun Kas:** Otomatis terpilih sesuai modul (`Kas Utama Masjid` atau `Kas Ambulance`).
+       4. **Uraian / Keterangan:** Input teks uraian transaksi (misal: *Infaq Kotak Amal Jum'at* / *BBM Armada*).
+       5. **Nominal (Rupiah):** Input rupiah dengan pemformatan otomatis saat mengetik (`500.000`).
+       6. **Tombol Simpan:** *"Simpan Transaksi Kas Sekarang"*.
+   - **Riwayat Transaksi Tersimpan & Tombol Hapus:**
+     - Tepat di bawah form, terdapat daftar riwayat transaksi kas terbaru dengan badge `PEMASUKAN` (hijau) atau `PENGELUARAN` (merah), tanggal, uraian, nominal, dan tombol hapus.
+   - **Perhitungan Saldo Otomatis & Sinkronisasi Dua Arah:**
+     - Saat transaksi dicatat via HP, data otomatis disimpan ke Supabase Cloud:
+       - Kas Utama -> tabel `keuangan`
+       - Kas Ambulance -> tabel `keuangan_ambulance`
+     - Saldo total donasi/infaq masuk, pengeluaran, dan saldo kas siaga langsung dihitung ulang otomatis dari data riil transaksi.
+     - Transmisi broadcast realtime (`INSERT` / `DELETE`) dikirim seketika ke Smart TV Masjid dan Dashboard Bendahara (<100ms).
+   - **Sinkronisasi Publik:**
+     - Berkas `web-statis/petugas.html` disalin dan disinkronkan ke `public/petugas.html`.
+3. **Eksekusi SOP Cache Invalidasi & Version Bumping (SOP #2):**
+   - Service Worker di `web-statis/sw.js` dinaikkan ke **`v5.7.8`** (`aljihad-signage-v5.7.8`).
+   - Logika pembersih cache usang di `web-statis/admin.html` disinkronkan ke `aljihad-signage-v5.7.8`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 11:55 WIB)
 
 ### 💎 SINKRONISASI PENUH PROGRAM INFAQ & WAKAF VERSI MOBILE (`petugas.html`) 1:1 DENGAN DASHBOARD BENDAHARA (`admin.html`) & SUPABASE CLOUD:
 1. **Latar Belakang & Keluhan CEO:**

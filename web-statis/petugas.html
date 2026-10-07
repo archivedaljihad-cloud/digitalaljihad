@@ -525,6 +525,34 @@
             color: #022c22;
         }
 
+        
+        /* BADGE JENIS TRANSAKSI KAS (PEMASUKAN / PENGELUARAN) */
+        .trx-badge-masuk {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #34d399;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trx-badge-keluar {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #f87171;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         /* SUB LIST ITEM CARD (SHOHIBUL / DONASI / PENGELUARAN) */
         .dynamic-item-card {
             background: rgba(2, 26, 20, 0.9);
@@ -1220,6 +1248,8 @@
         let qurbanShohibulList = [];
         let infaqDonasiList = [];
         let pengeluaranJumatList = [];
+        let kasUtamaList = [];
+        let kasAmbulanceList = [];
         let programInfaqList = [
             {
                 id: 4,
@@ -1397,11 +1427,12 @@
                 summaryText: () => `Saldo: Rp ${modules['kas-utama'].getVal('f_kas_saldo')}`,
                 fields: [
                     { id: "f_tgl_kas", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", hint: "Bulan pembukuan aktif" },
-                    // Ditambahkan di bawah Tanggal/Periode Laporan sesuai arahan CEO:
                     { id: "f_saldo_pekan_lalu", label: "Saldo Jum'at Pekan Lalu (Rp)", type: "text", val: "142.350.000", hint: "Saldo kas jumat sebelumnya" },
-                    { id: "f_kas_masuk", label: "Total Donasi / Infaq Masuk (Rp)", type: "text", val: "165.250.000", hint: "Kotak infaq jumat & transfer" },
-                    { id: "f_kas_keluar", label: "Total Pengeluaran Operasional (Rp)", type: "text", val: "16.750.000", hint: "Listrik, marbot, kebersihan" },
-                    { id: "f_kas_saldo", label: "Sisa Saldo Kas Siaga (Rp)", type: "text", val: "148.500.000", hint: "Saldo kas akhir masjid" }
+                    { id: "f_kas_masuk", label: "Total Donasi / Infaq Masuk (Rp)", type: "text", val: "22.879.023", hint: "Kotak infaq jumat & transfer" },
+                    { id: "f_kas_keluar", label: "Total Pengeluaran Operasional (Rp)", type: "text", val: "4.137.000", hint: "Listrik, marbot, kebersihan" },
+                    { id: "f_kas_saldo", label: "Sisa Saldo Kas Siaga (Rp)", type: "text", val: "18.742.023", hint: "Saldo kas akhir masjid" },
+                    // Formulir Catat Transaksi Kas Baru (Pemasukan / Pengeluaran)
+                    { id: "f_kas_subform", label: "Catat Transaksi Kas Utama", type: "kas_subform", val: "Kas Utama Masjid", hint: "Pencatatan transaksi kas masuk & keluar" }
                 ],
                 getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
@@ -1409,15 +1440,14 @@
             'ambulance': {
                 title: "Laporan Kas Mobil Ambulance",
                 icon: "fa-ambulance",
-                summaryText: () => `Saldo Terakhir: Rp ${modules['ambulance'].getVal('f_amb_saldo')}`,
+                summaryText: () => `Saldo: Rp ${modules['ambulance'].getVal('f_amb_saldo')}`,
                 fields: [
                     { id: "f_tgl_amb", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", hint: "Bulan pembukuan ambulance" },
-                    // Ditambahkan di bawah Tanggal/Periode Laporan sesuai arahan CEO:
                     { id: "f_amb_saldo_terakhir", label: "Saldo Terakhir (Rp)", type: "text", val: "1.172.200", hint: "Saldo pembukuan sebelumnya" },
                     { id: "f_amb_masuk", label: "Total Donasi Masuk Ambulance (Rp)", type: "text", val: "5.137.800", hint: "Infaq khusus ambulance" },
-                    { id: "f_amb_saldo", label: "Sisa Saldo Kas Siaga Ambulance (Rp)", type: "text", val: "1.172.200", hint: "Saldo kas siaga armada" }
-                    // BIAYA OPERASIONAL, BBM & SERVIS = DIHAPUS SESUAI PERINTAH CEO
-                    // NOMOR HOTLINE SIAGA AMBULANCE = DIHAPUS SESUAI PERINTAH CEO
+                    { id: "f_amb_saldo", label: "Sisa Saldo Kas Siaga Ambulance (Rp)", type: "text", val: "1.172.200", hint: "Saldo kas siaga armada" },
+                    // Formulir Catat Transaksi Kas Baru (Pemasukan / Pengeluaran)
+                    { id: "f_amb_subform", label: "Catat Transaksi Kas Ambulance", type: "kas_subform", val: "Kas Ambulance", hint: "Pencatatan transaksi kas ambulance" }
                 ],
                 getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
@@ -1638,9 +1668,11 @@
                         if (sj.maklumat) modules['jumat'].fields[5].val = sj.maklumat;
                     }
 
-                    // Kas Utama
+                    // Kas Utama (Sinkron Riwayat & Transaksi)
                     const kasList = await window.SupabaseDB.getKeuanganKasUtama();
                     if (kasList && kasList.length > 0) {
+                        kasUtamaList = kasList;
+                        localStorage.setItem('cached_keuangan', JSON.stringify(kasList));
                         let totM = 0, totK = 0;
                         kasList.forEach(item => {
                             totM += parseFloat(item.pemasukan || 0);
@@ -1652,15 +1684,18 @@
                         modules['kas-utama'].fields[4].val = formatRupiah(sld);
                     }
 
-                    // Kas Ambulance
+                    // Kas Ambulance (Sinkron Riwayat & Transaksi)
                     const ambList = await window.SupabaseDB.getKeuanganAmbulance();
                     if (ambList && ambList.length > 0) {
+                        kasAmbulanceList = ambList;
+                        localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(ambList));
                         let totM = 0, totK = 0;
                         ambList.forEach(item => {
                             totM += parseFloat(item.pemasukan || 0);
                             totK += parseFloat(item.pengeluaran || 0);
                         });
                         const sld = totM - totK;
+                        modules['ambulance'].fields[1].val = formatRupiah(sld);
                         modules['ambulance'].fields[2].val = formatRupiah(totM);
                         modules['ambulance'].fields[3].val = formatRupiah(sld);
                     }
@@ -1838,6 +1873,75 @@
                                 <div class="form-label-big" style="margin-bottom: 6px;">Riwayat Donasi Masuk Tersimpan:</div>
                                 <div id="donasiListContainer">
                                     ${renderDonasiListHTML()}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (f.type === 'kas_subform') {
+                    // Formulir Catat Transaksi Kas Baru (Sinkron Gambar 2 & Gambar 4 Dashboard Bendahara)
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    const isKasUtama = (f.val === 'Kas Utama Masjid');
+                    html += `
+                        <div class="sub-box-container">
+                            <div class="sub-box-title">
+                                <i class="fas fa-plus-circle"></i> Catat Transaksi Kas (${f.val})
+                            </div>
+                            
+                            <div class="form-block" style="margin-bottom: 8px;">
+                                <div class="form-label-box">
+                                    <label class="form-label-big">Tanggal Transaksi</label>
+                                </div>
+                                <input type="date" id="newKasTanggal_${f.id}" class="form-input-big" value="${todayStr}">
+                            </div>
+
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <div style="flex: 1;">
+                                    <div class="form-label-box">
+                                        <label class="form-label-big">Jenis Transaksi</label>
+                                    </div>
+                                    <select id="newKasTipe_${f.id}" class="form-input-big" style="font-weight: 700;">
+                                        <option value="masuk">PEMASUKAN</option>
+                                        <option value="keluar">PENGELUARAN</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div class="form-label-box">
+                                        <label class="form-label-big">Akun Kas</label>
+                                    </div>
+                                    <select id="newKasAkun_${f.id}" class="form-input-big" style="font-weight: 700;">
+                                        <option value="${f.val}" selected>${f.val}</option>
+                                        <option value="${isKasUtama ? 'Kas Ambulance' : 'Kas Utama Masjid'}">${isKasUtama ? 'Kas Ambulance' : 'Kas Utama Masjid'}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-block" style="margin-bottom: 8px;">
+                                <div class="form-label-box">
+                                    <label class="form-label-big">Uraian / Keterangan</label>
+                                </div>
+                                <input type="text" id="newKasUraian_${f.id}" class="form-input-big" placeholder="Contoh: Infaq Kotak Amal Jum'at / Donasi Operasional Ambulance">
+                            </div>
+
+                            <div class="form-block" style="margin-bottom: 10px;">
+                                <div class="form-label-box">
+                                    <label class="form-label-big">Nominal (Rupiah)</label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-weight: 800; color: #ffd700; font-size: 0.95rem;">Rp</span>
+                                    <input type="text" id="newKasNominal_${f.id}" class="form-input-big" style="flex: 1; font-weight: 800;" placeholder="Contoh: 500.000" oninput="formatInputNominal(this)">
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-add-subitem" onclick="addKasTransactionItem('${f.id}', '${f.val}')">
+                                <i class="fas fa-check-circle"></i> Simpan Transaksi Kas Sekarang
+                            </button>
+
+                            <div style="margin-top: 12px; border-top: 1px dashed rgba(255,215,0,0.3); padding-top: 8px;">
+                                <div class="form-label-big" style="margin-bottom: 6px; font-size: 0.78rem;">
+                                    Riwayat Transaksi Tersimpan (${f.val}):
+                                </div>
+                                <div id="kasListContainer_${f.id}">
+                                    ${renderKasListHTML(f.val, f.id)}
                                 </div>
                             </div>
                         </div>
@@ -2200,6 +2304,226 @@
             showToastSuccess('Catatan donasi berhasil dihapus.');
         }
 
+        
+        /* =========================================================================
+           PENCATATAN TRANSAKSI KAS (SINKRON DENGAN GAMBAR 2 & 4 BENDAHARA)
+           ========================================================================= */
+        function formatInputNominal(input) {
+            if (!input) return;
+            const raw = input.value.replace(/[^0-9]/g, '');
+            if (!raw) {
+                input.value = '';
+                return;
+            }
+            input.value = new Intl.NumberFormat('id-ID').format(raw);
+        }
+
+        function renderKasListHTML(kategori, formId) {
+            const isKasUtama = (kategori === 'Kas Utama Masjid');
+            const list = isKasUtama ? kasUtamaList : kasAmbulanceList;
+
+            if (!list || list.length === 0) {
+                return '<div style="font-size:0.75rem; color:#94a3b8; text-align:center; padding:10px;">Belum ada riwayat transaksi kas tercatat</div>';
+            }
+
+            return list.slice(0, 15).map((item, idx) => {
+                const isMasuk = (parseFloat(item.pemasukan || 0) > 0);
+                const nominal = isMasuk ? parseFloat(item.pemasukan) : parseFloat(item.pengeluaran || 0);
+                const tgl = formatDateIndo(item.tanggal);
+                const uraian = item.deskripsi || item.uraian || '-';
+                const id = item.id || idx;
+
+                return `
+                    <div class="dynamic-item-card">
+                        <div class="dynamic-item-text">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 2px;">
+                                <span class="${isMasuk ? 'trx-badge-masuk' : 'trx-badge-keluar'}">
+                                    <i class="fas ${isMasuk ? 'fa-arrow-down' : 'fa-arrow-up'}"></i> ${isMasuk ? 'PEMASUKAN' : 'PENGELUARAN'}
+                                </span>
+                                <span style="font-size: 0.8rem; font-weight: 800; color: ${isMasuk ? '#34d399' : '#f87171'};">
+                                    ${isMasuk ? '+' : '-'} Rp ${formatRupiah(nominal)}
+                                </span>
+                            </div>
+                            <div class="dynamic-item-title">${escapeHtml(uraian)}</div>
+                            <div class="dynamic-item-sub">${tgl} • ${escapeHtml(item.kategori || kategori)}</div>
+                        </div>
+                        <button type="button" class="btn-remove-subitem" onclick="removeKasTransactionItem('${id}', '${kategori}', '${formId}')" title="Hapus Transaksi">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function addKasTransactionItem(formId, kategoriDefault) {
+            const tgl = document.getElementById(`newKasTanggal_${formId}`)?.value || new Date().toISOString().split('T')[0];
+            const tipe = document.getElementById(`newKasTipe_${formId}`)?.value || 'masuk';
+            const kat = document.getElementById(`newKasAkun_${formId}`)?.value || kategoriDefault;
+            const uraian = document.getElementById(`newKasUraian_${formId}`)?.value.trim();
+            const nominal = parseNominal(document.getElementById(`newKasNominal_${formId}`)?.value);
+
+            if (!uraian || nominal <= 0) {
+                alert('Harap lengkapi uraian keterangan dan nominal transaksi!');
+                return;
+            }
+
+            const isKasUtama = (kat === 'Kas Utama Masjid');
+            const targetTable = isKasUtama ? 'keuangan' : 'keuangan_ambulance';
+
+            const payload = {
+                tanggal: tgl,
+                deskripsi: uraian,
+                pemasukan: (tipe === 'masuk' ? nominal : 0),
+                pengeluaran: (tipe === 'keluar' ? nominal : 0),
+                saldo: nominal,
+                kategori: kat
+            };
+
+            // 1. Simpan langsung ke Supabase Cloud
+            try {
+                const client = window.SupabaseDB ? window.SupabaseDB.getClient() : null;
+                if (client) {
+                    const { data, error } = await client.from(targetTable).insert([payload]).select();
+                    if (!error && data && data[0]) {
+                        payload.id = data[0].id;
+                    }
+                }
+            } catch (err) {
+                console.warn(`Gagal insert ke Supabase ${targetTable}:`, err);
+            }
+
+            if (!payload.id) payload.id = Date.now();
+
+            // 2. Tambahkan ke state array lokal & localStorage
+            if (isKasUtama) {
+                kasUtamaList.unshift(payload);
+                localStorage.setItem('cached_keuangan', JSON.stringify(kasUtamaList));
+            } else {
+                kasAmbulanceList.unshift(payload);
+                localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(kasAmbulanceList));
+            }
+
+            // 3. Hitung ulang total dan update input ringkasan form
+            if (isKasUtama) {
+                let totM = 0, totK = 0;
+                kasUtamaList.forEach(item => {
+                    totM += parseFloat(item.pemasukan || 0);
+                    totK += parseFloat(item.pengeluaran || 0);
+                });
+                const sld = totM - totK;
+                const elM = document.getElementById('f_kas_masuk');
+                const elK = document.getElementById('f_kas_keluar');
+                const elS = document.getElementById('f_kas_saldo');
+                if (elM) elM.value = formatRupiah(totM);
+                if (elK) elK.value = formatRupiah(totK);
+                if (elS) elS.value = formatRupiah(sld);
+                modules['kas-utama'].fields[2].val = formatRupiah(totM);
+                modules['kas-utama'].fields[3].val = formatRupiah(totK);
+                modules['kas-utama'].fields[4].val = formatRupiah(sld);
+            } else {
+                let totM = 0, totK = 0;
+                kasAmbulanceList.forEach(item => {
+                    totM += parseFloat(item.pemasukan || 0);
+                    totK += parseFloat(item.pengeluaran || 0);
+                });
+                const sld = totM - totK;
+                const elM = document.getElementById('f_amb_masuk');
+                const elS = document.getElementById('f_amb_saldo');
+                const elT = document.getElementById('f_amb_saldo_terakhir');
+                if (elM) elM.value = formatRupiah(totM);
+                if (elS) elS.value = formatRupiah(sld);
+                if (elT) elT.value = formatRupiah(sld);
+                modules['ambulance'].fields[1].val = formatRupiah(sld);
+                modules['ambulance'].fields[2].val = formatRupiah(totM);
+                modules['ambulance'].fields[3].val = formatRupiah(sld);
+            }
+
+            // 4. Transmisi Realtime Broadcast ke Smart TV & Dashboard Bendahara
+            if (window.SupabaseDB && typeof window.SupabaseDB.broadcastChange === 'function') {
+                window.SupabaseDB.broadcastChange(targetTable, 'INSERT', payload, 'Bendahara Mobile');
+            }
+
+            // 5. Refresh daftar transaksi di tampilan
+            const container = document.getElementById(`kasListContainer_${formId}`);
+            if (container) {
+                container.innerHTML = renderKasListHTML(kategoriDefault, formId);
+            }
+
+            // 6. Reset form input transaksi
+            const inUraian = document.getElementById(`newKasUraian_${formId}`);
+            const inNominal = document.getElementById(`newKasNominal_${formId}`);
+            if (inUraian) inUraian.value = '';
+            if (inNominal) inNominal.value = '';
+
+            updateAllCardPreviews();
+            showToastSuccess(`Alhamdulillah! Transaksi ${kat} berhasil dicatat & masuk ke TV!`);
+        }
+
+        async function removeKasTransactionItem(id, kategori, formId) {
+            if (!confirm('Hapus catatan transaksi kas ini?')) return;
+            const isKasUtama = (kategori === 'Kas Utama Masjid');
+            const targetTable = isKasUtama ? 'keuangan' : 'keuangan_ambulance';
+
+            try {
+                const client = window.SupabaseDB ? window.SupabaseDB.getClient() : null;
+                if (client) {
+                    await client.from(targetTable).delete().eq('id', id);
+                }
+            } catch(err) {
+                console.warn(`Gagal hapus transaksi dari Supabase ${targetTable}:`, err);
+            }
+
+            if (isKasUtama) {
+                kasUtamaList = kasUtamaList.filter(item => String(item.id) !== String(id));
+                localStorage.setItem('cached_keuangan', JSON.stringify(kasUtamaList));
+                let totM = 0, totK = 0;
+                kasUtamaList.forEach(item => {
+                    totM += parseFloat(item.pemasukan || 0);
+                    totK += parseFloat(item.pengeluaran || 0);
+                });
+                const sld = totM - totK;
+                const elM = document.getElementById('f_kas_masuk');
+                const elK = document.getElementById('f_kas_keluar');
+                const elS = document.getElementById('f_kas_saldo');
+                if (elM) elM.value = formatRupiah(totM);
+                if (elK) elK.value = formatRupiah(totK);
+                if (elS) elS.value = formatRupiah(sld);
+                modules['kas-utama'].fields[2].val = formatRupiah(totM);
+                modules['kas-utama'].fields[3].val = formatRupiah(totK);
+                modules['kas-utama'].fields[4].val = formatRupiah(sld);
+            } else {
+                kasAmbulanceList = kasAmbulanceList.filter(item => String(item.id) !== String(id));
+                localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(kasAmbulanceList));
+                let totM = 0, totK = 0;
+                kasAmbulanceList.forEach(item => {
+                    totM += parseFloat(item.pemasukan || 0);
+                    totK += parseFloat(item.pengeluaran || 0);
+                });
+                const sld = totM - totK;
+                const elM = document.getElementById('f_amb_masuk');
+                const elS = document.getElementById('f_amb_saldo');
+                const elT = document.getElementById('f_amb_saldo_terakhir');
+                if (elM) elM.value = formatRupiah(totM);
+                if (elS) elS.value = formatRupiah(sld);
+                if (elT) elT.value = formatRupiah(sld);
+                modules['ambulance'].fields[1].val = formatRupiah(sld);
+                modules['ambulance'].fields[2].val = formatRupiah(totM);
+                modules['ambulance'].fields[3].val = formatRupiah(sld);
+            }
+
+            if (window.SupabaseDB && typeof window.SupabaseDB.broadcastChange === 'function') {
+                window.SupabaseDB.broadcastChange(targetTable, 'DELETE', { id }, 'Bendahara Mobile');
+            }
+
+            const container = document.getElementById(`kasListContainer_${formId}`);
+            if (container) {
+                container.innerHTML = renderKasListHTML(kategori, formId);
+            }
+
+            updateAllCardPreviews();
+            showToastSuccess('Catatan transaksi kas berhasil dihapus.');
+        }
+
         function renderPengeluaranListHTML() {
             if (!pengeluaranJumatList || pengeluaranJumatList.length === 0) {
                 return '<div style="font-size:0.75rem; color:#94a3b8; text-align:center; padding:6px;">Belum ada daftar pengeluaran</div>';
@@ -2249,7 +2573,7 @@
 
             // 1. Ambil nilai input dari form
             mod.fields.forEach(f => {
-                if (f.type !== 'shohibul_subform' && f.type !== 'donasi_subform' && f.type !== 'biaya_subform') {
+                if (f.type !== 'shohibul_subform' && f.type !== 'donasi_subform' && f.type !== 'biaya_subform' && f.type !== 'kas_subform') {
                     const el = document.getElementById(f.id);
                     if (el) f.val = el.value.trim();
                 }
@@ -2316,6 +2640,29 @@
                         }
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('pengumuman_jumat', 'UPDATE', pjPayload, 'Bendahara Mobile');
+                        }
+                    } else if (currentActiveModule === 'kas-utama') {
+                        const kuPayload = {
+                            periode: mod.getVal('f_tgl_kas'),
+                            saldo_pekan_lalu: parseNominal(mod.getVal('f_saldo_pekan_lalu')),
+                            infaq_masuk: parseNominal(mod.getVal('f_kas_masuk')),
+                            pengeluaran: parseNominal(mod.getVal('f_kas_keluar')),
+                            saldo_akhir: parseNominal(mod.getVal('f_kas_saldo'))
+                        };
+                        await window.SupabaseDB.setAppSetting('laporan_kas_utama', kuPayload);
+                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                            window.SupabaseDB.broadcastChange('keuangan', 'UPDATE', kuPayload, 'Bendahara Mobile');
+                        }
+                    } else if (currentActiveModule === 'ambulance') {
+                        const ambPayload = {
+                            periode: mod.getVal('f_tgl_amb'),
+                            saldo_terakhir: parseNominal(mod.getVal('f_amb_saldo_terakhir')),
+                            donasi_masuk: parseNominal(mod.getVal('f_amb_masuk')),
+                            saldo_akhir: parseNominal(mod.getVal('f_amb_saldo'))
+                        };
+                        await window.SupabaseDB.setAppSetting('laporan_kas_ambulance', ambPayload);
+                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                            window.SupabaseDB.broadcastChange('keuangan_ambulance', 'UPDATE', ambPayload, 'Bendahara Mobile');
                         }
                     } else if (currentActiveModule === 'infaq') {
                         // Sinkronkan status aktif program ke Supabase & LocalStorage
