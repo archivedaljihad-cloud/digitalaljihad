@@ -76,16 +76,25 @@
         }
 
         .mosque-icon-badge {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, #ffd700, #b8860b);
+            width: 46px;
+            height: 46px;
+            background: rgba(255, 215, 0, 0.12);
+            border: 1.5px solid var(--gold-accent);
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #022c22;
-            font-size: 1.35rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            padding: 3px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 215, 0, 0.2);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .mosque-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
         }
 
         .header-text h1 {
@@ -162,8 +171,9 @@
             background: linear-gradient(135deg, rgba(8, 76, 58, 0.85), rgba(4, 46, 35, 0.9));
             border: 1.5px solid rgba(255, 215, 0, 0.35);
             border-radius: 18px;
-            padding: 14px 16px;
+            padding: 16px 18px;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+            text-align: center;
         }
 
         .guide-mode-tag {
@@ -174,26 +184,39 @@
             font-size: 0.70rem;
             font-weight: 800;
             letter-spacing: 1.5px;
-            padding: 3px 12px;
+            padding: 4px 14px;
             border-radius: 20px;
-            margin-bottom: 8px;
+            margin: 0 auto 10px auto;
             text-transform: uppercase;
+            text-align: center;
+        }
+
+        .guide-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .guide-content h2 {
-            font-size: 0.96rem;
+            font-size: 0.98rem;
             font-weight: 800;
             color: #ffffff;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
+            text-align: center;
         }
 
         .guide-content p {
             font-size: 0.80rem;
             color: #e2e8f0;
-            line-height: 1.45;
+            line-height: 1.5;
+            text-align: center;
+            margin: 0 auto;
         }
 
         /* KATEGORI ROLE BADGE HEADER */
@@ -1025,7 +1048,7 @@
         <header class="header-panel">
             <div class="header-brand">
                 <div class="mosque-icon-badge">
-                    <i class="fas fa-mosque"></i>
+                    <img src="image/display/logo_aljihad.png" alt="Logo Masjid Jami' Al-Jihad" class="mosque-logo-img" onerror="this.onerror=null;this.src='img/logo-aljihad-circle.png';">
                 </div>
                 <div class="header-text">
                     <h1>Masjid Jami' Al-Jihad</h1>

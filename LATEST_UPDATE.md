@@ -4,7 +4,32 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 12:15 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 12:25 WIB)
+
+### 🕌 PEMBARUAN LOGO MASJID JAMI' AL-JIHAD & PERATAAN TENGAH (CENTER) KOTAK SAMBUTAN PADA MODE QUICK INPUT MOBILE (`petugas.html` & `modeinput.html`):
+1. **Latar Belakang & Arahan Khusus CEO:**
+   - CEO meminta mengganti icon masjid di header dengan logo resmi Masjid Jami' Al-Jihad.
+   - CEO meminta memformat seluruh teks yang ada di dalam kotak (termasuk kotak kapsul) menjadi rata tengah (*center*).
+   - Menyiapkan akses URL yang mudah diingat: `https://digitalaljihad.my.id/modeinput` di samping URL yang sudah ada `https://digitalaljihad.my.id/petugas`.
+
+2. **Rincian Perubahan yang Diterapkan:**
+   - **Logo Resmi Masjid Jami' Al-Jihad:**
+     - Ikon fontawesome masjid `<i class="fas fa-mosque"></i>` diganti dengan logo resmi Masjid Jami' Al-Jihad circular emas (`image/display/logo_aljihad.png` dengan fallback `img/logo-aljihad-circle.png`).
+     - Frame logo dipoles dengan border emas aksen, latar belakang transparan mewah, bayangan glow halus, dan properti `object-fit: contain`.
+   - **Perataan Tengah Presisi (Center Alignment) Kotak Sambutan:**
+     - Kotak sambutan (`.senior-guide-box`) diatur `text-align: center;`.
+     - Kotak kapsul badge (`.guide-mode-tag` dengan teks `QUICK INPUT MODE BY MOBILE`) diformat berada tepat di tengah dengan `margin: 0 auto 10px auto;` dan `display: inline-block;`.
+     - Judul salam (`.guide-content h2` `Assalamu'alaikum, 👋`) diformat rata tengah dengan flex centering (`justify-content: center; text-align: center;`).
+     - Paragraf deskripsi (`.guide-content p`) diformat rata tengah (`text-align: center; margin: 0 auto;`).
+   - **URL Akses Ganda Cerdas (Clean URL):**
+     - Tersedia rute baru yang sangat mudah diingat: `https://digitalaljihad.my.id/modeinput` sekaligus mempertahankan `https://digitalaljihad.my.id/petugas` agar pengurus dapat mengakses lewat kedua link tersebut.
+
+3. **Eksekusi SOP Cache Invalidasi & Version Bumping (SOP #2):**
+   - Service Worker di `web-statis/sw.js` dinaikkan ke **`v5.7.9`** (`aljihad-signage-v5.7.9`).
+   - Logika pembersih cache usang di `web-statis/admin.html` disinkronkan ke `aljihad-signage-v5.7.9`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 12:15 WIB)
 
 ### 💰 INTEGRASI FORM PENCATATAN TRANSAKSI KAS PADA VERSI MOBILE (`petugas.html`) SINKRON 1:1 DENGAN DASHBOARD BENDAHARA (GAMBAR 2 & 4):
 1. **Latar Belakang & Keluhan CEO:**
