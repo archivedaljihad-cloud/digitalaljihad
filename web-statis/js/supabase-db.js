@@ -6,13 +6,23 @@
 (function (window) {
     let sbClient = null;
 
+    function getSbConfig() {
+        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG && SUPABASE_CONFIG.url) return SUPABASE_CONFIG;
+        if (typeof window !== 'undefined' && window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.url) return window.SUPABASE_CONFIG;
+        return {
+            url: 'https://xskusfacwsclbgdtgier.supabase.co',
+            anonKey: 'sb_publishable_lsUgbFcTmwuwiiV70rzSWQ_V0JUR-mX'
+        };
+    }
+
     function getClient() {
         if (!sbClient) {
             if (typeof window.supabase === 'undefined' || !window.supabase.createClient) {
                 console.warn('Supabase JS SDK belum dimuat. Menggunakan fallback lokal.');
                 return null;
             }
-            sbClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+            const cfg = getSbConfig();
+            sbClient = window.supabase.createClient(cfg.url, cfg.anonKey);
         }
         return sbClient;
     }
@@ -70,83 +80,122 @@
         },
 
         /**
+         * Direct Native REST Fetch ke Supabase Cloud (Zero Dependency)
+         * Berjalan 100% tanpa bergantung pada ketersediaan CDN JS SDK
+         */
+        async restFetch(path, options = {}) {
+            const cfg = getSbConfig();
+            const headers = Object.assign({
+                'apikey': cfg.anonKey,
+                'Authorization': `Bearer ${cfg.anonKey}`,
+                'Content-Type': 'application/json'
+            }, options.headers || {});
+
+            const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+            const res = await fetch(`${cfg.url}/rest/v1/${cleanPath}`, {
+                ...options,
+                headers
+            });
+            if (!res.ok) {
+                throw new Error(`Supabase REST HTTP ${res.status}`);
+            }
+            return await res.json();
+        },
+
+        /**
          * Ambil pengaturan umum (app_settings) dari Supabase Cloud
          * Mengambil seluruh baris konfigurasi (row 1 + baris key-value dinamis)
          */
         async getSettings() {
             try {
                 const client = getClient();
+                let data = null;
                 if (client) {
-                    const { data, error } = await client.from('app_settings').select('*').order('id', { ascending: true });
-                    if (!error && data && data.length > 0) {
-                        // Baris utama id = 1
-                        const row1 = data.find(r => r.id === 1) || data[0];
-                        const settings = Object.assign({}, this.defaultSettings, row1);
-
-                        // Gabungkan baris key-value tambahan dari Supabase
-                        data.forEach(r => {
-                            if (r.key && r.id !== 1 && r.value !== null && r.value !== undefined) {
-                                let parsedVal = r.value;
-                                if (typeof r.value === 'string' && (r.value.startsWith('{') || r.value.startsWith('['))) {
-                                    try { parsedVal = JSON.parse(r.value); } catch(e) {}
-                                }
-                                settings[r.key] = parsedVal;
-                            }
-                        });
-
-                        // Parse JSON fields jika bertipe string
-                        if (typeof settings.rotation_pages === 'string') {
-                            try { settings.rotation_pages = JSON.parse(settings.rotation_pages); } catch (e) {}
-                        }
-                        if (typeof settings.running_text_pages === 'string') {
-                            try { settings.running_text_pages = JSON.parse(settings.running_text_pages); } catch (e) {}
-                        }
-
-                        // Normalisasi aman status prayer_mode_enabled dari kolom value row 1 atau key-value
-                        if (settings.value !== undefined && settings.value !== null) {
-                            settings.prayer_mode_enabled = (settings.value === '1' || settings.value === 1 || settings.value === true);
-                        } else if (settings.prayer_mode_enabled !== undefined) {
-                            settings.prayer_mode_enabled = (settings.prayer_mode_enabled === true || settings.prayer_mode_enabled === '1' || settings.prayer_mode_enabled === 1);
-                        } else {
-                            settings.prayer_mode_enabled = true;
-                        }
-
-                        // Sanitasi nama masjid & sub header agar tidak ada nilai dummy lama
-                        if (!settings.nama_aplikasi || settings.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || settings.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
-                            settings.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';
-                        }
-                        if (!settings.sub_header || settings.sub_header.includes('Kebon Jeruk') || settings.sub_header.includes('Melati') || settings.sub_header.includes('Graha Asri')) {
-                            settings.sub_header = 'SISTEM INFORMASI DIGITAL';
-                        }
-
-                        // Simpan ke cache lokal browser untuk offline resilience
-                        try {
-                            localStorage.setItem('cached_app_settings', JSON.stringify(settings));
-                            if (settings.rotation_interval) {
-                                localStorage.setItem('display_rotation_interval', settings.rotation_interval);
-                            }
-                            if (settings.kajian_sabtu_data) {
-                                localStorage.setItem('cached_kajian_sabtu', typeof settings.kajian_sabtu_data === 'string' ? settings.kajian_sabtu_data : JSON.stringify(settings.kajian_sabtu_data));
-                            }
-                            if (settings.kajian_sabtu_enabled !== undefined) {
-                                localStorage.setItem('cached_kajian_sabtu_enabled', settings.kajian_sabtu_enabled);
-                            }
-                            if (settings.kajian_sabtu_start_time) {
-                                localStorage.setItem('cached_kajian_sabtu_start_time', settings.kajian_sabtu_start_time);
-                            }
-                            if (settings.kegiatan_rutin_settings) {
-                                localStorage.setItem('agenda_rutin_settings', typeof settings.kegiatan_rutin_settings === 'string' ? settings.kegiatan_rutin_settings : JSON.stringify(settings.kegiatan_rutin_settings));
-                            }
-                            if (settings.pengumuman_jumat) {
-                                localStorage.setItem('pengumuman_jumat_data', typeof settings.pengumuman_jumat === 'string' ? settings.pengumuman_jumat : JSON.stringify(settings.pengumuman_jumat));
-                            }
-                            if (settings.rbac_users_list) {
-                                localStorage.setItem('aljihad_users_list', typeof settings.rbac_users_list === 'string' ? settings.rbac_users_list : JSON.stringify(settings.rbac_users_list));
-                            }
-                        } catch (e) {}
-
-                        return settings;
+                    const res = await client.from('app_settings').select('*').order('id', { ascending: true });
+                    if (!res.error && res.data && res.data.length > 0) {
+                        data = res.data;
                     }
+                }
+                // Direct REST Fallback jika client SDK null / gagal
+                if (!data || data.length === 0) {
+                    try {
+                        const restData = await this.restFetch('app_settings?select=*&order=id.asc');
+                        if (Array.isArray(restData) && restData.length > 0) {
+                            data = restData;
+                        }
+                    } catch (restErr) {
+                        console.warn('[SupabaseDB] REST fetch app_settings:', restErr);
+                    }
+                }
+
+                if (data && data.length > 0) {
+                    // Baris utama id = 1
+                    const row1 = data.find(r => r.id === 1) || data[0];
+                    const settings = Object.assign({}, this.defaultSettings, row1);
+
+                    // Gabungkan baris key-value tambahan dari Supabase
+                    data.forEach(r => {
+                        if (r.key && r.id !== 1 && r.value !== null && r.value !== undefined) {
+                            let parsedVal = r.value;
+                            if (typeof r.value === 'string' && (r.value.startsWith('{') || r.value.startsWith('['))) {
+                                try { parsedVal = JSON.parse(r.value); } catch(e) {}
+                            }
+                            settings[r.key] = parsedVal;
+                        }
+                    });
+
+                    // Parse JSON fields jika bertipe string
+                    if (typeof settings.rotation_pages === 'string') {
+                        try { settings.rotation_pages = JSON.parse(settings.rotation_pages); } catch (e) {}
+                    }
+                    if (typeof settings.running_text_pages === 'string') {
+                        try { settings.running_text_pages = JSON.parse(settings.running_text_pages); } catch (e) {}
+                    }
+
+                    // Normalisasi aman status prayer_mode_enabled dari kolom value row 1 atau key-value
+                    if (settings.value !== undefined && settings.value !== null) {
+                        settings.prayer_mode_enabled = (settings.value === '1' || settings.value === 1 || settings.value === true);
+                    } else if (settings.prayer_mode_enabled !== undefined) {
+                        settings.prayer_mode_enabled = (settings.prayer_mode_enabled === true || settings.prayer_mode_enabled === '1' || settings.prayer_mode_enabled === 1);
+                    } else {
+                        settings.prayer_mode_enabled = true;
+                    }
+
+                    // Sanitasi nama masjid & sub header agar tidak ada nilai dummy lama
+                    if (!settings.nama_aplikasi || settings.nama_aplikasi.trim().toUpperCase() === 'DISPLAY MASJID' || settings.nama_aplikasi.trim().toUpperCase() === 'NAMA MASJID') {
+                        settings.nama_aplikasi = 'MASJID JAMI\' AL-JIHAD';
+                    }
+                    if (!settings.sub_header || settings.sub_header.includes('Kebon Jeruk') || settings.sub_header.includes('Melati') || settings.sub_header.includes('Graha Asri')) {
+                        settings.sub_header = 'SISTEM INFORMASI DIGITAL';
+                    }
+
+                    // Simpan ke cache lokal browser untuk offline resilience
+                    try {
+                        localStorage.setItem('cached_app_settings', JSON.stringify(settings));
+                        if (settings.rotation_interval) {
+                            localStorage.setItem('display_rotation_interval', settings.rotation_interval);
+                        }
+                        if (settings.kajian_sabtu_data) {
+                            localStorage.setItem('cached_kajian_sabtu', typeof settings.kajian_sabtu_data === 'string' ? settings.kajian_sabtu_data : JSON.stringify(settings.kajian_sabtu_data));
+                        }
+                        if (settings.kajian_sabtu_enabled !== undefined) {
+                            localStorage.setItem('cached_kajian_sabtu_enabled', settings.kajian_sabtu_enabled);
+                        }
+                        if (settings.kajian_sabtu_start_time) {
+                            localStorage.setItem('cached_kajian_sabtu_start_time', settings.kajian_sabtu_start_time);
+                        }
+                        if (settings.kegiatan_rutin_settings) {
+                            localStorage.setItem('agenda_rutin_settings', typeof settings.kegiatan_rutin_settings === 'string' ? settings.kegiatan_rutin_settings : JSON.stringify(settings.kegiatan_rutin_settings));
+                        }
+                        if (settings.pengumuman_jumat) {
+                            localStorage.setItem('pengumuman_jumat_data', typeof settings.pengumuman_jumat === 'string' ? settings.pengumuman_jumat : JSON.stringify(settings.pengumuman_jumat));
+                        }
+                        if (settings.rbac_users_list) {
+                            localStorage.setItem('aljihad_users_list', typeof settings.rbac_users_list === 'string' ? settings.rbac_users_list : JSON.stringify(settings.rbac_users_list));
+                        }
+                    } catch (e) {}
+
+                    return settings;
                 }
             } catch (err) {
                 console.warn('Gagal membaca app_settings dari Supabase:', err);
@@ -411,7 +460,17 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca jadwal_sholat dari Supabase:', err);
+                console.warn('Gagal membaca jadwal_sholat dari Supabase SDK:', err);
+            }
+            // Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('jadwal_sholat?order=id.asc');
+                if (Array.isArray(rows) && rows.length > 0) {
+                    localStorage.setItem('cached_jadwal_sholat', JSON.stringify(rows));
+                    return rows;
+                }
+            } catch (restErr) {
+                console.warn('REST fallback jadwal_sholat:', restErr);
             }
 
             const cached = localStorage.getItem('cached_jadwal_sholat');
@@ -435,7 +494,17 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca pengumuman:', err);
+                console.warn('Gagal membaca pengumuman SDK:', err);
+            }
+            // Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('pengumuman?order=id.desc');
+                if (Array.isArray(rows)) {
+                    localStorage.setItem('cached_pengumuman', JSON.stringify(rows));
+                    return rows;
+                }
+            } catch (restErr) {
+                console.warn('REST fallback pengumuman:', restErr);
             }
             const cached = localStorage.getItem('cached_pengumuman');
             return cached ? JSON.parse(cached) : [];
@@ -455,7 +524,17 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca sholat_jumat:', err);
+                console.warn('Gagal membaca sholat_jumat SDK:', err);
+            }
+            // Direct REST API Fallback (Bypass SDK jika CDN belum siap / offline)
+            try {
+                const rows = await this.restFetch('sholat_jumat?order=tanggal.desc,id.desc&limit=1');
+                if (Array.isArray(rows) && rows.length > 0) {
+                    localStorage.setItem('cached_sholat_jumat', JSON.stringify(rows[0]));
+                    return rows[0];
+                }
+            } catch (restErr) {
+                console.warn('Gagal membaca sholat_jumat via REST:', restErr);
             }
             const cached = localStorage.getItem('cached_sholat_jumat');
             return cached ? JSON.parse(cached) : null;
@@ -475,7 +554,17 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca keuangan:', err);
+                console.warn('Gagal membaca keuangan SDK:', err);
+            }
+            // Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('keuangan?order=tanggal.desc');
+                if (Array.isArray(rows)) {
+                    localStorage.setItem('cached_keuangan', JSON.stringify(rows));
+                    return rows;
+                }
+            } catch (restErr) {
+                console.warn('REST fallback keuangan:', restErr);
             }
             const cached = localStorage.getItem('cached_keuangan');
             return cached ? JSON.parse(cached) : [];

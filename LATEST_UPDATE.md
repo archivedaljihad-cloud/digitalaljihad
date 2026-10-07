@@ -4,7 +4,36 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 06:25 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 06:55 WIB)
+
+### 🕌 RESOLUSI TOTAL SINKRONISASI JADWAL PETUGAS JUM'AT TV DISPLAY: NATIVE REST DIRECT FETCH ENGINE & ZERO-LATENCY PARENT BRIDGE (`slides/jumat.html`, `supabase-db.js`, `index.html`, & `sw.js`):
+1. **Latar Belakang & Keluhan Kritis Pengguna:**
+   - **Gambar 1 (Tampilan TV Display `slides/jumat.html`):** Menampilkan data default/kosong ("Tanggal: Jumat Mendatang", "Imam & Khotib: Belum Ditetapkan", "Muadzin: Belum Ditetapkan", "Bilal: Belum Ditetapkan", dan foto logo default Al-Jihad).
+   - **Gambar 2 (Dashboard Admin `admin.html`):** Data petugas Jum'at (Jum'at 9 Okt 2026, Khatib & Imam: Ust. Jamal Haris, S.Ag., Muadzin: Ust. Rudy, Bilal: Ust. Sahroni, Maklumat: Ust. Agus Purwanto, serta foto custom) telah lengkap diisi 2 hari yang lalu dan tersimpan di database Supabase Cloud.
+2. **Investigasi Akar Masalah Mendalam (Root Cause Analysis):**
+   - **Ketergantungan Total Terhadap CDN JS SDK (@supabase/supabase-js):** Di dalam iframe `slides/jumat.html`, pemuatan data sangat bergantung pada script eksternal `https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2`. Pada browser Smart TV/WebView/Fully Kiosk atau lingkungan iframe dengan jaringan terisolasi/lambat, jika script CDN ini lambat, diblokir, atau timeout, variabel `window.supabase` menjadi undefined.
+   - **Ketiadaan REST Fallback pada Getter `supabase-db.js`:** Fungsi `getSholatJumat()` dan `getSettings()` di `supabase-db.js` sebelumnya HANYA mengandalkan SDK. Jika SDK gagal/null, fungsi tersebut tidak pernah melakukan HTTP fetch langsung ke Supabase, melainkan langsung jatuh ke `localStorage.getItem()`. Pada TV Display yang tidak pernah membuka halaman admin, localStorage kosong (`null`), sehingga fungsi mengembalikan nilai `null`. Akibatnya `if (jumat || pj)` bernilai `false` dan teks HTML statis default tetap terpampang di TV.
+   - **Bug ReferenceError pada Realtime Broadcast (`index.html:1243`):** Di `web-statis/index.html` baris 1243, terdapat variabel usang `const activeFrame = isFrameAActive ? frameA : frameB;` yang memicu `ReferenceError` saat menerima broadcast realtime `sholat_jumat`, sehingga event `postMessage` ke iframe TV gagal terkirim.
+   - **Parent-to-Child Data Isolation:** Parent `index.html` sebenarnya telah memiliki data `jumatPetugas` dan `settings` di memori, tetapi tidak pernah menyuntikkannya secara otomatis ke iframe anak saat iframe dimuat (`onload`).
+3. **Solusi & Implementasi Multi-Layered (Zero Single Point of Failure):**
+   - **Layer 1 - Direct Native REST Fetch Engine (`supabase-db.js` & `slides/jumat.html`):**
+     - Menambahkan fungsi `restFetch(path, options)` di `SupabaseDB` yang menggunakan native browser `fetch()` langsung ke endpoint REST Supabase (`${SUPABASE_CONFIG.url}/rest/v1/...`) dengan header `apikey` dan `Authorization`.
+     - `getSholatJumat()`, `getSettings()`, `getKeuangan()`, dan `getJadwalSholat()` kini memiliki fallback otomatis ke native REST fetch jika SDK Supabase belum termuat atau gagal.
+     - `slides/jumat.html` kini juga secara mandiri melakukan fetch langsung via REST API tanpa bergantung pada ketersediaan library pihak ketiga `@supabase/supabase-js`.
+   - **Layer 2 - Zero-Latency Parent-Child Bridge (`index.html` & `slides/jumat.html`):**
+     - Di `index.html`, saat iframe (`frame1` atau `frame2`) selesai memuat (`onload` pada `initDisplay`, `preloadNextSlide`, dan `switchSlide`), parent langsung mengirimkan data mutakhir (`INIT_DISPLAY_DATA`: `settings`, `jumatPetugas`, `jadwalList`) melalui `postMessage`.
+     - Variabel `window.jumatPetugas` dan `window.settings` diekspos secara global di parent window sehingga iframe anak dapat membacanya seketika (0ms latency).
+   - **Layer 3 - Perbaikan Realtime Broadcast di `index.html`:**
+     - Memperbaiki baris 1243 dengan menyebarkan payload `DATA_UPDATED` dan `jumatPetugas` ke kedua iframe (`frame1` dan `frame2`) secara aman tanpa error.
+   - **Layer 4 - Format Tanggal Robust & Pemrosesan Foto Base64:**
+     - Parsing tanggal menggunakan pemisahan string `YYYY-MM-DD` untuk mencegah bias zona waktu UTC.
+     - Foto Imam custom berformat base64 (`running_text_pages.jumat_foto_imam_b64`) kini terbaca sempurna baik saat data berupa objek maupun string JSON.
+   - **Layer 5 - Bumping Cache & Service Worker (SOP #2):**
+     - Menaikkan versi Service Worker di `web-statis/sw.js` ke **`v5.8.4`** (`aljihad-signage-v5.8.4`).
+     - Menyinkronkan tombol pembersihan cache di `web-statis/admin.html` ke `v5.8.4`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 06:25 WIB)
 
 ### 🎬 REVOLUSI TRANSISI SLIDE TV DISPLAY BUTTERY-SMOOTH: OVER-FADE CROSS-DISSOLVE & PROACTIVE BACKGROUND PRELOADING (`index.html`, `rotator.blade.php`, & `rotator-outdoor.blade.php`):
 1. **Latar Belakang & Masukan Penting CEO:**

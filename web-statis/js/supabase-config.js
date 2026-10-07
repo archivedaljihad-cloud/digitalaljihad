@@ -8,6 +8,10 @@ const SUPABASE_CONFIG = {
     anonKey: 'sb_publishable_lsUgbFcTmwuwiiV70rzSWQ_V0JUR-mX'
 };
 
+if (typeof window !== 'undefined') {
+    window.SUPABASE_CONFIG = SUPABASE_CONFIG;
+}
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = SUPABASE_CONFIG;
 }
