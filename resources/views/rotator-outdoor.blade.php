@@ -70,33 +70,35 @@
             width: 100%;
             height: 100%;
             border: none;
-            background-color: #050505;
+            background-color: transparent;
             will-change: opacity;
+            transform: translateZ(0);
             backface-visibility: hidden;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 1.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         iframe.active {
-            opacity: 1;
-            z-index: 2;
-            pointer-events: auto;
-            transition: opacity 0.8s ease-in-out;
+            opacity: 1 !important;
+            transform: translateZ(0) !important;
+            z-index: 2 !important;
+            pointer-events: auto !important;
+            transition: opacity 1.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
 
         iframe.outgoing {
-            opacity: 0;
-            z-index: 1;
-            pointer-events: none;
-            transition: opacity 0.8s ease-in-out;
-        }
+            opacity: 1 !important;
+            transform: translateZ(0) !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+            transition: none !important;
         }
 
         iframe.standby {
             transition: none !important;
             opacity: 0 !important;
-            transform: scale(0.995) !important;
+            transform: translateZ(0) !important;
             z-index: 1 !important;
             pointer-events: none !important;
         }
@@ -617,13 +619,19 @@
                 setTimeout(() => {
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {
-                            frames.current.className = 'outgoing';
+                            const oldFrame = frames.current;
+                            oldFrame.className = 'outgoing';
                             frames.next.className = 'active';
                             currentFrameId = frames.next.id;
                             isLoading = false;
                             if (!isBroadcastingMimbar && rotationEnabled && activePages.length > 1) {
                                 resetCountdown();
                             }
+                            setTimeout(() => {
+                                if (oldFrame.classList.contains('outgoing')) {
+                                    oldFrame.className = 'standby';
+                                }
+                            }, 1200);
                         });
                     });
                 }, 80);

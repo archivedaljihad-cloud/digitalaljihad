@@ -78,30 +78,30 @@
             width: 100%;
             height: 100%;
             border: none;
-            background-color: #050505;
-            will-change: opacity, transform;
+            background-color: transparent;
+            will-change: opacity;
+            transform: translateZ(0);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             pointer-events: none;
             opacity: 0;
-            transform: translate3d(0, 0, 0) scale(1.015);
-            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: opacity 1.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         iframe.active {
             opacity: 1 !important;
-            transform: translate3d(0, 0, 0) scale(1) !important;
+            transform: translateZ(0) !important;
             z-index: 2 !important;
             pointer-events: auto !important;
-            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+            transition: opacity 1.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
 
         iframe.outgoing {
-            opacity: 0 !important;
-            transform: translate3d(0, 0, 0) scale(0.99) !important;
+            opacity: 1 !important;
+            transform: translateZ(0) !important;
             z-index: 1 !important;
             pointer-events: none !important;
-            transition: opacity 1.35s cubic-bezier(0.25, 1, 0.5, 1), transform 1.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+            transition: none !important;
         }
 
         /* Mode standby instan tanpa animasi saat memuat halaman berikutnya */
@@ -109,8 +109,8 @@
         iframe.incoming {
             transition: none !important;
             opacity: 0 !important;
-            transform: translate3d(0, 0, 0) scale(1.015) !important;
-            z-index: 2 !important;
+            transform: translateZ(0) !important;
+            z-index: 1 !important;
             pointer-events: none !important;
         }
 
@@ -756,10 +756,10 @@
                     requestAnimationFrame(() => {
                         void frames.next.offsetWidth;
                         requestAnimationFrame(() => {
-                            // Lakukan transisi cross-dissolve & depth bloom yang mewah dan lembut
+                            // Lakukan transisi Over-Fade cross-dissolve yang mewah dan bebas hentakan
                             const outgoingFrame = frames.current;
-                            outgoingFrame.className = 'outgoing'; // Tetap di tengah sambil memudar lembut
-                            frames.next.className = 'active';     // Masuk anggun & mekar lembut dari tengah
+                            outgoingFrame.className = 'outgoing'; // Tetap solid di bawah (z-index 1) sebagai alas
+                            frames.next.className = 'active';     // Masuk anggun memudar lembut di atasnya (z-index 2)
 
                             // Swap ID
                             currentFrameId = frames.next.id;
@@ -774,7 +774,7 @@
                                 if (outgoingFrame.classList.contains('outgoing')) {
                                     outgoingFrame.className = 'standby';
                                 }
-                            }, 1400);
+                            }, 1200);
                         });
                     });
                 }, 120);

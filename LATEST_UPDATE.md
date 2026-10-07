@@ -4,7 +4,39 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 16:40 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 06:25 WIB)
+
+### 🎬 REVOLUSI TRANSISI SLIDE TV DISPLAY BUTTERY-SMOOTH: OVER-FADE CROSS-DISSOLVE & PROACTIVE BACKGROUND PRELOADING (`index.html`, `rotator.blade.php`, & `rotator-outdoor.blade.php`):
+1. **Latar Belakang & Masukan Penting CEO:**
+   - CEO menyampaikan: *"Saya melihat tampilan di TV saat perpindahan antar halaman masih kurang halus, seperti masih ada hentakan kecil."*
+2. **Identifikasi Akar Masalah (Root Cause Analysis):**
+   - **Scale Jitter & Geometric Jerk:** Sebelumnya iframe menggunakan `transform: scale(1.015)` menuju `scale(1)` pada frame masuk dan `scale(1)` ke `scale(0.99)` pada frame keluar. Pada layar TV besar (43-75 inch), perbedaan 1.5% menghasilkan pergeseran fisik ~29 piksel pada tepi layar. Hal ini membuat background masjid `BG1.png`, header nama masjid, dan running text bergoyang/membal (zoom bounce) saat pergantian slide, lalu mendadak berhenti ("hentakan").
+   - **Beban Berat GPU TV (Texture Rescaling Dropped Frames):** Chip grafis Smart TV (Mali GPU) terbebani saat merasterisasi dan meresampling dua tekstur full HD 1080p yang sedang di-scale bersamaan, menyebabkan penurunan frame rate tajam (micro-stutter) di awal transisi.
+   - **Midpoint Luminance Dip (Kedipan Gelap):** Karena frame keluar memudar dari 1 -> 0 bersamaan dengan frame masuk dari 0 -> 1, di titik tengah kedua frame beropasitas ~50%, sehingga warna hitam latar belakang `#050505` tembus dan menimbulkan kedipan redup sesaat.
+   - **Beban Eksekusi JS Bersamaan dengan Animasi (Tanpa Preloading):** Sebelumnya slide baru baru mulai di-load (`src = nextUrl`) saat timer rotasi habis. Akibatnya saat animasi berjalan, CPU TV sedang sibuk mengeksekusi inisialisasi JavaScript slide baru (Supabase, jam, jadwal sholat, font rendering), memicu dropped frames.
+3. **Solusi & Implementasi Baru (Ultra-Smooth Architecture):**
+   - **Pure Stationary Hardware-Accelerated Dissolve (Tanpa Scale):**
+     - Menghapus total `scale(1.015)` dan `scale(0.99)`.
+     - Menggunakan `transform: translateZ(0)` murni dan `will-change: opacity` dengan kurva bezier mulus `cubic-bezier(0.4, 0, 0.2, 1)` durasi 1.15 detik.
+     - Background `BG1.png`, header masjid, kapsul jam, dan footer marquee kini 100% diam, kokoh, dan sejajar sempurna antar slide tanpa getaran/pergeseran piksel sedikit pun.
+   - **Over-Fade (A-over-B) Cross-Dissolve (Bebas Kedipan Gelap):**
+     - Frame lama (`outgoing`) dipertahankan solid pada `opacity: 1` di `z-index: 1` sebagai alas.
+     - Frame baru (`active`) di `z-index: 2` perlahan memudar masuk dari `opacity: 0` ke `1` di atasnya.
+     - Hasilnya: Tingkat kecerahan layar selalu stabil 100% tanpa ada kedipan redup/gelap di tengah transisi.
+     - Setelah frame baru 100% menutup frame lama (1.2 detik), frame lama baru dinonaktifkan ke `standby` di latar belakang.
+   - **Proactive Background Preloading (`preloadNextSlide`):**
+     - Saat slide aktif sedang tayang, slide berikutnya otomatis langsung di-preload dan dirender secara hening di latar belakang (`backFrame.className = 'incoming'`).
+     - Seluruh aset HTML, CSS, font, data Supabase, dan jam selesai dimuat dan stabil saat slide sedang tayang.
+     - Ketika waktu rotasi tiba, slide berikutnya **SUDAH 100% SIAP DI MEMORI**. Transisi fade-in langsung berjalan seketika dengan pemanfaatan GPU 60fps tanpa hentakan CPU!
+   - **Penyelarasan Multi-Target:**
+     - Diterapkan pada `web-statis/index.html` (Cloudflare Workers produksi utama).
+     - Diterapkan pada `resources/views/rotator.blade.php` dan `resources/views/rotator-outdoor.blade.php` (Blade template Laravel).
+4. **Pilar Bumping Cache & Service Worker (SOP #2):**
+   - Versi Service Worker di `web-statis/sw.js` dinaikkan ke **`v5.8.3`** (`aljihad-signage-v5.8.3`).
+   - Logika invalidasi cache usang di `web-statis/admin.html` disinkronkan ke `aljihad-signage-v5.8.3`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 16:40 WIB)
 
 ### 🔐 SINKRONISASI PERUBAHAN PASSWORD DARI DASHBOARD SUPER ADMIN (DYNAMIC AUTH OVERRIDE - `petugas.html` & `modeinput.html`):
 1. **Pertanyaan CEO:**
