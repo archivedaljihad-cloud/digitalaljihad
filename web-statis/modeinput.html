@@ -1723,6 +1723,70 @@
                         modules['ambulance'].fields[2].val = formatRupiah(totM);
                         modules['ambulance'].fields[3].val = formatRupiah(sld);
                     }
+
+                    // 1. Ambil state global quick_petugas_state_v2 dari Supabase Cloud app_settings
+                    // agar semua 11 modul otomatis 100% sama persis di setiap device/HP baru
+                    try {
+                        const cloudState = await window.SupabaseDB.getAppSetting('quick_petugas_state_v2');
+                        if (cloudState) {
+                            const parsedState = (typeof cloudState === 'string') ? JSON.parse(cloudState) : cloudState;
+                            if (parsedState && typeof parsedState === 'object') {
+                                Object.keys(parsedState).forEach(k => {
+                                    if (modules[k] && Array.isArray(parsedState[k])) {
+                                        modules[k].fields.forEach((f, idx) => {
+                                            if (parsedState[k][idx] !== undefined && f.type !== 'shohibul_subform' && f.type !== 'donasi_subform' && f.type !== 'biaya_subform' && f.type !== 'kas_subform') {
+                                                f.val = parsedState[k][idx];
+                                            }
+                                        });
+                                    }
+                                });
+                                localStorage.setItem('quick_petugas_state_v2', JSON.stringify(parsedState));
+                            }
+                        }
+                    } catch(e) {
+                        console.warn('Gagal ambil quick_petugas_state_v2 dari cloud:', e);
+                    }
+
+                    // 2. Ambil shohibul qurban dari Supabase Cloud
+                    try {
+                        const cloudQurban = await window.SupabaseDB.getAppSetting('cached_qurban_data');
+                        if (cloudQurban) {
+                            const parsedQ = (typeof cloudQurban === 'string') ? JSON.parse(cloudQurban) : cloudQurban;
+                            if (Array.isArray(parsedQ) && parsedQ.length > 0) {
+                                qurbanShohibulList = parsedQ;
+                                localStorage.setItem('cached_qurban_data', JSON.stringify(parsedQ));
+                            }
+                        }
+                    } catch(e) {}
+
+                    // 3. Ambil pengumuman jumat & rincian biaya dari Supabase Cloud
+                    try {
+                        const cloudPengumuman = await window.SupabaseDB.getAppSetting('pengumuman_jumat');
+                        if (cloudPengumuman) {
+                            const parsedPeng = (typeof cloudPengumuman === 'string') ? JSON.parse(cloudPengumuman) : cloudPengumuman;
+                            if (parsedPeng && parsedPeng.pengeluaran && Array.isArray(parsedPeng.pengeluaran)) {
+                                pengeluaranJumatList = parsedPeng.pengeluaran;
+                                localStorage.setItem('pengumuman_jumat_data', JSON.stringify(parsedPeng));
+                            }
+                        }
+                    } catch(e) {}
+
+                    // 4. Ambil undangan eksternal jika ada di Supabase Cloud
+                    try {
+                        const cloudUndangan = await window.SupabaseDB.getAppSetting('undangan_eksternal');
+                        if (cloudUndangan) {
+                            const parsedUnd = (typeof cloudUndangan === 'string') ? JSON.parse(cloudUndangan) : cloudUndangan;
+                            if (parsedUnd && modules['undangan']) {
+                                if (parsedUnd.pengundang) modules['undangan'].fields[0].val = parsedUnd.pengundang;
+                                if (parsedUnd.penceramah) modules['undangan'].fields[1].val = parsedUnd.penceramah;
+                                if (parsedUnd.waktu) modules['undangan'].fields[2].val = parsedUnd.waktu;
+                                if (parsedUnd.tanggal) modules['undangan'].fields[3].val = parsedUnd.tanggal;
+                                if (parsedUnd.acara) modules['undangan'].fields[4].val = parsedUnd.acara;
+                                if (parsedUnd.tempat) modules['undangan'].fields[5].val = parsedUnd.tempat;
+                                if (parsedUnd.keterangan) modules['undangan'].fields[6].val = parsedUnd.keterangan;
+                            }
+                        }
+                    } catch(e) {}
                 }
             } catch (err) {
                 console.warn('Inisialisasi data realtime:', err);
@@ -2629,12 +2693,15 @@
                 }
             });
 
-            // 2. Simpan State Lokal
+            // 2. Simpan State Lokal & Cloud Supabase (agar Device Lain 100% langsung sama persis)
             const stateToSave = {};
             Object.keys(modules).forEach(k => {
                 stateToSave[k] = modules[k].fields.map(f => f.val);
             });
             localStorage.setItem('quick_petugas_state_v2', JSON.stringify(stateToSave));
+            if (window.SupabaseDB && typeof window.SupabaseDB.setAppSetting === 'function') {
+                window.SupabaseDB.setAppSetting('quick_petugas_state_v2', stateToSave).catch(e => console.warn('Sync cloud state:', e));
+            }
 
             // 3. Simpan ke Supabase & Trigger Realtime Broadcast
             try {
@@ -2663,6 +2730,7 @@
                             qurban_lokasi_sembelih: mod.getVal('f_lokasi_sembelih')
                         };
                         await window.SupabaseDB.setAppSetting('qurban', qPayload);
+                        await window.SupabaseDB.setAppSetting('cached_qurban_data', qurbanShohibulList);
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('qurban', 'UPDATE', qPayload, 'Panitia Qurban Mobile');
                         }
@@ -2805,7 +2873,13 @@
             }
         });
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Sinkronkan daftar pengguna dari Supabase Cloud agar password/user yang baru diubah di dashboard langsung bisa dipakai di HP mana pun
+            if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
+                try {
+                    await window.AdminAuth.syncUsersFromCloud();
+                } catch(e) {}
+            }
             checkSecurityAuth();
             initLiveDatabase();
         });

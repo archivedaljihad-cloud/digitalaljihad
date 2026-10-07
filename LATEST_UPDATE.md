@@ -4,7 +4,39 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 13:05 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 16:20 WIB)
+
+### 📱 JAMINAN SINKRONISASI LINTAS PERANGKAT (MULTI-DEVICE UNIFORMITY - `petugas.html` & `modeinput.html`):
+1. **Latar Belakang & Pertanyaan Kritis CEO:**
+   - CEO menanyakan: *"apakah mode input petugas ini sudah dipastikan jika dibuka di device yang berbeda user name, password dan datanya sudah sama."*
+   - Diperlukan kepastian mutlak bahwa ketika link dibuka di smartphone A, smartphone B, tablet, iPhone, Android, atau laptop yang berbeda tanpa riwayat localStorage sebelumnya, seluruh data formulir dan kredensial akses tetap 100% identik dan tersinkronisasi.
+
+2. **Penyempurnaan Arsitektur & Logika Multi-Device:**
+   - **Autentikasi Lintas Perangkat (User & Password):**
+     - Tersedia 4 akun pengurus default hardcoded yang langsung valid di HP/device mana pun tanpa perlu koneksi awal:
+       - Super Admin (`SuperUser1971`)
+       - Bendahara Kas (`#1.Bendahara`)
+       - Ketua DKM (`*dkm1#aljihad`)
+       - Petugas/Operator (`135dkmlJihad`)
+     - Ditambahkan fungsi otomatis `window.AdminAuth.syncUsersFromCloud()` pada event `DOMContentLoaded`. Jika ada penambahan akun atau perubahan password di dashboard Supabase Cloud, device baru langsung menarik daftar pengguna tersebut.
+   - **Sinkronisasi Data 11 Modul ke Supabase Cloud:**
+     - Pada `handleSaveModule()`, seluruh nilai state input (`stateToSave`) kini otomatis disimpan langsung ke Supabase Cloud tabel `app_settings` dengan kunci `quick_petugas_state_v2`.
+     - Sub-form dinamis juga otomatis disimpan ke Supabase Cloud:
+       - Shohibul Qurban disinkronkan ke `cached_qurban_data`.
+       - Pengumuman Jumat & rincian biaya disinkronkan ke `pengumuman_jumat`.
+       - Undangan jamaah disinkronkan ke `undangan_eksternal`.
+       - Kas Utama disinkronkan ke tabel `keuangan`.
+       - Kas Ambulance disinkronkan ke tabel `keuangan_ambulance`.
+       - Program Infaq & Donasi disinkronkan ke tabel `program_infaq` & `donasi_infaq`.
+       - Petugas Sholat Jumat disinkronkan ke `sholat_jumat`.
+     - Pada `initLiveDatabase()`, sistem kini memprioritaskan pengambilan data dari Supabase Cloud `app_settings` (`quick_petugas_state_v2`, `cached_qurban_data`, `pengumuman_jumat`, `undangan_eksternal`). Sehingga ketika HP pengurus lain membuka halaman untuk pertama kali, seluruh form input terisi data terbaru yang sama persis seperti yang diisi oleh pengurus sebelumnya.
+
+3. **Pilar Bumping Cache & Service Worker (SOP #2):**
+   - Versi Service Worker di `web-statis/sw.js` dinaikkan ke **`v5.8.1`** (`aljihad-signage-v5.8.1`).
+   - Logika invalidasi cache usang di `web-statis/admin.html` disinkronkan ke `aljihad-signage-v5.8.1`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 13:05 WIB)
 
 ### 🔙 PERBAIKAN NAVIGASI TOMBOL BACK MOBILE (`petugas.html` & `modeinput.html`):
 1. **Latar Belakang & Keluhan CEO:**
