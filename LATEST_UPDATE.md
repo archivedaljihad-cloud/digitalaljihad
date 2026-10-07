@@ -4,7 +4,68 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 06:10 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 11:20 WIB)
+
+### 🚀 RESTRUKTURISASI MENU QUICK INPUT MODE MOBILE BERDASARKAN PERAN (PETUGAS/OPERATOR & BENDAHARA) DENGAN 11 MODUL SPESIFIK (`web-statis/petugas.html`):
+1. **Latar Belakang & Arahan Khusus CEO:**
+   - Membagi menu input cepat di ponsel menjadi dua kelompok peran yang jelas: **PETUGAS/OPERATOR** (7 Modul) dan **BENDAHARA** (4 Modul).
+   - Menyelaraskan seluruh field form, menambah popdown dropdown, upload foto imam langsung dari HP, form Shohibul Qurban, form donasi infaq, dan lembar pengumuman sholat Jumat beserta kas.
+
+2. **Rincian Perubahan Kategori PETUGAS / OPERATOR (7 Modul):**
+   - **1. Jadwal Sholat & Durasi:** Ditambahkan modul pengaturan waktu sholat 5 waktu (Subuh, Dzuhur, Ashar, Maghrib, Isya) serta durasi TV (Hitung mundur adzan, durasi adzan, jeda iqomah, durasi layar gelap sholat, dan durasi khutbah Jumat).
+   - **2. Petugas Sholat Jum'at:** 
+     - Ditambahkan fitur **Upload Foto Imam** (bisa langsung pilih file dari kamera/galeri HP dengan preview instan Base64 atau input URL alternatif).
+     - **Tema / Judul Khutbah: DIHAPUS TOTAL** sesuai instruksi CEO.
+     - Field: Tanggal Jumat, Khatib & Imam, Foto Imam, Muadzin, Bilal, Pembaca Maklumat.
+   - **3. Kajian Malam Ahad:**
+     - Ditambahkan **popdown pilihan pekan**: `Pekan ke-1` s/d `Pekan ke-5`.
+     - Ditambahkan pilihan **Bulan** (Januari - Desember), **Tahun** (2026 - 2030), dan **Jam Pelaksanaan**.
+     - Field: Tema Kajian, Penceramah/Ustadz, Kitab Rujukan.
+   - **4. Ubah Kajian Umum Tafsir Al-Qur'an:**
+     - Ditambahkan **popdown jadwal**: `Tahsin Al-Qur'an (Setiap Selasa & Kamis Ba'da Ashar)` dan `Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)`.
+     - Field: Judul, Kitab & Surat, Pemateri, Jam Pelaksanaan, Catatan Jamaah.
+   - **5. Undangan Jama'ah (7 Field Lengkap):**
+     - Nama Masjid / Mushola Pengundang, Penceramah / Tamu Undangan, Waktu Pelaksanaan, Hari & Tanggal Acara, Nama Acara / Kegiatan, Alamat / Tempat Acara Dilakukan, Keterangan / Ajakan Jamaah.
+   - **6. Semarak Ramadhan:**
+     - Ditambahkan form **Petugas Tarawih & Kultum Malam Ini**: Malam Ke-, Imam Tarawih, Penceramah Kultum, Tema Kultum, Bilal Tarawih.
+     - Ditambahkan form **Catat Transaksi Infaq / Tromol**: Tanggal, Pemasukan Tromol Tarawih (Rp), Donasi Buka Puasa Bersama (Rp), Porsi Takjil.
+   - **7. Ubah Penerimaan Hewan Qurban:**
+     - Ringkasan Metrik: Jumlah Sapi, Jumlah Kambing, Total Donatur, Target Paket, Jam & Lokasi Sembelih.
+     - **Paling Bawah Ditambahkan Formulir Shohibul Qurban (Orang yang Berqurban)**: Nama Shohibul, Bin/Binti, Jenis Hewan (1/7 Sapi, Sapi Mandiri, Kambing), Infaq Operasional, serta daftar list tersimpan dengan tombol tambah & hapus.
+
+3. **Rincian Perubahan Kategori BENDAHARA (4 Modul):**
+   - **1. Ubah Laporan Kas Utama Masjid:**
+     - Di bawah Tanggal / Periode Laporan ditambahkan field: **Saldo Jum'at Pekan Lalu (Rp)**.
+     - Field: Tanggal Laporan, Saldo Jum'at Pekan Lalu, Total Infaq Masuk, Total Pengeluaran, Sisa Saldo Kas Siaga.
+   - **2. Kas Mobil Ambulance:**
+     - Di bawah Tanggal / Periode Laporan ditambahkan field: **Saldo Terakhir (Rp)**.
+     - **Biaya Operasional, BBM & Servis (Rp) = DIHAPUS**.
+     - **Nomor Hotline Siaga Ambulance = DIHAPUS**.
+     - Field: Tanggal Laporan, Saldo Terakhir, Donasi Masuk Ambulance, Sisa Saldo Kas Siaga.
+   - **3. Ubah Program Infaq & Wakaf:**
+     - **Nama Program Penggalangan Infaq** diganti **popdown menu (select dropdown)** mengikuti program aktif di dashboard.
+     - **Target Dana yang Dibutuhkan (Rp) = DIHAPUS**.
+     - **Nomor Rekening Infaq = DIHAPUS**.
+     - Ditambahkan **Formulir Catat Donasi Masuk**: Nama Donatur (Checkbox Hamba Allah), Tanggal, Nominal (Rp), Metode Pembayaran, Keterangan/Doa, serta riwayat donasi tersimpan.
+   - **4. Pengumuman Sholat Jum'at (BENDAHARA):**
+     - Semua field lama dihapus, diganti menjadi:
+       1. Tanggal Kegiatan Sholat Jum'at (Hari H)
+       2. Petugas Sholat Jum'at (Hari H): Khatib & Imam, Muadzin, Bilal, Pembaca Maklumat
+       3. Laporan Kas Masjid (Saldo Awal Kas Jum'at)
+       4. Tambah item Pemasukan Kas (Keterangan & Nominal Tromol Pekan Lalu)
+       5. Formulir Daftar Pengeluaran / Biaya Operasional (Uraian & Nominal Biaya) yang dapat ditambah/dihapus dinamis.
+
+4. **Eksekusi Bumping Cache Service Worker (SOP #2):**
+   - Cache Service Worker dinaikkan dari `v5.7.5` ke **`v5.7.6`** (`aljihad-signage-v5.7.6`) di `web-statis/sw.js` dan skrip pembersihan cache otomatis di `web-statis/admin.html`.
+
+5. **Eksekusi 4 Pilar Sinkronisasi SOP:**
+   - Cold Backup ke folder `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit & push `main`.
+   - Cloudflare Deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
+
+---
+
+## ✨ UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 06:10 WIB)
 
 ### 🔒 PROTEKSI PASSWORD DASHBOARD, PENYELARASAN FIELD INPUT DENGAN DASHBOARD, PENYESUAIAN UKURAN FONT, DAN FOOTER RESMI PADA QUICK INPUT MODE BY MOBILE (`web-statis/petugas.html`):
 1. **Latar Belakang & Instruksi Lengkap CEO:**

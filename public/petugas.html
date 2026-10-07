@@ -196,7 +196,41 @@
             line-height: 1.45;
         }
 
-        /* 10 KOTAK MENU RAKSASA (PROPORSI RAMPING) */
+        /* KATEGORI ROLE BADGE HEADER */
+        .role-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: linear-gradient(90deg, rgba(6, 61, 46, 0.9), rgba(2, 26, 19, 0.7));
+            border-left: 4px solid var(--gold-accent);
+            border-radius: 8px;
+            margin-top: 6px;
+            margin-bottom: 2px;
+        }
+
+        .role-section-title {
+            font-size: 0.84rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--gold-accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .role-section-count {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        /* DAFTAR KARTU MENU */
         .cards-list {
             display: flex;
             flex-direction: column;
@@ -237,10 +271,11 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
         }
 
+        .bg-sholat { background: linear-gradient(135deg, #059669, #047857); }
         .bg-jumat { background: linear-gradient(135deg, #10b981, #047857); }
         .bg-ahad { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        .bg-tahsin { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
         .bg-tafsir { background: linear-gradient(135deg, #06b6d4, #0e7490); }
+        .bg-undangan { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
         .bg-ramadhan { background: linear-gradient(135deg, #f59e0b, #b45309); }
         .bg-qurban { background: linear-gradient(135deg, #ef4444, #b91c1c); }
         .bg-kas-utama { background: linear-gradient(135deg, #10b981, #065f46); }
@@ -356,7 +391,7 @@
             color: #ffffff;
         }
 
-        /* FORM FIELD SESUAI DASHBOARD (FONT NYAMAN & PROPORSIONAL) */
+        /* FORM FIELD */
         .form-block {
             margin-bottom: 13px;
             text-align: left;
@@ -399,9 +434,159 @@
             background: rgba(2, 30, 22, 1);
         }
 
+        select.form-input-big {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffd700' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px;
+            padding-right: 36px;
+        }
+
+        select.form-input-big option {
+            background-color: #063d2e;
+            color: #ffffff;
+            padding: 8px;
+        }
+
         textarea.form-input-big {
             min-height: 70px;
             resize: vertical;
+        }
+
+        /* SECTION SUB-BOX DALAM FORM */
+        .sub-box-container {
+            background: rgba(4, 38, 29, 0.7);
+            border: 1.2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+        }
+
+        .sub-box-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+        }
+
+        /* FOTO IMAM UPLOAD WIDGET */
+        .imam-photo-widget {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 6px;
+            background: rgba(2, 22, 17, 0.9);
+            border: 1.4px dashed rgba(255, 215, 0, 0.4);
+            border-radius: 12px;
+            padding: 10px 12px;
+        }
+
+        .imam-photo-thumb {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-accent);
+            object-fit: cover;
+            background: #021a13;
+        }
+
+        .imam-upload-controls {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .btn-upload-file {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid var(--gold-accent);
+            color: var(--gold-accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-align: center;
+        }
+
+        .btn-upload-file:active {
+            background: var(--gold-accent);
+            color: #022c22;
+        }
+
+        /* SUB LIST ITEM CARD (SHOHIBUL / DONASI / PENGELUARAN) */
+        .dynamic-item-card {
+            background: rgba(2, 26, 20, 0.9);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .dynamic-item-text {
+            flex: 1;
+        }
+
+        .dynamic-item-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .dynamic-item-sub {
+            font-size: 0.72rem;
+            color: #94a3b8;
+        }
+
+        .btn-remove-subitem {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .btn-add-subitem {
+            width: 100%;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1.2px dashed #10b981;
+            color: #6ee7b7;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .btn-add-subitem:active {
+            background: #10b981;
+            color: #ffffff;
         }
 
         /* TOMBOL SIMPAN RAKSASA */
@@ -680,105 +865,138 @@
             </div>
         </div>
 
-        <!-- DAFTAR 10 KOTAK MENU DENGAN FIELD SESUAI DASHBOARD -->
+        <!-- =========================================================================
+             BAGIAN 1: MENU PETUGAS / OPERATOR (7 MENU)
+             ========================================================================= -->
+        <div class="role-section-header">
+            <div class="role-section-title">
+                <i class="fas fa-user-gear"></i> PETUGAS / OPERATOR
+            </div>
+            <div class="role-section-count">7 Modul</div>
+        </div>
+
         <main class="cards-list">
 
-            <!-- 1. Jadwal Jumat -->
+            <!-- 1. Jadwal Sholat & Durasi -->
+            <div class="big-card-btn" onclick="openModule('jadwal-sholat')">
+                <div class="card-icon-round bg-sholat"><i class="fas fa-clock"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">1. Jadwal Sholat & Durasi</div>
+                    <div class="card-desc" id="sub-jadwal-sholat">Durasi Iqomah: 10 mnt | Sholat: 15 mnt</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 2. Petugas Sholat Jum'at (Foto Imam, Tanpa Tema Khutbah) -->
             <div class="big-card-btn" onclick="openModule('jumat')">
                 <div class="card-icon-round bg-jumat"><i class="fas fa-kaaba"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">1. Jadwal Sholat Jum'at</div>
+                    <div class="card-title">2. Petugas Sholat Jum'at</div>
                     <div class="card-desc" id="sub-jumat">Khatib: Memuat data...</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 2. Kajian Malam Ahad -->
+            <!-- 3. Kajian Malam Ahad (Popdown Pekan 1-5, Bulan, Tahun, Jam) -->
             <div class="big-card-btn" onclick="openModule('ahad')">
                 <div class="card-icon-round bg-ahad"><i class="fas fa-moon"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">2. Kajian Malam Ahad</div>
-                    <div class="card-desc" id="sub-ahad">Tema: Memuat data...</div>
+                    <div class="card-title">3. Kajian Malam Ahad</div>
+                    <div class="card-desc" id="sub-ahad">Pekan: Memuat data...</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 3. Tahsin Al-Qur'an -->
-            <div class="big-card-btn" onclick="openModule('tahsin')">
-                <div class="card-icon-round bg-tahsin"><i class="fas fa-book-quran"></i></div>
-                <div class="card-text-wrap">
-                    <div class="card-title">3. Tahsin Al-Qur'an</div>
-                    <div class="card-desc" id="sub-tahsin">Jadwal: Setiap Selasa & Kamis</div>
-                </div>
-                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
-            </div>
-
-            <!-- 4. Kajian Umum Tafsir -->
+            <!-- 4. Ubah Kajian Umum Tafsir Al-Qur'an (Popdown Tahsin / Tafsir 2 Pekan Sekali) -->
             <div class="big-card-btn" onclick="openModule('tafsir')">
                 <div class="card-icon-round bg-tafsir"><i class="fas fa-book-open"></i></div>
                 <div class="card-text-wrap">
                     <div class="card-title">4. Kajian Umum Tafsir Al-Qur'an</div>
-                    <div class="card-desc" id="sub-tafsir">Kitab: Tafsir Ibnu Katsir</div>
+                    <div class="card-desc" id="sub-tafsir">Jadwal: Tafsir (2 Pekan Sekali)</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 5. Semarak Ramadhan -->
+            <!-- 5. Undangan Jama'ah (7 Field Lengkap) -->
+            <div class="big-card-btn" onclick="openModule('undangan')">
+                <div class="card-icon-round bg-undangan"><i class="fas fa-envelope-open-text"></i></div>
+                <div class="card-text-wrap">
+                    <div class="card-title">5. Undangan Jama'ah</div>
+                    <div class="card-desc" id="sub-undangan">Pengundang: Memuat data...</div>
+                </div>
+                <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <!-- 6. Semarak Ramadhan (Petugas Tarawih & Kultum + Catat Infaq Tromol) -->
             <div class="big-card-btn" onclick="openModule('ramadhan')">
                 <div class="card-icon-round bg-ramadhan"><i class="fas fa-star-and-crescent"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">5. Semarak Ramadhan</div>
-                    <div class="card-desc" id="sub-ramadhan">Imam Tarawih & Jadwal Buka Bersama</div>
+                    <div class="card-title">6. Semarak Ramadhan</div>
+                    <div class="card-desc" id="sub-ramadhan">Imam Tarawih & Infaq Tromol</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 6. Penerimaan Qurban -->
+            <!-- 7. Ubah Penerimaan Hewan Qurban (Shohibul Qurban di paling bawah) -->
             <div class="big-card-btn" onclick="openModule('qurban')">
                 <div class="card-icon-round bg-qurban"><i class="fas fa-cow"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">6. Penerimaan Qurban</div>
+                    <div class="card-title">7. Penerimaan Hewan Qurban</div>
                     <div class="card-desc" id="sub-qurban">Terkumpul: 14 Sapi, 32 Kambing</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 7. Kas Utama Masjid -->
+        </main>
+
+        <!-- =========================================================================
+             BAGIAN 2: MENU BENDAHARA (4 MENU)
+             ========================================================================= -->
+        <div class="role-section-header" style="background: linear-gradient(90deg, rgba(6, 46, 61, 0.9), rgba(2, 19, 26, 0.7)); border-left-color: #38bdf8;">
+            <div class="role-section-title" style="color: #38bdf8;">
+                <i class="fas fa-coins"></i> BENDAHARA MASJID
+            </div>
+            <div class="role-section-count" style="border-color: rgba(56, 189, 248, 0.4); color: #7dd3fc;">4 Modul</div>
+        </div>
+
+        <main class="cards-list">
+
+            <!-- 8. Ubah Laporan Kas Utama Masjid (Saldo Jumat Pekan Lalu) -->
             <div class="big-card-btn" onclick="openModule('kas-utama')">
                 <div class="card-icon-round bg-kas-utama"><i class="fas fa-wallet"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">7. Kas Utama Masjid</div>
-                    <div class="card-desc" id="sub-kas-utama">Saldo Kas: Memuat saldo...</div>
+                    <div class="card-title">1. Kas Utama Masjid</div>
+                    <div class="card-desc" id="sub-kas-utama">Saldo Siaga: Memuat saldo...</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 8. Kas Mobil Ambulance -->
+            <!-- 9. Kas Ambulance (Saldo Terakhir, Biaya & Hotline Dihapus) -->
             <div class="big-card-btn" onclick="openModule('ambulance')">
                 <div class="card-icon-round bg-ambulance"><i class="fas fa-ambulance"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">8. Kas Mobil Ambulance</div>
-                    <div class="card-desc" id="sub-ambulance">Saldo Siaga: Memuat saldo...</div>
+                    <div class="card-title">2. Kas Mobil Ambulance</div>
+                    <div class="card-desc" id="sub-ambulance">Saldo Terakhir: Memuat saldo...</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 9. Program Infaq -->
+            <!-- 10. Ubah Program Infaq & Wakaf (Popdown Program + Catat Donasi Masuk) -->
             <div class="big-card-btn" onclick="openModule('infaq')">
                 <div class="card-icon-round bg-infaq"><i class="fas fa-hand-holding-heart"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">9. Program Infaq & Wakaf</div>
-                    <div class="card-desc" id="sub-infaq">Infaq Karpet & Perluasan Wudhu</div>
+                    <div class="card-title">3. Program Infaq & Wakaf</div>
+                    <div class="card-desc" id="sub-infaq">Pilih Program & Catat Donasi</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
 
-            <!-- 10. Pengumuman Sholat Jumat -->
+            <!-- 11. Pengumuman Sholat Jum'at BENDAHARA (Hari H, Petugas, Kas, Tromol, Daftar Pengeluaran) -->
             <div class="big-card-btn" onclick="openModule('pengumuman')">
                 <div class="card-icon-round bg-pengumuman"><i class="fas fa-bullhorn"></i></div>
                 <div class="card-text-wrap">
-                    <div class="card-title">10. Pengumuman Sholat Jum'at</div>
-                    <div class="card-desc" id="sub-pengumuman">Rapatkan Shaf & Heningkan HP</div>
+                    <div class="card-title">4. Pengumuman Sholat Jum'at (Kas)</div>
+                    <div class="card-desc" id="sub-pengumuman">Tromol Pekan Lalu & Biaya Operasional</div>
                 </div>
                 <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
@@ -799,16 +1017,15 @@
             <div class="sheet-header">
                 <div class="sheet-title-box">
                     <i class="fas fa-kaaba" id="sheetIcon"></i>
-                    <h3 id="sheetTitle">Edit Jadwal Sholat Jum'at</h3>
+                    <h3 id="sheetTitle">Edit Data</h3>
                 </div>
                 <button class="btn-sheet-close" onclick="closeSheet()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <div id="sheetFormFields">
-                <!-- Fields are injected dynamically -->
-            </div>
+            <!-- Kontainer Field Form Dinamis -->
+            <div id="sheetFormFields"></div>
 
             <button class="btn-giant-save" onclick="handleSaveModule()">
                 <i class="fas fa-check-circle"></i> SIMPAN KE TV SEKARANG
@@ -837,131 +1054,248 @@
             '135dkmlJihad'    // DKM 2
         ];
 
-        // 10 MODUL DENGAN FIELD LENGKAP PERSIS SEPERTI DI DASHBOARD ADMIN
+        // FOTO IMAM BASE64 BUFFER
+        let jumatImamFotoBase64 = '';
+
+        // DATA LIST DINAMIS
+        let qurbanShohibulList = [];
+        let infaqDonasiList = [];
+        let pengeluaranJumatList = [];
+
+        // 11 MODUL SPESIFIK SESUAI INSTRUKSI CEO
         const modules = {
-            'jumat': {
-                title: "Jadwal Sholat Jum'at",
-                icon: "fa-kaaba",
-                summaryField: 1,
-                prefix: "Khatib: ",
+            // =================================================================
+            // PETUGAS / OPERATOR (7 MODUL)
+            // =================================================================
+            'jadwal-sholat': {
+                title: "Jadwal Sholat & Durasi",
+                icon: "fa-clock",
+                summaryText: () => `Iqomah: ${modules['jadwal-sholat'].getVal('f_iqomah')} mnt | Sholat: ${modules['jadwal-sholat'].getVal('f_sholat')} mnt`,
                 fields: [
-                    { id: "f_tgl_jumat", label: "Tanggal Jum'at", type: "text", val: "Jumat, 10 Oktober 2026", placeholder: "Contoh: Jumat, 10 Oktober 2026", hint: "Format: Hari, Tanggal Bulan Tahun" },
-                    { id: "f_khatib", label: "Nama Khatib & Imam", type: "text", val: "Ust. Dr. H. Ahmad Dahlan, MA", placeholder: "Nama lengkap Khatib & Gelar", hint: "Khatib sekaligus Imam" },
-                    { id: "f_muadzin", label: "Nama Muadzin", type: "text", val: "Ustadz Bilal Ramadhan", placeholder: "Nama Muadzin Adzan", hint: "Pengumandangkan adzan Jumat" },
-                    { id: "f_bilal", label: "Nama Bilal / Tarhim", type: "text", val: "Ust. Ahmad Farhan", placeholder: "Nama Bilal", hint: "Petugas bilal Jumat" },
-                    { id: "f_maklumat", label: "Pembaca Maklumat / Keuangan", type: "text", val: "Bpk. H. Utut Priastya", placeholder: "Nama Petugas Maklumat", hint: "Membaca kas & maklumat DKM" },
-                    { id: "f_tema_khutbah", label: "Tema / Judul Khutbah", type: "text", val: "Membangun Generasi Rabbani di Era Digital", placeholder: "Judul khutbah (opsional)", hint: "Ditampilkan di layar TV" }
-                ]
+                    { id: "f_subuh", label: "Waktu Sholat Subuh", type: "text", val: "04:32 WIB", hint: "Format: HH:MM WIB" },
+                    { id: "f_dzuhur", label: "Waktu Sholat Dzuhur", type: "text", val: "11:54 WIB", hint: "Format: HH:MM WIB" },
+                    { id: "f_ashar", label: "Waktu Sholat Ashar", type: "text", val: "15:08 WIB", hint: "Format: HH:MM WIB" },
+                    { id: "f_maghrib", label: "Waktu Sholat Maghrib", type: "text", val: "17:58 WIB", hint: "Format: HH:MM WIB" },
+                    { id: "f_isya", label: "Waktu Sholat Isya", type: "text", val: "19:07 WIB", hint: "Format: HH:MM WIB" },
+                    { id: "f_cd_adzan", label: "Hitung Mundur Adzan (Menit)", type: "number", val: "5", hint: "Alarm jeda sebelum adzan berkumandang" },
+                    { id: "f_adzan", label: "Durasi Waktu Adzan (Menit)", type: "number", val: "3", hint: "Lama penayangan waktu adzan" },
+                    { id: "f_iqomah", label: "Durasi Menunggu Iqomah (Menit)", type: "number", val: "10", hint: "Hitung mundur jeda sholat sunnah" },
+                    { id: "f_sholat", label: "Durasi Layar Gelap Sholat (Menit)", type: "number", val: "15", hint: "TV gelap saat jamaah sholat" },
+                    { id: "f_jumat_durasi", label: "Durasi Khutbah & Sholat Jum'at (Menit)", type: "number", val: "50", hint: "TV stand by mode sholat Jumat" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
+
+            'jumat': {
+                title: "Petugas Sholat Jum'at",
+                icon: "fa-kaaba",
+                summaryText: () => `Khatib: ${modules['jumat'].getVal('f_khatib')}`,
+                fields: [
+                    { id: "f_tgl_jumat", label: "Tanggal Jum'at (Hari H)", type: "text", val: "Jumat, 10 Oktober 2026", hint: "Hari, Tanggal Bulan Tahun" },
+                    { id: "f_khatib", label: "Nama Khatib & Imam", type: "text", val: "Ust. Dr. H. Ahmad Dahlan, MA", hint: "Khatib sekaligus Imam Sholat" },
+                    { id: "f_foto_imam", label: "Upload Foto Imam (Kamera/Galeri/URL)", type: "imam_photo", val: "image/display/default_imam.jpg", hint: "Tampil di slide TV Sholat Jumat" },
+                    // Tema / Judul Khutbah: DIHILANGKAN SESUAI ARAHAN CEO
+                    { id: "f_muadzin", label: "Nama Muadzin", type: "text", val: "Ustadz Bilal Ramadhan", hint: "Pengumandang adzan Jumat" },
+                    { id: "f_bilal", label: "Nama Bilal / Tarhim", type: "text", val: "Ust. Ahmad Farhan", hint: "Petugas tarhim & bilal" },
+                    { id: "f_maklumat", label: "Pembaca Maklumat / Keuangan", type: "text", val: "Bpk. H. Utut Priastya", hint: "Membaca maklumat kas DKM" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+            },
+
             'ahad': {
                 title: "Kajian Malam Ahad",
                 icon: "fa-moon",
-                summaryField: 0,
-                prefix: "Tema: ",
+                summaryText: () => `${modules['ahad'].getVal('f_pekan_ahad')} | ${modules['ahad'].getVal('f_tema_ahad')}`,
                 fields: [
-                    { id: "f_tema_ahad", label: "Tema / Judul Kajian", type: "text", val: "Adab & Akhlak Penuntut Ilmu", placeholder: "Judul kajian", hint: "Materi kajian rutin" },
-                    { id: "f_ustadz_ahad", label: "Nama Penceramah / Ustadz", type: "text", val: "Ust. H. Abdul Somad, Lc., MA", placeholder: "Nama Ustadz & Gelar", hint: "Pemateri kajian" },
-                    { id: "f_kitab_ahad", label: "Kitab Rujukan", type: "text", val: "Kitab Riyadhus Shalihin", placeholder: "Nama Kitab / Rujukan", hint: "Buku panduan kajian" },
-                    { id: "f_pekan_ahad", label: "Pekan Pelaksanaan", type: "text", val: "Pekan ke-1", placeholder: "Contoh: Pekan 1 / Pekan 2", hint: "Urutan pekan bulanan" },
-                    { id: "f_waktu_ahad", label: "Waktu Pelaksanaan", type: "text", val: "Ba'da Sholat Maghrib s/d Isya", placeholder: "Contoh: Ba'da Maghrib", hint: "Jadwal jam tayang" }
-                ]
+                    { id: "f_tema_ahad", label: "Judul / Tema Kajian", type: "text", val: "Adab & Akhlak Penuntut Ilmu", hint: "Materi kajian rutin sabtu malam" },
+                    { 
+                        id: "f_pekan_ahad", 
+                        label: "Pekan Pelaksanaan (Popdown)", 
+                        type: "select", 
+                        val: "Pekan ke-1", 
+                        options: ["Pekan ke-1", "Pekan ke-2", "Pekan ke-3", "Pekan ke-4", "Pekan ke-5"],
+                        hint: "Pilih pekan ke-1 sampai ke-5" 
+                    },
+                    { 
+                        id: "f_bulan_ahad", 
+                        label: "Bulan Pelaksanaan", 
+                        type: "select", 
+                        val: "Oktober", 
+                        options: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+                        hint: "Bulan kajian berjalan" 
+                    },
+                    { 
+                        id: "f_tahun_ahad", 
+                        label: "Tahun Pelaksanaan", 
+                        type: "select", 
+                        val: "2026", 
+                        options: ["2026", "2027", "2028", "2029", "2030"],
+                        hint: "Tahun kalender" 
+                    },
+                    { id: "f_jam_ahad", label: "Jam Pelaksanaan", type: "text", val: "Ba'da Sholat Maghrib s/d Isya (18:15 WIB)", hint: "Waktu jam kajian" },
+                    { id: "f_ustadz_ahad", label: "Nama Penceramah / Ustadz", type: "text", val: "Ust. H. Abdul Somad, Lc., MA", hint: "Pemateri kajian" },
+                    { id: "f_kitab_ahad", label: "Kitab Rujukan", type: "text", val: "Kitab Riyadhus Shalihin", hint: "Buku panduan / rujukan kajian" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
-            'tahsin': {
-                title: "Tahsin Al-Qur'an",
-                icon: "fa-book-quran",
-                summaryField: 1,
-                prefix: "Jadwal: ",
-                fields: [
-                    { id: "f_ustadz_tahsin", label: "Nama Pengajar / Ustadz", type: "text", val: "Ust. Ahmad Fauzan, SQ", placeholder: "Nama Pengajar Tahsin", hint: "Ustadz pembimbing makhorijul huruf" },
-                    { id: "f_jadwal_tahsin", label: "Hari & Jam Belajar", type: "text", val: "Setiap Selasa & Kamis Ba'da Ashar", placeholder: "Hari & Jam", hint: "Waktu pertemuan rutin" },
-                    { id: "f_tempat_tahsin", label: "Tempat / Ruang", type: "text", val: "Ruang Utama Masjid Al-Jihad", placeholder: "Lokasi belajar", hint: "Area sholat / serbaguna" },
-                    { id: "f_peserta_tahsin", label: "Kategori Peserta", type: "text", val: "Ikhwan, Akhwat & Remaja (Umum)", placeholder: "Kategori peserta", hint: "Terbuka umum / kelas khusus" }
-                ]
-            },
+
             'tafsir': {
                 title: "Kajian Umum Tafsir Al-Qur'an",
                 icon: "fa-book-open",
-                summaryField: 0,
-                prefix: "Kitab: ",
+                summaryText: () => `${modules['tafsir'].getVal('f_jadwal_tafsir')}`,
                 fields: [
-                    { id: "f_kitab_tafsir", label: "Kitab & Surat yang Dikaji", type: "text", val: "Tafsir Ibnu Katsir - Surat Al-Baqarah", placeholder: "Nama kitab & surat", hint: "Rujukan tafsir ayat" },
-                    { id: "f_pemateri_tafsir", label: "Nama Pemateri / Ustadz", type: "text", val: "Dr. KH. M. Luqman Hakim", placeholder: "Nama Pemateri", hint: "Narasumber tafsir" },
-                    { id: "f_jadwal_tafsir", label: "Jadwal Pelaksanaan", type: "text", val: "Ahad Pagi Ba'da Subuh (06.00 WIB)", placeholder: "Jadwal waktu", hint: "Waktu kajian tafsir" },
-                    { id: "f_keterangan_tafsir", label: "Catatan Jamaah", type: "text", val: "Harap membawa mushaf Al-Qur'an & alat tulis", placeholder: "Pesan untuk jamaah", hint: "Himbauan DKM" }
-                ]
+                    { id: "f_judul_tafsir", label: "Judul / Nama Kajian", type: "text", val: "Kajian Umum Tafsir Al-Qur'an", hint: "Nama program kajian" },
+                    { 
+                        id: "f_jadwal_tafsir", 
+                        label: "Pilihan Jadwal Kajian (Popdown)", 
+                        type: "select", 
+                        val: "Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)", 
+                        options: [
+                            "Tahsin Al-Qur'an (Setiap Selasa & Kamis Ba'da Ashar)",
+                            "Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)"
+                        ],
+                        hint: "Pilih jenis jadwal kajian" 
+                    },
+                    { id: "f_kitab_tafsir", label: "Kitab & Surat yang Dikaji", type: "text", val: "Tafsir Ibnu Katsir - Surat Al-Baqarah", hint: "Rujukan tafsir ayat" },
+                    { id: "f_pemateri_tafsir", label: "Nama Pemateri / Pengajar", type: "text", val: "Dr. KH. M. Luqman Hakim", hint: "Narasumber pemateri" },
+                    { id: "f_waktu_tafsir", label: "Waktu Pelaksanaan", type: "text", val: "Ahad Pagi Ba'da Subuh (06.00 WIB)", hint: "Jadwal jam tayang" },
+                    { id: "f_keterangan_tafsir", label: "Catatan Jamaah", type: "text", val: "Harap membawa mushaf Al-Qur'an & alat tulis", hint: "Himbauan jamaah" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
+
+            'undangan': {
+                title: "Undangan Jama'ah",
+                icon: "fa-envelope-open-text",
+                summaryText: () => `Pengundang: ${modules['undangan'].getVal('f_und_pengundang')}`,
+                fields: [
+                    { id: "f_und_pengundang", label: "Nama Masjid / Mushola Pengundang", type: "text", val: "Masjid Jami' Baiturrahim", hint: "Instansi pengundang" },
+                    { id: "f_und_penceramah", label: "Penceramah / Tamu Undangan", type: "text", val: "KH. Abdullah Gymnastiar (Aa Gym)", hint: "Penceramah tamu" },
+                    { id: "f_und_waktu", label: "Waktu Pelaksanaan", type: "text", val: "Ba'da Sholat Isya (19.30 WIB s/d Selesai)", hint: "Waktu acara" },
+                    { id: "f_und_tanggal", label: "Hari & Tanggal Acara", type: "text", val: "Ahad, 18 Oktober 2026", hint: "Tanggal pelaksanaan kegiatan" },
+                    { id: "f_und_acara", label: "Nama Acara / Kegiatan", type: "text", val: "Peringatan Maulid Nabi Muhammad SAW 1448 H", hint: "Agenda kegiatan" },
+                    { id: "f_und_tempat", label: "Alamat / Tempat Acara Dilakukan", type: "text", val: "Jl. Simpangan Raya No. 45, Cikarang", hint: "Lokasi kegiatan" },
+                    { id: "f_und_keterangan", label: "Keterangan / Ajakan Jamaah", type: "textarea", val: "Diharapkan jamaah Masjid Al-Jihad dapat hadir meramaikan syiar ukhuwah Islamiyah.", hint: "Pesan ajakan DKM" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+            },
+
             'ramadhan': {
                 title: "Semarak Ramadhan",
                 icon: "fa-star-and-crescent",
-                summaryField: 0,
-                prefix: "Imam: ",
+                summaryText: () => `Tarawih: ${modules['ramadhan'].getVal('f_ram_imam')} | Tromol: Rp ${modules['ramadhan'].getVal('f_ram_tromol')}`,
                 fields: [
-                    { id: "f_imam_tarawih", label: "Nama Imam Sholat Tarawih", type: "text", val: "Syaikh Mahmud Al-Mishri", placeholder: "Nama Imam Tarawih", hint: "Pemimpin sholat tarawih & witir" },
-                    { id: "f_penceramah_kultum", label: "Penceramah Kultum Tarawih", type: "text", val: "Ust. Syamsuddin Noor, M.Ag", placeholder: "Nama Penceramah", hint: "Kultum 7 menit sebelum tarawih" },
-                    { id: "f_tema_kultum", label: "Tema Kultum Ramadhan", type: "text", val: "Meraih Berkah Lailatul Qadar", placeholder: "Tema ceramah", hint: "Judul kultum malam ini" },
-                    { id: "f_porsi_bukber", label: "Porsi Buka Puasa Bersama (Takjil)", type: "text", val: "Siap 350 Porsi Nasi Kotak & Takjil", placeholder: "Jumlah porsi", hint: "Disediakan gratis setiap hari" }
-                ]
+                    // Seksi Petugas Tarawih & Kultum Malam Ini
+                    { id: "f_ram_malam", label: "Malam Ramadhan Ke-", type: "text", val: "Malam ke-17 Ramadhan 1447 H", hint: "Contoh: Malam ke-1 / ke-17" },
+                    { id: "f_ram_imam", label: "Nama Imam Sholat Tarawih", type: "text", val: "Syaikh Mahmud Al-Mishri", hint: "Imam tarawih malam ini" },
+                    { id: "f_ram_kultum", label: "Penceramah Kultum Tarawih", type: "text", val: "Ust. Syamsuddin Noor, M.Ag", hint: "Pemateri kultum" },
+                    { id: "f_ram_tema", label: "Tema Kultum Ramadhan", type: "text", val: "Meraih Berkah Malam Nuzulul Qur'an", hint: "Materi ceramah" },
+                    { id: "f_ram_bilal", label: "Nama Bilal Tarawih", type: "text", val: "Ust. Hasan Basri", hint: "Petugas bilal tarawih" },
+                    // Seksi Catat Transaksi Infaq / Tromol
+                    { id: "f_ram_tgl_tromol", label: "Tanggal Transaksi Infaq Tromol", type: "text", val: "17 Ramadhan 1447 H", hint: "Tanggal pencatatan infaq" },
+                    { id: "f_ram_tromol", label: "Pemasukan Tromol Tarawih (Rp)", type: "text", val: "2.850.000", hint: "Nominal tromol malam ini" },
+                    { id: "f_ram_bukber", label: "Donasi Buka Puasa Bersama (Rp)", type: "text", val: "1.500.000", hint: "Infaq takjil & buka puasa" },
+                    { id: "f_ram_porsi", label: "Porsi Takjil Tersedia (Kotak)", type: "text", val: "350 Porsi Siap Saji", hint: "Porsi makanan buka bersama" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
+
             'qurban': {
                 title: "Penerimaan Hewan Qurban",
                 icon: "fa-cow",
-                summaryField: 0,
-                prefix: "Hewan: ",
+                summaryText: () => `Terkumpul: ${modules['qurban'].getVal('f_sapi')} Sapi, ${modules['qurban'].getVal('f_kambing')} Kambing`,
                 fields: [
-                    { id: "f_sapi", label: "Jumlah Sapi Terkumpul (Ekor)", type: "number", val: "14", placeholder: "Jumlah Sapi", hint: "Hewan sapi yang diterima" },
-                    { id: "f_kambing", label: "Jumlah Kambing / Domba (Ekor)", type: "number", val: "32", placeholder: "Jumlah Kambing", hint: "Hewan kambing/domba" },
-                    { id: "f_donatur", label: "Total Donatur / Shohibul Qurban", type: "number", val: "130", placeholder: "Jumlah peserta qurban", hint: "Warga yang berqurban" },
-                    { id: "f_paket_distribusi", label: "Target Distribusi Paket Daging", type: "text", val: "1.250 Paket Daging Mustahik", placeholder: "Target paket", hint: "Sasaran warga dhuafa & sekitar" }
-                ]
+                    { id: "f_sapi", label: "Jumlah Sapi Terkumpul (Ekor)", type: "number", val: "14", hint: "Hewan sapi yang diterima" },
+                    { id: "f_kambing", label: "Jumlah Kambing / Domba (Ekor)", type: "number", val: "32", hint: "Hewan kambing/domba" },
+                    { id: "f_donatur", label: "Total Donatur / Shohibul Qurban", type: "number", val: "130", hint: "Warga yang berqurban" },
+                    { id: "f_paket_distribusi", label: "Target Distribusi Paket Daging", type: "text", val: "1.250 Paket Daging Mustahik", hint: "Sasaran paket mustahik" },
+                    { id: "f_jam_sembelih", label: "Waktu Penyembelihan", type: "text", val: "Hari H 10 Dzulhijjah - Pukul 07:30 WIB s/d Selesai", hint: "Jadwal pemotongan" },
+                    { id: "f_lokasi_sembelih", label: "Lokasi Penyembelihan", type: "text", val: "Halaman Belakang Masjid Jami' Al-Jihad", hint: "Tempat pemotongan hewan" },
+                    // Form Khusus Paling Bawah: Daftar Shohibul Qurban
+                    { id: "f_shohibul_section", label: "Daftar Shohibul Qurban (Orang yang Berqurban)", type: "shohibul_subform", val: "", hint: "Form tambah shohibul qurban di paling bawah" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
+
+            // =================================================================
+            // BENDAHARA (4 MODUL)
+            // =================================================================
             'kas-utama': {
                 title: "Laporan Kas Utama Masjid",
                 icon: "fa-wallet",
-                summaryField: 2,
-                prefix: "Saldo: Rp ",
+                summaryText: () => `Saldo: Rp ${modules['kas-utama'].getVal('f_kas_saldo')}`,
                 fields: [
-                    { id: "f_tgl_kas", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", placeholder: "Contoh: Oktober 2026", hint: "Bulan pembukuan aktif" },
-                    { id: "f_kas_masuk", label: "Total Donasi / Infaq Masuk (Rp)", type: "text", val: "165.250.000", placeholder: "Nominal pemasukan", hint: "Kotak infaq jumat & transfer" },
-                    { id: "f_kas_keluar", label: "Total Pengeluaran Operasional (Rp)", type: "text", val: "16.750.000", placeholder: "Nominal pengeluaran", hint: "Listrik, marbot, kebersihan" },
-                    { id: "f_kas_saldo", label: "Sisa Saldo Kas Siaga (Rp)", type: "text", val: "148.500.000", placeholder: "Sisa saldo kas", hint: "Saldo kas akhir masjid" }
-                ]
+                    { id: "f_tgl_kas", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", hint: "Bulan pembukuan aktif" },
+                    // Ditambahkan di bawah Tanggal/Periode Laporan sesuai arahan CEO:
+                    { id: "f_saldo_pekan_lalu", label: "Saldo Jum'at Pekan Lalu (Rp)", type: "text", val: "142.350.000", hint: "Saldo kas jumat sebelumnya" },
+                    { id: "f_kas_masuk", label: "Total Donasi / Infaq Masuk (Rp)", type: "text", val: "165.250.000", hint: "Kotak infaq jumat & transfer" },
+                    { id: "f_kas_keluar", label: "Total Pengeluaran Operasional (Rp)", type: "text", val: "16.750.000", hint: "Listrik, marbot, kebersihan" },
+                    { id: "f_kas_saldo", label: "Sisa Saldo Kas Siaga (Rp)", type: "text", val: "148.500.000", hint: "Saldo kas akhir masjid" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
+
             'ambulance': {
                 title: "Laporan Kas Mobil Ambulance",
                 icon: "fa-ambulance",
-                summaryField: 2,
-                prefix: "Saldo Siaga: Rp ",
+                summaryText: () => `Saldo Terakhir: Rp ${modules['ambulance'].getVal('f_amb_saldo')}`,
                 fields: [
-                    { id: "f_tgl_amb", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", placeholder: "Bulan laporan", hint: "Bulan pembukuan ambulance" },
-                    { id: "f_amb_masuk", label: "Total Donasi Masuk Ambulance (Rp)", type: "text", val: "5.137.800", placeholder: "Total donasi", hint: "Infaq khusus ambulance" },
-                    { id: "f_amb_keluar", label: "Biaya Operasional, BBM & Servis (Rp)", type: "text", val: "3.965.600", placeholder: "Biaya operasional", hint: "Pengeluaran bbm & perawatan" },
-                    { id: "f_amb_saldo", label: "Sisa Saldo Kas Siaga Ambulance (Rp)", type: "text", val: "1.172.200", placeholder: "Saldo kas siaga", hint: "Saldo siap pakai ambulance" },
-                    { id: "f_amb_hotline", label: "Nomor Hotline Siaga Ambulance", type: "text", val: "0877-5876-7000", placeholder: "Nomor telepon/WA", hint: "Layanan siaga 24 jam" }
-                ]
+                    { id: "f_tgl_amb", label: "Tanggal / Periode Laporan", type: "text", val: "Periode Oktober 2026", hint: "Bulan pembukuan ambulance" },
+                    // Ditambahkan di bawah Tanggal/Periode Laporan sesuai arahan CEO:
+                    { id: "f_amb_saldo_terakhir", label: "Saldo Terakhir (Rp)", type: "text", val: "1.172.200", hint: "Saldo pembukuan sebelumnya" },
+                    { id: "f_amb_masuk", label: "Total Donasi Masuk Ambulance (Rp)", type: "text", val: "5.137.800", hint: "Infaq khusus ambulance" },
+                    { id: "f_amb_saldo", label: "Sisa Saldo Kas Siaga Ambulance (Rp)", type: "text", val: "1.172.200", hint: "Saldo kas siaga armada" }
+                    // BIAYA OPERASIONAL, BBM & SERVIS = DIHAPUS SESUAI PERINTAH CEO
+                    // NOMOR HOTLINE SIAGA AMBULANCE = DIHAPUS SESUAI PERINTAH CEO
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
+
             'infaq': {
                 title: "Program Infaq & Wakaf",
                 icon: "fa-hand-holding-heart",
-                summaryField: 0,
-                prefix: "Program: ",
+                summaryText: () => `Program: ${modules['infaq'].getVal('f_nama_infaq')}`,
                 fields: [
-                    { id: "f_nama_infaq", label: "Nama Program Penggalangan Infaq", type: "text", val: "Infaq Karpet & Perluasan Tempat Wudhu", placeholder: "Nama program", hint: "Program pembangunan masjid" },
-                    { id: "f_target_infaq", label: "Target Dana yang Dibutuhkan (Rp)", type: "text", val: "85.000.000", placeholder: "Target dana", hint: "Estimasi total RAB" },
-                    { id: "f_terkumpul_infaq", label: "Dana yang Sudah Terkumpul (Rp)", type: "text", val: "62.450.000", placeholder: "Dana terkumpul", hint: "Realisasi donasi masuk" },
-                    { id: "f_rekening_infaq", label: "Nomor Rekening Infaq", type: "text", val: "BSI (Bank Syariah Indonesia) 7123-456-789 a.n. Masjid Al-Jihad", placeholder: "No Rekening", hint: "Tujuan transfer jamaah" }
-                ]
+                    { 
+                        id: "f_nama_infaq", 
+                        label: "Nama Program Penggalangan Infaq (Popdown)", 
+                        type: "select", 
+                        val: "Infaq Karpet & Perluasan Tempat Wudhu", 
+                        options: [
+                            "Infaq Karpet & Perluasan Tempat Wudhu",
+                            "Pengadaan Mobil Ambulance Baru",
+                            "Renovasi Menara & Sound System Masjid",
+                            "Santunan Anak Yatim & Dhuafa Al-Jihad",
+                            "Pembangunan Sarana Pendidikan TPQ"
+                        ],
+                        hint: "Pilih program infaq aktif di dashboard" 
+                    },
+                    // TARGET DANA DIBUTUHKAN = DIHAPUS KARENA SUDAH DITETAPKAN DI DASHBOARD
+                    // NOMOR REKENING INFAQ = DIHAPUS KARENA SUDAH DITETAPKAN DI DASHBOARD
+                    // Form Tambahan: Formulir Catat Donasi Masuk
+                    { id: "f_donasi_subform", label: "Formulir Catat Donasi Masuk", type: "donasi_subform", val: "", hint: "Pencatatan donasi jamaah baru" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
+
             'pengumuman': {
-                title: "Pengumuman Sholat Jum'at",
+                title: "Pengumuman Sholat Jum'at & Kas",
                 icon: "fa-bullhorn",
-                summaryField: 0,
-                prefix: "Pesan: ",
+                summaryText: () => `Tromol Pekan Lalu: Rp ${modules['pengumuman'].getVal('f_pj_tromol')}`,
                 fields: [
-                    { id: "f_pesan_1", label: "Pengumuman Baris 1 (Shaf)", type: "text", val: "Harap merapatkan dan meluruskan shaf sholat.", placeholder: "Pesan pertama", hint: "Imbauan kerapian shaf" },
-                    { id: "f_pesan_2", label: "Pengumuman Baris 2 (HP)", type: "text", val: "Mohon nonaktifkan atau heningkan nada dering telepon genggam.", placeholder: "Pesan kedua", hint: "Ketenangan ibadah" },
-                    { id: "f_pesan_3", label: "Pengumuman Baris 3 (Adab Khutbah)", type: "text", val: "Dilarang berbicara atau mengobrol saat khutbah berlangsung.", placeholder: "Pesan ketiga", hint: "Adab mendengarkan khutbah" },
-                    { id: "f_pesan_4", label: "Pengumuman Tambahan DKM", type: "text", val: "Parkir kendaraan harap dikunci ganda demi keamanan bersama.", placeholder: "Pesan tambahan", hint: "Ketertiban lingkungan masjid" }
-                ]
+                    // SEMUA FIELD LAMA DIHAPUS, DIGANTI DENGAN 5 POIN SESUAI ARAHAN CEO:
+                    { id: "f_pj_tanggal", label: "Tanggal Kegiatan Sholat Jum'at (Hari H)", type: "text", val: "02 Oktober 2026", hint: "Tanggal pelaksanaan Sholat Jumat" },
+                    { id: "f_pj_khatib", label: "Petugas Imam & Khotib (Hari H)", type: "text", val: "Ust. Faiq Rido", hint: "Nama Imam sekaligus Khotib" },
+                    { id: "f_pj_muadzin", label: "Petugas Muadzin (Hari H)", type: "text", val: "Ust. Rudy", hint: "Nama Muadzin Jumat" },
+                    { id: "f_pj_bilal", label: "Petugas Bilal / Tarhim (Hari H)", type: "text", val: "Ust. Mansur", hint: "Nama Bilal" },
+                    { id: "f_pj_maklumat", label: "Petugas Pembaca Maklumat (Hari H)", type: "text", val: "Ust. Fatkhurokhman", hint: "Pembaca maklumat kas" },
+                    { id: "f_pj_saldo_awal", label: "Laporan Kas Masjid - Saldo Awal (Rp)", type: "text", val: "19.379.023", hint: "Saldo awal kas Jumat" },
+                    { id: "f_pj_ket_tromol", label: "Tambah item Pemasukan Kas (Keterangan)", type: "text", val: "Pendapatan Tromol Jumat ( 25 Sept 2026 )", hint: "Keterangan infaq tromol pekan lalu" },
+                    { id: "f_pj_tromol", label: "Nominal Pemasukan Kas (Tromol Pekan Lalu) Rp", type: "text", val: "3.500.000", hint: "Nominal uang tromol pekan lalu" },
+                    // Form Tambahan: Daftar Pengeluaran / Biaya
+                    { id: "f_pj_biaya_subform", label: "Formulir Daftar Pengeluaran / Biaya", type: "biaya_subform", val: "", hint: "Rincian pengeluaran operasional Jumat" }
+                ],
+                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             }
         };
 
@@ -986,7 +1320,6 @@
             const inputVal = document.getElementById('authPasswordInput').value.trim();
             const errBox = document.getElementById('authErrorMsg');
 
-            // Cek kecocokan password dengan akun terdaftar di AdminAuth / Default
             let matched = false;
 
             if (VALID_PASSWORDS.includes(inputVal)) {
@@ -1029,36 +1362,80 @@
         }
 
         /* =========================================================================
-           LOGIKA AMBIL & SIMPAN DATA REALTIME SUPABASE
+           LOGIKA AMBIL DATA DARI SUPABASE & LOCALSTORAGE
            ========================================================================= */
         async function initLiveDatabase() {
             try {
-                // Ambil state lokal tersimpan lebih dulu
-                const localSaved = localStorage.getItem('quick_petugas_state');
+                // 1. Ambil state lokal tersimpan
+                const localSaved = localStorage.getItem('quick_petugas_state_v2');
                 if (localSaved) {
                     const parsed = JSON.parse(localSaved);
                     Object.keys(parsed).forEach(k => {
-                        if (modules[k]) {
+                        if (modules[k] && Array.isArray(parsed[k])) {
                             modules[k].fields.forEach((f, idx) => {
-                                if (parsed[k][idx] !== undefined) f.val = parsed[k][idx];
+                                if (parsed[k][idx] !== undefined && f.type !== 'shohibul_subform' && f.type !== 'donasi_subform' && f.type !== 'biaya_subform') {
+                                    f.val = parsed[k][idx];
+                                }
                             });
                         }
                     });
                 }
 
-                // Ambil data langsung dari Supabase
+                // Ambil daftar sub-item
+                const qData = localStorage.getItem('cached_qurban_data');
+                if (qData) {
+                    try { qurbanShohibulList = JSON.parse(qData); } catch(e){}
+                }
+                if (!qurbanShohibulList || qurbanShohibulList.length === 0) {
+                    qurbanShohibulList = [
+                        { id: 1, nama: "Bpk. H. Bambang Soeprapto", bin: "Alm. Soeprapto", jenis: "1/7 Bagian Sapi", infaq: 350000 },
+                        { id: 2, nama: "Ibu Hj. Siti Nurhaliza", bin: "Binti H. Dahlan", jenis: "1 Ekor Kambing", infaq: 200000 },
+                        { id: 3, nama: "Keluarga Besar Bpk. Utut", bin: "Alm. H. Priastya", jenis: "1 Ekor Sapi Mandiri", infaq: 500000 }
+                    ];
+                }
+
+                const dData = localStorage.getItem('cached_donasi_infaq_data');
+                if (dData) {
+                    try { infaqDonasiList = JSON.parse(dData); } catch(e){}
+                }
+                if (!infaqDonasiList || infaqDonasiList.length === 0) {
+                    infaqDonasiList = [
+                        { id: 1, nama: "Hamba Allah", tgl: "2026-10-06", nominal: 500000, metode: "Transfer Bank BSI", ket: "Infaq Karpet Masjid" },
+                        { id: 2, nama: "Bpk. H. Subagyo", tgl: "2026-10-05", nominal: 1000000, metode: "Tunai / Kasir DKM", ket: "Infaq Pembangunan Wudhu" }
+                    ];
+                }
+
+                const pData = localStorage.getItem('pengumuman_jumat_data');
+                if (pData) {
+                    try {
+                        const parsedPj = JSON.parse(pData);
+                        if (parsedPj.pengeluaran && Array.isArray(parsedPj.pengeluaran)) {
+                            pengeluaranJumatList = parsedPj.pengeluaran;
+                        }
+                    } catch(e){}
+                }
+                if (!pengeluaranJumatList || pengeluaranJumatList.length === 0) {
+                    pengeluaranJumatList = [
+                        { ket: "Biaya Majlis Ta'lim Ibu - Ibu Selama 4 Minggu", nominal: 800000 },
+                        { ket: "Biaya Alokasi Buat Operasional Ambulan", nominal: 200000 },
+                        { ket: "Biaya Operasional Masjid Periode Tanggal 02 sd 04 Okt 2026", nominal: 3137000 }
+                    ];
+                }
+
+                // 2. Ambil data langsung dari Supabase
                 if (window.SupabaseDB) {
-                    // 1. Sholat Jumat
+                    // Sholat Jumat
                     const sj = await window.SupabaseDB.getSholatJumat();
                     if (sj) {
                         if (sj.tanggal) modules['jumat'].fields[0].val = sj.tanggal;
                         if (sj.khatib) modules['jumat'].fields[1].val = sj.khatib;
-                        if (sj.muadzin) modules['jumat'].fields[2].val = sj.muadzin;
-                        if (sj.bilal) modules['jumat'].fields[3].val = sj.bilal;
-                        if (sj.maklumat) modules['jumat'].fields[4].val = sj.maklumat;
+                        if (sj.foto_imam) modules['jumat'].fields[2].val = sj.foto_imam;
+                        if (sj.muadzin) modules['jumat'].fields[3].val = sj.muadzin;
+                        if (sj.bilal) modules['jumat'].fields[4].val = sj.bilal;
+                        if (sj.maklumat) modules['jumat'].fields[5].val = sj.maklumat;
                     }
 
-                    // 2. Kas Utama
+                    // Kas Utama
                     const kasList = await window.SupabaseDB.getKeuanganKasUtama();
                     if (kasList && kasList.length > 0) {
                         let totM = 0, totK = 0;
@@ -1067,12 +1444,12 @@
                             totK += parseFloat(item.pengeluaran || 0);
                         });
                         const sld = totM - totK;
-                        modules['kas-utama'].fields[1].val = formatRupiah(totM);
-                        modules['kas-utama'].fields[2].val = formatRupiah(totK);
-                        modules['kas-utama'].fields[3].val = formatRupiah(sld);
+                        modules['kas-utama'].fields[2].val = formatRupiah(totM);
+                        modules['kas-utama'].fields[3].val = formatRupiah(totK);
+                        modules['kas-utama'].fields[4].val = formatRupiah(sld);
                     }
 
-                    // 3. Kas Ambulance
+                    // Kas Ambulance
                     const ambList = await window.SupabaseDB.getKeuanganAmbulance();
                     if (ambList && ambList.length > 0) {
                         let totM = 0, totK = 0;
@@ -1081,8 +1458,7 @@
                             totK += parseFloat(item.pengeluaran || 0);
                         });
                         const sld = totM - totK;
-                        modules['ambulance'].fields[1].val = formatRupiah(totM);
-                        modules['ambulance'].fields[2].val = formatRupiah(totK);
+                        modules['ambulance'].fields[2].val = formatRupiah(totM);
                         modules['ambulance'].fields[3].val = formatRupiah(sld);
                     }
                 }
@@ -1097,22 +1473,25 @@
             return new Intl.NumberFormat('id-ID').format(num);
         }
 
+        function parseNominal(str) {
+            if (!str) return 0;
+            return parseFloat(String(str).replace(/[^0-9]/g, '')) || 0;
+        }
+
         function updateAllCardPreviews() {
             Object.keys(modules).forEach(k => {
                 const mod = modules[k];
                 const subEl = document.getElementById('sub-' + k);
-                if (subEl && mod.fields[mod.summaryField]) {
-                    if (k === 'qurban') {
-                        subEl.textContent = `Terkumpul: ${mod.fields[0].val} Sapi, ${mod.fields[1].val} Kambing`;
-                    } else {
-                        subEl.textContent = mod.prefix + mod.fields[mod.summaryField].val;
-                    }
+                if (subEl && typeof mod.summaryText === 'function') {
+                    subEl.textContent = mod.summaryText();
                 }
             });
         }
 
+        /* =========================================================================
+           OPEN & RENDER MODAL FORM
+           ========================================================================= */
         function openModule(moduleId) {
-            // Pastikan terotentikasi sebelum bisa input
             if (sessionStorage.getItem('quick_petugas_authenticated') !== 'true') {
                 checkSecurityAuth();
                 return;
@@ -1127,16 +1506,155 @@
             iconElem.className = 'fas ' + mod.icon;
 
             const formContainer = document.getElementById('sheetFormFields');
-            formContainer.innerHTML = mod.fields.map(f => `
-                <div class="form-block">
-                    <div class="form-label-box">
-                        <label class="form-label-big" for="${f.id}">${f.label}</label>
-                        ${f.hint ? `<span class="form-label-hint">${f.hint}</span>` : ''}
-                    </div>
-                    <input type="${f.type}" id="${f.id}" class="form-input-big" value="${escapeHtml(f.val)}" placeholder="${f.placeholder}">
-                </div>
-            `).join('');
+            let html = '';
 
+            mod.fields.forEach(f => {
+                if (f.type === 'select') {
+                    // Popdown Select Box
+                    html += `
+                        <div class="form-block">
+                            <div class="form-label-box">
+                                <label class="form-label-big" for="${f.id}">${f.label}</label>
+                                ${f.hint ? `<span class="form-label-hint">${f.hint}</span>` : ''}
+                            </div>
+                            <select id="${f.id}" class="form-input-big">
+                                ${f.options.map(opt => `<option value="${escapeHtml(opt)}" ${opt === f.val ? 'selected' : ''}>${escapeHtml(opt)}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                } else if (f.type === 'textarea') {
+                    // Textarea
+                    html += `
+                        <div class="form-block">
+                            <div class="form-label-box">
+                                <label class="form-label-big" for="${f.id}">${f.label}</label>
+                                ${f.hint ? `<span class="form-label-hint">${f.hint}</span>` : ''}
+                            </div>
+                            <textarea id="${f.id}" class="form-input-big">${escapeHtml(f.val)}</textarea>
+                        </div>
+                    `;
+                } else if (f.type === 'imam_photo') {
+                    // Upload Foto Imam Widget
+                    const currentSrc = jumatImamFotoBase64 || f.val || 'image/display/default_imam.jpg';
+                    html += `
+                        <div class="form-block">
+                            <div class="form-label-box">
+                                <label class="form-label-big">${f.label}</label>
+                                <span class="form-label-hint">${f.hint}</span>
+                            </div>
+                            <div class="imam-photo-widget">
+                                <img src="${escapeHtml(currentSrc)}" id="imamPhotoPreview" class="imam-photo-thumb" alt="Foto Imam">
+                                <div class="imam-upload-controls">
+                                    <label class="btn-upload-file">
+                                        <i class="fas fa-camera"></i> PILIH FOTO IMAM DARI HP
+                                        <input type="file" id="imamPhotoFileInput" accept="image/*" style="display: none;" onchange="handleImamPhotoUpload(event)">
+                                    </label>
+                                    <input type="text" id="${f.id}" class="form-input-big" style="padding: 6px 10px; font-size: 0.78rem;" value="${escapeHtml(f.val)}" placeholder="Atau tempel tautan URL Foto..." oninput="handleImamPhotoUrlInput(this.value)">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (f.type === 'shohibul_subform') {
+                    // Sub-form Shohibul Qurban di paling bawah modul qurban
+                    html += `
+                        <div class="sub-box-container">
+                            <div class="sub-box-title">
+                                <i class="fas fa-list-ol"></i> Daftar Shohibul Qurban
+                            </div>
+                            <div id="shohibulListContainer">
+                                ${renderShohibulListHTML()}
+                            </div>
+                            <div style="border-top: 1px dashed rgba(255,215,0,0.3); padding-top: 8px; margin-top: 8px;">
+                                <div class="form-label-box">
+                                    <label class="form-label-big">+ Tambah Shohibul Qurban Baru</label>
+                                </div>
+                                <input type="text" id="newShohibulNama" class="form-input-big" placeholder="Nama Shohibul (contoh: H. Bambang)" style="margin-bottom: 6px;">
+                                <input type="text" id="newShohibulBin" class="form-input-big" placeholder="Atas Nama / Bin (contoh: Alm. Soeprapto)" style="margin-bottom: 6px;">
+                                <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                    <select id="newShohibulJenis" class="form-input-big" style="flex: 1;">
+                                        <option value="1/7 Bagian Sapi">1/7 Bagian Sapi</option>
+                                        <option value="1 Ekor Sapi Mandiri">1 Ekor Sapi Mandiri</option>
+                                        <option value="1 Ekor Kambing">1 Ekor Kambing</option>
+                                    </select>
+                                    <input type="text" id="newShohibulInfaq" class="form-input-big" placeholder="Infaq Rp" style="flex: 1;" value="350.000">
+                                </div>
+                                <button type="button" class="btn-add-subitem" onclick="addShohibulItem()">
+                                    <i class="fas fa-plus-circle"></i> Tambahkan ke Daftar Shohibul
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else if (f.type === 'donasi_subform') {
+                    // Sub-form Catat Donasi Masuk di modul program infaq
+                    html += `
+                        <div class="sub-box-container">
+                            <div class="sub-box-title">
+                                <i class="fas fa-hand-holding-dollar"></i> Formulir Catat Donasi Masuk
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                                <input type="text" id="newDonasiNama" class="form-input-big" placeholder="Nama Donatur (misal: Bpk. Ahmad)" style="flex: 1;">
+                                <label style="display: flex; align-items: center; gap: 4px; font-size: 0.72rem; color: #ffd700; white-space: nowrap;">
+                                    <input type="checkbox" id="checkAnonim" onchange="toggleAnonimDonasi(this)"> Hamba Allah
+                                </label>
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <input type="text" id="newDonasiNominal" class="form-input-big" placeholder="Nominal Donasi Rp (misal: 500.000)" style="flex: 1;">
+                                <select id="newDonasiMetode" class="form-input-big" style="flex: 1;">
+                                    <option value="Tunai / Kasir DKM">Tunai / Kasir DKM</option>
+                                    <option value="Transfer Bank BSI">Transfer Bank BSI</option>
+                                    <option value="QRIS Digital">QRIS Digital</option>
+                                </select>
+                            </div>
+                            <input type="text" id="newDonasiKet" class="form-input-big" placeholder="Keterangan / Doa Jamaah (Opsional)" style="margin-bottom: 6px;">
+                            <button type="button" class="btn-add-subitem" onclick="addDonasiItem()">
+                                <i class="fas fa-plus-circle"></i> Catat Donasi Masuk Sekarang
+                            </button>
+
+                            <div style="margin-top: 10px; border-top: 1px dashed rgba(255,215,0,0.3); padding-top: 8px;">
+                                <div class="form-label-big" style="margin-bottom: 6px;">Riwayat Donasi Masuk Tersimpan:</div>
+                                <div id="donasiListContainer">
+                                    ${renderDonasiListHTML()}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (f.type === 'biaya_subform') {
+                    // Sub-form Daftar Pengeluaran / Biaya di modul pengumuman jumat
+                    html += `
+                        <div class="sub-box-container">
+                            <div class="sub-box-title">
+                                <i class="fas fa-receipt"></i> Daftar Pengeluaran / Biaya Operasional
+                            </div>
+                            <div id="pengeluaranListContainer">
+                                ${renderPengeluaranListHTML()}
+                            </div>
+                            <div style="border-top: 1px dashed rgba(255,215,0,0.3); padding-top: 8px; margin-top: 8px;">
+                                <div class="form-label-box">
+                                    <label class="form-label-big">+ Tambah Biaya / Pengeluaran</label>
+                                </div>
+                                <input type="text" id="newBiayaKet" class="form-input-big" placeholder="Uraian Biaya (misal: Biaya Operasional Kebersihan)" style="margin-bottom: 6px;">
+                                <input type="text" id="newBiayaNominal" class="form-input-big" placeholder="Nominal Pengeluaran Rp (misal: 500.000)" style="margin-bottom: 6px;">
+                                <button type="button" class="btn-add-subitem" onclick="addPengeluaranItem()">
+                                    <i class="fas fa-plus-circle"></i> Tambahkan ke Daftar Pengeluaran
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Input Text / Number standar
+                    html += `
+                        <div class="form-block">
+                            <div class="form-label-box">
+                                <label class="form-label-big" for="${f.id}">${f.label}</label>
+                                ${f.hint ? `<span class="form-label-hint">${f.hint}</span>` : ''}
+                            </div>
+                            <input type="${f.type}" id="${f.id}" class="form-input-big" value="${escapeHtml(f.val)}">
+                        </div>
+                    `;
+                }
+            });
+
+            formContainer.innerHTML = html;
             document.getElementById('sheetOverlay').classList.add('active');
         }
 
@@ -1144,40 +1662,288 @@
             document.getElementById('sheetOverlay').classList.remove('active');
         }
 
+        /* =========================================================================
+           HANDLER UPLOAD FOTO IMAM (BASE64 & PREVIEW)
+           ========================================================================= */
+        function handleImamPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                jumatImamFotoBase64 = e.target.result;
+                const prev = document.getElementById('imamPhotoPreview');
+                if (prev) prev.src = jumatImamFotoBase64;
+                const inputUrl = document.getElementById('f_foto_imam');
+                if (inputUrl) inputUrl.value = 'Foto dari Galeri HP';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleImamPhotoUrlInput(url) {
+            if (!url) return;
+            jumatImamFotoBase64 = '';
+            const prev = document.getElementById('imamPhotoPreview');
+            if (prev) prev.src = url;
+        }
+
+        /* =========================================================================
+           RENDER SUB-ITEM LIST (SHOHIBUL, DONASI, PENGELUARAN)
+           ========================================================================= */
+        function renderShohibulListHTML() {
+            if (!qurbanShohibulList || qurbanShohibulList.length === 0) {
+                return '<div style="font-size:0.75rem; color:#94a3b8; text-align:center; padding:6px;">Belum ada shohibul qurban</div>';
+            }
+            return qurbanShohibulList.map((item, idx) => `
+                <div class="dynamic-item-card">
+                    <div class="dynamic-item-text">
+                        <div class="dynamic-item-title">${escapeHtml(item.nama)}</div>
+                        <div class="dynamic-item-sub">${escapeHtml(item.bin)} • ${escapeHtml(item.jenis)} • Rp ${formatRupiah(item.infaq)}</div>
+                    </div>
+                    <button type="button" class="btn-remove-subitem" onclick="removeShohibulItem(${idx})" title="Hapus">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addShohibulItem() {
+            const nama = document.getElementById('newShohibulNama')?.value.trim();
+            const bin = document.getElementById('newShohibulBin')?.value.trim() || 'Atas Nama Shohibul Qurban';
+            const jenis = document.getElementById('newShohibulJenis')?.value || '1/7 Bagian Sapi';
+            const infaq = parseNominal(document.getElementById('newShohibulInfaq')?.value);
+
+            if (!nama) {
+                alert('Silakan isi nama shohibul qurban!');
+                return;
+            }
+
+            qurbanShohibulList.push({ id: Date.now(), nama, bin, jenis, infaq });
+            localStorage.setItem('cached_qurban_data', JSON.stringify(qurbanShohibulList));
+
+            const container = document.getElementById('shohibulListContainer');
+            if (container) container.innerHTML = renderShohibulListHTML();
+
+            document.getElementById('newShohibulNama').value = '';
+            document.getElementById('newShohibulBin').value = '';
+        }
+
+        function removeShohibulItem(idx) {
+            qurbanShohibulList.splice(idx, 1);
+            localStorage.setItem('cached_qurban_data', JSON.stringify(qurbanShohibulList));
+            const container = document.getElementById('shohibulListContainer');
+            if (container) container.innerHTML = renderShohibulListHTML();
+        }
+
+        function renderDonasiListHTML() {
+            if (!infaqDonasiList || infaqDonasiList.length === 0) {
+                return '<div style="font-size:0.75rem; color:#94a3b8; text-align:center; padding:6px;">Belum ada transaksi donasi</div>';
+            }
+            return infaqDonasiList.map((item, idx) => `
+                <div class="dynamic-item-card">
+                    <div class="dynamic-item-text">
+                        <div class="dynamic-item-title">${escapeHtml(item.nama)} — Rp ${formatRupiah(item.nominal)}</div>
+                        <div class="dynamic-item-sub">${escapeHtml(item.tgl)} • ${escapeHtml(item.metode)} ${item.ket ? `• ${escapeHtml(item.ket)}` : ''}</div>
+                    </div>
+                    <button type="button" class="btn-remove-subitem" onclick="removeDonasiItem(${idx})" title="Hapus">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function toggleAnonimDonasi(chk) {
+            const inp = document.getElementById('newDonasiNama');
+            if (!inp) return;
+            if (chk.checked) {
+                inp.value = 'Hamba Allah';
+                inp.disabled = true;
+            } else {
+                inp.value = '';
+                inp.disabled = false;
+                inp.focus();
+            }
+        }
+
+        function addDonasiItem() {
+            const nama = document.getElementById('newDonasiNama')?.value.trim() || 'Hamba Allah';
+            const nominal = parseNominal(document.getElementById('newDonasiNominal')?.value);
+            const metode = document.getElementById('newDonasiMetode')?.value || 'Tunai / Kasir DKM';
+            const ket = document.getElementById('newDonasiKet')?.value.trim() || '';
+            const tgl = new Date().toISOString().split('T')[0];
+
+            if (nominal <= 0) {
+                alert('Silakan masukkan nominal donasi yang valid!');
+                return;
+            }
+
+            infaqDonasiList.unshift({ id: Date.now(), nama, nominal, metode, ket, tgl });
+            localStorage.setItem('cached_donasi_infaq_data', JSON.stringify(infaqDonasiList));
+
+            const container = document.getElementById('donasiListContainer');
+            if (container) container.innerHTML = renderDonasiListHTML();
+
+            document.getElementById('newDonasiNama').value = '';
+            document.getElementById('newDonasiNominal').value = '';
+            document.getElementById('newDonasiKet').value = '';
+            const chk = document.getElementById('checkAnonim');
+            if (chk) chk.checked = false;
+            document.getElementById('newDonasiNama').disabled = false;
+        }
+
+        function removeDonasiItem(idx) {
+            infaqDonasiList.splice(idx, 1);
+            localStorage.setItem('cached_donasi_infaq_data', JSON.stringify(infaqDonasiList));
+            const container = document.getElementById('donasiListContainer');
+            if (container) container.innerHTML = renderDonasiListHTML();
+        }
+
+        function renderPengeluaranListHTML() {
+            if (!pengeluaranJumatList || pengeluaranJumatList.length === 0) {
+                return '<div style="font-size:0.75rem; color:#94a3b8; text-align:center; padding:6px;">Belum ada daftar pengeluaran</div>';
+            }
+            return pengeluaranJumatList.map((item, idx) => `
+                <div class="dynamic-item-card">
+                    <div class="dynamic-item-text">
+                        <div class="dynamic-item-title">${escapeHtml(item.ket)}</div>
+                        <div class="dynamic-item-sub">Biaya: Rp ${formatRupiah(item.nominal)}</div>
+                    </div>
+                    <button type="button" class="btn-remove-subitem" onclick="removePengeluaranItem(${idx})" title="Hapus">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addPengeluaranItem() {
+            const ket = document.getElementById('newBiayaKet')?.value.trim();
+            const nominal = parseNominal(document.getElementById('newBiayaNominal')?.value);
+
+            if (!ket || nominal <= 0) {
+                alert('Silakan isi uraian biaya dan nominal pengeluaran!');
+                return;
+            }
+
+            pengeluaranJumatList.push({ ket, nominal });
+            const container = document.getElementById('pengeluaranListContainer');
+            if (container) container.innerHTML = renderPengeluaranListHTML();
+
+            document.getElementById('newBiayaKet').value = '';
+            document.getElementById('newBiayaNominal').value = '';
+        }
+
+        function removePengeluaranItem(idx) {
+            pengeluaranJumatList.splice(idx, 1);
+            const container = document.getElementById('pengeluaranListContainer');
+            if (container) container.innerHTML = renderPengeluaranListHTML();
+        }
+
+        /* =========================================================================
+           SIMPAN MODUL & SINKRONISASI REALTIME
+           ========================================================================= */
         async function handleSaveModule() {
             if (!currentActiveModule) return;
             const mod = modules[currentActiveModule];
 
-            // 1. Simpan nilai lokal dari form
+            // 1. Ambil nilai input dari form
             mod.fields.forEach(f => {
-                const el = document.getElementById(f.id);
-                if (el) f.val = el.value.trim();
+                if (f.type !== 'shohibul_subform' && f.type !== 'donasi_subform' && f.type !== 'biaya_subform') {
+                    const el = document.getElementById(f.id);
+                    if (el) f.val = el.value.trim();
+                }
             });
 
-            // 2. Simpan ke LocalStorage State
+            // 2. Simpan State Lokal
             const stateToSave = {};
             Object.keys(modules).forEach(k => {
                 stateToSave[k] = modules[k].fields.map(f => f.val);
             });
-            localStorage.setItem('quick_petugas_state', JSON.stringify(stateToSave));
+            localStorage.setItem('quick_petugas_state_v2', JSON.stringify(stateToSave));
 
-            // 3. Simpan ke Supabase jika tersedia
+            // 3. Simpan ke Supabase & Trigger Realtime Broadcast
             try {
                 if (window.SupabaseDB) {
-                    const payload = {
-                        module: currentActiveModule,
-                        updated_at: new Date().toISOString(),
-                        values: mod.fields.map(f => f.val)
-                    };
-                    await window.SupabaseDB.setAppSetting(`quick_petugas_${currentActiveModule}`, payload);
-                    
-                    // Kirim sinyal broadcast ultra-cepat (<100ms) ke Smart TV
-                    if (typeof window.SupabaseDB.broadcastChange === 'function') {
-                        window.SupabaseDB.broadcastChange('quick_petugas', 'UPDATE', payload, 'Petugas Mobile');
+                    if (currentActiveModule === 'jumat') {
+                        const sjData = {
+                            tanggal: mod.getVal('f_tgl_jumat'),
+                            khatib: mod.getVal('f_khatib'),
+                            foto_imam: jumatImamFotoBase64 || mod.getVal('f_foto_imam'),
+                            muadzin: mod.getVal('f_muadzin'),
+                            bilal: mod.getVal('f_bilal'),
+                            maklumat: mod.getVal('f_maklumat'),
+                            tema: '' // Dihilangkan sesuai arahan CEO
+                        };
+                        await window.SupabaseDB.setAppSetting('sholat_jumat', sjData);
+                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                            window.SupabaseDB.broadcastChange('sholat_jumat', 'UPDATE', sjData, 'Petugas Mobile');
+                        }
+                    } else if (currentActiveModule === 'qurban') {
+                        const qPayload = {
+                            qurban_data: qurbanShohibulList,
+                            qurban_sapi: mod.getVal('f_sapi'),
+                            qurban_kambing: mod.getVal('f_kambing'),
+                            qurban_donatur: mod.getVal('f_donatur'),
+                            qurban_jam_sembelih: mod.getVal('f_jam_sembelih'),
+                            qurban_lokasi_sembelih: mod.getVal('f_lokasi_sembelih')
+                        };
+                        await window.SupabaseDB.setAppSetting('qurban', qPayload);
+                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                            window.SupabaseDB.broadcastChange('qurban', 'UPDATE', qPayload, 'Panitia Qurban Mobile');
+                        }
+                    } else if (currentActiveModule === 'pengumuman') {
+                        const pjPayload = {
+                            tanggalJudul: mod.getVal('f_pj_tanggal'),
+                            tanggalKas: mod.getVal('f_pj_tanggal'),
+                            saldoAwal: parseNominal(mod.getVal('f_pj_saldo_awal')),
+                            pemasukan: [
+                                { ket: mod.getVal('f_pj_ket_tromol'), nominal: parseNominal(mod.getVal('f_pj_tromol')) }
+                            ],
+                            pengeluaran: pengeluaranJumatList,
+                            petugas: {
+                                imamKhotib: mod.getVal('f_pj_khatib'),
+                                muadzin: mod.getVal('f_pj_muadzin'),
+                                bilal: mod.getVal('f_pj_bilal'),
+                                maklumat: mod.getVal('f_pj_maklumat')
+                            }
+                        };
+                        localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjPayload));
+                        if (typeof window.SupabaseDB.savePengumumanJumat === 'function') {
+                            await window.SupabaseDB.savePengumumanJumat(pjPayload);
+                        } else {
+                            await window.SupabaseDB.setAppSetting('pengumuman_jumat', pjPayload);
+                        }
+                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                            window.SupabaseDB.broadcastChange('pengumuman_jumat', 'UPDATE', pjPayload, 'Bendahara Mobile');
+                        }
+                    } else if (currentActiveModule === 'undangan') {
+                        const undPayload = {
+                            pengundang: mod.getVal('f_und_pengundang'),
+                            penceramah: mod.getVal('f_und_penceramah'),
+                            waktu: mod.getVal('f_und_waktu'),
+                            tanggal: mod.getVal('f_und_tanggal'),
+                            acara: mod.getVal('f_und_acara'),
+                            tempat: mod.getVal('f_und_tempat'),
+                            keterangan: mod.getVal('f_und_keterangan')
+                        };
+                        await window.SupabaseDB.setAppSetting('undangan_eksternal', undPayload);
+                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                            window.SupabaseDB.broadcastChange('undangan', 'UPDATE', undPayload, 'Petugas Mobile');
+                        }
+                    } else {
+                        // Modul standar
+                        const genPayload = {
+                            module: currentActiveModule,
+                            updated_at: new Date().toISOString(),
+                            values: mod.fields.map(f => f.val)
+                        };
+                        await window.SupabaseDB.setAppSetting(`quick_petugas_${currentActiveModule}`, genPayload);
+                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                            window.SupabaseDB.broadcastChange('quick_petugas', 'UPDATE', genPayload, 'Petugas Mobile');
+                        }
                     }
                 }
-            } catch (e) {
-                console.warn('Sinkronisasi Supabase:', e);
+            } catch (err) {
+                console.warn('Sinkronisasi Supabase:', err);
             }
 
             updateAllCardPreviews();
@@ -1199,14 +1965,12 @@
             return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        // Tutup modal jika area luar ditekan
         document.getElementById('sheetOverlay').addEventListener('click', (e) => {
             if (e.target.id === 'sheetOverlay') {
                 closeSheet();
             }
         });
 
-        // Jalankan saat halaman siap
         window.addEventListener('DOMContentLoaded', () => {
             checkSecurityAuth();
             initLiveDatabase();
