@@ -4,7 +4,39 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 11:20 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 11:55 WIB)
+
+### 💎 SINKRONISASI PENUH PROGRAM INFAQ & WAKAF VERSI MOBILE (`petugas.html`) 1:1 DENGAN DASHBOARD BENDAHARA (`admin.html`) & SUPABASE CLOUD:
+1. **Latar Belakang & Keluhan CEO:**
+   - CEO mengirimkan tangkapan layar perbandingan: **Gambar 1 (Versi Mobile)** vs **Gambar 2 (Dashboard Bendahara)**.
+   - Pada Gambar 1 sebelumnya, popdown pilihan program di form mobile masih berisi daftar teks statis lama (Karpet, Menara, TPQ, dsb), sedangkan di Dashboard Bendahara (Gambar 2) program aktif yang tayang di TV adalah:
+     `PENGADAAN AC BARU (DAIKIN 3 unit) ★ (Tayang di TV)` dengan Target Rp 40.000.000, Periode 01/09/2026 s/d 31/12/2026, dan Progres 46.6% Terkumpul (Rp 18.643.000).
+
+2. **Penyempurnaan & Sinkronisasi 100% Realtime:**
+   - **Popdown Dinamis Program Infaq:**
+     - Select dropdown `#f_nama_infaq` di modal bottom sheet mobile kini membaca 100% dari tabel `program_infaq` Supabase Cloud (`SupabaseDB.getProgramInfaq()`) dan cache `cached_program_infaq`.
+     - Dropdown menampilkan nama program aktif dengan badge bintang dan status: `PENGADAAN AC BARU (DAIKIN 3 unit) ★ (Tayang di TV)` secara persis 1:1.
+   - **Kartu Preview Detail Program Identik Gambar 2:**
+     - Menghadirkan card interaktif mewah `.program-detail-card` tepat di bawah popdown program:
+       - Header Judul: `PENGADAAN AC BARU (DAIKIN 3 unit)` + Badge hijau `Tayang di TV`.
+       - Keterangan Program: *"Untuk penggantian AC sekarang yang sudah tidak OPTIMAL/sering error"*.
+       - Periode Program: `📅 Periode: 01/09/2026 s/d 31/12/2026`.
+       - Header Progres: `PROGRES PENCAPAIAN DANA` dan `46.6% TERKUMPUL`.
+       - Progress Bar beranimasi gradien hijau bergaris halus (*striped modern*).
+       - Grid Statistik Rinci: Terkumpul (`Rp 18.643.000`), Target Dana (`Rp 40.000.000`), Sisa Kebutuhan (`Rp 21.357.000`).
+   - **Integrasi Penuh Catat Donasi Masuk ke Supabase (`donasi_infaq`):**
+     - Form pencatatan donasi langsung terhubung dengan `selectedProgramInfaqId` (ID: 4).
+     - Saat donasi dicatat via HP oleh petugas, payload tersimpan langsung ke tabel `donasi_infaq` Supabase Cloud, tersimpan di localStorage, dan mentransmisikan broadcast realtime (`INSERT donasi_infaq` & `UPDATE program_infaq`) seketika ke Smart TV Masjid dan Dashboard Bendahara.
+     - Riwayat donasi difilter otomatis sesuai program yang sedang dipilih dan dapat dihapus jika terjadi kesalahan input.
+   - **Sinkronisasi File Publik:**
+     - Seluruh pembaruan di `web-statis/petugas.html` disalin dan disinkronkan ke `public/petugas.html`.
+
+3. **Eksekusi SOP Cache Invalidasi & Version Bumping (SOP #2):**
+   - Service Worker di `web-statis/sw.js` dinaikkan ke **`v5.7.7`** (`aljihad-signage-v5.7.7`).
+   - Logika pembersih cache usang di `web-statis/admin.html` disinkronkan ke `aljihad-signage-v5.7.7`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 11:20 WIB)
 
 ### 🚀 RESTRUKTURISASI MENU QUICK INPUT MODE MOBILE BERDASARKAN PERAN (PETUGAS/OPERATOR & BENDAHARA) DENGAN 11 MODUL SPESIFIK (`web-statis/petugas.html`):
 1. **Latar Belakang & Arahan Khusus CEO:**

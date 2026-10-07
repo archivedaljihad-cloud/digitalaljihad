@@ -589,6 +589,165 @@
             color: #ffffff;
         }
 
+        
+        /* =========================================================================
+           KARTU PREVIEW DETAIL PROGRAM INFAQ (SINKRON DENGAN GAMBAR 2 BENDAHARA)
+           ========================================================================= */
+        .program-detail-card {
+            background: #ffffff;
+            color: #1f2937;
+            border-radius: 14px;
+            padding: 14px 14px 12px 14px;
+            margin-top: 10px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            border: 1.5px solid #60a5fa;
+            text-align: left;
+        }
+
+        .prog-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .prog-card-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #2563eb;
+            line-height: 1.3;
+            text-transform: uppercase;
+        }
+
+        .prog-tv-badge {
+            background: #10b981;
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+        }
+
+        .prog-tv-off {
+            background: #9ca3af;
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .prog-card-desc {
+            font-size: 0.76rem;
+            color: #4b5563;
+            line-height: 1.35;
+            margin-bottom: 8px;
+        }
+
+        .prog-card-periode {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .prog-card-periode i {
+            color: #2563eb;
+        }
+
+        .prog-progress-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .prog-progress-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #2563eb;
+            letter-spacing: 0.3px;
+        }
+
+        .prog-progress-pct {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .prog-bar-track {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .prog-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            background-size: 1rem 1rem;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            transition: width 0.5s ease;
+        }
+
+        .prog-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .prog-stat-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prog-stat-lbl {
+            font-size: 0.65rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .prog-stat-val {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .stat-collected .prog-stat-val { color: #059669; }
+        .stat-target .prog-stat-val { color: #2563eb; }
+        .stat-sisa .prog-stat-val { color: #d97706; }
+
         /* TOMBOL SIMPAN RAKSASA */
         .btn-giant-save {
             width: 100%;
@@ -1061,6 +1220,18 @@
         let qurbanShohibulList = [];
         let infaqDonasiList = [];
         let pengeluaranJumatList = [];
+        let programInfaqList = [
+            {
+                id: 4,
+                nama_program: "PENGADAAN AC BARU (DAIKIN 3 unit)",
+                keterangan: "Untuk penggantian AC sekarang yang sudah tidak OPTIMAL/sering error",
+                target_dana: 40000000,
+                tanggal_mulai: "2026-09-01",
+                tanggal_selesai: "2026-12-31",
+                is_active: true
+            }
+        ];
+        let selectedProgramInfaqId = 4;
 
         // 11 MODUL SPESIFIK SESUAI INSTRUKSI CEO
         const modules = {
@@ -1254,26 +1425,29 @@
             'infaq': {
                 title: "Program Infaq & Wakaf",
                 icon: "fa-hand-holding-heart",
-                summaryText: () => `Program: ${modules['infaq'].getVal('f_nama_infaq')}`,
+                summaryText: () => {
+                    const prog = (programInfaqList && programInfaqList.find(p => p.id == selectedProgramInfaqId)) || (programInfaqList && programInfaqList[0]);
+                    if (!prog) return "Pilih Program & Catat Donasi";
+                    const progDonasi = (infaqDonasiList || []).filter(d => !d.program_infaq_id || d.program_infaq_id == prog.id);
+                    const total = progDonasi.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
+                    const pct = (prog.target_dana > 0) ? Math.min(100, (total / prog.target_dana) * 100).toFixed(1) : 0;
+                    return `${prog.nama_program} (${pct}%)`;
+                },
                 fields: [
                     { 
                         id: "f_nama_infaq", 
                         label: "Nama Program Penggalangan Infaq (Popdown)", 
-                        type: "select", 
-                        val: "Infaq Karpet & Perluasan Tempat Wudhu", 
-                        options: [
-                            "Infaq Karpet & Perluasan Tempat Wudhu",
-                            "Pengadaan Mobil Ambulance Baru",
-                            "Renovasi Menara & Sound System Masjid",
-                            "Santunan Anak Yatim & Dhuafa Al-Jihad",
-                            "Pembangunan Sarana Pendidikan TPQ"
-                        ],
-                        hint: "Pilih program infaq aktif di dashboard" 
+                        type: "program_select", 
+                        val: "4", 
+                        hint: "Sinkron 100% dengan program aktif di dashboard bendahara" 
                     },
-                    // TARGET DANA DIBUTUHKAN = DIHAPUS KARENA SUDAH DITETAPKAN DI DASHBOARD
-                    // NOMOR REKENING INFAQ = DIHAPUS KARENA SUDAH DITETAPKAN DI DASHBOARD
-                    // Form Tambahan: Formulir Catat Donasi Masuk
-                    { id: "f_donasi_subform", label: "Formulir Catat Donasi Masuk", type: "donasi_subform", val: "", hint: "Pencatatan donasi jamaah baru" }
+                    { 
+                        id: "f_donasi_subform", 
+                        label: "Formulir Catat Donasi Masuk", 
+                        type: "donasi_subform", 
+                        val: "", 
+                        hint: "Pencatatan donasi jamaah masuk langsung ke TV & Bendahara" 
+                    }
                 ],
                 getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
@@ -1394,15 +1568,20 @@
                     ];
                 }
 
-                const dData = localStorage.getItem('cached_donasi_infaq_data');
+                // Ambil cache program infaq & donasi infaq
+                const pInfaqCached = localStorage.getItem('cached_program_infaq');
+                if (pInfaqCached) {
+                    try {
+                        const parsedP = JSON.parse(pInfaqCached);
+                        if (Array.isArray(parsedP) && parsedP.length > 0) {
+                            programInfaqList = parsedP;
+                        }
+                    } catch(e){}
+                }
+
+                const dData = localStorage.getItem('cached_donasi_infaq') || localStorage.getItem('cached_donasi_infaq_data');
                 if (dData) {
                     try { infaqDonasiList = JSON.parse(dData); } catch(e){}
-                }
-                if (!infaqDonasiList || infaqDonasiList.length === 0) {
-                    infaqDonasiList = [
-                        { id: 1, nama: "Hamba Allah", tgl: "2026-10-06", nominal: 500000, metode: "Transfer Bank BSI", ket: "Infaq Karpet Masjid" },
-                        { id: 2, nama: "Bpk. H. Subagyo", tgl: "2026-10-05", nominal: 1000000, metode: "Tunai / Kasir DKM", ket: "Infaq Pembangunan Wudhu" }
-                    ];
                 }
 
                 const pData = localStorage.getItem('pengumuman_jumat_data');
@@ -1424,6 +1603,30 @@
 
                 // 2. Ambil data langsung dari Supabase
                 if (window.SupabaseDB) {
+                    // Program Infaq & Donasi Infaq (Sinkron 100% dengan Bendahara)
+                    try {
+                        const dbProgs = await window.SupabaseDB.getProgramInfaq();
+                        if (dbProgs && dbProgs.length > 0) {
+                            programInfaqList = dbProgs;
+                            localStorage.setItem('cached_program_infaq', JSON.stringify(dbProgs));
+                            const activeProg = programInfaqList.find(p => p.is_active);
+                            if (activeProg) {
+                                selectedProgramInfaqId = activeProg.id;
+                            } else {
+                                selectedProgramInfaqId = programInfaqList[0].id;
+                            }
+                        }
+
+                        const dbDonasi = await window.SupabaseDB.getDonasiInfaq();
+                        if (dbDonasi && dbDonasi.length > 0) {
+                            infaqDonasiList = dbDonasi;
+                            localStorage.setItem('cached_donasi_infaq', JSON.stringify(dbDonasi));
+                            localStorage.setItem('cached_donasi_infaq_data', JSON.stringify(dbDonasi));
+                        }
+                    } catch (e) {
+                        console.warn('Gagal fetch program/donasi infaq dari Supabase:', e);
+                    }
+
                     // Sholat Jumat
                     const sj = await window.SupabaseDB.getSholatJumat();
                     if (sj) {
@@ -1551,6 +1754,27 @@
                                     </label>
                                     <input type="text" id="${f.id}" class="form-input-big" style="padding: 6px 10px; font-size: 0.78rem;" value="${escapeHtml(f.val)}" placeholder="Atau tempel tautan URL Foto..." oninput="handleImamPhotoUrlInput(this.value)">
                                 </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (f.type === 'program_select') {
+                    // Popdown Program Infaq Dinamis Sinkron Bendahara (Gambar 1 -> Gambar 2)
+                    html += `
+                        <div class="form-block">
+                            <div class="form-label-box">
+                                <label class="form-label-big" for="${f.id}">${f.label}</label>
+                                <span class="form-label-hint">Pilih program infaq aktif di dashboard</span>
+                            </div>
+                            <select id="${f.id}" class="form-input-big" onchange="onProgramInfaqChanged(this.value)">
+                                ${programInfaqList.map(prog => `
+                                    <option value="${prog.id}" ${prog.id == selectedProgramInfaqId ? 'selected' : ''}>
+                                        ${escapeHtml(prog.nama_program)}${prog.is_active ? ' ★ (Tayang di TV)' : ''}
+                                    </option>
+                                `).join('')}
+                            </select>
+                            <!-- Preview Detail Program Mirip Gambar 2 Dashboard Bendahara -->
+                            <div id="programDetailPreviewBox">
+                                ${renderProgramDetailCard(selectedProgramInfaqId)}
                             </div>
                         </div>
                     `;
@@ -1735,21 +1959,123 @@
             if (container) container.innerHTML = renderShohibulListHTML();
         }
 
-        function renderDonasiListHTML() {
-            if (!infaqDonasiList || infaqDonasiList.length === 0) {
-                return '<div style="font-size:0.75rem; color:#94a3b8; text-align:center; padding:6px;">Belum ada transaksi donasi</div>';
-            }
-            return infaqDonasiList.map((item, idx) => `
-                <div class="dynamic-item-card">
-                    <div class="dynamic-item-text">
-                        <div class="dynamic-item-title">${escapeHtml(item.nama)} — Rp ${formatRupiah(item.nominal)}</div>
-                        <div class="dynamic-item-sub">${escapeHtml(item.tgl)} • ${escapeHtml(item.metode)} ${item.ket ? `• ${escapeHtml(item.ket)}` : ''}</div>
+        
+        /* =========================================================================
+           HELPER FORMAT TANGGAL INDONESIA & DETAIL PROGRAM INFAQ
+           ========================================================================= */
+        function formatDateIndo(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                const parts = String(dateStr).split('T')[0].split('-');
+                if (parts.length === 3) {
+                    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+            } catch(e){}
+            return dateStr;
+        }
+
+        function renderProgramDetailCard(progId) {
+            const prog = (programInfaqList && programInfaqList.find(p => p.id == progId)) || (programInfaqList && programInfaqList[0]);
+            if (!prog) return '';
+
+            const progDonasi = (infaqDonasiList || []).filter(d => !d.program_infaq_id || d.program_infaq_id == prog.id);
+            const totalTerkumpul = progDonasi.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
+            const targetDana = parseFloat(prog.target_dana) || 0;
+            const persentase = targetDana > 0 ? Math.min(100, (totalTerkumpul / targetDana) * 100).toFixed(1) : 0;
+            const sisaDana = Math.max(0, targetDana - totalTerkumpul);
+
+            const tglMulai = formatDateIndo(prog.tanggal_mulai);
+            const tglSelesai = formatDateIndo(prog.tanggal_selesai);
+
+            return `
+                <div class="program-detail-card">
+                    <!-- Baris 1: Judul Program & Badge TV -->
+                    <div class="prog-card-header">
+                        <div class="prog-card-title">${escapeHtml(prog.nama_program)}</div>
+                        ${prog.is_active ? '<span class="prog-tv-badge"><i class="fas fa-tv mr-1"></i> Tayang di TV</span>' : '<span class="prog-tv-off">Tidak Tayang</span>'}
                     </div>
-                    <button type="button" class="btn-remove-subitem" onclick="removeDonasiItem(${idx})" title="Hapus">
-                        <i class="fas fa-trash"></i>
-                    </button>
+
+                    <!-- Baris 2: Keterangan Singkat -->
+                    <div class="prog-card-desc">${escapeHtml(prog.keterangan || 'Program penggalangan infaq & donasi jamaah.')}</div>
+
+                    <!-- Baris 3: Periode Program -->
+                    <div class="prog-card-periode">
+                        <i class="fas fa-calendar-alt"></i> Periode: <strong>${tglMulai} s/d ${tglSelesai}</strong>
+                    </div>
+
+                    <!-- Baris 4: Label & Persentase Progres -->
+                    <div class="prog-progress-label-row">
+                        <span class="prog-progress-title">PROGRES PENCAPAIAN DANA</span>
+                        <span class="prog-progress-pct">${persentase}% TERKUMPUL</span>
+                    </div>
+
+                    <!-- Baris 5: Progress Bar Striped Modern -->
+                    <div class="prog-bar-track">
+                        <div class="prog-bar-fill" style="width: ${persentase}%;">
+                            ${persentase}%
+                        </div>
+                    </div>
+
+                    <!-- Baris 6: Rincian Angka Target & Terkumpul -->
+                    <div class="prog-stats-grid">
+                        <div class="prog-stat-item stat-collected">
+                            <span class="prog-stat-lbl">Terkumpul</span>
+                            <span class="prog-stat-val">Rp ${formatRupiah(totalTerkumpul)}</span>
+                        </div>
+                        <div class="prog-stat-item stat-target">
+                            <span class="prog-stat-lbl">Target Dana</span>
+                            <span class="prog-stat-val">Rp ${formatRupiah(targetDana)}</span>
+                        </div>
+                        <div class="prog-stat-item stat-sisa">
+                            <span class="prog-stat-lbl">Sisa Kebutuhan</span>
+                            <span class="prog-stat-val">Rp ${formatRupiah(sisaDana)}</span>
+                        </div>
+                    </div>
                 </div>
-            `).join('');
+            `;
+        }
+
+        function onProgramInfaqChanged(val) {
+            selectedProgramInfaqId = parseInt(val) || val;
+            const previewBox = document.getElementById('programDetailPreviewBox');
+            if (previewBox) {
+                previewBox.innerHTML = renderProgramDetailCard(selectedProgramInfaqId);
+            }
+            const donasiBox = document.getElementById('donasiListContainer');
+            if (donasiBox) {
+                donasiBox.innerHTML = renderDonasiListHTML();
+            }
+            updateAllCardPreviews();
+        }
+
+        function renderDonasiListHTML() {
+            const list = (infaqDonasiList || [])
+                .filter(d => !d.program_infaq_id || d.program_infaq_id == selectedProgramInfaqId);
+
+            if (list.length === 0) {
+                return '<div style="font-size:0.75rem; color:#94a3b8; text-align:center; padding:10px;">Belum ada riwayat donasi untuk program ini</div>';
+            }
+
+            return list.map((item, idx) => {
+                const nama = item.nama_donatur || item.nama || 'Hamba Allah';
+                const nominal = parseFloat(item.nominal) || 0;
+                const tgl = formatDateIndo(item.tanggal || item.tgl);
+                const metode = item.metode_pembayaran || item.metode || 'Tunai / Kasir DKM';
+                const ket = item.keterangan || item.ket || '';
+                const id = item.id || idx;
+
+                return `
+                    <div class="dynamic-item-card">
+                        <div class="dynamic-item-text">
+                            <div class="dynamic-item-title">${escapeHtml(nama)} — Rp ${formatRupiah(nominal)}</div>
+                            <div class="dynamic-item-sub">${tgl} • ${escapeHtml(metode)} ${ket ? `• ${escapeHtml(ket)}` : ''}</div>
+                        </div>
+                        <button type="button" class="btn-remove-subitem" onclick="removeDonasiItem(${id})" title="Hapus Donasi">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
         }
 
         function toggleAnonimDonasi(chk) {
@@ -1765,8 +2091,11 @@
             }
         }
 
-        function addDonasiItem() {
-            const nama = document.getElementById('newDonasiNama')?.value.trim() || 'Hamba Allah';
+        async function addDonasiItem() {
+            const isAnonim = document.getElementById('checkAnonim')?.checked === true;
+            let nama = document.getElementById('newDonasiNama')?.value.trim();
+            if (isAnonim || !nama) nama = 'Hamba Allah';
+
             const nominal = parseNominal(document.getElementById('newDonasiNominal')?.value);
             const metode = document.getElementById('newDonasiMetode')?.value || 'Tunai / Kasir DKM';
             const ket = document.getElementById('newDonasiKet')?.value.trim() || '';
@@ -1777,25 +2106,98 @@
                 return;
             }
 
-            infaqDonasiList.unshift({ id: Date.now(), nama, nominal, metode, ket, tgl });
+            const newDonasi = {
+                program_infaq_id: parseInt(selectedProgramInfaqId),
+                nama_donatur: nama,
+                nama: nama,
+                nominal: nominal,
+                metode_pembayaran: metode,
+                metode: metode,
+                keterangan: ket,
+                ket: ket,
+                tanggal: tgl,
+                tgl: tgl
+            };
+
+            // Simpan langsung ke Supabase Cloud
+            try {
+                const client = window.SupabaseDB ? window.SupabaseDB.getClient() : null;
+                if (client) {
+                    const { data, error } = await client.from('donasi_infaq').insert([{
+                        program_infaq_id: newDonasi.program_infaq_id,
+                        nama_donatur: newDonasi.nama_donatur,
+                        nominal: newDonasi.nominal,
+                        metode_pembayaran: newDonasi.metode_pembayaran,
+                        keterangan: newDonasi.keterangan,
+                        tanggal: newDonasi.tanggal
+                    }]).select();
+                    if (!error && data && data[0]) {
+                        newDonasi.id = data[0].id;
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal insert donasi ke Supabase:', err);
+            }
+
+            if (!newDonasi.id) newDonasi.id = Date.now();
+
+            infaqDonasiList.unshift(newDonasi);
+            localStorage.setItem('cached_donasi_infaq', JSON.stringify(infaqDonasiList));
             localStorage.setItem('cached_donasi_infaq_data', JSON.stringify(infaqDonasiList));
+
+            // Transmisi Broadcast Realtime ke Smart TV & Dashboard Bendahara
+            if (window.SupabaseDB && typeof window.SupabaseDB.broadcastChange === 'function') {
+                window.SupabaseDB.broadcastChange('donasi_infaq', 'INSERT', newDonasi, 'Petugas Mobile');
+                window.SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { program_infaq_id: selectedProgramInfaqId }, 'Petugas Mobile');
+            }
 
             const container = document.getElementById('donasiListContainer');
             if (container) container.innerHTML = renderDonasiListHTML();
 
+            const previewBox = document.getElementById('programDetailPreviewBox');
+            if (previewBox) previewBox.innerHTML = renderProgramDetailCard(selectedProgramInfaqId);
+
+            updateAllCardPreviews();
+
+            // Reset Input Form
             document.getElementById('newDonasiNama').value = '';
             document.getElementById('newDonasiNominal').value = '';
             document.getElementById('newDonasiKet').value = '';
             const chk = document.getElementById('checkAnonim');
             if (chk) chk.checked = false;
             document.getElementById('newDonasiNama').disabled = false;
+
+            showToastSuccess('Alhamdulillah, donasi berhasil dicatat dan masuk ke sistem TV!');
         }
 
-        function removeDonasiItem(idx) {
-            infaqDonasiList.splice(idx, 1);
+        async function removeDonasiItem(id) {
+            if (!confirm('Hapus catatan donasi ini?')) return;
+            try {
+                const client = window.SupabaseDB ? window.SupabaseDB.getClient() : null;
+                if (client) {
+                    await client.from('donasi_infaq').delete().eq('id', id);
+                }
+            } catch (err) {
+                console.warn('Gagal hapus donasi dari Supabase:', err);
+            }
+
+            infaqDonasiList = infaqDonasiList.filter(d => d.id != id);
+            localStorage.setItem('cached_donasi_infaq', JSON.stringify(infaqDonasiList));
             localStorage.setItem('cached_donasi_infaq_data', JSON.stringify(infaqDonasiList));
+
+            if (window.SupabaseDB && typeof window.SupabaseDB.broadcastChange === 'function') {
+                window.SupabaseDB.broadcastChange('donasi_infaq', 'DELETE', { id }, 'Petugas Mobile');
+                window.SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { program_infaq_id: selectedProgramInfaqId }, 'Petugas Mobile');
+            }
+
             const container = document.getElementById('donasiListContainer');
             if (container) container.innerHTML = renderDonasiListHTML();
+
+            const previewBox = document.getElementById('programDetailPreviewBox');
+            if (previewBox) previewBox.innerHTML = renderProgramDetailCard(selectedProgramInfaqId);
+
+            updateAllCardPreviews();
+            showToastSuccess('Catatan donasi berhasil dihapus.');
         }
 
         function renderPengeluaranListHTML() {
@@ -1914,6 +2316,26 @@
                         }
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('pengumuman_jumat', 'UPDATE', pjPayload, 'Bendahara Mobile');
+                        }
+                    } else if (currentActiveModule === 'infaq') {
+                        // Sinkronkan status aktif program ke Supabase & LocalStorage
+                        try {
+                            const client = window.SupabaseDB ? window.SupabaseDB.getClient() : null;
+                            if (client && selectedProgramInfaqId) {
+                                await client.from('program_infaq').update({ is_active: false }).neq('id', selectedProgramInfaqId);
+                                await client.from('program_infaq').update({ is_active: true }).eq('id', selectedProgramInfaqId);
+
+                                programInfaqList.forEach(p => {
+                                    p.is_active = (p.id == selectedProgramInfaqId);
+                                });
+                                localStorage.setItem('cached_program_infaq', JSON.stringify(programInfaqList));
+
+                                if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                                    window.SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { id: selectedProgramInfaqId, is_active: true }, 'Petugas Mobile');
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Gagal sinkron status program infaq:', e);
                         }
                     } else if (currentActiveModule === 'undangan') {
                         const undPayload = {
