@@ -1550,11 +1550,20 @@
 
             let matched = false;
 
-            if (VALID_PASSWORDS.includes(inputVal)) {
-                matched = true;
-            } else if (window.AdminAuth && typeof window.AdminAuth.getUsers === 'function') {
+            // 1. Prioritas Utama: Cek daftar pengguna mutakhir dari AdminAuth (Cloud & Local RBAC)
+            // Sehingga jika Super Admin mengubah password di Dashboard, password baru LANGSUNG ikut berganti
+            if (window.AdminAuth && typeof window.AdminAuth.getUsers === 'function') {
                 const users = window.AdminAuth.getUsers();
-                matched = users.some(u => u.password === inputVal);
+                if (Array.isArray(users) && users.length > 0) {
+                    matched = users.some(u => (u.password || '').trim() === inputVal);
+                }
+            }
+
+            // 2. Fallback Darurat Offline: Jika data pengguna belum termuat, gunakan daftar default
+            if (!matched && (!window.AdminAuth || !window.AdminAuth.getUsers || window.AdminAuth.getUsers().length === 0)) {
+                if (VALID_PASSWORDS.includes(inputVal)) {
+                    matched = true;
+                }
             }
 
             if (matched) {

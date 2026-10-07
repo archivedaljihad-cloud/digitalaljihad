@@ -4,7 +4,23 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 16:20 WIB)
+## ✨ UPDATE TERBARU — 7 Oktober 2026 (Pukul 16:40 WIB)
+
+### 🔐 SINKRONISASI PERUBAHAN PASSWORD DARI DASHBOARD SUPER ADMIN (DYNAMIC AUTH OVERRIDE - `petugas.html` & `modeinput.html`):
+1. **Pertanyaan CEO:**
+   - *"Apakah password ini jika di ganti melalui dashboard super admin juga ikut berganti?"*
+2. **Penyempurnaan Logika Autentikasi (`handleAuthSubmit`):**
+   - **Prioritas Utama (Authoritative Cloud/Local RBAC):** Verifikasi kata sandi diubah untuk memeriksa langsung objek pengguna mutakhir dari `window.AdminAuth.getUsers()`.
+   - **Efek Nyata:**
+     - Jika Super Admin mengganti kata sandi pengurus (Super Admin, Bendahara, DKM) melalui Dashboard Admin (menu Manajemen Pengguna / RBAC), kata sandi baru tersebut **LANGSUNG BERLAKU & DAPAT DIGUNAKAN** di Mode Petugas HP manapun.
+     - Kata sandi lama yang telah diganti **OTOMATIS KADALUARSA / TIDAK BISA LAGI DIGUNAKAN**, sehingga kontrol keamanan dari Super Admin berjalan 100% efektif.
+     - Array `VALID_PASSWORDS` bawaan hanya dijadikan fallback darurat jika perangkat sedang benar-benar offline (tanpa koneksi internet dan cache pengguna belum tersedia).
+3. **Pilar Bumping Cache & Service Worker (SOP #2):**
+   - Versi Service Worker di `web-statis/sw.js` dinaikkan ke **`v5.8.2`** (`aljihad-signage-v5.8.2`).
+   - Logika invalidasi cache usang di `web-statis/admin.html` disinkronkan ke `aljihad-signage-v5.8.2`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 7 Oktober 2026 (Pukul 16:20 WIB)
 
 ### 📱 JAMINAN SINKRONISASI LINTAS PERANGKAT (MULTI-DEVICE UNIFORMITY - `petugas.html` & `modeinput.html`):
 1. **Latar Belakang & Pertanyaan Kritis CEO:**
