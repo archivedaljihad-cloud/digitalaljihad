@@ -4,7 +4,29 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 07:58 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 09:12 WIB)
+
+### 🎨 REVISI DESAIN & TIPOGRAFI SLIDE KAJIAN & INFORMASI KEGIATAN (`slides/pengumuman.html`, Versi SW v5.8.7):
+1. **Latar Belakang & Permintaan Pengguna:**
+   - Pada halaman "Kajian & Informasi Kegiatan" (`slides/pengumuman.html`), terdapat 4 butir penyempurnaan tampilan:
+     a. Gambar ikon kitab/rehal tidak utuh (bagian pinggir kanan-kiri terpotong oleh bingkai).
+     b. Menghilangkan kotak berlatar belakang gelap dan bergaris samping emas pada teks deskripsi.
+     c. Mengubah format teks deskripsi tersebut menjadi rata tengah (*text-align: center*).
+     d. Mengubah teks judul acara dari "Kajian Rutin Ba'da Maghrib & Shubuh Berjamaah" menjadi "Kajian Rutin ba'da Maghrib & ba'da Shubuh".
+2. **Implementasi Teknis & Solusi:**
+   - **Proporsi Gambar Utuh Tanpa Terpotong (`.speaker-frame` & `.ikon-kitab-img`):**
+     - Gambar `ikonkitab.png` memiliki rasio lanskap (594x420 px). Sebelumnya aturan `.speaker-frame img { object-fit: cover; }` memaksa gambar mengisi tinggi 300px secara vertikal sehingga sisi kanan-kiri terpotong 62px.
+     - Diperbaiki dengan menetapkan `.ikon-kitab-img { width: 100% !important; height: 100% !important; object-fit: contain !important; }` dan `.speaker-frame { padding: 16px; box-sizing: border-box; }`. Gambar kitab kini tampil 100% utuh dengan jarak aman di sekelilingnya.
+   - **Pelepasan Kotak & Penataan Rata Tengah (`.announcement-desc`):**
+     - Menghapus styling kotak (`background`, `border-left: 4px solid #ffd700`, `border-radius`).
+     - Menerapkan `background: transparent; border: none; text-align: center; width: 100%; font-size: 1.15rem; line-height: 1.6; margin-top: 14px;`.
+   - **Pembaruan Teks Judul Acara:**
+     - Diperbarui menjadi "Kajian Rutin ba'da Maghrib & ba'da Shubuh" baik di elemen markup HTML `#annTitle` maupun nilai fallback default di skrip JavaScript `displayAnnouncement()`.
+3. **Bumping Versi Cache Service Worker (SOP #2):**
+   - Dinaikkan ke **`v5.8.7`** (`aljihad-signage-v5.8.7`) pada `web-statis/sw.js` dan `web-statis/admin.html`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 07:58 WIB)
 
 ### ⏱️ RESOLUSI ROTASI SLIDE MACET/TERHENTI DI TV DISPLAY: FIX SCOPE REFERENCEERROR BROADCAST_TV_STATE & UNIVERSAL TRANSITION LOCK GUARD (Versi SW v5.8.6):
 1. **Latar Belakang & Keluhan Pengguna:**

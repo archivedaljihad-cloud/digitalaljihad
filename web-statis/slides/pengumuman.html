@@ -189,12 +189,15 @@
             align-items: center;
             justify-content: center;
             background: rgba(4, 25, 18, 0.5);
+            padding: 16px;
+            box-sizing: border-box;
         }
 
-        .speaker-frame img {
+        .speaker-frame img#annPhoto {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            border-radius: 12px;
         }
 
         .speaker-fallback {
@@ -204,24 +207,27 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 0;
             color: #ffd700;
-            padding: 16px;
+            padding: 0;
+            overflow: hidden;
         }
 
         .speaker-fallback i { font-size: 5rem; }
 
         .ikon-kitab-img {
-            max-width: 85%;
-            max-height: 85%;
-            object-fit: contain;
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain !important;
             filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.65));
             animation: pulseKitab 4s ease-in-out infinite;
         }
 
         @keyframes pulseKitab {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.65)); }
-            50% { transform: scale(1.03); filter: drop-shadow(0 12px 28px rgba(255, 215, 0, 0.35)); }
+            50% { transform: scale(1.02); filter: drop-shadow(0 12px 28px rgba(255, 215, 0, 0.35)); }
         }
 
         .details-col {
@@ -275,14 +281,16 @@
         .meta-badge i { color: #ffd700; }
 
         .announcement-desc {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: #e2e8f0;
-            line-height: 1.5;
-            margin-top: 6px;
-            background: rgba(0, 0, 0, 0.25);
-            padding: 12px 16px;
-            border-radius: 12px;
-            border-left: 4px solid #ffd700;
+            line-height: 1.6;
+            margin-top: 14px;
+            background: transparent;
+            border: none;
+            border-left: none;
+            padding: 0;
+            text-align: center;
+            width: 100%;
         }
 
         /* Indikator Slider dots */
@@ -385,7 +393,7 @@
 
                     <!-- Kolom Kanan: Detail Acara -->
                     <div class="details-col">
-                        <div class="announcement-title" id="annTitle">Kajian Rutin Ba'da Maghrib & Shubuh Berjamaah</div>
+                        <div class="announcement-title" id="annTitle">Kajian Rutin ba'da Maghrib & ba'da Shubuh</div>
                         <div class="announcement-speaker" id="annSpeakerWrap">
                             <i class="fas fa-user-graduate"></i>
                             <span id="annSpeaker">Bersama Asatidz & DKM Al-Jihad</span>
@@ -488,7 +496,7 @@
             if (!item) return;
 
             // Judul & Badge
-            document.getElementById('annTitle').textContent = item.judul || item.tema || 'Kegiatan Masjid';
+            document.getElementById('annTitle').textContent = item.judul || item.tema || "Kajian Rutin ba'da Maghrib & ba'da Shubuh";
             document.getElementById('annBadgeTitle').textContent = item.kategori || 'Kajian & Informasi Kegiatan';
 
             // Tanggal
@@ -529,7 +537,7 @@
             }
 
             // Uraian
-            document.getElementById('annDesc').textContent = item.isi || item.deskripsi || item.keterangan || "Terbuka untuk umum. Mari makmurkan masjid dan raih pahala berlipat ganda.";
+            document.getElementById('annDesc').textContent = item.isi || item.deskripsi || item.keterangan || "Terbuka untuk umum, ikhwan dan akhwat. Mari ramaikan majelis ilmu dan raih keberkahan berjamaah di rumah Allah SWT.";
 
             // Foto
             const photoEl = document.getElementById('annPhoto');
