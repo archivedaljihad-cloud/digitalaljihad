@@ -4,7 +4,25 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 16:15 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 18:30 WIB)
+
+### 📊 PERAPIHAN JUDUL GRAFIK 1 BARIS DI SLIDE RINGKASAN KEUANGAN (`/slides/keuangan-summary`, Versi SW v5.8.11):
+1. **Latar Belakang & Kebutuhan Pengguna:**
+   - Pengguna meminta teks **"Proporsi Pemasukan vs Pengeluaran"** pada kotak grafik donat arus kas di halaman `/slides/keuangan-summary` diperkecil agar pas dalam **1 baris saja**, sehingga tidak melipat/membungkus ke baris kedua dan memberikan ruang vertikal yang jauh lebih lega bagi tampilan grafik donat.
+2. **Implementasi & Optimasi Tampilan:**
+   - **Styling Judul Kotak Grafik (`.chart-box .box-title`):**
+     - Ukuran font disesuaikan menjadi `0.95rem` dengan `letter-spacing: 0.2px`, `white-space: nowrap`, `gap: 6px`, dan `overflow: hidden`.
+     - Teks judul dijamin 100% tampil rapi dalam 1 baris di seluruh resolusi layar (Smart TV, PC monitor, maupun tablet).
+     - Margin bawah dan padding bawah dikurangi menjadi `6px` sehingga menghemat ruang vertikal ~38px.
+   - **Perluasan Area Grafik (`.chart-box` & Legend):**
+     - Padding kotak grafik dirampingkan menjadi `10px 14px`.
+     - Legend Chart.js di bagian bawah dioptimalkan (`font-size: 11px`, `boxWidth: 12px`, `padding: 8px`).
+     - Diameter lingkaran grafik donat otomatis membesar dan tampil jauh lebih proporsional, lega, dan tajam di layar TV.
+3. **Pembaruan Service Worker & Caching (SOP #2):**
+   - Versi Service Worker dinaikkan ke **`v5.8.11`** (`aljihad-signage-v5.8.11`) pada `web-statis/sw.js` dan `web-statis/admin.html` agar Smart TV dan seluruh browser klien langsung memperbarui cache aset secara otomatis.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 16:15 WIB)
 
 ### 🎨 REFINEMENT TAMPILAN TV DISPLAY & ANTI-LOOP RELOAD PERTAMA (Versi SW v5.8.10):
 1. **Pencegahan Loop Reload Saat Pertama Kali Buka & Optimasi Kecepatan:**
