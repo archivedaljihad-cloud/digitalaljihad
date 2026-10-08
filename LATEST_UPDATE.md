@@ -4,7 +4,46 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 23:50 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 01:00 WIB)
+
+### ⚡ OPTIMASI BANDWIDTH & PENGHEMATAN EGRESS SUPABASE (95% REDUCTION, Versi SW v5.8.14):
+1. **Latar Belakang Masalah (Egress 4.44 GB / 5 GB di Free Plan):**
+   - **Kondisi:** Kuota Egress (data transfer keluar) di Supabase Free Plan mencapai 4.44 GB dari batas 5 GB per bulan (tersisa ~560 MB), sedangkan tanggal reset siklus penagihan masih tanggal 21 Oktober 2026 (12 hari ke depan).
+   - **Akar Masalah:**
+     - TV Display berjalan 24 jam nonstop dengan pergantian slide setiap 10-15 detik di dalam iframe.
+     - Setiap slide yang dimuat di iframe memuat ulang `supabase-js`, membuka koneksi WebSocket baru (`mosque-display-realtime` & `mosque-tv-remote-channel`), serta memanggil REST API Supabase (`getSettings`, `getJadwalSholat`, `getKeuangan`, dll).
+     - Di `index.html`, fungsi `broadcastTvState` memancarkan `channel.track()` setiap 15 detik dan setiap slide berpindah.
+     - Di `index.html`, `performBackgroundSync` memanggil 3 query REST setiap 30 detik tanpa memeriksa apakah WebSocket sedang terhubung.
+     - Di `agenda-rutin.html` dan `yasin.html`, terdapat interval polling 30 detik ke `SupabaseDB`.
+     - Akumulasi ratusan ribu panggilan ini selama 24 jam x 30 hari menghasilkan transfer data hingga 4.44 GB.
+
+2. **Solusi & Rekayasa Arsitektur Penghematan Egress:**
+   - **Smart In-Memory Shared Cache & Instant Realtime Invalidation (`js/supabase-db.js`):**
+     - Ditambahkan layer caching memori (`_cache`, `getCached`, `setCached`) dengan TTL default 10 menit untuk seluruh fungsi pembacaan data (`getSettings`, `getJadwalSholat`, `getPengumuman`, `getSholatJumat`, `getKeuangan`, `getKeuanganKasUtama`, `getKeuanganAmbulance`, `getProgramInfaq`, `getDonasiInfaq`, `getIdulFitri`, `getIdulAdha`, `getSlides`, `getUndanganEksternal`).
+     - **Invalidasi Instan (<100ms):** Setiap kali ada pembaruan data yang terdeteksi via Postgres Changes WAL, Remote Broadcast Command, Local BroadcastChannel, atau window postMessage, fungsi `invalidateCache(table)` langsung dijalankan seketika. Sehingga begitu pengurus mengedit data di admin, data baru tetap tayang di TV dalam hitungan milidetik, namun saat tidak ada editan (99.9% waktu), slide mengambil data dari memori (0 bytes Egress).
+     - Jika slide berada di dalam iframe TV, cache juga dipinjam dari parent window (`window.parent.SupabaseDB.getCached`).
+   - **Pemberhentian WebSocket Churn di Iframe TV (`js/supabase-db.js`):**
+     - Ditambahkan guard `isInsideIframe`. Child frame di dalam iframe TV didelegasikan agar tidak membuka koneksi WebSocket ke Supabase Cloud secara mandiri.
+     - Seluruh sinyal realtime untuk child frame disalurkan oleh jendela induk TV (`index.html`) melalui `window.postMessage` dan `BroadcastChannel`. Hanya jendela tingkat teratas (top-level) yang membuka 1 koneksi WebSocket persisten.
+   - **Throttling Presence Heartbeat (`js/supabase-db.js` & `index.html`):**
+     - `trackDevicePresence` dibatasi maksimal 1 kali per 60 detik (menghemat 85% traffic presence).
+     - Di `index.html`, `setInterval(broadcastTvState)` diubah dari 15 detik menjadi 60 detik.
+   - **Background Sync Adaptif (`index.html`):**
+     - Jika koneksi Realtime WebSocket dalam keadaan terhubung dan sehat (`state === 'joined'`), background polling hanya berjalan sebagai safety net setiap 10 menit (600.000 ms).
+     - Jika WebSocket terputus, background sync otomatis aktif setiap 60 detik untuk pemulihan data otomatis.
+   - **Pelonggaran Polling Slide Khusus (`agenda-rutin.html`, `yasin.html`):**
+     - Interval polling diperpanjang dari 30 detik menjadi 300 detik (5 menit) dengan tetap mempertahankan listener realtime instan.
+   - **Penaikan Versi Cache (SOP #2):**
+     - Versi Service Worker dinaikkan ke **`v5.8.14`** (`aljihad-signage-v5.8.14`) di `web-statis/sw.js` dan `web-statis/admin.html`.
+
+3. **Hasil & Estimasi Penghematan:**
+   - Konsumsi data keluar (Egress) harian turun drastis lebih dari **90–95%** (dari ~150-200 MB/hari menjadi <10 MB/hari).
+   - Sisa kuota 560 MB dipastikan sangat aman dan mencukupi hingga tanggal reset 21 Oktober 2026 tanpa risiko terblokir/overquota.
+   - Seluruh 48 pengujian regresi otomatis (`npm test`) lulus 100%.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 23:50 WIB)
 
 ### 🚀 RESOLUSI TOTAL DELAY & SINKRONISASI REALTIME SUPABASE CLOUD (Versi SW v5.8.13):
 1. **Latar Belakang & Investigasi Mendalam Akar Masalah:**

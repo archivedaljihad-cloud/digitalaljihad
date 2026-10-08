@@ -839,7 +839,7 @@
             setupAgendaRealtimeListener();
 
             // Refresh tiap 30 detik agar jika melewati pergantian hari/pekan otomatis ter-update
-            setInterval(loadAgendaData, 30000);
+            setInterval(loadAgendaData, 300000); // 5 menit (hemat bandwidth)
         });
     </script>
 </body>

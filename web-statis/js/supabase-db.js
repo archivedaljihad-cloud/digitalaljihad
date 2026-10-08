@@ -109,11 +109,100 @@
             return await res.json();
         },
 
+        // =========================================================================
+        // SMART CACHE & EGRESS BANDWIDTH OPTIMIZER (Anti-Overquota Protection)
+        // =========================================================================
+        _cache: {},
+        _cacheTimestamps: {},
+        _cacheTTL: 10 * 60 * 1000, // 10 menit default TTL (invalidasi instan saat ada realtime event)
+
+        invalidateCache(table = null) {
+            if (!table) {
+                this._cache = {};
+                this._cacheTimestamps = {};
+            } else {
+                const t = String(table).toLowerCase();
+                delete this._cache[t];
+                delete this._cacheTimestamps[t];
+                if (t === 'app_settings') {
+                    delete this._cache['settings'];
+                    delete this._cacheTimestamps['settings'];
+                }
+                if (t === 'keuangan' || t === 'transaksi_kas') {
+                    delete this._cache['keuangan'];
+                    delete this._cache['keuangan_kas_utama'];
+                    delete this._cache['keuangan_ambulance'];
+                    delete this._cacheTimestamps['keuangan'];
+                    delete this._cacheTimestamps['keuangan_kas_utama'];
+                    delete this._cacheTimestamps['keuangan_ambulance'];
+                }
+                if (t === 'sholat_jumat') {
+                    delete this._cache['sholat_jumat'];
+                    delete this._cacheTimestamps['sholat_jumat'];
+                }
+                if (t === 'jadwal_sholat') {
+                    delete this._cache['jadwal_sholat'];
+                    delete this._cacheTimestamps['jadwal_sholat'];
+                }
+                if (t === 'program_infaq' || t === 'donasi_infaq') {
+                    delete this._cache['program_infaq'];
+                    delete this._cache['donasi_infaq'];
+                    delete this._cacheTimestamps['program_infaq'];
+                    delete this._cacheTimestamps['donasi_infaq'];
+                }
+                if (t === 'slides') {
+                    delete this._cache['slides'];
+                    delete this._cacheTimestamps['slides'];
+                }
+                if (t === 'undangan' || t === 'undangan_eksternal') {
+                    delete this._cache['undangan'];
+                    delete this._cacheTimestamps['undangan'];
+                }
+            }
+            // Sinkronkan invalidasi ke parent jika di iframe
+            try {
+                if (typeof window !== 'undefined' && window.parent && window.parent !== window && window.parent.SupabaseDB && typeof window.parent.SupabaseDB.invalidateCache === 'function') {
+                    window.parent.SupabaseDB.invalidateCache(table);
+                }
+            } catch(e) {}
+        },
+
+        getCached(key) {
+            // 1. Cek jika berjalan di dalam iframe TV, pinjam cache dari parent window jika tersedia
+            try {
+                if (typeof window !== 'undefined' && window.parent && window.parent !== window && window.parent.SupabaseDB && typeof window.parent.SupabaseDB.getCached === 'function') {
+                    const parentVal = window.parent.SupabaseDB.getCached(key);
+                    if (parentVal !== null && parentVal !== undefined) return parentVal;
+                }
+            } catch(e) {}
+
+            const ts = this._cacheTimestamps[key] || 0;
+            if (this._cache[key] !== undefined && (Date.now() - ts) < this._cacheTTL) {
+                return this._cache[key];
+            }
+            return null;
+        },
+
+        setCached(key, data) {
+            if (data === undefined || data === null) return;
+            this._cache[key] = data;
+            this._cacheTimestamps[key] = Date.now();
+            try {
+                if (typeof window !== 'undefined' && window.parent && window.parent !== window && window.parent.SupabaseDB && typeof window.parent.SupabaseDB.setCached === 'function') {
+                    window.parent.SupabaseDB.setCached(key, data);
+                }
+            } catch(e) {}
+        },
+
         /**
          * Ambil pengaturan umum (app_settings) dari Supabase Cloud
          * Mengambil seluruh baris konfigurasi (row 1 + baris key-value dinamis)
          */
-        async getSettings() {
+        async getSettings(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('settings');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 let data = null;
@@ -202,6 +291,7 @@
                         }
                     } catch (e) {}
 
+                    this.setCached('settings', settings);
                     return settings;
                 }
             } catch (err) {
@@ -240,6 +330,7 @@
                 }
             } catch (e) {}
 
+            this.setCached('settings', fallbackSettings);
             return fallbackSettings;
         },
 
@@ -917,13 +1008,20 @@
         /**
          * Ambil jadwal sholat dari tabel jadwal_sholat
          */
-        async getJadwalSholat() {
+        async getJadwalSholat(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('jadwal_sholat');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('jadwal_sholat').select('*').order('id', { ascending: true });
                     if (!error && data && data.length > 0) {
                         localStorage.setItem('cached_jadwal_sholat', JSON.stringify(data));
+                        this.setCached('jadwal_sholat', data);
+                        this.setCached('slides', data);
+                        this.setCached('undangan', data);
                         return data;
                     }
                 }
@@ -935,6 +1033,9 @@
                 const rows = await this.restFetch('jadwal_sholat?order=id.asc');
                 if (Array.isArray(rows) && rows.length > 0) {
                     localStorage.setItem('cached_jadwal_sholat', JSON.stringify(rows));
+                    this.setCached('jadwal_sholat', rows);
+                    this.setCached('slides', rows);
+                    this.setCached('undangan', rows);
                     return rows;
                 }
             } catch (restErr) {
@@ -943,7 +1044,11 @@
 
             const cached = localStorage.getItem('cached_jadwal_sholat');
             if (cached) {
-                try { return JSON.parse(cached); } catch (e) {}
+                try {
+                    const parsed = JSON.parse(cached);
+                    this.setCached('jadwal_sholat', parsed);
+                    return parsed;
+                } catch (e) {}
             }
             return [];
         },
@@ -951,13 +1056,18 @@
         /**
          * Ambil daftar pengumuman
          */
-        async getPengumuman() {
+        async getPengumuman(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('pengumuman');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('pengumuman').select('*').order('id', { ascending: false });
                     if (!error && data) {
                         localStorage.setItem('cached_pengumuman', JSON.stringify(data));
+                        this.setCached('pengumuman', data);
                         return data;
                     }
                 }
@@ -969,20 +1079,27 @@
                 const rows = await this.restFetch('pengumuman?order=id.desc');
                 if (Array.isArray(rows)) {
                     localStorage.setItem('cached_pengumuman', JSON.stringify(rows));
+                    this.setCached('pengumuman', rows);
                     return rows;
                 }
             } catch (restErr) {
                 console.warn('REST fallback pengumuman:', restErr);
             }
             const cached = localStorage.getItem('cached_pengumuman');
-            return cached ? JSON.parse(cached) : [];
+            const resPengumuman = cached ? JSON.parse(cached) : [];
+            this.setCached('pengumuman', resPengumuman);
+            return resPengumuman;
         },
 
         /**
          * Ambil petugas sholat Jumat terbaru (Normalized & Unified)
          * Mengembalikan objek data terstandarisasi dengan pemisahan bilal & maklumat yang bersih
          */
-        async getSholatJumat() {
+        async getSholatJumat(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('sholat_jumat');
+                if (cached) return cached;
+            }
             let row = null;
             try {
                 const client = getClient();
@@ -1046,19 +1163,25 @@
             });
 
             try { localStorage.setItem('cached_sholat_jumat', JSON.stringify(normalized)); } catch (e) {}
+            this.setCached('sholat_jumat', normalized);
             return normalized;
         },
 
         /**
          * Ambil data transaksi keuangan kas masjid
          */
-        async getKeuangan() {
+        async getKeuangan(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('keuangan');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('keuangan').select('*').order('tanggal', { ascending: false });
                     if (!error && data) {
                         localStorage.setItem('cached_keuangan', JSON.stringify(data));
+                        this.setCached('keuangan', data);
                         return data;
                     }
                 }
@@ -1070,13 +1193,16 @@
                 const rows = await this.restFetch('keuangan?order=tanggal.desc');
                 if (Array.isArray(rows)) {
                     localStorage.setItem('cached_keuangan', JSON.stringify(rows));
+                    this.setCached('keuangan', rows);
                     return rows;
                 }
             } catch (restErr) {
                 console.warn('REST fallback keuangan:', restErr);
             }
             const cached = localStorage.getItem('cached_keuangan');
-            return cached ? JSON.parse(cached) : [];
+            const resKeuangan = cached ? JSON.parse(cached) : [];
+            this.setCached('keuangan', resKeuangan);
+            return resKeuangan;
         },
 
         /**
@@ -1107,21 +1233,32 @@
         /**
          * Ambil transaksi murni Kas Utama Masjid (Mengecualikan program penggalangan, infaq program, ambulans, dll)
          */
-        async getKeuanganKasUtama() {
-            const all = await this.getKeuangan();
-            return (all || []).filter(item => this.isKasUtamaMasjid(item));
+        async getKeuanganKasUtama(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('keuangan_kas_utama');
+                if (cached) return cached;
+            }
+            const all = await this.getKeuangan(forceRefresh);
+            const filtered = (all || []).filter(item => this.isKasUtamaMasjid(item));
+            this.setCached('keuangan_kas_utama', filtered);
+            return filtered;
         },
 
         /**
          * Ambil data transaksi kas mobil ambulance
          */
-        async getKeuanganAmbulance() {
+        async getKeuanganAmbulance(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('keuangan_ambulance');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('keuangan_ambulance').select('*').order('tanggal', { ascending: false });
                     if (!error && data) {
                         localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(data));
+                        this.setCached('keuangan_ambulance', data);
                         return data;
                     }
                 }
@@ -1129,19 +1266,26 @@
                 console.warn('Gagal membaca keuangan_ambulance:', err);
             }
             const cached = localStorage.getItem('cached_keuangan_ambulance');
-            return cached ? JSON.parse(cached) : [];
+            const resAmb = cached ? JSON.parse(cached) : [];
+            this.setCached('keuangan_ambulance', resAmb);
+            return resAmb;
         },
 
         /**
          * Ambil program infaq & target donasi
          */
-        async getProgramInfaq() {
+        async getProgramInfaq(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('program_infaq');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('program_infaq').select('*').order('id', { ascending: false });
                     if (!error && data) {
                         localStorage.setItem('cached_program_infaq', JSON.stringify(data));
+                        this.setCached('program_infaq', data);
                         return data;
                     }
                 }
@@ -1153,19 +1297,27 @@
                 const rows = await this.restFetch('program_infaq?order=id.desc');
                 if (Array.isArray(rows) && rows.length > 0) {
                     localStorage.setItem('cached_program_infaq', JSON.stringify(rows));
+                    this.setCached('program_infaq', rows);
                     return rows;
                 }
             } catch (restErr) {
                 console.warn('REST fallback program_infaq:', restErr);
             }
             const cached = localStorage.getItem('cached_program_infaq');
-            return cached ? JSON.parse(cached) : [];
+            const resProg = cached ? JSON.parse(cached) : [];
+            this.setCached('program_infaq', resProg);
+            return resProg;
         },
 
         /**
          * Ambil daftar donasi infaq per program atau keseluruhan
          */
-        async getDonasiInfaq(programId = null) {
+        async getDonasiInfaq(programId = null, forceRefresh = false) {
+            const cKey = programId ? ('donasi_infaq_' + programId) : 'donasi_infaq_all';
+            if (!forceRefresh) {
+                const cached = this.getCached(cKey);
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
@@ -1173,6 +1325,7 @@
                     if (programId) query = query.eq('program_infaq_id', programId);
                     const { data, error } = await query;
                     if (!error && data) {
+                        this.setCached(cKey, data);
                         return data;
                     }
                 }
@@ -1184,6 +1337,7 @@
                 const query = programId ? `donasi_infaq?program_infaq_id=eq.${programId}&order=tanggal.asc,id.asc` : 'donasi_infaq?order=tanggal.asc,id.asc';
                 const rows = await this.restFetch(query);
                 if (Array.isArray(rows) && rows.length > 0) {
+                    this.setCached(cKey, rows);
                     return rows;
                 }
             } catch (restErr) {
@@ -1203,13 +1357,18 @@
         /**
          * Ambil jadwal Sholat Idul Fitri terbaru
          */
-        async getIdulFitri() {
+        async getIdulFitri(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('idul_fitri');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('sholat_idul_fitri').select('*').order('id', { ascending: false }).limit(1);
                     if (!error && data && data.length > 0) {
                         localStorage.setItem('cached_idul_fitri', JSON.stringify(data[0]));
+                        this.setCached('idul_fitri', data[0]);
                         return data[0];
                     }
                 }
@@ -1221,25 +1380,33 @@
                 const rows = await this.restFetch('sholat_idul_fitri?order=id.desc&limit=1');
                 if (Array.isArray(rows) && rows.length > 0) {
                     localStorage.setItem('cached_idul_fitri', JSON.stringify(rows[0]));
+                    this.setCached('idul_fitri', rows[0]);
                     return rows[0];
                 }
             } catch (restErr) {
                 console.warn('REST fallback idul_fitri:', restErr);
             }
             const cached = localStorage.getItem('cached_idul_fitri');
-            return cached ? JSON.parse(cached) : null;
+            const resFitri = cached ? JSON.parse(cached) : null;
+            if (resFitri) this.setCached('idul_fitri', resFitri);
+            return resFitri;
         },
 
         /**
          * Ambil jadwal Sholat Idul Adha terbaru
          */
-        async getIdulAdha() {
+        async getIdulAdha(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('idul_adha');
+                if (cached) return cached;
+            }
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('sholat_idul_adha').select('*').order('id', { ascending: false }).limit(1);
                     if (!error && data && data.length > 0) {
                         localStorage.setItem('cached_idul_adha', JSON.stringify(data[0]));
+                        this.setCached('idul_adha', data[0]);
                         return data[0];
                     }
                 }
@@ -1251,19 +1418,26 @@
                 const rows = await this.restFetch('sholat_idul_adha?order=id.desc&limit=1');
                 if (Array.isArray(rows) && rows.length > 0) {
                     localStorage.setItem('cached_idul_adha', JSON.stringify(rows[0]));
+                    this.setCached('idul_adha', rows[0]);
                     return rows[0];
                 }
             } catch (restErr) {
                 console.warn('REST fallback idul_adha:', restErr);
             }
             const cached = localStorage.getItem('cached_idul_adha');
-            return cached ? JSON.parse(cached) : null;
+            const resAdha = cached ? JSON.parse(cached) : null;
+            if (resAdha) this.setCached('idul_adha', resAdha);
+            return resAdha;
         },
 
         /**
          * Ambil daftar galeri informasi masjid
          */
-        async getSlides() {
+        async getSlides(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('slides');
+                if (cached) return cached;
+            }
             // 1. Coba baca dari cloud database Supabase
             try {
                 const client = getClient();
@@ -1301,6 +1475,7 @@
                 if (local) {
                     const parsed = JSON.parse(local);
                     if (Array.isArray(parsed) && parsed.length > 0) {
+                        this.setCached('slides', parsed);
                         return parsed;
                     }
                 }
@@ -1562,6 +1737,10 @@
         _realtimeChannel: null,
         _realtimeReconnectTimer: null,
         subscribeRealtime(onUpdate) {
+            // Guard: Di dalam iframe TV, delegasikan ke parent window untuk menghemat koneksi WebSocket & Egress
+            const isInsideIframe = (typeof window !== 'undefined' && window.parent && window.parent !== window);
+            if (isInsideIframe) return null;
+
             const client = getClient();
             if (!client || !client.channel) return null;
 
@@ -1692,6 +1871,9 @@
          */
         _remoteReconnectTimer: null,
         subscribeRemoteCommands(onCommand) {
+            const isInsideIframe = (typeof window !== 'undefined' && window.parent && window.parent !== window);
+            if (isInsideIframe) return null;
+
             const channel = this.getRemoteChannel();
             if (!channel) return null;
 
@@ -1755,6 +1937,7 @@
         },
 
         broadcastChange(table, action = 'UPDATE', data = {}, sender = 'Admin') {
+            this.invalidateCache(table);
             const timestamp = Date.now();
             const payload = {
                 table: table,
@@ -1842,71 +2025,88 @@
                 }, 35); // 35ms debounce super responsif
             };
 
-            // 1. Supabase Realtime Postgres Changes
-            try {
-                this.subscribeRealtime((payload) => {
-                    safeTrigger({
-                        table: payload.table,
-                        action: payload.eventType || 'UPDATE',
-                        data: payload.new || payload.old || {},
-                        source: 'postgres_changes',
-                        timestamp: Date.now()
+            // Invalidate cache setiap ada sinyal data update
+            const origSafeTrigger = safeTrigger;
+            safeTrigger = (evt) => {
+                if (evt && evt.table) {
+                    this.invalidateCache(evt.table);
+                }
+                origSafeTrigger(evt);
+            };
+
+            // Cek jika berjalan di dalam iframe TV (child frame)
+            const isInsideIframe = (typeof window !== 'undefined' && window.parent && window.parent !== window);
+
+            // 1 & 2: HANYA buka koneksi WebSocket langsung ke Supabase Cloud jika berada di top-level window (TV induk atau admin standalone)
+            // Di dalam iframe, event realtime diterima instan lewat postMessage parent TV & BroadcastChannel lokal (hemat bandwidth & zero WS churn)
+            if (!isInsideIframe) {
+                // 1. Supabase Realtime Postgres Changes
+                try {
+                    this.subscribeRealtime((payload) => {
+                        this.invalidateCache(payload.table);
+                        safeTrigger({
+                            table: payload.table,
+                            action: payload.eventType || 'UPDATE',
+                            data: payload.new || payload.old || {},
+                            source: 'postgres_changes',
+                            timestamp: Date.now()
+                        });
                     });
-                });
-            } catch (e) {}
+                } catch (e) {}
 
-            // 2. Supabase Remote Broadcast Commands
-            try {
-                this.subscribeRemoteCommands((cmdPayload, data, commandName) => {
-                    const cmd = (typeof cmdPayload === 'string' ? cmdPayload : (cmdPayload?.command || commandName || '')).toUpperCase();
-                    const d = (cmdPayload && cmdPayload.data) ? cmdPayload.data : (data || {});
+                // 2. Supabase Remote Broadcast Commands
+                try {
+                    this.subscribeRemoteCommands((cmdPayload, data, commandName) => {
+                        const cmd = (typeof cmdPayload === 'string' ? cmdPayload : (cmdPayload?.command || commandName || '')).toUpperCase();
+                        const d = (cmdPayload && cmdPayload.data) ? cmdPayload.data : (data || {});
 
-                    if (cmd === 'DATA_UPDATED') {
-                        safeTrigger({
-                            table: d.table,
-                            action: d.action || 'UPDATE',
-                            data: d.data || {},
-                            sender: cmdPayload?.sender || 'Remote Admin',
-                            source: 'remote_broadcast',
-                            timestamp: d.timestamp || Date.now()
-                        });
-                    } else if (cmd.startsWith('SYNC_')) {
-                        const tableMap = {
-                            'SYNC_KAJIAN': 'kajian',
-                            'SYNC_AGENDA_RUTIN': 'agenda_rutin',
-                            'SYNC_PENGUMUMAN_JUMAT': 'pengumuman_jumat',
-                            'SYNC_RAMADHAN': 'ramadhan',
-                            'SYNC_KEUANGAN': 'keuangan',
-                            'SYNC_AMBULANCE': 'keuangan_ambulance',
-                            'SYNC_INFAQ': 'program_infaq',
-                            'SYNC_JUMAT': 'sholat_jumat',
-                            'SYNC_JADWAL_SHOLAT': 'jadwal_sholat',
-                            'SYNC_SLIDES': 'slides',
-                            'SYNC_QRIS': 'qris',
-                            'SYNC_QURBAN': 'qurban',
-                            'SYNC_UNDANGAN': 'undangan',
-                            'SYNC_RUNNING_TEXT': 'running_text'
-                        };
-                        safeTrigger({
-                            table: tableMap[cmd] || cmd.toLowerCase(),
-                            action: 'SYNC',
-                            data: d,
-                            sender: cmdPayload?.sender || 'Remote Admin',
-                            source: 'remote_sync_command',
-                            timestamp: Date.now()
-                        });
-                    } else if (cmd === 'UPDATE_SETTINGS') {
-                        safeTrigger({
-                            table: 'app_settings',
-                            action: 'UPDATE',
-                            data: d,
-                            sender: cmdPayload?.sender || 'Remote Admin',
-                            source: 'remote_settings',
-                            timestamp: Date.now()
-                        });
-                    }
-                });
-            } catch (e) {}
+                        if (cmd === 'DATA_UPDATED') {
+                            safeTrigger({
+                                table: d.table,
+                                action: d.action || 'UPDATE',
+                                data: d.data || {},
+                                sender: cmdPayload?.sender || 'Remote Admin',
+                                source: 'remote_broadcast',
+                                timestamp: d.timestamp || Date.now()
+                            });
+                        } else if (cmd.startsWith('SYNC_')) {
+                            const tableMap = {
+                                'SYNC_KAJIAN': 'kajian',
+                                'SYNC_AGENDA_RUTIN': 'agenda_rutin',
+                                'SYNC_PENGUMUMAN_JUMAT': 'pengumuman_jumat',
+                                'SYNC_RAMADHAN': 'ramadhan',
+                                'SYNC_KEUANGAN': 'keuangan',
+                                'SYNC_AMBULANCE': 'keuangan_ambulance',
+                                'SYNC_INFAQ': 'program_infaq',
+                                'SYNC_JUMAT': 'sholat_jumat',
+                                'SYNC_JADWAL_SHOLAT': 'jadwal_sholat',
+                                'SYNC_SLIDES': 'slides',
+                                'SYNC_QRIS': 'qris',
+                                'SYNC_QURBAN': 'qurban',
+                                'SYNC_UNDANGAN': 'undangan',
+                                'SYNC_RUNNING_TEXT': 'running_text'
+                            };
+                            safeTrigger({
+                                table: tableMap[cmd] || cmd.toLowerCase(),
+                                action: 'SYNC',
+                                data: d,
+                                sender: cmdPayload?.sender || 'Remote Admin',
+                                source: 'remote_sync_command',
+                                timestamp: Date.now()
+                            });
+                        } else if (cmd === 'UPDATE_SETTINGS') {
+                            safeTrigger({
+                                table: 'app_settings',
+                                action: 'UPDATE',
+                                data: d,
+                                sender: cmdPayload?.sender || 'Remote Admin',
+                                source: 'remote_settings',
+                                timestamp: Date.now()
+                            });
+                        }
+                    });
+                } catch (e) {}
+            }
 
             // 3. Local BroadcastChannel
             try {
@@ -1988,7 +2188,15 @@
         /**
          * Daftarkan status kehadiran TV (Presence Heartbeat)
          */
+        _lastPresenceTrack: 0,
         async trackDevicePresence(deviceInfo) {
+            const now = Date.now();
+            // Throttle presence heartbeat: hanya kirim ke cloud Supabase maksimal 1x per 60 detik (menghemat 85% egress)
+            if (now - this._lastPresenceTrack < 60000 && !(deviceInfo && deviceInfo.force)) {
+                return;
+            }
+            this._lastPresenceTrack = now;
+
             const channel = this.getRemoteChannel();
             if (!channel) return;
 
@@ -2064,7 +2272,11 @@
         /**
          * Ambil daftar Surat Undangan Eksternal (Ukhuwah Antar Masjid)
          */
-        async getUndanganEksternal() {
+        async getUndanganEksternal(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cached = this.getCached('undangan');
+                if (cached) return cached;
+            }
             // 1. Coba baca dari cloud database Supabase jika tabel ada
             try {
                 const client = getClient();

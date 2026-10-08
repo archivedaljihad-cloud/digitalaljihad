@@ -1675,7 +1675,7 @@
 
                 // Inisialisasi awal kehadiran TV dan interval berkala setiap 15 detik
                 setTimeout(broadcastTvState, 1500);
-                setInterval(broadcastTvState, 15000);
+                setInterval(() => broadcastTvState(false), 60000); // Heartbeat TV hemat bandwidth (1x per menit)
             }
 
             // PWA Service Worker Registration with Instant Auto-Reload on Real Updates (Anti-Loop on First Visit)
