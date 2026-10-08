@@ -667,6 +667,35 @@
             }
         }
 
+        // Daftarkan Status Kehadiran & Heartbeat Realtime Layar TV ke Cloud (Tingkat Global)
+        function broadcastTvState() {
+            try {
+                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.trackDevicePresence === 'function') {
+                    const curSlide = (activePages && activePages[currentIndex]) ? activePages[currentIndex] : 'slides/utama.html';
+                    const cleanName = curSlide.replace(/^slides\//, '').replace(/\.html$/, '').replace(/-/g, ' ').toUpperCase();
+                    const total = (activePages && activePages.length) ? activePages.length : 19;
+                    SupabaseDB.trackDevicePresence({
+                        type: 'tv-display',
+                        device_id: 'TV_MASJID_UTAMA',
+                        device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
+                        current_slide: curSlide,
+                        currentSlide: curSlide,
+                        currentSlideTitle: `Slide ${cleanName} (${currentIndex + 1}/${total})`,
+                        resolution: `${window.innerWidth} x ${window.innerHeight} px`,
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        userAgent: navigator.userAgent || 'Smart TV Browser',
+                        isPaused: isPaused,
+                        is_paused: isPaused,
+                        last_heartbeat: Date.now()
+                    });
+                }
+            } catch (e) {
+                console.warn('[Display TV] Gagal broadcast state TV:', e);
+            }
+        }
+        window.broadcastTvState = broadcastTvState;
+
         // Resolusi daftar slide aktif dari settings (dengan pemekaran dinamis multi-program infaq & smart scheduling)
         function resolveActivePages(appSettings, programInfaqList = []) {
             const list = [];
@@ -771,7 +800,11 @@
 
         // Pergantian slide TV: Ultra-Smooth Over-Fade Cross-Dissolve (Zero Stutter, Zero Scale Jitter, Zero Dark Dip)
         function switchSlide(targetIndex) {
-            if (activePages.length === 0 || isPrayerModeActive || isTransitioning) return;
+            if (activePages.length === 0 || isPrayerModeActive) return;
+            if (isTransitioning) {
+                console.warn('⚠️ [Display TV] switchSlide: Transisi sebelumnya masih berlangsung.');
+                return;
+            }
 
             currentIndex = (targetIndex + activePages.length) % activePages.length;
             const nextUrl = activePages[currentIndex];
@@ -781,6 +814,15 @@
 
             isTransitioning = true;
             let transitioned = false;
+
+            // Universal Lock Guard: isTransitioning TIDAK BOLEH terkunci lebih dari 3.5 detik dalam kondisi apapun
+            if (window._transitionLockGuard) clearTimeout(window._transitionLockGuard);
+            window._transitionLockGuard = setTimeout(() => {
+                if (isTransitioning) {
+                    console.warn('🚨 [Display TV Failsafe] isTransitioning dilepas paksa oleh timeout guard!');
+                    isTransitioning = false;
+                }
+            }, 3500);
 
             const applyTransition = () => {
                 if (transitioned) return;
@@ -800,7 +842,14 @@
                         backFrame.className = 'active';
 
                         currentFrame = currentFrame === 1 ? 2 : 1;
-                        broadcastTvState();
+
+                        try {
+                            if (typeof broadcastTvState === 'function') {
+                                broadcastTvState();
+                            }
+                        } catch (e) {
+                            console.warn('[Display TV] Broadcast state exception caught:', e);
+                        }
 
                         if (window.__SRE_TELEMETRY__) {
                             window.__SRE_TELEMETRY__.lastSlideSwitchTime = Date.now();
@@ -809,12 +858,18 @@
 
                         // Setelah transisi fade-in selesai sempurna (1.15s), bersihkan kelas frame lama ke standby
                         setTimeout(() => {
-                            if (frontFrame.classList.contains('outgoing')) {
-                                frontFrame.className = 'standby';
+                            try {
+                                if (frontFrame.classList.contains('outgoing')) {
+                                    frontFrame.className = 'standby';
+                                }
+                            } catch (e) {
+                                console.warn('[Display TV] Class cleanup warning:', e);
+                            } finally {
+                                isTransitioning = false;
+                                if (window._transitionLockGuard) clearTimeout(window._transitionLockGuard);
+                                // Proaktif preload slide berikutnya di latar belakang selagi slide ini tayang
+                                preloadNextSlide();
                             }
-                            isTransitioning = false;
-                            // Proaktif preload slide berikutnya di latar belakang selagi slide ini tayang
-                            preloadNextSlide();
                         }, 1200);
                     });
                 });
@@ -851,7 +906,10 @@
                 };
 
                 if (slideTransitionFailsafe) clearTimeout(slideTransitionFailsafe);
-                slideTransitionFailsafe = setTimeout(applyTransition, 2500);
+                slideTransitionFailsafe = setTimeout(() => {
+                    applyTransition();
+                    setTimeout(() => { isTransitioning = false; }, 1300);
+                }, 2500);
 
                 backFrame.src = nextUrl;
             }
@@ -868,7 +926,9 @@
         function togglePause() {
             isPaused = !isPaused;
             showOsd(isPaused ? '⏸ Rotasi Dijeda' : '▶ Rotasi Dilanjutkan');
-            broadcastTvState();
+            try {
+                if (typeof broadcastTvState === 'function') broadcastTvState();
+            } catch(e) {}
             if (!isPaused) {
                 scheduleNextRotation();
             } else {
@@ -1431,32 +1491,6 @@
                     }
                 });
 
-                // Daftarkan Status Kehadiran & Heartbeat Realtime Layar TV ke Cloud
-                function broadcastTvState() {
-                    try {
-                        if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.trackDevicePresence === 'function') {
-                            const curSlide = (activePages && activePages[currentIndex]) ? activePages[currentIndex] : 'slides/utama.html';
-                            const cleanName = curSlide.replace(/^slides\//, '').replace(/\.html$/, '').replace(/-/g, ' ').toUpperCase();
-                            const total = (activePages && activePages.length) ? activePages.length : 19;
-                            SupabaseDB.trackDevicePresence({
-                                type: 'tv-display',
-                                device_id: 'TV_MASJID_UTAMA',
-                                device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
-                                current_slide: curSlide,
-                                currentSlide: curSlide,
-                                currentSlideTitle: `Slide ${cleanName} (${currentIndex + 1}/${total})`,
-                                resolution: `${window.innerWidth} x ${window.innerHeight} px`,
-                                width: window.innerWidth,
-                                height: window.innerHeight,
-                                userAgent: navigator.userAgent || 'Smart TV Browser',
-                                isPaused: isPaused,
-                                is_paused: isPaused,
-                                last_heartbeat: Date.now()
-                            });
-                        }
-                    } catch (e) {}
-                }
-
                 // Inisialisasi awal kehadiran TV dan interval berkala setiap 15 detik
                 setTimeout(broadcastTvState, 1500);
                 setInterval(broadcastTvState, 15000);
@@ -1516,14 +1550,16 @@
             setInterval(() => {
                 if (isPaused || isPrayerModeActive) return;
                 const elapsed = Date.now() - (window.__SRE_TELEMETRY__ ? window.__SRE_TELEMETRY__.lastSlideSwitchTime : Date.now());
-                if (elapsed > (rotationInterval + 15000)) {
+                if (elapsed > (rotationInterval + 10000)) {
                     if (window.__SRE_TELEMETRY__) {
                         window.__SRE_TELEMETRY__.log('WATCHDOG', `Rotasi tertahan selama ${Math.round(elapsed/1000)} detik, memicu auto-recovery...`);
                     }
+                    console.warn(`[Watchdog Auto-Recovery] Rotasi tertahan selama ${Math.round(elapsed/1000)} detik, melepas kunci dan lanjut slide...`);
+                    isTransitioning = false; // Lepas kunci transisi secara paksa jika ada kegagalan tak terduga
                     nextPage();
                     scheduleNextRotation();
                 }
-            }, 5000);
+            }, 4000);
         });
     </script>
 </body>

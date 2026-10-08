@@ -4,7 +4,27 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 07:20 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 07:58 WIB)
+
+### ⏱️ RESOLUSI ROTASI SLIDE MACET/TERHENTI DI TV DISPLAY: FIX SCOPE REFERENCEERROR BROADCAST_TV_STATE & UNIVERSAL TRANSITION LOCK GUARD (Versi SW v5.8.6):
+1. **Latar Belakang & Keluhan Pengguna:**
+   - Pengguna melaporkan tampilan TV macet/tidak berotasi selama lebih dari 40 detik pada slide "Rincian Keuangan Kas Masjid" (`slides/keuangan.html`), meskipun di dashboard pengaturan interval rotasi telah diatur pada 5 detik.
+2. **Investigasi Akar Masalah Mendalam (Root Cause Analysis):**
+   - **Scope ReferenceError `broadcastTvState`:** Fungsi `broadcastTvState()` sebelumnya terdefinisi secara lokal (*nested block scope*) di dalam `document.addEventListener('DOMContentLoaded')` di dalam blok `if (window.SupabaseDB.subscribeRemoteCommands)`. Sementara itu, fungsi tersebut dipanggil dari scope luar pada `applyTransition()` (baris 803) dan `togglePause()` (baris 871).
+   - **Kegagalan Thread Transisi Cross-Dissolve:** Saat slide pertama (`utama.html`) selesai berpindah ke slide kedua (`keuangan.html`), `currentFrame` berubah menjadi frame 2 dan memanggil `broadcastTvState()`. Karena fungsi tidak berada dalam lexical scope, JavaScript melempar `ReferenceError: broadcastTvState is not defined`.
+   - **Deadlock Status `isTransitioning`:** Error tersebut menghentikan eksekusi microtask di dalam `requestAnimationFrame`, sehingga `setTimeout` yang bertugas menyetel `isTransitioning = false` tidak pernah berjalan. Akibatnya, `isTransitioning` terkunci secara permanen pada nilai `true`.
+   - **Blokade Rotasi Berkelanjutan:** Ketika interval 5 detik habis dan timer memanggil `nextPage()` -> `switchSlide()`, baris pertama fungsi `if (activePages.length === 0 || isPrayerModeActive || isTransitioning) return;` langsung keluar (*early return*). Bahkan SRE Watchdog tidak mampu mengganti slide karena tertahan oleh guard `isTransitioning`. Layar TV pun membeku (*freeze*) pada slide Keuangan.
+3. **Solusi & Penguatan Arsitektur Rotasi Menyeluruh:**
+   - **Elevasi Scope `broadcastTvState` ke Tingkat Global:** Fungsi didefinisikan pada tingkat atas (*top-level script scope*) dan diekspos ke `window.broadcastTvState`.
+   - **Proteksi Try-Catch & Safe Invocation:** Pemanggilan `broadcastTvState()` di `applyTransition()` dan `togglePause()` dibungkus dalam blok `try ... catch` defensif agar kegagalan jaringan atau telemetry tidak pernah mengganggu pergantian slide.
+   - **Garansi Pelepasan Kunci dengan `try ... finally`:** Pembersihan kelas CSS dan pelepasan kunci `isTransitioning = false` ditempatkan di dalam blok `finally` sehingga dijamin 100% selalu dieksekusi setelah 1.2 detik.
+   - **Universal Transition Lock Guard (Failsafe Timeout):** Ditambahkan pengaman waktu 3.5 detik (`window._transitionLockGuard`). Jika terjadi kendala tak terduga, status `isTransitioning` otomatis dilepas paksa.
+   - **Peningkatan SRE Watchdog Auto-Recovery:** Watchdog kini secara berkala (setiap 4 detik) memantau keterlambatan rotasi. Jika rotasi tertahan melebihi `rotationInterval + 10 detik`, watchdog secara otomatis melepas paksa status transisi dan memajukan slide ke halaman berikutnya.
+4. **Bumping Versi Cache Service Worker (SOP #2):**
+   - Menaikkan versi cache ke **`v5.8.6`** (`aljihad-signage-v5.8.6`) pada `web-statis/sw.js` dan sinkronisasi handler pembersihan cache di `web-statis/admin.html`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 07:20 WIB)
 
 ### 🛡️ AUDIT MENYELURUH DAN PENGUATAN KEBAL DESINKRONISASI PADA SELURUH 23 HALAMAN SLIDE DISPLAY & ENGINE REST NATIVE ZERO-SDK (25 Berkas Diperbarui, Versi SW v5.8.5):
 1. **Latar Belakang & Mandat Utama Pengguna:**
