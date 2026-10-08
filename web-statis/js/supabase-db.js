@@ -28,6 +28,13 @@
     }
 
     const SupabaseDB = {
+        /**
+         * Akses instans client Supabase JS SDK resmi (diperlukan form mobile & admin)
+         */
+        getClient() {
+            return getClient();
+        },
+
         // Fallback default settings jika offline atau database belum terhubung
         defaultSettings: {
             nama_aplikasi: 'MASJID JAMI\' AL-JIHAD',
@@ -1550,10 +1557,18 @@
         /**
          * Pasang pendengar Realtime WebSocket Supabase
          * Memanggil callback begitu ada INSERT, UPDATE, atau DELETE di database
+         * Dilengkapi Auto-Reconnect jika koneksi Smart TV terputus/sleep
          */
+        _realtimeChannel: null,
+        _realtimeReconnectTimer: null,
         subscribeRealtime(onUpdate) {
             const client = getClient();
             if (!client || !client.channel) return null;
+
+            if (this._realtimeChannel) {
+                try { client.removeChannel(this._realtimeChannel); } catch (e) {}
+                this._realtimeChannel = null;
+            }
 
             const channel = client.channel('mosque-display-realtime')
                 .on(
@@ -1569,9 +1584,22 @@
                 .subscribe((status) => {
                     if (status === 'SUBSCRIBED') {
                         console.log('🟢 [Realtime Supabase] Terhubung ke WebSocket cloud!');
+                        if (this._realtimeReconnectTimer) {
+                            clearTimeout(this._realtimeReconnectTimer);
+                            this._realtimeReconnectTimer = null;
+                        }
+                    } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+                        console.warn(`⚠️ [Realtime Supabase] Status WebSocket: ${status}. Menjadwalkan reconnect otomatis dalam 5 detik...`);
+                        if (!this._realtimeReconnectTimer) {
+                            this._realtimeReconnectTimer = setTimeout(() => {
+                                this._realtimeReconnectTimer = null;
+                                this.subscribeRealtime(onUpdate);
+                            }, 5000);
+                        }
                     }
                 });
 
+            this._realtimeChannel = channel;
             return channel;
         },
 
@@ -1583,7 +1611,7 @@
         _remoteChannel: null,
 
         getRemoteChannel() {
-            if (!this._remoteChannel) {
+            if (!this._remoteChannel || this._remoteChannel.state === 'closed' || this._remoteChannel.state === 'errored') {
                 const client = getClient();
                 if (client && client.channel) {
                     this._remoteChannel = client.channel('mosque-tv-remote-channel', {
@@ -1662,6 +1690,7 @@
         /**
          * Pasang pendengar perintah remote di layar TV (Receiver)
          */
+        _remoteReconnectTimer: null,
         subscribeRemoteCommands(onCommand) {
             const channel = this.getRemoteChannel();
             if (!channel) return null;
@@ -1688,6 +1717,19 @@
                 .subscribe((status) => {
                     if (status === 'SUBSCRIBED') {
                         console.log('🟢 [TV Receiver] Saluran remote control siap menerima sinyal');
+                        if (this._remoteReconnectTimer) {
+                            clearTimeout(this._remoteReconnectTimer);
+                            this._remoteReconnectTimer = null;
+                        }
+                    } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+                        console.warn(`⚠️ [TV Receiver Remote] Status: ${status}. Reconnect otomatis dalam 5 detik...`);
+                        if (!this._remoteReconnectTimer) {
+                            this._remoteReconnectTimer = setTimeout(() => {
+                                this._remoteReconnectTimer = null;
+                                this._remoteChannel = null;
+                                this.subscribeRemoteCommands(onCommand);
+                            }, 5000);
+                        }
                     }
                 });
 

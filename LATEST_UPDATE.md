@@ -4,7 +4,34 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 19:05 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 23:50 WIB)
+
+### 🚀 RESOLUSI TOTAL DELAY & SINKRONISASI REALTIME SUPABASE CLOUD (Versi SW v5.8.13):
+1. **Latar Belakang & Investigasi Mendalam Akar Masalah:**
+   - **Keluhan Pengguna:** Terjadi keterlambatan/delay sinkronisasi data dari aplikasi input ke TV Display, memicu keraguan apakah keberadaan 2 proyek Supabase dalam 1 akun menyebabkan bottleneck.
+   - **Kepastian Infrastruktur:** Dikonfirmasi bahwa 2 proyek Supabase (`digitalaljihad` dan `digitalaljihad-cloud`) berjalan pada server/kontainer terpisah dan **TIDAK saling mempengaruhi kecepatan sama sekali**.
+   - **Akar Masalah #1 (Bug `getClient` di Objek SupabaseDB):** Pada `web-statis/petugas.html` dan `modeinput.html`, pemanggilan `window.SupabaseDB.getClient()` saat mencatat transaksi kas, infaq, dan donasi mengalami kegagalan (`undefined / is not a function`) karena fungsi `getClient` belum diekspos keluar dari closure di `js/supabase-db.js`. Akibatnya data hanya tersimpan di localStorage lokal HP dan tidak pernah terkirim ke cloud Supabase.
+   - **Akar Masalah #2 (WebSocket Silent Disconnect di Smart TV):** Smart TV masjid (Android TV / Tizen / webOS) kerap memutus koneksi WebSocket di latar belakang setelah beberapa lama tanpa ada auto-reconnect.
+   - **Akar Masalah #3 (Ketiadaan Polling Fallback):** `index.html` tidak memiliki mekanisme polling berkala untuk memulihkan data jika WebSocket putus.
+   - **Akar Masalah #4 (Handling Event `quick_petugas`):** Event pembaruan dari modul petugas mobile belum ditangani secara spesifik di `tableSlideMapping` pada `index.html`.
+
+2. **Solusi & Rekayasa Kode:**
+   - **Ekspos `getClient()` Resmi pada `SupabaseDB` (`web-statis/js/supabase-db.js`):**
+     - Menambahkan method `getClient()` pada objek publik `SupabaseDB`, menjamin input donasi, kas, dan infaq dari HP petugas langsung sukses tersimpan ke database cloud Supabase.
+   - **Auto-Reconnect WebSocket & Proteksi Koneksi Drop (`js/supabase-db.js`):**
+     - Menambahkan handler timer reconnect otomatis (5 detik) pada `subscribeRealtime` dan `subscribeRemoteCommands` saat status WebSocket menjadi `CHANNEL_ERROR`, `TIMED_OUT`, atau `CLOSED`.
+   - **Background Resilient Polling Fallback (`web-statis/index.html`):**
+     - Menambahkan fungsi `performBackgroundSync` setiap 30 detik untuk memeriksa hash pembaruan data secara senyap (<1KB transfer) tanpa mengganggu jalannya rotasi slide. Layar TV dijamin selalu otomatis terupdate meskipun koneksi WebSocket sempat terputus.
+   - **Dukungan Penuh Modul `quick_petugas` (`web-statis/index.html`):**
+     - Menambahkan penanganan tabel `quick_petugas` pada `handleUniversalDataUpdate` dan `tableSlideMapping` agar input dari HP petugas seketika memicu pembaruan slide relevan.
+   - **Skrip Aktivasi Realtime Replication (`database/supabase_realtime_setup.sql`):**
+     - Dibuat skrip SQL untuk mengaktifkan `supabase_realtime` publication dan `REPLICA IDENTITY FULL` pada 12 tabel display masjid.
+   - **Penaikan Versi Cache (SOP #2):**
+     - Versi Cache Service Worker dinaikkan ke **`v5.8.13`** (`aljihad-signage-v5.8.13`) di `sw.js` dan `admin.html`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 19:05 WIB)
 
 ### 📖 PERBAIKAN TOTAL KUNCI OTOMATIS AGENDA SURAT YAASIIN & PENGAJIAN MALAM AHAD (`index.html`, Versi SW v5.8.12):
 1. **Latar Belakang Masalah & Root Cause Analysis:**

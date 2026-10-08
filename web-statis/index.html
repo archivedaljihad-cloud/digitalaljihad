@@ -1326,6 +1326,73 @@
             initDisplay();
             setInterval(checkPrayerMode, 1000);
 
+            // =========================================================================
+            // BACKGROUND RESILIENT SYNC (Auto-Recover jika WebSocket Smart TV Terputus)
+            // =========================================================================
+            let _lastSyncHash = '';
+            async function performBackgroundSync() {
+                try {
+                    if (isPrayerModeActive || !window.SupabaseDB) return;
+                    const [freshSettings, freshJumat, freshJadwal] = await Promise.all([
+                        SupabaseDB.getSettings().catch(() => null),
+                        SupabaseDB.getSholatJumat().catch(() => null),
+                        SupabaseDB.getJadwalSholat().catch(() => null)
+                    ]);
+
+                    if (freshSettings) {
+                        const newHash = JSON.stringify({
+                            rot: freshSettings.rotation_interval,
+                            rotPages: freshSettings.rotation_pages,
+                            nama: freshSettings.nama_aplikasi,
+                            jumat: freshJumat ? (freshJumat.imam || freshJumat.khatib) : '',
+                            jadwalCount: freshJadwal ? freshJadwal.length : 0,
+                            updated: freshSettings.updated_at
+                        });
+                        if (_lastSyncHash && _lastSyncHash !== newHash) {
+                            console.log('🔄 [Background Sync] Terdeteksi pembaruan data dari cloud Supabase!');
+                            settings = freshSettings;
+                            window.settings = settings;
+                            if (freshJumat) {
+                                jumatPetugas = freshJumat;
+                                window.jumatPetugas = jumatPetugas;
+                            }
+                            if (freshJadwal) {
+                                jadwalList = freshJadwal;
+                                window.jadwalList = jadwalList;
+                            }
+                            const progs = await SupabaseDB.getProgramInfaq().catch(() => []);
+                            activePages = resolveActivePages(settings, progs);
+                            broadcastToActiveFrames({
+                                type: 'INIT_DISPLAY_DATA',
+                                settings: settings,
+                                jumatPetugas: jumatPetugas,
+                                jadwalList: jadwalList,
+                                programInfaqList: progs
+                            });
+                            // Notifikasi frame aktif
+                            const f1 = document.getElementById('frame1');
+                            const f2 = document.getElementById('frame2');
+                            const payload = {
+                                type: 'DATA_UPDATED',
+                                table: 'app_settings',
+                                action: 'SYNC',
+                                data: freshSettings,
+                                jumatPetugas: jumatPetugas,
+                                settings: settings,
+                                force_reload: true
+                            };
+                            if (f1 && f1.contentWindow) try { f1.contentWindow.postMessage(payload, '*'); } catch(e) {}
+                            if (f2 && f2.contentWindow) try { f2.contentWindow.postMessage(payload, '*'); } catch(e) {}
+                        }
+                        _lastSyncHash = newHash;
+                    }
+                } catch (e) {
+                    console.warn('[Display TV Background Sync] Error:', e);
+                }
+            }
+            // Jalankan sinkronisasi cadangan setiap 30 detik (sangat ringan <1KB)
+            setInterval(performBackgroundSync, 30000);
+
             // Helper Broadcast Data ke Iframes yang Sedang Aktif di Layar TV
             function broadcastToActiveFrames(message) {
                 try {
@@ -1408,6 +1475,23 @@
                     if (data && data.text) {
                         updateMasterFooter(data.text);
                     }
+                } else if (table === 'quick_petugas') {
+                    Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
+                        if (newSettings) {
+                            settings = newSettings;
+                            window.settings = settings;
+                        }
+                        activePages = resolveActivePages(settings, progs);
+                        broadcastToActiveFrames({
+                            type: 'DATA_UPDATED',
+                            table: 'app_settings',
+                            action: 'UPDATE',
+                            data: data,
+                            settings: settings,
+                            force_reload: true
+                        });
+                        showOsd('⚡ Input Petugas Mobile Diterima');
+                    });
                 }
 
                 // 3. SEGERA RE-RENDER JIKA SLIDE YANG SEDANG TAYANG DI TV RELEVAN DENGAN DATA
@@ -1415,6 +1499,7 @@
                 try {
                     const currentUrl = (activePages && activePages[currentIndex]) ? activePages[currentIndex].toLowerCase() : '';
                     const tableSlideMapping = {
+                        'quick_petugas': ['jumat', 'keuangan', 'ambulance', 'infaq', 'qurban', 'ramadhan', 'undangan', 'kajian', 'agenda-rutin', 'kas-jumat', 'utama'],
                         'keuangan': ['keuangan', 'kas-jumat', 'keuangan-summary', 'utama'],
                         'keuangan_ambulance': ['ambulance', 'utama'],
                         'sholat_jumat': ['jumat', 'kas-jumat', 'utama'],
