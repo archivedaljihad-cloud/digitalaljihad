@@ -756,7 +756,8 @@
                                 type: 'INIT_DISPLAY_DATA',
                                 settings: settings,
                                 jumatPetugas: jumatPetugas,
-                                jadwalList: jadwalList
+                                jadwalList: jadwalList,
+                                programInfaqList: window.programInfaqList || []
                             }, '*');
                         }
                     } catch(e) {}
@@ -837,7 +838,8 @@
                                 type: 'INIT_DISPLAY_DATA',
                                 settings: settings,
                                 jumatPetugas: jumatPetugas,
-                                jadwalList: jadwalList
+                                jadwalList: jadwalList,
+                                programInfaqList: window.programInfaqList || []
                             }, '*');
                         }
                     } catch(e) {}
@@ -1088,8 +1090,10 @@
                 // 2. Ambil jadwal & petugas Jumat
                 jadwalList = await SupabaseDB.getJadwalSholat();
                 jumatPetugas = await SupabaseDB.getSholatJumat();
-                window.jumatPetugas = jumatPetugas;
                 window.settings = settings;
+                window.jumatPetugas = jumatPetugas;
+                window.jadwalList = jadwalList;
+                window.programInfaqList = programInfaqList;
 
                 // 3. Muat slide pertama
                 if (activePages.length > 0) {
@@ -1103,7 +1107,8 @@
                                     type: 'INIT_DISPLAY_DATA',
                                     settings: settings,
                                     jumatPetugas: jumatPetugas,
-                                    jadwalList: jadwalList
+                                    jadwalList: jadwalList,
+                                    programInfaqList: programInfaqList
                                 }, '*');
                             }
                         } catch(e) {}

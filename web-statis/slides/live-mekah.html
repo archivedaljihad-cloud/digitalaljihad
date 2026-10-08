@@ -273,7 +273,17 @@
 
         async function loadStreamSettings() {
             try {
-                const settings = await SupabaseDB.getSettings();
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
                 const localMekah = localStorage.getItem('live_makkah_url');
                 const dbMekah = settings ? settings.live_makkah_url : '';
                 let rawUrl = (localMekah && !localMekah.includes('live_stream?channel=')) 
@@ -285,15 +295,19 @@
                 }
 
                 if (settings) {
-                    const rText = SupabaseDB.getRunningTextForPage('/live-mekah-embed', settings);
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/live-mekah-embed', settings)
+                        : (settings.running_text || '');
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-kaaba"></i> ${rText}`;
                 }
 
                 if (rawUrl) {
-                    const embedUrl = SupabaseDB.formatYouTubeEmbed(rawUrl);
+                    const embedUrl = (window.SupabaseDB && typeof SupabaseDB.formatYouTubeEmbed === 'function')
+                        ? SupabaseDB.formatYouTubeEmbed(rawUrl)
+                        : rawUrl;
                     if (embedUrl) {
                         const iframe = document.getElementById('videoIframe');
-                        if (iframe.src !== embedUrl) {
+                        if (iframe && iframe.src !== embedUrl) {
                             iframe.src = embedUrl;
                         }
                     }
@@ -325,7 +339,9 @@
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'DATA_UPDATED' && (msg.table === 'live_tv' || msg.table === 'live_mekah' || msg.table === 'app_settings')) {
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    loadStreamSettings();
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'live_tv' || msg.table === 'live_mekah' || msg.table === 'app_settings')) {
                     loadStreamSettings();
                 } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                     loadStreamSettings();

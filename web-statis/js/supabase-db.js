@@ -637,7 +637,17 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca program_infaq:', err);
+                console.warn('Gagal membaca program_infaq SDK:', err);
+            }
+            // Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('program_infaq?order=id.desc');
+                if (Array.isArray(rows) && rows.length > 0) {
+                    localStorage.setItem('cached_program_infaq', JSON.stringify(rows));
+                    return rows;
+                }
+            } catch (restErr) {
+                console.warn('REST fallback program_infaq:', restErr);
             }
             const cached = localStorage.getItem('cached_program_infaq');
             return cached ? JSON.parse(cached) : [];
@@ -658,7 +668,17 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca donasi_infaq:', err);
+                console.warn('Gagal membaca donasi_infaq SDK:', err);
+            }
+            // Direct REST API Fallback
+            try {
+                const query = programId ? `donasi_infaq?program_infaq_id=eq.${programId}&order=tanggal.asc,id.asc` : 'donasi_infaq?order=tanggal.asc,id.asc';
+                const rows = await this.restFetch(query);
+                if (Array.isArray(rows) && rows.length > 0) {
+                    return rows;
+                }
+            } catch (restErr) {
+                console.warn('REST fallback donasi_infaq:', restErr);
             }
             const cached = localStorage.getItem('cached_donasi_infaq');
             const allDonasi = cached ? JSON.parse(cached) : [];
@@ -685,7 +705,17 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca sholat_idul_fitri:', err);
+                console.warn('Gagal membaca sholat_idul_fitri SDK:', err);
+            }
+            // Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('sholat_idul_fitri?order=id.desc&limit=1');
+                if (Array.isArray(rows) && rows.length > 0) {
+                    localStorage.setItem('cached_idul_fitri', JSON.stringify(rows[0]));
+                    return rows[0];
+                }
+            } catch (restErr) {
+                console.warn('REST fallback idul_fitri:', restErr);
             }
             const cached = localStorage.getItem('cached_idul_fitri');
             return cached ? JSON.parse(cached) : null;
@@ -705,13 +735,22 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca sholat_idul_adha:', err);
+                console.warn('Gagal membaca sholat_idul_adha SDK:', err);
+            }
+            // Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('sholat_idul_adha?order=id.desc&limit=1');
+                if (Array.isArray(rows) && rows.length > 0) {
+                    localStorage.setItem('cached_idul_adha', JSON.stringify(rows[0]));
+                    return rows[0];
+                }
+            } catch (restErr) {
+                console.warn('REST fallback idul_adha:', restErr);
             }
             const cached = localStorage.getItem('cached_idul_adha');
             return cached ? JSON.parse(cached) : null;
         },
 
-        /**
         /**
          * Ambil daftar galeri informasi masjid
          */
@@ -730,10 +769,24 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca slides dari Supabase:', err);
+                console.warn('Gagal membaca slides dari Supabase SDK:', err);
             }
 
-            // 2. Coba baca dari localStorage lokal
+            // 2. Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('slides?order=urutan.asc');
+                if (Array.isArray(rows) && rows.length > 0) {
+                    try {
+                        localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(rows));
+                        localStorage.setItem('cached_slides', JSON.stringify(rows));
+                    } catch (e) {}
+                    return rows;
+                }
+            } catch (restErr) {
+                console.warn('REST fallback slides:', restErr);
+            }
+
+            // 3. Coba baca dari localStorage lokal
             try {
                 const local = localStorage.getItem('aljihad_galeri_informasi');
                 if (local) {
@@ -1479,10 +1532,22 @@
                     }
                 }
             } catch (err) {
-                console.warn('Gagal membaca undangan_eksternal dari Supabase:', err);
+                console.warn('Gagal membaca undangan_eksternal dari Supabase SDK:', err);
             }
 
-            // 2. Coba baca dari localStorage lokal
+            // 2. Direct REST API Fallback
+            try {
+                const rows = await this.restFetch('undangan_eksternal?order=urutan.asc');
+                if (Array.isArray(rows) && rows.length > 0) {
+                    localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(rows));
+                    localStorage.setItem('cached_undangan_eksternal', JSON.stringify(rows));
+                    return rows;
+                }
+            } catch (restErr) {
+                // Table might not exist yet, fallback silently
+            }
+
+            // 3. Coba baca dari localStorage lokal
             try {
                 const local = localStorage.getItem('aljihad_undangan_eksternal') || localStorage.getItem('cached_undangan_eksternal');
                 if (local) {

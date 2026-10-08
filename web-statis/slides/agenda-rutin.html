@@ -724,26 +724,34 @@
             `;
         }
 
-        // Load Settings Supabase & LocalStorage
+        // Load Settings Supabase & LocalStorage / Parent Memory Bridge
         async function loadAgendaData() {
             let activeConfig = JSON.parse(JSON.stringify(defaultKegiatan));
 
-            // Coba ambil dari Supabase
+            // 1. Coba ambil dari Parent Memory TV container jika ada di iframe
+            let settings = null;
             try {
-                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.getSettings === 'function') {
-                    const settings = await SupabaseDB.getSettings();
-                    if (settings) {
-                        if (settings.nama_aplikasi) {
-                            const elNama = document.getElementById('nama-masjid');
-                            if (elNama) elNama.textContent = settings.nama_aplikasi;
-                        }
-                        if (settings.sub_header) {
-                            const elSub = document.getElementById('sub-header');
-                            if (elSub) elSub.textContent = settings.sub_header;
-                        }
-                        if (settings.kegiatan_rutin_settings) {
-                            activeConfig = Object.assign({}, activeConfig, settings.kegiatan_rutin_settings);
-                        }
+                if (window.parent && window.parent !== window && window.parent.settings) {
+                    settings = window.parent.settings;
+                }
+            } catch (e) {}
+
+            // 2. Coba ambil dari Supabase jika belum didapat dari parent
+            try {
+                if (!settings && typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.getSettings === 'function') {
+                    settings = await SupabaseDB.getSettings();
+                }
+                if (settings) {
+                    if (settings.nama_aplikasi) {
+                        const elNama = document.getElementById('nama-masjid');
+                        if (elNama) elNama.textContent = settings.nama_aplikasi;
+                    }
+                    if (settings.sub_header) {
+                        const elSub = document.getElementById('sub-header');
+                        if (elSub) elSub.textContent = settings.sub_header;
+                    }
+                    if (settings.kegiatan_rutin_settings) {
+                        activeConfig = Object.assign({}, activeConfig, settings.kegiatan_rutin_settings);
                     }
                 }
             } catch(e) {
@@ -798,8 +806,22 @@
 
             // Listener postMessage dari window induk (Display TV index.html)
             window.addEventListener('message', (event) => {
-                if (event.data && (event.data.type === 'SYNC_AGENDA_RUTIN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data' || event.data.force_reload)) {
-                    console.log('[SlideAgendaRutin] postMessage received from parent TV:', event.data);
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        if (msg.settings.nama_aplikasi) {
+                            const elNama = document.getElementById('nama-masjid');
+                            if (elNama) elNama.textContent = msg.settings.nama_aplikasi;
+                        }
+                        if (msg.settings.sub_header) {
+                            const elSub = document.getElementById('sub-header');
+                            if (elSub) elSub.textContent = msg.settings.sub_header;
+                        }
+                    }
+                    loadAgendaData();
+                } else if (msg.type === 'SYNC_AGENDA_RUTIN' || msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.action === 'reload_data' || msg.force_reload) {
+                    console.log('[SlideAgendaRutin] postMessage received from parent TV:', msg);
                     loadAgendaData();
                 }
             });

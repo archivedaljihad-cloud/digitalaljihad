@@ -312,23 +312,41 @@
 
         async function loadCctvSettings() {
             try {
-                // 1. Settings
-                const settings = await SupabaseDB.getSettings();
+                // 1. Settings (Bridge dari Parent Memory jika ada)
+                let settings = null;
+                let jumat = null;
+                try {
+                    if (window.parent && window.parent !== window) {
+                        if (window.parent.settings) settings = window.parent.settings;
+                        if (window.parent.jumatPetugas) jumat = window.parent.jumatPetugas;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
                 if (settings) {
-                    const rText = SupabaseDB.getRunningTextForPage('/live-mimbar-embed', settings);
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/live-mimbar-embed', settings)
+                        : (settings.running_text || '');
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-microphone-alt"></i> ${rText}`;
 
                     if (settings.cctv_mimbar_url) {
                         const iframe = document.getElementById('cctvIframe');
                         const standby = document.getElementById('cctvStandby');
-                        iframe.src = settings.cctv_mimbar_url;
-                        iframe.style.display = 'block';
-                        standby.style.display = 'none';
+                        if (iframe && iframe.src !== settings.cctv_mimbar_url) {
+                            iframe.src = settings.cctv_mimbar_url;
+                        }
+                        if (iframe) iframe.style.display = 'block';
+                        if (standby) standby.style.display = 'none';
                     }
                 }
 
-                // 2. Petugas Jum'at Terkini untuk nama Khatib
-                const jumat = await SupabaseDB.getSholatJumat();
+                // 2. Petugas Jum'at Terkini untuk nama Khatib (Bridge dari Parent jika ada)
+                if (!jumat && window.SupabaseDB) {
+                    jumat = await SupabaseDB.getSholatJumat();
+                }
                 if (jumat) {
                     const khatib = jumat.khatib || jumat.khotib || jumat.imam || 'Asatidz DKM';
                     document.getElementById('khatibNameDisplay').textContent = `Khatib: ${khatib}`;
@@ -345,7 +363,13 @@
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'DATA_UPDATED' && (msg.table === 'cctv_mimbar' || msg.table === 'live_tv' || msg.table === 'sholat_jumat' || msg.table === 'app_settings')) {
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.jumatPetugas) {
+                        const khatib = msg.jumatPetugas.khatib || msg.jumatPetugas.khotib || msg.jumatPetugas.imam || 'Asatidz DKM';
+                        document.getElementById('khatibNameDisplay').textContent = `Khatib: ${khatib}`;
+                    }
+                    loadCctvSettings();
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'cctv_mimbar' || msg.table === 'live_tv' || msg.table === 'sholat_jumat' || msg.table === 'app_settings')) {
                     loadCctvSettings();
                 } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                     loadCctvSettings();

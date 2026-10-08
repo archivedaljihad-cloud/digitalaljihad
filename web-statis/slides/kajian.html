@@ -1104,11 +1104,21 @@
             if (fillEl) fillEl.style.width = '0%';
         }
 
-        // Ambil Data Kajian & Jadwal Isya dari Supabase
+        // Ambil Data Kajian & Jadwal Isya dari Supabase / Parent TV Memory
         async function loadKajianData() {
             try {
-                // 1. Ambil setting aplikasi & kajian
-                const settings = await SupabaseDB.getSettings();
+                // 1. Ambil setting aplikasi & kajian (Bridge dari Parent Memory jika ada)
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
                 if (settings) {
                     if (settings.nama_aplikasi) {
                         const namaEl = document.getElementById('nama-masjid');
@@ -1116,7 +1126,9 @@
                     }
 
                     // Teks Berjalan Layar Kajian
-                    const rText = SupabaseDB.getRunningTextForPage('/kajian-embed', settings);
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/kajian-embed', settings)
+                        : (settings.running_text || '');
                     if (rText && document.getElementById('runningTextContent')) {
                         document.getElementById('runningTextContent').textContent = rText;
                     }
@@ -1238,8 +1250,16 @@
 
             // 4. Dengarkan postMessage dari parent window (Display TV index.html)
             window.addEventListener('message', (event) => {
-                if (event.data && (event.data.type === 'SYNC_KAJIAN' || event.data.type === 'DATA_UPDATED' || event.data.action === 'reload_data' || event.data.force_reload)) {
-                    console.log('[SlideKajian] postMessage received from parent TV:', event.data);
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings && msg.settings.nama_aplikasi) {
+                        const namaEl = document.getElementById('nama-masjid');
+                        if (namaEl) namaEl.textContent = msg.settings.nama_aplikasi;
+                    }
+                    loadKajianData();
+                } else if (msg.type === 'SYNC_KAJIAN' || msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.action === 'reload_data' || msg.force_reload) {
+                    console.log('[SlideKajian] postMessage received from parent TV:', msg);
                     loadKajianData();
                 }
             });

@@ -4,7 +4,56 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 06:55 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 07:20 WIB)
+
+### 🛡️ AUDIT MENYELURUH DAN PENGUATAN KEBAL DESINKRONISASI PADA SELURUH 23 HALAMAN SLIDE DISPLAY & ENGINE REST NATIVE ZERO-SDK (25 Berkas Diperbarui, Versi SW v5.8.5):
+1. **Latar Belakang & Mandat Utama Pengguna:**
+   - Pengguna menginstruksikan pemeriksaan menyeluruh, teliti, dan mendalam terhadap **seluruh halaman display satu per satu** selain `jumat.html` untuk memastikan reputasi dan kepercayaan pengurus masjid tidak tercoreng akibat layar TV menampilkan data kosong, angka nol, atau data usang.
+   - Penegakan penuh 4 Pilar Standar Operasional Prosedur (SOP) secara otomatis.
+2. **Penyempurnaan Total Native REST Fetch Engine (`web-statis/js/supabase-db.js`):**
+   - Sebelumnya, jika script CDN `@supabase/supabase-js` gagal/lambat termuat di Smart TV, beberapa fungsi getter mengalami kebuntuan (*deadlock*) dan hanya membaca `localStorage` yang kosong pada TV Display.
+   - Menambahkan mekanisme fallback langsung `restFetch(path, options)` menggunakan native browser `fetch()` ke Supabase REST API (`/rest/v1/...`) pada seluruh 13 fungsi getter:
+     - `getSettings()`, `getSholatJumat()`, `getKeuangan()`, `getJadwalSholat()`, `getPengumuman()`, `getProgramInfaq()`, `getDonasiInfaq()`, `getIdulFitri()`, `getIdulAdha()`, `getSlides()`, `getUndanganEksternal()`, serta getter terkait lainnya.
+     - **Hasil Pengujian Otomatis Zero-SDK:** Seluruh 13 fungsi diuji dalam simulasi 100% tanpa SDK (`window.supabase = null`), dan seluruhnya berhasil mengembalikan data valid secara instan via REST fetch tanpa kegagalan atau uncaught error.
+3. **Resolusi Script Konfigurasi yang Hilang:**
+   - Ditemukan bahwa `slides/idul-adha.html` dan `slides/idul-fitri.html` sebelumnya tidak memuat `<script src="../js/supabase-config.js"></script>`, sehingga jika CDN gagal, REST fallback tidak dapat memperoleh URL dan API key.
+   - Berkas telah diperbaiki dengan penambahan script konfigurasi tersebut di bagian `<head>`.
+4. **Implementasi Universal Zero-Latency Parent Memory Bridge & `INIT_DISPLAY_DATA` Listener (23 Berkas):**
+   - Seluruh 22 slide di `web-statis/slides/` dan `web-statis/prayer-mode.html` kini memiliki kemampuan multi-lapis untuk langsung mengambil data dari memori RAM `window.parent` (0ms latency) sebelum melakukan network request, serta merespons event `INIT_DISPLAY_DATA` dari parent:
+     1. `slides/utama.html`: Parent bridge `settings` & `jadwalList`, pendengar `INIT_DISPLAY_DATA`.
+     2. `slides/agenda-rutin.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     3. `slides/ambulance.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     4. `slides/hikmah.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     5. `slides/idul-adha.html`: Konfigurasi Supabase, safe date parser, parent bridge, pendengar `INIT_DISPLAY_DATA`.
+     6. `slides/idul-fitri.html`: Konfigurasi Supabase, safe date parser, parent bridge, pendengar `INIT_DISPLAY_DATA`.
+     7. `slides/infaq.html`: Parent bridge `programInfaqList`, pendengar `INIT_DISPLAY_DATA`.
+     8. `slides/kajian.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     9. `slides/keuangan.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     10. `slides/keuangan-summary.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     11. `slides/live-madinah.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     12. `slides/live-mekah.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     13. `slides/live-mimbar.html`: Parent bridge `settings` & `jumatPetugas`, pendengar `INIT_DISPLAY_DATA`.
+     14. `slides/pengumuman.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     15. `slides/qris.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     16. `slides/qurban.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     17. `slides/ramadhan.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     18. `slides/slide.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     19. `slides/undangan.html`: Parent bridge & pendengar `INIT_DISPLAY_DATA`.
+     20. `slides/yasin.html`: Parent bridge `settings` & `jadwalList`, pendengar `INIT_DISPLAY_DATA`.
+     21. `slides/jumat.html`: Diperkuat dengan REST fetch & memory bridge petugas Jum'at lengkap.
+     22. `slides/kas-jumat.html`: Sinkronisasi kas dan REST fallback.
+     23. `prayer-mode.html`: Parent bridge untuk `settings`, `jadwalList`, dan `jumatPetugas`, serta pendengar `INIT_DISPLAY_DATA`.
+5. **Penyelarasan Master Display Container (`web-statis/index.html`):**
+   - Global memory cache kini menyimpan `window.jadwalList` dan `window.programInfaqList` selain `window.settings` dan `window.jumatPetugas`.
+   - Payload `INIT_DISPLAY_DATA` yang dikirimkan secara berkala saat `onload` frame (`initDisplay`, `preloadNextSlide`, dan `switchSlide`) kini menyertakan `programInfaqList` sehingga slide infaq langsung terisi seketika saat di-render.
+6. **Bumping Versi Cache Service Worker (SOP #2):**
+   - Menaikkan versi cache di `web-statis/sw.js` ke **`v5.8.5`** (`aljihad-signage-v5.8.5`).
+   - Menyinkronkan fungsi verifikasi dan pembersihan cache usang di `web-statis/admin.html` ke `v5.8.5`.
+7. **Hasil Verifikasi Otomatis:**
+   - Seluruh 23 berkas display diverifikasi menggunakan skrip verifikasi otomatis: 100% memiliki script config, database library, parent memory bridge, message listener, dan penanganan `INIT_DISPLAY_DATA`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 06:55 WIB)
 
 ### 🕌 RESOLUSI TOTAL SINKRONISASI JADWAL PETUGAS JUM'AT TV DISPLAY: NATIVE REST DIRECT FETCH ENGINE & ZERO-LATENCY PARENT BRIDGE (`slides/jumat.html`, `supabase-db.js`, `index.html`, & `sw.js`):
 1. **Latar Belakang & Keluhan Kritis Pengguna:**

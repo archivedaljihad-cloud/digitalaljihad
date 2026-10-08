@@ -803,11 +803,22 @@
             }
         }
 
-        // Inisialisasi Data dari Supabase
+        // Inisialisasi Data dari Supabase / Parent TV Memory
         async function loadData() {
             try {
-                // 1. Settings
-                currentSettings = await SupabaseDB.getSettings();
+                // 1. Settings (Bridge dari Parent Memory jika ada di iframe TV)
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+                currentSettings = settings;
+
                 if (currentSettings) {
                     if (currentSettings.nama_aplikasi) {
                         document.getElementById('nama-masjid').textContent = currentSettings.nama_aplikasi;
@@ -817,14 +828,25 @@
                     }
 
                     // Teks Berjalan spesifik untuk halaman ini (/utama-embed)
-                    const runningText = SupabaseDB.getRunningTextForPage('/utama-embed', currentSettings);
+                    const runningText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/utama-embed', currentSettings)
+                        : (currentSettings.running_text || '');
                     if (runningText) {
                         document.getElementById('runningTextContent').textContent = runningText;
                     }
                 }
 
-                // 2. Jadwal Sholat
-                const jadwal = await SupabaseDB.getJadwalSholat();
+                // 2. Jadwal Sholat (Bridge dari Parent Memory jika ada)
+                let jadwal = null;
+                try {
+                    if (window.parent && window.parent !== window && Array.isArray(window.parent.jadwalList) && window.parent.jadwalList.length > 0) {
+                        jadwal = window.parent.jadwalList;
+                    }
+                } catch (e) {}
+
+                if (!jadwal && window.SupabaseDB) {
+                    jadwal = await SupabaseDB.getJadwalSholat();
+                }
                 if (jadwal && jadwal.length > 0) {
                     renderJadwalCards(jadwal);
                 }
@@ -940,7 +962,17 @@
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'jadwal_sholat' || msg.table === 'running_text')) {
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        currentSettings = msg.settings;
+                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
+                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
+                    }
+                    if (msg.jadwalList && msg.jadwalList.length > 0) {
+                        renderJadwalCards(msg.jadwalList);
+                    }
+                    loadData();
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'jadwal_sholat' || msg.table === 'running_text')) {
                     loadData();
                 } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                     loadData();

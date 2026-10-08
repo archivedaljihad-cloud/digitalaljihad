@@ -875,15 +875,27 @@
         let internalProgIndex = 0;
         let internalProgTimer = null;
 
-        // Load Program Infaq dari Supabase
+        // Load Program Infaq dari Supabase / Parent Memory Bridge
         async function loadProgramInfaqData() {
             try {
-                // 1. Settings
-                const settings = await SupabaseDB.getSettings();
+                // 1. Settings (Bridge dari Parent Memory jika ada)
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
                 if (settings) {
                     if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
                     if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
-                    const rText = SupabaseDB.getRunningTextForPage('/infaq-embed', settings);
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/infaq-embed', settings)
+                        : (settings.running_text || '');
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-hand-holding-usd"></i> ${rText}`;
 
                     // Muat data rekening donasi dinamis dari settings (running_text_pages.infaq_rekening / root settings / local cache)
@@ -1054,9 +1066,15 @@
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'DATA_UPDATED' && (msg.table === 'program_infaq' || msg.table === 'donasi_infaq' || msg.table === 'app_settings')) {
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
+                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
+                    }
                     loadProgramInfaqData();
-                } else if (msg.type === 'SYNC_INFAQ' || msg.force_reload) {
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'program_infaq' || msg.table === 'donasi_infaq' || msg.table === 'app_settings')) {
+                    loadProgramInfaqData();
+                } else if (msg.type === 'SYNC_INFAQ' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                     loadProgramInfaqData();
                 }
             });

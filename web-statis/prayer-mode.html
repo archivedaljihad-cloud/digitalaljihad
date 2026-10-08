@@ -1667,21 +1667,30 @@
             try {
                 setupPreviewBar();
 
-                if (window.SupabaseDB) {
-                    settings = await SupabaseDB.getSettings();
-                    jadwalList = await SupabaseDB.getJadwalSholat();
-                    jumatPetugas = await SupabaseDB.getSholatJumat();
-
-                    if (settings && settings.nama_aplikasi) {
-                        const elNama = document.getElementById('nama-masjid') || document.getElementById('masjidTitle');
-                        if (elNama) elNama.textContent = settings.nama_aplikasi.toUpperCase();
-                        const elSub = document.getElementById('sub-header');
-                        if (elSub && (settings.tagline_aplikasi || settings.sub_header)) {
-                            elSub.textContent = (settings.tagline_aplikasi || settings.sub_header).toUpperCase();
-                        }
-                        const elFooter = document.getElementById('masjidFooter');
-                        if (elFooter) elFooter.textContent = '© ' + settings.nama_aplikasi.toUpperCase();
+                // Memory Bridge dari Parent TV container jika di-embed dalam iframe
+                try {
+                    if (window.parent && window.parent !== window) {
+                        if (window.parent.settings) settings = window.parent.settings;
+                        if (window.parent.jadwalList) jadwalList = window.parent.jadwalList;
+                        if (window.parent.jumatPetugas) jumatPetugas = window.parent.jumatPetugas;
                     }
+                } catch (e) {}
+
+                if ((!settings || !jadwalList) && window.SupabaseDB) {
+                    if (!settings) settings = await SupabaseDB.getSettings();
+                    if (!jadwalList) jadwalList = await SupabaseDB.getJadwalSholat();
+                    if (!jumatPetugas) jumatPetugas = await SupabaseDB.getSholatJumat();
+                }
+
+                if (settings && settings.nama_aplikasi) {
+                    const elNama = document.getElementById('nama-masjid') || document.getElementById('masjidTitle');
+                    if (elNama) elNama.textContent = settings.nama_aplikasi.toUpperCase();
+                    const elSub = document.getElementById('sub-header');
+                    if (elSub && (settings.tagline_aplikasi || settings.sub_header)) {
+                        elSub.textContent = (settings.tagline_aplikasi || settings.sub_header).toUpperCase();
+                    }
+                    const elFooter = document.getElementById('masjidFooter');
+                    if (elFooter) elFooter.textContent = '© ' + settings.nama_aplikasi.toUpperCase();
                 }
 
                 updatePrayerUI();
@@ -1693,6 +1702,20 @@
                 setInterval(updatePrayerUI, 1000);
             }
         }
+
+        // Listener pesan dari Parent TV (postMessage) untuk update instan
+        window.addEventListener('message', (event) => {
+            const msg = event.data;
+            if (!msg) return;
+            if (msg.type === 'INIT_DISPLAY_DATA') {
+                if (msg.settings) settings = msg.settings;
+                if (msg.jadwalList) jadwalList = msg.jadwalList;
+                if (msg.jumatPetugas) jumatPetugas = msg.jumatPetugas;
+                updatePrayerUI();
+            } else if (msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                init();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', init);
     </script>

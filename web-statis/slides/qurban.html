@@ -832,11 +832,21 @@
             }, 1000);
         }
 
-        // Muat Data dari Supabase / Local Storage
+        // Muat Data dari Supabase / Local Storage / Parent TV Memory
         async function loadData() {
             try {
-                // 1. Settings
-                const currentSettings = await SupabaseDB.getSettings();
+                // 1. Settings (Bridge dari Parent Memory jika ada)
+                let currentSettings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        currentSettings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!currentSettings && window.SupabaseDB) {
+                    currentSettings = await SupabaseDB.getSettings();
+                }
+
                 if (currentSettings) {
                     if (currentSettings.nama_aplikasi) {
                         document.getElementById('nama-masjid').textContent = currentSettings.nama_aplikasi;
@@ -846,7 +856,9 @@
                     }
 
                     // Teks Berjalan spesifik untuk halaman ini (/qurban-embed)
-                    const runningText = SupabaseDB.getRunningTextForPage('/qurban-embed', currentSettings);
+                    const runningText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/qurban-embed', currentSettings)
+                        : (currentSettings.running_text || '');
                     if (runningText) {
                         document.getElementById('runningTextContent').textContent = runningText;
                     }
@@ -900,9 +912,15 @@
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'qurban')) {
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
+                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
+                    }
                     loadData();
-                } else if (msg.type === 'SYNC_QURBAN' || msg.force_reload) {
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'qurban')) {
+                    loadData();
+                } else if (msg.type === 'SYNC_QURBAN' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                     loadData();
                 }
             });

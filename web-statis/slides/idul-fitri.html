@@ -686,6 +686,7 @@
 
 	<!-- Supabase JS & DB Helper -->
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<script src="../js/supabase-config.js"></script>
 	<script src="../js/supabase-db.js"></script>
 
 	<script>
@@ -725,10 +726,15 @@
 		updateDateTime();
 		setInterval(updateDateTime, 1000);
 
-		// Format tanggal ID
+		// Format tanggal ID (Safe local date parser)
 		function formatTanggalIndo(dateStr) {
 			if (!dateStr) return '-';
 			try {
+				if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
+					const parts = dateStr.split('T')[0].split('-');
+					const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+					return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+				}
 				const d = new Date(dateStr);
 				if (isNaN(d.getTime())) return dateStr;
 				return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -737,11 +743,17 @@
 			}
 		}
 
-		// Load data Idul Fitri & App Settings
+		// Load data Idul Fitri & App Settings (Parent Memory Bridge)
 		async function loadData() {
 			try {
 				let settings = null;
-				if (window.SupabaseDB) {
+				try {
+					if (window.parent && window.parent !== window && window.parent.settings) {
+						settings = window.parent.settings;
+					}
+				} catch (e) {}
+
+				if (!settings && window.SupabaseDB) {
 					settings = await SupabaseDB.getSettings();
 				}
 
@@ -750,7 +762,9 @@
 						document.getElementById('masjidName').textContent = settings.nama_aplikasi.toUpperCase();
 					}
 					// Running Text spesifik untuk halaman ini
-					const rText = SupabaseDB.getRunningTextForPage('idul-fitri', settings);
+					const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+						? SupabaseDB.getRunningTextForPage('idul-fitri', settings)
+						: (settings.running_text || '');
 					if (rText) {
 						document.getElementById('runningText').textContent = rText;
 					}
@@ -807,7 +821,12 @@
 		window.addEventListener('message', (event) => {
 			const msg = event.data;
 			if (!msg) return;
-			if (msg.type === 'DATA_UPDATED' && (msg.table === 'sholat_idul_fitri' || msg.table === 'app_settings')) {
+			if (msg.type === 'INIT_DISPLAY_DATA') {
+				if (msg.settings && msg.settings.nama_aplikasi) {
+					document.getElementById('masjidName').textContent = msg.settings.nama_aplikasi.toUpperCase();
+				}
+				loadData();
+			} else if (msg.type === 'DATA_UPDATED' && (msg.table === 'sholat_idul_fitri' || msg.table === 'app_settings')) {
 				loadData();
 			} else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
 				loadData();

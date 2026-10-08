@@ -791,39 +791,49 @@
             startSlideRotation();
         }
 
-        // 2. SINKRONISASI DARI CLOUD SUPABASE SECARA ASINKRON
+        // 2. SINKRONISASI DARI CLOUD SUPABASE SECARA ASINKRON / PARENT MEMORY BRIDGE
         async function loadSlidesFromCloud() {
             try {
-                if (window.SupabaseDB) {
-                    // Ambil Pengaturan Umum (Nama Masjid & Teks Berjalan)
-                    const settings = await SupabaseDB.getSettings();
-                    if (settings) {
-                        if (settings.nama_aplikasi) {
-                            const nameEl = document.getElementById('nama-masjid');
-                            if (nameEl) nameEl.textContent = settings.nama_aplikasi;
-                        }
-                        if (settings.sub_header) {
-                            const subEl = document.getElementById('sub-header');
-                            if (subEl) subEl.textContent = settings.sub_header;
-                        }
-                        const rText = SupabaseDB.getRunningTextForPage('/slide-embed', settings);
-                        if (rText) {
-                            const rtEl = document.getElementById('runningTextContent');
-                            if (rtEl) rtEl.innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
-                        }
+                // Ambil Pengaturan Umum (Bridge dari Parent Memory jika ada)
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
                     }
+                } catch (e) {}
 
-                    // Ambil Daftar Galeri Informasi dari Cloud
-                    if (typeof SupabaseDB.getSlides === 'function') {
-                        const list = await SupabaseDB.getSlides();
-                        if (Array.isArray(list) && list.length > 0) {
-                            const valid = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
-                            if (valid.length > 0) {
-                                slidesData = valid;
-                                if (currentSlideIdx >= slidesData.length) currentSlideIdx = 0;
-                                showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
-                                startSlideRotation();
-                            }
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
+                if (settings) {
+                    if (settings.nama_aplikasi) {
+                        const nameEl = document.getElementById('nama-masjid');
+                        if (nameEl) nameEl.textContent = settings.nama_aplikasi;
+                    }
+                    if (settings.sub_header) {
+                        const subEl = document.getElementById('sub-header');
+                        if (subEl) subEl.textContent = settings.sub_header;
+                    }
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/slide-embed', settings)
+                        : (settings.running_text || '');
+                    if (rText) {
+                        const rtEl = document.getElementById('runningTextContent');
+                        if (rtEl) rtEl.innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
+                    }
+                }
+
+                // Ambil Daftar Galeri Informasi dari Cloud
+                if (window.SupabaseDB && typeof SupabaseDB.getSlides === 'function') {
+                    const list = await SupabaseDB.getSlides();
+                    if (Array.isArray(list) && list.length > 0) {
+                        const valid = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
+                        if (valid.length > 0) {
+                            slidesData = valid;
+                            if (currentSlideIdx >= slidesData.length) currentSlideIdx = 0;
+                            showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+                            startSlideRotation();
                         }
                     }
                 }
@@ -839,9 +849,21 @@
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'DATA_UPDATED' && (msg.table === 'slides' || msg.table === 'app_settings')) {
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        if (msg.settings.nama_aplikasi) {
+                            const nameEl = document.getElementById('nama-masjid');
+                            if (nameEl) nameEl.textContent = msg.settings.nama_aplikasi;
+                        }
+                        if (msg.settings.sub_header) {
+                            const subEl = document.getElementById('sub-header');
+                            if (subEl) subEl.textContent = msg.settings.sub_header;
+                        }
+                    }
                     loadSlidesFromCloud();
-                } else if (msg.type === 'SYNC_SLIDES' || msg.force_reload) {
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'slides' || msg.table === 'app_settings')) {
+                    loadSlidesFromCloud();
+                } else if (msg.type === 'SYNC_SLIDES' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                     loadSlidesFromCloud();
                 }
             });
