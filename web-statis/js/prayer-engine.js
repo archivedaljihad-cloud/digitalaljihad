@@ -173,7 +173,8 @@
             const setting = settings || {};
 
             // Cek apakah mode kajian sabtu diaktifkan (default true)
-            if (setting.kajian_sabtu_enabled === false) return false;
+            const isEnabled = setting.kajian_sabtu_enabled !== false && setting.kajian_sabtu_enabled !== 'false' && setting.kajian_sabtu_enabled !== 0 && setting.kajian_sabtu_enabled !== '0';
+            if (!isEnabled) return false;
 
             // Cek apakah hari Sabtu (Malam Ahad dalam penanggalan Islam)
             const isSaturday = now.getDay() === 6;
@@ -218,7 +219,8 @@
             const setting = settings || {};
 
             // Cek apakah mode yasin diaktifkan (default true)
-            if (setting.yasin_mode_enabled === false) return false;
+            const isEnabled = setting.yasin_mode_enabled !== false && setting.yasin_mode_enabled !== 'false' && setting.yasin_mode_enabled !== 0 && setting.yasin_mode_enabled !== '0';
+            if (!isEnabled) return false;
 
             // Cek apakah hari Kamis (Malam Jum'at dalam kalender Islam)
             const isThursday = now.getDay() === 4;

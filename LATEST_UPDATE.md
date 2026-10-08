@@ -4,7 +4,32 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 18:30 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 19:05 WIB)
+
+### 📖 PERBAIKAN TOTAL KUNCI OTOMATIS AGENDA SURAT YAASIIN & PENGAJIAN MALAM AHAD (`index.html`, Versi SW v5.8.12):
+1. **Latar Belakang Masalah & Root Cause Analysis:**
+   - **Keluhan Pengguna:** Pada hari Kamis malam (Malam Jum'at) pukul 18:30 WIB, jadwal Surat Yaasiin seharusnya otomatis muncul di layar TV dan rotasi halaman slide harus berhenti. Namun, tampilan TV dilaporkan tetap berotasi seperti biasa.
+   - **Root Cause #1 (SRE Watchdog Auto-Recovery Override):** Pada `index.html`, terdapat background watchdog (`setInterval` 4 detik) untuk auto-recovery jika slide membeku lebih dari `rotationInterval + 10s`. Watchdog ini hanya memeriksa `isPaused || isPrayerModeActive`. Ketika Surat Yaasiin aktif (18:30 s/d 18:52), `isPrayerModeActive` bernilai `false`, sehingga setelah 50 detik watchdog mendeteksi rotasi tertahan, memaksakan `nextPage()`, dan memicu rotasi normal kembali.
+   - **Root Cause #2 (Tidak Ada Guard pada Engine Rotasi):** Fungsi `scheduleNextRotation()`, `switchSlide()`, `nextPage()`, dan perintah remote TV tidak memiliki pengecekan flag status agenda khusus (`isYasinModeActive` / `isKajianModeActive`), sehingga jika ada event apapun (update database realtime, websocket, timer gantung), slide akan terus berotasi.
+   - **Root Cause #3 (Failsafe Cold Boot / Refresh Layar):** Jika halaman di-refresh saat jam 18:30-18:52, `initDisplay()` langsung memuat slide urutan pertama (`activePages[0]`) dan baru bergantung pada timer 1 detik, di mana jika `localStorage.lockPageRotation` sudah bernilai `yasin`, evaluasi `!== 'yasin'` menjadi `false` dan Yasin tidak termuat ulang.
+2. **Solusi & Rekayasa Arsitektur:**
+   - **Flag Memori Khusus (`isYasinModeActive`, `isKajianModeActive`):**
+     - Menambahkan state in-memory `isYasinModeActive` dan `isKajianModeActive`.
+   - **Pemberhentian & Penguncian Rotasi Menyeluruh:**
+     - `scheduleNextRotation()`: Ditambahkan guard `if (... || isYasinModeActive || isKajianModeActive) return;` sehingga tidak ada timer rotasi yang dapat dijadwalkan selagi Yaasiin / Kajian aktif.
+     - `switchSlide()`, `nextPage()`, `prevPage()`, dan keyboard/remote TV: Dilindungi secara total agar tidak dapat berganti slide.
+     - `SRE Watchdog`: Ditambahkan proteksi `if (... || isYasinModeActive || isKajianModeActive) return;` sehingga watchdog tidak lagi membatalkan atau merebut tampilan Surat Yaasiin secara paksa.
+   - **Transisi Mulus Dual-Iframe (`lockSpecialAgendaSlide`):**
+     - Memanfaatkan dual-iframe crossfade engine bawaan TV agar peralihan dari slide terakhir ke `slides/yasin.html` berlangsung mulus (over-fade cross-dissolve) tanpa kedip hitam.
+   - **Dukungan Boot Awal Instan (`initDisplay`):**
+     - Saat TV pertama kali dinyalakan atau direfresh antara pukul 18:30 hingga menjelang Isya (18:52), display TV langsung menginisialisasi dan menampilkan `slides/yasin.html` secara langsung tanpa memutar slide lain terlebih dahulu.
+   - **Defensif Parser Status di `prayer-engine.js`:**
+     - Pengecekan `yasin_mode_enabled` dan `kajian_sabtu_enabled` dibuat defensif terhadap nilai string (`'false'`, `'0'`, boolean `false`).
+3. **Pembaruan Service Worker & Invalidation Cache (SOP #2):**
+   - Versi Service Worker dinaikkan ke **`v5.8.12`** (`aljihad-signage-v5.8.12`) pada `web-statis/sw.js` dan `web-statis/admin.html`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 18:30 WIB)
 
 ### 📊 PERAPIHAN JUDUL GRAFIK 1 BARIS DI SLIDE RINGKASAN KEUANGAN (`/slides/keuangan-summary`, Versi SW v5.8.11):
 1. **Latar Belakang & Kebutuhan Pengguna:**

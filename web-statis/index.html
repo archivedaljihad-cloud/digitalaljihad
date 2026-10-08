@@ -647,6 +647,8 @@
         let isPaused = false;
         let currentFrame = 1;
         let isPrayerModeActive = false;
+        let isYasinModeActive = false;
+        let isKajianModeActive = false;
 
         let settings = null;
         let jadwalList = [];
@@ -800,7 +802,7 @@
 
         // Pergantian slide TV: Ultra-Smooth Over-Fade Cross-Dissolve (Zero Stutter, Zero Scale Jitter, Zero Dark Dip)
         function switchSlide(targetIndex) {
-            if (activePages.length === 0 || isPrayerModeActive) return;
+            if (activePages.length === 0 || isPrayerModeActive || isYasinModeActive || isKajianModeActive) return;
             if (isTransitioning) {
                 console.warn('⚠️ [Display TV] switchSlide: Transisi sebelumnya masih berlangsung.');
                 return;
@@ -916,10 +918,12 @@
         }
 
         function nextPage() {
+            if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) return;
             switchSlide(currentIndex + 1);
         }
 
         function prevPage() {
+            if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) return;
             switchSlide(currentIndex - 1);
         }
 
@@ -1035,7 +1039,7 @@
 
         function scheduleNextRotation() {
             clearTimeout(rotationTimer);
-            if (isPaused || isPrayerModeActive || activePages.length <= 1) return;
+            if (isPaused || isPrayerModeActive || isYasinModeActive || isKajianModeActive || activePages.length <= 1) return;
 
             rotationTimer = setTimeout(() => {
                 nextPage();
@@ -1043,7 +1047,65 @@
             }, rotationInterval);
         }
 
-        // Pantau waktu sholat (Prayer Mode Engine)
+        // Kunci penayangan slide agenda khusus (Surat Yaasiin / Pengajian Rutin Malam Ahad)
+        function lockSpecialAgendaSlide(url, label) {
+            clearTimeout(rotationTimer);
+            const frontFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
+            const backFrame = currentFrame === 1 ? document.getElementById('frame2') : document.getElementById('frame1');
+
+            const currentSrc = frontFrame.getAttribute('src') || '';
+            if (currentSrc.includes(url) && frontFrame.classList.contains('active')) {
+                return;
+            }
+
+            backFrame.className = 'incoming';
+            backFrame.dataset.loadedUrl = '';
+            backFrame.dataset.isReady = 'false';
+
+            let transitioned = false;
+            const applySpecialTransition = () => {
+                if (transitioned) return;
+                transitioned = true;
+                requestAnimationFrame(() => {
+                    void backFrame.offsetWidth;
+                    requestAnimationFrame(() => {
+                        frontFrame.className = 'outgoing';
+                        backFrame.className = 'active';
+                        currentFrame = currentFrame === 1 ? 2 : 1;
+                        setTimeout(() => {
+                            if (frontFrame.classList.contains('outgoing')) {
+                                frontFrame.className = 'standby';
+                            }
+                            isTransitioning = false;
+                        }, 1200);
+                    });
+                });
+            };
+
+            backFrame.onload = function() {
+                backFrame.dataset.loadedUrl = url;
+                backFrame.dataset.isReady = 'true';
+                try {
+                    if (backFrame.contentWindow) {
+                        backFrame.contentWindow.postMessage({
+                            type: 'INIT_DISPLAY_DATA',
+                            settings: settings,
+                            jumatPetugas: jumatPetugas,
+                            jadwalList: jadwalList,
+                            programInfaqList: window.programInfaqList || []
+                        }, '*');
+                    }
+                } catch(e) {}
+                setTimeout(applySpecialTransition, 120);
+            };
+            backFrame.onerror = function() {
+                applySpecialTransition();
+            };
+            setTimeout(applySpecialTransition, 2500);
+            backFrame.src = url;
+        }
+
+        // Pantau waktu sholat & agenda khusus (Prayer Mode Engine)
         function checkPrayerMode() {
             if (!window.PrayerEngine) return;
             const now = new Date();
@@ -1065,38 +1127,46 @@
                     console.log('✅ Mode Sholat selesai. Kembali ke rotasi TV.');
                     isPrayerModeActive = false;
                     prayerFrame.classList.remove('active');
-                    scheduleNextRotation();
+                    if (!isYasinModeActive && !isKajianModeActive) {
+                        scheduleNextRotation();
+                    }
                 }
             }
 
             // 2. Prioritas Kedua: Agenda Malam Jum'at (Surat Yaasiin ba'da Maghrib s/d Isya)
             if (state.yasin_active) {
-                if (localStorage.getItem('lockPageRotation') !== 'yasin') {
+                if (!isYasinModeActive) {
                     console.log('📖 Agenda Malam Jum\'at Aktif: Mengunci layar pada Surat Yaasiin.');
+                    isYasinModeActive = true;
                     localStorage.setItem('lockPageRotation', 'yasin');
-                    const targetFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
-                    targetFrame.src = 'slides/yasin.html';
                     clearTimeout(rotationTimer);
-                    showOsd('📖 Agenda Malam Jum\'at: Surat Yaasiin');
+                    lockSpecialAgendaSlide('slides/yasin.html', '📖 Agenda Malam Jum\'at: Surat Yaasiin');
+                } else {
+                    // Pastikan timer rotasi tetap mati selagi mode yasin aktif
+                    clearTimeout(rotationTimer);
                 }
-            } else if (localStorage.getItem('lockPageRotation') === 'yasin') {
+            } else if (isYasinModeActive) {
                 console.log('✅ Agenda Malam Jum\'at selesai. Mengembalikan rotasi normal.');
+                isYasinModeActive = false;
                 localStorage.removeItem('lockPageRotation');
                 scheduleNextRotation();
             }
 
             // 3. Prioritas Ketiga: Pengajian Rutin Malam Ahad (Kajian Sabtu Ba'da Maghrib s/d Isya)
             if (state.kajian_active) {
-                if (localStorage.getItem('lockPageRotation') !== 'kajian') {
+                if (!isKajianModeActive) {
                     console.log('🕌 Pengajian Rutin Malam Ahad Aktif: Mengunci layar pada Slide Kajian.');
+                    isKajianModeActive = true;
                     localStorage.setItem('lockPageRotation', 'kajian');
-                    const targetFrame = currentFrame === 1 ? document.getElementById('frame1') : document.getElementById('frame2');
-                    targetFrame.src = 'slides/kajian.html';
                     clearTimeout(rotationTimer);
-                    showOsd('🕌 Pengajian Rutin Malam Ahad: Majelis Ilmu');
+                    lockSpecialAgendaSlide('slides/kajian.html', '🕌 Pengajian Rutin Malam Ahad: Majelis Ilmu');
+                } else {
+                    // Pastikan timer rotasi tetap mati selagi mode kajian aktif
+                    clearTimeout(rotationTimer);
                 }
-            } else if (localStorage.getItem('lockPageRotation') === 'kajian') {
+            } else if (isKajianModeActive) {
                 console.log('✅ Pengajian Rutin Malam Ahad selesai. Mengembalikan rotasi normal.');
+                isKajianModeActive = false;
                 localStorage.removeItem('lockPageRotation');
                 scheduleNextRotation();
             }
@@ -1155,8 +1225,29 @@
                 window.jadwalList = jadwalList;
                 window.programInfaqList = programInfaqList;
 
+                // Cek langsung apakah saat inisialisasi sedang dalam waktu Sholat atau Agenda Khusus (Yasin / Kajian)
+                const initialState = window.PrayerEngine ? window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, new Date()) : null;
+                const isInitialYasin = initialState && initialState.yasin_active;
+                const isInitialKajian = initialState && initialState.kajian_active;
+
                 // 3. Muat slide pertama
-                if (activePages.length > 0) {
+                if (isInitialYasin) {
+                    console.log('📖 [Display TV Init] Memulai langsung pada Agenda Surat Yaasiin');
+                    isYasinModeActive = true;
+                    localStorage.setItem('lockPageRotation', 'yasin');
+                    const f1 = document.getElementById('frame1');
+                    f1.src = 'slides/yasin.html';
+                    f1.dataset.loadedUrl = 'slides/yasin.html';
+                    f1.dataset.isReady = 'true';
+                } else if (isInitialKajian) {
+                    console.log('🕌 [Display TV Init] Memulai langsung pada Agenda Kajian');
+                    isKajianModeActive = true;
+                    localStorage.setItem('lockPageRotation', 'kajian');
+                    const f1 = document.getElementById('frame1');
+                    f1.src = 'slides/kajian.html';
+                    f1.dataset.loadedUrl = 'slides/kajian.html';
+                    f1.dataset.isReady = 'true';
+                } else if (activePages.length > 0) {
                     const f1 = document.getElementById('frame1');
                     f1.onload = function() {
                         f1.dataset.loadedUrl = activePages[0];
@@ -1186,8 +1277,10 @@
                         overlay.style.opacity = '0';
                         setTimeout(() => overlay.style.display = 'none', 600);
                     }
-                    preloadNextSlide();
-                    scheduleNextRotation();
+                    if (!isInitialYasin && !isInitialKajian) {
+                        preloadNextSlide();
+                        scheduleNextRotation();
+                    }
                 }, 1200);
 
             } catch (err) {
@@ -1207,11 +1300,13 @@
             switch (e.key) {
                 case 'ArrowRight':
                 case 'MediaTrackNext':
+                    if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) break;
                     nextPage();
                     scheduleNextRotation();
                     break;
                 case 'ArrowLeft':
                 case 'MediaTrackPrevious':
+                    if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) break;
                     prevPage();
                     scheduleNextRotation();
                     break;
@@ -1445,11 +1540,13 @@
                             broadcastToActiveFrames({ type: 'UPDATE_SETTINGS', data: d });
                             break;
                         case 'NEXT':
+                            if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) break;
                             nextPage();
                             scheduleNextRotation();
                             showOsd('🎮 Remote: Slide Berikutnya');
                             break;
                         case 'PREV':
+                            if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) break;
                             prevPage();
                             scheduleNextRotation();
                             showOsd('🎮 Remote: Slide Sebelumnya');
@@ -1541,6 +1638,7 @@
                     touchEndX = e.changedTouches[0].screenX;
                     const diff = touchEndX - touchStartX;
                     if (Math.abs(diff) > 60) {
+                        if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) return;
                         if (diff < 0) {
                             nextPage();
                         } else {
@@ -1553,7 +1651,7 @@
 
             // SRE Rotation Watchdog (Mencegah Layar TV Freeze Akibat Background Sleep / Tab Throttling)
             setInterval(() => {
-                if (isPaused || isPrayerModeActive) return;
+                if (isPaused || isPrayerModeActive || isYasinModeActive || isKajianModeActive) return;
                 const elapsed = Date.now() - (window.__SRE_TELEMETRY__ ? window.__SRE_TELEMETRY__.lastSlideSwitchTime : Date.now());
                 if (elapsed > (rotationInterval + 10000)) {
                     if (window.__SRE_TELEMETRY__) {
