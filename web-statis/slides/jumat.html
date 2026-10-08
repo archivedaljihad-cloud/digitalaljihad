@@ -232,20 +232,38 @@
         }
 
         .jadwal-mendatang-badge {
-            background: #ffd700;
+            color-scheme: only light !important;
+            background: #ffd700 !important;
             color: #000000 !important;
-            padding: 4px 14px;
+            -webkit-text-fill-color: #000000 !important;
+            text-shadow: none !important;
+            padding: 5px 16px;
             border-radius: 20px;
-            font-size: 0.92rem;
-            font-weight: 800 !important;
+            font-size: 0.95rem;
+            font-weight: 900 !important;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            border: 1.5px solid rgba(0, 0, 0, 0.45) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+        }
+
+        .jadwal-mendatang-badge * {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            text-shadow: none !important;
         }
 
         .jadwal-mendatang-badge.badge-hari-ini {
             background: #28a745 !important;
             color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+        }
+
+        .jadwal-mendatang-badge.badge-hari-ini * {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
         }
 
         /* Pita Mutiara Hadits */
@@ -423,7 +441,7 @@
                     <div class="info-box-label"><i class="fas fa-calendar-alt"></i> Tanggal</div>
                     <div class="info-box-value">
                         <span class="value" id="valTanggal">Jumat Mendatang</span>
-                        <span class="jadwal-mendatang-badge" id="badgeJumatStatus"><i class="fas fa-calendar-week mr-1"></i> Jumat Mendatang</span>
+                        <span class="jadwal-mendatang-badge" id="badgeJumatStatus" style="color:#000000 !important; -webkit-text-fill-color:#000000 !important;"><i class="fas fa-calendar-week mr-1" style="color:#000000 !important;"></i> Jumat Mendatang</span>
                     </div>
                 </div>
 
@@ -543,10 +561,16 @@
                     if (badgeEl) {
                         if (isToday) {
                             badgeEl.className = 'jadwal-mendatang-badge badge-hari-ini';
+                            badgeEl.style.color = '#ffffff';
+                            badgeEl.style.webkitTextFillColor = '#ffffff';
+                            badgeEl.style.backgroundColor = '#28a745';
                             badgeEl.innerHTML = '<i class="fas fa-clock mr-1"></i> Hari Ini';
                         } else {
                             badgeEl.className = 'jadwal-mendatang-badge';
-                            badgeEl.innerHTML = '<i class="fas fa-calendar-week mr-1"></i> Jumat Mendatang';
+                            badgeEl.style.color = '#000000';
+                            badgeEl.style.webkitTextFillColor = '#000000';
+                            badgeEl.style.backgroundColor = '#ffd700';
+                            badgeEl.innerHTML = '<i class="fas fa-calendar-week mr-1" style="color:#000000 !important;"></i> Jumat Mendatang';
                         }
                     }
                 } else if (pj && (pj.tanggalJudul || pj.tanggalKas)) {

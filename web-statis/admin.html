@@ -7504,10 +7504,16 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
 
-            // PWA Service Worker Registration with Instant Auto-Reload on Update
+            // PWA Service Worker Registration with Instant Auto-Reload on Real Updates (Anti-Loop on First Visit)
             if ('serviceWorker' in navigator) {
                 let isRefreshing = false;
+                let hadController = Boolean(navigator.serviceWorker.controller);
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    // Cegah reload loop saat kunjungan pertama kali (uncontrolled -> controlled)
+                    if (!hadController) {
+                        hadController = true;
+                        return;
+                    }
                     if (!isRefreshing) {
                         isRefreshing = true;
                         console.log('🔄 [Admin PWA] Versi baru terdeteksi & aktif, memuat ulang halaman otomatis...');
@@ -7517,7 +7523,6 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
 
                 navigator.serviceWorker.register('sw.js').then((reg) => {
                     console.log('✅ [Admin PWA] Service Worker aktif:', reg.scope);
-                    reg.update(); // Periksa pembaruan segera
                 }).catch((err) => {
                     console.log('ℹ️ [Admin PWA] SW info:', err);
                 });
@@ -13555,7 +13560,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.9') {
+                                if (name !== 'aljihad-signage-v5.8.10') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }

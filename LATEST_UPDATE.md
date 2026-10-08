@@ -4,7 +4,35 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 14:00 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 16:15 WIB)
+
+### 🎨 REFINEMENT TAMPILAN TV DISPLAY & ANTI-LOOP RELOAD PERTAMA (Versi SW v5.8.10):
+1. **Pencegahan Loop Reload Saat Pertama Kali Buka & Optimasi Kecepatan:**
+   - **Root Cause Reload Loop:** Pada `index.html` dan `admin.html`, event listener `controllerchange` Service Worker memicu `window.location.reload()` tanpa memeriksa apakah halaman sebelumnya sudah dikontrol atau baru pertama kali dipasang (`navigator.serviceWorker.controller === null`). Saat pertama kali dibuka atau cache dibersihkan, aktivasi Service Worker langsung memicu reload seketika.
+   - **Solusi Anti-Loop:** Menambahkan flag pengecekan `let hadController = Boolean(navigator.serviceWorker.controller)`. Jika `!hadController`, Service Worker hanya mengambil kendali (*claim*) tanpa mereload halaman. Reload hanya dijalankan jika memang terjadi pembaruan versi nyata di latar belakang saat SW sudah aktif.
+   - **Optimasi Kecepatan Startup:** Menghapus `admin.html` (1.15 MB) dari daftar pre-cache awal `STATIC_ASSETS` di `sw.js` agar perangkat TV dan browser klien tidak terbebani download latar belakang yang masif saat pertama kali memuat signage. Aset admin tetap di-cache secara dinamis (*on-demand*) saat admin dibuka.
+2. **Gambar 1 (`slides/ambulance.html`): Hapus Kolom Kategori:**
+   - Menghilangkan `<th>` dan `<td>` Kategori dari tabel Kas Ambulance.
+   - Mengalokasikan ulang persentase lebar tabel (`col-tgl: 13%`, `col-desc: 42%`, `col-masuk: 15%`, `col-keluar: 15%`, `col-saldo: 15%`) sehingga teks uraian operasional tampil sangat lega dan tidak terpotong.
+3. **Gambar 2 (`slides/keuangan.html`): Hapus Kolom Kategori:**
+   - Menghilangkan `<th>` dan `<td>` Kategori dari tabel Kas Utama Masjid.
+   - Mengubah persentase lebar tabel secara proporsional sehingga kolom Uraian Kas mendapatkan ruang maksimal (42%) yang rapi dan nyaman dibaca dari kejauhan.
+4. **Gambar 3 (`slides/infaq.html`): Perbanyak Daftar Donatur Yang Tampil Bersamaan:**
+   - Mengoptimalkan vertical spacing (padding panel, title badge, card KPI, dan progress bar) sehingga kotak daftar donatur di bagian bawah mendapatkan tinggi vertikal yang jauh lebih luas.
+   - Mengurangi padding baris donatur secara proporsional sehingga kapasitas baris yang tampil serentak di layar TV meningkat drastis dari sebelumnya hanya 2 baris menjadi **6 hingga 8 baris nama donatur sekaligus**.
+5. **Gambar 4 (`slides/keuangan-summary.html`): Kotak Grafik Persegi Sama Sisi (1:1) & Kotak Mutasi Melebar:**
+   - Mengubah tata letak `.dashboard-row` dari grid 50:50 menjadi `display: flex; gap: 16px;`.
+   - Mengatur `.chart-box` menjadi persegi sama sisi (`aspect-ratio: 1 / 1; height: 100%; flex-shrink: 0;`).
+   - Mengatur `.trans-box` ("Mutasi Kas Terakhir") menjadi `flex: 1; min-width: 0;` sehingga melebar ke kanan (~65% lebar layar) dan seluruh detail transaksi kas terbaca sangat jelas dan leluasa.
+6. **Gambar 5 (`slides/jumat.html`): Font Badge "Jumat Mendatang" Solid Hitam:**
+   - Memperbaiki warna teks pada `.jadwal-mendatang-badge` agar tidak tertimpa mode kontras/dark browser TV dengan menambahkan:
+     `color-scheme: only light !important;`, `color: #000000 !important;`, `-webkit-text-fill-color: #000000 !important;`, `text-shadow: none !important;`, dan font icon hitam `color: #000000 !important;`.
+   - Menambahkan penguncian warna hitam langsung pada manipulasi DOM JavaScript dan atribut inline style.
+7. **Bumping Service Worker Cache (SOP #2):**
+   - Versi Service Worker dinaikkan ke **`v5.8.10`** (`aljihad-signage-v5.8.10`) pada `web-statis/sw.js` dan `web-statis/admin.html`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 14:00 WIB)
 
 ### 🏛️ STANDARISASI & PENYATUAN TOTAL SELURUH 11 MODUL ADMIN & MOBILE (UNIFIED FULL-STACK PIPELINE, Versi SW v5.8.9):
 1. **Latar Belakang & Mandat Utama:**

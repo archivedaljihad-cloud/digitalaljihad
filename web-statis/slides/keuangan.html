@@ -340,13 +340,12 @@
             vertical-align: middle;
         }
 
-        /* Kolom Proporsi Lebar (Kategori Utuh & Tidak Terpotong) */
-        .col-tgl { width: 11%; text-align: center; white-space: nowrap; }
-        .col-desc { width: 29%; text-align: left; }
-        .col-masuk { width: 14%; text-align: right; white-space: nowrap; }
-        .col-keluar { width: 14%; text-align: right; white-space: nowrap; }
+        /* Kolom Proporsi Lebar (Tanpa Kolom Kategori - Ruang Uraian Kas Maksimal & Lega) */
+        .col-tgl { width: 13%; text-align: center; white-space: nowrap; }
+        .col-desc { width: 42%; text-align: left; }
+        .col-masuk { width: 15%; text-align: right; white-space: nowrap; }
+        .col-keluar { width: 15%; text-align: right; white-space: nowrap; }
         .col-saldo { width: 15%; text-align: right; white-space: nowrap; }
-        .col-kat { width: 17%; text-align: center; padding: 8px 4px !important; }
 
         .keuangan-table tbody:hover {
             animation-play-state: paused;
@@ -549,7 +548,6 @@
                                 <th class="col-masuk"><i class="fas fa-arrow-circle-down mr-1"></i> Pemasukan</th>
                                 <th class="col-keluar"><i class="fas fa-arrow-circle-up mr-1"></i> Pengeluaran</th>
                                 <th class="col-saldo"><i class="fas fa-wallet mr-1"></i> Saldo Kas</th>
-                                <th class="col-kat"><i class="fas fa-tag mr-1"></i> Kategori</th>
                             </tr>
                         </thead>
                     </table>
@@ -557,7 +555,7 @@
                         <table class="keuangan-table">
                             <tbody id="keuangan-tbody">
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-muted">
+                                    <td colspan="5" class="text-center py-4 text-muted">
                                         <i class="fas fa-spinner fa-spin mr-2"></i> Menghubungkan ke Supabase...
                                     </td>
                                 </tr>
@@ -676,7 +674,7 @@
             const kasUtamaData = (data || []).filter(isKasUtamaMasjid);
 
             if (!kasUtamaData || kasUtamaData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">Belum ada catatan transaksi kas masjid yang tercatat.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">Belum ada catatan transaksi kas masjid yang tercatat.</td></tr>';
                 document.getElementById('statPemasukan').textContent = '0';
                 document.getElementById('statPengeluaran').textContent = '0';
                 document.getElementById('statSaldo').textContent = '0';
@@ -747,9 +745,6 @@
                         </td>
                         <td class="col-saldo">
                             <span class="rp-prefix">Rp</span><span class="amount-saldo-val">${formatRupiah(item.computedSaldo)}</span>
-                        </td>
-                        <td class="col-kat">
-                            <span class="badge-kategori-pill">${escapeHtml(katLabel)}</span>
                         </td>
                     </tr>
                 `;

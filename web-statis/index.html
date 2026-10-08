@@ -1496,10 +1496,16 @@
                 setInterval(broadcastTvState, 15000);
             }
 
-            // PWA Service Worker Registration with Instant Auto-Reload on Update
+            // PWA Service Worker Registration with Instant Auto-Reload on Real Updates (Anti-Loop on First Visit)
             if ('serviceWorker' in navigator) {
                 let isRefreshing = false;
+                let hadController = Boolean(navigator.serviceWorker.controller);
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    // Cegah reload loop saat kunjungan pertama kali (uncontrolled -> controlled)
+                    if (!hadController) {
+                        hadController = true;
+                        return;
+                    }
                     if (!isRefreshing) {
                         isRefreshing = true;
                         console.log('🔄 [PWA] Versi baru terdeteksi & aktif, memuat ulang halaman otomatis...');
@@ -1509,7 +1515,6 @@
 
                 navigator.serviceWorker.register('sw.js').then((reg) => {
                     console.log('✅ [PWA] Service Worker aktif:', reg.scope);
-                    reg.update(); // Periksa pembaruan segera
                 }).catch((err) => {
                     console.log('ℹ️ [PWA] Service Worker info:', err);
                 });

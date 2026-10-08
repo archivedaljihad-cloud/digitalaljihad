@@ -33,7 +33,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px 25px 85px 25px;
+            padding: 8px 24px 60px 24px;
             position: relative;
             z-index: 5;
         }
@@ -41,7 +41,7 @@
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             flex-shrink: 0;
             position: relative;
         }
@@ -99,8 +99,8 @@
 
         .panel {
             background: rgba(4, 25, 18, 0.72);
-            border-radius: 18px;
-            padding: 16px 24px;
+            border-radius: 16px;
+            padding: 10px 20px;
             backdrop-filter: blur(12px);
             box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
             border: 1.5px solid rgba(255, 215, 0, 0.45);
@@ -114,44 +114,44 @@
 
         .infaq-title-wrap {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             flex-shrink: 0;
         }
 
         .infaq-title-badge {
-            font-size: 1.60rem;
+            font-size: 1.35rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
-            padding: 6px 28px;
+            letter-spacing: 1.2px;
+            padding: 4px 22px;
             color: #ffffff;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
             border: 1.5px solid rgba(255, 215, 0, 0.65);
-            border-radius: 35px;
+            border-radius: 30px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25);
         }
 
-        .infaq-title-badge i { color: #ffd700; font-size: 1.5rem; }
+        .infaq-title-badge i { color: #ffd700; font-size: 1.30rem; }
 
         /* 4 STAT PILLS */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin-bottom: 6px;
             flex-shrink: 0;
         }
 
         .stat-pill {
             background: rgba(0, 0, 0, 0.45);
-            border-radius: 12px;
-            padding: 9px 16px;
+            border-radius: 10px;
+            padding: 6px 14px;
             display: flex;
             align-items: center;
-            gap: 13px;
+            gap: 10px;
             border: 1px solid rgba(255, 215, 0, 0.35);
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
         }
@@ -263,16 +263,16 @@
 
         .stat-info { display: flex; flex-direction: column; min-width: 0; }
         .stat-label { 
-            font-size: 0.88rem; 
+            font-size: 0.78rem; 
             text-transform: uppercase; 
             letter-spacing: 0.8px; 
             font-weight: 700; 
             color: rgba(255, 255, 255, 0.95); 
-            margin-bottom: 2px;
+            margin-bottom: 1px;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
         }
         .stat-value { 
-            font-size: 1.36rem; 
+            font-size: 1.25rem; 
             font-weight: 800; 
             font-family: monospace; 
             white-space: nowrap; 
@@ -286,9 +286,9 @@
         /* PROGRESS BAR */
         .progress-section {
             background: rgba(0, 0, 0, 0.35);
-            border-radius: 12px;
-            padding: 8px 16px;
-            margin-bottom: 12px;
+            border-radius: 10px;
+            padding: 5px 14px;
+            margin-bottom: 8px;
             border: 1px solid rgba(255, 215, 0, 0.25);
             flex-shrink: 0;
         }
@@ -297,15 +297,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
-            font-size: 0.88rem;
+            margin-bottom: 3px;
+            font-size: 0.82rem;
             font-weight: 700;
         }
 
         .progress-bar-bg {
-            height: 18px;
+            height: 12px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             border: 1px solid rgba(255, 215, 0, 0.3);
             position: relative;
@@ -314,7 +314,7 @@
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, #00e676 0%, #ffd700 100%);
-            border-radius: 10px;
+            border-radius: 8px;
             transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
         }
@@ -323,15 +323,15 @@
         .bottom-split-row {
             display: grid;
             grid-template-columns: 2.1fr 1fr;
-            gap: 14px;
+            gap: 12px;
             flex: 1;
             min-height: 0;
         }
 
         .donatur-box, .rek-box {
             background: rgba(0, 0, 0, 0.38);
-            border-radius: 14px;
-            padding: 12px 18px;
+            border-radius: 12px;
+            padding: 8px 14px;
             border: 1px solid rgba(255, 215, 0, 0.35);
             display: flex;
             flex-direction: column;
@@ -358,16 +358,16 @@
         /* HEADER KOLOM DAFTAR DONATUR (Nama Donatur, Keterangan Dekat Nominal, Nominal) */
         .donatur-header-row {
             display: grid;
-            grid-template-columns: minmax(0, 1.8fr) minmax(100px, auto) minmax(140px, auto);
-            gap: 12px;
-            padding: 4px 14px 6px 14px;
-            font-size: 0.88rem;
+            grid-template-columns: minmax(0, 1.8fr) minmax(90px, auto) minmax(130px, auto);
+            gap: 10px;
+            padding: 2px 10px 4px 10px;
+            font-size: 0.80rem;
             font-weight: 700;
             color: rgba(255, 215, 0, 0.92);
             letter-spacing: 0.5px;
             text-transform: uppercase;
             border-bottom: 1px dashed rgba(255, 215, 0, 0.25);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             flex-shrink: 0;
         }
 
@@ -403,7 +403,7 @@
         .donatur-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
         }
 
         .donatur-list.can-scroll {
@@ -422,16 +422,16 @@
 
         .donatur-item {
             display: grid;
-            grid-template-columns: minmax(0, 1.8fr) minmax(100px, auto) minmax(140px, auto);
+            grid-template-columns: minmax(0, 1.8fr) minmax(90px, auto) minmax(130px, auto);
             align-items: center;
-            padding: 8px 14px;
-            border-radius: 10px;
+            padding: 4px 10px;
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
-            font-size: 1.15rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+            font-size: 1rem;
             flex-shrink: 0;
-            gap: 12px;
+            gap: 10px;
         }
 
         .donatur-left {
@@ -442,12 +442,12 @@
         }
 
         .donatur-no {
-            display: none !important; /* Dihilangkan sesuai permintaan user agar nama donatur terlihat full & lengkap */
+            display: none !important;
         }
 
         .donatur-name {
             font-weight: 700;
-            font-size: 1.18rem;
+            font-size: 1.05rem;
             color: #ffffff;
             white-space: nowrap;
             overflow: hidden;
@@ -455,7 +455,7 @@
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
             min-width: 0;
         }
 
@@ -479,9 +479,9 @@
             background: rgba(255, 215, 0, 0.14);
             border: 1px solid rgba(255, 215, 0, 0.45);
             color: #ffd700;
-            padding: 3px 10px;
-            border-radius: 7px;
-            font-size: 0.95rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
             font-weight: 700;
             white-space: nowrap;
             overflow: hidden;
@@ -494,13 +494,13 @@
         .donatur-ket-empty {
             color: rgba(255, 255, 255, 0.25);
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
             padding-left: 6px;
         }
 
         .donatur-val {
             font-weight: 800;
-            font-size: 1.32rem;
+            font-size: 1.16rem;
             color: #ff9900;
             font-family: monospace;
             white-space: nowrap;
@@ -509,15 +509,15 @@
             letter-spacing: 0.3px;
         }
 
-        /* Spasi 1 Baris Antara Terakhir dan Pertama */
+        /* Spasi Baris Antara Terakhir dan Pertama */
         .donatur-loop-spacer {
-            height: 48px;
+            height: 24px;
             flex-shrink: 0;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 4px 0;
+            margin: 2px 0;
         }
 
         .donatur-loop-spacer .spacer-line {
@@ -534,10 +534,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(4, 25, 18, 0.95);
-            padding: 0 12px;
+            padding: 0 10px;
             color: rgba(255, 215, 0, 0.65);
-            font-size: 0.90rem;
-            letter-spacing: 5px;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
         }
 
         /* Rekening & QRIS */
