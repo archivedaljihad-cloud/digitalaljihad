@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
     'login.html',
     'prayer-mode.html',
     'petugas.html',
+    'modeinput.html',
     'favicon.ico',
     'robots.txt',
     'sitemap.xml',

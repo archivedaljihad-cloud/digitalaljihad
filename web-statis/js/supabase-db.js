@@ -501,6 +501,311 @@
         },
 
         /**
+         * Simpan Transaksi Kas Terpadu (Kas Utama & Ambulance - Bendahara)
+         * Menyimpan langsung ke tabel SQL 'keuangan' atau 'keuangan_ambulance',
+         * update cache lokal, dan trigger broadcast seketika (<50ms)
+         * @param {Object} payload { tanggal, deskripsi, pemasukan, pengeluaran, saldo, kategori }
+         */
+        async saveTransaksiKas(payload) {
+            if (!payload || !payload.deskripsi) return { success: false, error: 'Deskripsi transaksi wajib diisi' };
+            const kat = payload.kategori || 'Kas Utama Masjid';
+            const isAmbulance = (kat === 'Kas Ambulance');
+            const targetTable = isAmbulance ? 'keuangan_ambulance' : 'keuangan';
+            const cleanPayload = {
+                tanggal: payload.tanggal || new Date().toISOString().split('T')[0],
+                deskripsi: payload.deskripsi,
+                pemasukan: parseFloat(payload.pemasukan) || 0,
+                pengeluaran: parseFloat(payload.pengeluaran) || 0,
+                saldo: parseFloat(payload.saldo) || (parseFloat(payload.pemasukan) || 0),
+                kategori: kat
+            };
+
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${targetTable}`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(cleanPayload)
+                });
+
+                if (res.ok) {
+                    const inserted = await res.json().catch(() => [cleanPayload]);
+                    const rowData = Array.isArray(inserted) ? inserted[0] : inserted;
+                    if (typeof this.broadcastChange === 'function') {
+                        this.broadcastChange(targetTable, 'INSERT', rowData, 'Bendahara Unified');
+                    }
+                    if (typeof this.sendRemoteCommand === 'function') {
+                        this.sendRemoteCommand(isAmbulance ? 'SYNC_AMBULANCE' : 'SYNC_KEUANGAN', rowData);
+                    }
+                    return { success: true, data: rowData };
+                } else {
+                    const errJson = await res.json().catch(() => ({}));
+                    return { success: false, error: errJson.message || 'Gagal menyimpan transaksi' };
+                }
+            } catch (err) {
+                console.error('[SupabaseDB] saveTransaksiKas failed:', err);
+                return { success: false, error: err.message };
+            }
+        },
+
+        /**
+         * Hapus Transaksi Kas Terpadu
+         * @param {number|string} id
+         * @param {string} table 'keuangan' | 'keuangan_ambulance'
+         */
+        async deleteTransaksiKas(id, table = 'keuangan') {
+            if (!id) return false;
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${table}?id=eq.${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+                    }
+                });
+                if (res.ok) {
+                    if (typeof this.broadcastChange === 'function') {
+                        this.broadcastChange(table, 'DELETE', { id }, 'Bendahara Unified');
+                    }
+                    if (typeof this.sendRemoteCommand === 'function') {
+                        this.sendRemoteCommand(table === 'keuangan_ambulance' ? 'SYNC_AMBULANCE' : 'SYNC_KEUANGAN', { id });
+                    }
+                    return true;
+                }
+                return false;
+            } catch (err) {
+                console.warn('[SupabaseDB] deleteTransaksiKas failed:', err);
+                return false;
+            }
+        },
+
+        /**
+         * Simpan Data Qurban Terpadu (Admin & Petugas Mobile)
+         * @param {Object} payload { qurban_data, qurban_sapi, qurban_kambing, qurban_donatur, qurban_jam_sembelih, qurban_lokasi_sembelih }
+         */
+        async saveQurbanUnified(payload) {
+            if (!payload) return { success: false };
+            try {
+                const qList = Array.isArray(payload.qurban_data) ? payload.qurban_data : [];
+                const updateObj = {
+                    qurban_data: qList,
+                    qurban_sapi: payload.qurban_sapi ?? payload.sapi ?? 0,
+                    qurban_kambing: payload.qurban_kambing ?? payload.kambing ?? 0,
+                    qurban_donatur: payload.qurban_donatur ?? payload.donatur ?? 0,
+                    qurban_jam_sembelih: payload.qurban_jam_sembelih || '07:30 WIB s/d Selesai',
+                    qurban_lokasi_sembelih: payload.qurban_lokasi_sembelih || "Halaman Belakang Masjid Jami' Al-Jihad"
+                };
+
+                localStorage.setItem('cached_qurban_data', JSON.stringify(qList));
+
+                await Promise.all([
+                    this.saveSettingItem('cached_qurban_data', qList),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_CONFIG.anonKey,
+                            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updateObj)
+                    })
+                ]);
+
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('qurban', 'UPDATE', updateObj, 'Qurban Unified');
+                }
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_QURBAN', updateObj);
+                }
+                return { success: true, data: updateObj };
+            } catch (err) {
+                console.error('[SupabaseDB] saveQurbanUnified failed:', err);
+                return { success: false, error: err.message };
+            }
+        },
+
+        /**
+         * Simpan Petugas & Tromol Ramadhan Terpadu
+         * @param {Object} payload { malam_ke, imam, muadzin, kultum_penceramah, kultum_tema, bilal, infaq_tromol, ... }
+         */
+        async saveRamadhanUnified(payload) {
+            if (!payload) return { success: false };
+            try {
+                let currentPetugas = {};
+                try {
+                    const c = localStorage.getItem('cached_ramadhan_petugas');
+                    if (c) currentPetugas = JSON.parse(c);
+                } catch(e) {}
+
+                const dataPetugas = Object.assign(currentPetugas, {
+                    malam_ke: payload.malam_ke || currentPetugas.malam_ke || 'Malam Ramadhan',
+                    imam: payload.imam || currentPetugas.imam || '-',
+                    muadzin: payload.muadzin || currentPetugas.muadzin || '-',
+                    kultum_penceramah: payload.kultum_penceramah || payload.kultum || currentPetugas.kultum_penceramah || '-',
+                    kultum_tema: payload.kultum_tema || payload.tema || currentPetugas.kultum_tema || '',
+                    bilal: payload.bilal || currentPetugas.bilal || '-'
+                });
+
+                localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(dataPetugas));
+
+                const patchBody = { ramadhan_petugas: dataPetugas };
+
+                // Jika ada data mutasi tromol baru yang disertakan
+                if (payload.tromol_item) {
+                    let infaqList = [];
+                    try {
+                        const raw = localStorage.getItem('cached_ramadhan_infaq');
+                        if (raw) infaqList = JSON.parse(raw);
+                    } catch(e) {}
+                    infaqList.unshift(payload.tromol_item);
+                    localStorage.setItem('cached_ramadhan_infaq', JSON.stringify(infaqList));
+                    patchBody.ramadhan_infaq = infaqList;
+                }
+
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(patchBody)
+                });
+
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('ramadhan', 'UPDATE', patchBody, 'Ramadhan Unified');
+                }
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_RAMADHAN', patchBody);
+                }
+                return { success: true, data: patchBody };
+            } catch (err) {
+                console.error('[SupabaseDB] saveRamadhanUnified failed:', err);
+                return { success: false, error: err.message };
+            }
+        },
+
+        /**
+         * Simpan Undangan Jama'ah Terpadu (Mendukung baik Array maupun Single Object)
+         * @param {Array|Object} inputData
+         */
+        async saveUndanganUnified(inputData) {
+            if (!inputData) return { success: false };
+            try {
+                let list = [];
+                try {
+                    const c = localStorage.getItem('aljihad_undangan_eksternal') || localStorage.getItem('cached_undangan_eksternal');
+                    if (c) list = JSON.parse(c);
+                } catch(e) {}
+
+                if (Array.isArray(inputData)) {
+                    list = inputData;
+                } else if (typeof inputData === 'object') {
+                    const item = {
+                        id: inputData.id || Date.now(),
+                        nama_pengundang: inputData.pengundang || inputData.nama_pengundang || '',
+                        penceramah: inputData.penceramah || '',
+                        waktu_acara: inputData.waktu || inputData.waktu_acara || '',
+                        tanggal_acara: inputData.tanggal || inputData.tanggal_acara || '',
+                        nama_acara: inputData.acara || inputData.nama_acara || '',
+                        tempat_acara: inputData.tempat || inputData.tempat_acara || '',
+                        keterangan: inputData.keterangan || '',
+                        urutan: inputData.urutan || 1,
+                        is_active: inputData.is_active !== false
+                    };
+                    const existIdx = list.findIndex(u => String(u.id) === String(item.id));
+                    if (existIdx !== -1) {
+                        list[existIdx] = item;
+                    } else {
+                        list.unshift(item);
+                    }
+                    // Simpan juga versi single object untuk kompatibilitas form mobile
+                    await this.saveSettingItem('undangan_eksternal', inputData);
+                }
+
+                localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(list));
+                localStorage.setItem('cached_undangan_eksternal', JSON.stringify(list));
+
+                await this.saveSettingItem('undangan_eksternal_list', list);
+
+                // Coba simpan ke tabel jika ada
+                try {
+                    const client = getClient();
+                    if (client) {
+                        for (const u of list) {
+                            await client.from('undangan_eksternal').upsert([u]).catch(() => {});
+                        }
+                    }
+                } catch(e) {}
+
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('undangan', 'SYNC', list, 'Undangan Unified');
+                }
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_UNDANGAN', list);
+                }
+                return { success: true, data: list };
+            } catch (err) {
+                console.error('[SupabaseDB] saveUndanganUnified failed:', err);
+                return { success: false, error: err.message };
+            }
+        },
+
+        /**
+         * Simpan Pengaturan Durasi & Jadwal Sholat Terpadu
+         * @param {Object} payload { prayer_mode_enabled, countdown_adzan_duration, adzan_duration, prayer_mode_duration, prayer_mode_jumat_duration, ... }
+         */
+        async saveJadwalSholatUnified(payload) {
+            if (!payload) return { success: false };
+            try {
+                const updateObj = {
+                    prayer_mode_enabled: payload.prayer_mode_enabled !== false,
+                    countdown_adzan_duration: parseInt(payload.countdown_adzan_duration || payload.cd_adzan || 5, 10),
+                    adzan_duration: parseInt(payload.adzan_duration || payload.adzan || 3, 10),
+                    prayer_mode_duration: parseInt(payload.prayer_mode_duration || payload.sholat || 15, 10),
+                    iqamah_duration: parseInt(payload.iqamah_duration || payload.iqomah || 10, 10),
+                    prayer_mode_jumat_duration: parseInt(payload.prayer_mode_jumat_duration || payload.jumat_durasi || 50, 10)
+                };
+
+                let currentSettings = {};
+                try {
+                    const c = localStorage.getItem('cached_app_settings');
+                    if (c) currentSettings = JSON.parse(c);
+                } catch(e) {}
+                const merged = Object.assign({}, currentSettings, updateObj);
+                localStorage.setItem('cached_app_settings', JSON.stringify(merged));
+                localStorage.setItem('display_prayer_mode_enabled', updateObj.prayer_mode_enabled);
+                localStorage.setItem('display_prayer_mode_jumat_duration', updateObj.prayer_mode_jumat_duration);
+
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updateObj)
+                });
+
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('app_settings', 'UPDATE', updateObj, 'Jadwal Sholat Unified');
+                }
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_JADWAL_SHOLAT', updateObj);
+                    this.sendRemoteCommand('UPDATE_SETTINGS', updateObj);
+                }
+                return { success: true, data: updateObj };
+            } catch (err) {
+                console.error('[SupabaseDB] saveJadwalSholatUnified failed:', err);
+                return { success: false, error: err.message };
+            }
+        },
+
+        /**
          * Simpan / Perbarui app_settings ke Cloud Supabase (id=1 dan key-value dinamis)
          * Mendukung pembaruan sebagian (partial update) dan pembaruan menyeluruh
          * @param {Object} updatedFields
@@ -1533,6 +1838,7 @@
                             'SYNC_AMBULANCE': 'keuangan_ambulance',
                             'SYNC_INFAQ': 'program_infaq',
                             'SYNC_JUMAT': 'sholat_jumat',
+                            'SYNC_JADWAL_SHOLAT': 'jadwal_sholat',
                             'SYNC_SLIDES': 'slides',
                             'SYNC_QRIS': 'qris',
                             'SYNC_QURBAN': 'qurban',
@@ -1795,47 +2101,7 @@
          * Simpan / Perbarui daftar Surat Undangan Eksternal
          */
         async saveUndanganEksternal(undanganList) {
-            if (!Array.isArray(undanganList)) return false;
-
-            // 1. Simpan ke local cache seketika (offline-ready)
-            try {
-                localStorage.setItem('aljihad_undangan_eksternal', JSON.stringify(undanganList));
-                localStorage.setItem('cached_undangan_eksternal', JSON.stringify(undanganList));
-            } catch (e) {}
-
-            // 2. Coba simpan ke Supabase jika tabel tersedia
-            try {
-                const client = getClient();
-                if (client) {
-                    for (const item of undanganList) {
-                        const payload = {
-                            nama_pengundang: item.nama_pengundang,
-                            nama_acara: item.nama_acara,
-                            penceramah: item.penceramah || '',
-                            tanggal_acara: item.tanggal_acara || '',
-                            waktu_acara: item.waktu_acara || '',
-                            tempat_acara: item.tempat_acara || '',
-                            keterangan: item.keterangan || '',
-                            is_active: item.is_active !== false,
-                            urutan: parseInt(item.urutan) || 1
-                        };
-
-                        if (item.id && typeof item.id === 'number') {
-                            await client.from('undangan_eksternal').upsert({ id: item.id, ...payload });
-                        } else {
-                            await client.from('undangan_eksternal').insert([payload]);
-                        }
-                    }
-                }
-            } catch (err) {
-                console.warn('Gagal sinkronisasi undangan_eksternal ke Supabase:', err);
-            }
-
-            if (typeof this.broadcastChange === 'function') {
-                this.broadcastChange('undangan', 'UPDATE', { list: undanganList }, 'Admin Undangan');
-            }
-
-            return true;
+            return this.saveUndanganUnified(undanganList);
         },
 
         /**

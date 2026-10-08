@@ -4,30 +4,28 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 12:55 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 14:00 WIB)
 
-### 🏛️ REFORMASI ARSITEKTUR TOTAL PETUGAS JUMAT: PENYATUAN PIPELINE SATU PINTU (UNIFIED SINGLE MASTER PIPELINE, Versi SW v5.8.9):
-1. **Latar Belakang & Mandat Pengguna:**
-   - Menyelesaikan siklus desinkronisasi berulang antara Admin Laptop, Admin HP Mobile, dan Smart TV Display secara tuntas dan permanen.
-   - Menghapus disparitas antar-halaman input sehingga siapa pun yang mengedit di perangkat mana pun (Laptop via `admin.html`, HP Mobile via `petugas.html` atau `modeinput.html`), data dijamin 100% konsisten, instan (<50ms), dan tidak akan pernah salah orang lagi.
-2. **Implementasi Unified Single Master Pipeline:**
-   - **Central Database Engine (`web-statis/js/supabase-db.js`):**
-     - Menambahkan fungsi sentral `SupabaseDB.saveSholatJumat(payload)` yang bertindak sebagai satu-satunya gerbang resmi penyimpanan. Fungsi ini mengeksekusi sinkronisasi atomik ke seluruh wadah data:
-       a. Tabel SQL `sholat_jumat` (master resmi dengan format bilal & maklumat otomatis).
-       b. Tabel `app_settings` baris id: 1 (`prayer_mode_jumat_duration` dan `running_text_pages.jumat_maklumat`/`jumat_bilal`).
-       c. Tabel `app_settings` baris id: 9 (`pengumuman_jumat.petugas`).
-       d. LocalStorage cache (`cached_sholat_jumat`, `cached_jumat_bilal`, `cached_jumat_maklumat`).
-       e. Realtime Broadcast ke Smart TV via `sholat_jumat`, `app_settings`, dan `remoteCommand('SYNC_JUMAT')`.
-     - Meng-upgrade fungsi `SupabaseDB.getSholatJumat()` untuk secara otomatis mengekstrak dan menormalisasi `bilal`, `maklumat`, dan `raw_bilal`.
-   - **Penyelarasan Quick Input Mobile (`web-statis/petugas.html` & `web-statis/modeinput.html`):**
-     - Form penyimpanan `handleSaveModule()` kini langsung memanggil `SupabaseDB.saveSholatJumat()`, tidak lagi menulis ke wadah terpisah.
-     - Form pemuatan `initPetugas()` memprioritaskan data master dari `SupabaseDB.getSholatJumat()` dan memblokir penimpaan dari state lokal/cloud usang `quick_petugas_state_v2`.
-   - **Penyelarasan Admin Utama (`web-statis/admin.html`):**
-     - Terintegrasi dengan pipeline `SupabaseDB.saveSholatJumat()` sehingga seluruh jalur input terikat pada kontrak data yang seragam.
-   - **Slide TV Display (`web-statis/slides/jumat.html`):**
-     - Menerima data terstandarisasi langsung dari objek ternormalisasi tanpa resiko *priority inversion* atau data usang.
-3. **Bumping Versi Cache Service Worker (SOP #2):**
-   - Dinaikkan ke **`v5.8.9`** (`aljihad-signage-v5.8.9`) pada `web-statis/sw.js` dan `web-statis/admin.html`.
+### 🏛️ STANDARISASI & PENYATUAN TOTAL SELURUH 11 MODUL ADMIN & MOBILE (UNIFIED FULL-STACK PIPELINE, Versi SW v5.8.9):
+1. **Latar Belakang & Mandat Utama:**
+   - Menyelesaikan seluruh potensi desinkronisasi atau ketidaksinkronan data di semua 11 modul aplikasi antara Admin Laptop (`admin.html`), Mode Input Cepat HP Mobile (`petugas.html` & `modeinput.html`), dan Tampilan Smart TV Display secara tuntas, permanen, dan arsitektural.
+2. **Implementasi Unified Central Master Pipeline (`web-statis/js/supabase-db.js`):**
+   - **`saveSholatJumat(payload)`**: Menyimpan ke tabel `sholat_jumat`, `app_settings` id: 1 (`prayer_mode_jumat_duration`, `jumat_bilal`, `jumat_maklumat`), `app_settings` id: 9 (`pengumuman_jumat.petugas`), memutakhirkan cache lokal, serta memancarkan Realtime Broadcast (`sholat_jumat`, `app_settings`, `pengumuman_jumat`, dan remote command `SYNC_JUMAT`).
+   - **`saveTransaksiKas(payload)` & `deleteTransaksiKas(id, table)`**: Menyatukan pencatatan dan penghapusan transaksi Kas Utama dan Kas Ambulance dengan integrasi langsung ke tabel SQL Supabase `keuangan` / `keuangan_ambulance`, mutasi cache lokal, serta instant broadcast.
+   - **`saveQurbanUnified(payload)`**: Menyatukan penyimpanan data shohibul qurban serta jadwal penyembelihan ke `app_settings` id: 1 dan `cached_qurban_data`.
+   - **`saveRamadhanUnified(payload)`**: Menyatukan penyimpanan jadwal imam, kultum, bilal tarawih ke `app_settings.ramadhan_petugas` serta otomatis mencatat transaksi tromol ke tabel `keuangan`.
+   - **`saveJadwalSholatUnified(payload)`**: Menyatukan penyimpanan durasi adzan, countdown adzan, iqomah, prayer mode, dan prayer mode jumat ke `app_settings` serta memicu sinyal `SYNC_JADWAL_SHOLAT`.
+   - **`saveUndanganUnified(payload)` & `saveUndanganEksternal(list)`**: Menyatukan penyimpanan surat undangan eksternal ke tabel Supabase `undangan_eksternal` dan `app_settings.undangan_eksternal`.
+   - **`subscribeRemoteCommands` & `onDataChange`**: Memperluas pemetaan tabel (`tableMap`) dengan `'SYNC_JADWAL_SHOLAT': 'jadwal_sholat'`, `'SYNC_KEUANGAN'`, `'SYNC_AMBULANCE'`, `'SYNC_INFAQ'`, dll.
+3. **Penyelarasan Quick Input Mobile (`web-statis/petugas.html` & `web-statis/modeinput.html`):**
+   - **`handleSaveModule()`**: Seluruh 11 modul (Jum'at, Kas Utama, Kas Ambulance, Infak, Undangan, Qurban, Ramadhan, Malam Ahad, Tafsir, Jadwal Sholat, Petugas Cepat) kini 100% dialirkan ke Unified Central Methods di `SupabaseDB`.
+   - **`initPetugas()`**: Form input kini memuat langsung data master cloud terkini untuk seluruh modul (termasuk Kajian Sabtu/Ahad, Petugas Ramadhan, Durasi Sholat, dan Ringkasan Hewan Qurban) sehingga tampilan input di ponsel petugas selalu up-to-date dan tidak pernah tertimpa cache usang.
+4. **Penyelarasan Panel Admin Laptop (`web-statis/admin.html`):**
+   - Fungsi `simpanPetugasJumat()`, `simpanTransaksiKas()`, `hapusTransaksi()`, `simpanDataQurban()`, dan `simpanPetugasRamadhan()` dialirkan langsung melalui method `SupabaseDB` yang seragam.
+5. **Pembaruan Service Worker & Caching (SOP #2):**
+   - Service Worker versi **`v5.8.9`** (`aljihad-signage-v5.8.9`) aktif.
+   - Mendaftarkan `modeinput.html` ke dalam daftar `STATIC_ASSETS` di `web-statis/sw.js`.
+   - Seluruh browser klien dan Smart TV otomatis menginvaliasi cache usang saat rilis baru terdeteksi.
 
 
 ## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 09:35 WIB)

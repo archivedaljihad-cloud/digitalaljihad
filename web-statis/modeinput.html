@@ -1797,6 +1797,47 @@
                             }
                         }
                     } catch(e) {}
+
+                    // 5. Ambil data Master Kajian, Ramadhan, Durasi Sholat & Qurban dari Supabase Cloud
+                    try {
+                        const appSet = await window.SupabaseDB.getSettings();
+                        if (appSet) {
+                            if (appSet.kajian_sabtu_data) {
+                                const kd = (typeof appSet.kajian_sabtu_data === 'string') ? JSON.parse(appSet.kajian_sabtu_data) : appSet.kajian_sabtu_data;
+                                if (kd && modules['ahad']) {
+                                    if (kd.tema_kajian) modules['ahad'].fields[0].val = kd.tema_kajian;
+                                    if (kd.pekan_label) modules['ahad'].fields[1].val = kd.pekan_label;
+                                    if (kd.waktu_pelaksanaan) modules['ahad'].fields[4].val = kd.waktu_pelaksanaan;
+                                    if (kd.ustadz_nama) modules['ahad'].fields[5].val = kd.ustadz_nama;
+                                    if (kd.kitab_rujukan) modules['ahad'].fields[6].val = kd.kitab_rujukan;
+                                }
+                            }
+                            if (appSet.ramadhan_petugas && modules['ramadhan']) {
+                                const rp = (typeof appSet.ramadhan_petugas === 'string') ? JSON.parse(appSet.ramadhan_petugas) : appSet.ramadhan_petugas;
+                                if (rp) {
+                                    if (rp.malam_ke) modules['ramadhan'].fields[0].val = rp.malam_ke;
+                                    if (rp.imam) modules['ramadhan'].fields[1].val = rp.imam;
+                                    if (rp.kultum_penceramah) modules['ramadhan'].fields[2].val = rp.kultum_penceramah;
+                                    if (rp.kultum_tema) modules['ramadhan'].fields[3].val = rp.kultum_tema;
+                                    if (rp.bilal) modules['ramadhan'].fields[4].val = rp.bilal;
+                                }
+                            }
+                            if (modules['jadwal-sholat']) {
+                                if (appSet.countdown_adzan_duration) modules['jadwal-sholat'].fields[5].val = String(appSet.countdown_adzan_duration);
+                                if (appSet.adzan_duration) modules['jadwal-sholat'].fields[6].val = String(appSet.adzan_duration);
+                                if (appSet.iqamah_duration) modules['jadwal-sholat'].fields[7].val = String(appSet.iqamah_duration);
+                                if (appSet.prayer_mode_duration) modules['jadwal-sholat'].fields[8].val = String(appSet.prayer_mode_duration);
+                                if (appSet.prayer_mode_jumat_duration) modules['jadwal-sholat'].fields[9].val = String(appSet.prayer_mode_jumat_duration);
+                            }
+                            if (modules['qurban']) {
+                                if (appSet.qurban_sapi) modules['qurban'].fields[0].val = String(appSet.qurban_sapi);
+                                if (appSet.qurban_kambing) modules['qurban'].fields[1].val = String(appSet.qurban_kambing);
+                                if (appSet.qurban_donatur) modules['qurban'].fields[2].val = String(appSet.qurban_donatur);
+                                if (appSet.qurban_jam_sembelih) modules['qurban'].fields[4].val = appSet.qurban_jam_sembelih;
+                                if (appSet.qurban_lokasi_sembelih) modules['qurban'].fields[5].val = appSet.qurban_lokasi_sembelih;
+                            }
+                        }
+                    } catch(e) {}
                 }
             } catch (err) {
                 console.warn('Inisialisasi data realtime:', err);
@@ -2744,10 +2785,14 @@
                             qurban_jam_sembelih: mod.getVal('f_jam_sembelih'),
                             qurban_lokasi_sembelih: mod.getVal('f_lokasi_sembelih')
                         };
-                        await window.SupabaseDB.setAppSetting('qurban', qPayload);
-                        await window.SupabaseDB.setAppSetting('cached_qurban_data', qurbanShohibulList);
-                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
-                            window.SupabaseDB.broadcastChange('qurban', 'UPDATE', qPayload, 'Panitia Qurban Mobile');
+                        if (typeof window.SupabaseDB.saveQurbanUnified === 'function') {
+                            await window.SupabaseDB.saveQurbanUnified(qPayload);
+                        } else {
+                            await window.SupabaseDB.setAppSetting('qurban', qPayload);
+                            await window.SupabaseDB.setAppSetting('cached_qurban_data', qurbanShohibulList);
+                            if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                                window.SupabaseDB.broadcastChange('qurban', 'UPDATE', qPayload, 'Panitia Qurban Mobile');
+                            }
                         }
                     } else if (currentActiveModule === 'pengumuman') {
                         const pjPayload = {
@@ -2786,6 +2831,9 @@
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('keuangan', 'UPDATE', kuPayload, 'Bendahara Mobile');
                         }
+                        if (typeof window.SupabaseDB.sendRemoteCommand === 'function') {
+                            window.SupabaseDB.sendRemoteCommand('SYNC_KEUANGAN', kuPayload);
+                        }
                     } else if (currentActiveModule === 'ambulance') {
                         const ambPayload = {
                             periode: mod.getVal('f_tgl_amb'),
@@ -2796,6 +2844,9 @@
                         await window.SupabaseDB.setAppSetting('laporan_kas_ambulance', ambPayload);
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('keuangan_ambulance', 'UPDATE', ambPayload, 'Bendahara Mobile');
+                        }
+                        if (typeof window.SupabaseDB.sendRemoteCommand === 'function') {
+                            window.SupabaseDB.sendRemoteCommand('SYNC_AMBULANCE', ambPayload);
                         }
                     } else if (currentActiveModule === 'infaq') {
                         // Sinkronkan status aktif program ke Supabase & LocalStorage
@@ -2813,6 +2864,9 @@
                                 if (typeof window.SupabaseDB.broadcastChange === 'function') {
                                     window.SupabaseDB.broadcastChange('program_infaq', 'UPDATE', { id: selectedProgramInfaqId, is_active: true }, 'Petugas Mobile');
                                 }
+                                if (typeof window.SupabaseDB.sendRemoteCommand === 'function') {
+                                    window.SupabaseDB.sendRemoteCommand('SYNC_INFAQ', { id: selectedProgramInfaqId });
+                                }
                             }
                         } catch (e) {
                             console.warn('Gagal sinkron status program infaq:', e);
@@ -2827,9 +2881,65 @@
                             tempat: mod.getVal('f_und_tempat'),
                             keterangan: mod.getVal('f_und_keterangan')
                         };
-                        await window.SupabaseDB.setAppSetting('undangan_eksternal', undPayload);
-                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
-                            window.SupabaseDB.broadcastChange('undangan', 'UPDATE', undPayload, 'Petugas Mobile');
+                        if (typeof window.SupabaseDB.saveUndanganUnified === 'function') {
+                            await window.SupabaseDB.saveUndanganUnified(undPayload);
+                        } else {
+                            await window.SupabaseDB.setAppSetting('undangan_eksternal', undPayload);
+                            if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                                window.SupabaseDB.broadcastChange('undangan', 'UPDATE', undPayload, 'Petugas Mobile');
+                            }
+                        }
+                    } else if (currentActiveModule === 'ahad') {
+                        const ahadPayload = {
+                            pekan_label: mod.getVal('f_pekan_ahad') || 'Pekan ke-1',
+                            bulan_label: `${mod.getVal('f_bulan_ahad')} ${mod.getVal('f_tahun_ahad')}`,
+                            tema_kajian: mod.getVal('f_tema_ahad'),
+                            ustadz_nama: mod.getVal('f_ustadz_ahad'),
+                            kitab_rujukan: mod.getVal('f_kitab_ahad'),
+                            waktu_pelaksanaan: mod.getVal('f_jam_ahad')
+                        };
+                        if (typeof window.SupabaseDB.saveKajianData === 'function') {
+                            await window.SupabaseDB.saveKajianData(ahadPayload, true, mod.getVal('f_jam_ahad'));
+                        }
+                    } else if (currentActiveModule === 'tafsir') {
+                        const tafsirPayload = {
+                            judul: mod.getVal('f_judul_tafsir'),
+                            jadwal: mod.getVal('f_jadwal_tafsir'),
+                            kitab: mod.getVal('f_kitab_tafsir'),
+                            pemateri: mod.getVal('f_pemateri_tafsir'),
+                            waktu: mod.getVal('f_waktu_tafsir'),
+                            keterangan: mod.getVal('f_keterangan_tafsir')
+                        };
+                        if (typeof window.SupabaseDB.saveAgendaRutin === 'function') {
+                            await window.SupabaseDB.saveAgendaRutin(tafsirPayload);
+                        }
+                    } else if (currentActiveModule === 'ramadhan') {
+                        const ramPayload = {
+                            malam_ke: mod.getVal('f_ram_malam'),
+                            imam: mod.getVal('f_ram_imam'),
+                            kultum_penceramah: mod.getVal('f_ram_kultum'),
+                            kultum_tema: mod.getVal('f_ram_tema'),
+                            bilal: mod.getVal('f_ram_bilal'),
+                            tromol_item: {
+                                tanggal: mod.getVal('f_ram_tgl_tromol') || new Date().toISOString().split('T')[0],
+                                uraian: `Infaq Tromol Tarawih (${mod.getVal('f_ram_malam') || 'Ramadhan'})`,
+                                jenis: 'masuk',
+                                nominal: parseNominal(mod.getVal('f_ram_tromol'))
+                            }
+                        };
+                        if (typeof window.SupabaseDB.saveRamadhanUnified === 'function') {
+                            await window.SupabaseDB.saveRamadhanUnified(ramPayload);
+                        }
+                    } else if (currentActiveModule === 'jadwal-sholat') {
+                        const jsPayload = {
+                            cd_adzan: mod.getVal('f_cd_adzan'),
+                            adzan: mod.getVal('f_adzan'),
+                            iqomah: mod.getVal('f_iqomah'),
+                            sholat: mod.getVal('f_sholat'),
+                            jumat_durasi: mod.getVal('f_jumat_durasi')
+                        };
+                        if (typeof window.SupabaseDB.saveJadwalSholatUnified === 'function') {
+                            await window.SupabaseDB.saveJadwalSholatUnified(jsPayload);
                         }
                     } else {
                         // Modul standar
