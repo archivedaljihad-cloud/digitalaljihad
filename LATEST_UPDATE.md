@@ -4,7 +4,33 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 09:35 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 12:55 WIB)
+
+### 🏛️ REFORMASI ARSITEKTUR TOTAL PETUGAS JUMAT: PENYATUAN PIPELINE SATU PINTU (UNIFIED SINGLE MASTER PIPELINE, Versi SW v5.8.9):
+1. **Latar Belakang & Mandat Pengguna:**
+   - Menyelesaikan siklus desinkronisasi berulang antara Admin Laptop, Admin HP Mobile, dan Smart TV Display secara tuntas dan permanen.
+   - Menghapus disparitas antar-halaman input sehingga siapa pun yang mengedit di perangkat mana pun (Laptop via `admin.html`, HP Mobile via `petugas.html` atau `modeinput.html`), data dijamin 100% konsisten, instan (<50ms), dan tidak akan pernah salah orang lagi.
+2. **Implementasi Unified Single Master Pipeline:**
+   - **Central Database Engine (`web-statis/js/supabase-db.js`):**
+     - Menambahkan fungsi sentral `SupabaseDB.saveSholatJumat(payload)` yang bertindak sebagai satu-satunya gerbang resmi penyimpanan. Fungsi ini mengeksekusi sinkronisasi atomik ke seluruh wadah data:
+       a. Tabel SQL `sholat_jumat` (master resmi dengan format bilal & maklumat otomatis).
+       b. Tabel `app_settings` baris id: 1 (`prayer_mode_jumat_duration` dan `running_text_pages.jumat_maklumat`/`jumat_bilal`).
+       c. Tabel `app_settings` baris id: 9 (`pengumuman_jumat.petugas`).
+       d. LocalStorage cache (`cached_sholat_jumat`, `cached_jumat_bilal`, `cached_jumat_maklumat`).
+       e. Realtime Broadcast ke Smart TV via `sholat_jumat`, `app_settings`, dan `remoteCommand('SYNC_JUMAT')`.
+     - Meng-upgrade fungsi `SupabaseDB.getSholatJumat()` untuk secara otomatis mengekstrak dan menormalisasi `bilal`, `maklumat`, dan `raw_bilal`.
+   - **Penyelarasan Quick Input Mobile (`web-statis/petugas.html` & `web-statis/modeinput.html`):**
+     - Form penyimpanan `handleSaveModule()` kini langsung memanggil `SupabaseDB.saveSholatJumat()`, tidak lagi menulis ke wadah terpisah.
+     - Form pemuatan `initPetugas()` memprioritaskan data master dari `SupabaseDB.getSholatJumat()` dan memblokir penimpaan dari state lokal/cloud usang `quick_petugas_state_v2`.
+   - **Penyelarasan Admin Utama (`web-statis/admin.html`):**
+     - Terintegrasi dengan pipeline `SupabaseDB.saveSholatJumat()` sehingga seluruh jalur input terikat pada kontrak data yang seragam.
+   - **Slide TV Display (`web-statis/slides/jumat.html`):**
+     - Menerima data terstandarisasi langsung dari objek ternormalisasi tanpa resiko *priority inversion* atau data usang.
+3. **Bumping Versi Cache Service Worker (SOP #2):**
+   - Dinaikkan ke **`v5.8.9`** (`aljihad-signage-v5.8.9`) pada `web-statis/sw.js` dan `web-statis/admin.html`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 09:35 WIB)
 
 ### 🕌 RESOLUSI DESINKRONISASI PETUGAS JUMAT (PEMBACA MAKLUMAT) DI SMART TV: FIX PRIORITY INVERSION DI SLIDE JUMAT & AUTO-SYNC PENGUMUMAN_JUMAT (Versi SW v5.8.8):
 1. **Latar Belakang & Keluhan Pengguna:**

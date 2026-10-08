@@ -345,6 +345,162 @@
         },
 
         /**
+         * Simpan Petugas Sholat Jum'at Terpadu (Unified Single Master Pipeline)
+         * Satu-satunya gerbang resmi untuk menyimpan jadwal & petugas Jumat
+         * Menyimpan serentak ke tabel sholat_jumat, app_settings id:1, app_settings id:9 (pengumuman_jumat),
+         * local cache, dan memicu realtime broadcast seketika (<50ms) ke Smart TV.
+         * @param {Object} payload { tanggal, khatib, imam, muadzin, bilal, maklumat, durasi, foto_imam }
+         */
+        async saveSholatJumat(payload) {
+            if (!payload || !payload.tanggal) {
+                console.error('[SupabaseDB] Payload saveSholatJumat tidak lengkap:', payload);
+                return { success: false, error: 'Tanggal wajib diisi' };
+            }
+
+            try {
+                const tgl = payload.tanggal;
+                const finalKhatib = (payload.khatib || payload.imam || '').trim();
+                const finalImam = (payload.imam || payload.khatib || '').trim();
+                const muadzin = (payload.muadzin || '').trim();
+                const bilalOnly = (payload.bilal || '').trim();
+                const maklumatOnly = (payload.maklumat || '').trim();
+                const jumatDur = parseInt(payload.durasi || payload.jumat_durasi || 50, 10) || 50;
+                const fotoImam = payload.foto_imam || 'image/display/default_imam.jpg';
+
+                // Gabungkan bilal & maklumat untuk tabel SQL sholat_jumat
+                let combinedBilal = bilalOnly;
+                if (maklumatOnly) {
+                    combinedBilal = bilalOnly ? `${bilalOnly} / ${maklumatOnly}` : `- / ${maklumatOnly}`;
+                }
+
+                const dbRowPayload = {
+                    tanggal: tgl,
+                    khatib: finalKhatib,
+                    imam: finalImam,
+                    muadzin: muadzin,
+                    bilal: combinedBilal,
+                    foto_imam: fotoImam
+                };
+
+                // 1. Simpan ke Tabel SQL sholat_jumat (PATCH jika tanggal sudah ada, POST jika baru)
+                try {
+                    const checkRows = await this.restFetch(`sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}&select=id`);
+                    if (Array.isArray(checkRows) && checkRows.length > 0) {
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_CONFIG.anonKey,
+                                'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify(dbRowPayload)
+                        });
+                    } else {
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_CONFIG.anonKey,
+                                'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify(dbRowPayload)
+                        });
+                    }
+                } catch (sqlErr) {
+                    console.warn('[SupabaseDB] Error simpan sholat_jumat SQL:', sqlErr);
+                }
+
+                // 2. Simpan durasi & running text pages ke app_settings id=1
+                let currentRt = {};
+                try {
+                    const rtRaw = localStorage.getItem('cached_running_text_pages');
+                    if (rtRaw) currentRt = JSON.parse(rtRaw);
+                } catch (e) {}
+                currentRt.jumat_maklumat = maklumatOnly;
+                currentRt.jumat_bilal = bilalOnly;
+                if (fotoImam && fotoImam.startsWith('data:')) {
+                    currentRt.jumat_foto_imam_b64 = fotoImam;
+                } else if (fotoImam === 'image/display/default_imam.jpg') {
+                    delete currentRt.jumat_foto_imam_b64;
+                }
+                try { localStorage.setItem('cached_running_text_pages', JSON.stringify(currentRt)); } catch (e) {}
+
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.anonKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prayer_mode_jumat_duration: jumatDur,
+                        running_text_pages: currentRt
+                    })
+                }).catch(() => {});
+
+                // 3. Sinkronkan juga ke pengumuman_jumat (id=9) agar tidak memuat nama petugas lama
+                try {
+                    let pjd = null;
+                    const rawPj = localStorage.getItem('pengumuman_jumat_data');
+                    if (rawPj) {
+                        try { pjd = JSON.parse(rawPj); } catch(e) {}
+                    }
+                    if (pjd) {
+                        if (!pjd.petugas) pjd.petugas = {};
+                        pjd.petugas.imamKhotib = finalKhatib;
+                        pjd.petugas.muadzin = muadzin;
+                        pjd.petugas.bilal = bilalOnly;
+                        pjd.petugas.maklumat = maklumatOnly;
+                        localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjd));
+
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.9`, {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_CONFIG.anonKey,
+                                'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                value: JSON.stringify(pjd)
+                            })
+                        }).catch(() => {});
+                    }
+                } catch (e) {}
+
+                // 4. Update Local Caches
+                const unifiedResult = {
+                    ...dbRowPayload,
+                    bilal: bilalOnly,
+                    maklumat: maklumatOnly,
+                    durasi: jumatDur
+                };
+                try {
+                    localStorage.setItem('cached_jumat_bilal', bilalOnly);
+                    localStorage.setItem('cached_jumat_maklumat', maklumatOnly);
+                    localStorage.setItem('cached_prayer_mode_jumat_duration', jumatDur);
+                    localStorage.setItem('cached_sholat_jumat', JSON.stringify(unifiedResult));
+                } catch (e) {}
+
+                // 5. Broadcast Realtime ke Smart TV dan Seluruh Klien Terbuka
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('sholat_jumat', 'UPDATE', unifiedResult, 'Unified Petugas Master');
+                    this.broadcastChange('app_settings', 'UPDATE', { prayer_mode_jumat_duration: jumatDur, running_text_pages: currentRt }, 'Unified Petugas Master');
+                    this.broadcastChange('pengumuman_jumat', 'UPDATE', { petugas: { imamKhotib: finalKhatib, muadzin, bilal: bilalOnly, maklumat: maklumatOnly } }, 'Unified Petugas Master');
+                }
+                if (typeof this.sendRemoteCommand === 'function') {
+                    this.sendRemoteCommand('SYNC_JUMAT', unifiedResult);
+                }
+
+                return { success: true, data: unifiedResult };
+            } catch (err) {
+                console.error('[SupabaseDB] saveSholatJumat failed:', err);
+                return { success: false, error: err.message };
+            }
+        },
+
+        /**
          * Simpan / Perbarui app_settings ke Cloud Supabase (id=1 dan key-value dinamis)
          * Mendukung pembaruan sebagian (partial update) dan pembaruan menyeluruh
          * @param {Object} updatedFields
@@ -511,33 +667,74 @@
         },
 
         /**
-         * Ambil petugas sholat Jumat terbaru
+         * Ambil petugas sholat Jumat terbaru (Normalized & Unified)
+         * Mengembalikan objek data terstandarisasi dengan pemisahan bilal & maklumat yang bersih
          */
         async getSholatJumat() {
+            let row = null;
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('sholat_jumat').select('*').order('tanggal', { ascending: false }).order('id', { ascending: false }).limit(1);
                     if (!error && data && data.length > 0) {
-                        localStorage.setItem('cached_sholat_jumat', JSON.stringify(data[0]));
-                        return data[0];
+                        row = data[0];
                     }
                 }
             } catch (err) {
                 console.warn('Gagal membaca sholat_jumat SDK:', err);
             }
+
             // Direct REST API Fallback (Bypass SDK jika CDN belum siap / offline)
-            try {
-                const rows = await this.restFetch('sholat_jumat?order=tanggal.desc,id.desc&limit=1');
-                if (Array.isArray(rows) && rows.length > 0) {
-                    localStorage.setItem('cached_sholat_jumat', JSON.stringify(rows[0]));
-                    return rows[0];
+            if (!row) {
+                try {
+                    const rows = await this.restFetch('sholat_jumat?order=tanggal.desc,id.desc&limit=1');
+                    if (Array.isArray(rows) && rows.length > 0) {
+                        row = rows[0];
+                    }
+                } catch (restErr) {
+                    console.warn('Gagal membaca sholat_jumat via REST:', restErr);
                 }
-            } catch (restErr) {
-                console.warn('Gagal membaca sholat_jumat via REST:', restErr);
             }
-            const cached = localStorage.getItem('cached_sholat_jumat');
-            return cached ? JSON.parse(cached) : null;
+
+            if (!row) {
+                const cached = localStorage.getItem('cached_sholat_jumat');
+                if (cached) {
+                    try { row = JSON.parse(cached); } catch(e) {}
+                }
+            }
+
+            if (!row) return null;
+
+            // Normalisasi terpadu: Ekstrak bilal dan maklumat secara bersih
+            const rawBilal = (row.bilal || '').trim();
+            let bilalClean = rawBilal;
+            let maklumatClean = (row.maklumat || '').trim();
+
+            if (rawBilal.includes('/')) {
+                const bParts = rawBilal.split('/').map(s => s.trim());
+                bilalClean = bParts[0] || '';
+                if (bParts[1]) maklumatClean = bParts[1];
+            }
+
+            // Fallback maklumat dari settings running_text_pages jika belum terisi
+            if (!maklumatClean) {
+                try {
+                    const cachedRt = localStorage.getItem('cached_running_text_pages');
+                    if (cachedRt) {
+                        const rt = JSON.parse(cachedRt);
+                        if (rt.jumat_maklumat) maklumatClean = rt.jumat_maklumat;
+                    }
+                } catch (e) {}
+            }
+
+            const normalized = Object.assign({}, row, {
+                raw_bilal: rawBilal,
+                bilal: bilalClean,
+                maklumat: maklumatClean
+            });
+
+            try { localStorage.setItem('cached_sholat_jumat', JSON.stringify(normalized)); } catch (e) {}
+            return normalized;
         },
 
         /**

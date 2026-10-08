@@ -1741,6 +1741,7 @@
                             const parsedState = (typeof cloudState === 'string') ? JSON.parse(cloudState) : cloudState;
                             if (parsedState && typeof parsedState === 'object') {
                                 Object.keys(parsedState).forEach(k => {
+                                    if (k === 'jumat' && sj) return; // Prioritas utama: jangan timpa dari state usang
                                     if (modules[k] && Array.isArray(parsedState[k])) {
                                         modules[k].fields.forEach((f, idx) => {
                                             if (parsedState[k][idx] !== undefined && f.type !== 'shohibul_subform' && f.type !== 'donasi_subform' && f.type !== 'biaya_subform' && f.type !== 'kas_subform') {
@@ -2719,15 +2720,20 @@
                         const sjData = {
                             tanggal: mod.getVal('f_tgl_jumat'),
                             khatib: mod.getVal('f_khatib'),
+                            imam: mod.getVal('f_khatib'),
                             foto_imam: jumatImamFotoBase64 || mod.getVal('f_foto_imam'),
                             muadzin: mod.getVal('f_muadzin'),
                             bilal: mod.getVal('f_bilal'),
                             maklumat: mod.getVal('f_maklumat'),
-                            tema: '' // Dihilangkan sesuai arahan CEO
+                            durasi: parseInt(mod.getVal('f_jumat_durasi') || 50, 10) || 50
                         };
-                        await window.SupabaseDB.setAppSetting('sholat_jumat', sjData);
-                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
-                            window.SupabaseDB.broadcastChange('sholat_jumat', 'UPDATE', sjData, 'Petugas Mobile');
+                        if (typeof window.SupabaseDB.saveSholatJumat === 'function') {
+                            await window.SupabaseDB.saveSholatJumat(sjData);
+                        } else {
+                            await window.SupabaseDB.setAppSetting('sholat_jumat', sjData);
+                            if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                                window.SupabaseDB.broadcastChange('sholat_jumat', 'UPDATE', sjData, 'Petugas Mobile');
+                            }
                         }
                     } else if (currentActiveModule === 'qurban') {
                         const qPayload = {
