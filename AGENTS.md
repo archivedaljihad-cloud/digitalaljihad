@@ -15,10 +15,11 @@ Dokumen ini adalah aturan tetap (*standing rules*) dan Standar Operasional Prose
      - Folder lokal `C:\Users\anthu\Documents\【Digital WebSTATIS】\` berfungsi sebagai salinan cadangan arsip (*cold backup*).
    - **TAHAPAN OTOMATIS SETIAP SELESAI PENAMBAHAN FITUR / PERBAIKAN KODE:**
      Setiap kali selesai melakukan penambahan fitur atau perbaikan kode apapun, Anda **WAJIB LANGSUNG SECARA OTOMATIS MENJALANKAN (JANGAN MENUNGGU PERINTAH DARI PENGGUNA)**:
-     a. **Supabase Cloud**: Pastikan tabel / `app_settings` / skema cloud tersinkron dengan payload terkini.
-     b. **GitHub**: Lakukan `git add .`, `git commit -m "..."`, dan `git push origin main`.
-     c. **Cloudflare Workers**: Jalankan `npx wrangler deploy` untuk langsung memperbarui aset di **`https://digitalaljihad.my.id/`**.
-     d. **Folder Lokal**: Salin berkas pembaruan ke folder cadangan lokal `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+     a. **Pengujian Regresi Otomatis**: Jalankan `npm test` (memverifikasi 48+ assertion checks: sintaks seluruh file HTML/JS, simulasi 24 jam sholat, proteksi watchdog, konsistensi cache). Jika ada 1 saja yang gagal, **DILARANG COMMIT/DEPLOY** sebelum diperbaiki!
+     b. **Supabase Cloud**: Pastikan tabel / `app_settings` / skema cloud tersinkron dengan payload terkini.
+     c. **GitHub**: Lakukan `git add .`, `git commit -m "..."`, dan `git push origin main`.
+     d. **Cloudflare Workers**: Jalankan `npx wrangler deploy` untuk langsung memperbarui aset di **`https://digitalaljihad.my.id/`**.
+     e. **Folder Lokal**: Salin berkas pembaruan ke folder cadangan lokal `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
 
 2. **SOP PEMBERSIHAN & INVALIDASI CACHE USANG (SERVICE WORKER, PERAMBAN KLIEN, & TV DISPLAY):**
    - **MANDAT CACHE (DARI CEO):** *"Setelah 4 Pilar Sinkronisasi Otomatis selesai dilakukan, wajib cek cache usang/sudah tidak digunakan lagi. Jika menemukan cache yang usang/sudah tidak terpakai lagi, segera hapus agar tampilan di TV dan di device lain yang sedang membuka web ini selalu mendapatkan data yang terbaru dan realtime."*
