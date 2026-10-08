@@ -4,7 +4,38 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 09:12 WIB)
+## ✨ UPDATE TERBARU — 8 Oktober 2026 (Pukul 09:35 WIB)
+
+### 🕌 RESOLUSI DESINKRONISASI PETUGAS JUMAT (PEMBACA MAKLUMAT) DI SMART TV: FIX PRIORITY INVERSION DI SLIDE JUMAT & AUTO-SYNC PENGUMUMAN_JUMAT (Versi SW v5.8.8):
+1. **Latar Belakang & Keluhan Pengguna:**
+   - Pengguna melaporkan bahwa nama Pembaca Maklumat pada slide **Jadwal Sholat Jum'at** di Smart TV (`slides/jumat.html`) masih menampilkan nama lama **"Ust. Fatkhurokhman"**, padahal di form admin (`web-statis/admin.html`) telah diisi dan disimpan sebagai **"Ust. Agus Purwanto"** untuk Jum'at, 9 Oktober 2026.
+2. **Investigasi Akar Masalah Mendalam (Root Cause Analysis):**
+   - **Data di Database Supabase (`sholat_jumat`) Sudah Benar:** Pada baris data Jum'at 9 Oktober 2026 (`id: 9`), kolom `bilal` sudah tersimpan dengan benar: `"Ust. Sahroni / Ust. Agus Purwanto"` dan `app_settings` (id: 1) `running_text_pages.jumat_maklumat` bernilai `"Ust. Agus Purwanto"`.
+   - **Priority Inversion di `web-statis/slides/jumat.html`:**
+     - Pada baris 571 sebelumnya:
+       `let maklumatStr = pj?.petugas?.maklumat || '';`
+       Variabel `maklumatStr` diinisialisasi pertama kali dari objek fallback `pengumuman_jumat` (`pj`).
+     - Objek `pengumuman_jumat` di cloud (`app_settings` id: 9) masih menyimpan data pekan sebelumnya (2 Oktober 2026) yang berisi `"maklumat": "Ust. Fatkhurokhman"`.
+     - Karena `maklumatStr` sudah terisi nilai truthy (`"Ust. Fatkhurokhman"`), kondisi pemisahan `if (!maklumatStr) maklumatStr = bParts[1] || '';` dan `if (!maklumatStr && rt?.jumat_maklumat)` dilewati (*skipped*).
+     - Akibatnya, nilai terkini dari `sholat_jumat` (`bParts[1]` = `"Ust. Agus Purwanto"`) dan `running_text_pages.jumat_maklumat` terabaikan dan digantikan oleh data usang.
+3. **Solusi & Penguatan Menyeluruh:**
+   - **Pembenahan Prioritas Parser di `web-statis/slides/jumat.html`:**
+     - Prioritas tertinggi diberikan kepada data resmi spesifik jadwal Jum'at pekan terkait:
+       1. Nilai `bParts[1]` dari kolom `sholat_jumat.bilal` terpadu atau `jumat.maklumat`.
+       2. Nilai `settings.running_text_pages.jumat_maklumat` (tersimpan saat simpan petugas).
+       3. Fallback terakhir: `pj?.petugas?.maklumat`.
+     - Hal yang sama diterapkan pada petugas Bilal: `bParts[0]` / `rawBilal` -> `settings.running_text_pages.jumat_bilal` -> `pj?.petugas?.bilal`.
+   - **Sinkronisasi Dua Arah di Form Admin (`web-statis/admin.html`):**
+     - Pada fungsi `simpanPetugasJumat()`, sistem kini otomatis menyinkronkan nama petugas (`imamKhotib`, `muadzin`, `bilal`, `maklumat`) ke dalam payload `pengumuman_jumat` (di `localStorage` dan tabel Cloud `app_settings` baris id: 9).
+     - Menambahkan siaran Realtime Broadcast untuk `pengumuman_jumat` agar TV instan menerima perubahan tanpa jeda.
+   - **Pembaruan Cloud Supabase Langsung:**
+     - Memperbarui baris id: 9 pada tabel `app_settings` di Cloud Supabase agar `petugas.maklumat` langsung terbarui menjadi `"Ust. Agus Purwanto"`.
+     - Mengirim sinyal broadcast Realtime Supabase untuk refresh TV.
+4. **Bumping Versi Cache Service Worker (SOP #2):**
+   - Menaikkan versi cache ke **`v5.8.8`** (`aljihad-signage-v5.8.8`) pada `web-statis/sw.js` dan handler cache `admin.html`.
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 8 Oktober 2026 (Pukul 09:12 WIB)
 
 ### 🎨 REVISI DESAIN & TIPOGRAFI SLIDE KAJIAN & INFORMASI KEGIATAN (`slides/pengumuman.html`, Versi SW v5.8.7):
 1. **Latar Belakang & Permintaan Pengguna:**

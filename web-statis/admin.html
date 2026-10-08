@@ -11184,6 +11184,31 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     })
                 }).catch(() => {});
 
+                // 3. Sinkronkan juga nama petugas ke pengumuman_jumat (id=9 & localStorage) agar selalu konsisten
+                let pjd = null;
+                try {
+                    const rawPj = localStorage.getItem('pengumuman_jumat_data');
+                    if (rawPj) pjd = JSON.parse(rawPj);
+                    if (!pjd && typeof pjData !== 'undefined') pjd = pjData;
+                    if (pjd) {
+                        if (!pjd.petugas) pjd.petugas = {};
+                        pjd.petugas.imamKhotib = khotibImam;
+                        pjd.petugas.muadzin = muadzin;
+                        pjd.petugas.bilal = bilalOnly;
+                        pjd.petugas.maklumat = maklumatOnly;
+                        localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjd));
+                        if (typeof pjData !== 'undefined') pjData = pjd;
+
+                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.9`, {
+                            method: 'PATCH',
+                            headers: getSupabaseHeaders(),
+                            body: JSON.stringify({
+                                value: typeof pjd === 'string' ? pjd : JSON.stringify(pjd)
+                            })
+                        }).catch(() => {});
+                    }
+                } catch (e) {}
+
                 // Sinkronkan ke UI dan local cache
                 syncDurasiJumat(jumatDur);
                 try { localStorage.setItem('cached_prayer_mode_jumat_duration', jumatDur); } catch (e) {}
@@ -11210,6 +11235,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                     if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
                         SupabaseDB.broadcastChange('sholat_jumat', 'UPDATE', payload, 'DKM Sholat Jumat');
                         SupabaseDB.broadcastChange('app_settings', 'UPDATE', { prayer_mode_jumat_duration: jumatDur, running_text_pages: currentRt }, 'DKM Sholat Jumat');
+                        if (pjd) {
+                            SupabaseDB.broadcastChange('pengumuman_jumat', 'UPDATE', pjd, 'DKM Sholat Jumat');
+                        }
                     }
 
                     alert(`Alhamdulillah! Petugas Sholat Jum'at, foto Imam & Khotib, serta durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
@@ -13512,7 +13540,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.7') {
+                                if (name !== 'aljihad-signage-v5.8.8') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }

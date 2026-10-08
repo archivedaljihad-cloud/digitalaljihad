@@ -566,24 +566,44 @@
                 document.getElementById('valImamKhatib').textContent = imamKhatibStr;
                 document.getElementById('badgeImamName').textContent = imam || khatib || 'Ustd. Imam & Khotib';
 
-                let rawBilal = (jumat && jumat.bilal) ? jumat.bilal.trim() : (pj?.petugas?.bilal || '');
-                let bilalStr = rawBilal;
-                let maklumatStr = pj?.petugas?.maklumat || '';
+                let rawBilal = (jumat && jumat.bilal) ? jumat.bilal.trim() : '';
+                let bilalStr = '';
+                let maklumatStr = (jumat && jumat.maklumat) ? jumat.maklumat.trim() : '';
+
+                // Ekstrak dari format terpadu "Nama Bilal / Nama Pembaca Maklumat" (prioritas tertinggi dari tabel sholat_jumat)
                 if (rawBilal.includes('/')) {
                     const bParts = rawBilal.split('/').map(s => s.trim());
                     bilalStr = bParts[0] || '';
-                    if (!maklumatStr) maklumatStr = bParts[1] || '';
+                    if (bParts[1]) maklumatStr = bParts[1];
+                } else {
+                    bilalStr = rawBilal;
                 }
 
                 let rt = settings?.running_text_pages;
                 if (typeof rt === 'string') {
                     try { rt = JSON.parse(rt); } catch(e) { rt = {}; }
                 }
+
+                // Prioritas Maklumat:
+                // 1. Ekstrak dari sholat_jumat.bilal (bParts[1]) atau sholat_jumat.maklumat
+                // 2. Dari settings.running_text_pages.jumat_maklumat (disimpan saat simpanPetugasJumat)
+                // 3. Fallback pj?.petugas?.maklumat
                 if (!maklumatStr && rt?.jumat_maklumat) {
                     maklumatStr = rt.jumat_maklumat;
                 }
+                if (!maklumatStr && pj?.petugas?.maklumat) {
+                    maklumatStr = pj.petugas.maklumat;
+                }
+
+                // Prioritas Bilal:
+                // 1. Ekstrak dari sholat_jumat.bilal (bParts[0])
+                // 2. Dari settings.running_text_pages.jumat_bilal
+                // 3. Fallback pj?.petugas?.bilal
                 if (!bilalStr && rt?.jumat_bilal) {
                     bilalStr = rt.jumat_bilal;
+                }
+                if (!bilalStr && pj?.petugas?.bilal) {
+                    bilalStr = pj.petugas.bilal;
                 }
 
                 document.getElementById('valMuadzin').textContent = (jumat && jumat.muadzin) ? jumat.muadzin.trim() : (pj?.petugas?.muadzin || 'Belum Ditetapkan');
