@@ -7504,6 +7504,47 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
 
+            // Realtime Listener Lintas Perangkat (Multi-Device Auto-Sync)
+            if (window.SupabaseDB && typeof window.SupabaseDB.onDataChange === 'function') {
+                window.SupabaseDB.onDataChange(async (evt) => {
+                    console.log('🔄 [Admin Realtime] Perubahan data terdeteksi:', evt);
+                    if (evt && (evt.table === 'app_settings' || evt.key === 'app_settings') && evt.payload) {
+                        const s = evt.payload;
+                        const cd = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
+                        if (document.getElementById('cfgCountdownAdzan') && cd) document.getElementById('cfgCountdownAdzan').value = cd;
+                        const ad = s.prayer_mode_adzan_duration || s.adzan_duration;
+                        if (document.getElementById('cfgDurasiAdzan') && ad) document.getElementById('cfgDurasiAdzan').value = ad;
+                        const iq = s.prayer_mode_iqamah_duration || s.iqamah_duration;
+                        if (document.getElementById('cfgDurasiIqamah') && iq) document.getElementById('cfgDurasiIqamah').value = iq;
+                        const sh = s.prayer_mode_after_prayer || s.prayer_mode_duration;
+                        if (document.getElementById('cfgDurasiSholat') && sh) document.getElementById('cfgDurasiSholat').value = sh;
+                        const jm = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi);
+                        if (jm) syncDurasiJumat(jm);
+                    }
+                    await loadAllSupabaseData();
+                });
+            }
+            if (window.SupabaseDB && typeof window.SupabaseDB.onRemoteCommand === 'function') {
+                window.SupabaseDB.onRemoteCommand(async (cmd, payload) => {
+                    if (cmd === 'SYNC_JADWAL_SHOLAT' || cmd === 'UPDATE_SETTINGS') {
+                        if (payload) {
+                            const s = payload;
+                            const cd = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
+                            if (document.getElementById('cfgCountdownAdzan') && cd) document.getElementById('cfgCountdownAdzan').value = cd;
+                            const ad = s.prayer_mode_adzan_duration || s.adzan_duration;
+                            if (document.getElementById('cfgDurasiAdzan') && ad) document.getElementById('cfgDurasiAdzan').value = ad;
+                            const iq = s.prayer_mode_iqamah_duration || s.iqamah_duration;
+                            if (document.getElementById('cfgDurasiIqamah') && iq) document.getElementById('cfgDurasiIqamah').value = iq;
+                            const sh = s.prayer_mode_after_prayer || s.prayer_mode_duration;
+                            if (document.getElementById('cfgDurasiSholat') && sh) document.getElementById('cfgDurasiSholat').value = sh;
+                            const jm = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi);
+                            if (jm) syncDurasiJumat(jm);
+                        }
+                        await loadAllSupabaseData();
+                    }
+                });
+            }
+
             // PWA Service Worker Registration with Instant Auto-Reload on Real Updates (Anti-Loop on First Visit)
             if ('serviceWorker' in navigator) {
                 let isRefreshing = false;
@@ -8654,15 +8695,18 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         // Switch & Durasi Prayer Mode
                         const prayerEnabled = (s.prayer_mode_enabled !== false && s.value != '0');
                         if (document.getElementById('cfgPrayerModeEnabled')) document.getElementById('cfgPrayerModeEnabled').checked = prayerEnabled;
-                        if (document.getElementById('cfgCountdownAdzan') && s.prayer_mode_before_adzan) document.getElementById('cfgCountdownAdzan').value = s.prayer_mode_before_adzan;
-                        if (document.getElementById('cfgDurasiAdzan') && s.prayer_mode_adzan_duration) document.getElementById('cfgDurasiAdzan').value = s.prayer_mode_adzan_duration;
-                        if (document.getElementById('cfgDurasiIqamah') && s.prayer_mode_iqamah_duration) document.getElementById('cfgDurasiIqamah').value = s.prayer_mode_iqamah_duration;
+                        const cdVal = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
+                        if (document.getElementById('cfgCountdownAdzan') && cdVal) document.getElementById('cfgCountdownAdzan').value = cdVal;
+                        const adzVal = s.prayer_mode_adzan_duration || s.adzan_duration;
+                        if (document.getElementById('cfgDurasiAdzan') && adzVal) document.getElementById('cfgDurasiAdzan').value = adzVal;
+                        const iqmVal = s.prayer_mode_iqamah_duration || s.iqamah_duration;
+                        if (document.getElementById('cfgDurasiIqamah') && iqmVal) document.getElementById('cfgDurasiIqamah').value = iqmVal;
                         const sholatDurVal = s.prayer_mode_after_prayer || s.prayer_mode_duration;
                         if (document.getElementById('cfgDurasiSholat') && sholatDurVal) document.getElementById('cfgDurasiSholat').value = sholatDurVal;
                         if (document.getElementById('cfgAudioTarhim') && s.audio_tarhim !== undefined) document.getElementById('cfgAudioTarhim').value = s.audio_tarhim;
                         
                         // Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
-                        const jumatDur = parseInt(s.prayer_mode_jumat_duration) || 50;
+                        const jumatDur = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi) || 50;
                         syncDurasiJumat(jumatDur);
 
                         // Pengaturan Agenda Surat Yaasiin & Tahlil (Sync Dashboard & Settings)
@@ -13574,7 +13618,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.24') {
+                                if (name !== 'aljihad-signage-v5.8.25') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }

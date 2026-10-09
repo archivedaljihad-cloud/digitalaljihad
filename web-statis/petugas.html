@@ -2214,11 +2214,17 @@
                                 }
                             }
                             if (modules['jadwal-sholat']) {
-                                if (appSet.countdown_adzan_duration) modules['jadwal-sholat'].fields[5].val = String(appSet.countdown_adzan_duration);
-                                if (appSet.adzan_duration) modules['jadwal-sholat'].fields[6].val = String(appSet.adzan_duration);
-                                if (appSet.iqamah_duration) modules['jadwal-sholat'].fields[7].val = String(appSet.iqamah_duration);
-                                if (appSet.prayer_mode_duration) modules['jadwal-sholat'].fields[8].val = String(appSet.prayer_mode_duration);
-                                if (appSet.prayer_mode_jumat_duration) modules['jadwal-sholat'].fields[9].val = String(appSet.prayer_mode_jumat_duration);
+                                const cdAdzan = appSet.prayer_mode_before_adzan ?? appSet.countdown_adzan_duration;
+                                const adzanDur = appSet.prayer_mode_adzan_duration ?? appSet.adzan_duration;
+                                const iqomahDur = appSet.prayer_mode_iqamah_duration ?? appSet.iqamah_duration;
+                                const sholatDur = appSet.prayer_mode_after_prayer ?? appSet.prayer_mode_duration;
+                                const jumatDur = appSet.prayer_mode_jumat_duration ?? appSet.jumat_durasi;
+
+                                if (cdAdzan !== undefined && cdAdzan !== null) modules['jadwal-sholat'].fields[5].val = String(cdAdzan);
+                                if (adzanDur !== undefined && adzanDur !== null) modules['jadwal-sholat'].fields[6].val = String(adzanDur);
+                                if (iqomahDur !== undefined && iqomahDur !== null) modules['jadwal-sholat'].fields[7].val = String(iqomahDur);
+                                if (sholatDur !== undefined && sholatDur !== null) modules['jadwal-sholat'].fields[8].val = String(sholatDur);
+                                if (jumatDur !== undefined && jumatDur !== null) modules['jadwal-sholat'].fields[9].val = String(jumatDur);
                             }
                             if (modules['qurban']) {
                                 if (appSet.qurban_sapi) modules['qurban'].fields[0].val = String(appSet.qurban_sapi);
@@ -3348,7 +3354,12 @@
                             adzan: mod.getVal('f_adzan'),
                             iqomah: mod.getVal('f_iqomah'),
                             sholat: mod.getVal('f_sholat'),
-                            jumat_durasi: mod.getVal('f_jumat_durasi')
+                            jumat_durasi: mod.getVal('f_jumat_durasi'),
+                            prayer_mode_before_adzan: mod.getVal('f_cd_adzan'),
+                            prayer_mode_adzan_duration: mod.getVal('f_adzan'),
+                            prayer_mode_iqamah_duration: mod.getVal('f_iqomah'),
+                            prayer_mode_after_prayer: mod.getVal('f_sholat'),
+                            prayer_mode_jumat_duration: mod.getVal('f_jumat_durasi')
                         };
                         if (typeof window.SupabaseDB.saveJadwalSholatUnified === 'function') {
                             await window.SupabaseDB.saveJadwalSholatUnified(jsPayload);

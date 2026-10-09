@@ -265,6 +265,13 @@
                         settings.sub_header = 'SISTEM INFORMASI DIGITAL';
                     }
 
+                    // Normalisasi alias durasi sholat agar kompatibel antar-klien
+                    if (settings.prayer_mode_before_adzan !== undefined) settings.countdown_adzan_duration = settings.prayer_mode_before_adzan;
+                    if (settings.prayer_mode_adzan_duration !== undefined) settings.adzan_duration = settings.prayer_mode_adzan_duration;
+                    if (settings.prayer_mode_iqamah_duration !== undefined) settings.iqamah_duration = settings.prayer_mode_iqamah_duration;
+                    if (settings.prayer_mode_after_prayer !== undefined) settings.prayer_mode_duration = settings.prayer_mode_after_prayer;
+                    if (settings.prayer_mode_jumat_duration !== undefined) settings.jumat_durasi = settings.prayer_mode_jumat_duration;
+
                     // Simpan ke cache lokal browser untuk offline resilience
                     try {
                         localStorage.setItem('cached_app_settings', JSON.stringify(settings));
@@ -860,13 +867,40 @@
         async saveJadwalSholatUnified(payload) {
             if (!payload) return { success: false };
             try {
-                const updateObj = {
-                    prayer_mode_enabled: payload.prayer_mode_enabled !== false,
-                    countdown_adzan_duration: parseInt(payload.countdown_adzan_duration || payload.cd_adzan || 5, 10),
-                    adzan_duration: parseInt(payload.adzan_duration || payload.adzan || 3, 10),
-                    prayer_mode_duration: parseInt(payload.prayer_mode_duration || payload.sholat || 15, 10),
-                    iqamah_duration: parseInt(payload.iqamah_duration || payload.iqomah || 10, 10),
-                    prayer_mode_jumat_duration: parseInt(payload.prayer_mode_jumat_duration || payload.jumat_durasi || 50, 10)
+                const cdAdzan = parseInt(payload.prayer_mode_before_adzan || payload.countdown_adzan_duration || payload.cd_adzan || 5, 10);
+                const adzanDur = parseInt(payload.prayer_mode_adzan_duration || payload.adzan_duration || payload.adzan || 3, 10);
+                const iqamahDur = parseInt(payload.prayer_mode_iqamah_duration || payload.iqamah_duration || payload.iqomah || 10, 10);
+                const sholatDur = parseInt(payload.prayer_mode_after_prayer || payload.prayer_mode_duration || payload.sholat || 15, 10);
+                const jumatDur = parseInt(payload.prayer_mode_jumat_duration || payload.jumat_durasi || 50, 10);
+                const isEnabled = payload.prayer_mode_enabled !== false;
+
+                // 1. Kolom bersih sesuai skema tabel app_settings Supabase (bebas dari PGRST204)
+                const dbPayload = {
+                    prayer_mode_before_adzan: cdAdzan,
+                    prayer_mode_adzan_duration: adzanDur,
+                    prayer_mode_iqamah_duration: iqamahDur,
+                    prayer_mode_after_prayer: sholatDur,
+                    prayer_mode_jumat_duration: jumatDur
+                };
+                if (payload.value !== undefined) dbPayload.value = payload.value;
+
+                // 2. Object lengkap dengan seluruh alias untuk local cache & realtime broadcast
+                const fullObj = {
+                    prayer_mode_enabled: isEnabled,
+                    prayer_mode_before_adzan: cdAdzan,
+                    countdown_adzan_duration: cdAdzan,
+                    cd_adzan: cdAdzan,
+                    prayer_mode_adzan_duration: adzanDur,
+                    adzan_duration: adzanDur,
+                    adzan: adzanDur,
+                    prayer_mode_iqamah_duration: iqamahDur,
+                    iqamah_duration: iqamahDur,
+                    iqomah: iqamahDur,
+                    prayer_mode_after_prayer: sholatDur,
+                    prayer_mode_duration: sholatDur,
+                    sholat: sholatDur,
+                    prayer_mode_jumat_duration: jumatDur,
+                    jumat_durasi: jumatDur
                 };
 
                 let currentSettings = {};
@@ -874,29 +908,31 @@
                     const c = localStorage.getItem('cached_app_settings');
                     if (c) currentSettings = JSON.parse(c);
                 } catch(e) {}
-                const merged = Object.assign({}, currentSettings, updateObj);
+                const merged = Object.assign({}, currentSettings, fullObj);
                 localStorage.setItem('cached_app_settings', JSON.stringify(merged));
-                localStorage.setItem('display_prayer_mode_enabled', updateObj.prayer_mode_enabled);
-                localStorage.setItem('display_prayer_mode_jumat_duration', updateObj.prayer_mode_jumat_duration);
+                localStorage.setItem('display_prayer_mode_enabled', isEnabled);
+                localStorage.setItem('display_prayer_mode_jumat_duration', jumatDur);
 
+                // 3. Kirim PATCH ke Supabase dengan hanya kolom yang valid
                 await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_CONFIG.anonKey,
                         'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
                     },
-                    body: JSON.stringify(updateObj)
+                    body: JSON.stringify(dbPayload)
                 });
 
                 if (typeof this.broadcastChange === 'function') {
-                    this.broadcastChange('app_settings', 'UPDATE', updateObj, 'Jadwal Sholat Unified');
+                    this.broadcastChange('app_settings', 'UPDATE', fullObj, 'Jadwal Sholat Unified');
                 }
                 if (typeof this.sendRemoteCommand === 'function') {
-                    this.sendRemoteCommand('SYNC_JADWAL_SHOLAT', updateObj);
-                    this.sendRemoteCommand('UPDATE_SETTINGS', updateObj);
+                    this.sendRemoteCommand('SYNC_JADWAL_SHOLAT', fullObj);
+                    this.sendRemoteCommand('UPDATE_SETTINGS', fullObj);
                 }
-                return { success: true, data: updateObj };
+                return { success: true, data: fullObj };
             } catch (err) {
                 console.error('[SupabaseDB] saveJadwalSholatUnified failed:', err);
                 return { success: false, error: err.message };

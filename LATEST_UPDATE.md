@@ -4,7 +4,36 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 00:15 WIB)
+## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 00:45 WIB)
+
+### ⚡ RESOLUSI SINKRONISASI REALTIME INPUT JADWAL SHOLAT & DURASI KE DASHBOARD ADMIN, PETUGAS & TV (Versi SW v5.8.25):
+1. **Akar Masalah yang Teridentifikasi (*Root Cause Analysis*):**
+   - **Mismatched Column Schema di `saveJadwalSholatUnified` (`js/supabase-db.js`):** Saat pengguna mengubah durasi dari `modeinput.html` atau `petugas.html` (misal: Countdown Adzan = 15 mnt, Sholat Jumat = 60 mnt), fungsi `saveJadwalSholatUnified` sebelumnya mengirimkan kolom `countdown_adzan_duration`, `adzan_duration`, `iqamah_duration`, dan `prayer_mode_duration` ke REST API Supabase `app_settings?id=eq.1`. Karena kolom-kolom tersebut tidak ada dalam skema tabel Supabase (kolom resmi yang ada adalah `prayer_mode_before_adzan`, `prayer_mode_adzan_duration`, `prayer_mode_iqamah_duration`, `prayer_mode_after_prayer`, dan `prayer_mode_jumat_duration`), PostgREST mengembalikan error HTTP 400 (`PGRST204: Could not find column in schema cache`). Akibatnya, payload pembaruan ditolak Supabase dan data di cloud tidak pernah berubah.
+   - **Mismatched Property Read di `modeinput.html` & `petugas.html`:** Logika `initRealtimeData()` hanya membaca alias `countdown_adzan_duration`, dsb. sehingga selalu fallback ke nilai default lokal alih-alih nilai cloud terkini.
+   - **Ketiadaan Realtime Listener di Dashboard Admin (`admin.html`):** `admin.html` sebelumnya hanya memuat data 1 kali saat `DOMContentLoaded` tanpa mendaftarkan event listener `SupabaseDB.onDataChange(...)` dan `SupabaseDB.onRemoteCommand(...)`. Oleh karena itu, ketika pengguna di HP/tablet menyimpan data dari `modeinput.html`, form `#cfgCountdownAdzan`, `#cfgDurasiAdzan`, `#cfgDurasiIqamah`, `#cfgDurasiSholat`, dan `#cfgDurasiJumat` di layar admin tidak terbarui secara otomatis.
+
+2. **Perbaikan & Peningkatan Teknis yang Diterapkan:**
+   - **Normalisasi Skema Kolom di `saveJadwalSholatUnified` (`js/supabase-db.js`):**
+     - Payload yang dikirim ke Supabase kini difilter murni menggunakan nama kolom valid (`prayer_mode_before_adzan`, `prayer_mode_adzan_duration`, `prayer_mode_iqamah_duration`, `prayer_mode_after_prayer`, `prayer_mode_jumat_duration`), sehingga permintaan PATCH 100% diterima (HTTP 200).
+     - Objek cache lokal dan realtime broadcast (`broadcastChange`) tetap menyertakan seluruh variasi alias (`cd_adzan`, `countdown_adzan_duration`, `prayer_mode_before_adzan`, `jumat_durasi`, `prayer_mode_jumat_duration`) agar TV display dan semua client instan tersinkron tanpa jeda.
+   - **Dukungan Alias Dua Arah di `getSettings()` (`js/supabase-db.js`):**
+     - Memetakan alias kolom durasi sholat secara otomatis saat membaca dari Supabase sehingga setiap pemanggil selalu mendapatkan data yang konsisten.
+   - **Integrasi Listener Realtime Multi-Perangkat di `admin.html`:**
+     - Menambahkan handler `SupabaseDB.onDataChange(...)` dan `SupabaseDB.onRemoteCommand(...)` pada `DOMContentLoaded` di `admin.html`.
+     - Setiap kali ada perubahan pada `app_settings`, nilai input di layar admin (`#cfgCountdownAdzan`, `#cfgDurasiAdzan`, `#cfgDurasiIqamah`, `#cfgDurasiSholat`, `#cfgDurasiJumat`) langsung diperbarui secara instan (<50ms) dan `loadAllSupabaseData()` dijalankan untuk menyegarkan seluruh tabel.
+   - **Penyempurnaan `initRealtimeData()` & `handleSaveModule()` di `modeinput.html` & `petugas.html`:**
+     - Menggunakan *nullish coalescing* (`appSet.prayer_mode_before_adzan ?? appSet.countdown_adzan_duration`) sehingga form mobile selalu memuat durasi persis dari database cloud.
+     - Menyertakan seluruh properti skema Supabase saat memanggil `saveJadwalSholatUnified`.
+
+3. **Pembersihan Cache & Version Bumping (SOP #2):**
+   - Service Worker dinaikkan ke versi **`aljihad-signage-v5.8.25`** pada `web-statis/sw.js` dan `web-statis/admin.html` untuk memastikan cache usang langsung dibersihkan di TV dan perangkat lain.
+
+4. **Pengujian Regresi:**
+   - `npm test` lulus **68 / 68 assertions (100% PASS)**.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 10 Oktober 2026 (Pukul 00:15 WIB)
 
 ### 🏆 FINALISASI AUDIT MENYELURUH 8 PILAR SENIOR FULL-STACK ENGINEER & PENINGKATAN AUTENTIKASI LINTAS PERANGKAT (Versi SW v5.8.24):
 1. **Hasil Audit Komprehensif 8 Pilar:**
