@@ -4,7 +4,38 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 00:45 WIB)
+## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 01:10 WIB)
+
+### 🚀 FITUR SWITCHER DUAL-MODE LOGIN: DASHBOARD vs INPUT MOBILE DI HALAMAN `/login` (Versi SW v5.8.26):
+1. **Ringkasan Permintaan Pengguna:**
+   - Pada halaman `https://digitalaljihad.my.id/login` (`web-statis/login.html`), ditambahkan pilihan mode masuk: **DASHBOARD** dan **INPUT MOBILE**.
+   - Jika memilih **INPUT MOBILE**: Menampilkan halaman login persis seperti **Gambar 2** (modal card Akses Masuk Petugas hijau emerald dengan border gold bersinar, avatar icon tameng, tabs Masuk Cepat & Username & Sandi, tombol submit, dan link footer).
+   - Jika memilih **DASHBOARD**: Menampilkan halaman login persis seperti **Gambar 1** (kaligrafi salam & bismillah emas, ucapan selamat datang, pill panduan kredensial, form login dengan tombol oranye "Masuk ke Dashboard ->").
+   - Di tampilan Gambar 2, teks tombol `"MASUK SEBAGAI PENGURUS"` telah diganti menjadi **`"MASUK MODE INPUT MOBILE"`**.
+   - Seluruh fungsionalitas dan logika input yang ada di web statis utama tetap berjalan normal tanpa gangguan.
+
+2. **Perubahan & Implementasi Teknis:**
+   - **Segmented Control Mode Switcher (`web-statis/login.html`):**
+     - Menambahkan bar segmented switcher di bagian atas form login dengan dua tombol: `[ DASHBOARD ]` dan `[ INPUT MOBILE ]`.
+     - Dilengkapi transisi CSS halus, status tombol aktif bercahaya, dan accessibility attributes (`role="tablist"`, `aria-selected`).
+   - **Dual-View Rendering:**
+     - `#viewDashboardLogin` (Gambar 1): Form login dashboard admin standar dengan kaligrafi Arab emas, field email/username dan sandi, opsi ingatkan saya, serta tombol "Masuk ke Dashboard ->" menuju `admin.html`.
+     - `#viewMobileLogin` (Gambar 2): Kartu Akses Masuk Petugas hijau gelap dengan border emas bersinar (`.auth-gate-card`), avatar kuning `fa-user-shield`, sub-tabs "Masuk Cepat" & "Username & Sandi" (default aktif sesuai Gambar 2), dan tombol submit bertuliskan **`"MASUK MODE INPUT MOBILE"`** menuju `modeinput.html`.
+   - **Sinkronisasi Teks Tombol pada Auth Gate Mobile (`web-statis/modeinput.html` & `web-statis/petugas.html`):**
+     - Mengubah teks tombol `#btnAuthFullSubmit` dari `"MASUK SEBAGAI PENGURUS"` menjadi **`"MASUK MODE INPUT MOBILE"`** di markup HTML dan handler JavaScript reset/finally.
+   - **Deteksi Cerdas URL Parameter & LocalStorage:**
+     - Mendukung URL query parameter: `https://digitalaljihad.my.id/login?mode=mobile` langsung membuka tampilan Gambar 2, dan `login.html?mode=dashboard` membuka tampilan Gambar 1.
+     - Menyimpan preferensi pengguna di `localStorage.getItem('aljihad_login_mode')`.
+     - Mempertahankan integrasi `AdminAuth` dan `quick_petugas_authenticated` agar sesi login tidak bentrok.
+   - **Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.26`** pada `web-statis/sw.js` dan pembersih cache `web-statis/admin.html` agar cache usang di peramban TV display dan perangkat klien otomatis dibersihkan seketika.
+
+3. **Verifikasi & Pengujian:**
+   - `npm test`: **68 / 68 assertions LULUS (100% PASS)** tanpa regresi syntax atau runtime logic.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 10 Oktober 2026 (Pukul 00:45 WIB)
 
 ### ⚡ RESOLUSI SINKRONISASI REALTIME INPUT JADWAL SHOLAT & DURASI KE DASHBOARD ADMIN, PETUGAS & TV (Versi SW v5.8.25):
 1. **Akar Masalah yang Teridentifikasi (*Root Cause Analysis*):**

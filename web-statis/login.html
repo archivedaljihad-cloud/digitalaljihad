@@ -523,6 +523,294 @@
             font-weight: 800;
         }
 
+        /* =========================================================================
+           SELECTOR MODE LOGIN: DASHBOARD vs INPUT MOBILE
+           ========================================================================= */
+        .login-mode-segmented-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 22, 16, 0.92);
+            border: 1.8px solid rgba(255, 215, 0, 0.38);
+            border-radius: 32px;
+            padding: 4px;
+            margin-bottom: 16px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.7),
+                0 0 18px rgba(0, 230, 118, 0.18);
+            gap: 6px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .mode-segment-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 26px;
+            border: 1.5px solid transparent;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .mode-segment-btn:hover {
+            color: #ffd700;
+        }
+
+        .mode-segment-btn.active#btnModeDashboard {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+            color: #000000;
+            border-color: #ffd700;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45);
+            font-weight: 800;
+        }
+
+        .mode-segment-btn.active#btnModeMobile {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            border-color: #ffd700;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
+            font-weight: 800;
+        }
+
+        .login-mode-view {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInMode 0.3s ease-out;
+        }
+
+        @keyframes fadeInMode {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================================================
+           CARD MODE INPUT MOBILE (PERSIS GAMBAR 2)
+           ========================================================================= */
+        .auth-gate-card {
+            background: linear-gradient(145deg, #042f23, #074533);
+            border: 2px solid #ffd700;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            padding: 24px 22px 20px 22px;
+            text-align: center;
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.9), 
+                0 0 25px rgba(255, 215, 0, 0.35);
+            margin-bottom: 14px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            animation: popGate 0.25s ease-out;
+        }
+
+        @keyframes popGate {
+            from { transform: scale(0.96); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .auth-icon-circle {
+            width: 68px;
+            height: 68px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 50%;
+            margin: 0 auto 12px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #022c22;
+            font-size: 1.85rem;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .auth-gate-card h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .auth-gate-card p {
+            font-size: 0.84rem;
+            color: #cbd5e1;
+            line-height: 1.45;
+            margin-bottom: 16px;
+        }
+
+        .auth-tabs-nav {
+            display: flex;
+            background: rgba(2, 20, 15, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 16px;
+            gap: 4px;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.84rem;
+            font-weight: 700;
+            padding: 9px 12px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+
+        .auth-tab-btn.active {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(6, 61, 46, 0.9));
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-input-wrapper {
+            position: relative;
+            margin-bottom: 14px;
+            width: 100%;
+        }
+
+        .auth-password-input {
+            width: 100%;
+            height: 48px;
+            background: rgba(2, 20, 15, 0.95);
+            border: 2px solid #ffd700;
+            border-radius: 14px;
+            padding: 10px 46px 10px 16px;
+            font-size: 0.92rem;
+            color: #ffffff;
+            outline: none;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .auth-password-input::placeholder {
+            color: #64748b;
+            font-size: 0.88rem;
+        }
+
+        .auth-password-input:focus {
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.5);
+            border-color: #ffd700;
+        }
+
+        .auth-toggle-eye {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffd700;
+            cursor: pointer;
+            font-size: 1.15rem;
+            transition: transform 0.15s;
+            z-index: 3;
+        }
+
+        .auth-toggle-eye:hover {
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .auth-error-msg {
+            display: none;
+            color: #fca5a5;
+            font-size: 0.82rem;
+            font-weight: 600;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            text-align: left;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .btn-auth-unlock {
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: 1.8px solid #ffd700;
+            border-radius: 14px;
+            padding: 10px;
+            font-size: 0.98rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .btn-auth-unlock:hover {
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.6);
+            color: #ffffff;
+        }
+
+        .btn-auth-unlock:active {
+            transform: scale(0.98);
+        }
+
+        .auth-footer-links {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.80rem;
+        }
+
+        .auth-footer-link {
+            color: #94a3b8;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .auth-footer-link:hover {
+            color: #ffd700;
+            transform: translateY(-1px);
+        }
+
+        .auth-footer-separator {
+            color: #475569;
+        }
+
         /* RESPONSIVE LAYOUT */
         @media (max-width: 991px) {
             .login-grid-split {
@@ -610,118 +898,232 @@
         <div class="login-content-side">
             <div class="login-box-stack">
                 
-                <!-- 1. Kaligrafi Arab Salam & Bismillah (Kuning Emas) -->
-                <div class="arabic-greeting-wrap">
-                    <div class="arabic-salam-text">
-                        ٱلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ وَبَرَكَاتُهُ
-                    </div>
-                    <div class="arabic-bismillah-text">
-                        بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
-                    </div>
+                <!-- 0. SELECTOR MODE LOGIN: DASHBOARD vs INPUT MOBILE -->
+                <div class="login-mode-segmented-bar" role="tablist" aria-label="Pilihan Mode Login">
+                    <button type="button" 
+                            class="mode-segment-btn active" 
+                            id="btnModeDashboard" 
+                            role="tab" 
+                            aria-selected="true" 
+                            onclick="switchLoginMode('dashboard')">
+                        <i class="fas fa-desktop"></i> DASHBOARD
+                    </button>
+                    <button type="button" 
+                            class="mode-segment-btn" 
+                            id="btnModeMobile" 
+                            role="tab" 
+                            aria-selected="false" 
+                            onclick="switchLoginMode('mobile')">
+                        <i class="fas fa-mobile-alt"></i> INPUT MOBILE
+                    </button>
                 </div>
 
-                <!-- 2. Ucapan Selamat Datang & Nama Sistem -->
-                <h1 class="welcome-login-title">Selamat datang di halaman LOGIN</h1>
-                <h2 class="welcome-login-subtitle">SYSTEM INFORMASI DIGITAL MASJID JAMI' AL JIHAD</h2>
-
-                <!-- 4. Pill Petunjuk Masukkan Kredensial -->
-                <div class="credential-guide-pill">
-                    <i class="fas fa-key"></i>
-                    <span>Masukkan kredensial akun pengurus untuk masuk</span>
-                </div>
-
-                <!-- Box Notifikasi Alert Error/Success -->
-                <div id="loginAlertBox" class="alert-box">
-                    <div id="loginAlertMessage" style="display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span>Pesan notifikasi</span>
+                <!-- =========================================================================
+                     VIEW 1: MODE DASHBOARD (PERSIS GAMBAR 1)
+                     ========================================================================= -->
+                <div id="viewDashboardLogin" class="login-mode-view">
+                    
+                    <!-- 1. Kaligrafi Arab Salam & Bismillah (Kuning Emas) -->
+                    <div class="arabic-greeting-wrap">
+                        <div class="arabic-salam-text">
+                            ٱلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ وَبَرَكَاتُهُ
+                        </div>
+                        <div class="arabic-bismillah-text">
+                            بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+                        </div>
                     </div>
-                    <span style="cursor: pointer; font-size: 1.1rem;" onclick="closeAlert()">&times;</span>
-                </div>
 
-                <!-- 5. Card Form Login -->
-                <div class="login-form-card">
-                    <form id="loginForm" onsubmit="handleFormSubmit(event)">
-                        
-                        <!-- Field Email / Username -->
-                        <div class="login-field-row">
-                            <label class="login-field-label">
-                                <i class="fas fa-user-circle"></i>
-                                <span>Email / Username</span>
-                            </label>
-                            <div class="login-input-container">
-                                <i class="fas fa-envelope login-input-icon-lead"></i>
-                                <input type="text" 
-                                       class="login-input-control" 
-                                       id="loginIdentifier" 
-                                       required 
-                                       autocomplete="username" 
-                                       autofocus 
-                                       value="" 
-                                       placeholder="Email atau Username pengurus">
+                    <!-- 2. Ucapan Selamat Datang & Nama Sistem -->
+                    <h1 class="welcome-login-title">Selamat datang di halaman LOGIN</h1>
+                    <h2 class="welcome-login-subtitle">SYSTEM INFORMASI DIGITAL MASJID JAMI' AL JIHAD</h2>
+
+                    <!-- 4. Pill Petunjuk Masukkan Kredensial -->
+                    <div class="credential-guide-pill">
+                        <i class="fas fa-key"></i>
+                        <span>Masukkan kredensial akun pengurus untuk masuk</span>
+                    </div>
+
+                    <!-- Box Notifikasi Alert Error/Success -->
+                    <div id="loginAlertBox" class="alert-box">
+                        <div id="loginAlertMessage" style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Pesan notifikasi</span>
+                        </div>
+                        <span style="cursor: pointer; font-size: 1.1rem;" onclick="closeAlert()">&times;</span>
+                    </div>
+
+                    <!-- 5. Card Form Login Dashboard -->
+                    <div class="login-form-card">
+                        <form id="loginForm" onsubmit="handleFormSubmit(event)">
+                            
+                            <!-- Field Email / Username -->
+                            <div class="login-field-row">
+                                <label class="login-field-label">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Email / Username</span>
+                                </label>
+                                <div class="login-input-container">
+                                    <i class="fas fa-envelope login-input-icon-lead"></i>
+                                    <input type="text" 
+                                           class="login-input-control" 
+                                           id="loginIdentifier" 
+                                           required 
+                                           autocomplete="username" 
+                                           autofocus 
+                                           value="" 
+                                           placeholder="Email atau Username pengurus">
+                                </div>
                             </div>
+
+                            <!-- Field Kata Sandi -->
+                            <div class="login-field-row">
+                                <label class="login-field-label">
+                                    <i class="fas fa-lock"></i>
+                                    <span>Kata Sandi</span>
+                                </label>
+                                <div class="login-input-container">
+                                    <i class="fas fa-shield-alt login-input-icon-lead"></i>
+                                    <input type="password" 
+                                           class="login-input-control" 
+                                           id="loginPassword" 
+                                           required 
+                                           autocomplete="current-password" 
+                                           value="" 
+                                           placeholder="••••••••••••">
+                                    <button type="button" 
+                                            class="pwd-visibility-btn" 
+                                            onclick="togglePasswordVisibility()" 
+                                            title="Tampilkan / Sembunyikan Kata Sandi">
+                                        <i class="fas fa-eye" id="pwdToggleIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Row Opsi Ingatkan Saya -->
+                            <div class="login-options-row">
+                                <label class="remember-check-label" for="rememberTick">
+                                    <input type="checkbox" 
+                                           class="remember-check-input" 
+                                           id="rememberTick" 
+                                           checked>
+                                    <span>Ingatkan saya</span>
+                                </label>
+                                <span style="color: #94a3b8; font-size: 0.76rem;">
+                                    <i class="fas fa-lock mr-1 text-warning"></i> Sesi Aman
+                                </span>
+                            </div>
+
+                            <!-- Tombol Submit Masuk ke Dashboard -->
+                            <button type="submit" class="btn-submit-dashboard" id="btnSubmitDashboard">
+                                <span>Masuk ke Dashboard</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </form>
+
+                        <!-- Navigasi Bawah Form: Kembali ke Display & Butuh Bantuan WA -->
+                        <div class="login-nav-sublinks">
+                            <a href="index.html" class="link-return-disp">
+                                <i class="fas fa-tv"></i>
+                                <span>Kembali ke Display TV</span>
+                            </a>
+                            <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="btn-help-wa" 
+                               title="Hubungi Bantuan via WhatsApp 087758767000">
+                                <span>Butuh Bantuan</span>
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- =========================================================================
+                     VIEW 2: MODE INPUT MOBILE (PERSIS GAMBAR 2)
+                     ========================================================================= -->
+                <div id="viewMobileLogin" class="login-mode-view" style="display: none;">
+                    
+                    <div class="auth-gate-card">
+                        <div class="auth-icon-circle">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h2>Akses Masuk Petugas</h2>
+                        <p>Masukkan kata sandi, PIN, atau nama akun pengurus untuk membuka Quick Input Mode.</p>
+
+                        <!-- TABS PILIHAN LOGIN INTERNAL MOBILE -->
+                        <div class="auth-tabs-nav">
+                            <button type="button" class="auth-tab-btn" id="tabQuickAuth" onclick="switchMobileAuthTab('quick')">
+                                <i class="fas fa-bolt"></i> Masuk Cepat
+                            </button>
+                            <button type="button" class="auth-tab-btn active" id="tabFullAuth" onclick="switchMobileAuthTab('full')">
+                                <i class="fas fa-key"></i> Username &amp; Sandi
+                            </button>
                         </div>
 
-                        <!-- Field Kata Sandi -->
-                        <div class="login-field-row">
-                            <label class="login-field-label">
-                                <i class="fas fa-lock"></i>
-                                <span>Kata Sandi</span>
-                            </label>
-                            <div class="login-input-container">
-                                <i class="fas fa-shield-alt login-input-icon-lead"></i>
+                        <!-- Pesan Kesalahan / Error -->
+                        <div class="auth-error-msg" id="authMobileErrorMsg">
+                            <i class="fas fa-exclamation-triangle mr-1"></i> <span id="authMobileErrorText">Kredensial tidak cocok. Silakan coba lagi.</span>
+                        </div>
+
+                        <!-- FORM 1: MASUK CEPAT (1 KOLOM SMART MATCH) -->
+                        <form id="formMobileQuickAuth" style="display: none;" onsubmit="handleMobileQuickAuthSubmit(event)">
+                            <div class="auth-input-wrapper">
                                 <input type="password" 
-                                       class="login-input-control" 
-                                       id="loginPassword" 
-                                       required 
+                                       id="authMobilePasswordInput" 
+                                       class="auth-password-input" 
+                                       placeholder="Sandi / PIN / Username..." 
                                        autocomplete="current-password" 
-                                       value=""
-                                       placeholder="••••••••••••">
-                                <button type="button" 
-                                        class="pwd-visibility-btn" 
-                                        onclick="togglePasswordVisibility()" 
-                                        title="Tampilkan / Sembunyikan Kata Sandi">
-                                    <i class="fas fa-eye" id="pwdToggleIcon"></i>
-                                </button>
+                                       autocapitalize="none" 
+                                       autocorrect="off" 
+                                       spellcheck="false">
+                                <i class="fas fa-eye auth-toggle-eye" id="authMobileEyeIcon" onclick="togglePasswordVisibilityMobile('authMobilePasswordInput', 'authMobileEyeIcon')"></i>
                             </div>
+                            <button type="submit" class="btn-auth-unlock" id="btnMobileQuickSubmit">
+                                <i class="fas fa-unlock-alt"></i> BUKA KUNCI AKSES
+                            </button>
+                        </form>
+
+                        <!-- FORM 2: LOGIN LENGKAP (USERNAME & PASSWORD) - PERSIS GAMBAR 2 -->
+                        <form id="formMobileFullAuth" onsubmit="handleMobileFullAuthSubmit(event)">
+                            <div class="auth-input-wrapper">
+                                <input type="text" 
+                                       id="authMobileUserInput" 
+                                       class="auth-password-input" 
+                                       placeholder="Email atau Username pengurus" 
+                                       autocomplete="username" 
+                                       autocapitalize="none" 
+                                       autocorrect="off" 
+                                       spellcheck="false">
+                            </div>
+                            <div class="auth-input-wrapper">
+                                <input type="password" 
+                                       id="authMobilePassInput" 
+                                       class="auth-password-input" 
+                                       placeholder="Kata sandi akun..." 
+                                       autocomplete="current-password" 
+                                       autocapitalize="none" 
+                                       autocorrect="off" 
+                                       spellcheck="false">
+                                <i class="fas fa-eye auth-toggle-eye" id="authMobileFullEyeIcon" onclick="togglePasswordVisibilityMobile('authMobilePassInput', 'authMobileFullEyeIcon')"></i>
+                            </div>
+                            <button type="submit" class="btn-auth-unlock" id="btnMobileFullSubmit">
+                                <i class="fas fa-sign-in-alt"></i> MASUK MODE INPUT MOBILE
+                            </button>
+                        </form>
+
+                        <!-- TAUTAN NAVIGASI ALTERNATIF -->
+                        <div class="auth-footer-links">
+                            <a href="javascript:void(0)" class="auth-footer-link" onclick="switchLoginMode('dashboard')">
+                                <i class="fas fa-columns"></i> Dashboard Admin
+                            </a>
+                            <span class="auth-footer-separator">•</span>
+                            <a href="index.html" class="auth-footer-link">
+                                <i class="fas fa-tv"></i> Layar TV Display
+                            </a>
                         </div>
-
-                        <!-- Row Opsi Ingatkan Saya -->
-                        <div class="login-options-row">
-                            <label class="remember-check-label" for="rememberTick">
-                                <input type="checkbox" 
-                                       class="remember-check-input" 
-                                       id="rememberTick" 
-                                       checked>
-                                <span>Ingatkan saya</span>
-                            </label>
-                            <span style="color: #94a3b8; font-size: 0.76rem;">
-                                <i class="fas fa-lock mr-1 text-warning"></i> Sesi Aman
-                            </span>
-                        </div>
-
-                        <!-- Tombol Submit Masuk ke Dashboard -->
-                        <button type="submit" class="btn-submit-dashboard" id="btnSubmitDashboard">
-                            <span>Masuk ke Dashboard</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </form>
-
-                    <!-- Navigasi Bawah Form: Kembali ke Display & Butuh Bantuan WA -->
-                    <div class="login-nav-sublinks">
-                        <a href="index.html" class="link-return-disp">
-                            <i class="fas fa-tv"></i>
-                            <span>Kembali ke Display TV</span>
-                        </a>
-                        <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           class="btn-help-wa" 
-                           title="Hubungi Bantuan via WhatsApp 087758767000">
-                            <span>Butuh Bantuan</span>
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
                     </div>
+
                 </div>
 
                 <!-- 6. Card Footer Identitas Developer & Versi -->
@@ -754,45 +1156,284 @@
 <script src="js/admin-auth.js?v=5.5.3"></script>
 
 <script>
-    // Jika ada param ?action=logout, bersihkan sesi secara tuntas dan pastikan form login tampil
+    // URL Parameters
     const urlParams = new URLSearchParams(window.location.search);
+
+    // Jika ada param ?action=logout, bersihkan sesi secara tuntas
     if (urlParams.get('action') === 'logout') {
         try {
             localStorage.removeItem('aljihad_auth_user');
             localStorage.removeItem('aljihad_last_activity');
+            localStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.clear();
         } catch(e) {}
     } else {
-        // Cek jika sudah login, alihkan ke admin.html
-        AdminAuth.redirectIfLoggedIn('admin.html');
-    }
-
-    // Cek pesan redirect dari sessionStorage atau param url reason
-    const redirectReason = sessionStorage.getItem('auth_redirect_reason');
-    if (redirectReason) {
-        const isWarning = redirectReason.toLowerCase().includes('aktivitas') || redirectReason.toLowerCase().includes('keamanan');
-        showAlert(redirectReason, isWarning ? 'warning' : 'danger');
-        sessionStorage.removeItem('auth_redirect_reason');
-    } else if (urlParams.get('reason') === 'idle_timeout') {
-        showAlert('Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.', 'warning');
-    }
-
-    // Sinkronisasi data user dari Cloud Supabase saat halaman dimuat di device apapun
-    async function initLoginCloudSync() {
-        try {
-            if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
-                await AdminAuth.syncUsersFromCloud();
+        // Jika param ?mode=mobile diminta dan sudah diautentikasi petugas, alihkan langsung ke modeinput.html
+        const modeQuery = urlParams.get('mode');
+        if (modeQuery === 'mobile' || modeQuery === 'input-mobile') {
+            if (localStorage.getItem('quick_petugas_authenticated') === 'true' || sessionStorage.getItem('quick_petugas_authenticated') === 'true') {
+                window.location.replace('modeinput.html');
             }
-        } catch (e) {
-            console.warn('[Login] Sync users from cloud error:', e);
+        } else if (!modeQuery && urlParams.get('force') !== '1') {
+            // Cek jika sudah login, alihkan ke admin.html
+            if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.redirectIfLoggedIn === 'function') {
+                AdminAuth.redirectIfLoggedIn('admin.html');
+            }
         }
     }
 
-    // Inisialisasi awal saat DOM siap
-    document.addEventListener('DOMContentLoaded', () => {
-        initLoginCloudSync();
-    });
+    // DAFTAR PASSWORD VALID RESMI PETUGAS (TERMASUK ALIAS & USERNAME RESMI)
+    const VALID_PASSWORDS = [
+        'SuperUser1971',  // Super Admin
+        '#1.Bendahara',   // Bendahara
+        '*dkm1#aljihad',  // DKM 1
+        '135dkmlJihad',   // DKM 2
+        '#1.AlJihad',
+        'admin123',
+        'operator123',
+        'bendahara123',
+        'dkm',
+        'dkmsatu',
+        'admin',
+        'bendahara',
+        'operator'
+    ];
 
+    // =========================================================================
+    // FUNGSI SWITCHER MODE UTAMA: DASHBOARD (GAMBAR 1) VS INPUT MOBILE (GAMBAR 2)
+    // =========================================================================
+    function switchLoginMode(mode) {
+        const btnDashboard = document.getElementById('btnModeDashboard');
+        const btnMobile = document.getElementById('btnModeMobile');
+        const viewDashboard = document.getElementById('viewDashboardLogin');
+        const viewMobile = document.getElementById('viewMobileLogin');
+
+        if (mode === 'mobile') {
+            if (btnMobile) {
+                btnMobile.classList.add('active');
+                btnMobile.setAttribute('aria-selected', 'true');
+            }
+            if (btnDashboard) {
+                btnDashboard.classList.remove('active');
+                btnDashboard.setAttribute('aria-selected', 'false');
+            }
+            if (viewDashboard) viewDashboard.style.display = 'none';
+            if (viewMobile) viewMobile.style.display = 'block';
+            try { localStorage.setItem('aljihad_login_mode', 'mobile'); } catch(e){}
+            setTimeout(() => {
+                const inp = document.getElementById('authMobileUserInput');
+                if (inp && inp.offsetParent !== null) inp.focus();
+            }, 60);
+        } else {
+            if (btnDashboard) {
+                btnDashboard.classList.add('active');
+                btnDashboard.setAttribute('aria-selected', 'true');
+            }
+            if (btnMobile) {
+                btnMobile.classList.remove('active');
+                btnMobile.setAttribute('aria-selected', 'false');
+            }
+            if (viewDashboard) viewDashboard.style.display = 'block';
+            if (viewMobile) viewMobile.style.display = 'none';
+            try { localStorage.setItem('aljihad_login_mode', 'dashboard'); } catch(e){}
+            setTimeout(() => {
+                const inp = document.getElementById('loginIdentifier');
+                if (inp && inp.offsetParent !== null) inp.focus();
+            }, 60);
+        }
+    }
+
+    // =========================================================================
+    // FUNGSI TABS DI DALAM MODE INPUT MOBILE (GAMBAR 2)
+    // =========================================================================
+    function switchMobileAuthTab(tab) {
+        const tabQuick = document.getElementById('tabQuickAuth');
+        const tabFull = document.getElementById('tabFullAuth');
+        const formQuick = document.getElementById('formMobileQuickAuth');
+        const formFull = document.getElementById('formMobileFullAuth');
+        const errBox = document.getElementById('authMobileErrorMsg');
+        if (errBox) errBox.style.display = 'none';
+
+        if (tab === 'quick') {
+            if (tabQuick) tabQuick.classList.add('active');
+            if (tabFull) tabFull.classList.remove('active');
+            if (formQuick) formQuick.style.display = 'block';
+            if (formFull) formFull.style.display = 'none';
+            setTimeout(() => {
+                const inp = document.getElementById('authMobilePasswordInput');
+                if (inp) inp.focus();
+            }, 50);
+        } else {
+            if (tabFull) tabFull.classList.add('active');
+            if (tabQuick) tabQuick.classList.remove('active');
+            if (formQuick) formQuick.style.display = 'none';
+            if (formFull) formFull.style.display = 'block';
+            setTimeout(() => {
+                const inp = document.getElementById('authMobileUserInput');
+                if (inp) inp.focus();
+            }, 50);
+        }
+    }
+
+    function togglePasswordVisibilityMobile(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (!input) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            if (icon) {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        } else {
+            input.type = 'password';
+            if (icon) {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    }
+
+    function showMobileError(text) {
+        const errBox = document.getElementById('authMobileErrorMsg');
+        const errText = document.getElementById('authMobileErrorText');
+        if (errBox && errText) {
+            errText.textContent = text;
+            errBox.style.display = 'block';
+        }
+    }
+
+    // SUBMIT FORM 2 INPUT MOBILE (USERNAME & SANDI)
+    async function handleMobileFullAuthSubmit(e) {
+        e.preventDefault();
+        const identifier = (document.getElementById('authMobileUserInput')?.value || '').trim();
+        const password = (document.getElementById('authMobilePassInput')?.value || '').trim();
+        const btn = document.getElementById('btnMobileFullSubmit');
+        const errBox = document.getElementById('authMobileErrorMsg');
+        if (errBox) errBox.style.display = 'none';
+
+        if (!identifier || !password) {
+            showMobileError('Email/Username dan Kata Sandi wajib diisi!');
+            return;
+        }
+
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memverifikasi...';
+        }
+
+        try {
+            let user = null;
+            if (window.AdminAuth && typeof window.AdminAuth.login === 'function') {
+                user = await window.AdminAuth.login(identifier, password);
+            }
+            // Simpan status otentikasi petugas
+            localStorage.setItem('quick_petugas_authenticated', 'true');
+            sessionStorage.setItem('quick_petugas_authenticated', 'true');
+            if (user) {
+                try {
+                    localStorage.setItem('aljihad_auth_user', JSON.stringify(user));
+                    sessionStorage.setItem('aljihad_auth_user', JSON.stringify(user));
+                } catch(e){}
+            }
+
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Berhasil Masuk!';
+                btn.style.background = '#059669';
+            }
+
+            setTimeout(() => {
+                window.location.replace('modeinput.html');
+            }, 350);
+        } catch (err) {
+            showMobileError(err.message || 'Kredensial tidak cocok. Silakan coba lagi.');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> MASUK MODE INPUT MOBILE';
+            }
+        }
+    }
+
+    // SUBMIT FORM 1 INPUT MOBILE (MASUK CEPAT / PIN)
+    async function handleMobileQuickAuthSubmit(e) {
+        e.preventDefault();
+        const rawVal = (document.getElementById('authMobilePasswordInput')?.value || '').trim();
+        const cleanLower = rawVal.toLowerCase();
+        const btn = document.getElementById('btnMobileQuickSubmit');
+        const errBox = document.getElementById('authMobileErrorMsg');
+        if (errBox) errBox.style.display = 'none';
+
+        if (!rawVal) {
+            showMobileError('Silakan masukkan Sandi, PIN, atau Username Anda.');
+            return;
+        }
+
+        let matched = false;
+        let matchedUser = null;
+
+        let users = [];
+        if (window.AdminAuth && typeof window.AdminAuth.getUsers === 'function') {
+            try { users = window.AdminAuth.getUsers(); } catch(e){}
+        }
+        if (!Array.isArray(users) || users.length === 0) {
+            try {
+                const rawL = localStorage.getItem('aljihad_users_list');
+                if (rawL) users = JSON.parse(rawL);
+            } catch(e){}
+        }
+
+        if (Array.isArray(users) && users.length > 0) {
+            matchedUser = users.find(u => {
+                const uPwd = (u.password || '').trim();
+                const un = (u.username || '').toLowerCase().trim();
+                return uPwd === rawVal || (uPwd && uPwd.toLowerCase() === cleanLower) || un === cleanLower;
+            });
+            if (matchedUser) matched = true;
+        }
+
+        if (!matched) {
+            const validLower = VALID_PASSWORDS.map(p => p.toLowerCase());
+            if (VALID_PASSWORDS.includes(rawVal) || validLower.includes(cleanLower)) {
+                matched = true;
+                if (cleanLower.includes('bendahara')) {
+                    matchedUser = (users || []).find(u => u.role === 'bendahara');
+                } else if (cleanLower.includes('admin') || cleanLower.includes('super')) {
+                    matchedUser = (users || []).find(u => u.role === 'admin');
+                } else {
+                    matchedUser = (users || []).find(u => u.role === 'petugas');
+                }
+            }
+        }
+
+        if (matched) {
+            localStorage.setItem('quick_petugas_authenticated', 'true');
+            sessionStorage.setItem('quick_petugas_authenticated', 'true');
+            if (matchedUser) {
+                try {
+                    localStorage.setItem('aljihad_auth_user', JSON.stringify(matchedUser));
+                    sessionStorage.setItem('aljihad_auth_user', JSON.stringify(matchedUser));
+                } catch(e){}
+            }
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Kunci Terbuka!';
+                btn.style.background = '#059669';
+            }
+            setTimeout(() => {
+                window.location.replace('modeinput.html');
+            }, 300);
+        } else {
+            showMobileError('Kredensial atau PIN tidak cocok. Silakan coba lagi.');
+            const input = document.getElementById('authMobilePasswordInput');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+        }
+    }
+
+    // =========================================================================
+    // FUNGSI MODE DASHBOARD (GAMBAR 1)
+    // =========================================================================
     function togglePasswordVisibility() {
         const input = document.getElementById('loginPassword');
         const icon = document.getElementById('pwdToggleIcon');
@@ -876,6 +1517,47 @@
             }
         }
     }
+
+    // Sinkronisasi data user dari Cloud Supabase saat halaman dimuat di device apapun
+    async function initLoginCloudSync() {
+        try {
+            if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
+                await AdminAuth.syncUsersFromCloud();
+            }
+        } catch (e) {
+            console.warn('[Login] Sync users from cloud error:', e);
+        }
+    }
+
+    // Inisialisasi awal saat DOM siap
+    document.addEventListener('DOMContentLoaded', () => {
+        initLoginCloudSync();
+
+        // Cek pesan redirect dari sessionStorage atau param url reason
+        const redirectReason = sessionStorage.getItem('auth_redirect_reason');
+        if (redirectReason) {
+            const isWarning = redirectReason.toLowerCase().includes('aktivitas') || redirectReason.toLowerCase().includes('keamanan');
+            showAlert(redirectReason, isWarning ? 'warning' : 'danger');
+            sessionStorage.removeItem('auth_redirect_reason');
+        } else if (urlParams.get('reason') === 'idle_timeout') {
+            showAlert('Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.', 'warning');
+        }
+
+        // Deteksi mode login dari query param ?mode=... atau preferensi lokal
+        const modeParam = urlParams.get('mode');
+        let activeMode = 'dashboard';
+        if (modeParam === 'mobile' || modeParam === 'input-mobile' || modeParam === 'input_mobile') {
+            activeMode = 'mobile';
+        } else if (modeParam === 'dashboard') {
+            activeMode = 'dashboard';
+        } else {
+            try {
+                const savedMode = localStorage.getItem('aljihad_login_mode');
+                if (savedMode === 'mobile') activeMode = 'mobile';
+            } catch(e) {}
+        }
+        switchLoginMode(activeMode);
+    });
 </script>
 
 </body>
