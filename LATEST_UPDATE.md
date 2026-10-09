@@ -22,16 +22,19 @@
      - **PEMBERSIHAN CACHE USANG**: Pembersihan kunci cache lokal yang sudah usang dan pembaruan Service Worker cache.
 
 2. **Tindakan Perbaikan & Penyempurnaan yang Diterapkan:**
+   - **Sinkronisasi Realtime Antar-Akun Petugas & Bendahara (`web-statis/petugas.html` & `web-statis/modeinput.html`):**
+     - Menambahkan pendengar universal `SupabaseDB.onDataChange` di `DOMContentLoaded`.
+     - Ketika Bendahara atau Petugas lain menginput atau mengubah data apapun (Kas, Petugas Jum'at, Infaq, Qurban, Agenda), formulir dan kartu preview di HP petugas lain seketika tersinkronisasi otomatis (<100ms) tanpa perlu refresh halaman manual (dengan proteksi saat bottom sheet form sedang aktif mengetik agar input tidak terganggu).
    - **Pembersihan Cache Usang (`web-statis/js/supabase-db.js`):**
      - Memperluas daftar `obsoleteKeys` di `SupabaseDB.cleanupObsoleteCache()` dengan menambahkan kunci eksperimen lama: `portal_gateway_active`, `portal_auth_target`, `aljihad_gateway_token`, `backup_petugas_old`, `cached_prayer_settings_old`.
    - **Proteksi Keamanan & Crawler SEO (`web-statis/robots.txt`):**
      - Menambahkan aturan proteksi `Disallow: /petugas.html` dan `Disallow: /modeinput.html` melengkapi `Disallow: /admin.html` dan `Disallow: /login.html` agar formulir internal pengurus tidak terindeks oleh bot mesin pencari.
    - **Pengujian Regresi Otomatis (`scripts/test-engine.js`):**
-     - Menambahkan verifikasi otomatis untuk rute disallow `petugas.html` dan `modeinput.html`.
-     - Hasil verifikasi: **66 dari 66 pengujian (100%) lulus sempurna**.
+     - Menambahkan verifikasi otomatis untuk rute disallow `petugas.html` dan `modeinput.html`, serta verifikasi listener realtime multi-akun.
+     - Hasil verifikasi: **68 dari 68 pengujian (100%) lulus sempurna**.
 
 3. **Sinkronisasi 4 Pilar (SOP Wajib):**
-   - **GitHub (`main`)**: Commit `7c93150` berhasil di-push ke repositori.
+   - **GitHub (`main`)**: Commit `e9a3331` berhasil di-push ke repositori.
    - **Cloudflare Workers**: Berhasil di-deploy via `npx wrangler deploy` ke `https://digitalaljihad.my.id/`.
    - **Folder Mandiri Lokal**: Seluruh file diperbarui di `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
    - **Database Supabase**: Skema dan listener realtime terhubung aktif.
