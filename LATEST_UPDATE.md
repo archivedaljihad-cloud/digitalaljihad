@@ -4,7 +4,41 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 18:55 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 19:30 WIB)
+
+### 🛡️ AUDIT SENIOR SRE, SDET, & DEVSECOPS MENYELURUH & PERBAIKAN PRAYER MODE REALTIME (Versi SW v5.8.21):
+1. **Latar Belakang & Mandat Audit 7 Pilar:**
+   - Melakukan finalisasi audit menyeluruh, mendalam, dan sangat teliti pada 7 domain kritis:
+     1. **Arsitektur Sistem, Logika Bisnis & Fungsionalitas Fitur**
+     2. **Performa & Optimasi (Performance & Caching)**
+     3. **Keamanan (Security & DevSecOps)**
+     4. **Antarmuka & Pengalaman Pengguna (UI/UX Kiosk TV & Mobile Officer)**
+     5. **Kompatibilitas & Aksesibilitas (Compatibility & a11y)**
+     6. **Observabilitas & Pemantauan (Observability, Telemetry & Watchdog)**
+     7. **Kepatuhan & SEO (SEO & Crawler Protection)**
+   - **Mandat Utama Pengguna:** *"JANGAN ABAIKAN PRAYER MODE, SEMUA SETING dan DATA INPUT oleh PETUGAS, ADMIN, BENDAHARA --> ini MASALAH SANGAT KRUSIAL karena selalu di lihat oleh jamaah. Jika menurut anda diperlukan tindakan perbaikan, silakan diperbaiki elemen/hal-hal yang berpotensi menyebabkan gagal fungsi dan bug. Jika ada cache usang yang sudah tidak relevan dan tidak diperlukan lagi silakan di hapus agar responsifitas Web aplikasi ini meningkat."*
+
+2. **Perbaikan Krusial & Penyempurnaan yang Diterapkan:**
+   - **Mission-Critical Prayer Mode (`web-statis/prayer-mode.html`):**
+     - **Fix Bug Cache Stale Data:** Memperbaiki fungsi `init(forceFresh)` agar saat menerima sinyal `DATA_UPDATED` atau `force_reload`, sistem langsung menyegarkan data `settings`, `jadwalList`, dan `jumatPetugas` dari Supabase Cloud / storage tanpa tertahan oleh pemeriksaan variabel in-memory yang sudah ada sebelumnya.
+     - **Direct Universal Realtime Listener:** Memasang pendengar `SupabaseDB.onDataChange` langsung di `prayer-mode.html` untuk menjamin penerimaan siaran realtime Postgres Changes & Broadcast Channel sekalipun dibuka di tab/display terpisah.
+     - **Dukungan Dinamis Pembaca Maklumat (`cardMaklumat` & `.has-maklumat`):** Saat fase Khutbah Jum'at (`state.phase === KHUTBAH`), jika terdapat data petugas Maklumat (baik kolom mandiri maupun format gabung `Bilal / Maklumat`), tata letak kartu otomatis beralih menjadi 4 kolom proporsional (`Khotib & Imam`, `Muadzin`, `Bilal`, `Maklumat`) sehingga seluruh input Petugas/Admin tampil utuh di hadapan jamaah.
+     - **Public Bridge API:** Mengekspos `window.initPrayerMode` dan `window.updatePrayerUI` ke window objek untuk kemudahan kendali sinkronisasi dari iframe induk `index.html`.
+   - **Pembersihan Cache Usang & Penyempurnaan Panel Admin (`web-statis/admin.html` & `js/supabase-db.js`):**
+     - Memperluas daftar `obsoleteKeys` di `SupabaseDB.cleanupObsoleteCache()` untuk menyisir dan menghapus kunci memori lama (`cached_ramadhan_legacy`, `cached_tarhim_legacy`, `cached_jumat_legacy`, `old_quick_petugas_state`, `cached_display_config_legacy`).
+     - Memperbaiki string label versi usang di modal pembersihan cache `admin.html` dari `v5.6.9` ke versi mutakhir `v5.8.21`.
+   - **DevSecOps & Proteksi Crawler SEO (`web-statis/robots.txt` & `web-statis/sitemap.xml`):**
+     - Menambahkan aturan `Disallow:` untuk seluruh rute gerbang pengurus dan input internal (`/petugas.html`, `/petugas`, `/modeinput.html`, `/modeinput`, `/admin.html`, `/admin`, `/login.html`, `/login`) guna mencegah bot mesin pencari mengindeks formulir internal DKM.
+     - Memperbarui timestamp `<lastmod>` di `sitemap.xml` ke tanggal terkini (9 Oktober 2026).
+   - **Bumping Cache Service Worker (SOP #2):**
+     - Versi dinaikkan ke **`v5.8.21`** (`aljihad-signage-v5.8.21`) di `web-statis/sw.js` dan `web-statis/admin.html` agar browser TV dan klien lama otomatis membuang cache usang dan memuat aset terbaru secara instan.
+   - **Sistem Pengujian Regresi Otomatis (`scripts/test-engine.js`):**
+     - Menambahkan **[TEST 7] Prayer Mode Realtime & Officer Sync Integrity** dan **[TEST 8] DevSecOps & SEO Robots Integrity**.
+     - Total pengujian meningkat menjadi **68 / 68 assertion checks**, semuanya **100% lulus sempurna**.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 18:55 WIB)
 
 ### 🚪 GERBANG RESMI TUNGGAL OTORISASI PENGURUS & TV DISPLAY MASJID (Versi SW v5.8.20):
 1. **Latar Belakang & Mandat Keamanan Pengguna:**

@@ -2370,7 +2370,12 @@
                 const obsoleteKeys = [
                     'cached_prayer_mode_enabled',
                     'cached_prayer_mode_jumat_duration',
-                    'nu_last_sync_date'
+                    'nu_last_sync_date',
+                    'cached_ramadhan_legacy',
+                    'cached_tarhim_legacy',
+                    'cached_jumat_legacy',
+                    'old_quick_petugas_state',
+                    'cached_display_config_legacy'
                 ];
 
                 obsoleteKeys.forEach(k => {

@@ -235,6 +235,26 @@ assert(adminContent.includes('requireAuth'), 'admin.html diproteksi wajib otenti
 assert(authContent.includes('requireAuth') && authContent.includes('redirect='), 'admin-auth.js menangani parameter redirect otomatis ke gerbang resmi');
 
 // -------------------------------------------------------------
+// 7. PRAYER MODE REALTIME & OFFICER SYNC INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 7] Prayer Mode Realtime & Officer Sync Integrity:');
+const prayerContent = fs.readFileSync(path.join(baseDir, 'prayer-mode.html'), 'utf8');
+assert(prayerContent.includes('SupabaseDB.onDataChange'), 'prayer-mode.html memiliki listener universal SupabaseDB.onDataChange');
+assert(prayerContent.includes('cardMaklumat') && prayerContent.includes('has-maklumat'), 'prayer-mode.html memiliki komponen display Pembaca Maklumat');
+assert(prayerContent.includes('init(true)') || prayerContent.includes('forceFresh'), 'prayer-mode.html mendukung forceFresh cache bypass saat update');
+assert(prayerContent.includes('window.initPrayerMode') && prayerContent.includes('window.updatePrayerUI'), 'prayer-mode.html mengekspos public interface bridge ke parent TV');
+
+// -------------------------------------------------------------
+// 8. DEVSECOPS & SEO ROBOTS INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 8] DevSecOps & SEO Robots Integrity:');
+const robotsContent = fs.readFileSync(path.join(baseDir, 'robots.txt'), 'utf8');
+assert(robotsContent.includes('Disallow: /admin.html') && robotsContent.includes('Disallow: /admin'), 'robots.txt memblokir crawler ke rute admin');
+assert(robotsContent.includes('Disallow: /petugas.html') && robotsContent.includes('Disallow: /petugas'), 'robots.txt memblokir crawler ke rute petugas');
+assert(robotsContent.includes('Disallow: /modeinput.html') && robotsContent.includes('Disallow: /modeinput'), 'robots.txt memblokir crawler ke rute modeinput');
+assert(robotsContent.includes('Disallow: /login.html') && robotsContent.includes('Disallow: /login'), 'robots.txt memblokir crawler ke rute login');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');

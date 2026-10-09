@@ -777,7 +777,7 @@
             color: #D4AF37;
         }
 
-        /* 6. JUMAT OFFICERS GRID (Khotib & Imam Memanjang 1 Baris) */
+        /* 6. JUMAT OFFICERS GRID (Khotib & Imam Memanjang 1 Baris, Muadzin, Bilal, Maklumat) */
         .jumat-officers-grid {
             display: none;
             grid-template-columns: 1.85fr 1.05fr 1.05fr;
@@ -785,6 +785,10 @@
             width: 100%;
             max-width: 1120px;
             margin: 10px auto;
+        }
+
+        .jumat-officers-grid.has-maklumat {
+            grid-template-columns: 1.55fr 1.05fr 1fr 1.15fr;
         }
 
         .jumat-officers-grid.active {
@@ -1207,7 +1211,7 @@
             </div>
         </div>
 
-        <!-- 3B. KHUSUS JUMAT: 3 KARTU PETUGAS JUMAT (KHOTIB & IMAM MEMANJANG) -->
+        <!-- 3B. KHUSUS JUMAT: 3-4 KARTU PETUGAS JUMAT (KHOTIB & IMAM MEMANJANG, MUADZIN, BILAL, MAKLUMAT) -->
         <div class="jumat-officers-grid" id="jumatOfficersGrid">
             <div class="officer-card officer-card-main">
                 <div class="officer-badge"><i class="fas fa-microphone"></i> KHOTIB &amp; IMAM</div>
@@ -1220,6 +1224,10 @@
             <div class="officer-card">
                 <div class="officer-badge"><i class="fas fa-hands-praying"></i> BILAL</div>
                 <div class="officer-name" id="officerBilal">Bilal</div>
+            </div>
+            <div class="officer-card" id="cardMaklumat" style="display: none;">
+                <div class="officer-badge"><i class="fas fa-scroll"></i> MAKLUMAT</div>
+                <div class="officer-name" id="officerMaklumat">Pembaca Maklumat</div>
             </div>
         </div>
 
@@ -1774,10 +1782,33 @@
                     const elMuadzin = document.getElementById('officerMuadzin');
                     if (elMuadzin) elMuadzin.textContent = pet.muadzin || 'Muadzin';
 
-                    let bilalCardName = pet.bilal || 'Bilal';
-                    if (bilalCardName.includes('/')) bilalCardName = bilalCardName.split('/')[0].trim();
+                    let rawBilal = (pet.bilal || '').trim();
+                    let bilalCardName = rawBilal || 'Bilal';
+                    let maklumatCardName = (pet.maklumat || '').trim();
+
+                    if (rawBilal.includes('/')) {
+                        const parts = rawBilal.split('/').map(s => s.trim());
+                        bilalCardName = parts[0] || 'Bilal';
+                        if (!maklumatCardName && parts[1]) {
+                            maklumatCardName = parts[1];
+                        }
+                    }
+
                     const elBilal = document.getElementById('officerBilal');
                     if (elBilal) elBilal.textContent = bilalCardName || 'Bilal';
+
+                    const cardMaklumat = document.getElementById('cardMaklumat');
+                    const elMaklumat = document.getElementById('officerMaklumat');
+                    if (cardMaklumat && elMaklumat) {
+                        if (maklumatCardName && maklumatCardName !== '-' && maklumatCardName !== 'Belum Ditetapkan') {
+                            elMaklumat.textContent = maklumatCardName;
+                            cardMaklumat.style.display = 'block';
+                            jumatGridEl.classList.add('has-maklumat');
+                        } else {
+                            cardMaklumat.style.display = 'none';
+                            jumatGridEl.classList.remove('has-maklumat');
+                        }
+                    }
                 }
 
                 adabNoticeEl.style.display = 'inline-flex';
@@ -1788,7 +1819,7 @@
             }
         }
 
-        async function init() {
+        async function init(forceFresh = false) {
             try {
                 setupPreviewBar();
 
@@ -1802,26 +1833,26 @@
                 } catch (e) {}
 
                 // Fallback LocalStorage instan
-                if (!settings) {
+                if (!settings || forceFresh) {
                     try { const s = localStorage.getItem('cached_app_settings'); if (s) settings = JSON.parse(s); } catch (e) {}
                 }
-                if (!jadwalList || !jadwalList.length) {
+                if (!jadwalList || !jadwalList.length || forceFresh) {
                     try { const j = localStorage.getItem('cached_jadwal_sholat'); if (j) jadwalList = JSON.parse(j); } catch (e) {}
                 }
-                if (!jumatPetugas) {
+                if (!jumatPetugas || forceFresh) {
                     try { const p = localStorage.getItem('cached_sholat_jumat'); if (p) jumatPetugas = JSON.parse(p); } catch (e) {}
                 }
 
-                // Cloud Supabase fallback jika masih ada data yang kosong
+                // Cloud Supabase fallback jika masih ada data yang kosong atau paksaan refresh
                 if (window.SupabaseDB) {
-                    if (!settings) {
-                        try { settings = await SupabaseDB.getSettings(); } catch (e) {}
+                    if (!settings || forceFresh) {
+                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch (e) {}
                     }
-                    if (!jadwalList || !jadwalList.length) {
-                        try { jadwalList = await SupabaseDB.getJadwalSholat(); } catch (e) {}
+                    if (!jadwalList || !jadwalList.length || forceFresh) {
+                        try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch (e) {}
                     }
-                    if (!jumatPetugas) {
-                        try { jumatPetugas = await SupabaseDB.getSholatJumat(); } catch (e) {}
+                    if (!jumatPetugas || forceFresh) {
+                        try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch (e) {}
                     }
                 }
 
@@ -1851,22 +1882,54 @@
         }
 
         // Listener pesan dari Parent TV (postMessage) untuk update instan
-        window.addEventListener('message', (event) => {
+        window.addEventListener('message', async (event) => {
             const msg = event.data;
             if (!msg) return;
+
+            // Selalu adopsi payload terkini jika tersedia
+            if (msg.settings) settings = msg.settings;
+            if (msg.jadwalList && msg.jadwalList.length > 0) jadwalList = msg.jadwalList;
+            if (msg.jumatPetugas) jumatPetugas = msg.jumatPetugas;
+
             if (msg.type === 'INIT_DISPLAY_DATA' || msg.type === 'UPDATE_PRAYER_STATE') {
-                if (msg.settings) settings = msg.settings;
-                if (msg.jadwalList && msg.jadwalList.length > 0) jadwalList = msg.jadwalList;
-                if (msg.jumatPetugas) jumatPetugas = msg.jumatPetugas;
                 if (msg.state) window._parentState = msg.state;
                 updatePrayerUI();
-            } else if (msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                init();
+            } else if (msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.type === 'SYNC_JUMAT' || msg.force_reload) {
+                if (window.SupabaseDB) {
+                    if (msg.table === 'sholat_jumat' || msg.type === 'SYNC_JUMAT') {
+                        try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch(e) {}
+                    }
+                    if (msg.table === 'jadwal_sholat') {
+                        try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch(e) {}
+                    }
+                    if (msg.table === 'app_settings' || msg.type === 'UPDATE_SETTINGS') {
+                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch(e) {}
+                    }
+                }
+                init(true);
             }
         });
 
-        // Expose updatePrayerUI ke window agar parent bisa memicu render langsung
+        // Pasang Pendengar Universal Realtime Langsung (Postgres Changes, BroadcastChannel, Storage)
+        if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+            SupabaseDB.onDataChange(async (payload) => {
+                const tbl = (payload.table || '').toLowerCase();
+                if (tbl === 'sholat_jumat' || tbl === 'jadwal_sholat' || tbl === 'app_settings' || tbl === 'quick_petugas') {
+                    if (tbl === 'sholat_jumat') {
+                        try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch(e) {}
+                    } else if (tbl === 'jadwal_sholat') {
+                        try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch(e) {}
+                    } else {
+                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch(e) {}
+                    }
+                    updatePrayerUI();
+                }
+            });
+        }
+
+        // Expose updatePrayerUI & init ke window agar parent bisa memicu render langsung
         window.updatePrayerUI = updatePrayerUI;
+        window.initPrayerMode = init;
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
