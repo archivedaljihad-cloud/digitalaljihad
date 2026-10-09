@@ -4,7 +4,32 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 20:25 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 20:38 WIB)
+
+### 🧹 PENGHAPUSAN TOMBOL BANTUAN "PILIH AKUN PETUGAS CEPAT (1-KLIK)" (Versi SW v5.8.23):
+1. **Permintaan Pengguna:**
+   - Menghilangkan bagian bantuan akun cepat pada modal "Akses Masuk Petugas":
+     - *"Pilih Akun Petugas Cepat (1-Klik):"*
+     - *"Petugas DKM"*
+     - *"Ketua DKM"*
+     - *"Bendahara"*
+     - *"Super Admin"*
+2. **Tindakan yang Dilakukan:**
+   - **Halaman Formulir Petugas (`web-statis/petugas.html` & `web-statis/modeinput.html`):**
+     - Menghapus blok elemen `<div class="auth-quick-chips-wrap">...</div>` secara tuntas.
+     - Tampilan modal otentikasi kini tampil jauh lebih bersih, ringkas, dan profesional: hanya menampilkan tab Masuk Cepat / Username & Sandi, kolom input kata sandi/PIN, tombol masuk utama, dan tautan footer navigasi.
+   - **Bumping Cache Service Worker (SOP #2):**
+     - Menaikkan versi Service Worker ke **`aljihad-signage-v5.8.23`** di `web-statis/sw.js` dan `web-statis/admin.html` agar browser HP petugas dan TV display seketika memperbarui antarmuka tanpa tertahan cache lama.
+3. **Hasil Pengujian Regresi Otomatis (`scripts/test-engine.js`):**
+   - Seluruh **68 pengujian lulus 100% sempurna**.
+4. **Sinkronisasi 4 Pilar (SOP Wajib):**
+   - **GitHub (`main`)**: Commit `81aef98` telah di-push.
+   - **Cloudflare Workers**: Berhasil di-deploy ke `https://digitalaljihad.my.id/` (Version ID: `4a0967b8-84da-4695-94be-53ec97988b30`).
+   - **Folder Cadangan Lokal**: Berkas tersalin ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 20:25 WIB)
 
 ### 🏆 FINALISASI AUDIT MENYELURUH 7 PILAR (SRE, QA SDET, & DEVSECOPS) & OPTIMASI REALTIME:
 1. **Latar Belakang & Mandat:**
