@@ -53,11 +53,11 @@
                 };
             }
 
-            const beforeAdzan = parseInt(setting.prayer_mode_before_adzan) || 5;
-            const adzanDuration = parseInt(setting.prayer_mode_adzan_duration) || 5;
-            const iqamahDuration = parseInt(setting.prayer_mode_iqamah_duration) || 10;
-            const prayerDuration = parseInt(setting.prayer_mode_duration) || 10;
-            const jumatDuration = parseInt(setting.prayer_mode_jumat_duration) || 50;
+            const beforeAdzan = parseInt(setting.prayer_mode_before_adzan) || parseInt(setting.durasi_tarhim) || 5;
+            const adzanDuration = parseInt(setting.prayer_mode_adzan_duration) || parseInt(setting.durasi_adzan) || 5;
+            const iqamahDuration = parseInt(setting.prayer_mode_iqamah_duration) || parseInt(setting.durasi_iqamah) || 10;
+            const prayerDuration = parseInt(setting.prayer_mode_duration) || parseInt(setting.durasi_sholat) || 10;
+            const jumatDuration = parseInt(setting.prayer_mode_jumat_duration) || parseInt(setting.durasi_jumat) || 50;
 
             const isFriday = now.getDay() === 5; // 5 = Friday
 

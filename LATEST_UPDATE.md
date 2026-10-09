@@ -4,7 +4,52 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 11:00 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 12:45 WIB)
+
+### 🕌 PERBAIKAN TOTAL MODE SHOLAT JUM'AT & SINKRONISASI PRAYER MODE IFRAME (Versi SW v5.8.16):
+1. **Latar Belakang & Keluhan Pengguna:**
+   - **Kondisi:** Pengguna melaporkan bahwa saat sholat Jum'at siang ini (Jum'at 9 Oktober 2026), halaman mode sholat tidak berjalan dan hanya tertahan menampilkan tulisan *"SHOLAT FARDHU"* dengan jam 00:00.
+   - **Akar Masalah (*Root Cause Analysis*):**
+     - **Iframe Data Isolation & Initialization Race Condition:** Di `index.html`, elemen `<iframe id="prayerFrame" src="prayer-mode.html">` dimuat di awal. Saat `prayer-mode.html` menjalankan `init()` pada event `DOMContentLoaded`, data di `window.parent` (`settings`, `jadwalList`, `jumatPetugas`) belum selesai diambil dari Supabase.
+     - **Bug Evaluasi Array Kosong JavaScript:** Variabel `jadwalList` di `prayer-mode.html` diinisialisasi dengan array kosong `let jadwalList = [];`. Pengecekan database cloud menggunakan kondisi `if (!jadwalList)`. Karena di JavaScript `![]` bernilai `false`, pemanggilan `SupabaseDB.getJadwalSholat()` di dalam iframe **TIDAK PERNAH DIJALANKAN**, sehingga `jadwalList` tetap kosong `[]`.
+     - **Early Exit di updatePrayerUI():** Karena `jadwalList` kosong, `PrayerEngine.getPrayerState()` di dalam iframe mengembalikan `{ active: false }`. Logika `updatePrayerUI()` kemudian langsung mengeksekusi `return;` tanpa pernah memperbarui DOM. Akibatnya elemen teks tetap menampilkan placeholder HTML statis bawaan: `<span class="prayer-name" id="prayerName">SHOLAT FARDHU</span>` dan timer `00:00`.
+     - **Ketiadaan PostMessage State dari Parent TV ke PrayerFrame:** Saat waktu sholat aktif, `index.html` hanya menambahkan kelas CSS `prayerFrame.classList.add('active')` tanpa mem-push state sholat aktif atau data jadwal sholat ke `prayerFrame.contentWindow`.
+
+2. **Solusi & Rekayasa Arsitektur:**
+   - **Preload Instan Multi-Tingkat (*Instant LocalStorage Bridge*):**
+     - Pada baris pertama skrip `prayer-mode.html`, variabel `settings`, `jadwalList`, dan `jumatPetugas` langsung dipre-load dari `localStorage` (`cached_app_settings`, `cached_jadwal_sholat`, `cached_sholat_jumat`) dalam orde 0ms tanpa menunggu async network.
+   - **Sinkronisasi Memori Dinamis Setiap Detik (*Live Parent Memory Bridge*):**
+     - Di dalam `updatePrayerUI()`, `prayer-mode.html` secara kontinyu membaca `window.parent.settings`, `window.parent.jadwalList`, dan `window.parent.jumatPetugas`.
+     - Prioritas state aktif: jika `window.parent.latestPrayerState` aktif, `prayer-mode.html` langsung menggunakan state parent tersebut sehingga 100% sinkron tanpa kemungkinan desinkronisasi.
+   - **Perbaikan Pemeriksaan Array Kosong:**
+     - Seluruh pengecekan array diubah menjadi `if (!jadwalList || !jadwalList.length)`.
+   - **Push Real-Time dari Parent ke Prayer Frame:**
+     - Di `index.html` pada fungsi `checkPrayerMode()`, setiap detik saat mode sholat aktif, parent mengirim pesan postMessage `UPDATE_PRAYER_STATE` dengan muatan `{ state, settings, jadwalList, jumatPetugas }` dan memanggil `prayerFrame.contentWindow.updatePrayerUI()` secara langsung.
+     - Di `broadcastToActiveFrames()`, elemen `prayerFrame` kini ikut disertakan bersama `frame1` dan `frame2`.
+     - Di `initDisplay()`, jika TV dinyalakan atau dimuat ulang tepat pada saat sholat fardhu / sholat Jum'at sedang berlangsung, layar TV langsung mengunci ke Mode Sholat seketika tanpa jeda rotasi slide.
+   - **Pengayaan Tampilan Khusus Sholat Jum'at:**
+     - **Fase Countdown Sholat Jum'at:**
+       - Judul Fase: *"Menjelang Sholat Jum'at"*
+       - Badge Timer: *"Menuju Adzan Jum'at"*
+       - Nama Sholat: *"SHOLAT JUM'AT"*
+       - Pesan Adab: *"Bersiap Sholat Jum'at Berjamaah. Mari Merapikan Shaf & Menyimak Khutbah."*
+       - Hadith Keutamaan Hari Jum'at: HR. Muslim no. 854.
+     - **Fase Adzan Sholat Jum'at:**
+       - Judul: *"Waktu Sholat Jum'at Telah Tiba"*
+       - Badge: *"Adzan Jum'at Berkumandang"*
+     - **Fase Khutbah & Sholat Jum'at:**
+       - Tiga kartu petugas Jum'at (Khotib & Imam, Muadzin, Bilal) otomatis terisi dari `jumatPetugas` / `sholat_jumat` / `localStorage` dengan penataan bersih.
+       - Teks Al-Qur'an (Surat Al-A'raf ayat 204), terjemahan, dan 4 ikon adab larangan berbicara/menelpon saat khutbah.
+   - **Perbaikan Teks Cadangan Default (*Defensive Default Text*):**
+     - Teks placeholder di markup HTML diubah dari *"SHOLAT FARDHU"* menjadi *"WAKTU SHOLAT"*.
+   - **Penambahan Pengujian Regresi Otomatis (51 Tests):**
+     - Menambahkan pengujian simulasi fase Khutbah sholat Jum'at (12:20 WIB) dan pengujian integrasi bridge postMessage `UPDATE_PRAYER_STATE` di `scripts/test-engine.js`.
+   - **Bumping Versi Cache Service Worker (SOP #2):**
+     - Versi dinaikkan ke **`v5.8.16`** (`aljihad-signage-v5.8.16`) di `web-statis/sw.js` dan `web-statis/admin.html`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 11:00 WIB)
 
 ### 📱 PERBAIKAN TOTAL AUTENTIKASI & LOGIN HALAMAN MODE INPUT / PETUGAS LINTAS PERANGKAT (Versi SW v5.8.15):
 1. **Latar Belakang & Keluhan Pengguna:**

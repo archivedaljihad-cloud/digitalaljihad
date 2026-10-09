@@ -139,11 +139,17 @@ const friAdzanTime = new Date('2026-10-09T11:40:00+07:00');
 const friState = window.PrayerEngine.getPrayerState(mockSettings, mockJadwal, null, friAdzanTime);
 assert(friState.active === true && friState.isFriday === true, 'Jumat Siang 11:40 WIB: Sholat Jumat harus AKTIF');
 
+// Test 2.5: Khutbah & Sholat Jumat (Jumat 9 Okt 2026, 12:20 WIB)
+const friKhutbahTime = new Date('2026-10-09T12:20:00+07:00');
+const friKhutbahState = window.PrayerEngine.getPrayerState(mockSettings, mockJadwal, { khatib: 'Ust. Jamal', imam: 'Ust. Jamal' }, friKhutbahTime);
+assert(friKhutbahState.active === true && friKhutbahState.phase === 'khutbah' && friKhutbahState.prayer === "SHOLAT JUM'AT", 'Jumat Siang 12:20 WIB: Fase Khutbah & Sholat Jumat harus AKTIF');
+
 // -------------------------------------------------------------
 // 3. ROTATION & WATCHDOG GUARDS INTEGRITY
 // -------------------------------------------------------------
 console.log('\n📌 [TEST 3] Rotation Guard & Watchdog Integrity di index.html:');
 const indexHtml = fs.readFileSync(path.join(baseDir, 'index.html'), 'utf8');
+const prayerModeHtml = fs.readFileSync(path.join(baseDir, 'prayer-mode.html'), 'utf8');
 
 assert(indexHtml.includes('let isYasinModeActive = false;'), 'index.html memiliki state isYasinModeActive');
 assert(indexHtml.includes('let isKajianModeActive = false;'), 'index.html memiliki state isKajianModeActive');
@@ -161,8 +167,15 @@ const hasWatchdogGuard = indexHtml.includes('if (isPaused || isPrayerModeActive 
 assert(hasWatchdogGuard, 'SRE Watchdog dijaga agar TIDAK MEMBATALKAN Surat Yaasiin/Kajian');
 
 // Cek initDisplay instant boot
-const hasInitBoot = indexHtml.includes('isInitialYasin') && indexHtml.includes('isInitialKajian');
-assert(hasInitBoot, 'initDisplay() langsung memuat Yaasiin/Kajian saat TV dinyalakan di jam agenda');
+const hasInitBoot = indexHtml.includes('isInitialYasin') && indexHtml.includes('isInitialKajian') && indexHtml.includes('isInitialPrayer');
+assert(hasInitBoot, 'initDisplay() langsung memuat Sholat/Yaasiin/Kajian saat TV dinyalakan di jam agenda');
+
+// Cek Prayer Frame Synchronizer & Memory Bridge
+const hasPrayerBridge = indexHtml.includes('window.latestPrayerState = state;') && indexHtml.includes('UPDATE_PRAYER_STATE');
+assert(hasPrayerBridge, 'index.html mengekspos latestPrayerState dan push UPDATE_PRAYER_STATE ke prayerFrame');
+
+const hasPrayerModeListener = prayerModeHtml.includes('UPDATE_PRAYER_STATE') && prayerModeHtml.includes('cached_app_settings');
+assert(hasPrayerModeListener, 'prayer-mode.html memiliki listener UPDATE_PRAYER_STATE dan LocalStorage cache bridge');
 
 // -------------------------------------------------------------
 // 4. DATA PARSER INTEGRITY

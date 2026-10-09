@@ -1134,7 +1134,7 @@
             <div class="phase-title" id="phaseTitle">Menjelang Waktu Sholat</div>
             <div class="prayer-badge">
                 <span class="badge-gem"></span>
-                <span class="prayer-name" id="prayerName">SHOLAT FARDHU</span>
+                <span class="prayer-name" id="prayerName">WAKTU SHOLAT</span>
                 <span class="badge-gem"></span>
             </div>
         </div>
@@ -1258,6 +1258,16 @@
         let currentPrayerAudio = '';
         let hasPlayedTarhim = false;
         let hasPlayedAdzan = false;
+
+        // Preload instan dari LocalStorage agar tampilan langsung aktif tanpa jeda query database
+        try {
+            const sCached = localStorage.getItem('cached_app_settings');
+            if (sCached) settings = JSON.parse(sCached);
+            const jCached = localStorage.getItem('cached_jadwal_sholat');
+            if (jCached) jadwalList = JSON.parse(jCached);
+            const pCached = localStorage.getItem('cached_sholat_jumat');
+            if (pCached) jumatPetugas = JSON.parse(pCached);
+        } catch (e) {}
 
         function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
 
@@ -1442,14 +1452,53 @@
         // Render UI
         function updatePrayerUI() {
             if (!window.PrayerEngine) return;
+
+            // 1. Sinkronisasi data real-time dari Window Parent Display TV jika tersedia (Memory Bridge)
+            if (window.parent && window.parent !== window) {
+                try {
+                    if (window.parent.settings) settings = window.parent.settings;
+                    if (window.parent.jadwalList && window.parent.jadwalList.length > 0) jadwalList = window.parent.jadwalList;
+                    if (window.parent.jumatPetugas) jumatPetugas = window.parent.jumatPetugas;
+                } catch (e) {}
+            }
+
+            // 2. Fallback ke LocalStorage jika data lokal masih belum lengkap
+            if (!settings) {
+                try {
+                    const s = localStorage.getItem('cached_app_settings');
+                    if (s) settings = JSON.parse(s);
+                } catch (e) {}
+            }
+            if (!jadwalList || !jadwalList.length) {
+                try {
+                    const j = localStorage.getItem('cached_jadwal_sholat');
+                    if (j) jadwalList = JSON.parse(j);
+                } catch (e) {}
+            }
+            if (!jumatPetugas) {
+                try {
+                    const p = localStorage.getItem('cached_sholat_jumat');
+                    if (p) jumatPetugas = JSON.parse(p);
+                } catch (e) {}
+            }
+
             const now = new Date();
-            let state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+            let state = null;
+
+            // Prioritas state aktif: parent state > pushed state > kalkulasi lokal
+            if (window.parent && window.parent !== window && window.parent.latestPrayerState && window.parent.latestPrayerState.active) {
+                state = window.parent.latestPrayerState;
+            } else if (window._parentState && window._parentState.active) {
+                state = window._parentState;
+            } else {
+                state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+            }
 
             const isStandAlone = (window.self === window.top);
             const urlParams = new URLSearchParams(window.location.search);
             const isExplicitPreview = urlParams.has('preview') || urlParams.has('debug') || urlParams.has('test');
 
-            if (!state.active) {
+            if (!state || !state.active) {
                 if (isStandAlone || isExplicitPreview) {
                     // Mode Pratinjau / Standalone: Aktifkan simulasi agar operator bisa melihat tampilan kapan saja
                     if (simulatedSeconds > 0 && previewPhase !== PrayerEngine.PHASES.PRAYER && previewPhase !== PrayerEngine.PHASES.KHUTBAH) {
@@ -1461,10 +1510,10 @@
                         prayer: previewPrayer,
                         remaining: simulatedSeconds,
                         jumatPetugas: jumatPetugas || {
-                            khatib: 'Ustd. H. Abdul Somad, Lc., MA',
-                            imam: 'Ustd. H. Ahmad Al-Habsyi',
-                            muadzin: 'Ustd. Bilal bin Rabah',
-                            bilal: 'Ustd. Abdullah'
+                            khatib: 'Ust. Jamal Haris, S.Ag.',
+                            imam: 'Ust. Jamal Haris, S.Ag.',
+                            muadzin: 'Ust. Rudy',
+                            bilal: 'Ust. Sahroni'
                         }
                     };
                 } else {
@@ -1505,7 +1554,9 @@
             const hadithBodyEl = document.getElementById('hadithBody');
             const hadithSourceEl = document.getElementById('hadithSource');
 
-            prayerNameEl.textContent = state.prayer ? state.prayer.toUpperCase() : 'WAKTU SHOLAT';
+            const isJumat = state.isFriday || (state.prayer && state.prayer.toUpperCase().includes("JUM'AT"));
+
+            prayerNameEl.textContent = state.prayer ? state.prayer.toUpperCase() : (isJumat ? "SHOLAT JUM'AT" : 'WAKTU SHOLAT');
 
             const remaining = state.remaining || 0;
             const m = Math.floor(remaining / 60);
@@ -1538,23 +1589,29 @@
 
             // LOGIKA FASE SHOLAT
             if (state.phase === PrayerEngine.PHASES.COUNTDOWN) {
-                phaseTitleEl.textContent = 'Menjelang Waktu Sholat';
-                timerBadgeTextEl.textContent = 'Menuju Adzan';
+                phaseTitleEl.textContent = isJumat ? "Menjelang Sholat Jum'at" : 'Menjelang Waktu Sholat';
+                timerBadgeTextEl.textContent = isJumat ? "Menuju Adzan Jum'at" : 'Menuju Adzan';
                 countdownSectionEl.style.display = 'flex';
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
                 prayerModeBoxEl.classList.remove('active');
-                messageTextEl.textContent = (settings && settings.Countdown_Adzan) || 'Bersiap Masuk Waktu Sholat';
+                messageTextEl.textContent = isJumat ? 
+                    "Bersiap Sholat Jum'at Berjamaah. Mari Merapikan Shaf & Menyimak Khutbah." : 
+                    ((settings && settings.Countdown_Adzan) || 'Bersiap Masuk Waktu Sholat');
 
                 adabNoticeEl.style.display = 'inline-flex';
-                adabNoticeTextEl.textContent = 'Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.';
+                adabNoticeTextEl.textContent = isJumat ? 
+                    "Waktu Adzan Jum'at akan Segera Tiba. Mari Mengambil Shaf Terdepan." : 
+                    'Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.';
                 hadithHeaderEl.style.display = 'block';
-                hadithBodyEl.textContent = '"Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."';
-                hadithSourceEl.textContent = '(HR. Bukhari dan Muslim)';
+                hadithBodyEl.textContent = isJumat ? 
+                    '"Sebaik-baik hari di mana matahari terbit padanya adalah hari Jum\'at; padanya Adam diciptakan, padanya ia dimasukkan ke surga, dan padanya ia dikeluarkan darinya."' : 
+                    '"Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."';
+                hadithSourceEl.textContent = isJumat ? '(HR. Muslim no. 854)' : '(HR. Bukhari dan Muslim)';
 
             } else if (state.phase === PrayerEngine.PHASES.ADZAN) {
-                phaseTitleEl.textContent = 'Waktu Sholat Telah Tiba';
-                timerBadgeTextEl.textContent = 'Adzan Sedang Berkumandang';
+                phaseTitleEl.textContent = isJumat ? "Waktu Sholat Jum'at Telah Tiba" : 'Waktu Sholat Telah Tiba';
+                timerBadgeTextEl.textContent = isJumat ? "Adzan Jum'at Berkumandang" : 'Adzan Sedang Berkumandang';
                 countdownSectionEl.style.display = 'flex';
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
@@ -1607,7 +1664,7 @@
                 hadithSourceEl.textContent = '(HR. Bukhari no. 723 & Muslim no. 433)';
 
             } else if (state.phase === PrayerEngine.PHASES.KHUTBAH) {
-                phaseTitleEl.textContent = 'Khutbah & Sholat Jum\'at Berjamaah';
+                phaseTitleEl.textContent = "Khutbah & Sholat Jum'at Berjamaah";
                 countdownSectionEl.style.display = 'none';
                 jumatGridEl.classList.add('active');
                 messageBannerEl.style.display = 'none';
@@ -1630,9 +1687,10 @@
                     <div class="jumat-quran-arti">“Apabila dibacakan Al-Quran (khutbah), maka dengarkanlah baik-baik, dan perhatikanlah dengan tenang agar kamu mendapat rahmat,” <span class="jumat-quran-surat">(Surat Al-A’raf, ayat 204)</span></div>
                 `;
 
-                if (state.jumatPetugas) {
-                    const khatib = (state.jumatPetugas.khatib || '').trim();
-                    const imam = (state.jumatPetugas.imam || '').trim();
+                const pet = state.jumatPetugas || jumatPetugas || (window.parent && window.parent.jumatPetugas);
+                if (pet) {
+                    const khatib = (pet.khatib || '').trim();
+                    const imam = (pet.imam || '').trim();
                     let namaKhotibImam = '';
                     if (khatib && imam && khatib !== imam) {
                         namaKhotibImam = `${khatib} / ${imam}`;
@@ -1647,9 +1705,9 @@
                     if (elImam) elImam.textContent = imam || khatib || 'Ustd. Imam';
 
                     const elMuadzin = document.getElementById('officerMuadzin');
-                    if (elMuadzin) elMuadzin.textContent = state.jumatPetugas.muadzin || 'Muadzin';
+                    if (elMuadzin) elMuadzin.textContent = pet.muadzin || 'Muadzin';
 
-                    let bilalCardName = state.jumatPetugas.bilal || 'Bilal';
+                    let bilalCardName = pet.bilal || 'Bilal';
                     if (bilalCardName.includes('/')) bilalCardName = bilalCardName.split('/')[0].trim();
                     const elBilal = document.getElementById('officerBilal');
                     if (elBilal) elBilal.textContent = bilalCardName || 'Bilal';
@@ -1671,15 +1729,33 @@
                 try {
                     if (window.parent && window.parent !== window) {
                         if (window.parent.settings) settings = window.parent.settings;
-                        if (window.parent.jadwalList) jadwalList = window.parent.jadwalList;
+                        if (window.parent.jadwalList && window.parent.jadwalList.length > 0) jadwalList = window.parent.jadwalList;
                         if (window.parent.jumatPetugas) jumatPetugas = window.parent.jumatPetugas;
                     }
                 } catch (e) {}
 
-                if ((!settings || !jadwalList) && window.SupabaseDB) {
-                    if (!settings) settings = await SupabaseDB.getSettings();
-                    if (!jadwalList) jadwalList = await SupabaseDB.getJadwalSholat();
-                    if (!jumatPetugas) jumatPetugas = await SupabaseDB.getSholatJumat();
+                // Fallback LocalStorage instan
+                if (!settings) {
+                    try { const s = localStorage.getItem('cached_app_settings'); if (s) settings = JSON.parse(s); } catch (e) {}
+                }
+                if (!jadwalList || !jadwalList.length) {
+                    try { const j = localStorage.getItem('cached_jadwal_sholat'); if (j) jadwalList = JSON.parse(j); } catch (e) {}
+                }
+                if (!jumatPetugas) {
+                    try { const p = localStorage.getItem('cached_sholat_jumat'); if (p) jumatPetugas = JSON.parse(p); } catch (e) {}
+                }
+
+                // Cloud Supabase fallback jika masih ada data yang kosong
+                if (window.SupabaseDB) {
+                    if (!settings) {
+                        try { settings = await SupabaseDB.getSettings(); } catch (e) {}
+                    }
+                    if (!jadwalList || !jadwalList.length) {
+                        try { jadwalList = await SupabaseDB.getJadwalSholat(); } catch (e) {}
+                    }
+                    if (!jumatPetugas) {
+                        try { jumatPetugas = await SupabaseDB.getSholatJumat(); } catch (e) {}
+                    }
                 }
 
                 if (settings && settings.nama_aplikasi) {
@@ -1694,12 +1770,16 @@
                 }
 
                 updatePrayerUI();
-                setInterval(updatePrayerUI, 1000);
+                if (!window._prayerInterval) {
+                    window._prayerInterval = setInterval(updatePrayerUI, 1000);
+                }
             } catch (err) {
                 console.warn('Gagal inisialisasi prayer mode:', err);
                 setupPreviewBar();
                 updatePrayerUI();
-                setInterval(updatePrayerUI, 1000);
+                if (!window._prayerInterval) {
+                    window._prayerInterval = setInterval(updatePrayerUI, 1000);
+                }
             }
         }
 
@@ -1707,15 +1787,19 @@
         window.addEventListener('message', (event) => {
             const msg = event.data;
             if (!msg) return;
-            if (msg.type === 'INIT_DISPLAY_DATA') {
+            if (msg.type === 'INIT_DISPLAY_DATA' || msg.type === 'UPDATE_PRAYER_STATE') {
                 if (msg.settings) settings = msg.settings;
-                if (msg.jadwalList) jadwalList = msg.jadwalList;
+                if (msg.jadwalList && msg.jadwalList.length > 0) jadwalList = msg.jadwalList;
                 if (msg.jumatPetugas) jumatPetugas = msg.jumatPetugas;
+                if (msg.state) window._parentState = msg.state;
                 updatePrayerUI();
             } else if (msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
                 init();
             }
         });
+
+        // Expose updatePrayerUI ke window agar parent bisa memicu render langsung
+        window.updatePrayerUI = updatePrayerUI;
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
