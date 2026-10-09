@@ -219,20 +219,17 @@ assert(adminMatch && adminMatch[1], `Versi Cache Cleaner terdeteksi di admin.htm
 assert(swMatch && adminMatch && swMatch[1] === adminMatch[1], `Versi cache sw.js dan admin.html IDENTIK (${swMatch[1]} === ${adminMatch[1]})`);
 
 // -------------------------------------------------------------
-// 6. GERBANG RESMI & RBAC PROTECTION INTEGRITY
+// 6. FORM PETUGAS & AUTENTIKASI INTEGRITY
 // -------------------------------------------------------------
-console.log('\n📌 [TEST 6] Gerbang Resmi & RBAC Protection Integrity:');
+console.log('\n📌 [TEST 6] Form Petugas & Autentikasi Mandiri Integrity:');
 const loginContent = fs.readFileSync(path.join(baseDir, 'login.html'), 'utf8');
 const petugasContent = fs.readFileSync(path.join(baseDir, 'petugas.html'), 'utf8');
 const modeinputContent = fs.readFileSync(path.join(baseDir, 'modeinput.html'), 'utf8');
-const authContent = fs.readFileSync(path.join(baseDir, 'js/admin-auth.js'), 'utf8');
 
-assert(loginContent.includes('id="gatewayPortalHub"') && loginContent.includes('id="loginFormCardWrap"'), 'login.html memiliki struktur Portal Hub & Login Form Gerbang Resmi');
-assert(loginContent.includes('renderGatewayState'), 'login.html memiliki state router otomatis renderGatewayState()');
-assert(petugasContent.includes('requireAuth'), 'petugas.html diproteksi wajib otentikasi requireAuth');
-assert(modeinputContent.includes('requireAuth'), 'modeinput.html diproteksi wajib otentikasi requireAuth');
-assert(adminContent.includes('requireAuth'), 'admin.html diproteksi wajib otentikasi requireAuth');
-assert(authContent.includes('requireAuth') && authContent.includes('redirect='), 'admin-auth.js menangani parameter redirect otomatis ke gerbang resmi');
+assert(petugasContent.includes('authGateOverlay'), 'petugas.html memiliki PIN/password modal internal');
+assert(modeinputContent.includes('authGateOverlay'), 'modeinput.html memiliki PIN/password modal internal');
+assert(petugasContent.includes('handleAuthSubmit'), 'petugas.html memiliki fungsi otentikasi mandiri handleAuthSubmit');
+assert(loginContent.includes('login') || loginContent.includes('Login'), 'login.html memiliki form otentikasi standar');
 
 // -------------------------------------------------------------
 // 7. PRAYER MODE REALTIME & OFFICER SYNC INTEGRITY
@@ -245,14 +242,12 @@ assert(prayerContent.includes('init(true)') || prayerContent.includes('forceFres
 assert(prayerContent.includes('window.initPrayerMode') && prayerContent.includes('window.updatePrayerUI'), 'prayer-mode.html mengekspos public interface bridge ke parent TV');
 
 // -------------------------------------------------------------
-// 8. DEVSECOPS & SEO ROBOTS INTEGRITY
+// 8. SEO ROBOTS INTEGRITY
 // -------------------------------------------------------------
-console.log('\n📌 [TEST 8] DevSecOps & SEO Robots Integrity:');
+console.log('\n📌 [TEST 8] SEO Robots Integrity:');
 const robotsContent = fs.readFileSync(path.join(baseDir, 'robots.txt'), 'utf8');
-assert(robotsContent.includes('Disallow: /admin.html') && robotsContent.includes('Disallow: /admin'), 'robots.txt memblokir crawler ke rute admin');
-assert(robotsContent.includes('Disallow: /petugas.html') && robotsContent.includes('Disallow: /petugas'), 'robots.txt memblokir crawler ke rute petugas');
-assert(robotsContent.includes('Disallow: /modeinput.html') && robotsContent.includes('Disallow: /modeinput'), 'robots.txt memblokir crawler ke rute modeinput');
-assert(robotsContent.includes('Disallow: /login.html') && robotsContent.includes('Disallow: /login'), 'robots.txt memblokir crawler ke rute login');
+assert(robotsContent.includes('Disallow: /admin.html'), 'robots.txt memblokir crawler ke rute admin');
+assert(robotsContent.includes('Disallow: /login.html'), 'robots.txt memblokir crawler ke rute login');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

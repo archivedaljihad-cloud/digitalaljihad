@@ -4,7 +4,35 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 19:30 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 19:48 WIB)
+
+### ↩️ ROLLBACK PEMBATALAN "1 GERBANG RESMI" & PENGEMBALIAN PENUH KE MODEL SEMULA (Versi SW v5.8.22):
+1. **Mandat & Keputusan Pengguna:**
+   - **Instruksi Pengguna:** *"HILANGKAN 1 GERBANG RESMI yang baru saja ANDA BUAT !!!! DAN KEMBALIKAN KE MODEL SEBELUMNYA SAYA TIDAK MEMBUTUHKAN HAL-HAL ITU !!!!! MALAH MEMBUAT BINGUNG PETUGAS. DAN LUPAKAN MASALAH PERINTAH 1 GERBANG RESMI KARENA SAYA DAN ANDA SALAH PENGERTIAN. KEMBALIKAN KE BENTUK SEMULA."*
+2. **Pemulihan Penuh ke Bentuk Semula (Sebelum Gerbang Resmi):**
+   - **Halaman Formulir Petugas (`web-statis/petugas.html` & `web-statis/modeinput.html`):**
+     - Seluruh modifikasi portal gerbang resmi dibatalkan total.
+     - Mengembalikan modal input PIN/password internal (`authGateOverlay`) dan fungsi otentikasi mandiri (`handleAuthSubmit`) yang sudah familiar dan mudah digunakan oleh para petugas/DKM masjid.
+     - Menghapus bilah status gerbang (`#gatewayActiveBadgeBar`) dan tautan portal hub. Petugas kini bisa langsung mengisi data jadwal sholat, sholat Jum'at, kas, infaq, dan agenda seperti sedia kala tanpa diarahkan ke `login.html`.
+   - **Halaman Login (`web-statis/login.html`):**
+     - Dikembalikan 100% ke bentuk formulir Login Pengurus standar semula (sebelum penambahan Portal Hub 4 Pintu).
+   - **Modul Admin Auth (`web-statis/js/admin-auth.js`):**
+     - Dikembalikan ke versi original (`8fcd255`) tanpa pemaksaan parameter auto-redirect gerbang.
+   - **Dashboard Admin (`web-statis/admin.html`):**
+     - Menghapus tautan menu "Portal Gerbang Resmi" dari profil menu dropdown.
+   - **Robots.txt (`web-statis/robots.txt`):**
+     - Dikembalikan ke konfigurasi standar original (`8fcd255`).
+3. **Peningkatan Kritis yang Tetap Dipertahankan (Hasil Audit Kualitas):**
+   - Perbaikan realtime **Prayer Mode** (`web-statis/prayer-mode.html`) dengan listener universal `SupabaseDB.onDataChange`, kartu dinamis Pembaca Maklumat, dan cache bypass `forceFresh`.
+   - Pembersihan memori usang di `web-statis/js/supabase-db.js`.
+4. **Bumping Cache Service Worker (SOP #2):**
+   - Versi dinaikkan ke **`aljihad-signage-v5.8.22`** di `web-statis/sw.js` dan `web-statis/admin.html` agar browser seluruh TV dan HP petugas seketika menghapus cache gerbang resmi dan kembali ke tampilan semula.
+5. **Pengujian Regresi Otomatis (`scripts/test-engine.js`):**
+   - Seluruh 64 pengujian lulus 100% sempurna.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 19:30 WIB)
 
 ### 🛡️ AUDIT SENIOR SRE, SDET, & DEVSECOPS MENYELURUH & PERBAIKAN PRAYER MODE REALTIME (Versi SW v5.8.21):
 1. **Latar Belakang & Mandat Audit 7 Pilar:**

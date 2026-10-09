@@ -1589,10 +1589,6 @@
                                     <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-primary"></i> 
                                     <span>Dashboard Utama</span>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center font-weight-bold" href="login.html" style="color: #10b981;">
-                                    <i class="fas fa-door-open fa-sm fa-fw mr-2" style="color: #10b981;"></i> 
-                                    <span>Portal Gerbang Resmi</span>
-                                </a>
                                 <a class="dropdown-item d-flex align-items-center text-warning font-weight-bold" href="javascript:void(0)" onclick="bersihkanCacheSistem()">
                                     <i class="fas fa-broom fa-sm fa-fw mr-2 text-warning"></i> 
                                     <span>Bersihkan Cache & Refresh TV</span>
@@ -13572,13 +13568,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     });
                 }
 
-                // 2. Bersihkan CacheStorage Service Worker (sisakan v5.8.21)
+                // 2. Bersihkan CacheStorage Service Worker (sisakan v5.8.22)
                 if ('caches' in window) {
                     try {
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.21') {
+                                if (name !== 'aljihad-signage-v5.8.22') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
@@ -13604,8 +13600,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     SupabaseDB.broadcastChange('app_settings', 'RELOAD', { timestamp: Date.now() }, 'Admin Maintenance');
                 }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('RELOAD', { reason: 'Pembersihan cache sistem v5.8.21' }).catch(() => {});
-                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.8.21' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('RELOAD', { reason: 'Pembersihan cache sistem v5.8.22' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.8.22' }).catch(() => {});
                 }
 
                 // 5. Muat ulang data terbaru dari Supabase
@@ -13620,7 +13616,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         html: `
                             <p class="text-left mb-2">Seluruh cache usang dan memori usang telah dibersihkan:</p>
                             <ul class="text-left small text-muted mb-3 pl-3">
-                                <li>Service Worker diperbarui ke <b>v5.8.21</b></li>
+                                <li>Service Worker diperbarui ke <b>v5.8.22</b></li>
                                 <li>Kunci memori lama yang dibersihkan: <b>${removedItems.length > 0 ? removedItems.join(', ') : 'Bersih (Sudah Optimal)'}</b></li>
                                 <li>Sinyal refresh TV telah dipancarkan secara realtime (&lt; 100ms) ke seluruh layar</li>
                             </ul>

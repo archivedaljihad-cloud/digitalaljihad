@@ -15,15 +15,9 @@ Allow: /css/*
 Allow: /js/*
 Allow: /fonts/*
 
-# Proteksi Panel Administrasi, Petugas & Otentikasi Resmi
+# Proteksi Panel Administrasi & Otentikasi
 Disallow: /admin.html
-Disallow: /admin
-Disallow: /petugas.html
-Disallow: /petugas
-Disallow: /modeinput.html
-Disallow: /modeinput
 Disallow: /login.html
-Disallow: /login
 Disallow: /PANDUAN_*
 
 # Peta Situs Resmi (XML Sitemap)

@@ -166,73 +166,6 @@
             color: #ffffff;
         }
 
-        .btn-portal-auth {
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid #ffd700;
-            color: #ffd700;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-portal-auth:active {
-            background: #ffd700;
-            color: #022c22;
-        }
-
-        .gateway-active-badge-bar {
-            background: rgba(3, 26, 17, 0.88);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            border-radius: 12px;
-            padding: 7px 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.76rem;
-            color: #e2e8f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        .gateway-badge-left {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .gateway-live-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #10b981;
-            box-shadow: 0 0 6px #10b981;
-        }
-
-        .link-gateway-hub {
-            color: #ffd700;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.74rem;
-            padding: 3px 8px;
-            background: rgba(255, 215, 0, 0.12);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .link-gateway-hub:hover {
-            background: #ffd700;
-            color: #022c22;
-        }
-
         /* BANNER RESMI SESUAI ARAHAN CEO */
         .senior-guide-box {
             background: linear-gradient(135deg, rgba(8, 76, 58, 0.85), rgba(4, 46, 35, 0.9));
@@ -1313,26 +1246,11 @@
                 <div class="status-badge" id="tvStatusIndicator">
                     <div class="pulse-dot"></div> TV Siap
                 </div>
-                <a href="login.html" class="btn-portal-auth" title="Portal Gerbang Resmi">
-                    <i class="fas fa-door-open"></i>
-                </a>
-                <button class="btn-lock-auth" onclick="lockSecurityGate()" title="Keluar / Kunci Gerbang">
-                    <i class="fas fa-power-off"></i>
+                <button class="btn-lock-auth" onclick="lockSecurityGate()" title="Kunci Akses">
+                    <i class="fas fa-lock"></i>
                 </button>
             </div>
         </header>
-
-        <!-- BAR STATUS GERBANG RESMI PENGURUS -->
-        <div class="gateway-active-badge-bar" id="gatewayActiveBadgeBar">
-            <div class="gateway-badge-left">
-                <span class="gateway-live-dot"></span>
-                <i class="fas fa-shield-alt text-warning"></i>
-                <span>Gerbang Resmi: <strong id="gatewayBarUserName">Pengurus</strong> (<span id="gatewayBarUserRole">Petugas</span>)</span>
-            </div>
-            <div class="gateway-badge-right">
-                <a href="login.html" class="link-gateway-hub"><i class="fas fa-door-open"></i> Portal</a>
-            </div>
-        </div>
 
         <!-- BANNER SAMBUTAN RESMI SESUAI ARAHAN CEO -->
         <div class="senior-guide-box">
@@ -1845,38 +1763,34 @@
             handleAuthSubmit(null, pwd, username);
         }
 
-        function updateGatewaySessionBadge(user) {
-            if (!user) return;
-            const nameEl = document.getElementById('gatewayBarUserName');
-            const roleEl = document.getElementById('gatewayBarUserRole');
-            if (nameEl) nameEl.textContent = user.name || 'Pengurus';
-            if (roleEl) roleEl.textContent = user.role_label || 'Petugas';
-        }
-
         function checkSecurityAuth() {
-            if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.requireAuth === 'function') {
-                const user = AdminAuth.requireAuth('login.html?redirect=petugas.html');
-                if (!user) return false;
-                updateGatewaySessionBadge(user);
-                const overlay = document.getElementById('authGateOverlay');
+            // 1. Cek sesi aktif AdminAuth dari localStorage atau window.AdminAuth
+            let currentUser = null;
+            try {
+                if (window.AdminAuth && typeof window.AdminAuth.getCurrentUser === 'function') {
+                    currentUser = window.AdminAuth.getCurrentUser();
+                }
+                if (!currentUser) {
+                    const raw = localStorage.getItem('aljihad_auth_user');
+                    if (raw) currentUser = JSON.parse(raw);
+                }
+            } catch(e) {}
+
+            // 2. Cek apakah sudah pernah unlock di perangkat ini (localStorage atau sessionStorage)
+            const isAuth = localStorage.getItem('quick_petugas_authenticated') === 'true' || 
+                           sessionStorage.getItem('quick_petugas_authenticated') === 'true';
+
+            const overlay = document.getElementById('authGateOverlay');
+            if (currentUser || isAuth) {
+                localStorage.setItem('quick_petugas_authenticated', 'true');
+                sessionStorage.setItem('quick_petugas_authenticated', 'true');
                 if (overlay) overlay.style.display = 'none';
                 return true;
             } else {
-                const raw = localStorage.getItem('aljihad_auth_user');
-                if (!raw) {
-                    window.location.replace('login.html?redirect=petugas.html');
-                    return false;
-                }
-                try {
-                    const user = JSON.parse(raw);
-                    updateGatewaySessionBadge(user);
-                    const overlay = document.getElementById('authGateOverlay');
-                    if (overlay) overlay.style.display = 'none';
-                    return true;
-                } catch(e) {
-                    window.location.replace('login.html?redirect=petugas.html');
-                    return false;
-                }
+                if (overlay) overlay.style.display = 'flex';
+                const input = document.getElementById('authPasswordInput');
+                if (input) setTimeout(() => input.focus(), 100);
+                return false;
             }
         }
 
@@ -2081,15 +1995,15 @@
         }
 
         function lockSecurityGate() {
-            if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.logout === 'function') {
-                AdminAuth.logout('login.html?action=logout');
-            } else {
-                localStorage.removeItem('aljihad_auth_user');
-                localStorage.removeItem('aljihad_last_activity');
-                localStorage.removeItem('quick_petugas_authenticated');
-                sessionStorage.clear();
-                window.location.replace('login.html?action=logout');
-            }
+            localStorage.removeItem('quick_petugas_authenticated');
+            sessionStorage.removeItem('quick_petugas_authenticated');
+            const pInput = document.getElementById('authPasswordInput');
+            if (pInput) pInput.value = '';
+            const errBox = document.getElementById('authErrorMsg');
+            if (errBox) errBox.style.display = 'none';
+            const overlay = document.getElementById('authGateOverlay');
+            if (overlay) overlay.style.display = 'flex';
+            if (pInput) pInput.focus();
         }
 
         /* =========================================================================
@@ -2363,8 +2277,7 @@
            OPEN & RENDER MODAL FORM
            ========================================================================= */
         function openModule(moduleId) {
-            const user = (typeof AdminAuth !== 'undefined') ? AdminAuth.getCurrentUser() : null;
-            if (!user) {
+            if (sessionStorage.getItem('quick_petugas_authenticated') !== 'true') {
                 checkSecurityAuth();
                 return;
             }
