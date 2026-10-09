@@ -229,6 +229,8 @@ const modeinputContent = fs.readFileSync(path.join(baseDir, 'modeinput.html'), '
 assert(petugasContent.includes('authGateOverlay'), 'petugas.html memiliki PIN/password modal internal');
 assert(modeinputContent.includes('authGateOverlay'), 'modeinput.html memiliki PIN/password modal internal');
 assert(petugasContent.includes('handleAuthSubmit'), 'petugas.html memiliki fungsi otentikasi mandiri handleAuthSubmit');
+assert(petugasContent.includes('SupabaseDB.onDataChange'), 'petugas.html memiliki listener realtime multi-akun');
+assert(modeinputContent.includes('SupabaseDB.onDataChange'), 'modeinput.html memiliki listener realtime multi-akun');
 assert(loginContent.includes('login') || loginContent.includes('Login'), 'login.html memiliki form otentikasi standar');
 
 // -------------------------------------------------------------

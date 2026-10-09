@@ -3436,6 +3436,15 @@
             if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
                 window.AdminAuth.syncUsersFromCloud().catch(e => console.warn('Sync cloud user background:', e));
             }
+
+            // Pasang Pendengar Universal Realtime agar data selalu tersinkron otomatis antar-akun (<100ms)
+            if (window.SupabaseDB && typeof window.SupabaseDB.onDataChange === 'function') {
+                window.SupabaseDB.onDataChange(() => {
+                    if (!isSheetOpen) {
+                        initLiveDatabase();
+                    }
+                });
+            }
         });
     </script>
 </body>
