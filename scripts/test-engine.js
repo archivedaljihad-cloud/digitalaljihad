@@ -248,6 +248,8 @@ console.log('\n📌 [TEST 8] SEO Robots Integrity:');
 const robotsContent = fs.readFileSync(path.join(baseDir, 'robots.txt'), 'utf8');
 assert(robotsContent.includes('Disallow: /admin.html'), 'robots.txt memblokir crawler ke rute admin');
 assert(robotsContent.includes('Disallow: /login.html'), 'robots.txt memblokir crawler ke rute login');
+assert(robotsContent.includes('Disallow: /petugas.html'), 'robots.txt memblokir crawler ke rute petugas');
+assert(robotsContent.includes('Disallow: /modeinput.html'), 'robots.txt memblokir crawler ke rute modeinput');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

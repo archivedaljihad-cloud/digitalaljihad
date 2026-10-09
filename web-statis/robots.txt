@@ -18,6 +18,8 @@ Allow: /fonts/*
 # Proteksi Panel Administrasi & Otentikasi
 Disallow: /admin.html
 Disallow: /login.html
+Disallow: /petugas.html
+Disallow: /modeinput.html
 Disallow: /PANDUAN_*
 
 # Peta Situs Resmi (XML Sitemap)

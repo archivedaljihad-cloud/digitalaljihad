@@ -2375,7 +2375,12 @@
                     'cached_tarhim_legacy',
                     'cached_jumat_legacy',
                     'old_quick_petugas_state',
-                    'cached_display_config_legacy'
+                    'cached_display_config_legacy',
+                    'portal_gateway_active',
+                    'portal_auth_target',
+                    'aljihad_gateway_token',
+                    'backup_petugas_old',
+                    'cached_prayer_settings_old'
                 ];
 
                 obsoleteKeys.forEach(k => {
