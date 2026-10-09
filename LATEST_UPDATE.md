@@ -4,7 +4,47 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 01:00 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 11:00 WIB)
+
+### 📱 PERBAIKAN TOTAL AUTENTIKASI & LOGIN HALAMAN MODE INPUT / PETUGAS LINTAS PERANGKAT (Versi SW v5.8.15):
+1. **Latar Belakang & Keluhan Pengguna:**
+   - **Kondisi:** Pengguna melaporkan bahwa saat halaman `modeinput.html` / `petugas.html` dibuka di perangkat lain (smartphone, tablet, atau browser lain), petugas tidak bisa login / tertahan di security gate.
+   - **Akar Masalah (*Root Cause Analysis*):**
+     - **Strict Case-Sensitivity & Input Keyboard HP:** Fungsi verifikasi sebelumnya hanya mencocokkan `u.password === inputVal` secara *case-sensitive* kaku. Di perangkat mobile (iOS Safari & Android), keyboard secara otomatis mengkapitalisasi huruf pertama atau mengubah huruf kecil/besar (misal: `135dkmljihad` vs `135dkmlJihad`, `superuser1971` vs `SuperUser1971`, `#1.bendahara` vs `#1.Bendahara`), serta tidak adanya atribut `autocapitalize="none"` dan `autocorrect="off"`.
+     - **Ketiadaan Dukungan Input Username / Identifier:** Petugas masjid (DKM / Operator) seringkali mengetikkan username (`dkm`, `dkmsatu`, `admin`, `bendahara`, `operator`), namun modal hanya menerima string password murni dan menolak username.
+     - **Fallback Mati (*Dead Code* di Fallback Darurat):** Logika fallback darurat dibungkus oleh `if (!matched && (!window.AdminAuth || !window.AdminAuth.getUsers || window.AdminAuth.getUsers().length === 0))`. Karena `AdminAuth.getUsers()` selalu mengembalikan array akun bawaan, blok fallback `VALID_PASSWORDS` tidak pernah dieksekusi sama sekali saat pencocokan utama gagal.
+     - **Pengabaian Sesi Login yang Sudah Ada:** `checkSecurityAuth()` sebelumnya hanya memeriksa `sessionStorage.getItem('quick_petugas_authenticated')`. Jika pengguna sudah login di dashboard `admin.html` pada perangkat tersebut (`aljihad_auth_user`), halaman `petugas.html` tidak mendeteksinya dan tetap mengunci layar. Selain itu `sessionStorage` langsung terhapus saat tab browser HP ditutup, sehingga petugas selalu terkunci kembali setiap membuka link.
+     - **Latency Blocking Jaringan Seluler:** Pada `DOMContentLoaded`, pemanggilan `await window.AdminAuth.syncUsersFromCloud()` menahan pemanggilan `checkSecurityAuth()` dan `initLiveDatabase()` hingga 3.5 detik jika koneksi seluler HP lambat.
+
+2. **Solusi & Rekayasa Arsitektur:**
+   - **Sistem Autentikasi Cerdas Fleksibel (*Smart Dual Matching Engine*):**
+     - Pencocokan password mendukung *case-sensitive* dan *case-insensitive* (`uPwd === inputVal || uPwd.toLowerCase() === cleanLower`).
+     - Pencocokan nama akun otomatis mendeteksi jika yang dimasukkan adalah username (`dkm`, `admin`, `bendahara`, `dkmsatu`, `operator`), email, atau nama pengurus.
+     - Verifikasi fallback darurat `VALID_PASSWORDS` dijamin selalu berjalan tanpa terblokir.
+     - Verifikasi awan (*Realtime Cloud Fetch*) otomatis memeriksa tabel Supabase `app_settings` key `rbac_users_list` jika kredensial lokal belum terdaftar.
+   - **Tombol 1-Klik Akun Petugas Cepat (*1-Tap Quick Role Chips*):**
+     - Disediakan 4 tombol pintas khusus ramah lansia (55+ tahun): `[ 🕌 Petugas DKM ]`, `[ 👳 Ketua DKM ]`, `[ 💰 Bendahara ]`, dan `[ 🛡️ Super Admin ]` yang langsung mengisi dan membuka kunci dalam 1 kali sentuhan jari.
+   - **Tab Dual Mode: Masuk Cepat vs Username & Sandi Lengkap:**
+     - Tab 1: "Masuk Cepat" (1 kolom serbaguna untuk Sandi / PIN / Username).
+     - Tab 2: "Username & Sandi" (2 kolom standar login lengkap terintegrasi langsung dengan `AdminAuth.login()`).
+   - **Integrasi Sesi Lintas Storage & Persistent Unlocking:**
+     - Status otorisasi disimpan ke `localStorage` dan `sessionStorage` (`quick_petugas_authenticated = 'true'`).
+     - Jika perangkat sudah memiliki sesi login aktif (`localStorage.getItem('aljihad_auth_user')` atau `AdminAuth.getCurrentUser()`), kunci otomatis terbuka tanpa meminta password berulang.
+   - **Non-Blocking Execution & Responsivitas Startup:**
+     - `checkSecurityAuth()` dan `initLiveDatabase()` dijalankan seketika tanpa menunggu fetch jaringan seluler.
+     - `AdminAuth.syncUsersFromCloud()` dialihkan ke background promise.
+   - **Sinkronisasi 100% Seluruh File Petugas:**
+     - Seluruh perbaikan disinkronkan secara identik ke:
+       - `web-statis/petugas.html`
+       - `web-statis/modeinput.html`
+       - `public/petugas.html`
+       - `public/modeinput.html`
+   - **Bumping Versi Cache Service Worker (SOP #2):**
+     - Versi Service Worker dinaikkan ke **`v5.8.15`** (`aljihad-signage-v5.8.15`) di `web-statis/sw.js` dan `web-statis/admin.html`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 01:00 WIB)
 
 ### ⚡ OPTIMASI BANDWIDTH & PENGHEMATAN EGRESS SUPABASE (95% REDUCTION, Versi SW v5.8.14):
 1. **Latar Belakang Masalah (Egress 4.44 GB / 5 GB di Free Plan):**

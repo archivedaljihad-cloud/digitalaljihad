@@ -824,7 +824,7 @@
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
         }
 
-        /* MODAL KUNCI KEAMANAN (PASSWORD GATE) */
+        /* MODAL KUNCI KEAMANAN & LOGIN PETUGAS (PASSWORD GATE) */
         .auth-gate-overlay {
             position: fixed;
             top: 0;
@@ -845,7 +845,7 @@
             border: 2px solid var(--gold-accent);
             border-radius: 24px;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             padding: 24px 20px;
             text-align: center;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px var(--gold-glow);
@@ -862,7 +862,7 @@
             height: 64px;
             background: linear-gradient(135deg, #ffd700, #b8860b);
             border-radius: 50%;
-            margin: 0 auto 14px auto;
+            margin: 0 auto 12px auto;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -875,19 +875,55 @@
             font-size: 1.25rem;
             font-weight: 800;
             color: #ffffff;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .auth-gate-card p {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #cbd5e1;
             line-height: 1.4;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+        }
+
+        /* TABS NAV AUTH */
+        .auth-tabs-nav {
+            display: flex;
+            background: rgba(2, 20, 15, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 12px;
+            padding: 3px;
+            margin-bottom: 16px;
+            gap: 4px;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 8px 10px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+
+        .auth-tab-btn.active {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(6, 61, 46, 0.9));
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .auth-input-wrapper {
             position: relative;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .auth-password-input {
@@ -895,11 +931,11 @@
             background: rgba(2, 20, 15, 0.95);
             border: 2px solid var(--gold-accent);
             border-radius: 14px;
-            padding: 14px 44px 14px 16px;
-            font-size: 1.05rem;
+            padding: 13px 44px 13px 16px;
+            font-size: 1rem;
             color: #ffffff;
             outline: none;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             font-family: inherit;
         }
 
@@ -926,7 +962,7 @@
             border: 1px solid #ef4444;
             padding: 8px 12px;
             border-radius: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             text-align: left;
         }
 
@@ -935,8 +971,8 @@
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             border: 1.8px solid var(--gold-accent);
             border-radius: 14px;
-            padding: 14px;
-            font-size: 1.08rem;
+            padding: 13px;
+            font-size: 1.02rem;
             font-weight: 800;
             color: #ffffff;
             cursor: pointer;
@@ -946,10 +982,84 @@
             gap: 10px;
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
             transition: all 0.2s;
+            font-family: inherit;
         }
 
         .btn-auth-unlock:active {
             transform: scale(0.98);
+        }
+
+        /* QUICK CHIPS PENGURUS */
+        .auth-quick-chips-wrap {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(255, 215, 0, 0.25);
+            text-align: left;
+        }
+
+        .auth-chips-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #cbd5e1;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .auth-chips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .auth-chip-btn {
+            background: rgba(2, 24, 18, 0.85);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 8px 10px;
+            color: #ffffff;
+            font-size: 0.76rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            text-align: left;
+        }
+
+        .auth-chip-btn:hover, .auth-chip-btn:active {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: var(--gold-accent);
+            transform: scale(1.02);
+        }
+
+        .auth-footer-links {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.76rem;
+        }
+
+        .auth-footer-link {
+            color: #94a3b8;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s;
+        }
+
+        .auth-footer-link:hover, .auth-footer-link:active {
+            color: var(--gold-accent);
+            text-decoration: underline;
+        }
+
+        .auth-footer-separator {
+            color: rgba(255, 215, 0, 0.4);
         }
 
         /* NOTIFIKASI TOAST */
@@ -1016,28 +1126,105 @@
 </head>
 <body>
 
-    <!-- SECURITY GATE (PASSWORD DASHBOARD ADMIN) -->
+    <!-- SECURITY & LOGIN GATE (AKSES RESMI PENGURUS & PETUGAS) -->
     <div class="auth-gate-overlay" id="authGateOverlay">
         <div class="auth-gate-card">
             <div class="auth-icon-circle">
-                <i class="fas fa-lock"></i>
+                <i class="fas fa-user-shield"></i>
             </div>
-            <h2>Kunci Keamanan Input</h2>
-            <p>Silakan masukkan password yang biasa digunakan untuk login ke Dashboard Admin demi keamanan.</p>
+            <h2>Akses Masuk Petugas</h2>
+            <p>Masukkan kata sandi, PIN, atau nama akun pengurus untuk membuka Quick Input Mode.</p>
+
+            <!-- TABS PILIHAN LOGIN -->
+            <div class="auth-tabs-nav">
+                <button type="button" class="auth-tab-btn active" id="tabQuickAuth" onclick="switchAuthTab('quick')">
+                    <i class="fas fa-bolt"></i> Masuk Cepat
+                </button>
+                <button type="button" class="auth-tab-btn" id="tabFullAuth" onclick="switchAuthTab('full')">
+                    <i class="fas fa-key"></i> Username & Sandi
+                </button>
+            </div>
 
             <div class="auth-error-msg" id="authErrorMsg">
-                <i class="fas fa-exclamation-triangle mr-1"></i> Password salah. Silakan masukkan password akun dashboard.
+                <i class="fas fa-exclamation-triangle mr-1"></i> <span id="authErrorText">Kredensial tidak cocok. Silakan coba lagi.</span>
             </div>
 
-            <form onsubmit="handleAuthSubmit(event)">
+            <!-- FORM 1: MASUK CEPAT (1 KOLOM SMART MATCH) -->
+            <form id="formQuickAuth" onsubmit="handleAuthSubmit(event)">
                 <div class="auth-input-wrapper">
-                    <input type="password" id="authPasswordInput" class="auth-password-input" placeholder="Masukkan password..." autocomplete="current-password" required>
-                    <i class="fas fa-eye auth-toggle-eye" id="authEyeIcon" onclick="togglePasswordVisibility()"></i>
+                    <input type="password" 
+                           id="authPasswordInput" 
+                           class="auth-password-input" 
+                           placeholder="Sandi / PIN / Username..." 
+                           autocomplete="current-password" 
+                           autocapitalize="none" 
+                           autocorrect="off" 
+                           spellcheck="false" 
+                           required>
+                    <i class="fas fa-eye auth-toggle-eye" id="authEyeIcon" onclick="togglePasswordVisibility('authPasswordInput', 'authEyeIcon')"></i>
                 </div>
-                <button type="submit" class="btn-auth-unlock">
-                    <i class="fas fa-unlock"></i> BUKA KUNCI AKSES
+                <button type="submit" class="btn-auth-unlock" id="btnAuthQuickSubmit">
+                    <i class="fas fa-unlock-alt"></i> BUKA KUNCI AKSES
                 </button>
             </form>
+
+            <!-- FORM 2: LOGIN LENGKAP (USERNAME & PASSWORD) -->
+            <form id="formFullAuth" style="display: none;" onsubmit="handleFullAuthSubmit(event)">
+                <div class="auth-input-wrapper">
+                    <input type="text" 
+                           id="authFullUserInput" 
+                           class="auth-password-input" 
+                           placeholder="Email atau Username pengurus" 
+                           autocomplete="username" 
+                           autocapitalize="none" 
+                           autocorrect="off" 
+                           spellcheck="false">
+                </div>
+                <div class="auth-input-wrapper">
+                    <input type="password" 
+                           id="authFullPassInput" 
+                           class="auth-password-input" 
+                           placeholder="Kata sandi akun..." 
+                           autocomplete="current-password" 
+                           autocapitalize="none" 
+                           autocorrect="off" 
+                           spellcheck="false">
+                    <i class="fas fa-eye auth-toggle-eye" id="authFullEyeIcon" onclick="togglePasswordVisibility('authFullPassInput', 'authFullEyeIcon')"></i>
+                </div>
+                <button type="submit" class="btn-auth-unlock" id="btnAuthFullSubmit">
+                    <i class="fas fa-sign-in-alt"></i> MASUK SEBAGAI PENGURUS
+                </button>
+            </form>
+
+            <!-- CHIPS / TOMBOL BANTUAN AKUN CEPAT PETUGAS -->
+            <div class="auth-quick-chips-wrap">
+                <div class="auth-chips-title">Pilih Akun Petugas Cepat (1-Klik):</div>
+                <div class="auth-chips-grid">
+                    <button type="button" class="auth-chip-btn" onclick="quickFillAndLogin('135dkmlJihad', 'dkm')">
+                        <i class="fas fa-tv text-info"></i> Petugas DKM
+                    </button>
+                    <button type="button" class="auth-chip-btn" onclick="quickFillAndLogin('*dkm1#aljihad', 'dkmsatu')">
+                        <i class="fas fa-user-tie text-warning"></i> Ketua DKM
+                    </button>
+                    <button type="button" class="auth-chip-btn" onclick="quickFillAndLogin('#1.Bendahara', 'bendahara')">
+                        <i class="fas fa-wallet text-success"></i> Bendahara
+                    </button>
+                    <button type="button" class="auth-chip-btn" onclick="quickFillAndLogin('SuperUser1971', 'admin')">
+                        <i class="fas fa-shield-alt text-warning"></i> Super Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAUTAN NAVIGASI ALTERNATIF -->
+            <div class="auth-footer-links">
+                <a href="admin.html" class="auth-footer-link">
+                    <i class="fas fa-columns"></i> Dashboard Admin
+                </a>
+                <span class="auth-footer-separator">•</span>
+                <a href="index.html" class="auth-footer-link">
+                    <i class="fas fa-tv"></i> Layar TV Display
+                </a>
+            </div>
         </div>
     </div>
 
@@ -1251,17 +1438,26 @@
 
     <!-- SUPABASE CORE SDK & AUTH -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js"></script>
-    <script src="js/supabase-db.js"></script>
-    <script src="js/admin-auth.js"></script>
+    <script src="js/supabase-config.js?v=5.8.15"></script>
+    <script src="js/supabase-db.js?v=5.8.15"></script>
+    <script src="js/admin-auth.js?v=5.8.15"></script>
 
     <script>
-        // DAFTAR PASSWORD VALID RESMI DASHBOARD
+        // DAFTAR PASSWORD VALID RESMI DASHBOARD (TERMASUK ALIAS & USERNAME RESMI)
         const VALID_PASSWORDS = [
             'SuperUser1971',  // Super Admin
             '#1.Bendahara',   // Bendahara
             '*dkm1#aljihad',  // DKM 1
-            '135dkmlJihad'    // DKM 2
+            '135dkmlJihad',   // DKM 2
+            '#1.AlJihad',
+            'admin123',
+            'operator123',
+            'bendahara123',
+            'dkm',
+            'dkmsatu',
+            'admin',
+            'bendahara',
+            'operator'
         ];
 
         // FOTO IMAM BASE64 BUFFER
@@ -1530,72 +1726,284 @@
         let isSheetOpen = false;
 
         /* =========================================================================
-           SISTEM AUTENTIKASI KUNCI KEAMANAN (PASSWORD GATE)
+           SISTEM AUTENTIKASI KUNCI KEAMANAN (PASSWORD GATE) & LOGIN PETUGAS
            ========================================================================= */
-        function checkSecurityAuth() {
-            const isAuth = sessionStorage.getItem('quick_petugas_authenticated');
-            const overlay = document.getElementById('authGateOverlay');
-            if (isAuth === 'true') {
-                overlay.style.display = 'none';
+        function switchAuthTab(mode) {
+            const tabQuick = document.getElementById('tabQuickAuth');
+            const tabFull = document.getElementById('tabFullAuth');
+            const formQuick = document.getElementById('formQuickAuth');
+            const formFull = document.getElementById('formFullAuth');
+            const errBox = document.getElementById('authErrorMsg');
+            if (errBox) errBox.style.display = 'none';
+
+            if (mode === 'quick') {
+                if (tabQuick) tabQuick.classList.add('active');
+                if (tabFull) tabFull.classList.remove('active');
+                if (formQuick) formQuick.style.display = 'block';
+                if (formFull) formFull.style.display = 'none';
+                setTimeout(() => {
+                    const inp = document.getElementById('authPasswordInput');
+                    if (inp) inp.focus();
+                }, 50);
             } else {
-                overlay.style.display = 'flex';
-                document.getElementById('authPasswordInput').focus();
+                if (tabFull) tabFull.classList.add('active');
+                if (tabQuick) tabQuick.classList.remove('active');
+                if (formQuick) formQuick.style.display = 'none';
+                if (formFull) formFull.style.display = 'block';
+                setTimeout(() => {
+                    const inp = document.getElementById('authFullUserInput');
+                    if (inp) inp.focus();
+                }, 50);
             }
         }
 
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const inputVal = document.getElementById('authPasswordInput').value.trim();
+        function quickFillAndLogin(pwd, username) {
+            const input = document.getElementById('authPasswordInput');
+            if (input) input.value = pwd;
+            handleAuthSubmit(null, pwd, username);
+        }
+
+        function checkSecurityAuth() {
+            // 1. Cek sesi aktif AdminAuth dari localStorage atau window.AdminAuth
+            let currentUser = null;
+            try {
+                if (window.AdminAuth && typeof window.AdminAuth.getCurrentUser === 'function') {
+                    currentUser = window.AdminAuth.getCurrentUser();
+                }
+                if (!currentUser) {
+                    const raw = localStorage.getItem('aljihad_auth_user');
+                    if (raw) currentUser = JSON.parse(raw);
+                }
+            } catch(e) {}
+
+            // 2. Cek apakah sudah pernah unlock di perangkat ini (localStorage atau sessionStorage)
+            const isAuth = localStorage.getItem('quick_petugas_authenticated') === 'true' || 
+                           sessionStorage.getItem('quick_petugas_authenticated') === 'true';
+
+            const overlay = document.getElementById('authGateOverlay');
+            if (currentUser || isAuth) {
+                localStorage.setItem('quick_petugas_authenticated', 'true');
+                sessionStorage.setItem('quick_petugas_authenticated', 'true');
+                if (overlay) overlay.style.display = 'none';
+                return true;
+            } else {
+                if (overlay) overlay.style.display = 'flex';
+                const input = document.getElementById('authPasswordInput');
+                if (input) setTimeout(() => input.focus(), 100);
+                return false;
+            }
+        }
+
+        async function handleAuthSubmit(e, overrideVal, overrideUser) {
+            if (e) e.preventDefault();
+            const rawVal = overrideVal !== undefined ? overrideVal : (document.getElementById('authPasswordInput')?.value || '');
+            const inputVal = rawVal.trim();
+            const cleanLower = inputVal.toLowerCase();
             const errBox = document.getElementById('authErrorMsg');
+            const errText = document.getElementById('authErrorText') || errBox;
+
+            if (!inputVal) {
+                if (errBox) {
+                    errBox.style.display = 'block';
+                    errText.textContent = "Silakan masukkan sandi, PIN, atau nama akun Anda.";
+                }
+                return;
+            }
 
             let matched = false;
+            let matchedUser = null;
 
-            // 1. Prioritas Utama: Cek daftar pengguna mutakhir dari AdminAuth (Cloud & Local RBAC)
-            // Sehingga jika Super Admin mengubah password di Dashboard, password baru LANGSUNG ikut berganti
+            // 1. Ambil daftar user mutakhir dari AdminAuth
+            let users = [];
             if (window.AdminAuth && typeof window.AdminAuth.getUsers === 'function') {
-                const users = window.AdminAuth.getUsers();
-                if (Array.isArray(users) && users.length > 0) {
-                    matched = users.some(u => (u.password || '').trim() === inputVal);
+                try { users = window.AdminAuth.getUsers(); } catch(errU) {}
+            }
+            if (!Array.isArray(users) || users.length === 0) {
+                try {
+                    const rawL = localStorage.getItem('aljihad_users_list');
+                    if (rawL) users = JSON.parse(rawL);
+                } catch(errL) {}
+            }
+            if (!Array.isArray(users) || users.length === 0) {
+                users = (typeof DEFAULT_AUTH_USERS !== 'undefined') ? DEFAULT_AUTH_USERS : [];
+            }
+
+            // A. Cek kecocokan password akun (Case Sensitive & Case Insensitive)
+            if (Array.isArray(users) && users.length > 0) {
+                matchedUser = users.find(u => {
+                    const uPwd = (u.password || '').trim();
+                    return uPwd === inputVal || (uPwd && uPwd.toLowerCase() === cleanLower);
+                });
+                if (matchedUser) matched = true;
+            }
+
+            // B. Cek jika input cocok dengan username, email, nama, atau role pengurus
+            if (!matched && Array.isArray(users) && users.length > 0) {
+                matchedUser = users.find(u => {
+                    const un = (u.username || '').toLowerCase().trim();
+                    const em = (u.email || '').toLowerCase().trim();
+                    const nm = (u.name || '').toLowerCase().trim();
+                    const ro = (u.role || '').toLowerCase().trim();
+                    return un === cleanLower || em === cleanLower || (cleanLower.length >= 3 && nm.includes(cleanLower)) || ro === cleanLower;
+                });
+                if (matchedUser) matched = true;
+            }
+
+            // C. Cek daftar password & username resmi VALID_PASSWORDS
+            if (!matched) {
+                const validLower = VALID_PASSWORDS.map(p => p.toLowerCase());
+                if (VALID_PASSWORDS.includes(inputVal) || validLower.includes(cleanLower)) {
+                    matched = true;
+                    // Kaitkan dengan akun role yang relevan
+                    if (cleanLower.includes('bendahara')) {
+                        matchedUser = (users || []).find(u => u.role === 'bendahara');
+                    } else if (cleanLower.includes('admin') || cleanLower.includes('super')) {
+                        matchedUser = (users || []).find(u => u.role === 'admin');
+                    } else {
+                        matchedUser = (users || []).find(u => u.role === 'petugas');
+                    }
                 }
             }
 
-            // 2. Fallback Darurat Offline: Jika data pengguna belum termuat, gunakan daftar default
-            if (!matched && (!window.AdminAuth || !window.AdminAuth.getUsers || window.AdminAuth.getUsers().length === 0)) {
-                if (VALID_PASSWORDS.includes(inputVal)) {
-                    matched = true;
+            // D. Jika belum cocok, cek langsung ke Supabase Cloud (jika online)
+            if (!matched && typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+                try {
+                    const btn = document.getElementById('btnAuthQuickSubmit');
+                    if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memverifikasi Cloud...';
+                    
+                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list&select=value`, {
+                        headers: {
+                            'apikey': SUPABASE_CONFIG.anonKey,
+                            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+                        }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.length > 0 && data[0].value) {
+                            let cloudUsers = data[0].value;
+                            if (typeof cloudUsers === 'string') {
+                                try { cloudUsers = JSON.parse(cloudUsers); } catch(err) {}
+                            }
+                            if (Array.isArray(cloudUsers)) {
+                                matchedUser = cloudUsers.find(u => {
+                                    const uPwd = (u.password || '').trim();
+                                    const un = (u.username || '').toLowerCase().trim();
+                                    return uPwd === inputVal || (uPwd && uPwd.toLowerCase() === cleanLower) || un === cleanLower;
+                                });
+                                if (matchedUser) matched = true;
+                            }
+                        }
+                    }
+                } catch (cloudErr) {
+                    console.warn('Verifikasi cloud fallback:', cloudErr);
+                } finally {
+                    const btn = document.getElementById('btnAuthQuickSubmit');
+                    if (btn) btn.innerHTML = '<i class="fas fa-unlock-alt"></i> BUKA KUNCI AKSES';
                 }
             }
 
             if (matched) {
+                // Simpan flag otorisasi permanen di perangkat ini (localStorage + sessionStorage)
+                localStorage.setItem('quick_petugas_authenticated', 'true');
                 sessionStorage.setItem('quick_petugas_authenticated', 'true');
+
+                // Jika user cocok, catat juga sebagai sesi login pengurus
+                if (matchedUser) {
+                    try {
+                        localStorage.setItem('aljihad_auth_user', JSON.stringify(matchedUser));
+                    } catch(e) {}
+                } else if (overrideUser) {
+                    const found = (users || []).find(u => (u.username || '').toLowerCase() === overrideUser.toLowerCase());
+                    if (found) {
+                        try { localStorage.setItem('aljihad_auth_user', JSON.stringify(found)); } catch(e) {}
+                    }
+                }
+
                 document.getElementById('authGateOverlay').style.display = 'none';
-                errBox.style.display = 'none';
-                showToastSuccess("Kunci dibuka! Selamat datang di Quick Input Mode.");
+                if (errBox) errBox.style.display = 'none';
+                showToastSuccess("Kunci akses dibuka! Selamat datang di Quick Input Mode.");
             } else {
-                errBox.style.display = 'block';
-                document.getElementById('authPasswordInput').value = '';
-                document.getElementById('authPasswordInput').focus();
+                if (errBox) {
+                    errBox.style.display = 'block';
+                    errText.textContent = "Kredensial tidak cocok. Masukkan kata sandi, PIN, atau pilih salah satu tombol Akun Petugas Cepat di bawah.";
+                }
+                const input = document.getElementById('authPasswordInput');
+                if (input) {
+                    input.value = '';
+                    input.focus();
+                }
             }
         }
 
-        function togglePasswordVisibility() {
-            const pInput = document.getElementById('authPasswordInput');
-            const eye = document.getElementById('authEyeIcon');
+        async function handleFullAuthSubmit(e) {
+            e.preventDefault();
+            const identifier = (document.getElementById('authFullUserInput')?.value || '').trim();
+            const password = (document.getElementById('authFullPassInput')?.value || '').trim();
+            const errBox = document.getElementById('authErrorMsg');
+            const errText = document.getElementById('authErrorText') || errBox;
+            const btn = document.getElementById('btnAuthFullSubmit');
+
+            if (!identifier || !password) {
+                if (errBox) {
+                    errBox.style.display = 'block';
+                    errText.textContent = "Email/Username dan kata sandi wajib diisi!";
+                }
+                return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memverifikasi...';
+            }
+
+            try {
+                if (window.AdminAuth && typeof window.AdminAuth.login === 'function') {
+                    const user = await window.AdminAuth.login(identifier, password);
+                    localStorage.setItem('quick_petugas_authenticated', 'true');
+                    sessionStorage.setItem('quick_petugas_authenticated', 'true');
+                    document.getElementById('authGateOverlay').style.display = 'none';
+                    if (errBox) errBox.style.display = 'none';
+                    showToastSuccess(`Ahlan wa Sahlan, ${user.name} (${user.role_label})!`);
+                } else {
+                    // Fallback jika AdminAuth belum siap
+                    await handleAuthSubmit(null, password, identifier);
+                }
+            } catch (err) {
+                if (errBox) {
+                    errBox.style.display = 'block';
+                    errText.textContent = err.message || "Gagal masuk: kredensial tidak cocok.";
+                }
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> MASUK SEBAGAI PENGURUS';
+                }
+            }
+        }
+
+        function togglePasswordVisibility(inputId = 'authPasswordInput', iconId = 'authEyeIcon') {
+            const pInput = document.getElementById(inputId);
+            const eye = document.getElementById(iconId);
+            if (!pInput) return;
             if (pInput.type === 'password') {
                 pInput.type = 'text';
-                eye.className = 'fas fa-eye-slash auth-toggle-eye';
+                if (eye) eye.className = 'fas fa-eye-slash auth-toggle-eye';
             } else {
                 pInput.type = 'password';
-                eye.className = 'fas fa-eye auth-toggle-eye';
+                if (eye) eye.className = 'fas fa-eye auth-toggle-eye';
             }
         }
 
         function lockSecurityGate() {
+            localStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.removeItem('quick_petugas_authenticated');
-            document.getElementById('authPasswordInput').value = '';
-            document.getElementById('authErrorMsg').style.display = 'none';
-            document.getElementById('authGateOverlay').style.display = 'flex';
-            document.getElementById('authPasswordInput').focus();
+            const pInput = document.getElementById('authPasswordInput');
+            if (pInput) pInput.value = '';
+            const errBox = document.getElementById('authErrorMsg');
+            if (errBox) errBox.style.display = 'none';
+            const overlay = document.getElementById('authGateOverlay');
+            if (overlay) overlay.style.display = 'flex';
+            if (pInput) pInput.focus();
         }
 
         /* =========================================================================
@@ -2998,15 +3406,15 @@
             }
         });
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            // Sinkronkan daftar pengguna dari Supabase Cloud agar password/user yang baru diubah di dashboard langsung bisa dipakai di HP mana pun
-            if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
-                try {
-                    await window.AdminAuth.syncUsersFromCloud();
-                } catch(e) {}
-            }
+        window.addEventListener('DOMContentLoaded', () => {
+            // Jalankan cek autentikasi & database live seketika tanpa tertahan latency jaringan
             checkSecurityAuth();
             initLiveDatabase();
+
+            // Sinkronkan daftar pengguna dari Supabase Cloud di latar belakang agar perubahan password mutakhir selalu terupdate
+            if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
+                window.AdminAuth.syncUsersFromCloud().catch(e => console.warn('Sync cloud user background:', e));
+            }
         });
     </script>
 </body>
