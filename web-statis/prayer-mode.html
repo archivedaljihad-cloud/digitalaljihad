@@ -1097,6 +1097,32 @@
             color: #ffffff;
         }
 
+        .preview-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 4px;
+        }
+
+        .preview-label.gold {
+            color: #F5DC8C;
+        }
+
+        .preview-btn.jumat-btn {
+            border-color: rgba(212, 175, 55, 0.45);
+            color: #fef08a;
+            background: rgba(212, 175, 55, 0.12);
+        }
+
+        .preview-btn.jumat-btn:hover {
+            background: rgba(212, 175, 55, 0.35);
+            border-color: #ffd700;
+            color: #ffffff;
+        }
+
         @media (max-width: 900px) {
             .standalone-preview-bar {
                 width: 96%;
@@ -1391,9 +1417,15 @@
             if (phase === 'countdown') {
                 simulatedSeconds = 195; // 03:15
                 previewPrayer = 'Ashar';
+            } else if (phase === 'countdown_jumat') {
+                simulatedSeconds = 180; // 03:00
+                previewPrayer = "SHOLAT JUM'AT";
             } else if (phase === 'adzan') {
                 simulatedSeconds = 180; // 03:00
                 previewPrayer = 'Ashar';
+            } else if (phase === 'adzan_jumat') {
+                simulatedSeconds = 180; // 03:00
+                previewPrayer = "SHOLAT JUM'AT";
             } else if (phase === 'iqamah') {
                 simulatedSeconds = 300; // 05:00
                 previewPrayer = 'Ashar';
@@ -1432,17 +1464,39 @@
                 simulatedSeconds = parseInt(urlParams.get('sec')) || 195;
             }
 
+            // Parameter khusus pengujian Sholat Jum'at: ?jumat=countdown | adzan | khutbah atau ?preview=jumat
+            if (urlParams.has('jumat') || urlParams.get('preview') === 'jumat' || urlParams.get('test') === 'jumat') {
+                const jumatParam = (urlParams.get('jumat') || '').toLowerCase();
+                if (jumatParam === 'countdown' || jumatParam === 'menuju_adzan') {
+                    previewPhase = 'countdown_jumat';
+                    previewPrayer = "SHOLAT JUM'AT";
+                    simulatedSeconds = 180;
+                } else if (jumatParam === 'adzan') {
+                    previewPhase = 'adzan_jumat';
+                    previewPrayer = "SHOLAT JUM'AT";
+                    simulatedSeconds = 180;
+                } else {
+                    previewPhase = 'khutbah';
+                    previewPrayer = "SHOLAT JUM'AT";
+                    simulatedSeconds = 0;
+                }
+            }
+
             const bar = document.createElement('div');
             bar.id = 'standalonePreviewBar';
             bar.className = 'standalone-preview-bar';
             bar.innerHTML = `
                 <div class="preview-badge"><i class="fas fa-eye"></i> PRATINJAU</div>
                 <div class="preview-btn-group">
+                    <span class="preview-label">FARDHU:</span>
                     <button type="button" class="preview-btn ${previewPhase === 'countdown' ? 'active' : ''}" data-phase="countdown" onclick="switchPreview('countdown')">Menuju Adzan</button>
                     <button type="button" class="preview-btn ${previewPhase === 'adzan' ? 'active' : ''}" data-phase="adzan" onclick="switchPreview('adzan')">Adzan</button>
                     <button type="button" class="preview-btn ${previewPhase === 'iqamah' ? 'active' : ''}" data-phase="iqamah" onclick="switchPreview('iqamah')">Iqamah</button>
                     <button type="button" class="preview-btn ${previewPhase === 'prayer' ? 'active' : ''}" data-phase="prayer" onclick="switchPreview('prayer')">Sholat</button>
-                    <button type="button" class="preview-btn ${previewPhase === 'khutbah' ? 'active' : ''}" data-phase="khutbah" onclick="switchPreview('khutbah')">Sholat Jum'at</button>
+                    <span class="preview-label gold">JUM'AT:</span>
+                    <button type="button" class="preview-btn jumat-btn ${previewPhase === 'countdown_jumat' ? 'active' : ''}" data-phase="countdown_jumat" onclick="switchPreview('countdown_jumat')">Menuju Adzan Jum'at</button>
+                    <button type="button" class="preview-btn jumat-btn ${previewPhase === 'adzan_jumat' ? 'active' : ''}" data-phase="adzan_jumat" onclick="switchPreview('adzan_jumat')">Adzan Jum'at</button>
+                    <button type="button" class="preview-btn jumat-btn ${previewPhase === 'khutbah' ? 'active' : ''}" data-phase="khutbah" onclick="switchPreview('khutbah')">Khutbah & Sholat</button>
                 </div>
                 <a href="index.html" class="preview-btn exit-btn" title="Buka Rotasi Display TV"><i class="fas fa-tv"></i> Rotator TV</a>
             `;
@@ -1504,9 +1558,22 @@
                     if (simulatedSeconds > 0 && previewPhase !== PrayerEngine.PHASES.PRAYER && previewPhase !== PrayerEngine.PHASES.KHUTBAH) {
                         simulatedSeconds--;
                     }
+                    let currentActualPhase = previewPhase;
+                    let isFri = false;
+                    if (previewPhase === 'countdown_jumat') {
+                        currentActualPhase = PrayerEngine.PHASES.COUNTDOWN;
+                        isFri = true;
+                    } else if (previewPhase === 'adzan_jumat') {
+                        currentActualPhase = PrayerEngine.PHASES.ADZAN;
+                        isFri = true;
+                    } else if (previewPhase === 'khutbah') {
+                        currentActualPhase = PrayerEngine.PHASES.KHUTBAH;
+                        isFri = true;
+                    }
                     state = {
                         active: true,
-                        phase: previewPhase,
+                        isFriday: isFri || (previewPrayer && previewPrayer.toUpperCase().includes("JUM'AT")),
+                        phase: currentActualPhase,
                         prayer: previewPrayer,
                         remaining: simulatedSeconds,
                         jumatPetugas: jumatPetugas || {

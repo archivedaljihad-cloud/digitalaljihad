@@ -1109,7 +1109,37 @@
         function checkPrayerMode() {
             if (!window.PrayerEngine) return;
             const now = new Date();
-            const state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+            let state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+
+            // SIMULASI / TESTING MODE JUM'AT VIA URL PARAMETER (index.html?test_jumat=khutbah | countdown | adzan)
+            const urlParams = new URLSearchParams(window.location.search);
+            const testJumat = urlParams.get('test_jumat') || urlParams.get('simulasi_jumat') || urlParams.get('test_prayer');
+            if (testJumat && !window._simulasiDismissed) {
+                let simPhase = PrayerEngine.PHASES.KHUTBAH;
+                let simRemaining = 2400; // 40 menit
+                if (testJumat === 'countdown' || testJumat === 'menuju_adzan') {
+                    simPhase = PrayerEngine.PHASES.COUNTDOWN;
+                    simRemaining = 180;
+                } else if (testJumat === 'adzan') {
+                    simPhase = PrayerEngine.PHASES.ADZAN;
+                    simRemaining = 180;
+                }
+                state = {
+                    active: true,
+                    isFriday: true,
+                    phase: simPhase,
+                    prayer: "SHOLAT JUM'AT",
+                    remaining: simRemaining,
+                    jumatPetugas: jumatPetugas || {
+                        khatib: 'Ust. Jamal Haris, S.Ag.',
+                        imam: 'Ust. Jamal Haris, S.Ag.',
+                        muadzin: 'Ust. Rudy',
+                        bilal: 'Ust. Sahroni'
+                    }
+                };
+                showSimulasiJumatBanner(testJumat, simPhase);
+            }
+
             window.latestPrayerState = state;
 
             const prayerFrame = document.getElementById('prayerFrame');
@@ -1198,6 +1228,31 @@
                 if (prayerFrame) prayerFrame.classList.remove('active');
                 scheduleNextRotation();
             }
+        };
+
+        // Indikator Banner Simulasi Mode Jum'at
+        function showSimulasiJumatBanner(paramVal, phase) {
+            if (document.getElementById('simulasiJumatBanner')) return;
+            const banner = document.createElement('div');
+            banner.id = 'simulasiJumatBanner';
+            banner.style.cssText = 'position:fixed;bottom:16px;right:20px;z-index:1000000;background:rgba(1,19,10,0.94);backdrop-filter:blur(10px);border:1.5px solid #FFD700;border-radius:30px;padding:8px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(0,0,0,0.8),0 0 15px rgba(255,215,0,0.3);font-family:Poppins,sans-serif;font-size:12px;color:#ffffff;';
+            let phaseLabel = "Khutbah & Sholat";
+            if (window.PrayerEngine) {
+                if (phase === window.PrayerEngine.PHASES.COUNTDOWN) phaseLabel = "Menuju Adzan Jum'at";
+                if (phase === window.PrayerEngine.PHASES.ADZAN) phaseLabel = "Adzan Jum'at";
+            }
+            banner.innerHTML = `<span>🕌 <strong style="color:#FFD700;">SIMULASI TV JUM'AT:</strong> ${phaseLabel}</span><button type="button" onclick="dismissSimulasiJumat()" style="background:rgba(239,68,68,0.25);border:1px solid #ef4444;color:#fca5a5;font-size:11px;font-weight:700;padding:4px 10px;border-radius:15px;cursor:pointer;">Keluar Simulasi ✕</button>`;
+            document.body.appendChild(banner);
+        }
+
+        window.dismissSimulasiJumat = function() {
+            window._simulasiDismissed = true;
+            const b = document.getElementById('simulasiJumatBanner');
+            if (b) b.remove();
+            isPrayerModeActive = false;
+            const pf = document.getElementById('prayerFrame');
+            if (pf) pf.classList.remove('active');
+            scheduleNextRotation();
         };
 
         // Inisialisasi Utama

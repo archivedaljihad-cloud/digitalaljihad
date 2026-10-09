@@ -4,7 +4,42 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 12:45 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 13:10 WIB)
+
+### 🕌 SISTEM PENGUJIAN & SIMULASI LENGKAP MODE SHOLAT JUM'AT (Versi SW v5.8.17):
+1. **Latar Belakang & Kebutuhan Pengguna:**
+   - **Kebutuhan:** Pengguna/DKM menanyakan bagaimana cara menguji mode prayer sholat Jum'at pada hari biasa (sebelum hari H), agar pengurus masjid dapat mengetahui dan memastikan secara visual apa yang akan terjadi nanti di layar TV saat hari Jum'at tiba.
+   - **Tantangan Teknis:** Mode Jum'at normalnya hanya aktif pada hari Jum'at (`day === 5`) saat jam sholat Jum'at (11:40 - 12:40 WIB). Diperlukan simulator mandiri yang fleksibel agar bisa diuji kapan saja tanpa mengubah kalender komputer TV atau merusak display masjid yang sedang aktif berjalan.
+
+2. **Solusi & Fitur Simulasi yang Diimplementasikan:**
+   - **Metode 1: Simulator Langsung pada Halaman Mode Sholat (`prayer-mode.html`)**
+     - Ditambahkan kontrol pratinjau khusus Jum'at di bilah pratinjau atas/bawah:
+       - `[ 🕌 Menuju Adzan Jum'at ]`: Menyimulasikan hitung mundur flip clock 3 menit menuju adzan Jum'at dengan teks hadith keutamaan hari Jum'at (HR. Muslim no. 854) dan instruksi merapikan shaf.
+       - `[ 📢 Adzan Jum'at ]`: Menyimulasikan waktu adzan Jum'at berkumandang dengan judul *"Waktu Sholat Jum'at Telah Tiba"* dan instruksi menonaktifkan alat komunikasi.
+       - `[ 📖 Khutbah & Sholat ]`: Menyimulasikan fase khutbah dan sholat Jum'at dengan kartu 4 petugas (Khotib & Imam, Imam Sholat, Muadzin, Bilal) serta hadith adab diam menyimak khutbah (HR. Bukhari no. 934 & Muslim no. 851).
+     - Mendukung parameter URL langsung:
+       - `prayer-mode.html?jumat=countdown` (Uji hitung mundur menuju adzan Jum'at)
+       - `prayer-mode.html?jumat=adzan` (Uji kumandang adzan Jum'at)
+       - `prayer-mode.html?jumat=khutbah` (Uji kartu petugas khutbah & sholat Jum'at)
+   - **Metode 2: Simulasi TV Display Rotator (`index.html`)**
+     - Di `index.html` fungsi `checkPrayerMode()`, ditambahkan pendeteksi URL parameter `test_jumat`:
+       - `https://digitalaljihad.my.id/?test_jumat=khutbah` (Layar TV langsung mengunci ke mode Khutbah Jum'at)
+       - `https://digitalaljihad.my.id/?test_jumat=countdown` (Layar TV mengunci ke mode Countdown Adzan Jum'at)
+       - `https://digitalaljihad.my.id/?test_jumat=adzan` (Layar TV mengunci ke mode Adzan Jum'at)
+     - Saat simulasi aktif, muncul badge informatif elegan di kanan bawah layar:
+       `[ 🕌 SIMULASI TV JUM'AT: Khutbah & Sholat | Keluar Simulasi ✕ ]`
+     - Tombol *"Keluar Simulasi ✕"* memungkinkan operator langsung mengembalikan TV ke rotasi normal seketika.
+   - **Metode 3: Tombol Pratinjau Cepat di Panel Petugas (`petugas.html`)**
+     - Pada modul input `Petugas Sholat Jum'at` di `petugas.html`, ditambahkan widget tombol pengujian:
+       - `[ 🖥️ Uji Mode Sholat Jum'at ]` (Membuka `prayer-mode.html?jumat=khutbah`)
+       - `[ 📺 Uji di Rotator TV ]` (Membuka `index.html?test_jumat=khutbah`)
+     - Petugas DKM setelah menginput nama khatib/imam dapat langsung mengetes hasilnya dalam 1 sentuhan.
+   - **Bumping Cache Service Worker (SOP #2):**
+     - Dinaikkan ke **`v5.8.17`** (`aljihad-signage-v5.8.17`) di `web-statis/sw.js` dan `web-statis/admin.html`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 12:45 WIB)
 
 ### 🕌 PERBAIKAN TOTAL MODE SHOLAT JUM'AT & SINKRONISASI PRAYER MODE IFRAME (Versi SW v5.8.16):
 1. **Latar Belakang & Keluhan Pengguna:**
