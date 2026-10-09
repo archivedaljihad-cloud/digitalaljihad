@@ -40,11 +40,14 @@ const filesToCheck = [
     'index.html',
     'admin.html',
     'petugas.html',
+    'modeinput.html',
+    'login.html',
     'prayer-mode.html',
     'sw.js',
     'js/prayer-engine.js',
     'js/supabase-db.js',
     'js/supabase-config.js',
+    'js/admin-auth.js',
     'js/anti-idle.js'
 ];
 
@@ -214,6 +217,22 @@ const adminMatch = adminContent.match(/if\s*\(name\s*!==\s*['"]([^'"]+)['"]\)/);
 assert(swMatch && swMatch[1], `Versi CACHE_NAME terdeteksi di sw.js (${swMatch ? swMatch[1] : 'NONE'})`);
 assert(adminMatch && adminMatch[1], `Versi Cache Cleaner terdeteksi di admin.html (${adminMatch ? adminMatch[1] : 'NONE'})`);
 assert(swMatch && adminMatch && swMatch[1] === adminMatch[1], `Versi cache sw.js dan admin.html IDENTIK (${swMatch[1]} === ${adminMatch[1]})`);
+
+// -------------------------------------------------------------
+// 6. GERBANG RESMI & RBAC PROTECTION INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 6] Gerbang Resmi & RBAC Protection Integrity:');
+const loginContent = fs.readFileSync(path.join(baseDir, 'login.html'), 'utf8');
+const petugasContent = fs.readFileSync(path.join(baseDir, 'petugas.html'), 'utf8');
+const modeinputContent = fs.readFileSync(path.join(baseDir, 'modeinput.html'), 'utf8');
+const authContent = fs.readFileSync(path.join(baseDir, 'js/admin-auth.js'), 'utf8');
+
+assert(loginContent.includes('id="gatewayPortalHub"') && loginContent.includes('id="loginFormCardWrap"'), 'login.html memiliki struktur Portal Hub & Login Form Gerbang Resmi');
+assert(loginContent.includes('renderGatewayState'), 'login.html memiliki state router otomatis renderGatewayState()');
+assert(petugasContent.includes('requireAuth'), 'petugas.html diproteksi wajib otentikasi requireAuth');
+assert(modeinputContent.includes('requireAuth'), 'modeinput.html diproteksi wajib otentikasi requireAuth');
+assert(adminContent.includes('requireAuth'), 'admin.html diproteksi wajib otentikasi requireAuth');
+assert(authContent.includes('requireAuth') && authContent.includes('redirect='), 'admin-auth.js menangani parameter redirect otomatis ke gerbang resmi');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

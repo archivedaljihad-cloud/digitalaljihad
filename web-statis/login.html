@@ -589,6 +589,273 @@
             }
 
         }
+
+        /* STYLES GERBANG RESMI & PORTAL HUB */
+        .gateway-roles-badge-row {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 230, 118, 0.2);
+            width: 100%;
+            text-align: center;
+        }
+
+        .roles-badge-title {
+            font-size: 0.74rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .roles-badge-list {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .role-pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.70rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+        }
+
+        .pill-admin {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .pill-bendahara {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+            color: #34d399;
+        }
+
+        .pill-petugas {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: #38bdf8;
+            color: #7dd3fc;
+        }
+
+        /* PORTAL HUB */
+        .gateway-portal-hub {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .portal-user-badge-card {
+            background: linear-gradient(135deg, rgba(6, 61, 46, 0.95), rgba(4, 38, 29, 0.98));
+            border: 1.5px solid #ffd700;
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 215, 0, 0.25);
+        }
+
+        .portal-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .portal-user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #022c22;
+            border: 2px solid #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .portal-user-meta h3 {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 2px;
+        }
+
+        .portal-role-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.70rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .portal-status-online {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            white-space: nowrap;
+        }
+
+        .portal-pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulseDot 1.5s infinite;
+        }
+
+        .portal-doors-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .portal-doors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+
+        @media (max-width: 576px) {
+            .portal-doors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .portal-door-card {
+            background: rgba(3, 26, 17, 0.88);
+            border: 1.5px solid rgba(0, 230, 118, 0.35);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none !important;
+            color: #ffffff !important;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+        }
+
+        .portal-door-card:hover {
+            transform: translateY(-2px);
+            border-color: #ffd700;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7), 0 0 14px rgba(255, 215, 0, 0.3);
+        }
+
+        .door-header-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .door-icon-box {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        .door-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .door-desc {
+            font-size: 0.72rem;
+            color: #cbd5e1;
+            line-height: 1.35;
+            margin-bottom: 10px;
+        }
+
+        .door-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .door-admin .door-icon-box { background: rgba(245, 158, 11, 0.2); color: #ffd700; border: 1px solid #ffd700; }
+        .door-admin .door-action-btn { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.5); }
+        .door-admin:hover .door-action-btn { background: #f59e0b; color: #000; }
+
+        .door-petugas .door-icon-box { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid #38bdf8; }
+        .door-petugas .door-action-btn { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.5); }
+        .door-petugas:hover .door-action-btn { background: #38bdf8; color: #000; }
+
+        .door-modeinput .door-icon-box { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+        .door-modeinput .door-action-btn { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); }
+        .door-modeinput:hover .door-action-btn { background: #10b981; color: #000; }
+
+        .door-tv .door-icon-box { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #eab308; }
+        .door-tv .door-action-btn { background: rgba(234, 179, 8, 0.2); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.5); }
+        .door-tv:hover .door-action-btn { background: #eab308; color: #000; }
+
+        .btn-gateway-logout-hub {
+            width: 100%;
+            padding: 10px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1.5px solid #ef4444;
+            border-radius: 10px;
+            color: #fca5a5;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-gateway-logout-hub:hover {
+            background: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.45);
+        }
     </style>
 </head>
 <body>
@@ -606,7 +873,7 @@
             </div>
         </div>
 
-        <!-- SISI KANAN: KONTEN LOGIN & FORM -->
+        <!-- SISI KANAN: KONTEN LOGIN & FORM / PORTAL HUB -->
         <div class="login-content-side">
             <div class="login-box-stack">
                 
@@ -621,13 +888,13 @@
                 </div>
 
                 <!-- 2. Ucapan Selamat Datang & Nama Sistem -->
-                <h1 class="welcome-login-title">Selamat datang di halaman LOGIN</h1>
+                <h1 class="welcome-login-title" id="gatewayMainTitle">GERBANG RESMI PENGURUS</h1>
                 <h2 class="welcome-login-subtitle">SYSTEM INFORMASI DIGITAL MASJID JAMI' AL JIHAD</h2>
 
-                <!-- 4. Pill Petunjuk Masukkan Kredensial -->
-                <div class="credential-guide-pill">
-                    <i class="fas fa-key"></i>
-                    <span>Masukkan kredensial akun pengurus untuk masuk</span>
+                <!-- 3. Pill Petunjuk Masukkan Kredensial -->
+                <div class="credential-guide-pill" id="gatewayGuidePill">
+                    <i class="fas fa-door-open"></i>
+                    <span id="gatewayGuideText">Pintu Tunggal Resmi Otorisasi Pengaturan & Tampilan TV Display</span>
                 </div>
 
                 <!-- Box Notifikasi Alert Error/Success -->
@@ -639,15 +906,15 @@
                     <span style="cursor: pointer; font-size: 1.1rem;" onclick="closeAlert()">&times;</span>
                 </div>
 
-                <!-- 5. Card Form Login -->
-                <div class="login-form-card">
+                <!-- VIEW A: CARD FORMULIR LOGIN (JIKA BELUM LOGIN) -->
+                <div class="login-form-card" id="loginFormCardWrap">
                     <form id="loginForm" onsubmit="handleFormSubmit(event)">
                         
                         <!-- Field Email / Username -->
                         <div class="login-field-row">
                             <label class="login-field-label">
                                 <i class="fas fa-user-circle"></i>
-                                <span>Email / Username</span>
+                                <span>Email / Username Pengurus</span>
                             </label>
                             <div class="login-input-container">
                                 <i class="fas fa-envelope login-input-icon-lead"></i>
@@ -658,7 +925,7 @@
                                        autocomplete="username" 
                                        autofocus 
                                        value="" 
-                                       placeholder="Email atau Username pengurus">
+                                       placeholder="admin / bendahara / dkm">
                             </div>
                         </div>
 
@@ -666,7 +933,7 @@
                         <div class="login-field-row">
                             <label class="login-field-label">
                                 <i class="fas fa-lock"></i>
-                                <span>Kata Sandi</span>
+                                <span>Kata Sandi Resmi</span>
                             </label>
                             <div class="login-input-container">
                                 <i class="fas fa-shield-alt login-input-icon-lead"></i>
@@ -696,32 +963,161 @@
                                 <span>Ingatkan saya</span>
                             </label>
                             <span style="color: #94a3b8; font-size: 0.76rem;">
-                                <i class="fas fa-lock mr-1 text-warning"></i> Sesi Aman
+                                <i class="fas fa-shield-halved mr-1 text-warning"></i> Gerbang Resmi
                             </span>
                         </div>
 
-                        <!-- Tombol Submit Masuk ke Dashboard -->
+                        <!-- Tombol Submit Masuk Melalui Gerbang Resmi -->
                         <button type="submit" class="btn-submit-dashboard" id="btnSubmitDashboard">
-                            <span>Masuk ke Dashboard</span>
+                            <span>Masuk Melalui Gerbang Resmi</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
+
+                        <!-- Indikator 3 Peran Resmi -->
+                        <div class="gateway-roles-badge-row">
+                            <div class="roles-badge-title">
+                                <i class="fas fa-shield-alt mr-1"></i> Hak Akses Pengurus yang Terdaftar:
+                            </div>
+                            <div class="roles-badge-list">
+                                <span class="role-pill-badge pill-admin">
+                                    <i class="fas fa-shield-alt"></i> Super Admin
+                                </span>
+                                <span class="role-pill-badge pill-bendahara">
+                                    <i class="fas fa-wallet"></i> Bendahara Kas
+                                </span>
+                                <span class="role-pill-badge pill-petugas">
+                                    <i class="fas fa-tv"></i> Petugas / DKM
+                                </span>
+                            </div>
+                        </div>
                     </form>
 
                     <!-- Navigasi Bawah Form: Kembali ke Display & Butuh Bantuan WA -->
                     <div class="login-nav-sublinks">
                         <a href="index.html" class="link-return-disp">
                             <i class="fas fa-tv"></i>
-                            <span>Kembali ke Display TV</span>
+                            <span>Layar TV Display</span>
                         </a>
-                        <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" 
+                        <a href="https://wa.me/6287758767000?text=Assalamu%27alaikum%20Admin%2C%20saya%20butuh%20bantuan%20login%20Gerbang%20Resmi%20System%20Informasi%20Digital%20Masjid%20Jami%27%20Al%20Jihad" 
                            target="_blank" 
                            rel="noopener noreferrer" 
                            class="btn-help-wa" 
                            title="Hubungi Bantuan via WhatsApp 087758767000">
-                            <span>Butuh Bantuan</span>
+                            <span>Bantuan Pengurus</span>
                             <i class="fab fa-whatsapp"></i>
                         </a>
                     </div>
+                </div>
+
+                <!-- VIEW B: PORTAL HUB GERBANG RESMI (JIKA SUDAH LOGIN) -->
+                <div class="gateway-portal-hub" id="gatewayPortalHub">
+                    <!-- Kartu Pengurus Aktif -->
+                    <div class="portal-user-badge-card">
+                        <div class="portal-user-info">
+                            <div class="portal-user-avatar" id="portalUserInitial">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="portal-user-meta">
+                                <h3 id="portalUserName">Pengurus Masjid</h3>
+                                <span class="portal-role-tag" id="portalUserRoleBadge" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; border: 1px solid #ffd700;">
+                                    <i class="fas fa-shield-alt"></i> <span id="portalUserRoleText">Super Admin</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="portal-status-online">
+                            <span class="portal-pulse-dot"></span>
+                            <span>Gerbang Aktif</span>
+                        </div>
+                    </div>
+
+                    <div class="portal-doors-title">
+                        <i class="fas fa-door-open text-warning"></i> Pintu Akses Pengelolaan Masjid:
+                    </div>
+
+                    <!-- Grid 4 Pintu Gerbang -->
+                    <div class="portal-doors-grid">
+                        <!-- Pintu 1: Admin Dashboard -->
+                        <a href="admin.html" class="portal-door-card door-admin">
+                            <div>
+                                <div class="door-header-row">
+                                    <div class="door-icon-box">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="door-title">Dashboard Admin</div>
+                                </div>
+                                <div class="door-desc">
+                                    Pengaturan slide TV, video, running text, jadwal sholat, & manajemen akun.
+                                </div>
+                            </div>
+                            <div class="door-action-btn">
+                                <span>Buka Dashboard</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+
+                        <!-- Pintu 2: Petugas Sholat & Jumat -->
+                        <a href="petugas.html" class="portal-door-card door-petugas">
+                            <div>
+                                <div class="door-header-row">
+                                    <div class="door-icon-box">
+                                        <i class="fas fa-mosque"></i>
+                                    </div>
+                                    <div class="door-title">Petugas & Sholat</div>
+                                </div>
+                                <div class="door-desc">
+                                    Input imam/khotib Jum'at, jadwal sholat, kajian Ahad, tafsir, & agenda.
+                                </div>
+                            </div>
+                            <div class="door-action-btn">
+                                <span>Buka Form Petugas</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+
+                        <!-- Pintu 3: Quick Input Mode Mobile -->
+                        <a href="modeinput.html" class="portal-door-card door-modeinput">
+                            <div>
+                                <div class="door-header-row">
+                                    <div class="door-icon-box">
+                                        <i class="fas fa-mobile-screen-button"></i>
+                                    </div>
+                                    <div class="door-title">Input Cepat Mobile</div>
+                                </div>
+                                <div class="door-desc">
+                                    Input praktis kas utama, tromol tarawih, ambulance, & infaq masjid.
+                                </div>
+                            </div>
+                            <div class="door-action-btn">
+                                <span>Buka Input Cepat</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+
+                        <!-- Pintu 4: TV Display Monitor -->
+                        <a href="index.html" class="portal-door-card door-tv">
+                            <div>
+                                <div class="door-header-row">
+                                    <div class="door-icon-box">
+                                        <i class="fas fa-tv"></i>
+                                    </div>
+                                    <div class="door-title">Layar TV Display</div>
+                                </div>
+                                <div class="door-desc">
+                                    Mode Kiosk TV Masjid. Menampilkan data yang disinkronkan resmi.
+                                </div>
+                            </div>
+                            <div class="door-action-btn">
+                                <span>Lihat Layar TV</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Tombol Keluar / Kunci Gerbang -->
+                    <button type="button" class="btn-gateway-logout-hub" onclick="eksekusiLogoutResmi()">
+                        <i class="fas fa-power-off"></i>
+                        <span>Kunci & Keluar dari Gerbang Resmi</span>
+                    </button>
                 </div>
 
                 <!-- 6. Card Footer Identitas Developer & Versi -->
@@ -734,7 +1130,7 @@
                     </div>
                     <div>
                         <span class="attribution-version-badge">
-                            <i class="fas fa-bolt"></i> WEB STATIS v5.5.3
+                            <i class="fas fa-bolt"></i> WEB STATIS v5.8.20
                         </span>
                     </div>
                     <div class="attribution-copyright">
@@ -749,35 +1145,86 @@
 </div>
 
 <!-- Script BaaS & Auth -->
-<script src="js/supabase-config.js?v=5.5.3"></script>
-<script src="js/supabase-db.js?v=5.5.3"></script>
-<script src="js/admin-auth.js?v=5.5.3"></script>
+<script src="js/supabase-config.js?v=5.8.20"></script>
+<script src="js/supabase-db.js?v=5.8.20"></script>
+<script src="js/admin-auth.js?v=5.8.20"></script>
 
 <script>
-    // Jika ada param ?action=logout, bersihkan sesi secara tuntas dan pastikan form login tampil
     const urlParams = new URLSearchParams(window.location.search);
+
+    // 1. Eksekusi jika param ?action=logout
     if (urlParams.get('action') === 'logout') {
         try {
             localStorage.removeItem('aljihad_auth_user');
             localStorage.removeItem('aljihad_last_activity');
+            localStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.clear();
         } catch(e) {}
-    } else {
-        // Cek jika sudah login, alihkan ke admin.html
-        AdminAuth.redirectIfLoggedIn('admin.html');
     }
 
-    // Cek pesan redirect dari sessionStorage atau param url reason
+    // 2. Fungsi render status Gerbang Resmi (Login Form vs Portal Hub)
+    function renderGatewayState() {
+        const user = (typeof AdminAuth !== 'undefined') ? AdminAuth.getCurrentUser() : null;
+        const targetRedirect = urlParams.get('redirect');
+
+        // Jika user sudah login dan ada parameter redirect yang valid, alihkan seketika
+        if (user && targetRedirect && targetRedirect !== 'login.html') {
+            window.location.replace(targetRedirect);
+            return;
+        }
+
+        const loginWrap = document.getElementById('loginFormCardWrap');
+        const portalHub = document.getElementById('gatewayPortalHub');
+        const guidePill = document.getElementById('gatewayGuidePill');
+        const guideText = document.getElementById('gatewayGuideText');
+        const mainTitle = document.getElementById('gatewayMainTitle');
+
+        if (user) {
+            // Tampilkan Portal Hub
+            if (loginWrap) loginWrap.style.display = 'none';
+            if (portalHub) portalHub.style.display = 'flex';
+            if (mainTitle) mainTitle.textContent = 'PORTAL GERBANG RESMI';
+            if (guideText) guideText.textContent = `Ahlan wa Sahlan, ${user.name}! Sesi Gerbang Resmi Anda aktif.`;
+
+            // Isi metadata profil pengurus
+            const nameEl = document.getElementById('portalUserName');
+            const roleBadge = document.getElementById('portalUserRoleBadge');
+            const roleText = document.getElementById('portalUserRoleText');
+            const avatarEl = document.getElementById('portalUserInitial');
+
+            if (nameEl) nameEl.textContent = user.name || 'Pengurus Masjid';
+            if (roleText) roleText.textContent = user.role_label || 'Pengurus';
+            if (roleBadge) {
+                roleBadge.style.background = (user.color || '#ffd700') + '26';
+                roleBadge.style.color = user.color || '#ffd700';
+                roleBadge.style.borderColor = user.color || '#ffd700';
+            }
+            if (avatarEl) {
+                const init = (user.name || 'P').trim().charAt(0).toUpperCase();
+                avatarEl.innerHTML = `<span style="font-weight:800;">${init}</span>`;
+            }
+        } else {
+            // Tampilkan Formulir Login Gerbang Resmi
+            if (loginWrap) loginWrap.style.display = 'block';
+            if (portalHub) portalHub.style.display = 'none';
+            if (mainTitle) mainTitle.textContent = 'GERBANG RESMI PENGURUS';
+            if (guideText) guideText.textContent = 'Pintu Tunggal Resmi Otorisasi Pengaturan & Tampilan TV Display';
+        }
+    }
+
+    // 3. Notifikasi Alasan Redirect / Idle Timeout
     const redirectReason = sessionStorage.getItem('auth_redirect_reason');
     if (redirectReason) {
-        const isWarning = redirectReason.toLowerCase().includes('aktivitas') || redirectReason.toLowerCase().includes('keamanan');
+        const isWarning = redirectReason.toLowerCase().includes('aktivitas') || redirectReason.toLowerCase().includes('keamanan') || redirectReason.toLowerCase().includes('terproteksi');
         showAlert(redirectReason, isWarning ? 'warning' : 'danger');
         sessionStorage.removeItem('auth_redirect_reason');
     } else if (urlParams.get('reason') === 'idle_timeout') {
-        showAlert('Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.', 'warning');
+        showAlert('Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan masuk kembali melalui gerbang resmi.', 'warning');
+    } else if (urlParams.get('action') === 'logout') {
+        showAlert('Sesi Gerbang Resmi berhasil ditutup secara aman. Layar TV hanya menampilkan data yang sah.', 'success');
     }
 
-    // Sinkronisasi data user dari Cloud Supabase saat halaman dimuat di device apapun
+    // 4. Sinkronisasi data user dari Supabase Cloud
     async function initLoginCloudSync() {
         try {
             if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
@@ -788,8 +1235,9 @@
         }
     }
 
-    // Inisialisasi awal saat DOM siap
+    // 5. Inisialisasi awal saat DOM siap
     document.addEventListener('DOMContentLoaded', () => {
+        renderGatewayState();
         initLoginCloudSync();
     });
 
@@ -834,23 +1282,44 @@
         const password = document.getElementById('loginPassword').value;
 
         btn.disabled = true;
-        btn.innerHTML = '<span>Memverifikasi Kredensial...</span> <i class="fas fa-spinner fa-spin"></i>';
+        btn.innerHTML = '<span>Memverifikasi Otorisasi...</span> <i class="fas fa-spinner fa-spin"></i>';
         btn.style.opacity = '0.85';
         btn.style.cursor = 'wait';
 
         try {
             const user = await AdminAuth.login(identifier, password);
-            showAlert(`Alhamdulillah, Ahlan wa Sahlan <strong>${user.name}</strong> (${user.role_label})! Mengalihkan ke dashboard...`, 'success');
+            showAlert(`Alhamdulillah, Ahlan wa Sahlan <strong>${user.name}</strong> (${user.role_label})! Membuka Gerbang Resmi...`, 'success');
             
+            const targetRedirect = urlParams.get('redirect');
             setTimeout(() => {
-                window.location.replace('admin.html');
+                if (targetRedirect && targetRedirect !== 'login.html') {
+                    window.location.replace(targetRedirect);
+                } else if (user.role === 'petugas') {
+                    window.location.replace('petugas.html');
+                } else if (user.role === 'bendahara') {
+                    window.location.replace('admin.html#kas');
+                } else {
+                    window.location.replace('admin.html');
+                }
             }, 800);
         } catch (err) {
             btn.disabled = false;
-            btn.innerHTML = '<span>Masuk ke Dashboard</span> <i class="fas fa-arrow-right"></i>';
+            btn.innerHTML = '<span>Masuk Melalui Gerbang Resmi</span> <i class="fas fa-arrow-right"></i>';
             btn.style.opacity = '1';
             btn.style.cursor = 'pointer';
-            showAlert(err.message || 'Terjadi kesalahan saat memverifikasi akun.', 'danger');
+            showAlert(err.message || 'Kredensial tidak valid. Silakan hubungi Super Admin.', 'danger');
+        }
+    }
+
+    function eksekusiLogoutResmi() {
+        if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.logout === 'function') {
+            AdminAuth.logout('login.html?action=logout');
+        } else {
+            localStorage.removeItem('aljihad_auth_user');
+            localStorage.removeItem('aljihad_last_activity');
+            localStorage.removeItem('quick_petugas_authenticated');
+            sessionStorage.clear();
+            window.location.replace('login.html?action=logout');
         }
     }
 </script>

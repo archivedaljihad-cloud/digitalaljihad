@@ -789,6 +789,8 @@ const AdminAuth = {
         try {
             localStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+            localStorage.removeItem('quick_petugas_authenticated');
+            sessionStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.setItem('auth_redirect_reason', 'Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.');
         } catch (e) {
             console.warn('Gagal membersihkan sesi idle:', e);
@@ -802,13 +804,25 @@ const AdminAuth = {
     },
 
     /**
-     * Proteksi halaman admin: jika belum login, lempar ke login.html
+     * Proteksi halaman pengurus (1 Gerbang Resmi): jika belum login, lempar ke login.html dengan parameter redirect
      */
     requireAuth(redirectUrl = 'login.html') {
         const user = this.getCurrentUser();
         if (!user) {
-            sessionStorage.setItem('auth_redirect_reason', 'Silakan masuk terlebih dahulu untuk mengakses Dashboard.');
-            window.location.replace(redirectUrl);
+            let targetRedirect = redirectUrl;
+            if (typeof window !== 'undefined') {
+                const currentFile = (window.location.pathname.split('/').pop() || 'admin.html');
+                if (!targetRedirect.includes('?redirect=') && currentFile !== 'login.html') {
+                    const sep = targetRedirect.includes('?') ? '&' : '?';
+                    targetRedirect = `${targetRedirect}${sep}redirect=${encodeURIComponent(currentFile)}`;
+                }
+            }
+            if (typeof sessionStorage !== 'undefined') {
+                sessionStorage.setItem('auth_redirect_reason', 'Akses Terproteksi: Silakan masuk melalui Gerbang Resmi Pengurus.');
+            }
+            if (typeof window !== 'undefined') {
+                window.location.replace(targetRedirect);
+            }
             return null;
         }
         // Inisialisasi otomatis engine pemantau auto-logout saat tidak ada aktivitas (3 Menit)
@@ -817,10 +831,10 @@ const AdminAuth = {
     },
 
     /**
-     * Jika sudah login, redirect langsung ke admin.html saat membuka login.html
+     * Helper redirect jika sudah login (opsional)
      */
     redirectIfLoggedIn(targetUrl = 'admin.html') {
-        if (this.isLoggedIn()) {
+        if (this.isLoggedIn() && typeof window !== 'undefined') {
             window.location.replace(targetUrl);
         }
     },
@@ -971,6 +985,8 @@ const AdminAuth = {
         try {
             localStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+            localStorage.removeItem('quick_petugas_authenticated');
+            sessionStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.removeItem('auth_redirect_reason');
         } catch (e) {
             console.warn('Gagal membersihkan storage logout:', e);

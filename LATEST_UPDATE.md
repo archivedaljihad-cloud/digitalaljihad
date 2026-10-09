@@ -4,7 +4,51 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 14:22 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 18:55 WIB)
+
+### 🚪 GERBANG RESMI TUNGGAL OTORISASI PENGURUS & TV DISPLAY MASJID (Versi SW v5.8.20):
+1. **Latar Belakang & Mandat Keamanan Pengguna:**
+   - **Instruksi Pengguna:** *"Agar lebih aman, tolong untuk semua halaman yang bisa diseting/dirubah/diganti oleh admin, bendahara dan petugas dibuatkan buat 1 gerbang resmi. Sehingga yang tampil di layar TV hanya yang melalui gerbang/pintu resmi."*
+   - **Analisis Keamanan Sebelumnya:**
+     - Halaman `petugas.html` dan `modeinput.html` sebelumnya menggunakan modal overlay PIN/password lokal (`authGateOverlay`) serta flag `quick_petugas_authenticated`, yang dapat dilewati secara terpisah tanpa melewati sistem sesi terpusat RBAC.
+     - Pengurus menginginkan **1 Gerbang Resmi Tunggal** di mana seluruh otorisasi perubahan jadwal, slide, kas, dan pengumuman disaring ketat melalui `login.html`, sehingga layar TV Display masjid (`index.html`) hanya menampilkan data sah yang disinkronkan oleh pengurus terverifikasi resmi.
+
+2. **Rekayasa & Implementasi Fitur "1 Gerbang Resmi":**
+   - **Transformasi `web-statis/login.html` Menjadi Gerbang Resmi & Portal Hub:**
+     - **Mode Belum Login:** Menampilkan form otentikasi resmi dengan enkripsi sesi, proteksi anti brute-force, dan indikator 3 peran pengurus resmi:
+       - 🛡️ **Super Admin** (`admin` / `SuperUser1971`) -> Akses penuh konfigurasi sistem, akun, dan slide.
+       - 💼 **Bendahara Kas** (`bendahara` / `#1.Bendahara`) -> Pembukuan kas utama, kas ambulance, infaq, & laporan keuangan.
+       - 🕌 **Petugas / DKM** (`dkmsatu` / `*dkm1#aljihad` & `dkm` / `135dkmlJihad`) -> Jadwal sholat, petugas sholat 5 waktu, imam/khotib Jum'at, dan agenda rutin.
+     - **Mode Sudah Login:** Mengaktifkan **Portal Hub Gerbang Resmi** (`#gatewayPortalHub`):
+       - Menampilkan kartu identitas pengurus aktif (Avatar, Nama, Badge Peran, Indikator Sesi Live).
+       - Menampilkan **4 Pintu Gerbang Akses Resmi**:
+         1. 🛡️ **Dashboard Admin Utama (`admin.html`)**
+         2. 🕌 **Formulir Petugas Sholat & Jum'at (`petugas.html`)**
+         3. ⚡ **Panel Input Cepat Mobile (`modeinput.html`)**
+         4. 📺 **Layar Utama TV Display (`index.html`)** (Mode Kiosk Jama'ah)
+       - Tombol **"Kunci & Keluar dari Gerbang Resmi"** untuk memutus sesi secara aman seketika.
+     - **Smart Router & Auto-Redirect:** Menangani parameter `?redirect=...` sehingga pengguna yang mengakses form petugas langsung kembali ke halaman tujuan setelah otentikasi sukses di gerbang resmi.
+
+   - **Proteksi Mutlak di Seluruh Halaman Pengubah Data (`petugas.html` & `modeinput.html`):**
+     - Fungsi `checkSecurityAuth()` diperbarui untuk wajib memanggil `AdminAuth.requireAuth('login.html?redirect=...')`. Pengunjung tanpa sesi langsung dialihkan ke gerbang resmi.
+     - Fungsi `openModule()` memeriksa integritas sesi sebelum membuka formulir edit modul apapun.
+     - Penambahan bilah status resmi di bagian atas header: `🟢 Gerbang Resmi: [Nama Pengurus] ([Peran])` dengan akses cepat ke Portal Gerbang dan tombol Logout.
+     - Fungsi `lockSecurityGate()` langsung memanggil `AdminAuth.logout('login.html?action=logout')`.
+     - Penghapusan seluruh bypass lokal `quick_petugas_authenticated`.
+
+   - **Integrasi di Dashboard Admin (`admin.html`):**
+     - Menambahkan navigasi cepat ke **"Portal Gerbang Resmi"** pada menu dropdown profil pengguna.
+
+   - **Sistem Pengujian Regresi Otomatis (`scripts/test-engine.js`):**
+     - Menambahkan **[TEST 6] Gerbang Resmi & RBAC Protection Integrity** (total 60/60 assertion checks 100% lulus sempurna).
+
+3. **Bumping Cache Service Worker (SOP #2):**
+   - Dinaikkan ke **`v5.8.20`** (`aljihad-signage-v5.8.20`) di `web-statis/sw.js` dan `web-statis/admin.html`.
+   - Menambahkan `login.html` ke daftar `STATIC_ASSETS` di `sw.js` untuk ketahanan offline PWA.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 14:22 WIB)
 
 ### 🕌 VERIFIKASI JADWAL BIMAS ISLAM KEMENAG RI SELURUH BULAN & HARMONISASI AUTO-SYNC UTAMA.HTML (Versi SW v5.8.19):
 1. **Latar Belakang & Analisis Pengguna:**

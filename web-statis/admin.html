@@ -1589,6 +1589,10 @@
                                     <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-primary"></i> 
                                     <span>Dashboard Utama</span>
                                 </a>
+                                <a class="dropdown-item d-flex align-items-center font-weight-bold" href="login.html" style="color: #10b981;">
+                                    <i class="fas fa-door-open fa-sm fa-fw mr-2" style="color: #10b981;"></i> 
+                                    <span>Portal Gerbang Resmi</span>
+                                </a>
                                 <a class="dropdown-item d-flex align-items-center text-warning font-weight-bold" href="javascript:void(0)" onclick="bersihkanCacheSistem()">
                                     <i class="fas fa-broom fa-sm fa-fw mr-2 text-warning"></i> 
                                     <span>Bersihkan Cache & Refresh TV</span>
@@ -13574,7 +13578,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.19') {
+                                if (name !== 'aljihad-signage-v5.8.20') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
