@@ -4,7 +4,23 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 13:55 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 14:22 WIB)
+
+### 🕌 VERIFIKASI JADWAL BIMAS ISLAM KEMENAG RI SELURUH BULAN & HARMONISASI AUTO-SYNC UTAMA.HTML (Versi SW v5.8.19):
+1. **Latar Belakang & Analisis Pengguna:**
+   - **Pertanyaan Pengguna:** *"Apakah jadwal ini hanya untuk bulan oktober saja, bagaimana dengan bulan september dan seterusnya?"*
+   - **Pemeriksaan Arsitektur Jadwal:**
+     - Jadwal sholat resmi Bimas Islam Kemenag RI dan Lembaga Falakiyah NU di sistem Al-Jihad **mencakup seluruh bulan (Januari s.d. Desember) dan seluruh tahun**.
+     - API upstream Bimas Islam Kemenag RI (`api.myquran.com/v2/sholat/jadwal/1203/YYYY/MM/DD`) menyediakan database hisab astronomis dinamis per hari untuk seluruh bulan.
+     - Di slide utama TV Display (`slides/utama.html`), terdapat sistem cron/watchdog otomatis (`checkAutoSyncKemenag()` setiap 1 jam) yang mendeteksi pergantian tanggal/bulan baru, sehingga jadwal harian otomatis ter-update ke Supabase Cloud dan LocalStorage tanpa perlu campur tangan manual admin.
+2. **Harmonisasi Parameter Ihtiyath di `slides/utama.html`:**
+   - Menyinkronkan fungsi `checkAutoSyncKemenag()` di `slides/utama.html` agar saat sumber aktif adalah `nu`, pemanggilan Aladhan menyertakan parameter `tune=2,2,-4,3,2,3,3,3,0` (Ihtiyath syar'i +2 menit Kemenag/NU) dan fallback aman ke data resmi Bimas Islam, mencegah terjadinya regresi jadwal 04:15.
+3. **Bumping Cache Service Worker (SOP #2):**
+   - Dinaikkan ke **`v5.8.19`** (`aljihad-signage-v5.8.19`) di `web-statis/sw.js` dan `web-statis/admin.html`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 13:55 WIB)
 
 ### 🕌 KALIBRASI & SINKRONISASI JADWAL SHOLAT FALAKIYAH NU KABUPATEN BEKASI (Versi SW v5.8.18):
 1. **Latar Belakang & Keluhan Pengguna:**

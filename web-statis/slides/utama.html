@@ -882,15 +882,15 @@
                         if (cityId === '1221') { lat = -6.2383; lng = 106.9756; }
                         if (cityId === '1301') { lat = -6.2088; lng = 106.8456; }
                         try {
-                            const resAl = await fetch(`https://api.aladhan.com/v1/timings/${d}-${m}-${y}?latitude=${lat}&longitude=${lng}&method=20`);
+                            const resAl = await fetch(`https://api.aladhan.com/v1/timings/${d}-${m}-${y}?latitude=${lat}&longitude=${lng}&method=20&tune=2,2,-4,3,2,3,3,3,0`);
                             if (resAl.ok) {
                                 const jAl = await resAl.json();
                                 const t = jAl.data?.timings;
-                                if (t && t.Fajr && t.Dhuhr) {
+                                if (t && t.Fajr && t.Dhuhr && t.Maghrib) {
                                     list = [
-                                        { name: 'Imsak', time: (t.Imsak || '04:14') + ':00' },
+                                        { name: 'Imsak', time: (t.Imsak || '04:07') + ':00' },
                                         { name: 'Subuh', time: t.Fajr + ':00' },
-                                        { name: 'Syuruk', time: (t.Sunrise || '05:36') + ':00' },
+                                        { name: 'Syuruk', time: (t.Sunrise || '05:29') + ':00' },
                                         { name: 'Dzuhur', time: t.Dhuhr + ':00' },
                                         { name: 'Ashar', time: t.Asr + ':00' },
                                         { name: 'Maghrib', time: t.Maghrib + ':00' },
