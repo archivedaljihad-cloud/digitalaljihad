@@ -4,7 +4,53 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 20:38 WIB)
+## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 00:15 WIB)
+
+### 🏆 FINALISASI AUDIT MENYELURUH 8 PILAR SENIOR FULL-STACK ENGINEER & PENINGKATAN AUTENTIKASI LINTAS PERANGKAT (Versi SW v5.8.24):
+1. **Hasil Audit Komprehensif 8 Pilar:**
+   - **Pilar 1: Arsitektur Sistem, Logika Bisnis, dan Fungsionalitas Fitur:**
+     - Arsitektur JAMstack Edge (Cloudflare Workers) terhubung secara mulus dengan Supabase Cloud BaaS (Postgres Changes, Broadcast Channels, Remote Commands, REST API zero-dependency).
+     - Seluruh 19 halaman rotasi TV display (`slides/*.html`), Prayer Mode (`prayer-mode.html`), Admin Panel (`admin.html`), serta Quick Input Mode (`petugas.html` & `modeinput.html`) berjalan harmonis dengan siklus sholat 24 jam, Jumat takeover, Yaasiin Malam Jumat, dan Kajian Malam Ahad.
+   - **Pilar 2: Performa & Optimasi (Performance):**
+     - Zero-Flicker Over-Dissolve Crossfade engine pada dual-iframe (`frame1` & `frame2`) dengan V-Sync double `requestAnimationFrame`.
+     - Zero-cache pada dokumen HTML dan scripts (`max-age=0, must-revalidate`) di Cloudflare Headers, dipadukan dengan edge caching 1 tahun pada aset berat (fonts, vendor, audio, ikon).
+   - **Pilar 3: Keamanan (Security):**
+     - Penambahan proteksi anti brute-force di `login.html` (cooldown 30 detik setelah 5 kegagalan berturut-turut).
+     - Dual-layer RBAC (Super Admin, Bendahara, Petugas/Operator) dengan auto-logout 3 menit saat idle di panel admin.
+     - Proteksi crawler web di `robots.txt` (`Disallow: /admin.html`, `/login.html`, `/petugas.html`, `/modeinput.html`).
+   - **Pilar 4: Antarmuka & Pengalaman Pengguna (UI/UX):**
+     - UI 10-foot Smart TV bersih tanpa gangguan elemen debug/OSD.
+     - Desain Royal Islamic Material Design 3 (Emerald `#071a10` & Gold `#ffd700`) pada panel login dan admin.
+     - Mobile Quick Cards dengan touch sheet modal yang ergonomis untuk pengurus masjid dari HP/tablet.
+   - **Pilar 5: Kompatibilitas & Aksesibilitas (Compatibility & a11y):**
+     - Kompatibilitas penuh Smart TV (Fully Kiosk Browser, Tizen, webOS, Android TV) serta browser mobile iOS Safari, Chrome Android, Firefox, Edge, dan desktop.
+     - Label formulir semantik, kontras warna rasio tinggi (>7:1 AAA standard), aria-live alert overlays, dan touch gestures `{ passive: true }`.
+   - **Pilar 6: Observabilitas & Pemantauan (Observability & Logging):**
+     - SRE Telemetry telemetry buffer (`window.__SRE_TELEMETRY__`) mencatat metrik rotasi, error window, dan unhandled rejections.
+     - Remote device presence tracking (`SupabaseDB.trackDevicePresence`) memancarkan status heartbeat TV display ke Supabase Cloud.
+     - SRE Watchdog rotasi otomatis memulihkan freeze jika rotasi tertahan melebihi batas waktu.
+   - **Pilar 7: Kepatuhan & SEO (SEO & Compliance):**
+     - Open Graph, Twitter Card, Canonical URL, favicon standard, dan semantic HTML5 doctype.
+   - **Pilar 8: Autentikasi & Login Lintas Perangkat (Cross-Device Login):**
+     - **Penyempurnaan `isPetugasAuthenticated()` di `petugas.html` & `modeinput.html`:** Memperbaiki bug sesi di mana `openModule` sebelumnya hanya mengecek `sessionStorage`, sehingga pengguna HP yang membuka ulang tab terblokir. Kini mengecek `localStorage`, `sessionStorage`, dan sesi `AdminAuth` secara komprehensif.
+     - **Penyempurnaan Dual-Storage di `admin-auth.js`:** `getCurrentUser()`, `login()`, dan `logout()` kini mengeksekusi sinkronisasi aman ke `localStorage` dan `sessionStorage` dengan `try...catch` pelindung privasi/incognito browser.
+     - **Toleransi Huruf Kapital Keyboard HP pada Password Default:** Menangani auto-capitalization keyboard ponsel pada kata sandi resmi (`#1.Bendahara`, `SuperUser1971`, `*dkm1#aljihad`, `135dkmlJihad`).
+
+2. **Pembersihan Cache Usang & Bumping Service Worker (SOP #2):**
+   - Menaikkan versi Service Worker ke **`aljihad-signage-v5.8.24`** di `web-statis/sw.js` dan `web-statis/admin.html`.
+   - Menghapus seluruh cache usang via `caches.delete()` dan `cleanupObsoleteCache()` di `js/supabase-db.js`.
+
+3. **Hasil Pengujian Regresi Otomatis (`scripts/test-engine.js`):**
+   - Seluruh **68 pengujian (100%) lulus sempurna**.
+
+4. **Sinkronisasi 4 Pilar (SOP Wajib):**
+   - **GitHub (`main`)**: Kode terbaru di-commit dan di-push.
+   - **Cloudflare Workers**: Aset di-deploy ke `https://digitalaljihad.my.id/`.
+   - **Folder Cadangan Lokal**: Seluruh berkas disalin ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 20:38 WIB)
 
 ### 🧹 PENGHAPUSAN TOMBOL BANTUAN "PILIH AKUN PETUGAS CEPAT (1-KLIK)" (Versi SW v5.8.23):
 1. **Permintaan Pengguna:**

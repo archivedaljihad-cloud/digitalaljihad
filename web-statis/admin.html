@@ -13568,13 +13568,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     });
                 }
 
-                // 2. Bersihkan CacheStorage Service Worker (sisakan v5.8.23)
+                // 2. Bersihkan CacheStorage Service Worker (sisakan v5.8.24)
                 if ('caches' in window) {
                     try {
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.23') {
+                                if (name !== 'aljihad-signage-v5.8.24') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
@@ -13600,8 +13600,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     SupabaseDB.broadcastChange('app_settings', 'RELOAD', { timestamp: Date.now() }, 'Admin Maintenance');
                 }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('RELOAD', { reason: 'Pembersihan cache sistem v5.8.23' }).catch(() => {});
-                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.8.23' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('RELOAD', { reason: 'Pembersihan cache sistem v5.8.24' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.8.24' }).catch(() => {});
                 }
 
                 // 5. Muat ulang data terbaru dari Supabase

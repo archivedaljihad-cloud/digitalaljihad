@@ -123,24 +123,24 @@ const AdminAuth = {
         // 1. Cocok persis dengan kata sandi akun saat ini
         if (userPwd && userPwd === cleanPwd) return true;
 
-        // 2. Khusus Akun Bendahara: hanya password resmi default mutakhir (#1.Bendahara)
+        // 2. Khusus Akun Bendahara: password resmi default mutakhir (#1.Bendahara)
         if (u.email === 'bendahara@aljihad.com' || u.username === 'bendahara') {
-            return cleanPwd === '#1.Bendahara';
+            return cleanPwd === '#1.Bendahara' || cleanPwd.toLowerCase() === '#1.bendahara';
         }
 
-        // 3. Khusus Akun Super Admin: hanya password resmi default mutakhir (SuperUser1971)
+        // 3. Khusus Akun Super Admin: password resmi default mutakhir (SuperUser1971)
         if (u.email === 'archived.aljihad@gmail.com' || u.username === 'admin') {
-            return cleanPwd === 'SuperUser1971';
+            return cleanPwd === 'SuperUser1971' || cleanPwd.toLowerCase() === 'superuser1971';
         }
 
-        // 4. Khusus Akun Ketua DKM: hanya password resmi default mutakhir (*dkm1#aljihad)
+        // 4. Khusus Akun Ketua DKM: password resmi default mutakhir (*dkm1#aljihad)
         if (u.email === 'ketuadkm@aljihad.com' || u.username === 'dkmsatu') {
-            return cleanPwd === '*dkm1#aljihad';
+            return cleanPwd === '*dkm1#aljihad' || cleanPwd.toLowerCase() === '*dkm1#aljihad';
         }
 
-        // 5. Khusus Akun Petugas DKM Al Jihad: hanya password resmi default mutakhir (135dkmlJihad)
+        // 5. Khusus Akun Petugas DKM Al Jihad: password resmi default mutakhir (135dkmlJihad)
         if (u.email === 'dkm@aljihad.com' || u.username === 'dkm') {
-            return cleanPwd === '135dkmlJihad';
+            return cleanPwd === '135dkmlJihad' || cleanPwd.toLowerCase() === '135dkmljihad';
         }
 
         return false;
@@ -604,7 +604,11 @@ const AdminAuth = {
      */
     getCurrentUser() {
         try {
-            const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+            let raw = null;
+            try { raw = localStorage.getItem(AUTH_STORAGE_KEY); } catch (e) {}
+            if (!raw) {
+                try { raw = sessionStorage.getItem(AUTH_STORAGE_KEY); } catch (e) {}
+            }
             if (!raw) return null;
             const user = JSON.parse(raw);
             if (!user) return null;
@@ -956,7 +960,22 @@ const AdminAuth = {
             token: 'statis_' + Math.random().toString(36).substring(2) + Date.now().toString(36)
         };
 
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionPayload));
+        // Simpan sesi login ke LocalStorage & SessionStorage secara aman
+        try {
+            localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionPayload));
+        } catch (e) {
+            console.warn('[AdminAuth] Gagal simpan ke localStorage:', e);
+        }
+        try {
+            sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionPayload));
+        } catch (e) {}
+
+        // Sinkronkan juga flag otorisasi Quick Input Mode petugas
+        try {
+            localStorage.setItem('quick_petugas_authenticated', 'true');
+            sessionStorage.setItem('quick_petugas_authenticated', 'true');
+        } catch (e) {}
+
         return sessionPayload;
     },
 
@@ -971,6 +990,7 @@ const AdminAuth = {
         try {
             localStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+            sessionStorage.removeItem(AUTH_STORAGE_KEY);
             sessionStorage.removeItem('auth_redirect_reason');
         } catch (e) {
             console.warn('Gagal membersihkan storage logout:', e);

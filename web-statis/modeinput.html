@@ -1744,27 +1744,29 @@
             handleAuthSubmit(null, pwd, username);
         }
 
-        function checkSecurityAuth() {
-            // 1. Cek sesi aktif AdminAuth dari localStorage atau window.AdminAuth
-            let currentUser = null;
+        function isPetugasAuthenticated() {
             try {
-                if (window.AdminAuth && typeof window.AdminAuth.getCurrentUser === 'function') {
-                    currentUser = window.AdminAuth.getCurrentUser();
+                if (localStorage.getItem('quick_petugas_authenticated') === 'true' || 
+                    sessionStorage.getItem('quick_petugas_authenticated') === 'true') {
+                    return true;
                 }
-                if (!currentUser) {
-                    const raw = localStorage.getItem('aljihad_auth_user');
-                    if (raw) currentUser = JSON.parse(raw);
+                if (window.AdminAuth && typeof window.AdminAuth.isLoggedIn === 'function' && window.AdminAuth.isLoggedIn()) {
+                    return true;
                 }
+                const rawAuth = localStorage.getItem('aljihad_auth_user') || sessionStorage.getItem('aljihad_auth_user');
+                if (rawAuth) return true;
             } catch(e) {}
+            return false;
+        }
 
-            // 2. Cek apakah sudah pernah unlock di perangkat ini (localStorage atau sessionStorage)
-            const isAuth = localStorage.getItem('quick_petugas_authenticated') === 'true' || 
-                           sessionStorage.getItem('quick_petugas_authenticated') === 'true';
-
+        function checkSecurityAuth() {
+            const isAuth = isPetugasAuthenticated();
             const overlay = document.getElementById('authGateOverlay');
-            if (currentUser || isAuth) {
-                localStorage.setItem('quick_petugas_authenticated', 'true');
-                sessionStorage.setItem('quick_petugas_authenticated', 'true');
+            if (isAuth) {
+                try {
+                    localStorage.setItem('quick_petugas_authenticated', 'true');
+                    sessionStorage.setItem('quick_petugas_authenticated', 'true');
+                } catch(e) {}
                 if (overlay) overlay.style.display = 'none';
                 return true;
             } else {
@@ -2258,7 +2260,7 @@
            OPEN & RENDER MODAL FORM
            ========================================================================= */
         function openModule(moduleId) {
-            if (sessionStorage.getItem('quick_petugas_authenticated') !== 'true') {
+            if (!isPetugasAuthenticated()) {
                 checkSecurityAuth();
                 return;
             }

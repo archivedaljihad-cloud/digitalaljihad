@@ -825,13 +825,28 @@
         document.getElementById('loginAlertBox').style.display = 'none';
     }
 
+    let loginAttempts = 0;
+    let lockUntil = 0;
+
     async function handleFormSubmit(e) {
         e.preventDefault();
         closeAlert();
 
+        const now = Date.now();
+        if (now < lockUntil) {
+            const remSec = Math.ceil((lockUntil - now) / 1000);
+            showAlert(`Demi keamanan, login ditangguhkan sementara karena terlalu banyak kegagalan. Silakan tunggu <strong>${remSec} detik</strong> lagi.`, 'warning');
+            return;
+        }
+
         const btn = document.getElementById('btnSubmitDashboard');
-        const identifier = document.getElementById('loginIdentifier').value;
-        const password = document.getElementById('loginPassword').value;
+        const identifier = (document.getElementById('loginIdentifier').value || '').trim();
+        const password = (document.getElementById('loginPassword').value || '').trim();
+
+        if (!identifier || !password) {
+            showAlert('Silakan masukkan Email/Username dan Kata Sandi Anda.', 'warning');
+            return;
+        }
 
         btn.disabled = true;
         btn.innerHTML = '<span>Memverifikasi Kredensial...</span> <i class="fas fa-spinner fa-spin"></i>';
@@ -840,17 +855,25 @@
 
         try {
             const user = await AdminAuth.login(identifier, password);
+            loginAttempts = 0;
             showAlert(`Alhamdulillah, Ahlan wa Sahlan <strong>${user.name}</strong> (${user.role_label})! Mengalihkan ke dashboard...`, 'success');
             
             setTimeout(() => {
                 window.location.replace('admin.html');
-            }, 800);
+            }, 600);
         } catch (err) {
+            loginAttempts++;
             btn.disabled = false;
             btn.innerHTML = '<span>Masuk ke Dashboard</span> <i class="fas fa-arrow-right"></i>';
             btn.style.opacity = '1';
             btn.style.cursor = 'pointer';
-            showAlert(err.message || 'Terjadi kesalahan saat memverifikasi akun.', 'danger');
+
+            if (loginAttempts >= 5) {
+                lockUntil = Date.now() + 30000; // 30 detik cooldown
+                showAlert('Terlalu banyak percobaan gagal (5x). Demi keamanan, silakan tunggu 30 detik sebelum mencoba kembali.', 'danger');
+            } else {
+                showAlert(err.message || 'Terjadi kesalahan saat memverifikasi akun.', 'danger');
+            }
         }
     }
 </script>
