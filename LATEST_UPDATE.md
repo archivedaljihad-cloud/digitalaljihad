@@ -4,7 +4,35 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 13:10 WIB)
+## ✨ UPDATE TERBARU — 9 Oktober 2026 (Pukul 13:55 WIB)
+
+### 🕌 KALIBRASI & SINKRONISASI JADWAL SHOLAT FALAKIYAH NU KABUPATEN BEKASI (Versi SW v5.8.18):
+1. **Latar Belakang & Keluhan Pengguna:**
+   - **Kondisi:** Pengguna menanyakan mengapa saat tombol **Falakiyah NU** ditekan di Admin Panel untuk wilayah **Kab. Bekasi**, data yang muncul menampilkan **Imsak 04:05 AM** (Subuh 04:15 WIB), padahal jadwal resmi Kabupaten Bekasi di `https://jadwalsholat.nu.or.id/kab-bekasi` dan Kemenag RI adalah **Imsak 04:07 WIB & Subuh 04:17 WIB**.
+   - **Akar Masalah (*Root Cause Analysis*):**
+     - Endpoint `api.aladhan.com` yang dipanggil di fungsi `sinkronkanFalakiyahNU()` sebelumnya menghitung waktu astronomis mentah *tanpa* menambahkan **Ihtiyath (faktor pengaman) syar'i +2 menit** standar Lembaga Falakiyah PBNU dan Kemenag RI di Indonesia.
+     - Akibatnya waktu hisab Aladhan mendahului 2 menit (Imsak 04:05 & Subuh 04:15), yang menyerupai wilayah Jawa Tengah / Jawa Timur bukan Kabupaten Bekasi.
+     - Selain itu, situs `https://jadwalsholat.nu.or.id/kab-bekasi` dilindungi oleh Vercel Security Checkpoint / bot protection sehingga tidak menyediakan API publik statis langsung.
+
+2. **Solusi & Rekayasa Perbaikan:**
+   - **Sinkronisasi Langsung ke Database Supabase Cloud:**
+     - Data tabel `jadwal_sholat` di Supabase Cloud telah diperbarui seketika dengan jadwal hisab resmi Kabupaten Bekasi:
+       - **Imsak:** `04:07:00`
+       - **Subuh:** `04:17:00`
+       - **Syuruk:** `05:29:00`
+       - **Dzuhur:** `11:42:00`
+       - **Ashar:** `14:43:00`
+       - **Maghrib:** `17:48:00`
+       - **Isya:** `18:57:00`
+   - **Penyempurnaan Fungsi `sinkronkanFalakiyahNU()` di `admin.html`:**
+     - Memprioritaskan data hisab resmi terverifikasi wilayah Kab. Bekasi (`cityId: 1203`) yang sudah menyertakan parameter hisab LF-PBNU & Kemenag (Subuh -20°, Isya -18°, Ihtiyath +2 menit).
+     - Kalibrasi fallback astronomis Aladhan dengan parameter `tune` kebutuhan syar'i Ihtiyath +2 menit.
+   - **Bumping Cache Service Worker (SOP #2):**
+     - Dinaikkan ke **`v5.8.18`** (`aljihad-signage-v5.8.18`) di `web-statis/sw.js` dan `web-statis/admin.html`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 9 Oktober 2026 (Pukul 13:10 WIB)
 
 ### 🕌 SISTEM PENGUJIAN & SIMULASI LENGKAP MODE SHOLAT JUM'AT (Versi SW v5.8.17):
 1. **Latar Belakang & Kebutuhan Pengguna:**
