@@ -132,10 +132,15 @@ const thursIsyaCountdown = new Date('2026-10-08T18:52:01+07:00');
 const countdownState = window.PrayerEngine.getPrayerState(mockSettings, mockJadwal, null, thursIsyaCountdown);
 assert(countdownState.active === true, 'Pukul 18:52:01 WIB: Mode Sholat Isya harus MENGAMBIL ALIH (countdown)');
 
-// Test 2.3: Malam Ahad / Kajian Sabtu (Sabtu 10 Okt 2026, 18:25 s/d 18:52)
+// Test 2.3: Malam Ahad / Kajian Sabtu (Sabtu 10 Okt 2026, ba'da Maghrib s/d selesai Isya)
 const satKajianTime = new Date('2026-10-10T18:30:00+07:00');
 const satState = window.PrayerEngine.getPrayerState(mockSettings, mockJadwal, null, satKajianTime);
-assert(satState.kajian_active === true, 'Malam Ahad 18:30 WIB: Slide Kajian harus AKTIF');
+assert(satState.kajian_active === true, 'Malam Ahad 18:30 WIB: Slide Kajian harus AKTIF (terkunci ba\'da Maghrib)');
+
+// Test 2.3b: Selesai Sholat Isya Malam Ahad (19:25 WIB, Isya 18:55 + 25m = 19:20 selesai)
+const satPostIsyaTime = new Date('2026-10-10T19:25:00+07:00');
+const satPostIsyaState = window.PrayerEngine.getPrayerState(mockSettings, mockJadwal, null, satPostIsyaTime);
+assert(satPostIsyaState.kajian_active === false && satPostIsyaState.active === false, 'Malam Ahad 19:25 WIB: Setelah selesai sholat Isya, kunci kajian dilepas & rotasi normal kembali');
 
 // Test 2.4: Sholat Jumat (Jumat 9 Okt 2026, 11:39 s/d 12:34)
 const friAdzanTime = new Date('2026-10-09T11:40:00+07:00');

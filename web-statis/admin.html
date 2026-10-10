@@ -1312,11 +1312,11 @@
                     </a>
                 </li>
 
-                <!-- NAV ITEM: PUSAT AGENDA RUTIN MASJID (BISA DIAKSES ADMIN & PETUGAS) -->
+                <!-- NAV ITEM: AGENDA RUTIN MASJID (BISA DIAKSES ADMIN & PETUGAS) -->
                 <li class="nav-item" id="nav-agenda-rutin">
                     <a class="nav-link" href="javascript:void(0)" onclick="switchAdminSection('agenda-rutin')">
                         <i class="fas fa-fw fa-calendar-check" style="color: #10b981;"></i>
-                        <span>Pusat Agenda Rutin</span>
+                        <span>Agenda Rutin</span>
                         <span class="badge badge-success ml-1" style="font-size: 0.65rem;">NEW</span>
                     </a>
                 </li>
@@ -2775,7 +2775,7 @@
                                     <label class="font-weight-bold mb-1 text-dark d-flex align-items-center" for="cfgKajianSabtuEnabled" style="font-size: 1rem; cursor: pointer;">
                                         <i class="fas fa-tv text-success mr-2"></i> Aktifkan Mode Kajian Malam Ahad Otomatis di Layar TV
                                     </label>
-                                    <small class="text-muted d-block">Jika aktif, setiap hari <strong>Sabtu Malam ba'da Maghrib s/d Adzan Isya</strong>, seluruh layar TV otomatis mengunci siaran ke <strong>Slide Kajian Rutin</strong> sesuai tanggal malam tersebut.</small>
+                                    <small class="text-muted d-block">Jika aktif, setiap hari <strong>Sabtu Malam ba'da Maghrib s/d selesai Sholat Isya</strong>, seluruh layar TV otomatis mengunci siaran ke <strong>Slide Kajian Rutin</strong> dan tidak berotasi ke slide lain sampai sholat Isya selesai.</small>
                                 </div>
                                 <div class="custom-control custom-switch ml-3" style="transform: scale(1.35);">
                                     <input type="checkbox" class="custom-control-input" id="cfgKajianSabtuEnabled" checked>
@@ -2838,16 +2838,17 @@
                                                     <button class="btn btn-warning dropdown-toggle font-weight-bold px-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 11px; background: #f59e0b; color: #071a10; border-color: #f59e0b;">
                                                         <i class="fas fa-clock mr-1"></i>24H
                                                     </button>
-                                                    <div class="dropdown-menu dropdown-menu-right shadow-lg p-2" style="min-width: 175px; border-radius: 10px; border: 1px solid rgba(201,160,61,0.3); z-index: 1050;">
-                                                        <div class="dropdown-header text-uppercase font-weight-bold px-2 py-1" style="font-size: 10px; color: #0e3521;">Pilihan Cepat (24 Jam)</div>
-                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:15')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:15 WIB</a>
-                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:20')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:20 WIB</a>
-                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success active" href="javascript:void(0)" onclick="setKajianJam24H('18:25')"><i class="fas fa-star mr-1 text-warning" style="font-size: 10px;"></i> 18:25 WIB (Standar)</a>
-                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:30')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:30 WIB</a>
-                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success" href="javascript:void(0)" onclick="setKajianJam24H('18:45')"><i class="fas fa-check-circle mr-1 text-muted" style="font-size: 10px;"></i> 18:45 WIB</a>
+                                                    <div class="dropdown-menu dropdown-menu-right shadow-lg p-2" style="min-width: 220px; border-radius: 10px; border: 1px solid rgba(201,160,61,0.3); z-index: 1050;">
+                                                        <div class="dropdown-header text-uppercase font-weight-bold px-2 py-1" style="font-size: 10px; color: #0e3521;">Mode Mulai Penguncian TV</div>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-success active" href="javascript:void(0)" onclick="setKajianJam24H('18:15')"><i class="fas fa-magic mr-1 text-warning" style="font-size: 10px;"></i> Ba'da Maghrib (Dinamis Selesai Sholat)</a>
+                                                        <div class="dropdown-divider my-1"></div>
+                                                        <div class="dropdown-header text-uppercase font-weight-bold px-2 py-1" style="font-size: 10px; color: #0e3521;">Jam Tertentu (Manual 24H)</div>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-dark" href="javascript:void(0)" onclick="setKajianJam24H('18:20')"><i class="fas fa-clock mr-1 text-muted" style="font-size: 10px;"></i> 18:20 WIB</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-dark" href="javascript:void(0)" onclick="setKajianJam24H('18:25')"><i class="fas fa-clock mr-1 text-muted" style="font-size: 10px;"></i> 18:25 WIB (Standar)</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-dark" href="javascript:void(0)" onclick="setKajianJam24H('18:30')"><i class="fas fa-clock mr-1 text-muted" style="font-size: 10px;"></i> 18:30 WIB</a>
+                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-dark" href="javascript:void(0)" onclick="setKajianJam24H('18:45')"><i class="fas fa-clock mr-1 text-muted" style="font-size: 10px;"></i> 18:45 WIB</a>
                                                         <div class="dropdown-divider my-1"></div>
                                                         <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-primary" href="javascript:void(0)" onclick="setKajianJam24H('19:30')"><i class="fas fa-moon mr-1 text-info" style="font-size: 10px;"></i> 19:30 WIB (Ba'da Isya)</a>
-                                                        <a class="dropdown-item py-1 px-2 rounded font-weight-bold text-primary" href="javascript:void(0)" onclick="setKajianJam24H('20:00')"><i class="fas fa-moon mr-1 text-info" style="font-size: 10px;"></i> 20:00 WIB</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -7357,7 +7358,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             { order: 1, name: 'Jadwal Sholat 5 Waktu', path: 'slides/utama.html', url: 'slides/utama.html', page: '/utama-embed', category: 'Utama / Sholat', category_color: 'primary', active: true },
             { order: 2, name: 'Laporan Kas Masjid', path: 'slides/keuangan.html', url: 'slides/keuangan.html', page: '/keuangan-embed', category: 'Keuangan', category_color: 'success', active: true },
             { order: 3, name: 'Petugas Sholat Jum\'at', path: 'slides/jumat.html', url: 'slides/jumat.html', page: '/jumat-embed', category: 'Jum\'at', category_color: 'warning text-dark', active: true },
-            { order: 4, name: 'Pengumuman DKM', path: 'slides/pengumuman.html', url: 'slides/pengumuman.html', page: '/pengumuman-embed', category: 'Informasi', category_color: 'info', active: true },
+            { order: 4, name: 'Agenda Rutin', path: 'slides/pengumuman.html', url: 'slides/pengumuman.html', page: '/pengumuman-embed', category: 'Agenda Rutin', category_color: 'info', active: true },
             { order: 5, name: 'Grafik Arus Kas', path: 'slides/keuangan-summary.html', url: 'slides/keuangan-summary.html', page: '/keuangan-summary-embed', category: 'Keuangan', category_color: 'success', active: true },
             { order: 6, name: 'QRIS Donasi & Infaq', path: 'slides/qris.html', url: 'slides/qris.html', page: '/qris-embed', category: 'Donasi', category_color: 'danger', active: true },
             { order: 7, name: 'Galeri Informasi & Dokumentasi', path: 'slides/slide.html', url: 'slides/slide.html', page: '/slide-embed', category: 'Dokumentasi', category_color: 'info', active: true },
@@ -13618,7 +13619,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.27') {
+                                if (name !== 'aljihad-signage-v5.8.28') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }

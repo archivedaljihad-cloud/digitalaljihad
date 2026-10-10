@@ -10,15 +10,14 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Stylesheets Tema Seragam Masjid -->
-    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261010_01">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261010_01">
 
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -27,24 +26,18 @@
 
     <style>
         :root {
-            --gold-primary: #d4af37;
-            --gold-light: #f7e7a9;
-            --gold-dark: #aa820a;
+            --gold-primary: #ffd700;
+            --gold-light: #fff4b8;
+            --gold-dark: #b8960c;
             --emerald-dark: #021a11;
             --emerald-card: #04291b;
             --emerald-light: #064e3b;
-            --text-gold: #ffd700;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Poppins', sans-serif;
-            color: var(--text-light, #ffffff);
+            color: #ffffff;
             height: 100vh;
             width: 100vw;
             display: flex;
@@ -57,366 +50,446 @@
 
         .container {
             width: 100%;
-            max-width: 1720px;
+            max-width: 1680px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px 30px 48px 30px;
+            padding: 8px 24px 72px 24px;
             position: relative;
             z-index: 5;
+            box-sizing: border-box;
         }
 
-        /* HEADER SERAGAM MASTER MASJID */
+        /* HEADER MASTER MASJID */
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             flex-shrink: 0;
             position: relative;
         }
 
-        .schedule-header-section {
-            text-align: center;
-            flex-shrink: 0;
-            margin-top: 8px;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .title-with-icons {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            background: linear-gradient(135deg, rgba(2, 25, 17, 0.9) 0%, rgba(4, 40, 26, 0.85) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.7);
-            border-radius: 35px;
-            padding: 5px 28px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 215, 0, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .title-icon-badge {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(3, 22, 15, 0.95);
-            border: 1.5px solid rgba(255, 215, 0, 0.65);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffd700;
-            font-size: 1.35rem;
-            flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        .title-text-wrap h2 {
-            font-size: 1.55rem;
-            color: #ffffff !important;
-            letter-spacing: 2px;
-            font-weight: 800;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
-            margin: 0;
+        .header h1 {
+            font-size: 2.35rem !important;
+            line-height: 1.1;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow: 
+                0 3px 6px rgba(0, 0, 0, 0.98),
+                0 6px 18px rgba(0, 0, 0, 0.92),
+                0 0 25px rgba(0, 0, 0, 0.85) !important;
+            margin: 0 0 2px 0;
+            font-weight: 900 !important;
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
         }
 
-        .title-text-wrap p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: #ffd700;
+        .header h3.sub-header {
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 3.5px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000, 0 2px 8px rgba(0,0,0,0.95);
+            margin-bottom: 3px;
+        }
+
+        .datetime {
+            font-size: 1.25rem;
+            background: rgba(3, 20, 15, 0.75);
+            display: inline-block;
+            padding: 3px 22px;
+            border-radius: 35px;
             font-weight: 600;
             letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.55);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
         }
 
-        /* Main Content Grid */
-        .main-stage {
-            position: relative;
-            z-index: 10;
-            flex: 1;
-            padding: 10px 10px 6px 10px;
+        /* SECTION BADGE BAR */
+        .section-header-bar {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 0;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin: 6px auto 10px auto;
+            flex-shrink: 0;
         }
 
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+        .page-title-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.92) 0%, rgba(5, 42, 28, 0.88) 100%);
+            padding: 6px 24px;
+            border-radius: 35px;
+            border: 1.6px solid rgba(255, 215, 0, 0.7);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 215, 0, 0.25);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            font-family: 'Outfit', 'Poppins', sans-serif;
+        }
+
+        .page-title-badge i { color: #ffd700; font-size: 1.35rem; }
+
+        .date-badge {
+            background: rgba(2, 16, 11, 0.75);
+            color: #ffd700;
+            padding: 6px 22px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 215, 0, 0.45);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* MULTI-SLIDE SHOWCASE STAGE */
+        .agenda-stage-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .agenda-slide-deck {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            max-height: 65vh;
-            align-items: stretch;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.985);
+            transition: opacity 0.65s cubic-bezier(0.25, 1, 0.5, 1), transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.65s;
+            pointer-events: none;
         }
 
-        /* Agenda Card */
-        .agenda-card {
-            background: linear-gradient(170deg, rgba(4, 41, 27, 0.92) 0%, rgba(2, 26, 17, 0.95) 100%);
-            border: 1.5px solid rgba(212, 175, 55, 0.35);
-            border-radius: 18px;
-            padding: 16px 18px 12px 18px;
+        .agenda-slide-deck.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            pointer-events: auto;
+            z-index: 2;
+        }
+
+        /* BIG CARDS (2 CARDS PER SLIDE) */
+        .agenda-big-card {
+            background: linear-gradient(145deg, rgba(3, 26, 18, 0.92) 0%, rgba(2, 18, 12, 0.96) 100%);
+            border: 1.8px solid rgba(255, 215, 0, 0.45);
+            border-radius: 24px;
+            padding: 24px 28px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: all 0.35s ease;
         }
 
-        /* Highlight Hari Ini (Aura Glowing) */
-        .agenda-card.today-active {
-            border: 2px solid #ffd700 !important;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.18) !important;
-            background: linear-gradient(170deg, rgba(8, 60, 40, 0.96) 0%, rgba(3, 35, 23, 0.98) 100%);
-            transform: translateY(-4px);
+        /* AURA GLOWING UNTUK JADWAL AKTIF HARI INI */
+        .agenda-big-card.today-active {
+            border: 2.2px solid #ffd700 !important;
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.55), inset 0 0 20px rgba(255, 215, 0, 0.18), 0 18px 50px rgba(0, 0, 0, 0.75) !important;
+            background: linear-gradient(145deg, rgba(6, 42, 28, 0.96) 0%, rgba(2, 22, 15, 0.98) 100%) !important;
         }
 
-        .today-floating-badge {
+        .agenda-big-card::before {
+            content: '';
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #000;
-            font-size: 9.5px;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-            animation: pulseBadge 1.8s infinite;
-            z-index: 2;
+            top: -60px;
+            right: -60px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.16) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        @keyframes pulseBadge {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.06); opacity: 0.9; }
-            100% { transform: scale(1); }
-        }
-
-        .card-top {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-category-wrap {
-            text-align: center;
-            margin-bottom: 6px;
-        }
-
-        .card-category {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 10.5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 3px 12px;
-            border-radius: 20px;
-        }
-
-        .cat-yasin { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
-        .cat-kajian { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
-        .cat-tahsin { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
-        .cat-tafsir { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
-
-        /* Teks Judul Center Bertingkat 2 Baris */
-        .card-title {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.25;
-            margin-bottom: 10px;
-            min-height: 48px;
-            text-align: center !important;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-        }
-
-        .card-title .title-top {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #ffffff;
-            display: block;
-            text-align: center;
-        }
-
-        .card-title .title-bottom {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #ffffff;
-            opacity: 0.95;
-            display: block;
-            text-align: center;
-            margin-top: 2px;
-        }
-
-        /* ========================================================
-           FORMAT 2 BARIS PER ITEM (STACKED CLEAN LAYOUT)
-           Baris 1: Label Emas (Hari, Waktu, Imam, Tempat, dll)
-           Baris 2: Value Putih Bersih (Indentasi di bawahnya)
-           ======================================================== */
-        .info-item {
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        .info-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #ffd700; /* Warna Emas Kuning Berbeda dengan teks di bawahnya */
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-            margin-bottom: 2px;
-        }
-
-        .info-label i {
-            color: #ffd700;
-            font-size: 11px;
-            width: 14px;
-            text-align: center;
-        }
-
-        .info-value {
-            font-size: 0.94rem;
-            font-weight: 600;
-            color: #ffffff; /* Warna Putih Bersih Kontras */
-            line-height: 1.3;
-            padding-left: 20px; /* Indentasi rapi di bawah teks label */
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
-        }
-
-        /* Day Pills Box (Tahsin) */
-        .day-pills-box {
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 12px;
-            padding: 7px 10px;
-            margin-top: 4px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            text-align: left;
-        }
-
-        .day-pills-title {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--gold-light);
-            text-transform: uppercase;
-            margin-bottom: 5px;
+        /* CARD HEADER */
+        .card-header-flex {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.25);
+            flex-shrink: 0;
         }
 
-        .pills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-
-        .day-pill {
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-        }
-
-        .day-pill.active {
-            background: #ffd700;
-            color: #000;
-            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
-        }
-
-        .day-pill.today {
-            background: #10b981;
-            color: #fff;
-            animation: pulseToday 1.5s infinite;
-        }
-
-        @keyframes pulseToday {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
-        /* Bagian bawah kotak: badge status di-center */
-        .card-bottom {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.80rem;
-            color: #94a3b8;
-            text-align: center;
-        }
-
-        .card-bottom .status-badge {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--gold-light);
+        .card-order-badge {
             display: inline-flex;
             align-items: center;
+            gap: 10px;
+        }
+
+        .order-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            color: #021a11;
+            font-size: 1.15rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .category-pill {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
             gap: 6px;
         }
 
-        /* Bottom Ticker */
-        .bottom-ticker {
+        /* TODAY FLOATING BADGE */
+        .today-pill-badge {
+            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            animation: pulseToday 1.6s infinite;
+        }
+
+        @keyframes pulseToday {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 4px 22px rgba(255, 215, 0, 0.6); }
+        }
+
+        /* CARD BODY */
+        .card-body-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .card-title-main {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #ffd700;
+            line-height: 1.25;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+            font-family: 'Outfit', 'Poppins', sans-serif;
+        }
+
+        .time-badge-box {
+            background: linear-gradient(135deg, rgba(2, 38, 24, 0.85) 0%, rgba(1, 24, 15, 0.9) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            border-radius: 14px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .time-badge-box i {
+            font-size: 1.6rem;
+            color: #ffd700;
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
+            flex-shrink: 0;
+        }
+
+        .time-badge-label {
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .time-badge-val {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            letter-spacing: 0.5px;
+        }
+
+        .mentor-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 9px 15px;
+        }
+
+        .mentor-badge-row i {
+            font-size: 1.35rem;
+            color: #38bdf8;
+            flex-shrink: 0;
+        }
+
+        .mentor-text-wrap {
+            overflow: hidden;
+        }
+
+        .mentor-role {
+            font-size: 0.74rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .mentor-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .card-description-text {
+            font-size: 0.95rem;
+            line-height: 1.45;
+            color: #e2e8f0;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 10px 14px;
+            border-radius: 12px;
+            border-left: 3px solid #ffd700;
+        }
+
+        /* LOCATION PILL */
+        .location-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* SLIDE CONTROLS & PROGRESS INDICATOR */
+        .slide-indicator-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+
+        .slide-tab-pill {
+            background: rgba(2, 22, 14, 0.8);
+            border: 1.5px solid rgba(255, 215, 0, 0.35);
+            padding: 7px 22px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-tab-pill.active {
+            border-color: #ffd700;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.35);
+            background: linear-gradient(135deg, rgba(6, 44, 30, 0.95) 0%, rgba(2, 25, 17, 0.98) 100%);
+        }
+
+        .slide-tab-pill .pill-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700, #f59e0b);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .slide-tab-pill.active .pill-progress {
+            box-shadow: 0 0 8px #ffd700;
+        }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 38px;
             z-index: 20;
             background: rgba(2, 16, 11, 0.92);
-            border-top: 1px solid rgba(212, 175, 55, 0.4);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.45);
             backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 35px;
-            font-size: 0.82rem;
-            color: #cbd5e1;
         }
-
-        .ticker-left {
+        .running-badge {
+            background: linear-gradient(135deg, #ffd700, #f59e0b);
+            color: #021a11;
+            font-weight: 900;
+            font-size: 1rem;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--gold-light);
-            font-weight: 600;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+            font-family: 'Outfit', sans-serif;
         }
-
-        .ticker-right {
-            color: #ffffff;
+        .running-text-container { flex: 1; padding: 7px 18px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 72s linear infinite;
+            font-size: 1.15rem;
             font-weight: 600;
-            font-size: 0.82rem;
-            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
         }
     </style>
 </head>
 
 <body>
+    <!-- Background Slideshow Islami -->
     <div class="display-background"></div>
     <div class="display-overlay"></div>
 
@@ -429,419 +502,482 @@
     </div>
 
     <div class="container">
-        <!-- HEADER SERAGAM MASTER MASJID -->
+        <!-- HEADER MASTER MASJID -->
         <div class="header">
             <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
             <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
             <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
 
-            <div class="schedule-header-section">
-                <div class="title-with-icons">
-                    <div class="title-icon-badge left-icon"><i class="fas fa-calendar-check"></i></div>
-                    <div class="title-text-wrap">
-                        <h2>JADWAL KEGIATAN RUTIN MASJID</h2>
-                        <p>Agenda Ta'lim & Ibadah Berjamaah Pekanan & Dwi-Mingguan</p>
+        <!-- SECTION BADGE BAR -->
+        <div class="section-header-bar">
+            <div class="page-title-badge">
+                <i class="fas fa-calendar-check"></i>
+                <span>AGENDA RUTIN MASJID</span>
+            </div>
+            <div class="date-badge" id="agendaHeaderSub">
+                <i class="fas fa-mosque"></i>
+                <span>Jadwal Ibadah &amp; Majelis Ta'lim Mingguan</span>
+            </div>
+        </div>
+
+        <!-- MULTI-SLIDE SHOWCASE STAGE -->
+        <div class="agenda-stage-container" id="agendaStageContainer">
+
+            <!-- ==========================================
+                 SLIDE 1: YAASIIN & KAJIAN MALAM AHAD
+                 ========================================== -->
+            <div class="agenda-slide-deck active" id="deckSlide1">
+                <!-- KARTU 1: SURAT YAASIIN -->
+                <div class="agenda-big-card" id="cardYasin">
+                    <div class="card-header-flex">
+                        <div class="card-order-badge">
+                            <div class="order-circle">1</div>
+                            <div class="category-pill">
+                                <i class="fas fa-book-quran"></i> Agenda Rutin Malam Jum'at
+                            </div>
+                        </div>
+                        <div id="badgeStatusYasin" class="today-pill-badge" style="display: none;">
+                            <i class="fas fa-fire"></i> MALAM INI
+                        </div>
                     </div>
-                    <div class="title-icon-badge right-icon"><i class="fas fa-star-and-crescent"></i></div>
+
+                    <div class="card-body-content">
+                        <div class="card-title-main" id="titleYasin">Pembacaan Surat Yaasiin &amp; Tahlil</div>
+
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <div class="time-badge-label">WAKTU PELAKSANAAN</div>
+                                <div class="time-badge-val" id="waktuYasin">Malam Jum'at (Kamis Malam) • Ba'da Maghrib s/d Isya</div>
+                            </div>
+                        </div>
+
+                        <div class="mentor-badge-row">
+                            <i class="fas fa-user-graduate"></i>
+                            <div class="mentor-text-wrap">
+                                <div class="mentor-role">IMAM / PEMBIMBING</div>
+                                <div class="mentor-name" id="mentorYasin">Imam Rawatib &amp; Asatidz DKM Al-Jihad</div>
+                            </div>
+                        </div>
+
+                        <div class="card-description-text" id="descYasin">
+                            Pembacaan Surat Yaasiin 83 ayat, dzikir tahlil, dan doa bersama untuk kemaslahatan jama'ah, keluarga &amp; ahli kubur.
+                        </div>
+
+                        <div class="location-pill">
+                            <i class="fas fa-map-marker-alt text-warning"></i>
+                            <span id="lokasiYasin">Ruang Utama Masjid Jami' Al-Jihad</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KARTU 2: PENGAJIAN RUTIN MALAM AHAD -->
+                <div class="agenda-big-card" id="cardKajianAhad">
+                    <div class="card-header-flex">
+                        <div class="card-order-badge">
+                            <div class="order-circle">2</div>
+                            <div class="category-pill">
+                                <i class="fas fa-book-reader"></i> Agenda Rutin Malam Ahad
+                            </div>
+                        </div>
+                        <div id="badgeStatusKajian" class="today-pill-badge" style="display: none;">
+                            <i class="fas fa-fire"></i> MALAM INI
+                        </div>
+                    </div>
+
+                    <div class="card-body-content">
+                        <div class="card-title-main" id="titleKajianAhad">Pengajian Rutin Malam Ahad</div>
+
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <div class="time-badge-label">WAKTU PELAKSANAAN</div>
+                                <div class="time-badge-val" id="waktuKajianAhad">Malam Ahad (Sabtu Malam) • Ba'da Maghrib s/d Isya</div>
+                            </div>
+                        </div>
+
+                        <div class="mentor-badge-row">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <div class="mentor-text-wrap">
+                                <div class="mentor-role">PEMATERI / KITAB RUJUKAN</div>
+                                <div class="mentor-name" id="mentorKajianAhad">K.H Iskandar Najib, M.Pd.I. (Kitab Irsyadul 'Ibad)</div>
+                            </div>
+                        </div>
+
+                        <div class="card-description-text" id="descKajianAhad">
+                            Kajian kitab fiqih &amp; tasawuf tematik bergilir setiap pekan. Terbuka untuk seluruh jama'ah ikhwan &amp; akhwat.
+                        </div>
+
+                        <div class="location-pill">
+                            <i class="fas fa-map-marker-alt text-warning"></i>
+                            <span id="lokasiKajianAhad">Ruang Utama Masjid Jami' Al-Jihad</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 SLIDE 2: TAHSIN AL-QUR'AN & KAJIAN TAFSIR
+                 ========================================== -->
+            <div class="agenda-slide-deck" id="deckSlide2">
+                <!-- KARTU 3: TAHSIN AL-QUR'AN -->
+                <div class="agenda-big-card" id="cardTahsin">
+                    <div class="card-header-flex">
+                        <div class="card-order-badge">
+                            <div class="order-circle">3</div>
+                            <div class="category-pill">
+                                <i class="fas fa-quran"></i> Bimbingan Belajar Al-Qur'an
+                            </div>
+                        </div>
+                        <div id="badgeStatusTahsin" class="today-pill-badge" style="display: none;">
+                            <i class="fas fa-star"></i> HARI INI
+                        </div>
+                    </div>
+
+                    <div class="card-body-content">
+                        <div class="card-title-main" id="titleTahsin">Bimbingan Tahsin &amp; Tartil Al-Qur'an</div>
+
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <div class="time-badge-label">JADWAL PELAKSANAAN</div>
+                                <div class="time-badge-val" id="waktuTahsin">Setiap Senin, Rabu &amp; Sabtu • Ba'da Isya (20:00 WIB)</div>
+                            </div>
+                        </div>
+
+                        <div class="mentor-badge-row">
+                            <i class="fas fa-user-check"></i>
+                            <div class="mentor-text-wrap">
+                                <div class="mentor-role">PEMBINA / PENGAJAR</div>
+                                <div class="mentor-name" id="mentorTahsin">Ust. Pembina Tahsin Al-Qur'an DKM Al-Jihad</div>
+                            </div>
+                        </div>
+
+                        <div class="card-description-text" id="descTahsin">
+                            Bimbingan fashahah makharijul huruf, kaidah ilmu tajwid, dan kelancaran membaca Al-Qur'an untuk remaja &amp; dewasa.
+                        </div>
+
+                        <div class="location-pill">
+                            <i class="fas fa-map-marker-alt text-warning"></i>
+                            <span id="lokasiTahsin">Serambi Masjid Jami' Al-Jihad</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KARTU 4: KAJIAN UMUM TAFSIR -->
+                <div class="agenda-big-card" id="cardTafsir">
+                    <div class="card-header-flex">
+                        <div class="card-order-badge">
+                            <div class="order-circle">4</div>
+                            <div class="category-pill">
+                                <i class="fas fa-mosque"></i> Kajian Shubuh / Tematik
+                            </div>
+                        </div>
+                        <div id="badgeStatusTafsir" class="today-pill-badge" style="display: none;">
+                            <i class="fas fa-star"></i> HARI INI
+                        </div>
+                    </div>
+
+                    <div class="card-body-content">
+                        <div class="card-title-main" id="titleTafsir">Kajian Umum Tafsir Al-Qur'an</div>
+
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <div class="time-badge-label">WAKTU PELAKSANAAN</div>
+                                <div class="time-badge-val" id="waktuTafsir">Setiap Ahad Shubuh / Pagi • Pukul 05:30 WIB s/d Selesai</div>
+                            </div>
+                        </div>
+
+                        <div class="mentor-badge-row">
+                            <i class="fas fa-award"></i>
+                            <div class="mentor-text-wrap">
+                                <div class="mentor-role">NARASUMBER / ASATIDZ</div>
+                                <div class="mentor-name" id="mentorTafsir">Asatidz Pakar Tafsir &amp; Ulama Tamu</div>
+                            </div>
+                        </div>
+
+                        <div class="card-description-text" id="descTafsir">
+                            Tadabbur ayat-ayat Al-Qur'an, pemahaman makna kontekstual, serta pembinaan akhlak mulia dalam keluarga muslim.
+                        </div>
+
+                        <div class="location-pill">
+                            <i class="fas fa-map-marker-alt text-warning"></i>
+                            <span id="lokasiTafsir">Ruang Utama Masjid Jami' Al-Jihad</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SLIDE INDICATOR BAR -->
+        <div class="slide-indicator-bar">
+            <div class="slide-tab-pill active" id="tabSlide1" onclick="goToSlide(0)">
+                <i class="fas fa-book-open text-warning"></i>
+                <span>Bagian 1 : Yaasiin &amp; Kajian Malam Ahad</span>
+                <div class="pill-progress" id="progressSlide1"></div>
+            </div>
+            <div class="slide-tab-pill" id="tabSlide2" onclick="goToSlide(1)">
+                <i class="fas fa-quran text-warning"></i>
+                <span>Bagian 2 : Tahsin &amp; Kajian Tafsir</span>
+                <div class="pill-progress" id="progressSlide2"></div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-badge"><i class="fas fa-calendar-alt"></i> AGENDA RUTIN</div>
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-bullhorn"></i> Jadwal Majelis Ta'lim &amp; Kegiatan Rutin Masjid Jami' Al-Jihad. Mari ramaikan rumah Allah SWT dengan menuntut ilmu syar'i dan amal sholeh.
                 </div>
             </div>
         </div>
-
-        <!-- MAIN 4 CARDS STAGE -->
-        <main class="main-stage">
-            <div class="cards-grid" id="cardsGrid">
-                <!-- Diisi secara dinamis oleh JavaScript -->
-            </div>
-        </main>
     </div>
-
-    <!-- BOTTOM RUNNING TEXT TICKER -->
-    <div class="bottom-running-wrap">
-        <div class="running-badge"><i class="fas fa-calendar-alt"></i> AGENDA RUTIN</div>
-        <div class="running-text-container">
-            <div class="running-text" id="runningText">
-                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">Mari makmurkan rumah Allah SWT dengan menghadiri majelis ilmu & kegiatan ibadah bersama keluarga tercinta • Sistem Informasi Digital — Masjid Jami' Al Jihad</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- CORE AMBIENT & CLOCK SCRIPT -->
-    <script src="../js/display-clock-ambient.js"></script>
 
     <script>
-        // State Global Default
-        let defaultKegiatan = {
-            yasin: {
-                enabled: true,
-                judul: 'Pembacaan Surat Yaasiin & Tahlil',
-                hari: 'Kamis (Malam Jum\'at)',
-                waktu: 'Ba\'da Sholat Maghrib s/d Isya',
-                pembimbing: 'Imam Rawatib / Asatidz Masjid',
-                keterangan: 'Rutin Setiap Malam Jum\'at Bersama Seluruh Jamaah',
-                lokasi: 'Ruang Utama Masjid Jami\' Al Jihad'
-            },
-            kajian_ahad: {
-                enabled: true,
-                judul: 'Kajian Malam Ahad',
-                hari: 'Sabtu (Malam Ahad)',
-                waktu: 'Ba\'da Sholat Maghrib s/d Isya',
-                pembimbing: '',
-                keterangan: '',
-                lokasi: 'Ruang Utama Masjid Jami\' Al Jihad'
-            },
-            tahsin: {
-                enabled: true,
-                judul: 'Bimbingan Tahsin Al-Qur\'an',
-                waktu: 'Ba\'da Sholat Isya (20:00 WIB)',
-                pembimbing: 'Ust. Pembina Tahsin Al-Qur\'an',
-                keterangan: 'Terbuka untuk Jamaah Ikhwan & Akhwat (Semua Usia)',
-                lokasi: 'Serambi & Ruang Utama Masjid',
-                hari_aktif: ['senin', 'rabu', 'sabtu'],
-                catatan_khusus: ''
-            },
-            tafsir: {
-                enabled: true,
-                judul: 'Kajian Umum Tafsir Al-Qur\'an',
-                pola: '2_minggu',
-                pekan_aktif: [1, 3],
-                hari: 'Ahad',
-                waktu: 'Ba\'da Sholat Subuh (05:15 WIB)',
-                pembimbing: 'Asatidz Dewan Syari\'ah Masjid',
-                keterangan: 'Tafsir Ayat-ayat & Sarapan Pagi Bersama',
-                lokasi: 'Ruang Utama Masjid Jami\' Al Jihad'
-            }
-        };
+        // Background Rotator Islami
+        const backgroundImages = [
+            "../image/display/background/BG2.png",
+            "../image/display/background/BG10.png",
+            "../image/display/background/BG4.png",
+            "../image/display/background/BG7.png",
+            "../image/display/background/BG11.png",
+            "../image/display/background/BG6.png",
+            "../image/display/background/BG1.png",
+            "../image/display/background/BG9.png",
+            "../image/display/background/BG5.png",
+            "../image/display/background/BG8.png",
+            "../image/display/background/BG3.png"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
 
-        const dayNames = ['ahad', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-        const dayLabelMap = {
-            senin: 'Senin',
-            selasa: 'Selasa',
-            rabu: 'Rabu',
-            kamis: 'Kamis',
-            jumat: 'Jum\'at',
-            sabtu: 'Sabtu',
-            ahad: 'Ahad'
-        };
-
-        // Helper Format Judul Bertingkat 2 Baris (Center)
-        function formatCardTitle(rawTitle, defaultTop, defaultBottom) {
-            const raw = (rawTitle || '').trim();
-            if (!raw) {
-                return `<span class="title-top">${defaultTop}</span><span class="title-bottom">${defaultBottom}</span>`;
-            }
-            if (raw.includes('\n')) {
-                const parts = raw.split('\n');
-                return `<span class="title-top">${parts[0].trim()}</span><span class="title-bottom">${parts.slice(1).join(' ').trim()}</span>`;
-            }
-            if (raw.includes('<br>')) {
-                const parts = raw.split('<br>');
-                return `<span class="title-top">${parts[0].trim()}</span><span class="title-bottom">${parts.slice(1).join(' ').trim()}</span>`;
-            }
-            const lower = raw.toLowerCase();
-            if (lower.includes('kajian') && lower.includes('ahad')) {
-                return `<span class="title-top">Kajian</span><span class="title-bottom">Malam Ahad</span>`;
-            }
-            if (lower.includes('tahsin')) {
-                return `<span class="title-top">Bimbingan</span><span class="title-bottom">Tahsin Al-Qur'an</span>`;
-            }
-            if (lower.includes('tafsir')) {
-                return `<span class="title-top">Kajian Umum</span><span class="title-bottom">Tafsir Al-Qur'an</span>`;
-            }
-            if (lower.includes('yaasiin') || lower.includes('yasin')) {
-                return `<span class="title-top">Pembacaan Surat Yaasiin</span><span class="title-bottom">& Tahlil</span>`;
-            }
-            return `<span class="title-top">${raw}</span>`;
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
         }
 
-        function renderCards(data) {
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
             const now = new Date();
-            const curDayIdx = now.getDay();
-            const curDayKey = dayNames[curDayIdx];
-            const curWeekOfMonth = Math.ceil(now.getDate() / 7);
-
-            const isYasinToday = (curDayKey === 'kamis');
-            const isAhadKajianToday = (curDayKey === 'sabtu');
+            const dtEl = document.getElementById('datetime');
+            if (!dtEl) return;
+            if (typeof getStandardMasjidDateTime === 'function') {
+                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
+                return;
+            }
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
             
-            const tahsinDays = data.tahsin.hari_aktif || ['senin', 'rabu', 'sabtu'];
-            const isTahsinToday = tahsinDays.includes(curDayKey);
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-            const tafsirPekan = data.tafsir.pekan_aktif || [1, 3];
-            const isTafsirThisWeek = tafsirPekan.includes(curWeekOfMonth);
-            const isTafsirToday = (curDayKey === 'ahad' && isTafsirThisWeek);
+            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
 
-            const grid = document.getElementById('cardsGrid');
-            grid.innerHTML = `
-                <!-- 1. YAASIIN (FORMAT 2 BARIS STACKED) -->
-                <div class="agenda-card ${isYasinToday ? 'today-active' : ''}">
-                    ${isYasinToday ? '<div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> MALAM INI</div>' : ''}
-                    <div class="card-top">
-                        <div class="card-category-wrap">
-                            <span class="card-category cat-yasin"><i class="fa-solid fa-book-quran"></i> Rutin Setiap Pekan</span>
-                        </div>
-                        <h2 class="card-title">${formatCardTitle(data.yasin.judul, 'Pembacaan Surat Yaasiin', '& Tahlil')}</h2>
+        // =========================================================================
+        // MULTI-SLIDE CAROUSEL & PROGRESS ENGINE (10 - 12 DETIK PER SLIDE)
+        // =========================================================================
+        let currentSlideIndex = 0;
+        const SLIDE_DURATION = 11000; // 11 detik
+        let slideTimer = null;
+        let progressInterval = null;
+        let progressStart = Date.now();
 
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
-                            <div class="info-value">Setiap Kamis (Malam Jum'at)</div>
-                        </div>
+        function goToSlide(index) {
+            currentSlideIndex = index;
+            const deck1 = document.getElementById('deckSlide1');
+            const deck2 = document.getElementById('deckSlide2');
+            const tab1 = document.getElementById('tabSlide1');
+            const tab2 = document.getElementById('tabSlide2');
+            const prog1 = document.getElementById('progressSlide1');
+            const prog2 = document.getElementById('progressSlide2');
 
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
-                            <div class="info-value">${data.yasin.waktu || 'Ba\'da Sholat Maghrib s/d Isya'}</div>
-                        </div>
+            if (currentSlideIndex === 0) {
+                deck1.classList.add('active');
+                deck2.classList.remove('active');
+                tab1.classList.add('active');
+                tab2.classList.remove('active');
+                if (prog2) prog2.style.width = '0%';
+            } else {
+                deck2.classList.add('active');
+                deck1.classList.remove('active');
+                tab2.classList.add('active');
+                tab1.classList.remove('active');
+                if (prog1) prog1.style.width = '0%';
+            }
 
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Imam / Pembimbing :</div>
-                            <div class="info-value">${data.yasin.pembimbing || 'Ketua / Pengurus DKM Al Jihad'}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-location-dot"></i> Tempat :</div>
-                            <div class="info-value">${data.yasin.lokasi || 'Ruang Utama Masjid Jami\' Al Jihad'}</div>
-                        </div>
-                    </div>
-                    <div class="card-bottom">
-                        <span class="status-badge"><i class="fa-solid fa-users"></i> Terbuka untuk Jamaah Umum</span>
-                    </div>
-                </div>
-
-                <!-- 2. KAJIAN MALAM AHAD (FORMAT 2 BARIS STACKED) -->
-                <div class="agenda-card ${isAhadKajianToday ? 'today-active' : ''}">
-                    ${isAhadKajianToday ? '<div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> MALAM INI</div>' : ''}
-                    <div class="card-top">
-                        <div class="card-category-wrap">
-                            <span class="card-category cat-kajian"><i class="fa-solid fa-book-reader"></i> Rutin Setiap Pekan</span>
-                        </div>
-                        <h2 class="card-title">${formatCardTitle(data.kajian_ahad.judul, 'Kajian', 'Malam Ahad')}</h2>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Hari :</div>
-                            <div class="info-value">Setiap Sabtu (Malam Ahad)</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
-                            <div class="info-value">${data.kajian_ahad.waktu || 'Ba\'da Sholat Maghrib s/d Isya'}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pemateri :</div>
-                            <div class="info-value">${data.kajian_ahad.pembimbing || '-'}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-book-open"></i> Kitab / Tema :</div>
-                            <div class="info-value">${data.kajian_ahad.keterangan || '-'}</div>
-                        </div>
-                    </div>
-                    <div class="card-bottom">
-                        <span class="status-badge"><i class="fa-solid fa-circle-question"></i> Sesi Tanya Jawab</span>
-                    </div>
-                </div>
-
-                <!-- 3. TAHSIN AL-QUR'AN (FORMAT 2 BARIS STACKED) -->
-                <div class="agenda-card ${isTahsinToday ? 'today-active' : ''}">
-                    ${isTahsinToday ? '<div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> HARI INI</div>' : ''}
-                    <div class="card-top">
-                        <div class="card-category-wrap">
-                            <span class="card-category cat-tahsin"><i class="fa-solid fa-quran"></i> Bimbingan Tartil</span>
-                        </div>
-                        <h2 class="card-title">${formatCardTitle(data.tahsin.judul, 'Bimbingan', 'Tahsin Al-Qur\'an')}</h2>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
-                            <div class="info-value">${data.tahsin.waktu || 'Ba\'da Sholat Isya (20:00 WIB)'}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pembina :</div>
-                            <div class="info-value">${data.tahsin.pembimbing || 'Ust. Pembina Tahsin Al-Qur\'an'}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-location-dot"></i> Tempat :</div>
-                            <div class="info-value">${data.tahsin.lokasi || 'Serambi & Ruang Utama Masjid'}</div>
-                        </div>
-
-                        <div class="day-pills-box">
-                            <div class="day-pills-title">
-                                <span class="info-label" style="margin-bottom: 0;"><i class="fa-solid fa-calendar-week"></i> Jadwal Pekan Ini :</span>
-                                ${isTahsinToday ? '<span style="color: #6ee7b7; font-size: 10px; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Hari Ini Ada</span>' : ''}
-                            </div>
-                            <div class="pills-container" style="margin-top: 5px; padding-left: 4px;">
-                                ${Object.keys(dayLabelMap).map(k => {
-                                    const isActive = tahsinDays.includes(k);
-                                    const isCurrent = (curDayKey === k);
-                                    if (isActive) {
-                                        return `<span class="day-pill ${isCurrent ? 'today' : 'active'}">${dayLabelMap[k]}</span>`;
-                                    }
-                                    return '';
-                                }).join('')}
-                                ${tahsinDays.length === 0 ? '<span class="day-pill" style="background: rgba(255,255,255,0.05); color: #94a3b8;">Menyesuaikan info asatidz</span>' : ''}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-bottom">
-                        <span class="status-badge"><i class="fa-solid fa-graduation-cap"></i> Semua Tingkatan Usia</span>
-                    </div>
-                </div>
-
-                <!-- 4. TAFSIR AL-QUR'AN (FORMAT 2 BARIS STACKED) -->
-                <div class="agenda-card ${isTafsirToday ? 'today-active' : ''}">
-                    ${isTafsirToday ? '<div class="today-floating-badge"><i class="fa-solid fa-bell mr-1"></i> PAGI INI</div>' : (isTafsirThisWeek ? '<div class="today-floating-badge" style="background: #3b82f6; color: #fff;"><i class="fa-solid fa-calendar-check mr-1"></i> PEKAN INI</div>' : '')}
-                    <div class="card-top">
-                        <div class="card-category-wrap">
-                            <span class="card-category cat-tafsir"><i class="fa-solid fa-sun"></i> Tiap 2 Pekan Sekali</span>
-                        </div>
-                        <h2 class="card-title">${formatCardTitle(data.tafsir.judul, 'Kajian Umum', 'Tafsir Al-Qur\'an')}</h2>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-calendar-day"></i> Jadwal :</div>
-                            <div class="info-value">Setiap Ahad (Pekan ke-${tafsirPekan.join(' & ke-')})</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-clock"></i> Waktu :</div>
-                            <div class="info-value">${data.tafsir.waktu || 'Ba\'da Sholat Subuh (05:15 WIB)'}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-user-tie"></i> Pemateri :</div>
-                            <div class="info-value">${data.tafsir.pembimbing || 'Asatidz Dewan Syari\'ah Masjid'}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fa-solid fa-utensils"></i> Fasilitas :</div>
-                            <div class="info-value">${data.tafsir.keterangan || 'Tafsir Ayat & Sarapan Pagi Bersama'}</div>
-                        </div>
-                    </div>
-                    <div class="card-bottom">
-                        <span class="status-badge">
-                            ${isTafsirThisWeek ? '<i class="fa-solid fa-circle-check text-success"></i> Pekan Aktif (Pekan ' + curWeekOfMonth + ')' : '<i class="fa-solid fa-calendar-minus"></i> Istirahat Pekan Ini'}
-                        </span>
-                    </div>
-                </div>
-            `;
+            resetSlideTimer();
         }
 
-        // Load Settings Supabase & LocalStorage / Parent Memory Bridge
+        function resetSlideTimer() {
+            if (slideTimer) clearTimeout(slideTimer);
+            if (progressInterval) clearInterval(progressInterval);
+
+            progressStart = Date.now();
+            const activeProgEl = currentSlideIndex === 0 ? document.getElementById('progressSlide1') : document.getElementById('progressSlide2');
+
+            progressInterval = setInterval(() => {
+                const elapsed = Date.now() - progressStart;
+                const pct = Math.min(100, (elapsed / SLIDE_DURATION) * 100);
+                if (activeProgEl) activeProgEl.style.width = `${pct}%`;
+            }, 100);
+
+            slideTimer = setTimeout(() => {
+                goToSlide(currentSlideIndex === 0 ? 1 : 0);
+            }, SLIDE_DURATION);
+        }
+
+        // =========================================================================
+        // SMART DAY AUTO-HIGHLIGHT ("MALAM INI" / "HARI INI")
+        // =========================================================================
+        function applySmartHighlights() {
+            const now = new Date();
+            const day = now.getDay(); // 0 = Ahad, 1 = Senin, 2 = Selasa, 3 = Rabu, 4 = Kamis, 5 = Jumat, 6 = Sabtu
+
+            // 1. Kartu Yaasiin: Aktif Malam Jum'at (Kamis malam)
+            const cardYasin = document.getElementById('cardYasin');
+            const badgeYasin = document.getElementById('badgeStatusYasin');
+            if (day === 4) { // Kamis
+                cardYasin.classList.add('today-active');
+                badgeYasin.style.display = 'inline-flex';
+                badgeYasin.innerHTML = '<i class="fas fa-fire"></i> MALAM INI';
+            } else {
+                cardYasin.classList.remove('today-active');
+                badgeYasin.style.display = 'none';
+            }
+
+            // 2. Kartu Kajian Malam Ahad: Aktif Sabtu malam
+            const cardKajian = document.getElementById('cardKajianAhad');
+            const badgeKajian = document.getElementById('badgeStatusKajian');
+            if (day === 6) { // Sabtu
+                cardKajian.classList.add('today-active');
+                badgeKajian.style.display = 'inline-flex';
+                badgeKajian.innerHTML = '<i class="fas fa-fire"></i> MALAM INI';
+            } else {
+                cardKajian.classList.remove('today-active');
+                badgeKajian.style.display = 'none';
+            }
+
+            // 3. Kartu Tahsin: Aktif Senin (1), Rabu (3), dan Sabtu (6)
+            const cardTahsin = document.getElementById('cardTahsin');
+            const badgeTahsin = document.getElementById('badgeStatusTahsin');
+            if (day === 1 || day === 3 || day === 6) {
+                cardTahsin.classList.add('today-active');
+                badgeTahsin.style.display = 'inline-flex';
+                badgeTahsin.innerHTML = '<i class="fas fa-star"></i> HARI INI';
+            } else {
+                cardTahsin.classList.remove('today-active');
+                badgeTahsin.style.display = 'none';
+            }
+
+            // 4. Kartu Kajian Tafsir: Aktif Ahad (0)
+            const cardTafsir = document.getElementById('cardTafsir');
+            const badgeTafsir = document.getElementById('badgeStatusTafsir');
+            if (day === 0) { // Ahad
+                cardTafsir.classList.add('today-active');
+                badgeTafsir.style.display = 'inline-flex';
+                badgeTafsir.innerHTML = '<i class="fas fa-star"></i> HARI INI';
+            } else {
+                cardTafsir.classList.remove('today-active');
+                badgeTafsir.style.display = 'none';
+            }
+        }
+
+        // =========================================================================
+        // DATA LOADER & SUPABASE / LOCALSTORAGE SYNC
+        // =========================================================================
         async function loadAgendaData() {
-            let activeConfig = JSON.parse(JSON.stringify(defaultKegiatan));
-
-            // 1. Coba ambil dari Parent Memory TV container jika ada di iframe
-            let settings = null;
             try {
-                if (window.parent && window.parent !== window && window.parent.settings) {
-                    settings = window.parent.settings;
-                }
-            } catch (e) {}
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
 
-            // 2. Coba ambil dari Supabase jika belum didapat dari parent
-            try {
-                if (!settings && typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.getSettings === 'function') {
+                if (!settings && window.SupabaseDB) {
                     settings = await SupabaseDB.getSettings();
                 }
+
                 if (settings) {
-                    if (settings.nama_aplikasi) {
-                        const elNama = document.getElementById('nama-masjid');
-                        if (elNama) elNama.textContent = settings.nama_aplikasi;
-                    }
-                    if (settings.sub_header) {
-                        const elSub = document.getElementById('sub-header');
-                        if (elSub) elSub.textContent = settings.sub_header;
-                    }
-                    if (settings.kegiatan_rutin_settings) {
-                        activeConfig = Object.assign({}, activeConfig, settings.kegiatan_rutin_settings);
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/agenda-rutin-embed', settings)
+                        : (settings.running_text || '');
+                    if (rText) {
+                        document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-bullhorn"></i> ${rText}`;
                     }
                 }
-            } catch(e) {
-                console.warn('Gagal memuat setting dari Supabase:', e);
-            }
 
-            // Fallback LocalStorage
-            try {
-                const localStr = localStorage.getItem('agenda_rutin_settings');
-                if (localStr) {
-                    const parsed = JSON.parse(localStr);
-                    activeConfig = Object.assign({}, activeConfig, parsed);
-                }
-            } catch(e) {}
-
-            renderCards(activeConfig);
-        }
-
-        // Listener Realtime Supabase & Remote Broadcast
-        function setupAgendaRealtimeListener() {
-            try {
-                if (typeof SupabaseDB !== 'undefined') {
-                    if (typeof SupabaseDB.subscribeRealtime === 'function') {
-                        SupabaseDB.subscribeRealtime((payload) => {
-                            console.log('[SlideAgendaRutin] Realtime table change detected:', payload);
-                            loadAgendaData();
-                        });
-                    }
-
-                    if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
-                        SupabaseDB.subscribeRemoteCommands((cmd, data) => {
-                            const commandName = typeof cmd === 'string' ? cmd : (cmd?.command || '');
-                            console.log('[SlideAgendaRutin] Remote command received:', commandName, data);
-                            if (commandName === 'SYNC_AGENDA_RUTIN' || commandName === 'UPDATE_SETTINGS' || commandName === 'REFRESH') {
-                                loadAgendaData();
-                            }
-                        });
-                    }
-
-                    if (typeof SupabaseDB.onDataChange === 'function') {
-                        SupabaseDB.onDataChange((payload) => {
-                            const tbl = (payload.table || '').toLowerCase();
-                            if (tbl === 'agenda_rutin' || tbl === 'app_settings' || tbl === 'kajian') {
-                                loadAgendaData();
-                            }
-                        });
-                    }
-                }
-            } catch (e) {
-                console.warn('[SlideAgendaRutin] Realtime setup failed:', e);
-            }
-
-            // Listener postMessage dari window induk (Display TV index.html)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings) {
-                        if (msg.settings.nama_aplikasi) {
-                            const elNama = document.getElementById('nama-masjid');
-                            if (elNama) elNama.textContent = msg.settings.nama_aplikasi;
+                // Cek sinkronisasi data agenda dari localStorage / Supabase
+                const rawAgenda = localStorage.getItem('aljihad_agenda_rutin');
+                if (rawAgenda) {
+                    try {
+                        const parsed = JSON.parse(rawAgenda);
+                        if (parsed.yasin) {
+                            if (parsed.yasin.judul) document.getElementById('titleYasin').textContent = parsed.yasin.judul;
+                            if (parsed.yasin.waktu) document.getElementById('waktuYasin').textContent = parsed.yasin.waktu;
+                            if (parsed.yasin.pembimbing) document.getElementById('mentorYasin').textContent = parsed.yasin.pembimbing;
+                            if (parsed.yasin.lokasi) document.getElementById('lokasiYasin').textContent = parsed.yasin.lokasi;
                         }
-                        if (msg.settings.sub_header) {
-                            const elSub = document.getElementById('sub-header');
-                            if (elSub) elSub.textContent = msg.settings.sub_header;
+                        if (parsed.kajian) {
+                            if (parsed.kajian.judul) document.getElementById('titleKajianAhad').textContent = parsed.kajian.judul;
+                            if (parsed.kajian.waktu) document.getElementById('waktuKajianAhad').textContent = parsed.kajian.waktu;
+                            if (parsed.kajian.pembimbing) document.getElementById('mentorKajianAhad').textContent = parsed.kajian.pembimbing;
                         }
-                    }
-                    loadAgendaData();
-                } else if (msg.type === 'SYNC_AGENDA_RUTIN' || msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.action === 'reload_data' || msg.force_reload) {
-                    console.log('[SlideAgendaRutin] postMessage received from parent TV:', msg);
-                    loadAgendaData();
+                        if (parsed.tahsin) {
+                            if (parsed.tahsin.judul) document.getElementById('titleTahsin').textContent = parsed.tahsin.judul;
+                            if (parsed.tahsin.waktu) document.getElementById('waktuTahsin').textContent = parsed.tahsin.waktu;
+                            if (parsed.tahsin.pembimbing) document.getElementById('mentorTahsin').textContent = parsed.tahsin.pembimbing;
+                        }
+                    } catch(e) {}
                 }
-            });
-        }
 
-        // Listener Realtime Storage (Jika Takmir Update dari Admin Tab Sebelah)
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'agenda_rutin_settings' || e.key === 'cached_kajian_sabtu') {
-                loadAgendaData();
+                applySmartHighlights();
+            } catch (err) {
+                console.warn('Gagal memuat agenda data:', err);
             }
-        });
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             loadAgendaData();
-            setupAgendaRealtimeListener();
+            goToSlide(0);
 
-            // Refresh tiap 30 detik agar jika melewati pergantian hari/pekan otomatis ter-update
-            setInterval(loadAgendaData, 300000); // 5 menit (hemat bandwidth)
+            // Dengarkan postMessage dari parent TV
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'INIT_DISPLAY_DATA' || msg.type === 'DATA_UPDATED') {
+                    loadAgendaData();
+                }
+            });
+
+            // Dengarkan listener realtime universal
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'app_settings' || tbl === 'pengumuman' || tbl === 'agenda_rutin') {
+                        loadAgendaData();
+                    }
+                });
+            }
         });
     </script>
 </body>
-
 </html>

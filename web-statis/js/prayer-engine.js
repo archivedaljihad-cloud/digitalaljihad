@@ -166,7 +166,10 @@
 
         /**
          * Deteksi apakah saat ini sedang dalam Pengajian Rutin Malam Ahad (Kajian Sabtu Malam)
-         * Hari Sabtu malam (day === 6), mulai kajian_sabtu_start_time (default 18:25) sampai menjelang adzan Isya
+         * Hari Sabtu malam (day === 6):
+         * - Mulai: ba'da sholat Maghrib (Maghrib + adzan + iqamah + sholat = dinamis selesai sholat Maghrib)
+         *   atau mengikuti pengaturan manual kajian_sabtu_start_time jika mode manual.
+         * - Selesai: terkunci sampai selesai sholat Isya (Isya + adzan + iqamah + sholat = dinamis selesai sholat Isya).
          */
         isKajianActive(settings, jadwalList, customNow) {
             const now = customNow || new Date();
@@ -183,12 +186,42 @@
             if (!jadwalList || jadwalList.length === 0) return false;
 
             try {
-                // Waktu mulai (default 18:25 atau waktu ba'da sholat Maghrib)
-                const startTimeStr = setting.kajian_sabtu_start_time || '18:25';
-                const [startH, startM] = startTimeStr.split(':');
-                const kajianStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(startH), parseInt(startM), 0);
+                // Durasi sholat dari setting
+                const adzanDuration = parseInt(setting.prayer_mode_adzan_duration) || parseInt(setting.durasi_adzan) || 5;
+                const iqamahDuration = parseInt(setting.prayer_mode_iqamah_duration) || parseInt(setting.durasi_iqamah) || 10;
+                const prayerDuration = parseInt(setting.prayer_mode_duration) || parseInt(setting.durasi_sholat) || 10;
+                const totalPrayerDurationMs = (adzanDuration + iqamahDuration + prayerDuration) * 60 * 1000;
 
-                // Cari jadwal Isya
+                // 1. Waktu Mulai: Otomatis ba'da Sholat Maghrib (Maghrib + Adzan + Iqamah + Sholat Berjamaah)
+                // atau Manual jika diatur oleh petugas
+                let kajianStart = null;
+                const isManualStart = setting.kajian_sabtu_start_mode === 'manual';
+
+                if (isManualStart && setting.kajian_sabtu_start_time) {
+                    const [startH, startM] = setting.kajian_sabtu_start_time.split(':');
+                    kajianStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(startH, 10) || 0, parseInt(startM, 10) || 0, 0);
+                } else {
+                    // Cari jadwal Maghrib hari ini
+                    const maghribItem = jadwalList.find(item => {
+                        if (!item || !item.nama_sholat || !item.waktu) return false;
+                        const clean = item.nama_sholat.toLowerCase().trim();
+                        return clean.includes('maghrib');
+                    });
+
+                    if (maghribItem) {
+                        const [mH, mM, mS] = maghribItem.waktu.split(':');
+                        const maghribAdzan = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(mH, 10) || 0, parseInt(mM, 10) || 0, parseInt(mS || 0, 10) || 0);
+                        // Mulai tepat setelah sholat Maghrib selesai berjamaah
+                        kajianStart = new Date(maghribAdzan.getTime() + totalPrayerDurationMs);
+                    } else {
+                        // Fallback jika tidak ada data jadwal maghrib
+                        const startTimeStr = setting.kajian_sabtu_start_time || '18:15';
+                        const [startH, startM] = startTimeStr.split(':');
+                        kajianStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(startH, 10) || 0, parseInt(startM, 10) || 0, 0);
+                    }
+                }
+
+                // 2. Waktu Selesai: Kunci sampai selesai setingan sholat Isya
                 const isyaItem = jadwalList.find(item => {
                     if (!item || !item.nama_sholat || !item.waktu) return false;
                     const clean = item.nama_sholat.toLowerCase().trim();
@@ -197,13 +230,13 @@
 
                 if (!isyaItem) return false;
 
-                const [isyaH, isyaM] = isyaItem.waktu.split(':');
-                const isyaAdzan = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(isyaH), parseInt(isyaM), 0);
-                const beforeAdzan = parseInt(setting.prayer_mode_before_adzan) || 5;
-                const isyaCountdownStart = new Date(isyaAdzan.getTime() - beforeAdzan * 60 * 1000);
+                const [isyaH, isyaM, isyaS] = isyaItem.waktu.split(':');
+                const isyaAdzan = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(isyaH, 10) || 0, parseInt(isyaM, 10) || 0, parseInt(isyaS || 0, 10) || 0);
+                // Waktu sholat Isya selesai sempurna (Adzan + Iqamah + Sholat Berjamaah)
+                const isyaPrayerEnd = new Date(isyaAdzan.getTime() + totalPrayerDurationMs);
 
-                // Aktif jika jam sekarang sudah >= kajianStart dan < isyaCountdownStart
-                return now >= kajianStart && now < isyaCountdownStart;
+                // Aktif sejak waktu mulai ba'da Maghrib sampai selesai sholat Isya
+                return now >= kajianStart && now < isyaPrayerEnd;
             } catch (err) {
                 console.warn('Gagal evaluasi waktu kajian sabtu:', err);
                 return false;

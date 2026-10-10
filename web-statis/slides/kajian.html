@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengajian Rutin Malam Ahad - Display Masjid</title>
+    <title>Pengajian Rutin Malam Ahad - Display Masjid | Masjid Jami' Al-Jihad</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261010_01">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261010_01">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,12 +29,12 @@
 
         .container {
             width: 100%;
-            max-width: 1680px;
+            max-width: 1720px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: clamp(4px, 1vh, 8px) clamp(12px, 1.5vw, 24px) clamp(50px, 5.5vh, 56px) clamp(12px, 1.5vw, 24px);
+            padding: clamp(6px, 1vh, 10px) clamp(16px, 1.8vw, 32px) clamp(50px, 5.5vh, 60px) clamp(16px, 1.8vw, 32px);
             position: relative;
             z-index: 5;
             box-sizing: border-box;
@@ -44,35 +44,42 @@
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: clamp(2px, 0.5vh, 4px);
+            margin-bottom: clamp(2px, 0.4vh, 4px);
             flex-shrink: 0;
             position: relative;
         }
 
         .header h1, #nama-masjid {
-            font-size: clamp(1.6rem, 2.3vw, 2.35rem) !important;
-            margin: 0 0 -10px 0 !important;
+            font-size: clamp(1.8rem, 2.4vw, 2.4rem) !important;
+            margin: 0 0 -8px 0 !important;
+            font-weight: 900 !important;
+            letter-spacing: 3px;
         }
 
         .header h3.sub-header {
-            font-size: clamp(0.75rem, 1.1vw, 1.05rem) !important;
-            margin-top: clamp(3px, 0.6vh, 6px) !important;
+            font-size: clamp(0.85rem, 1.2vw, 1.1rem) !important;
+            margin-top: clamp(3px, 0.5vh, 5px) !important;
             margin-bottom: clamp(2px, 0.4vh, 4px) !important;
+            letter-spacing: 3px;
         }
 
         .header .datetime {
-            font-size: clamp(0.95rem, 1.3vw, 1.25rem) !important;
-            padding: clamp(2px, 0.4vh, 4px) clamp(14px, 1.5vw, 24px) !important;
+            font-size: clamp(1rem, 1.35vw, 1.28rem) !important;
+            padding: clamp(2px, 0.4vh, 4px) clamp(16px, 1.8vw, 26px) !important;
             margin: 2px auto 0 auto !important;
             display: inline-flex !important;
             align-items: center !important;
             gap: 12px !important;
+            background: rgba(3, 20, 15, 0.75);
+            border: 1.5px solid rgba(255, 215, 0, 0.55);
+            border-radius: 35px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .schedule-header-section {
             text-align: center;
             flex-shrink: 0;
-            margin-top: clamp(2px, 0.5vh, 5px);
+            margin-top: clamp(3px, 0.6vh, 6px);
             display: flex;
             justify-content: center;
             width: 100%;
@@ -82,27 +89,27 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: clamp(8px, 1.2vw, 16px);
-            background: linear-gradient(135deg, rgba(2, 25, 17, 0.9) 0%, rgba(4, 40, 26, 0.85) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.7);
+            gap: clamp(10px, 1.4vw, 18px);
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.92) 0%, rgba(4, 40, 26, 0.88) 100%);
+            border: 1.6px solid rgba(255, 215, 0, 0.75);
             border-radius: 35px;
-            padding: clamp(3px, 0.5vh, 6px) clamp(14px, 1.5vw, 24px);
+            padding: clamp(4px, 0.6vh, 7px) clamp(16px, 1.8vw, 28px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 215, 0, 0.25);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
         .title-icon-badge {
-            width: clamp(32px, 4.2vh, 44px);
-            height: clamp(32px, 4.2vh, 44px);
+            width: clamp(34px, 4.5vh, 46px);
+            height: clamp(34px, 4.5vh, 46px);
             border-radius: 50%;
             background: rgba(3, 22, 15, 0.95);
-            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            border: 1.5px solid rgba(255, 215, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffd700;
-            font-size: clamp(1rem, 1.8vh, 1.35rem);
+            font-size: clamp(1.1rem, 2vh, 1.4rem);
             flex-shrink: 0;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
@@ -115,7 +122,7 @@
         }
 
         .title-text-wrap h2 {
-            font-size: clamp(1.15rem, 1.8vh, 1.5rem);
+            font-size: clamp(1.3rem, 2vh, 1.65rem);
             color: #ffffff !important;
             letter-spacing: 2px;
             font-weight: 800;
@@ -123,44 +130,47 @@
             margin: 0;
             text-transform: uppercase;
             line-height: 1.2;
+            font-family: 'Outfit', 'Poppins', sans-serif;
         }
+
         .title-text-wrap p {
             margin: 0;
-            font-size: clamp(0.72rem, 1.1vh, 0.85rem);
+            font-size: clamp(0.8rem, 1.2vh, 0.95rem);
             color: #ffd700;
             font-weight: 600;
             letter-spacing: 0.8px;
             line-height: 1.25;
         }
+
         .sholawat-greeting {
             font-family: 'Amiri', serif;
-            font-size: clamp(0.85rem, 1.4vh, 1.08rem);
+            font-size: clamp(0.95rem, 1.5vh, 1.18rem);
             color: #fff4b8;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.75);
-            margin-top: 3px;
+            margin-top: 2px;
             letter-spacing: 0.5px;
             line-height: 1.4;
         }
 
-        /* 3-Column Layout */
+        /* 2-COLUMN MAIN LAYOUT (LEGA & MUDAH DIBACA) */
         .kajian-main-layout {
             display: grid;
-            grid-template-columns: minmax(270px, 340px) 1fr minmax(250px, 320px);
-            gap: clamp(10px, 1.3vw, 18px);
+            grid-template-columns: minmax(360px, 440px) 1fr;
+            gap: clamp(16px, 1.8vw, 26px);
             align-items: stretch;
             width: 100%;
             flex: 1;
             min-height: 0;
-            margin: clamp(4px, 0.8vh, 8px) auto 0 auto;
+            margin: clamp(6px, 1vh, 10px) auto 0 auto;
         }
 
-        /* Glassmorphism Cards */
+        /* GLASSMORHPISM CARDS */
         .kajian-card {
-            background: linear-gradient(135deg, rgba(6, 32, 22, 0.9) 0%, rgba(2, 18, 12, 0.94) 100%);
-            border: 1.5px solid rgba(212, 175, 55, 0.55);
-            border-radius: 16px;
-            padding: clamp(10px, 1.5vh, 16px) clamp(12px, 1.3vw, 18px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 238, 170, 0.25);
+            background: linear-gradient(135deg, rgba(6, 32, 22, 0.92) 0%, rgba(2, 18, 12, 0.96) 100%);
+            border: 1.8px solid rgba(212, 175, 55, 0.6);
+            border-radius: 20px;
+            padding: clamp(14px, 1.8vh, 22px) clamp(16px, 1.8vw, 24px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 238, 170, 0.25);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             display: flex;
@@ -175,333 +185,281 @@
         .kajian-card::before {
             content: '';
             position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+            top: -60px;
+            right: -60px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.18) 0%, transparent 70%);
             pointer-events: none;
         }
 
-        /* Kolom Kiri: Pemateri / Ustadz */
+        /* KOLOM KIRI: PROFIL PEMATERI */
         .ustadz-photo-container {
             width: 100%;
-            height: clamp(95px, 17vh, 165px);
-            border-radius: 12px;
+            height: clamp(130px, 20vh, 190px);
+            border-radius: 16px;
             overflow: hidden;
-            border: 2px solid rgba(255, 215, 0, 0.65);
+            border: 2px solid rgba(255, 215, 0, 0.75);
             position: relative;
             background: #02130c;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.6);
-            margin-bottom: clamp(6px, 1vh, 10px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.7);
+            margin-bottom: clamp(10px, 1.4vh, 14px);
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
         .ustadz-photo {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            object-position: top center;
-            transition: transform 0.5s ease;
-        }
-        .ustadz-badge-floating {
-            position: absolute;
-            bottom: clamp(4px, 0.8vh, 8px);
-            left: 8px;
-            right: 8px;
-            background: rgba(2, 20, 13, 0.94);
-            border: 1px solid #ffd700;
-            padding: clamp(3px, 0.5vh, 5px) 8px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .ustadz-badge-role {
-            font-size: clamp(0.68rem, 1vh, 0.75rem);
-            color: #ffd700;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            display: block;
-        }
-        .ustadz-name-title {
-            font-size: clamp(1.05rem, 1.8vh, 1.25rem);
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: clamp(2px, 0.4vh, 4px);
-            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
-        }
-        .ustadz-spec {
-            font-size: clamp(0.72rem, 1.1vh, 0.82rem);
-            color: #86efac;
-            font-weight: 500;
-            margin-bottom: clamp(6px, 1vh, 10px);
-            line-height: 1.25;
-        }
-        .waktu-kajian-pill {
-            background: rgba(16, 185, 129, 0.18);
-            border: 1px solid rgba(16, 185, 129, 0.45);
-            border-radius: 10px;
-            padding: clamp(6px, 1vh, 9px) clamp(8px, 1vw, 12px);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-            margin-top: auto;
-        }
-        .waktu-kajian-pill i {
-            font-size: clamp(1.1rem, 1.8vh, 1.3rem);
-            flex-shrink: 0;
-        }
-        .waktu-kajian-pill .waktu-label {
-            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
-            color: #94a3b8;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            line-height: 1.1;
-        }
-        .waktu-kajian-pill .waktu-val {
-            font-size: clamp(0.78rem, 1.3vh, 0.92rem);
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.2;
+            object-fit: contain;
+            background: linear-gradient(180deg, #022015 0%, #01140d 100%);
         }
 
-        /* Kolom Tengah: Kitab & Tema */
+        .ustadz-badge-floating {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(217, 119, 6, 0.95));
+            color: #021a11;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: clamp(0.72rem, 1.1vh, 0.85rem);
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            white-space: nowrap;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .ustadz-name-title {
+            font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+            font-weight: 800;
+            color: #ffd700;
+            line-height: 1.2;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            margin-bottom: 4px;
+            font-family: 'Outfit', 'Poppins', sans-serif;
+        }
+
+        .ustadz-spec {
+            font-size: clamp(0.85rem, 1.25vh, 1.05rem);
+            color: #e2e8f0;
+            text-align: center;
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: clamp(8px, 1.2vh, 12px);
+        }
+
+        .waktu-kajian-pill {
+            background: linear-gradient(135deg, rgba(2, 38, 24, 0.9) 0%, rgba(1, 24, 15, 0.95) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.55);
+            border-radius: 14px;
+            padding: clamp(8px, 1.3vh, 12px) clamp(12px, 1.3vw, 16px);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+            margin-top: auto;
+        }
+
+        .waktu-kajian-pill i {
+            font-size: clamp(1.4rem, 2.2vh, 1.8rem);
+            color: #ffd700;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
+        }
+
+        .waktu-kajian-pill .waktu-label {
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            line-height: 1.1;
+        }
+
+        .waktu-kajian-pill .waktu-val {
+            font-size: clamp(0.95rem, 1.5vh, 1.18rem);
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+        }
+
+        /* KOLOM KANAN: KITAB, TEMA & HADITS */
         .tema-badge-wrap {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: clamp(4px, 0.8vh, 8px);
+            margin-bottom: clamp(6px, 1vh, 10px);
             flex-shrink: 0;
         }
+
         .pekan-badge {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: #ffffff;
-            font-size: clamp(0.7rem, 1.1vh, 0.8rem);
+            font-size: clamp(0.82rem, 1.25vh, 0.98rem);
             font-weight: 800;
-            padding: 3px 10px;
+            padding: 4px 14px;
             border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.45);
+            font-family: 'Outfit', sans-serif;
         }
+
         .live-status-badge {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.6);
-            color: #fca5a5;
-            font-size: clamp(0.68rem, 1vh, 0.76rem);
+            background: rgba(239, 68, 68, 0.25);
+            border: 1.2px solid rgba(239, 68, 68, 0.7);
+            color: #fecaca;
+            font-size: clamp(0.75rem, 1.15vh, 0.88rem);
             font-weight: 700;
-            padding: 3px 8px;
+            padding: 4px 12px;
             border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
+
         .live-dot {
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #ef4444;
-            box-shadow: 0 0 8px #ef4444;
+            box-shadow: 0 0 10px #ef4444;
             animation: blinkLive 1.5s infinite;
         }
+
         @keyframes blinkLive {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
 
         .kitab-box {
-            background: rgba(0, 0, 0, 0.35);
-            border: 1.5px solid rgba(255, 215, 0, 0.4);
-            border-radius: 12px;
-            padding: clamp(6px, 1vh, 9px) clamp(10px, 1vw, 14px);
-            margin-bottom: clamp(5px, 0.8vh, 8px);
+            background: rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            border-radius: 14px;
+            padding: clamp(8px, 1.2vh, 12px) clamp(12px, 1.3vw, 18px);
+            margin-bottom: clamp(8px, 1.1vh, 12px);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
+
         .kitab-icon {
-            font-size: clamp(1.3rem, 2.2vh, 1.65rem);
+            font-size: clamp(1.6rem, 2.5vh, 2rem);
             color: #ffd700;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
             flex-shrink: 0;
         }
+
         .kitab-label {
-            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
             color: #cbd5e1;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            font-weight: 600;
+            font-weight: 700;
             line-height: 1.1;
         }
+
         .kitab-title {
-            font-size: clamp(0.95rem, 1.6vh, 1.18rem);
+            font-size: clamp(1.2rem, 1.9vh, 1.48rem);
             font-weight: 800;
             color: #ffd700;
-            line-height: 1.2;
+            line-height: 1.25;
+            font-family: 'Outfit', 'Poppins', sans-serif;
         }
 
         .tema-box {
-            background: rgba(2, 28, 18, 0.7);
-            border-left: 4px solid #10b981;
-            border-radius: 0 12px 12px 0;
-            padding: clamp(6px, 1.1vh, 10px) clamp(10px, 1vw, 14px);
-            margin-bottom: clamp(5px, 0.8vh, 8px);
+            background: linear-gradient(135deg, rgba(2, 38, 24, 0.85) 0%, rgba(1, 24, 15, 0.95) 100%);
+            border-left: 5px solid #10b981;
+            border-radius: 0 14px 14px 0;
+            padding: clamp(8px, 1.3vh, 14px) clamp(14px, 1.4vw, 20px);
+            margin-bottom: clamp(10px, 1.3vh, 14px);
             flex-shrink: 0;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
         }
+
         .tema-label {
-            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
             color: #86efac;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            font-weight: 700;
-            margin-bottom: 2px;
+            font-weight: 800;
+            margin-bottom: 3px;
             line-height: 1.1;
         }
+
         .tema-title {
-            font-size: clamp(0.95rem, 1.7vh, 1.25rem);
+            font-size: clamp(1.25rem, 2.1vh, 1.6rem);
             font-weight: 800;
             color: #ffffff;
-            line-height: 1.25;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+            line-height: 1.28;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+            font-family: 'Outfit', 'Poppins', sans-serif;
         }
 
         .hadits-box {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px dashed rgba(255, 215, 0, 0.45);
-            border-radius: 12px;
-            padding: clamp(6px, 1vh, 10px) clamp(10px, 1vw, 14px);
+            background: rgba(0, 0, 0, 0.45);
+            border: 1.5px dashed rgba(255, 215, 0, 0.5);
+            border-radius: 16px;
+            padding: clamp(10px, 1.5vh, 18px) clamp(14px, 1.5vw, 22px);
             flex: 1;
             min-height: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
         }
+
         .hadits-arab {
             font-family: 'Amiri', serif;
-            font-size: clamp(0.95rem, 1.6vh, 1.18rem);
+            font-size: clamp(1.45rem, 2.5vh, 1.95rem);
             color: #fff4b8;
+            line-height: 1.75;
             text-align: right;
             direction: rtl;
-            line-height: 1.45;
-            margin-bottom: 3px;
-        }
-        .hadits-arti {
-            font-size: clamp(0.68rem, 1.1vh, 0.82rem);
-            color: #e2e8f0;
-            line-height: 1.3;
-            font-style: italic;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .hadits-riwayat {
-            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
-            color: #ffd700;
-            font-weight: 700;
-            text-align: right;
-            margin-top: 2px;
-        }
-
-        /* Kolom Kanan: Tanya Jawab QR & Countdown Isya */
-        .countdown-isya-box {
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(153, 27, 27, 0.3) 100%);
-            border: 1.5px solid rgba(248, 113, 113, 0.6);
-            border-radius: 12px;
-            padding: clamp(6px, 1vh, 10px);
-            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.75);
             margin-bottom: clamp(6px, 1vh, 10px);
-            flex-shrink: 0;
-        }
-        .cd-label {
-            font-size: clamp(0.68rem, 1vh, 0.75rem);
-            color: #fca5a5;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 2px;
-        }
-        .cd-time {
-            font-size: clamp(1.4rem, 2.4vh, 1.95rem);
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: 2px;
-            font-family: monospace;
-            text-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
-            line-height: 1;
-        }
-        .cd-sub {
-            font-size: clamp(0.65rem, 0.95vh, 0.72rem);
-            color: #e2e8f0;
-            margin-top: 2px;
         }
 
-        .qa-card-box {
-            background: rgba(0, 0, 0, 0.45);
-            border: 1.5px solid rgba(255, 215, 0, 0.5);
-            border-radius: 12px;
-            padding: clamp(6px, 1.2vh, 12px);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            min-height: 0;
+        .hadits-arti {
+            font-size: clamp(0.92rem, 1.45vh, 1.12rem);
+            color: #e2e8f0;
+            line-height: 1.45;
+            font-style: italic;
+            text-align: left;
+            border-left: 3px solid #ffd700;
+            padding-left: 12px;
+            margin-bottom: clamp(4px, 0.8vh, 8px);
         }
-        .qa-badge {
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid rgba(255, 215, 0, 0.5);
+
+        .hadits-riwayat {
+            font-size: clamp(0.82rem, 1.2vh, 0.98rem);
             color: #ffd700;
-            font-size: clamp(0.65rem, 1vh, 0.72rem);
             font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: clamp(3px, 0.6vh, 6px);
-        }
-        .qa-qr-img {
-            width: clamp(68px, 10.5vh, 100px);
-            height: clamp(68px, 10.5vh, 100px);
-            background: #ffffff;
-            padding: 4px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-            margin-bottom: clamp(3px, 0.6vh, 6px);
-        }
-        .qa-instruction {
-            font-size: clamp(0.7rem, 1.1vh, 0.8rem);
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: 2px;
-        }
-        .qa-subtext {
-            font-size: clamp(0.62rem, 0.92vh, 0.68rem);
-            color: #cbd5e1;
-            line-height: 1.2;
+            text-align: right;
+            letter-spacing: 0.5px;
         }
 
         /* TIMELINE STRIP 1 BULAN PENUH (PEKAN 1 - 5) */
         .kajian-timeline-container {
             width: 100%;
             background: linear-gradient(135deg, rgba(2, 24, 16, 0.95) 0%, rgba(1, 15, 10, 0.98) 100%);
-            border: 1.5px solid rgba(212, 175, 55, 0.65);
-            border-radius: 14px;
-            padding: clamp(3px, 0.7vh, 7px) clamp(8px, 1.2vw, 14px) clamp(4px, 0.8vh, 7px) clamp(8px, 1.2vw, 14px);
+            border: 1.6px solid rgba(212, 175, 55, 0.65);
+            border-radius: 16px;
+            padding: clamp(4px, 0.8vh, 8px) clamp(10px, 1.4vw, 18px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255, 238, 170, 0.25);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            margin-top: clamp(4px, 0.7vh, 7px);
+            margin-top: clamp(6px, 0.9vh, 10px);
             flex-shrink: 0;
             position: relative;
         }
@@ -510,26 +468,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: clamp(2px, 0.4vh, 4px);
+            margin-bottom: clamp(3px, 0.5vh, 5px);
         }
+
         .timeline-title {
-            font-size: clamp(0.68rem, 1vh, 0.8rem);
+            font-size: clamp(0.82rem, 1.2vh, 0.98rem);
             font-weight: 800;
             color: #ffd700;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
         }
+
         .timeline-subtext {
-            font-size: clamp(0.62rem, 0.9vh, 0.7rem);
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
             color: #94a3b8;
         }
+
         .rotator-pill {
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid rgba(16, 185, 129, 0.5);
+            background: rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(16, 185, 129, 0.6);
             color: #86efac;
-            font-size: clamp(0.62rem, 0.9vh, 0.68rem);
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
             font-weight: 700;
-            padding: 1px 8px;
+            padding: 2px 10px;
             border-radius: 20px;
             display: inline-flex;
             align-items: center;
@@ -538,14 +500,14 @@
         .timeline-cards-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: clamp(4px, 0.8vw, 8px);
+            gap: clamp(6px, 1vw, 12px);
         }
 
         .timeline-mini-card {
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 215, 0, 0.25);
-            border-radius: 8px;
-            padding: clamp(3px, 0.5vh, 5px) clamp(5px, 0.7vw, 8px);
+            background: rgba(0, 0, 0, 0.5);
+            border: 1.2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: clamp(5px, 0.8vh, 8px) clamp(8px, 1vw, 12px);
             cursor: pointer;
             transition: all 0.35s ease;
             position: relative;
@@ -553,18 +515,18 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: clamp(46px, 7.5vh, 64px);
+            min-height: clamp(58px, 8.5vh, 76px);
         }
 
         .timeline-mini-card:hover {
-            border-color: rgba(255, 215, 0, 0.7);
-            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(255, 215, 0, 0.8);
+            background: rgba(16, 185, 129, 0.2);
         }
 
         .timeline-mini-card.active-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(6, 78, 59, 0.5) 100%);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.4) 0%, rgba(6, 78, 59, 0.6) 100%);
             border: 2px solid #ffd700;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), inset 0 0 10px rgba(255, 215, 0, 0.2);
             transform: translateY(-2px);
         }
 
@@ -572,60 +534,70 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1px;
+            margin-bottom: 2px;
         }
+
         .timeline-pekan-badge {
-            font-size: clamp(0.58rem, 0.85vh, 0.66rem);
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
             font-weight: 800;
             color: #ffd700;
             text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
         }
+
         .timeline-date-text {
-            font-size: clamp(0.6rem, 0.88vh, 0.68rem);
+            font-size: clamp(0.74rem, 1.05vh, 0.84rem);
             font-weight: 700;
             color: #ffffff;
         }
+
         .timeline-ustadz-text {
-            font-size: clamp(0.62rem, 0.92vh, 0.72rem);
+            font-size: clamp(0.82rem, 1.25vh, 0.98rem);
             font-weight: 700;
             color: #ffffff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            line-height: 1.15;
+            line-height: 1.2;
         }
+
         .timeline-tema-text {
-            font-size: clamp(0.56rem, 0.82vh, 0.64rem);
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
             color: #cbd5e1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            line-height: 1.15;
+            line-height: 1.2;
         }
+
         .timeline-status-pill {
-            font-size: clamp(0.52rem, 0.75vh, 0.58rem);
+            font-size: clamp(0.65rem, 0.9vh, 0.74rem);
             font-weight: 700;
-            padding: 1px 4px;
+            padding: 2px 6px;
             border-radius: 6px;
             display: inline-block;
-            margin-top: 1px;
+            margin-top: 2px;
             align-self: flex-start;
         }
+
         .status-pill-live {
             background: #dc2626;
             color: #ffffff;
             animation: blinkLive 1.5s infinite;
         }
+
         .status-pill-next {
             background: #d97706;
             color: #ffffff;
         }
+
         .status-pill-done {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.18);
             color: #94a3b8;
         }
+
         .status-pill-future {
-            background: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.35);
             color: #a7f3d0;
         }
 
@@ -634,9 +606,10 @@
             height: 3px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
-            margin-top: clamp(2px, 0.4vh, 4px);
+            margin-top: clamp(3px, 0.5vh, 5px);
             overflow: hidden;
         }
+
         .timeline-progress-fill {
             height: 100%;
             width: 0%;
@@ -645,37 +618,51 @@
         }
 
         .fade-card-transition {
-            opacity: 0.2;
-            transform: scale(0.985);
+            opacity: 0.25;
+            transform: scale(0.988);
         }
 
-        @media (max-width: 1200px) {
-            .kajian-main-layout {
-                grid-template-columns: minmax(240px, 280px) 1fr minmax(230px, 260px);
-                gap: 12px;
-            }
+        /* RUNNING TEKS MARQUEE BAWAH */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.92);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.45);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
         }
 
-        @media (max-height: 700px) {
-            .timeline-subtext {
-                display: none;
-            }
-            .timeline-mini-card {
-                min-height: 42px;
-                padding: 2px 4px;
-            }
-            .timeline-tema-text {
-                display: none;
-            }
-            .ustadz-photo-container {
-                height: 90px;
-            }
+        .running-badge {
+            background: linear-gradient(135deg, #ffd700, #f59e0b);
+            color: #021a11;
+            font-weight: 900;
+            font-size: 1rem;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+            font-family: 'Outfit', sans-serif;
         }
 
-        @media (max-height: 560px) {
-            .kajian-timeline-container {
-                display: none;
-            }
+        .running-text-container { flex: 1; padding: 7px 18px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 72s linear infinite;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
         }
     </style>
 </head>
@@ -711,7 +698,7 @@
             </div>
         </div>
 
-        <!-- 3-COLUMN MAIN CONTENT -->
+        <!-- 2-COLUMN MAIN CONTENT (LUAS, JELAS, & MEWAH) -->
         <div class="kajian-main-layout" id="kajianMainLayout">
             <!-- KOLOM 1: PROFIL PEMATERI -->
             <div class="kajian-card" id="cardKolom1">
@@ -723,19 +710,19 @@
                         </div>
                     </div>
                     <div class="ustadz-name-title" id="valUstadzName">-</div>
-                    <div class="ustadz-spec" id="valUstadzSpec">Majelis Ta'lim & Kajian Rutin</div>
+                    <div class="ustadz-spec" id="valUstadzSpec">Majelis Ta'lim &amp; Kajian Rutin</div>
                 </div>
 
                 <div class="waktu-kajian-pill">
                     <i class="fas fa-clock text-warning"></i>
                     <div>
-                        <div class="waktu-label">Waktu Pelaksanaan</div>
-                        <div class="waktu-val" id="valWaktuPelaksanaan">Ba'da Sholat Maghrib s/d Isya</div>
+                        <div class="waktu-label">WAKTU PELAKSANAAN</div>
+                        <div class="waktu-val" id="valWaktuPelaksanaan">Ba'da Sholat Maghrib s/d Menjelang Isya</div>
                     </div>
                 </div>
             </div>
 
-            <!-- KOLOM 2: KITAB & TEMA PEKAN INI -->
+            <!-- KOLOM 2: KITAB, TEMA & HADITS PEKAN INI -->
             <div class="kajian-card" id="cardKolom2">
                 <div>
                     <div class="tema-badge-wrap">
@@ -761,29 +748,8 @@
 
                 <div class="hadits-box">
                     <div class="hadits-arab">مَا اجْتَمَعَ قَوْمٌ فِي بَيْتٍ مِنْ بُيُوتِ اللَّهِ يَتْلُونَ كِتَابَ اللَّهِ وَيَتَدَارَسُونَهُ بَيْنَهُمْ إِلَّا نَزَلَتْ عَلَيْهِمُ السَّكِينَةُ</div>
-                    <div class="hadits-arti">"Tidaklah suatu kaum berkumpul di salah satu rumah Allah membaca kitab-Nya dan saling mempelajarinya, melainkan turun kepada mereka sakinah (ketenteraman) dan dinaungi para malaikat."</div>
+                    <div class="hadits-arti">"Tidaklah suatu kaum berkumpul di salah satu rumah Allah membaca kitab-Nya dan saling mempelajarinya, melainkan turun kepada mereka ketenteraman (sakinah) dan dinaungi para malaikat."</div>
                     <div class="hadits-riwayat">HR. Muslim no. 2699</div>
-                </div>
-            </div>
-
-            <!-- KOLOM 3: COUNTDOWN ISYA & TANYA JAWAB QR -->
-            <div class="kajian-card" id="cardKolom3">
-                <!-- Countdown Isya -->
-                <div class="countdown-isya-box">
-                    <div class="cd-label">
-                        <i class="fas fa-hourglass-half"></i> Menuju Adzan Isya
-                    </div>
-                    <div class="cd-time" id="countdownIsyaDisplay">--:--:--</div>
-                    <div class="cd-sub" id="waktuIsyaLabel">Waktu Isya: 19:00 WIB</div>
-                </div>
-
-                <!-- Tanya Jawab QR Code -->
-                <div class="qa-card-box">
-                    <span class="qa-badge"><i class="fas fa-qrcode mr-1"></i> Tanya Jawab Digital</span>
-                    <!-- QR Code SVG Dinamis -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fdigitalaljihad.my.id%2Fkajian%23tanya" class="qa-qr-img" alt="QR Code Tanya Jawab" onerror="this.style.display='none'">
-                    <div class="qa-instruction">Scan untuk Mengajukan Pertanyaan</div>
-                    <div class="qa-subtext">Khusus jamaah yang ingin bertanya tanpa mikrofon (pertanyaan dibacakan moderator).</div>
                 </div>
             </div>
         </div>
@@ -808,17 +774,17 @@
         </div>
     </div>
 
-    <!-- RUNNING TEKS MARQUEE BAWAH (PROFESIONAL TV TICKER) -->
+    <!-- RUNNING TEKS MARQUEE BAWAH -->
     <div class="bottom-running-wrap">
         <div class="running-badge"><i class="fas fa-graduation-cap"></i> KAJIAN ILMU</div>
         <div class="running-text-container">
             <div class="running-text" id="runningText">
-                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">📚 Kajian Rutin Malam Ahad Ba'da Maghrib Masjid Jami' Al-Jihad • "Barangsiapa menempuh jalan mencari ilmu, Allah mudahkan jalannya menuju surga." (HR. Muslim) • Terbuka untuk umum jamaah ikhwan & akhwat</span>
+                <i class="fas fa-bullhorn"></i> <span id="runningTextContent">📚 Kajian Rutin Malam Ahad Ba'da Maghrib Masjid Jami' Al-Jihad • "Barangsiapa menempuh jalan mencari ilmu, Allah mudahkan jalannya menuju surga." (HR. Muslim) • Terbuka untuk umum jamaah ikhwan &amp; akhwat</span>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT JAM, COUNTDOWN ISYA & SUPABASE INTEGRATION -->
+    <!-- SCRIPT JAM & SUPABASE INTEGRATION -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="../js/supabase-db.js"></script>
@@ -831,10 +797,10 @@
 
         // Default Data Kajian Malam Ahad
         const DEFAULT_KAJIAN = {
-            ustadz_nama: "",
-            ustadz_gelar: "",
-            kitab_rujukan: "",
-            tema_kajian: "",
+            ustadz_nama: "K.H Iskandar Najib, M.Pd.I.",
+            ustadz_gelar: "Asatidz Masjid Jami' Al-Jihad",
+            kitab_rujukan: "Kitab Irsyadul 'Ibad karya Syaikh Zainuddin Al-Malibary",
+            tema_kajian: "Kajian Fiqih Ibadah & Muamalah Tematik",
             pekan_label: "Pekan 1",
             waktu_pelaksanaan: "Ba'da Sholat Maghrib s/d Menjelang Isya",
             tanggal: ""
@@ -866,36 +832,11 @@
 
             const dtEl = document.getElementById('datetime');
             if (dtEl) {
-                dtEl.innerHTML = `<span class="date">${dayName}, ${date} ${monthName} ${year}</span> <span class="time">${h}:${m}:${s} WIB</span>`;
+                dtEl.innerHTML = `<span class="date">${dayName}, ${date} ${monthName} ${year}</span> &nbsp;•&nbsp; <span class="time">${h}:${m}:${s} WIB</span>`;
             }
         }
         setInterval(updateDateTime, 1000);
         updateDateTime();
-
-        // Hitung Mundur Menuju Isya
-        let targetIsyaTime = null;
-        function updateCountdownIsya() {
-            const cdEl = document.getElementById('countdownIsyaDisplay');
-            if (!cdEl) return;
-
-            const now = new Date();
-            if (!targetIsyaTime) {
-                targetIsyaTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
-            }
-
-            const diff = targetIsyaTime - now;
-            if (diff > 0) {
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                const hStr = hours > 0 ? String(hours).padStart(2, '0') + ':' : '';
-                cdEl.textContent = `${hStr}${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            } else {
-                cdEl.textContent = "00:00:00";
-            }
-        }
-        setInterval(updateCountdownIsya, 1000);
 
         function formatTanggalShort(dateStr) {
             if (!dateStr) return '-';
@@ -905,22 +846,6 @@
                     const m = parseInt(parts[1]) - 1;
                     const d = parseInt(parts[2]);
                     return `${d} ${SHORT_BULAN_INDONESIA[m] || ''}`;
-                }
-            } catch (e) {}
-            return dateStr;
-        }
-
-        function formatTanggalIndoFull(dateStr) {
-            if (!dateStr) return '';
-            try {
-                const parts = dateStr.split('-');
-                if (parts.length === 3) {
-                    const y = parseInt(parts[0]);
-                    const m = parseInt(parts[1]) - 1;
-                    const d = parseInt(parts[2]);
-                    const dObj = new Date(y, m, d);
-                    const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
-                    return `${days[dObj.getDay()]}, ${d} ${NAMA_BULAN_INDONESIA[m]} ${y}`;
                 }
             } catch (e) {}
             return dateStr;
@@ -977,7 +902,7 @@
             grid.innerHTML = html;
         }
 
-        // Tampilkan data pekan terpilih ke 3 kartu utama
+        // Tampilkan data pekan terpilih ke 2 kartu utama
         function displayKajianItem(index, withTransition = true) {
             if (!currentJadwalList[index]) return;
             const d = currentJadwalList[index];
@@ -997,7 +922,7 @@
                     document.getElementById('valUstadzSpec').textContent = d.ustadz_gelar || 'Majelis Ta\'lim & Kajian Rutin';
                 }
                 if (document.getElementById('valWaktuPelaksanaan')) {
-                    document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Isya";
+                    document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Menjelang Isya";
                 }
 
                 // Update teks kartu kitab & tema
@@ -1104,10 +1029,9 @@
             if (fillEl) fillEl.style.width = '0%';
         }
 
-        // Ambil Data Kajian & Jadwal Isya dari Supabase / Parent TV Memory
+        // Ambil Data Kajian dari Supabase / Parent TV Memory
         async function loadKajianData() {
             try {
-                // 1. Ambil setting aplikasi & kajian (Bridge dari Parent Memory jika ada)
                 let settings = null;
                 try {
                     if (window.parent && window.parent !== window && window.parent.settings) {
@@ -1125,7 +1049,6 @@
                         if (namaEl) namaEl.textContent = settings.nama_aplikasi;
                     }
 
-                    // Teks Berjalan Layar Kajian
                     const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
                         ? SupabaseDB.getRunningTextForPage('/kajian-embed', settings)
                         : (settings.running_text || '');
@@ -1149,7 +1072,6 @@
                         if (kData.jadwal_list && Array.isArray(kData.jadwal_list) && kData.jadwal_list.length > 0) {
                             currentJadwalList = kData.jadwal_list;
                         } else {
-                            // Single fallback data
                             currentJadwalList = [Object.assign({}, DEFAULT_KAJIAN, kData)];
                         }
                     } else {
@@ -1159,7 +1081,6 @@
                     currentJadwalList = [DEFAULT_KAJIAN];
                 }
 
-                // 2. Deteksi tanggal hari ini & jadwal terdekat
                 const now = new Date();
                 isTodaySaturday = (now.getDay() === 6);
                 const y = now.getFullYear();
@@ -1179,7 +1100,6 @@
                     }
                 });
 
-                // Pilih index awal: Hari H jika Sabtu, atau jadwal terdekat berikutnya
                 if (isTodaySaturday && todaySaturdayIndex !== -1) {
                     activeJadwalIndex = todaySaturdayIndex;
                 } else if (nextUpcomingIndex !== -1) {
@@ -1191,18 +1111,6 @@
                 renderTimelineCards();
                 displayKajianItem(activeJadwalIndex, false);
                 startAutoRotation();
-
-                // 3. Ambil jadwal Isya untuk countdown
-                const jadwalList = await SupabaseDB.getJadwalSholat();
-                if (jadwalList && jadwalList.length > 0) {
-                    const isya = jadwalList.find(j => j.nama_sholat && j.nama_sholat.toLowerCase().includes('isya'));
-                    if (isya && isya.waktu) {
-                        const [h, min, s] = isya.waktu.split(':');
-                        targetIsyaTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(h), parseInt(min), parseInt(s || 0));
-                        const labelEl = document.getElementById('waktuIsyaLabel');
-                        if (labelEl) labelEl.textContent = `Waktu Isya: ${isya.waktu.substring(0, 5)} WIB`;
-                    }
-                }
             } catch (err) {
                 console.warn('Gagal memuat data kajian online:', err);
                 currentJadwalList = [DEFAULT_KAJIAN];
@@ -1211,30 +1119,24 @@
             }
         }
 
-        // Setup Realtime Subscription untuk update instan di layar TV saat admin menyimpan jadwal baru
         function setupKajianRealtimeListener() {
             try {
                 if (typeof SupabaseDB !== 'undefined') {
-                    // 1. Dengarkan Postgres Realtime Changes pada tabel app_settings
                     if (typeof SupabaseDB.subscribeRealtime === 'function') {
                         SupabaseDB.subscribeRealtime((payload) => {
-                            console.log('[SlideKajian] Realtime table change detected:', payload);
                             loadKajianData();
                         });
                     }
 
-                    // 2. Dengarkan Remote Commands Broadcast (SYNC_KAJIAN, UPDATE_SETTINGS, REFRESH)
                     if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
                         SupabaseDB.subscribeRemoteCommands((cmd, data) => {
                             const commandName = typeof cmd === 'string' ? cmd : (cmd?.command || '');
-                            console.log('[SlideKajian] Remote command received:', commandName, data);
                             if (commandName === 'SYNC_KAJIAN' || commandName === 'UPDATE_SETTINGS' || commandName === 'REFRESH') {
                                 loadKajianData();
                             }
                         });
                     }
 
-                    // 3. Dengarkan Universal onDataChange
                     if (typeof SupabaseDB.onDataChange === 'function') {
                         SupabaseDB.onDataChange((payload) => {
                             const tbl = (payload.table || '').toLowerCase();
@@ -1248,7 +1150,6 @@
                 console.warn('[SlideKajian] Realtime setup failed:', e);
             }
 
-            // 4. Dengarkan postMessage dari parent window (Display TV index.html)
             window.addEventListener('message', (event) => {
                 const msg = event.data;
                 if (!msg) return;
@@ -1259,7 +1160,6 @@
                     }
                     loadKajianData();
                 } else if (msg.type === 'SYNC_KAJIAN' || msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.action === 'reload_data' || msg.force_reload) {
-                    console.log('[SlideKajian] postMessage received from parent TV:', msg);
                     loadKajianData();
                 }
             });

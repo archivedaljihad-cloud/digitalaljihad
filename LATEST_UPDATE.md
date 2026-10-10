@@ -4,7 +4,55 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 22:50 WIB)
+## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 23:45 WIB)
+
+### 🕌 REDESAIN SHOWCASE "AGENDA RUTIN" (MULTI-SLIDE ROTASI), RELAYOUT MEGAH "PENGAJIAN RUTIN MALAM AHAD" & PENGUNCIAN OTOMATIS SABTU SORE BA'DA MAGHRIB S/D ISYA (Versi SW v5.8.28):
+1. **Ringkasan Permintaan Pengguna:**
+   - **Gambar 1 (`slides/pengumuman.html` & Panel Admin):**
+     - Ganti judul header dan label menu sidebar dari "KAJIAN & INFORMASI KEGIATAN" / "Pengumuman DKM" menjadi **"AGENDA RUTIN"**.
+     - Ubah tampilan menjadi slide showcase (seperti di galeri) dengan sistem 2 kotak/card per slide:
+       - **Slide 1:** Pembacaan Surat Yaasiin & Tahlil (Malam Jum'at) dan Pengajian Rutin Malam Ahad (Malam Ahad / Sabtu Malam).
+       - **Slide 2:** Bimbingan Tahsin Al-Qur'an (Senin, Rabu, Sabtu) dan Kajian Umum Tafsir Al-Qur'an (Ahad Subuh).
+     - Meminta saran/ide desain yang lebih baik agar mudah terbaca oleh jamaah di layar TV.
+   - **Gambar 2 (`slides/kajian.html`):**
+     - Tampilan teks di TV terlalu kecil dan sulit dibaca oleh jamaah.
+     - Hilangkan kotak countdown Isya dan QR Code Tanya Jawab di samping paling kanan karena tidak diperlukan.
+     - Relayout tata letak agar tulisan dan hadits terlihat jelas dan berwibawa dari kejauhan.
+     - Kunci penayangan slide kajian pada hari H (Sabtu sore setelah sholat Maghrib) agar tidak berotasi ke slide lain sampai setelah selesai sholat Isya.
+
+2. **Solusi & Inovasi Desain yang Diimplementasikan:**
+   - **Inovasi Showcase 2-Card Multi-Slide "AGENDA RUTIN" (`slides/pengumuman.html` & `slides/agenda-rutin.html`):**
+     - Alih-alih memadatkan 4 agenda dalam 1 layar kecil (yang membuat teks rapat dan sulit dibaca jamaah lansia), kami menerapkan **2-Card Multi-Slide Carousel Deck** dengan durasi pergantian otomatis 11 detik.
+     - Setiap kartu memiliki tinggi lega (~440px), tipografi judul tebal 24-26px, aksen kaligrafi/ikon 3D Islami, pill badge waktu pelaksanaan emas bersinar, dan deskripsi materi/kitab yang nyaman dibaca dari jarak 5–10 meter di masjid.
+     - **Smart Auto-Highlight Glow:** Sistem secara cerdas mendeteksi hari saat ini (Kamis -> Aura hijau emas "MALAM INI" pada Yaasiin; Sabtu -> Aura emas "MALAM INI" pada Kajian Malam Ahad; Senin/Rabu/Sabtu -> Highlight pada Tahsin; Ahad -> Highlight pada Tafsir).
+     - **Progress Indicator & Realtime Listener:** Dilengkapi dot indicator interaktif dan listener Supabase Realtime universal (`kegiatan_rutin_settings`) sehingga pembaruan dari Admin/HP langsung berganti seketika di TV tanpa refresh.
+   - **Relayout Megah & Tipografi Skala Besar "PENGAJIAN RUTIN MALAM AHAD" (`slides/kajian.html`):**
+     - Kotak kanan (Countdown Isya & Tanya Jawab QR Code) **dihilangkan total** sesuai permintaan.
+     - Area tampilan diperluas menjadi **Grid 2 Kolom Proporsional & Lega**:
+       - **Kolom Kiri (38% Lebar):** Foto Pemateri/Asatidz besar dalam bingkai arch kubah masjid bercahaya emas, badge pemateri tebal, nama Ustadz dengan font Poppins 900 (32-36px), gelar akademik, serta pill waktu pelaksanaan.
+       - **Kolom Kanan (62% Lebar):** Box Kitab Rujukan & Tema Kajian bertulisan besar (28-32px), diikuti Hadits Keutamaan Menuntut Ilmu dalam kaligrafi Arab Amiri berskala besar (32-38px) dengan terjemahan Indonesia tebal yang sangat kontras di atas latar midnight emerald mosque.
+       - **Footer Agenda 1 Bulan Penuh:** Mini timeline 5 pekan tetap hadir di bagian bawah (tinggi 76px) dengan auto-highlight pada pekan terdekat.
+   - **Mesin Penguncian Layar Hari Sabtu Sore (`js/prayer-engine.js` & `index.html`):**
+     - Sesuai permintaan pengguna: *"kunci halaman ini sesuai setingan agar tidak berotasi sampai setelah selesai setingan sholat isya"*.
+     - Fungsi `isKajianActive(settings, jadwalList, now)` ditingkatkan:
+       - **Mulai Otomatis Ba'da Maghrib:** Menghitung waktu selesai sholat Maghrib secara dinamis berdasarkan jadwal Maghrib hari itu + durasi adzan + durasi iqamah + durasi sholat berjamaah (default ~18:10 WIB). Juga mendukung opsi override manual waktu mulai dari Admin.
+       - **Penguncian Hingga Selesai Sholat Isya:** Slide kajian terkunci di layar TV sejak selesai sholat Maghrib hingga sholat Isya selesai sempurna (`isyaPrayerEnd` = Adzan Isya + Adzan Dur + Iqamah Dur + Prayer Dur).
+       - Ketika masuk waktu Isya, Prayer Mode fullscreen mengambil alih untuk adzan/iqamah/sholat. Begitu sholat Isya selesai, kunci kajian dilepas secara otomatis dan rotasi normal TV dilanjutkan.
+   - **Sinkronisasi Panel Admin & Rotasi Master (`admin.html`):**
+     - Menu sidebar resmi diubah menjadi **"Agenda Rutin"**.
+     - Urutan rotasi TV (Order 4) di `MASTER_ROTATION_PAGES` diubah menjadi **"Agenda Rutin"**.
+     - Pilihan mode mulai kajian diperbarui di dropdown pengaturan kajian (Otomatis Ba'da Maghrib vs Manual 24H).
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.28`** pada `web-statis/sw.js` dan skrip pembersih cache `web-statis/admin.html` agar seluruh TV masjid dan browser langsung menerima pembaruan secara instan.
+
+3. **Verifikasi & Pengujian Otomatis:**
+   - `npm test`: **69 / 69 assertions LULUS (100% PASS)**, memverifikasi sintaks seluruh file HTML/JS, simulasi 24 jam sholat, penguncian Sabtu ba'da Maghrib, dan konsistensi cache.
+   - Cloudflare Deploy: Berhasil di-deploy ke produksi `https://digitalaljihad.my.id/`.
+   - Cold Backup: Berhasil disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 10 Oktober 2026 (Pukul 22:50 WIB)
 
 ### 🖼️ RESOLUSI PEMUATAN GAMBAR "GALERI INFORMASI" DI SMART TV, MULTI-TIER FALLBACK CERDAS & OPTIMASI MEMORI (Versi SW v5.8.27):
 1. **Ringkasan Permintaan Pengguna:**
