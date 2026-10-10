@@ -13618,7 +13618,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.26') {
+                                if (name !== 'aljihad-signage-v5.8.27') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
@@ -15109,7 +15109,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 id: 1,
                 judul: 'Arah Qiblat',
                 deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB',
-                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                gambar: 'image/slides/custom_uploaded.png',
                 urutan: 1,
                 durasi: 10,
                 aktif: true
@@ -15259,19 +15259,52 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
         function handleGaleriImageUpload(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('Ukuran berkas terlalu besar! Maksimal 5MB.');
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('Ukuran berkas terlalu besar! Maksimal 10MB.');
                     input.value = '';
                     return;
                 }
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    galeriUploadedBase64 = e.target.result;
-                    const previewImg = document.getElementById('galeriPreviewImg');
-                    const placeholder = document.getElementById('galeriPlaceholder');
-                    previewImg.src = galeriUploadedBase64;
-                    previewImg.style.display = 'block';
-                    placeholder.style.display = 'none';
+                    const rawBase64 = e.target.result;
+                    // Optimasi otomatis gambar ke resolusi ramah TV (maks 1280px) agar memori TV & localStorage tetap aman
+                    const img = new Image();
+                    img.onload = function() {
+                        const MAX_W = 1280;
+                        const MAX_H = 1280;
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > MAX_W || h > MAX_H) {
+                            if (w > h) {
+                                h = Math.round((h * MAX_W) / w);
+                                w = MAX_W;
+                            } else {
+                                w = Math.round((w * MAX_H) / h);
+                                h = MAX_H;
+                            }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        galeriUploadedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+
+                        const previewImg = document.getElementById('galeriPreviewImg');
+                        const placeholder = document.getElementById('galeriPlaceholder');
+                        previewImg.src = galeriUploadedBase64;
+                        previewImg.style.display = 'block';
+                        placeholder.style.display = 'none';
+                    };
+                    img.onerror = function() {
+                        galeriUploadedBase64 = rawBase64;
+                        const previewImg = document.getElementById('galeriPreviewImg');
+                        const placeholder = document.getElementById('galeriPlaceholder');
+                        previewImg.src = galeriUploadedBase64;
+                        previewImg.style.display = 'block';
+                        placeholder.style.display = 'none';
+                    };
+                    img.src = rawBase64;
                 };
                 reader.readAsDataURL(file);
             }

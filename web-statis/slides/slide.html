@@ -444,7 +444,7 @@
             <!-- Kolom Kiri: Poster Gambar -->
             <div class="slide-left-col">
                 <div class="poster-frame" id="posterFrame">
-                    <img id="posterImg" src="../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png" alt="Poster Informasi" style="display: block;" onerror="handlePosterError(this)">
+                    <img id="posterImg" src="../image/slides/custom_uploaded.png" alt="Poster Informasi" style="display: block;" onerror="handlePosterError(this)">
                     <div class="poster-fallback" id="posterFallback" style="display: none;">
                         <i class="fas fa-images"></i>
                         <div>
@@ -483,9 +483,9 @@
 
     <!-- CORE SCRIPTS DENGAN CACHE-BUSTER -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js?v=20260927_04"></script>
-    <script src="../js/supabase-db.js?v=20260927_04"></script>
-    <script src="../js/display-clock-ambient.js?v=20260927_04"></script>
+    <script src="../js/supabase-config.js?v=20261010_01"></script>
+    <script src="../js/supabase-db.js?v=20261010_01"></script>
+    <script src="../js/display-clock-ambient.js?v=20261010_01"></script>
 
     <script>
         // Background Rotator Islami
@@ -545,7 +545,7 @@
                 judul: 'Arah Qiblat',
                 kategori: 'Pengukuran & Validasi',
                 deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
-                gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                gambar: 'image/slides/custom_uploaded.png',
                 urutan: 1,
                 durasi: 10,
                 aktif: true
@@ -581,19 +581,57 @@
         // Penanganan fallback cerdas gambar jika salah satu path gagal di browser TV
         function handlePosterError(imgEl) {
             if (!imgEl) return;
-            const currentSrc = imgEl.src;
+            const currentSrc = imgEl.src || '';
+
+            // Jika error terjadi pada data URI base64, beralih langsung ke gambar statis
+            if (currentSrc.startsWith('data:image/')) {
+                console.warn('⚠️ Gagal me-render data URI base64, beralih ke berkas statis resmi...');
+                const defaultStatic = (slidesData && slidesData[currentSlideIdx] && slidesData[currentSlideIdx].gambar && !slidesData[currentSlideIdx].gambar.startsWith('data:image/'))
+                    ? resolveSlideUrl(slidesData[currentSlideIdx].gambar)
+                    : '../image/slides/custom_uploaded.png';
+                imgEl.src = defaultStatic;
+                imgEl.style.display = 'block';
+                return;
+            }
+
             const filename = currentSrc.split('/').pop().split('?')[0];
 
             if (!posterRetryMap[filename]) {
                 posterRetryMap[filename] = 1;
                 console.warn('⚠️ Path gambar relatif gagal, mencoba path root:', filename);
                 imgEl.src = '/image/slides/' + filename;
+                imgEl.style.display = 'block';
                 return;
             }
             if (posterRetryMap[filename] === 1) {
                 posterRetryMap[filename] = 2;
                 console.warn('⚠️ Path root gagal, mencoba CDN Cloudflare live:', filename);
                 imgEl.src = 'https://digitalaljihad.my.id/image/slides/' + filename;
+                imgEl.style.display = 'block';
+                return;
+            }
+
+            // Fallback bertingkat ke aset default resmi masjid
+            const fallbackMap = {
+                0: '../image/slides/custom_uploaded.png',
+                1: '../image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                2: '../image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp'
+            };
+            const defaultImg = fallbackMap[currentSlideIdx] || '../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png';
+
+            if (posterRetryMap[filename] === 2 && !currentSrc.includes(defaultImg.split('/').pop())) {
+                posterRetryMap[filename] = 3;
+                console.warn('⚠️ Mencoba fallback ke gambar arsip default resmi masjid:', defaultImg);
+                imgEl.src = defaultImg;
+                imgEl.style.display = 'block';
+                return;
+            }
+
+            // Fallback alternatif ke 1gdpq jika custom_uploaded gagal
+            if (filename.includes('custom_uploaded') && posterRetryMap[filename] === 3) {
+                posterRetryMap[filename] = 4;
+                imgEl.src = '../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png';
+                imgEl.style.display = 'block';
                 return;
             }
 
@@ -605,27 +643,34 @@
 
         function resolveSlideUrl(url) {
             if (!url) return '';
-            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image/')) {
-                return url;
-            } else if (url.startsWith('../image/')) {
-                return url;
-            } else if (url.startsWith('image/')) {
-                return '../' + url;
-            } else if (url.startsWith('slides/')) {
-                return '../image/' + url;
+            const trimmed = String(url).trim();
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:image/')) {
+                return trimmed;
+            }
+            const clean = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed;
+            if (clean.startsWith('../image/')) {
+                return clean;
+            } else if (clean.startsWith('image/')) {
+                return '../' + clean;
+            } else if (clean.startsWith('slides/')) {
+                return '../image/' + clean;
             } else {
-                return '../image/slides/' + url;
+                return '../image/slides/' + clean;
             }
         }
 
-        // Efek Card Flip Transition (3D Grid Flip)
+        // Efek Card Flip Transition (3D Grid Flip) dengan Preloader Aman & Anti-Crash TV
         function perform3DGridFlip(fromUrl, toUrl, callback) {
             const container = document.getElementById('gridFlipContainer');
             const posterImg = document.getElementById('posterImg');
             const frame = document.getElementById('posterFrame');
             const card = document.querySelector('.slide-card');
+            const fallback = document.getElementById('posterFallback');
 
-            if (!container || !fromUrl || !toUrl || fromUrl === toUrl) {
+            if (fallback) fallback.style.display = 'none';
+
+            // Jika tidak ada container, gambar sama, atau URL berupa base64 besar: langsung ganti aman tanpa 3D flip berat
+            if (!container || !fromUrl || !toUrl || fromUrl === toUrl || toUrl.startsWith('data:image/') || fromUrl.startsWith('data:image/')) {
                 if (posterImg && toUrl) {
                     posterImg.src = toUrl;
                     posterImg.style.display = 'block';
@@ -634,68 +679,97 @@
                 return;
             }
 
-            const COLS = 4;
-            const ROWS = 3;
-            const tileWidthPercent = 100 / COLS;
-            const tileHeightPercent = 100 / ROWS;
+            // Preload gambar baru terlebih dahulu agar sisi belakang tile tidak blank saat berputar
+            let flipExecuted = false;
+            const preloadImg = new Image();
 
-            container.innerHTML = '';
-            container.classList.add('active');
-            if (frame) frame.classList.add('flip-lifting');
-            if (card) card.classList.add('card-flipping');
+            const executeFlip = () => {
+                if (flipExecuted) return;
+                flipExecuted = true;
+                clearTimeout(flipFailsafe);
 
-            let maxDelay = 0;
+                const COLS = 4;
+                const ROWS = 3;
+                const tileWidthPercent = 100 / COLS;
+                const tileHeightPercent = 100 / ROWS;
 
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    const tile = document.createElement('div');
-                    tile.className = 'grid-flip-tile tile-flipping';
-                    tile.style.width = `${tileWidthPercent}%`;
-                    tile.style.height = `${tileHeightPercent}%`;
-                    tile.style.left = `${c * tileWidthPercent}%`;
-                    tile.style.top = `${r * tileHeightPercent}%`;
+                container.innerHTML = '';
+                container.classList.add('active');
+                if (frame) frame.classList.add('flip-lifting');
+                if (card) card.classList.add('card-flipping');
 
-                    // Wave delay diagonal dari kiri atas ke kanan bawah
-                    const delay = (c + r) * 65;
-                    if (delay > maxDelay) maxDelay = delay;
-                    tile.style.animationDelay = `${delay}ms`;
+                let maxDelay = 0;
 
-                    const bgPosX = (COLS > 1) ? `${(c / (COLS - 1)) * 100}%` : '50%';
-                    const bgPosY = (ROWS > 1) ? `${(r / (ROWS - 1)) * 100}%` : '50%';
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const tile = document.createElement('div');
+                        tile.className = 'grid-flip-tile tile-flipping';
+                        tile.style.width = `${tileWidthPercent}%`;
+                        tile.style.height = `${tileHeightPercent}%`;
+                        tile.style.left = `${c * tileWidthPercent}%`;
+                        tile.style.top = `${r * tileHeightPercent}%`;
 
-                    // Sisi Depan (Gambar Saat Ini)
-                    const front = document.createElement('div');
-                    front.className = 'grid-flip-face front';
-                    front.style.backgroundImage = `url("${fromUrl}")`;
-                    front.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
-                    front.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+                        // Wave delay diagonal dari kiri atas ke kanan bawah
+                        const delay = (c + r) * 65;
+                        if (delay > maxDelay) maxDelay = delay;
+                        tile.style.animationDelay = `${delay}ms`;
 
-                    // Sisi Belakang (Gambar Baru yang Akan Muncul)
-                    const back = document.createElement('div');
-                    back.className = 'grid-flip-face back';
-                    back.style.backgroundImage = `url("${toUrl}")`;
-                    back.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
-                    back.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+                        const bgPosX = (COLS > 1) ? `${(c / (COLS - 1)) * 100}%` : '50%';
+                        const bgPosY = (ROWS > 1) ? `${(r / (ROWS - 1)) * 100}%` : '50%';
 
-                    tile.appendChild(front);
-                    tile.appendChild(back);
-                    container.appendChild(tile);
+                        // Sisi Depan (Gambar Saat Ini)
+                        const front = document.createElement('div');
+                        front.className = 'grid-flip-face front';
+                        front.style.backgroundImage = `url("${fromUrl}")`;
+                        front.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
+                        front.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+
+                        // Sisi Belakang (Gambar Baru yang Akan Muncul)
+                        const back = document.createElement('div');
+                        back.className = 'grid-flip-face back';
+                        back.style.backgroundImage = `url("${toUrl}")`;
+                        back.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
+                        back.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+
+                        tile.appendChild(front);
+                        tile.appendChild(back);
+                        container.appendChild(tile);
+                    }
                 }
-            }
 
-            const totalDuration = 750 + maxDelay + 50;
+                const totalDuration = 750 + maxDelay + 50;
 
-            setTimeout(() => {
+                setTimeout(() => {
+                    if (posterImg) {
+                        posterImg.src = toUrl;
+                        posterImg.style.display = 'block';
+                    }
+                    container.classList.remove('active');
+                    container.innerHTML = '';
+                    if (frame) frame.classList.remove('flip-lifting');
+                    if (card) card.classList.remove('card-flipping');
+                    if (callback) callback();
+                }, totalDuration);
+            };
+
+            // Failsafe timeout maksimal 800ms jika koneksi lambat agar rotasi tidak terhenti
+            const flipFailsafe = setTimeout(() => {
+                if (!flipExecuted) {
+                    executeFlip();
+                }
+            }, 800);
+
+            preloadImg.onload = executeFlip;
+            preloadImg.onerror = () => {
+                // Jika preload gagal, langsung terapkan tanpa animasi tile macet
+                clearTimeout(flipFailsafe);
                 if (posterImg) {
                     posterImg.src = toUrl;
                     posterImg.style.display = 'block';
                 }
-                container.classList.remove('active');
-                container.innerHTML = '';
-                if (frame) frame.classList.remove('flip-lifting');
-                if (card) card.classList.remove('card-flipping');
                 if (callback) callback();
-            }, totalDuration);
+            };
+            preloadImg.src = toUrl;
         }
 
         function showSlide(item, index, total) {
@@ -708,7 +782,9 @@
 
             const nextTitle = item.judul || item.title || 'Galeri Informasi Masjid';
             const nextDesc = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
-            const rawUrl = item.gambar_base64 || item.gambar || item.image || item.file_path;
+            
+            // Prioritaskan path gambar statis yang ringan dan cepat di TV
+            const rawUrl = item.gambar || item.gambar_base64 || item.image || item.file_path;
             const newResolvedUrl = resolveSlideUrl(rawUrl);
 
             // Update elemen teks
@@ -717,6 +793,7 @@
 
             if (newResolvedUrl) {
                 if (fallback) fallback.style.display = 'none';
+                if (posterImg) posterImg.style.display = 'block';
 
                 if (lastResolvedImgUrl && lastResolvedImgUrl !== newResolvedUrl) {
                     // Jalankan efek Card Flip Transition (3D Grid Flip)

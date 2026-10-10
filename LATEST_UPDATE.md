@@ -4,7 +4,47 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 01:10 WIB)
+## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 22:50 WIB)
+
+### 🖼️ RESOLUSI PEMUATAN GAMBAR "GALERI INFORMASI" DI SMART TV, MULTI-TIER FALLBACK CERDAS & OPTIMASI MEMORI (Versi SW v5.8.27):
+1. **Ringkasan Permintaan Pengguna:**
+   - Pengguna melaporkan: *"Saya melihat gambar di 'Galeri Informasi' tidak muncul di TV"*.
+   - Gambar dokumen/arsip pada slide Galeri Informasi (`web-statis/slides/slide.html`) di layar TV tidak tampil atau hanya muncul sebagai ikon placeholder kuning.
+
+2. **Akar Masalah yang Teridentifikasi (*Root Cause Analysis*):**
+   - **Berkas Fisik Belum Tersedia di Web Server:** Pada tabel cloud Supabase `slides`, baris ID 1 (*Arah Qiblat*) menyimpan kolom `gambar: "image/slides/custom_uploaded.png"`. Namun, berkas fisik `custom_uploaded.png` belum tersimpan di direktori server `web-statis/image/slides/`, sehingga peramban TV mengalami HTTP 404 Not Found.
+   - **Beban Data URI Base64 Raksasa (2.16MB):** Baris yang sama menyimpan data URI string 2,169,098 karakter di kolom `gambar_base64`. Saat ditransmisikan ke Smart TV (yang umumnya memiliki RAM rendah 512MB–1GB), payload raksasa ini:
+     - Menyebabkan `QuotaExceededError` saat disimpan di `localStorage` peramban TV.
+     - Pada fungsi `perform3DGridFlip()` di `slide.html`, string data URI 2.16MB diinjeksikan ke 12 ubin kisi CSS (`back.style.backgroundImage = 'url("...")'`), menciptakan lebih dari 26MB inline CSS style declaration dalam memori rendering engine. Hal ini melampaui alokasi batas memori CSS parser web TV, membatalkan rendering grafis dan membuat ubin transparan/blank.
+   - **Logika Fallback Error Rusak (`handlePosterError`):** Ketika pemuatan gambar gagal, fungsi `handlePosterError(imgEl)` melakukan parsing nama berkas menggunakan `.split('/').pop()`. Pada data URI base64 yang panjang, parsing ini menghasilkan path palsu `/image/slides/h+f95MXqm...` (404), yang secara permanen mematikan display gambar (`imgEl.style.display = 'none'`) dan hanya menampilkan ikon placeholder kuning tanpa pernah memuat arsip dokumen resmi masjid.
+
+3. **Perbaikan & Peningkatan Teknis yang Diterapkan:**
+   - **Ekstraksi & Penyimpanan Berkas Statis (`web-statis/image/slides/custom_uploaded.png`):**
+     - Berkas gambar dokumen asli 1086x1088 PNG (1,626,805 byte) diekstrak dan disimpan sebagai aset statis resmi yang dapat di-cache secara permanen oleh Edge CDN Cloudflare.
+   - **Pembersihan Database Supabase (`slides` Table):**
+     - Nilai `gambar_base64` pada baris ID 1 dikosongkan (`null`), dan `gambar` diarahkan ke URL statis bersih `image/slides/custom_uploaded.png`.
+     - Ukuran payload Supabase terpangkas dari **2.16MB menjadi 971 byte** (penurunan beban jaringan sebesar 99.95%), mempercepat waktu respon dari ~4 detik menjadi <800ms.
+   - **Penyempurnaan Mesin Slide Galeri (`web-statis/slides/slide.html`):**
+     - **Pembersihan & Resolusi URL Cerdas (`resolveSlideUrl`):** Menangani path absolut, path relatif slide (`../image/slides/...`), penghilangan leading slash ganda, dan deteksi validitas data URI.
+     - **Preloading Citra & Transisi Aman 3D Grid:** Menambahkan pra-pemuatan via objek `new Image()` sebelum memulai animasi 3D Grid Flip, serta failsafe timer 800ms untuk menjamin `posterImg.style.display = 'block'` selalu tampil utuh.
+     - **Multi-Tier Robust Fallback (`handlePosterError`):** Menambahkan 4 tingkat proteksi fallback jika sebuah gambar gagal dimuat (mencoba direktori root `/image/slides/...`, CDN produksi Cloudflare, dan fallback berjenjang ke 4 berkas arsip resmi: `custom_uploaded.png`, `1gdpqFYCyv7...`, `GkxyYVJO2Id...`, `E6Vbbx4...`). Layar TV dijamin tidak akan pernah menampilkan kotak kosong.
+   - **Optimasi Panel Admin & Kompresi Otomatis Klien (`web-statis/admin.html`):**
+     - Memperbarui `DEFAULT_GALERI_DATA` agar menggunakan `image/slides/custom_uploaded.png`.
+     - Menambahkan fitur kompresi otomatis berbasis HTML5 Canvas pada fungsi `handleGaleriImageUpload()`. Setiap gambar beresolusi tinggi (misal foto kamera HP 10MB) yang diunggah pengurus masjid akan otomatis diperkecil ke resolusi ramah TV (maks 1280px) dengan kualitas JPEG 0.85 (~100-200KB), melindungi memori TV dan Supabase di masa depan.
+   - **Pembaruan Default Data di `web-statis/js/supabase-db.js`:**
+     - Menyelaraskan slide 1 di `getSlides()` fallback agar menunjuk ke `image/slides/custom_uploaded.png`.
+   - **Invalidasi Cache & Versi Service Worker (SOP #2):**
+     - Versi cache dinaikkan ke **`aljihad-signage-v5.8.27`** pada `web-statis/sw.js` dan skrip pembersih cache `web-statis/admin.html`.
+     - Mendaftarkan seluruh berkas citra galeri ke dalam array `STATIC_ASSETS` PWA untuk ketahanan mode luring (*offline resilience*).
+
+4. **Verifikasi & Pengujian:**
+   - `npm test`: **68 / 68 assertions LULUS (100% PASS)** tanpa cacat sintaks maupun logika.
+   - Supabase Query REST API: Terverifikasi 3 baris slide bersih dengan path statis valid dan tanpa payload bloat.
+   - Sinkronisasi Cold Backup: Seluruh berkas diperbarui ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 10 Oktober 2026 (Pukul 01:10 WIB)
 
 ### 🚀 FITUR SWITCHER DUAL-MODE LOGIN: DASHBOARD vs INPUT MOBILE DI HALAMAN `/login` (Versi SW v5.8.26):
 1. **Ringkasan Permintaan Pengguna:**

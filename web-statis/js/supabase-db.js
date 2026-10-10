@@ -1524,7 +1524,7 @@
                     judul: 'Arah Qiblat',
                     kategori: 'Pengukuran & Validasi',
                     deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
-                    gambar: 'image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png',
+                    gambar: 'image/slides/custom_uploaded.png',
                     urutan: 1,
                     durasi: 10,
                     aktif: true
