@@ -4,7 +4,40 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 10 Oktober 2026 (Pukul 23:45 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 03:55 WIB)
+
+### 🕌 OPTIMASI TAMPILAN SLIDE "PENGAJIAN RUTIN MALAM AHAD" (`slides/kajian.html`) — PERBESAR FOTO PEMATERI, WAKTU 1 BARIS, & CLEANUP UI (Versi SW v5.8.29):
+1. **Ringkasan Permintaan Pengguna:**
+   - Halaman: `https://digitalaljihad.my.id/slides/kajian` (`web-statis/slides/kajian.html`):
+     1. Hilangkan teks label `"Waktu Pelaksanaan"`.
+     2. Hilangkan kotak kapsul dan teks `"Bergiliran Otomatis"` pada baris header timeline agenda bulanan di bagian bawah.
+     3. Jadikan teks `"Ba'da Sholat Maghrib s/d Menjelang Isya"` menjadi 1 baris saja.
+     4. Perbesar tempat foto `"pemateri kajian"`.
+
+2. **Perubahan & Solusi Teknis yang Diterapkan:**
+   - **Perbesaran Tempat Foto Pemateri Kajian (`.ustadz-photo-container`):**
+     - Ukuran tinggi kontainer foto dinaikkan drastis dari sebelumnya `clamp(130px, 20vh, 190px)` menjadi **`clamp(200px, 30vh, 290px)`** (+53% lebih tinggi & proporsional).
+     - Kolom kiri layout diperluas dari `minmax(360px, 440px)` menjadi `minmax(380px, 460px)` sehingga foto Ustadz/Logo masjid tampil megah dan sangat jelas terlihat dari kejauhan.
+     - Latar belakang bingkai foto diberi aksen `radial-gradient(circle at center, #063824 0%, #02170f 85%)` yang berpadu serasi dengan border emas 18px radius.
+     - Ditambahkan pembaruan sumber foto dinamis (`d.ustadz_foto || d.foto`) pada fungsi `displayKajianItem(index)`.
+   - **Pemberantasan Label & Formatting Waktu 1 Baris (`.waktu-kajian-pill`):**
+     - Elemen `<div class="waktu-label">WAKTU PELAKSANAAN</div>` dihapus total sesuai permintaan.
+     - Struktur waktu diubah menjadi flex baris tunggal: ikon jam emas + teks nilai waktu (`.waktu-val`).
+     - Diberi aturan `white-space: nowrap;`, penyesuaian font responsive `clamp(0.82rem, 1.3vh, 1.02rem)`, dan jarak proporsional sehingga teks `"Ba'da Sholat Maghrib s/d Menjelang Isya"` tampil rapi dan terkunci dalam **1 baris utuh** tanpa terpotong atau wrap.
+   - **Pembersihan Kotak Kapsul "Bergiliran Otomatis":**
+     - Elemen `<div class="timeline-rotator-status"><span class="rotator-pill">...</span></div>` dihapus dari `.timeline-header-bar`.
+     - Timeline header bar tampil lebih bersih dan lapang hanya memuat judul agenda bulan ini dan keterangan, sementara logika rotasi 9 detik di latar belakang tetap berjalan mulus.
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.29`** pada `web-statis/sw.js` dan skrip pembersih cache `web-statis/admin.html`.
+     - Seluruh browser TV dan perangkat pengurus masjid langsung membuang cache lama dan memuat tampilan baru seketika.
+
+3. **Verifikasi & Pengujian Otomatis:**
+   - `npm test`: **69 / 69 assertions LULUS (100% PASS)** tanpa kesalahan sintaks atau regresi.
+   - Sinkronisasi menyeluruh dilakukan ke GitHub, Cloudflare Workers, dan folder cadangan lokal.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 10 Oktober 2026 (Pukul 23:45 WIB)
 
 ### 🕌 REDESAIN SHOWCASE "AGENDA RUTIN" (MULTI-SLIDE ROTASI), RELAYOUT MEGAH "PENGAJIAN RUTIN MALAM AHAD" & PENGUNCIAN OTOMATIS SABTU SORE BA'DA MAGHRIB S/D ISYA (Versi SW v5.8.28):
 1. **Ringkasan Permintaan Pengguna:**
