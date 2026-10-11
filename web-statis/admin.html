@@ -4356,8 +4356,8 @@
                                             <small id="prevInfaqAtasNama" class="font-weight-bold" style="color:#ffd700;">DKM Jami Al Jihad</small>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <small style="color:#94a3b8;">Konfirmasi WhatsApp</small>
-                                            <small id="prevInfaqWa" class="font-weight-bold text-right" style="color:#00e676; line-height: 1.25;">0856 1235 167 (BENDAHARA)</small>
+                                            <small style="color:#94a3b8; line-height: 1.25;">Konfirmasi<br>WhatsApp</small>
+                                            <small id="prevInfaqWa" class="font-weight-bold text-right" style="color:#00e676; line-height: 1.25;">0856 1235 167<br><span style="font-size:0.85em;">(BENDAHARA)</span></small>
                                         </div>
                                     </div>
 
@@ -13736,13 +13736,13 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     });
                 }
 
-                // 2. Bersihkan CacheStorage Service Worker (sisakan v5.8.39)
+                // 2. Bersihkan CacheStorage Service Worker (sisakan v5.8.40)
                 if ('caches' in window) {
                     try {
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.39') {
+                                if (name !== 'aljihad-signage-v5.8.40') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
@@ -13768,8 +13768,8 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                     SupabaseDB.broadcastChange('app_settings', 'RELOAD', { timestamp: Date.now() }, 'Admin Maintenance');
                 }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('RELOAD', { reason: 'Pembersihan cache sistem v5.8.39' }).catch(() => {});
-                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.8.39' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('RELOAD', { reason: 'Pembersihan cache sistem v5.8.40' }).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('REFRESH_DISPLAY', { reason: 'Pembersihan cache sistem v5.8.40' }).catch(() => {});
                 }
 
                 // 5. Muat ulang data terbaru dari Supabase
@@ -13784,7 +13784,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         html: `
                             <p class="text-left mb-2">Seluruh cache usang dan memori usang telah dibersihkan:</p>
                             <ul class="text-left small text-muted mb-3 pl-3">
-                                <li>Service Worker diperbarui ke <b>v5.8.39</b></li>
+                                <li>Service Worker diperbarui ke <b>v5.8.40</b></li>
                                 <li>Kunci memori lama yang dibersihkan: <b>${removedItems.length > 0 ? removedItems.join(', ') : 'Bersih (Sudah Optimal)'}</b></li>
                                 <li>Sinyal refresh TV telah dipancarkan secara realtime (&lt; 100ms) ke seluruh layar</li>
                             </ul>

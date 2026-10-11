@@ -4,7 +4,29 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 23:25 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 23:45 WIB)
+
+### 🎨 REDESIGN PROGRESS BAR TARGET DONASI SESUAI ILUSTRASI GAMBAR 2 & PENYESUAIAN MULTI-DEVICE SMART TV (Versi SW v5.8.40):
+1. **Redesign Komponen Progress Bar Target Donasi Sesuai Gambar 2 (`web-statis/slides/infaq.html`)**:
+   - Format 'Pencapaian Target Donasi:' diubah menjadi satu bar tunggal berukuran tebal (*height: 38px*) dengan latar belakang kaca gelap bernuansa emerald mewah dan border emas elegan.
+   - Di dalam bar tersebut, terdapat badge teks `'Pencapaian Target Donasi :'` di sebelah kiri (dengan bayangan kontras tinggi sehingga terbaca tajam di atas warna hijau maupun latar gelap), dan angka persentase **`46.6%`** di sebelah kanan dibuat **JAUH LEBIH BESAR & TEBAL (*font-size: 1.60rem*, *font-weight: 900*, warna emas `#ffd700` dengan glow emas)** sehingga terlihat sangat jelas oleh jamaah masjid dari jarak jauh (>5 meter).
+   - Animasi pengisian batang donasi (`.progress-bar-fill`) meluncur mulus di lapisan bawah teks secara hardware-accelerated.
+2. **Format 2 Baris Konfirmasi WhatsApp Tanpa Pemotongan Nomor Telepon**:
+   - Label WhatsApp dibuat baku 2 baris (`Konfirmasi<br>WhatsApp`) dengan lebar kompak, memberikan ruang horizontal maksimal bagi nomor telepon `0856 1235 167` dan label `(BENDAHARA)` di sisi kanan sehingga nomor telepon dipastikan tidak pernah terpotong atau wrap sembarangan di kartu rekening.
+3. **Penyelesaian Perbedaan Jumlah Baris Donatur di Layar Laptop vs Layar TV**:
+   - **Penyebab**: Layar laptop (1080p standar desktop) memiliki viewport vertikal besar (~900px+), sedangkan peramban Smart TV umumnya beroperasi pada resolusi render 720p (atau 1080p dengan zoom UI bawaan TV 125%-150% yang menyisakan ruang vertikal terbatas ~600px). Sebelumnya, ukuran header masjid dan kotak statistik yang besar menyita lebih dari 380px tinggi layar, sehingga ruang tersisa untuk kotak daftar donatur di TV hanya cukup menampilkan 3 baris saja.
+   - **Solusi**: Diterapkan sistem adaptif cerdas (`@media (max-height: 850px)`) yang secara otomatis merapatkan padding, memperkecil proporsi header dan kotak ringkasan secara proporsional di layar TV. Ruang bebas untuk kotak donatur bertambah >140px, sehingga di layar Smart TV kini **menampilkan 7 sampai 8 baris donatur sekaligus** persis seperti di layar laptop, dan terus bergulir (*smooth vertical loop marquee*) menampilkan seluruh 16 donatur secara bergantian.
+4. **Bumping Service Worker & Sinkronisasi Cache (`web-statis/sw.js` & `admin.html`)**:
+   - Cache dinaikkan ke versi **`aljihad-signage-v5.8.40`** dan disinkronkan ke pembersih cache admin.
+5. **Validasi Kualitas & 4 Pilar SOP Deployment**:
+   - Lulus 86/86 assertions pengujian regresi otomatis (`npm test`).
+   - Deployment Cloudflare Workers (`https://digitalaljihad.my.id/`).
+   - Backup mirror lokal ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit dan push branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 23:25 WIB)
 
 ### 🎨 OPTIMASI LAYOUT SLIDE INFAQ & FORMAT RATA KANAN KONFIRMASI WHATSAPP (Versi SW v5.8.39):
 1. **Penyesuaian Tata Letak Rata Kanan (Right-Aligned) Konfirmasi WhatsApp (`web-statis/slides/infaq.html`)**:

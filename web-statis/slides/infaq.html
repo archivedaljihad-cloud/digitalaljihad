@@ -283,40 +283,72 @@
         .stat-pill.kekurangan .stat-value { color: #ff5252; text-shadow: 0 0 10px rgba(255, 82, 82, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
         .stat-pill.donatur .stat-value { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
 
-        /* PROGRESS BAR */
+        /* PROGRESS BAR BESAR & MEWAH SESUAI ILUSTRASI GAMBAR 2 */
         .progress-section {
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 10px;
-            padding: 5px 14px;
+            background: transparent;
             margin-bottom: 8px;
-            border: 1px solid rgba(255, 215, 0, 0.25);
             flex-shrink: 0;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3px;
-            font-size: 0.82rem;
-            font-weight: 700;
+            padding: 0;
+            border: none;
         }
 
         .progress-bar-bg {
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            height: 38px;
+            background: rgba(2, 24, 16, 0.88);
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.8), 0 4px 14px rgba(0, 0, 0, 0.45);
             position: relative;
+            display: flex;
+            align-items: center;
         }
 
         .progress-bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
             height: 100%;
-            background: linear-gradient(90deg, #00e676 0%, #ffd700 100%);
-            border-radius: 8px;
+            background: linear-gradient(90deg, #00e676 0%, #76ff03 60%, #ffd700 100%);
+            border-radius: 10px;
             transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 18px rgba(0, 230, 118, 0.65);
+            z-index: 1;
+        }
+
+        .progress-bar-overlay {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            pointer-events: none;
+        }
+
+        .progress-title-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.6px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.98), 0 0 8px rgba(0, 0, 0, 0.9);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 2px 10px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+        }
+
+        .progress-percent-val {
+            font-size: 1.60rem;
+            font-weight: 900;
+            color: #ffd700;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.98), 0 0 14px rgba(255, 215, 0, 0.85);
+            padding: 0 4px;
         }
 
         /* 2 KOLOM BAWAH */
@@ -582,6 +614,15 @@
             text-align: right;
         }
 
+        .rek-label-wa {
+            color: #cbd5e1;
+            line-height: 1.25;
+            flex-shrink: 0;
+            font-size: 1.05rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
         .rek-wa-wrap {
             display: flex;
             flex-direction: column;
@@ -590,6 +631,18 @@
             text-align: right;
             line-height: 1.25;
             margin-left: auto;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .rek-wa-wrap > span:first-child {
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 1.22rem;
+            letter-spacing: 0.8px;
+            color: #00e676;
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.45);
+            white-space: nowrap;
         }
 
         .rek-wa-wrap .wa-role {
@@ -598,6 +651,7 @@
             color: #00e676;
             letter-spacing: 0.8px;
             text-shadow: 0 0 8px rgba(0, 230, 118, 0.35);
+            white-space: nowrap;
         }
 
         /* RUNNING TEXT FOOTER & BADGE */
@@ -657,6 +711,151 @@
         @keyframes marquee {
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
+        }
+
+        /* ========================================================
+           OPTIMASI RESPONSIVE KHUSUS SMART TV (720p / 1080p scaled)
+           Memastikan daftar donatur di layar TV tampil banyak (7-8 baris)
+           seperti di laptop tanpa terpotong
+           ======================================================== */
+        @media (max-height: 850px), (max-width: 1366px) {
+            .container {
+                padding: 4px 18px 52px 18px;
+            }
+            .header h1 {
+                font-size: 2.1rem !important;
+                margin-bottom: 2px !important;
+            }
+            .header h3.sub-header {
+                font-size: 1.0rem;
+                margin-bottom: 2px;
+            }
+            .datetime {
+                font-size: 1.15rem;
+                padding: 2px 18px;
+            }
+            .panel {
+                padding: 8px 16px;
+            }
+            .infaq-title-wrap {
+                margin-bottom: 4px;
+            }
+            .infaq-title-badge {
+                font-size: 1.15rem;
+                padding: 3px 18px;
+            }
+            .summary-grid {
+                gap: 6px;
+                margin-bottom: 5px;
+            }
+            .stat-pill {
+                padding: 4px 10px;
+                gap: 8px;
+            }
+            .stat-pill .icon-box {
+                width: 38px;
+                height: 38px;
+                font-size: 1.2rem;
+            }
+            .stat-label {
+                font-size: 0.70rem;
+            }
+            .stat-value {
+                font-size: 1.08rem;
+            }
+            .progress-section {
+                margin-bottom: 6px;
+            }
+            .progress-bar-bg {
+                height: 34px;
+            }
+            .progress-title-text {
+                font-size: 1.02rem;
+            }
+            .progress-percent-val {
+                font-size: 1.38rem;
+            }
+            .donatur-box, .rek-box {
+                padding: 6px 12px;
+            }
+            .box-title {
+                font-size: 1.05rem;
+                margin-bottom: 5px;
+                padding-bottom: 4px;
+            }
+            .donatur-header-row {
+                font-size: 0.74rem;
+                padding: 2px 8px 3px 8px;
+                margin-bottom: 3px;
+            }
+            .donatur-item {
+                padding: 3px 8px;
+                font-size: 0.92rem;
+            }
+            .donatur-name {
+                font-size: 0.95rem;
+            }
+            .donatur-ket {
+                font-size: 0.78rem;
+                padding: 1px 6px;
+            }
+            .donatur-val {
+                font-size: 1.05rem;
+            }
+            .rek-item {
+                padding: 5px 0;
+                font-size: 0.98rem;
+            }
+            .rek-num {
+                font-size: 1.12rem;
+            }
+            .rek-label-wa {
+                font-size: 0.95rem;
+            }
+            .rek-wa-wrap .wa-role {
+                font-size: 0.88rem;
+            }
+        }
+
+        @media (max-height: 660px) {
+            .container {
+                padding: 2px 14px 48px 14px;
+            }
+            .header h1 {
+                font-size: 1.7rem !important;
+            }
+            .header h3.sub-header {
+                font-size: 0.88rem;
+            }
+            .datetime {
+                font-size: 1.0rem;
+                padding: 2px 14px;
+            }
+            .infaq-title-badge {
+                font-size: 1.0rem;
+                padding: 2px 14px;
+            }
+            .stat-pill {
+                padding: 3px 8px;
+            }
+            .stat-pill .icon-box {
+                width: 32px;
+                height: 32px;
+                font-size: 1.0rem;
+            }
+            .progress-bar-bg {
+                height: 30px;
+            }
+            .progress-title-text {
+                font-size: 0.92rem;
+            }
+            .progress-percent-val {
+                font-size: 1.25rem;
+            }
+            .donatur-item {
+                padding: 2px 6px;
+                font-size: 0.86rem;
+            }
         }
     </style>
 </head>
@@ -724,14 +923,16 @@
                     </div>
                 </div>
 
-                <!-- PROGRESS BAR -->
+                <!-- PROGRESS BAR SESUAI ILUSTRASI GAMBAR 2 -->
                 <div class="progress-section">
-                    <div class="progress-header">
-                        <span style="color: #cbd5e1;">Pencapaian Target Donasi:</span>
-                        <span style="color: #ffd700;" id="progressPercent">65.6%</span>
-                    </div>
                     <div class="progress-bar-bg">
                         <div class="progress-bar-fill" id="progressBarFill" style="width: 65.6%;"></div>
+                        <div class="progress-bar-overlay">
+                            <span class="progress-title-text">
+                                <i class="fas fa-chart-line text-warning"></i> Pencapaian Target Donasi :
+                            </span>
+                            <span class="progress-percent-val" id="progressPercent">65.6%</span>
+                        </div>
                     </div>
                 </div>
 
@@ -809,7 +1010,7 @@
                                 <span id="infaqAtasNama" style="font-weight: 700; color: #ffd700;">DKM Jami Al Jihad</span>
                             </div>
                             <div class="rek-item">
-                                <span style="color: #cbd5e1; line-height: 1.35;">Konfirmasi WhatsApp</span>
+                                <span class="rek-label-wa">Konfirmasi<br>WhatsApp</span>
                                 <span id="infaqWaKonfirmasi" class="rek-num rek-wa-wrap" style="color: #00e676;">
                                     <span>0856 1235 167</span>
                                     <span class="wa-role">(BENDAHARA)</span>
