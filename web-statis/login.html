@@ -1159,13 +1159,14 @@
     // URL Parameters
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Jika ada param ?action=logout, bersihkan sesi secara tuntas
-    if (urlParams.get('action') === 'logout') {
+    // Jika ada param ?action=logout atau ?reason=idle_timeout, bersihkan sesi secara tuntas
+    if (urlParams.get('action') === 'logout' || urlParams.get('reason') === 'idle_timeout') {
         try {
             localStorage.removeItem('aljihad_auth_user');
             localStorage.removeItem('aljihad_last_activity');
             localStorage.removeItem('quick_petugas_authenticated');
-            sessionStorage.clear();
+            sessionStorage.removeItem('aljihad_auth_user');
+            sessionStorage.removeItem('quick_petugas_authenticated');
         } catch(e) {}
     } else {
         // Jika param ?mode=mobile diminta dan sudah diautentikasi petugas, alihkan langsung ke modeinput.html
@@ -1175,7 +1176,7 @@
                 window.location.replace('modeinput.html');
             }
         } else if (!modeQuery && urlParams.get('force') !== '1') {
-            // Cek jika sudah login, alihkan ke admin.html
+            // Cek jika sudah login, alihkan ke admin.html (hanya jika BUKAN logout / idle_timeout)
             if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.redirectIfLoggedIn === 'function') {
                 AdminAuth.redirectIfLoggedIn('admin.html');
             }

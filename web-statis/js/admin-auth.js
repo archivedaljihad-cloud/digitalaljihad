@@ -649,7 +649,14 @@ const AdminAuth = {
      * Memeriksa apakah user sudah login
      */
     isLoggedIn() {
-        return !!this.getCurrentUser();
+        if (!!this.getCurrentUser()) return true;
+        try {
+            if (localStorage.getItem('quick_petugas_authenticated') === 'true' || 
+                sessionStorage.getItem('quick_petugas_authenticated') === 'true') {
+                return true;
+            }
+        } catch (e) {}
+        return false;
     },
 
     // ==============================================================
@@ -658,6 +665,7 @@ const AdminAuth = {
     IDLE_TIMEOUT_MS: 3 * 60 * 1000, // 3 Menit (180.000 ms)
     LAST_ACTIVITY_KEY: 'aljihad_last_activity',
     _idleTimeoutTimer: null,
+    _idleHeartbeatInterval: null,
     _lastActivityTime: Date.now(),
     _idleListenersAttached: false,
 
@@ -677,7 +685,24 @@ const AdminAuth = {
 
         const recordActivity = () => {
             const now = Date.now();
-            // Throttling 1 detik agar hemat konsumsi CPU
+
+            // 1. KRITIS: Cek dulu apakah sesi sudah idle melebihi batas 3 menit SEBELUM mereset waktu!
+            let effectiveLastTime = this._lastActivityTime;
+            try {
+                const stored = parseInt(localStorage.getItem(this.LAST_ACTIVITY_KEY) || '0', 10);
+                if (!isNaN(stored) && stored > 0) {
+                    effectiveLastTime = Math.max(effectiveLastTime, stored);
+                }
+            } catch (e) {}
+
+            // Jika durasi sejak aktivitas terakhir SUDAH melampaui batas (>= 3 menit), jangan perbarui waktu & langsung auto-logout
+            if (now - effectiveLastTime >= this.IDLE_TIMEOUT_MS) {
+                console.warn('🛡️ [AdminAuth] Aktivitas terdeteksi setelah melampaui batas idle 3 menit. Memaksa auto-logout.');
+                this.handleIdleTimeout();
+                return;
+            }
+
+            // 2. Throttling 1 detik agar hemat konsumsi CPU saat interaksi terus-menerus
             if (now - this._lastActivityTime < 1000) return;
             this._lastActivityTime = now;
             try {
@@ -725,6 +750,22 @@ const AdminAuth = {
             this._idleListenersAttached = true;
         }
 
+        // Jalankan Heartbeat Polling setiap 2 detik untuk menjamin ketahanan terhadap background tab sleep/throttling
+        if (this._idleHeartbeatInterval) {
+            clearInterval(this._idleHeartbeatInterval);
+            this._idleHeartbeatInterval = null;
+        }
+        this._idleHeartbeatInterval = setInterval(() => {
+            if (!this.isLoggedIn()) {
+                if (this._idleHeartbeatInterval) {
+                    clearInterval(this._idleHeartbeatInterval);
+                    this._idleHeartbeatInterval = null;
+                }
+                return;
+            }
+            this._checkAndHandleIdle();
+        }, 2000);
+
         this._scheduleIdleCheck();
         console.log(`🛡️ [AdminAuth] Auto-Logout Inactivity AKTIF: Sesi akan otomatis berakhir jika tidak ada aktivitas selama ${Math.round(this.IDLE_TIMEOUT_MS / 60000)} Menit.`);
     },
@@ -741,8 +782,8 @@ const AdminAuth = {
         let effectiveLastTime = this._lastActivityTime;
         try {
             const stored = parseInt(localStorage.getItem(this.LAST_ACTIVITY_KEY) || '0', 10);
-            if (!isNaN(stored) && stored > effectiveLastTime) {
-                effectiveLastTime = stored;
+            if (!isNaN(stored) && stored > 0) {
+                effectiveLastTime = Math.max(effectiveLastTime, stored);
             }
         } catch (e) {}
 
@@ -762,18 +803,19 @@ const AdminAuth = {
      * Periksa durasi idle aktual dan eksekusi logout jika telah melampaui batas
      */
     _checkAndHandleIdle() {
+        if (!this.isLoggedIn()) return;
         let effectiveLastTime = this._lastActivityTime;
         try {
             const stored = parseInt(localStorage.getItem(this.LAST_ACTIVITY_KEY) || '0', 10);
-            if (!isNaN(stored) && stored > effectiveLastTime) {
-                effectiveLastTime = stored;
+            if (!isNaN(stored) && stored > 0) {
+                effectiveLastTime = Math.max(effectiveLastTime, stored);
             }
         } catch (e) {}
 
         const elapsed = Date.now() - effectiveLastTime;
         if (elapsed >= this.IDLE_TIMEOUT_MS) {
             this.handleIdleTimeout();
-        } else {
+        } else if (!this._idleTimeoutTimer) {
             this._scheduleIdleCheck();
         }
     },
@@ -782,20 +824,31 @@ const AdminAuth = {
      * Eksekusi langsung Auto-Logout saat 3 menit tanpa aktivitas
      */
     handleIdleTimeout() {
-        if (!this.isLoggedIn()) return;
         console.warn('🛡️ [AdminAuth] Auto-logout dipicu: Tidak ada aktivitas selama 3 menit.');
 
         if (this._idleTimeoutTimer) {
             clearTimeout(this._idleTimeoutTimer);
             this._idleTimeoutTimer = null;
         }
+        if (this._idleHeartbeatInterval) {
+            clearInterval(this._idleHeartbeatInterval);
+            this._idleHeartbeatInterval = null;
+        }
 
         try {
             localStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+            localStorage.removeItem('quick_petugas_authenticated');
+            sessionStorage.removeItem(AUTH_STORAGE_KEY);
+            sessionStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.setItem('auth_redirect_reason', 'Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali.');
         } catch (e) {
             console.warn('Gagal membersihkan sesi idle:', e);
+        }
+
+        // Cegah looping jika saat ini sudah berada di login.html
+        if (typeof window !== 'undefined' && window.location && window.location.pathname.endsWith('login.html')) {
+            return;
         }
 
         try {
@@ -987,10 +1040,16 @@ const AdminAuth = {
             clearTimeout(this._idleTimeoutTimer);
             this._idleTimeoutTimer = null;
         }
+        if (this._idleHeartbeatInterval) {
+            clearInterval(this._idleHeartbeatInterval);
+            this._idleHeartbeatInterval = null;
+        }
         try {
             localStorage.removeItem(AUTH_STORAGE_KEY);
             localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+            localStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.removeItem(AUTH_STORAGE_KEY);
+            sessionStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.removeItem('auth_redirect_reason');
         } catch (e) {
             console.warn('Gagal membersihkan storage logout:', e);

@@ -1768,6 +1768,9 @@
                     sessionStorage.setItem('quick_petugas_authenticated', 'true');
                 } catch(e) {}
                 if (overlay) overlay.style.display = 'none';
+                if (window.AdminAuth && typeof window.AdminAuth.initIdleTimer === 'function') {
+                    window.AdminAuth.initIdleTimer();
+                }
                 return true;
             } else {
                 if (overlay) overlay.style.display = 'flex';
@@ -1904,6 +1907,9 @@
 
                 document.getElementById('authGateOverlay').style.display = 'none';
                 if (errBox) errBox.style.display = 'none';
+                if (window.AdminAuth && typeof window.AdminAuth.initIdleTimer === 'function') {
+                    window.AdminAuth.initIdleTimer();
+                }
                 showToastSuccess("Kunci akses dibuka! Selamat datang di Quick Input Mode.");
             } else {
                 if (errBox) {
@@ -1946,6 +1952,9 @@
                     sessionStorage.setItem('quick_petugas_authenticated', 'true');
                     document.getElementById('authGateOverlay').style.display = 'none';
                     if (errBox) errBox.style.display = 'none';
+                    if (window.AdminAuth && typeof window.AdminAuth.initIdleTimer === 'function') {
+                        window.AdminAuth.initIdleTimer();
+                    }
                     showToastSuccess(`Ahlan wa Sahlan, ${user.name} (${user.role_label})!`);
                 } else {
                     // Fallback jika AdminAuth belum siap
@@ -1978,6 +1987,10 @@
         }
 
         function lockSecurityGate() {
+            if (window.AdminAuth && typeof window.AdminAuth.logout === 'function') {
+                window.AdminAuth.logout('modeinput.html');
+                return;
+            }
             localStorage.removeItem('quick_petugas_authenticated');
             sessionStorage.removeItem('quick_petugas_authenticated');
             const pInput = document.getElementById('authPasswordInput');

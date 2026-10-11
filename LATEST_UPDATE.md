@@ -4,7 +4,46 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 11:30 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 14:45 WIB)
+
+### 🛡️ PERBAIKAN TOTAL ENGINE AUTO-LOGOUT INACTIVITY 3 MENIT, ELIMINASI BOUNCING REDIRECT, PERIODIC HEARTBEAT & INTEGRASI LINTAS HALAMAN ADMIN/PETUGAS — (Versi SW v5.8.32):
+1. **Ringkasan Permintaan Pengguna:**
+   - Pengguna melaporkan bahwa fitur auto-logout saat idle / tidak ada aktivitas tampaknya tidak berfungsi lagi.
+   - Sesuai standar keamanan sistem masjid, jika pengguna tidak melakukan aktivitas apapun selama **3 menit (180.000 ms)**, sesi harus otomatis berakhir (auto-logout) dan dialihkan ke layar login.
+
+2. **Akar Masalah Teknis (*Root Causes*):**
+   - **Bug "Resumed Activity Erases Idle Duration" (`js/admin-auth.js`):**
+     Ketika pengguna diam selama >3 menit, lalu kembali dan menggerakkan mouse atau menekan keyboard, fungsi `recordActivity()` langsung mengeksekusi `_lastActivityTime = Date.now()` **tanpa** mengecek terlebih dahulu apakah durasi sejak aktivitas terakhir sudah mencapai `>= 3 menit`. Akibatnya, saat timer browser sempat tertunda/terhambat oleh sleep mode atau tab throttling, sentuhan mouse pengguna saat kembali justru menghapus riwayat idle dan memberi waktu baru 3 menit sehingga auto-logout tidak pernah terjadi.
+   - **Bug "Bouncing Redirect" di Halaman Login (`login.html`):**
+     Saat `handleIdleTimeout()` me-redirect ke `login.html?reason=idle_timeout`, sistem hanya menghapus `localStorage`, tetapi **tidak menghapus** `sessionStorage.removeItem('aljihad_auth_user')` dan `quick_petugas_authenticated`. Di `login.html`, skrip hanya memeriksa `if (urlParams.get('action') === 'logout')` dan mengabaikan `reason=idle_timeout`, sehingga `AdminAuth.redirectIfLoggedIn('admin.html')` langsung memantulkan (*bounce*) pengguna kembali ke dashboard dalam hitungan milidetik.
+   - **Ketiadaan Heartbeat Periodic:**
+     Hanya mengandalkan satu timer `setTimeout` 180 detik sangat rentan dibekukan (*frozen/throttled*) oleh fitur power management browser dan OS saat tab tidak aktif di latar belakang.
+   - **Ketiadaan Idle Timer di Form Input Petugas (`petugas.html` & `modeinput.html`):**
+     Kedua halaman ini tidak pernah menginisialisasi `AdminAuth.initIdleTimer()` saat petugas membuka kunci akses gerbang keamanan (*security gate*).
+
+3. **Perubahan & Solusi Teknis yang Diterapkan:**
+   - **Engine Deteksi Idle Cerdas & Proteksi Reset Timer (`web-statis/js/admin-auth.js`):**
+     - Di dalam `recordActivity()`, hal pertama yang dilakukan adalah membandingkan `now - effectiveLastTime >= this.IDLE_TIMEOUT_MS`. Jika durasi idle sudah melampaui 3 menit, sistem **LANGSUNG memicu `handleIdleTimeout()`** dan menolak memperbarui timestamp aktivitas.
+     - Ditambahkan **Periodic Heartbeat Polling (interval tiap 2 detik)** melalui `_idleHeartbeatInterval` yang aktif memantau batas 3 menit bahkan jika tab berada di background atau timer utama mengalami drift.
+     - Pembersihan sesi tuntas di `handleIdleTimeout()` dan `logout()`: Menghapus `AUTH_STORAGE_KEY` dan `LAST_ACTIVITY_KEY` dari `localStorage` DAN `sessionStorage`, serta menghapus token otorisasi `quick_petugas_authenticated`.
+     - Dukungan multi-akun & petugas di `isLoggedIn()`: Memeriksa keberadaan sesi user aktif maupun flag `quick_petugas_authenticated`.
+   - **Eliminasi Bouncing Redirect & Notifikasi Ramah di `web-statis/login.html`:**
+     - Ditambahkan penanganan menyeluruh: `if (urlParams.get('action') === 'logout' || urlParams.get('reason') === 'idle_timeout')`.
+     - Memastikan seluruh kredensial dibersihkan dan **MENCEGAH `redirectIfLoggedIn('admin.html')`** terpanggil jika `reason === 'idle_timeout'`.
+     - Menampilkan banner notifikasi peringatan oranye/kuning yang jelas: *"Demi keamanan data masjid, sesi Anda telah berakhir otomatis karena tidak ada aktivitas selama 3 menit. Silakan login kembali."*
+   - **Integrasi Penuh di Mode Petugas & Input Mobile (`petugas.html` & `modeinput.html`):**
+     - Mengaktifkan `AdminAuth.initIdleTimer()` saat otorisasi berhasil dibuka (`checkSecurityAuth()`, `handleAuthSubmit()`, dan `handleFullAuthSubmit()`).
+     - Mengaitkan `lockSecurityGate()` langsung dengan `AdminAuth.logout()` untuk pembersihan interval dan kredensial seketika.
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.32`** pada `web-statis/sw.js` dan skrip pembersih cache `web-statis/admin.html`.
+
+4. **Verifikasi & Pengujian Otomatis:**
+   - Menambahkan 8 assertions uji baru di `scripts/test-engine.js` memvalidasi timeout 180.000 ms, heartbeat interval, deteksi aktivitas terlambat, dan pembersihan sesi lengkap.
+   - Hasil `npm test`: **79 / 79 assertions LULUS (100% PASS)** tanpa satu pun kegagalan.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 11:30 WIB)
 
 ### 🚀 AKSELERASI PERFORMA & OPTIMASI PENUH SELURUH GAMBAR BACKGROUND WEB STATIS (WEBP HIGH QUALITY, PRELOAD MEMORY, PROGRESSIVE RENDERING & SW PRECACHE INSTAN) — (Versi SW v5.8.31):
 1. **Ringkasan Permintaan Pengguna:**

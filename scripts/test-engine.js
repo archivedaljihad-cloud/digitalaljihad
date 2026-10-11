@@ -247,6 +247,17 @@ assert(petugasContent.includes('SupabaseDB.onDataChange'), 'petugas.html memilik
 assert(modeinputContent.includes('SupabaseDB.onDataChange'), 'modeinput.html memiliki listener realtime multi-akun');
 assert(loginContent.includes('login') || loginContent.includes('Login'), 'login.html memiliki form otentikasi standar');
 
+// Verifikasi Engine Auto-Logout Saat Tidak Ada Aktivitas (3 Menit)
+const authContent = fs.readFileSync(path.join(baseDir, 'js/admin-auth.js'), 'utf8');
+assert(authContent.includes('IDLE_TIMEOUT_MS: 3 * 60 * 1000'), 'AdminAuth memiliki IDLE_TIMEOUT_MS tepat 3 menit (180.000 ms)');
+assert(authContent.includes('_idleHeartbeatInterval'), 'AdminAuth memiliki _idleHeartbeatInterval untuk periodic heartbeat check');
+assert(authContent.includes('now - effectiveLastTime >= this.IDLE_TIMEOUT_MS'), 'AdminAuth recordActivity mencegah reset timer jika durasi idle sudah melampaui batas 3 menit');
+assert(authContent.includes("sessionStorage.removeItem(AUTH_STORAGE_KEY)"), 'AdminAuth handleIdleTimeout membersihkan sesi sessionStorage secara tuntas');
+assert(authContent.includes("localStorage.removeItem('quick_petugas_authenticated')"), 'AdminAuth handleIdleTimeout membersihkan kredensial petugas');
+assert(loginContent.includes("urlParams.get('reason') === 'idle_timeout'"), 'login.html menangani pembersihan sesi dan cegah bouncing redirect saat idle_timeout');
+assert(petugasContent.includes('AdminAuth.initIdleTimer()'), 'petugas.html mengaktifkan idle timer saat otorisasi berhasil');
+assert(modeinputContent.includes('AdminAuth.initIdleTimer()'), 'modeinput.html mengaktifkan idle timer saat otorisasi berhasil');
+
 // -------------------------------------------------------------
 // 7. PRAYER MODE REALTIME & OFFICER SYNC INTEGRITY
 // -------------------------------------------------------------
