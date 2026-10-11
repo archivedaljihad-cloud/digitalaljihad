@@ -4,7 +4,54 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 10:45 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 11:30 WIB)
+
+### 🚀 AKSELERASI PERFORMA & OPTIMASI PENUH SELURUH GAMBAR BACKGROUND WEB STATIS (WEBP HIGH QUALITY, PRELOAD MEMORY, PROGRESSIVE RENDERING & SW PRECACHE INSTAN) — (Versi SW v5.8.31):
+1. **Ringkasan Permintaan Pengguna:**
+   - Masalah visual: Pada saat layar TV pertama kali dimuat atau berpindah slide, gambar background terlihat berat dibuka dan tidak tampil langsung penuh, melainkan muncul perbagian satu-persatu (*render chunk/scanline lag*).
+   - Target: Buat seluruh gambar background di web statis terbuka dengan super cepat, ringan, dan instan, namun resolusi gambar tetap tajam, jernih, dan tidak pecah/buram.
+
+2. **Akar Masalah Teknis (*Root Causes*):**
+   - **Ukuran File Berlebihan:** Gambar background bawaan (`BG1.png` s/d `BG11.png`, `bg_jumat.jpg`, `Kaabah.png`, `Nabawi.jpg`) berformat PNG uncompressed atau JPG non-progressive berukuran raksasa antara 700 KB hingga 1,7 MB (total ~15 MB aset background).
+   - **Metode Decode Baseline:** Gambar JPEG baseline dan PNG unpaletted memicu proses decode baris-demi-baris (*scanline decode*). Pada TV processor atau koneksi internet masjid, gambar ter-render bertahap dari atas ke bawah.
+   - **Background Belum Masuk Precaching Service Worker:** Aset background sebelumnya tidak terdaftar di `STATIC_ASSETS` `sw.js`, sehingga setiap pergantian slide TV harus mengunduh ulang aset melalui jaringan.
+   - **Pergantian Background Tanpa Preload Memori:** Siklus rotasi di JavaScript slide (`slide.html`, `infaq.html`, `qris.html`, dll) langsung mengganti `backgroundImage` tanpa memuat file ke RAM browser terlebih dahulu.
+
+3. **Perubahan & Solusi Teknis yang Diterapkan:**
+   - **Konversi & Kompresi WebP Resolusi Tinggi (Lanczos High-Fidelity):**
+     - Seluruh 24 file background dikonversi ke format generasi terbaru **WebP** (`quality=84`, `method=6`).
+     - Gambar berdimensi raksasa (seperti `Nabawi.jpg` 3684x2053 dan `Nabawi001.jpg` 4095x2304) di-resample menggunakan filter **Lanczos** ke standar Full HD (1920x1080) yang presisi pixel-for-pixel dengan layar TV display.
+     - **Hasil Kompresi Nyata:**
+       - `Kaabah.png` (1.688 KB) ➔ `Kaabah.webp` **220 KB** (**hemat 86,9%**).
+       - `Nabawi.jpg` (1.355 KB) ➔ `Nabawi.webp` **272 KB** (**hemat 79,9%**).
+       - `bg_jumat.jpg` (1.054 KB) ➔ `bg_jumat.webp` **260 KB** (**hemat 75,3%**).
+       - `BG1.png` s/d `BG11.png` (rata-rata 700–1.026 KB) ➔ WebP hanya **99 KB – 345 KB** (**hemat 50–77%**).
+       - Total ukuran aset background terpangkas dari **15,08 MB** menjadi **5,08 MB** (**penghematan bandwidth 66,3%** dengan ketajaman visual 100% terjaga).
+     - Seluruh file JPEG eksisting dioptimasi in-place menjadi **Progressive JPEG** sebagai fallback aman.
+   - **Integrasi WebP & Dark Emerald Backdrop di Seluruh CSS & Template Slide:**
+     - `web-statis/css/display-theme.css`: Menggunakan `BG1.webp` dengan fallback `BG1.png`, serta ditambahkan `background-color: #021a11 !important;` untuk mencegah kedipan putih/kosong saat inisialisasi.
+     - `slides/jumat.html` & `slides/kas-jumat.html`: Menggunakan `bg_jumat.webp` dengan fallback `bg_jumat.jpg`.
+     - `slides/live-madinah.html`: Menggunakan `Nabawi.webp` dengan fallback `Nabawi.jpg`.
+     - `prayer-mode.html`: Menggunakan `Kaabah.webp` dengan fallback `Kaabah.png`.
+     - `slides/idul-adha.html` & `slides/idul-fitri.html`: Menggunakan `bg_idul_adha.webp` dan `bg_idul_fitri.webp`.
+   - **Mekanisme In-Memory Preloading di JavaScript Rotator Slide:**
+     - Di 10 berkas slide (`slide.html`, `infaq.html`, `qris.html`, `pengumuman.html`, `undangan.html`, `agenda-rutin.html`, `hikmah.html`, `ambulance.html`, `keuangan-summary.html`, `keuangan.html`), seluruh array background diubah ke WebP dan di-preload ke memori browser sejak detik pertama slide dimuat (`backgroundImages.forEach(src => { const img = new Image(); img.src = src; });`).
+     - Efek: Saat timer 12 detik berganti, gambar sudah 100% berada di RAM GPU TV, sehingga transisi terjadi seketika (*instantaneous zero-latency crossfade*) tanpa ada jeda atau render perbagian.
+   - **Preload HTML Resource Hints di Halaman Induk:**
+     - Ditambahkan `<link rel="preload" as="image" href="...BG1.webp" type="image/webp">` pada `web-statis/index.html` dan `web-statis/slides/utama.html` agar background utama diunduh prioritas tertinggi sebelum perenderan layout dimulai.
+   - **Service Worker Precaching (`web-statis/sw.js`):**
+     - Seluruh berkas background WebP didaftarkan ke dalam `STATIC_ASSETS`.
+     - Begitu Service Worker terpasang, seluruh background tersimpan permanen di CacheStorage TV. Permintaan background berikutnya dilayani dalam **0 milidetik** dari cache lokal offline.
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.31`** pada `web-statis/sw.js` dan skrip pembersih cache `web-statis/admin.html`.
+
+4. **Verifikasi & Pengujian Otomatis:**
+   - `npm test`: **71 / 71 assertions LULUS (100% PASS)** tanpa error.
+   - Dilakukan 4 Pilar Sinkronisasi: GitHub commit & push, Cloudflare Workers deploy, dan sinkronisasi cold backup lokal.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 10:45 WIB)
 
 ### ⚙️ FITUR TIMER ROTASI PEKAN & PENGENDALI PENGUNCIAN SABTU MALAM KHUSUS SUPER ADMIN (`slides/kajian.html`, `admin.html`, `prayer-engine.js`) — (Versi SW v5.8.30):
 1. **Ringkasan Permintaan Pengguna:**

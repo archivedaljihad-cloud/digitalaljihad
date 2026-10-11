@@ -631,21 +631,28 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // Background Rotator Islami
+        // Background Rotator Islami (Optimized WebP & Preloaded)
         const backgroundImages = [
-            "../image/display/background/BG2.png",
-            "../image/display/background/BG10.png",
-            "../image/display/background/BG4.png",
-            "../image/display/background/BG7.png",
-            "../image/display/background/BG11.png",
-            "../image/display/background/BG6.png",
-            "../image/display/background/BG9.png",
-            "../image/display/background/BG5.png",
-            "../image/display/background/BG3.png"
+            "../image/display/background/BG2.webp",
+            "../image/display/background/BG10.webp",
+            "../image/display/background/BG4.webp",
+            "../image/display/background/BG7.webp",
+            "../image/display/background/BG11.webp",
+            "../image/display/background/BG6.webp",
+            "../image/display/background/BG9.webp",
+            "../image/display/background/BG5.webp",
+            "../image/display/background/BG3.webp"
         ];
         let currentBgIndex = 0;
         const bgEl = document.querySelector('.display-background') || document.body;
         if (backgroundImages.length > 0) {
+            // Preload seluruh background gambar ke memori browser untuk transisi instan tanpa lag
+            backgroundImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+
+            bgEl.style.setProperty('background-color', '#021a11', 'important');
             bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
             bgEl.style.setProperty('background-size', 'cover', 'important');
             bgEl.style.setProperty('background-position', 'center', 'important');

@@ -413,12 +413,14 @@
 		.display-background {
 			position: fixed;
 			inset: 0;
-			background-image: url('../image/display/background/bg_idul_adha.jpg'), url('../image/display/background/BG2.png');
+			background-color: #021a11;
+			background-image: url('../image/display/background/bg_idul_adha.webp'), url('../image/display/background/bg_idul_adha.jpg'), url('../image/display/background/BG2.webp');
 			background-position: center center;
 			background-repeat: no-repeat;
 			background-size: cover;
 			filter: brightness(0.95) contrast(1.05);
 			z-index: 0;
+			transition: opacity 0.5s ease-in-out;
 		}
 
 		.display-overlay {

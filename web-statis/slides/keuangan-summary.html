@@ -1,733 +1,735 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ringkasan & Grafik Keuangan Kas Masjid - Display TV</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--text-light, #ffffff);
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1600px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px 25px 85px 25px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .header {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 8px;
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 2.5rem !important;
-            line-height: 1.1;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            -webkit-text-stroke: 1.8px #FFD700 !important;
-            paint-order: stroke fill !important;
-            text-shadow: 
-                0 3px 6px rgba(0, 0, 0, 0.98),
-                0 6px 18px rgba(0, 0, 0, 0.92),
-                0 0 25px rgba(0, 0, 0, 0.85) !important;
-            margin: 0 0 4px 0;
-            font-weight: 900 !important;
-            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
-        }
-
-        .header h3.sub-header {
-            font-size: 1.15rem;
-            font-weight: 600;
-            letter-spacing: 4px;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-shadow: 1px 1px 0 #000000, -1px 1px 0 #000000, 1px -1px 0 #000000, -1px -1px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.95);
-            margin-bottom: 4px;
-        }
-
-        .datetime {
-            font-size: 1.35rem;
-            background: rgba(3, 20, 15, 0.65);
-            display: inline-block;
-            padding: 4px 24px;
-            border-radius: 35px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            border: 1.5px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            margin: 4px 0;
-            min-height: 0;
-            gap: 12px;
-        }
-
-        /* 3 KARTU STATS ATAS */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            width: 100%;
-            flex-shrink: 0;
-        }
-
-        .stat-card {
-            background: rgba(4, 25, 18, 0.72);
-            backdrop-filter: blur(12px);
-            border-radius: 14px;
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            border: 1.5px solid rgba(255, 215, 0, 0.35);
-        }
-
-        .stat-card.income { border-left: 5px solid #00e676; }
-        .stat-card.expense { border-left: 5px solid #ff6b6b; }
-        .stat-card.balance { border-left: 5px solid #ffd700; background: linear-gradient(135deg, rgba(4, 25, 18, 0.8), rgba(255, 215, 0, 0.12)); }
-
-        .stat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-        }
-
-        .stat-card.income .stat-icon { background: rgba(0, 230, 118, 0.15); color: #00e676; }
-        .stat-card.expense .stat-icon { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; }
-        .stat-card.balance .stat-icon { background: rgba(255, 215, 0, 0.15); color: #ffd700; }
-
-        .stat-body { display: flex; flex-direction: column; min-width: 0; }
-        .stat-label { font-size: 0.80rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.9; margin-bottom: 2px; }
-        .stat-card.income .stat-label { color: #a7f3d0; }
-        .stat-card.expense .stat-label { color: #fecaca; }
-        .stat-card.balance .stat-label { color: #fef08a; }
-
-        .stat-val-wrap { display: flex; align-items: baseline; gap: 4px; white-space: nowrap; line-height: 1.1; }
-        .stat-rp { font-size: 1rem; font-weight: 600; opacity: 0.9; }
-        .stat-card.income .stat-rp { color: #ffffff; font-weight: 700; }
-        .stat-card.expense .stat-rp { color: #ff6b6b; }
-        .stat-card.balance .stat-rp { color: #ffd700; }
-
-        .stat-num { font-size: 1.55rem; font-weight: 800; font-family: 'Poppins', sans-serif; font-variant-numeric: tabular-nums; }
-        .stat-card.income .stat-num { color: #ffffff; text-shadow: 0 0 14px rgba(255, 255, 255, 0.55); }
-        .stat-card.expense .stat-num { color: #ff6b6b; }
-        .stat-card.balance .stat-num { color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.45); }
-
-        /* DASHBOARD 2 KOLOM (Kotak Grafik Persegi Sama Sisi, Mutasi Kas Terakhir Luas & Jelas) */
-        .dashboard-row {
-            display: flex;
-            gap: 16px;
-            flex: 1;
-            min-height: 0;
-            width: 100%;
-        }
-
-        .chart-box {
-            aspect-ratio: 1 / 1;
-            height: 100%;
-            flex-shrink: 0;
-            background: rgba(4, 25, 18, 0.72);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            padding: 10px 14px;
-            border: 1.5px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
-
-        .chart-box .box-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 0.2px;
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            white-space: nowrap;
-            gap: 6px;
-            overflow: hidden;
-        }
-
-        .chart-box .box-title i {
-            color: #ffd700;
-            font-size: 1.05rem;
-            flex-shrink: 0;
-        }
-
-        .chart-box .box-title span {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: inline-block;
-        }
-
-        .trans-box {
-            flex: 1;
-            min-width: 0;
-            height: 100%;
-            background: rgba(4, 25, 18, 0.72);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            padding: 14px 20px;
-            border: 1.5px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
-
-        .box-title {
-            font-size: 1.28rem;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            margin-bottom: 10px;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-            border-bottom: 1.5px solid rgba(255, 215, 0, 0.4);
-            padding-bottom: 8px;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-        }
-
-        .box-title i { color: #ffd700; font-size: 1.35rem; }
-
-        .chart-area {
-            flex: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 0;
-        }
-
-        .chart-area canvas {
-            max-height: 100% !important;
-            max-width: 100% !important;
-        }
-
-        /* DAFTAR TRANSAKSI KANAN */
-        .trans-scroll {
-            flex: 1;
-            overflow-y: auto;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .trans-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 9px 14px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            transition: all 0.2s ease;
-        }
-
-        .trans-item:hover {
-            background: rgba(255, 215, 0, 0.16);
-            border-color: rgba(255, 215, 0, 0.4);
-        }
-
-        .trans-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-            flex: 1;
-        }
-
-        .trans-icon-circle {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .trans-icon-circle.income { background: rgba(0, 230, 118, 0.22); color: #00e676; border: 1.5px solid rgba(0, 230, 118, 0.5); }
-        .trans-icon-circle.expense { background: rgba(255, 107, 107, 0.22); color: #ff6b6b; border: 1.5px solid rgba(255, 107, 107, 0.5); }
-
-        .trans-text {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        .trans-desc {
-            font-size: 1.10rem;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.3;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
-        }
-
-        .trans-date {
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            font-weight: 500;
-            margin-top: 1px;
-        }
-
-        .trans-val {
-            text-align: right;
-            white-space: nowrap;
-            font-family: 'Poppins', monospace;
-            font-variant-numeric: tabular-nums;
-            font-size: 1.18rem;
-            font-weight: 800;
-            letter-spacing: 0.3px;
-        }
-
-        .trans-val.income { color: #00e676; text-shadow: 0 0 12px rgba(0, 230, 118, 0.45), 0 2px 5px rgba(0, 0, 0, 0.9); }
-        .trans-val.expense { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 107, 107, 0.4), 0 2px 5px rgba(0, 0, 0, 0.9); }
-
-        /* RUNNING TEXT FOOTER */
-        .bottom-running-wrap {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 20;
-            background: rgba(2, 16, 11, 0.88);
-            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
-            backdrop-filter: blur(10px);
-        }
-        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
-        .running-text {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 68s linear infinite;
-            font-size: 1.20rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        .running-text i { color: #ffd700; margin: 0 10px; }
-        @keyframes marquee {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100%); }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Background Slideshow Islami -->
-    <div class="display-background"></div>
-    <div class="display-overlay"></div>
-
-    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) SERAGAM MASJID -->
-    <div class="kaligrafi-medallion kaligrafi-muhammad">
-        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
-    </div>
-    <div class="kaligrafi-medallion kaligrafi-allah">
-        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
-    </div>
-
-    <div class="container">
-        <!-- HEADER MASJID -->
-        <div class="header">
-            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
-            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
-            <div class="datetime" id="datetime">Memuat Waktu...</div>
-        </div>
-
-        <!-- MAIN CONTENT PANEL -->
-        <div class="main-content">
-            <!-- 3 KARTU STATS ATAS -->
-            <div class="stats-grid">
-                <div class="stat-card income">
-                    <div class="stat-icon"><i class="fas fa-arrow-circle-down"></i></div>
-                    <div class="stat-body">
-                        <span class="stat-label">Total Pemasukan</span>
-                        <div class="stat-val-wrap">
-                            <span class="stat-rp">Rp</span>
-                            <span class="stat-num" id="statPemasukan">0</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="stat-card expense">
-                    <div class="stat-icon"><i class="fas fa-arrow-circle-up"></i></div>
-                    <div class="stat-body">
-                        <span class="stat-label">Total Pengeluaran</span>
-                        <div class="stat-val-wrap">
-                            <span class="stat-rp">Rp</span>
-                            <span class="stat-num" id="statPengeluaran">0</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="stat-card balance">
-                    <div class="stat-icon"><i class="fas fa-wallet"></i></div>
-                    <div class="stat-body">
-                        <span class="stat-label">Sisa Saldo Kas</span>
-                        <div class="stat-val-wrap">
-                            <span class="stat-rp">Rp</span>
-                            <span class="stat-num" id="statSaldo">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DASHBOARD 2 KOLOM: GRAFIK & DAFTAR TRANSAKSI -->
-            <div class="dashboard-row">
-                <!-- Kolom Kiri: Chart Distribusi Arus Kas -->
-                <div class="chart-box">
-                    <div class="box-title">
-                        <i class="fas fa-chart-pie"></i>
-                        <span>Proporsi Pemasukan vs Pengeluaran</span>
-                    </div>
-                    <div class="chart-area">
-                        <canvas id="keuanganChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Kolom Kanan: 7 Transaksi Kas Terkini -->
-                <div class="trans-box">
-                    <div class="box-title">
-                        <i class="fas fa-history"></i>
-                        <span>Mutasi Kas Terakhir</span>
-                    </div>
-                    <div class="trans-scroll" id="transList">
-                        <div class="text-center py-4 text-muted">
-                            <i class="fas fa-spinner fa-spin mr-2"></i> Memuat data transaksi...
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FOOTER RUNNING TEXT -->
-        <div class="bottom-running-wrap">
-            <div class="running-badge"><i class="fas fa-chart-pie"></i> ARUS KAS</div>
-            <div class="running-text-container">
-                <div class="running-text" id="runningTextContent">
-                    <i class="fas fa-chart-line"></i> Ringkasan dan Grafik Arus Keuangan Masjid Jami' Al-Jihad. Transparan, Amanah, dan Berkah.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CORE SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js"></script>
-    <script src="../js/supabase-db.js"></script>
-    <script src="../js/display-clock-ambient.js"></script>
-
-    <script>
-        // Format Angka Rupiah
-        function formatRupiah(num) {
-            const val = parseFloat(num) || 0;
-            return new Intl.NumberFormat('id-ID').format(val);
-        }
-
-        // Background Rotator Islami
-        const backgroundImages = [
-            "../image/display/background/BG2.png",
-            "../image/display/background/BG10.png",
-            "../image/display/background/BG4.png",
-            "../image/display/background/BG7.png",
-            "../image/display/background/BG11.png",
-            "../image/display/background/BG6.png",
-            "../image/display/background/BG1.png",
-            "../image/display/background/BG9.png",
-            "../image/display/background/BG5.png",
-            "../image/display/background/BG8.png",
-            "../image/display/background/BG3.png"
-        ];
-        let currentBgIndex = 0;
-        const bgEl = document.querySelector('.display-background') || document.body;
-        if (backgroundImages.length > 0) {
-            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
-            bgEl.style.setProperty('background-size', 'cover', 'important');
-            bgEl.style.setProperty('background-position', 'center', 'important');
-            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
-            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
-
-            setInterval(() => {
-                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
-                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
-            }, 12000);
-        }
-
-        // Jam & Tanggal Standar Masjid
-        function updateClock() {
-            const now = new Date();
-            const dtEl = document.getElementById('datetime');
-            if (!dtEl) return;
-            if (typeof getStandardMasjidDateTime === 'function') {
-                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
-                return;
-            }
-            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
-            
-            const dayName = days[now.getDay()];
-            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-
-            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-
-        let chartInstance = null;
-
-        // Validasi murni Kas Keuangan Masjid (Menjaga independensi kas operasional masjid)
-        function isKasUtamaMasjid(item) {
-            if (!item) return false;
-            const kat = (item.kategori || '').toLowerCase().trim();
-            const posMandiriLain = [
-                'penggalangan',
-                'program infaq',
-                'infaq program',
-                'infaq renovasi',
-                'renovasi',
-                'ambulance',
-                'ambulans',
-                'qurban',
-                'ramadhan',
-                'donasi infaq',
-                'donatur'
-            ];
-            for (const pos of posMandiriLain) {
-                if (kat.includes(pos)) return false;
-            }
-            return true;
-        }
-
-        // Render Chart Donut & List
-        function renderSummaryUI(data) {
-            const transListEl = document.getElementById('transList');
-            // FILTER KETAT: Hanya tampilkan Keuangan Kas Utama Masjid murni
-            const kasUtamaData = (data || []).filter(isKasUtamaMasjid);
-
-            if (!kasUtamaData || kasUtamaData.length === 0) {
-                if (transListEl) transListEl.innerHTML = '<div class="text-center py-4 text-muted">Belum ada transaksi kas masjid.</div>';
-                document.getElementById('statPemasukan').textContent = '0';
-                document.getElementById('statPengeluaran').textContent = '0';
-                document.getElementById('statSaldo').textContent = '0';
-                return;
-            }
-
-            let totMasuk = 0;
-            let totKeluar = 0;
-
-            kasUtamaData.forEach(item => {
-                totMasuk += parseFloat(item.pemasukan) || 0;
-                totKeluar += parseFloat(item.pengeluaran) || 0;
-            });
-
-            const saldo = totMasuk - totKeluar;
-
-            document.getElementById('statPemasukan').textContent = formatRupiah(totMasuk);
-            document.getElementById('statPengeluaran').textContent = formatRupiah(totKeluar);
-            document.getElementById('statSaldo').textContent = formatRupiah(saldo);
-
-            // 1. Render Chart.js Donut
-            const ctx = document.getElementById('keuanganChart');
-            if (ctx) {
-                if (chartInstance) chartInstance.destroy();
-                chartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Pemasukan Kas', 'Pengeluaran Kas'],
-                        datasets: [{
-                            data: [totMasuk, totKeluar],
-                            backgroundColor: [
-                                'rgba(0, 230, 118, 0.85)',
-                                'rgba(255, 107, 107, 0.85)'
-                            ],
-                            borderColor: [
-                                '#00e676',
-                                '#ff6b6b'
-                            ],
-                            borderWidth: 2,
-                            hoverOffset: 6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: '#ffffff',
-                                    font: { family: 'Poppins', size: 11, weight: '600' },
-                                    boxWidth: 12,
-                                    padding: 8
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.label}: Rp ${formatRupiah(context.raw)}`;
-                                    }
-                                }
-                            }
-                        },
-                        cutout: '65%'
-                    }
-                });
-            }
-
-            // 2. Render 8 Transaksi Terakhir
-            if (transListEl) {
-                const latest = kasUtamaData.slice(0, 8);
-                transListEl.innerHTML = latest.map(item => {
-                    const masuk = parseFloat(item.pemasukan) || 0;
-                    const keluar = parseFloat(item.pengeluaran) || 0;
-                    const isIncome = masuk > 0;
-                    const nominal = isIncome ? masuk : keluar;
-
-                    let tglFormatted = '-';
-                    if (item.tanggal) {
-                        const d = new Date(item.tanggal);
-                        const blnShort = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-                        tglFormatted = `${d.getDate()} ${blnShort[d.getMonth()]} ${d.getFullYear()}`;
-                    }
-
-                    let katLabel = item.kategori || 'Kas Utama Masjid';
-                    if (katLabel.toLowerCase() === 'kas utama') katLabel = 'Kas Utama Masjid';
-
-                    return `
-                        <div class="trans-item">
-                            <div class="trans-meta">
-                                <div class="trans-icon-circle ${isIncome ? 'income' : 'expense'}">
-                                    <i class="fas ${isIncome ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
-                                </div>
-                                <div class="trans-text">
-                                    <span class="trans-desc">${item.deskripsi || item.uraian || 'Infaq Kas'}</span>
-                                    <span class="trans-date">${tglFormatted} &nbsp;•&nbsp; ${katLabel}</span>
-                                </div>
-                            </div>
-                            <div class="trans-val ${isIncome ? 'income' : 'expense'}">
-                                ${isIncome ? '+' : '-'} Rp ${formatRupiah(nominal)}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        // Load Data Ringkasan Keuangan
-        async function loadSummaryData() {
-            try {
-                // 1. Settings (Bridge dari Parent Memory jika ada)
-                let settings = null;
-                try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
-                        settings = window.parent.settings;
-                    }
-                } catch (e) {}
-
-                if (!settings && window.SupabaseDB) {
-                    settings = await SupabaseDB.getSettings();
-                }
-
-                if (settings) {
-                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
-                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
-                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
-                        ? SupabaseDB.getRunningTextForPage('/keuangan-summary-embed', settings)
-                        : (settings.running_text || '');
-                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-chart-line"></i> ${rText}`;
-                }
-
-                // 2. Data Keuangan Kas Murni Masjid
-                const data = await SupabaseDB.getKeuanganKasUtama();
-                renderSummaryUI(data);
-            } catch (err) {
-                console.error('Gagal memuat ringkasan keuangan:', err);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSummaryData();
-
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings) {
-                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
-                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
-                    }
-                    loadSummaryData();
-                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'keuangan' || msg.table === 'app_settings')) {
-                    loadSummaryData();
-                } else if (msg.type === 'SYNC_KEUANGAN' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadSummaryData();
-                }
-            });
-
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'keuangan' || tbl === 'app_settings') {
-                        loadSummaryData();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'keuangan' || payload.table === 'app_settings') {
-                        loadSummaryData();
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ringkasan & Grafik Keuangan Kas Masjid - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem !important;
+            line-height: 1.1;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow: 
+                0 3px 6px rgba(0, 0, 0, 0.98),
+                0 6px 18px rgba(0, 0, 0, 0.92),
+                0 0 25px rgba(0, 0, 0, 0.85) !important;
+            margin: 0 0 4px 0;
+            font-weight: 900 !important;
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 #000000, -1px 1px 0 #000000, 1px -1px 0 #000000, -1px -1px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.95);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: rgba(3, 20, 15, 0.65);
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            margin: 4px 0;
+            min-height: 0;
+            gap: 12px;
+        }
+
+        /* 3 KARTU STATS ATAS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        .stat-card {
+            background: rgba(4, 25, 18, 0.72);
+            backdrop-filter: blur(12px);
+            border-radius: 14px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border: 1.5px solid rgba(255, 215, 0, 0.35);
+        }
+
+        .stat-card.income { border-left: 5px solid #00e676; }
+        .stat-card.expense { border-left: 5px solid #ff6b6b; }
+        .stat-card.balance { border-left: 5px solid #ffd700; background: linear-gradient(135deg, rgba(4, 25, 18, 0.8), rgba(255, 215, 0, 0.12)); }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .stat-card.income .stat-icon { background: rgba(0, 230, 118, 0.15); color: #00e676; }
+        .stat-card.expense .stat-icon { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; }
+        .stat-card.balance .stat-icon { background: rgba(255, 215, 0, 0.15); color: #ffd700; }
+
+        .stat-body { display: flex; flex-direction: column; min-width: 0; }
+        .stat-label { font-size: 0.80rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.9; margin-bottom: 2px; }
+        .stat-card.income .stat-label { color: #a7f3d0; }
+        .stat-card.expense .stat-label { color: #fecaca; }
+        .stat-card.balance .stat-label { color: #fef08a; }
+
+        .stat-val-wrap { display: flex; align-items: baseline; gap: 4px; white-space: nowrap; line-height: 1.1; }
+        .stat-rp { font-size: 1rem; font-weight: 600; opacity: 0.9; }
+        .stat-card.income .stat-rp { color: #ffffff; font-weight: 700; }
+        .stat-card.expense .stat-rp { color: #ff6b6b; }
+        .stat-card.balance .stat-rp { color: #ffd700; }
+
+        .stat-num { font-size: 1.55rem; font-weight: 800; font-family: 'Poppins', sans-serif; font-variant-numeric: tabular-nums; }
+        .stat-card.income .stat-num { color: #ffffff; text-shadow: 0 0 14px rgba(255, 255, 255, 0.55); }
+        .stat-card.expense .stat-num { color: #ff6b6b; }
+        .stat-card.balance .stat-num { color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.45); }
+
+        /* DASHBOARD 2 KOLOM (Kotak Grafik Persegi Sama Sisi, Mutasi Kas Terakhir Luas & Jelas) */
+        .dashboard-row {
+            display: flex;
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+        }
+
+        .chart-box {
+            aspect-ratio: 1 / 1;
+            height: 100%;
+            flex-shrink: 0;
+            background: rgba(4, 25, 18, 0.72);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 10px 14px;
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .chart-box .box-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            white-space: nowrap;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .chart-box .box-title i {
+            color: #ffd700;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        .chart-box .box-title span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+        }
+
+        .trans-box {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            background: rgba(4, 25, 18, 0.72);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 14px 20px;
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .box-title {
+            font-size: 1.28rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            margin-bottom: 10px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            border-bottom: 1.5px solid rgba(255, 215, 0, 0.4);
+            padding-bottom: 8px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .box-title i { color: #ffd700; font-size: 1.35rem; }
+
+        .chart-area {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        .chart-area canvas {
+            max-height: 100% !important;
+            max-width: 100% !important;
+        }
+
+        /* DAFTAR TRANSAKSI KANAN */
+        .trans-scroll {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .trans-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 14px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.2s ease;
+        }
+
+        .trans-item:hover {
+            background: rgba(255, 215, 0, 0.16);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        .trans-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .trans-icon-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .trans-icon-circle.income { background: rgba(0, 230, 118, 0.22); color: #00e676; border: 1.5px solid rgba(0, 230, 118, 0.5); }
+        .trans-icon-circle.expense { background: rgba(255, 107, 107, 0.22); color: #ff6b6b; border: 1.5px solid rgba(255, 107, 107, 0.5); }
+
+        .trans-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .trans-desc {
+            font-size: 1.10rem;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+        }
+
+        .trans-date {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        .trans-val {
+            text-align: right;
+            white-space: nowrap;
+            font-family: 'Poppins', monospace;
+            font-variant-numeric: tabular-nums;
+            font-size: 1.18rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+        }
+
+        .trans-val.income { color: #00e676; text-shadow: 0 0 12px rgba(0, 230, 118, 0.45), 0 2px 5px rgba(0, 0, 0, 0.9); }
+        .trans-val.expense { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 107, 107, 0.4), 0 2px 5px rgba(0, 0, 0, 0.9); }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 68s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) SERAGAM MASJID -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN CONTENT PANEL -->
+        <div class="main-content">
+            <!-- 3 KARTU STATS ATAS -->
+            <div class="stats-grid">
+                <div class="stat-card income">
+                    <div class="stat-icon"><i class="fas fa-arrow-circle-down"></i></div>
+                    <div class="stat-body">
+                        <span class="stat-label">Total Pemasukan</span>
+                        <div class="stat-val-wrap">
+                            <span class="stat-rp">Rp</span>
+                            <span class="stat-num" id="statPemasukan">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card expense">
+                    <div class="stat-icon"><i class="fas fa-arrow-circle-up"></i></div>
+                    <div class="stat-body">
+                        <span class="stat-label">Total Pengeluaran</span>
+                        <div class="stat-val-wrap">
+                            <span class="stat-rp">Rp</span>
+                            <span class="stat-num" id="statPengeluaran">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card balance">
+                    <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="stat-body">
+                        <span class="stat-label">Sisa Saldo Kas</span>
+                        <div class="stat-val-wrap">
+                            <span class="stat-rp">Rp</span>
+                            <span class="stat-num" id="statSaldo">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD 2 KOLOM: GRAFIK & DAFTAR TRANSAKSI -->
+            <div class="dashboard-row">
+                <!-- Kolom Kiri: Chart Distribusi Arus Kas -->
+                <div class="chart-box">
+                    <div class="box-title">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Proporsi Pemasukan vs Pengeluaran</span>
+                    </div>
+                    <div class="chart-area">
+                        <canvas id="keuanganChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: 7 Transaksi Kas Terkini -->
+                <div class="trans-box">
+                    <div class="box-title">
+                        <i class="fas fa-history"></i>
+                        <span>Mutasi Kas Terakhir</span>
+                    </div>
+                    <div class="trans-scroll" id="transList">
+                        <div class="text-center py-4 text-muted">
+                            <i class="fas fa-spinner fa-spin mr-2"></i> Memuat data transaksi...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-badge"><i class="fas fa-chart-pie"></i> ARUS KAS</div>
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-chart-line"></i> Ringkasan dan Grafik Arus Keuangan Masjid Jami' Al-Jihad. Transparan, Amanah, dan Berkah.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/supabase-db.js"></script>
+    <script src="../js/display-clock-ambient.js"></script>
+
+    <script>
+        // Format Angka Rupiah
+        function formatRupiah(num) {
+            const val = parseFloat(num) || 0;
+            return new Intl.NumberFormat('id-ID').format(val);
+        }
+
+        // Background Rotator Islami (Optimized WebP & Preloaded)
+        const backgroundImages = [
+            "../image/display/background/BG2.webp",
+            "../image/display/background/BG10.webp",
+            "../image/display/background/BG4.webp",
+            "../image/display/background/BG7.webp",
+            "../image/display/background/BG11.webp",
+            "../image/display/background/BG6.webp",
+            "../image/display/background/BG1.webp",
+            "../image/display/background/BG9.webp",
+            "../image/display/background/BG5.webp",
+            "../image/display/background/BG8.webp",
+            "../image/display/background/BG3.webp"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            backgroundImages.forEach(src => { const img = new Image(); img.src = src; });
+            bgEl.style.setProperty('background-color', '#021a11', 'important');
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const dtEl = document.getElementById('datetime');
+            if (!dtEl) return;
+            if (typeof getStandardMasjidDateTime === 'function') {
+                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
+                return;
+            }
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        let chartInstance = null;
+
+        // Validasi murni Kas Keuangan Masjid (Menjaga independensi kas operasional masjid)
+        function isKasUtamaMasjid(item) {
+            if (!item) return false;
+            const kat = (item.kategori || '').toLowerCase().trim();
+            const posMandiriLain = [
+                'penggalangan',
+                'program infaq',
+                'infaq program',
+                'infaq renovasi',
+                'renovasi',
+                'ambulance',
+                'ambulans',
+                'qurban',
+                'ramadhan',
+                'donasi infaq',
+                'donatur'
+            ];
+            for (const pos of posMandiriLain) {
+                if (kat.includes(pos)) return false;
+            }
+            return true;
+        }
+
+        // Render Chart Donut & List
+        function renderSummaryUI(data) {
+            const transListEl = document.getElementById('transList');
+            // FILTER KETAT: Hanya tampilkan Keuangan Kas Utama Masjid murni
+            const kasUtamaData = (data || []).filter(isKasUtamaMasjid);
+
+            if (!kasUtamaData || kasUtamaData.length === 0) {
+                if (transListEl) transListEl.innerHTML = '<div class="text-center py-4 text-muted">Belum ada transaksi kas masjid.</div>';
+                document.getElementById('statPemasukan').textContent = '0';
+                document.getElementById('statPengeluaran').textContent = '0';
+                document.getElementById('statSaldo').textContent = '0';
+                return;
+            }
+
+            let totMasuk = 0;
+            let totKeluar = 0;
+
+            kasUtamaData.forEach(item => {
+                totMasuk += parseFloat(item.pemasukan) || 0;
+                totKeluar += parseFloat(item.pengeluaran) || 0;
+            });
+
+            const saldo = totMasuk - totKeluar;
+
+            document.getElementById('statPemasukan').textContent = formatRupiah(totMasuk);
+            document.getElementById('statPengeluaran').textContent = formatRupiah(totKeluar);
+            document.getElementById('statSaldo').textContent = formatRupiah(saldo);
+
+            // 1. Render Chart.js Donut
+            const ctx = document.getElementById('keuanganChart');
+            if (ctx) {
+                if (chartInstance) chartInstance.destroy();
+                chartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pemasukan Kas', 'Pengeluaran Kas'],
+                        datasets: [{
+                            data: [totMasuk, totKeluar],
+                            backgroundColor: [
+                                'rgba(0, 230, 118, 0.85)',
+                                'rgba(255, 107, 107, 0.85)'
+                            ],
+                            borderColor: [
+                                '#00e676',
+                                '#ff6b6b'
+                            ],
+                            borderWidth: 2,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#ffffff',
+                                    font: { family: 'Poppins', size: 11, weight: '600' },
+                                    boxWidth: 12,
+                                    padding: 8
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: Rp ${formatRupiah(context.raw)}`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '65%'
+                    }
+                });
+            }
+
+            // 2. Render 8 Transaksi Terakhir
+            if (transListEl) {
+                const latest = kasUtamaData.slice(0, 8);
+                transListEl.innerHTML = latest.map(item => {
+                    const masuk = parseFloat(item.pemasukan) || 0;
+                    const keluar = parseFloat(item.pengeluaran) || 0;
+                    const isIncome = masuk > 0;
+                    const nominal = isIncome ? masuk : keluar;
+
+                    let tglFormatted = '-';
+                    if (item.tanggal) {
+                        const d = new Date(item.tanggal);
+                        const blnShort = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                        tglFormatted = `${d.getDate()} ${blnShort[d.getMonth()]} ${d.getFullYear()}`;
+                    }
+
+                    let katLabel = item.kategori || 'Kas Utama Masjid';
+                    if (katLabel.toLowerCase() === 'kas utama') katLabel = 'Kas Utama Masjid';
+
+                    return `
+                        <div class="trans-item">
+                            <div class="trans-meta">
+                                <div class="trans-icon-circle ${isIncome ? 'income' : 'expense'}">
+                                    <i class="fas ${isIncome ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                </div>
+                                <div class="trans-text">
+                                    <span class="trans-desc">${item.deskripsi || item.uraian || 'Infaq Kas'}</span>
+                                    <span class="trans-date">${tglFormatted} &nbsp;•&nbsp; ${katLabel}</span>
+                                </div>
+                            </div>
+                            <div class="trans-val ${isIncome ? 'income' : 'expense'}">
+                                ${isIncome ? '+' : '-'} Rp ${formatRupiah(nominal)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Load Data Ringkasan Keuangan
+        async function loadSummaryData() {
+            try {
+                // 1. Settings (Bridge dari Parent Memory jika ada)
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/keuangan-summary-embed', settings)
+                        : (settings.running_text || '');
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-chart-line"></i> ${rText}`;
+                }
+
+                // 2. Data Keuangan Kas Murni Masjid
+                const data = await SupabaseDB.getKeuanganKasUtama();
+                renderSummaryUI(data);
+            } catch (err) {
+                console.error('Gagal memuat ringkasan keuangan:', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSummaryData();
+
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
+                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
+                    }
+                    loadSummaryData();
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'keuangan' || msg.table === 'app_settings')) {
+                    loadSummaryData();
+                } else if (msg.type === 'SYNC_KEUANGAN' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadSummaryData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'keuangan' || tbl === 'app_settings') {
+                        loadSummaryData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'keuangan' || payload.table === 'app_settings') {
+                        loadSummaryData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

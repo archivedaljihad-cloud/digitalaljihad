@@ -69,12 +69,14 @@ body {
     position: fixed !important;
     inset: 0;
     z-index: -10 !important;
-    background-image: url('../image/display/background/BG1.png');
+    background-color: #021a11 !important;
+    background-image: url('../image/display/background/BG1.webp'), url('../image/display/background/BG1.png');
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
     opacity: 1 !important; 
     filter: brightness(0.96) contrast(1.06) saturate(1.08) !important;
+    transition: opacity 0.5s ease-in-out;
 }
 
 /* =====================================================
