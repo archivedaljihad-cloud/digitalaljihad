@@ -2784,6 +2784,80 @@
                             </div>
                         </div>
 
+                        <!-- PANEL KHUSUS SUPER ADMIN: PENGATURAN TIMER ROTASI & PENGUNCIAN KAJIAN -->
+                        <div class="card p-3 mb-3 shadow-sm" id="cardSuperAdminKajianTimer" style="background: linear-gradient(135deg, #022015 0%, #063824 100%); border: 1.8px solid #d4af37; border-radius: 14px; color: #fff; display: none;">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom" style="border-color: rgba(255, 215, 0, 0.35) !important;">
+                                <div class="d-flex align-items-center">
+                                    <span class="badge badge-warning text-dark font-weight-bold mr-2 px-2 py-1" style="font-size: 11px;">
+                                        <i class="fas fa-user-shield mr-1"></i> SUPER ADMIN ONLY
+                                    </span>
+                                    <strong class="text-warning" style="font-size: 0.95rem; letter-spacing: 0.5px;">KONFIGURASI TIMER &amp; SIKLUS ROTASI KAJIAN</strong>
+                                </div>
+                                <small class="text-light" style="opacity: 0.85;"><i class="fas fa-lock mr-1 text-warning"></i> Khusus Hak Akses Super Admin</small>
+                            </div>
+
+                            <div class="row align-items-start mt-2">
+                                <!-- 1. Timer Rotasi Jadwal Pekan di Slide -->
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label class="text-warning small font-weight-bold mb-1 d-flex align-items-center">
+                                        <i class="fas fa-sync-alt mr-1"></i> Durasi Pergantian Pekan 1–5 di Slide (Detik):
+                                    </label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text font-weight-bold bg-dark text-warning border-secondary"><i class="fas fa-hourglass-half"></i></span>
+                                        </div>
+                                        <input type="number" class="form-control font-weight-bold text-center" id="cfgKajianRotasiPekanDetik" value="9" min="3" max="60" style="font-size: 14px; background: #ffffff; color: #022015;">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text font-weight-bold bg-warning text-dark border-secondary">Detik</span>
+                                        </div>
+                                    </div>
+                                    <small class="text-light d-block mt-1" style="font-size: 11px; opacity: 0.85;">Interval pergeseran kartu Pekan 1 s/d 5 di slide TV (Standar: <strong>9 detik</strong>).</small>
+                                </div>
+
+                                <!-- 2. Mode & Durasi Penguncian Layar TV Sabtu Malam -->
+                                <div class="col-md-6">
+                                    <label class="text-warning small font-weight-bold mb-1 d-flex align-items-center">
+                                        <i class="fas fa-lock mr-1"></i> Mode Penguncian Layar TV Sabtu Malam:
+                                    </label>
+                                    <select class="form-control form-control-sm font-weight-bold mb-2 text-dark" id="cfgKajianLockMode" onchange="toggleKajianLockModeUI()" style="background: #ffffff;">
+                                        <option value="full">🔒 Terkunci Penuh (Ba'da Maghrib s/d Selesai Sholat Isya)</option>
+                                        <option value="timer">⏱️ Batas Waktu Timer Khusus (Menit setelah Maghrib)</option>
+                                        <option value="interleaved">🔄 Rotasi Berseling (Kajian Prioritas diselingi Slide Lain)</option>
+                                    </select>
+                                    
+                                    <!-- Field Tambahan Durasi Timer (Kondisional) -->
+                                    <div id="wrapKajianLockDuration" style="display: none;" class="mb-2">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text font-weight-bold bg-dark text-warning border-secondary">Durasi Kunci:</span>
+                                            </div>
+                                            <input type="number" class="form-control font-weight-bold text-center" id="cfgKajianLockDurationMinutes" value="60" min="15" max="180" style="background: #ffffff; color: #022015;">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text font-weight-bold bg-warning text-dark border-secondary">Menit</span>
+                                            </div>
+                                        </div>
+                                        <small class="text-light d-block mt-1" style="font-size: 10.5px; opacity: 0.85;">TV mengunci kajian selama menit ini sejak sholat Maghrib selesai.</small>
+                                    </div>
+
+                                    <!-- Field Tambahan Interleave Interval (Kondisional) -->
+                                    <div id="wrapKajianLockInterleave" style="display: none;" class="mb-2">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text font-weight-bold bg-dark text-warning border-secondary">Kajian Tayang:</span>
+                                            </div>
+                                            <input type="number" class="form-control font-weight-bold text-center" id="cfgKajianInterleaveInterval" value="60" min="20" max="300" style="background: #ffffff; color: #022015;">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text font-weight-bold bg-warning text-dark border-secondary">Detik</span>
+                                            </div>
+                                        </div>
+                                        <small class="text-light d-block mt-1" style="font-size: 10.5px; opacity: 0.85;">Kajian tayang selama detik ini, lalu TV memutar slide lain 1 kali dan kembali ke kajian.</small>
+                                    </div>
+
+                                    <small class="text-light d-block mt-1" style="font-size: 11px; opacity: 0.85;">Pengendali otomatis siklus tayang TV Sabtu malam ba'da Maghrib.</small>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Card Pemilihan Bulan & Generator Tanggal Otomatis -->
                         <div class="card p-3 mb-4 shadow-sm" style="background: linear-gradient(135deg, #022316 0%, #063d27 100%); border: 1.5px solid #d4af37; border-radius: 14px; color: #fff;">
                             <div class="row align-items-center">
@@ -7777,9 +7851,25 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             // Update Welcome Hero Banner Greeting Sesuai Peran Aktif Pengguna
             updateWelcomeBannerGreeting(user);
 
+            // Khusus Super Admin: Panel Pengaturan Timer Rotasi & Penguncian Kajian
+            const cardSuperTimer = document.getElementById('cardSuperAdminKajianTimer');
+            if (cardSuperTimer) {
+                cardSuperTimer.style.display = isSuperAdmin ? 'block' : 'none';
+            }
+
             // Render ulang tabel pengguna sesuai hak akses terkini
             renderUsersTable();
         }
+
+        // Helper: Toggle Tampilan Opsi Penguncian Kajian Sesuai Mode
+        function toggleKajianLockModeUI() {
+            const mode = document.getElementById('cfgKajianLockMode')?.value || 'full';
+            const wrapDur = document.getElementById('wrapKajianLockDuration');
+            const wrapInt = document.getElementById('wrapKajianLockInterleave');
+            if (wrapDur) wrapDur.style.display = (mode === 'timer') ? 'block' : 'none';
+            if (wrapInt) wrapInt.style.display = (mode === 'interleaved') ? 'block' : 'none';
+        }
+        window.toggleKajianLockModeUI = toggleKajianLockModeUI;
 
         // Helper: Pembaruan Banner Sapaan Waktu & Gelar Resmi Berdasarkan Peran (100% Dinamis dari Edit Akun)
         function updateWelcomeBannerGreeting(user) {
@@ -8855,6 +8945,26 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         if (!kData || Object.keys(kData).length === 0) {
                             try { kData = JSON.parse(localStorage.getItem('cached_kajian_sabtu')); } catch (e) {}
                         }
+
+                        // Muat Konfigurasi Timer Khusus Super Admin
+                        const rotPekan = (kData && kData.rotasi_pekan_detik) || s.kajian_rotasi_pekan_detik || localStorage.getItem('cached_kajian_rotasi_pekan_detik');
+                        if (document.getElementById('cfgKajianRotasiPekanDetik') && rotPekan) {
+                            document.getElementById('cfgKajianRotasiPekanDetik').value = parseInt(rotPekan) || 9;
+                        }
+                        const lMode = (kData && kData.lock_mode) || s.kajian_lock_mode || localStorage.getItem('cached_kajian_lock_mode') || 'full';
+                        if (document.getElementById('cfgKajianLockMode') && lMode) {
+                            document.getElementById('cfgKajianLockMode').value = lMode;
+                        }
+                        const lDur = (kData && kData.lock_duration_minutes) || s.kajian_lock_duration_minutes || localStorage.getItem('cached_kajian_lock_duration_minutes');
+                        if (document.getElementById('cfgKajianLockDurationMinutes') && lDur) {
+                            document.getElementById('cfgKajianLockDurationMinutes').value = parseInt(lDur) || 60;
+                        }
+                        const lInt = (kData && kData.interleave_interval) || s.kajian_interleave_interval || localStorage.getItem('cached_kajian_interleave_interval');
+                        if (document.getElementById('cfgKajianInterleaveInterval') && lInt) {
+                            document.getElementById('cfgKajianInterleaveInterval').value = parseInt(lInt) || 60;
+                        }
+                        if (typeof toggleKajianLockModeUI === 'function') toggleKajianLockModeUI();
+
                         if (kData && kData.jadwal_list && Array.isArray(kData.jadwal_list) && kData.jadwal_list.length > 0) {
                             currentKajianBulanData.jadwal_list = kData.jadwal_list;
                             if (kData.bulan_num) currentKajianBulanData.bulan_num = parseInt(kData.bulan_num);
@@ -12365,11 +12475,20 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
 
                 const nearestItem = currentKajianBulanData.jadwal_list[nearestIndex] || currentKajianBulanData.jadwal_list[0];
 
+                const rotasiPekanDetik = Math.max(3, parseInt(document.getElementById('cfgKajianRotasiPekanDetik')?.value) || 9);
+                const lockMode = document.getElementById('cfgKajianLockMode')?.value || 'full';
+                const lockDurationMinutes = Math.max(15, parseInt(document.getElementById('cfgKajianLockDurationMinutes')?.value) || 60);
+                const interleaveInterval = Math.max(20, parseInt(document.getElementById('cfgKajianInterleaveInterval')?.value) || 60);
+
                 const payloadData = {
                     bulan_num: bulan,
                     tahun: tahun,
                     bulan_label: `${namaBulan} ${tahun}`,
                     jadwal_list: currentKajianBulanData.jadwal_list,
+                    rotasi_pekan_detik: rotasiPekanDetik,
+                    lock_mode: lockMode,
+                    lock_duration_minutes: lockDurationMinutes,
+                    interleave_interval: interleaveInterval,
                     // Kompatibilitas dengan pembaca lama:
                     pekan_label: nearestItem.pekan_label || `Pekan ${nearestIndex + 1}`,
                     tanggal: nearestItem.tanggal || '',
@@ -12384,6 +12503,10 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                 localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
                 localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
                 localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
+                localStorage.setItem('cached_kajian_rotasi_pekan_detik', rotasiPekanDetik);
+                localStorage.setItem('cached_kajian_lock_mode', lockMode);
+                localStorage.setItem('cached_kajian_lock_duration_minutes', lockDurationMinutes);
+                localStorage.setItem('cached_kajian_interleave_interval', interleaveInterval);
 
                 // Simpan ke app_settings Supabase secara multi-row aman & broadcast realtime
                 let sbSuccess = false;
@@ -13619,7 +13742,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.29') {
+                                if (name !== 'aljihad-signage-v5.8.30') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }

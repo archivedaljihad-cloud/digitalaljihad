@@ -805,7 +805,7 @@
         let isTodaySaturday = false;
         let todaySaturdayIndex = -1;
         let nextUpcomingIndex = -1;
-        const ROTATION_INTERVAL_MS = 9000; // 9 detik per pekan
+        let rotationIntervalMs = 9000; // Default 9 detik (dapat diatur oleh Super Admin)
 
         // Jam & Tanggal Header
         function updateDateTime() {
@@ -1000,7 +1000,7 @@
             progressVal = 0;
             const fillEl = document.getElementById('timelineProgressFill');
             const stepMs = 100;
-            const increment = (100 / (ROTATION_INTERVAL_MS / stepMs));
+            const increment = (100 / (rotationIntervalMs / stepMs));
 
             progressInterval = setInterval(() => {
                 progressVal += increment;
@@ -1074,6 +1074,20 @@
                     } else {
                         currentJadwalList = [DEFAULT_KAJIAN];
                     }
+
+                    // Baca preferensi interval rotasi pekan dari data atau setting Super Admin
+                    let rotSec = 9;
+                    if (kData && kData.rotasi_pekan_detik) {
+                        rotSec = parseInt(kData.rotasi_pekan_detik) || 9;
+                    } else if (settings && (settings.kajian_rotasi_pekan_detik || settings.rotasi_pekan_detik)) {
+                        rotSec = parseInt(settings.kajian_rotasi_pekan_detik || settings.rotasi_pekan_detik) || 9;
+                    } else {
+                        try {
+                            const cachedRot = localStorage.getItem('cached_kajian_rotasi_pekan_detik');
+                            if (cachedRot) rotSec = parseInt(cachedRot) || 9;
+                        } catch(e) {}
+                    }
+                    rotationIntervalMs = Math.max(3, rotSec) * 1000;
                 } else {
                     currentJadwalList = [DEFAULT_KAJIAN];
                 }

@@ -4,7 +4,47 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 03:55 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 10:45 WIB)
+
+### ⚙️ FITUR TIMER ROTASI PEKAN & PENGENDALI PENGUNCIAN SABTU MALAM KHUSUS SUPER ADMIN (`slides/kajian.html`, `admin.html`, `prayer-engine.js`) — (Versi SW v5.8.30):
+1. **Ringkasan Permintaan Pengguna:**
+   - Menyediakan fitur setting timer rotasi dan durasi penguncian TV di dashboard admin:
+     1. **Durasi Pergantian Jadwal Pekan 1 s/d 5 di Dalam Halaman Kajian** (`slides/kajian.html`).
+     2. **Durasi Penguncian Otomatis pada Hari Sabtu Malam (Ba'da Maghrib s/d Selesai Isya)** di TV Display.
+     3. **Batasan Hak Akses Ketat:** Fitur setelan timer ini **hanya boleh tampil dan disetel di dashboard Super Admin (`role === 'admin'`)**. Pengguna role Petugas dan Bendahara tidak memiliki akses ke kontrol timer ini.
+
+2. **Perubahan & Solusi Teknis yang Diterapkan:**
+   - **Panel Khusus Super Admin di Panel Admin (`web-statis/admin.html`):**
+     - Dibuat kartu eksklusif `#cardSuperAdminKajianTimer` berlatar emerald gradient `#022015` ke `#063824` dengan border emas `#d4af37` dan badge mencolok `"SUPER ADMIN ONLY"`.
+     - Logika RBAC di `applyCurrentUserState(user)` memastikan elemen ini berstatus `display: block` jika `user.role === 'admin'` dan `display: none` untuk role lainnya.
+     - **Input Konfigurasi:**
+       - `#cfgKajianRotasiPekanDetik`: Mengatur interval pergantian slide Pekan 1–5 di `slides/kajian.html` (minimal 3 detik, default 9 detik).
+       - `#cfgKajianLockMode`: Dropdown mode penguncian layar TV Sabtu malam:
+         - `full`: Terkunci Penuh (Ba'da Maghrib s/d Selesai Sholat Isya).
+         - `timer`: Batas Waktu Timer Khusus (Menit setelah Maghrib, min 15 menit, default 60 menit).
+         - `interleaved`: Rotasi Berseling (Kajian prioritas diselingi slide lain selama 20 detik).
+       - Fungsi interaktif `toggleKajianLockModeUI()` mengatur tampilan input kondisional durasi secara otomatis.
+   - **Sinkronisasi Data Multi-Lapisan (`web-statis/js/supabase-db.js` & `web-statis/admin.html`):**
+     - Parameter timer disimpan ke dalam objek `kajian_sabtu_data`, key individual `app_settings` (`kajian_rotasi_pekan_detik`, `kajian_lock_mode`), serta `localStorage` offline-first.
+     - Penyiaran realtime melalui event `broadcastChange` memastikan TV langsung merespon tanpa harus refresh manual.
+   - **Rotasi Dinamis di Slide Kajian (`web-statis/slides/kajian.html`):**
+     - Mengubah interval statis `ROTATION_INTERVAL_MS` menjadi variabel dinamis `rotationIntervalMs` yang dibaca langsung dari payload data / settings / cache.
+     - Progress bar timeline di bagian bawah (`timelineProgressFill`) otomatis menyesuaikan laju pengisian dengan interval detik baru.
+   - **Logika Engine Pintar di Prayer Engine (`web-statis/js/prayer-engine.js`):**
+     - Logika `isKajianActive(setting, jadwalList, customNow)` membaca `lock_mode`.
+     - Jika mode `timer`: penguncian diakhiri setelah `lock_duration_minutes` tercapai sejak sholat Maghrib berjamaah selesai.
+     - Jika mode `interleaved`: siklus tayang otomatis bergantian secara matematis (tayang kajian selama detik interval, diselingi slide lain 20 detik, lalu kembali ke kajian) selama rentang waktu Maghrib ke Isya.
+   - **SOP Bumping Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.30`** pada `web-statis/sw.js` dan skrip pembersih cache `web-statis/admin.html`.
+     - TV Display dan perangkat pengurus masjid otomatis menginvalidasi cache usang dan memuat logika terbaru.
+
+3. **Verifikasi & Pengujian Otomatis:**
+   - `npm test`: **71 / 71 assertions LULUS (100% PASS)** termasuk test suite baru untuk mode timer penguncian.
+   - Dilakukan 4 Pilar Sinkronisasi: GitHub commit & push, Cloudflare Workers deploy, dan sinkronisasi cold backup lokal.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 03:55 WIB)
 
 ### 🕌 OPTIMASI TAMPILAN SLIDE "PENGAJIAN RUTIN MALAM AHAD" (`slides/kajian.html`) — PERBESAR FOTO PEMATERI, WAKTU 1 BARIS, & CLEANUP UI (Versi SW v5.8.29):
 1. **Ringkasan Permintaan Pengguna:**

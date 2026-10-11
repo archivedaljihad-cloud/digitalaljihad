@@ -142,6 +142,15 @@ const satPostIsyaTime = new Date('2026-10-10T19:25:00+07:00');
 const satPostIsyaState = window.PrayerEngine.getPrayerState(mockSettings, mockJadwal, null, satPostIsyaTime);
 assert(satPostIsyaState.kajian_active === false && satPostIsyaState.active === false, 'Malam Ahad 19:25 WIB: Setelah selesai sholat Isya, kunci kajian dilepas & rotasi normal kembali');
 
+// Test 2.3c: Mode Timer Khusus Super Admin (Kunci 25 menit setelah Maghrib selesai 18:10 -> batas 18:35)
+const timerSettings = Object.assign({}, mockSettings, {
+    kajian_sabtu_data: { lock_mode: 'timer', lock_duration_minutes: 25 }
+});
+const satTimerActive = window.PrayerEngine.getPrayerState(timerSettings, mockJadwal, null, new Date('2026-10-10T18:30:00+07:00'));
+assert(satTimerActive.kajian_active === true, 'Malam Ahad Mode Timer: Masih dalam durasi timer 25 menit (Kajian AKTIF)');
+const satTimerExpired = window.PrayerEngine.getPrayerState(timerSettings, mockJadwal, null, new Date('2026-10-10T18:40:00+07:00'));
+assert(satTimerExpired.kajian_active === false, 'Malam Ahad Mode Timer: Melebihi durasi timer 25 menit (Kajian DILEPAS kembali ke rotasi)');
+
 // Test 2.4: Sholat Jumat (Jumat 9 Okt 2026, 11:39 s/d 12:34)
 const friAdzanTime = new Date('2026-10-09T11:40:00+07:00');
 const friState = window.PrayerEngine.getPrayerState(mockSettings, mockJadwal, null, friAdzanTime);

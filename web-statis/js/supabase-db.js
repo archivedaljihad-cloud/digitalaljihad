@@ -392,11 +392,17 @@
                 localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
                 localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
                 localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
+                if (payloadData.rotasi_pekan_detik) localStorage.setItem('cached_kajian_rotasi_pekan_detik', payloadData.rotasi_pekan_detik);
+                if (payloadData.lock_mode) localStorage.setItem('cached_kajian_lock_mode', payloadData.lock_mode);
+                if (payloadData.lock_duration_minutes) localStorage.setItem('cached_kajian_lock_duration_minutes', payloadData.lock_duration_minutes);
+                if (payloadData.interleave_interval) localStorage.setItem('cached_kajian_interleave_interval', payloadData.interleave_interval);
 
                 await Promise.all([
                     this.saveSettingItem('kajian_sabtu_data', payloadData),
                     this.saveSettingItem('kajian_sabtu_enabled', enabled),
-                    this.saveSettingItem('kajian_sabtu_start_time', jamMulai)
+                    this.saveSettingItem('kajian_sabtu_start_time', jamMulai),
+                    this.saveSettingItem('kajian_rotasi_pekan_detik', payloadData.rotasi_pekan_detik || 9),
+                    this.saveSettingItem('kajian_lock_mode', payloadData.lock_mode || 'full')
                 ]);
 
                 if (typeof this.broadcastChange === 'function') {

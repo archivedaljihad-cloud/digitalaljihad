@@ -235,8 +235,32 @@
                 // Waktu sholat Isya selesai sempurna (Adzan + Iqamah + Sholat Berjamaah)
                 const isyaPrayerEnd = new Date(isyaAdzan.getTime() + totalPrayerDurationMs);
 
-                // Aktif sejak waktu mulai ba'da Maghrib sampai selesai sholat Isya
-                return now >= kajianStart && now < isyaPrayerEnd;
+                // Cek Mode Penguncian & Timer Khusus Super Admin
+                let kData = setting.kajian_sabtu_data;
+                if (typeof kData === 'string') {
+                    try { kData = JSON.parse(kData); } catch (e) {}
+                }
+                const lockMode = (kData && kData.lock_mode) || setting.kajian_lock_mode || 'full';
+
+                let kajianEnd = isyaPrayerEnd;
+                if (lockMode === 'timer') {
+                    const lockDurMin = parseInt((kData && kData.lock_duration_minutes) || setting.kajian_lock_duration_minutes) || 60;
+                    kajianEnd = new Date(kajianStart.getTime() + (lockDurMin * 60 * 1000));
+                }
+
+                if (now < kajianStart || now >= kajianEnd) {
+                    return false;
+                }
+
+                if (lockMode === 'interleaved') {
+                    const interleaveSec = Math.max(20, parseInt((kData && kData.interleave_interval) || setting.kajian_interleave_interval) || 60);
+                    const cycleSec = interleaveSec + 20; // 20 detik untuk putaran slide lain
+                    const elapsedSec = Math.floor((now.getTime() - kajianStart.getTime()) / 1000);
+                    const modSec = elapsedSec % cycleSec;
+                    return modSec < interleaveSec;
+                }
+
+                return true;
             } catch (err) {
                 console.warn('Gagal evaluasi waktu kajian sabtu:', err);
                 return false;
