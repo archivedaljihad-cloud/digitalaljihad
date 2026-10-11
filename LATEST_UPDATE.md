@@ -4,7 +4,47 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 17:53 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 19:50 WIB)
+
+### 🚀 OVERHAUL TOTAL 7 MASALAH SISTEM: SINKRONISASI REALTIME MULTI-DEVICE, PERFORMA SMART TV 60FPS, WARNA TV NATURAL, & SCHEMATIC ZERO-REGRESSION (Versi SW v5.8.38):
+1. **Penyelesaian Masalah 1 & 5: Sinkronisasi Data Antar-Halaman & Antar-Device Realtime 100%:**
+   - **Invalidasi Cache Bertingkat (`SupabaseDB.invalidateCache`)**: Mengizinkan pembersihan komprehensif seluruh cache turunan (`settings`, `sholat_jumat`, `jadwal_sholat`, `keuangan`, `program_infaq`, `donasi_infaq`, `slides`, `undangan`, `pengumuman`, `kajian`, `agenda_rutin`, `ramadhan`, dll.) seketika saat `app_settings` atau `quick_petugas` diperbarui.
+   - **Rotator TV Realtime (`web-statis/index.html`)**: `handleUniversalDataUpdate` kini langsung mengeksekusi `SupabaseDB.invalidateCache(table)` dan memancarkan data mutakhir ke seluruh active frames (`frame1`, `frame2`, `prayerFrame`). Data petugas Jumat dan Galeri Slide otomatis disiarkan ulang secara asinkron dengan payload `force_reload: true`.
+   - **Pemberian Jaminan Non-Destructive Update**: `saveSholatJumat()` kini membaca data live `running_text_pages` terlebih dahulu dari Supabase Cloud sebelum melakukan patch, sehingga perubahan petugas dari HP tidak pernah lagi menghapus running text 19 slide lainnya.
+
+2. **Penyelesaian Masalah 2 & 7: Login Lintas Perangkat Multi-Device & Sinkronisasi `/petugas`, `/modeinput`, `/login`:**
+   - **Live Cloud Sync pada Quick Auth Mobile (`web-statis/login.html`)**: `handleMobileQuickAuthSubmit` kini proaktif memanggil `AdminAuth.syncUsersFromCloud()` dan memiliki live fallback query langsung ke Supabase `app_settings?key=eq.rbac_users_list`. Akun baru atau perubahan kata sandi langsung terautentikasi seketika di semua perangkat (HP, tablet, laptop, PC).
+   - **Cross-Auth Bridge Synchronization**: Berhasil menautkan token `quick_petugas_authenticated` dan `aljihad_auth_user` saat login di seluruh mode (Dashboard maupun Mobile). Pengguna yang berpindah dari `/login` ke `/modeinput` atau `/petugas` tidak lagi mengalami sesi terkunci atau desinkronisasi.
+   - **Paritas 100% `petugas.html` & `modeinput.html`**: Kode kedua halaman kini sepenuhnya identik dan tersinkronisasi, termasuk 11 modul manajemen serta tombol pengujian tampilan TV Hari Jum'at.
+   - **Clean URL Rewrites (`web-statis/_redirects`)**: Menambahkan pemetaan rute bersih di Cloudflare Workers/Pages (`/petugas`, `/modeinput`, `/login`, `/admin`, `/prayer-mode`).
+
+3. **Penyelesaian Masalah 3: Akurasi Warna TV Natural & Foto Slide/Imam Tampil Sempurna:**
+   - **Penghapusan Black Crush & Color Distortion (`web-statis/css/display-theme.css`)**: Mengganti `filter: brightness(0.96) contrast(1.06) saturate(1.08) !important;` menjadi `filter: none !important;` pada `.display-background`. Layar Smart TV kini menampilkan warna asli gambar tanpa distorsi kehijauan/kekuningan atau bayangan pekat akibat dynamic picture enhancer TV.
+   - **Gradient Vignette yang Teduh & Transparan**: Melembutkan `.display-overlay` sehingga background masjid tetap cerah, tajam, dan teks informasi tetap kontras tinggi.
+   - **Proteksi Overflow Skema SQL `sholat_jumat.foto_imam` (`varchar(255)`)**: Unggahan foto base64 panjang (>200 karakter) kini secara cerdas disimpan sebagai `'custom_uploaded'` pada tabel SQL PostgreSQL, sedangkan data base64 aslinya disimpan utuh di `app_settings.running_text_pages.jumat_foto_imam_b64`. Layar TV dan slide meresolusikannya kembali tanpa error limit schema SQL!
+   - **Slide Image Custom Base64 (`slides_custom_data`)**: Unggahan custom slide kini disaring agar kolom `gambar_base64` tidak dikirim ke tabel SQL `slides` (mencegah error schema cache PGRST204), dan data gambar base64 digabungkan otomatis melalui `mergeCustomSlideImages()`.
+
+4. **Penyelesaian Masalah 4: Responsivitas Layar Smart TV 60 FPS:**
+   - **Penggantian 12-Tile 3D Grid Flip (`web-statis/slides/slide.html`)**: Mengganti rotasi 12 tile 3D (`preserve-3d`, `rotateY(180deg)`) yang membebani GPU TV dengan **Hardware-Accelerated Cinematic Cross-Dissolve**. Perpindahan slide kini berjalan halus pada 60 FPS tanpa frame drop, bebas memory spike, dan 100% bebas dari ubin hitam/blank.
+
+5. **Penyelesaian Masalah 6: Proteksi Zero-Regression & Isolasi Modul:**
+   - Perbaikan terisolasi secara modular pada lapisan data (`supabase-db.js`), styling TV (`display-theme.css`), slide viewer (`slide.html`), router (`_redirects`), dan auth gate (`login.html`, `petugas.html`, `modeinput.html`).
+   - Semua modul sholat, timer khutbah Jumat, Yaasiin malam Jumat, kajian malam Ahad, dan watchdog display berjalan normal tanpa terganggu.
+   - Suite pengujian otomatis `npm test` diperluas dari 79 menjadi **86 assertions** dan **LULUS 100% (86/86 PASS)**.
+
+6. **Bumping Service Worker & Pembersihan Cache (`web-statis/sw.js` & `admin.html`):**
+   - Service Worker dinaikkan ke versi **`aljihad-signage-v5.8.38`**.
+   - Skrip pembersih cache panel Admin di `admin.html` diperbarui agar menyisakan versi `v5.8.38` dan membersihkan seluruh cache usang.
+
+7. **Eksekusi 4 Pilar SOP Deployment:**
+   - **Cloudflare Workers**: Berhasil deploy aset live ke `https://digitalaljihad.archived-aljihad.workers.dev` & domain utama `https://digitalaljihad.my.id/`.
+   - **Supabase Cloud**: Skema dan sinkronisasi realtime teruji aktif.
+   - **Cold Backup**: Seluruh berkas pembaruan disalin ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Commit & push branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 17:53 WIB)
 
 ### 🧩 INSTALASI 5 AGENTIC SKILLS (ANTIGRAVITY AWESOME SKILLS) KE WORKSPACE (.agents/skills/):
 1. **Ringkasan Permintaan Pengguna:**

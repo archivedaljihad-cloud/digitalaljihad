@@ -75,7 +75,7 @@ body {
     background-repeat: no-repeat !important;
     background-size: cover !important;
     opacity: 1 !important; 
-    filter: brightness(0.96) contrast(1.06) saturate(1.08) !important;
+    filter: none !important;
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -91,16 +91,16 @@ body {
     z-index: -9 !important;
     background: 
         /* Vignette lembut sudut luar layar untuk keteduhan visual & bebas silau */
-        radial-gradient(ellipse at 50% 50%, rgba(2, 14, 10, 0.04) 0%, rgba(1, 12, 8, 0.32) 100%),
+        radial-gradient(ellipse at 50% 50%, rgba(2, 14, 10, 0.0) 0%, rgba(1, 12, 8, 0.20) 100%),
         /* Gradasi vertikal penopang kontras Header atas dan Running Text bawah */
         linear-gradient(180deg, 
-            rgba(2, 16, 11, 0.78) 0%, 
-            rgba(2, 16, 11, 0.50) 15%, 
-            rgba(2, 16, 11, 0.20) 28%, 
-            rgba(2, 16, 11, 0.12) 50%, 
-            rgba(2, 16, 11, 0.18) 75%, 
-            rgba(2, 16, 11, 0.52) 88%, 
-            rgba(2, 16, 11, 0.75) 100%
+            rgba(2, 16, 11, 0.70) 0%, 
+            rgba(2, 16, 11, 0.38) 15%, 
+            rgba(2, 16, 11, 0.10) 28%, 
+            rgba(2, 16, 11, 0.05) 50%, 
+            rgba(2, 16, 11, 0.10) 75%, 
+            rgba(2, 16, 11, 0.40) 88%, 
+            rgba(2, 16, 11, 0.70) 100%
         ) !important;
 }
 

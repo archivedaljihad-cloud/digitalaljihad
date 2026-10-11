@@ -1369,8 +1369,18 @@
             return;
         }
 
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memeriksa...';
+        }
+
         let matched = false;
         let matchedUser = null;
+
+        // 1. Sinkronisasi pengguna dari Supabase Cloud lebih dulu agar data akun mutakhir dikenali di seluruh perangkat
+        if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
+            try { await window.AdminAuth.syncUsersFromCloud(); } catch(e){}
+        }
 
         let users = [];
         if (window.AdminAuth && typeof window.AdminAuth.getUsers === 'function') {
@@ -1390,6 +1400,36 @@
                 return uPwd === rawVal || (uPwd && uPwd.toLowerCase() === cleanLower) || un === cleanLower;
             });
             if (matchedUser) matched = true;
+        }
+
+        // Live fallback query langsung ke Supabase Cloud jika belum cocok
+        if (!matched) {
+            try {
+                const sbUrl = (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) ? SUPABASE_CONFIG.url : 'https://xskusfacwsclbgdtgier.supabase.co';
+                const sbKey = (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.anonKey) ? SUPABASE_CONFIG.anonKey : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhza3VzZmFjd3NjbGJnZHRnaWVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3ODc0NzQsImV4cCI6MjA4NzM2MzQ3NH0.90xR4P0fT1SjhbOQY3dkhB355Zg944-G9t7K409Zg3M';
+                const res = await fetch(`${sbUrl}/rest/v1/app_settings?key=eq.rbac_users_list&select=value`, {
+                    headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data[0] && data[0].value) {
+                        let cloudUsers = data[0].value;
+                        if (typeof cloudUsers === 'string') {
+                            try { cloudUsers = JSON.parse(cloudUsers); } catch(e){}
+                        }
+                        if (Array.isArray(cloudUsers) && cloudUsers.length > 0) {
+                            users = cloudUsers;
+                            try { localStorage.setItem('aljihad_users_list', JSON.stringify(users)); } catch(e){}
+                            matchedUser = users.find(u => {
+                                const uPwd = (u.password || '').trim();
+                                const un = (u.username || '').toLowerCase().trim();
+                                return uPwd === rawVal || (uPwd && uPwd.toLowerCase() === cleanLower) || un === cleanLower;
+                            });
+                            if (matchedUser) matched = true;
+                        }
+                    }
+                }
+            } catch(e) {}
         }
 
         if (!matched) {
@@ -1424,6 +1464,11 @@
             }, 300);
         } else {
             showMobileError('Kredensial atau PIN tidak cocok. Silakan coba lagi.');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-key"></i> Buka Akses Input Mobile';
+                btn.style.background = '';
+            }
             const input = document.getElementById('authMobilePasswordInput');
             if (input) {
                 input.value = '';
@@ -1498,6 +1543,10 @@
         try {
             const user = await AdminAuth.login(identifier, password);
             loginAttempts = 0;
+            try {
+                localStorage.setItem('quick_petugas_authenticated', 'true');
+                sessionStorage.setItem('quick_petugas_authenticated', 'true');
+            } catch(e){}
             showAlert(`Alhamdulillah, Ahlan wa Sahlan <strong>${user.name}</strong> (${user.role_label})! Mengalihkan ke dashboard...`, 'success');
             
             setTimeout(() => {

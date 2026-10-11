@@ -124,9 +124,47 @@
                 const t = String(table).toLowerCase();
                 delete this._cache[t];
                 delete this._cacheTimestamps[t];
-                if (t === 'app_settings') {
+
+                // Jika event berasal dari quick_petugas atau app_settings, hapus seluruh sub-cache
+                if (t === 'app_settings' || t === 'quick_petugas' || t === 'settings' || t === 'all') {
                     delete this._cache['settings'];
+                    delete this._cache['sholat_jumat'];
+                    delete this._cache['jadwal_sholat'];
+                    delete this._cache['keuangan'];
+                    delete this._cache['keuangan_kas_utama'];
+                    delete this._cache['keuangan_ambulance'];
+                    delete this._cache['program_infaq'];
+                    delete this._cache['donasi_infaq'];
+                    delete this._cache['slides'];
+                    delete this._cache['undangan'];
+                    delete this._cache['pengumuman'];
+                    delete this._cache['pengumuman_jumat'];
+                    delete this._cache['ramadhan'];
+                    delete this._cache['qurban'];
+                    delete this._cache['kajian'];
+                    delete this._cache['agenda_rutin'];
+                    delete this._cache['idul_fitri'];
+                    delete this._cache['idul_adha'];
+                    delete this._cache['quick_petugas'];
                     delete this._cacheTimestamps['settings'];
+                    delete this._cacheTimestamps['sholat_jumat'];
+                    delete this._cacheTimestamps['jadwal_sholat'];
+                    delete this._cacheTimestamps['keuangan'];
+                    delete this._cacheTimestamps['keuangan_kas_utama'];
+                    delete this._cacheTimestamps['keuangan_ambulance'];
+                    delete this._cacheTimestamps['program_infaq'];
+                    delete this._cacheTimestamps['donasi_infaq'];
+                    delete this._cacheTimestamps['slides'];
+                    delete this._cacheTimestamps['undangan'];
+                    delete this._cacheTimestamps['pengumuman'];
+                    delete this._cacheTimestamps['pengumuman_jumat'];
+                    delete this._cacheTimestamps['ramadhan'];
+                    delete this._cacheTimestamps['qurban'];
+                    delete this._cacheTimestamps['kajian'];
+                    delete this._cacheTimestamps['agenda_rutin'];
+                    delete this._cacheTimestamps['idul_fitri'];
+                    delete this._cacheTimestamps['idul_adha'];
+                    delete this._cacheTimestamps['quick_petugas'];
                 }
                 if (t === 'keuangan' || t === 'transaksi_kas') {
                     delete this._cache['keuangan'];
@@ -136,7 +174,7 @@
                     delete this._cacheTimestamps['keuangan_kas_utama'];
                     delete this._cacheTimestamps['keuangan_ambulance'];
                 }
-                if (t === 'sholat_jumat') {
+                if (t === 'sholat_jumat' || t === 'jumat') {
                     delete this._cache['sholat_jumat'];
                     delete this._cacheTimestamps['sholat_jumat'];
                 }
@@ -477,6 +515,12 @@
                 const maklumatOnly = (payload.maklumat || '').trim();
                 const jumatDur = parseInt(payload.durasi || payload.jumat_durasi || 50, 10) || 50;
                 const fotoImam = payload.foto_imam || 'image/display/default_imam.jpg';
+                let sqlFotoImam = fotoImam;
+                // Proteksi skema SQL varchar(255): string base64 panjang disimpan sebagai 'custom_uploaded' di SQL,
+                // dan disimpan utuh tanpa batas di app_settings jsonb
+                if (fotoImam && (fotoImam.length > 200 || fotoImam.startsWith('data:'))) {
+                    sqlFotoImam = 'custom_uploaded';
+                }
 
                 // Gabungkan bilal & maklumat untuk tabel SQL sholat_jumat
                 let combinedBilal = bilalOnly;
@@ -490,7 +534,7 @@
                     imam: finalImam,
                     muadzin: muadzin,
                     bilal: combinedBilal,
-                    foto_imam: fotoImam
+                    foto_imam: sqlFotoImam
                 };
 
                 // 1. Simpan ke Tabel SQL sholat_jumat (PATCH jika tanggal sudah ada, POST jika baru)
@@ -524,11 +568,22 @@
                 }
 
                 // 2. Simpan durasi & running text pages ke app_settings id=1
+                // Proteksi zero-loss: Ambil dulu running text cloud mutakhir agar 19 slide lain tidak terhapus saat diedit dari HP!
                 let currentRt = {};
                 try {
-                    const rtRaw = localStorage.getItem('cached_running_text_pages');
-                    if (rtRaw) currentRt = JSON.parse(rtRaw);
+                    const liveSettings = await this.getSettings(true).catch(() => null);
+                    if (liveSettings && typeof liveSettings.running_text_pages === 'object' && liveSettings.running_text_pages !== null) {
+                        currentRt = Object.assign({}, liveSettings.running_text_pages);
+                    }
                 } catch (e) {}
+
+                if (Object.keys(currentRt).length === 0) {
+                    try {
+                        const rtRaw = localStorage.getItem('cached_running_text_pages');
+                        if (rtRaw) currentRt = JSON.parse(rtRaw);
+                    } catch (e) {}
+                }
+
                 currentRt.jumat_maklumat = maklumatOnly;
                 currentRt.jumat_bilal = bilalOnly;
                 if (fotoImam && fotoImam.startsWith('data:')) {
@@ -583,6 +638,7 @@
                 // 4. Update Local Caches
                 const unifiedResult = {
                     ...dbRowPayload,
+                    foto_imam: fotoImam,
                     bilal: bilalOnly,
                     maklumat: maklumatOnly,
                     durasi: jumatDur
@@ -1062,8 +1118,6 @@
                     if (!error && data && data.length > 0) {
                         localStorage.setItem('cached_jadwal_sholat', JSON.stringify(data));
                         this.setCached('jadwal_sholat', data);
-                        this.setCached('slides', data);
-                        this.setCached('undangan', data);
                         return data;
                     }
                 }
@@ -1076,8 +1130,6 @@
                 if (Array.isArray(rows) && rows.length > 0) {
                     localStorage.setItem('cached_jadwal_sholat', JSON.stringify(rows));
                     this.setCached('jadwal_sholat', rows);
-                    this.setCached('slides', rows);
-                    this.setCached('undangan', rows);
                     return rows;
                 }
             } catch (restErr) {
@@ -1198,10 +1250,22 @@
                 } catch (e) {}
             }
 
+            let resolvedFoto = row.foto_imam || 'image/display/default_imam.jpg';
+            if (!resolvedFoto || resolvedFoto === 'custom_uploaded') {
+                try {
+                    const cachedRt = localStorage.getItem('cached_running_text_pages');
+                    if (cachedRt) {
+                        const rt = JSON.parse(cachedRt);
+                        if (rt.jumat_foto_imam_b64) resolvedFoto = rt.jumat_foto_imam_b64;
+                    }
+                } catch(e) {}
+            }
+
             const normalized = Object.assign({}, row, {
                 raw_bilal: rawBilal,
                 bilal: bilalClean,
-                maklumat: maklumatClean
+                maklumat: maklumatClean,
+                foto_imam: resolvedFoto
             });
 
             try { localStorage.setItem('cached_sholat_jumat', JSON.stringify(normalized)); } catch (e) {}
@@ -1480,17 +1544,36 @@
                 const cached = this.getCached('slides');
                 if (cached) return cached;
             }
+
+            // Helper merge custom base64 image agar poster kustom selalu muncul di TV
+            const mergeCustomSlideImages = (list) => {
+                if (!Array.isArray(list)) return list;
+                let b64Map = {};
+                try {
+                    const raw = localStorage.getItem('cached_slides_custom_data');
+                    if (raw) b64Map = JSON.parse(raw);
+                } catch(e) {}
+                return list.map(s => {
+                    if ((s.gambar === 'image/slides/custom_uploaded.png' || s.gambar === '../image/slides/custom_uploaded.png') && b64Map[s.id]) {
+                        return Object.assign({}, s, { gambar: b64Map[s.id], gambar_base64: b64Map[s.id] });
+                    }
+                    return s;
+                });
+            };
+
             // 1. Coba baca dari cloud database Supabase
             try {
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('slides').select('*').order('urutan', { ascending: true });
                     if (!error && Array.isArray(data) && data.length > 0) {
+                        const mergedData = mergeCustomSlideImages(data);
                         try {
-                            localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(data));
-                            localStorage.setItem('cached_slides', JSON.stringify(data));
+                            localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(mergedData));
+                            localStorage.setItem('cached_slides', JSON.stringify(mergedData));
                         } catch (e) {}
-                        return data;
+                        this.setCached('slides', mergedData);
+                        return mergedData;
                     }
                 }
             } catch (err) {
@@ -1501,11 +1584,13 @@
             try {
                 const rows = await this.restFetch('slides?order=urutan.asc');
                 if (Array.isArray(rows) && rows.length > 0) {
+                    const mergedRows = mergeCustomSlideImages(rows);
                     try {
-                        localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(rows));
-                        localStorage.setItem('cached_slides', JSON.stringify(rows));
+                        localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(mergedRows));
+                        localStorage.setItem('cached_slides', JSON.stringify(mergedRows));
                     } catch (e) {}
-                    return rows;
+                    this.setCached('slides', mergedRows);
+                    return mergedRows;
                 }
             } catch (restErr) {
                 console.warn('REST fallback slides:', restErr);
@@ -1517,13 +1602,14 @@
                 if (local) {
                     const parsed = JSON.parse(local);
                     if (Array.isArray(parsed) && parsed.length > 0) {
-                        this.setCached('slides', parsed);
-                        return parsed;
+                        const mergedLocal = mergeCustomSlideImages(parsed);
+                        this.setCached('slides', mergedLocal);
+                        return mergedLocal;
                     }
                 }
             } catch (e) {}
 
-            // 3. Default fallback 3 arsip dokumentasi & sertifikasi resmi Masjid Al-Jihad
+            // 4. Default fallback 3 arsip dokumentasi & sertifikasi resmi Masjid Al-Jihad
             const defaultSlides = [
                 {
                     id: 1,
@@ -1557,11 +1643,13 @@
                 }
             ];
 
+            const mergedDefaults = mergeCustomSlideImages(defaultSlides);
             try {
-                localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(defaultSlides));
+                localStorage.setItem('aljihad_galeri_informasi', JSON.stringify(mergedDefaults));
             } catch (e) {}
 
-            return defaultSlides;
+            this.setCached('slides', mergedDefaults);
+            return mergedDefaults;
         },
 
         /**
@@ -1577,6 +1665,7 @@
                 const client = getClient();
                 if (client && SUPABASE_CONFIG.url) {
                     console.log('📡 [SupabaseDB] Menyimpan galeri informasi ke cloud Supabase...');
+                    const customBase64Map = {};
                     const cleanSlides = slidesList.map(s => {
                         let imgVal = s.gambar || '';
                         let b64Val = s.gambar_base64 || null;
@@ -1586,19 +1675,30 @@
                             b64Val = imgVal;
                             imgVal = 'image/slides/custom_uploaded.png';
                         }
+                        if (b64Val) {
+                            customBase64Map[s.id] = b64Val;
+                        }
 
+                        // HANYA kirim field yang ada di skema SQL tabel slides (Bebas dari PGRST204)
                         return {
                             id: s.id,
                             judul: s.judul || '',
                             deskripsi: s.deskripsi || '',
                             gambar: imgVal.substring(0, 250),
-                            gambar_base64: b64Val,
                             urutan: parseInt(s.urutan, 10) || 1,
                             durasi: parseInt(s.durasi, 10) || 10,
                             aktif: s.aktif !== false,
                             updated_at: new Date().toISOString()
                         };
                     });
+
+                    // Simpan map foto base64 ke app_settings agar persist ke TV
+                    if (Object.keys(customBase64Map).length > 0) {
+                        try {
+                            localStorage.setItem('cached_slides_custom_data', JSON.stringify(customBase64Map));
+                            await this.saveSettingItem('slides_custom_data', customBase64Map).catch(() => {});
+                        } catch(e) {}
+                    }
 
                     // Upsert seluruh baris slide ke tabel slides
                     const { error: upsertErr } = await client.from('slides').upsert(cleanSlides, { onConflict: 'id' });

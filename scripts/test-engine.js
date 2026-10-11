@@ -279,6 +279,23 @@ assert(robotsContent.includes('Disallow: /petugas.html'), 'robots.txt memblokir 
 assert(robotsContent.includes('Disallow: /modeinput.html'), 'robots.txt memblokir crawler ke rute modeinput');
 
 // -------------------------------------------------------------
+// 9. MULTI-DEVICE CLOUD SYNC & TV ENGINE INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 9] Multi-Device Cloud Sync & TV Display Engine:');
+const dbContent = fs.readFileSync(path.join(baseDir, 'js/supabase-db.js'), 'utf8');
+const themeContent = fs.readFileSync(path.join(baseDir, 'css/display-theme.css'), 'utf8');
+const slideContent = fs.readFileSync(path.join(baseDir, 'slides/slide.html'), 'utf8');
+const redirectsPath = path.join(baseDir, '_redirects');
+
+assert(dbContent.includes("t === 'app_settings'") && dbContent.includes("delete this._cache['sholat_jumat']"), 'SupabaseDB.invalidateCache membersihkan seluruh tabel dependen saat app_settings berubah');
+assert(dbContent.includes("sqlFotoImam = 'custom_uploaded'") && dbContent.includes("foto_imam: sqlFotoImam"), 'SupabaseDB.saveSholatJumat melindungi kolom varchar(255) SQL dari base64 overflow');
+assert(dbContent.includes('mergeCustomSlideImages') && dbContent.includes('slides_custom_data'), 'SupabaseDB mendukung resolusi custom base64 slide tanpa merusak skema SQL');
+assert(loginContent.includes('AdminAuth.syncUsersFromCloud') && loginContent.includes('rbac_users_list'), 'login.html mendukung sinkronisasi akun mutakhir lintas perangkat dengan live fallback');
+assert(fs.existsSync(redirectsPath) && fs.readFileSync(redirectsPath, 'utf8').includes('/petugas.html'), '_redirects memetakan routing clean URL /petugas dan /modeinput');
+assert(themeContent.includes('filter: none !important;'), 'display-theme.css menonaktifkan filter CSS berat untuk melindungi akurasi warna dan performa Smart TV');
+assert(slideContent.includes('cross-dissolve') || slideContent.includes('transisi halus'), 'slide.html menggunakan hardware-accelerated cross-dissolve anti-crash TV');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');

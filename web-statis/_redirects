@@ -1,0 +1,7 @@
+# Cloudflare Static Assets / Pages Redirects & Rewrites
+# Pemetaan URL bersih ke file HTML fisik
+/petugas        /petugas.html    200
+/modeinput      /modeinput.html  200
+/login          /login.html      200
+/admin          /admin.html      200
+/prayer-mode    /prayer-mode.html 200

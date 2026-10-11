@@ -1987,8 +1987,9 @@
         }
 
         function lockSecurityGate() {
+            const redirectUrl = window.location.pathname.includes('modeinput') ? 'modeinput.html' : 'petugas.html';
             if (window.AdminAuth && typeof window.AdminAuth.logout === 'function') {
-                window.AdminAuth.logout('petugas.html');
+                window.AdminAuth.logout(redirectUrl);
                 return;
             }
             localStorage.removeItem('quick_petugas_authenticated');

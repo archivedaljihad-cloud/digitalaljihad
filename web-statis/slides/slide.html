@@ -1,975 +1,924 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide Informasi & Poster Masjid - Display TV</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #ffffff;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1600px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px 25px 85px 25px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .header {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 8px;
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .header h1 {
-            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
-            font-size: 2.5rem !important;
-            line-height: 1.1;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            -webkit-text-stroke: 1.8px #FFD700 !important;
-            paint-order: stroke fill !important;
-            text-shadow: 
-                0 3px 6px rgba(0, 0, 0, 0.98),
-                0 6px 18px rgba(0, 0, 0, 0.92),
-                0 0 25px rgba(0, 0, 0, 0.85) !important;
-            margin: 0 0 4px 0;
-            font-weight: 900 !important;
-        }
-
-        .header h3.sub-header {
-            font-size: 1.15rem;
-            font-weight: 600;
-            letter-spacing: 4px;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-shadow: 1px 1px 0 #000000, -1px 1px 0 #000000, 1px -1px 0 #000000, -1px -1px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.95);
-            margin-bottom: 4px;
-        }
-
-        .datetime {
-            font-size: 1.45rem !important;
-            background: linear-gradient(135deg, rgba(2, 22, 15, 0.94) 0%, rgba(3, 34, 23, 0.90) 100%) !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 6px 30px !important;
-            border-radius: 35px !important;
-            font-weight: 700 !important;
-            letter-spacing: 1px !important;
-            border: 2.5px solid #FFD700 !important;
-            box-shadow: 
-                0 0 16px rgba(255, 215, 0, 0.55),
-                0 8px 25px rgba(0, 0, 0, 0.9),
-                inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            color: #ffffff !important;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
-            white-space: nowrap !important;
-        }
-
-        /* STAGE UTAMA 2 KOLOM */
-        .slide-stage {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 36px;
-            min-height: 0;
-            width: 100%;
-        }
-
-        /* KOLOM KIRI: POSTER GAMBAR UTUH */
-        .slide-left-col {
-            flex: 1.3;
-            height: 64vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        /* 3D GRID FLIP TRANSITION ENGINE - BORDERLESS FLOATING POSTER */
-        .poster-frame {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            overflow: visible;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1400px;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .poster-frame.flip-lifting {
-            transform: scale(0.97) rotateX(2deg);
-        }
-
-        .poster-frame img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            border-radius: 16px;
-            display: block;
-            filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.88));
-            transition: opacity 0.4s ease;
-        }
-
-        /* 3D Grid Flip Overlay */
-        .grid-flip-container {
-            position: absolute;
-            inset: 0;
-            display: none;
-            perspective: 1400px;
-            pointer-events: none;
-            z-index: 20;
-            border-radius: 18px;
-            overflow: hidden;
-            background: transparent;
-            filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.88));
-        }
-        .grid-flip-container.active {
-            display: block;
-        }
-
-        .grid-flip-tile {
-            position: absolute;
-            transform-style: preserve-3d;
-            will-change: transform;
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            box-sizing: border-box;
-            background: #03140f;
-            border-radius: 6px;
-        }
-
-        .grid-flip-face {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            background-repeat: no-repeat;
-            background-color: #041912;
-            overflow: hidden;
-            border-radius: 5px;
-        }
-
-        .grid-flip-face.front {
-            transform: rotateY(0deg);
-        }
-
-        .grid-flip-face.back {
-            transform: rotateY(180deg);
-        }
-
-        .grid-flip-face::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        @keyframes tileFlip3D {
-            0% {
-                transform: perspective(1200px) rotateY(0deg) translateZ(0);
-            }
-            50% {
-                transform: perspective(1200px) rotateY(90deg) translateZ(35px) scale(0.95);
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.4);
-            }
-            100% {
-                transform: perspective(1200px) rotateY(180deg) translateZ(0);
-            }
-        }
-
-        .tile-flipping {
-            animation: tileFlip3D 0.75s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-        }
-
-        /* 3D Flip Reveal Effect for Text Card */
-        .slide-card {
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
-            transform-origin: center center;
-        }
-        .slide-card.card-flipping {
-            transform: perspective(1000px) scale(0.96);
-            opacity: 0.6;
-        }
-
-        .poster-fallback {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            color: #ffd700;
-            padding: 30px;
-            text-align: center;
-            background: rgba(4, 25, 18, 0.65);
-            border: 1.5px dashed rgba(255, 215, 0, 0.35);
-            border-radius: 20px;
-        }
-
-        .poster-fallback i { font-size: 5rem; }
-
-        /* KOLOM KANAN: PANEL PENJELASAN (BORDERLESS / FULL TRANSPARAN & TEKS CENTER) */
-        .slide-right-col {
-            flex: 1;
-            height: 64vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .slide-card {
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            padding: 10px 24px;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            box-shadow: none;
-            width: 100%;
-            height: auto;
-            max-height: 64vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            gap: 16px;
-            position: relative;
-        }
-
-        .slide-title {
-            font-size: 2.45rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.25;
-            text-align: center;
-            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.95), 0 6px 30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.85);
-            width: 100%;
-        }
-
-        .slide-title::after {
-            content: '';
-            display: block;
-            width: 75px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #ffd700, transparent);
-            margin: 16px auto 0 auto;
-            border-radius: 2px;
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.85);
-        }
-
-        .slide-desc {
-            font-size: 1.25rem;
-            color: #f1f5f9;
-            line-height: 1.7;
-            background: transparent;
-            border: none;
-            padding: 0;
-            border-radius: 0;
-            text-align: center;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 4px 22px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.85);
-            max-width: 92%;
-            margin: 0 auto;
-            box-shadow: none;
-        }
-
-        .slide-dots-indicator {
-            position: relative;
-            bottom: auto;
-            right: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .dot-pill {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-            transition: all 0.3s ease;
-        }
-
-        .dot-pill.active {
-            background: #ffd700;
-            width: 26px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px #ffd700;
-        }
-
-        /* RUNNING TEXT FOOTER */
-        .bottom-running-wrap {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 48px;
-            z-index: 1000;
-            background: linear-gradient(90deg, #021a12 0%, #03271b 25%, #053324 50%, #03271b 75%, #021a12 100%) !important;
-            border-top: 2.5px solid #ffd700 !important;
-            display: flex !important;
-            align-items: center !important;
-            box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.85), 0 -1px 5px rgba(255, 215, 0, 0.4) !important;
-            backdrop-filter: blur(14px);
-            overflow: hidden;
-        }
-
-        .running-badge {
-            color-scheme: only light !important;
-            background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
-            color: #000000 !important;
-            -webkit-text-fill-color: #000000 !important;
-            height: 100% !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            padding: 0 24px 0 20px !important;
-            font-family: 'Poppins', 'Montserrat', 'Inter', -apple-system, sans-serif !important;
-            font-weight: 900 !important;
-            font-size: 1.06rem !important;
-            letter-spacing: 1px !important;
-            text-transform: uppercase !important;
-            flex-shrink: 0 !important;
-            border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
-            gap: 8px !important;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
-            z-index: 10 !important;
-            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
-            -webkit-text-stroke: 0.4px #000000 !important;
-            paint-order: stroke fill !important;
-            text-shadow: none !important;
-            filter: none !important;
-        }
-
-        .running-badge,
-        .running-badge *,
-        .running-badge i {
-            color-scheme: only light !important;
-            color: #000000 !important;
-            -webkit-text-fill-color: #000000 !important;
-            text-shadow: none !important;
-            filter: none !important;
-        }
-
-        .running-badge i {
-            font-size: 1.15rem !important;
-            font-weight: 900 !important;
-            margin-right: 2px !important;
-        }
-
-        .running-text-container { flex: 1; padding: 0 20px; overflow: hidden; white-space: nowrap; height: 100%; display: flex; align-items: center; }
-        .running-text {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 68s linear infinite;
-            font-size: 1.16rem;
-            font-weight: 600;
-            color: #ffffff;
-            letter-spacing: 0.6px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
-        }
-        .running-text i { color: #ffd700; margin: 0 10px; }
-        @keyframes marquee {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100%); }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Background Slideshow Islami -->
-    <div class="display-background"></div>
-    <div class="display-overlay"></div>
-
-    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DENGAN EFEK DENYUT PELAN -->
-    <div class="kaligrafi-medallion kaligrafi-muhammad">
-        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
-    </div>
-    <div class="kaligrafi-medallion kaligrafi-allah">
-        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
-    </div>
-
-    <div class="container">
-        <!-- HEADER MASJID -->
-        <div class="header">
-            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
-            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
-            <div class="datetime" id="datetime">Memuat Waktu...</div>
-        </div>
-
-        <!-- MAIN SLIDE STAGE -->
-        <div class="slide-stage">
-            <!-- Kolom Kiri: Poster Gambar -->
-            <div class="slide-left-col">
-                <div class="poster-frame" id="posterFrame">
-                    <img id="posterImg" src="../image/slides/custom_uploaded.png" alt="Poster Informasi" style="display: block;" onerror="handlePosterError(this)">
-                    <div class="poster-fallback" id="posterFallback" style="display: none;">
-                        <i class="fas fa-images"></i>
-                        <div>
-                            <div style="font-size: 1.4rem; font-weight: 800; color: #ffffff;">INFORMASI & DAKWAH</div>
-                            <div style="font-size: 0.95rem; color: #cbd5e1; margin-top: 4px;">Masjid Jami' Al-Jihad</div>
-                        </div>
-                    </div>
-                    <!-- 3D Grid Flip Overlay Container -->
-                    <div class="grid-flip-container" id="gridFlipContainer"></div>
-                </div>
-            </div>
-
-            <!-- Kolom Kanan: Detail Slide -->
-            <div class="slide-right-col">
-                <div class="slide-card">
-                    <div class="slide-title" id="slideTitle">Arah Qiblat</div>
-                    <div class="slide-desc" id="slideDesc">
-                        Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami' Al-Jihad.
-                    </div>
-
-                    <div class="slide-dots-indicator" id="slideDots"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FOOTER RUNNING TEXT -->
-        <div class="bottom-running-wrap">
-            <div class="running-badge"><i class="fas fa-images"></i> DOKUMENTASI</div>
-            <div class="running-text-container">
-                <div class="running-text" id="runningTextContent">
-                    <i class="fas fa-star-and-crescent"></i> Informasi & Layanan Masjid Jami' Al-Jihad. Bersama Memakmurkan Rumah Allah SWT.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CORE SCRIPTS DENGAN CACHE-BUSTER -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js?v=20261010_01"></script>
-    <script src="../js/supabase-db.js?v=20261010_01"></script>
-    <script src="../js/display-clock-ambient.js?v=20261010_01"></script>
-
-    <script>
-        // Background Rotator Islami (Optimized WebP & Preloaded)
-        const backgroundImages = [
-            "../image/display/background/BG2.webp",
-            "../image/display/background/BG10.webp",
-            "../image/display/background/BG4.webp",
-            "../image/display/background/BG7.webp",
-            "../image/display/background/BG11.webp",
-            "../image/display/background/BG6.webp",
-            "../image/display/background/BG1.webp",
-            "../image/display/background/BG9.webp",
-            "../image/display/background/BG5.webp",
-            "../image/display/background/BG8.webp",
-            "../image/display/background/BG3.webp"
-        ];
-        let currentBgIndex = 0;
-        const bgEl = document.querySelector('.display-background') || document.body;
-        if (backgroundImages.length > 0) {
-            backgroundImages.forEach(src => { const img = new Image(); img.src = src; });
-            bgEl.style.setProperty('background-color', '#021a11', 'important');
-            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
-            bgEl.style.setProperty('background-size', 'cover', 'important');
-            bgEl.style.setProperty('background-position', 'center', 'important');
-            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
-            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
-
-            setInterval(() => {
-                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
-                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
-            }, 12000);
-        }
-
-        // Jam & Tanggal Standar Masjid
-        function updateClock() {
-            const now = new Date();
-            const dtEl = document.getElementById('datetime');
-            if (!dtEl) return;
-            if (typeof getStandardMasjidDateTime === 'function') {
-                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
-                return;
-            }
-            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
-            
-            const dayName = days[now.getDay()];
-            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-
-            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-
-        // Data Bawaan Resmi Galeri Informasi Masjid Jami' Al-Jihad
-        const DEFAULT_SLIDES = [
-            {
-                id: 1,
-                judul: 'Arah Qiblat',
-                kategori: 'Pengukuran & Validasi',
-                deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
-                gambar: 'image/slides/custom_uploaded.png',
-                urutan: 1,
-                durasi: 10,
-                aktif: true
-            },
-            {
-                id: 2,
-                judul: 'Qiblat Sertifikat',
-                kategori: 'Sertifikasi Resmi',
-                deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat Kementerian Agama Republik Indonesia.',
-                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
-                urutan: 2,
-                durasi: 10,
-                aktif: true
-            },
-            {
-                id: 3,
-                judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
-                kategori: 'Legalitas & Perizinan',
-                deskripsi: 'Surat Tanda Daftar Masjid Jami\' Al Jihad terdaftar resmi di Kementerian Agama (KEMENAG) RI.',
-                gambar: 'image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp',
-                urutan: 3,
-                durasi: 10,
-                aktif: true
-            }
-        ];
-
-        let slidesData = [...DEFAULT_SLIDES];
-        let currentSlideIdx = 0;
-        let slideTimer = null;
-        let lastResolvedImgUrl = '';
-        let posterRetryMap = {};
-
-        // Penanganan fallback cerdas gambar jika salah satu path gagal di browser TV
-        function handlePosterError(imgEl) {
-            if (!imgEl) return;
-            const currentSrc = imgEl.src || '';
-
-            // Jika error terjadi pada data URI base64, beralih langsung ke gambar statis
-            if (currentSrc.startsWith('data:image/')) {
-                console.warn('⚠️ Gagal me-render data URI base64, beralih ke berkas statis resmi...');
-                const defaultStatic = (slidesData && slidesData[currentSlideIdx] && slidesData[currentSlideIdx].gambar && !slidesData[currentSlideIdx].gambar.startsWith('data:image/'))
-                    ? resolveSlideUrl(slidesData[currentSlideIdx].gambar)
-                    : '../image/slides/custom_uploaded.png';
-                imgEl.src = defaultStatic;
-                imgEl.style.display = 'block';
-                return;
-            }
-
-            const filename = currentSrc.split('/').pop().split('?')[0];
-
-            if (!posterRetryMap[filename]) {
-                posterRetryMap[filename] = 1;
-                console.warn('⚠️ Path gambar relatif gagal, mencoba path root:', filename);
-                imgEl.src = '/image/slides/' + filename;
-                imgEl.style.display = 'block';
-                return;
-            }
-            if (posterRetryMap[filename] === 1) {
-                posterRetryMap[filename] = 2;
-                console.warn('⚠️ Path root gagal, mencoba CDN Cloudflare live:', filename);
-                imgEl.src = 'https://digitalaljihad.my.id/image/slides/' + filename;
-                imgEl.style.display = 'block';
-                return;
-            }
-
-            // Fallback bertingkat ke aset default resmi masjid
-            const fallbackMap = {
-                0: '../image/slides/custom_uploaded.png',
-                1: '../image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
-                2: '../image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp'
-            };
-            const defaultImg = fallbackMap[currentSlideIdx] || '../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png';
-
-            if (posterRetryMap[filename] === 2 && !currentSrc.includes(defaultImg.split('/').pop())) {
-                posterRetryMap[filename] = 3;
-                console.warn('⚠️ Mencoba fallback ke gambar arsip default resmi masjid:', defaultImg);
-                imgEl.src = defaultImg;
-                imgEl.style.display = 'block';
-                return;
-            }
-
-            // Fallback alternatif ke 1gdpq jika custom_uploaded gagal
-            if (filename.includes('custom_uploaded') && posterRetryMap[filename] === 3) {
-                posterRetryMap[filename] = 4;
-                imgEl.src = '../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png';
-                imgEl.style.display = 'block';
-                return;
-            }
-
-            console.error('❌ Gagal memuat gambar dari seluruh sumber:', filename);
-            imgEl.style.display = 'none';
-            const fallback = document.getElementById('posterFallback');
-            if (fallback) fallback.style.display = 'flex';
-        }
-
-        function resolveSlideUrl(url) {
-            if (!url) return '';
-            const trimmed = String(url).trim();
-            if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:image/')) {
-                return trimmed;
-            }
-            const clean = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed;
-            if (clean.startsWith('../image/')) {
-                return clean;
-            } else if (clean.startsWith('image/')) {
-                return '../' + clean;
-            } else if (clean.startsWith('slides/')) {
-                return '../image/' + clean;
-            } else {
-                return '../image/slides/' + clean;
-            }
-        }
-
-        // Efek Card Flip Transition (3D Grid Flip) dengan Preloader Aman & Anti-Crash TV
-        function perform3DGridFlip(fromUrl, toUrl, callback) {
-            const container = document.getElementById('gridFlipContainer');
-            const posterImg = document.getElementById('posterImg');
-            const frame = document.getElementById('posterFrame');
-            const card = document.querySelector('.slide-card');
-            const fallback = document.getElementById('posterFallback');
-
-            if (fallback) fallback.style.display = 'none';
-
-            // Jika tidak ada container, gambar sama, atau URL berupa base64 besar: langsung ganti aman tanpa 3D flip berat
-            if (!container || !fromUrl || !toUrl || fromUrl === toUrl || toUrl.startsWith('data:image/') || fromUrl.startsWith('data:image/')) {
-                if (posterImg && toUrl) {
-                    posterImg.src = toUrl;
-                    posterImg.style.display = 'block';
-                }
-                if (callback) callback();
-                return;
-            }
-
-            // Preload gambar baru terlebih dahulu agar sisi belakang tile tidak blank saat berputar
-            let flipExecuted = false;
-            const preloadImg = new Image();
-
-            const executeFlip = () => {
-                if (flipExecuted) return;
-                flipExecuted = true;
-                clearTimeout(flipFailsafe);
-
-                const COLS = 4;
-                const ROWS = 3;
-                const tileWidthPercent = 100 / COLS;
-                const tileHeightPercent = 100 / ROWS;
-
-                container.innerHTML = '';
-                container.classList.add('active');
-                if (frame) frame.classList.add('flip-lifting');
-                if (card) card.classList.add('card-flipping');
-
-                let maxDelay = 0;
-
-                for (let r = 0; r < ROWS; r++) {
-                    for (let c = 0; c < COLS; c++) {
-                        const tile = document.createElement('div');
-                        tile.className = 'grid-flip-tile tile-flipping';
-                        tile.style.width = `${tileWidthPercent}%`;
-                        tile.style.height = `${tileHeightPercent}%`;
-                        tile.style.left = `${c * tileWidthPercent}%`;
-                        tile.style.top = `${r * tileHeightPercent}%`;
-
-                        // Wave delay diagonal dari kiri atas ke kanan bawah
-                        const delay = (c + r) * 65;
-                        if (delay > maxDelay) maxDelay = delay;
-                        tile.style.animationDelay = `${delay}ms`;
-
-                        const bgPosX = (COLS > 1) ? `${(c / (COLS - 1)) * 100}%` : '50%';
-                        const bgPosY = (ROWS > 1) ? `${(r / (ROWS - 1)) * 100}%` : '50%';
-
-                        // Sisi Depan (Gambar Saat Ini)
-                        const front = document.createElement('div');
-                        front.className = 'grid-flip-face front';
-                        front.style.backgroundImage = `url("${fromUrl}")`;
-                        front.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
-                        front.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
-
-                        // Sisi Belakang (Gambar Baru yang Akan Muncul)
-                        const back = document.createElement('div');
-                        back.className = 'grid-flip-face back';
-                        back.style.backgroundImage = `url("${toUrl}")`;
-                        back.style.backgroundPosition = `${bgPosX} ${bgPosY}`;
-                        back.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
-
-                        tile.appendChild(front);
-                        tile.appendChild(back);
-                        container.appendChild(tile);
-                    }
-                }
-
-                const totalDuration = 750 + maxDelay + 50;
-
-                setTimeout(() => {
-                    if (posterImg) {
-                        posterImg.src = toUrl;
-                        posterImg.style.display = 'block';
-                    }
-                    container.classList.remove('active');
-                    container.innerHTML = '';
-                    if (frame) frame.classList.remove('flip-lifting');
-                    if (card) card.classList.remove('card-flipping');
-                    if (callback) callback();
-                }, totalDuration);
-            };
-
-            // Failsafe timeout maksimal 800ms jika koneksi lambat agar rotasi tidak terhenti
-            const flipFailsafe = setTimeout(() => {
-                if (!flipExecuted) {
-                    executeFlip();
-                }
-            }, 800);
-
-            preloadImg.onload = executeFlip;
-            preloadImg.onerror = () => {
-                // Jika preload gagal, langsung terapkan tanpa animasi tile macet
-                clearTimeout(flipFailsafe);
-                if (posterImg) {
-                    posterImg.src = toUrl;
-                    posterImg.style.display = 'block';
-                }
-                if (callback) callback();
-            };
-            preloadImg.src = toUrl;
-        }
-
-        function showSlide(item, index, total) {
-            if (!item) return;
-
-            const titleEl = document.getElementById('slideTitle');
-            const descEl = document.getElementById('slideDesc');
-            const posterImg = document.getElementById('posterImg');
-            const fallback = document.getElementById('posterFallback');
-
-            const nextTitle = item.judul || item.title || 'Galeri Informasi Masjid';
-            const nextDesc = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
-            
-            // Prioritaskan path gambar statis yang ringan dan cepat di TV
-            const rawUrl = item.gambar || item.gambar_base64 || item.image || item.file_path;
-            const newResolvedUrl = resolveSlideUrl(rawUrl);
-
-            // Update elemen teks
-            if (titleEl) titleEl.textContent = nextTitle;
-            if (descEl) descEl.textContent = nextDesc;
-
-            if (newResolvedUrl) {
-                if (fallback) fallback.style.display = 'none';
-                if (posterImg) posterImg.style.display = 'block';
-
-                if (lastResolvedImgUrl && lastResolvedImgUrl !== newResolvedUrl) {
-                    // Jalankan efek Card Flip Transition (3D Grid Flip)
-                    perform3DGridFlip(lastResolvedImgUrl, newResolvedUrl, () => {
-                        lastResolvedImgUrl = newResolvedUrl;
-                    });
-                } else {
-                    if (posterImg) {
-                        posterImg.src = newResolvedUrl;
-                        posterImg.style.display = 'block';
-                    }
-                    lastResolvedImgUrl = newResolvedUrl;
-                }
-            } else {
-                if (posterImg) posterImg.style.display = 'none';
-                if (fallback) fallback.style.display = 'flex';
-                lastResolvedImgUrl = '';
-            }
-
-            const dotsEl = document.getElementById('slideDots');
-            if (dotsEl && total > 1) {
-                dotsEl.innerHTML = Array.from({ length: total }).map((_, i) => `
-                    <div class="dot-pill ${i === index ? 'active' : ''}" style="cursor: pointer;" onclick="goToSlide(${i})" title="Buka Dokumen ${i + 1}"></div>
-                `).join('');
-            } else if (dotsEl) {
-                dotsEl.innerHTML = '';
-            }
-        }
-
-        function goToSlide(targetIdx) {
-            if (!slidesData || targetIdx < 0 || targetIdx >= slidesData.length) return;
-            currentSlideIdx = targetIdx;
-            showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
-            scheduleNextSlide();
-        }
-
-        function scheduleNextSlide() {
-            if (slideTimer) clearTimeout(slideTimer);
-            if (!slidesData || slidesData.length <= 1) return;
-
-            const currentItem = slidesData[currentSlideIdx];
-            const durationSec = (currentItem && currentItem.durasi && parseInt(currentItem.durasi, 10) >= 3)
-                ? parseInt(currentItem.durasi, 10)
-                : 10;
-
-            slideTimer = setTimeout(() => {
-                currentSlideIdx = (currentSlideIdx + 1) % slidesData.length;
-                showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
-                scheduleNextSlide();
-            }, durationSec * 1000);
-        }
-
-        function startSlideRotation() {
-            scheduleNextSlide();
-        }
-
-        // 1. INISIALISASI INSTAN (ZERO DELAY) SEBELUM KONEKSI JARINGAN SELESAI
-        try {
-            const cached = localStorage.getItem('aljihad_galeri_informasi');
-            if (cached) {
-                const parsed = JSON.parse(cached);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    const valid = parsed.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
-                    if (valid.length > 0) slidesData = valid;
-                }
-            }
-        } catch (e) {}
-
-        // Tampilkan slide pertama sekarang juga
-        if (slidesData.length > 0) {
-            showSlide(slidesData[0], 0, slidesData.length);
-            startSlideRotation();
-        }
-
-        // 2. SINKRONISASI DARI CLOUD SUPABASE SECARA ASINKRON / PARENT MEMORY BRIDGE
-        async function loadSlidesFromCloud() {
-            try {
-                // Ambil Pengaturan Umum (Bridge dari Parent Memory jika ada)
-                let settings = null;
-                try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
-                        settings = window.parent.settings;
-                    }
-                } catch (e) {}
-
-                if (!settings && window.SupabaseDB) {
-                    settings = await SupabaseDB.getSettings();
-                }
-
-                if (settings) {
-                    if (settings.nama_aplikasi) {
-                        const nameEl = document.getElementById('nama-masjid');
-                        if (nameEl) nameEl.textContent = settings.nama_aplikasi;
-                    }
-                    if (settings.sub_header) {
-                        const subEl = document.getElementById('sub-header');
-                        if (subEl) subEl.textContent = settings.sub_header;
-                    }
-                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
-                        ? SupabaseDB.getRunningTextForPage('/slide-embed', settings)
-                        : (settings.running_text || '');
-                    if (rText) {
-                        const rtEl = document.getElementById('runningTextContent');
-                        if (rtEl) rtEl.innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
-                    }
-                }
-
-                // Ambil Daftar Galeri Informasi dari Cloud
-                if (window.SupabaseDB && typeof SupabaseDB.getSlides === 'function') {
-                    const list = await SupabaseDB.getSlides();
-                    if (Array.isArray(list) && list.length > 0) {
-                        const valid = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
-                        if (valid.length > 0) {
-                            slidesData = valid;
-                            if (currentSlideIdx >= slidesData.length) currentSlideIdx = 0;
-                            showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
-                            startSlideRotation();
-                        }
-                    }
-                }
-            } catch (err) {
-                console.warn('Gagal sinkronisasi slides dari cloud:', err);
-            }
-        }
-
-        function initSlideApp() {
-            loadSlidesFromCloud();
-
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings) {
-                        if (msg.settings.nama_aplikasi) {
-                            const nameEl = document.getElementById('nama-masjid');
-                            if (nameEl) nameEl.textContent = msg.settings.nama_aplikasi;
-                        }
-                        if (msg.settings.sub_header) {
-                            const subEl = document.getElementById('sub-header');
-                            if (subEl) subEl.textContent = msg.settings.sub_header;
-                        }
-                    }
-                    loadSlidesFromCloud();
-                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'slides' || msg.table === 'app_settings')) {
-                    loadSlidesFromCloud();
-                } else if (msg.type === 'SYNC_SLIDES' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadSlidesFromCloud();
-                }
-            });
-
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'slides' || tbl === 'app_settings') {
-                        loadSlidesFromCloud();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload && (payload.table === 'slides' || payload.table === 'app_settings')) {
-                        console.log('⚡ Menerima update data realtime untuk Galeri Informasi');
-                        loadSlidesFromCloud();
-                    }
-                });
-            }
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initSlideApp);
-        } else {
-            initSlideApp();
-        }
-    </script>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Informasi & Poster Masjid - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 25px 85px 25px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
+            font-size: 2.5rem !important;
+            line-height: 1.1;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow: 
+                0 3px 6px rgba(0, 0, 0, 0.98),
+                0 6px 18px rgba(0, 0, 0, 0.92),
+                0 0 25px rgba(0, 0, 0, 0.85) !important;
+            margin: 0 0 4px 0;
+            font-weight: 900 !important;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 #000000, -1px 1px 0 #000000, 1px -1px 0 #000000, -1px -1px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.95);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.45rem !important;
+            background: linear-gradient(135deg, rgba(2, 22, 15, 0.94) 0%, rgba(3, 34, 23, 0.90) 100%) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 6px 30px !important;
+            border-radius: 35px !important;
+            font-weight: 700 !important;
+            letter-spacing: 1px !important;
+            border: 2.5px solid #FFD700 !important;
+            box-shadow: 
+                0 0 16px rgba(255, 215, 0, 0.55),
+                0 8px 25px rgba(0, 0, 0, 0.9),
+                inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+            white-space: nowrap !important;
+        }
+
+        /* STAGE UTAMA 2 KOLOM */
+        .slide-stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 36px;
+            min-height: 0;
+            width: 100%;
+        }
+
+        /* KOLOM KIRI: POSTER GAMBAR UTUH */
+        .slide-left-col {
+            flex: 1.3;
+            height: 64vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* 3D GRID FLIP TRANSITION ENGINE - BORDERLESS FLOATING POSTER */
+        .poster-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: visible;
+            border: none;
+            box-shadow: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1400px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .poster-frame.flip-lifting {
+            transform: scale(0.97) rotateX(2deg);
+        }
+
+        .poster-frame img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+            display: block;
+            filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.88));
+            transition: opacity 0.4s ease;
+        }
+
+        /* 3D Grid Flip Overlay */
+        .grid-flip-container {
+            position: absolute;
+            inset: 0;
+            display: none;
+            perspective: 1400px;
+            pointer-events: none;
+            z-index: 20;
+            border-radius: 18px;
+            overflow: hidden;
+            background: transparent;
+            filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.88));
+        }
+        .grid-flip-container.active {
+            display: block;
+        }
+
+        .grid-flip-tile {
+            position: absolute;
+            transform-style: preserve-3d;
+            will-change: transform;
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            box-sizing: border-box;
+            background: #03140f;
+            border-radius: 6px;
+        }
+
+        .grid-flip-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background-repeat: no-repeat;
+            background-color: #041912;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .grid-flip-face.front {
+            transform: rotateY(0deg);
+        }
+
+        .grid-flip-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .grid-flip-face::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        @keyframes tileFlip3D {
+            0% {
+                transform: perspective(1200px) rotateY(0deg) translateZ(0);
+            }
+            50% {
+                transform: perspective(1200px) rotateY(90deg) translateZ(35px) scale(0.95);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.4);
+            }
+            100% {
+                transform: perspective(1200px) rotateY(180deg) translateZ(0);
+            }
+        }
+
+        .tile-flipping {
+            animation: tileFlip3D 0.75s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+        }
+
+        /* 3D Flip Reveal Effect for Text Card */
+        .slide-card {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+            transform-origin: center center;
+        }
+        .slide-card.card-flipping {
+            transform: perspective(1000px) scale(0.96);
+            opacity: 0.6;
+        }
+
+        .poster-fallback {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: #ffd700;
+            padding: 30px;
+            text-align: center;
+            background: rgba(4, 25, 18, 0.65);
+            border: 1.5px dashed rgba(255, 215, 0, 0.35);
+            border-radius: 20px;
+        }
+
+        .poster-fallback i { font-size: 5rem; }
+
+        /* KOLOM KANAN: PANEL PENJELASAN (BORDERLESS / FULL TRANSPARAN & TEKS CENTER) */
+        .slide-right-col {
+            flex: 1;
+            height: 64vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-card {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 10px 24px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: none;
+            width: 100%;
+            height: auto;
+            max-height: 64vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 16px;
+            position: relative;
+        }
+
+        .slide-title {
+            font-size: 2.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            text-align: center;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.95), 0 6px 30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.85);
+            width: 100%;
+        }
+
+        .slide-title::after {
+            content: '';
+            display: block;
+            width: 75px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 16px auto 0 auto;
+            border-radius: 2px;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.85);
+        }
+
+        .slide-desc {
+            font-size: 1.25rem;
+            color: #f1f5f9;
+            line-height: 1.7;
+            background: transparent;
+            border: none;
+            padding: 0;
+            border-radius: 0;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 4px 22px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.85);
+            max-width: 92%;
+            margin: 0 auto;
+            box-shadow: none;
+        }
+
+        .slide-dots-indicator {
+            position: relative;
+            bottom: auto;
+            right: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .dot-pill {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .dot-pill.active {
+            background: #ffd700;
+            width: 26px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        /* RUNNING TEXT FOOTER */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px;
+            z-index: 1000;
+            background: linear-gradient(90deg, #021a12 0%, #03271b 25%, #053324 50%, #03271b 75%, #021a12 100%) !important;
+            border-top: 2.5px solid #ffd700 !important;
+            display: flex !important;
+            align-items: center !important;
+            box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.85), 0 -1px 5px rgba(255, 215, 0, 0.4) !important;
+            backdrop-filter: blur(14px);
+            overflow: hidden;
+        }
+
+        .running-badge {
+            color-scheme: only light !important;
+            background: linear-gradient(135deg, #fff04d 0%, #ffd700 40%, #f59e0b 100%) !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            height: 100% !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            padding: 0 24px 0 20px !important;
+            font-family: 'Poppins', 'Montserrat', 'Inter', -apple-system, sans-serif !important;
+            font-weight: 900 !important;
+            font-size: 1.06rem !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            flex-shrink: 0 !important;
+            border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
+            gap: 8px !important;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5) !important;
+            z-index: 10 !important;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%) !important;
+            -webkit-text-stroke: 0.4px #000000 !important;
+            paint-order: stroke fill !important;
+            text-shadow: none !important;
+            filter: none !important;
+        }
+
+        .running-badge,
+        .running-badge *,
+        .running-badge i {
+            color-scheme: only light !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            text-shadow: none !important;
+            filter: none !important;
+        }
+
+        .running-badge i {
+            font-size: 1.15rem !important;
+            font-weight: 900 !important;
+            margin-right: 2px !important;
+        }
+
+        .running-text-container { flex: 1; padding: 0 20px; overflow: hidden; white-space: nowrap; height: 100%; display: flex; align-items: center; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 68s linear infinite;
+            font-size: 1.16rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.6px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DENGAN EFEK DENYUT PELAN -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN SLIDE STAGE -->
+        <div class="slide-stage">
+            <!-- Kolom Kiri: Poster Gambar -->
+            <div class="slide-left-col">
+                <div class="poster-frame" id="posterFrame">
+                    <img id="posterImg" src="../image/slides/custom_uploaded.png" alt="Poster Informasi" style="display: block;" onerror="handlePosterError(this)">
+                    <div class="poster-fallback" id="posterFallback" style="display: none;">
+                        <i class="fas fa-images"></i>
+                        <div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: #ffffff;">INFORMASI & DAKWAH</div>
+                            <div style="font-size: 0.95rem; color: #cbd5e1; margin-top: 4px;">Masjid Jami' Al-Jihad</div>
+                        </div>
+                    </div>
+                    <!-- 3D Grid Flip Overlay Container -->
+                    <div class="grid-flip-container" id="gridFlipContainer"></div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Detail Slide -->
+            <div class="slide-right-col">
+                <div class="slide-card">
+                    <div class="slide-title" id="slideTitle">Arah Qiblat</div>
+                    <div class="slide-desc" id="slideDesc">
+                        Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami' Al-Jihad.
+                    </div>
+
+                    <div class="slide-dots-indicator" id="slideDots"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-badge"><i class="fas fa-images"></i> DOKUMENTASI</div>
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-star-and-crescent"></i> Informasi & Layanan Masjid Jami' Al-Jihad. Bersama Memakmurkan Rumah Allah SWT.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS DENGAN CACHE-BUSTER -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js?v=20261010_01"></script>
+    <script src="../js/supabase-db.js?v=20261010_01"></script>
+    <script src="../js/display-clock-ambient.js?v=20261010_01"></script>
+
+    <script>
+        // Background Rotator Islami (Optimized WebP & Preloaded)
+        const backgroundImages = [
+            "../image/display/background/BG2.webp",
+            "../image/display/background/BG10.webp",
+            "../image/display/background/BG4.webp",
+            "../image/display/background/BG7.webp",
+            "../image/display/background/BG11.webp",
+            "../image/display/background/BG6.webp",
+            "../image/display/background/BG1.webp",
+            "../image/display/background/BG9.webp",
+            "../image/display/background/BG5.webp",
+            "../image/display/background/BG8.webp",
+            "../image/display/background/BG3.webp"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            backgroundImages.forEach(src => { const img = new Image(); img.src = src; });
+            bgEl.style.setProperty('background-color', '#021a11', 'important');
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const dtEl = document.getElementById('datetime');
+            if (!dtEl) return;
+            if (typeof getStandardMasjidDateTime === 'function') {
+                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
+                return;
+            }
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Data Bawaan Resmi Galeri Informasi Masjid Jami' Al-Jihad
+        const DEFAULT_SLIDES = [
+            {
+                id: 1,
+                judul: 'Arah Qiblat',
+                kategori: 'Pengukuran & Validasi',
+                deskripsi: 'Hasil pengecekkan arah qiblat pada hari Kamis, 16 Juli 2026 Jam: 16:27 WIB di Masjid Jami\' Al-Jihad.',
+                gambar: 'image/slides/custom_uploaded.png',
+                urutan: 1,
+                durasi: 10,
+                aktif: true
+            },
+            {
+                id: 2,
+                judul: 'Qiblat Sertifikat',
+                kategori: 'Sertifikasi Resmi',
+                deskripsi: 'Sertifikasi Gerakan Nasional 1.148K Rasdhul Qiblat Kementerian Agama Republik Indonesia.',
+                gambar: 'image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                urutan: 2,
+                durasi: 10,
+                aktif: true
+            },
+            {
+                id: 3,
+                judul: 'Sistem Informasi Masjid KEMENAG (SIMAS)',
+                kategori: 'Legalitas & Perizinan',
+                deskripsi: 'Surat Tanda Daftar Masjid Jami\' Al Jihad terdaftar resmi di Kementerian Agama (KEMENAG) RI.',
+                gambar: 'image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp',
+                urutan: 3,
+                durasi: 10,
+                aktif: true
+            }
+        ];
+
+        let slidesData = [...DEFAULT_SLIDES];
+        let currentSlideIdx = 0;
+        let slideTimer = null;
+        let lastResolvedImgUrl = '';
+        let posterRetryMap = {};
+
+        // Penanganan fallback cerdas gambar jika salah satu path gagal di browser TV
+        function handlePosterError(imgEl) {
+            if (!imgEl) return;
+            const currentSrc = imgEl.src || '';
+
+            // Jika error terjadi pada data URI base64, beralih langsung ke gambar statis
+            if (currentSrc.startsWith('data:image/')) {
+                console.warn('⚠️ Gagal me-render data URI base64, beralih ke berkas statis resmi...');
+                const defaultStatic = (slidesData && slidesData[currentSlideIdx] && slidesData[currentSlideIdx].gambar && !slidesData[currentSlideIdx].gambar.startsWith('data:image/'))
+                    ? resolveSlideUrl(slidesData[currentSlideIdx].gambar)
+                    : '../image/slides/custom_uploaded.png';
+                imgEl.src = defaultStatic;
+                imgEl.style.display = 'block';
+                return;
+            }
+
+            const filename = currentSrc.split('/').pop().split('?')[0];
+
+            if (!posterRetryMap[filename]) {
+                posterRetryMap[filename] = 1;
+                console.warn('⚠️ Path gambar relatif gagal, mencoba path root:', filename);
+                imgEl.src = '/image/slides/' + filename;
+                imgEl.style.display = 'block';
+                return;
+            }
+            if (posterRetryMap[filename] === 1) {
+                posterRetryMap[filename] = 2;
+                console.warn('⚠️ Path root gagal, mencoba CDN Cloudflare live:', filename);
+                imgEl.src = 'https://digitalaljihad.my.id/image/slides/' + filename;
+                imgEl.style.display = 'block';
+                return;
+            }
+
+            // Fallback bertingkat ke aset default resmi masjid
+            const fallbackMap = {
+                0: '../image/slides/custom_uploaded.png',
+                1: '../image/slides/GkxyYVJO2IdZoU1X6mgSNUcghs0gu1HqVtYlxgYA.png',
+                2: '../image/slides/E6Vbbx4rwXUpvmdD8LodQkbK9x82dYzX723Fb386.webp'
+            };
+            const defaultImg = fallbackMap[currentSlideIdx] || '../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png';
+
+            if (posterRetryMap[filename] === 2 && !currentSrc.includes(defaultImg.split('/').pop())) {
+                posterRetryMap[filename] = 3;
+                console.warn('⚠️ Mencoba fallback ke gambar arsip default resmi masjid:', defaultImg);
+                imgEl.src = defaultImg;
+                imgEl.style.display = 'block';
+                return;
+            }
+
+            // Fallback alternatif ke 1gdpq jika custom_uploaded gagal
+            if (filename.includes('custom_uploaded') && posterRetryMap[filename] === 3) {
+                posterRetryMap[filename] = 4;
+                imgEl.src = '../image/slides/1gdpqFYCyv7Sv0qLDTpyxSjMnknbVEM9OLVOjPM3.png';
+                imgEl.style.display = 'block';
+                return;
+            }
+
+            console.error('❌ Gagal memuat gambar dari seluruh sumber:', filename);
+            imgEl.style.display = 'none';
+            const fallback = document.getElementById('posterFallback');
+            if (fallback) fallback.style.display = 'flex';
+        }
+
+        function resolveSlideUrl(url) {
+            if (!url) return '';
+            const trimmed = String(url).trim();
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:image/')) {
+                return trimmed;
+            }
+            const clean = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed;
+            if (clean.startsWith('../image/')) {
+                return clean;
+            } else if (clean.startsWith('image/')) {
+                return '../' + clean;
+            } else if (clean.startsWith('slides/')) {
+                return '../image/' + clean;
+            } else {
+                return '../image/slides/' + clean;
+            }
+        }
+
+        // Efek Transisi Slide dengan Hardware-Accelerated Cinematic Cross-Fade (Anti-Lag & Anti-Crash TV)
+        function perform3DGridFlip(fromUrl, toUrl, callback) {
+            const posterImg = document.getElementById('posterImg');
+            const card = document.querySelector('.slide-card');
+            const fallback = document.getElementById('posterFallback');
+
+            if (fallback) fallback.style.display = 'none';
+
+            if (!posterImg || !toUrl) {
+                if (callback) callback();
+                return;
+            }
+
+            if (!fromUrl || fromUrl === toUrl) {
+                posterImg.src = toUrl;
+                posterImg.style.display = 'block';
+                if (callback) callback();
+                return;
+            }
+
+            // Transisi halus cross-dissolve dengan akselerasi GPU murni
+            posterImg.style.transition = 'opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)';
+            posterImg.style.opacity = '0';
+            posterImg.style.transform = 'scale(0.98)';
+            if (card) {
+                card.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
+                card.style.opacity = '0.7';
+                card.style.transform = 'scale(0.99)';
+            }
+
+            let executed = false;
+            const completeTransition = () => {
+                if (executed) return;
+                executed = true;
+                posterImg.src = toUrl;
+                posterImg.style.display = 'block';
+                // Trigger reflow untuk animasi masuk
+                void posterImg.offsetWidth;
+                posterImg.style.opacity = '1';
+                posterImg.style.transform = 'scale(1)';
+                if (card) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'scale(1)';
+                }
+                setTimeout(() => {
+                    if (callback) callback();
+                }, 300);
+            };
+
+            const preloadImg = new Image();
+            const failsafe = setTimeout(completeTransition, 350);
+            preloadImg.onload = () => {
+                clearTimeout(failsafe);
+                completeTransition();
+            };
+            preloadImg.onerror = () => {
+                clearTimeout(failsafe);
+                completeTransition();
+            };
+            preloadImg.src = toUrl;
+        }
+
+        function showSlide(item, index, total) {
+            if (!item) return;
+
+            const titleEl = document.getElementById('slideTitle');
+            const descEl = document.getElementById('slideDesc');
+            const posterImg = document.getElementById('posterImg');
+            const fallback = document.getElementById('posterFallback');
+
+            const nextTitle = item.judul || item.title || 'Galeri Informasi Masjid';
+            const nextDesc = item.deskripsi || item.description || item.konten || 'Arsip dokumentasi dan informasi penting kegiatan Masjid Jami\' Al-Jihad.';
+            
+            // Prioritaskan path gambar statis yang ringan dan cepat di TV
+            const rawUrl = item.gambar || item.gambar_base64 || item.image || item.file_path;
+            const newResolvedUrl = resolveSlideUrl(rawUrl);
+
+            // Update elemen teks
+            if (titleEl) titleEl.textContent = nextTitle;
+            if (descEl) descEl.textContent = nextDesc;
+
+            if (newResolvedUrl) {
+                if (fallback) fallback.style.display = 'none';
+                if (posterImg) posterImg.style.display = 'block';
+
+                if (lastResolvedImgUrl && lastResolvedImgUrl !== newResolvedUrl) {
+                    // Jalankan efek Card Flip Transition (3D Grid Flip)
+                    perform3DGridFlip(lastResolvedImgUrl, newResolvedUrl, () => {
+                        lastResolvedImgUrl = newResolvedUrl;
+                    });
+                } else {
+                    if (posterImg) {
+                        posterImg.src = newResolvedUrl;
+                        posterImg.style.display = 'block';
+                    }
+                    lastResolvedImgUrl = newResolvedUrl;
+                }
+            } else {
+                if (posterImg) posterImg.style.display = 'none';
+                if (fallback) fallback.style.display = 'flex';
+                lastResolvedImgUrl = '';
+            }
+
+            const dotsEl = document.getElementById('slideDots');
+            if (dotsEl && total > 1) {
+                dotsEl.innerHTML = Array.from({ length: total }).map((_, i) => `
+                    <div class="dot-pill ${i === index ? 'active' : ''}" style="cursor: pointer;" onclick="goToSlide(${i})" title="Buka Dokumen ${i + 1}"></div>
+                `).join('');
+            } else if (dotsEl) {
+                dotsEl.innerHTML = '';
+            }
+        }
+
+        function goToSlide(targetIdx) {
+            if (!slidesData || targetIdx < 0 || targetIdx >= slidesData.length) return;
+            currentSlideIdx = targetIdx;
+            showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+            scheduleNextSlide();
+        }
+
+        function scheduleNextSlide() {
+            if (slideTimer) clearTimeout(slideTimer);
+            if (!slidesData || slidesData.length <= 1) return;
+
+            const currentItem = slidesData[currentSlideIdx];
+            const durationSec = (currentItem && currentItem.durasi && parseInt(currentItem.durasi, 10) >= 3)
+                ? parseInt(currentItem.durasi, 10)
+                : 10;
+
+            slideTimer = setTimeout(() => {
+                currentSlideIdx = (currentSlideIdx + 1) % slidesData.length;
+                showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+                scheduleNextSlide();
+            }, durationSec * 1000);
+        }
+
+        function startSlideRotation() {
+            scheduleNextSlide();
+        }
+
+        // 1. INISIALISASI INSTAN (ZERO DELAY) SEBELUM KONEKSI JARINGAN SELESAI
+        try {
+            const cached = localStorage.getItem('aljihad_galeri_informasi');
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    const valid = parsed.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
+                    if (valid.length > 0) slidesData = valid;
+                }
+            }
+        } catch (e) {}
+
+        // Tampilkan slide pertama sekarang juga
+        if (slidesData.length > 0) {
+            showSlide(slidesData[0], 0, slidesData.length);
+            startSlideRotation();
+        }
+
+        // 2. SINKRONISASI DARI CLOUD SUPABASE SECARA ASINKRON / PARENT MEMORY BRIDGE
+        async function loadSlidesFromCloud() {
+            try {
+                // Ambil Pengaturan Umum (Bridge dari Parent Memory jika ada)
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
+                if (settings) {
+                    if (settings.nama_aplikasi) {
+                        const nameEl = document.getElementById('nama-masjid');
+                        if (nameEl) nameEl.textContent = settings.nama_aplikasi;
+                    }
+                    if (settings.sub_header) {
+                        const subEl = document.getElementById('sub-header');
+                        if (subEl) subEl.textContent = settings.sub_header;
+                    }
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/slide-embed', settings)
+                        : (settings.running_text || '');
+                    if (rText) {
+                        const rtEl = document.getElementById('runningTextContent');
+                        if (rtEl) rtEl.innerHTML = `<i class="fas fa-star-and-crescent"></i> ${rText}`;
+                    }
+                }
+
+                // Ambil Daftar Galeri Informasi dari Cloud
+                if (window.SupabaseDB && typeof SupabaseDB.getSlides === 'function') {
+                    const list = await SupabaseDB.getSlides();
+                    if (Array.isArray(list) && list.length > 0) {
+                        const valid = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
+                        if (valid.length > 0) {
+                            slidesData = valid;
+                            if (currentSlideIdx >= slidesData.length) currentSlideIdx = 0;
+                            showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+                            startSlideRotation();
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal sinkronisasi slides dari cloud:', err);
+            }
+        }
+
+        function initSlideApp() {
+            loadSlidesFromCloud();
+
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        if (msg.settings.nama_aplikasi) {
+                            const nameEl = document.getElementById('nama-masjid');
+                            if (nameEl) nameEl.textContent = msg.settings.nama_aplikasi;
+                        }
+                        if (msg.settings.sub_header) {
+                            const subEl = document.getElementById('sub-header');
+                            if (subEl) subEl.textContent = msg.settings.sub_header;
+                        }
+                    }
+                    loadSlidesFromCloud();
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'slides' || msg.table === 'app_settings')) {
+                    loadSlidesFromCloud();
+                } else if (msg.type === 'SYNC_SLIDES' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadSlidesFromCloud();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'slides' || tbl === 'app_settings') {
+                        loadSlidesFromCloud();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload && (payload.table === 'slides' || payload.table === 'app_settings')) {
+                        console.log('⚡ Menerima update data realtime untuk Galeri Informasi');
+                        loadSlidesFromCloud();
+                    }
+                });
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSlideApp);
+        } else {
+            initSlideApp();
+        }
+    </script>
+</body>
+</html>

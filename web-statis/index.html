@@ -1534,7 +1534,12 @@
                 const data = event.data || {};
                 console.log(`⚡ [Display TV Realtime Update]: table=${table}, action=${action}`, data);
 
-                // 1. Sebarkan ke seluruh active frame (frameA & frameB)
+                // 0. Purge cache seketika agar pembacaan berikutnya selalu data mutakhir
+                if (window.SupabaseDB && typeof window.SupabaseDB.invalidateCache === 'function') {
+                    window.SupabaseDB.invalidateCache(table);
+                }
+
+                // 1. Sebarkan ke seluruh active frame (frameA, frameB, prayerFrame)
                 broadcastToActiveFrames({
                     type: 'DATA_UPDATED',
                     table: table,
@@ -1584,9 +1589,30 @@
                         if (petugas) {
                             jumatPetugas = petugas;
                             window.jumatPetugas = jumatPetugas;
+                            broadcastToActiveFrames({
+                                type: 'DATA_UPDATED',
+                                table: 'sholat_jumat',
+                                action: 'UPDATE',
+                                data: petugas,
+                                jumatPetugas: petugas,
+                                settings: window.settings || settings,
+                                force_reload: true
+                            });
                         }
                     });
                     showOsd("⚡ Petugas Jum'at Diperbarui");
+                } else if (table === 'slides' || table === 'slides_custom_data') {
+                    SupabaseDB.getSlides().then(slides => {
+                        broadcastToActiveFrames({
+                            type: 'DATA_UPDATED',
+                            table: 'slides',
+                            action: 'UPDATE',
+                            data: slides,
+                            slides: slides,
+                            force_reload: true
+                        });
+                        showOsd('⚡ Galeri Slide Diperbarui');
+                    });
                 } else if (table === 'running_text') {
                     if (data && data.text) {
                         updateMasterFooter(data.text);
