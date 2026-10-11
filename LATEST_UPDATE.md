@@ -4,7 +4,35 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 15:30 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:05 WIB)
+
+### 🔴 PENYESUAIAN TEKS JADWAL & WAKTU PELAKSANAAN WARNA MERAH SESUAI ILUSTRASI PADA SLIDE PENGUMUMAN / AGENDA RUTIN — (Versi SW v5.8.34):
+1. **Ringkasan Permintaan Pengguna:**
+   - Di halaman slide pengumuman agenda rutin (`https://digitalaljihad.my.id/slides/pengumuman`), ganti teks yang berada di dalam kotak "JADWAL PELAKSANAAN" mengikuti gambar ilustrasi yang dilampirkan oleh pengguna dengan format teks berwarna merah.
+
+2. **Perubahan & Penyesuaian yang Diterapkan:**
+   - **Kartu 3 (Bimbingan Tahsin & Tartil Al-Qur'an):**
+     - Mengubah isi kotak jadwal menjadi 2 baris teks merah (`#ff3333`) dengan titik dua sejajar rapi:
+       - `Jadwal : Senin, Rabu, Sabtu`
+       - `Waktu : 20:00WIB (Ba'da Isya)`
+   - **Kartu 4 (Kajian Umum Tafsir Al-Qur'an):**
+     - Mengubah isi kotak jadwal menjadi 2 baris teks merah (`#ff3333`) dengan titik dua sejajar rapi:
+       - `Jadwal : Setiap pekan 2 dan pekan ke 4`
+       - `Waktu : Ba'da sholat subuh`
+   - **Styling Modern & Keterbacaan Optimal (`.time-schedule-red`):**
+     - Menggunakan kelas CSS baru `.time-schedule-red` dengan `color: #ff3333 !important`, font-weight 800, layout flex, dan label width 76px agar tanda titik dua (`:`) sejajar lurus secara presisi, sangat jelas dan kontras dibaca dari jarak jauh pada layar TV masjid.
+     - Diterapkan secara identik pada `web-statis/slides/pengumuman.html` dan `web-statis/slides/agenda-rutin.html`.
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.34`** pada `web-statis/sw.js` dan pembersih cache `web-statis/admin.html`.
+
+3. **Verifikasi & Pengujian Otomatis:**
+   - Menjalankan seluruh pengujian regresi otomatis `npm test`.
+   - Hasil pengujian: **79 / 79 assertions LULUS (100% PASS)** tanpa error.
+
+---
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 15:30 WIB)
 
 ### 📺 ELIMINASI RELOAD OTOMATIS LAYAR TV UTAMA (SILENT BACKGROUND CACHING) & REDESAIN LEGA / PROFESIONAL SLIDE AGENDA RUTIN (PENGUMUMAN) — (Versi SW v5.8.33):
 1. **Ringkasan Permintaan Pengguna:**

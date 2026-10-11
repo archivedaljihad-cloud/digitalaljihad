@@ -322,6 +322,42 @@
             line-height: 1.1;
         }
 
+        
+        /* JADWAL PELAKSANAAN TEKS MERAH (SESUAI ILUSTRASI) */
+        .time-schedule-red {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            color: #ff3333 !important;
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1.35;
+            letter-spacing: 0.3px;
+        }
+
+        .time-schedule-red .sched-row {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .time-schedule-red .sched-lbl {
+            width: 76px;
+            flex-shrink: 0;
+            color: #ff3333 !important;
+            font-weight: 800;
+        }
+
+        .time-schedule-red .sched-sep {
+            margin-right: 8px;
+            color: #ff3333 !important;
+            font-weight: 800;
+        }
+
+        .time-schedule-red .sched-val {
+            color: #ff3333 !important;
+            font-weight: 800;
+        }
+
         .time-badge-val {
             font-size: 1.18rem;
             font-weight: 800;
@@ -584,12 +620,12 @@
                     <div class="card-body-content">
                         <div class="card-title-main" id="titleTahsin">Bimbingan Tahsin &amp; Tartil Al-Qur'an</div>
 
-                        <div class="time-badge-box">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <div class="time-badge-label">JADWAL PELAKSANAAN</div>
-                                <div class="time-badge-val" id="waktuTahsin">Setiap Senin, Rabu &amp; Sabtu • Ba'da Isya (20:00 WIB)</div>
-                            </div>
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div class="time-schedule-red" id="waktuTahsin">
+                                <div class="sched-row"><span class="sched-lbl">Jadwal</span><span class="sched-sep">:</span><span class="sched-val">Senin, Rabu, Sabtu</span></div>
+                                <div class="sched-row"><span class="sched-lbl">Waktu</span><span class="sched-sep">:</span><span class="sched-val">20:00WIB (Ba'da Isya)</span></div>
+                            </div>
                         </div>
 
                         <div class="mentor-badge-row">
@@ -628,12 +664,12 @@
                     <div class="card-body-content">
                         <div class="card-title-main" id="titleTafsir">Kajian Umum Tafsir Al-Qur'an</div>
 
-                        <div class="time-badge-box">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <div class="time-badge-label">WAKTU PELAKSANAAN</div>
-                                <div class="time-badge-val" id="waktuTafsir">Setiap Ahad Shubuh / Pagi • Pukul 05:30 WIB s/d Selesai</div>
-                            </div>
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div class="time-schedule-red" id="waktuTafsir">
+                                <div class="sched-row"><span class="sched-lbl">Jadwal</span><span class="sched-sep">:</span><span class="sched-val">Setiap pekan 2 dan pekan ke 4</span></div>
+                                <div class="sched-row"><span class="sched-lbl">Waktu</span><span class="sched-sep">:</span><span class="sched-val">Ba'da sholat subuh</span></div>
+                            </div>
                         </div>
 
                         <div class="mentor-badge-row">
