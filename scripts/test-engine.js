@@ -291,7 +291,7 @@ assert(dbContent.includes("t === 'app_settings'") && dbContent.includes("delete 
 assert(dbContent.includes("sqlFotoImam = 'custom_uploaded'") && dbContent.includes("foto_imam: sqlFotoImam"), 'SupabaseDB.saveSholatJumat melindungi kolom varchar(255) SQL dari base64 overflow');
 assert(dbContent.includes('mergeCustomSlideImages') && dbContent.includes('slides_custom_data'), 'SupabaseDB mendukung resolusi custom base64 slide tanpa merusak skema SQL');
 assert(loginContent.includes('AdminAuth.syncUsersFromCloud') && loginContent.includes('rbac_users_list'), 'login.html mendukung sinkronisasi akun mutakhir lintas perangkat dengan live fallback');
-assert(fs.existsSync(redirectsPath) && fs.readFileSync(redirectsPath, 'utf8').includes('/petugas.html'), '_redirects memetakan routing clean URL /petugas dan /modeinput');
+assert(!fs.existsSync(redirectsPath), '_redirects dieliminasi untuk mencegah infinite redirect loop 307 pada Cloudflare Workers Static Assets');
 assert(themeContent.includes('filter: none !important;'), 'display-theme.css menonaktifkan filter CSS berat untuk melindungi akurasi warna dan performa Smart TV');
 assert(slideContent.includes('cross-dissolve') || slideContent.includes('transisi halus'), 'slide.html menggunakan hardware-accelerated cross-dissolve anti-crash TV');
 
