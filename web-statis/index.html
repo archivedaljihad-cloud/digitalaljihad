@@ -1794,21 +1794,10 @@
                 setInterval(() => broadcastTvState(false), 60000); // Heartbeat TV hemat bandwidth (1x per menit)
             }
 
-            // PWA Service Worker Registration with Instant Auto-Reload on Real Updates (Anti-Loop on First Visit)
+            // PWA Service Worker Registration (Silent Background Update - Layar TV Tidak Pernah Reload Sendiri)
             if ('serviceWorker' in navigator) {
-                let isRefreshing = false;
-                let hadController = Boolean(navigator.serviceWorker.controller);
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    // Cegah reload loop saat kunjungan pertama kali (uncontrolled -> controlled)
-                    if (!hadController) {
-                        hadController = true;
-                        return;
-                    }
-                    if (!isRefreshing) {
-                        isRefreshing = true;
-                        console.log('🔄 [PWA] Versi baru terdeteksi & aktif, memuat ulang halaman otomatis...');
-                        window.location.reload();
-                    }
+                    console.log('🔄 [PWA] Service Worker versi baru telah aktif di latar belakang (tanpa reload layar TV).');
                 });
 
                 navigator.serviceWorker.register('sw.js').then((reg) => {

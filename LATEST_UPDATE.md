@@ -4,7 +4,48 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 14:45 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 15:30 WIB)
+
+### 📺 ELIMINASI RELOAD OTOMATIS LAYAR TV UTAMA (SILENT BACKGROUND CACHING) & REDESAIN LEGA / PROFESIONAL SLIDE AGENDA RUTIN (PENGUMUMAN) — (Versi SW v5.8.33):
+1. **Ringkasan Permintaan Pengguna:**
+   - **Layar TV Reload Sendiri:** Pengguna masih melihat layar Smart TV display melakukan reload halaman sendiri secara tiba-tiba tanpa ada perintah refresh. Diminta untuk memeriksa dan menghilangkan auto-reload yang tidak diinginkan tersebut.
+   - **Slide Agenda Rutin / Pengumuman (`https://digitalaljihad.my.id/slides/pengumuman`):** Agar tampilan slide terlihat lebih lega, lapang, dan profesional, hilangkan kotak dua kapsul dan teks yang berada di bawah (indikator bar: *"Bagian 1 : Yaasiin & Kajian Malam Ahad"* dan *"Bagian 2 : Tahsin & Kajian Tafsir"*).
+
+2. **Akar Masalah Teknis (*Root Causes*):**
+   - **Auto-Reload Layar TV (`web-statis/index.html`):**
+     Pada baris 1798-1808 di `index.html`, terdapat listener event Service Worker:
+     ```javascript
+     navigator.serviceWorker.addEventListener('controllerchange', () => {
+         if (!isRefreshing) {
+             isRefreshing = true;
+             window.location.reload();
+         }
+     });
+     ```
+     Setiap kali terjadi deployment baru atau pembaruan cache Service Worker (misal saat versi dinaikkan atau edge Cloudflare menyegarkan worker), skrip `sw.js` memicu `skipWaiting()` dan `clients.claim()`. Hal ini menembakkan event `controllerchange` yang seketika mengeksekusi `window.location.reload()`. Akibatnya, TV display di masjid tiba-tiba berkedip hitam dan merefresh halaman sendiri di hadapan jama'ah/pengurus.
+   - **Kotak Kapsul Mempersempit Panggung Agenda (`slides/pengumuman.html` & `slides/agenda-rutin.html`):**
+     Elemen `<div class="slide-indicator-bar">` memakan ruang vertikal sekitar 50px di bawah panggung kartu agenda. Padahal pada layar Smart TV 16:9, ruang vertikal tersebut sangat berharga untuk membuat kartu agenda tampil besar, lega, lapang, dan nyaman dibaca dari jarak jauh oleh jama'ah masjid.
+
+3. **Perubahan & Solusi Teknis yang Diterapkan:**
+   - **Eliminasi Auto-Reload TV (Silent Background Caching di `web-statis/index.html`):**
+     - Mengubah listener `controllerchange` Service Worker agar tidak lagi mengeksekusi `window.location.reload()`.
+     - Pembaruan aset dan Service Worker kini berlangsung senyap di latar belakang (*silent background update*). Layar TV tetap beroperasi stabil 24/7 tanpa kedipan reload, sementara iframe slide dan komponen display memperbarui data secara realtime melalui broadcast Supabase dan cache-control header edge Cloudflare.
+   - **Redesain Lega & Profesional Slide Agenda Rutin (`web-statis/slides/pengumuman.html` & `web-statis/slides/agenda-rutin.html`):**
+     - Menghapus blok HTML `<div class="slide-indicator-bar">...</div>` berisi kapsul tombol *"Bagian 1 : Yaasiin & Kajian Malam Ahad"* dan *"Bagian 2 : Tahsin & Kajian Tafsir"*.
+     - Menambahkan aturan CSS `.slide-indicator-bar { display: none !important; }` sebagai proteksi ganda.
+     - Memperlebar padding kartu agenda (`.agenda-big-card`) dari `24px 28px` menjadi `28px 34px` dengan border-radius `26px` sehingga kartu agenda memanfaatkan ruang vertikal penuh yang telah terbuka secara proporsional, mewah, dan sangat lapang.
+     - Memperbarui skrip rotasi `goToSlide()` dan `resetSlideTimer()` menjadi null-safe (`if (tab1) ...`, `if (prog1) ...`) sehingga rotasi otomatis antar Bagian 1 dan Bagian 2 tetap berjalan mulus setiap 11 detik tanpa error JavaScript.
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.33`** pada `web-statis/sw.js` dan pembersih cache `web-statis/admin.html`.
+
+4. **Verifikasi & Pengujian Otomatis:**
+   - Menjalankan seluruh pengujian regresi otomatis `npm test`.
+   - Hasil pengujian: **79 / 79 assertions LULUS (100% PASS)** tanpa error sintaks maupun regresi logika.
+
+---
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 14:45 WIB)
 
 ### 🛡️ PERBAIKAN TOTAL ENGINE AUTO-LOGOUT INACTIVITY 3 MENIT, ELIMINASI BOUNCING REDIRECT, PERIODIC HEARTBEAT & INTEGRASI LINTAS HALAMAN ADMIN/PETUGAS — (Versi SW v5.8.32):
 1. **Ringkasan Permintaan Pengguna:**

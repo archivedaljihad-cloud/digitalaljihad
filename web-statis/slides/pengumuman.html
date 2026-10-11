@@ -183,7 +183,7 @@
             background: linear-gradient(145deg, rgba(3, 26, 18, 0.92) 0%, rgba(2, 18, 12, 0.96) 100%);
             border: 1.8px solid rgba(255, 215, 0, 0.45);
             border-radius: 24px;
-            padding: 24px 28px;
+            padding: 28px 34px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -386,51 +386,9 @@
             margin-top: 4px;
         }
 
-        /* SLIDE CONTROLS & PROGRESS INDICATOR */
-        .slide-indicator-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 10px;
-            flex-shrink: 0;
-        }
-
-        .slide-tab-pill {
-            background: rgba(2, 22, 14, 0.8);
-            border: 1.5px solid rgba(255, 215, 0, 0.35);
-            padding: 7px 22px;
-            border-radius: 25px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #94a3b8;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.35s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slide-tab-pill.active {
-            border-color: #ffd700;
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.35);
-            background: linear-gradient(135deg, rgba(6, 44, 30, 0.95) 0%, rgba(2, 25, 17, 0.98) 100%);
-        }
-
-        .slide-tab-pill .pill-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #ffd700, #f59e0b);
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .slide-tab-pill.active .pill-progress {
-            box-shadow: 0 0 8px #ffd700;
+        /* SLIDE CONTROLS (DISEMBUNYIKAN AGAR TAMPILAN LEGA & PROFESIONAL) */
+        .slide-indicator-bar {
+            display: none !important;
         }
 
         /* RUNNING TEXT FOOTER */
@@ -698,22 +656,8 @@
                 </div>
             </div>
 
-        </div>
-
-        <!-- SLIDE INDICATOR BAR -->
-        <div class="slide-indicator-bar">
-            <div class="slide-tab-pill active" id="tabSlide1" onclick="goToSlide(0)">
-                <i class="fas fa-book-open text-warning"></i>
-                <span>Bagian 1 : Yaasiin &amp; Kajian Malam Ahad</span>
-                <div class="pill-progress" id="progressSlide1"></div>
-            </div>
-            <div class="slide-tab-pill" id="tabSlide2" onclick="goToSlide(1)">
-                <i class="fas fa-quran text-warning"></i>
-                <span>Bagian 2 : Tahsin &amp; Kajian Tafsir</span>
-                <div class="pill-progress" id="progressSlide2"></div>
-            </div>
-        </div>
-
+        </div>
+
         <!-- FOOTER RUNNING TEXT -->
         <div class="bottom-running-wrap">
             <div class="running-badge"><i class="fas fa-calendar-alt"></i> AGENDA RUTIN</div>
@@ -793,30 +737,30 @@
         let progressInterval = null;
         let progressStart = Date.now();
 
-        function goToSlide(index) {
-            currentSlideIndex = index;
-            const deck1 = document.getElementById('deckSlide1');
-            const deck2 = document.getElementById('deckSlide2');
-            const tab1 = document.getElementById('tabSlide1');
-            const tab2 = document.getElementById('tabSlide2');
-            const prog1 = document.getElementById('progressSlide1');
-            const prog2 = document.getElementById('progressSlide2');
-
-            if (currentSlideIndex === 0) {
-                deck1.classList.add('active');
-                deck2.classList.remove('active');
-                tab1.classList.add('active');
-                tab2.classList.remove('active');
-                if (prog2) prog2.style.width = '0%';
-            } else {
-                deck2.classList.add('active');
-                deck1.classList.remove('active');
-                tab2.classList.add('active');
-                tab1.classList.remove('active');
-                if (prog1) prog1.style.width = '0%';
-            }
-
-            resetSlideTimer();
+        function goToSlide(index) {
+            currentSlideIndex = index;
+            const deck1 = document.getElementById('deckSlide1');
+            const deck2 = document.getElementById('deckSlide2');
+            const tab1 = document.getElementById('tabSlide1');
+            const tab2 = document.getElementById('tabSlide2');
+            const prog1 = document.getElementById('progressSlide1');
+            const prog2 = document.getElementById('progressSlide2');
+
+            if (currentSlideIndex === 0) {
+                if (deck1) deck1.classList.add('active');
+                if (deck2) deck2.classList.remove('active');
+                if (tab1) tab1.classList.add('active');
+                if (tab2) tab2.classList.remove('active');
+                if (prog2) prog2.style.width = '0%';
+            } else {
+                if (deck2) deck2.classList.add('active');
+                if (deck1) deck1.classList.remove('active');
+                if (tab2) tab2.classList.add('active');
+                if (tab1) tab1.classList.remove('active');
+                if (prog1) prog1.style.width = '0%';
+            }
+
+            resetSlideTimer();
         }
 
         function resetSlideTimer() {
