@@ -1,1102 +1,1150 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Program Infaq & Donasi Khusus - Display TV</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--text-light, #ffffff);
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1600px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 8px 24px 60px 24px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .header {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 4px;
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 2.5rem !important;
-            line-height: 1.1;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            -webkit-text-stroke: 1.8px #FFD700 !important;
-            paint-order: stroke fill !important;
-            text-shadow: 
-                0 3px 6px rgba(0, 0, 0, 0.98),
-                0 6px 18px rgba(0, 0, 0, 0.92),
-                0 0 25px rgba(0, 0, 0, 0.85) !important;
-            margin: 0 0 4px 0;
-            font-weight: 900 !important;
-            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
-        }
-
-        .header h3.sub-header {
-            font-size: 1.15rem;
-            font-weight: 600;
-            letter-spacing: 4px;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-shadow: 1px 1px 0 #000000, -1px 1px 0 #000000, 1px -1px 0 #000000, -1px -1px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.95);
-            margin-bottom: 4px;
-        }
-
-        .datetime {
-            font-size: 1.35rem;
-            background: linear-gradient(135deg, rgba(2, 44, 29, 0.92) 0%, rgba(5, 74, 49, 0.88) 100%) !important;
-            display: inline-block;
-            padding: 4px 24px;
-            border-radius: 35px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            border: 2.5px solid #FFD700 !important;
-            box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), 0 8px 25px rgba(0, 0, 0, 0.9) !important;
-            backdrop-filter: blur(12px);
-        }
-
-        /* MAIN CONTENT PANEL */
-        .main-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex: 1;
-            margin: 4px 0;
-            min-height: 0;
-        }
-
-        .panel {
-            background: rgba(4, 25, 18, 0.72);
-            border-radius: 16px;
-            padding: 10px 20px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
-            border: 1.5px solid rgba(255, 215, 0, 0.45);
-            width: 100%;
-            max-width: 1420px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .infaq-title-wrap {
-            text-align: center;
-            margin-bottom: 6px;
-            flex-shrink: 0;
-        }
-
-        .infaq-title-badge {
-            font-size: 1.35rem;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            padding: 4px 22px;
-            color: #ffffff;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.65);
-            border-radius: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25);
-        }
-
-        .infaq-title-badge i { color: #ffd700; font-size: 1.30rem; }
-
-        /* 4 STAT PILLS */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 6px;
-            flex-shrink: 0;
-        }
-
-        .stat-pill {
-            background: rgba(0, 0, 0, 0.45);
-            border-radius: 10px;
-            padding: 6px 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-        }
-
-        .stat-pill .icon-box {
-            width: 46px;
-            height: 46px;
-            border-radius: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.45rem;
-            flex-shrink: 0;
-        }
-
-        .stat-pill.target .icon-box { background: rgba(0, 180, 216, 0.25); color: #00b4d8; border: 1px solid rgba(0, 180, 216, 0.4); }
-        .stat-pill.terkumpul .icon-box { background: rgba(0, 230, 118, 0.25); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.4); }
-        .stat-pill.kekurangan .icon-box { background: rgba(255, 82, 82, 0.25); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.4); }
-        .stat-pill.donatur .icon-box { background: rgba(255, 215, 0, 0.25); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.4); }
-
-        /* Efek Denyut Pelan (Slow Breathing Pulse) khusus Kotak Persegi Kecil Target (Icon Box dengan bulatan-bulatan) */
-        @keyframes pulseTargetIconBox {
-            0%, 100% {
-                transform: scale(1);
-                border-color: rgba(0, 180, 216, 0.45);
-                background: rgba(0, 180, 216, 0.22);
-                box-shadow: 0 0 0 rgba(0, 180, 216, 0);
-            }
-            50% {
-                transform: scale(1.15);
-                border-color: rgba(0, 235, 255, 0.95);
-                background: rgba(0, 200, 240, 0.42);
-                box-shadow: 0 0 16px rgba(0, 210, 255, 0.75), inset 0 0 8px rgba(0, 235, 255, 0.45);
-            }
-        }
-
-        @keyframes pulseBullseyeInner {
-            0%, 100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.4));
-                color: #00b4d8;
-            }
-            50% {
-                transform: scale(1.18);
-                filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.95));
-                color: #e0f7fa;
-            }
-        }
-
-        /* Kotak persegi panjang Target Dana tetap diam */
-        .stat-pill.target {
-            /* Tetap tenang / diam tanpa animasi gerakan skala */
-        }
-
-        /* Kotak persegi kecil yang ada bulatan-bulatannya (fa-bullseye) berdenyut pelan memikat perhatian */
-        .stat-pill.target .icon-box {
-            animation: pulseTargetIconBox 2.6s ease-in-out infinite;
-            will-change: transform, box-shadow, border-color, background;
-        }
-
-        .stat-pill.target .icon-box i {
-            display: inline-block;
-            animation: pulseBullseyeInner 2.6s ease-in-out infinite;
-            will-change: transform, filter, color;
-        }
-
-        /* Efek Denyut Pelan Fase Kebalikan (Counter-Phase Pulse) khusus Kotak Jam Pasir Merah Kekurangan */
-        @keyframes pulseKekuranganIconBox {
-            0%, 100% {
-                transform: scale(1);
-                border-color: rgba(255, 82, 82, 0.45);
-                background: rgba(255, 82, 82, 0.22);
-                box-shadow: 0 0 0 rgba(255, 82, 82, 0);
-            }
-            50% {
-                transform: scale(1.15);
-                border-color: rgba(255, 23, 68, 0.95);
-                background: rgba(255, 60, 60, 0.42);
-                box-shadow: 0 0 16px rgba(255, 23, 68, 0.75), inset 0 0 8px rgba(255, 82, 82, 0.45);
-            }
-        }
-
-        @keyframes pulseHourglassInner {
-            0%, 100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 2px rgba(255, 82, 82, 0.4));
-                color: #ff5252;
-            }
-            50% {
-                transform: scale(1.18);
-                filter: drop-shadow(0 0 10px rgba(255, 82, 82, 0.95));
-                color: #ffebee;
-            }
-        }
-
-        /* Kotak persegi kecil jam pasir (fa-hourglass-half) berdenyut pelan bergantian ritme dengan Target Dana */
-        .stat-pill.kekurangan .icon-box {
-            animation: pulseKekuranganIconBox 2.6s ease-in-out infinite;
-            animation-delay: -1.3s; /* Kebalikan fase 180°: saat Target mengecil, Kekurangan membesar */
-            will-change: transform, box-shadow, border-color, background;
-        }
-
-        .stat-pill.kekurangan .icon-box i {
-            display: inline-block;
-            animation: pulseHourglassInner 2.6s ease-in-out infinite;
-            animation-delay: -1.3s;
-            will-change: transform, filter, color;
-        }
-
-        .stat-info { display: flex; flex-direction: column; min-width: 0; }
-        .stat-label { 
-            font-size: 0.78rem; 
-            text-transform: uppercase; 
-            letter-spacing: 0.8px; 
-            font-weight: 700; 
-            color: rgba(255, 255, 255, 0.95); 
-            margin-bottom: 1px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
-        }
-        .stat-value { 
-            font-size: 1.25rem; 
-            font-weight: 800; 
-            font-family: monospace; 
-            white-space: nowrap; 
-            letter-spacing: 0.3px;
-        }
-        .stat-pill.target .stat-value { color: #ff9900; text-shadow: 0 0 14px rgba(255, 153, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.9); }
-        .stat-pill.terkumpul .stat-value { color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9); }
-        .stat-pill.kekurangan .stat-value { color: #ff5252; text-shadow: 0 0 10px rgba(255, 82, 82, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
-        .stat-pill.donatur .stat-value { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
-
-        /* PROGRESS BAR */
-        .progress-section {
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 10px;
-            padding: 5px 14px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255, 215, 0, 0.25);
-            flex-shrink: 0;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3px;
-            font-size: 0.82rem;
-            font-weight: 700;
-        }
-
-        .progress-bar-bg {
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            position: relative;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00e676 0%, #ffd700 100%);
-            border-radius: 8px;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
-        }
-
-        /* 2 KOLOM BAWAH */
-        .bottom-split-row {
-            display: grid;
-            grid-template-columns: 2.1fr 1fr;
-            gap: 12px;
-            flex: 1;
-            min-height: 0;
-        }
-
-        .donatur-box, .rek-box {
-            background: rgba(0, 0, 0, 0.38);
-            border-radius: 12px;
-            padding: 8px 14px;
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        }
-
-        .box-title {
-            font-size: 1.18rem;
-            font-weight: 800;
-            color: #ffd700;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
-            padding-bottom: 6px;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-        }
-
-        /* HEADER KOLOM DAFTAR DONATUR (Nama Donatur, Keterangan Dekat Nominal, Nominal) */
-        .donatur-header-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1.8fr) minmax(90px, auto) minmax(130px, auto);
-            gap: 10px;
-            padding: 2px 10px 4px 10px;
-            font-size: 0.80rem;
-            font-weight: 700;
-            color: rgba(255, 215, 0, 0.92);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            border-bottom: 1px dashed rgba(255, 215, 0, 0.25);
-            margin-bottom: 4px;
-            flex-shrink: 0;
-        }
-
-        .donatur-header-row .head-left {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .donatur-header-row .head-ket {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 6px;
-            text-align: right;
-        }
-
-        .donatur-header-row .head-val {
-            text-align: right;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 6px;
-        }
-
-        .donatur-scroll-wrapper {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-            min-height: 0;
-        }
-
-        .donatur-list {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .donatur-list.can-scroll {
-            will-change: transform;
-            animation: scrollDonaturUp var(--scroll-duration, 50s) linear infinite;
-        }
-
-        .donatur-list.can-scroll:hover {
-            animation-play-state: paused;
-        }
-
-        @keyframes scrollDonaturUp {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
-
-        .donatur-item {
-            display: grid;
-            grid-template-columns: minmax(0, 1.8fr) minmax(90px, auto) minmax(130px, auto);
-            align-items: center;
-            padding: 4px 10px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-            font-size: 1rem;
-            flex-shrink: 0;
-            gap: 10px;
-        }
-
-        .donatur-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 0;
-        }
-
-        .donatur-no {
-            display: none !important;
-        }
-
-        .donatur-name {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            min-width: 0;
-        }
-
-        .donatur-name i {
-            color: #ffd700;
-            font-size: 1.10rem;
-            flex-shrink: 0;
-        }
-
-        .donatur-ket-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            min-width: 0;
-            overflow: hidden;
-        }
-
-        .donatur-ket {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(255, 215, 0, 0.14);
-            border: 1px solid rgba(255, 215, 0, 0.45);
-            color: #ffd700;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-            letter-spacing: 0.3px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
-        }
-
-        .donatur-ket-empty {
-            color: rgba(255, 255, 255, 0.25);
-            font-weight: 600;
-            font-size: 1rem;
-            padding-left: 6px;
-        }
-
-        .donatur-val {
-            font-weight: 800;
-            font-size: 1.16rem;
-            color: #ff9900;
-            font-family: monospace;
-            white-space: nowrap;
-            text-shadow: 0 0 14px rgba(255, 153, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.9);
-            text-align: right;
-            letter-spacing: 0.3px;
-        }
-
-        /* Spasi Baris Antara Terakhir dan Pertama */
-        .donatur-loop-spacer {
-            height: 24px;
-            flex-shrink: 0;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2px 0;
-        }
-
-        .donatur-loop-spacer .spacer-line {
-            width: 85%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.45), transparent);
-            position: relative;
-        }
-
-        .donatur-loop-spacer .spacer-line::after {
-            content: '• • •';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(4, 25, 18, 0.95);
-            padding: 0 10px;
-            color: rgba(255, 215, 0, 0.65);
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-        }
-
-        /* Rekening & QRIS */
-        .rek-content {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .rek-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-            font-size: 1.10rem;
-        }
-
-        .rek-num { 
-            font-weight: 800; 
-            color: #ffd700; 
-            font-family: monospace; 
-            font-size: 1.25rem; 
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-        }
-
-        /* RUNNING TEXT FOOTER & BADGE */
-        .bottom-running-wrap {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 20;
-            background: rgba(2, 16, 11, 0.88);
-            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            height: 48px;
-        }
-        .running-badge {
-            color-scheme: only light !important;
-            background: linear-gradient(135deg, #ffd700, #ffb300) !important;
-            color: #000000 !important;
-            -webkit-text-fill-color: #000000 !important;
-            font-weight: 900 !important;
-            text-shadow: none !important;
-            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%) !important;
-            border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-            height: 100% !important;
-            padding: 0 24px 0 18px !important;
-            font-size: 1.10rem !important;
-            flex-shrink: 0 !important;
-            letter-spacing: 1px !important;
-        }
-        .running-badge,
-        .running-badge *,
-        .running-badge i {
-            color-scheme: only light !important;
-            color: #000000 !important;
-            -webkit-text-fill-color: #000000 !important;
-            text-shadow: none !important;
-            filter: none !important;
-        }
-        .running-badge i {
-            font-size: 1.15rem !important;
-        }
-        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; flex: 1; }
-        .running-text {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 68s linear infinite;
-            font-size: 1.20rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        .running-text i { color: #ffd700; margin: 0 10px; }
-        @keyframes marquee {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100%); }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Background Slideshow Islami -->
-    <div class="display-background"></div>
-    <div class="display-overlay"></div>
-
-    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DENGAN EFEK DENYUT PELAN -->
-    <div class="kaligrafi-medallion kaligrafi-muhammad">
-        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
-    </div>
-    <div class="kaligrafi-medallion kaligrafi-allah">
-        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
-    </div>
-
-    <div class="container">
-        <!-- HEADER MASJID -->
-        <div class="header">
-            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
-            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
-            <div class="datetime" id="datetime">Memuat Waktu...</div>
-        </div>
-
-        <!-- MAIN PANEL -->
-        <div class="main-content">
-            <div class="panel">
-                <div class="infaq-title-wrap">
-                    <div class="infaq-title-badge">
-                        <i class="fas fa-hand-holding-usd"></i>
-                        <span id="programName">Program Pembebasan Lahan & Renovasi Masjid</span>
-                    </div>
-                </div>
-
-                <!-- 4 KARTU STAT PILLS -->
-                <div class="summary-grid">
-                    <div class="stat-pill target">
-                        <div class="icon-box"><i class="fas fa-bullseye"></i></div>
-                        <div class="stat-info">
-                            <span class="stat-label">Target Dana</span>
-                            <span class="stat-value" id="valTarget">Rp 150.000.000</span>
-                        </div>
-                    </div>
-                    <div class="stat-pill terkumpul">
-                        <div class="icon-box"><i class="fas fa-coins"></i></div>
-                        <div class="stat-info">
-                            <span class="stat-label">Terkumpul</span>
-                            <span class="stat-value" id="valTerkumpul">Rp 98.450.000</span>
-                        </div>
-                    </div>
-                    <div class="stat-pill kekurangan">
-                        <div class="icon-box"><i class="fas fa-hourglass-half"></i></div>
-                        <div class="stat-info">
-                            <span class="stat-label">Kekurangan</span>
-                            <span class="stat-value" id="valKekurangan">Rp 51.550.000</span>
-                        </div>
-                    </div>
-                    <div class="stat-pill donatur">
-                        <div class="icon-box"><i class="fas fa-users"></i></div>
-                        <div class="stat-info">
-                            <span class="stat-label">Total Donatur</span>
-                            <span class="stat-value" id="valDonatur">142 Donatur</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PROGRESS BAR -->
-                <div class="progress-section">
-                    <div class="progress-header">
-                        <span style="color: #cbd5e1;">Pencapaian Target Donasi:</span>
-                        <span style="color: #ffd700;" id="progressPercent">65.6%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progressBarFill" style="width: 65.6%;"></div>
-                    </div>
-                </div>
-
-                <!-- 2 KOLOM BAWAH -->
-                <div class="bottom-split-row">
-                    <!-- Kolom Daftar Donatur -->
-                    <div class="donatur-box">
-                        <div class="donatur-header-row">
-                            <div class="head-left"><i class="fas fa-user-circle"></i> NAMA DONATUR</div>
-                            <div class="head-ket"><i class="fas fa-tag"></i> KETERANGAN</div>
-                            <div class="head-val"><i class="fas fa-money-bill-wave"></i> NOMINAL</div>
-                        </div>
-                        <div class="donatur-scroll-wrapper" id="donaturScrollWrapper">
-                            <div class="donatur-list" id="donaturList">
-                                <div class="donatur-item">
-                                    <div class="donatur-left">
-                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah (Kel. H. Syahrul)</span>
-                                    </div>
-                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RW.007</span></div>
-                                    <span class="donatur-val">Rp 5.000.000</span>
-                                </div>
-                                <div class="donatur-item">
-                                    <div class="donatur-left">
-                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah</span>
-                                    </div>
-                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RT.02</span></div>
-                                    <span class="donatur-val">Rp 2.500.000</span>
-                                </div>
-                                <div class="donatur-item">
-                                    <div class="donatur-left">
-                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Bpk. Rahmat Hidayat</span>
-                                    </div>
-                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RW.011</span></div>
-                                    <span class="donatur-val">Rp 1.000.000</span>
-                                </div>
-                                <div class="donatur-item">
-                                    <div class="donatur-left">
-                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah</span>
-                                    </div>
-                                    <div class="donatur-ket-wrap"><span class="donatur-ket-empty">-</span></div>
-                                    <span class="donatur-val">Rp 500.000</span>
-                                </div>
-                                <div class="donatur-item">
-                                    <div class="donatur-left">
-                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Majelis Taklim Ummahat</span>
-                                    </div>
-                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> Blok C</span></div>
-                                    <span class="donatur-val">Rp 3.200.000</span>
-                                </div>
-                                <!-- Spasi 1 baris antara donatur terakhir dan pertama -->
-                                <div class="donatur-loop-spacer" aria-hidden="true">
-                                    <div class="spacer-line"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kolom Informasi Transfer & Rekening -->
-                    <div class="rek-box">
-                        <div class="box-title">
-                            <i class="fas fa-university"></i>
-                            <span>Saluran Transfer Donasi</span>
-                        </div>
-                        <div class="rek-content">
-                            <div class="rek-item">
-                                <span style="color: #cbd5e1;">Bank</span>
-                                <span id="infaqBankName" style="font-weight: 700; color: #ffffff;">Bank Jawa Barat (BJB)</span>
-                            </div>
-                            <div class="rek-item">
-                                <span style="color: #cbd5e1;">Nomor Rek.</span>
-                                <span id="infaqNoRek" class="rek-num">011 686 685 4100</span>
-                            </div>
-                            <div class="rek-item">
-                                <span style="color: #cbd5e1;">Atas Nama</span>
-                                <span id="infaqAtasNama" style="font-weight: 700; color: #ffd700;">DKM Jami Al Jihad</span>
-                            </div>
-                            <div class="rek-item">
-                                <span style="color: #cbd5e1;">Konfirmasi WhatsApp</span>
-                                <span id="infaqWaKonfirmasi" class="rek-num" style="color: #00e676;">0856 1235 167 (BENDAHARA)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FOOTER RUNNING TEXT -->
-        <div class="bottom-running-wrap">
-            <div class="running-badge"><i class="fas fa-hand-holding-heart"></i> INFAQ & WAKAF</div>
-            <div class="running-text-container">
-                <div class="running-text" id="runningTextContent">
-                    <i class="fas fa-hand-holding-usd"></i> Program Penggalangan Infaq & Donasi Masjid Jami' Al-Jihad. "Perumpamaan orang yang menafkahkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh butir." (QS. Al-Baqarah: 261).
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CORE SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase-config.js?v=5.3.3"></script>
-    <script src="../js/supabase-db.js?v=5.3.3"></script>
-    <script src="../js/display-clock-ambient.js?v=5.3.3"></script>
-
-    <script>
-        function formatRupiah(num) {
-            const val = parseFloat(num) || 0;
-            return new Intl.NumberFormat('id-ID').format(val);
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        // Background Rotator Islami (Optimized WebP & Preloaded)
-        const backgroundImages = [
-            "../image/display/background/BG2.webp",
-            "../image/display/background/BG10.webp",
-            "../image/display/background/BG4.webp",
-            "../image/display/background/BG7.webp",
-            "../image/display/background/BG11.webp",
-            "../image/display/background/BG6.webp",
-            "../image/display/background/BG1.webp",
-            "../image/display/background/BG9.webp",
-            "../image/display/background/BG5.webp",
-            "../image/display/background/BG8.webp",
-            "../image/display/background/BG3.webp"
-        ];
-        let currentBgIndex = 0;
-        const bgEl = document.querySelector('.display-background') || document.body;
-        if (backgroundImages.length > 0) {
-            backgroundImages.forEach(src => { const img = new Image(); img.src = src; });
-            bgEl.style.setProperty('background-color', '#021a11', 'important');
-            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
-            bgEl.style.setProperty('background-size', 'cover', 'important');
-            bgEl.style.setProperty('background-position', 'center', 'important');
-            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
-            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
-
-            setInterval(() => {
-                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
-                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
-            }, 12000);
-        }
-
-        // Jam & Tanggal Standar Masjid
-        function updateClock() {
-            const now = new Date();
-            const dtEl = document.getElementById('datetime');
-            if (!dtEl) return;
-            if (typeof getStandardMasjidDateTime === 'function') {
-                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
-                return;
-            }
-            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
-            
-            const dayName = days[now.getDay()];
-            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-
-            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-
-        // Ambil ID program dari parameter URL jika ada (misal: infaq.html?id=2)
-        const urlParams = new URLSearchParams(window.location.search);
-        let requestedProgId = urlParams.get('id');
-        let allActivePrograms = [];
-        let internalProgIndex = 0;
-        let internalProgTimer = null;
-
-        // Load Program Infaq dari Supabase / Parent Memory Bridge
-        async function loadProgramInfaqData() {
-            try {
-                // 1. Settings (Bridge dari Parent Memory jika ada)
-                let settings = null;
-                try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
-                        settings = window.parent.settings;
-                    }
-                } catch (e) {}
-
-                if (!settings && window.SupabaseDB) {
-                    settings = await SupabaseDB.getSettings();
-                }
-
-                if (settings) {
-                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
-                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
-                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
-                        ? SupabaseDB.getRunningTextForPage('/infaq-embed', settings)
-                        : (settings.running_text || '');
-                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-hand-holding-usd"></i> ${rText}`;
-
-                    // Muat data rekening donasi dinamis dari settings (running_text_pages.infaq_rekening / root settings / local cache)
-                    const rek = (settings?.running_text_pages && typeof settings.running_text_pages === 'object' && settings.running_text_pages.infaq_rekening)
-                                ? settings.running_text_pages.infaq_rekening
-                                : (settings?.infaq_rekening || (() => { try { return JSON.parse(localStorage.getItem('infaq_rekening') || '{}'); } catch(e){ return {}; } })());
-
-                    const bankName = rek?.bank || rek?.infaq_bank_name || settings?.infaq_bank_name;
-                    const noRek    = rek?.noRek || rek?.infaq_no_rekening || settings?.infaq_no_rekening;
-                    const atasNama = rek?.nama || rek?.infaq_atas_nama || settings?.infaq_atas_nama;
-                    const waKonf   = rek?.wa || rek?.infaq_wa_konfirmasi || settings?.infaq_wa_konfirmasi;
-
-                    if (bankName) document.getElementById('infaqBankName').textContent = bankName;
-                    if (noRek)    document.getElementById('infaqNoRek').textContent = noRek;
-                    if (atasNama) document.getElementById('infaqAtasNama').textContent = atasNama;
-                    if (waKonf)   document.getElementById('infaqWaKonfirmasi').textContent = waKonf;
-                }
-
-                // 2. Program Infaq
-                const programs = await SupabaseDB.getProgramInfaq();
-                if (programs && programs.length > 0) {
-                    allActivePrograms = programs.filter(p => p.is_active === true);
-                    if (allActivePrograms.length === 0) allActivePrograms = [programs[0]];
-
-                    let prog = null;
-                    if (requestedProgId) {
-                        prog = programs.find(p => p.id == requestedProgId) || allActivePrograms[0];
-                    } else {
-                        prog = allActivePrograms[internalProgIndex % allActivePrograms.length];
-                    }
-
-                    renderSingleProgram(prog);
-
-                    // Jika dibuka tanpa query parameter ID dan terdapat > 1 program aktif, jalankan rotasi internal tiap 12 detik
-                    if (!requestedProgId && allActivePrograms.length > 1) {
-                        clearTimeout(internalProgTimer);
-                        internalProgTimer = setTimeout(() => {
-                            internalProgIndex = (internalProgIndex + 1) % allActivePrograms.length;
-                            loadProgramInfaqData();
-                        }, 12000);
-                    }
-                }
-            } catch (err) {
-                console.error('Gagal memuat program infaq:', err);
-            }
-        }
-
-        async function renderSingleProgram(prog) {
-            if (!prog) return;
-
-            if (prog.nama_program) {
-                document.getElementById('programName').textContent = prog.nama_program;
-            }
-
-            const target = parseFloat(prog.target_dana) || 0;
-            let terkumpul = 0;
-            let totalDonaturCount = 0;
-            let rawDonaturList = [];
-
-            // Prioritaskan pembacaan donasi spesifik dari tabel donasi_infaq
-            try {
-                const donaturList = await SupabaseDB.getDonasiInfaq(prog.id);
-                if (donaturList && donaturList.length > 0) {
-                    terkumpul = donaturList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
-                    totalDonaturCount = donaturList.length;
-                    rawDonaturList = donaturList;
-                }
-            } catch (e) {}
-
-            if (terkumpul === 0 && prog.dana_terkumpul) {
-                terkumpul = parseFloat(prog.dana_terkumpul);
-            }
-
-            const isTercapai = (target > 0 && terkumpul >= target);
-            const sisa = Math.max(0, target - terkumpul);
-            const percent = target > 0 ? ((terkumpul / target) * 100).toFixed(1) : 0;
-
-            document.getElementById('valTarget').textContent = 'Rp ' + formatRupiah(target);
-            document.getElementById('valTerkumpul').textContent = 'Rp ' + formatRupiah(terkumpul);
-
-            if (isTercapai) {
-                document.getElementById('valKekurangan').innerHTML = '<span style="color:#00e676; font-size:1.25rem; font-weight:800;">Rp 0 (Terpenuhi)</span>';
-                document.getElementById('progressPercent').innerHTML = '<span style="color:#00e676;"><i class="fas fa-check-circle"></i> 100% Target Terpenuhi</span>';
-                document.getElementById('progressBarFill').style.width = '100%';
-                document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #00b4d8 100%)';
-            } else {
-                document.getElementById('valKekurangan').textContent = 'Rp ' + formatRupiah(sisa);
-                document.getElementById('progressPercent').textContent = percent + '%';
-                document.getElementById('progressBarFill').style.width = Math.min(100, percent) + '%';
-                document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #ffd700 100%)';
-            }
-
-            document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Donatur';
-
-            // Render Donatur List Dinamis (Urutan: yang terlama di atas, yang terbaru di paling bawah)
-            const donaturContainer = document.getElementById('donaturList');
-            const scrollWrapper = document.getElementById('donaturScrollWrapper');
-            if (donaturContainer) {
-                // Reset animasi scroll sebelumnya jika ada
-                donaturContainer.classList.remove('can-scroll');
-
-                if (rawDonaturList.length > 0) {
-                    // Sorting ASC: yang lama di atas, yang paling baru di paling bawah
-                    const sortedAsc = [...rawDonaturList].sort((a, b) => {
-                        const dateA = new Date(a.tanggal || 0).getTime();
-                        const dateB = new Date(b.tanggal || 0).getTime();
-                        if (dateA !== dateB) return dateA - dateB;
-                        return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
-                    });
-
-                    // Render semua donatur (tanpa kotak nomor agar nama donatur tampil penuh & utuh)
-                    const donaturItemsHtml = sortedAsc.map((d, idx) => {
-                        const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
-                        const hasKet = d.keterangan && d.keterangan.trim() !== '' && d.keterangan.trim() !== '-';
-                        const ketHtml = hasKet 
-                            ? `<div class="donatur-ket-wrap"><span class="donatur-ket" title="${escapeHtml(d.keterangan)}"><i class="fas fa-tag mr-1" style="font-size: 0.78rem; opacity: 0.85;"></i> ${escapeHtml(d.keterangan)}</span></div>` 
-                            : `<div class="donatur-ket-wrap"><span class="donatur-ket-empty">-</span></div>`;
-                        return `
-                            <div class="donatur-item">
-                                <div class="donatur-left">
-                                    <span class="donatur-name"><i class="fas fa-user-circle text-warning"></i> ${escapeHtml(nama)}</span>
-                                </div>
-                                ${ketHtml}
-                                <span class="donatur-val">Rp ${formatRupiah(d.nominal)}</span>
-                            </div>
-                        `;
-                    }).join('');
-
-                    // Spasi 1 baris antara donatur terakhir dan pertama saat perulangan (loop)
-                    const loopSpacerHtml = `
-                        <div class="donatur-loop-spacer" aria-hidden="true">
-                            <div class="spacer-line"></div>
-                        </div>
-                    `;
-
-                    donaturContainer.innerHTML = donaturItemsHtml + loopSpacerHtml;
-
-                    // Cek apakah data donatur melebihi tinggi kotak container (overflow)
-                    requestAnimationFrame(() => {
-                        if (scrollWrapper && donaturContainer.scrollHeight > scrollWrapper.clientHeight + 4) {
-                            // Gandakan elemen anak (termasuk spacer 1 baris) untuk efek seamless vertical marquee loop tanpa jeda
-                            const originalChildren = Array.from(donaturContainer.children);
-                            originalChildren.forEach(child => {
-                                donaturContainer.appendChild(child.cloneNode(true));
-                            });
-
-                            // Kecepatan membaca ideal di layar TV: tenang, stabil, dan nyaman dibaca (6.8 detik per baris)
-                            const totalRows = sortedAsc.length + 1;
-                            const duration = Math.max(35, totalRows * 6.8);
-                            donaturContainer.style.setProperty('--scroll-duration', `${duration}s`);
-                            donaturContainer.classList.add('can-scroll');
-                        }
-                    });
-                } else {
-                    donaturContainer.innerHTML = `
-                        <div class="donatur-item" style="display:flex; justify-content:center; color:#94a3b8; font-style:italic; padding:18px 14px;">
-                            <span>Belum ada catatan donatur masuk untuk program ini</span>
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProgramInfaqData();
-
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings) {
-                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
-                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
-                    }
-                    loadProgramInfaqData();
-                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'program_infaq' || msg.table === 'donasi_infaq' || msg.table === 'app_settings')) {
-                    loadProgramInfaqData();
-                } else if (msg.type === 'SYNC_INFAQ' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadProgramInfaqData();
-                }
-            });
-
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'program_infaq' || tbl === 'donasi_infaq' || tbl === 'app_settings') {
-                        loadProgramInfaqData();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'program_infaq' || payload.table === 'donasi_infaq' || payload.table === 'app_settings') {
-                        loadProgramInfaqData();
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Infaq & Donasi Khusus - Display TV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-light, #ffffff);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px 24px 60px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem !important;
+            line-height: 1.1;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow: 
+                0 3px 6px rgba(0, 0, 0, 0.98),
+                0 6px 18px rgba(0, 0, 0, 0.92),
+                0 0 25px rgba(0, 0, 0, 0.85) !important;
+            margin: 0 0 4px 0;
+            font-weight: 900 !important;
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
+        }
+
+        .header h3.sub-header {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 #000000, -1px 1px 0 #000000, 1px -1px 0 #000000, -1px -1px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.95);
+            margin-bottom: 4px;
+        }
+
+        .datetime {
+            font-size: 1.35rem;
+            background: linear-gradient(135deg, rgba(2, 44, 29, 0.92) 0%, rgba(5, 74, 49, 0.88) 100%) !important;
+            display: inline-block;
+            padding: 4px 24px;
+            border-radius: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 2.5px solid #FFD700 !important;
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), 0 8px 25px rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(12px);
+        }
+
+        /* MAIN CONTENT PANEL */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            margin: 4px 0;
+            min-height: 0;
+        }
+
+        .panel {
+            background: rgba(4, 25, 18, 0.72);
+            border-radius: 16px;
+            padding: 10px 20px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            width: 100%;
+            max-width: 1420px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .infaq-title-wrap {
+            text-align: center;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        .infaq-title-badge {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            padding: 4px 22px;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(2, 25, 17, 0.85) 0%, rgba(5, 42, 28, 0.8) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.65);
+            border-radius: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 215, 0, 0.25);
+        }
+
+        .infaq-title-badge i { color: #ffd700; font-size: 1.30rem; }
+
+        /* 4 STAT PILLS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        .stat-pill {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 10px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+
+        .stat-pill .icon-box {
+            width: 46px;
+            height: 46px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            flex-shrink: 0;
+        }
+
+        .stat-pill.target .icon-box { background: rgba(0, 180, 216, 0.25); color: #00b4d8; border: 1px solid rgba(0, 180, 216, 0.4); }
+        .stat-pill.terkumpul .icon-box { background: rgba(0, 230, 118, 0.25); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.4); }
+        .stat-pill.kekurangan .icon-box { background: rgba(255, 82, 82, 0.25); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.4); }
+        .stat-pill.donatur .icon-box { background: rgba(255, 215, 0, 0.25); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.4); }
+
+        /* Efek Denyut Pelan (Slow Breathing Pulse) khusus Kotak Persegi Kecil Target (Icon Box dengan bulatan-bulatan) */
+        @keyframes pulseTargetIconBox {
+            0%, 100% {
+                transform: scale(1);
+                border-color: rgba(0, 180, 216, 0.45);
+                background: rgba(0, 180, 216, 0.22);
+                box-shadow: 0 0 0 rgba(0, 180, 216, 0);
+            }
+            50% {
+                transform: scale(1.15);
+                border-color: rgba(0, 235, 255, 0.95);
+                background: rgba(0, 200, 240, 0.42);
+                box-shadow: 0 0 16px rgba(0, 210, 255, 0.75), inset 0 0 8px rgba(0, 235, 255, 0.45);
+            }
+        }
+
+        @keyframes pulseBullseyeInner {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 2px rgba(0, 180, 216, 0.4));
+                color: #00b4d8;
+            }
+            50% {
+                transform: scale(1.18);
+                filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.95));
+                color: #e0f7fa;
+            }
+        }
+
+        /* Kotak persegi panjang Target Dana tetap diam */
+        .stat-pill.target {
+            /* Tetap tenang / diam tanpa animasi gerakan skala */
+        }
+
+        /* Kotak persegi kecil yang ada bulatan-bulatannya (fa-bullseye) berdenyut pelan memikat perhatian */
+        .stat-pill.target .icon-box {
+            animation: pulseTargetIconBox 2.6s ease-in-out infinite;
+            will-change: transform, box-shadow, border-color, background;
+        }
+
+        .stat-pill.target .icon-box i {
+            display: inline-block;
+            animation: pulseBullseyeInner 2.6s ease-in-out infinite;
+            will-change: transform, filter, color;
+        }
+
+        /* Efek Denyut Pelan Fase Kebalikan (Counter-Phase Pulse) khusus Kotak Jam Pasir Merah Kekurangan */
+        @keyframes pulseKekuranganIconBox {
+            0%, 100% {
+                transform: scale(1);
+                border-color: rgba(255, 82, 82, 0.45);
+                background: rgba(255, 82, 82, 0.22);
+                box-shadow: 0 0 0 rgba(255, 82, 82, 0);
+            }
+            50% {
+                transform: scale(1.15);
+                border-color: rgba(255, 23, 68, 0.95);
+                background: rgba(255, 60, 60, 0.42);
+                box-shadow: 0 0 16px rgba(255, 23, 68, 0.75), inset 0 0 8px rgba(255, 82, 82, 0.45);
+            }
+        }
+
+        @keyframes pulseHourglassInner {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 2px rgba(255, 82, 82, 0.4));
+                color: #ff5252;
+            }
+            50% {
+                transform: scale(1.18);
+                filter: drop-shadow(0 0 10px rgba(255, 82, 82, 0.95));
+                color: #ffebee;
+            }
+        }
+
+        /* Kotak persegi kecil jam pasir (fa-hourglass-half) berdenyut pelan bergantian ritme dengan Target Dana */
+        .stat-pill.kekurangan .icon-box {
+            animation: pulseKekuranganIconBox 2.6s ease-in-out infinite;
+            animation-delay: -1.3s; /* Kebalikan fase 180°: saat Target mengecil, Kekurangan membesar */
+            will-change: transform, box-shadow, border-color, background;
+        }
+
+        .stat-pill.kekurangan .icon-box i {
+            display: inline-block;
+            animation: pulseHourglassInner 2.6s ease-in-out infinite;
+            animation-delay: -1.3s;
+            will-change: transform, filter, color;
+        }
+
+        .stat-info { display: flex; flex-direction: column; min-width: 0; }
+        .stat-label { 
+            font-size: 0.78rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.8px; 
+            font-weight: 700; 
+            color: rgba(255, 255, 255, 0.95); 
+            margin-bottom: 1px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+        }
+        .stat-value { 
+            font-size: 1.25rem; 
+            font-weight: 800; 
+            font-family: monospace; 
+            white-space: nowrap; 
+            letter-spacing: 0.3px;
+        }
+        .stat-pill.target .stat-value { color: #ff9900; text-shadow: 0 0 14px rgba(255, 153, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.9); }
+        .stat-pill.terkumpul .stat-value { color: #ffffff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9); }
+        .stat-pill.kekurangan .stat-value { color: #ff5252; text-shadow: 0 0 10px rgba(255, 82, 82, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
+        .stat-pill.donatur .stat-value { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9); }
+
+        /* PROGRESS BAR */
+        .progress-section {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 10px;
+            padding: 5px 14px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            flex-shrink: 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .progress-bar-bg {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00e676 0%, #ffd700 100%);
+            border-radius: 8px;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+        }
+
+        /* 2 KOLOM BAWAH */
+        .bottom-split-row {
+            display: grid;
+            grid-template-columns: 2.1fr 1fr;
+            gap: 12px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .donatur-box, .rek-box {
+            background: rgba(0, 0, 0, 0.38);
+            border-radius: 12px;
+            padding: 8px 14px;
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .box-title {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #ffd700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 6px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        /* HEADER KOLOM DAFTAR DONATUR (Nama Donatur, Keterangan Dekat Nominal, Nominal) */
+        .donatur-header-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(90px, auto) minmax(130px, auto);
+            gap: 10px;
+            padding: 2px 10px 4px 10px;
+            font-size: 0.80rem;
+            font-weight: 700;
+            color: rgba(255, 215, 0, 0.92);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-bottom: 1px dashed rgba(255, 215, 0, 0.25);
+            margin-bottom: 4px;
+            flex-shrink: 0;
+        }
+
+        .donatur-header-row .head-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .donatur-header-row .head-ket {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+            text-align: right;
+        }
+
+        .donatur-header-row .head-val {
+            text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .donatur-scroll-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            min-height: 0;
+        }
+
+        .donatur-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .donatur-list.can-scroll {
+            will-change: transform;
+            animation: scrollDonaturUp var(--scroll-duration, 50s) linear infinite;
+        }
+
+        .donatur-list.can-scroll:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollDonaturUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        .donatur-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(90px, auto) minmax(130px, auto);
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+            font-size: 1rem;
+            flex-shrink: 0;
+            gap: 10px;
+        }
+
+        .donatur-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .donatur-no {
+            display: none !important;
+        }
+
+        .donatur-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .donatur-name i {
+            color: #ffd700;
+            font-size: 1.10rem;
+            flex-shrink: 0;
+        }
+
+        .donatur-ket-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .donatur-ket {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 215, 0, 0.14);
+            border: 1px solid rgba(255, 215, 0, 0.45);
+            color: #ffd700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            letter-spacing: 0.3px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+        }
+
+        .donatur-ket-empty {
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+            font-size: 1rem;
+            padding-left: 6px;
+        }
+
+        .donatur-val {
+            font-weight: 800;
+            font-size: 1.16rem;
+            color: #ff9900;
+            font-family: monospace;
+            white-space: nowrap;
+            text-shadow: 0 0 14px rgba(255, 153, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.9);
+            text-align: right;
+            letter-spacing: 0.3px;
+        }
+
+        /* Spasi Baris Antara Terakhir dan Pertama */
+        .donatur-loop-spacer {
+            height: 24px;
+            flex-shrink: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px 0;
+        }
+
+        .donatur-loop-spacer .spacer-line {
+            width: 85%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.45), transparent);
+            position: relative;
+        }
+
+        .donatur-loop-spacer .spacer-line::after {
+            content: '• • •';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(4, 25, 18, 0.95);
+            padding: 0 10px;
+            color: rgba(255, 215, 0, 0.65);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+        }
+
+        /* Rekening & QRIS */
+        .rek-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .rek-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 1.10rem;
+            gap: 12px;
+        }
+
+        .rek-item:last-child {
+            border-bottom: none;
+        }
+
+        .rek-item > *:first-child {
+            flex-shrink: 0;
+        }
+
+        .rek-item > *:last-child {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .rek-num { 
+            font-weight: 800; 
+            color: #ffd700; 
+            font-family: monospace; 
+            font-size: 1.25rem; 
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+            text-align: right;
+        }
+
+        .rek-wa-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            text-align: right;
+            line-height: 1.25;
+            margin-left: auto;
+        }
+
+        .rek-wa-wrap .wa-role {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #00e676;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 8px rgba(0, 230, 118, 0.35);
+        }
+
+        /* RUNNING TEXT FOOTER & BADGE */
+        .bottom-running-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background: rgba(2, 16, 11, 0.88);
+            border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            height: 48px;
+        }
+        .running-badge {
+            color-scheme: only light !important;
+            background: linear-gradient(135deg, #ffd700, #ffb300) !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            font-weight: 900 !important;
+            text-shadow: none !important;
+            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%) !important;
+            border-right: 2px solid rgba(0, 0, 0, 0.35) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            height: 100% !important;
+            padding: 0 24px 0 18px !important;
+            font-size: 1.10rem !important;
+            flex-shrink: 0 !important;
+            letter-spacing: 1px !important;
+        }
+        .running-badge,
+        .running-badge *,
+        .running-badge i {
+            color-scheme: only light !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            text-shadow: none !important;
+            filter: none !important;
+        }
+        .running-badge i {
+            font-size: 1.15rem !important;
+        }
+        .running-text-container { padding: 8px 20px; overflow: hidden; white-space: nowrap; flex: 1; }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 68s linear infinite;
+            font-size: 1.20rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .running-text i { color: #ffd700; margin: 0 10px; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Slideshow Islami -->
+    <div class="display-background"></div>
+    <div class="display-overlay"></div>
+
+    <!-- MEDALI KALIGRAFI EMAS 3D (MUHAMMAD & ALLAH) DENGAN EFEK DENYUT PELAN -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="../image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="../image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
+
+    <div class="container">
+        <!-- HEADER MASJID -->
+        <div class="header">
+            <h1 id="nama-masjid">MASJID JAMI' AL JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime">Memuat Waktu...</div>
+        </div>
+
+        <!-- MAIN PANEL -->
+        <div class="main-content">
+            <div class="panel">
+                <div class="infaq-title-wrap">
+                    <div class="infaq-title-badge">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span id="programName">Program Pembebasan Lahan & Renovasi Masjid</span>
+                    </div>
+                </div>
+
+                <!-- 4 KARTU STAT PILLS -->
+                <div class="summary-grid">
+                    <div class="stat-pill target">
+                        <div class="icon-box"><i class="fas fa-bullseye"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Target Dana</span>
+                            <span class="stat-value" id="valTarget">Rp 150.000.000</span>
+                        </div>
+                    </div>
+                    <div class="stat-pill terkumpul">
+                        <div class="icon-box"><i class="fas fa-coins"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Terkumpul</span>
+                            <span class="stat-value" id="valTerkumpul">Rp 98.450.000</span>
+                        </div>
+                    </div>
+                    <div class="stat-pill kekurangan">
+                        <div class="icon-box"><i class="fas fa-hourglass-half"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Kekurangan</span>
+                            <span class="stat-value" id="valKekurangan">Rp 51.550.000</span>
+                        </div>
+                    </div>
+                    <div class="stat-pill donatur">
+                        <div class="icon-box"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Donatur</span>
+                            <span class="stat-value" id="valDonatur">142 Donatur</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROGRESS BAR -->
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span style="color: #cbd5e1;">Pencapaian Target Donasi:</span>
+                        <span style="color: #ffd700;" id="progressPercent">65.6%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBarFill" style="width: 65.6%;"></div>
+                    </div>
+                </div>
+
+                <!-- 2 KOLOM BAWAH -->
+                <div class="bottom-split-row">
+                    <!-- Kolom Daftar Donatur -->
+                    <div class="donatur-box">
+                        <div class="donatur-header-row">
+                            <div class="head-left"><i class="fas fa-user-circle"></i> NAMA DONATUR</div>
+                            <div class="head-ket"><i class="fas fa-tag"></i> KETERANGAN</div>
+                            <div class="head-val"><i class="fas fa-money-bill-wave"></i> NOMINAL</div>
+                        </div>
+                        <div class="donatur-scroll-wrapper" id="donaturScrollWrapper">
+                            <div class="donatur-list" id="donaturList">
+                                <div class="donatur-item">
+                                    <div class="donatur-left">
+                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah (Kel. H. Syahrul)</span>
+                                    </div>
+                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RW.007</span></div>
+                                    <span class="donatur-val">Rp 5.000.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <div class="donatur-left">
+                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah</span>
+                                    </div>
+                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RT.02</span></div>
+                                    <span class="donatur-val">Rp 2.500.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <div class="donatur-left">
+                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Bpk. Rahmat Hidayat</span>
+                                    </div>
+                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> RW.011</span></div>
+                                    <span class="donatur-val">Rp 1.000.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <div class="donatur-left">
+                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Hamba Allah</span>
+                                    </div>
+                                    <div class="donatur-ket-wrap"><span class="donatur-ket-empty">-</span></div>
+                                    <span class="donatur-val">Rp 500.000</span>
+                                </div>
+                                <div class="donatur-item">
+                                    <div class="donatur-left">
+                                        <span class="donatur-name"><i class="fas fa-user-circle mr-1 text-warning"></i> Majelis Taklim Ummahat</span>
+                                    </div>
+                                    <div class="donatur-ket-wrap"><span class="donatur-ket"><i class="fas fa-tag mr-1" style="font-size: 0.78rem;"></i> Blok C</span></div>
+                                    <span class="donatur-val">Rp 3.200.000</span>
+                                </div>
+                                <!-- Spasi 1 baris antara donatur terakhir dan pertama -->
+                                <div class="donatur-loop-spacer" aria-hidden="true">
+                                    <div class="spacer-line"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Informasi Transfer & Rekening -->
+                    <div class="rek-box">
+                        <div class="box-title">
+                            <i class="fas fa-university"></i>
+                            <span>Saluran Transfer Donasi</span>
+                        </div>
+                        <div class="rek-content">
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1;">Bank</span>
+                                <span id="infaqBankName" style="font-weight: 700; color: #ffffff;">Bank Jawa Barat (BJB)</span>
+                            </div>
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1;">Nomor Rek.</span>
+                                <span id="infaqNoRek" class="rek-num">011 686 685 4100</span>
+                            </div>
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1;">Atas Nama</span>
+                                <span id="infaqAtasNama" style="font-weight: 700; color: #ffd700;">DKM Jami Al Jihad</span>
+                            </div>
+                            <div class="rek-item">
+                                <span style="color: #cbd5e1; line-height: 1.35;">Konfirmasi WhatsApp</span>
+                                <span id="infaqWaKonfirmasi" class="rek-num rek-wa-wrap" style="color: #00e676;">
+                                    <span>0856 1235 167</span>
+                                    <span class="wa-role">(BENDAHARA)</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER RUNNING TEXT -->
+        <div class="bottom-running-wrap">
+            <div class="running-badge"><i class="fas fa-hand-holding-heart"></i> INFAQ & WAKAF</div>
+            <div class="running-text-container">
+                <div class="running-text" id="runningTextContent">
+                    <i class="fas fa-hand-holding-usd"></i> Program Penggalangan Infaq & Donasi Masjid Jami' Al-Jihad. "Perumpamaan orang yang menafkahkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh butir." (QS. Al-Baqarah: 261).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js?v=5.3.3"></script>
+    <script src="../js/supabase-db.js?v=5.3.3"></script>
+    <script src="../js/display-clock-ambient.js?v=5.3.3"></script>
+
+    <script>
+        function formatRupiah(num) {
+            const val = parseFloat(num) || 0;
+            return new Intl.NumberFormat('id-ID').format(val);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Background Rotator Islami (Optimized WebP & Preloaded)
+        const backgroundImages = [
+            "../image/display/background/BG2.webp",
+            "../image/display/background/BG10.webp",
+            "../image/display/background/BG4.webp",
+            "../image/display/background/BG7.webp",
+            "../image/display/background/BG11.webp",
+            "../image/display/background/BG6.webp",
+            "../image/display/background/BG1.webp",
+            "../image/display/background/BG9.webp",
+            "../image/display/background/BG5.webp",
+            "../image/display/background/BG8.webp",
+            "../image/display/background/BG3.webp"
+        ];
+        let currentBgIndex = 0;
+        const bgEl = document.querySelector('.display-background') || document.body;
+        if (backgroundImages.length > 0) {
+            backgroundImages.forEach(src => { const img = new Image(); img.src = src; });
+            bgEl.style.setProperty('background-color', '#021a11', 'important');
+            bgEl.style.setProperty('transition', 'background-image 1.5s ease-in-out', 'important');
+            bgEl.style.setProperty('background-size', 'cover', 'important');
+            bgEl.style.setProperty('background-position', 'center', 'important');
+            bgEl.style.setProperty('background-repeat', 'no-repeat', 'important');
+            bgEl.style.setProperty('background-image', `url('${backgroundImages[0]}')`, 'important');
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                bgEl.style.setProperty('background-image', `url('${backgroundImages[currentBgIndex]}')`, 'important');
+            }, 12000);
+        }
+
+        // Jam & Tanggal Standar Masjid
+        function updateClock() {
+            const now = new Date();
+            const dtEl = document.getElementById('datetime');
+            if (!dtEl) return;
+            if (typeof getStandardMasjidDateTime === 'function') {
+                dtEl.innerHTML = getStandardMasjidDateTime(now, true);
+                return;
+            }
+            const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agst', 'Sept', 'Okt', 'Nov', 'Des'];
+            
+            const dayName = days[now.getDay()];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            dtEl.innerHTML = `<span style="color:#ffd700;">${dayName}</span>, ${dateStr} &nbsp;•&nbsp; <span style="color:#ffd700;font-weight:700;">${timeStr}</span>`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Ambil ID program dari parameter URL jika ada (misal: infaq.html?id=2)
+        const urlParams = new URLSearchParams(window.location.search);
+        let requestedProgId = urlParams.get('id');
+        let allActivePrograms = [];
+        let internalProgIndex = 0;
+        let internalProgTimer = null;
+
+        // Load Program Infaq dari Supabase / Parent Memory Bridge
+        async function loadProgramInfaqData() {
+            try {
+                // 1. Settings (Bridge dari Parent Memory jika ada)
+                let settings = null;
+                try {
+                    if (window.parent && window.parent !== window && window.parent.settings) {
+                        settings = window.parent.settings;
+                    }
+                } catch (e) {}
+
+                if (!settings && window.SupabaseDB) {
+                    settings = await SupabaseDB.getSettings();
+                }
+
+                if (settings) {
+                    if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
+                    if (settings.sub_header) document.getElementById('sub-header').textContent = settings.sub_header;
+                    const rText = (window.SupabaseDB && typeof SupabaseDB.getRunningTextForPage === 'function')
+                        ? SupabaseDB.getRunningTextForPage('/infaq-embed', settings)
+                        : (settings.running_text || '');
+                    if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-hand-holding-usd"></i> ${rText}`;
+
+                    // Muat data rekening donasi dinamis dari settings (running_text_pages.infaq_rekening / root settings / local cache)
+                    const rek = (settings?.running_text_pages && typeof settings.running_text_pages === 'object' && settings.running_text_pages.infaq_rekening)
+                                ? settings.running_text_pages.infaq_rekening
+                                : (settings?.infaq_rekening || (() => { try { return JSON.parse(localStorage.getItem('infaq_rekening') || '{}'); } catch(e){ return {}; } })());
+
+                    const bankName = rek?.bank || rek?.infaq_bank_name || settings?.infaq_bank_name;
+                    const noRek    = rek?.noRek || rek?.infaq_no_rekening || settings?.infaq_no_rekening;
+                    const atasNama = rek?.nama || rek?.infaq_atas_nama || settings?.infaq_atas_nama;
+                    const waKonf   = rek?.wa || rek?.infaq_wa_konfirmasi || settings?.infaq_wa_konfirmasi;
+
+                    function renderInfaqWaKonfirmasi(rawStr) {
+                        const el = document.getElementById('infaqWaKonfirmasi');
+                        if (!el || !rawStr) return;
+                        const str = String(rawStr).trim();
+                        const match = str.match(/^(.*?)\s*(\(.*?\))$/);
+                        if (match && match[1] && match[2]) {
+                            el.innerHTML = `<span>${match[1].trim()}</span><span class="wa-role">${match[2].trim()}</span>`;
+                        } else {
+                            el.innerHTML = `<span>${str}</span>`;
+                        }
+                    }
+
+                    if (bankName) document.getElementById('infaqBankName').textContent = bankName;
+                    if (noRek)    document.getElementById('infaqNoRek').textContent = noRek;
+                    if (atasNama) document.getElementById('infaqAtasNama').textContent = atasNama;
+                    if (waKonf)   renderInfaqWaKonfirmasi(waKonf);
+                }
+
+                // 2. Program Infaq
+                const programs = await SupabaseDB.getProgramInfaq();
+                if (programs && programs.length > 0) {
+                    allActivePrograms = programs.filter(p => p.is_active === true);
+                    if (allActivePrograms.length === 0) allActivePrograms = [programs[0]];
+
+                    let prog = null;
+                    if (requestedProgId) {
+                        prog = programs.find(p => p.id == requestedProgId) || allActivePrograms[0];
+                    } else {
+                        prog = allActivePrograms[internalProgIndex % allActivePrograms.length];
+                    }
+
+                    renderSingleProgram(prog);
+
+                    // Jika dibuka tanpa query parameter ID dan terdapat > 1 program aktif, jalankan rotasi internal tiap 12 detik
+                    if (!requestedProgId && allActivePrograms.length > 1) {
+                        clearTimeout(internalProgTimer);
+                        internalProgTimer = setTimeout(() => {
+                            internalProgIndex = (internalProgIndex + 1) % allActivePrograms.length;
+                            loadProgramInfaqData();
+                        }, 12000);
+                    }
+                }
+            } catch (err) {
+                console.error('Gagal memuat program infaq:', err);
+            }
+        }
+
+        async function renderSingleProgram(prog) {
+            if (!prog) return;
+
+            if (prog.nama_program) {
+                document.getElementById('programName').textContent = prog.nama_program;
+            }
+
+            const target = parseFloat(prog.target_dana) || 0;
+            let terkumpul = 0;
+            let totalDonaturCount = 0;
+            let rawDonaturList = [];
+
+            // Prioritaskan pembacaan donasi spesifik dari tabel donasi_infaq
+            try {
+                const donaturList = await SupabaseDB.getDonasiInfaq(prog.id);
+                if (donaturList && donaturList.length > 0) {
+                    terkumpul = donaturList.reduce((acc, d) => acc + (parseFloat(d.nominal) || 0), 0);
+                    totalDonaturCount = donaturList.length;
+                    rawDonaturList = donaturList;
+                }
+            } catch (e) {}
+
+            if (terkumpul === 0 && prog.dana_terkumpul) {
+                terkumpul = parseFloat(prog.dana_terkumpul);
+            }
+
+            const isTercapai = (target > 0 && terkumpul >= target);
+            const sisa = Math.max(0, target - terkumpul);
+            const percent = target > 0 ? ((terkumpul / target) * 100).toFixed(1) : 0;
+
+            document.getElementById('valTarget').textContent = 'Rp ' + formatRupiah(target);
+            document.getElementById('valTerkumpul').textContent = 'Rp ' + formatRupiah(terkumpul);
+
+            if (isTercapai) {
+                document.getElementById('valKekurangan').innerHTML = '<span style="color:#00e676; font-size:1.25rem; font-weight:800;">Rp 0 (Terpenuhi)</span>';
+                document.getElementById('progressPercent').innerHTML = '<span style="color:#00e676;"><i class="fas fa-check-circle"></i> 100% Target Terpenuhi</span>';
+                document.getElementById('progressBarFill').style.width = '100%';
+                document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #00b4d8 100%)';
+            } else {
+                document.getElementById('valKekurangan').textContent = 'Rp ' + formatRupiah(sisa);
+                document.getElementById('progressPercent').textContent = percent + '%';
+                document.getElementById('progressBarFill').style.width = Math.min(100, percent) + '%';
+                document.getElementById('progressBarFill').style.background = 'linear-gradient(90deg, #00e676 0%, #ffd700 100%)';
+            }
+
+            document.getElementById('valDonatur').textContent = (totalDonaturCount > 0 ? totalDonaturCount : (prog.total_donatur || 0)) + ' Donatur';
+
+            // Render Donatur List Dinamis (Urutan: yang terlama di atas, yang terbaru di paling bawah)
+            const donaturContainer = document.getElementById('donaturList');
+            const scrollWrapper = document.getElementById('donaturScrollWrapper');
+            if (donaturContainer) {
+                // Reset animasi scroll sebelumnya jika ada
+                donaturContainer.classList.remove('can-scroll');
+
+                if (rawDonaturList.length > 0) {
+                    // Sorting ASC: yang lama di atas, yang paling baru di paling bawah
+                    const sortedAsc = [...rawDonaturList].sort((a, b) => {
+                        const dateA = new Date(a.tanggal || 0).getTime();
+                        const dateB = new Date(b.tanggal || 0).getTime();
+                        if (dateA !== dateB) return dateA - dateB;
+                        return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+                    });
+
+                    // Render semua donatur (tanpa kotak nomor agar nama donatur tampil penuh & utuh)
+                    const donaturItemsHtml = sortedAsc.map((d, idx) => {
+                        const nama = d.is_anonim ? 'Hamba Allah' : (d.nama_donatur || 'Hamba Allah');
+                        const hasKet = d.keterangan && d.keterangan.trim() !== '' && d.keterangan.trim() !== '-';
+                        const ketHtml = hasKet 
+                            ? `<div class="donatur-ket-wrap"><span class="donatur-ket" title="${escapeHtml(d.keterangan)}"><i class="fas fa-tag mr-1" style="font-size: 0.78rem; opacity: 0.85;"></i> ${escapeHtml(d.keterangan)}</span></div>` 
+                            : `<div class="donatur-ket-wrap"><span class="donatur-ket-empty">-</span></div>`;
+                        return `
+                            <div class="donatur-item">
+                                <div class="donatur-left">
+                                    <span class="donatur-name"><i class="fas fa-user-circle text-warning"></i> ${escapeHtml(nama)}</span>
+                                </div>
+                                ${ketHtml}
+                                <span class="donatur-val">Rp ${formatRupiah(d.nominal)}</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    // Spasi 1 baris antara donatur terakhir dan pertama saat perulangan (loop)
+                    const loopSpacerHtml = `
+                        <div class="donatur-loop-spacer" aria-hidden="true">
+                            <div class="spacer-line"></div>
+                        </div>
+                    `;
+
+                    donaturContainer.innerHTML = donaturItemsHtml + loopSpacerHtml;
+
+                    // Cek apakah data donatur melebihi tinggi kotak container (overflow)
+                    requestAnimationFrame(() => {
+                        if (scrollWrapper && donaturContainer.scrollHeight > scrollWrapper.clientHeight + 4) {
+                            // Gandakan elemen anak (termasuk spacer 1 baris) untuk efek seamless vertical marquee loop tanpa jeda
+                            const originalChildren = Array.from(donaturContainer.children);
+                            originalChildren.forEach(child => {
+                                donaturContainer.appendChild(child.cloneNode(true));
+                            });
+
+                            // Kecepatan membaca ideal di layar TV: tenang, stabil, dan nyaman dibaca (6.8 detik per baris)
+                            const totalRows = sortedAsc.length + 1;
+                            const duration = Math.max(35, totalRows * 6.8);
+                            donaturContainer.style.setProperty('--scroll-duration', `${duration}s`);
+                            donaturContainer.classList.add('can-scroll');
+                        }
+                    });
+                } else {
+                    donaturContainer.innerHTML = `
+                        <div class="donatur-item" style="display:flex; justify-content:center; color:#94a3b8; font-style:italic; padding:18px 14px;">
+                            <span>Belum ada catatan donatur masuk untuk program ini</span>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgramInfaqData();
+
+            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
+            window.addEventListener('message', (event) => {
+                const msg = event.data;
+                if (!msg) return;
+                if (msg.type === 'INIT_DISPLAY_DATA') {
+                    if (msg.settings) {
+                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
+                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
+                    }
+                    loadProgramInfaqData();
+                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'program_infaq' || msg.table === 'donasi_infaq' || msg.table === 'app_settings')) {
+                    loadProgramInfaqData();
+                } else if (msg.type === 'SYNC_INFAQ' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
+                    loadProgramInfaqData();
+                }
+            });
+
+            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
+            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((payload) => {
+                    const tbl = (payload.table || '').toLowerCase();
+                    if (tbl === 'program_infaq' || tbl === 'donasi_infaq' || tbl === 'app_settings') {
+                        loadProgramInfaqData();
+                    }
+                });
+            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
+                SupabaseDB.subscribeRealtime((payload) => {
+                    if (payload.table === 'program_infaq' || payload.table === 'donasi_infaq' || payload.table === 'app_settings') {
+                        loadProgramInfaqData();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

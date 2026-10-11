@@ -4,7 +4,27 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 19:50 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 23:25 WIB)
+
+### 🎨 OPTIMASI LAYOUT SLIDE INFAQ & FORMAT RATA KANAN KONFIRMASI WHATSAPP (Versi SW v5.8.39):
+1. **Penyesuaian Tata Letak Rata Kanan (Right-Aligned) Konfirmasi WhatsApp (`web-statis/slides/infaq.html`)**:
+   - Format teks nomor WhatsApp bendahara `0856 1235 167` dan label `(BENDAHARA)` pada kartu 'Saluran Transfer Donasi' kini dibuat rata kanan (`text-align: right`, `align-items: flex-end`, `margin-left: auto`), sejajar sempurna dengan teks baris di atasnya (`Bank Jawa Barat (BJB)`, `011 686 685 4100`, dan `DKM Jami Al Jihad`).
+   - Ditambahkan flex container `.rek-wa-wrap` dan class `.wa-role` agar nomor telepon dan label peran tersusun vertikal secara proporsional dan rata ke batas kanan kartu.
+   - Ditambahkan fungsi helper JavaScript `renderInfaqWaKonfirmasi(rawStr)` untuk memformat string dinamis dari Supabase Cloud `app_settings` / LocalStorage secara otomatis menjadi pasangan nomor dan label peran rata kanan.
+2. **Pembaruan Konsistensi Modal Admin (`web-statis/admin.html`)**:
+   - Preview kartu rekening pada modal pengaturan infaq di panel Admin disinkronkan agar baris Konfirmasi WhatsApp juga menampilkan layout rata kanan yang serasi dengan tampilan TV.
+3. **Bumping Service Worker & Pembersihan Cache Usang (`web-statis/sw.js` & `admin.html`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.39`**.
+   - Skrip pembersih cache panel Admin di `admin.html` disinkronkan ke **`v5.8.39`** untuk membersihkan seluruh cache lama secara otomatis di semua perangkat klien.
+4. **Validasi Kualitas & 4 Pilar SOP Deployment**:
+   - Seluruh 86 assertion checks pada `npm test` lolos 100% tanpa error sintaks maupun regresi.
+   - Deployed ke Cloudflare Workers (`https://digitalaljihad.my.id/`).
+   - Backup lokal cold mirror ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit dan push branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 19:50 WIB)
 
 ### 🚀 OVERHAUL TOTAL 7 MASALAH SISTEM: SINKRONISASI REALTIME MULTI-DEVICE, PERFORMA SMART TV 60FPS, WARNA TV NATURAL, & SCHEMATIC ZERO-REGRESSION (Versi SW v5.8.38):
 1. **Penyelesaian Masalah 1 & 5: Sinkronisasi Data Antar-Halaman & Antar-Device Realtime 100%:**
