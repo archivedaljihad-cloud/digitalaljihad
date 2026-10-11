@@ -4,7 +4,34 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:25 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:45 WIB)
+
+### 🛡️ INTEGRASI SOP WAJIB: ZERO-REGRESSION & LOGIN MULTI-DEVICE LINTAS PLATFORM DENGAN DATA TERBARU — (Versi SW v5.8.37):
+1. **Ringkasan Permintaan Pengguna:**
+   - Pengguna menambahkan Standar Operasional Prosedur (SOP) wajib baru:
+     - *"1. Pastikan setiap ada pembaharuan/perbaikan/update tidak mengganggu halaman yang lain yang ada di web statis ini dan semua user bisa login dari device yang berbeda (dari hp, tablet, pc, laptop) dengan data terbaru."*
+
+2. **Integrasi Aturan ke Dalam Dokumen Standar Operasional Prosedur (`AGENTS.md`):**
+   - **SOP 5 (Proteksi Zero-Regression & Isolasi Modul Aman):**
+     - Mewajibkan setiap pembaruan, penambahan fitur, atau perbaikan kode diisolasi secara modular (`modular isolation`).
+     - Dilarang keras memicu bentrokan CSS global, kebocoran variabel/event listener, atau merusak fungsi halaman lain (`index.html`, `admin.html`, `petugas.html`, `modeinput.html`, `login.html`, `prayer-mode.html`, sub-slides).
+     - Menjalankan pengujian regresi otomatis `npm test` (79/79 assertions lulus) sebelum commit atau deploy.
+   - **SOP 6 (Kompatibilitas Multi-Device & Login Lintas Perangkat Realtime):**
+     - Seluruh user pengurus (Super Admin, Bendahara Kas, Petugas/DKM) dapat login dari perangkat berbeda (HP, tablet, PC, laptop) secara bersamaan tanpa konflik sesi.
+     - Setiap kali pengguna membuka halaman login atau melakukan proses autentikasi (`AdminAuth.login`), sistem proaktif menyinkronkan data akun dari Supabase Cloud (`app_settings` key `rbac_users_list`) agar perubahan profil atau password baru langsung aktif di seluruh perangkat.
+     - Header Cloudflare `Cache-Control: public, max-age=0, must-revalidate` dan pembersihan cache otomatis memastikan tidak ada cache usang yang menahan data otentikasi atau form input.
+     - Tata letak responsif penuh (*fluid cross-device design*) untuk smartphone (320px-767px), tablet (768px-1024px), PC/laptop (1025px-1920px), dan Smart TV (layar lebar 1080p/4K).
+
+3. **Bumping Versi Cache Service Worker (SOP #2):**
+   - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.37`** pada `web-statis/sw.js` dan skrip pembersihan cache di `web-statis/admin.html`.
+   - Mengoptimalkan media query responsif cross-device pada sub-slide `slides/pengumuman.html` dan `slides/agenda-rutin.html`.
+
+4. **Verifikasi Pengujian Otomatis:**
+   - `npm test`: **79 / 79 assertions LULUS (100% PASS)** tanpa error.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 16:25 WIB)
 
 ### 🔄 SINKRONISASI DATA PEMATERI & KETERANGAN AGENDA RUTIN DARI PANEL ADMIN / SUPABASE KE LAYAR TV — (Versi SW v5.8.36):
 1. **Ringkasan Permintaan Pengguna:**

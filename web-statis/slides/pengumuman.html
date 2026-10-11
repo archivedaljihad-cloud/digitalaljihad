@@ -472,6 +472,104 @@
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
+
+        /* =========================================================================
+           SOP 6: RESPONSIVE CROSS-DEVICE OPTIMIZATION (TV, PC, LAPTOP, TABLET, HP)
+           ========================================================================= */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 12px 20px 75px 20px;
+            }
+            .header h1 {
+                font-size: 2rem !important;
+            }
+            .agenda-big-card {
+                padding: 22px 24px;
+            }
+            .card-title-main {
+                font-size: 1.55rem;
+            }
+            .time-schedule-custom {
+                font-size: 1.05rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto !important;
+            }
+            .container {
+                height: auto !important;
+                min-height: 100vh;
+                padding: 10px 14px 85px 14px;
+                justify-content: flex-start;
+                gap: 12px;
+            }
+            .header h1 {
+                font-size: 1.45rem !important;
+                letter-spacing: 1.5px;
+            }
+            .header h3.sub-header {
+                font-size: 0.85rem;
+                letter-spacing: 2px;
+            }
+            .datetime {
+                font-size: 0.92rem;
+                padding: 2px 14px;
+            }
+            .section-header-bar {
+                flex-direction: column;
+                gap: 8px;
+                align-items: center;
+            }
+            .page-title-badge {
+                font-size: 0.98rem;
+                padding: 5px 18px;
+            }
+            .date-badge {
+                font-size: 0.82rem;
+                padding: 4px 14px;
+            }
+            .agenda-stage-container {
+                min-height: 520px;
+            }
+            .agenda-slide-deck {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                position: relative;
+                height: auto;
+            }
+            .agenda-big-card {
+                padding: 18px 20px;
+                border-radius: 20px;
+            }
+            .card-title-main {
+                font-size: 1.35rem;
+            }
+            .time-schedule-custom {
+                font-size: 0.95rem;
+            }
+            .time-schedule-custom .sched-lbl {
+                width: 64px;
+            }
+            .mentor-name {
+                font-size: 1rem;
+            }
+            .card-description-text {
+                font-size: 0.88rem;
+            }
+            .running-badge {
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+            .running-text {
+                font-size: 0.95rem;
+            }
+            .kaligrafi-medallion {
+                display: none !important;
+            }
+        }
+
     </style>
 </head>
 
