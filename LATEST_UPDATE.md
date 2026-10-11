@@ -4,7 +4,26 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 00:25 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 00:50 WIB)
+
+### 🎨 OPTIMASI UKURAN TEKS JUDUL PROGRAM INFAQ DI SLIDE TV (Versi SW v5.8.42):
+1. **Pembesaran Teks Judul Program Infaq (`web-statis/slides/infaq.html`)**:
+   - Memperbesar ukuran teks judul program donasi (contoh: *"LAPORAN INFAQ PENGADAAN AC BARU (DAIKIN 3 unit)"*) di elemen `.infaq-title-badge` dari `1.35rem` menjadi **`1.55rem`** dengan ketebalan ekstra tebal (**`font-weight: 800`**), border emas lebih tegas `1.8px`, padding lapang `5px 26px`, dan ikon donasi `1.48rem`.
+   - Mengoptimalkan media queries adaptif layar Smart TV:
+     - Viewport TV sedang (`max-height: 850px`): font-size dinaikkan dari `1.15rem` menjadi **`1.30rem`** (`font-weight: 800`).
+     - Viewport TV kompak (`max-height: 660px`): font-size dinaikkan dari `1.0rem` menjadi **`1.15rem`** (`font-weight: 800`).
+   - Judul program donasi kini terbaca jauh lebih jelas, tegas, dan berwibawa dari jarak jauh oleh seluruh jamaah masjid.
+2. **Bumping Service Worker & Pembersihan Cache (`web-statis/sw.js` & `admin.html`)**:
+   - CACHE_NAME dinaikkan ke **`aljihad-signage-v5.8.42`** di `sw.js` dan disinkronkan ke pembersih cache `admin.html`.
+3. **Validasi Kualitas & 4 Pilar SOP Deployment**:
+   - Lulus 86/86 assertions pengujian regresi otomatis (`npm test`).
+   - Deployment Cloudflare Workers (`https://digitalaljihad.my.id/`).
+   - Backup mirror lokal ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit dan push branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 12 Oktober 2026 (Pukul 00:25 WIB)
 
 ### ⚡ PENYELESAIAN MASALAH CHROME NOT RESPONDING & OPTIMASI REALTIME MULTI-TAB ANTI-FREEZE (Versi SW v5.8.41):
 1. **Diagnosis & Solusi Akar Masalah Google Chrome '(Not Responding)' di Panel Admin (`https://digitalaljihad.my.id/admin`)**:
