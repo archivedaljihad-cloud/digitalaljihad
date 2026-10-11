@@ -4,7 +4,41 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:05 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:15 WIB)
+
+### 🟠 PENERAPAN WARNA FONT AMBER/ORANGE (#FF9900) & PENYELARASAN JADWAL SELURUH 4 KARTU AGENDA RUTIN — (Versi SW v5.8.35):
+1. **Ringkasan Permintaan Pengguna:**
+   - Mengubah warna font teks jadwal dan waktu dalam kotak mengikuti sampel warna yang dikirimkan oleh pengguna (RGB: 255, 153, 0 / Hex: **`#FF9900`** - Deep Amber / Golden Orange).
+   - Menyamakan format tampilan kotak tersebut pada Kartu 1 (*"Pembacaan Surat Yaasiin & Tahlil"*) dan Kartu 2 (*"Pengajian Rutin Malam Ahad"*).
+
+2. **Perubahan & Penyesuaian yang Diterapkan:**
+   - **Penyelarasan Format Seluruh 4 Kartu Agenda (Simetris & Seragam):**
+     - **Kartu 1 (Pembacaan Surat Yaasiin & Tahlil):**
+       - `Jadwal : Malam Jum'at (Kamis Malam)`
+       - `Waktu  : Ba'da Maghrib s/d Isya`
+     - **Kartu 2 (Pengajian Rutin Malam Ahad):**
+       - `Jadwal : Malam Ahad (Sabtu Malam)`
+       - `Waktu  : Ba'da Maghrib s/d Isya`
+     - **Kartu 3 (Bimbingan Tahsin & Tartil Al-Qur'an):**
+       - `Jadwal : Senin, Rabu, Sabtu`
+       - `Waktu  : 20:00WIB (Ba'da Isya)`
+     - **Kartu 4 (Kajian Umum Tafsir Al-Qur'an):**
+       - `Jadwal : Setiap pekan 2 dan pekan ke 4`
+       - `Waktu  : Ba'da sholat subuh`
+   - **Styling Warna Font Amber/Orange (#FF9900):**
+     - Mengubah styling `.time-schedule-custom` menjadi warna **`#FF9900`** (oranye emas hangat), dengan font-weight 800 dan lebar label tetap 76px sehingga tanda titik dua (`:`) sejajar lurus ke bawah di seluruh kartu. Warna ini berpadu serasi dan elegan dengan nuansa islami masjid.
+     - Diterapkan pada `web-statis/slides/pengumuman.html` dan `web-statis/slides/agenda-rutin.html`.
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.35`** pada `web-statis/sw.js` dan pembersih cache `web-statis/admin.html`.
+
+3. **Verifikasi & Pengujian Otomatis:**
+   - Menjalankan seluruh pengujian regresi otomatis `npm test`.
+   - Hasil pengujian: **79 / 79 assertions LULUS (100% PASS)** tanpa error.
+
+---
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 16:05 WIB)
 
 ### 🔴 PENYESUAIAN TEKS JADWAL & WAKTU PELAKSANAAN WARNA MERAH SESUAI ILUSTRASI PADA SLIDE PENGUMUMAN / AGENDA RUTIN — (Versi SW v5.8.34):
 1. **Ringkasan Permintaan Pengguna:**

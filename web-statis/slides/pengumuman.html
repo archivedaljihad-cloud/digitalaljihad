@@ -323,38 +323,43 @@
         }
 
         
-        /* JADWAL PELAKSANAAN TEKS MERAH (SESUAI ILUSTRASI) */
+        /* JADWAL PELAKSANAAN TEKS AMBER/ORANGE (#FF9900) */
+        .time-schedule-custom,
         .time-schedule-red {
             display: flex;
             flex-direction: column;
             gap: 2px;
-            color: #ff3333 !important;
+            color: #FF9900 !important;
             font-size: 1.15rem;
             font-weight: 800;
             line-height: 1.35;
             letter-spacing: 0.3px;
         }
 
+        .time-schedule-custom .sched-row,
         .time-schedule-red .sched-row {
             display: flex;
             align-items: baseline;
         }
 
+        .time-schedule-custom .sched-lbl,
         .time-schedule-red .sched-lbl {
             width: 76px;
             flex-shrink: 0;
-            color: #ff3333 !important;
+            color: #FF9900 !important;
             font-weight: 800;
         }
 
+        .time-schedule-custom .sched-sep,
         .time-schedule-red .sched-sep {
             margin-right: 8px;
-            color: #ff3333 !important;
+            color: #FF9900 !important;
             font-weight: 800;
         }
 
+        .time-schedule-custom .sched-val,
         .time-schedule-red .sched-val {
-            color: #ff3333 !important;
+            color: #FF9900 !important;
             font-weight: 800;
         }
 
@@ -527,12 +532,12 @@
                     <div class="card-body-content">
                         <div class="card-title-main" id="titleYasin">Pembacaan Surat Yaasiin &amp; Tahlil</div>
 
-                        <div class="time-badge-box">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <div class="time-badge-label">WAKTU PELAKSANAAN</div>
-                                <div class="time-badge-val" id="waktuYasin">Malam Jum'at (Kamis Malam) • Ba'da Maghrib s/d Isya</div>
-                            </div>
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div class="time-schedule-custom" id="waktuYasin">
+                                <div class="sched-row"><span class="sched-lbl">Jadwal</span><span class="sched-sep">:</span><span class="sched-val">Malam Jum'at (Kamis Malam)</span></div>
+                                <div class="sched-row"><span class="sched-lbl">Waktu</span><span class="sched-sep">:</span><span class="sched-val">Ba'da Maghrib s/d Isya</span></div>
+                            </div>
                         </div>
 
                         <div class="mentor-badge-row">
@@ -571,12 +576,12 @@
                     <div class="card-body-content">
                         <div class="card-title-main" id="titleKajianAhad">Pengajian Rutin Malam Ahad</div>
 
-                        <div class="time-badge-box">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <div class="time-badge-label">WAKTU PELAKSANAAN</div>
-                                <div class="time-badge-val" id="waktuKajianAhad">Malam Ahad (Sabtu Malam) • Ba'da Maghrib s/d Isya</div>
-                            </div>
+                        <div class="time-badge-box">
+                            <i class="fas fa-clock"></i>
+                            <div class="time-schedule-custom" id="waktuKajianAhad">
+                                <div class="sched-row"><span class="sched-lbl">Jadwal</span><span class="sched-sep">:</span><span class="sched-val">Malam Ahad (Sabtu Malam)</span></div>
+                                <div class="sched-row"><span class="sched-lbl">Waktu</span><span class="sched-sep">:</span><span class="sched-val">Ba'da Maghrib s/d Isya</span></div>
+                            </div>
                         </div>
 
                         <div class="mentor-badge-row">
@@ -622,7 +627,7 @@
 
                         <div class="time-badge-box">
                             <i class="fas fa-clock"></i>
-                            <div class="time-schedule-red" id="waktuTahsin">
+                            <div class="time-schedule-custom" id="waktuTahsin">
                                 <div class="sched-row"><span class="sched-lbl">Jadwal</span><span class="sched-sep">:</span><span class="sched-val">Senin, Rabu, Sabtu</span></div>
                                 <div class="sched-row"><span class="sched-lbl">Waktu</span><span class="sched-sep">:</span><span class="sched-val">20:00WIB (Ba'da Isya)</span></div>
                             </div>
@@ -666,7 +671,7 @@
 
                         <div class="time-badge-box">
                             <i class="fas fa-clock"></i>
-                            <div class="time-schedule-red" id="waktuTafsir">
+                            <div class="time-schedule-custom" id="waktuTafsir">
                                 <div class="sched-row"><span class="sched-lbl">Jadwal</span><span class="sched-sep">:</span><span class="sched-val">Setiap pekan 2 dan pekan ke 4</span></div>
                                 <div class="sched-row"><span class="sched-lbl">Waktu</span><span class="sched-sep">:</span><span class="sched-val">Ba'da sholat subuh</span></div>
                             </div>
