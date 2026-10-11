@@ -588,13 +588,11 @@
                             <i class="fas fa-chalkboard-teacher"></i>
                             <div class="mentor-text-wrap">
                                 <div class="mentor-role">PEMATERI / KITAB RUJUKAN</div>
-                                <div class="mentor-name" id="mentorKajianAhad">K.H Iskandar Najib, M.Pd.I. (Kitab Irsyadul 'Ibad)</div>
+                                <div class="mentor-name" id="mentorKajianAhad">Ust Mahmud Abdul Ghani, S.Kom., M.M.</div>
                             </div>
                         </div>
 
-                        <div class="card-description-text" id="descKajianAhad">
-                            Kajian kitab fiqih &amp; tasawuf tematik bergilir setiap pekan. Terbuka untuk seluruh jama'ah ikhwan &amp; akhwat.
-                        </div>
+                        <div class="card-description-text" id="descKajianAhad">Kajian Kitab Nashoihul Ibad</div>
 
                         <div class="location-pill">
                             <i class="fas fa-map-marker-alt text-warning"></i>
@@ -637,13 +635,11 @@
                             <i class="fas fa-user-check"></i>
                             <div class="mentor-text-wrap">
                                 <div class="mentor-role">PEMBINA / PENGAJAR</div>
-                                <div class="mentor-name" id="mentorTahsin">Ust. Pembina Tahsin Al-Qur'an DKM Al-Jihad</div>
+                                <div class="mentor-name" id="mentorTahsin">Ust. M. Abu Bakar Sidiq, M.Pd.</div>
                             </div>
                         </div>
 
-                        <div class="card-description-text" id="descTahsin">
-                            Bimbingan fashahah makharijul huruf, kaidah ilmu tajwid, dan kelancaran membaca Al-Qur'an untuk remaja &amp; dewasa.
-                        </div>
+                        <div class="card-description-text" id="descTahsin">Terbuka untuk Jamaah Ikhwan</div>
 
                         <div class="location-pill">
                             <i class="fas fa-map-marker-alt text-warning"></i>
@@ -681,13 +677,11 @@
                             <i class="fas fa-award"></i>
                             <div class="mentor-text-wrap">
                                 <div class="mentor-role">NARASUMBER / ASATIDZ</div>
-                                <div class="mentor-name" id="mentorTafsir">Asatidz Pakar Tafsir &amp; Ulama Tamu</div>
+                                <div class="mentor-name" id="mentorTafsir">Ust. M. Abu Bakar Sidiq, M.Pd.</div>
                             </div>
                         </div>
 
-                        <div class="card-description-text" id="descTafsir">
-                            Tadabbur ayat-ayat Al-Qur'an, pemahaman makna kontekstual, serta pembinaan akhlak mulia dalam keluarga muslim.
-                        </div>
+                        <div class="card-description-text" id="descTafsir">Tafsir Ayat-ayat Pilihan &amp; Sarapan Pagi Bersama</div>
 
                         <div class="location-pill">
                             <i class="fas fa-map-marker-alt text-warning"></i>
@@ -906,30 +900,60 @@
                     }
                 }
 
-                // Cek sinkronisasi data agenda dari localStorage / Supabase
-                const rawAgenda = localStorage.getItem('aljihad_agenda_rutin');
-                if (rawAgenda) {
-                    try {
-                        const parsed = JSON.parse(rawAgenda);
-                        if (parsed.yasin) {
-                            if (parsed.yasin.judul) document.getElementById('titleYasin').textContent = parsed.yasin.judul;
-                            if (parsed.yasin.waktu) document.getElementById('waktuYasin').textContent = parsed.yasin.waktu;
-                            if (parsed.yasin.pembimbing) document.getElementById('mentorYasin').textContent = parsed.yasin.pembimbing;
-                            if (parsed.yasin.lokasi) document.getElementById('lokasiYasin').textContent = parsed.yasin.lokasi;
-                        }
-                        if (parsed.kajian) {
-                            if (parsed.kajian.judul) document.getElementById('titleKajianAhad').textContent = parsed.kajian.judul;
-                            if (parsed.kajian.waktu) document.getElementById('waktuKajianAhad').textContent = parsed.kajian.waktu;
-                            if (parsed.kajian.pembimbing) document.getElementById('mentorKajianAhad').textContent = parsed.kajian.pembimbing;
-                        }
-                        if (parsed.tahsin) {
-                            if (parsed.tahsin.judul) document.getElementById('titleTahsin').textContent = parsed.tahsin.judul;
-                            if (parsed.tahsin.waktu) document.getElementById('waktuTahsin').textContent = parsed.tahsin.waktu;
-                            if (parsed.tahsin.pembimbing) document.getElementById('mentorTahsin').textContent = parsed.tahsin.pembimbing;
-                        }
-                    } catch(e) {}
-                }
-
+                // Sinkronisasi data agenda rutin dari Supabase & LocalStorage
+                let agendaData = null;
+                if (settings && settings.kegiatan_rutin_settings) {
+                    try {
+                        agendaData = typeof settings.kegiatan_rutin_settings === 'string'
+                            ? JSON.parse(settings.kegiatan_rutin_settings)
+                            : settings.kegiatan_rutin_settings;
+                    } catch (e) {}
+                }
+                if (!agendaData) {
+                    const raw = localStorage.getItem('agenda_rutin_settings') || localStorage.getItem('aljihad_agenda_rutin');
+                    if (raw) {
+                        try { agendaData = JSON.parse(raw); } catch (e) {}
+                    }
+                }
+
+                if (agendaData) {
+                    // 1. Yaasiin
+                    const yasin = agendaData.yasin;
+                    if (yasin) {
+                        if (yasin.judul && document.getElementById('titleYasin')) document.getElementById('titleYasin').textContent = yasin.judul;
+                        if (yasin.pembimbing && document.getElementById('mentorYasin')) document.getElementById('mentorYasin').textContent = yasin.pembimbing;
+                        if (yasin.keterangan && document.getElementById('descYasin')) document.getElementById('descYasin').textContent = yasin.keterangan;
+                        if (yasin.lokasi && document.getElementById('lokasiYasin')) document.getElementById('lokasiYasin').textContent = yasin.lokasi;
+                    }
+
+                    // 2. Kajian Ahad
+                    const kajian = agendaData.kajian_ahad || agendaData.kajian;
+                    if (kajian) {
+                        if (kajian.judul && document.getElementById('titleKajianAhad')) document.getElementById('titleKajianAhad').textContent = kajian.judul;
+                        if (kajian.pembimbing && document.getElementById('mentorKajianAhad')) document.getElementById('mentorKajianAhad').textContent = kajian.pembimbing;
+                        if (kajian.keterangan && document.getElementById('descKajianAhad')) document.getElementById('descKajianAhad').textContent = kajian.keterangan;
+                        if (kajian.lokasi && document.getElementById('lokasiKajianAhad')) document.getElementById('lokasiKajianAhad').textContent = kajian.lokasi;
+                    }
+
+                    // 3. Tahsin
+                    const tahsin = agendaData.tahsin;
+                    if (tahsin) {
+                        if (tahsin.judul && document.getElementById('titleTahsin')) document.getElementById('titleTahsin').textContent = tahsin.judul;
+                        if (tahsin.pembimbing && document.getElementById('mentorTahsin')) document.getElementById('mentorTahsin').textContent = tahsin.pembimbing;
+                        if (tahsin.keterangan && document.getElementById('descTahsin')) document.getElementById('descTahsin').textContent = tahsin.keterangan;
+                        if (tahsin.lokasi && document.getElementById('lokasiTahsin')) document.getElementById('lokasiTahsin').textContent = tahsin.lokasi;
+                    }
+
+                    // 4. Tafsir
+                    const tafsir = agendaData.tafsir;
+                    if (tafsir) {
+                        if (tafsir.judul && document.getElementById('titleTafsir')) document.getElementById('titleTafsir').textContent = tafsir.judul;
+                        if (tafsir.pembimbing && document.getElementById('mentorTafsir')) document.getElementById('mentorTafsir').textContent = tafsir.pembimbing;
+                        if (tafsir.keterangan && document.getElementById('descTafsir')) document.getElementById('descTafsir').textContent = tafsir.keterangan;
+                        if (tafsir.lokasi && document.getElementById('lokasiTafsir')) document.getElementById('lokasiTafsir').textContent = tafsir.lokasi;
+                    }
+                }
+
                 applySmartHighlights();
             } catch (err) {
                 console.warn('Gagal memuat agenda data:', err);

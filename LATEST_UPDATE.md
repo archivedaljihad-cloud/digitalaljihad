@@ -4,7 +4,38 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:15 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:25 WIB)
+
+### 🔄 SINKRONISASI DATA PEMATERI & KETERANGAN AGENDA RUTIN DARI PANEL ADMIN / SUPABASE KE LAYAR TV — (Versi SW v5.8.36):
+1. **Ringkasan Permintaan Pengguna:**
+   - Pengguna menanyakan mengapa nama pemateri di Gambar 1 (Layar TV display `slides/pengumuman.html`) tidak sama dengan data yang sudah diatur di Gambar 2 (Panel Admin Agenda Rutin).
+   - Layar TV seharusnya mengambil data pemateri dan kegiatan secara dinamis dari data agenda yang tersimpan di Gambar 2.
+
+2. **Akar Masalah Teknis (*Root Causes*):**
+   - **Ketidakcocokan Kunci Penyimpanan (*Storage Key Mismatch*):**
+     Panel Admin (`admin.html`) menyimpan data agenda rutin ke `app_settings` Supabase Cloud dengan key **`kegiatan_rutin_settings`** dan ke localStorage dengan key **`agenda_rutin_settings`**. Namun skrip `loadAgendaData()` di `slides/pengumuman.html` dan `slides/agenda-rutin.html` sebelumnya hanya mencari key lama `aljihad_agenda_rutin`.
+   - **Ketiadaan Handler untuk Kartu 4 (Tafsir) & Kajian Ahad:**
+     Di skrip pemuat sebelumnya, blok `parsed.tafsir` sama sekali tidak ada, dan `kajian_ahad` tidak terbaca karena mencari `parsed.kajian`. Akibatnya, nama pemateri di Kartu 3 (*Ust. Pembina Tahsin...*) dan Kartu 4 (*Asatidz Pakar Tafsir...*) selalu tertahan pada teks statis bawaan HTML.
+
+3. **Perubahan & Solusi yang Diterapkan:**
+   - **Sinkronisasi Dinamis & Realtime (`pengumuman.html` & `agenda-rutin.html`):**
+     - Memperbarui fungsi `loadAgendaData()` untuk menyerap `settings.kegiatan_rutin_settings` dari Supabase Cloud dan `localStorage.getItem('agenda_rutin_settings')`.
+     - Menghubungkan seluruh elemen secara lengkap:
+       - **Kartu 3 (Tahsin):** Pemateri (`#mentorTahsin`) otomatis mengambil *"Ust. M. Abu Bakar Sidiq, M.Pd."* dan keterangan (`#descTahsin`) mengambil *"Terbuka untuk Jamaah Ikhwan"*.
+       - **Kartu 4 (Tafsir):** Pemateri (`#mentorTafsir`) otomatis mengambil *"Ust. M. Abu Bakar Sidiq, M.Pd."* dan keterangan (`#descTafsir`) mengambil *"Tafsir Ayat-ayat Pilihan & Sarapan Pagi Bersama"*.
+       - **Kartu 2 (Kajian Ahad):** Pemateri (`#mentorKajianAhad`) otomatis mengambil *"Ust Mahmud Abdul Ghani, S.Kom., M.M."* dan keterangan (`#descKajianAhad`) mengambil *"Kajian Kitab Nashoihul Ibad"*.
+     - Memperbarui teks fallback di markup HTML agar langsung selaras dengan data database terbaru bahkan sebelum JavaScript sinkronisasi berjalan.
+   - **SOP Bumping Versi Service Worker & Pembersihan Cache (SOP #2):**
+     - Versi `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.36`** pada `web-statis/sw.js` dan pembersih cache `web-statis/admin.html`.
+
+4. **Verifikasi & Pengujian Otomatis:**
+   - Menjalankan seluruh pengujian regresi otomatis `npm test`.
+   - Hasil pengujian: **79 / 79 assertions LULUS (100% PASS)** tanpa error.
+
+---
+
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 16:15 WIB)
 
 ### 🟠 PENERAPAN WARNA FONT AMBER/ORANGE (#FF9900) & PENYELARASAN JADWAL SELURUH 4 KARTU AGENDA RUTIN — (Versi SW v5.8.35):
 1. **Ringkasan Permintaan Pengguna:**
