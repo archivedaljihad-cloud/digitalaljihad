@@ -4,7 +4,46 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 16:45 WIB)
+## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 17:53 WIB)
+
+### 🧩 INSTALASI 5 AGENTIC SKILLS (ANTIGRAVITY AWESOME SKILLS) KE WORKSPACE (.agents/skills/):
+1. **Ringkasan Permintaan Pengguna:**
+   - Pengguna menanyakan mengenai repositori open-source `antigravity-awesome-skills` (by benjaminasterA) dan meminta untuk menginstalkan 5 kategori skill utama ke dalam repositori/proyek ini:
+     - *Frontend & Web Engineering*
+     - *DevOps, Cloud & Infrastruktur*
+     - *Clean Architecture & Refactoring*
+     - *Security & Vulnerability Hardening*
+     - *Testing & Quality Assurance*
+
+2. **Pemasangan Skill Standar ke `.agents/skills/`:**
+   - Telah dibuat folder standar kustomisasi AI Agent pada root workspace: `.agents/skills/`
+   - Berkas-berkas playbook operasional yang dipasang:
+     - **`.agents/skills/frontend-web-engineering/SKILL.md`**:
+       - Standar estetika visual premium (Glassmorphism, dark palette, micro-animations, tipografi Inter/Outfit/Amiri).
+       - Desain fluid responsif lintas perangkat (HP 320px-767px, Tablet 768px-1024px, PC/Laptop 1025px-1920px, Smart TV 1080p/4K 16:9).
+       - Optimasi Core Web Vitals (LCP < 2.5s, CLS < 0.1, INP < 200ms) dan isolasi modular anti bentrokan CSS.
+     - **`.agents/skills/devops-cloud-infra/SKILL.md`**:
+       - Alur kerja 4 Pilar Sinkronisasi Wajib: Cloudflare Workers deploy, Supabase Cloud sync, GitHub main push, dan folder cadangan lokal mirror (`C:\Users\anthu\Documents\【Digital WebSTATIS】\`).
+       - Prosedur invalidasi cache, bumping Service Worker `sw.js`, dan penegakan header edge Cloudflare `_headers`.
+     - **`.agents/skills/clean-architecture-refactoring/SKILL.md`**:
+       - Pemisahan lapisan Presentation, Logic, dan Data.
+       - Proteksi nullish coalescing (`?? true`, `?? 50`, `?? ''`) pencegah crash layar TV saat offline / transisi jaringan.
+       - Pencegahan memory leak pada aplikasi display 24/7 (pembersihan interval, deteksi detached DOM nodes, pembersihan websocket channel).
+     - **`.agents/skills/security-vulnerability-hardening/SKILL.md`**:
+       - Protokol pencegahan accidental data loss (larangan DROP/TRUNCATE tanpa verifikasi pengguna).
+       - Sanitasi input XSS pada dynamic slide, running text, dan form petugas.
+       - Manajemen keamanan sesi RBAC lintas perangkat (pemisahan anon key vs service role key).
+     - **`.agents/skills/testing-quality-assurance/SKILL.md`**:
+       - Standar pengujian regresi otomatis zero-defect release gate (`npm test` 79/79 assertions pass).
+       - Checklist pra-deploy untuk seluruh halaman dan simulasi siklus sholat 24 jam.
+
+3. **Verifikasi Pengujian & Integritas Sistem:**
+   - Menjalankan seluruh pengujian otomatis `npm test`.
+   - Hasil pengujian: **79 / 79 assertions LULUS (100% PASS)** tanpa error regresi.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 16:45 WIB)
 
 ### 🛡️ INTEGRASI SOP WAJIB: ZERO-REGRESSION & LOGIN MULTI-DEVICE LINTAS PLATFORM DENGAN DATA TERBARU — (Versi SW v5.8.37):
 1. **Ringkasan Permintaan Pengguna:**
