@@ -2152,10 +2152,19 @@
             // Debounce pelindung agar jika 5 saluran menyala bersamaan, callback hanya dipanggil 1x per batch
             let debounceTimer = null;
             let lastEventSignature = '';
+            let lastEventTime = 0;
             const safeTrigger = (evt) => {
-                const sig = `${evt.table}_${evt.action}_${evt.timestamp || Date.now()}`;
-                if (sig === lastEventSignature) return;
+                if (evt && evt.table) {
+                    this.invalidateCache(evt.table);
+                }
+                const now = Date.now();
+                const sig = `${evt?.table || 'all'}_${evt?.action || 'SYNC'}`;
+                // Jika event tabel & aksi yang sama tiba dalam rentang <150ms dari berbagai track redundan, lewati redundansi
+                if (sig === lastEventSignature && (now - lastEventTime) < 150) {
+                    return;
+                }
                 lastEventSignature = sig;
+                lastEventTime = now;
 
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => {
@@ -2164,16 +2173,7 @@
                     } catch (err) {
                         console.error('[SupabaseDB.onDataChange] Callback error:', err);
                     }
-                }, 35); // 35ms debounce super responsif
-            };
-
-            // Invalidate cache setiap ada sinyal data update
-            const origSafeTrigger = safeTrigger;
-            safeTrigger = (evt) => {
-                if (evt && evt.table) {
-                    this.invalidateCache(evt.table);
-                }
-                origSafeTrigger(evt);
+                }, 120); // 120ms debounce pelindung multi-track
             };
 
             // Cek jika berjalan di dalam iframe TV (child frame)

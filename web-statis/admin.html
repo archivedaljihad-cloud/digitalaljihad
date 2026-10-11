@@ -7579,9 +7579,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
 
-            // Realtime Listener Lintas Perangkat (Multi-Device Auto-Sync)
+            // Realtime Listener Lintas Perangkat (Multi-Device Auto-Sync Anti-Freeze)
             if (window.SupabaseDB && typeof window.SupabaseDB.onDataChange === 'function') {
-                window.SupabaseDB.onDataChange(async (evt) => {
+                window.SupabaseDB.onDataChange((evt) => {
                     console.log('🔄 [Admin Realtime] Perubahan data terdeteksi:', evt);
                     if (evt && (evt.table === 'app_settings' || evt.key === 'app_settings') && evt.payload) {
                         const s = evt.payload;
@@ -7596,11 +7596,11 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                         const jm = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi);
                         if (jm) syncDurasiJumat(jm);
                     }
-                    await loadAllSupabaseData();
+                    debouncedLoadAllSupabaseData(600);
                 });
             }
             if (window.SupabaseDB && typeof window.SupabaseDB.onRemoteCommand === 'function') {
-                window.SupabaseDB.onRemoteCommand(async (cmd, payload) => {
+                window.SupabaseDB.onRemoteCommand((cmd, payload) => {
                     if (cmd === 'SYNC_JADWAL_SHOLAT' || cmd === 'UPDATE_SETTINGS') {
                         if (payload) {
                             const s = payload;
@@ -7615,26 +7615,15 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                             const jm = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi);
                             if (jm) syncDurasiJumat(jm);
                         }
-                        await loadAllSupabaseData();
+                        debouncedLoadAllSupabaseData(600);
                     }
                 });
             }
 
-            // PWA Service Worker Registration with Instant Auto-Reload on Real Updates (Anti-Loop on First Visit)
+            // PWA Service Worker Registration (Silent Background Update - Tanpa Reload Kasar yang Membekukan Browser)
             if ('serviceWorker' in navigator) {
-                let isRefreshing = false;
-                let hadController = Boolean(navigator.serviceWorker.controller);
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    // Cegah reload loop saat kunjungan pertama kali (uncontrolled -> controlled)
-                    if (!hadController) {
-                        hadController = true;
-                        return;
-                    }
-                    if (!isRefreshing) {
-                        isRefreshing = true;
-                        console.log('🔄 [Admin PWA] Versi baru terdeteksi & aktif, memuat ulang halaman otomatis...');
-                        window.location.reload();
-                    }
+                    console.log('🔄 [Admin PWA] Service Worker versi baru telah aktif di latar belakang (tanpa reload paksa).');
                 });
 
                 navigator.serviceWorker.register('sw.js').then((reg) => {
@@ -8497,57 +8486,76 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
         }
 
         // =======================================================
-        // 6. LIVE DATA LOADER DARI SUPABASE
+        // 6. LIVE DATA LOADER DARI SUPABASE (ANTI-FREEZE & PROTEKSI TITIK MACET)
         // =======================================================
+        let _isLoadingAllData = false;
+        let _pendingLoadAllData = false;
+        let _debounceLoadTimer = null;
+
+        function debouncedLoadAllSupabaseData(delayMs = 600) {
+            if (_debounceLoadTimer) clearTimeout(_debounceLoadTimer);
+            _debounceLoadTimer = setTimeout(() => {
+                loadAllSupabaseData();
+            }, delayMs);
+        }
+
         async function loadAllSupabaseData() {
             if (typeof SUPABASE_CONFIG === 'undefined' || !SUPABASE_CONFIG.url) return;
-
-            const headers = getSupabaseHeaders();
-
-            // Eksekusi paralel 10 query ke Supabase (memangkas latensi serial dari ~3500ms menjadi ~350ms)
-            const [
-                resKasSettled,
-                resAmbSettled,
-                resJumatSettled,
-                resSholatSettled,
-                resSetSettled,
-                resUsersSettled,
-                resInfaqSettled,
-                resDonasiSettled,
-                resQrisSettled,
-                resSlidesSettled
-            ] = await Promise.allSettled([
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?order=tanggal.desc,id.desc`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan_ambulance?order=tanggal.desc,id.desc`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc,id.desc&limit=1`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=id,name,email,role_id`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?order=id.desc`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?order=tanggal.asc,id.asc`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?order=id.asc`, { headers }),
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/slides?order=urutan.asc`, { headers })
-            ]);
-
-            // A. Kas Utama Masjid
-            try {
-                if (resKasSettled.status === 'fulfilled' && resKasSettled.value.ok) {
-                    const rawKas = await resKasSettled.value.json();
-                    // FILTER KETAT: Jaga independensi Kas Utama Masjid dari pos penggalangan infaq / donasi program lain
-                    cachedKasData = (rawKas || []).filter(item => {
-                        if (!item) return false;
-                        const kat = (item.kategori || '').toLowerCase().trim();
-                        const bukanKas = ['penggalangan', 'program infaq', 'infaq program', 'infaq renovasi', 'renovasi', 'ambulance', 'ambulans', 'qurban', 'ramadhan', 'donasi infaq', 'donatur'];
-                        for (const b of bukanKas) {
-                            if (kat.includes(b)) return false;
-                        }
-                        return true;
-                    });
-                    renderKasTables(cachedKasData);
-                }
-            } catch (err) {
-                console.warn('Gagal memuat kas utama dari Supabase:', err);
+            if (_isLoadingAllData) {
+                _pendingLoadAllData = true;
+                return;
             }
+            _isLoadingAllData = true;
+            try {
+                const headers = getSupabaseHeaders();
+
+                // Eksekusi paralel 10 query ke Supabase (memangkas latensi serial dari ~3500ms menjadi ~350ms)
+                const [
+                    resKasSettled,
+                    resAmbSettled,
+                    resJumatSettled,
+                    resSholatSettled,
+                    resSetSettled,
+                    resUsersSettled,
+                    resInfaqSettled,
+                    resDonasiSettled,
+                    resQrisSettled,
+                    resSlidesSettled
+                ] = await Promise.allSettled([
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan?order=tanggal.desc,id.desc`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/keuangan_ambulance?order=tanggal.desc,id.desc`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc,id.desc&limit=1`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?order=id.asc`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?select=id,name,email,role_id`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/program_infaq?order=id.desc`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/donasi_infaq?order=tanggal.asc,id.asc`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?order=id.asc`, { headers }),
+                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/slides?order=urutan.asc`, { headers })
+                ]);
+
+                // A. Kas Utama Masjid
+                try {
+                    if (resKasSettled.status === 'fulfilled' && resKasSettled.value.ok) {
+                        const rawKas = await resKasSettled.value.json();
+                        // FILTER KETAT: Jaga independensi Kas Utama Masjid dari pos penggalangan infaq / donasi program lain
+                        cachedKasData = (rawKas || []).filter(item => {
+                            if (!item) return false;
+                            const kat = (item.kategori || '').toLowerCase().trim();
+                            const bukanKas = ['penggalangan', 'program infaq', 'infaq program', 'infaq renovasi', 'renovasi', 'ambulance', 'ambulans', 'qurban', 'ramadhan', 'donasi infaq', 'donatur'];
+                            for (const b of bukanKas) {
+                                if (kat.includes(b)) return false;
+                            }
+                            return true;
+                        });
+                        renderKasTables(cachedKasData);
+                    }
+                } catch (err) {
+                    console.warn('Gagal memuat kas utama dari Supabase:', err);
+                }
+
+                // Beri napas ke message pump browser (mencegah Windows mendeteksi Not Responding)
+                await new Promise(r => setTimeout(r, 0));
 
             // B. Kas Mobil Ambulance
             try {
@@ -9125,7 +9133,14 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
             if (typeof filterKasTable === 'function') {
                 filterKasTable();
             }
+        } finally {
+            _isLoadingAllData = false;
+            if (_pendingLoadAllData) {
+                _pendingLoadAllData = false;
+                debouncedLoadAllSupabaseData(300);
+            }
         }
+    }
 
         // Render Tabel Kas
         function renderKasTables(data) {
@@ -13742,7 +13757,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.40') {
+                                if (name !== 'aljihad-signage-v5.8.41') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }

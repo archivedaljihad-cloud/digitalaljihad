@@ -4,7 +4,29 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 11 Oktober 2026 (Pukul 23:45 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 00:25 WIB)
+
+### ⚡ PENYELESAIAN MASALAH CHROME NOT RESPONDING & OPTIMASI REALTIME MULTI-TAB ANTI-FREEZE (Versi SW v5.8.41):
+1. **Diagnosis & Solusi Akar Masalah Google Chrome '(Not Responding)' di Panel Admin (`https://digitalaljihad.my.id/admin`)**:
+   - **Akar Masalah 1 (Multi-Channel Realtime Echo Storm)**: Ketika tab Admin dibuka bersamaan dengan tab Display TV (`index.html`) atau perangkat lain, satu pembaruan data memicu sinyal bersamaan melalui 5 saluran redundan (Supabase Postgres Changes, Supabase Remote Broadcast, Supabase Remote Command, BroadcastChannel, dan LocalStorage Event). Karena debounce sebelumnya terlalu kecil (35ms) dan signature event menyertakan timestamp dinamis per-milidetik, kelima saluran tersebut tidak terdeduplikasi dan masing-masing memanggil `loadAllSupabaseData()` berturut-turut.
+   - **Akar Masalah 2 (Concurrency Flood & Monolitik DOM Blocking)**: Pemanggilan `loadAllSupabaseData()` yang beruntun mengeksekusi 10 query HTTP paralel ke Supabase sekaligus merender ratusan baris tabel transaksi Kas, Ambulance, Rotasi TV, Petugas Jumat, QRIS, dan Infaq secara sinkron tanpa jeda, menguras 100% CPU thread JavaScript utama dan menghentikan pemrosesan pesan Windows (Message Pump) selama >5 detik sehingga Chrome berubah warna pucat dan dilabeli oleh Windows sebagai `(Not Responding)`.
+   - **Akar Masalah 3 (Forced Hard Reload Loop pada Service Worker `controllerchange`)**: Skrip PWA Service Worker di `admin.html` sebelumnya memanggil `window.location.reload()` seketika saat service worker baru aktif. Jika beberapa tab atau update berjalan di background, pemuatan ulang paksa file monolitik 1.15 MB membebani memori dan membekukan peramban.
+2. **Implementasi Perbaikan & Proteksi Defensif**:
+   - **Multi-Track Deduplication & Debounce 120ms (`web-statis/js/supabase-db.js`)**: `safeTrigger` pada `onDataChange` kini mendeteksi signature unik `table_action` dan meredam duplikasi dalam rentang 150ms dari berbagai track redundan, menyatukan 5 saluran realtime menjadi 1 panggilan callback yang tenang dan efisien.
+   - **Concurrency Guard & Debounced Data Loader (`web-statis/admin.html`)**: Menambahkan `_isLoadingAllData`, `_pendingLoadAllData`, dan fungsi `debouncedLoadAllSupabaseData(600)` sehingga pembaruan realtime tidak akan pernah menjalankan query ganda secara simultan. Jika ada permintaan update saat query sedang berjalan, sistem secara otomatis mengantrikannya untuk dieksekusi 1x setelah siklus selesai.
+   - **Non-Blocking Execution Yielding**: Menyisipkan jeda `await new Promise(r => setTimeout(r, 0))` di sela-sela fase rendering tabel berat (Kas, Ambulance, Petugas Jumat, Setting, Program Infaq) di dalam `loadAllSupabaseData()`. Hal ini memberi napas kepada Windows Message Pump dan antarmuka Chrome untuk memproses klik, scroll, dan repaint sehingga browser tetap responsif dan lancar (60fps).
+   - **Eliminasi Reload Paksa Service Worker**: Menghapus `window.location.reload()` kasar pada event `controllerchange` di `admin.html` dan menggantinya dengan silent background activation (persis seperti yang diterapkan di `index.html`), menjaga kenyamanan dan stabilitas admin saat menginput data.
+3. **Bumping Service Worker & Pembersihan Cache (`web-statis/sw.js` & `admin.html`)**:
+   - CACHE_NAME dinaikkan ke **`aljihad-signage-v5.8.41`** di `sw.js` dan skrip pembersih cache `admin.html`.
+4. **Validasi Kualitas & 4 Pilar SOP Deployment**:
+   - Lulus 86/86 assertions pengujian regresi otomatis (`npm test`).
+   - Deployment Cloudflare Workers (`https://digitalaljihad.my.id/`).
+   - Backup mirror lokal ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit dan push branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 11 Oktober 2026 (Pukul 23:45 WIB)
 
 ### 🎨 REDESIGN PROGRESS BAR TARGET DONASI SESUAI ILUSTRASI GAMBAR 2 & PENYESUAIAN MULTI-DEVICE SMART TV (Versi SW v5.8.40):
 1. **Redesign Komponen Progress Bar Target Donasi Sesuai Gambar 2 (`web-statis/slides/infaq.html`)**:
