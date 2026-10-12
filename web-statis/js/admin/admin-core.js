@@ -490,9 +490,9 @@
 
             if (greetingData) {
                 if (greetingTimeEl) greetingTimeEl.textContent = greetingData.salamWaktu;
-                if (heroGreetingUserEl) heroGreetingUserEl.textContent = `${greetingData.displayName} ${greetingData.roleSuffix}`;
+                if (heroGreetingUserEl) heroGreetingUserEl.textContent = greetingData.displayName;
                 if (welcomeHeroTitleEl) {
-                    welcomeHeroTitleEl.innerHTML = `Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">${greetingData.displayName} ${greetingData.roleSuffix}</span>!`;
+                    welcomeHeroTitleEl.innerHTML = `Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">${greetingData.displayName}</span> !`;
                 }
             } else {
                 const hours = new Date().getHours();

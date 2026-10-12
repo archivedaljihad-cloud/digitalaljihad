@@ -7,7 +7,31 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 15:52 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 16:03 WIB)
+
+### 👤 PERSONALISASI SAPAAN USER DINAMIS DI DASHBOARD UTAMA (Versi SW v5.8.49):
+1. **Pembaruan Format Sapaan Selamat Datang (`Selamat Datang, [nama user] !`)**:
+   - **Mandat**: Mengubah teks ucapan hero banner di dashboard utama seluruh user (Super Admin, Bendahara, Petugas/Operator) agar menampilkan nama akun secara bersih dan personal tanpa tanda kurung peran (`roleSuffix`) yang panjang.
+   - **Tampilan Standar**:
+     - Baris 1: Salam waktu otomatis (`Selamat Pagi,` / `Selamat Siang,` / `Selamat Sore,` / `Selamat Malam,`).
+     - Baris 2: `Selamat Datang, [nama user] !` (contoh: `Selamat Datang, Bpk. Suwardi !`, `Selamat Datang, Bpk. Haji Utut Priyastya !`, `Selamat Datang, Bpk. Hadi Prayitno !`, atau nama akun lain yang login).
+   - **Berkas yang Diperbarui**:
+     - `web-statis/admin.html`: Markup default hero banner dan skrip inline inisialisasi awal.
+     - `web-statis/js/admin-auth.js`: Fungsi `getFormattedGreeting(user)` dan `applyRBAC(user)` diformat bersih hanya menggunakan `displayName` pada banner, sementara label peran (`.auth-user-role-label`) tetap tampil elegan di topbar dan sidebar.
+     - `web-statis/js/admin/admin-core.js`: Logika `updateHeroGreeting()` disinkronkan.
+     - `web-statis/petugas.html` & `web-statis/modeinput.html`: Banner sambutan Quick Input mode disematkan `updatePetugasGreeting()` sehingga langsung menampilkan sapaan personal `[salam waktu] Selamat Datang, [nama user] !` saat kunci akses dibuka.
+
+2. **Pembersihan Cache & Cache Version Bumping (Versi SW `v5.8.49`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.49`** pada `web-statis/sw.js` dan handler pembersih cache pada `web-statis/js/admin/admin-settings.js`.
+
+3. **Verifikasi & Sinkronisasi 4 Pilar (Cloudflare, Backup Lokal, GitHub, Test Suite)**:
+   - **Otomasi Pengujian**: 117 / 117 assertions lulus sempurna (100% PASS).
+   - **Cloudflare Edge**: Deploy sukses via Wrangler ke `https://digitalaljihad.my.id/`.
+   - **Cadangan Lokal**: Seluruh berkas disalin langsung ke root `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 15:52 WIB)
 
 ### 🌿 PENYEMPURNAAN TEMA HIJAU ZAMRUD DURASI JUM'AT & PROPORSIONALITAS TOGGLE PRAYER MODE (Versi SW v5.8.48):
 1. **Penyesuaian Skala Teks Switch Prayer Mode (`web-statis/admin.html`)**:

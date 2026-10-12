@@ -1237,7 +1237,7 @@
         <div class="senior-guide-box">
             <div class="guide-mode-tag">QUICK INPUT MODE by MOBILE</div>
             <div class="guide-content">
-                <h2>Assalamu'alaikum, 👋</h2>
+                <h2 id="petugasWelcomeGreeting">Assalamu'alaikum, 👋</h2>
                 <p>Selamat datang di Sistem Informasi Digital-Masjid Jami' Al JIhad (QUICK INPUT MODE).<br>
                 Silakan pilih salah satu kotak di bawah untuk mengubah jadwal atau laporan kas. Data akan langsung ditampilkan di layar TV masjid secara realtime.</p>
             </div>
@@ -1759,6 +1759,24 @@
             return false;
         }
 
+        function updatePetugasGreeting() {
+            try {
+                var rawAuth = localStorage.getItem('aljihad_auth_user') || sessionStorage.getItem('aljihad_auth_user');
+                var u = rawAuth ? JSON.parse(rawAuth) : null;
+                var h = new Date().getHours();
+                var s = 'Selamat Malam,';
+                if (h >= 3 && h < 11) s = 'Selamat Pagi,';
+                else if (h >= 11 && h < 15) s = 'Selamat Siang,';
+                else if (h >= 15 && h < 18) s = 'Selamat Sore,';
+
+                var name = (u && u.name) ? u.name.trim() : 'Bpk. Hadi Prayitno';
+                var heading = document.getElementById('petugasWelcomeGreeting');
+                if (heading) {
+                    heading.innerHTML = `${s} Selamat Datang, <span class="text-warning font-weight-bold">${name}</span> ! 👋`;
+                }
+            } catch(e) {}
+        }
+
         function checkSecurityAuth() {
             const isAuth = isPetugasAuthenticated();
             const overlay = document.getElementById('authGateOverlay');
@@ -1767,6 +1785,7 @@
                     localStorage.setItem('quick_petugas_authenticated', 'true');
                     sessionStorage.setItem('quick_petugas_authenticated', 'true');
                 } catch(e) {}
+                updatePetugasGreeting();
                 if (overlay) overlay.style.display = 'none';
                 if (window.AdminAuth && typeof window.AdminAuth.initIdleTimer === 'function') {
                     window.AdminAuth.initIdleTimer();
@@ -1906,6 +1925,7 @@
                 }
 
                 document.getElementById('authGateOverlay').style.display = 'none';
+                updatePetugasGreeting();
                 if (errBox) errBox.style.display = 'none';
                 if (window.AdminAuth && typeof window.AdminAuth.initIdleTimer === 'function') {
                     window.AdminAuth.initIdleTimer();

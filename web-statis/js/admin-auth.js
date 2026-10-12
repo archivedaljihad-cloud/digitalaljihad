@@ -1123,7 +1123,7 @@ const AdminAuth = {
 
         // Jika belum diset namanya, gunakan fallback default
         if (!rawName) {
-            rawName = (role === 'admin' ? 'Suwardi' : (role === 'bendahara' ? 'Bpk. H. Utut Priastya' : 'Bpk. Ust. Hadi Prayitno'));
+            rawName = (role === 'admin' ? 'Bpk. Suwardi' : (role === 'bendahara' ? 'Bpk. Haji Utut Priyastya' : 'Bpk. Hadi Prayitno'));
         }
 
         // 1. Bersihkan tanda kurung peran sebelumnya di nama jika ada (misal "H. Utut Priyastya (Bendahara)" -> "H. Utut Priyastya")
@@ -1134,11 +1134,11 @@ const AdminAuth = {
         let displayName = cleanName;
         const lower = cleanName.toLowerCase();
         const isOrg = lower.startsWith('dkm') || lower.startsWith('pengurus') || lower.startsWith('panitia') || lower.startsWith('tim') || lower.startsWith('sekretariat') || lower.startsWith('takmir') || lower.startsWith('yayasan');
-        if (!isOrg && !lower.startsWith('bpk.') && !lower.startsWith('bpk ') && !lower.startsWith('bapak') && !lower.startsWith('ust.') && !lower.startsWith('ustadz') && !lower.startsWith('ibu') && !lower.startsWith('hj.') && !lower.startsWith('h.')) {
+        if (!isOrg && !lower.startsWith('bpk.') && !lower.startsWith('bpk ') && !lower.startsWith('bapak') && !lower.startsWith('ust.') && !lower.startsWith('ustadz') && !lower.startsWith('ibu') && !lower.startsWith('hj.') && !lower.startsWith('h.') && !lower.startsWith('haji')) {
             displayName = 'Bpk. ' + cleanName;
         }
 
-        // 3. Gelar Resmi Masjid Berdasarkan Peran Akun
+        // 3. Gelar Resmi Masjid Berdasarkan Peran Akun (disimpan untuk metadata bila dibutuhkan)
         let roleSuffix = '';
         if (role === 'bendahara') {
             roleSuffix = "(Bendahara Masjid Jami' Al Jihad)";
@@ -1152,8 +1152,8 @@ const AdminAuth = {
             salamWaktu,
             displayName,
             roleSuffix,
-            fullWelcomeLine: `Selamat Datang, ${displayName} ${roleSuffix}!`,
-            fullText: `${salamWaktu}\nSelamat Datang, ${displayName} ${roleSuffix}!`
+            fullWelcomeLine: `Selamat Datang, ${displayName} !`,
+            fullText: `${salamWaktu}\nSelamat Datang, ${displayName} !`
         };
     },
 
@@ -1186,10 +1186,10 @@ const AdminAuth = {
             greetingTimeEl.textContent = greetingData.salamWaktu;
         }
 
-        // Update Elemen Selamat Datang & Nama (Baris 2: Misal "Selamat Datang, Bpk. H. Utut Priastya (Bendahara Masjid Jami' Al Jihad)!")
+        // Update Elemen Selamat Datang & Nama (Baris 2: Misal "Selamat Datang, Bpk. Suwardi !")
         const heroTitleEl = document.getElementById('welcomeHeroTitle');
         if (heroTitleEl) {
-            heroTitleEl.innerHTML = `Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">${greetingData.displayName} ${greetingData.roleSuffix}</span>!`;
+            heroTitleEl.innerHTML = `Selamat Datang, <span class="auth-welcome-name text-warning font-weight-bold" id="heroGreetingUser">${greetingData.displayName}</span> !`;
         }
 
         // 3. Update Label Profil di Sidebar dan Topbar (Gunakan nama asli akun pengguna)
