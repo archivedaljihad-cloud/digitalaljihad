@@ -746,6 +746,47 @@
         .hinge-pin.left { left: 4px; }
         .hinge-pin.right { right: 4px; }
 
+        /* MODEL BIASA (KLASIK BERSIH / BUKAN FLIP) */
+        .tile-face {
+            background: linear-gradient(180deg, #022c16 0%, #011c0e 50%, #01130a 51%, #000b05 100%);
+            border: 2px solid rgba(255, 215, 0, 0.75);
+            border-radius: 20px;
+            padding: 16px 24px;
+            width: clamp(140px, 15vw, 210px);
+            height: clamp(100px, 11vw, 150px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 18px 42px rgba(0, 0, 0, 0.8),
+                0 0 32px rgba(255, 215, 0, 0.25),
+                inset 0 1px 2px rgba(255, 255, 255, 0.35);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .tile-number {
+            font-family: 'Cinzel', monospace;
+            font-size: clamp(64px, 7vw, 96px);
+            font-weight: 900;
+            color: #FFFFFF;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
+            line-height: 1;
+            user-select: none;
+        }
+
+        .tile-crease {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
         .tile-label {
             font-size: 13px;
             font-weight: 800;
@@ -1357,7 +1398,7 @@
                 </div>
 
                 <div class="countdown-tiles-wrapper">
-                    <!-- TILE MENIT (3D MECHANICAL FLIP CLOCK OPSI 1) -->
+                    <!-- TILE MENIT (3D MECHANICAL FLIP CLOCK & MODEL BIASA) -->
                     <div class="countdown-tile">
                         <div class="flip-card-box size-large" id="flipMinutes">
                             <div class="flip-card-half top static-top"><span class="flip-digit-text digit" id="timerMinutes">00</span></div>
@@ -1368,12 +1409,16 @@
                             <div class="hinge-pin left"></div>
                             <div class="hinge-pin right"></div>
                         </div>
+                        <div class="tile-face" id="tileFaceMinutes" style="display: none;">
+                            <span class="tile-number" id="timerMinutesPlain">00</span>
+                            <div class="tile-crease"></div>
+                        </div>
                         <div class="tile-label">MENIT</div>
                     </div>
 
                     <div class="countdown-separator">:</div>
 
-                    <!-- TILE DETIK (3D MECHANICAL FLIP CLOCK OPSI 1) -->
+                    <!-- TILE DETIK (3D MECHANICAL FLIP CLOCK & MODEL BIASA) -->
                     <div class="countdown-tile">
                         <div class="flip-card-box size-large" id="flipSeconds">
                             <div class="flip-card-half top static-top"><span class="flip-digit-text digit" id="timerSeconds">00</span></div>
@@ -1383,6 +1428,10 @@
                             <div class="hinge-bar"></div>
                             <div class="hinge-pin left"></div>
                             <div class="hinge-pin right"></div>
+                        </div>
+                        <div class="tile-face" id="tileFaceSeconds" style="display: none;">
+                            <span class="tile-number" id="timerSecondsPlain">00</span>
+                            <div class="tile-crease"></div>
                         </div>
                         <div class="tile-label">DETIK</div>
                     </div>
@@ -1567,10 +1616,35 @@
         }
 
         // -------------------------------------------------------------
-        // MESIN 3D MECHANICAL FLIP CLOCK CONTROLLER (OPSI 1)
+        // MESIN 3D MECHANICAL FLIP CLOCK CONTROLLER (OPSI 1 & MODEL BIASA)
         // -------------------------------------------------------------
         let prevFlipM = -1;
         let prevFlipS = -1;
+
+        function getCountdownStyle() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const styleParam = urlParams.get('style') || urlParams.get('countdown_style') || urlParams.get('model');
+                if (styleParam === 'biasa' || styleParam === 'regular' || styleParam === 'classic') return 'biasa';
+                if (styleParam === 'flip' || styleParam === '3d') return 'flip';
+            } catch (e) {}
+
+            try {
+                const localStyle = localStorage.getItem('prayer_countdown_style');
+                if (localStyle === 'biasa' || localStyle === 'flip') return localStyle;
+            } catch (e) {}
+
+            return '{{ $setting->prayer_countdown_style ?? "flip" }}';
+        }
+
+        window.switchCountdownStyle = function(style) {
+            try {
+                localStorage.setItem('prayer_countdown_style', style);
+            } catch (e) {}
+            prevFlipM = -1;
+            prevFlipS = -1;
+            updateCountdown();
+        };
 
         function setFlipBoxInstant(boxEl, val) {
             if (!boxEl) return;
@@ -1584,6 +1658,9 @@
 
         function animateFlipBox(boxEl, oldVal, newVal) {
             if (!boxEl || oldVal === newVal) return;
+            if (boxEl._pendingVal === newVal && boxEl.classList.contains('is-flipping')) {
+                return;
+            }
             if (boxEl._flipTimer) {
                 clearTimeout(boxEl._flipTimer);
                 boxEl._flipTimer = null;
@@ -1629,27 +1706,46 @@
             const minStr = formatTwoDigits(minutes);
             const secStr = formatTwoDigits(seconds);
 
+            const activeStyle = getCountdownStyle();
             const flipMinutesEl = document.getElementById('flipMinutes');
             const flipSecondsEl = document.getElementById('flipSeconds');
+            const tileFaceMinutesEl = document.getElementById('tileFaceMinutes');
+            const tileFaceSecondsEl = document.getElementById('tileFaceSeconds');
+            const timerMinutesPlainEl = document.getElementById('timerMinutesPlain');
+            const timerSecondsPlainEl = document.getElementById('timerSecondsPlain');
 
-            if (flipMinutesEl) {
-                if (prevFlipM !== minStr) {
-                    if (prevFlipM !== -1) animateFlipBox(flipMinutesEl, prevFlipM, minStr);
-                    else setFlipBoxInstant(flipMinutesEl, minStr);
-                    prevFlipM = minStr;
-                }
-            } else if (elMinutes) {
-                elMinutes.textContent = minStr;
-            }
+            if (activeStyle === 'biasa') {
+                if (flipMinutesEl) flipMinutesEl.style.display = 'none';
+                if (flipSecondsEl) flipSecondsEl.style.display = 'none';
+                if (tileFaceMinutesEl) tileFaceMinutesEl.style.display = 'flex';
+                if (tileFaceSecondsEl) tileFaceSecondsEl.style.display = 'flex';
+                if (timerMinutesPlainEl) timerMinutesPlainEl.textContent = minStr;
+                if (timerSecondsPlainEl) timerSecondsPlainEl.textContent = secStr;
+            } else {
+                if (tileFaceMinutesEl) tileFaceMinutesEl.style.display = 'none';
+                if (tileFaceSecondsEl) tileFaceSecondsEl.style.display = 'none';
+                if (flipMinutesEl) flipMinutesEl.style.display = 'block';
+                if (flipSecondsEl) flipSecondsEl.style.display = 'block';
 
-            if (flipSecondsEl) {
-                if (prevFlipS !== secStr) {
-                    if (prevFlipS !== -1) animateFlipBox(flipSecondsEl, prevFlipS, secStr);
-                    else setFlipBoxInstant(flipSecondsEl, secStr);
-                    prevFlipS = secStr;
+                if (flipMinutesEl) {
+                    if (prevFlipM !== minStr) {
+                        if (prevFlipM !== -1) animateFlipBox(flipMinutesEl, prevFlipM, minStr);
+                        else setFlipBoxInstant(flipMinutesEl, minStr);
+                        prevFlipM = minStr;
+                    }
+                } else if (elMinutes) {
+                    elMinutes.textContent = minStr;
                 }
-            } else if (elSeconds) {
-                elSeconds.textContent = secStr;
+
+                if (flipSecondsEl) {
+                    if (prevFlipS !== secStr) {
+                        if (prevFlipS !== -1) animateFlipBox(flipSecondsEl, prevFlipS, secStr);
+                        else setFlipBoxInstant(flipSecondsEl, secStr);
+                        prevFlipS = secStr;
+                    }
+                } else if (elSeconds) {
+                    elSeconds.textContent = secStr;
+                }
             }
 
             if (elHidden) elHidden.textContent = minStr + ':' + secStr;

@@ -267,6 +267,9 @@ assert(prayerContent.includes('SupabaseDB.onDataChange'), 'prayer-mode.html memi
 assert(prayerContent.includes('cardMaklumat') && prayerContent.includes('has-maklumat'), 'prayer-mode.html memiliki komponen display Pembaca Maklumat');
 assert(prayerContent.includes('init(true)') || prayerContent.includes('forceFresh'), 'prayer-mode.html mendukung forceFresh cache bypass saat update');
 assert(prayerContent.includes('window.initPrayerMode') && prayerContent.includes('window.updatePrayerUI'), 'prayer-mode.html mengekspos public interface bridge ke parent TV');
+assert(prayerContent.includes('flip-card-box') && prayerContent.includes('tile-face') && prayerContent.includes('tile-number'), 'prayer-mode.html mendukung kedua desain countdown (Model Flip 3D & Model Biasa Klasik)');
+assert(prayerContent.includes('getCountdownStyle') && prayerContent.includes('switchCountdownStyle'), 'prayer-mode.html memiliki controller dynamic switch gaya countdown');
+assert(adminContent.includes('cfgCountdownStyle'), 'admin.html memiliki konfigurasi pilihan Desain Countdown Sholat (cfgCountdownStyle)');
 
 // -------------------------------------------------------------
 // 8. SEO ROBOTS INTEGRITY

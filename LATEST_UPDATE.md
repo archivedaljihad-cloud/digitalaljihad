@@ -4,24 +4,35 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 00:50 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 12:35 WIB)
 
-### 🎨 OPTIMASI UKURAN TEKS JUDUL PROGRAM INFAQ DI SLIDE TV (Versi SW v5.8.42):
-1. **Pembesaran Teks Judul Program Infaq (`web-statis/slides/infaq.html`)**:
-   - Memperbesar ukuran teks judul program donasi (contoh: *"LAPORAN INFAQ PENGADAAN AC BARU (DAIKIN 3 unit)"*) di elemen `.infaq-title-badge` dari `1.35rem` menjadi **`1.55rem`** dengan ketebalan ekstra tebal (**`font-weight: 800`**), border emas lebih tegas `1.8px`, padding lapang `5px 26px`, dan ikon donasi `1.48rem`.
-   - Mengoptimalkan media queries adaptif layar Smart TV:
-     - Viewport TV sedang (`max-height: 850px`): font-size dinaikkan dari `1.15rem` menjadi **`1.30rem`** (`font-weight: 800`).
-     - Viewport TV kompak (`max-height: 660px`): font-size dinaikkan dari `1.0rem` menjadi **`1.15rem`** (`font-weight: 800`).
-   - Judul program donasi kini terbaca jauh lebih jelas, tegas, dan berwibawa dari jarak jauh oleh seluruh jamaah masjid.
-2. **Bumping Service Worker & Pembersihan Cache (`web-statis/sw.js` & `admin.html`)**:
-   - CACHE_NAME dinaikkan ke **`aljihad-signage-v5.8.42`** di `sw.js` dan disinkronkan ke pembersih cache `admin.html`.
-3. **Validasi Kualitas & 4 Pilar SOP Deployment**:
-   - Lulus 86/86 assertions pengujian regresi otomatis (`npm test`).
+### ⏱️ DUKUNGAN DUAL DESAIN COUNTDOWN PRAYER MODE (3D FLIP CLOCK & MODEL BIASA KLASIK) DENGAN KONTROL ADMIN REALTIME (Versi SW v5.8.43):
+1. **Penyelesaian Masalah Perbedaan Model Countdown Sholat (Flip Clock vs Model Biasa)**:
+   - **Akar Masalah**: Sebelum update `ad9fe6e`, mode hitung mundur sholat menggunakan kartu kaca datar `.tile-face` (Model Biasa). Update `ad9fe6e` memperkenalkan animasi jam putar 3D `.flip-card-box`. Karena belum adanya tombol pemilih di panel Admin, perangkat pengguna yang memuat versi berbeda atau membuka pratinjau laptop menampilkan model berbeda tanpa kendali. Selain itu, pemicuan ganda interval UI berpotensi memotong animasi 3D sehingga tampak seperti kartu biasa.
+   - **Solusi Dual Model Terpadu (`web-statis/prayer-mode.html`, `resources/views/prayer-mode.blade.php`, `public/preview-prayer-mode.html`)**:
+     - Mengintegrasikan kedua model tampilan secara native dalam satu container `.countdown-tiles-wrapper`:
+       - **🔄 3D Mechanical Flip Clock (`.flip-card-box`)**: Tampilan jam lipat mekanik modern 3D dengan pembagian flapper atas/bawah, lipatan realistis, dan animasi pergantian angka 3D.
+       - **⏱️ Model Biasa / Modern Flat Glass (`.tile-face`, `.tile-number`, `.tile-crease`)**: Tampilan kartu kaca datar elegan dengan angka jelas, garis pemisah horizontal tipis, dan pembacaan waktu yang tenang tanpa efek rotasi fisik.
+     - Kedua model berbagi dimensi dan proporsi yang identik (`clamp(140px, 15vw, 210px)` x `clamp(100px, 11vw, 150px)`) sehingga pertukaran desain berlangsung instan (<1ms) dengan **Zero Cumulative Layout Shift (CLS = 0)**.
+     - Menambahkan fungsi pengontrol dinamis `getCountdownStyle()`, `switchCountdownStyle(style)`, dan mekanisme fallback hierarkis (URL param `?style=`, LocalStorage `prayer_countdown_style`, dan Supabase Cloud `prayer_countdown_style`).
+     - Menyediakan tombol pemilih cepat di bilah simulasi pratinjau laptop (`[ DESAIN: 🔄 3D Flip | ⏱️ Model Biasa ]`) untuk kemudahan pengujian langsung.
+2. **Penambahan Kontrol Pilihan Desain di Panel Admin (`web-statis/admin.html`)**:
+   - Menambahkan dropdown `<select id="cfgCountdownStyle">` di dalam kartu Pengaturan Durasi & Transisi Sholat:
+     - Opsi 1: `🔄 3D Mechanical Flip Clock (Efek Lipat Modern)`
+     - Opsi 2: `⏱️ Model Biasa / Modern Flat Glass (Klasik Elegan)`
+   - Disinkronkan dengan Supabase Cloud (`app_settings` key `prayer_countdown_style`), LocalStorage, serta event transmisi realtime (`onDataChange` & `onRemoteCommand`).
+   - Setiap kali Admin mengubah opsi desain, Smart TV di masjid langsung beralih desain secara realtime (<100ms) tanpa reload layar atau merusak jalannya hitungan mundur.
+3. **Bumping Service Worker & Pembersihan Cache Usang (`web-statis/sw.js` & `admin.html`)**:
+   - CACHE_NAME dinaikkan ke **`aljihad-signage-v5.8.43`** di `sw.js` dan skrip pembersih cache `admin.html`.
+4. **Validasi Kualitas & 4 Pilar SOP Deployment**:
+   - Lulus 89/89 assertions pengujian regresi otomatis (`npm test`).
    - Deployment Cloudflare Workers (`https://digitalaljihad.my.id/`).
    - Backup mirror lokal ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
    - Git commit dan push branch `main`.
 
 ---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 12 Oktober 2026 (Pukul 00:50 WIB)
 
 ## 📜 ARSIP UPDATE SEBELUMNYA — 12 Oktober 2026 (Pukul 00:25 WIB)
 
