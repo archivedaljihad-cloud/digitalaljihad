@@ -7,7 +7,41 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 20:35 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 20:52 WIB)
+
+### 🕌 DESAIN KOTAK PRAYER MODE TRANSPARAN GLASSMORPHISM, PENGHILANGAN 3 IKON, & FORMAT HADITS SHAF 2 BARIS (Versi SW v5.8.59):
+1. **Kotak Transparan Glassmorphism (`.prayer-mode-box`)**:
+   - **Permintaan Pengguna**: Mengurangi opacity warna kotak display pada fase sholat berjamaah (`?phase=prayer`) agar siluet dan keindahan gambar latar belakang Ka'bah lebih terlihat jelas tembus pandang.
+   - **Implementasi Estetika**:
+     - Mengubah gradien latar belakang dari pekat (`rgba(8, 48, 28, 0.95)`) menjadi semi-transparan `linear-gradient(135deg, rgba(4, 28, 16, 0.46), rgba(1, 15, 8, 0.56))` dengan efek blur kaca halus `backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);`.
+     - Border emas diperhalus (`border: 1.8px solid rgba(212, 175, 55, 0.7)`), box shadow disesuaikan dengan glow lembut (`rgba(212, 175, 55, 0.25)`).
+     - Menghasilkan visual glassmorphism modern yang mewah dan membuat lanskap Ka'bah terlihat anggun di balik kotak teks.
+2. **Penghilangan Ketiga Ikon dalam Kotak Mode Sholat**:
+   - Ikon speaker silent (`volume-xmark`), shaf (`people-arrows`), dan masjid (`mosque`) di dalam kotak `.prayer-mode-box` disembunyikan secara menyeluruh pada fase sholat berjamaah (`display: none;`).
+   - Logika runtime `updatePrayerUI()` dan initial DOM mengosongkan serta menyembunyikan kontainer `#prayerIconsRow` pada fase prayer.
+   - Tetap menjaga 4 ikon adab Jumat (`IkonBicara`, `IkonNgobrol`, `IkonSilent`, `IkonNelpon`) tetap tampil sempurna khusus pada fase Khutbah Jumat (`.jumat-box .icons-row.jumat-icons-row`).
+3. **Format Teks Hadits Shaf 2 Baris (Center & Ukuran Font Proporsional)**:
+   - Teks hadits pelurusan shaf disusun rapi menjadi 3 elemen hierarkis yang semuanya rata tengah (**FORMAT CENTER**):
+     - **Baris Atas (Matan Arab)**: `<div class="prayer-shaf-arabic">سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ</div>` (font `Amiri` emas `#FFD700`, glow lembut, `text-align: center;`).
+     - **Baris 1 Terjemahan**: `<div class="prayer-shaf-arti">“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat”</div>` (font `Poppins`, putih tajam `#FFFFFF`, `text-align: center;`).
+     - **Baris 2 Sumber Perawi**: `<div class="prayer-shaf-source">(HR. Bukhari no.690 &amp; HR. Muslim no.433)</div>` (font `Poppins`, emas muda `#FDE047`, letter-spacing 0.5px, `text-align: center;`).
+4. **Sinkronisasi File Cadangan & Laravel View**:
+   - `web-statis/prayer-mode.html`: Implementasi utama produksi.
+   - `public/preview-prayer-mode.html`: Ditambahkan styling dan DOM hadits 2 baris serta box transparan.
+   - `resources/views/prayer-mode.blade.php`: Diperbarui styling CSS dan blade markup `@elseif($phase == 'prayer')`.
+5. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.59`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.59`** di `web-statis/sw.js` dan skrip pembersih cache panel Admin di `web-statis/js/admin/admin-settings.js`.
+6. **Pengujian Regresi Otomatis (142 / 142 PASS)**:
+   - Memperbarui [TEST 12] di `scripts/test-engine.js` untuk memverifikasi CSS `.prayer-shaf-source`, teks 2 baris terjemahan + perawi, latar belakang transparan Ka'bah, dan penyembunyian 3 ikon.
+   - Hasil pengujian: Seluruh 142 assertions LULUS tanpa celah (100% PASS).
+7. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Dideploy langsung ke produksi live `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal**: Disinkronkan ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 20:35 WIB)
 
 ### 🕌 PENYESUAIAN POSISI SEIMBANG KOTAK KAPSUL NAMA SHOLAT DI PRAYER MODE (Versi SW v5.8.58):
 1. **Penyeimbangan Posisi Kotak Kapsul Nama Sholat (`web-statis/prayer-mode.html`)**:

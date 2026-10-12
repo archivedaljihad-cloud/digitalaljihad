@@ -353,15 +353,19 @@ assert(keuSummaryContent.includes('.income-sign') && keuSummaryContent.includes(
 assert(!keuSummaryContent.includes('.trans-val.income { color: #00e676;'), 'slides/keuangan-summary.html tidak menggunakan warna hijau neon bulam lama');
 
 // -------------------------------------------------------------
-// 12. PRAYER MODE SHAF HADITH CENTER FORMAT INTEGRITY
+// 12. PRAYER MODE SHAF HADITH CENTER FORMAT & TRANSPARENT BOX INTEGRITY
 // -------------------------------------------------------------
-console.log('\n📌 [TEST 12] Prayer Mode Shaf Hadith Center Format Integrity:');
+console.log('\n📌 [TEST 12] Prayer Mode Shaf Hadith Center Format & Transparent Box Integrity:');
 const prayerModeHtmlContent = fs.readFileSync(path.join(baseDir, 'prayer-mode.html'), 'utf8');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-arabic') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arabic format center');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arti format center');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-source') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-source format center');
 assert(prayerModeHtmlContent.includes('سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ'), 'prayer-mode.html memuat matan hadits Arab pelurusan shaf');
-assert(prayerModeHtmlContent.includes('“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat” (HR. Bukhari no.690, Muslim no.433)'), 'prayer-mode.html memuat terjemahan hadits shaf HR Bukhari & Muslim');
+assert(prayerModeHtmlContent.includes('“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat”'), 'prayer-mode.html memuat terjemahan hadits shaf');
+assert(prayerModeHtmlContent.includes('(HR. Bukhari no.690 &amp; HR. Muslim no.433)'), 'prayer-mode.html memuat sumber hadits HR. Bukhari no.690 & HR. Muslim no.433');
 assert(!prayerModeHtmlContent.includes("prayerModeTextEl.textContent = 'Iqamah Segera Dikumandangkan"), 'prayer-mode.html tidak lagi menggunakan teks Iqamah lama pada fase sholat berjamaah');
+assert(prayerModeHtmlContent.includes('rgba(4, 28, 16, 0.46)'), 'prayer-mode.html memiliki latar belakang kotak transparan agar Ka\'bah terlihat');
+assert(prayerModeHtmlContent.includes('.prayer-mode-box .icons-row') && prayerModeHtmlContent.includes('display: none;'), 'prayer-mode.html menyembunyikan 3 ikon saat fase sholat berlangsung');
 assert(prayerModeHtmlContent.includes('body.phase-prayer .phase-section') && prayerModeHtmlContent.includes('clamp(26px,'), 'prayer-mode.html memiliki aturan posisi seimbang kotak kapsul nama sholat pas di antara judul dan hadits shaf');
 
 // -------------------------------------------------------------
