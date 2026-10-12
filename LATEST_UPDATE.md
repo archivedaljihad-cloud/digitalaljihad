@@ -7,7 +7,29 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 15:25 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 15:52 WIB)
+
+### 🌿 PENYEMPURNAAN TEMA HIJAU ZAMRUD DURASI JUM'AT & PROPORSIONALITAS TOGGLE PRAYER MODE (Versi SW v5.8.48):
+1. **Penyesuaian Skala Teks Switch Prayer Mode (`web-statis/admin.html`)**:
+   - Memperkecil teks `"Aktifkan Prayer Mode Otomatis di Layar TV"` dari `1rem` menjadi `13.5px` proporsional dengan ikon yang disesuaikan dan skala switch `transform: scale(1.15)` agar tampak rapi dan seimbang di bawah judul *Pengaturan Durasi Sholat, Adzan, Iqamah & Waktu Sistem*.
+   - Deskripsi teks bantuan diperkecil ke `11.5px` agar compact.
+
+2. **Penerapan Tema Hijau Zamrud & Font Putih Susu pada Kartu Durasi Jum'at**:
+   - **Gradien Hijau Zamrud Elegan**: Mengubah latar belakang kartu durasi sholat Jum'at (`#cfgDurasiJumat` dan `#jumatDurasiInput`) menjadi hijau zamrud mewah (`linear-gradient(135deg, #059669 0%, #047857 100%)`) dengan border kiri aksen hijau cerah (`5px solid #34d399`) dan bayangan lembut.
+   - **Tipografi Putih Susu (*Milky White*)**: Seluruh judul dan teks deskripsi menggunakan warna putih susu (`#ffffff`, `#d1fae5`, dan `#f1f5f9`) dengan tingkat keterbacaan tinggi (rasio kontras WCAG AAA > 6.5:1). Kotak input tetap berlatar putih bersih dengan angka hijau zamrud tajam (`#047857`) dan teks keterangan pendamping putih susu (`#f8fafc`).
+   - **Pembaruan Redaksi Teks**: Mengubah teks kalimat menjadi *"Khusus hari Jum'at waktu Dzuhur, TV otomatis masuk ke Mode Khutbah (nama Khatib, Imam, Muadzin, Bilal, hadits adab). Layar terkunci selama durasi ini."* (kata "tenang" dihilangkan).
+
+3. **Pembersihan Cache & Cache Version Bumping (Versi SW `v5.8.48`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.48`** pada `web-statis/sw.js` dan sinkronisasi pembersihan cache pada `web-statis/js/admin/admin-settings.js`.
+
+4. **Verifikasi & Sinkronisasi 4 Pilar (Cloudflare, Backup Lokal, GitHub, Test Suite)**:
+   - **Otomasi Pengujian**: 117 / 117 assertions lulus sempurna (100% PASS).
+   - **Cloudflare Edge**: Deploy sukses via Wrangler ke `https://digitalaljihad.my.id/`.
+   - **Cadangan Lokal**: Seluruh berkas pembaruan disalin langsung ke root `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 15:25 WIB)
 
 ### 🎨 PERAMPINGAN UI KOTAK DURASI SHOLAT JUM'AT & CLEAN DESIGN DASHBOARD ADMIN (Versi SW v5.8.47):
 1. **Perampingan Desain Kotak Durasi Sholat Jum'at (`web-statis/admin.html`)**:

@@ -2426,12 +2426,12 @@
                                         <div class="card p-3 mb-3 border-left-success shadow-sm" style="background: #f8fafc; border: 1.5px solid #d1e7dd; border-radius: 12px;">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <div>
-                                                    <label class="font-weight-bold mb-1 text-dark d-flex align-items-center" for="cfgPrayerModeEnabled" style="font-size: 1rem; cursor: pointer;">
-                                                        <i class="fas fa-power-off text-success mr-2"></i> Aktifkan Prayer Mode Otomatis di Layar TV
+                                                    <label class="font-weight-bold mb-1 text-dark d-flex align-items-center" for="cfgPrayerModeEnabled" style="font-size: 13.5px; cursor: pointer;">
+                                                        <i class="fas fa-power-off text-success mr-2" style="font-size: 13.5px;"></i> Aktifkan Prayer Mode Otomatis di Layar TV
                                                     </label>
-                                                    <small class="text-muted d-block">Jika aktif, layar TV otomatis masuk ke mode hitung mundur, kumandang adzan, iqamah, dan mode sholat hening saat waktu sholat tiba.</small>
+                                                    <small class="text-muted d-block" style="font-size: 11.5px; line-height: 1.35;">Jika aktif, layar TV otomatis masuk ke mode hitung mundur, kumandang adzan, iqamah, dan mode sholat hening saat waktu sholat tiba.</small>
                                                 </div>
-                                                <div class="custom-control custom-switch ml-3" style="transform: scale(1.35);">
+                                                <div class="custom-control custom-switch ml-3" style="transform: scale(1.15);">
                                                     <input type="checkbox" class="custom-control-input" id="cfgPrayerModeEnabled" checked onchange="handlePrayerModeSwitch(this); simpanPengaturanDurasiTV(true);">
                                                     <label class="custom-control-label" for="cfgPrayerModeEnabled" style="cursor: pointer;"></label>
                                                 </div>
@@ -2512,30 +2512,30 @@
                                         </div>
 
                                         <!-- DURASI KHUSUS SHOLAT JUMAT (DAPAT DIEDIT PETUGAS/OPERATOR) -->
-                                        <div class="card p-2 px-3 shadow-sm mt-3" style="background: #f0fdf4; border: 1.5px solid #86efac; border-left: 5px solid #10b981; border-radius: 12px;">
-                                            <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 12px;">
-                                                <!-- Sisi Kiri: Judul & Deskripsi Ramping -->
-                                                <div style="flex: 1; min-width: 260px;">
+                                         <div class="card p-2 px-3 shadow-sm mt-3" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); border: 1px solid #059669; border-left: 5px solid #34d399; border-radius: 12px; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);">
+                                             <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 12px;">
+                                                 <!-- Sisi Kiri: Judul & Deskripsi Ramping -->
+                                                 <div style="flex: 1; min-width: 260px;">
                                                     <div class="d-flex align-items-center">
-                                                        <i class="fas fa-mosque mr-2" style="font-size: 16px; color: #10b981;"></i>
-                                                        <span class="font-weight-bold" style="font-size: 15px; color: #10b981;">
-                                                            Durasi Sholat Jum'at <span style="font-weight: 700;">(Khutbah & Sholat)</span>
+                                                        <i class="fas fa-mosque mr-2" style="font-size: 16px; color: #a7f3d0;"></i>
+                                                        <span class="font-weight-bold" style="font-size: 15px; color: #ffffff; letter-spacing: 0.2px;">
+                                                            Durasi Sholat Jum'at <span style="font-weight: 700; color: #d1fae5;">(Khutbah & Sholat)</span>
                                                         </span>
                                                     </div>
-                                                    <p class="mb-0 mt-1" style="font-size: 12.5px; color: #475569; line-height: 1.35;">
-                                                        Khusus hari Jum'at waktu Dzuhur, TV otomatis masuk ke Mode Khutbah (nama Khatib, Imam, Muadzin, Bilal, hadits adab). Layar terkunci tenang selama durasi ini.
+                                                    <p class="mb-0 mt-1" style="font-size: 12.5px; color: #f1f5f9; line-height: 1.4;">
+                                                        Khusus hari Jum'at waktu Dzuhur, TV otomatis masuk ke Mode Khutbah (nama Khatib, Imam, Muadzin, Bilal, hadits adab). Layar terkunci selama durasi ini.
                                                     </p>
                                                 </div>
 
                                                 <!-- Sisi Kanan: Input Durasi + Keterangan di Samping Kotak Menit -->
                                                 <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
-                                                    <div class="input-group shadow-sm" style="width: 130px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;">
-                                                        <input type="number" id="cfgDurasiJumat" class="form-control text-center font-weight-bold" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)" style="border: none; font-size: 17px; font-weight: 800; color: #10b981; height: 38px; box-shadow: none; padding-right: 0;">
+                                                    <div class="input-group shadow-sm" style="width: 130px; border: 1.5px solid #a7f3d0; border-radius: 8px; overflow: hidden; background: #ffffff;">
+                                                        <input type="number" id="cfgDurasiJumat" class="form-control text-center font-weight-bold" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)" style="border: none; font-size: 17px; font-weight: 800; color: #047857; height: 38px; box-shadow: none; padding-right: 0;">
                                                         <div class="input-group-append">
-                                                            <span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #e2e8f0; font-size: 13px; font-weight: 800; color: #10b981; padding: 0 10px;">menit</span>
+                                                            <span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #d1fae5; font-size: 13px; font-weight: 800; color: #047857; padding: 0 10px;">menit</span>
                                                         </div>
                                                     </div>
-                                                    <span class="font-weight-bold" style="font-size: 12px; color: #64748b; line-height: 1.3;">
+                                                    <span class="font-weight-bold" style="font-size: 12px; color: #f8fafc; line-height: 1.3;">
                                                         Bisa disesuaikan tiap pekan (35–60 mnt)
                                                     </span>
                                                 </div>
@@ -2649,27 +2649,27 @@
                                         </div>
 
                                         <!-- INPUT DURASI SHOLAT JUMAT KHUSUS PEKAN INI -->
-                                        <div class="card p-2 px-3 shadow-sm mt-3" style="background: #f0fdf4; border: 1.5px solid #86efac; border-left: 5px solid #10b981; border-radius: 12px;">
+                                        <div class="card p-2 px-3 shadow-sm mt-3" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); border: 1px solid #059669; border-left: 5px solid #34d399; border-radius: 12px; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);">
                                             <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 12px;">
                                                 <div style="flex: 1; min-width: 250px;">
                                                     <div class="d-flex align-items-center">
-                                                        <i class="fas fa-mosque mr-2" style="font-size: 16px; color: #10b981;"></i>
-                                                        <span class="font-weight-bold" style="font-size: 15px; color: #10b981;">
-                                                            Durasi Sholat & Khutbah Jum'at <span style="font-weight: 700;">(Pekan Ini)</span>
+                                                        <i class="fas fa-mosque mr-2" style="font-size: 16px; color: #a7f3d0;"></i>
+                                                        <span class="font-weight-bold" style="font-size: 15px; color: #ffffff; letter-spacing: 0.2px;">
+                                                            Durasi Sholat & Khutbah Jum'at <span style="font-weight: 700; color: #d1fae5;">(Pekan Ini)</span>
                                                         </span>
                                                     </div>
-                                                    <p class="mb-0 mt-1" style="font-size: 12.5px; color: #475569; line-height: 1.35;">
-                                                        Dapat diubah oleh Operator/Petugas jika durasi khutbah & sholat pekan ini berbeda dari biasanya. Layar TV akan terkunci tenang selama durasi ini.
+                                                    <p class="mb-0 mt-1" style="font-size: 12.5px; color: #f1f5f9; line-height: 1.4;">
+                                                        Dapat diubah oleh Operator/Petugas jika durasi khutbah & sholat pekan ini berbeda dari biasanya. Layar TV akan terkunci selama durasi ini.
                                                     </p>
                                                 </div>
                                                 <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
-                                                    <div class="input-group shadow-sm" style="width: 130px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;">
-                                                        <input type="number" class="form-control text-center font-weight-bold" id="jumatDurasiInput" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)" style="border: none; font-size: 17px; font-weight: 800; color: #10b981; height: 38px; box-shadow: none; padding-right: 0;">
+                                                    <div class="input-group shadow-sm" style="width: 130px; border: 1.5px solid #a7f3d0; border-radius: 8px; overflow: hidden; background: #ffffff;">
+                                                        <input type="number" class="form-control text-center font-weight-bold" id="jumatDurasiInput" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)" style="border: none; font-size: 17px; font-weight: 800; color: #047857; height: 38px; box-shadow: none; padding-right: 0;">
                                                         <div class="input-group-append">
-                                                            <span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #e2e8f0; font-size: 13px; font-weight: 800; color: #10b981; padding: 0 10px;">menit</span>
+                                                            <span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #d1fae5; font-size: 13px; font-weight: 800; color: #047857; padding: 0 10px;">menit</span>
                                                         </div>
                                                     </div>
-                                                    <span class="font-weight-bold" style="font-size: 12px; color: #64748b; line-height: 1.3;">
+                                                    <span class="font-weight-bold" style="font-size: 12px; color: #f8fafc; line-height: 1.3;">
                                                         Bisa disesuaikan tiap pekan (35–60 mnt)
                                                     </span>
                                                 </div>
