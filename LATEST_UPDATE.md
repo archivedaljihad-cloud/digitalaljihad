@@ -7,7 +7,41 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 16:38 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 16:53 WIB)
+
+### 💳 PERBAIKAN DISPLAY GAMBAR QRIS & KONTRASTING KOTAK KAPSUL (Versi SW v5.8.52):
+1. **Perbaikan Tampilan Gambar QRIS (`slides/qris.html`)**:
+   - **Penyebab Masalah**: Tag `img#qrisImage` sebelumnya mengarah ke path yang tidak ada (`../image/qris.png`) dengan fallback eksternal yang diblokir/gagal.
+   - **Solusi Komprehensif**:
+     - Mengubah path gambar utama di `slides/qris.html` menjadi `../img/QRIS.jpg` (menggunakan file QRIS resmi masjid Al-Jihad yang valid).
+     - Menjadikan fallback `onerror` lokal dan tangguh: `this.onerror=null; this.src='../img/QRIS.jpg';`.
+     - Menyalin `web-statis/img/QRIS.jpg` ke `web-statis/image/qris.png` dan `web-statis/image/QRIS.jpg` demi kompatibilitas 100% backward terhadap modul admin dan cache lama.
+     - Memperbaiki parser `loadQrisData()` di `slides/qris.html` agar secara otomatis mengenali prefix path relatif (`image/` atau `img/` disesuaikan dengan `../`) jika dikirim dari Supabase `app_settings` atau tabel `qris`.
+     - Memperbaiki preview & detail QRIS di `web-statis/admin.html` agar merujuk ke aset `img/QRIS.jpg`.
+
+2. **Perbaikan Kotak Kapsul Badge di Bawah Gambar QRIS (`.qris-brand-badge`)**:
+   - **Penyebab Masalah**: Teks kotak kapsul (*"Mendukung Semua E-Wallet & M-Banking"*) sebelumnya menggunakan warna hijau redup (`#00e676`) di atas background transparan sehingga berbaur dengan latar belakang dan tidak terbaca dari jarak jauh TV atau perangkat mobile.
+   - **Solusi Styling Kontras Tinggi & Mewah**:
+     - Warna teks diubah menjadi putih bersih tajam (`color: #ffffff !important;`) dengan text shadow tebal (`0 1px 3px rgba(0,0,0,0.9)`).
+     - Ikon shield `<i class="fas fa-shield-alt"></i>` diberi aksen emas bercahaya (`color: #ffd700; filter: drop-shadow(...)`).
+     - Latar belakang kapsul ditingkatkan menggunakan gradasi emerald pekat mewah (`linear-gradient(135deg, rgba(6, 78, 59, 0.96), rgba(4, 46, 35, 0.98))`) dengan border zamrud `1.5px solid #10b981` dan bayangan lembut.
+     - Menambahkan layout responsif `@media (max-width: 992px)` agar pada layar kecil/HP/tablet frame QRIS dan kotak kapsul otomatis menyesuaikan secara fleksibel tanpa terpotong footer.
+
+3. **Service Worker Offline Cache & Bumping (`aljihad-signage-v5.8.52`)**:
+   - Mendaftarkan `'img/QRIS.jpg'` dan `'image/qris.png'` ke dalam `STATIC_ASSETS` di `web-statis/sw.js` agar gambar QRIS selalu tersedia secara instan dan offline-ready di seluruh smart TV masjid.
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.52`** pada `web-statis/sw.js` dan sinkron dengan `web-statis/js/admin/admin-settings.js`.
+
+4. **Pengujian Regresi Otomatis (129 / 129 PASS)**:
+   - Menambahkan suite pengujian baru **[TEST 10] QRIS Display & Capsule Badge Integrity** pada `scripts/test-engine.js` (6 assertion baru: validasi berkas fisik, integritas markup, fallback lokal, kontras styling kapsul, dan konsistensi SW cache).
+
+5. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Berhasil memperbarui aset statis ke produksi **`https://digitalaljihad.my.id/`** (5 modified assets ter-upload).
+   - **Cold Backup Lokal**: Berhasil disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Berhasil di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 16:38 WIB)
 
 ### ⏱️ PENGATURAN MANUAL DURASI SLIDE PENGUMUMAN & ROTASI TV (Versi SW v5.8.51):
 1. **Fitur Durasi Manual pada Halaman Pengumuman (`slides/pengumuman.html`)**:

@@ -329,6 +329,21 @@ assert(themeContent.includes('filter: none !important;'), 'display-theme.css men
 assert(slideContent.includes('cross-dissolve') || slideContent.includes('transisi halus'), 'slide.html menggunakan hardware-accelerated cross-dissolve anti-crash TV');
 
 // -------------------------------------------------------------
+// 10. QRIS DISPLAY & CAPSULE BADGE INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 10] QRIS Display & Capsule Badge Integrity:');
+const qrisHtmlContent = fs.readFileSync(path.join(baseDir, 'slides/qris.html'), 'utf8');
+const qrisImgExists = fs.existsSync(path.join(baseDir, 'img/QRIS.jpg'));
+const qrisPngExists = fs.existsSync(path.join(baseDir, 'image/qris.png'));
+
+assert(qrisImgExists, 'File fisik img/QRIS.jpg tersedia');
+assert(qrisPngExists, 'File kompatibilitas image/qris.png tersedia');
+assert(qrisHtmlContent.includes('src="../img/QRIS.jpg"'), 'slides/qris.html menggunakan sumber utama ../img/QRIS.jpg');
+assert(qrisHtmlContent.includes('onerror="this.onerror=null; this.src=\'../img/QRIS.jpg\';"'), 'slides/qris.html memiliki fallback lokal ../img/QRIS.jpg');
+assert(qrisHtmlContent.includes('.qris-brand-badge') && qrisHtmlContent.includes('color: #ffffff !important;'), 'Kotak kapsul .qris-brand-badge memiliki kontras teks putih tajam');
+assert(swContent.includes("'img/QRIS.jpg'") && swContent.includes("'image/qris.png'"), 'sw.js me-cache seluruh varian gambar QRIS');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');

@@ -1,7 +1,7 @@
 /**
  * MODUL ADMIN: admin-settings.js
  * Digital Signage Masjid Jami' Al-Jihad
- * Versi: aljihad-signage-v5.8.51
+ * Versi: aljihad-signage-v5.8.52
  */
 
         async function simpanPengaturanSistem() {
@@ -157,7 +157,7 @@
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.51') {
+                                if (name !== 'aljihad-signage-v5.8.52') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
