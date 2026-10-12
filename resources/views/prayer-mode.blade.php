@@ -856,6 +856,20 @@
             font-size: 22px;
         }
 
+        .message-banner-icon-img {
+            height: clamp(34px, 4.2vh, 46px);
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+            vertical-align: middle;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .message-banner-icon-img:hover {
+            transform: scale(1.08);
+        }
+
         .message-text {
             font-size: clamp(20px, 2vw, 30px);
             font-weight: 600;
@@ -1568,11 +1582,11 @@
                 </div>
             @elseif($phase == 'adzan')
                 <div class="message-banner">
-                    <i class="fa-solid fa-volume-xmark message-icon"></i>
+                    <img src="{{ asset('img/IkonFlightMode.png') }}" class="message-banner-icon-img" alt="Flight Mode">
                     <span class="message-text">
                         {!! nl2br(e($displayMessage)) !!}
                     </span>
-                    <i class="fa-solid fa-volume-xmark message-icon"></i>
+                    <img src="{{ asset('img/IkonSilentHP.png') }}" class="message-banner-icon-img" alt="Silent Phone">
                 </div>
             @else
                 <div class="message-banner">

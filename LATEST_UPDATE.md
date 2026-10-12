@@ -7,7 +7,39 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 01:05 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 01:30 WIB)
+
+### 📴 IKON ALAT KOMUNIKASI PADA FASE ADZAN FARDHU (FLIGHT MODE & SILENT PHONE) (Versi SW v5.8.63):
+1. **Pembaruan Ikon Visual Pesan Hening pada Fase Adzan (`#messageBanner`)**:
+   - **Permintaan Pengguna**: Mengganti ikon lama pada teks *"Mohon untuk menonaktifkan / silent alat komunikasi"* di fase Adzan fardhu dengan format:
+     `[gambar 2/flight mode] Mohon untuk menonaktifkan / silent alat komunikasi [gambar 1/silent]` dengan ukuran yang disesuaikan proporsional.
+   - **Implementasi Aset**:
+     - **Ikon Kiri**: `img/IkonFlightMode.png` (Smartphone dengan indikator lingkaran hijau *Flight Mode On*).
+     - **Teks Tengah**: *"Mohon untuk menonaktifkan / silent alat komunikasi"* (Tipografi putih tebal dengan *subtle text-shadow*).
+     - **Ikon Kanan**: `img/IkonSilentHP.png` (Smartphone dengan indikator lingkaran merah coret *Silent Audio*).
+     - Kedua berkas PNG transparan beresolusi tinggi diintegrasikan ke direktori `web-statis/img/`, `public/img/`, dan folder cadangan lokal.
+2. **Desain Adaptif & Styling Responsif (`.message-banner-icon-img`)**:
+   - Menggunakan `height: clamp(34px, 4.2vh, 46px); width: auto; object-fit: contain;` sehingga kedua ikon proporsional dan selaras dengan tinggi teks banner.
+   - Dilengkapi efek `filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));` agar ikon smartphone tampil tegas, berdimensi, dan kontras di atas latar belakang Ka'bah.
+   - Breakpoint responsif mobile (`@media (max-width: 600px)`): Tinggi ikon disesuaikan ke `28px` dengan padding rapat agar pas di layar smartphone/HP tanpa overflow.
+3. **Logika Transisi Fase Sholat (`updatePrayerUI()`)**:
+   - Fase **ADZAN**: Ikon masjid FontAwesome disembunyikan, kedua ikon gambar smartphone (`messageIconImgLeft` & `messageIconImgRight`) dimunculkan secara otomatis mengapit teks pesan hening.
+   - Fase **COUNTDOWN** & **IQAMAH**: Menampilkan ikon masjid standar (`<i class="fas fa-mosque"></i>`), sedangkan kedua ikon smartphone disembunyikan.
+   - Fase **PRAYER** & **KHUTBAH**: Seluruh `.message-banner` disembunyikan sesuai layout sholat berjamaah yang lapang.
+4. **Penyelarasan Berkas Proyek**:
+   - `web-statis/prayer-mode.html`: Implementasi produksi utama.
+   - `public/preview-prayer-mode.html`: Penyelarasan modul preview publik.
+   - `resources/views/prayer-mode.blade.php`: Penyelarasan template Laravel Blade.
+   - `web-statis/sw.js`: Registrasi `'img/IkonFlightMode.png'` & `'img/IkonSilentHP.png'` ke dalam `STATIC_ASSETS`.
+5. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.63`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.63`** di `web-statis/sw.js` dan `web-statis/js/admin/admin-settings.js`.
+6. **Pengujian Regresi Otomatis (150 / 150 PASS)**:
+   - Menambahkan assertion verifikasi ketersediaan berkas fisik `IkonFlightMode.png` & `IkonSilentHP.png`, integrasi di `#messageBanner`, dan cache Service Worker pada Test 12 `scripts/test-engine.js`.
+   - Menjalankan `npm test`: Seluruh 150 assertions LULUS (100% PASS).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 01:05 WIB)
 
 ### 🎛️ PRATINJAU PRAYER MODE BEBAS HAMBATAN: PENYEMBUNYIAN KOTAK TOOLBAR PRATINJAU, TOMBOL TOGGLE DISKRET, & TOMBOL TUTUP (Versi SW v5.8.62):
 1. **Penghilangan Gangguan Kotak Toolbar Pratinjau (`#standalonePreviewBar`)**:

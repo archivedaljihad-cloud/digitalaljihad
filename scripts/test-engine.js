@@ -371,6 +371,10 @@ assert(prayerModeHtmlContent.includes('.prayer-mode-box .icons-row') && prayerMo
 assert(prayerModeHtmlContent.includes('body.phase-prayer .phase-section') && prayerModeHtmlContent.includes('clamp(26px,'), 'prayer-mode.html memiliki aturan posisi seimbang kotak kapsul nama sholat pas di antara judul dan hadits shaf');
 assert(prayerModeHtmlContent.includes('.bg-kaabah') && prayerModeHtmlContent.includes('transform: scale('), 'prayer-mode.html memiliki background Kaabah yang di-zoom in (scale)');
 assert(prayerModeHtmlContent.includes('.bg-kaabah') && prayerModeHtmlContent.includes('contrast(1.30)') && prayerModeHtmlContent.includes('image-rendering: -webkit-optimize-contrast;'), 'prayer-mode.html memiliki background Kaabah yang dipertegas dan dipertajam');
+assert(fs.existsSync(path.join(baseDir, 'img/IkonFlightMode.png')), 'File fisik img/IkonFlightMode.png tersedia');
+assert(fs.existsSync(path.join(baseDir, 'img/IkonSilentHP.png')), 'File fisik img/IkonSilentHP.png tersedia');
+assert(prayerModeHtmlContent.includes('src="img/IkonFlightMode.png"') && prayerModeHtmlContent.includes('src="img/IkonSilentHP.png"'), 'prayer-mode.html memiliki ikon Flight Mode (kiri) dan Silent HP (kanan) di messageBanner');
+assert(swContent.includes("'img/IkonFlightMode.png'") && swContent.includes("'img/IkonSilentHP.png'"), 'sw.js me-cache ikon IkonFlightMode.png dan IkonSilentHP.png');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

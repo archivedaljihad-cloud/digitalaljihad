@@ -693,6 +693,21 @@
             font-size: 22px;
         }
 
+        .message-banner-icon-img {
+            height: clamp(34px, 4.2vh, 46px);
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+            vertical-align: middle;
+            flex-shrink: 0;
+            display: none;
+            transition: transform 0.3s ease;
+        }
+
+        .message-banner-icon-img:hover {
+            transform: scale(1.08);
+        }
+
         .message-text {
             font-size: clamp(18px, 1.8vw, 26px);
             font-weight: 600;
@@ -1411,8 +1426,10 @@
         <!-- 4. PESAN MASJID & MODE HENING -->
         <div class="message-section">
             <div class="message-banner" id="messageBanner">
+                <img src="img/IkonFlightMode.png" id="messageIconImgLeft" class="message-banner-icon-img" alt="Flight Mode" style="display: none;">
                 <i class="fas fa-mosque message-icon" id="messageIcon"></i>
                 <span class="message-text" id="messageText">Bersiap Masuk Waktu Sholat</span>
+                <img src="img/IkonSilentHP.png" id="messageIconImgRight" class="message-banner-icon-img" alt="Silent Phone" style="display: none;">
             </div>
 
             <div class="prayer-mode-box" id="prayerModeBox">
@@ -1881,6 +1898,9 @@
             const timerSecondsEl = document.getElementById('timerSeconds');
             const jumatGridEl = document.getElementById('jumatOfficersGrid');
             const messageBannerEl = document.getElementById('messageBanner');
+            const messageIconEl = document.getElementById('messageIcon');
+            const messageIconImgLeftEl = document.getElementById('messageIconImgLeft');
+            const messageIconImgRightEl = document.getElementById('messageIconImgRight');
             const messageTextEl = document.getElementById('messageText');
             const prayerModeBoxEl = document.getElementById('prayerModeBox');
             const prayerModeTextEl = document.getElementById('prayerModeText');
@@ -1956,6 +1976,9 @@
                 countdownSectionEl.style.display = 'flex';
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
+                if (messageIconEl) messageIconEl.style.display = 'inline-block';
+                if (messageIconImgLeftEl) messageIconImgLeftEl.style.display = 'none';
+                if (messageIconImgRightEl) messageIconImgRightEl.style.display = 'none';
                 prayerModeBoxEl.classList.remove('active');
                 hadithPlakatEl.style.display = 'block';
                 messageTextEl.textContent = isJumat ? 
@@ -1978,6 +2001,9 @@
                 countdownSectionEl.style.display = 'flex';
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
+                if (messageIconEl) messageIconEl.style.display = 'none';
+                if (messageIconImgLeftEl) messageIconImgLeftEl.style.display = 'inline-block';
+                if (messageIconImgRightEl) messageIconImgRightEl.style.display = 'inline-block';
                 prayerModeBoxEl.classList.remove('active');
                 hadithPlakatEl.style.display = 'block';
                 messageTextEl.textContent = 'Mohon untuk menonaktifkan / silent alat komunikasi';
@@ -1993,6 +2019,9 @@
                 countdownSectionEl.style.display = 'flex';
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
+                if (messageIconEl) messageIconEl.style.display = 'inline-block';
+                if (messageIconImgLeftEl) messageIconImgLeftEl.style.display = 'none';
+                if (messageIconImgRightEl) messageIconImgRightEl.style.display = 'none';
                 prayerModeBoxEl.classList.remove('active');
                 hadithPlakatEl.style.display = 'block';
                 messageTextEl.textContent = (settings && settings.Hitung_Mundur_Iqamah) || 'Menuju Waktu Iqamah';
