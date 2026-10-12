@@ -3044,59 +3044,65 @@
                         </div>
 
                         <div class="row">
-                            <!-- Kolom Kiri: Form Input Pekan Terpilih -->
+                            <!-- Kolom Kiri: Form Input Pekan Terpilih (Desain Ramping & Kompak) -->
                             <div class="col-lg-7 mb-4">
                                 <div class="content-card shadow-sm">
-                                    <div class="content-card-header d-flex justify-content-between align-items-center">
-                                        <h6 class="content-card-title mb-0">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center" style="padding: 10px 18px !important;">
+                                        <h6 class="content-card-title mb-0" style="font-size: 0.92rem;">
                                             <i class="fas fa-edit text-success mr-1"></i> Form Pengajian: <span class="text-success font-weight-bold" id="kajianActivePekanTitle">Pekan ke-1</span>
                                         </h6>
                                         <div id="kajianActiveStatusBadge">
-                                            <span class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> Siap Tayang</span>
+                                            <span class="badge badge-success px-2 py-1" style="font-size: 11px;"><i class="fas fa-check-circle mr-1"></i> Siap Tayang</span>
                                         </div>
                                     </div>
-                                    <div class="p-3">
+                                    <div class="p-3" style="padding: 14px 18px !important;">
+                                        <!-- Baris 1: Tanggal & Waktu Pelaksanaan -->
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="font-weight-bold">Tanggal Pelaksanaan (Hari Sabtu) <span class="text-danger">*</span></label>
-                                                <input type="date" class="form-control font-weight-bold text-success" id="kajianTanggal" onchange="onKajianFieldChanged()">
-                                                <small class="text-muted" id="kajianTanggalLabelInfo">Contoh: 2026-10-03</small>
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="font-weight-bold mb-1" style="font-size: 0.82rem; color: #1e293b;">Tanggal Pelaksanaan (Sabtu) <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control form-control-sm font-weight-bold text-success" id="kajianTanggal" onchange="onKajianFieldChanged()" style="height: 36px; border-radius: 8px;">
+                                                <small class="text-muted d-block mt-0.5" id="kajianTanggalLabelInfo" style="font-size: 11px;">Contoh: 2026-10-03</small>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="font-weight-bold">Waktu Pelaksanaan</label>
-                                                <input type="text" class="form-control font-weight-bold" id="kajianWaktuPelaksanaan" value="Ba'da Sholat Maghrib s/d Menjelang Isya" oninput="onKajianFieldChanged()">
-                                                <small class="text-muted">Keterangan durasi di layar TV.</small>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Nama Ustadz Pemateri <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control font-weight-bold" id="kajianUstadzNama" value="" placeholder="Contoh: Ust. Dr. Faisal, M.Ag" oninput="onKajianFieldChanged()">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Gelar / Bidang Keahlian Ustadz</label>
-                                            <input type="text" class="form-control" id="kajianUstadzGelar" value="" placeholder="Contoh: Pakar Fiqih Muamalah / Dosen Pascasarjana" oninput="onKajianFieldChanged()">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Kitab Rujukan Utama</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-book-quran text-warning"></i></span></div>
-                                                <input type="text" class="form-control font-weight-bold" id="kajianKitabRujukan" value="" placeholder="Contoh: Bulughul Maram / Tafsir Ibnu Katsir" oninput="onKajianFieldChanged()">
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="font-weight-bold mb-1" style="font-size: 0.82rem; color: #1e293b;">Waktu Pelaksanaan</label>
+                                                <input type="text" class="form-control form-control-sm font-weight-bold" id="kajianWaktuPelaksanaan" value="Ba'da Sholat Maghrib s/d Menjelang Isya" oninput="onKajianFieldChanged()" style="height: 36px; border-radius: 8px;">
+                                                <small class="text-muted d-block mt-0.5" style="font-size: 11px;">Keterangan durasi di layar TV.</small>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Tema Pembahasan Pekan Ini <span class="text-danger">*</span></label>
-                                            <textarea class="form-control font-weight-bold" id="kajianTemaPembahasan" rows="2" placeholder="Contoh: Keutamaan Menjaga Hak Sesama Muslim & Adab Bertetangga" oninput="onKajianFieldChanged()"></textarea>
+                                        <!-- Baris 2: Nama Ustadz & Gelar / Bidang Keahlian -->
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="font-weight-bold mb-1" style="font-size: 0.82rem; color: #1e293b;">Nama Ustadz Pemateri <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm font-weight-bold" id="kajianUstadzNama" value="" placeholder="Contoh: Ust. Dr. Faisal, M.Ag" oninput="onKajianFieldChanged()" style="height: 36px; border-radius: 8px;">
+                                            </div>
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="font-weight-bold mb-1" style="font-size: 0.82rem; color: #1e293b;">Gelar / Bidang Keahlian</label>
+                                                <input type="text" class="form-control form-control-sm" id="kajianUstadzGelar" value="" placeholder="Contoh: Pakar Fiqih Muamalah" oninput="onKajianFieldChanged()" style="height: 36px; border-radius: 8px;">
+                                            </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                            <button type="button" class="btn btn-outline-success btn-sm font-weight-bold" onclick="isiPresetPekanAktif()">
+                                        <!-- Baris 3: Kitab Rujukan Utama & Tema Pembahasan Pekan Ini -->
+                                        <div class="form-row">
+                                            <div class="form-group col-md-5 mb-2">
+                                                <label class="font-weight-bold mb-1" style="font-size: 0.82rem; color: #1e293b;">Kitab Rujukan Utama</label>
+                                                <div class="input-group input-group-sm">
+                                                    <div class="input-group-prepend"><span class="input-group-text px-2" style="background: #f8fafc; border-radius: 8px 0 0 8px;"><i class="fas fa-book-quran text-warning" style="font-size: 12px;"></i></span></div>
+                                                    <input type="text" class="form-control form-control-sm font-weight-bold" id="kajianKitabRujukan" value="" placeholder="Contoh: Tafsir Al-Qur'an" oninput="onKajianFieldChanged()" style="height: 36px; border-radius: 0 8px 8px 0;">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-7 mb-2">
+                                                <label class="font-weight-bold mb-1" style="font-size: 0.82rem; color: #1e293b;">Tema Pembahasan Pekan Ini <span class="text-danger">*</span></label>
+                                                <textarea class="form-control form-control-sm font-weight-bold" id="kajianTemaPembahasan" rows="1" placeholder="Contoh: Keutamaan Menjaga Hak Sesama Muslim" oninput="onKajianFieldChanged()" style="height: 36px; min-height: 36px; resize: vertical; border-radius: 8px; line-height: 1.4; padding-top: 6px;"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <!-- Baris 4: Aksi Tombol Reset & AI Copywriter -->
+                                        <div class="d-flex justify-content-between align-items-center pt-2 mt-1 border-top">
+                                            <button type="button" class="btn btn-outline-success btn-sm font-weight-bold" onclick="isiPresetPekanAktif()" style="border-radius: 8px; font-size: 0.82rem; padding: 5px 12px;">
                                                 <i class="fas fa-sync-alt mr-1"></i> Reset ke Preset Pekan Ini
                                             </button>
-                                            <button type="button" class="btn btn-outline-warning btn-sm font-weight-bold" onclick="bukaModalAiCopywriter('Kajian Rutin', 'kajian')">
+                                            <button type="button" class="btn btn-outline-warning btn-sm font-weight-bold" onclick="bukaModalAiCopywriter('Kajian Rutin', 'kajian')" style="border-radius: 8px; font-size: 0.82rem; padding: 5px 12px;">
                                                 <i class="fas fa-magic mr-1"></i> ✨ AI Copywriter Pekan Ini
                                             </button>
                                         </div>
@@ -3107,14 +3113,14 @@
                             <!-- Kolom Kanan: Pratinjau Tampilan TV & Tombol Simpan (Kompak Sejajar Form Kiri) -->
                             <div class="col-lg-5 mb-4">
                                 <div class="content-card mb-3 shadow-sm">
-                                    <div class="content-card-header d-flex justify-content-between align-items-center">
-                                        <h6 class="content-card-title mb-0">
+                                    <div class="content-card-header d-flex justify-content-between align-items-center" style="padding: 10px 18px !important;">
+                                        <h6 class="content-card-title mb-0" style="font-size: 0.92rem;">
                                             <i class="fas fa-eye text-primary mr-1"></i> Pratinjau Layar TV (Pekan Terpilih)
                                         </h6>
                                         <span class="badge badge-warning text-dark font-weight-bold" id="prevKajianDateBadge">Sabtu, -</span>
                                     </div>
-                                    <div class="p-3">
-                                        <div class="jumat-preview-box text-center" style="background: linear-gradient(135deg, #021a11 0%, #032b1b 100%); border: 1.5px solid #d4af37; border-radius: 14px; padding: 16px; color: #fff;">
+                                    <div class="p-3" style="padding: 14px 18px !important;">
+                                        <div class="jumat-preview-box text-center" style="background: linear-gradient(135deg, #021a11 0%, #032b1b 100%); border: 1.5px solid #d4af37; border-radius: 14px; padding: 14px; color: #fff;">
                                             <span class="badge badge-success font-weight-bold px-3 py-1 mb-2" id="prevKajianPekanBadge">
                                                 <i class="fas fa-calendar-week mr-1"></i> PEKAN KE-1 (SABTU MALAM)
                                             </span>
@@ -3133,11 +3139,11 @@
                                 </div>
 
                                 <!-- Tombol Aksi Simpan Agenda 1 Bulan (Tepat di Bawah Pratinjau TV, Sejajar Form Kiri) -->
-                                <div class="card p-3 shadow-sm border-0" style="background: #f8fafc; border-radius: 12px; border: 1.5px dashed #86efac !important;">
-                                    <button type="button" id="btnSimpanKajian" class="btn btn-success btn-block font-weight-bold shadow d-flex align-items-center justify-content-center" onclick="simpanKajianSabtu()" style="border-radius: 10px; font-size: 1.05rem; padding: 12px 20px; letter-spacing: 0.3px;">
-                                        <i class="fas fa-save mr-2" style="font-size: 1.25rem;"></i> Simpan Agenda 1 Bulan
+                                <div class="card shadow-sm border-0" style="background: #f8fafc; border-radius: 12px; border: 1.5px dashed #86efac !important; padding: 12px 16px !important;">
+                                    <button type="button" id="btnSimpanKajian" class="btn btn-success btn-block font-weight-bold shadow d-flex align-items-center justify-content-center" onclick="simpanKajianSabtu()" style="border-radius: 10px; font-size: 1rem; padding: 10px 18px; letter-spacing: 0.3px;">
+                                        <i class="fas fa-save mr-2" style="font-size: 1.15rem;"></i> Simpan Agenda 1 Bulan
                                     </button>
-                                    <small class="text-muted text-center d-block mt-2" style="font-size: 11px;">
+                                    <small class="text-muted text-center d-block mt-1.5" style="font-size: 11px;">
                                         <i class="fas fa-check-circle text-success mr-1"></i> Menyimpan seluruh jadwal Pekan 1 s/d 5 ke server & otomatis tayang di Layar TV.
                                     </small>
                                 </div>

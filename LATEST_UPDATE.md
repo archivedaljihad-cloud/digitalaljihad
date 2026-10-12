@@ -7,7 +7,31 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 17:35 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 17:45 WIB)
+
+### 🕌 PERAMPINGAN LAYOUT FORM PENGAJIAN DI DASHBOARD ADMIN KAJIAN MALAM AHAD (Versi SW v5.8.54):
+1. **Restrukturisasi Grid Kompak & Streamlining Form Pengajian (`web-statis/admin.html`)**:
+   - **Latar Belakang & Masalah**: Form Pengajian Pekan Terpilih sebelumnya menumpuk 6 baris input vertikal secara penuh (`form-group` dengan margin bawah standar 1rem dan textarea tema 2-baris tinggi), memakan ruang vertikal >505px. Hal ini membuat kolom form tampak dominan, sesak (*penuh sesak*), dan tidak seimbang dengan kolom Pratinjau Layar TV di sebelahnya.
+   - **Solusi Desain Ramping & Proporsional**:
+     - **Grid 2-Kolom Berpasangan**: Mengelompokkan field input ke dalam 3 baris grid horizontal (`form-row`):
+       - *Baris 1*: Tanggal Pelaksanaan (`col-md-6`) & Waktu Pelaksanaan (`col-md-6`).
+       - *Baris 2*: Nama Ustadz Pemateri (`col-md-6`) & Gelar / Bidang Keahlian Ustadz (`col-md-6`).
+       - *Baris 3*: Kitab Rujukan Utama (`col-md-5`, dengan input group icon buku) & Tema Pembahasan Pekan Ini (`col-md-7`, textarea compact 1-baris fleksibel).
+     - **Optimalisasi Spacing**: Mengurangi margin bawah dari `mb-3`/default menjadi `mb-2`, menyederhanakan padding card body menjadi `14px 18px`, dan menyelaraskan header card (`10px 18px`).
+     - **Preservasi 100% Fungsi & ID**: Seluruh ID elemen (`kajianActivePekanTitle`, `kajianTanggal`, `kajianWaktuPelaksanaan`, `kajianUstadzNama`, `kajianUstadzGelar`, `kajianKitabRujukan`, `kajianTemaPembahasan`), event listener (`onchange`, `oninput`), serta fungsi tombol (`isiPresetPekanAktif()`, `bukaModalAiCopywriter()`) dipertahankan tanpa perubahan kontrak API.
+     - **Penyelarasan Kolom Kanan**: Kolom Pratinjau Layar TV dan Tombol Simpan Agenda 1 Bulan disesuaikan padding-nya sehingga tinggi kolom kiri dan kanan sejajar rapi dan presisi di layar desktop/laptop.
+2. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.54`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.54`** di `web-statis/sw.js` dan skrip pembersih cache panel Admin di `web-statis/js/admin/admin-settings.js` untuk menjamin seluruh browser admin dan perangkat display langsung memuat template UI termutakhir.
+3. **Pengujian Regresi Otomatis (132 / 132 PASS)**:
+   - Menjalankan `npm test`, seluruh 132 assertions dinyatakan LULUS (100% PASS), menjamin integritas prayer engine, sintaks, cache consistency, dan multi-device authentication.
+4. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Dideploy langsung ke produksi live `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal**: Disinkronkan ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 17:35 WIB)
 
 ### 📊 PENINGKATAN KONTRAS NOMINAL MUTASI KAS KEUANGAN SUMMARY TV DISPLAY (Versi SW v5.8.53):
 1. **Perbaikan Warna & Keterbacaan Nominal Pemasukan (`slides/keuangan-summary.html`)**:
