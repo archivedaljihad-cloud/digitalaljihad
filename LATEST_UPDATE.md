@@ -7,7 +7,33 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 00:48 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 01:05 WIB)
+
+### 🎛️ PRATINJAU PRAYER MODE BEBAS HAMBATAN: PENYEMBUNYIAN KOTAK TOOLBAR PRATINJAU, TOMBOL TOGGLE DISKRET, & TOMBOL TUTUP (Versi SW v5.8.62):
+1. **Penghilangan Gangguan Kotak Toolbar Pratinjau (`#standalonePreviewBar`)**:
+   - **Keluhan Pengguna**: Pengguna merasa terganggu dengan kemunculan kotak pratinjau standalone yang melayang di bagian bawah layar dan menutupi teks hadits pelurusan shaf serta panorama Ka'bah saat membuka halaman pratinjau.
+   - **Implementasi Default Hidden**:
+     - Mengubah style `.standalone-preview-bar` menjadi `display: none;` secara default.
+     - Kotak toolbar pratinjau kini **tidak akan pernah muncul secara otomatis** yang menutupi layar saat pengguna membuka `prayer-mode.html` atau `prayer-mode.html?phase=prayer`. Layar mode sholat kini tampil **100% utuh, bersih, dan bebas dari halangan visual apa pun** persis seperti tampilan di layar Smart TV masjid.
+2. **Tombol Mini Pemicu Diskret di Pojok Kanan Bawah (`#previewMiniToggle`)**:
+   - Menambahkan tombol bulat mini elegan (`width: 36px; height: 36px;`) di sudut pojok kanan bawah (`bottom: 14px; right: 14px;`) dengan ikon `<i class="fas fa-sliders-h"></i>`.
+   - Tombol mini ini memiliki opacity rendah (`0.35`) sehingga tidak menarik perhatian atau mengganggu estetika display, dan akan menyala anggun (`opacity: 1`) saat kursor didekatkan.
+   - Mengklik tombol mini ini akan membuka toolbar pratinjau jika pengurus/teknisi memang ingin menguji pergantian fase.
+3. **Tombol Tutup Langsung (`[× Tutup]`) & Dukungan Tombol Keyboard `Esc`**:
+   - Menambahkan tombol `<button class="preview-btn close-btn" onclick="togglePreviewBar(false)"><i class="fas fa-times"></i> Tutup</button>` pada toolbar pratinjau agar pengguna dapat menutup/menyembunyikannya seketika hanya dengan satu klik.
+   - Menambahkan keyboard event listener: menekan tombol **`Escape` (ESC)** pada keyboard juga akan langsung menutup toolbar pratinjau seketika.
+   - Status preferensi penutupan disimpan di `sessionStorage` (`prayer_preview_bar_open`), sehingga saat halaman di-refresh toolbar tidak akan muncul kembali mengganggu pengguna.
+4. **Penyelarasan Berkas Terkait**:
+   - `web-statis/prayer-mode.html`: Implementasi produksi utama.
+   - `public/preview-prayer-mode.html`: Penyelarasan modul pratinjau publik.
+5. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.62`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.62`** di `web-statis/sw.js` dan `web-statis/js/admin/admin-settings.js`.
+6. **Pengujian Regresi Otomatis (146 / 146 PASS)**:
+   - Menjalankan `npm test`: Seluruh 146 assertions LULUS tanpa celah (100% PASS).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 00:48 WIB)
 
 ### 🕌 DESAIN PRAYER MODE MINIMALIS: PENGHILANGAN KOTAK BAWAH, KOTAK TRANSPARAN, & GESER TEKS SHAF KE BAWAH (Versi SW v5.8.61):
 1. **Penghilangan Kotak Hadits Bawah (`#hadithPlakat`) pada Fase Sholat Berjamaah**:
