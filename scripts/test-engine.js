@@ -353,6 +353,17 @@ assert(keuSummaryContent.includes('.income-sign') && keuSummaryContent.includes(
 assert(!keuSummaryContent.includes('.trans-val.income { color: #00e676;'), 'slides/keuangan-summary.html tidak menggunakan warna hijau neon bulam lama');
 
 // -------------------------------------------------------------
+// 12. PRAYER MODE SHAF HADITH CENTER FORMAT INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 12] Prayer Mode Shaf Hadith Center Format Integrity:');
+const prayerModeHtmlContent = fs.readFileSync(path.join(baseDir, 'prayer-mode.html'), 'utf8');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-arabic') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arabic format center');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arti format center');
+assert(prayerModeHtmlContent.includes('سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ'), 'prayer-mode.html memuat matan hadits Arab pelurusan shaf');
+assert(prayerModeHtmlContent.includes('“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat” (HR. Bukhari no.690, Muslim no.433)'), 'prayer-mode.html memuat terjemahan hadits shaf HR Bukhari & Muslim');
+assert(!prayerModeHtmlContent.includes("prayerModeTextEl.textContent = 'Iqamah Segera Dikumandangkan"), 'prayer-mode.html tidak lagi menggunakan teks Iqamah lama pada fase sholat berjamaah');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');

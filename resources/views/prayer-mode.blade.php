@@ -926,6 +926,30 @@
             font-style: normal;
         }
 
+        .prayer-shaf-arabic {
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: clamp(24px, 2.7vw, 38px);
+            font-weight: 700;
+            line-height: 1.6;
+            color: #FFD700;
+            text-shadow: 0 0 16px rgba(255, 215, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.9);
+            direction: rtl;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .prayer-shaf-arti {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(16px, 1.6vw, 23px);
+            font-weight: 600;
+            line-height: 1.5;
+            color: #FFFFFF;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
+            text-align: center;
+            max-width: 1040px;
+            margin: 0 auto;
+        }
+
         /* =====================================================
            BAGIAN 5: HADITH VIGNETTE PLAKAT
            ===================================================== */
@@ -1482,7 +1506,8 @@
                         <i class="fa-solid fa-mosque"></i>
                     </div>
                     <div class="message-text">
-                        {!! nl2br(e($displayMessage)) !!}
+                        <div class="prayer-shaf-arabic">سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ</div>
+                        <div class="prayer-shaf-arti">“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat” (HR. Bukhari no.690, Muslim no.433)</div>
                     </div>
                 </div>
             @elseif($phase == 'adzan')

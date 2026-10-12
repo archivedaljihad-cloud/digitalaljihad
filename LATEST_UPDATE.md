@@ -7,7 +7,35 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 19:50 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 20:20 WIB)
+
+### 🕌 PEMBARUAN TEKS HADITS PELURUSAN SHAF PADA PRAYER MODE (Versi SW v5.8.57):
+1. **Penggantian Teks Fase Sholat Berjamaah (`web-statis/prayer-mode.html`)**:
+   - **Latar Belakang**: Pada fase sholat berjamaah (`?phase=prayer`), teks display sebelumnya berbunyi *"Iqamah Segera Dikumandangkan. Mari Bersiap Mengisi Shaf Terdepan, Luruskan dan Rapatkan Shaf."*.
+   - **Hadits Nabawi Riwayat Bukhari & Muslim (Format Center)**:
+     - Teks diganti dengan hadits shahih anjuran merapatkan dan meluruskan shaf sholat:
+       - **Matan Arab**: `سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ`
+       - **Terjemahan & Perawi**: `“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat” (HR. Bukhari no.690, Muslim no.433)`
+   - **Tipografi & Desain Format CENTER**:
+     - Menambahkan class `.prayer-shaf-arabic` dengan font Arab premium (`Amiri`, `Scheherazade New`), warna emas berkilau (`#FFD700`), glow lembut, dan `text-align: center;`.
+     - Menambahkan class `.prayer-shaf-arti` dengan font bersih (`Poppins`), warna putih kontras tajam (`#FFFFFF`), teks rapi dan rata tengah sempurna (`text-align: center;`).
+     - Memperbarui initial DOM markup `#prayerModeText` serta logika runtime render di `updatePrayerUI()` saat `state.phase === PrayerEngine.PHASES.PRAYER`.
+2. **Sinkronisasi File Cadangan & Laravel View**:
+   - `public/preview-prayer-mode.html`: Menambahkan styling dan DOM hadits shaf yang identik.
+   - `resources/views/prayer-mode.blade.php`: Menambahkan CSS `.prayer-shaf-arabic` & `.prayer-shaf-arti` serta markup rendering blade `@elseif($phase == 'prayer')`.
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.57`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.57`** di `web-statis/sw.js` dan skrip pembersih cache panel Admin di `web-statis/js/admin/admin-settings.js` untuk memastikan seluruh layar TV dan peramban klien langsung mendeteksi rilis baru seketika.
+4. **Pengujian Regresi Otomatis (137 / 137 PASS)**:
+   - Menambahkan **[TEST 12] Prayer Mode Shaf Hadith Center Format Integrity** di `scripts/test-engine.js` (memverifikasi CSS center, matan Arab, terjemahan Indonesia, dan pembersihan teks lama).
+   - Menjalankan `npm test`: Seluruh 137 assertions LULUS tanpa celah (100% PASS).
+5. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Dideploy langsung ke produksi live `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal**: Disinkronkan ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 19:50 WIB)
 
 ### 💰 PERUBAHAN JUDUL SLIDE KEUANGAN KAS MASJID (Versi SW v5.8.56):
 1. **Penyesuaian Judul Slide (`slides/keuangan.html` & `resources/views/keuangan.blade.php`)**:
