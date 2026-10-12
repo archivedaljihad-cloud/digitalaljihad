@@ -3112,39 +3112,39 @@
 
                             <!-- Kolom Kanan: Pratinjau Tampilan TV & Tombol Simpan (Kompak Sejajar Form Kiri) -->
                             <div class="col-lg-5 mb-4">
-                                <div class="content-card mb-3 shadow-sm">
+                                <div class="content-card mb-2 shadow-sm">
                                     <div class="content-card-header d-flex justify-content-between align-items-center" style="padding: 10px 18px !important;">
                                         <h6 class="content-card-title mb-0" style="font-size: 0.92rem;">
                                             <i class="fas fa-eye text-primary mr-1"></i> Pratinjau Layar TV (Pekan Terpilih)
                                         </h6>
                                         <span class="badge badge-warning text-dark font-weight-bold" id="prevKajianDateBadge">Sabtu, -</span>
                                     </div>
-                                    <div class="p-3" style="padding: 14px 18px !important;">
-                                        <div class="jumat-preview-box text-center" style="background: linear-gradient(135deg, #021a11 0%, #032b1b 100%); border: 1.5px solid #d4af37; border-radius: 14px; padding: 14px; color: #fff;">
-                                            <span class="badge badge-success font-weight-bold px-3 py-1 mb-2" id="prevKajianPekanBadge">
+                                    <div class="p-3" style="padding: 12px 16px !important;">
+                                        <div class="jumat-preview-box text-center" style="background: linear-gradient(135deg, #021a11 0%, #032b1b 100%); border: 1.5px solid #d4af37; border-radius: 12px; padding: 12px 14px; color: #fff;">
+                                            <span class="badge badge-success font-weight-bold px-2.5 py-1 mb-1.5" id="prevKajianPekanBadge" style="font-size: 11px;">
                                                 <i class="fas fa-calendar-week mr-1"></i> PEKAN KE-1 (SABTU MALAM)
                                             </span>
-                                            <div class="font-weight-bold text-white mb-1" id="prevKajianUstadz" style="font-size: 1.15rem;">-</div>
-                                            <div class="text-warning small font-weight-bold mb-2" id="prevKajianKitab">-</div>
-                                            <div class="p-2 rounded mb-2" style="background: rgba(0,0,0,0.4); border-left: 3px solid #10b981; text-align: left;">
-                                                <div class="small text-muted font-weight-bold" style="font-size: 10px;">TEMA PEKAN INI:</div>
-                                                <div class="small font-weight-bold text-white" id="prevKajianTema">Tema Kajian Belum Diatur</div>
+                                            <div class="font-weight-bold text-white mb-1" id="prevKajianUstadz" style="font-size: 1.05rem;">-</div>
+                                            <div class="text-warning small font-weight-bold mb-1.5" id="prevKajianKitab" style="font-size: 11.5px;">-</div>
+                                            <div class="p-1.5 rounded mb-1.5" style="background: rgba(0,0,0,0.4); border-left: 3px solid #10b981; text-align: left; padding: 6px 10px !important;">
+                                                <div class="small text-muted font-weight-bold" style="font-size: 9.5px;">TEMA PEKAN INI:</div>
+                                                <div class="small font-weight-bold text-white" id="prevKajianTema" style="font-size: 11.5px;">Tema Kajian Belum Diatur</div>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center text-muted small" style="font-size: 11px;">
+                                            <div class="d-flex justify-content-between align-items-center text-muted small" style="font-size: 10.5px;">
                                                 <span><i class="fas fa-clock text-warning mr-1"></i> <span id="prevKajianWaktu">Ba'da Maghrib - Isya</span></span>
-                                                <span class="badge badge-warning text-dark font-weight-bold"><i class="fas fa-qrcode mr-1"></i> Tanya Jawab HP</span>
+                                                <span class="badge badge-warning text-dark font-weight-bold" style="font-size: 10px;"><i class="fas fa-qrcode mr-1"></i> Tanya Jawab HP</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Tombol Aksi Simpan Agenda 1 Bulan (Tepat di Bawah Pratinjau TV, Sejajar Form Kiri) -->
-                                <div class="card shadow-sm border-0" style="background: #f8fafc; border-radius: 12px; border: 1.5px dashed #86efac !important; padding: 12px 16px !important;">
-                                    <button type="button" id="btnSimpanKajian" class="btn btn-success btn-block font-weight-bold shadow d-flex align-items-center justify-content-center" onclick="simpanKajianSabtu()" style="border-radius: 10px; font-size: 1rem; padding: 10px 18px; letter-spacing: 0.3px;">
-                                        <i class="fas fa-save mr-2" style="font-size: 1.15rem;"></i> Simpan Agenda 1 Bulan
+                                <!-- Tombol Aksi Simpan Agenda 1 Bulan (Desain Ramping & Kompak) -->
+                                <div class="card shadow-sm border-0" style="background: #f0fdf4; border-radius: 10px; border: 1px dashed #86efac !important; padding: 7px 12px !important;">
+                                    <button type="button" id="btnSimpanKajian" class="btn btn-success btn-block font-weight-bold shadow-sm d-flex align-items-center justify-content-center" onclick="simpanKajianSabtu()" style="border-radius: 8px; font-size: 0.88rem; padding: 6px 14px; letter-spacing: 0.2px;">
+                                        <i class="fas fa-save mr-1.5" style="font-size: 0.95rem;"></i> Simpan Agenda 1 Bulan
                                     </button>
-                                    <small class="text-muted text-center d-block mt-1.5" style="font-size: 11px;">
-                                        <i class="fas fa-check-circle text-success mr-1"></i> Menyimpan seluruh jadwal Pekan 1 s/d 5 ke server & otomatis tayang di Layar TV.
+                                    <small class="text-muted text-center d-block mt-1" style="font-size: 10.5px; line-height: 1.2;">
+                                        <i class="fas fa-check-circle text-success mr-1"></i> Simpan jadwal Pekan 1-5 & otomatis tayang di TV.
                                     </small>
                                 </div>
                             </div>

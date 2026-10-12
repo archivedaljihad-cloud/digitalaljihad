@@ -7,7 +7,29 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 17:45 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 19:45 WIB)
+
+### 🕌 PERAMPINGAN KOTAK "SIMPAN AGENDA 1 BULAN" KAJIAN MALAM AHAD (Versi SW v5.8.55):
+1. **Perampingan Desain Kotak Aksi Simpan Agenda (`web-statis/admin.html`)**:
+   - **Latar Belakang & Masalah**: Kotak tombol *"Simpan Agenda 1 Bulan"* di bawah kartu Pratinjau Layar TV sebelumnya berukuran tebal (*padding 12px 16px* dengan border dashed 1.5px dan margin atas 16px), memakan ruang vertikal berlebih sehingga kolom kanan tampak menggembung dan membuat dashboard terasa penuh sesak.
+   - **Solusi Desain Ramping, Kompak, & Elegan**:
+     - Mengurangi margin pemisah dari kartu pratinjau TV dari `mb-3` (16px) menjadi `mb-2` (8px).
+     - Merampingkan padding kontainer kartu dari `12px 16px` menjadi `7px 12px` dengan latar belakang hijau mint lembut (`#f0fdf4`) dan garis tepian halus (`1px dashed #86efac`).
+     - Menyesuaikan ukuran tombol `#btnSimpanKajian` menjadi lebih proporsional (`padding: 6px 14px; font-size: 0.88rem; border-radius: 8px;`).
+     - Menyederhanakan teks caption menjadi 1 baris ringkas: *"Simpan jadwal Pekan 1-5 & otomatis tayang di TV."*
+     - Memperkecil padding dan tipografi kartu pratinjau TV di atasnya agar tinggi kolom kiri (Form Pengajian) dan kolom kanan (Pratinjau + Simpan) sejajar presisi dan lega.
+2. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.55`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.55`** di `web-statis/sw.js` dan skrip pembersih cache panel Admin di `web-statis/js/admin/admin-settings.js` untuk memastikan browser admin dan TV display memuat layout terbaru.
+3. **Pengujian Regresi Otomatis (132 / 132 PASS)**:
+   - Menjalankan `npm test`, seluruh 132 assertions dinyatakan LULUS (100% PASS).
+4. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Dideploy langsung ke produksi live `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal**: Disinkronkan ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 17:45 WIB)
 
 ### 🕌 PERAMPINGAN LAYOUT FORM PENGAJIAN DI DASHBOARD ADMIN KAJIAN MALAM AHAD (Versi SW v5.8.54):
 1. **Restrukturisasi Grid Kompak & Streamlining Form Pengajian (`web-statis/admin.html`)**:
