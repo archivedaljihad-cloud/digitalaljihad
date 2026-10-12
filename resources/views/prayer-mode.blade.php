@@ -122,15 +122,19 @@
 
         /* Ka'bah Watermark Vignette */
         .bg-kaabah {
-            background-image: url('{{ asset("img/Kaabah.png") }}');
+            background-image: url('{{ asset("img/Kaabah.webp") }}'), url('{{ asset("img/Kaabah.png") }}');
             background-size: contain;
             background-position: center 85%;
             background-repeat: no-repeat;
-            opacity: 0.30;
+            transform: scale(1.16);
+            transform-origin: center 82%;
+            opacity: 0.38;
             mix-blend-mode: luminosity;
-            filter: contrast(1.15) brightness(1.2);
-            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 45%, rgba(0, 0, 0, 0) 85%);
-            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 45%, rgba(0, 0, 0, 0) 85%);
+            filter: contrast(1.30) brightness(1.24);
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 88%);
+            -webkit-mask-image: radial-gradient(circle at center 60%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 88%);
         }
 
         /* Dark Radial Vignette */

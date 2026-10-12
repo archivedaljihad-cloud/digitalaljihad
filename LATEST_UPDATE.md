@@ -7,7 +7,46 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 20:52 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 00:15 WIB)
+
+### 🕋 PENINGKATAN VISUAL BACKGROUND KA'BAH PADA PRAYER MODE (ZOOM IN & PERTAJAM DETAIL) (Versi SW v5.8.60):
+1. **Pembesaran (Zoom In) Gambar Background Ka'bah (`.bg-kaabah`)**:
+   - **Permintaan Pengguna**: Membesarkan sedikit lagi (*zoom in*) gambar background Ka'bah di halaman prayer mode agar lanskap dan monumen suci Ka'bah tampil lebih megah, proporsional, dan memenuhi bidang pandang layar TV display secara estetis.
+   - **Implementasi**:
+     - Menambahkan `transform: scale(1.16);` dan `transform-origin: center 82%;` pada kelas `.bg-kaabah`.
+     - Skala 1.16x (+16%) memperbesar Ka'bah secara pas tanpa memotong bagian penting ornamen kaligrafi maupun puncak Ka'bah.
+     - `transform-origin: center 82%` menjaga titik jangkar bawah tetap seimbang dan menyatu di balik kartu/kotak informasi.
+     - Memperlebar radial gradient masking dari `45% 85%` menjadi `50% 88%` sehingga area fokus Ka'bah lebih luas dan tepinya memudar halus (*feathering*) ke arah vignette gelap.
+2. **Penajaman Gambar Ka'bah (*Sharpening & Clarity Enhancement*)**:
+   - **Permintaan Pengguna**: Mempertajam gambar background Ka'bah agar tidak terlihat buram, samar, atau "hambar".
+   - **Implementasi Multi-Layer**:
+     - **Peningkatan Filter CSS**:
+       - Menaikkan kontras dari `contrast(1.15)` menjadi `contrast(1.30)`.
+       - Menaikkan kecerahan dari `brightness(1.2)` menjadi `brightness(1.24)`.
+       - Menaikkan opacity lapisan dari `0.30` menjadi `0.38` agar detail Ka'bah terlihat jelas tembus pandang di balik kotak kaca glassmorphism tanpa mengorbankan keterbacaan teks hadits.
+       - Menambahkan `image-rendering: -webkit-optimize-contrast;` dan `image-rendering: crisp-edges;` agar browser TV memproses rendering tekstur gambar dengan ketajaman tepi maksimal.
+     - **Penajaman Aset Gambar Fisik (`Kaabah.png` & `Kaabah.webp`)**:
+       - Memproses file gambar sumber dengan filter konvolusi UnsharpMask (`radius=1.6`, `percent=125`, `threshold=2`) via pustaka Pillow Python berkualitas tinggi (quality 95%).
+       - Ornamen kaligrafi emas di Kiswah Ka'bah dan pilar-pilar Masjidil Haram kini tampil jauh lebih tajam, jernih, dan berdefinisi tinggi.
+3. **Penyelarasan Seluruh Berkas & Template**:
+   - `web-statis/prayer-mode.html`: Implementasi produksi utama.
+   - `web-statis/img/Kaabah.webp` & `web-statis/img/Kaabah.png`: Aset gambar dipertajam.
+   - `public/img/Kaabah.webp` & `public/img/Kaabah.png`: Penyelarasan aset gambar.
+   - `public/preview-prayer-mode.html`: Penyelarasan CSS `.bg-kaabah`.
+   - `resources/views/prayer-mode.blade.php`: Penyelarasan CSS blade template `.bg-kaabah`.
+4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.60`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.60`** di `web-statis/sw.js` dan skrip pembersih cache panel Admin di `web-statis/js/admin/admin-settings.js`.
+5. **Pengujian Regresi Otomatis (144 / 144 PASS)**:
+   - Menambahkan assertion verifikasi zoom in (`transform: scale`) dan penajaman kontras (`contrast(1.30)` & `optimize-contrast`) di Test 12 `scripts/test-engine.js`.
+   - Menjalankan `npm test`: Seluruh 144 assertions LULUS tanpa celah (100% PASS).
+6. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Dideploy langsung ke produksi live `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal**: Disinkronkan ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 20:52 WIB)
 
 ### 🕌 DESAIN KOTAK PRAYER MODE TRANSPARAN GLASSMORPHISM, PENGHILANGAN 3 IKON, & FORMAT HADITS SHAF 2 BARIS (Versi SW v5.8.59):
 1. **Kotak Transparan Glassmorphism (`.prayer-mode-box`)**:

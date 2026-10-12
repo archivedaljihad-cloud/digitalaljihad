@@ -367,6 +367,8 @@ assert(!prayerModeHtmlContent.includes("prayerModeTextEl.textContent = 'Iqamah S
 assert(prayerModeHtmlContent.includes('rgba(4, 28, 16, 0.46)'), 'prayer-mode.html memiliki latar belakang kotak transparan agar Ka\'bah terlihat');
 assert(prayerModeHtmlContent.includes('.prayer-mode-box .icons-row') && prayerModeHtmlContent.includes('display: none;'), 'prayer-mode.html menyembunyikan 3 ikon saat fase sholat berlangsung');
 assert(prayerModeHtmlContent.includes('body.phase-prayer .phase-section') && prayerModeHtmlContent.includes('clamp(26px,'), 'prayer-mode.html memiliki aturan posisi seimbang kotak kapsul nama sholat pas di antara judul dan hadits shaf');
+assert(prayerModeHtmlContent.includes('.bg-kaabah') && prayerModeHtmlContent.includes('transform: scale('), 'prayer-mode.html memiliki background Kaabah yang di-zoom in (scale)');
+assert(prayerModeHtmlContent.includes('.bg-kaabah') && prayerModeHtmlContent.includes('contrast(1.30)') && prayerModeHtmlContent.includes('image-rendering: -webkit-optimize-contrast;'), 'prayer-mode.html memiliki background Kaabah yang dipertegas dan dipertajam');
 
 // -------------------------------------------------------------
 // HASIL AKHIR
