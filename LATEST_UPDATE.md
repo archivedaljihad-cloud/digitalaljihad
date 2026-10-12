@@ -4,6 +4,9 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
+> 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
+> Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
+
 ## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 12:48 WIB)
 
 ### 🛠️ PERBAIKAN SINTAKS ADMIN.HTML, SIDEBAR MENU RESPONSIVE, & ENHANCEMENT ENGINE TEST SINTAKS INLINE (Versi SW v5.8.44):
