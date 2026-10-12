@@ -7,7 +7,28 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 14:15 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 15:25 WIB)
+
+### 🎨 PERAMPINGAN UI KOTAK DURASI SHOLAT JUM'AT & CLEAN DESIGN DASHBOARD ADMIN (Versi SW v5.8.47):
+1. **Perampingan Desain Kotak Durasi Sholat Jum'at (`web-statis/admin.html`)**:
+   - **Tampilan Ramping & Elegan**: Mengurangi ketebalan kartu dari `p-3` menjadi `p-2 px-3`, border radius 12px, memangkas margin vertikal dan ukuran font judul sehingga tata letak kartu tidak memakan banyak ruang vertikal dan tampak jauh lebih rapi di layar admin (HP, Tablet, maupun PC).
+   - **Pemberian Ruang Lebih Bersih**: Menghilangkan badge teks `"Bebas Diedit oleh Operator / Petugas"` pada kartu durasi Jum'at di seksi *Jadwal Sholat & Timer TV* (`#cfgDurasiJumat`) dan seksi *Petugas Sholat Jum'at* (`#jumatDurasiInput`).
+   - **Reposisi Teks Keterangan**: Memindahkan teks keterangan `"Bisa disesuaikan tiap pekan (35–60 mnt)"` dari posisi bawah kotak menjadi sejajar di samping kanan kotak input menit menggunakan layout flex (`d-flex align-items-center flex-wrap`, gap 10px).
+   - **Preservasi Fungsionalitas & Zero-Regression**: ID elemen `#cfgDurasiJumat` dan `#jumatDurasiInput` serta sinkronisasi event `oninput="syncDurasiJumat(this.value)"` tetap 100% terjaga dan berfungsi normal.
+
+2. **Pembersihan Cache & Cache Version Bumping (Versi SW `v5.8.47`)**:
+   - `web-statis/sw.js`: Versi cache dinaikkan ke **`aljihad-signage-v5.8.47`**.
+   - `web-statis/js/admin/admin-settings.js`: Handler pembersih cache disinkronkan ke **`aljihad-signage-v5.8.47`** agar browser klien langsung menghapus cache versi lama saat update.
+   - Cloudflare headers menjamin aset HTML dan Service Worker dimuat segar oleh peramban admin dan TV.
+
+3. **Verifikasi & Sinkronisasi 4 Pilar (Cloudflare, Backup Lokal, GitHub, Test Suite)**:
+   - **Otomasi Pengujian**: 117 / 117 assertions lulus sempurna (100% PASS).
+   - **Cloudflare Edge**: Deploy sukses ke `https://digitalaljihad.my.id/` via Wrangler.
+   - **Cadangan Lokal**: Seluruh aset tersinkronisasi ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 14:15 WIB)
 
 ### 🚀 FINALISASI MULTI-DEVICE RESPONSIVENESS & REALTIME AUTH SYNC LINTAS PERANGKAT (Versi SW v5.8.46):
 1. **Sinkronisasi Autentikasi Realtime Lintas Perangkat (<100ms) Sesuai RBAC**:
