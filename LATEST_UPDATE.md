@@ -4,26 +4,17 @@
 > Dokumen ini adalah **titik acuan utama (*single source of truth / handover guide*)**. Setiap kali Anda ingin melanjutkan pengembangan, memperbaiki bug, atau memodifikasi fitur di aplikasi ini menggunakan komputer, akun, atau percakapan baru, **baca dokumen ini terlebih dahulu**. Seluruh struktur arsitektur, rute, tabel database, logika peran, dan fitur mutakhir terdokumentasi lengkap di sini.
 
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 12:35 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 12:48 WIB)
 
-### ⏱️ DUKUNGAN DUAL DESAIN COUNTDOWN PRAYER MODE (3D FLIP CLOCK & MODEL BIASA KLASIK) DENGAN KONTROL ADMIN REALTIME (Versi SW v5.8.43):
-1. **Penyelesaian Masalah Perbedaan Model Countdown Sholat (Flip Clock vs Model Biasa)**:
-   - **Akar Masalah**: Sebelum update `ad9fe6e`, mode hitung mundur sholat menggunakan kartu kaca datar `.tile-face` (Model Biasa). Update `ad9fe6e` memperkenalkan animasi jam putar 3D `.flip-card-box`. Karena belum adanya tombol pemilih di panel Admin, perangkat pengguna yang memuat versi berbeda atau membuka pratinjau laptop menampilkan model berbeda tanpa kendali. Selain itu, pemicuan ganda interval UI berpotensi memotong animasi 3D sehingga tampak seperti kartu biasa.
-   - **Solusi Dual Model Terpadu (`web-statis/prayer-mode.html`, `resources/views/prayer-mode.blade.php`, `public/preview-prayer-mode.html`)**:
-     - Mengintegrasikan kedua model tampilan secara native dalam satu container `.countdown-tiles-wrapper`:
-       - **🔄 3D Mechanical Flip Clock (`.flip-card-box`)**: Tampilan jam lipat mekanik modern 3D dengan pembagian flapper atas/bawah, lipatan realistis, dan animasi pergantian angka 3D.
-       - **⏱️ Model Biasa / Modern Flat Glass (`.tile-face`, `.tile-number`, `.tile-crease`)**: Tampilan kartu kaca datar elegan dengan angka jelas, garis pemisah horizontal tipis, dan pembacaan waktu yang tenang tanpa efek rotasi fisik.
-     - Kedua model berbagi dimensi dan proporsi yang identik (`clamp(140px, 15vw, 210px)` x `clamp(100px, 11vw, 150px)`) sehingga pertukaran desain berlangsung instan (<1ms) dengan **Zero Cumulative Layout Shift (CLS = 0)**.
-     - Menambahkan fungsi pengontrol dinamis `getCountdownStyle()`, `switchCountdownStyle(style)`, dan mekanisme fallback hierarkis (URL param `?style=`, LocalStorage `prayer_countdown_style`, dan Supabase Cloud `prayer_countdown_style`).
-     - Menyediakan tombol pemilih cepat di bilah simulasi pratinjau laptop (`[ DESAIN: 🔄 3D Flip | ⏱️ Model Biasa ]`) untuk kemudahan pengujian langsung.
-2. **Penambahan Kontrol Pilihan Desain di Panel Admin (`web-statis/admin.html`)**:
-   - Menambahkan dropdown `<select id="cfgCountdownStyle">` di dalam kartu Pengaturan Durasi & Transisi Sholat:
-     - Opsi 1: `🔄 3D Mechanical Flip Clock (Efek Lipat Modern)`
-     - Opsi 2: `⏱️ Model Biasa / Modern Flat Glass (Klasik Elegan)`
-   - Disinkronkan dengan Supabase Cloud (`app_settings` key `prayer_countdown_style`), LocalStorage, serta event transmisi realtime (`onDataChange` & `onRemoteCommand`).
-   - Setiap kali Admin mengubah opsi desain, Smart TV di masjid langsung beralih desain secara realtime (<100ms) tanpa reload layar atau merusak jalannya hitungan mundur.
+### 🛠️ PERBAIKAN SINTAKS ADMIN.HTML, SIDEBAR MENU RESPONSIVE, & ENHANCEMENT ENGINE TEST SINTAKS INLINE (Versi SW v5.8.44):
+1. **Penyelesaian Masalah Menu Sidebar Tidak Merespon & 'Memuat Akun...' di Admin (`web-statis/admin.html`)**:
+   - **Akar Masalah**: Terdapat potongan kode duplikat yang tersisa di dalam fungsi `simpanPengaturanDurasiTV()` setelah penutupan objek `cleanPayload`. Karakter titik dua (`:`) pada baris tersebut memicu fatal JavaScript `SyntaxError: Unexpected token ':'`. Akibatnya, peramban menghentikan eksekusi blok skrip utama admin secara total, menyebabkan fungsi `switchAdminSection()` tidak terdefinisi dan event `DOMContentLoaded` gagal berjalan sehingga profil pengguna tetap berstatus 'Memuat Akun...'.
+   - **Solusi**: Menghapus seluruh baris properti duplikat yang berada di luar objek payload. Skrip utama `admin.html` (594.076 karakter) kini terkompilasi 100% mulus, fungsi `switchAdminSection` aktif sempurna, dan seluruh navigasi menu sidebar kembali responsif seketika saat diklik.
+2. **Peningkatan Deteksi & Validasi Sintaks Test Engine (`scripts/test-engine.js`)**:
+   - Memperbaiki parser deteksi tag `<script src="...">` pada `test-engine.js`. Sebelumnya pemeriksaan menggunakan `s.includes('src=')` pada seluruh isi blok skrip sehingga skrip inline yang memuat string atribut `src` (seperti manipulasi `img.src` atau iframe) terabaikan dari pengujian sintaks.
+   - Kini pengujian mengecek atribut `src` secara presisi hanya pada tag pembuka `<script[^>]*>` dan menghitung jumlah blok inline script yang diuji (`testedCount`). Kedua blok inline script di `admin.html` kini diverifikasi ketat secara otomatis sehingga tidak ada lagi syntax error yang lolos tanpa terdeteksi.
 3. **Bumping Service Worker & Pembersihan Cache Usang (`web-statis/sw.js` & `admin.html`)**:
-   - CACHE_NAME dinaikkan ke **`aljihad-signage-v5.8.43`** di `sw.js` dan skrip pembersih cache `admin.html`.
+   - CACHE_NAME dinaikkan ke **`aljihad-signage-v5.8.44`** di `sw.js` dan skrip pembersih cache `admin.html`.
 4. **Validasi Kualitas & 4 Pilar SOP Deployment**:
    - Lulus 89/89 assertions pengujian regresi otomatis (`npm test`).
    - Deployment Cloudflare Workers (`https://digitalaljihad.my.id/`).
@@ -31,6 +22,8 @@
    - Git commit dan push branch `main`.
 
 ---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 12 Oktober 2026 (Pukul 12:35 WIB)
 
 ## 📜 ARSIP UPDATE SEBELUMNYA — 12 Oktober 2026 (Pukul 00:50 WIB)
 

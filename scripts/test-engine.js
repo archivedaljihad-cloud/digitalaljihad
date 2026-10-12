@@ -69,9 +69,12 @@ filesToCheck.forEach(relPath => {
     if (relPath.endsWith('.html')) {
         const scripts = content.match(/<script[\s\S]*?<\/script>/gi) || [];
         let htmlValid = true;
+        let testedCount = 0;
         scripts.forEach((s, idx) => {
-            if (s.includes('src=')) return;
+            const openTag = (s.match(/<script[^>]*>/i) || [''])[0];
+            if (/\bsrc\s*=/i.test(openTag)) return;
             const code = s.replace(/<script[^>]*>/i, '').replace(/<\/script>/i, '');
+            testedCount++;
             try {
                 new Function(code);
             } catch (err) {
@@ -79,7 +82,7 @@ filesToCheck.forEach(relPath => {
                 console.error(`     Syntax error in ${relPath} script #${idx}:`, err.message);
             }
         });
-        assert(htmlValid, `Validasi sintaks JavaScript di ${relPath}`);
+        assert(htmlValid, `Validasi sintaks JavaScript di ${relPath} (${testedCount} blok inline script)`);
     } else {
         let jsValid = true;
         try {

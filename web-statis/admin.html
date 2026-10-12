@@ -12958,13 +12958,6 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
             if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
                 SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
             }
-                prayer_mode_adzan_duration: adzanDur,
-                prayer_mode_iqamah_duration: iqamahDur,
-                prayer_mode_after_prayer: sholatDur,
-                prayer_mode_jumat_duration: jumatDur,
-                audio_tarhim: audioTarhim,
-                tarhim_trigger_seconds: audioTarhim * 60
-            };
 
             let saveSuccess = false;
             try {
@@ -13799,7 +13792,7 @@ Mari hadir lebih awal, luruskan & rapatkan shaf, serta nonaktifkan nada dering h
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.43') {
+                                if (name !== 'aljihad-signage-v5.8.44') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
