@@ -7,7 +7,51 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 12:48 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 13:35 WIB)
+
+### 🏗️ MODULARISASI UTAMA SKRIP ADMIN.HTML MENJADI 21 MODUL INDEPENDEN (Versi SW v5.8.45):
+1. **Pemisahan Blok JavaScript Monolitik (594 KB) Menjadi 21 Modul Independen (`web-statis/js/admin/*.js`)**:
+   - **Latar Belakang & Motivasi**: Berkas `web-statis/admin.html` sebelumnya membengkak hingga berukuran 1.15 MB (18.331 baris) dengan 594 KB inline JavaScript monolitik di satu tag `<script>`. Hal ini menyulitkan pemeliharaan, memakan kuota token AI saat editing, dan rawan syntax regression.
+   - **Eksekusi Otomasi Berkecepatan Tinggi (`scripts/modularize-admin.js`)**: Dijalankan skrip otomasi Node.js lokal untuk mengekstrak seluruh 10.903 baris kode JavaScript ke dalam 21 modul domain independen tanpa menghilangkan 1 baris kode pun atau mengubah alur logika:
+     1. `js/admin/admin-core.js` (State global, variabel `currentUser`, `MASTER_ROTATION_PAGES`, helper UI dasar, sidebar toggle, dan auth setup).
+     2. `js/admin/admin-data-loader.js` (Debounced loader realtime Supabase anti-freeze, listener Postgres Changes, dan remote command).
+     3. `js/admin/admin-users.js` (Manajemen akun RBAC pengguna & modal tambah/edit/hapus pengurus).
+     4. `js/admin/admin-kas.js` (Pencatatan kas utama masjid, layanan ambulance, modal transaksi, filter, dan export Excel).
+     5. `js/admin/admin-infaq.js` (Manajemen multi-program infaq, donatur, saluran rekening transfer, export CSV, dan cetak PDF).
+     6. `js/admin/admin-qris.js` (Manajemen barcode QRIS digital donasi, status aktif, upload custom gambar & URL).
+     7. `js/admin/admin-rotasi.js` (Manajemen 20 slide TV rotasi, durasi interval, preview iframe fullscreen, dan switch aktif/nonaktif).
+     8. `js/admin/admin-jumat.js` (Petugas sholat Jum'at, foto imam/khotib upload base64, generator flyer WhatsApp, dan canvas export).
+     9. `js/admin/admin-kajian.js` (Kajian rutin malam Ahad, kalkulator tanggal Sabtu kalender Hijriyah/Masehi, dan rekap bulanan).
+     10. `js/admin/admin-jadwal-sholat.js` (Jadwal sholat Kemenag & Falakiyah NU, durasi adzan, iqamah, sholat, dan countdown style).
+     11. `js/admin/admin-running-text.js` (Manajemen teks berjalan multi-halaman display TV dengan kontrol accordion).
+     12. `js/admin/admin-yasin.js` (Pengaturan waktu & aktivasi otomatis Surat Yaasiin 83 ayat pada malam Jum'at).
+     13. `js/admin/admin-settings.js` (Pengaturan sistem, official stream YouTube tester, dan pembersihan cache SW).
+     14. `js/admin/admin-ai.js` (Integrasi Google Gemini AI Copywriter untuk pembuatan draf pengumuman dan maklumat dakwah).
+     15. `js/admin/admin-qurban.js` (Penerimaan hewan qurban Idul Adha & daftar shohibul qurban).
+     16. `js/admin/admin-ramadhan.js` (Agenda tarawih Ramadhan, kas tromol harian, dan toggle mode Ramadhan TV).
+     17. `js/admin/admin-remote.js` (Remote control TV display realtime, command bridge, TV presence monitor, dan event log).
+     18. `js/admin/admin-galeri.js` (Galeri dokumentasi masjid & viewer gambar).
+     19. `js/admin/admin-undangan.js` (Warta ukhuwah & surat undangan eksternal).
+     20. `js/admin/admin-agenda-rutin.js` (Agenda kegiatan rutin pekanan masjid & sinkronisasi otomatis).
+     21. `js/admin/admin-pengumuman-jumat.js` (Pengumuman resmi Jum'at, naskah bacaan maklumat 13 poin, PDF, Word, PNG, dan broadcast WA).
+2. **Optimasi Berkas `web-statis/admin.html`**:
+   - Ukuran berkas `admin.html` terpangkas drastis dari **1.153.902 bytes (1.15 MB)** menjadi **561.342 bytes (561 KB)** (pengurangan lebih dari 51% ukuran HTML).
+   - Seluruh modul dimuat secara teratur dan paralel melalui `<script src="js/admin/..."></script>` dengan version query string `?v=5.8.45`.
+3. **Ekspansi Suite Pengujian Otomatis (`scripts/test-engine.js`)**:
+   - `test-engine.js` diperluas untuk secara otomatis memeriksa sintaks JavaScript dari seluruh berkas di direktori `web-statis/js/admin/*.js`.
+   - Jumlah assertion test bertambah drastis dari 89 menjadi **110 assertions** dan **LULUS 100% (110 / 110 PASS)**!
+4. **Bumping Service Worker & Pembersihan Cache Usang (`web-statis/sw.js` & `admin-settings.js`)**:
+   - `CACHE_NAME` dinaikkan ke **`aljihad-signage-v5.8.45`**.
+   - Skrip pembersih cache usang pada `admin-settings.js` disinkronkan ke versi `v5.8.45`.
+5. **Eksekusi 4 Pilar SOP Deployment**:
+   - Lulus 110/110 assertions pengujian regresi otomatis (`npm test`).
+   - Deployment Cloudflare Workers (`https://digitalaljihad.my.id/`).
+   - Mirror cold backup ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Git commit dan push branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 12 Oktober 2026 (Pukul 12:48 WIB)
 
 ### 🛠️ PERBAIKAN SINTAKS ADMIN.HTML, SIDEBAR MENU RESPONSIVE, & ENHANCEMENT ENGINE TEST SINTAKS INLINE (Versi SW v5.8.44):
 1. **Penyelesaian Masalah Menu Sidebar Tidak Merespon & 'Memuat Akun...' di Admin (`web-statis/admin.html`)**:

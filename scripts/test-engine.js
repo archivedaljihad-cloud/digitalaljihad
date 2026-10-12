@@ -51,6 +51,14 @@ const filesToCheck = [
     'js/anti-idle.js'
 ];
 
+// Tambahkan seluruh modul admin di js/admin/
+const adminJsDir = path.join(baseDir, 'js/admin');
+if (fs.existsSync(adminJsDir)) {
+    fs.readdirSync(adminJsDir).forEach(f => {
+        if (f.endsWith('.js')) filesToCheck.push(`js/admin/${f}`);
+    });
+}
+
 // Tambahkan seluruh slide
 const slidesDir = path.join(baseDir, 'slides');
 if (fs.existsSync(slidesDir)) {
@@ -229,7 +237,10 @@ const swContent = fs.readFileSync(path.join(baseDir, 'sw.js'), 'utf8');
 const adminContent = fs.readFileSync(path.join(baseDir, 'admin.html'), 'utf8');
 
 const swMatch = swContent.match(/CACHE_NAME\s*=\s*['"]([^'"]+)['"]/);
-const adminMatch = adminContent.match(/if\s*\(name\s*!==\s*['"]([^'"]+)['"]\)/);
+const adminSettingsPath = path.join(baseDir, 'js/admin/admin-settings.js');
+const adminSettingsContent = fs.existsSync(adminSettingsPath) ? fs.readFileSync(adminSettingsPath, 'utf8') : '';
+const combinedAdmin = adminContent + '\n' + adminSettingsContent;
+const adminMatch = combinedAdmin.match(/if\s*\(name\s*!==\s*['"]([^'"]+)['"]\)/);
 
 assert(swMatch && swMatch[1], `Versi CACHE_NAME terdeteksi di sw.js (${swMatch ? swMatch[1] : 'NONE'})`);
 assert(adminMatch && adminMatch[1], `Versi Cache Cleaner terdeteksi di admin.html (${adminMatch ? adminMatch[1] : 'NONE'})`);
