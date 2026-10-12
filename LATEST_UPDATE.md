@@ -7,7 +7,31 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 20:20 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 20:35 WIB)
+
+### 🕌 PENYESUAIAN POSISI SEIMBANG KOTAK KAPSUL NAMA SHOLAT DI PRAYER MODE (Versi SW v5.8.58):
+1. **Penyeimbangan Posisi Kotak Kapsul Nama Sholat (`web-statis/prayer-mode.html`)**:
+   - **Latar Belakang Permintaan**: Pada fase sholat berjamaah (`?phase=prayer`), posisi kotak kapsul nama sholat (`.prayer-badge`, contoh: `• ASHAR •`) sebelumnya menempel terlalu rapat ke atas tepat di bawah teks judul *"Sholat Berjamaah Sedang Berlangsung"* (hanya terpisah `gap: 8px`), sementara jarak ke kotak teks hadits pelurusan shaf di bawahnya cukup renggang, sehingga terlihat timpang.
+   - **Solusi Tata Letak Seimbang (*Equidistant Vertical Centering*)**:
+     - Menyesuaikan `gap` pada `.phase-section` saat fase prayer menjadi `clamp(26px, 3.8vh, 50px)` dan margin bawah `clamp(14px, 2vh, 26px)`.
+     - Menambahkan `margin-top: clamp(8px, 1.2vh, 16px)` pada `.prayer-badge` saat fase sholat berlangsung.
+     - Posisi kotak kapsul nama sholat kini bergeser turun secara proporsional dan berada **tepat di tengah-tengah (seimbang sempurna)** di antara teks judul *"Sholat Berjamaah Sedang Berlangsung"* dan kotak teks hadits *"سَوُّوا صُفُوفَكُمْ..."*.
+2. **Sinkronisasi File Cadangan & Laravel View**:
+   - `public/preview-prayer-mode.html`: Menambahkan aturan CSS penyeimbang posisi dan sinkronisasi toggle class `phase-prayer` / `is-prayer`.
+   - `resources/views/prayer-mode.blade.php`: Menambahkan aturan CSS penyeimbang posisi pada template Blade.
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.58`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.58`** di `web-statis/sw.js` dan skrip pembersih cache panel Admin di `web-statis/js/admin/admin-settings.js`.
+4. **Pengujian Regresi Otomatis (138 / 138 PASS)**:
+   - Menambahkan assertion verifikasi posisi seimbang kotak kapsul nama sholat di Test 12 `scripts/test-engine.js`.
+   - Menjalankan `npm test`: Seluruh 138 assertions LULUS tanpa celah (100% PASS).
+5. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Dideploy langsung ke produksi live `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal**: Disinkronkan ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 20:20 WIB)
 
 ### 🕌 PEMBARUAN TEKS HADITS PELURUSAN SHAF PADA PRAYER MODE (Versi SW v5.8.57):
 1. **Penggantian Teks Fase Sholat Berjamaah (`web-statis/prayer-mode.html`)**:

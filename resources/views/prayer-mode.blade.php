@@ -392,6 +392,20 @@
             overflow: visible;
         }
 
+        /* Posisi Seimbang Kotak Kapsul Nama Sholat pada Fase Sholat Berjamaah */
+        body.phase-prayer .phase-section,
+        .phase-section.is-prayer,
+        .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .phase-section {
+            gap: clamp(26px, 3.8vh, 50px);
+            margin-bottom: clamp(14px, 2vh, 26px);
+        }
+
+        body.phase-prayer .prayer-badge,
+        .phase-section.is-prayer .prayer-badge,
+        .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .prayer-badge {
+            margin-top: clamp(8px, 1.2vh, 16px);
+        }
+
         .prayer-badge::before {
             content: '';
             position: absolute;

@@ -362,6 +362,7 @@ assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlCont
 assert(prayerModeHtmlContent.includes('سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ'), 'prayer-mode.html memuat matan hadits Arab pelurusan shaf');
 assert(prayerModeHtmlContent.includes('“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat” (HR. Bukhari no.690, Muslim no.433)'), 'prayer-mode.html memuat terjemahan hadits shaf HR Bukhari & Muslim');
 assert(!prayerModeHtmlContent.includes("prayerModeTextEl.textContent = 'Iqamah Segera Dikumandangkan"), 'prayer-mode.html tidak lagi menggunakan teks Iqamah lama pada fase sholat berjamaah');
+assert(prayerModeHtmlContent.includes('body.phase-prayer .phase-section') && prayerModeHtmlContent.includes('clamp(26px,'), 'prayer-mode.html memiliki aturan posisi seimbang kotak kapsul nama sholat pas di antara judul dan hadits shaf');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

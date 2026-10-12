@@ -247,7 +247,19 @@
             overflow: visible;
         }
 
-        /* 1. Efek Pendaran Keemasan Memancar di Luar Pinggiran Kapsul (Outer Radiant Golden Halo) */
+        /* Posisi Seimbang Kotak Kapsul Nama Sholat pada Fase Sholat Berjamaah */
+        body.phase-prayer .phase-section,
+        .phase-section.is-prayer,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .phase-section {
+            gap: clamp(26px, 3.8vh, 50px);
+            margin-bottom: clamp(14px, 2vh, 26px);
+        }
+
+        body.phase-prayer .prayer-badge,
+        .phase-section.is-prayer .prayer-badge,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .prayer-badge {
+            margin-top: clamp(8px, 1.2vh, 16px);
+        }
         .prayer-badge::before {
             content: '';
             position: absolute;
@@ -1796,6 +1808,12 @@
                     timerSecondsEl.textContent = sStr;
                 }
             }
+
+            // Sinkronisasi kelas body & section untuk penyesuaian posisi kapsul fase sholat
+            const isPrayerPhase = (state.phase === PrayerEngine.PHASES.PRAYER);
+            document.body.classList.toggle('phase-prayer', isPrayerPhase);
+            const phaseSectionEl = document.querySelector('.phase-section');
+            if (phaseSectionEl) phaseSectionEl.classList.toggle('is-prayer', isPrayerPhase);
 
             // LOGIKA FASE SHOLAT
             if (state.phase === PrayerEngine.PHASES.COUNTDOWN) {
