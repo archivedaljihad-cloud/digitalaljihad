@@ -344,6 +344,15 @@ assert(qrisHtmlContent.includes('.qris-brand-badge') && qrisHtmlContent.includes
 assert(swContent.includes("'img/QRIS.jpg'") && swContent.includes("'image/qris.png'"), 'sw.js me-cache seluruh varian gambar QRIS');
 
 // -------------------------------------------------------------
+// 11. FINANCIAL SUMMARY TV MUTATION CONTRAST INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 11] Financial Summary TV Mutation Contrast Integrity:');
+const keuSummaryContent = fs.readFileSync(path.join(baseDir, 'slides/keuangan-summary.html'), 'utf8');
+assert(keuSummaryContent.includes('.trans-val.income') && keuSummaryContent.includes('color: #ffffff !important;'), 'slides/keuangan-summary.html memiliki nominal pemasukan putih tajam kontras');
+assert(keuSummaryContent.includes('.income-sign') && keuSummaryContent.includes('#22c55e'), 'slides/keuangan-summary.html memiliki tanda plus hijau segar tegas');
+assert(!keuSummaryContent.includes('.trans-val.income { color: #00e676;'), 'slides/keuangan-summary.html tidak menggunakan warna hijau neon bulam lama');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');
