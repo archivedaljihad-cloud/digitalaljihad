@@ -2825,7 +2825,7 @@
                                     <label class="font-weight-bold mb-1 text-dark d-flex align-items-center" for="cfgKajianSabtuEnabled" style="font-size: 1rem; cursor: pointer;">
                                         <i class="fas fa-tv text-success mr-2"></i> Aktifkan Mode Kajian Malam Ahad Otomatis di Layar TV
                                     </label>
-                                    <small class="text-muted d-block">Jika aktif, setiap hari <strong>Sabtu Malam ba'da Maghrib s/d selesai Sholat Isya</strong>, seluruh layar TV otomatis mengunci siaran ke <strong>Slide Kajian Rutin</strong> dan tidak berotasi ke slide lain sampai sholat Isya selesai.</small>
+                                    <small class="text-muted d-block">Jika aktif, setiap hari <strong>Sabtu Malam ba'da Maghrib s/d menjelang Sholat Isya</strong>, seluruh layar TV otomatis mengunci siaran ke <strong>Slide Kajian Rutin</strong> dan tidak berotasi ke slide lain sampai menjelang sholat Isya.</small>
                                 </div>
                                 <div class="custom-control custom-switch ml-3" style="transform: scale(1.35);">
                                     <input type="checkbox" class="custom-control-input" id="cfgKajianSabtuEnabled" checked>
@@ -2838,10 +2838,7 @@
                         <div class="card p-3 mb-3 shadow-sm" id="cardSuperAdminKajianTimer" style="background: linear-gradient(135deg, #022015 0%, #063824 100%); border: 1.8px solid #d4af37; border-radius: 14px; color: #fff; display: none;">
                             <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom" style="border-color: rgba(255, 215, 0, 0.35) !important;">
                                 <div class="d-flex align-items-center">
-                                    <span class="badge badge-warning text-dark font-weight-bold mr-2 px-2 py-1" style="font-size: 11px;">
-                                        <i class="fas fa-user-shield mr-1"></i> SUPER ADMIN ONLY
-                                    </span>
-                                    <strong class="text-warning" style="font-size: 0.95rem; letter-spacing: 0.5px;">KONFIGURASI TIMER &amp; SIKLUS ROTASI KAJIAN</strong>
+                                    <strong class="text-warning" style="font-size: 0.95rem; letter-spacing: 0.5px;"><i class="fas fa-sliders-h mr-1"></i> KONFIGURASI TIMER &amp; SIKLUS ROTASI KAJIAN</strong>
                                 </div>
                                 <small class="text-light" style="opacity: 0.85;"><i class="fas fa-lock mr-1 text-warning"></i> Khusus Hak Akses Super Admin</small>
                             </div>
@@ -2870,7 +2867,7 @@
                                         <i class="fas fa-lock mr-1"></i> Mode Penguncian Layar TV Sabtu Malam:
                                     </label>
                                     <select class="form-control form-control-sm font-weight-bold mb-2 text-dark" id="cfgKajianLockMode" onchange="toggleKajianLockModeUI()" style="background: #ffffff;">
-                                        <option value="full">🔒 Terkunci Penuh (Ba'da Maghrib s/d Selesai Sholat Isya)</option>
+                                        <option value="full">🔒 Terkunci Penuh (Ba'da Maghrib s/d Menjelang Sholat Isya)</option>
                                         <option value="timer">⏱️ Batas Waktu Timer Khusus (Menit setelah Maghrib)</option>
                                         <option value="interleaved">🔄 Rotasi Berseling (Kajian Prioritas diselingi Slide Lain)</option>
                                     </select>

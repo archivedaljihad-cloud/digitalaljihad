@@ -7,7 +7,26 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 16:53 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 17:00 WIB)
+
+### 🕌 PENYELARASAN UI MENU KAJIAN MALAM AHAD DI DASHBOARD ADMIN:
+1. **Penghapusan Teks "SUPER ADMIN ONLY"**:
+   - Menghapus badge `<span class="badge badge-warning ...">SUPER ADMIN ONLY</span>` pada header card konfigurasi timer kajian di `web-statis/admin.html` agar tampilan antarmuka lebih bersih, rapi, dan elegan.
+2. **Penyelarasan Teks Mode Penguncian Layar TV Sabtu Malam**:
+   - Mengubah teks opsi mode penguncian layar TV Sabtu malam:
+     - Dari: `🔒 Terkunci Penuh (Ba'da Maghrib s/d Selesai Sholat Isya)`
+     - Menjadi: `🔒 Terkunci Penuh (Ba'da Maghrib s/d Menjelang Sholat Isya)`
+   - Menyesuaikan juga deskripsi teks bantuan (*helper text*) pada switch otomatis kajian di `admin.html` menjadi *"menjelang Sholat Isya"*.
+   - Nilai value teknis (`value="full"`) tetap dipertahankan aman tanpa mengubah struktur API/database.
+3. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Pengujian Regresi Otomatis**: `npm test` lulus 129 / 129 checks (100% PASS).
+   - **Cloudflare Workers**: Berhasil dideploy langsung ke produksi live `https://digitalaljihad.my.id/` (Version ID: `d0bab413-e9a8-4782-962b-11428f2ac56b`).
+   - **Cold Backup Lokal**: Berhasil disinkronkan ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Berhasil di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 16:53 WIB)
 
 ### 💳 PERBAIKAN DISPLAY GAMBAR QRIS & KONTRASTING KOTAK KAPSUL (Versi SW v5.8.52):
 1. **Perbaikan Tampilan Gambar QRIS (`slides/qris.html`)**:
