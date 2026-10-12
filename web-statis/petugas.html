@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -13,7 +14,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
@@ -144,8 +146,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.35; transform: scale(0.85); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.35;
+                transform: scale(0.85);
+            }
         }
 
         .btn-lock-auth {
@@ -296,17 +307,49 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
         }
 
-        .bg-sholat { background: linear-gradient(135deg, #059669, #047857); }
-        .bg-jumat { background: linear-gradient(135deg, #10b981, #047857); }
-        .bg-ahad { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        .bg-tafsir { background: linear-gradient(135deg, #06b6d4, #0e7490); }
-        .bg-undangan { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-        .bg-ramadhan { background: linear-gradient(135deg, #f59e0b, #b45309); }
-        .bg-qurban { background: linear-gradient(135deg, #ef4444, #b91c1c); }
-        .bg-kas-utama { background: linear-gradient(135deg, #10b981, #065f46); }
-        .bg-ambulance { background: linear-gradient(135deg, #e11d48, #9f1239); }
-        .bg-infaq { background: linear-gradient(135deg, #14b8a6, #0f766e); }
-        .bg-pengumuman { background: linear-gradient(135deg, #f97316, #c2410c); }
+        .bg-sholat {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .bg-jumat {
+            background: linear-gradient(135deg, #10b981, #047857);
+        }
+
+        .bg-ahad {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .bg-tafsir {
+            background: linear-gradient(135deg, #06b6d4, #0e7490);
+        }
+
+        .bg-undangan {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .bg-ramadhan {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+        }
+
+        .bg-qurban {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+        }
+
+        .bg-kas-utama {
+            background: linear-gradient(135deg, #10b981, #065f46);
+        }
+
+        .bg-ambulance {
+            background: linear-gradient(135deg, #e11d48, #9f1239);
+        }
+
+        .bg-infaq {
+            background: linear-gradient(135deg, #14b8a6, #0f766e);
+        }
+
+        .bg-pengumuman {
+            background: linear-gradient(135deg, #f97316, #c2410c);
+        }
 
         .card-text-wrap {
             flex: 1;
@@ -367,8 +410,13 @@
         }
 
         @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
         }
 
         .sheet-header {
@@ -550,7 +598,7 @@
             color: #022c22;
         }
 
-        
+
         /* BADGE JENIS TRANSAKSI KAS (PEMASUKAN / PENGELUARAN) */
         .trx-badge-masuk {
             background: rgba(16, 185, 129, 0.2);
@@ -642,7 +690,7 @@
             color: #ffffff;
         }
 
-        
+
         /* =========================================================================
            KARTU PREVIEW DETAIL PROGRAM INFAQ (SINKRON DENGAN GAMBAR 2 BENDAHARA)
            ========================================================================= */
@@ -797,9 +845,17 @@
             color: #0f172a;
         }
 
-        .stat-collected .prog-stat-val { color: #059669; }
-        .stat-target .prog-stat-val { color: #2563eb; }
-        .stat-sisa .prog-stat-val { color: #d97706; }
+        .stat-collected .prog-stat-val {
+            color: #059669;
+        }
+
+        .stat-target .prog-stat-val {
+            color: #2563eb;
+        }
+
+        .stat-sisa .prog-stat-val {
+            color: #d97706;
+        }
 
         /* TOMBOL SIMPAN RAKSASA */
         .btn-giant-save {
@@ -855,8 +911,15 @@
         }
 
         @keyframes popGate {
-            from { transform: scale(0.94); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.94);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .auth-icon-circle {
@@ -870,7 +933,7 @@
             justify-content: center;
             color: #022c22;
             font-size: 1.8rem;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         }
 
         .auth-gate-card h2 {
@@ -1031,7 +1094,8 @@
             text-align: left;
         }
 
-        .auth-chip-btn:hover, .auth-chip-btn:active {
+        .auth-chip-btn:hover,
+        .auth-chip-btn:active {
             background: rgba(16, 185, 129, 0.25);
             border-color: var(--gold-accent);
             transform: scale(1.02);
@@ -1055,7 +1119,8 @@
             transition: color 0.2s;
         }
 
-        .auth-footer-link:hover, .auth-footer-link:active {
+        .auth-footer-link:hover,
+        .auth-footer-link:active {
             color: var(--gold-accent);
             text-decoration: underline;
         }
@@ -1132,41 +1197,51 @@
             body {
                 padding: 10px 10px 50px 10px;
             }
+
             .header-panel {
                 padding: 10px 12px;
                 border-radius: 14px;
             }
+
             .mosque-icon-badge {
                 width: 40px;
                 height: 40px;
             }
+
             .header-text h1 {
                 font-size: 0.90rem;
             }
+
             .status-badge {
                 font-size: 0.68rem;
                 padding: 3px 8px;
             }
+
             .modal-sheet {
                 padding: 16px 14px 28px 14px;
                 border-radius: 20px 20px 0 0;
             }
+
             .big-card-btn {
                 padding: 10px 12px;
                 gap: 10px;
             }
+
             .card-icon-round {
                 width: 40px;
                 height: 40px;
                 min-width: 40px;
                 font-size: 1.2rem;
             }
+
             .card-title {
                 font-size: 0.88rem;
             }
+
             .card-desc {
                 font-size: 0.72rem;
             }
+
             .btn-giant-save {
                 padding: 12px 14px;
                 font-size: 0.92rem;
@@ -1178,84 +1253,106 @@
             body {
                 padding: 8px 8px 40px 8px;
             }
+
             .app-container {
                 gap: 10px;
             }
+
             .header-panel {
                 padding: 8px 10px;
                 border-radius: 12px;
             }
+
             .mosque-icon-badge {
                 width: 34px;
                 height: 34px;
                 border-radius: 10px;
             }
+
             .header-text h1 {
                 font-size: 0.82rem;
             }
+
             .header-text p {
                 font-size: 0.62rem;
             }
+
             .header-actions {
                 gap: 4px;
             }
+
             .status-badge {
                 font-size: 0.62rem;
                 padding: 2px 6px;
             }
+
             .btn-lock-auth {
                 width: 28px;
                 height: 28px;
                 font-size: 0.75rem;
             }
+
             .senior-guide-box {
                 padding: 12px 10px;
                 border-radius: 14px;
             }
+
             .guide-content h2 {
                 font-size: 0.88rem;
             }
+
             .guide-content p {
                 font-size: 0.74rem;
             }
+
             .auth-gate-card {
                 padding: 18px 12px;
                 border-radius: 18px;
             }
+
             .auth-icon-circle {
                 width: 52px;
                 height: 52px;
                 font-size: 1.45rem;
             }
+
             .auth-gate-card h2 {
                 font-size: 1.1rem;
             }
+
             .auth-gate-card p {
                 font-size: 0.76rem;
             }
+
             .auth-tabs-nav {
                 margin-bottom: 12px;
             }
+
             .auth-tab-btn {
                 padding: 6px 6px;
                 font-size: 0.72rem;
             }
+
             .auth-chips-grid {
                 grid-template-columns: 1fr;
             }
+
             .prog-stats-grid {
                 grid-template-columns: 1fr;
                 gap: 4px;
             }
+
             .prog-stat-item {
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
                 padding: 4px 8px;
             }
+
             .modal-sheet {
                 padding: 14px 10px 24px 10px;
             }
+
             .btn-giant-save {
                 font-size: 0.88rem;
                 padding: 11px 12px;
@@ -1267,17 +1364,21 @@
             .app-container {
                 max-width: 600px;
             }
+
             .header-panel {
                 padding: 16px 20px;
                 border-radius: 20px;
             }
+
             .mosque-icon-badge {
                 width: 52px;
                 height: 52px;
             }
+
             .header-text h1 {
                 font-size: 1.1rem;
             }
+
             .big-card-btn:hover {
                 border-color: var(--gold-accent);
                 transform: translateY(-2px);
@@ -1286,6 +1387,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- SECURITY & LOGIN GATE (AKSES RESMI PENGURUS & PETUGAS) -->
@@ -1308,22 +1410,18 @@
             </div>
 
             <div class="auth-error-msg" id="authErrorMsg">
-                <i class="fas fa-exclamation-triangle mr-1"></i> <span id="authErrorText">Kredensial tidak cocok. Silakan coba lagi.</span>
+                <i class="fas fa-exclamation-triangle mr-1"></i> <span id="authErrorText">Kredensial tidak cocok.
+                    Silakan coba lagi.</span>
             </div>
 
             <!-- FORM 1: MASUK CEPAT (1 KOLOM SMART MATCH) -->
             <form id="formQuickAuth" onsubmit="handleAuthSubmit(event)">
                 <div class="auth-input-wrapper">
-                    <input type="password" 
-                           id="authPasswordInput" 
-                           class="auth-password-input" 
-                           placeholder="Sandi / PIN / Username..." 
-                           autocomplete="current-password" 
-                           autocapitalize="none" 
-                           autocorrect="off" 
-                           spellcheck="false" 
-                           required>
-                    <i class="fas fa-eye auth-toggle-eye" id="authEyeIcon" onclick="togglePasswordVisibility('authPasswordInput', 'authEyeIcon')"></i>
+                    <input type="password" id="authPasswordInput" class="auth-password-input"
+                        placeholder="Sandi / PIN / Username..." autocomplete="current-password" autocapitalize="none"
+                        autocorrect="off" spellcheck="false" required>
+                    <i class="fas fa-eye auth-toggle-eye" id="authEyeIcon"
+                        onclick="togglePasswordVisibility('authPasswordInput', 'authEyeIcon')"></i>
                 </div>
                 <button type="submit" class="btn-auth-unlock" id="btnAuthQuickSubmit">
                     <i class="fas fa-unlock-alt"></i> BUKA KUNCI AKSES
@@ -1333,25 +1431,16 @@
             <!-- FORM 2: LOGIN LENGKAP (USERNAME & PASSWORD) -->
             <form id="formFullAuth" style="display: none;" onsubmit="handleFullAuthSubmit(event)">
                 <div class="auth-input-wrapper">
-                    <input type="text" 
-                           id="authFullUserInput" 
-                           class="auth-password-input" 
-                           placeholder="Email atau Username pengurus" 
-                           autocomplete="username" 
-                           autocapitalize="none" 
-                           autocorrect="off" 
-                           spellcheck="false">
+                    <input type="text" id="authFullUserInput" class="auth-password-input"
+                        placeholder="Email atau Username pengurus" autocomplete="username" autocapitalize="none"
+                        autocorrect="off" spellcheck="false">
                 </div>
                 <div class="auth-input-wrapper">
-                    <input type="password" 
-                           id="authFullPassInput" 
-                           class="auth-password-input" 
-                           placeholder="Kata sandi akun..." 
-                           autocomplete="current-password" 
-                           autocapitalize="none" 
-                           autocorrect="off" 
-                           spellcheck="false">
-                    <i class="fas fa-eye auth-toggle-eye" id="authFullEyeIcon" onclick="togglePasswordVisibility('authFullPassInput', 'authFullEyeIcon')"></i>
+                    <input type="password" id="authFullPassInput" class="auth-password-input"
+                        placeholder="Kata sandi akun..." autocomplete="current-password" autocapitalize="none"
+                        autocorrect="off" spellcheck="false">
+                    <i class="fas fa-eye auth-toggle-eye" id="authFullEyeIcon"
+                        onclick="togglePasswordVisibility('authFullPassInput', 'authFullEyeIcon')"></i>
                 </div>
                 <button type="submit" class="btn-auth-unlock" id="btnAuthFullSubmit">
                     <i class="fas fa-sign-in-alt"></i> MASUK MODE INPUT MOBILE
@@ -1373,12 +1462,13 @@
 
     <!-- MAIN APP CONTAINER -->
     <div class="app-container">
-        
+
         <!-- HEADER MASJID -->
         <header class="header-panel">
             <div class="header-brand">
                 <div class="mosque-icon-badge">
-                    <img src="image/display/logo_aljihad.png" alt="Logo Masjid Jami' Al-Jihad" class="mosque-logo-img" onerror="this.onerror=null;this.src='img/logo-aljihad-circle.png';">
+                    <img src="image/display/logo_aljihad.png" alt="Logo Masjid Jami' Al-Jihad" class="mosque-logo-img"
+                        onerror="this.onerror=null;this.src='img/logo-aljihad-circle.png';">
                 </div>
                 <div class="header-text">
                     <h1>Masjid Jami' Al-Jihad</h1>
@@ -1401,7 +1491,8 @@
             <div class="guide-content">
                 <h2 id="petugasWelcomeGreeting">Assalamu'alaikum, 👋</h2>
                 <p>Selamat datang di Sistem Informasi Digital-Masjid Jami' Al JIhad (QUICK INPUT MODE).<br>
-                Silakan pilih salah satu kotak di bawah untuk mengubah jadwal atau laporan kas. Data akan langsung ditampilkan di layar TV masjid secara realtime.</p>
+                    Silakan pilih salah satu kotak di bawah untuk mengubah jadwal atau laporan kas. Data akan langsung
+                    ditampilkan di layar TV masjid secara realtime.</p>
             </div>
         </div>
 
@@ -1492,7 +1583,8 @@
         <!-- =========================================================================
              BAGIAN 2: MENU BENDAHARA (4 MENU)
              ========================================================================= -->
-        <div class="role-section-header" style="background: linear-gradient(90deg, rgba(6, 46, 61, 0.9), rgba(2, 19, 26, 0.7)); border-left-color: #38bdf8;">
+        <div class="role-section-header"
+            style="background: linear-gradient(90deg, rgba(6, 46, 61, 0.9), rgba(2, 19, 26, 0.7)); border-left-color: #38bdf8;">
             <div class="role-section-title" style="color: #38bdf8;">
                 <i class="fas fa-coins"></i> BENDAHARA MASJID
             </div>
@@ -1646,7 +1738,7 @@
                     { id: "f_sholat", label: "Durasi Layar Gelap Sholat (Menit)", type: "number", val: "15", hint: "TV gelap saat jamaah sholat" },
                     { id: "f_jumat_durasi", label: "Durasi Khutbah & Sholat Jum'at (Menit)", type: "number", val: "50", hint: "TV stand by mode sholat Jumat" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'jumat': {
@@ -1662,7 +1754,7 @@
                     { id: "f_bilal", label: "Nama Bilal / Tarhim", type: "text", val: "Ust. Ahmad Farhan", hint: "Petugas tarhim & bilal" },
                     { id: "f_maklumat", label: "Pembaca Maklumat / Keuangan", type: "text", val: "Bpk. H. Utut Priastya", hint: "Membaca maklumat kas DKM" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'ahad': {
@@ -1671,35 +1763,35 @@
                 summaryText: () => `${modules['ahad'].getVal('f_pekan_ahad')} | ${modules['ahad'].getVal('f_tema_ahad')}`,
                 fields: [
                     { id: "f_tema_ahad", label: "Judul / Tema Kajian", type: "text", val: "Adab & Akhlak Penuntut Ilmu", hint: "Materi kajian rutin sabtu malam" },
-                    { 
-                        id: "f_pekan_ahad", 
-                        label: "Pekan Pelaksanaan (Popdown)", 
-                        type: "select", 
-                        val: "Pekan ke-1", 
+                    {
+                        id: "f_pekan_ahad",
+                        label: "Pekan Pelaksanaan (Popdown)",
+                        type: "select",
+                        val: "Pekan ke-1",
                         options: ["Pekan ke-1", "Pekan ke-2", "Pekan ke-3", "Pekan ke-4", "Pekan ke-5"],
-                        hint: "Pilih pekan ke-1 sampai ke-5" 
+                        hint: "Pilih pekan ke-1 sampai ke-5"
                     },
-                    { 
-                        id: "f_bulan_ahad", 
-                        label: "Bulan Pelaksanaan", 
-                        type: "select", 
-                        val: "Oktober", 
+                    {
+                        id: "f_bulan_ahad",
+                        label: "Bulan Pelaksanaan",
+                        type: "select",
+                        val: "Oktober",
                         options: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
-                        hint: "Bulan kajian berjalan" 
+                        hint: "Bulan kajian berjalan"
                     },
-                    { 
-                        id: "f_tahun_ahad", 
-                        label: "Tahun Pelaksanaan", 
-                        type: "select", 
-                        val: "2026", 
+                    {
+                        id: "f_tahun_ahad",
+                        label: "Tahun Pelaksanaan",
+                        type: "select",
+                        val: "2026",
                         options: ["2026", "2027", "2028", "2029", "2030"],
-                        hint: "Tahun kalender" 
+                        hint: "Tahun kalender"
                     },
                     { id: "f_jam_ahad", label: "Jam Pelaksanaan", type: "text", val: "Ba'da Sholat Maghrib s/d Isya (18:15 WIB)", hint: "Waktu jam kajian" },
                     { id: "f_ustadz_ahad", label: "Nama Penceramah / Ustadz", type: "text", val: "Ust. H. Abdul Somad, Lc., MA", hint: "Pemateri kajian" },
                     { id: "f_kitab_ahad", label: "Kitab Rujukan", type: "text", val: "Kitab Riyadhus Shalihin", hint: "Buku panduan / rujukan kajian" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'tafsir': {
@@ -1708,23 +1800,23 @@
                 summaryText: () => `${modules['tafsir'].getVal('f_jadwal_tafsir')}`,
                 fields: [
                     { id: "f_judul_tafsir", label: "Judul / Nama Kajian", type: "text", val: "Kajian Umum Tafsir Al-Qur'an", hint: "Nama program kajian" },
-                    { 
-                        id: "f_jadwal_tafsir", 
-                        label: "Pilihan Jadwal Kajian (Popdown)", 
-                        type: "select", 
-                        val: "Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)", 
+                    {
+                        id: "f_jadwal_tafsir",
+                        label: "Pilihan Jadwal Kajian (Popdown)",
+                        type: "select",
+                        val: "Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)",
                         options: [
                             "Tahsin Al-Qur'an (Setiap Selasa & Kamis Ba'da Ashar)",
                             "Kajian Umum Tafsir Al-Qur'an (2 Pekan Sekali)"
                         ],
-                        hint: "Pilih jenis jadwal kajian" 
+                        hint: "Pilih jenis jadwal kajian"
                     },
                     { id: "f_kitab_tafsir", label: "Kitab & Surat yang Dikaji", type: "text", val: "Tafsir Ibnu Katsir - Surat Al-Baqarah", hint: "Rujukan tafsir ayat" },
                     { id: "f_pemateri_tafsir", label: "Nama Pemateri / Pengajar", type: "text", val: "Dr. KH. M. Luqman Hakim", hint: "Narasumber pemateri" },
                     { id: "f_waktu_tafsir", label: "Waktu Pelaksanaan", type: "text", val: "Ahad Pagi Ba'da Subuh (06.00 WIB)", hint: "Jadwal jam tayang" },
                     { id: "f_keterangan_tafsir", label: "Catatan Jamaah", type: "text", val: "Harap membawa mushaf Al-Qur'an & alat tulis", hint: "Himbauan jamaah" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'undangan': {
@@ -1740,7 +1832,7 @@
                     { id: "f_und_tempat", label: "Alamat / Tempat Acara Dilakukan", type: "text", val: "Jl. Simpangan Raya No. 45, Cikarang", hint: "Lokasi kegiatan" },
                     { id: "f_und_keterangan", label: "Keterangan / Ajakan Jamaah", type: "textarea", val: "Diharapkan jamaah Masjid Al-Jihad dapat hadir meramaikan syiar ukhuwah Islamiyah.", hint: "Pesan ajakan DKM" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'ramadhan': {
@@ -1760,7 +1852,7 @@
                     { id: "f_ram_bukber", label: "Donasi Buka Puasa Bersama (Rp)", type: "text", val: "1.500.000", hint: "Infaq takjil & buka puasa" },
                     { id: "f_ram_porsi", label: "Porsi Takjil Tersedia (Kotak)", type: "text", val: "350 Porsi Siap Saji", hint: "Porsi makanan buka bersama" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'qurban': {
@@ -1777,7 +1869,7 @@
                     // Form Khusus Paling Bawah: Daftar Shohibul Qurban
                     { id: "f_shohibul_section", label: "Daftar Shohibul Qurban (Orang yang Berqurban)", type: "shohibul_subform", val: "", hint: "Form tambah shohibul qurban di paling bawah" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             // =================================================================
@@ -1796,7 +1888,7 @@
                     // Formulir Catat Transaksi Kas Baru (Pemasukan / Pengeluaran)
                     { id: "f_kas_subform", label: "Catat Transaksi Kas Utama", type: "kas_subform", val: "Kas Utama Masjid", hint: "Pencatatan transaksi kas masuk & keluar" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'ambulance': {
@@ -1811,7 +1903,7 @@
                     // Formulir Catat Transaksi Kas Baru (Pemasukan / Pengeluaran)
                     { id: "f_amb_subform", label: "Catat Transaksi Kas Ambulance", type: "kas_subform", val: "Kas Ambulance", hint: "Pencatatan transaksi kas ambulance" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'infaq': {
@@ -1826,22 +1918,22 @@
                     return `${prog.nama_program} (${pct}%)`;
                 },
                 fields: [
-                    { 
-                        id: "f_nama_infaq", 
-                        label: "Nama Program Penggalangan Infaq (Popdown)", 
-                        type: "program_select", 
-                        val: "4", 
-                        hint: "Sinkron 100% dengan program aktif di dashboard bendahara" 
+                    {
+                        id: "f_nama_infaq",
+                        label: "Nama Program Penggalangan Infaq (Popdown)",
+                        type: "program_select",
+                        val: "4",
+                        hint: "Sinkron 100% dengan program aktif di dashboard bendahara"
                     },
-                    { 
-                        id: "f_donasi_subform", 
-                        label: "Formulir Catat Donasi Masuk", 
-                        type: "donasi_subform", 
-                        val: "", 
-                        hint: "Pencatatan donasi jamaah masuk langsung ke TV & Bendahara" 
+                    {
+                        id: "f_donasi_subform",
+                        label: "Formulir Catat Donasi Masuk",
+                        type: "donasi_subform",
+                        val: "",
+                        hint: "Pencatatan donasi jamaah masuk langsung ke TV & Bendahara"
                     }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             },
 
             'pengumuman': {
@@ -1861,7 +1953,7 @@
                     // Form Tambahan: Daftar Pengeluaran / Biaya
                     { id: "f_pj_biaya_subform", label: "Formulir Daftar Pengeluaran / Biaya", type: "biaya_subform", val: "", hint: "Rincian pengeluaran operasional Jumat" }
                 ],
-                getVal: function(id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
+                getVal: function (id) { const f = this.fields.find(x => x.id === id); return f ? f.val : ''; }
             }
         };
 
@@ -1908,7 +2000,7 @@
 
         function isPetugasAuthenticated() {
             try {
-                if (localStorage.getItem('quick_petugas_authenticated') === 'true' || 
+                if (localStorage.getItem('quick_petugas_authenticated') === 'true' ||
                     sessionStorage.getItem('quick_petugas_authenticated') === 'true') {
                     return true;
                 }
@@ -1917,7 +2009,7 @@
                 }
                 const rawAuth = localStorage.getItem('aljihad_auth_user') || sessionStorage.getItem('aljihad_auth_user');
                 if (rawAuth) return true;
-            } catch(e) {}
+            } catch (e) { }
             return false;
         }
 
@@ -1936,7 +2028,7 @@
                 if (heading) {
                     heading.innerHTML = `${s} Selamat Datang, <span class="text-warning font-weight-bold">${name}</span> ! 👋`;
                 }
-            } catch(e) {}
+            } catch (e) { }
         }
 
         function checkSecurityAuth() {
@@ -1946,7 +2038,7 @@
                 try {
                     localStorage.setItem('quick_petugas_authenticated', 'true');
                     sessionStorage.setItem('quick_petugas_authenticated', 'true');
-                } catch(e) {}
+                } catch (e) { }
                 updatePetugasGreeting();
                 if (overlay) overlay.style.display = 'none';
                 if (window.AdminAuth && typeof window.AdminAuth.initIdleTimer === 'function') {
@@ -1983,13 +2075,13 @@
             // 1. Ambil daftar user mutakhir dari AdminAuth
             let users = [];
             if (window.AdminAuth && typeof window.AdminAuth.getUsers === 'function') {
-                try { users = window.AdminAuth.getUsers(); } catch(errU) {}
+                try { users = window.AdminAuth.getUsers(); } catch (errU) { }
             }
             if (!Array.isArray(users) || users.length === 0) {
                 try {
                     const rawL = localStorage.getItem('aljihad_users_list');
                     if (rawL) users = JSON.parse(rawL);
-                } catch(errL) {}
+                } catch (errL) { }
             }
             if (!Array.isArray(users) || users.length === 0) {
                 users = (typeof DEFAULT_AUTH_USERS !== 'undefined') ? DEFAULT_AUTH_USERS : [];
@@ -2037,7 +2129,7 @@
                 try {
                     const btn = document.getElementById('btnAuthQuickSubmit');
                     if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memverifikasi Cloud...';
-                    
+
                     const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.rbac_users_list&select=value`, {
                         headers: {
                             'apikey': SUPABASE_CONFIG.anonKey,
@@ -2049,7 +2141,7 @@
                         if (data && data.length > 0 && data[0].value) {
                             let cloudUsers = data[0].value;
                             if (typeof cloudUsers === 'string') {
-                                try { cloudUsers = JSON.parse(cloudUsers); } catch(err) {}
+                                try { cloudUsers = JSON.parse(cloudUsers); } catch (err) { }
                             }
                             if (Array.isArray(cloudUsers)) {
                                 matchedUser = cloudUsers.find(u => {
@@ -2078,11 +2170,11 @@
                 if (matchedUser) {
                     try {
                         localStorage.setItem('aljihad_auth_user', JSON.stringify(matchedUser));
-                    } catch(e) {}
+                    } catch (e) { }
                 } else if (overrideUser) {
                     const found = (users || []).find(u => (u.username || '').toLowerCase() === overrideUser.toLowerCase());
                     if (found) {
-                        try { localStorage.setItem('aljihad_auth_user', JSON.stringify(found)); } catch(e) {}
+                        try { localStorage.setItem('aljihad_auth_user', JSON.stringify(found)); } catch (e) { }
                     }
                 }
 
@@ -2208,7 +2300,7 @@
                 // Ambil daftar sub-item
                 const qData = localStorage.getItem('cached_qurban_data');
                 if (qData) {
-                    try { qurbanShohibulList = JSON.parse(qData); } catch(e){}
+                    try { qurbanShohibulList = JSON.parse(qData); } catch (e) { }
                 }
                 if (!qurbanShohibulList || qurbanShohibulList.length === 0) {
                     qurbanShohibulList = [
@@ -2226,12 +2318,12 @@
                         if (Array.isArray(parsedP) && parsedP.length > 0) {
                             programInfaqList = parsedP;
                         }
-                    } catch(e){}
+                    } catch (e) { }
                 }
 
                 const dData = localStorage.getItem('cached_donasi_infaq') || localStorage.getItem('cached_donasi_infaq_data');
                 if (dData) {
-                    try { infaqDonasiList = JSON.parse(dData); } catch(e){}
+                    try { infaqDonasiList = JSON.parse(dData); } catch (e) { }
                 }
 
                 const pData = localStorage.getItem('pengumuman_jumat_data');
@@ -2241,7 +2333,7 @@
                         if (parsedPj.pengeluaran && Array.isArray(parsedPj.pengeluaran)) {
                             pengeluaranJumatList = parsedPj.pengeluaran;
                         }
-                    } catch(e){}
+                    } catch (e) { }
                 }
                 if (!pengeluaranJumatList || pengeluaranJumatList.length === 0) {
                     pengeluaranJumatList = [
@@ -2340,7 +2432,7 @@
                                 localStorage.setItem('quick_petugas_state_v2', JSON.stringify(parsedState));
                             }
                         }
-                    } catch(e) {
+                    } catch (e) {
                         console.warn('Gagal ambil quick_petugas_state_v2 dari cloud:', e);
                     }
 
@@ -2354,7 +2446,7 @@
                                 localStorage.setItem('cached_qurban_data', JSON.stringify(parsedQ));
                             }
                         }
-                    } catch(e) {}
+                    } catch (e) { }
 
                     // 3. Ambil pengumuman jumat & rincian biaya dari Supabase Cloud
                     try {
@@ -2366,7 +2458,7 @@
                                 localStorage.setItem('pengumuman_jumat_data', JSON.stringify(parsedPeng));
                             }
                         }
-                    } catch(e) {}
+                    } catch (e) { }
 
                     // 4. Ambil undangan eksternal jika ada di Supabase Cloud
                     try {
@@ -2383,7 +2475,7 @@
                                 if (parsedUnd.keterangan) modules['undangan'].fields[6].val = parsedUnd.keterangan;
                             }
                         }
-                    } catch(e) {}
+                    } catch (e) { }
 
                     // 5. Ambil data Master Kajian, Ramadhan, Durasi Sholat & Qurban dari Supabase Cloud
                     try {
@@ -2430,7 +2522,7 @@
                                 if (appSet.qurban_lokasi_sembelih) modules['qurban'].fields[5].val = appSet.qurban_lokasi_sembelih;
                             }
                         }
-                    } catch(e) {}
+                    } catch (e) { }
                 }
             } catch (err) {
                 console.warn('Inisialisasi data realtime:', err);
@@ -2763,7 +2855,7 @@
                 if (window.history.state && window.history.state.modalOpen) {
                     try {
                         window.history.back();
-                    } catch (e) {}
+                    } catch (e) { }
                 }
             }
             isSheetOpen = false;
@@ -2781,7 +2873,7 @@
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 jumatImamFotoBase64 = e.target.result;
                 const prev = document.getElementById('imamPhotoPreview');
                 if (prev) prev.src = jumatImamFotoBase64;
@@ -2846,7 +2938,7 @@
             if (container) container.innerHTML = renderShohibulListHTML();
         }
 
-        
+
         /* =========================================================================
            HELPER FORMAT TANGGAL INDONESIA & DETAIL PROGRAM INFAQ
            ========================================================================= */
@@ -2857,7 +2949,7 @@
                 if (parts.length === 3) {
                     return `${parts[2]}/${parts[1]}/${parts[0]}`;
                 }
-            } catch(e){}
+            } catch (e) { }
             return dateStr;
         }
 
@@ -3087,7 +3179,7 @@
             showToastSuccess('Catatan donasi berhasil dihapus.');
         }
 
-        
+
         /* =========================================================================
            PENCATATAN TRANSAKSI KAS (SINKRON DENGAN GAMBAR 2 & 4 BENDAHARA)
            ========================================================================= */
@@ -3252,7 +3344,7 @@
                 if (client) {
                     await client.from(targetTable).delete().eq('id', id);
                 }
-            } catch(err) {
+            } catch (err) {
                 console.warn(`Gagal hapus transaksi dari Supabase ${targetTable}:`, err);
             }
 
@@ -3636,7 +3728,7 @@
                 window.SupabaseDB.onDataChange((evt) => {
                     if (evt && (evt.key === 'rbac_users_list' || (evt.table === 'app_settings' && evt.payload && (evt.payload.key === 'rbac_users_list' || evt.payload.rbac_users_list)))) {
                         if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
-                            window.AdminAuth.syncUsersFromCloud().catch(() => {});
+                            window.AdminAuth.syncUsersFromCloud().catch(() => { });
                         }
                     }
                     if (!isSheetOpen) {
@@ -3648,7 +3740,7 @@
                 window.SupabaseDB.onRemoteCommand((cmd) => {
                     if (cmd === 'SYNC_AUTH_USERS') {
                         if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
-                            window.AdminAuth.syncUsersFromCloud().catch(() => {});
+                            window.AdminAuth.syncUsersFromCloud().catch(() => { });
                         }
                     }
                 });
@@ -3661,7 +3753,7 @@
                         initLiveDatabase();
                     }
                     if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
-                        window.AdminAuth.syncUsersFromCloud().catch(() => {});
+                        window.AdminAuth.syncUsersFromCloud().catch(() => { });
                     }
                 }
             };
@@ -3670,4 +3762,5 @@
         });
     </script>
 </body>
+
 </html>

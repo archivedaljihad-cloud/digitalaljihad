@@ -566,7 +566,7 @@
 
 		<div class="main-content">
 			<div class="panel keuangan">
-				<h2><i class="fas fa-file-invoice-dollar"></i> Rincian Keuangan Kas Masjid</h2>
+				<h2><i class="fas fa-file-invoice-dollar"></i> Laporan Keuangan Kas Masjid</h2>
 				
 				<!-- KPI SUMMARY CARDS: BERSIH, MEWAH & BEBAS TUMPUK -->
 				<div class="summary-grid">
