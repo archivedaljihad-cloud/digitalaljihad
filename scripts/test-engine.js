@@ -281,6 +281,12 @@ assert(petugasContent.includes('SYNC_AUTH_USERS'), 'petugas.html memiliki handle
 assert(modeinputContent.includes('SYNC_AUTH_USERS'), 'modeinput.html memiliki handler SYNC_AUTH_USERS');
 assert(loginContent.includes('max-width: 100%') && loginContent.includes('min-height: 100dvh'), 'login.html memiliki CSS layout fluid adaptif cross-device');
 assert(loginContent.includes('@media (max-width: 380px)'), 'login.html memiliki breakpoint responsif ultra-compact mobile (< 380px)');
+assert(petugasContent.includes('@media (max-width: 380px)'), 'petugas.html memiliki breakpoint responsif ultra-compact mobile (< 380px)');
+assert(modeinputContent.includes('@media (max-width: 380px)'), 'modeinput.html memiliki breakpoint responsif ultra-compact mobile (< 380px)');
+assert(adminContent.includes('@media (max-width: 380px)'), 'admin.html memiliki breakpoint responsif ultra-compact mobile (< 380px)');
+assert(petugasContent.includes('visibilitychange') && petugasContent.includes('handleDeviceWakeSync'), 'petugas.html memiliki listener visibilitychange untuk sync otomatis saat tab aktif');
+assert(modeinputContent.includes('visibilitychange') && modeinputContent.includes('handleDeviceWakeSync'), 'modeinput.html memiliki listener visibilitychange untuk sync otomatis saat tab aktif');
+assert(adminCoreContent.includes('visibilitychange') && adminCoreContent.includes('handleAdminTabWakeSync'), 'admin-core.js memiliki listener visibilitychange untuk sync otomatis saat tab aktif');
 
 // -------------------------------------------------------------
 // 7. PRAYER MODE REALTIME & OFFICER SYNC INTEGRITY

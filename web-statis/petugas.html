@@ -47,6 +47,8 @@
             align-items: center;
             padding: 12px 12px 60px 12px;
             font-size: 0.88rem;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         .app-container {
@@ -1121,6 +1123,166 @@
             letter-spacing: 1.2px;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
             text-transform: uppercase;
+        }
+
+        /* =========================================================================
+           CROSS-DEVICE FLUID RESPONSIVE SYSTEM (HP, TABLET, PC, & SMART TV)
+           ========================================================================= */
+        @media (max-width: 576px) {
+            body {
+                padding: 10px 10px 50px 10px;
+            }
+            .header-panel {
+                padding: 10px 12px;
+                border-radius: 14px;
+            }
+            .mosque-icon-badge {
+                width: 40px;
+                height: 40px;
+            }
+            .header-text h1 {
+                font-size: 0.90rem;
+            }
+            .status-badge {
+                font-size: 0.68rem;
+                padding: 3px 8px;
+            }
+            .modal-sheet {
+                padding: 16px 14px 28px 14px;
+                border-radius: 20px 20px 0 0;
+            }
+            .big-card-btn {
+                padding: 10px 12px;
+                gap: 10px;
+            }
+            .card-icon-round {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                font-size: 1.2rem;
+            }
+            .card-title {
+                font-size: 0.88rem;
+            }
+            .card-desc {
+                font-size: 0.72rem;
+            }
+            .btn-giant-save {
+                padding: 12px 14px;
+                font-size: 0.92rem;
+            }
+        }
+
+        /* ULTRA COMPACT MOBILE (Layar Smartphone < 380px) */
+        @media (max-width: 380px) {
+            body {
+                padding: 8px 8px 40px 8px;
+            }
+            .app-container {
+                gap: 10px;
+            }
+            .header-panel {
+                padding: 8px 10px;
+                border-radius: 12px;
+            }
+            .mosque-icon-badge {
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+            }
+            .header-text h1 {
+                font-size: 0.82rem;
+            }
+            .header-text p {
+                font-size: 0.62rem;
+            }
+            .header-actions {
+                gap: 4px;
+            }
+            .status-badge {
+                font-size: 0.62rem;
+                padding: 2px 6px;
+            }
+            .btn-lock-auth {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+            }
+            .senior-guide-box {
+                padding: 12px 10px;
+                border-radius: 14px;
+            }
+            .guide-content h2 {
+                font-size: 0.88rem;
+            }
+            .guide-content p {
+                font-size: 0.74rem;
+            }
+            .auth-gate-card {
+                padding: 18px 12px;
+                border-radius: 18px;
+            }
+            .auth-icon-circle {
+                width: 52px;
+                height: 52px;
+                font-size: 1.45rem;
+            }
+            .auth-gate-card h2 {
+                font-size: 1.1rem;
+            }
+            .auth-gate-card p {
+                font-size: 0.76rem;
+            }
+            .auth-tabs-nav {
+                margin-bottom: 12px;
+            }
+            .auth-tab-btn {
+                padding: 6px 6px;
+                font-size: 0.72rem;
+            }
+            .auth-chips-grid {
+                grid-template-columns: 1fr;
+            }
+            .prog-stats-grid {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+            .prog-stat-item {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 4px 8px;
+            }
+            .modal-sheet {
+                padding: 14px 10px 24px 10px;
+            }
+            .btn-giant-save {
+                font-size: 0.88rem;
+                padding: 11px 12px;
+            }
+        }
+
+        /* TABLET & DESKTOP ENHANCEMENTS (>= 768px) */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 600px;
+            }
+            .header-panel {
+                padding: 16px 20px;
+                border-radius: 20px;
+            }
+            .mosque-icon-badge {
+                width: 52px;
+                height: 52px;
+            }
+            .header-text h1 {
+                font-size: 1.1rem;
+            }
+            .big-card-btn:hover {
+                border-color: var(--gold-accent);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+            }
         }
     </style>
 </head>
@@ -2605,6 +2767,10 @@
                 }
             }
             isSheetOpen = false;
+            // Pastikan data live selalu segar dan sinkron dengan device lain
+            if (typeof initLiveDatabase === 'function') {
+                initLiveDatabase();
+            }
         }
 
         /* =========================================================================
@@ -3487,6 +3653,20 @@
                     }
                 });
             }
+
+            // Realtime Auto-Sync saat Device Kembali Aktif dari Sleep / Background Tab
+            const handleDeviceWakeSync = () => {
+                if (document.visibilityState === 'visible' || !document.hidden) {
+                    if (!isSheetOpen && typeof initLiveDatabase === 'function') {
+                        initLiveDatabase();
+                    }
+                    if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
+                        window.AdminAuth.syncUsersFromCloud().catch(() => {});
+                    }
+                }
+            };
+            document.addEventListener('visibilitychange', handleDeviceWakeSync);
+            window.addEventListener('focus', handleDeviceWakeSync);
         });
     </script>
 </body>

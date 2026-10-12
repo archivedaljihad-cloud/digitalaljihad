@@ -249,6 +249,22 @@
                     console.log('ℹ️ [Admin PWA] SW info:', err);
                 });
             }
+
+            // Realtime Auto-Sync saat Admin Tab Aktif Kembali dari Background / Sleep
+            const handleAdminTabWakeSync = () => {
+                if (document.visibilityState === 'visible' || !document.hidden) {
+                    if (typeof debouncedLoadAllSupabaseData === 'function') {
+                        debouncedLoadAllSupabaseData(150);
+                    }
+                    if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
+                        AdminAuth.syncUsersFromCloud().then(() => {
+                            if (typeof renderUsersTable === 'function') renderUsersTable();
+                        }).catch(() => {});
+                    }
+                }
+            };
+            document.addEventListener('visibilitychange', handleAdminTabWakeSync);
+            window.addEventListener('focus', handleAdminTabWakeSync);
         });
 
         // =======================================================
