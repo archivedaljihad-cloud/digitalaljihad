@@ -7,7 +7,44 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 00:15 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 00:48 WIB)
+
+### 🕌 DESAIN PRAYER MODE MINIMALIS: PENGHILANGAN KOTAK BAWAH, KOTAK TRANSPARAN, & GESER TEKS SHAF KE BAWAH (Versi SW v5.8.61):
+1. **Penghilangan Kotak Hadits Bawah (`#hadithPlakat`) pada Fase Sholat Berjamaah**:
+   - **Permintaan Pengguna**: Menghilangkan kotak bawah yang berisi teks *"Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat"* agar tidak terjadi duplikasi tampilan dan area visual layar TV terbuka luas.
+   - **Implementasi**:
+     - Menambahkan aturan CSS `body.phase-prayer #hadithPlakat { display: none !important; }`.
+     - Logika `updatePrayerUI()` saat `state.phase === PrayerEngine.PHASES.PRAYER` secara aktif menyembunyikan `#hadithPlakat` (`hadithPlakatEl.style.display = 'none';`) dan tetap menampilkan kotak plakat secara normal (`display: 'block'`) pada fase lain (Countdown, Adzan, Iqamah, dan Khutbah).
+     - Menghapus rendering blok plakat bawah di template Blade `prayer-mode.blade.php` saat `$phase == 'prayer'`.
+2. **Kotak Teks Hadits Shaf 100% Transparan (`.prayer-mode-box`)**:
+   - **Permintaan Pengguna**: Mentransparankan kotak yang membungkus teks hadits pelurusan shaf.
+   - **Implementasi**:
+     - Memberikan styling `background: transparent !important;`, `border: none !important;`, `box-shadow: none !important;`, `backdrop-filter: none !important;`, dan `animation: none !important;` pada `.prayer-mode-box:not(.jumat-box)` saat fase sholat berlangsung.
+     - Menghasilkan tampilan teks murni yang melayang anggun langsung di atas gambar background Ka'bah tanpa kotak penghalang.
+3. **Penggeseran Posisi Teks Hadits Shaf ke Bagian Bawah Layar**:
+   - **Permintaan Pengguna**: Menggeser posisi 3 baris teks hadits shaf (matan Arab, terjemahan Indonesia, dan perawi) ke bagian bawah menggantikan posisi kotak yang sudah dihapus.
+   - **Implementasi Flexbox Bottom Layout**:
+     - Menerapkan `margin-top: auto !important;` dan `margin-bottom: clamp(8px, 1.6vh, 22px) !important;` pada `.message-section` saat fase sholat.
+     - Di dalam tata letak flex column `.prayer-container`, `margin-top: auto` mendorong seluruh blok teks hadits shaf ke bagian paling bawah layar secara presisi di posisi bekas `#hadithPlakat`.
+     - Area tengah layar kini 100% lapang, megah, dan bebas hambatan, memperlihatkan keindahan panorama Ka'bah yang baru saja diperbesar dan dipertajam secara utuh.
+     - Memperkuat *text-shadow* bertingkat pada `.prayer-shaf-arabic`, `.prayer-shaf-arti`, dan `.prayer-shaf-source` agar teks tetap terbaca sangat kontras, tajam, dan bercahaya di atas background.
+4. **Penyelarasan Seluruh Berkas & Template**:
+   - `web-statis/prayer-mode.html`: Implementasi produksi utama.
+   - `public/preview-prayer-mode.html`: Penyelarasan CSS & logic update preview.
+   - `resources/views/prayer-mode.blade.php`: Penyelarasan template Laravel Blade & CSS.
+5. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.61`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.61`** di `web-statis/sw.js` dan skrip pembersih cache panel Admin di `web-statis/js/admin/admin-settings.js`.
+6. **Pengujian Regresi Otomatis (146 / 146 PASS)**:
+   - Menambahkan assertion verifikasi transparansi kotak hadits shaf, penghilangan `#hadithPlakat`, dan pergeseran posisi `.message-section` ke bawah di Test 12 `scripts/test-engine.js`.
+   - Menjalankan `npm test`: Seluruh 146 assertions LULUS tanpa celah (100% PASS).
+7. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - **Cloudflare Workers Deploy**: Dideploy langsung ke produksi live `https://digitalaljihad.my.id/`.
+   - **Cold Backup Lokal**: Disinkronkan ke folder cadangan `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - **GitHub**: Di-commit dan di-push ke branch `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 00:15 WIB)
 
 ### 🕋 PENINGKATAN VISUAL BACKGROUND KA'BAH PADA PRAYER MODE (ZOOM IN & PERTAJAM DETAIL) (Versi SW v5.8.60):
 1. **Pembesaran (Zoom In) Gambar Background Ka'bah (`.bg-kaabah`)**:

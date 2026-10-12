@@ -264,6 +264,30 @@
         .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .prayer-badge {
             margin-top: clamp(8px, 1.2vh, 16px);
         }
+
+        /* FASE SHOLAT BERJAMAAH: KOTAK TRANSPARAN & POSISI TEKS HADITS SHAF DIGESER KE BAWAH */
+        body.phase-prayer #hadithPlakat,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) #hadithPlakat {
+            display: none !important;
+        }
+
+        body.phase-prayer .message-section,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .message-section {
+            margin-top: auto !important;
+            margin-bottom: clamp(8px, 1.6vh, 22px) !important;
+            max-width: 1100px;
+        }
+
+        body.phase-prayer .prayer-mode-box:not(.jumat-box),
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .prayer-mode-box:not(.jumat-box) {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            animation: none !important;
+            padding: 0 !important;
+        }
         .prayer-badge::before {
             content: '';
             position: absolute;
@@ -771,10 +795,10 @@
             font-weight: 700;
             line-height: 1.6;
             color: #FFD700;
-            text-shadow: 0 0 18px rgba(255, 215, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.95);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 3px 8px rgba(0, 0, 0, 0.98), 0 0 30px rgba(0, 0, 0, 0.9);
             direction: rtl;
             text-align: center;
-            margin-bottom: clamp(10px, 1.3vh, 16px);
+            margin-bottom: clamp(6px, 1vh, 12px);
         }
 
         .prayer-shaf-arti {
@@ -783,10 +807,10 @@
             font-weight: 600;
             line-height: 1.5;
             color: #FFFFFF;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.92);
             text-align: center;
             max-width: 1060px;
-            margin: 0 auto clamp(6px, 0.8vh, 10px);
+            margin: 0 auto clamp(4px, 0.6vh, 8px);
         }
 
         .prayer-shaf-source {
@@ -796,7 +820,7 @@
             letter-spacing: 0.5px;
             line-height: 1.4;
             color: #FDE047;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95), 0 0 12px rgba(253, 224, 71, 0.5);
             text-align: center;
             margin: 0 auto;
         }
@@ -1840,6 +1864,7 @@
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
                 prayerModeBoxEl.classList.remove('active');
+                hadithPlakatEl.style.display = 'block';
                 messageTextEl.textContent = isJumat ? 
                     "Bersiap Sholat Jum'at Berjamaah. Mari Merapikan Shaf & Menyimak Khutbah." : 
                     ((settings && settings.Countdown_Adzan) || 'Bersiap Masuk Waktu Sholat');
@@ -1861,6 +1886,7 @@
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
                 prayerModeBoxEl.classList.remove('active');
+                hadithPlakatEl.style.display = 'block';
                 messageTextEl.textContent = 'Mohon untuk menonaktifkan / silent alat komunikasi';
 
                 adabNoticeEl.style.display = 'none';
@@ -1875,6 +1901,7 @@
                 jumatGridEl.classList.remove('active');
                 messageBannerEl.style.display = 'inline-flex';
                 prayerModeBoxEl.classList.remove('active');
+                hadithPlakatEl.style.display = 'block';
                 messageTextEl.textContent = (settings && settings.Hitung_Mundur_Iqamah) || 'Menuju Waktu Iqamah';
 
                 adabNoticeEl.style.display = 'none';
@@ -1902,11 +1929,8 @@
                     <div class="prayer-shaf-source">(HR. Bukhari no.690 &amp; HR. Muslim no.433)</div>
                 `;
 
-                adabNoticeEl.style.display = 'inline-flex';
-                adabNoticeTextEl.textContent = 'Luruskan dan Rapatkan Shaf Sholat Berjamaah';
-                hadithHeaderEl.style.display = 'block';
-                hadithBodyEl.textContent = '“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat”';
-                hadithSourceEl.textContent = '(HR. Bukhari no. 690 & Muslim no. 433)';
+                // Kotak hadits bawah (#hadithPlakat) dihilangkan pada fase sholat berjamaah
+                hadithPlakatEl.style.display = 'none';
 
             } else if (state.phase === PrayerEngine.PHASES.KHUTBAH) {
                 phaseTitleEl.textContent = "Khutbah & Sholat Jum'at Berjamaah";
@@ -1914,6 +1938,7 @@
                 jumatGridEl.classList.add('active');
                 messageBannerEl.style.display = 'none';
                 prayerModeBoxEl.classList.add('active');
+                hadithPlakatEl.style.display = 'block';
                 prayerModeBoxEl.classList.add('jumat-box');
 
                 const prayerIconsRowEl = document.getElementById('prayerIconsRow');

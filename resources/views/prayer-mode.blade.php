@@ -984,6 +984,32 @@
             margin: 0 auto;
         }
 
+        /* FASE SHOLAT BERJAMAAH: KOTAK TRANSPARAN & POSISI TEKS HADITS SHAF DIGESER KE BAWAH */
+        body.phase-prayer #hadithPlakat,
+        body.phase-prayer .hadith-plakat,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) #hadithPlakat,
+        .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .hadith-plakat {
+            display: none !important;
+        }
+
+        body.phase-prayer .message-section,
+        .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .message-section {
+            margin-top: auto !important;
+            margin-bottom: clamp(8px, 1.6vh, 22px) !important;
+            max-width: 1100px;
+        }
+
+        body.phase-prayer .prayer-mode-box:not(.jumat-box),
+        .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .prayer-mode-box:not(.jumat-box) {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            animation: none !important;
+            padding: 0 !important;
+        }
+
         /* =====================================================
            BAGIAN 5: HADITH VIGNETTE PLAKAT
            ===================================================== */
@@ -1559,6 +1585,7 @@
         </div>
 
         <!-- 5. PLAKAT PESAN & HADITS SHOLAT -->
+        @if($phase != 'prayer')
         <div class="hadith-plakat">
             <span class="quote-watermark quote-left">“</span>
 
@@ -1598,21 +1625,11 @@
                 <div class="hadith-body phase-quote">
                     "Adzan Telah selesai, Mari Gunakan Waktu Yang Tersedia Untuk Berdoa. Doa Antara Adzan & Iqamah Tidak Ditolak."
                 </div>
-            @else
-                {{-- prayer phase --}}
-                <div class="hadith-header">
-                    Rasulullah <span class="saw-symbol">ﷺ</span> bersabda:
-                </div>
-                <div class="hadith-body">
-                    "Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."
-                </div>
-                <div class="hadith-source">
-                    (HR. Bukhari dan Muslim)
-                </div>
             @endif
 
             <span class="quote-watermark quote-right">”</span>
         </div>
+        @endif
     </div>
 
     <!-- SCRIPT AUDIO & COUNTDOWN LOGIC -->
