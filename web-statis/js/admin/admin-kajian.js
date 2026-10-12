@@ -1,7 +1,7 @@
 /**
  * MODUL ADMIN: admin-kajian.js
  * Digital Signage Masjid Jami' Al-Jihad
- * Versi: aljihad-signage-v5.8.45
+ * Versi: aljihad-signage-v5.8.46
  */
 
         // PENGAJIAN RUTIN MALAM AHAD (SABTU MALAM)

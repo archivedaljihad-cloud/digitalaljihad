@@ -52,7 +52,9 @@
 
         /* SPLIT LAYOUT 2-KOLOM */
         .login-page-wrap {
-            width: 100vw;
+            width: 100%;
+            max-width: 100%;
+            min-height: 100dvh;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -849,7 +851,7 @@
 
         @media (max-width: 576px) {
             .login-page-wrap {
-                padding: 20px 15px;
+                padding: 20px 14px;
             }
 
             .mandala-logo-img {
@@ -876,6 +878,44 @@
                 padding: 16px 14px;
             }
 
+        }
+        /* ULTRA COMPACT MOBILE (Smartphone Layar Sempit < 380px) */
+        @media (max-width: 380px) {
+            .login-page-wrap {
+                padding: 16px 10px;
+            }
+            .mode-segment-btn {
+                padding: 8px 6px;
+                font-size: 0.74rem;
+                gap: 4px;
+                letter-spacing: 0.2px;
+            }
+            .mandala-logo-img {
+                width: 130px;
+            }
+            .arabic-salam-text {
+                font-size: 1.35rem;
+            }
+            .arabic-bismillah-text {
+                font-size: 1.18rem;
+            }
+            .welcome-login-title {
+                font-size: 1.05rem;
+            }
+            .welcome-login-subtitle {
+                font-size: 0.80rem;
+            }
+            .login-form-card {
+                padding: 14px 12px;
+            }
+            .auth-gate-card {
+                padding: 18px 12px;
+                border-radius: 16px;
+            }
+            .credential-guide-pill {
+                font-size: 0.74rem;
+                padding: 5px 8px;
+            }
         }
     </style>
 </head>
@@ -1136,7 +1176,7 @@
                     </div>
                     <div>
                         <span class="attribution-version-badge">
-                            <i class="fas fa-bolt"></i> WEB STATIS v5.5.3
+                            <i class="fas fa-bolt"></i> WEB STATIS v5.8.46
                         </span>
                     </div>
                     <div class="attribution-copyright">
@@ -1151,9 +1191,9 @@
 </div>
 
 <!-- Script BaaS & Auth -->
-<script src="js/supabase-config.js?v=5.5.3"></script>
-<script src="js/supabase-db.js?v=5.5.3"></script>
-<script src="js/admin-auth.js?v=5.5.3"></script>
+<script src="js/supabase-config.js?v=5.8.46"></script>
+<script src="js/supabase-db.js?v=5.8.46"></script>
+<script src="js/admin-auth.js?v=5.8.46"></script>
 
 <script>
     // URL Parameters
@@ -1572,7 +1612,8 @@
     async function initLoginCloudSync() {
         try {
             if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
-                await AdminAuth.syncUsersFromCloud();
+                const updatedUsers = await AdminAuth.syncUsersFromCloud();
+                console.log('✅ [Login] Data akun pengurus tersinkronkan realtime dari Cloud:', updatedUsers?.length, 'akun');
             }
         } catch (e) {
             console.warn('[Login] Sync users from cloud error:', e);
@@ -1582,6 +1623,26 @@
     // Inisialisasi awal saat DOM siap
     document.addEventListener('DOMContentLoaded', () => {
         initLoginCloudSync();
+
+        // Pasang Realtime Listener Supabase agar pembaruan akun di Device A langsung tersinkron di Device B seketika (<100ms)
+        if (typeof SupabaseDB !== 'undefined') {
+            if (typeof SupabaseDB.onRemoteCommand === 'function') {
+                SupabaseDB.onRemoteCommand((cmd, payload) => {
+                    if (cmd === 'SYNC_AUTH_USERS') {
+                        console.log('🔄 [Login Realtime] Broadcast SYNC_AUTH_USERS diterima. Memperbarui kredensial...');
+                        initLoginCloudSync();
+                    }
+                });
+            }
+            if (typeof SupabaseDB.onDataChange === 'function') {
+                SupabaseDB.onDataChange((evt) => {
+                    if (evt && (evt.key === 'rbac_users_list' || (evt.table === 'app_settings' && evt.payload && (evt.payload.key === 'rbac_users_list' || evt.payload.rbac_users_list)))) {
+                        console.log('🔄 [Login Realtime] Database rbac_users_list di app_settings diperbarui. Menyinkronkan...');
+                        initLoginCloudSync();
+                    }
+                });
+            }
+        }
 
         // Cek pesan redirect dari sessionStorage atau param url reason
         const redirectReason = sessionStorage.getItem('auth_redirect_reason');

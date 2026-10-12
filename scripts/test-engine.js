@@ -272,6 +272,16 @@ assert(loginContent.includes("urlParams.get('reason') === 'idle_timeout'"), 'log
 assert(petugasContent.includes('AdminAuth.initIdleTimer()'), 'petugas.html mengaktifkan idle timer saat otorisasi berhasil');
 assert(modeinputContent.includes('AdminAuth.initIdleTimer()'), 'modeinput.html mengaktifkan idle timer saat otorisasi berhasil');
 
+// Verifikasi Multi-Device Realtime Auth Synchronization & Fluid Layout
+assert(loginContent.includes('SYNC_AUTH_USERS') && loginContent.includes('SupabaseDB.onRemoteCommand'), 'login.html memiliki listener realtime broadcast SYNC_AUTH_USERS');
+assert(loginContent.includes('rbac_users_list') && loginContent.includes('SupabaseDB.onDataChange'), 'login.html memiliki listener realtime Postgres Changes rbac_users_list');
+const adminCoreContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-core.js'), 'utf8');
+assert(adminCoreContent.includes('SYNC_AUTH_USERS'), 'admin-core.js memiliki handler SYNC_AUTH_USERS untuk sinkronisasi akun realtime');
+assert(petugasContent.includes('SYNC_AUTH_USERS'), 'petugas.html memiliki handler SYNC_AUTH_USERS');
+assert(modeinputContent.includes('SYNC_AUTH_USERS'), 'modeinput.html memiliki handler SYNC_AUTH_USERS');
+assert(loginContent.includes('max-width: 100%') && loginContent.includes('min-height: 100dvh'), 'login.html memiliki CSS layout fluid adaptif cross-device');
+assert(loginContent.includes('@media (max-width: 380px)'), 'login.html memiliki breakpoint responsif ultra-compact mobile (< 380px)');
+
 // -------------------------------------------------------------
 // 7. PRAYER MODE REALTIME & OFFICER SYNC INTEGRITY
 // -------------------------------------------------------------

@@ -1,7 +1,7 @@
 /**
  * MODUL ADMIN: admin-core.js
  * Digital Signage Masjid Jami' Al-Jihad
- * Versi: aljihad-signage-v5.8.45
+ * Versi: aljihad-signage-v5.8.46
  */
 
         // 1. Verifikasi Autentikasi Pengguna saat halaman dimuat
@@ -172,6 +172,18 @@
             if (window.SupabaseDB && typeof window.SupabaseDB.onDataChange === 'function') {
                 window.SupabaseDB.onDataChange((evt) => {
                     console.log('🔄 [Admin Realtime] Perubahan data terdeteksi:', evt);
+                    // Sinkronisasi realtime daftar akun pengurus jika rbac_users_list diperbarui di Supabase
+                    if (evt && (evt.key === 'rbac_users_list' || (evt.table === 'app_settings' && evt.payload && (evt.payload.key === 'rbac_users_list' || evt.payload.rbac_users_list)))) {
+                        console.log('🔄 [Admin Realtime] Data rbac_users_list diperbarui dari Cloud. Memperbarui tabel user...');
+                        if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
+                            AdminAuth.syncUsersFromCloud().then(() => {
+                                if (typeof renderUsersTable === 'function') renderUsersTable();
+                                const activeU = AdminAuth.getCurrentUser();
+                                if (activeU) applyCurrentUserState(activeU);
+                            }).catch(() => {});
+                        }
+                    }
+
                     if (evt && (evt.table === 'app_settings' || evt.key === 'app_settings') && evt.payload) {
                         const s = evt.payload;
                         const cd = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
@@ -193,6 +205,16 @@
             }
             if (window.SupabaseDB && typeof window.SupabaseDB.onRemoteCommand === 'function') {
                 window.SupabaseDB.onRemoteCommand((cmd, payload) => {
+                    if (cmd === 'SYNC_AUTH_USERS') {
+                        console.log('🔄 [Admin Realtime] Perintah remote SYNC_AUTH_USERS diterima. Memperbarui tabel akun...');
+                        if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.syncUsersFromCloud === 'function') {
+                            AdminAuth.syncUsersFromCloud().then(() => {
+                                if (typeof renderUsersTable === 'function') renderUsersTable();
+                                const activeU = AdminAuth.getCurrentUser();
+                                if (activeU) applyCurrentUserState(activeU);
+                            }).catch(() => {});
+                        }
+                    }
                     if (cmd === 'SYNC_JADWAL_SHOLAT' || cmd === 'UPDATE_SETTINGS') {
                         if (payload) {
                             const s = payload;

@@ -1419,9 +1419,9 @@
 
     <!-- SUPABASE CORE SDK & AUTH -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=5.8.15"></script>
-    <script src="js/supabase-db.js?v=5.8.15"></script>
-    <script src="js/admin-auth.js?v=5.8.15"></script>
+    <script src="js/supabase-config.js?v=5.8.46"></script>
+    <script src="js/supabase-db.js?v=5.8.46"></script>
+    <script src="js/admin-auth.js?v=5.8.46"></script>
 
     <script>
         // DAFTAR PASSWORD VALID RESMI DASHBOARD (TERMASUK ALIAS & USERNAME RESMI)
@@ -3447,9 +3447,23 @@
 
             // Pasang Pendengar Universal Realtime agar data selalu tersinkron otomatis antar-akun (<100ms)
             if (window.SupabaseDB && typeof window.SupabaseDB.onDataChange === 'function') {
-                window.SupabaseDB.onDataChange(() => {
+                window.SupabaseDB.onDataChange((evt) => {
+                    if (evt && (evt.key === 'rbac_users_list' || (evt.table === 'app_settings' && evt.payload && (evt.payload.key === 'rbac_users_list' || evt.payload.rbac_users_list)))) {
+                        if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
+                            window.AdminAuth.syncUsersFromCloud().catch(() => {});
+                        }
+                    }
                     if (!isSheetOpen) {
                         initLiveDatabase();
+                    }
+                });
+            }
+            if (window.SupabaseDB && typeof window.SupabaseDB.onRemoteCommand === 'function') {
+                window.SupabaseDB.onRemoteCommand((cmd) => {
+                    if (cmd === 'SYNC_AUTH_USERS') {
+                        if (window.AdminAuth && typeof window.AdminAuth.syncUsersFromCloud === 'function') {
+                            window.AdminAuth.syncUsersFromCloud().catch(() => {});
+                        }
                     }
                 });
             }

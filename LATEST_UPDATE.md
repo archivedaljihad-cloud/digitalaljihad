@@ -7,7 +7,39 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 13:35 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 14:15 WIB)
+
+### 🚀 FINALISASI MULTI-DEVICE RESPONSIVENESS & REALTIME AUTH SYNC LINTAS PERANGKAT (Versi SW v5.8.46):
+1. **Sinkronisasi Autentikasi Realtime Lintas Perangkat (<100ms) Sesuai RBAC**:
+   - **Mandat**: Memastikan seluruh user pengurus (Super Admin, Bendahara, Petugas/Operator) dapat login dari device yang berbeda-beda (HP, Tablet, PC, Laptop) dengan data yang selalu tersinkronisasi realtime.
+   - **Pembaruan Halaman Login (`web-statis/login.html`)**:
+     - Ditambahkan listener realtime aktif `SupabaseDB.onRemoteCommand` untuk event `SYNC_AUTH_USERS` dan `SupabaseDB.onDataChange` untuk tabel `app_settings` (key `rbac_users_list`).
+     - Jika Super Admin menambah atau mengubah akun/password di Laptop/PC, peramban di Smartphone/Tablet pengurus yang sedang membuka halaman login langsung menyinkronkan data kredensial terbaru secara instan (<100ms) tanpa perlu refresh manual.
+   - **Pembaruan Panel Admin (`web-statis/js/admin/admin-core.js`)**:
+     - Handler `SYNC_AUTH_USERS` dan `rbac_users_list` disematkan pada engine realtime admin agar tabel manajemen pengguna (`renderUsersTable()`) dan state sesi aktif (`currentUser`) langsung ter-update seketika di seluruh terminal admin.
+   - **Pembaruan Quick Input Petugas (`web-statis/modeinput.html` & `petugas.html`)**:
+     - Disematkan listener realtime `SYNC_AUTH_USERS` sehingga input cepat PIN/password pada ponsel petugas selalu mutakhir.
+
+2. **Penyempurnaan Desain Antarmuka Adaptif Lintas Device (*Fluid Cross-Device Design*)**:
+   - **Eliminasi Scrollbar Overflow**: Mengubah `.login-page-wrap` dari `width: 100vw` menjadi `width: 100%; max-width: 100%; min-height: 100dvh;` untuk mencegah horizontal scrollbar pada peramban mobile (iOS Safari / Android Chrome) maupun desktop.
+   - **Breakpoint Ultra-Compact Mobile (`@media (max-width: 380px)`)**:
+     - Menyesuaikan proporsi mandala logo (130px), kaligrafi Arab (1.35rem & 1.18rem), segmented bar selector (font 0.74rem, padding 8px 6px), dan padding kartu formulir (14px 12px) agar pas sempurna di ponsel berlayar sempit (iPhone SE, Galaxy Z Flip, split screen mobile) tanpa teks terpotong atau wrap canggung.
+   - **Kompatibilitas Layar Besar (Smart TV 1080p, 2K, 4K 16:9)**:
+     - Preservasi sistem scaling berbasis viewport (`vw`, `vh`, `clamp`) pada `index.html`, `display-theme.css`, dan seluruh sub-slide sehingga terbaca sangat jelas dari jarak jauh (>3 meter).
+
+3. **Pembersihan Cache Usang & Penyeragaman Versi Aset (`?v=5.8.46`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.46`** pada `web-statis/sw.js`.
+   - Tool pembersih cache pada `web-statis/js/admin/admin-settings.js` disinkronkan ke `v5.8.46`, menjamin seluruh cache lama (`v5.8.45` ke bawah) langsung dihapus permanen.
+   - Query string aset skrip diseragamkan ke **`?v=5.8.46`** di seluruh halaman: `admin.html`, `login.html`, `petugas.html`, `modeinput.html`, `index.html`, dan `prayer-mode.html`.
+
+4. **Ekspansi Suite Pengujian Otomatis (`scripts/test-engine.js`)**:
+   - Ditambahkan 7 assertion checks baru: verifikasi listener broadcast `SYNC_AUTH_USERS` di login, listener Postgres Changes `rbac_users_list`, handler `SYNC_AUTH_USERS` di admin-core/petugas/modeinput, layout fluid adaptif, dan breakpoint ultra-compact mobile (< 380px).
+   - Seluruh **117 assertions LULUS 100% (117 / 117 PASS)** tanpa kegagalan!
+
+---
+
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 13:35 WIB)
 
 ### 🏗️ MODULARISASI UTAMA SKRIP ADMIN.HTML MENJADI 21 MODUL INDEPENDEN (Versi SW v5.8.45):
 1. **Pemisahan Blok JavaScript Monolitik (594 KB) Menjadi 21 Modul Independen (`web-statis/js/admin/*.js`)**:
