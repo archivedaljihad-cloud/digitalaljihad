@@ -865,7 +865,9 @@
         // MULTI-SLIDE CAROUSEL & PROGRESS ENGINE (10 - 12 DETIK PER SLIDE)
         // =========================================================================
         let currentSlideIndex = 0;
-        const SLIDE_DURATION = 11000; // 11 detik
+        const urlParams = new URLSearchParams(window.location.search);
+        const customSec = parseInt(urlParams.get('durasi') || urlParams.get('duration') || urlParams.get('d'), 10);
+        let SLIDE_DURATION = (!isNaN(customSec) && customSec > 0) ? (customSec * 1000) : 11000;
         let slideTimer = null;
         let progressInterval = null;
         let progressStart = Date.now();

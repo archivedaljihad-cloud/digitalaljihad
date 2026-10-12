@@ -7,7 +7,23 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 16:25 WIB)
+## ✨ UPDATE TERBARU — 12 Oktober 2026 (Pukul 16:38 WIB)
+
+### ⏱️ PENGATURAN MANUAL DURASI SLIDE PENGUMUMAN & ROTASI TV (Versi SW v5.8.51):
+1. **Fitur Durasi Manual pada Halaman Pengumuman (`slides/pengumuman.html`)**:
+   - Menambahkan pembacaan parameter URL dinamis (`?durasi=...`, `?duration=...`, `?d=...`) sehingga durasi tayang carousel internal (antara Slide Deck 1 Agenda Pembinaan Umat dan Slide Deck 2 Agenda Bimbingan Keislaman) dapat disetel secara manual sesuai keinginan pengguna.
+   - Contoh pemakaian: `https://digitalaljihad.my.id/slides/pengumuman?durasi=15` (durasi menjadi 15 detik), `?durasi=20` (20 detik).
+   - Menghubungkan durasi default ke interval rotasi TV dari parent frame jika tayang dalam rotasi utama.
+2. **Pembersihan Cache & Cache Version Bumping (Versi SW `v5.8.51`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.51`** pada `web-statis/sw.js` dan handler pembersih cache pada `web-statis/js/admin/admin-settings.js`.
+3. **Eksekusi 4 Pilar SOP Mandat Proyek**:
+   - Cloudflare Workers deploy live ke `https://digitalaljihad.my.id/`.
+   - Sinkronisasi cold mirror ke `C:\Users\anthu\Documents\【Digital WebSTATIS】\`.
+   - Commit & push ke repositori GitHub `main`.
+
+---
+
+## 📜 ARSIP UPDATE — 12 Oktober 2026 (Pukul 16:25 WIB)
 
 ### 🚀 AUDIT MENYELURUH 5 DIVISI SPESIALIS, FLUID MULTI-DEVICE RESPONSIVENESS & REALTIME SYNC ENGINE (Versi SW v5.8.50):
 1. **Frontend Web Engineering (Fluid Multi-Device Layout Adaptif 320px - 4K)**:
