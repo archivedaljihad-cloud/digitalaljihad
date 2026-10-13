@@ -399,6 +399,7 @@ assert(kajianHtmlContent.includes('card-photo-wrapper') && kajianHtmlContent.inc
 assert(kajianHtmlContent.includes('card-kitab-box') && kajianHtmlContent.includes('card-schedule-footer'), 'slides/kajian.html memiliki komponen Kitab Rujukan, Hari/Tanggal, dan Jam Pelaksanaan');
 assert(kajianHtmlContent.includes('kajian-pagination-bar') && kajianHtmlContent.includes('pagination-progress-fill'), 'slides/kajian.html mengganti timeline lama dengan bar indikator halaman ramping');
 assert(kajianHtmlContent.includes('ITEMS_PER_PAGE = 2') && kajianHtmlContent.includes('renderCurrentPage'), 'slides/kajian.html memiliki paging 2 kartu per slide dengan rotasi otomatis bergiliran');
+assert(!kajianHtmlContent.includes('.card-tema-box') && !kajianHtmlContent.includes('${temaHtml}'), 'slides/kajian.html tidak memiliki kotak tema sekunder asimetris yang merusak keseimbangan 2 kartu');
 
 // -------------------------------------------------------------
 // 15. NEO BACKGROUND ROTATOR INTEGRITY (BGR-0 S/D BGR-5)

@@ -7,7 +7,36 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 14:15 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 15:30 WIB)
+
+### ⚖️ RESTORASI KESEIMBANGAN & SIMETRI KARTU SLIDE KAJIAN (ELIMINASI KOTAK ASIMETRIS KAJIAN TEMA) (`web-statis/slides/kajian.html`) — (Versi SW v5.8.69):
+1. **Latar Belakang & Keluhan Pengguna**:
+   - Halaman: `https://digitalaljihad.my.id/slides/kajian` (Slide ke-2: Pekan 3 & Pekan 4).
+   - Pengguna melaporkan bahwa posisi kartu kiri (Pekan 3) dan kanan (Pekan 4) tidak seimbang. Pada kartu kiri terdapat elemen tambahan yang diberi lingkaran merah di screenshot (kotak tema kajian sekunder `.card-tema-box`) yang mendorong tanggal dan jam ke bawah sehingga garis dasar kotak kanan dan kiri tidak rata.
+
+2. **Akar Masalah (Root Cause)**:
+   - Pada `web-statis/slides/kajian.html`, terdapat logika penyisipan elemen bersyarat `${temaHtml}` (`<div class="card-tema-box">`) jika `item.tema_kajian !== item.kitab_rujukan`.
+   - Di database Supabase Cloud, Pekan 3 memiliki data `tema_kajian`: *"Kitab Syaikh Zainuddin Al.malibary"* sedangkan `kitab_rujukan`: *"Kitab Irsyadul 'ibad karya Syaikh Zainuddin Al Malibary"*. Karena teksnya sedikit berbeda, Pekan 3 menampilkan kotak tema sekunder tambahan bergaris hijau di bawah kotak kitab.
+   - Sedangkan Pekan 4 memiliki `tema_kajian === kitab_rujukan` sehingga tidak memunculkan kotak tema sekunder. Akibatnya, kartu kiri memiliki 4 baris kotak, sedangkan kartu kanan hanya memiliki 3 baris kotak, merusak simetri visual 2 kartu berdampingan.
+
+3. **Implementasi & Solusi Desain**:
+   - **Eliminasi Kotak Asimetris**: Menghapus `${temaHtml}` dan styling `.card-tema-box` dari markup kartu di `web-statis/slides/kajian.html`.
+   - **Penyelarasan Materi Kitab**: Mengonsolidasikan sumber materi kajian menjadi satu kotak tunggal yang elegan `.card-kitab-box` (`const kitabRujukan = item.kitab_rujukan || item.tema_kajian || "Kitab Irsyadul 'Ibad karya Syaikh Zainuddin Al-Malibary";`).
+   - **Ketinggian Kotak Kitab Seragam (`min-height`)**: Menambahkan `min-height: clamp(50px, 6.5vh, 64px);` pada `.card-kitab-box` sehingga baik judul kitab 1 baris maupun 2 baris tetap berada pada tinggi dan baseline yang identik.
+   - **Sinkronisasi Database Cloud (Supabase)**: Memperbarui record `kajian_sabtu_data` di Supabase Cloud sehingga `tema_kajian` Pekan 3 selaras dengan `kitab_rujukan`.
+   - **Hasil**: Kartu kiri (Pekan 3) dan kartu kanan (Pekan 4) kini memiliki 3 komponen identik di bawah foto: (1) Nama & Gelar Ustadz, (2) Kotak Kitab Kuning, (3) Kotak Tanggal & Jam. Keduanya 100% simetris, seimbang, dan sejajar rata.
+
+4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.69`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.69`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.69`**.
+
+5. **Pengujian Regresi Otomatis (184 / 184 PASS)**:
+   - Menambahkan assertion pengujian di `scripts/test-engine.js` memastikan tidak ada kotak sekunder asimetris di `kajian.html`.
+   - Seluruh 184 assertions lulus 100% tanpa error.
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 14:15 WIB)
 
 ### 🌄 PEMBARUAN BACKGROUND ROTATOR (NEO IMAGE BGR-0 S/D BGR-5) PADA 5 HALAMAN SLIDE KHUSUS (Versi SW v5.8.68):
 1. **Latar Belakang & Permintaan Pengguna**:
