@@ -7,7 +7,29 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 15:30 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 16:05 WIB)
+
+### 🕌 PEMBARUAN JUDUL BADGE KARTU NO. 4 AGENDA RUTIN ("Kajian ba'da Shubuh") (`web-statis/slides/agenda-rutin.html` & `web-statis/slides/pengumuman.html`) — (Versi SW v5.8.70):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Pada halaman slide agenda rutin di kartu urutan no. 4 (`#cardTafsir`), judul badge kategori sebelumnya tertulis: `"Kajian Shubuh / Tematik"`.
+   - Pengguna meminta agar teks judul no. 4 diganti secara presisi menjadi: `"Kajian ba'da Shubuh"`.
+
+2. **Implementasi & Penyelarasan Frontend**:
+   - `web-statis/slides/agenda-rutin.html`: Mengubah elemen `.category-pill` kartu no. 4 dari:
+     `<i class="fas fa-mosque"></i> Kajian Shubuh / Tematik` menjadi `<i class="fas fa-mosque"></i> Kajian ba'da Shubuh`.
+   - `web-statis/slides/pengumuman.html`: Menyelaraskan kartu no. 4 pada deck agenda rutin identik di pengumuman menjadi `<i class="fas fa-mosque"></i> Kajian ba'da Shubuh` agar rotasi slide TV tetap konsisten.
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.70`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.70`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.70`**.
+
+4. **Pengujian Regresi Otomatis (188 / 188 PASS)**:
+   - Menambahkan TEST 16 di `scripts/test-engine.js` untuk memverifikasi teks `"Kajian ba'da Shubuh"` dan memastikan string usang `"Kajian Shubuh / Tematik"` tereliminasi sepenuhnya.
+   - Seluruh 188 assertions lulus 100% tanpa error.
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 15:30 WIB)
 
 ### ⚖️ RESTORASI KESEIMBANGAN & SIMETRI KARTU SLIDE KAJIAN (ELIMINASI KOTAK ASIMETRIS KAJIAN TEMA) (`web-statis/slides/kajian.html`) — (Versi SW v5.8.69):
 1. **Latar Belakang & Keluhan Pengguna**:

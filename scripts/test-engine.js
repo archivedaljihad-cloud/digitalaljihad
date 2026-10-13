@@ -436,6 +436,17 @@ untouchedSlides.forEach(slideRel => {
 assert(swContent.includes('image/display/background/BGR-0.webp'), 'sw.js me-cache aset background BGR terbaru');
 
 // -------------------------------------------------------------
+// 16. AGENDA RUTIN CARD NO. 4 BADGE TITLE INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 16] Agenda Rutin Card No. 4 Badge Title Integrity:');
+const agendaContent = fs.readFileSync(path.join(baseDir, 'slides/agenda-rutin.html'), 'utf8');
+const pengumumanAgendaContent = fs.readFileSync(path.join(baseDir, 'slides/pengumuman.html'), 'utf8');
+assert(agendaContent.includes('Kajian ba\'da Shubuh'), 'slides/agenda-rutin.html memiliki badge no. 4 "Kajian ba\'da Shubuh"');
+assert(!agendaContent.includes('Kajian Shubuh / Tematik'), 'slides/agenda-rutin.html tidak lagi memuat string usang "Kajian Shubuh / Tematik"');
+assert(pengumumanAgendaContent.includes('Kajian ba\'da Shubuh'), 'slides/pengumuman.html memiliki badge no. 4 "Kajian ba\'da Shubuh"');
+assert(!pengumumanAgendaContent.includes('Kajian Shubuh / Tematik'), 'slides/pengumuman.html tidak lagi memuat string usang "Kajian Shubuh / Tematik"');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');
