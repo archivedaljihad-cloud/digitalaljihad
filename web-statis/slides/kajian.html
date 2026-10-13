@@ -7,10 +7,10 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20261010_01">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20261010_01">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261013_01">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261013_01">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -79,7 +79,7 @@
         .schedule-header-section {
             text-align: center;
             flex-shrink: 0;
-            margin-top: clamp(3px, 0.6vh, 6px);
+            margin-top: clamp(3px, 0.5vh, 6px);
             display: flex;
             justify-content: center;
             width: 100%;
@@ -93,15 +93,15 @@
             background: linear-gradient(135deg, rgba(2, 25, 17, 0.92) 0%, rgba(4, 40, 26, 0.88) 100%);
             border: 1.6px solid rgba(255, 215, 0, 0.75);
             border-radius: 35px;
-            padding: clamp(4px, 0.6vh, 7px) clamp(16px, 1.8vw, 28px);
+            padding: clamp(4px, 0.5vh, 6px) clamp(16px, 1.8vw, 28px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 215, 0, 0.25);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
         .title-icon-badge {
-            width: clamp(34px, 4.5vh, 46px);
-            height: clamp(34px, 4.5vh, 46px);
+            width: clamp(32px, 4vh, 42px);
+            height: clamp(32px, 4vh, 42px);
             border-radius: 50%;
             background: rgba(3, 22, 15, 0.95);
             border: 1.5px solid rgba(255, 215, 0, 0.7);
@@ -109,7 +109,7 @@
             align-items: center;
             justify-content: center;
             color: #ffd700;
-            font-size: clamp(1.1rem, 2vh, 1.4rem);
+            font-size: clamp(1.05rem, 1.8vh, 1.35rem);
             flex-shrink: 0;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
@@ -122,501 +122,445 @@
         }
 
         .title-text-wrap h2 {
-            font-size: clamp(1.3rem, 2vh, 1.65rem);
+            font-size: clamp(1.25rem, 1.85vh, 1.55rem);
             color: #ffffff !important;
             letter-spacing: 2px;
             font-weight: 800;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
             margin: 0;
             text-transform: uppercase;
-            line-height: 1.2;
+            line-height: 1.15;
             font-family: 'Outfit', 'Poppins', sans-serif;
         }
 
         .title-text-wrap p {
             margin: 0;
-            font-size: clamp(0.8rem, 1.2vh, 0.95rem);
+            font-size: clamp(0.78rem, 1.1vh, 0.92rem);
             color: #ffd700;
             font-weight: 600;
             letter-spacing: 0.8px;
-            line-height: 1.25;
+            line-height: 1.2;
         }
 
         .sholawat-greeting {
             font-family: 'Amiri', serif;
-            font-size: clamp(0.95rem, 1.5vh, 1.18rem);
+            font-size: clamp(0.9rem, 1.35vh, 1.1rem);
             color: #fff4b8;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.75);
-            margin-top: 2px;
+            margin-top: 1px;
             letter-spacing: 0.5px;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
-        /* 2-COLUMN MAIN LAYOUT (LEGA & MUDAH DIBACA) */
-        .kajian-main-layout {
+        /* GRID 2 KOTAK BERDAMPINGAN SESUAI ILUSTRASI GAMBAR 2 */
+        .kajian-cards-grid {
             display: grid;
-            grid-template-columns: minmax(380px, 460px) 1fr;
-            gap: clamp(16px, 1.8vw, 26px);
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(16px, 2vw, 30px);
             align-items: stretch;
             width: 100%;
             flex: 1;
             min-height: 0;
-            margin: clamp(6px, 1vh, 10px) auto 0 auto;
+            margin: clamp(6px, 1vh, 12px) auto 0 auto;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        /* GLASSMORHPISM CARDS */
-        .kajian-card {
-            background: linear-gradient(135deg, rgba(6, 32, 22, 0.92) 0%, rgba(2, 18, 12, 0.96) 100%);
-            border: 1.8px solid rgba(212, 175, 55, 0.6);
+        .kajian-cards-grid.single-item {
+            grid-template-columns: 1fr;
+            max-width: 780px;
+        }
+
+        .fade-card-transition {
+            opacity: 0.15;
+            transform: scale(0.99);
+        }
+
+        /* GLASSMORHPISM KAJIAN CARD (LEGA, SEIMBANG, PROPORSIONAL) */
+        .kajian-card-box {
+            background: linear-gradient(135deg, rgba(6, 32, 22, 0.95) 0%, rgba(2, 18, 12, 0.98) 100%);
+            border: 2px solid rgba(212, 175, 55, 0.7);
             border-radius: 20px;
-            padding: clamp(14px, 1.8vh, 22px) clamp(16px, 1.8vw, 24px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 238, 170, 0.25);
+            padding: clamp(12px, 1.6vh, 20px) clamp(16px, 1.8vw, 24px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 238, 170, 0.25);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            align-items: center;
             position: relative;
             overflow: hidden;
             min-height: 0;
-            transition: opacity 0.35s ease, transform 0.35s ease;
+            transition: all 0.35s ease;
         }
 
-        .kajian-card::before {
+        .kajian-card-box::before {
             content: '';
             position: absolute;
-            top: -60px;
-            right: -60px;
-            width: 160px;
-            height: 160px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.18) 0%, transparent 70%);
+            top: -50px;
+            right: -50px;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.16) 0%, transparent 70%);
             pointer-events: none;
         }
 
-        /* KOLOM KIRI: PROFIL PEMATERI */
-        .ustadz-photo-container {
+        .kajian-card-box.card-is-today {
+            border: 2.4px solid #ef4444;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.45), 0 12px 35px rgba(0, 0, 0, 0.85);
+        }
+
+        .kajian-card-box.card-is-upcoming {
+            border: 2.4px solid #f59e0b;
+            box-shadow: 0 0 22px rgba(245, 158, 11, 0.4), 0 12px 35px rgba(0, 0, 0, 0.85);
+        }
+
+        /* 1. BAGIAN ATAS KARTU: [ MUTIARA HADITS/HR ] DENGAN BADGE PEKAN */
+        .card-hadits-header {
             width: 100%;
-            height: clamp(200px, 30vh, 290px);
-            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.52);
+            border: 1.4px solid rgba(255, 215, 0, 0.5);
+            border-radius: 14px;
+            padding: clamp(6px, 0.9vh, 10px) clamp(10px, 1.2vw, 16px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: clamp(8px, 1.1vh, 14px);
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+        }
+
+        .card-pekan-pill {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            font-size: clamp(0.78rem, 1.15vh, 0.92rem);
+            font-weight: 800;
+            padding: 3px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.45);
+            font-family: 'Outfit', sans-serif;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .card-hadits-quote-wrap {
+            flex: 1;
+            text-align: center;
+            padding: 0 6px;
+            min-width: 0;
+            line-height: 1.25;
+        }
+
+        .card-hadits-quote {
+            font-size: clamp(0.74rem, 1.05vh, 0.88rem);
+            color: #fff4b8;
+            font-style: italic;
+            font-weight: 500;
+            display: inline;
+        }
+
+        .card-hadits-source {
+            font-size: clamp(0.68rem, 0.95vh, 0.8rem);
+            color: #ffd700;
+            font-weight: 700;
+            font-style: normal;
+            margin-left: 6px;
+            white-space: nowrap;
+        }
+
+        .card-status-badge {
+            font-size: clamp(0.7rem, 1vh, 0.82rem);
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 16px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-badge-today {
+            background: rgba(220, 38, 38, 0.35);
+            border: 1px solid #ef4444;
+            color: #fecaca;
+            animation: blinkLive 1.5s infinite;
+        }
+
+        .status-badge-upcoming {
+            background: rgba(217, 119, 6, 0.35);
+            border: 1px solid #f59e0b;
+            color: #fef3c7;
+        }
+
+        .status-badge-done {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #94a3b8;
+        }
+
+        .status-badge-future {
+            background: rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(16, 185, 129, 0.6);
+            color: #a7f3d0;
+        }
+
+        @keyframes blinkLive {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        /* 2. BAGIAN TENGAH: [ FOTO PEMATERI ] */
+        .card-photo-wrapper {
+            width: clamp(160px, 24vh, 230px);
+            height: clamp(160px, 24vh, 230px);
+            border-radius: 20px;
             overflow: hidden;
-            border: 2px solid rgba(255, 215, 0, 0.75);
+            border: 2.5px solid #ffd700;
             position: relative;
-            background: #02130c;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
-            margin-bottom: clamp(10px, 1.4vh, 14px);
+            background: radial-gradient(circle at center, #063824 0%, #02170f 85%);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8), 0 0 16px rgba(255, 215, 0, 0.35);
+            margin: 0 auto clamp(8px, 1.1vh, 14px) auto;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .ustadz-photo {
+        .card-photo {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            background: radial-gradient(circle at center, #063824 0%, #02170f 85%);
         }
 
-        .ustadz-badge-floating {
+        .card-photo-floating-badge {
             position: absolute;
-            bottom: 8px;
+            bottom: 6px;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(217, 119, 6, 0.95));
             color: #021a11;
-            padding: 4px 18px;
+            padding: 3px 16px;
             border-radius: 20px;
-            font-size: clamp(0.75rem, 1.15vh, 0.88rem);
+            font-size: clamp(0.72rem, 1.05vh, 0.82rem);
             font-weight: 800;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.6px;
             text-transform: uppercase;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
             white-space: nowrap;
             font-family: 'Outfit', sans-serif;
             z-index: 2;
         }
 
-        .ustadz-name-title {
-            font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+        /* 3. DETAIL PEMATERI, KITAB, TANGGAL, JAM */
+        .card-info-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            min-height: 0;
+            justify-content: space-between;
+        }
+
+        .card-ustadz-name {
+            font-size: clamp(1.3rem, 2.05vw, 1.82rem);
             font-weight: 800;
             color: #ffd700;
             line-height: 1.2;
-            text-align: center;
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             font-family: 'Outfit', 'Poppins', sans-serif;
-        }
-
-        .ustadz-spec {
-            font-size: clamp(0.85rem, 1.25vh, 1.05rem);
-            color: #e2e8f0;
             text-align: center;
-            font-weight: 500;
-            line-height: 1.3;
-            margin-bottom: clamp(8px, 1.2vh, 12px);
         }
 
-        .waktu-kajian-pill {
-            background: linear-gradient(135deg, rgba(2, 38, 24, 0.9) 0%, rgba(1, 24, 15, 0.95) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.55);
-            border-radius: 14px;
-            padding: clamp(8px, 1.2vh, 11px) clamp(10px, 1.2vw, 16px);
+        .card-ustadz-gelar {
+            font-size: clamp(0.78rem, 1.1vh, 0.92rem);
+            color: #cbd5e1;
+            font-weight: 500;
+            margin-bottom: clamp(6px, 0.9vh, 10px);
+            text-align: center;
+        }
+
+        .card-kitab-box {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1.2px solid rgba(255, 215, 0, 0.45);
+            border-radius: 12px;
+            padding: clamp(6px, 0.9vh, 9px) clamp(12px, 1.2vw, 18px);
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: clamp(8px, 1vw, 12px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-            margin-top: auto;
-            width: 100%;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+            margin-bottom: clamp(5px, 0.8vh, 8px);
         }
 
-        .waktu-kajian-pill i {
-            font-size: clamp(1.15rem, 1.8vh, 1.45rem);
+        .card-kitab-icon {
+            font-size: clamp(1.2rem, 1.8vh, 1.5rem);
             color: #ffd700;
             flex-shrink: 0;
-            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
         }
 
-        .waktu-kajian-pill .waktu-val {
-            font-size: clamp(0.82rem, 1.3vh, 1.02rem);
-            font-weight: 800;
+        .card-kitab-text {
+            font-size: clamp(0.92rem, 1.3vw, 1.15rem);
+            font-weight: 700;
             color: #ffffff;
-            line-height: 1.2;
-            white-space: nowrap;
-            letter-spacing: 0.3px;
+            line-height: 1.25;
             text-align: center;
         }
 
-        /* KOLOM KANAN: KITAB, TEMA & HADITS */
-        .tema-badge-wrap {
+        .card-tema-box {
+            background: rgba(16, 185, 129, 0.15);
+            border-left: 4px solid #10b981;
+            border-radius: 0 10px 10px 0;
+            padding: clamp(4px, 0.7vh, 7px) clamp(10px, 1vw, 14px);
+            width: 100%;
+            font-size: clamp(0.8rem, 1.1vh, 0.94rem);
+            color: #a7f3d0;
+            font-weight: 600;
+            margin-bottom: clamp(6px, 0.8vh, 10px);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-schedule-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(8px, 1vw, 14px);
+            width: 100%;
+            margin-top: auto;
+            flex-wrap: wrap;
+        }
+
+        .card-tanggal-pill {
+            background: rgba(0, 0, 0, 0.52);
+            border: 1.4px solid rgba(255, 215, 0, 0.55);
+            border-radius: 12px;
+            padding: clamp(6px, 0.9vh, 9px) clamp(12px, 1.2vw, 18px);
+            font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+            font-weight: 800;
+            color: #ffd700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .card-jam-pill {
+            background: linear-gradient(135deg, rgba(2, 38, 24, 0.95) 0%, rgba(1, 24, 15, 0.98) 100%);
+            border: 1.4px solid rgba(255, 215, 0, 0.55);
+            border-radius: 12px;
+            padding: clamp(6px, 0.9vh, 9px) clamp(12px, 1.2vw, 18px);
+            font-size: clamp(0.82rem, 1.15vw, 1.02rem);
+            font-weight: 800;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        /* BARIS INDIKATOR HALAMAN RAMPING (MENGGANTIKAN KOTAK-KOTAK TIMELINE KECIL) */
+        .kajian-pagination-bar {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(2, 24, 16, 0.95) 0%, rgba(1, 15, 10, 0.98) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.6);
+            border-radius: 12px;
+            padding: clamp(5px, 0.7vh, 8px) clamp(12px, 1.4vw, 20px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin-top: clamp(6px, 0.8vh, 10px);
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: clamp(6px, 1vh, 10px);
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pagination-info-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             flex-shrink: 0;
         }
 
-        .pekan-badge {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: #ffffff;
-            font-size: clamp(0.82rem, 1.25vh, 0.98rem);
+        .pagination-agenda-title {
+            font-size: clamp(0.78rem, 1.1vh, 0.92rem);
             font-weight: 800;
-            padding: 4px 14px;
-            border-radius: 20px;
-            text-transform: uppercase;
+            color: #ffd700;
             letter-spacing: 0.8px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.45);
+            text-transform: uppercase;
             font-family: 'Outfit', sans-serif;
         }
 
-        .live-status-badge {
-            background: rgba(239, 68, 68, 0.25);
-            border: 1.2px solid rgba(239, 68, 68, 0.7);
-            color: #fecaca;
-            font-size: clamp(0.75rem, 1.15vh, 0.88rem);
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
+        .pagination-sublabel {
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
+            color: #94a3b8;
+        }
+
+        .pagination-pills-wrap {
             display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .pagination-pill-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1.2px solid rgba(255, 215, 0, 0.35);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: clamp(0.72rem, 1vh, 0.82rem);
+            font-weight: 700;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ef4444;
-            box-shadow: 0 0 10px #ef4444;
-            animation: blinkLive 1.5s infinite;
-        }
-
-        @keyframes blinkLive {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .kitab-box {
-            background: rgba(0, 0, 0, 0.45);
-            border: 1.5px solid rgba(255, 215, 0, 0.45);
-            border-radius: 14px;
-            padding: clamp(8px, 1.2vh, 12px) clamp(12px, 1.3vw, 18px);
-            margin-bottom: clamp(8px, 1.1vh, 12px);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-
-        .kitab-icon {
-            font-size: clamp(1.6rem, 2.5vh, 2rem);
-            color: #ffd700;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
-            flex-shrink: 0;
-        }
-
-        .kitab-label {
-            font-size: clamp(0.72rem, 1vh, 0.82rem);
-            color: #cbd5e1;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            font-weight: 700;
-            line-height: 1.1;
-        }
-
-        .kitab-title {
-            font-size: clamp(1.2rem, 1.9vh, 1.48rem);
+        .pagination-pill-item.active-pill {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.5) 0%, rgba(6, 78, 59, 0.7) 100%);
+            border: 1.5px solid #ffd700;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
             font-weight: 800;
-            color: #ffd700;
-            line-height: 1.25;
-            font-family: 'Outfit', 'Poppins', sans-serif;
         }
 
-        .tema-box {
-            background: linear-gradient(135deg, rgba(2, 38, 24, 0.85) 0%, rgba(1, 24, 15, 0.95) 100%);
-            border-left: 5px solid #10b981;
-            border-radius: 0 14px 14px 0;
-            padding: clamp(8px, 1.3vh, 14px) clamp(14px, 1.4vw, 20px);
-            margin-bottom: clamp(10px, 1.3vh, 14px);
-            flex-shrink: 0;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-        }
-
-        .tema-label {
+        .pagination-timer-text {
             font-size: clamp(0.72rem, 1vh, 0.82rem);
             color: #86efac;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            font-weight: 800;
-            margin-bottom: 3px;
-            line-height: 1.1;
-        }
-
-        .tema-title {
-            font-size: clamp(1.25rem, 2.1vh, 1.6rem);
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.28;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-            font-family: 'Outfit', 'Poppins', sans-serif;
-        }
-
-        .hadits-box {
-            background: rgba(0, 0, 0, 0.45);
-            border: 1.5px dashed rgba(255, 215, 0, 0.5);
-            border-radius: 16px;
-            padding: clamp(10px, 1.5vh, 18px) clamp(14px, 1.5vw, 22px);
-            flex: 1;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
-        }
-
-        .hadits-arab {
-            font-family: 'Amiri', serif;
-            font-size: clamp(1.45rem, 2.5vh, 1.95rem);
-            color: #fff4b8;
-            line-height: 1.75;
-            text-align: right;
-            direction: rtl;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.75);
-            margin-bottom: clamp(6px, 1vh, 10px);
-        }
-
-        .hadits-arti {
-            font-size: clamp(0.92rem, 1.45vh, 1.12rem);
-            color: #e2e8f0;
-            line-height: 1.45;
-            font-style: italic;
-            text-align: left;
-            border-left: 3px solid #ffd700;
-            padding-left: 12px;
-            margin-bottom: clamp(4px, 0.8vh, 8px);
-        }
-
-        .hadits-riwayat {
-            font-size: clamp(0.82rem, 1.2vh, 0.98rem);
-            color: #ffd700;
-            font-weight: 800;
-            text-align: right;
-            letter-spacing: 0.5px;
-        }
-
-        /* TIMELINE STRIP 1 BULAN PENUH (PEKAN 1 - 5) */
-        .kajian-timeline-container {
-            width: 100%;
-            background: linear-gradient(135deg, rgba(2, 24, 16, 0.95) 0%, rgba(1, 15, 10, 0.98) 100%);
-            border: 1.6px solid rgba(212, 175, 55, 0.65);
-            border-radius: 16px;
-            padding: clamp(4px, 0.8vh, 8px) clamp(10px, 1.4vw, 18px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255, 238, 170, 0.25);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            margin-top: clamp(6px, 0.9vh, 10px);
+            font-weight: 700;
             flex-shrink: 0;
-            position: relative;
         }
 
-        .timeline-header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: clamp(3px, 0.5vh, 5px);
-        }
-
-        .timeline-title {
-            font-size: clamp(0.82rem, 1.2vh, 0.98rem);
-            font-weight: 800;
-            color: #ffd700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .timeline-subtext {
-            font-size: clamp(0.72rem, 1vh, 0.82rem);
-            color: #94a3b8;
-        }
-
-        .rotator-pill {
-            background: rgba(16, 185, 129, 0.25);
-            border: 1px solid rgba(16, 185, 129, 0.6);
-            color: #86efac;
-            font-size: clamp(0.72rem, 1vh, 0.82rem);
-            font-weight: 700;
-            padding: 2px 10px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .timeline-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: clamp(6px, 1vw, 12px);
-        }
-
-        .timeline-mini-card {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1.2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 10px;
-            padding: clamp(5px, 0.8vh, 8px) clamp(8px, 1vw, 12px);
-            cursor: pointer;
-            transition: all 0.35s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: clamp(58px, 8.5vh, 76px);
-        }
-
-        .timeline-mini-card:hover {
-            border-color: rgba(255, 215, 0, 0.8);
-            background: rgba(16, 185, 129, 0.2);
-        }
-
-        .timeline-mini-card.active-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.4) 0%, rgba(6, 78, 59, 0.6) 100%);
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), inset 0 0 10px rgba(255, 215, 0, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .timeline-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2px;
-        }
-
-        .timeline-pekan-badge {
-            font-size: clamp(0.72rem, 1vh, 0.82rem);
-            font-weight: 800;
-            color: #ffd700;
-            text-transform: uppercase;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .timeline-date-text {
-            font-size: clamp(0.74rem, 1.05vh, 0.84rem);
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .timeline-ustadz-text {
-            font-size: clamp(0.82rem, 1.25vh, 0.98rem);
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.2;
-        }
-
-        .timeline-tema-text {
-            font-size: clamp(0.72rem, 1vh, 0.82rem);
-            color: #cbd5e1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.2;
-        }
-
-        .timeline-status-pill {
-            font-size: clamp(0.65rem, 0.9vh, 0.74rem);
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 6px;
-            display: inline-block;
-            margin-top: 2px;
-            align-self: flex-start;
-        }
-
-        .status-pill-live {
-            background: #dc2626;
-            color: #ffffff;
-            animation: blinkLive 1.5s infinite;
-        }
-
-        .status-pill-next {
-            background: #d97706;
-            color: #ffffff;
-        }
-
-        .status-pill-done {
-            background: rgba(255,255,255,0.18);
-            color: #94a3b8;
-        }
-
-        .status-pill-future {
-            background: rgba(16, 185, 129, 0.35);
-            color: #a7f3d0;
-        }
-
-        .timeline-progress-track {
+        .pagination-progress-track {
+            position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
             height: 3px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            margin-top: clamp(3px, 0.5vh, 5px);
-            overflow: hidden;
         }
 
-        .timeline-progress-fill {
+        .pagination-progress-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, #10b981, #ffd700);
             transition: width 0.1s linear;
-        }
-
-        .fade-card-transition {
-            opacity: 0.25;
-            transform: scale(0.988);
         }
 
         /* RUNNING TEKS MARQUEE BAWAH */
@@ -661,6 +605,20 @@
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
+
+        /* RESPONSIVE LAYOUT UNTUK LAYAR KECIL / MOBILE */
+        @media (max-width: 900px) {
+            .kajian-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .container {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+                padding-bottom: 70px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -695,72 +653,25 @@
             </div>
         </div>
 
-        <!-- 2-COLUMN MAIN CONTENT (LUAS, JELAS, & MEWAH) -->
-        <div class="kajian-main-layout" id="kajianMainLayout">
-            <!-- KOLOM 1: PROFIL PEMATERI -->
-            <div class="kajian-card" id="cardKolom1">
-                <div>
-                    <div class="ustadz-photo-container">
-                        <img src="../image/display/default_imam.jpg" id="ustadzPhoto" class="ustadz-photo" alt="Ustadz Pemateri" onerror="this.onerror=null;this.src='../image/display/default_imam.jpg';">
-                        <div class="ustadz-badge-floating">
-                            <span class="ustadz-badge-role"><i class="fas fa-chalkboard-teacher mr-1"></i> Pemateri Kajian</span>
-                        </div>
-                    </div>
-                    <div class="ustadz-name-title" id="valUstadzName">-</div>
-                    <div class="ustadz-spec" id="valUstadzSpec">Majelis Ta'lim &amp; Kajian Rutin</div>
-                </div>
-
-                <div class="waktu-kajian-pill">
-                    <i class="fas fa-clock text-warning"></i>
-                    <span class="waktu-val" id="valWaktuPelaksanaan">Ba'da Sholat Maghrib s/d Menjelang Isya</span>
-                </div>
-            </div>
-
-            <!-- KOLOM 2: KITAB, TEMA & HADITS PEKAN INI -->
-            <div class="kajian-card" id="cardKolom2">
-                <div>
-                    <div class="tema-badge-wrap">
-                        <span class="pekan-badge" id="badgePekanKajian"><i class="fas fa-calendar-week mr-1"></i> Pekan 1</span>
-                        <span class="live-status-badge" id="liveStatusBadge">
-                            <span class="live-dot" id="liveDot"></span> <span id="liveStatusText">MAJELIS ILMU TERBUKA UMUM</span>
-                        </span>
-                    </div>
-
-                    <div class="kitab-box">
-                        <i class="fas fa-book-quran kitab-icon"></i>
-                        <div>
-                            <div class="kitab-label">Kitab Rujukan Utama</div>
-                            <div class="kitab-title" id="valKitabRujukan">-</div>
-                        </div>
-                    </div>
-
-                    <div class="tema-box">
-                        <div class="tema-label"><i class="fas fa-bookmark mr-1"></i> Tema Pembahasan Pekan Ini</div>
-                        <div class="tema-title" id="valTemaKajian">Jadwal Kajian Belum Diatur</div>
-                    </div>
-                </div>
-
-                <div class="hadits-box">
-                    <div class="hadits-arab">مَا اجْتَمَعَ قَوْمٌ فِي بَيْتٍ مِنْ بُيُوتِ اللَّهِ يَتْلُونَ كِتَابَ اللَّهِ وَيَتَدَارَسُونَهُ بَيْنَهُمْ إِلَّا نَزَلَتْ عَلَيْهِمُ السَّكِينَةُ</div>
-                    <div class="hadits-arti">"Tidaklah suatu kaum berkumpul di salah satu rumah Allah membaca kitab-Nya dan saling mempelajarinya, melainkan turun kepada mereka ketenteraman (sakinah) dan dinaungi para malaikat."</div>
-                    <div class="hadits-riwayat">HR. Muslim no. 2699</div>
-                </div>
-            </div>
+        <!-- GRID KARTU KAJIAN (2 KOTAK PROPORSIONAL BERDAMPINGAN DENGAN ROTASI SLIDE PEKAN) -->
+        <div class="kajian-cards-grid" id="kajianCardsGrid">
+            <!-- Diisi otomatis oleh JavaScript renderCurrentPage() -->
         </div>
 
-        <!-- TIMELINE STRIP 1 BULAN PENUH (PEKAN 1 - 5) -->
-        <div class="kajian-timeline-container" id="kajianTimelineContainer">
-            <div class="timeline-header-bar">
-                <div style="display: flex; align-items: center;">
-                    <span class="timeline-title"><i class="fas fa-calendar-alt text-warning mr-1"></i> AGENDA BULAN INI (<span id="timelineBulanLabel">OKTOBER 2026</span>):</span>
-                    <span class="timeline-subtext" style="margin-left: 10px;">Menampilkan jadwal kajian 1 bulan penuh secara bergiliran</span>
-                </div>
+        <!-- BARIS INDIKATOR HALAMAN BULANAN RAMPING (KOTAK KECIL BAWAH DISUSUTKAN AGAR ATAS MAHAL & PROPORSIONAL) -->
+        <div class="kajian-pagination-bar" id="kajianPaginationBar">
+            <div class="pagination-info-left">
+                <span class="pagination-agenda-title"><i class="fas fa-calendar-alt text-warning mr-1"></i> AGENDA BULAN INI (<span id="timelineBulanLabel">OKTOBER 2026</span>):</span>
+                <span class="pagination-sublabel" id="paginationSubLabel">Menampilkan Pekan 1 &amp; 2</span>
             </div>
-            <div class="timeline-cards-grid" id="timelineCardsGrid">
-                <!-- Diisi otomatis oleh JavaScript -->
+            <div class="pagination-pills-wrap" id="paginationPills">
+                <!-- Diisi otomatis oleh renderPaginationPills() -->
             </div>
-            <div class="timeline-progress-track">
-                <div class="timeline-progress-fill" id="timelineProgressFill"></div>
+            <div class="pagination-timer-text">
+                <i class="fas fa-sync-alt fa-spin mr-1"></i> Rotasi: <span id="rotSecDisplay">10</span>s
+            </div>
+            <div class="pagination-progress-track">
+                <div class="pagination-progress-fill" id="paginationProgressFill"></div>
             </div>
         </div>
     </div>
@@ -786,6 +697,35 @@
         ];
         const SHORT_BULAN_INDONESIA = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
+        // Curated Mutiara Hadits Shahih untuk Setiap Pekan
+        const MUTIARA_HADITS_LIST = [
+            {
+                arab: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+                arti: "Sebaik-baik kalian adalah orang yang mempelajari Al-Qur'an dan mengajarkannya.",
+                riwayat: "HR. Bukhari no. 5027"
+            },
+            {
+                arab: "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
+                arti: "Barangsiapa menempuh jalan mencari ilmu, Allah mudahkan jalannya ke surga.",
+                riwayat: "HR. Muslim no. 2699"
+            },
+            {
+                arab: "مَا اجْتَمَعَ قَوْمٌ فِي بَيْتٍ مِنْ بُيُوتِ اللَّهِ يَتْلُونَ كِتَابَ اللَّهِ... إِلَّا نَزَلَتْ عَلَيْهِمُ السَّكِينَةُ",
+                arti: "Tidaklah suatu kaum berkumpul di rumah Allah membaca & mempelajari Al-Qur'an, melainkan turun ketenteraman.",
+                riwayat: "HR. Muslim no. 2699"
+            },
+            {
+                arab: "إِنَّ الْعُلَمَاءَ وَرَثَةُ الْأَنْبِيَاءِ",
+                arti: "Sesungguhnya para ulama adalah pewaris para nabi.",
+                riwayat: "HR. Abu Dawud & Tirmidzi"
+            },
+            {
+                arab: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+                arti: "Menuntut ilmu itu adalah kewajiban bagi setiap muslim.",
+                riwayat: "HR. Ibnu Majah no. 224"
+            }
+        ];
+
         // Default Data Kajian Malam Ahad
         const DEFAULT_KAJIAN = {
             ustadz_nama: "K.H Iskandar Najib, M.Pd.I.",
@@ -797,15 +737,16 @@
             tanggal: ""
         };
 
+        const ITEMS_PER_PAGE = 2; // 2 Kotak Berdampingan per Halaman Sesuai Gambar 2
         let currentJadwalList = [];
-        let activeJadwalIndex = 0;
-        let rotationTimer = null;
+        let currentPageIndex = 0;
+        let totalPages = 1;
         let progressInterval = null;
         let progressVal = 0;
         let isTodaySaturday = false;
         let todaySaturdayIndex = -1;
         let nextUpcomingIndex = -1;
-        let rotationIntervalMs = 9000; // Default 9 detik (dapat diatur oleh Super Admin)
+        let rotationIntervalMs = 10000; // Default 10 detik per rotasi halaman
 
         // Jam & Tanggal Header
         function updateDateTime() {
@@ -829,6 +770,22 @@
         setInterval(updateDateTime, 1000);
         updateDateTime();
 
+        function formatTanggalIndo(dateStr) {
+            if (!dateStr) return 'Setiap Hari Sabtu';
+            try {
+                const parts = dateStr.split('-');
+                if (parts.length === 3) {
+                    const y = parseInt(parts[0]);
+                    const m = parseInt(parts[1]) - 1;
+                    const d = parseInt(parts[2]);
+                    const dObj = new Date(y, m, d);
+                    const days = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+                    return `${days[dObj.getDay()]}, ${d} ${NAMA_BULAN_INDONESIA[m]} ${y}`;
+                }
+            } catch (e) {}
+            return dateStr;
+        }
+
         function formatTanggalShort(dateStr) {
             if (!dateStr) return '-';
             try {
@@ -842,163 +799,167 @@
             return dateStr;
         }
 
-        // Render Baris Mini Card Timeline
-        function renderTimelineCards() {
-            const grid = document.getElementById('timelineCardsGrid');
+        // Render Halaman Terpilih (Menampilkan 2 Kotak Berdampingan)
+        function renderCurrentPage(withTransition = true) {
+            const grid = document.getElementById('kajianCardsGrid');
             if (!grid) return;
 
-            const now = new Date();
-            const y = now.getFullYear();
-            const m = String(now.getMonth() + 1).padStart(2, '0');
-            const d = String(now.getDate()).padStart(2, '0');
-            const todayStr = `${y}-${m}-${d}`;
+            totalPages = Math.max(1, Math.ceil(currentJadwalList.length / ITEMS_PER_PAGE));
+            if (currentPageIndex >= totalPages) currentPageIndex = 0;
 
-            let html = '';
-            currentJadwalList.forEach((item, idx) => {
-                const pekanNum = item.pekan || (idx + 1);
-                const isActive = (idx === activeJadwalIndex);
-                const isToday = (item.tanggal && item.tanggal === todayStr && isTodaySaturday);
-                const isNext = (idx === nextUpcomingIndex && !isToday);
+            const startIndex = currentPageIndex * ITEMS_PER_PAGE;
+            const endIndex = startIndex + ITEMS_PER_PAGE;
+            const pageItems = currentJadwalList.slice(startIndex, endIndex);
 
-                let statusPill = '';
-                if (isToday) {
-                    statusPill = '<span class="timeline-status-pill status-pill-live"><i class="fas fa-broadcast-tower mr-1"></i> Hari Ini</span>';
-                } else if (isNext) {
-                    statusPill = '<span class="timeline-status-pill status-pill-next"><i class="fas fa-star mr-1"></i> Terdekat</span>';
-                } else if (item.tanggal) {
-                    if (item.tanggal < todayStr) {
-                        statusPill = '<span class="timeline-status-pill status-pill-done">Selesai</span>';
-                    } else {
-                        statusPill = '<span class="timeline-status-pill status-pill-future">Mendatang</span>';
-                    }
-                }
-
-                const shortDate = item.tanggal ? formatTanggalShort(item.tanggal) : `Sabtu P${pekanNum}`;
-                const ustadzShort = item.ustadz_nama || 'Pemateri DKM';
-                const temaShort = item.kitab_rujukan ? item.kitab_rujukan.split('(')[0].trim() : (item.tema_kajian || 'Majelis Ilmu');
-
-                html += `
-                    <div class="timeline-mini-card ${isActive ? 'active-card' : ''}" onclick="selectPekanManual(${idx})" id="miniCard${idx}">
-                        <div class="timeline-card-header">
-                            <span class="timeline-pekan-badge">Pekan ${pekanNum}</span>
-                            <span class="timeline-date-text">${shortDate}</span>
-                        </div>
-                        <div class="timeline-ustadz-text" title="${ustadzShort}">${ustadzShort}</div>
-                        <div class="timeline-tema-text" title="${temaShort}">${temaShort}</div>
-                        ${statusPill}
-                    </div>
-                `;
-            });
-
-            grid.innerHTML = html;
-        }
-
-        // Tampilkan data pekan terpilih ke 2 kartu utama
-        function displayKajianItem(index, withTransition = true) {
-            if (!currentJadwalList[index]) return;
-            const d = currentJadwalList[index];
-            activeJadwalIndex = index;
-
-            const layout = document.getElementById('kajianMainLayout');
-            if (withTransition && layout) {
-                layout.classList.add('fade-card-transition');
+            if (withTransition) {
+                grid.classList.add('fade-card-transition');
             }
 
             setTimeout(() => {
-                // Update foto pemateri jika tersedia
-                if (document.getElementById('ustadzPhoto')) {
-                    const photoSrc = d.ustadz_foto || d.foto || '../image/display/default_imam.jpg';
-                    document.getElementById('ustadzPhoto').src = photoSrc;
-                }
-
-                // Update teks kartu pemateri
-                if (document.getElementById('valUstadzName')) {
-                    document.getElementById('valUstadzName').textContent = d.ustadz_nama || '-';
-                }
-                if (document.getElementById('valUstadzSpec')) {
-                    document.getElementById('valUstadzSpec').textContent = d.ustadz_gelar || 'Majelis Ta\'lim & Kajian Rutin';
-                }
-                if (document.getElementById('valWaktuPelaksanaan')) {
-                    document.getElementById('valWaktuPelaksanaan').textContent = d.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Menjelang Isya";
-                }
-
-                // Update teks kartu kitab & tema
-                if (document.getElementById('valKitabRujukan')) {
-                    document.getElementById('valKitabRujukan').textContent = d.kitab_rujukan || '-';
-                }
-                if (document.getElementById('valTemaKajian')) {
-                    document.getElementById('valTemaKajian').textContent = d.tema_kajian || 'Jadwal Kajian Belum Diatur';
-                }
-
-                // Update badge pekan
-                const pekanLabel = d.pekan_label || `Pekan ${index + 1}`;
-                const tglLabel = d.tanggal ? ` • ${formatTanggalShort(d.tanggal)}` : '';
-                if (document.getElementById('badgePekanKajian')) {
-                    document.getElementById('badgePekanKajian').innerHTML = `<i class="fas fa-calendar-week mr-1"></i> ${pekanLabel}${tglLabel}`;
-                }
-
-                // Update status banner
-                const statusBadge = document.getElementById('liveStatusBadge');
-                const statusText = document.getElementById('liveStatusText');
-                const liveDot = document.getElementById('liveDot');
-
                 const now = new Date();
                 const y = now.getFullYear();
                 const m = String(now.getMonth() + 1).padStart(2, '0');
-                const date = String(now.getDate()).padStart(2, '0');
-                const todayStr = `${y}-${m}-${date}`;
+                const d = String(now.getDate()).padStart(2, '0');
+                const todayStr = `${y}-${m}-${d}`;
 
-                if (d.tanggal && d.tanggal === todayStr && isTodaySaturday) {
-                    if (statusText) statusText.textContent = "HARI INI • SEDANG BERLANGSUNG";
-                    if (statusBadge) {
-                        statusBadge.style.background = "rgba(220, 38, 38, 0.35)";
-                        statusBadge.style.borderColor = "rgba(239, 68, 68, 0.9)";
-                        statusBadge.style.color = "#fecaca";
-                    }
-                    if (liveDot) liveDot.style.background = "#ef4444";
-                } else if (index === nextUpcomingIndex) {
-                    if (statusText) statusText.textContent = `SABTU TERDEKAT (${formatTanggalShort(d.tanggal)})`;
-                    if (statusBadge) {
-                        statusBadge.style.background = "rgba(217, 119, 6, 0.35)";
-                        statusBadge.style.borderColor = "rgba(245, 158, 11, 0.9)";
-                        statusBadge.style.color = "#fef3c7";
-                    }
-                    if (liveDot) liveDot.style.background = "#f59e0b";
+                if (pageItems.length === 1) {
+                    grid.classList.add('single-item');
                 } else {
-                    if (statusText) statusText.textContent = `AGENDA BULAN INI (${formatTanggalShort(d.tanggal)})`;
-                    if (statusBadge) {
-                        statusBadge.style.background = "rgba(16, 185, 129, 0.25)";
-                        statusBadge.style.borderColor = "rgba(16, 185, 129, 0.6)";
-                        statusBadge.style.color = "#a7f3d0";
-                    }
-                    if (liveDot) liveDot.style.background = "#10b981";
+                    grid.classList.remove('single-item');
                 }
 
-                // Update status aktif di timeline strip
-                currentJadwalList.forEach((_, idx) => {
-                    const card = document.getElementById(`miniCard${idx}`);
-                    if (card) {
-                        if (idx === index) {
-                            card.classList.add('active-card');
+                let html = '';
+                pageItems.forEach((item, localIdx) => {
+                    const globalIdx = startIndex + localIdx;
+                    const pekanNum = item.pekan || (globalIdx + 1);
+                    const isToday = (item.tanggal && item.tanggal === todayStr && isTodaySaturday);
+                    const isNext = (globalIdx === nextUpcomingIndex && !isToday);
+
+                    // Badge status
+                    let statusBadgeHtml = '';
+                    if (isToday) {
+                        statusBadgeHtml = `<span class="card-status-badge status-badge-today"><i class="fas fa-broadcast-tower mr-1"></i> HARI INI</span>`;
+                    } else if (isNext) {
+                        statusBadgeHtml = `<span class="card-status-badge status-badge-upcoming"><i class="fas fa-star mr-1"></i> TERDEKAT</span>`;
+                    } else if (item.tanggal) {
+                        if (item.tanggal < todayStr) {
+                            statusBadgeHtml = `<span class="card-status-badge status-badge-done">Selesai</span>`;
                         } else {
-                            card.classList.remove('active-card');
+                            statusBadgeHtml = `<span class="card-status-badge status-badge-future">Mendatang</span>`;
                         }
                     }
+
+                    // Hadits mutiara untuk pekan ini
+                    const hadits = MUTIARA_HADITS_LIST[globalIdx % MUTIARA_HADITS_LIST.length];
+                    const photoSrc = item.ustadz_foto || item.foto || '../image/display/default_imam.jpg';
+                    const ustadzNama = item.ustadz_nama || "K.H Iskandar Najib, M.Pd.I.";
+                    const ustadzGelar = item.ustadz_gelar || "Asatidz Masjid Jami' Al-Jihad";
+                    const kitabRujukan = item.kitab_rujukan || "Kitab Irsyadul 'Ibad karya Syaikh Zainuddin Al-Malibary";
+                    const temaKajian = item.tema_kajian || "";
+                    const hariTanggalFormatted = formatTanggalIndo(item.tanggal);
+                    const jamPelaksanaan = item.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Menjelang Isya";
+                    const pekanLabel = item.pekan_label || `Pekan ${pekanNum}`;
+
+                    // Tampilkan tema tambahan jika berbeda dari kitab rujukan
+                    let temaHtml = '';
+                    if (temaKajian && temaKajian !== kitabRujukan && temaKajian !== 'Jadwal Kajian Belum Diatur') {
+                        temaHtml = `<div class="card-tema-box" title="${temaKajian}"><i class="fas fa-bookmark mr-1"></i> ${temaKajian}</div>`;
+                    }
+
+                    html += `
+                        <div class="kajian-card-box ${isToday ? 'card-is-today' : ''} ${isNext ? 'card-is-upcoming' : ''}">
+                            <!-- 1. HEADER MUTIARA HADITS/HR -->
+                            <div class="card-hadits-header">
+                                <span class="card-pekan-pill"><i class="fas fa-calendar-week mr-1"></i> ${pekanLabel}</span>
+                                <div class="card-hadits-quote-wrap">
+                                    <span class="card-hadits-quote">"${hadits.arti}"</span>
+                                    <span class="card-hadits-source">— ${hadits.riwayat}</span>
+                                </div>
+                                ${statusBadgeHtml}
+                            </div>
+
+                            <!-- 2. FOTO PEMATERI -->
+                            <div class="card-photo-wrapper">
+                                <img src="${photoSrc}" class="card-photo" alt="${ustadzNama}" onerror="this.onerror=null;this.src='../image/display/default_imam.jpg';">
+                                <div class="card-photo-floating-badge">
+                                    <i class="fas fa-chalkboard-teacher mr-1"></i> Pemateri Kajian
+                                </div>
+                            </div>
+
+                            <!-- 3. DETAIL PEMATERI, KITAB, TANGGAL, JAM -->
+                            <div class="card-info-content">
+                                <div class="card-ustadz-name">${ustadzNama}</div>
+                                <div class="card-ustadz-gelar">${ustadzGelar}</div>
+
+                                <div class="card-kitab-box">
+                                    <i class="fas fa-book-quran card-kitab-icon"></i>
+                                    <span class="card-kitab-text">${kitabRujukan}</span>
+                                </div>
+
+                                ${temaHtml}
+
+                                <div class="card-schedule-footer">
+                                    <div class="card-tanggal-pill">
+                                        <i class="fas fa-calendar-day text-warning"></i>
+                                        <span>${hariTanggalFormatted}</span>
+                                    </div>
+                                    <div class="card-jam-pill">
+                                        <i class="fas fa-clock text-warning"></i>
+                                        <span>${jamPelaksanaan}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 });
 
-                if (layout) {
-                    layout.classList.remove('fade-card-transition');
+                grid.innerHTML = html;
+                renderPaginationPills();
+
+                if (withTransition) {
+                    grid.classList.remove('fade-card-transition');
                 }
-            }, withTransition ? 200 : 0);
+            }, withTransition ? 220 : 0);
         }
 
-        // Jalankan rotasi otomatis bergiliran tiap 9 detik
+        // Render Indikator Tombol Halaman (Pills)
+        function renderPaginationPills() {
+            const container = document.getElementById('paginationPills');
+            const subLabel = document.getElementById('paginationSubLabel');
+            if (!container) return;
+
+            totalPages = Math.max(1, Math.ceil(currentJadwalList.length / ITEMS_PER_PAGE));
+
+            let html = '';
+            for (let i = 0; i < totalPages; i++) {
+                const startP = (i * ITEMS_PER_PAGE) + 1;
+                const endP = Math.min((i + 1) * ITEMS_PER_PAGE, currentJadwalList.length);
+                const rangeLabel = (startP === endP) ? `Pekan ${startP}` : `Pekan ${startP} - ${endP}`;
+                const isActive = (i === currentPageIndex);
+
+                html += `
+                    <div class="pagination-pill-item ${isActive ? 'active-pill' : ''}" onclick="selectPageManual(${i})">
+                        <i class="fas ${isActive ? 'fa-dot-circle text-warning' : 'fa-circle'}"></i> Halaman ${i + 1} (${rangeLabel})
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+
+            if (subLabel) {
+                const curStart = (currentPageIndex * ITEMS_PER_PAGE) + 1;
+                const curEnd = Math.min((currentPageIndex + 1) * ITEMS_PER_PAGE, currentJadwalList.length);
+                subLabel.textContent = `Menampilkan ${curStart === curEnd ? `Pekan ${curStart}` : `Pekan ${curStart} & ${curEnd}`}`;
+            }
+        }
+
+        // Jalankan rotasi halaman otomatis bergantian tiap N detik
         function startAutoRotation() {
             stopAutoRotation();
-            if (currentJadwalList.length <= 1) return;
+            totalPages = Math.max(1, Math.ceil(currentJadwalList.length / ITEMS_PER_PAGE));
+            if (totalPages <= 1) return;
 
             progressVal = 0;
-            const fillEl = document.getElementById('timelineProgressFill');
+            const fillEl = document.getElementById('paginationProgressFill');
             const stepMs = 100;
             const increment = (100 / (rotationIntervalMs / stepMs));
 
@@ -1008,21 +969,21 @@
 
                 if (progressVal >= 100) {
                     progressVal = 0;
-                    activeJadwalIndex = (activeJadwalIndex + 1) % currentJadwalList.length;
-                    displayKajianItem(activeJadwalIndex, true);
+                    currentPageIndex = (currentPageIndex + 1) % totalPages;
+                    renderCurrentPage(true);
                 }
             }, stepMs);
         }
 
         function stopAutoRotation() {
             if (progressInterval) clearInterval(progressInterval);
-            if (rotationTimer) clearTimeout(rotationTimer);
         }
 
-        function selectPekanManual(index) {
-            displayKajianItem(index, true);
+        function selectPageManual(pageIdx) {
+            currentPageIndex = pageIdx;
+            renderCurrentPage(true);
             progressVal = 0;
-            const fillEl = document.getElementById('timelineProgressFill');
+            const fillEl = document.getElementById('paginationProgressFill');
             if (fillEl) fillEl.style.width = '0%';
         }
 
@@ -1075,23 +1036,26 @@
                         currentJadwalList = [DEFAULT_KAJIAN];
                     }
 
-                    // Baca preferensi interval rotasi pekan dari data atau setting Super Admin
-                    let rotSec = 9;
+                    // Baca preferensi interval rotasi halaman dari data atau setting Super Admin
+                    let rotSec = 10;
                     if (kData && kData.rotasi_pekan_detik) {
-                        rotSec = parseInt(kData.rotasi_pekan_detik) || 9;
+                        rotSec = parseInt(kData.rotasi_pekan_detik) || 10;
                     } else if (settings && (settings.kajian_rotasi_pekan_detik || settings.rotasi_pekan_detik)) {
-                        rotSec = parseInt(settings.kajian_rotasi_pekan_detik || settings.rotasi_pekan_detik) || 9;
+                        rotSec = parseInt(settings.kajian_rotasi_pekan_detik || settings.rotasi_pekan_detik) || 10;
                     } else {
                         try {
                             const cachedRot = localStorage.getItem('cached_kajian_rotasi_pekan_detik');
-                            if (cachedRot) rotSec = parseInt(cachedRot) || 9;
+                            if (cachedRot) rotSec = parseInt(cachedRot) || 10;
                         } catch(e) {}
                     }
-                    rotationIntervalMs = Math.max(3, rotSec) * 1000;
+                    rotationIntervalMs = Math.max(4, rotSec) * 1000;
+                    const rotDisplay = document.getElementById('rotSecDisplay');
+                    if (rotDisplay) rotDisplay.textContent = Math.round(rotationIntervalMs / 1000);
                 } else {
                     currentJadwalList = [DEFAULT_KAJIAN];
                 }
 
+                // Hitung deteksi hari ini dan terdekat
                 const now = new Date();
                 isTodaySaturday = (now.getDay() === 6);
                 const y = now.getFullYear();
@@ -1111,22 +1075,22 @@
                     }
                 });
 
+                // Tentukan halaman awal berdasarkan jadwal hari ini jika ada
                 if (isTodaySaturday && todaySaturdayIndex !== -1) {
-                    activeJadwalIndex = todaySaturdayIndex;
+                    currentPageIndex = Math.floor(todaySaturdayIndex / ITEMS_PER_PAGE);
                 } else if (nextUpcomingIndex !== -1) {
-                    activeJadwalIndex = nextUpcomingIndex;
+                    currentPageIndex = Math.floor(nextUpcomingIndex / ITEMS_PER_PAGE);
                 } else {
-                    activeJadwalIndex = 0;
+                    currentPageIndex = 0;
                 }
 
-                renderTimelineCards();
-                displayKajianItem(activeJadwalIndex, false);
+                renderCurrentPage(false);
                 startAutoRotation();
             } catch (err) {
                 console.warn('Gagal memuat data kajian online:', err);
                 currentJadwalList = [DEFAULT_KAJIAN];
-                renderTimelineCards();
-                displayKajianItem(0, false);
+                currentPageIndex = 0;
+                renderCurrentPage(false);
             }
         }
 

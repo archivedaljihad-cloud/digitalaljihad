@@ -7,7 +7,59 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 09:25 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 09:55 WIB)
+
+### 🕌 PEROMBAKAN DESAIN & TATA LETAK SLIDE KAJIAN MALAM AHAD (2 KOTAK SIMETRIS PROPORSIONAL SESUAI ILUSTRASI GAMBAR 2, ROTASI SLIDE OTOMATIS, & SLIM PAGINATION BAR) (Versi SW v5.8.65):
+1. **Perombakan Layout Slide Kajian Berdasarkan Ilustrasi Gambar 2 (`web-statis/slides/kajian.html`)**:
+   - **Permintaan Pengguna**:
+     - Halaman: `https://digitalaljihad.my.id/slides/kajian`
+     - Desain dan layout diganti seperti Gambar 2 sebagai ilustrasi.
+     - Dalam 1 halaman berisi 2 (atau 3) kotak (setiap pekannya), dengan pergantian slide otomatis bergantian untuk pekan lanjutannya.
+     - Mengecilkan / menghilangkan kotak-kotak kecil jadwal di bagian bawah agar 2 kotak utama di atas terlihat proporsional dan tidak berdesakan.
+   - **Implementasi Tata Letak 2 Kotak Simetris (`.kajian-cards-grid` & `.kajian-card-box`)**:
+     - Mengubah layout asimetris sebelumnya (1 kolom ustadz di kiri + 1 kolom kitab di kanan) menjadi **Grid 2 Kotak Berdampingan (`grid-template-columns: repeat(2, 1fr)`)** yang simetris, megah, dan elegan.
+     - Setiap kartu pekan memiliki hierarki desain persis sesuai ilustrasi Gambar 2:
+       1. **Bagian Atas (`[ MUTIARA HADITS/HR ]`)**:
+          - Badge Pekan (`.card-pekan-pill`, e.g. `PEKAN 1`, `PEKAN 2`).
+          - Mutiara Hadits Shahih (`.card-hadits-quote` dan sumber `.card-hadits-source`), mengutip hadits riwayat HR. Bukhari, Muslim, Abu Dawud, dan Ibnu Majah mengenai keutamaan menuntut ilmu dan mempelajari Al-Qur'an.
+          - Badge status dinamis (`HARI INI • SEDANG BERLANGSUNG` berkedip merah jika hari ini Sabtu bertepatan dengan tanggal jadwal, atau `TERDEKAT`, `Mendatang`, `Selesai`).
+       2. **Bagian Tengah (`[ FOTO PEMATERI ]`)**:
+          - Bingkai foto portrait melengkung (`border-radius: 20px`) dengan bingkai emas murni (`2.5px solid #ffd700`), efek bayangan mendalam, dan lencana melayang `Pemateri Kajian`.
+       3. **Bagian Bawah (`[ DETAIL PEMATERI, KITAB, TANGGAL, JAM ]`)**:
+          - `[ NAMA PEMATERI ]`: Tipografi emas megah Outfit/Poppins (`font-weight: 800; color: #ffd700; font-size: 1.3rem - 1.82rem`).
+          - `[ Kitab Rujukan Utama ]`: Kotak kaca berpenanda Al-Qur'an emas (`.card-kitab-box`) dengan teks putih jelas.
+          - `[ Tema Pembahasan ]`: Kotak aksen hijau zamrud elegan jika terdapat tema khusus.
+          - `[ Hari & Tanggal Pelaksanaan ]`: Kotak kapsul berpenanda kalender (`Sabtu, 3 Oktober 2026`).
+          - `[ Jam Pelaksanaan ]`: Kotak kapsul berpenanda jam (`Ba'da Sholat Maghrib s/d Menjelang Isya`).
+
+2. **Mesin Rotasi Halaman Otomatis (*Auto-Sliding Multi-Page Engine*)**:
+   - Jika dalam 1 bulan terdapat 4 atau 5 pekan:
+     - Halaman 1: Pekan 1 & Pekan 2
+     - Halaman 2: Pekan 3 & Pekan 4
+     - Halaman 3: Pekan 5 (ditampilkan di tengah secara elegan dengan kelas `.single-item`)
+   - Rotasi otomatis berjalan bergantian tiap 10 detik (dapat disesuaikan di pengaturan Super Admin) dengan animasi transisi *fade-dissolve* halus tanpa kedipan.
+   - Deteksi cerdas: Saat TV dinyalakan di hari Sabtu, slide langsung membuka halaman yang memuat jadwal kajian hari ini.
+
+3. **Penyusutan Strip Bawah Menjadi Bar Indikator Halaman Ramping (`.kajian-pagination-bar`)**:
+   - Menghilangkan 5 kotak kecil jadwal yang sebelumnya memakan tinggi layar dan membuat kartu di atas tertekan.
+   - Digantikan dengan bilah indikator halaman ultra-ramping setinggi ~32px:
+     - Kiri: Agenda Bulan Ini (`OKTOBER 2026`) dan label pekan yang sedang tampil.
+     - Tengah: Tombol pil indikator halaman (`Halaman 1 (Pekan 1-2)`, `Halaman 2 (Pekan 3-4)`, `Halaman 3 (Pekan 5)`).
+     - Kanan: Indikator rotasi otomatis.
+     - Bawah: Garis kemajuan (*progress bar*) 3px yang mengisi secara kontinu menuju rotasi halaman berikutnya.
+   - Memberikan ruang vertikal >700px bagi 2 kotak utama sehingga tampak proporsional, lapang, dan mudah dibaca dari jarak jauh (>3-5 meter).
+
+4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.65`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.65`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.65`**.
+
+5. **Pengujian Regresi Otomatis (162 / 162 PASS)**:
+   - Menambahkan pengujian otomatis di `scripts/test-engine.js` (Test 14: Kajian Slide 2-Card Redesign & Auto-Sliding Integrity).
+   - Menjalankan `npm test`: Seluruh 162 assertions LULUS (100% PASS).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 09:25 WIB)
 
 ### 📺 PERBAIKAN TATA LETAK SLIDE QRIS (ANTI-TABRAKAN KAPSUL JAM) & PENINGKATAN KONTRAS NOMOR BENDAHARA PADA SLIDE INFAQ (Versi SW v5.8.64):
 1. **Perbaikan Tata Letak Slide QRIS (`web-statis/slides/qris.html`)**:

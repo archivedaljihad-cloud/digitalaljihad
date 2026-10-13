@@ -389,6 +389,18 @@ assert(infaqHtmlContent.includes('.rek-wa-wrap .wa-role') && infaqHtmlContent.in
 assert(infaqHtmlContent.includes('fa-whatsapp'), 'slides/infaq.html memiliki ikon WhatsApp resmi');
 
 // -------------------------------------------------------------
+// 14. KAJIAN SLIDE 2-CARD REDESIGN & AUTO-SLIDING INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 14] Kajian Slide 2-Card Redesign & Auto-Sliding Integrity:');
+const kajianHtmlContent = fs.readFileSync(path.join(baseDir, 'slides/kajian.html'), 'utf8');
+assert(kajianHtmlContent.includes('.kajian-cards-grid') && kajianHtmlContent.includes('grid-template-columns: repeat(2, 1fr);'), 'slides/kajian.html memiliki CSS grid 2 kotak berdampingan proporsional');
+assert(kajianHtmlContent.includes('card-hadits-header') && kajianHtmlContent.includes('MUTIARA_HADITS_LIST'), 'slides/kajian.html memiliki header kartu Mutiara Hadits/HR per pekan');
+assert(kajianHtmlContent.includes('card-photo-wrapper') && kajianHtmlContent.includes('card-ustadz-name'), 'slides/kajian.html memiliki frame foto pemateri dan nama pemateri emas');
+assert(kajianHtmlContent.includes('card-kitab-box') && kajianHtmlContent.includes('card-schedule-footer'), 'slides/kajian.html memiliki komponen Kitab Rujukan, Hari/Tanggal, dan Jam Pelaksanaan');
+assert(kajianHtmlContent.includes('kajian-pagination-bar') && kajianHtmlContent.includes('pagination-progress-fill'), 'slides/kajian.html mengganti timeline lama dengan bar indikator halaman ramping');
+assert(kajianHtmlContent.includes('ITEMS_PER_PAGE = 2') && kajianHtmlContent.includes('renderCurrentPage'), 'slides/kajian.html memiliki paging 2 kartu per slide dengan rotasi otomatis bergiliran');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');
