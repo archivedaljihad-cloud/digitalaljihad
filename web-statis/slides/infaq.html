@@ -615,42 +615,60 @@
         }
 
         .rek-label-wa {
-            color: #cbd5e1;
+            color: #ffffff;
             line-height: 1.25;
             flex-shrink: 0;
             font-size: 1.05rem;
-            font-weight: 600;
+            font-weight: 700;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+        }
+
+        .rek-label-wa i {
+            color: #25d366;
+            font-size: 1.30rem;
+            filter: drop-shadow(0 0 6px rgba(37, 211, 102, 0.7));
         }
 
         .rek-wa-wrap {
-            display: flex;
+            display: inline-flex;
             flex-direction: column;
             align-items: flex-end;
             justify-content: center;
             text-align: right;
-            line-height: 1.25;
+            line-height: 1.2;
             margin-left: auto;
             flex-shrink: 0;
             white-space: nowrap;
+            background: rgba(3, 40, 24, 0.88);
+            border: 1.5px solid #22c55e;
+            padding: 4px 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.6), inset 0 0 8px rgba(34, 197, 94, 0.25);
         }
 
-        .rek-wa-wrap > span:first-child {
+        .rek-wa-wrap > span:first-child,
+        .rek-wa-wrap .wa-number {
             font-family: monospace;
-            font-weight: 800;
-            font-size: 1.22rem;
+            font-weight: 900;
+            font-size: 1.30rem;
             letter-spacing: 0.8px;
-            color: #00e676;
-            text-shadow: 0 0 10px rgba(0, 230, 118, 0.45);
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.98), 0 0 12px rgba(34, 197, 94, 0.8) !important;
             white-space: nowrap;
         }
 
         .rek-wa-wrap .wa-role {
-            font-size: 0.92rem;
+            font-size: 0.96rem;
             font-weight: 800;
-            color: #00e676;
-            letter-spacing: 0.8px;
-            text-shadow: 0 0 8px rgba(0, 230, 118, 0.35);
+            color: #FFD700 !important;
+            -webkit-text-fill-color: #FFD700 !important;
+            letter-spacing: 1.2px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.98), 0 0 8px rgba(255, 215, 0, 0.6) !important;
             white-space: nowrap;
         }
 
@@ -809,9 +827,15 @@
             }
             .rek-num {
                 font-size: 1.12rem;
-            }
             .rek-label-wa {
                 font-size: 0.95rem;
+            }
+            .rek-wa-wrap {
+                padding: 3px 10px;
+            }
+            .rek-wa-wrap > span:first-child,
+            .rek-wa-wrap .wa-number {
+                font-size: 1.15rem;
             }
             .rek-wa-wrap .wa-role {
                 font-size: 0.88rem;
@@ -857,6 +881,19 @@
             .donatur-item {
                 padding: 2px 6px;
                 font-size: 0.86rem;
+            }
+            .rek-label-wa {
+                font-size: 0.85rem;
+            }
+            .rek-wa-wrap {
+                padding: 2px 8px;
+            }
+            .rek-wa-wrap > span:first-child,
+            .rek-wa-wrap .wa-number {
+                font-size: 1.05rem;
+            }
+            .rek-wa-wrap .wa-role {
+                font-size: 0.82rem;
             }
         }
     </style>
@@ -1012,9 +1049,9 @@
                                 <span id="infaqAtasNama" style="font-weight: 700; color: #ffd700;">DKM Jami Al Jihad</span>
                             </div>
                             <div class="rek-item">
-                                <span class="rek-label-wa">Konfirmasi<br>WhatsApp</span>
-                                <span id="infaqWaKonfirmasi" class="rek-num rek-wa-wrap" style="color: #00e676;">
-                                    <span>0856 1235 167</span>
+                                <span class="rek-label-wa"><i class="fab fa-whatsapp"></i><span>Konfirmasi<br>WhatsApp</span></span>
+                                <span id="infaqWaKonfirmasi" class="rek-num rek-wa-wrap">
+                                    <span class="wa-number">0856 1235 167</span>
                                     <span class="wa-role">(BENDAHARA)</span>
                                 </span>
                             </div>
@@ -1155,9 +1192,9 @@
                         const str = String(rawStr).trim();
                         const match = str.match(/^(.*?)\s*(\(.*?\))$/);
                         if (match && match[1] && match[2]) {
-                            el.innerHTML = `<span>${match[1].trim()}</span><span class="wa-role">${match[2].trim()}</span>`;
+                            el.innerHTML = `<span class="wa-number">${escapeHtml(match[1].trim())}</span><span class="wa-role">${escapeHtml(match[2].trim())}</span>`;
                         } else {
-                            el.innerHTML = `<span>${str}</span>`;
+                            el.innerHTML = `<span class="wa-number">${escapeHtml(str)}</span>`;
                         }
                     }
 

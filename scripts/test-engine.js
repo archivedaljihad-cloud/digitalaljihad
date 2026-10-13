@@ -341,6 +341,8 @@ assert(qrisPngExists, 'File kompatibilitas image/qris.png tersedia');
 assert(qrisHtmlContent.includes('src="../img/QRIS.jpg"'), 'slides/qris.html menggunakan sumber utama ../img/QRIS.jpg');
 assert(qrisHtmlContent.includes('onerror="this.onerror=null; this.src=\'../img/QRIS.jpg\';"'), 'slides/qris.html memiliki fallback lokal ../img/QRIS.jpg');
 assert(qrisHtmlContent.includes('.qris-brand-badge') && qrisHtmlContent.includes('color: #ffffff !important;'), 'Kotak kapsul .qris-brand-badge memiliki kontras teks putih tajam');
+assert(qrisHtmlContent.includes('.qris-frame') && qrisHtmlContent.includes('max-height: 44vh;'), 'slides/qris.html membatasi tinggi frame QRIS agar tidak meluap ke atas');
+assert(qrisHtmlContent.includes('@media (max-height: 850px)'), 'slides/qris.html memiliki optimasi media query khusus Smart TV');
 assert(swContent.includes("'img/QRIS.jpg'") && swContent.includes("'image/qris.png'"), 'sw.js me-cache seluruh varian gambar QRIS');
 
 // -------------------------------------------------------------
@@ -375,6 +377,16 @@ assert(fs.existsSync(path.join(baseDir, 'img/IkonFlightMode.png')), 'File fisik 
 assert(fs.existsSync(path.join(baseDir, 'img/IkonSilentHP.png')), 'File fisik img/IkonSilentHP.png tersedia');
 assert(prayerModeHtmlContent.includes('src="img/IkonFlightMode.png"') && prayerModeHtmlContent.includes('src="img/IkonSilentHP.png"'), 'prayer-mode.html memiliki ikon Flight Mode (kiri) dan Silent HP (kanan) di messageBanner');
 assert(swContent.includes("'img/IkonFlightMode.png'") && swContent.includes("'img/IkonSilentHP.png'"), 'sw.js me-cache ikon IkonFlightMode.png dan IkonSilentHP.png');
+
+// -------------------------------------------------------------
+// 13. INFAQ SLIDE TREASURER WHATSAPP CONTRAST INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 13] Infaq Slide Treasurer WhatsApp Contrast Integrity:');
+const infaqHtmlContent = fs.readFileSync(path.join(baseDir, 'slides/infaq.html'), 'utf8');
+assert(infaqHtmlContent.includes('.rek-wa-wrap') && infaqHtmlContent.includes('background: rgba(3, 40, 24,'), 'slides/infaq.html memiliki badge kontras tinggi untuk kontak WhatsApp');
+assert(infaqHtmlContent.includes('.rek-wa-wrap .wa-number') && infaqHtmlContent.includes('color: #FFFFFF !important;'), 'slides/infaq.html memiliki nomor bendahara putih tajam kontras');
+assert(infaqHtmlContent.includes('.rek-wa-wrap .wa-role') && infaqHtmlContent.includes('color: #FFD700 !important;'), 'slides/infaq.html memiliki peran bendahara emas tajam kontras');
+assert(infaqHtmlContent.includes('fa-whatsapp'), 'slides/infaq.html memiliki ikon WhatsApp resmi');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

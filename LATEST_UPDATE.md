@@ -7,7 +7,49 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 01:30 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 09:25 WIB)
+
+### 📺 PERBAIKAN TATA LETAK SLIDE QRIS (ANTI-TABRAKAN KAPSUL JAM) & PENINGKATAN KONTRAS NOMOR BENDAHARA PADA SLIDE INFAQ (Versi SW v5.8.64):
+1. **Perbaikan Tata Letak Slide QRIS (`web-statis/slides/qris.html`)**:
+   - **Keluhan Pengguna (Gambar 1 vs Gambar 2)**: Pada layar TV fisik (Gambar 1), judul *"INFAQ & SHODAQOH DIGITAL QRIS"* tertimpa / menabrak kotak kapsul jam di bagian atas. Tampilan yang diinginkan adalah seperti Gambar 2 (judul berada di bawah kotak kapsul jam dengan jarak proporsional dan tidak menabrak).
+   - **Akar Masalah (*Root Cause*)**:
+     - `.qris-frame img` tidak memiliki pembatas tinggi vertikal (`max-height`), sehingga gambar QRIS vertikal (720x1020) mengembang ke tinggi 380px+.
+     - Ditambah padding `.container` sebesar `85px` di bagian bawah dan styling flexbox `.main-content` dengan `align-items: center; min-height: 0;`, saat ruang viewport vertikal pada TV (skala 720p / 1080p scaled) menyempit, kartu QRIS terdorong ke atas (*upward flexbox drift*) sehingga judul menabrak kotak kapsul jam `.datetime`.
+   - **Solusi & Implementasi**:
+     - Membatasi tinggi vertikal `.qris-frame` (`max-height: 44vh; max-width: 280px;`) dan `img#qrisImage` (`max-height: calc(44vh - 20px); width: auto; object-fit: contain;`).
+     - Mengatur padding `.container` menjadi `8px 24px 54px 24px;` dan `.header` memiliki `margin-bottom: 10px; z-index: 10; flex-shrink: 0;`.
+     - Memberikan `margin: auto 0;` pada `.qris-card` dan merapatkan padding `.qris-body` (`padding: 10px 24px; gap: 32px;`).
+     - Memperbarui ikon judul menjadi `<i class="fas fa-th-large"></i>` (4 kotak persegi emas) persis seperti ilustrasi Gambar 2.
+     - Menambahkan media queries responsif khusus Smart TV:
+       - `@media (max-height: 850px), (max-width: 1366px)`
+       - `@media (max-height: 660px)`
+       Memastikan judul *"INFAQ & SHODAQOH DIGITAL QRIS"* selalu berada di bawah kotak kapsul jam dengan ruang bernapas yang lega di semua jenis resolusi TV maupun peramban.
+
+2. **Peningkatan Kontras & Keterbacaan Nomor Telepon Bendahara (`web-statis/slides/infaq.html`)**:
+   - **Keluhan Pengguna (Gambar 3)**: Pada kotak kanan pojok bawah (*Saluran Transfer Donasi*), teks hijau yang berisi nomor telepon bendahara (`0856 1235 167 (BENDAHARA)`) tidak terlihat / tenggelam di layar TV masjid.
+   - **Akar Masalah (*Root Cause*)**:
+     - Warna teks sebelumnya menggunakan hijau neon buram `#00e676` dengan efek shadow hijau pada latar belakang kaca gelap masjid (`rgba(4, 25, 18, 0.72)`). Pada panel LED TV masjid dari jarak >3 meter, teks hijau di atas latar belakang hijau gelap kehilangan kontras dan terlihat buram/tenggelam.
+     - Teks peran `(BENDAHARA)` berukuran kecil (`0.92rem`) dan warna seragam hijau.
+   - **Solusi & Implementasi**:
+     - **Nomor Telepon (`.wa-number`)**: Diubah menjadi putih tajam **`#FFFFFF !important`** (`font-weight: 900; font-size: 1.30rem; font-family: monospace;`) dengan bayangan teks tegas dan pendaran halus emerald.
+     - **Peran Bendahara (`.wa-role`)**: Diubah menjadi emas murni **`#FFD700 !important`** (`font-weight: 800; font-size: 0.96rem; letter-spacing: 1.2px;`).
+     - **Container Badge WhatsApp (`.rek-wa-wrap`)**: Diberikan kartu kontras berlatar belakang `rgba(3, 40, 24, 0.88)` dengan border hijau segar `1.5px solid #22c55e` dan shadow halus `0 3px 12px rgba(0, 0, 0, 0.6)`.
+     - **Label WhatsApp (`.rek-label-wa`)**: Ditambahkan ikon WhatsApp resmi `<i class="fab fa-whatsapp"></i>` berwarna `#25d366` dengan drop-shadow jelas.
+     - **Logika Renderer Dinamis (`renderInfaqWaKonfirmasi`)**: Diperbarui agar parsing nomor telepon dan peran `(BENDAHARA)` otomatis menerapkan struktur kelas kontras tinggi `.wa-number` dan `.wa-role`.
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.64`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.64`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.64`**.
+
+4. **Pengujian Regresi Otomatis (156 / 156 PASS)**:
+   - Menambahkan pengujian otomatis di `scripts/test-engine.js`:
+     - Test 10: Memverifikasi `max-height` frame QRIS dan media queries Smart TV pada `slides/qris.html`.
+     - Test 13: Memverifikasi kontras nomor bendahara WhatsApp (`#FFFFFF`), peran bendahara emas (`#FFD700`), dan ikon WhatsApp pada `slides/infaq.html`.
+   - Menjalankan `npm test`: Seluruh 156 assertions LULUS (100% PASS).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 01:30 WIB)
 
 ### 📴 IKON ALAT KOMUNIKASI PADA FASE ADZAN FARDHU (FLIGHT MODE & SILENT PHONE) (Versi SW v5.8.63):
 1. **Pembaruan Ikon Visual Pesan Hening pada Fase Adzan (`#messageBanner`)**:

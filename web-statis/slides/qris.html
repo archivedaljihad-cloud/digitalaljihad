@@ -33,7 +33,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px 25px 85px 25px;
+            padding: 8px 24px 54px 24px;
             position: relative;
             z-index: 5;
         }
@@ -41,9 +41,10 @@
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             flex-shrink: 0;
             position: relative;
+            z-index: 10;
         }
 
         .header h1 {
@@ -93,8 +94,10 @@
             justify-content: center;
             align-items: center;
             flex: 1;
-            margin: 4px 0;
+            margin: 0;
             min-height: 0;
+            position: relative;
+            z-index: 5;
         }
 
         .qris-card {
@@ -105,14 +108,15 @@
             border: none !important;
             box-shadow: none !important;
             width: 100%;
-            max-width: 1260px;
+            max-width: 1280px;
             overflow: visible;
             display: flex;
             flex-direction: column;
+            margin: auto 0;
         }
 
         .qris-page-title {
-            font-size: 1.80rem;
+            font-size: 1.75rem;
             font-weight: 800;
             color: #ffffff;
             letter-spacing: 1.5px;
@@ -120,20 +124,20 @@
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .qris-page-title i {
             color: #ffd700;
-            font-size: 1.80rem;
+            font-size: 1.75rem;
             filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
         }
 
         /* BODY 2 KOLOM */
         .qris-body {
-            padding: 20px 32px;
+            padding: 10px 24px;
             display: flex;
-            gap: 36px;
+            gap: 32px;
             align-items: center;
         }
 
@@ -141,7 +145,8 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
+            min-width: 0;
         }
 
         .qris-desc-box {
@@ -258,7 +263,7 @@
 
         /* KOLOM QRIS */
         .qris-col {
-            flex: 0 0 340px;
+            flex: 0 0 320px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -268,20 +273,23 @@
 
         .qris-frame {
             background: #ffffff;
-            padding: 12px;
+            padding: 10px;
             border-radius: 20px;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
             border: 3px solid rgba(255, 215, 0, 0.75);
             display: flex;
             align-items: center;
             justify-content: center;
-            max-width: 290px;
+            max-width: 280px;
+            max-height: 44vh;
             width: 100%;
         }
 
         .qris-frame img {
-            width: 100%;
+            width: auto;
+            max-width: 100%;
             height: auto;
+            max-height: calc(44vh - 20px);
             border-radius: 8px;
             display: block;
             object-fit: contain;
@@ -309,6 +317,148 @@
             color: #ffd700 !important;
             font-size: 1.15rem !important;
             filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.85)) !important;
+        }
+
+        /* ========================================================
+           OPTIMASI RESPONSIVE KHUSUS SMART TV (720p / 1080p scaled)
+           Mencegah judul bertabrakan dengan kotak kapsul jam di TV
+           ======================================================== */
+        @media (max-height: 850px), (max-width: 1366px) {
+            .container {
+                padding: 6px 18px 52px 18px;
+            }
+            .header h1 {
+                font-size: 2.1rem !important;
+                margin-bottom: 2px !important;
+            }
+            .header h3.sub-header {
+                font-size: 1.0rem !important;
+                margin-bottom: 2px !important;
+            }
+            .header .datetime,
+            .datetime {
+                font-size: 1.15rem !important;
+                padding: 3px 20px !important;
+            }
+            .header {
+                margin-bottom: 8px !important;
+            }
+            .qris-body {
+                padding: 6px 16px;
+                gap: 24px;
+            }
+            .qris-page-title {
+                font-size: 1.45rem;
+                margin-bottom: 4px;
+                gap: 10px;
+            }
+            .qris-page-title i {
+                font-size: 1.45rem;
+            }
+            .qris-desc-box {
+                padding: 8px 14px;
+            }
+            .qris-instruction {
+                font-size: 0.95rem;
+                margin-bottom: 6px;
+            }
+            .qris-alert-box {
+                padding: 8px 12px;
+            }
+            .qris-alert-text {
+                font-size: 1.05rem;
+            }
+            .qris-alert-text strong {
+                font-size: 1.12rem;
+            }
+            .bank-info-card {
+                padding: 10px 16px;
+            }
+            .bank-title {
+                font-size: 1.10rem;
+                margin-bottom: 6px;
+                padding-bottom: 4px;
+            }
+            .bank-detail-row {
+                padding: 4px 0;
+                font-size: 1.05rem;
+            }
+            .bank-label {
+                font-size: 1.05rem;
+            }
+            .bank-val {
+                font-size: 1.20rem;
+            }
+            .bank-val.owner-name {
+                font-size: 1.12rem;
+            }
+            .qris-gratitude {
+                font-size: 0.95rem;
+                padding-top: 4px;
+            }
+            .qris-col {
+                flex: 0 0 270px;
+                gap: 8px;
+            }
+            .qris-frame {
+                max-width: 240px;
+                max-height: 290px;
+                padding: 8px;
+            }
+            .qris-frame img {
+                max-height: 260px;
+            }
+            .qris-brand-badge {
+                font-size: 0.88rem !important;
+                padding: 6px 16px !important;
+            }
+        }
+
+        @media (max-height: 660px) {
+            .container {
+                padding: 4px 14px 48px 14px;
+            }
+            .header h1 {
+                font-size: 1.7rem !important;
+            }
+            .header h3.sub-header {
+                font-size: 0.88rem !important;
+            }
+            .header .datetime,
+            .datetime {
+                font-size: 1.0rem !important;
+                padding: 2px 14px !important;
+            }
+            .header {
+                margin-bottom: 4px !important;
+            }
+            .qris-body {
+                padding: 4px 12px;
+                gap: 16px;
+            }
+            .qris-page-title {
+                font-size: 1.25rem;
+            }
+            .qris-desc-box {
+                padding: 6px 10px;
+            }
+            .qris-instruction {
+                font-size: 0.85rem;
+            }
+            .bank-info-card {
+                padding: 6px 12px;
+            }
+            .qris-col {
+                flex: 0 0 220px;
+            }
+            .qris-frame {
+                max-width: 200px;
+                max-height: 230px;
+                padding: 6px;
+            }
+            .qris-frame img {
+                max-height: 205px;
+            }
         }
 
         @media (max-width: 992px) {
@@ -375,7 +525,7 @@
                     <!-- Kolom Informasi & Rekening -->
                     <div class="info-col">
                         <div class="qris-page-title">
-                            <i class="fas fa-qrcode"></i> INFAQ & SHODAQOH DIGITAL QRIS
+                            <i class="fas fa-th-large"></i> INFAQ & SHODAQOH DIGITAL QRIS
                         </div>
                         <div class="qris-desc-box">
                             <div class="qris-instruction" id="qrisInstruction">
