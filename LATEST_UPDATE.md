@@ -7,7 +7,40 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 20:05 WIB)
+## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 01:30 WIB)
+
+### 🕌 PENYESUAIAN UKURAN TEKS ANGKA JAM SHOLAT AGAR JELAS TERBACA DARI JARAK 10 METER (`web-statis/slides/utama.html`, `resources/views/utama.blade.php`) — (Versi SW v5.8.75):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Di halaman `https://digitalaljihad.my.id/slides/utama`, pengguna meminta:
+     *"Sedikit perbesar teks angka jam sholat agar lebih terlihat oleh jamaah dari jarak 10m"*.
+2. **Analisis Kebutuhan Visibilitas Jarak Jauh (10 Meter di Smart TV Masjid)**:
+   - Pada layar Smart TV 43" - 65" / 75", ukuran font awal `2.1rem` (~33.6px) pada kartu jadwal sholat (`.sholat-card .waktu-sholat`) terasa agak kecil jika dilihat oleh jamaah dari saf belakang yang berjarak sekitar 10 meter.
+   - Sesuai prinsip *Visual Acuity / Distance-to-Height Ratio* untuk signage publik, proporsi diperbesar sekitar ~26% menjadi **`2.65rem`** (~42.4px) dengan font-weight 800 (tebal), line-height 1.1, serta text shadow emas dan kontras hitam pekat ganda (`text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 0 12px rgba(255, 215, 0, 0.45)`).
+3. **Penyelarasan Desain & Fluid Cross-Device Responsiveness**:
+   - **Kartu Jadwal Sholat Desktop / TV 1080p-4K (`.sholat-card .waktu-sholat`)**:
+     - Dinaikkan dari `2.1rem` menjadi **`2.65rem`** (angka jam seperti `04:05`, `04:15`, `11:41`, `18:57` terlihat sangat tegas, tajam, dan anggun).
+     - Padding kartu disesuaikan dari `padding: 16px 10px 10px 10px;` menjadi **`padding: 14px 8px 10px 8px;`** untuk menjaga ruang vertikal dan simetri sempurna tanpa merusak jarak margin bawah.
+   - **Kapsul Sholat Berikutnya (`.next-prayer-bar`)**:
+     - `.npb-schedule-time` (jam sholat berikutnya): dinaikkan dari `13px` ke **`15px`** dengan font-weight 700.
+     - `.npb-countdown` (hitungan mundur sholat): dinaikkan dari `16px` ke **`19px`** dengan letter-spacing `1.2px` dan glow putih tajam.
+   - **Breakpoint Tablet (<= 1024px)**:
+     - `.sholat-card .waktu-sholat`: ditetapkan **`2.2rem`** untuk layout 4 kolom yang proporsional.
+   - **Breakpoint Mobile Smartphone (<= 767px)**:
+     - `.sholat-card .waktu-sholat`: diselaraskan dari `1.45rem` ke **`1.55rem`** untuk kemudahan membaca di HP.
+   - **Breakpoint Layar Kecil (<= 380px)**:
+     - `.sholat-card .waktu-sholat`: dinaikkan ke **`1.35rem`**.
+   - **Sinkronisasi Blade View**:
+     - `resources/views/utama.blade.php` diperbarui identik ke `2.65rem` / `letter-spacing: 0.8px`.
+4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.75`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.75`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.75`**.
+5. **Pengujian Regresi Otomatis (196 / 196 PASS)**:
+   - Ditambahkan Test Suite ke-17 di `scripts/test-engine.js`: verifikasi ukuran font `2.65rem` di `slides/utama.html`, ukuran countdown `19px`, media query breakpoints, dan integritas cache cleaner.
+   - `npm test` lulus 100% (196 / 196 tests passing).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 20:05 WIB)
 
 ### 🔄 PERBAIKAN TOGGLE ROTASI DISPLAY TV & AKTIVASI PETUGAS SHOLAT JUM'AT (`web-statis/js/admin/admin-rotasi.js`, `admin-jumat.js`, `supabase-db.js`) — (Versi SW v5.8.74):
 1. **Latar Belakang & Keluhan Pengguna**:

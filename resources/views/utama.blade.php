@@ -532,10 +532,10 @@
 		}
 
 		.sholat-card .waktu-sholat {
-			font-size: 2.25rem;
-			font-weight: 700;
+			font-size: 2.65rem;
+			font-weight: 800;
 			color: #ffe066;
-			letter-spacing: 1px;
+			letter-spacing: 0.8px;
 			text-shadow: 0 3px 8px rgba(0, 0, 0, 0.9);
 			margin-top: 3px;
 		}

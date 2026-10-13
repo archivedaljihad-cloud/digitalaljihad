@@ -450,6 +450,17 @@ assert(pengumumanAgendaContent.includes('Kajian ba\'da Shubuh'), 'slides/pengumu
 assert(!pengumumanAgendaContent.includes('Kajian Shubuh / Tematik'), 'slides/pengumuman.html tidak lagi memuat string usang "Kajian Shubuh / Tematik"');
 
 // -------------------------------------------------------------
+// 17. SLIDES UTAMA PRAYER TIME LEGIBILITY (10M DISTANCE)
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 17] Slides Utama Prayer Time Legibility (10M Distance Visibility):');
+const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'utf8');
+assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
+assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
+assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
+assert(utamaContent.includes('font-size: 1.55rem;'), 'slides/utama.html memiliki font-size adaptif 1.55rem pada layar mobile <= 767px');
+assert(swContent.includes('aljihad-signage-v5.8.75'), 'sw.js memiliki bumping versi cache terbaru v5.8.75');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');
