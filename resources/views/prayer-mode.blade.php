@@ -998,6 +998,20 @@
             margin: 0 auto;
         }
 
+        .prayer-shaf-reminder {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(16px, 1.6vw, 22px);
+            font-weight: 600;
+            font-style: italic;
+            line-height: 1.5;
+            color: #FFFFFF;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.92);
+            text-align: center;
+            max-width: 1060px;
+            margin: clamp(6px, 0.9vh, 12px) auto 0;
+            letter-spacing: 0.3px;
+        }
+
         /* FASE SHOLAT BERJAMAAH: KOTAK TRANSPARAN & POSISI TEKS HADITS SHAF DIGESER KE BAWAH */
         body.phase-prayer #hadithPlakat,
         body.phase-prayer .hadith-plakat,
@@ -1009,7 +1023,7 @@
         body.phase-prayer .message-section,
         .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .message-section {
             margin-top: auto !important;
-            margin-bottom: clamp(8px, 1.6vh, 22px) !important;
+            margin-bottom: clamp(35px, 4.8vh, 60px) !important;
             max-width: 1100px;
         }
 
@@ -1576,8 +1590,9 @@
                 <div class="prayer-mode-box">
                     <div class="message-text">
                         <div class="prayer-shaf-arabic">سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ</div>
-                        <div class="prayer-shaf-arti">“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat”</div>
+                        <div class="prayer-shaf-arti">“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”</div>
                         <div class="prayer-shaf-source">(HR. Bukhari no.690 &amp; HR. Muslim no.433)</div>
+                        <div class="prayer-shaf-reminder">“Shalatlah seolah-olah ini adalah shalat terakhirmu”</div>
                     </div>
                 </div>
             @elseif($phase == 'adzan')

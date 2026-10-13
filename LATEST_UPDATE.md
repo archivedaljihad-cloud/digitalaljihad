@@ -7,7 +7,32 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 16:05 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 16:25 WIB)
+
+### 🕋 PENYELARASAN TEKS SHALAT, PENAMBAHAN PENGINGAT SHALAT TERAKHIR, & PENYESUAIAN POSISI ELEVASI HADITS SHAF (`web-statis/prayer-mode.html` & `resources/views/prayer-mode.blade.php`) — (Versi SW v5.8.71):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Pada halaman `https://digitalaljihad.my.id/prayer-mode?phase=prayer`, pengguna meminta:
+     1. Mengganti kata `"salat"` menjadi `"shalat"` pada terjemahan hadits shaf.
+     2. Di bawah terjemahan dan perawi hadits, menambahkan pengingat: `“Shalatlah seolah-olah ini adalah shalat terakhirmu”`.
+     3. Menaikkan sedikit lagi posisi blok teks hadits shaf agar tidak terlalu mepet dengan batas bawah layar TV.
+
+2. **Implementasi & Penyelarasan Desain**:
+   - **Teks Terjemahan Shalat**: Mengganti teks pada `.prayer-shaf-arti` dari `“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan salat”` menjadi `“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”`.
+   - **Penambahan Pengingat Shalat Terakhir**: Menambahkan elemen `<div class="prayer-shaf-reminder">“Shalatlah seolah-olah ini adalah shalat terakhirmu”</div>` dengan font Poppins, semi-bold italic (`font-weight: 600`), warna putih mutiara berkilau dengan *text-shadow* bertingkat untuk keterbacaan tajam di atas latar belakang Ka'bah.
+   - **Elevasi Posisi Seimbang**: Menaikkan posisi `.message-section` pada fase sholat dengan mengubah `margin-bottom` dari `clamp(8px, 1.6vh, 22px)` menjadi `clamp(35px, 4.8vh, 60px) !important;`. Seluruh rangkaian teks (Arab, terjemahan, perawi, dan pengingat) naik secara anggun, terhindar dari bezel TV display, dan proporsional dengan badge waktu sholat di atasnya.
+   - **Penyelarasan Multi-File**: Perubahan diterapkan secara terisolasi dan identik pada `web-statis/prayer-mode.html`, `resources/views/prayer-mode.blade.php`, dan `public/preview-prayer-mode.html`.
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.71`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.71`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.71`**.
+
+4. **Pengujian Regresi Otomatis (190 / 190 PASS)**:
+   - Memperbarui pengujian TEST 12 di `scripts/test-engine.js` untuk memverifikasi string `"kesempurnaan shalat"`, keberadaan pesan pengingat shalat terakhir, class `.prayer-shaf-reminder`, serta memastikan kata usang `"kesempurnaan salat"` tidak lagi ditemukan.
+   - Seluruh 190 assertions lulus 100% tanpa error.
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 16:05 WIB)
 
 ### 🕌 PEMBARUAN JUDUL BADGE KARTU NO. 4 AGENDA RUTIN ("Kajian ba'da Shubuh") (`web-statis/slides/agenda-rutin.html` & `web-statis/slides/pengumuman.html`) — (Versi SW v5.8.70):
 1. **Latar Belakang & Permintaan Pengguna**:
