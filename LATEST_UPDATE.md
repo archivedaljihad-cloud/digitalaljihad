@@ -7,7 +7,36 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 18:35 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 20:05 WIB)
+
+### 🔄 PERBAIKAN TOGGLE ROTASI DISPLAY TV & AKTIVASI PETUGAS SHOLAT JUM'AT (`web-statis/js/admin/admin-rotasi.js`, `admin-jumat.js`, `supabase-db.js`) — (Versi SW v5.8.74):
+1. **Latar Belakang & Keluhan Pengguna**:
+   - Di dashboard Admin menu **"Rotasi Halaman Display TV"**, toggle switch **Petugas Sholat Jum'at** (`slides/jumat.html`) tidak bisa diaktifkan — saat diklik aktif, toggle switch seketika kembali lagi ke Nonaktif (*reverting back*).
+2. **Akar Masalah (*Root Cause*)**:
+   - **Ketiadaan Auto-Sync State Lokal**: Fungsi `handleRotationSwitchChange(input)` di `web-statis/js/admin/admin-rotasi.js` sebelumnya hanya mengubah label visual DOM (`Aktif`/`Nonaktif`), namun sama sekali tidak memperbarui array `cachedRotationPages`, tidak menyimpan ke `localStorage`, dan tidak mengirim PATCH ke Supabase Cloud.
+   - **Re-render Otomatis Latar Belakang**: Ketika `loadAllSupabaseData()` terpanggil secara berkala atau saat tab mengalami `visibilitychange` (fokus kembali), fungsi me-render ulang seluruh tabel rotasi dengan `cachedRotationPages` lama yang masih bernilai `active: false`, sehingga toggle langsung kembali ke Nonaktif.
+   - **Blokir Otorisasi Role Petugas**: Tombol `simpanRotasiTV()` sebelumnya membatasi hanya Super Admin (`role === 'admin'`), sementara pengguna yang sedang login adalah **Bpk. Ust. Hadi Prayitno (Petugas / Operator / Ketua DKM)** yang memiliki hak operasional TV Display (`role === 'petugas'`).
+3. **Solusi & Implementasi**:
+   - **Auto-Sync Seketika pada Switch Toggle (`handleRotationSwitchChange`)**:
+     - Ditambahkan parameter URL dan index: `handleRotationSwitchChange(this, '${url}', ${idx})`.
+     - Ketika toggle diklik, sistem langsung memperbarui `targetSlide.active = isChecked` pada `cachedRotationPages`.
+     - Langsung disimpan ke `localStorage.setItem('cached_rotation_pages', ...)` agar kebal terhadap event blur/focus/sync apapun.
+     - Mengirim PATCH otomatis ke Supabase Cloud `app_settings?id=eq.1` (`rotation_pages`) dan melakukan broadcast realtime `SupabaseDB.broadcastChange` ke Smart TV (<100ms).
+   - **Perluasan Hak Akses Pengurus (`isAllowed`)**:
+     - `simpanRotasiTV()` dan `setAllRotationPagesActive()` kini dapat dijalankan baik oleh Super Admin maupun Petugas / Operator (`role === 'admin' || role === 'petugas'`).
+   - **Jaminan Aktivasi Otomatis saat Simpan Petugas Jum'at**:
+     - Di `web-statis/js/admin/admin-jumat.js` (`simpanPetugasJumat`) dan `web-statis/js/supabase-db.js` (`saveSholatJumat`), jika `slides/jumat.html` berada dalam status nonaktif, sistem secara cerdas langsung mengaktifkannya ke `active: true` di `rotation_pages`.
+   - **Update Langsung Supabase Cloud**:
+     - Menjalankan patch langsung ke Supabase Cloud `app_settings` sehingga `Petugas Sholat Jum'at` kini berstatus `active: true` (11 dari 20 halaman aktif).
+4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.74`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.74`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.74`**.
+5. **Pengujian Regresi Otomatis (191 / 191 PASS)**:
+   - Menjalankan `npm test` dengan hasil 191 assertions lulus 100% tanpa regresi.
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 18:35 WIB)
 
 ### 🕋 PENYESUAIAN UKURAN FONT TERJEMAHAN HADITS SHAF & PENGINGAT SHALAT TERAKHIR (`prayer-mode.html?phase=prayer`) — (Versi SW v5.8.73):
 1. **Latar Belakang & Permintaan Pengguna**:

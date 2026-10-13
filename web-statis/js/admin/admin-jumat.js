@@ -228,13 +228,36 @@
                 }
                 try { localStorage.setItem('cached_running_text_pages', JSON.stringify(currentRt)); } catch (e) {}
 
+                // 2. Pastikan slide Petugas Jum'at otomatis aktif di daftar rotasi TV saat data petugas disimpan
+                let updatedRotPages = null;
+                try {
+                    if (!cachedRotationPages || cachedRotationPages.length === 0) {
+                        cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
+                    }
+                    const jSlide = cachedRotationPages.find(p => (p.url || p.path || '').includes('jumat.html') && !(p.url || p.path || '').includes('kas-jumat.html'));
+                    if (jSlide && jSlide.active === false) {
+                        jSlide.active = true;
+                        cachedRotationPages = normalizeRotationPages(cachedRotationPages);
+                        localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
+                        updatedRotPages = cachedRotationPages;
+                        if (typeof renderRotationTable === 'function') {
+                            renderRotationTable(cachedRotationPages);
+                        }
+                    }
+                } catch (e) {}
+
+                const patchSettingsPayload = {
+                    prayer_mode_jumat_duration: jumatDur,
+                    running_text_pages: currentRt
+                };
+                if (updatedRotPages) {
+                    patchSettingsPayload.rotation_pages = updatedRotPages;
+                }
+
                 await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
-                    body: JSON.stringify({
-                        prayer_mode_jumat_duration: jumatDur,
-                        running_text_pages: currentRt
-                    })
+                    body: JSON.stringify(patchSettingsPayload)
                 }).catch(() => {});
 
                 // 3. Sinkronkan juga nama petugas ke pengumuman_jumat (id=9 & localStorage) agar selalu konsisten

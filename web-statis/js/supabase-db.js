@@ -593,6 +593,36 @@
                 }
                 try { localStorage.setItem('cached_running_text_pages', JSON.stringify(currentRt)); } catch (e) {}
 
+                // Pastikan slide Petugas Jum'at otomatis aktif di daftar rotasi TV saat data petugas disimpan
+                let updatedRotPages = null;
+                try {
+                    const liveSettings = await this.getSettings(true).catch(() => null);
+                    let rotPages = liveSettings?.rotation_pages;
+                    if (typeof rotPages === 'string') {
+                        try { rotPages = JSON.parse(rotPages); } catch(e) {}
+                    }
+                    if (!rotPages || !Array.isArray(rotPages)) {
+                        const localRot = localStorage.getItem('cached_rotation_pages');
+                        if (localRot) try { rotPages = JSON.parse(localRot); } catch(e) {}
+                    }
+                    if (Array.isArray(rotPages)) {
+                        const jSlide = rotPages.find(p => (p.url || p.path || p.page || '').includes('jumat') && !(p.url || p.path || p.page || '').includes('kas-jumat'));
+                        if (jSlide && jSlide.active === false) {
+                            jSlide.active = true;
+                            updatedRotPages = rotPages;
+                            localStorage.setItem('cached_rotation_pages', JSON.stringify(rotPages));
+                        }
+                    }
+                } catch(e) {}
+
+                const patchAppSettingsPayload = {
+                    prayer_mode_jumat_duration: jumatDur,
+                    running_text_pages: currentRt
+                };
+                if (updatedRotPages) {
+                    patchAppSettingsPayload.rotation_pages = updatedRotPages;
+                }
+
                 await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: {
@@ -600,10 +630,7 @@
                         'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        prayer_mode_jumat_duration: jumatDur,
-                        running_text_pages: currentRt
-                    })
+                    body: JSON.stringify(patchAppSettingsPayload)
                 }).catch(() => {});
 
                 // 3. Sinkronkan juga ke pengumuman_jumat (id=9) agar tidak memuat nama petugas lama

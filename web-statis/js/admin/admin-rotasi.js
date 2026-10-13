@@ -38,7 +38,7 @@
                         </td>
                         <td class="text-center align-middle">
                             <div class="custom-control custom-switch d-inline-block">
-                                <input type="checkbox" class="custom-control-input" id="rotCheck${idx + 1}" ${isChecked} onchange="handleRotationSwitchChange(this)">
+                                <input type="checkbox" class="custom-control-input" id="rotCheck${idx + 1}" ${isChecked} onchange="handleRotationSwitchChange(this, '${url}', ${idx})">
                                 <label class="custom-control-label font-weight-bold ${p.active !== false ? 'text-success' : 'text-muted'}" for="rotCheck${idx + 1}">${p.active !== false ? 'Aktif' : 'Nonaktif'}</label>
                             </div>
                         </td>
@@ -84,14 +84,58 @@
             }
         }
 
-        // Event handler switch aktif/nonaktif baris
-        function handleRotationSwitchChange(input) {
+        // Event handler switch aktif/nonaktif baris (Realtime & Auto-Sync)
+        async function handleRotationSwitchChange(input, url, idx) {
+            const isChecked = input.checked;
             const label = input.nextElementSibling;
             if (label) {
-                label.textContent = input.checked ? 'Aktif' : 'Nonaktif';
-                label.className = input.checked ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-muted';
+                label.textContent = isChecked ? 'Aktif' : 'Nonaktif';
+                label.className = isChecked ? 'custom-control-label font-weight-bold text-success' : 'custom-control-label font-weight-bold text-muted';
             }
             updateActiveRotationCountBadge();
+
+            // 1. Dapatkan referensi item di cachedRotationPages
+            if (!cachedRotationPages || cachedRotationPages.length === 0) {
+                cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
+            }
+
+            let targetSlide = null;
+            if (url) {
+                targetSlide = cachedRotationPages.find(p => (p.url === url || p.path === url || (p.path && p.path.includes(url))));
+            }
+            if (!targetSlide && typeof idx === 'number' && cachedRotationPages[idx]) {
+                targetSlide = cachedRotationPages[idx];
+            }
+
+            if (targetSlide) {
+                targetSlide.active = isChecked;
+            } else if (typeof idx === 'number' && cachedRotationPages[idx]) {
+                cachedRotationPages[idx].active = isChecked;
+            }
+
+            // Normalisasi & simpan segera ke localStorage agar tidak ter-reset oleh event blur/focus/sync apapun!
+            cachedRotationPages = normalizeRotationPages(cachedRotationPages);
+            localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
+
+            // 2. Auto-sync seketika ke Supabase Cloud & Realtime TV Display
+            try {
+                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({
+                        rotation_pages: cachedRotationPages
+                    })
+                });
+
+                if (res.ok) {
+                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                        const actor = (currentUser?.name || 'Petugas Operator');
+                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', { rotation_pages: cachedRotationPages }, actor);
+                    }
+                }
+            } catch (err) {
+                console.warn('Sync otomatis status rotasi ke Supabase:', err);
+            }
         }
 
         // Perbarui badge jumlah total slide yang aktif
@@ -109,11 +153,11 @@
             }
         }
 
-        // Aktifkan / Matikan semua halaman sekaligus (Khusus Super Admin)
-        function setAllRotationPagesActive(isActive) {
-            const isSuperAdmin = (currentUser && (currentUser.role === 'admin' || currentUser.role_id === 3));
-            if (!isSuperAdmin) {
-                alert('Akses Dibatasi: Hanya Super Admin yang berhak mengubah status rotasi massal.');
+        // Aktifkan / Matikan semua halaman sekaligus (Super Admin & Petugas Operator)
+        async function setAllRotationPagesActive(isActive) {
+            const isAllowed = (currentUser && (currentUser.role === 'admin' || currentUser.role === 'petugas' || currentUser.role_id === 3 || currentUser.role_id === 2));
+            if (!isAllowed) {
+                alert('Akses Dibatasi: Hanya Pengurus (Admin / Petugas Operator) yang berhak mengubah status rotasi massal.');
                 return;
             }
             const allChecks = document.querySelectorAll('#rotationTableBody input[type="checkbox"]');
@@ -126,6 +170,26 @@
                 }
             });
             updateActiveRotationCountBadge();
+
+            if (!cachedRotationPages || cachedRotationPages.length === 0) {
+                cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
+            }
+            cachedRotationPages.forEach(p => { p.active = isActive; });
+            cachedRotationPages = normalizeRotationPages(cachedRotationPages);
+            localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
+
+            try {
+                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                    method: 'PATCH',
+                    headers: getSupabaseHeaders(),
+                    body: JSON.stringify({ rotation_pages: cachedRotationPages })
+                });
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', { rotation_pages: cachedRotationPages }, (currentUser?.name || 'Petugas Operator'));
+                }
+            } catch (e) {
+                console.warn('Sync setAllRotationPagesActive:', e);
+            }
         }
 
         // Reset Urutan dan Status Halaman ke Standar Master
@@ -201,9 +265,9 @@
         // Buka Modal Edit Kas
 
         async function simpanRotasiTV() {
-            const isSuperAdmin = (currentUser && (currentUser.role === 'admin' || currentUser.role_id === 3));
-            if (!isSuperAdmin) {
-                alert('Akses Dibatasi: Hanya Super Admin yang berhak menyimpan perubahan urutan rotasi display TV.');
+            const isAllowed = (currentUser && (currentUser.role === 'admin' || currentUser.role === 'petugas' || currentUser.role_id === 3 || currentUser.role_id === 2));
+            if (!isAllowed) {
+                alert('Akses Dibatasi: Hanya Pengurus (Admin / Petugas Operator) yang berhak menyimpan perubahan rotasi display TV.');
                 return;
             }
 
