@@ -7,7 +7,38 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 17:10 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 18:35 WIB)
+
+### 🕋 PENYESUAIAN UKURAN FONT TERJEMAHAN HADITS SHAF & PENGINGAT SHALAT TERAKHIR (`prayer-mode.html?phase=prayer`) — (Versi SW v5.8.73):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Pada halaman `https://digitalaljihad.my.id/prayer-mode?phase=prayer`, pengguna meminta:
+     - `سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ` = **UKURAN TETAP / TIDAK BERUBAH**
+     - `“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”` = **FONTNYA PERBESAR SEDIKIT LAGI**
+     - `(HR. Bukhari no.690 & HR. Muslim no.433)` = **UKURAN TETAP / TIDAK BERUBAH**
+     - `“Shalatlah seolah-olah ini adalah shalat terakhirmu”` = **FONTNYA PERBESAR SEDIKIT LAGI**
+
+2. **Implementasi & Penyelarasan Desain Fluid Responsive**:
+   - **Matan Arab Hadits Shaf (`.prayer-shaf-arabic`)**: Ukuran dipertahankan tetap sesuai mandat (`clamp(26px, 2.9vw, 42px)`, font `Amiri`, emas `#FFD700`, glow lembut).
+   - **Terjemahan Hadits Shaf (`.prayer-shaf-arti`)**: Ukuran diperbesar proporsional dari `clamp(17px, 1.7vw, 24px)` menjadi **`clamp(20px, 2.0vw, 28px)`** (kenaikan ~17% di TV display) serta penyesuaian `max-width: 1160px;` agar kalimat hadits mengalir rata tengah sempurna tanpa kata menggantung (*orphan words*).
+   - **Sumber Perawi Hadits (`.prayer-shaf-source`)**: Ukuran dipertahankan tetap sesuai mandat (`clamp(13px, 1.3vw, 18px)`, emas muda `#FDE047`, letter-spacing `0.5px`).
+   - **Pengingat Shalat Terakhir (`.prayer-shaf-reminder`)**: Ukuran diperbesar proporsional dari `clamp(16px, 1.6vw, 22px)` menjadi **`clamp(18px, 1.8vw, 25px)`** (kenaikan ~14% di TV display) dengan font Poppins semi-bold italic, warna putih mutiara berkilau `#FFFFFF`.
+   - **Keluasan Kontainer (`body.phase-prayer .message-section`)**: `max-width` dinaikkan dari `1100px` menjadi `1180px` untuk memberikan ruang pernapasan (*breathing room*) yang lapang dan simetris di atas latar belakang Ka'bah.
+   - **Sinkronisasi Multi-File Parity**: Perubahan diterapkan identik pada:
+     - `web-statis/prayer-mode.html`
+     - `public/preview-prayer-mode.html`
+     - `resources/views/prayer-mode.blade.php`
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.73`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.73`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.73`**.
+
+4. **Pengujian Regresi Otomatis (191 / 191 PASS)**:
+   - Pengujian TEST 12 di `scripts/test-engine.js` diperluas dengan assertions verifikasi font size clamp baru pada `.prayer-shaf-arti` dan `.prayer-shaf-reminder`.
+   - Seluruh 191 assertions lulus 100% tanpa error (`npm test`).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 17:10 WIB)
 
 ### 📁 PENYESUAIAN PENAMAAN FOLDER CADANGAN LOKAL (`【coldBACKUP - Digital WebSTATIS】`) & STANDARISASI ARSITEKTUR:
 1. **Latar Belakang & Klarifikasi Pengguna**:

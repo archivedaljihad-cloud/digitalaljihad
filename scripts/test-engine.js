@@ -361,11 +361,12 @@ console.log('\n📌 [TEST 12] Prayer Mode Shaf Hadith Center Format & Transparen
 const prayerModeHtmlContent = fs.readFileSync(path.join(baseDir, 'prayer-mode.html'), 'utf8');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-arabic') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arabic format center');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arti format center');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlContent.includes('clamp(20px, 2.0vw, 28px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-arti yang diperbesar proporsional');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-source') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-source format center');
 assert(prayerModeHtmlContent.includes('“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”'), 'prayer-mode.html memuat terjemahan hadits shaf dengan kata "shalat"');
 assert(!prayerModeHtmlContent.includes('kesempurnaan salat'), 'prayer-mode.html tidak lagi memuat kata usang "kesempurnaan salat"');
 assert(prayerModeHtmlContent.includes('Shalatlah seolah-olah ini adalah shalat terakhirmu'), 'prayer-mode.html memuat pengingat shalat terakhir');
-assert(prayerModeHtmlContent.includes('.prayer-shaf-reminder'), 'prayer-mode.html memiliki CSS .prayer-shaf-reminder');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-reminder') && prayerModeHtmlContent.includes('clamp(18px, 1.8vw, 25px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-reminder yang diperbesar proporsional');
 assert(prayerModeHtmlContent.includes('(HR. Bukhari no.690 &amp; HR. Muslim no.433)'), 'prayer-mode.html memuat sumber hadits HR. Bukhari no.690 & HR. Muslim no.433');
 assert(!prayerModeHtmlContent.includes("prayerModeTextEl.textContent = 'Iqamah Segera Dikumandangkan"), 'prayer-mode.html tidak lagi menggunakan teks Iqamah lama pada fase sholat berjamaah');
 assert(prayerModeHtmlContent.includes('body.phase-prayer .prayer-mode-box') && prayerModeHtmlContent.includes('background: transparent !important;'), 'prayer-mode.html memiliki kotak hadits shaf 100% transparan di fase sholat');
