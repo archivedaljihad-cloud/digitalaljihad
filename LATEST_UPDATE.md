@@ -7,7 +7,24 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 16:45 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 17:10 WIB)
+
+### 📁 PENYESUAIAN PENAMAAN FOLDER CADANGAN LOKAL (`【coldBACKUP - Digital WebSTATIS】`) & STANDARISASI ARSITEKTUR:
+1. **Latar Belakang & Klarifikasi Pengguna**:
+   - Pengguna mendapati 2 folder di komputer lokal:
+     1. `C:\Users\anthu\Documents\【Project】\DIGITALv304\web-statis\` (Folder utama aktif produksi)
+     2. `C:\Users\anthu\Documents\【Digital WebSTATIS】\` (Folder cadangan arsip / cold backup)
+   - Agar tidak terjadi kebingungan atau salah buka folder saat bekerja di File Explorer, pengguna meminta agar folder nomor 2 di-*rename* menjadi:
+     `C:\Users\anthu\Documents\【coldBACKUP - Digital WebSTATIS】`.
+
+2. **Implementasi & Penyelarasan Konfigurasi**:
+   - **Rename Folder**: Folder `C:\Users\anthu\Documents\【Digital WebSTATIS】` berhasil di-rename menjadi **`C:\Users\anthu\Documents\【coldBACKUP - Digital WebSTATIS】`**.
+   - **Pembaruan Aturan SOP (`AGENTS.md`)**: Memperbarui aturan mandatori cold backup di `AGENTS.md` poin 1.e sehingga setiap agen AI berikutnya secara otomatis menyalin berkas pembaruan ke jalur baru `C:\Users\anthu\Documents\【coldBACKUP - Digital WebSTATIS】\`.
+   - **Konfirmasi Folder Aktif**: Memastikan bahwa folder aktif produksi tetap berada di `C:\Users\anthu\Documents\【Project】\DIGITALv304\web-statis\` yang terintegrasi dengan Git, GitHub `main`, Cloudflare Workers (`wrangler.toml`), dan `npm test`.
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 16:45 WIB)
 
 ### 🕋 ELEVASI TINGGI POSISI BLOK HADITS SHAF & PENGINGAT SHALAT TERAKHIR (`web-statis/prayer-mode.html` & `resources/views/prayer-mode.blade.php`) — (Versi SW v5.8.72):
 1. **Latar Belakang & Permintaan Pengguna**:
