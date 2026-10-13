@@ -299,18 +299,31 @@
         }
 
         .slide-desc {
-            font-size: 1.25rem;
-            color: #f1f5f9;
+            font-size: 1.24rem;
+            font-weight: 500;
+            color: #ffffff;
             line-height: 1.7;
-            background: transparent;
-            border: none;
-            padding: 0;
-            border-radius: 0;
+            background: rgba(3, 22, 15, 0.80);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
+            border-radius: 18px;
+            padding: 15px 28px;
             text-align: center;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 4px 22px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.85);
-            max-width: 92%;
+            -webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.9);
+            text-shadow: 
+                0 0 8px #000000,
+                0 0 16px rgba(0, 0, 0, 0.95),
+                0 2px 5px #000000,
+                0 4px 18px rgba(0, 0, 0, 0.9);
+            box-shadow: 
+                0 10px 32px rgba(0, 0, 0, 0.75),
+                0 0 20px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            max-width: 95%;
             margin: 0 auto;
-            box-shadow: none;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
         }
 
         .slide-dots-indicator {
@@ -414,6 +427,50 @@
         @keyframes marquee {
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
+        }
+
+        /* =====================================================
+           RESPONSIVE VIEWPORT BREAKPOINTS (SLIDE.HTML)
+           Senior JAMstack Multi-Device Adaptation
+           ===================================================== */
+        @media (max-width: 1024px) {
+            .container { padding: 10px 16px 75px 16px; }
+            .slide-stage { gap: 20px; }
+            .slide-title { font-size: 1.85rem; }
+            .slide-desc {
+                font-size: 1.05rem;
+                padding: 12px 18px;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px 12px 70px 12px;
+            }
+            .slide-stage {
+                flex-direction: column;
+                gap: 16px;
+                height: auto;
+            }
+            .slide-left-col {
+                flex: none;
+                height: 40vh;
+                width: 100%;
+            }
+            .slide-right-col {
+                flex: none;
+                height: auto;
+                width: 100%;
+            }
+            .slide-title { font-size: 1.45rem; }
+            .slide-desc {
+                font-size: 0.95rem;
+                padding: 10px 14px;
+                line-height: 1.5;
+            }
         }
     </style>
 </head>
@@ -661,66 +718,97 @@
             }
         }
 
-        // Efek Transisi Slide dengan Hardware-Accelerated Cinematic Cross-Fade (Anti-Lag & Anti-Crash TV)
-        function perform3DGridFlip(fromUrl, toUrl, callback) {
+        let isSlideTransitioning = false;
+
+        // Efek Transisi Slide dengan Hardware-Accelerated Cinematic Cross-Dissolve (Ultra-Smooth Anti-Hentakan & Anti-Lag TV)
+        function performCinematicTransition(toUrl, nextTitle, nextDesc, callback) {
             const posterImg = document.getElementById('posterImg');
             const card = document.querySelector('.slide-card');
+            const titleEl = document.getElementById('slideTitle');
+            const descEl = document.getElementById('slideDesc');
             const fallback = document.getElementById('posterFallback');
 
             if (fallback) fallback.style.display = 'none';
 
-            if (!posterImg || !toUrl) {
+            if (!posterImg) {
+                if (titleEl) titleEl.textContent = nextTitle;
+                if (descEl) descEl.textContent = nextDesc;
                 if (callback) callback();
                 return;
             }
 
-            if (!fromUrl || fromUrl === toUrl) {
-                posterImg.src = toUrl;
-                posterImg.style.display = 'block';
-                if (callback) callback();
-                return;
-            }
+            const fadeOutMs = 450;
+            const fadeInMs = 550;
 
-            // Transisi halus cross-dissolve dengan akselerasi GPU murni
-            posterImg.style.transition = 'opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)';
+            // 1. FASE OUT SINKRON: Redupkan gambar poster & teks deskripsi secara lembut bersamaan
+            posterImg.style.transition = `opacity ${fadeOutMs}ms cubic-bezier(0.4, 0, 0.2, 1), transform ${fadeOutMs}ms cubic-bezier(0.4, 0, 0.2, 1)`;
             posterImg.style.opacity = '0';
-            posterImg.style.transform = 'scale(0.98)';
+            posterImg.style.transform = 'scale(0.96)';
+
             if (card) {
-                card.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
-                card.style.opacity = '0.7';
-                card.style.transform = 'scale(0.99)';
+                card.style.transition = `opacity ${fadeOutMs}ms cubic-bezier(0.4, 0, 0.2, 1), transform ${fadeOutMs}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(8px)';
             }
 
-            let executed = false;
-            const completeTransition = () => {
-                if (executed) return;
-                executed = true;
-                posterImg.src = toUrl;
-                posterImg.style.display = 'block';
-                // Trigger reflow untuk animasi masuk
-                void posterImg.offsetWidth;
-                posterImg.style.opacity = '1';
-                posterImg.style.transform = 'scale(1)';
-                if (card) {
-                    card.style.opacity = '1';
-                    card.style.transform = 'scale(1)';
-                }
-                setTimeout(() => {
-                    if (callback) callback();
-                }, 300);
-            };
+            // 2. FASE GANTI KONTEN SAAT KOSONG / OPACITY 0 (Mencegah Hentakan Teks / Gambar)
+            setTimeout(() => {
+                // Perbarui judul dan deskripsi saat tidak terlihat oleh jamaah
+                if (titleEl) titleEl.textContent = nextTitle;
+                if (descEl) descEl.textContent = nextDesc;
 
-            const preloadImg = new Image();
-            const failsafe = setTimeout(completeTransition, 350);
-            preloadImg.onload = () => {
-                clearTimeout(failsafe);
-                completeTransition();
-            };
-            preloadImg.onerror = () => {
-                clearTimeout(failsafe);
-                completeTransition();
-            };
-            preloadImg.src = toUrl;
+                const proceedFadeIn = () => {
+                    if (toUrl) {
+                        posterImg.src = toUrl;
+                        posterImg.style.display = 'block';
+                        if (fallback) fallback.style.display = 'none';
+                    } else {
+                        posterImg.style.display = 'none';
+                        if (fallback) fallback.style.display = 'flex';
+                    }
+
+                    // Trigger reflow agar browser mendaftarkan perubahan sebelum animasi masuk
+                    void posterImg.offsetWidth;
+                    if (card) void card.offsetWidth;
+
+                    // 3. FASE IN: Munculkan gambar dan teks secara elegan dengan timing kurva alami (cross-dissolve murni)
+                    posterImg.style.transition = `opacity ${fadeInMs}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${fadeInMs}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+                    posterImg.style.opacity = '1';
+                    posterImg.style.transform = 'scale(1)';
+
+                    if (card) {
+                        card.style.transition = `opacity ${fadeInMs}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${fadeInMs}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }
+
+                    setTimeout(() => {
+                        if (callback) callback();
+                    }, fadeInMs + 50);
+                };
+
+                // Preload gambar baru sebelum dimunculkan untuk menjamin tidak ada glitch render
+                if (toUrl) {
+                    const preloader = new Image();
+                    let handled = false;
+                    const triggerOnce = () => {
+                        if (handled) return;
+                        handled = true;
+                        proceedFadeIn();
+                    };
+                    const maxWait = setTimeout(triggerOnce, 300);
+                    preloader.onload = () => { clearTimeout(maxWait); triggerOnce(); };
+                    preloader.onerror = () => { clearTimeout(maxWait); triggerOnce(); };
+                    preloader.src = toUrl;
+                } else {
+                    proceedFadeIn();
+                }
+            }, fadeOutMs);
+        }
+
+        // Kompatibilitas mundur jika dipanggil dari tempat lain
+        function perform3DGridFlip(fromUrl, toUrl, callback) {
+            performCinematicTransition(toUrl, '', '', callback);
         }
 
         function showSlide(item, index, total) {
@@ -738,32 +826,7 @@
             const rawUrl = item.gambar || item.gambar_base64 || item.image || item.file_path;
             const newResolvedUrl = resolveSlideUrl(rawUrl);
 
-            // Update elemen teks
-            if (titleEl) titleEl.textContent = nextTitle;
-            if (descEl) descEl.textContent = nextDesc;
-
-            if (newResolvedUrl) {
-                if (fallback) fallback.style.display = 'none';
-                if (posterImg) posterImg.style.display = 'block';
-
-                if (lastResolvedImgUrl && lastResolvedImgUrl !== newResolvedUrl) {
-                    // Jalankan efek Card Flip Transition (3D Grid Flip)
-                    perform3DGridFlip(lastResolvedImgUrl, newResolvedUrl, () => {
-                        lastResolvedImgUrl = newResolvedUrl;
-                    });
-                } else {
-                    if (posterImg) {
-                        posterImg.src = newResolvedUrl;
-                        posterImg.style.display = 'block';
-                    }
-                    lastResolvedImgUrl = newResolvedUrl;
-                }
-            } else {
-                if (posterImg) posterImg.style.display = 'none';
-                if (fallback) fallback.style.display = 'flex';
-                lastResolvedImgUrl = '';
-            }
-
+            // Update indikator dots
             const dotsEl = document.getElementById('slideDots');
             if (dotsEl && total > 1) {
                 dotsEl.innerHTML = Array.from({ length: total }).map((_, i) => `
@@ -772,6 +835,40 @@
             } else if (dotsEl) {
                 dotsEl.innerHTML = '';
             }
+
+            // Inisialisasi awal (pertama kali dibuka): render instan
+            if (!lastResolvedImgUrl) {
+                if (titleEl) titleEl.textContent = nextTitle;
+                if (descEl) descEl.textContent = nextDesc;
+                if (newResolvedUrl) {
+                    if (fallback) fallback.style.display = 'none';
+                    if (posterImg) {
+                        posterImg.src = newResolvedUrl;
+                        posterImg.style.display = 'block';
+                        posterImg.style.opacity = '1';
+                        posterImg.style.transform = 'scale(1)';
+                    }
+                    lastResolvedImgUrl = newResolvedUrl;
+                } else {
+                    if (posterImg) posterImg.style.display = 'none';
+                    if (fallback) fallback.style.display = 'flex';
+                }
+                return;
+            }
+
+            // Jika URL dan teks sama persis, tidak perlu transisi ulang
+            if (lastResolvedImgUrl === newResolvedUrl && titleEl && titleEl.textContent === nextTitle) {
+                return;
+            }
+
+            if (isSlideTransitioning) return;
+            isSlideTransitioning = true;
+
+            // Jalankan transisi sinematik cross-dissolve ultra-halus (bebas hentakan)
+            performCinematicTransition(newResolvedUrl, nextTitle, nextDesc, () => {
+                lastResolvedImgUrl = newResolvedUrl;
+                isSlideTransitioning = false;
+            });
         }
 
         function goToSlide(targetIdx) {

@@ -7,7 +7,37 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 02:05 WIB)
+## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 02:25 WIB)
+
+### 🖼️ PENINGKATAN KONTRAS TEKS DESKRIPSI & ANIMASI TRANSISI SINEMATIK BEBAS HENTAKAN PADA SLIDE DOKUMENTASI (`web-statis/slides/slide.html`, `resources/views/slide.blade.php`) — (Versi SW v5.8.77):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Di halaman `https://digitalaljihad.my.id/slides/slide`, pengguna meminta 2 hal penting:
+     1. *"Berikan sedikit efek gelap (misalnya ditambahkan outerglow/outline) yang warnanya kontras dengan teks 'deskripsi' agar teks deskripsi bisa lebih mudah terbaca oleh jamaah."* (Latar belakang slide menampilkan Masjid Nabawi/pelataran masjid yang cerah, sehingga teks putih deskripsi sebelumnya agak silau dan kurang kontras).
+     2. *"Perhalus lagi efek/animasi perpindahan slidenya. Sekarang saat perpindahan antara slide 1 ke slide 2 ke slide 3 masih terlihat ada hentakan."*
+2. **Solusi Efek Gelap & Kontras Tajam pada Teks Deskripsi (`.slide-desc`)**:
+   - Ditambahkan kapsul frosted glass gelap islami: `background: rgba(3, 22, 15, 0.80);` dengan blur mendalam `backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);`.
+   - Diberikan bingkai emas elegan berpenetrasi: `border: 1.5px solid rgba(255, 215, 0, 0.45); border-radius: 18px; padding: 15px 28px;`.
+   - Diberikan efek outline gelap pekat dengan `-webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.9);` serta multi-layered dark text shadow (`0 0 8px #000000, 0 0 16px rgba(0, 0, 0, 0.95), 0 2px 5px #000000, 0 4px 18px rgba(0, 0, 0, 0.9)`).
+   - Ditambahkan bayangan kartu mendalam: `box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.15);`.
+   - Ditambahkan breakpoint responsif untuk kenyamanan membaca di Smart TV, tablet, maupun layar smartphone.
+3. **Solusi Eliminasi Hentakan Transisi Slide (`performCinematicTransition`)**:
+   - **Analisis Hentakan Sebelumnya**: Pada implementasi lama, teks judul dan deskripsi langsung diganti di milidetik pertama fungsi dijalankan sebelum gambar poster lama selesai memudar. Ini menciptakan hentakan visual karena teks melompat seketika sementara gambar masih berkedip cepat.
+   - **Mesin Transisi Sinematik 3-Fase Baru**:
+     - **Fase 1 (Fade-Out Sinkron Lembut - 450ms)**: Gambar poster dan panel teks diturunkan opacity-nya bersama-sama hingga `0` dengan sedikit efek mikro-zoom/turun lembut (`scale(0.96)` dan `translateY(8px)`).
+     - **Fase 2 (Penukaran Data di Kegelapan)**: Teks judul baru dan deskripsi baru di-inject ke DOM saat kartu teks sedang dalam kondisi 100% transparan (`opacity: 0`). Gambar baru di-preload di background dengan timeout fallback 300ms agar browser TV tidak menggantung.
+     - **Fase 3 (Fade-In Sinematik Anggun - 550ms)**: Gambar dan panel teks dimunculkan kembali secara sinkron dan serempak menggunakan kurva animasi natural `cubic-bezier(0.16, 1, 0.3, 1)` menuju `opacity: 1`, `scale(1)`, `translateY(0)`.
+   - Menggunakan flag `isSlideTransitioning = true` sehingga tidak terjadi tabrakan animasi jika ada pergantian cepat.
+   - Selaras dengan template Laravel Blade di `resources/views/slide.blade.php`.
+4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.77`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.77`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.77`**.
+5. **Pengujian Regresi Otomatis (203 / 203 PASS)**:
+   - Ditambahkan Test Suite ke-19 di `scripts/test-engine.js` untuk memverifikasi kontras teks deskripsi, outline/stroke, dan mesin transisi bebas hentakan.
+   - Seluruh 203 assertions check lolos 100%.
+
+---
+
+## 📜 ARSIP UPDATE — 14 Oktober 2026 (Pukul 02:05 WIB)
 
 ### 👤 FORMAT 1 BARIS TEKS NAMA IMAM & KHOTIB DALAM KOTAK FOTO SLIDE JUM'AT (`web-statis/slides/jumat.html`, `resources/views/jumat.blade.php`) — (Versi SW v5.8.76):
 1. **Latar Belakang & Permintaan Pengguna**:

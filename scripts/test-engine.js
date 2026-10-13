@@ -457,7 +457,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.76'), 'sw.js memiliki bumping versi cache terbaru v5.8.76');
+assert(swContent.includes('aljihad-signage-v5.8.77'), 'sw.js memiliki bumping versi cache terbaru v5.8.77');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -468,6 +468,16 @@ assert(jumatContent.includes('.imam-badge-overlay .badge-name') && jumatContent.
 assert(jumatContent.includes('text-overflow: ellipsis;'), 'slides/jumat.html memiliki proteksi text-overflow ellipsis agar tidak meluap');
 assert(jumatContent.includes('.imam-card-box') && jumatContent.includes('width: 280px;'), 'slides/jumat.html memiliki lebar imam-card-box 280px yang lapang untuk gelar nama');
 assert(jumatContent.includes('badgeImamEl.style.fontSize'), 'slides/jumat.html memiliki dynamic font-size scaler untuk nama panjang di badge imam');
+
+// -------------------------------------------------------------
+// 19. SLIDES SLIDE CONTRAST & CINEMATIC TRANSITION INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 19] Slides Slide Contrast & Cinematic Transition Integrity:');
+const slidePageContent = fs.readFileSync(path.join(baseDir, 'slides/slide.html'), 'utf8');
+assert(slidePageContent.includes('.slide-desc') && slidePageContent.includes('background: rgba(3, 22, 15, 0.80);'), 'slides/slide.html memiliki background frosted gelap untuk kontras teks deskripsi');
+assert(slidePageContent.includes('-webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.9);'), 'slides/slide.html memiliki outline/stroke kontras gelap pada teks deskripsi');
+assert(slidePageContent.includes('performCinematicTransition'), 'slides/slide.html memiliki fungsi performCinematicTransition bebas hentakan');
+assert(slidePageContent.includes('fadeOutMs = 450') && slidePageContent.includes('fadeInMs = 550'), 'slides/slide.html memiliki kurva timing transisi sinematik sinkron');
 
 // -------------------------------------------------------------
 // HASIL AKHIR
