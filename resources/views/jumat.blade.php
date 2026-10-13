@@ -212,8 +212,8 @@
 
 		/* KOTAK NO 3: FOTO IMAM RASIO 4:5 */
 		.imam-card-box {
-			flex: 0 0 270px;
-			width: 270px;
+			flex: 0 0 280px;
+			width: 280px;
 			background: rgba(4, 25, 18, 0.75);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
@@ -252,7 +252,7 @@
 			left: 0;
 			right: 0;
 			background: linear-gradient(0deg, rgba(2, 16, 11, 0.96) 0%, rgba(2, 16, 11, 0.8) 70%, transparent 100%);
-			padding: 16px 10px 8px 10px;
+			padding: 16px 6px 8px 6px;
 			text-align: center;
 			display: flex;
 			flex-direction: column;
@@ -274,12 +274,17 @@
 		}
 
 		.imam-badge-overlay .badge-name {
-			font-size: 1.02rem;
+			font-size: 0.94rem;
 			font-weight: 700;
 			color: #ffffff;
 			line-height: 1.25;
 			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-			word-break: break-word;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			letter-spacing: -0.2px;
+			display: block;
+			width: 100%;
 		}
 
 		/* KANAN: INFO ROWS STACK */

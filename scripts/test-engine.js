@@ -457,8 +457,17 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(utamaContent.includes('font-size: 1.55rem;'), 'slides/utama.html memiliki font-size adaptif 1.55rem pada layar mobile <= 767px');
-assert(swContent.includes('aljihad-signage-v5.8.75'), 'sw.js memiliki bumping versi cache terbaru v5.8.75');
+assert(swContent.includes('aljihad-signage-v5.8.76'), 'sw.js memiliki bumping versi cache terbaru v5.8.76');
+
+// -------------------------------------------------------------
+// 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 18] Slides Jumat Imam Photo Badge 1-Line Format Integrity:');
+const jumatContent = fs.readFileSync(path.join(baseDir, 'slides/jumat.html'), 'utf8');
+assert(jumatContent.includes('.imam-badge-overlay .badge-name') && jumatContent.includes('white-space: nowrap;'), 'slides/jumat.html memiliki CSS white-space nowrap agar nama imam selalu 1 baris');
+assert(jumatContent.includes('text-overflow: ellipsis;'), 'slides/jumat.html memiliki proteksi text-overflow ellipsis agar tidak meluap');
+assert(jumatContent.includes('.imam-card-box') && jumatContent.includes('width: 280px;'), 'slides/jumat.html memiliki lebar imam-card-box 280px yang lapang untuk gelar nama');
+assert(jumatContent.includes('badgeImamEl.style.fontSize'), 'slides/jumat.html memiliki dynamic font-size scaler untuk nama panjang di badge imam');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

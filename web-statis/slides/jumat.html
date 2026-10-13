@@ -124,8 +124,8 @@
 
         /* Kotak Foto Imam */
         .imam-card-box {
-            flex: 0 0 270px;
-            width: 270px;
+            flex: 0 0 280px;
+            width: 280px;
             background: rgba(4, 25, 18, 0.75);
             backdrop-filter: blur(12px);
             border-radius: 18px;
@@ -160,7 +160,7 @@
             left: 0;
             right: 0;
             background: linear-gradient(0deg, rgba(2, 16, 11, 0.96) 0%, rgba(2, 16, 11, 0.8) 70%, transparent 100%);
-            padding: 16px 10px 8px 10px;
+            padding: 16px 6px 8px 6px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -176,10 +176,17 @@
         }
 
         .imam-badge-overlay .badge-name {
-            font-size: 1.05rem;
+            font-size: 0.94rem;
             font-weight: 700;
             color: #ffffff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+            letter-spacing: -0.2px;
+            display: block;
+            width: 100%;
         }
 
         /* Info Stack Rows */
@@ -341,6 +348,9 @@
                 flex: 0 0 220px;
                 width: 220px;
             }
+            .imam-badge-overlay .badge-name {
+                font-size: 0.84rem;
+            }
             .title-with-icons {
                 padding: 6px 18px;
             }
@@ -363,6 +373,9 @@
             .imam-card-box {
                 flex: none;
                 width: 180px;
+            }
+            .imam-badge-overlay .badge-name {
+                font-size: 0.80rem;
             }
             .duty-list-box {
                 width: 100%;
@@ -590,7 +603,18 @@
                 }
 
                 document.getElementById('valImamKhatib').textContent = imamKhatibStr;
-                document.getElementById('badgeImamName').textContent = imam || khatib || 'Ustd. Imam & Khotib';
+                const badgeImamEl = document.getElementById('badgeImamName');
+                if (badgeImamEl) {
+                    const rawName = imam || khatib || 'Ustd. Imam & Khotib';
+                    badgeImamEl.textContent = rawName;
+                    if (rawName.length > 25) {
+                        badgeImamEl.style.fontSize = '0.86rem';
+                    } else if (rawName.length > 20) {
+                        badgeImamEl.style.fontSize = '0.90rem';
+                    } else {
+                        badgeImamEl.style.fontSize = '';
+                    }
+                }
 
                 let rawBilal = (jumat && jumat.bilal) ? jumat.bilal.trim() : '';
                 let bilalStr = '';

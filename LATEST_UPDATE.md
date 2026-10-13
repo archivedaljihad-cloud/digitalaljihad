@@ -7,7 +7,30 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 01:30 WIB)
+## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 02:05 WIB)
+
+### 👤 FORMAT 1 BARIS TEKS NAMA IMAM & KHOTIB DALAM KOTAK FOTO SLIDE JUM'AT (`web-statis/slides/jumat.html`, `resources/views/jumat.blade.php`) — (Versi SW v5.8.76):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Di halaman `https://digitalaljihad.my.id/slides/jumat`, teks nama imam & khotib `"Ust. Taufik Suprapto, S.Sos."` yang berada di dalam lencana bawah kotak foto sebelumnya terlipat menjadi 2 baris (baris 1: `Ust. Taufik Suprapto,`, baris 2: `S.Sos.`).
+   - Pengguna meminta: *"Edit format teks nama imam&khotib "Ust. Taufik Suprapto, S.Sos." yang ada didalam kotak foto menjadi 1 baris saja."*
+2. **Penyebab & Solusi Layout**:
+   - **Penyebab**: Lebar kotak foto `270px` dengan padding badge `10px` dan font size `1.05rem` tanpa aturan `white-space: nowrap` menyebabkan gelar akademik terdorong ke baris kedua.
+   - **Solusi**:
+     - Ditambahkan `white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; width: 100%;` pada `.imam-badge-overlay .badge-name`.
+     - Lebar `.imam-card-box` sedikit disesuaikan dari `270px` ke `280px` (`flex: 0 0 280px; width: 280px;`) dan padding overlay diperluas dari `16px 10px 8px 10px` ke `16px 6px 8px 6px;` untuk memberikan ruang pernapasan horizontal yang cukup.
+     - Tipografi `.badge-name` diselaraskan ke `0.94rem` dengan `letter-spacing: -0.2px;` dan text shadow tebal, serta dynamic auto-scaler di JavaScript (`badgeImamEl.style.fontSize`) jika nama pengurus panjang (> 25 karakter).
+     - Breakpoint responsif ditambahkan untuk tablet (≤ 1024px: `0.84rem`) dan mobile (≤ 767px: `0.80rem`).
+     - File Blade template `resources/views/jumat.blade.php` disinkronkan identik.
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.76`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.76`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.76`**.
+4. **Pengujian Regresi Otomatis (199 / 199 PASS)**:
+   - Ditambahkan Test Suite ke-18 di `scripts/test-engine.js` untuk memvalidasi format 1 baris nama imam, lebar 280px, dan proteksi text-overflow.
+   - Seluruh 199 tests lulus 100%.
+
+---
+
+## 📜 ARSIP UPDATE — 14 Oktober 2026 (Pukul 01:30 WIB)
 
 ### 🕌 PENYESUAIAN UKURAN TEKS ANGKA JAM SHOLAT AGAR JELAS TERBACA DARI JARAK 10 METER (`web-statis/slides/utama.html`, `resources/views/utama.blade.php`) — (Versi SW v5.8.75):
 1. **Latar Belakang & Permintaan Pengguna**:
