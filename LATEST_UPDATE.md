@@ -7,7 +7,27 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 02:25 WIB)
+## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 02:40 WIB)
+
+### 🧹 PERAPIAN STRUKTUR PROYEK & PENGARSIPAN BERKAS TIDAK DIGUNAKAN KE FOLDER "FILE PINDAHAN" (`coldBACKUP` & `DIGITALv304`):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Pengguna meminta untuk memeriksa folder `C:\Users\anthu\Documents\【coldBACKUP - Digital WebSTATIS】` dan `C:\Users\anthu\Documents\【Project】\DIGITALv304` agar terlihat rapi dan bersih.
+   - Seluruh berkas yang sudah tidak digunakan lagi dipindahkan (*move*) ke:
+     `C:\Users\anthu\Documents\【coldBACKUP - Digital WebSTATIS】\FILE PINDAHAN`.
+2. **Struktur Pengelompokan & Relokasi Terstruktur**:
+   - Berkas dipindahkan dan dikelompokkan secara rapi ke subfolder di dalam `FILE PINDAHAN`:
+     - **`web-statis-obsolete/`**: Berkas pratinjau lama (`preview-flip-clock.html`, `preview-mobile-petugas.html`, `preview_header.html`), panduan Render lama (`PANDUAN_AKUN_RENDER.html`, `.pdf`, `PANDUAN_FULLY_KIOSK_SMART_TV_ALJIHAD.pdf`), dan duplikat stempel/TTD di root (`stempelDKM_trans.png`, `tandatanganketuaDKM_trans.png`, `tantatanganbendahara_trans.png` yang aslinya sudah aman di `img/`).
+     - **`root-utilities-scripts/`**: Skrip utilitas/debugging PHP lama (`add_prayers.php`, `check_schema.php`, `check_setting.php`, `update_footer.php`), generator Python PDF lama, dan file teks sementara (`Teks Gold.txt`).
+     - **`panduan-arsip/`**: Berkas arsip riwayat percakapan deployment dan panduan render di root (`RIWAYAT_CHAT_SESI_DEPLOYMENT.*`, `PANDUAN_MENGEMBALIKAN_AKUN_RENDER.*`, dll).
+     - **`database-sql-dumps/`**: Dump SQL database lawas (`digitalv304.sql`, `digitalv304_tidb.sql`) sebelum migrasi penuh ke Supabase Cloud.
+     - **`scratch/`**: Seluruh 117 skrip pengujian, inspeksi DOM, dan analisis visual sementara.
+3. **Hasil & Verifikasi Zero-Regression**:
+   - Kedua folder (`DIGITALv304` dan `coldBACKUP`) kini 100% bersih, rapi, dan hanya memuat berkas aktif produksi.
+   - Pengujian regresi otomatis `npm test` tetap **203 / 203 PASS (100% Lolos)**.
+
+---
+
+## 📜 ARSIP UPDATE — 14 Oktober 2026 (Pukul 02:25 WIB)
 
 ### 🖼️ PENINGKATAN KONTRAS TEKS DESKRIPSI & ANIMASI TRANSISI SINEMATIK BEBAS HENTAKAN PADA SLIDE DOKUMENTASI (`web-statis/slides/slide.html`, `resources/views/slide.blade.php`) — (Versi SW v5.8.77):
 1. **Latar Belakang & Permintaan Pengguna**:
