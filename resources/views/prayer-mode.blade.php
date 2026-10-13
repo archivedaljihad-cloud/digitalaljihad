@@ -1023,7 +1023,7 @@
         body.phase-prayer .message-section,
         .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .message-section {
             margin-top: auto !important;
-            margin-bottom: clamp(35px, 4.8vh, 60px) !important;
+            margin-bottom: clamp(90px, 12vh, 150px) !important;
             max-width: 1100px;
         }
 
