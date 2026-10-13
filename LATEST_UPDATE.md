@@ -7,7 +7,39 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 09:55 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 10:15 WIB)
+
+### 💳 RESTORASI TIPOGRAFI TEGAS & PERAMPINGAN 2 KOTAK INFORMASI SLIDE QRIS SESUAI ILUSTRASI GAMBAR 2 (`web-statis/slides/qris.html`) — (Versi SW v5.8.66):
+1. **Latar Belakang & Keluhan Pengguna**:
+   - Halaman: `https://digitalaljihad.my.id/slides/qris`
+   - Pada pembaruan sebelumnya, penambahan media query skala kecil menyebabkan ukuran teks pada layar TV menyusut (*teks terlihat mengecil*).
+   - Pengguna meminta agar ukuran teks judul *"INFAQ & SHODAQOH DIGITAL QRIS"* dan detail lainnya dikembalikan menjadi besar, jelas, dan menonjol persis seperti gambar ilustrasi.
+   - Solusi yang diminta pengguna: Cukup rampingkan/kecilkan sedikit 2 kotak yang berada di kiri gambar QRIS (Kotak Petunjuk/Alert DKM dan Kotak Rekening Donasi) sehingga judul tidak tertimpa kotak kapsul jam dan tetap terlihat mencolok.
+
+2. **Implementasi & Solusi Desain Sesuai Gambar 2**:
+   - **Judul Halaman (`.qris-page-title`)**:
+     - Mengembalikan ukuran font besar, tebal, dan menonjol: `font-size: clamp(1.75rem, 2.3vw, 2.2rem); font-weight: 900; letter-spacing: 1.5px;`.
+     - Teks putih tajam `#ffffff` dengan bayangan tegas dan ikon 4 kotak emas berkilau `<i class="fas fa-th-large"></i>`.
+   - **Perampingan Kotak 1 (`.qris-desc-box`)**:
+     - Memadatkan padding vertikal menjadi `clamp(8px, 1.2vh, 14px) clamp(14px, 1.5vw, 20px)`.
+     - Alert box DKM Jami Al Jihad (`.qris-alert-box`): Menggunakan padding ramping `clamp(6px, 0.9vh, 10px)` dengan border samping emas 5px dan teks nama DKM emas menyala.
+   - **Perampingan Kotak 2 (`.bank-info-card`)**:
+     - Memadatkan padding vertikal menjadi `clamp(10px, 1.3vh, 16px) clamp(16px, 1.6vw, 22px)` dengan padding baris rekening `clamp(3px, 0.5vh, 6px)`.
+     - Nomor rekening Bank BJB tetap berukuran besar (`1.35rem - 1.55rem`), monospace emas, dan mudah dibaca dari jarak jauh.
+   - **Keseimbangan Kolom QRIS (`.qris-col`)**:
+     - Frame QRIS putih melengkung elegan (`border-radius: 20px`, border emas 3px) dan badge e-wallet hijau zamrud `.qris-brand-badge` di bawahnya.
+     - Penyesuaian padding container atas (`clamp(6px, 1vh, 10px)`) dan margin header bawah (`clamp(4px, 0.8vh, 8px)`) memastikan terdapat ruang kosong vertikal yang aman (>60px) di bawah kotak kapsul jam. Judul tidak akan pernah menabrak atau tertimpa jam.
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.66`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.66`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.66`**.
+
+4. **Pengujian Regresi Otomatis (162 / 162 PASS)**:
+   - Menjalankan `npm test`: Seluruh 162 assertions LULUS (100% PASS).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 09:55 WIB)
 
 ### 🕌 PEROMBAKAN DESAIN & TATA LETAK SLIDE KAJIAN MALAM AHAD (2 KOTAK SIMETRIS PROPORSIONAL SESUAI ILUSTRASI GAMBAR 2, ROTASI SLIDE OTOMATIS, & SLIM PAGINATION BAR) (Versi SW v5.8.65):
 1. **Perombakan Layout Slide Kajian Berdasarkan Ilustrasi Gambar 2 (`web-statis/slides/kajian.html`)**:

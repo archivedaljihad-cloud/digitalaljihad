@@ -7,10 +7,10 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../css/display-theme.css?v=20261006_06">
-    <link rel="stylesheet" href="../css/partials-theme.css?v=20261006_06">
+    <link rel="stylesheet" href="../css/display-theme.css?v=20261013_02">
+    <link rel="stylesheet" href="../css/partials-theme.css?v=20261013_02">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,16 +24,17 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            background-color: #041913;
         }
 
         .container {
             width: 100%;
-            max-width: 1600px;
+            max-width: 1620px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 8px 24px 54px 24px;
+            padding: clamp(6px, 1vh, 10px) clamp(20px, 2.2vw, 36px) clamp(48px, 5.5vh, 58px) clamp(20px, 2.2vw, 36px);
             position: relative;
             z-index: 5;
         }
@@ -41,14 +42,14 @@
         .header {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 10px;
+            margin-bottom: clamp(4px, 0.8vh, 8px);
             flex-shrink: 0;
             position: relative;
             z-index: 10;
         }
 
         .header h1 {
-            font-size: 2.5rem !important;
+            font-size: clamp(2.0rem, 2.7vw, 2.5rem) !important;
             line-height: 1.1;
             letter-spacing: 3.5px;
             text-transform: uppercase;
@@ -66,7 +67,7 @@
         }
 
         .header h3.sub-header {
-            font-size: 1.15rem;
+            font-size: clamp(0.95rem, 1.25vw, 1.15rem);
             font-weight: 600;
             letter-spacing: 4px;
             color: #ffffff;
@@ -76,15 +77,15 @@
         }
 
         .datetime {
-            font-size: 1.35rem;
-            background: rgba(3, 20, 15, 0.65);
+            font-size: clamp(1.1rem, 1.35vw, 1.35rem);
+            background: rgba(3, 20, 15, 0.75);
             display: inline-block;
-            padding: 4px 24px;
+            padding: clamp(3px, 0.5vh, 5px) clamp(18px, 1.8vw, 28px);
             border-radius: 35px;
             font-weight: 600;
-            letter-spacing: 1px;
-            border: 1.5px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            letter-spacing: 0.8px;
+            border: 1.5px solid rgba(255, 215, 0, 0.55);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(8px);
         }
 
@@ -108,36 +109,39 @@
             border: none !important;
             box-shadow: none !important;
             width: 100%;
-            max-width: 1280px;
+            max-width: 1320px;
             overflow: visible;
             display: flex;
             flex-direction: column;
             margin: auto 0;
         }
 
+        /* JUDUL HALAMAN: TEGAK, BESAR, JELAS & MENONJOL PERSIS GAMBAR 2 */
         .qris-page-title {
-            font-size: 1.75rem;
-            font-weight: 800;
+            font-size: clamp(1.75rem, 2.3vw, 2.2rem);
+            font-weight: 900;
             color: #ffffff;
             letter-spacing: 1.5px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 8px;
+            margin-bottom: clamp(6px, 1vh, 12px);
+            text-transform: uppercase;
+            font-family: 'Poppins', 'Outfit', sans-serif;
         }
 
         .qris-page-title i {
             color: #ffd700;
-            font-size: 1.75rem;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+            font-size: clamp(1.75rem, 2.3vw, 2.2rem);
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75));
         }
 
-        /* BODY 2 KOLOM */
+        /* BODY 2 KOLOM (KIRI: INFORMASI RAMPING, KANAN: GAMBAR QRIS BESAR) */
         .qris-body {
-            padding: 10px 24px;
+            padding: 0;
             display: flex;
-            gap: 32px;
+            gap: clamp(24px, 2.6vw, 42px);
             align-items: center;
         }
 
@@ -145,23 +149,26 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: clamp(8px, 1.1vh, 12px);
             min-width: 0;
         }
 
+        /* KOTAK 1: PETUNJUK & ALERT VERIFIKASI NAMA DKM (RAMPING & PROPORSIONAL) */
         .qris-desc-box {
-            background: rgba(3, 22, 16, 0.75);
-            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            background: rgba(3, 22, 16, 0.78);
+            border: 1.5px solid rgba(255, 215, 0, 0.45);
             border-radius: 14px;
-            padding: 14px 18px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            padding: clamp(8px, 1.2vh, 14px) clamp(14px, 1.5vw, 20px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
         }
 
         .qris-instruction {
-            font-size: 1.05rem;
-            line-height: 1.5;
+            font-size: clamp(1.05rem, 1.35vw, 1.18rem);
+            line-height: 1.45;
             color: #ffffff;
-            margin-bottom: 8px;
+            margin-bottom: clamp(6px, 0.8vh, 10px);
+            font-weight: 500;
         }
 
         .qris-alert-box {
@@ -169,7 +176,7 @@
             border: 1.5px solid rgba(255, 215, 0, 0.65);
             border-left: 5px solid #ffd700;
             border-radius: 10px;
-            padding: 10px 16px;
+            padding: clamp(6px, 0.9vh, 10px) clamp(12px, 1.2vw, 16px);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -178,13 +185,13 @@
 
         .qris-alert-box i { 
             color: #ffd700; 
-            font-size: 1.45rem; 
+            font-size: clamp(1.35rem, 1.7vw, 1.55rem); 
             filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
             flex-shrink: 0;
         }
 
         .qris-alert-text { 
-            font-size: 1.15rem; 
+            font-size: clamp(1.1rem, 1.4vw, 1.22rem); 
             color: #ffffff; 
             font-weight: 600;
             letter-spacing: 0.3px;
@@ -194,47 +201,48 @@
         .qris-alert-text strong {
             color: #ffd700 !important;
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: clamp(1.2rem, 1.5vw, 1.32rem);
             letter-spacing: 0.5px;
             text-shadow: 0 0 14px rgba(255, 215, 0, 0.85), 0 2px 4px rgba(0, 0, 0, 0.95);
         }
 
+        /* KOTAK 2: REKENING RESMI DONASI (RAMPING & ELEGAN) */
         .bank-info-card {
-            background: rgba(3, 20, 15, 0.82);
+            background: rgba(3, 20, 15, 0.85);
             border-radius: 14px;
-            padding: 15px 22px;
+            padding: clamp(10px, 1.3vh, 16px) clamp(16px, 1.6vw, 22px);
             border: 1.5px solid rgba(255, 215, 0, 0.45);
             border-left: 6px solid #ffd700;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
         }
 
         .bank-title {
             color: #ffd700;
-            font-size: 1.25rem;
+            font-size: clamp(1.2rem, 1.45vw, 1.32rem);
             font-weight: 800;
-            margin-bottom: 8px;
+            margin-bottom: clamp(4px, 0.6vh, 8px);
             display: flex;
             align-items: center;
             gap: 10px;
             letter-spacing: 0.5px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
             border-bottom: 1px solid rgba(255, 215, 0, 0.25);
-            padding-bottom: 6px;
+            padding-bottom: 4px;
         }
 
         .bank-detail-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: clamp(3px, 0.5vh, 6px) 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-            font-size: 1.18rem;
         }
 
         .bank-detail-row:last-child { border-bottom: none; }
         .bank-label { 
             color: #f8fafc; 
-            font-size: 1.20rem; 
+            font-size: clamp(1.12rem, 1.35vw, 1.25rem); 
             font-weight: 700; 
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); 
         }
@@ -242,54 +250,53 @@
             font-weight: 800; 
             color: #ffd700; 
             font-family: monospace; 
-            font-size: 1.38rem; 
+            font-size: clamp(1.35rem, 1.8vw, 1.55rem); 
             letter-spacing: 0.8px; 
             text-shadow: 0 0 12px rgba(255, 215, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.95); 
         }
         .bank-val.owner-name {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.25rem;
+            font-size: clamp(1.2rem, 1.45vw, 1.32rem);
             letter-spacing: 0.3px;
         }
 
         .qris-gratitude {
-            font-size: 1.05rem;
+            font-size: clamp(1.02rem, 1.25vw, 1.15rem);
             font-weight: 700;
             font-style: italic;
             color: #ffd700;
             text-align: center;
-            padding-top: 6px;
+            padding-top: 4px;
         }
 
-        /* KOLOM QRIS */
+        /* KOLOM KANAN: FRAME QRIS BESAR & BADGE RESMI E-WALLET */
         .qris-col {
-            flex: 0 0 320px;
+            flex: 0 0 clamp(320px, 26vw, 380px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: clamp(8px, 1.2vh, 12px);
         }
 
         .qris-frame {
             background: #ffffff;
             padding: 10px;
             border-radius: 20px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
-            border: 3px solid rgba(255, 215, 0, 0.75);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+            border: 3px solid rgba(255, 215, 0, 0.85);
             display: flex;
             align-items: center;
             justify-content: center;
-            max-width: 280px;
-            max-height: 44vh;
+            max-width: 100%;
             width: 100%;
+            max-height: 44vh;
         }
 
         .qris-frame img {
-            width: auto;
-            max-width: 100%;
+            width: 100%;
             height: auto;
-            max-height: calc(44vh - 20px);
+            max-height: clamp(340px, 48vh, 440px);
             border-radius: 8px;
             display: block;
             object-fit: contain;
@@ -297,11 +304,11 @@
 
         .qris-brand-badge {
             background: linear-gradient(135deg, rgba(6, 78, 59, 0.96), rgba(4, 46, 35, 0.98)) !important;
-            border: 1.5px solid #10b981 !important;
+            border: 1.6px solid #10b981 !important;
             color: #ffffff !important;
-            padding: 8px 22px !important;
+            padding: 7px 22px !important;
             border-radius: 30px !important;
-            font-size: 0.96rem !important;
+            font-size: clamp(0.92rem, 1.15vw, 1.05rem) !important;
             font-weight: 700 !important;
             display: inline-flex !important;
             align-items: center !important;
@@ -315,150 +322,15 @@
 
         .qris-brand-badge i {
             color: #ffd700 !important;
-            font-size: 1.15rem !important;
+            font-size: clamp(1.1rem, 1.3vw, 1.25rem) !important;
             filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.85)) !important;
         }
 
-        /* ========================================================
-           OPTIMASI RESPONSIVE KHUSUS SMART TV (720p / 1080p scaled)
-           Mencegah judul bertabrakan dengan kotak kapsul jam di TV
-           ======================================================== */
-        @media (max-height: 850px), (max-width: 1366px) {
-            .container {
-                padding: 6px 18px 52px 18px;
-            }
-            .header h1 {
-                font-size: 2.1rem !important;
-                margin-bottom: 2px !important;
-            }
-            .header h3.sub-header {
-                font-size: 1.0rem !important;
-                margin-bottom: 2px !important;
-            }
-            .header .datetime,
-            .datetime {
-                font-size: 1.15rem !important;
-                padding: 3px 20px !important;
-            }
-            .header {
-                margin-bottom: 8px !important;
-            }
-            .qris-body {
-                padding: 6px 16px;
-                gap: 24px;
-            }
-            .qris-page-title {
-                font-size: 1.45rem;
-                margin-bottom: 4px;
-                gap: 10px;
-            }
-            .qris-page-title i {
-                font-size: 1.45rem;
-            }
-            .qris-desc-box {
-                padding: 8px 14px;
-            }
-            .qris-instruction {
-                font-size: 0.95rem;
-                margin-bottom: 6px;
-            }
-            .qris-alert-box {
-                padding: 8px 12px;
-            }
-            .qris-alert-text {
-                font-size: 1.05rem;
-            }
-            .qris-alert-text strong {
-                font-size: 1.12rem;
-            }
-            .bank-info-card {
-                padding: 10px 16px;
-            }
-            .bank-title {
-                font-size: 1.10rem;
-                margin-bottom: 6px;
-                padding-bottom: 4px;
-            }
-            .bank-detail-row {
-                padding: 4px 0;
-                font-size: 1.05rem;
-            }
-            .bank-label {
-                font-size: 1.05rem;
-            }
-            .bank-val {
-                font-size: 1.20rem;
-            }
-            .bank-val.owner-name {
-                font-size: 1.12rem;
-            }
-            .qris-gratitude {
-                font-size: 0.95rem;
-                padding-top: 4px;
-            }
-            .qris-col {
-                flex: 0 0 270px;
-                gap: 8px;
-            }
-            .qris-frame {
-                max-width: 240px;
-                max-height: 290px;
-                padding: 8px;
-            }
-            .qris-frame img {
-                max-height: 260px;
-            }
-            .qris-brand-badge {
-                font-size: 0.88rem !important;
-                padding: 6px 16px !important;
-            }
-        }
-
-        @media (max-height: 660px) {
-            .container {
-                padding: 4px 14px 48px 14px;
-            }
-            .header h1 {
-                font-size: 1.7rem !important;
-            }
-            .header h3.sub-header {
-                font-size: 0.88rem !important;
-            }
-            .header .datetime,
-            .datetime {
-                font-size: 1.0rem !important;
-                padding: 2px 14px !important;
-            }
-            .header {
-                margin-bottom: 4px !important;
-            }
-            .qris-body {
-                padding: 4px 12px;
-                gap: 16px;
-            }
-            .qris-page-title {
-                font-size: 1.25rem;
-            }
-            .qris-desc-box {
-                padding: 6px 10px;
-            }
-            .qris-instruction {
-                font-size: 0.85rem;
-            }
-            .bank-info-card {
-                padding: 6px 12px;
-            }
-            .qris-col {
-                flex: 0 0 220px;
-            }
-            .qris-frame {
-                max-width: 200px;
-                max-height: 230px;
-                padding: 6px;
-            }
-            .qris-frame img {
-                max-height: 205px;
-            }
+        /* MEDIA QUERY RESPONSIF STANDAR & SMART TV */
+        @media (max-height: 850px) {
+            .container { padding: 6px 20px 50px 20px; }
+            .header { margin-bottom: 4px !important; }
+            .qris-frame { max-height: 44vh; }
         }
 
         @media (max-width: 992px) {
@@ -466,7 +338,7 @@
             .qris-body { flex-direction: column; gap: 20px; padding: 10px 15px; }
             .info-col { width: 100%; }
             .qris-col { width: 100%; flex: auto; }
-            .qris-frame { max-width: 250px; }
+            .qris-frame { max-width: 280px; }
         }
 
         /* RUNNING TEXT FOOTER */
@@ -522,14 +394,14 @@
         <div class="main-content">
             <div class="qris-card">
                 <div class="qris-body">
-                    <!-- Kolom Informasi & Rekening -->
+                    <!-- Kolom Informasi & Rekening (Ramping & Proporsional Sesuai Gambar 2) -->
                     <div class="info-col">
                         <div class="qris-page-title">
                             <i class="fas fa-th-large"></i> INFAQ & SHODAQOH DIGITAL QRIS
                         </div>
                         <div class="qris-desc-box">
                             <div class="qris-instruction" id="qrisInstruction">
-                                Bagi para jamaah yang ingin berinfaq dan sedekah secara digital, silahkan scan QRIS ini
+                                Bagi yang ingin berinfaq dan sedekah secara digital, silahkan scan QRIS ini
                             </div>
                             <div class="qris-alert-box">
                                 <i class="fas fa-check-circle"></i>
@@ -559,7 +431,7 @@
                         </div>
                     </div>
 
-                    <!-- Kolom Gambar QRIS -->
+                    <!-- Kolom Gambar QRIS (Frame Putih Mewah & Badge E-Wallet) -->
                     <div class="qris-col">
                         <div class="qris-frame">
                             <img id="qrisImage" src="../img/QRIS.jpg" alt="QRIS Resmi Masjid Jami' Al Jihad" onerror="this.onerror=null; this.src='../img/QRIS.jpg';">
