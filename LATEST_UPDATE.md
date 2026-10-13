@@ -7,7 +7,32 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 10:15 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 10:30 WIB)
+
+### 🖼️ PERBAIKAN PROPORSI FRAME GAMBAR QRIS (SNUG-FIT WRAPPING & ASPEK RASIO STANDAR STAND-POSTER) (`web-statis/slides/qris.html`) — (Versi SW v5.8.67):
+1. **Latar Belakang & Keluhan Pengguna**:
+   - Halaman: `https://digitalaljihad.my.id/slides/qris`
+   - Pada pembaruan sebelumnya, kartu putih frame QRIS melebar secara horizontal (`flex: 0 0 clamp(320px, 26vw, 380px)` dan `width: 100%`) melebihi aspek rasio alami gambar poster QRIS (720x1020).
+   - Akibatnya, timbul ruang kosong putih yang sangat lebar di sisi kiri dan kanan gambar QRIS di dalam bingkai emas, membuat poster QRIS terlihat janggal dan tidak pas (*gambar QRIS malah kacau*).
+
+2. **Implementasi & Solusi Desain**:
+   - **Perbaikan `.qris-col`**: Dibatasi lebar kolom tepat `flex: 0 0 310px;`.
+   - **Perbaikan `.qris-frame`**:
+     - Mengubah ukuran menjadi `max-width: 290px; width: fit-content; max-height: 44vh;`.
+     - Padding putih `10px` kini membungkus poster QRIS secara simetris dan presisi di keempat sisinya (atas, kanan, bawah, kiri).
+     - Border emas `3px solid rgba(255, 215, 0, 0.85)` dengan sudut melengkung `20px` pas mengelilingi poster tanpa ada celah putih kosong yang bocor di samping.
+   - **Perbaikan `.qris-frame img`**: Menggunakan `width: 100%; height: auto; max-height: calc(44vh - 20px); border-radius: 8px; object-fit: contain;`, sehingga poster QRIS resmi (720x1020) tampil utuh, tajam, dan proporsional.
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.67`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.67`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.67`**.
+
+4. **Pengujian Regresi Otomatis (162 / 162 PASS)**:
+   - Menjalankan `npm test`: Seluruh 162 assertions LULUS (100% PASS).
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 10:15 WIB)
 
 ### 💳 RESTORASI TIPOGRAFI TEGAS & PERAMPINGAN 2 KOTAK INFORMASI SLIDE QRIS SESUAI ILUSTRASI GAMBAR 2 (`web-statis/slides/qris.html`) — (Versi SW v5.8.66):
 1. **Latar Belakang & Keluhan Pengguna**:
