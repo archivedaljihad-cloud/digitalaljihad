@@ -7,7 +7,60 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 10:30 WIB)
+## ✨ UPDATE TERBARU — 13 Oktober 2026 (Pukul 14:15 WIB)
+
+### 🌄 PEMBARUAN BACKGROUND ROTATOR (NEO IMAGE BGR-0 S/D BGR-5) PADA 5 HALAMAN SLIDE KHUSUS (Versi SW v5.8.68):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Pengguna meminta penggantian gambar background slideshow khusus pada 5 slide terpilih:
+     1. `https://digitalaljihad.my.id/slides/keuangan` (`web-statis/slides/keuangan.html`)
+     2. `https://digitalaljihad.my.id/slides/keuangan-summary` (`web-statis/slides/keuangan-summary.html`)
+     3. `https://digitalaljihad.my.id/slides/qris` (`web-statis/slides/qris.html`)
+     4. `https://digitalaljihad.my.id/slides/ambulance` (`web-statis/slides/ambulance.html`)
+     5. `https://digitalaljihad.my.id/slides/infaq` (`web-statis/slides/infaq.html`)
+   - Sumber gambar: `C:\Users\anthu\Documents\【Digital WebSTATIS】\neo image\` dengan berkas: `BGR-0.png`, `BGR-1.png`, `BGR-2.png`, `BGR-3.png`, `BGR-4.png`, `BGR-5.png`.
+   - Ketentuan Wajib:
+     - Hanya 5 halaman tersebut yang diganti background-nya (isolasi ketat zero-regression untuk halaman lain).
+     - File dikompresi agar sangat ringan saat dibuka di TV/browser tanpa mengurangi ketajaman visual.
+     - Efek rotasi, interval (12 detik), dan transisi (1.5 detik ease-in-out) dipertahankan 100%.
+
+2. **Kompresi & Optimasi Gambar**:
+   - Gambar dikonversi ke format WebP resolusi tinggi dengan Quality 88 dan Effort Level 6:
+     - `BGR-0.webp`: ~327 KB (dari 743 KB PNG, hemat 56%)
+     - `BGR-1.webp`: ~330 KB (dari 762 KB PNG, hemat 57%)
+     - `BGR-2.webp`: ~402 KB (dari 786 KB PNG, hemat 49%)
+     - `BGR-3.webp`: ~254 KB (dari 592 KB PNG, hemat 57%)
+     - `BGR-4.webp`: ~265 KB (dari 618 KB PNG, hemat 57%)
+     - `BGR-5.webp`: ~289 KB (dari 682 KB PNG, hemat 58%)
+     - Total ukuran 6 gambar berkurang dari ~4.2 MB menjadi ~1.8 MB (penghematan bandwidth >57%).
+   - Berkas asli PNG (`BGR-0.png` s/d `BGR-5.png`) dan WebP (`BGR-0.webp` s/d `BGR-5.webp`) disimpan rapi di `web-statis/image/display/background/` dan disinkronkan ke folder cadangan lokal `C:\Users\anthu\Documents\【Digital WebSTATIS】\image\display\background\`.
+
+3. **Pembaruan Kode Slide (`backgroundImages`)**:
+   - Memperbarui array `backgroundImages` pada kelima slide:
+     ```javascript
+     const backgroundImages = [
+         "../image/display/background/BGR-0.webp",
+         "../image/display/background/BGR-1.webp",
+         "../image/display/background/BGR-2.webp",
+         "../image/display/background/BGR-3.webp",
+         "../image/display/background/BGR-4.webp",
+         "../image/display/background/BGR-5.webp"
+     ];
+     ```
+   - Seluruh logika transisi, preloading memori, dan pergantian berkala interval 12 detik dipertahankan tanpa perubahan.
+   - Halaman slide lain (`utama.html`, `pengumuman.html`, `undangan.html`, `slide.html`, dll.) tetap menggunakan background sebelumnya secara aman (*isolated*).
+
+4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.68`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.68`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.68`**.
+   - Menambahkan 6 berkas WebP baru ke daftar `STATIC_ASSETS` di `web-statis/sw.js` untuk pre-caching otomatis offline-first.
+
+5. **Pengujian Regresi Otomatis (183 / 183 PASS)**:
+   - Menambahkan suite pengujian otomatis `[TEST 15] Neo Background Rotator Integrity` di `scripts/test-engine.js`.
+   - Verifikasi 183 assertions lulus 100% tanpa ada kegagalan.
+
+---
+
+## 📜 ARSIP UPDATE — 13 Oktober 2026 (Pukul 10:30 WIB)
 
 ### 🖼️ PERBAIKAN PROPORSI FRAME GAMBAR QRIS (SNUG-FIT WRAPPING & ASPEK RASIO STANDAR STAND-POSTER) (`web-statis/slides/qris.html`) — (Versi SW v5.8.67):
 1. **Latar Belakang & Keluhan Pengguna**:

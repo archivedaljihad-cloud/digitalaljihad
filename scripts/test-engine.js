@@ -401,6 +401,40 @@ assert(kajianHtmlContent.includes('kajian-pagination-bar') && kajianHtmlContent.
 assert(kajianHtmlContent.includes('ITEMS_PER_PAGE = 2') && kajianHtmlContent.includes('renderCurrentPage'), 'slides/kajian.html memiliki paging 2 kartu per slide dengan rotasi otomatis bergiliran');
 
 // -------------------------------------------------------------
+// 15. NEO BACKGROUND ROTATOR INTEGRITY (BGR-0 S/D BGR-5)
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 15] Neo Background Rotator Integrity:');
+for (let i = 0; i <= 5; i++) {
+    const pngPath = path.join(baseDir, `image/display/background/BGR-${i}.png`);
+    const webpPath = path.join(baseDir, `image/display/background/BGR-${i}.webp`);
+    assert(fs.existsSync(pngPath), `File fisik image/display/background/BGR-${i}.png tersedia`);
+    assert(fs.existsSync(webpPath), `File terkompresi image/display/background/BGR-${i}.webp tersedia`);
+}
+
+const targetSlides = [
+    'slides/keuangan.html',
+    'slides/keuangan-summary.html',
+    'slides/qris.html',
+    'slides/ambulance.html',
+    'slides/infaq.html'
+];
+
+targetSlides.forEach(slideRel => {
+    const slideContent = fs.readFileSync(path.join(baseDir, slideRel), 'utf8');
+    const hasBgrWebp = slideContent.includes('BGR-0.webp') && slideContent.includes('BGR-5.webp');
+    assert(hasBgrWebp, `${slideRel} menggunakan background BGR-0 s/d BGR-5`);
+});
+
+// Verifikasi isolasi halaman lain (tidak boleh berubah)
+const untouchedSlides = ['slides/undangan.html', 'slides/pengumuman.html', 'slides/slide.html'];
+untouchedSlides.forEach(slideRel => {
+    const content = fs.readFileSync(path.join(baseDir, slideRel), 'utf8');
+    assert(!content.includes('BGR-0.webp'), `Isolasi aman: ${slideRel} tidak tersentuh pembaruan background`);
+});
+
+assert(swContent.includes('image/display/background/BGR-0.webp'), 'sw.js me-cache aset background BGR terbaru');
+
+// -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
 console.log('\n================================================================');
