@@ -7,7 +7,58 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 00:35 WIB)
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 01:00 WIB)
+
+### 🕌 PENERAPAN PERMANEN KOTAK KHUTBAH TRANSPARAN 1 & TEMA WARNA TEKS "EMAS DAN PUTIH" PADA TAMPILAN TV (`prayer-mode.html`) — (Versi SW v5.8.82):
+1. **Keputusan & Mandat Pengguna**:
+   - Pengguna memutuskan dan memilih opsi terbaik dari halaman pratinjau `https://digitalaljihad.my.id/preview-khutbah?phase=khutbah`:
+     > *"di halaman https://digitalaljihad.my.id/preview-khutbah?phase=khutbah saya memutuskan dan memilih 'Transparan 1' dengan 'Emas dan Putih'. Tolong terapkan permanen di tampilan TV kemudian jalankan SOP anda."*
+
+2. **Implementasi Permanen pada Tampilan TV Display (`prayer-mode.html` & `resources/views/prayer-mode.blade.php`)**:
+   - **Kedua Kotak Khutbah 100% Transparan Tanpa Outline / Border**:
+     - `.prayer-mode-box.jumat-box` dan `#hadithPlakat` (serta `.hadith-plakat`) kini secara permanen memiliki styling:
+       ```css
+       background: transparent !important;
+       backdrop-filter: none !important;
+       -webkit-backdrop-filter: none !important;
+       border: none !important;
+       box-shadow: none !important;
+       ```
+     - Watermark kutipan (`.quote-watermark`) otomatis dinonaktifkan (`display: none !important`) saat Khutbah agar background Kaabah bersih dan tidak terganggu.
+     - Penyesuaian layout padding dan margin tetap rapi dan proporsional.
+   - **Tipografi Kontras Tinggi Tema "Emas Radiant & Putih Kristal" Permanen**:
+     - **Teks Arab (`.jumat-quran-arabic`)**: Warna Emas Radiant `#FFE082`, `font-weight: 700`, ukuran diperbesar (`clamp(28px, 3.0vw, 42px)`), dengan bayangan pekat berlapis (`0 0 24px rgba(255, 215, 0, 0.8), 0 3px 6px #000000, 0 6px 18px rgba(0, 0, 0, 0.95), 0 0 35px rgba(0, 0, 0, 0.9)`).
+     - **Terjemahan Ayat (`.jumat-quran-arti`)**: Warna Putih Kristal `#FFFFFF` tebal `font-weight: 600`, ukuran `clamp(18px, 1.75vw, 25px)`, dengan outline bayangan hitam 4 arah (`text-shadow: 1px 1px 2px #000, -1px -1px 2px #000, 1px -1px 2px #000, -1px 1px 2px #000, 0 3px 8px rgba(0,0,0,0.98), 0 6px 20px rgba(0,0,0,0.95)`).
+     - **Rujukan Surat (`.jumat-quran-surat`)**: Warna Kuning Emas `#FDE047`, `font-weight: 800`.
+     - **Badge Panduan Adab (`.adab-notice`)**: Emerald gelap dengan garis emas cerah `#FDE047` dan teks `#FEF08A`.
+     - **Header Sabda Rasulullah (`.hadith-header`)**: Kuning Emas `#FDE047`, `font-weight: 700`, dengan simbol `ﷺ` emas `#FFE082`.
+     - **Isi Teks Hadits (`.hadith-body`)**: Putih Kristal `#FFFFFF` tegak (non-italic agar mudah dibaca dari jarak jauh), `font-weight: 600`, ukuran `clamp(18px, 1.8vw, 25px)`, kontras sangat tajam.
+     - **Sumber Riwayat (`.hadith-source`)**: Kuning Emas `#FDE047`, `font-weight: 800`.
+   - **Aktivasi Dinamis Fase Sholat**:
+     - Logika JavaScript `prayer-mode.html` otomatis mengaktifkan kelas `khutbah-transparent` setiap kali `state.phase === PrayerEngine.PHASES.KHUTBAH` tanpa memerlukan query string tambahan.
+     - Mode countdown, adzan, dan sholat berjamaah reguler lainnya tetap terlindungi secara aman (*zero-regression*).
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.82`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.82`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.82`**.
+   - Skrip tes regresi `scripts/test-engine.js` diperbarui untuk memverifikasi versi `v5.8.82`.
+
+4. **Berkas yang Terkait**:
+   - `web-statis/prayer-mode.html` (Penerapan permanen kotak transparan & tipografi Emas-Putih)
+   - `resources/views/prayer-mode.blade.php` (Penyelarasan Blade view Laravel)
+   - `web-statis/preview-khutbah.html` (Penyelarasan pratinjau)
+   - `public/preview-khutbah.html` (Penyelarasan pratinjau public)
+   - `web-statis/sw.js` (Bumping versi Service Worker cache ke `v5.8.82`)
+   - `web-statis/js/admin/admin-settings.js` (Penyelarasan cache cleaner)
+   - `scripts/test-engine.js` (Penyelarasan asersi cache `v5.8.82`)
+   - `C:\Users\anthu\Documents\【coldBACKUP - Digital WebSTATIS】\` (Salinan cadangan lokal)
+
+5. **Hasil Pengujian Regresi Otomatis (`npm test`)**:
+   - **214 / 214 ASSERTIONS LULUS (100% PASS)** tanpa regression error.
+
+---
+
+## 📜 ARSIP UPDATE — 15 Oktober 2026 (Pukul 00:35 WIB)
 
 ### 🕌 PENAJAMAN KONTRAS & WARNA TEKS KHUTBAH JUM'AT (`preview-khutbah.html` & `prayer-mode.html`) — (Versi SW v5.8.81):
 1. **Latar Belakang Permintaan Pengguna**:

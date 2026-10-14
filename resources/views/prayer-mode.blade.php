@@ -1038,10 +1038,11 @@
             padding: 0 !important;
         }
 
-        /* PRATINJAU KHUTBAH JUM'AT: KEDUA KOTAK TRANSPARAN & OUTLINE DIHILANGKAN */
+        /* DESAIN PERMANEN KHUTBAH JUM'AT DI TV: KEDUA KOTAK TRANSPARAN & OUTLINE DIHILANGKAN */
         body.khutbah-transparent .prayer-mode-box.jumat-box,
         .prayer-container.khutbah-transparent .prayer-mode-box.jumat-box,
-        .prayer-mode-box.jumat-box.is-transparent {
+        .prayer-mode-box.jumat-box.is-transparent,
+        .prayer-mode-box.jumat-box {
             background: transparent !important;
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
@@ -1054,7 +1055,12 @@
 
         body.khutbah-transparent #hadithPlakat,
         .prayer-container.khutbah-transparent #hadithPlakat,
-        #hadithPlakat.is-transparent {
+        #hadithPlakat.is-transparent,
+        body.khutbah-transparent .hadith-plakat,
+        body:has(.prayer-mode-box.jumat-box) #hadithPlakat,
+        body:has(.prayer-mode-box.jumat-box) .hadith-plakat,
+        .prayer-container:has(.prayer-mode-box.jumat-box) #hadithPlakat,
+        .prayer-container:has(.prayer-mode-box.jumat-box) .hadith-plakat {
             background: transparent !important;
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
@@ -1066,13 +1072,16 @@
 
         body.khutbah-transparent #hadithPlakat .quote-watermark,
         .prayer-container.khutbah-transparent #hadithPlakat .quote-watermark,
-        #hadithPlakat.is-transparent .quote-watermark {
+        #hadithPlakat.is-transparent .quote-watermark,
+        body:has(.prayer-mode-box.jumat-box) #hadithPlakat .quote-watermark,
+        body:has(.prayer-mode-box.jumat-box) .hadith-plakat .quote-watermark {
             display: none !important;
         }
 
-        /* Penegasan Warna Teks & Kontras Tinggi Khutbah Agar Terbaca Sangat Jelas di Layar TV */
+        /* Penegasan Warna Teks & Kontras Tinggi Khutbah (Emas Radiant & Putih Kristal) */
         body.khutbah-transparent .jumat-quran-arabic,
-        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arabic {
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arabic,
+        .prayer-mode-box.jumat-box .jumat-quran-arabic {
             color: #FFE082 !important;
             font-size: clamp(28px, 3.0vw, 42px) !important;
             font-weight: 700 !important;
@@ -1085,7 +1094,8 @@
         }
 
         body.khutbah-transparent .jumat-quran-arti,
-        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arti {
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arti,
+        .prayer-mode-box.jumat-box .jumat-quran-arti {
             color: #FFFFFF !important;
             font-size: clamp(18px, 1.75vw, 25px) !important;
             font-weight: 600 !important;
@@ -1100,7 +1110,8 @@
         }
 
         body.khutbah-transparent .jumat-quran-surat,
-        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-surat {
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-surat,
+        .prayer-mode-box.jumat-box .jumat-quran-surat {
             color: #FDE047 !important;
             font-weight: 800 !important;
             text-shadow: 0 2px 6px #000000, 0 0 14px rgba(253, 224, 71, 0.6) !important;
@@ -1108,7 +1119,9 @@
 
         body.khutbah-transparent .adab-notice,
         #hadithPlakat.is-transparent .adab-notice,
-        .hadith-plakat.is-transparent .adab-notice {
+        .hadith-plakat.is-transparent .adab-notice,
+        body:has(.prayer-mode-box.jumat-box) #hadithPlakat .adab-notice,
+        body:has(.prayer-mode-box.jumat-box) .hadith-plakat .adab-notice {
             background: linear-gradient(135deg, rgba(6, 44, 25, 0.92) 0%, rgba(2, 22, 12, 0.96) 100%) !important;
             border: 1.8px solid #FDE047 !important;
             color: #FEF08A !important;
@@ -1120,7 +1133,9 @@
 
         body.khutbah-transparent .hadith-header,
         #hadithPlakat.is-transparent .hadith-header,
-        .hadith-plakat.is-transparent .hadith-header {
+        .hadith-plakat.is-transparent .hadith-header,
+        body:has(.prayer-mode-box.jumat-box) #hadithPlakat .hadith-header,
+        body:has(.prayer-mode-box.jumat-box) .hadith-plakat .hadith-header {
             color: #FDE047 !important;
             font-weight: 700 !important;
             font-size: clamp(16px, 1.5vw, 21px) !important;
@@ -1130,14 +1145,18 @@
 
         body.khutbah-transparent .saw-symbol,
         #hadithPlakat.is-transparent .saw-symbol,
-        .hadith-plakat.is-transparent .saw-symbol {
+        .hadith-plakat.is-transparent .saw-symbol,
+        body:has(.prayer-mode-box.jumat-box) #hadithPlakat .saw-symbol,
+        body:has(.prayer-mode-box.jumat-box) .hadith-plakat .saw-symbol {
             color: #FFE082 !important;
             font-weight: 800 !important;
         }
 
         body.khutbah-transparent .hadith-body,
         #hadithPlakat.is-transparent .hadith-body,
-        .hadith-plakat.is-transparent .hadith-body {
+        .hadith-plakat.is-transparent .hadith-body,
+        body:has(.prayer-mode-box.jumat-box) #hadithPlakat .hadith-body,
+        body:has(.prayer-mode-box.jumat-box) .hadith-plakat .hadith-body {
             color: #FFFFFF !important;
             font-style: normal !important;
             font-weight: 600 !important;
@@ -1154,7 +1173,9 @@
 
         body.khutbah-transparent .hadith-source,
         #hadithPlakat.is-transparent .hadith-source,
-        .hadith-plakat.is-transparent .hadith-source {
+        .hadith-plakat.is-transparent .hadith-source,
+        body:has(.prayer-mode-box.jumat-box) #hadithPlakat .hadith-source,
+        body:has(.prayer-mode-box.jumat-box) .hadith-plakat .hadith-source {
             color: #FDE047 !important;
             font-weight: 800 !important;
             font-size: clamp(14px, 1.25vw, 18px) !important;
