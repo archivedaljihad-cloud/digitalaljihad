@@ -7,7 +7,35 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 13:25 WIB)
+## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 23:45 WIB)
+
+### 🕌 PRATINJAU DESAIN KOTAK KHUTBAH JUM'AT: TRANSPARAN 100% & TANPA OUTLINE (`preview-khutbah.html` & `prayer-mode.html`) — (Versi SW v5.8.79):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Pengguna meminta dibuatkan halaman pratinjau (*preview page*) terlebih dahulu sebelum memutuskan apakah kedua kotak pada halaman `https://digitalaljihad.my.id/prayer-mode?phase=khutbah` akan dibuat transparan 100% dan outlinenya dihilangkan:
+     - Kotak 1: Ayat Al-Quran (Surat Al-A’raf ayat 204: *وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ*)
+     - Kotak 2: Hadits Adab Khutbah Jum'at (*Rasulullah ﷺ bersabda: "Jika engkau berkata kepada sahabatmu pada hari Jum'at: 'Diamlah!'..."*)
+2. **Solusi & Implementasi yang Diterapkan**:
+   - **Halaman Khusus Pratinjau Interaktif (`web-statis/preview-khutbah.html` & `public/preview-khutbah.html`)**:
+     - Dibuatkan halaman khusus yang menampilkan mode Khutbah Jum'at lengkap dengan sample data persis seperti tampilan TV produksi.
+     - **Mode Transparan (Default)**: Kedua kotak dibuat 100% transparan (`background: transparent; outline: none; border: none; box-shadow: none; backdrop-filter: none;`).
+     - **Penajaman Text-Shadow**: Teks ayat Al-Quran emas dan teks hadits putih diberikan drop-shadow berlapis tajam kontras agar tetap terbaca kristal dan sangat jelas langsung di atas latar belakang Kaabah.
+     - **Floating Comparison Switcher Dock**: Dilengkapi dock pembanding interaktif di bagian bawah layar:
+       - `[ ✨ 1. Transparan 1 & Tanpa Outline ]`: Melihat tampilan transparan bersih.
+       - `[ 🔲 2. Desain Saat Ini (Kotak Hijau & Outline) ]`: Melihat kembali desain kotak asli.
+       - Memungkinkan perbandingan *before vs after* secara instan hanya dengan 1 kali klik di TV, PC, tablet, maupun smartphone.
+   - **Dukungan URL Query Parameter & Toggle di `prayer-mode.html`**:
+     - `prayer-mode.html` kini mendukung parameter `?box=transparent` atau `?transparan=1` (contoh: `https://digitalaljihad.my.id/prayer-mode?phase=khutbah&box=transparent`).
+     - Toolbar pratinjau (`standalonePreviewBar`) kini dilengkapi tombol toggle: `[ 🪄 Kotak: Transparan / Berbingkai ]`.
+   - **Sinkronisasi Cache & Service Worker**:
+     - `web-statis/sw.js`: Bumping versi cache ke `aljihad-signage-v5.8.79` dan penambahan `preview-khutbah.html` ke static asset cache.
+     - `web-statis/js/admin/admin-settings.js`: Penyelarasan pembersihan cache ke `v5.8.79`.
+   - **Pengujian Regresi Otomatis (`npm test`)**:
+     - Penambahan unit test [TEST 21] Khutbah Jum'at Transparent Boxes Preview Integrity.
+     - Hasil: **211 / 211 LULUS (100% PASS)** tanpa regresi sama sekali.
+
+---
+
+## 📜 ARSIP UPDATE — 14 Oktober 2026 (Pukul 13:25 WIB)
 
 ### 📢 PEMBARUAN TEKS PENGINGAT SAVE & BERSIHKAN CACHE & REFRESH TV PADA BANNER HERO DASHBOARD (`web-statis/admin.html`) — (Versi SW v5.8.78):
 1. **Latar Belakang & Permintaan Pengguna**:

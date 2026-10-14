@@ -457,7 +457,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.78'), 'sw.js memiliki bumping versi cache terbaru v5.8.78');
+assert(swContent.includes('aljihad-signage-v5.8.79'), 'sw.js memiliki bumping versi cache terbaru v5.8.79');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -487,6 +487,17 @@ const adminPageContent = fs.readFileSync(path.join(baseDir, 'admin.html'), 'utf8
 assert(adminPageContent.includes('Setelah melakukan input/edit data, <strong class="text-warning">JANGAN LUPA !</strong> tekan menu <strong class="text-warning">SAVE</strong> dan tekan <strong class="text-warning">BERSIHKAN CACHE &amp; REFRESH TV</strong> agar seluruh perubahan data di dashboard ini langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display.'), 'admin.html memuat teks pengingat SAVE dan Bersihkan Cache & Refresh TV terbaru');
 assert(adminPageContent.includes('.hero-sub-desc') && adminPageContent.includes('max-width: 880px;'), 'admin.html memiliki CSS .hero-sub-desc dengan max-width 880px yang proporsional');
 assert(adminPageContent.includes('id="btnTopbarBersihkanCache"'), 'admin.html memiliki tombol pintas Bersihkan Cache & Refresh TV di topbar');
+
+// -------------------------------------------------------------
+// 21. KHUTBAH JUM'AT TRANSPARENT BOXES PREVIEW INTEGRITY
+// -------------------------------------------------------------
+console.log("\n📌 [TEST 21] Khutbah Jum'at Transparent Boxes Preview Integrity:");
+assert(fs.existsSync(path.join(baseDir, 'preview-khutbah.html')), 'File fisik preview-khutbah.html tersedia');
+const previewKhutbahContent = fs.readFileSync(path.join(baseDir, 'preview-khutbah.html'), 'utf8');
+assert(previewKhutbahContent.includes('is-transparent-mode'), 'preview-khutbah.html mendukung mode transparan');
+assert(previewKhutbahContent.includes('setMode'), 'preview-khutbah.html memiliki fungsi interaktif pembanding real-time');
+assert(prayerModeHtmlContent.includes('khutbah-transparent') && prayerModeHtmlContent.includes('toggleTransparentBox'), 'prayer-mode.html memiliki handler dan toggle khutbah transparan');
+assert(swContent.includes("'preview-khutbah.html'"), 'sw.js me-cache berkas preview-khutbah.html');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

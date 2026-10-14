@@ -1038,6 +1038,64 @@
             padding: 0 !important;
         }
 
+        /* PRATINJAU KHUTBAH JUM'AT: KEDUA KOTAK TRANSPARAN & OUTLINE DIHILANGKAN */
+        body.khutbah-transparent .prayer-mode-box.jumat-box,
+        .prayer-container.khutbah-transparent .prayer-mode-box.jumat-box,
+        .prayer-mode-box.jumat-box.is-transparent {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            animation: none !important;
+            padding: clamp(6px, 1vh, 12px) 0 !important;
+        }
+
+        body.khutbah-transparent #hadithPlakat,
+        .prayer-container.khutbah-transparent #hadithPlakat,
+        #hadithPlakat.is-transparent {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            padding: clamp(6px, 1vh, 12px) 0 !important;
+        }
+
+        body.khutbah-transparent #hadithPlakat .quote-watermark,
+        .prayer-container.khutbah-transparent #hadithPlakat .quote-watermark,
+        #hadithPlakat.is-transparent .quote-watermark {
+            display: none !important;
+        }
+
+        /* Penegasan Text Shadow Kontras Tinggi Agar Terbaca Sangat Jelas di TV */
+        body.khutbah-transparent .jumat-quran-arabic,
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arabic {
+            text-shadow: 0 0 22px rgba(255, 215, 0, 0.75), 0 3px 8px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.95);
+        }
+
+        body.khutbah-transparent .jumat-quran-arti,
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arti {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        }
+
+        body.khutbah-transparent .hadith-header,
+        #hadithPlakat.is-transparent .hadith-header {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 3px 12px rgba(0, 0, 0, 0.9);
+        }
+
+        body.khutbah-transparent .hadith-body,
+        #hadithPlakat.is-transparent .hadith-body {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        }
+
+        body.khutbah-transparent .hadith-source,
+        #hadithPlakat.is-transparent .hadith-source {
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.98), 0 0 12px rgba(212, 175, 55, 0.5);
+        }
+
         /* =====================================================
            BAGIAN 5: HADITH VIGNETTE PLAKAT
            ===================================================== */
