@@ -7,7 +7,30 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 02:40 WIB)
+## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 13:25 WIB)
+
+### 📢 PEMBARUAN TEKS PENGINGAT SAVE & BERSIHKAN CACHE & REFRESH TV PADA BANNER HERO DASHBOARD (`web-statis/admin.html`) — (Versi SW v5.8.78):
+1. **Latar Belakang & Permintaan Pengguna**:
+   - Pengguna meminta untuk memperbarui kalimat pengingat di halaman dashboard admin:
+     *Dari:*
+     `"JANGAN LUPA !! setelah input/edit data tekan menu SAVE agar seluruh perubahan data di dashboard ini akan langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display."`
+     *Menjadi:*
+     `"Setelah melakukan input/edit data, JANGAN LUPA ! tekan menu SAVE dan tekan BERSIHKAN CACHE & REFRESH TV agar seluruh perubahan data di dashboard ini langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display."`
+2. **Solusi & Detail Perubahan yang Diterapkan**:
+   - **Markup Hero Sub-Desc (`web-statis/admin.html`)**:
+     Teks pada elemen `.hero-sub-desc` di dalam `.welcome-hero-banner` telah diperbarui persis sesuai instruksi dengan penekanan teks emas tegas (`<strong class="text-warning">JANGAN LUPA !</strong>`, `<strong class="text-warning">SAVE</strong>`, dan `<strong class="text-warning">BERSIHKAN CACHE &amp; REFRESH TV</strong>`).
+   - **Optimasi CSS Tata Letak (`.hero-sub-desc`)**:
+     Ukuran `max-width` pada `.hero-sub-desc` disesuaikan menjadi `880px` agar kalimat baru mengalir rapi, proporsional, dan nyaman dibaca di desktop, tablet, maupun layar mobile.
+   - **Sinkronisasi Cache & Service Worker**:
+     - `web-statis/sw.js`: Bumping versi cache ke `aljihad-signage-v5.8.78`.
+     - `web-statis/js/admin/admin-settings.js`: Penyelarasan pembersihan cache Service Worker ke `v5.8.78`.
+   - **Pengujian Regresi Otomatis (`npm test`)**:
+     - Penambahan test unit [TEST 20] untuk memverifikasi teks pengingat, CSS `.hero-sub-desc`, dan tombol `#btnTopbarBersihkanCache`.
+     - Hasil: **206 / 206 LULUS (100% PASS)** tanpa regresi sama sekali.
+
+---
+
+## 📜 ARSIP UPDATE — 14 Oktober 2026 (Pukul 02:40 WIB)
 
 ### 🧹 PERAPIAN STRUKTUR PROYEK & PENGARSIPAN BERKAS TIDAK DIGUNAKAN KE FOLDER "FILE PINDAHAN" (`coldBACKUP` & `DIGITALv304`):
 1. **Latar Belakang & Permintaan Pengguna**:

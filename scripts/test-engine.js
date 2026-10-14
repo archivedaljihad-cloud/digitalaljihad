@@ -457,7 +457,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.77'), 'sw.js memiliki bumping versi cache terbaru v5.8.77');
+assert(swContent.includes('aljihad-signage-v5.8.78'), 'sw.js memiliki bumping versi cache terbaru v5.8.78');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -478,6 +478,15 @@ assert(slidePageContent.includes('.slide-desc') && slidePageContent.includes('ba
 assert(slidePageContent.includes('-webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.9);'), 'slides/slide.html memiliki outline/stroke kontras gelap pada teks deskripsi');
 assert(slidePageContent.includes('performCinematicTransition'), 'slides/slide.html memiliki fungsi performCinematicTransition bebas hentakan');
 assert(slidePageContent.includes('fadeOutMs = 450') && slidePageContent.includes('fadeInMs = 550'), 'slides/slide.html memiliki kurva timing transisi sinematik sinkron');
+
+// -------------------------------------------------------------
+// 20. ADMIN DASHBOARD REMINDER & REFRESH TV NOTICE INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 20] Admin Dashboard Reminder & Bersihkan Cache Notice Integrity:');
+const adminPageContent = fs.readFileSync(path.join(baseDir, 'admin.html'), 'utf8');
+assert(adminPageContent.includes('Setelah melakukan input/edit data, <strong class="text-warning">JANGAN LUPA !</strong> tekan menu <strong class="text-warning">SAVE</strong> dan tekan <strong class="text-warning">BERSIHKAN CACHE &amp; REFRESH TV</strong> agar seluruh perubahan data di dashboard ini langsung tersimpan dan disinkronkan secara real-time ke Layar TV Display.'), 'admin.html memuat teks pengingat SAVE dan Bersihkan Cache & Refresh TV terbaru');
+assert(adminPageContent.includes('.hero-sub-desc') && adminPageContent.includes('max-width: 880px;'), 'admin.html memiliki CSS .hero-sub-desc dengan max-width 880px yang proporsional');
+assert(adminPageContent.includes('id="btnTopbarBersihkanCache"'), 'admin.html memiliki tombol pintas Bersihkan Cache & Refresh TV di topbar');
 
 // -------------------------------------------------------------
 // HASIL AKHIR
