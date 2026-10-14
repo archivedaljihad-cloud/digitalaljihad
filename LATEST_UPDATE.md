@@ -7,7 +7,47 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 00:15 WIB)
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 00:35 WIB)
+
+### 🕌 PENAJAMAN KONTRAS & WARNA TEKS KHUTBAH JUM'AT (`preview-khutbah.html` & `prayer-mode.html`) — (Versi SW v5.8.81):
+1. **Latar Belakang Permintaan Pengguna**:
+   - Pengguna meminta: *"coba di bagian teksnya di ganti warnanya agar lebih terlihat dan mudah dibaca oleh jamaah"*.
+   - Khususnya pada mode transparan (dan juga mode reguler), teks yang berada di atas latar belakang Kaabah memerlukan kontras yang jauh lebih kuat, ketebalan (*font weight*) yang solid, serta palet warna yang memancarkan cahaya (*luminous glow*) agar jamaah di saf belakang (jarak >3–5 meter) dapat membaca ayat Al-Quran dan Hadits Khutbah Jum'at dengan sangat mudah dan nyaman di layar Smart TV.
+
+2. **Rincian Perubahan Warna & Tipografi Teks Khutbah**:
+   - **Kotak 1: Ayat Al-Quran (Surat Al-A'raf: 204)**:
+     - **Teks Arab (`.jumat-quran-arabic`)**: Diperbarui menjadi **Emas Radiant Bercahaya (`#FFE082` / `#FFD700`)**, ukuran clamp diperbesar (`clamp(28px, 3.0vw, 42px)`), `font-weight: 700`, dengan *quadruple drop-shadow* berlapis hitam pekat & aura emas (`text-shadow: 0 0 24px rgba(255, 215, 0, 0.8), 0 3px 6px #000000, 0 6px 18px rgba(0, 0, 0, 0.95), 0 0 35px rgba(0, 0, 0, 0.9)`).
+     - **Terjemahan Ayat (`.jumat-quran-arti`)**: Warna **Putih Kristal Murni (`#FFFFFF`)**, bobot `font-weight: 600`, ukuran diperbesar (`clamp(18px, 1.75vw, 25px)`), dengan stroke bayangan 4-arah hitam legam (`text-shadow: 1px 1px 2px #000, -1px -1px 2px #000, 1px -1px 2px #000, -1px 1px 2px #000, 0 3px 8px rgba(0,0,0,0.98), 0 6px 20px rgba(0,0,0,0.95)`).
+     - **Rujukan Surat (`.jumat-quran-surat`)**: Warna **Kuning Emas Tajam (`#FDE047`)**, `font-weight: 800`, menonjol kontras di antara teks terjemahan putih.
+   - **Kotak 2: Hadits Adab Khutbah Jum'at**:
+     - **Badge Panduan Adab (`.adab-notice`)**: Diubah menjadi kapsul kaca zamrud hijau gelap (`rgba(6, 44, 25, 0.92)`), berbingkai kuning emas (`1.8px solid #FDE047`), teks kuning cerah (`#FEF08A`, `font-weight: 700`), dan bayangan glow lembut.
+     - **Header Sabda Rasulullah (`.hadith-header`)**: Mengganti warna sampanye pudar `#F0DEAA` (weight 500) menjadi **Kuning Emas Tegas (`#FDE047`)** tebal `font-weight: 700`, `letter-spacing: 1.2px`, dengan simbol `ﷺ` berwarna emas murni (`#FFE082`).
+     - **Isi Teks Hadits (`.hadith-body`)**: Mengganti warna kelabu `#F8FAFC` (italic, weight 500 yang rawan kabur) menjadi **Putih Kristal Tegak (`#FFFFFF`)**, `font-style: normal` (non-italic agar mudah dieja jamaah dari jauh), `font-weight: 600`, ukuran diperbesar (`clamp(18px, 1.8vw, 25px)`), dengan stroke outline bayangan hitam berlapis.
+     - **Sumber Riwayat (`.hadith-source`)**: Mengganti warna perunggu redup `#D4AF37` menjadi **Kuning Emas Terang (`#FDE047`)**, `font-weight: 800`, `letter-spacing: 1.2px`.
+
+3. **Dock Interaktif Pilihan Tema Warna Teks Real-Time pada Halaman Pratinjau**:
+   - Di `preview-khutbah.html`, dock perbandingan bawah dilengkapi selector tema warna teks instan:
+     - `[ ✨ Emas & Putih (Rekomendasi) ]`: Warna baru berdaya kontras tinggi.
+     - `[ ☀️ Kuning Tajam ]`: Varian kuning lemon neon kontras ultra.
+     - `[ 💎 Emas Amber ]`: Varian emas amber sunset hangat.
+     - `[ 🏛️ Standar Lama ]`: Melihat kembali tampilan warna lama untuk perbandingan.
+   - Pengguna/pengurus dapat langsung mengklik tombol-tombol tersebut secara langsung untuk melihat mana yang paling sesuai selera.
+
+4. **Berkas yang Dimodifikasi**:
+   - `web-statis/preview-khutbah.html` (Styling tema warna kontras tinggi & dock pemilih tema)
+   - `web-statis/prayer-mode.html` (Pembaruan kontras teks transparan & default hadith)
+   - `resources/views/prayer-mode.blade.php` (Sinkronisasi Blade view Laravel)
+   - `public/preview-khutbah.html` (Sinkronisasi public Laravel)
+   - `web-statis/sw.js` (Bumping versi Service Worker cache ke `v5.8.81`)
+   - `web-statis/js/admin/admin-settings.js` (Penyelarasan pembersihan cache ke `v5.8.81`)
+   - `scripts/test-engine.js` (Pembaruan cache test ke `v5.8.81` dan penambahan asersi kontras teks Khutbah)
+
+5. **Hasil Pengujian Regresi Otomatis (`npm test`)**:
+   - **214 / 214 ASSERTIONS LULUS (100% PASS)** tanpa regression error.
+
+---
+
+## 📜 ARSIP UPDATE — 15 Oktober 2026 (Pukul 00:15 WIB)
 
 ### 🕌 PENYELARASAN 100% HEADER & BADGE SHOLAT JUM'AT PADA PRATINJAU KHUTBAH (`preview-khutbah.html`) — (Versi SW v5.8.80):
 1. **Latar Belakang & Pertanyaan Pengguna**:

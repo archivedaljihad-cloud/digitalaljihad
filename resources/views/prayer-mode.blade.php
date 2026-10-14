@@ -1070,30 +1070,96 @@
             display: none !important;
         }
 
-        /* Penegasan Text Shadow Kontras Tinggi Agar Terbaca Sangat Jelas di TV */
+        /* Penegasan Warna Teks & Kontras Tinggi Khutbah Agar Terbaca Sangat Jelas di Layar TV */
         body.khutbah-transparent .jumat-quran-arabic,
         .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arabic {
-            text-shadow: 0 0 22px rgba(255, 215, 0, 0.75), 0 3px 8px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.95);
+            color: #FFE082 !important;
+            font-size: clamp(28px, 3.0vw, 42px) !important;
+            font-weight: 700 !important;
+            line-height: 1.6 !important;
+            text-shadow: 
+                0 0 24px rgba(255, 215, 0, 0.8), 
+                0 3px 6px #000000, 
+                0 6px 18px rgba(0, 0, 0, 0.95), 
+                0 0 35px rgba(0, 0, 0, 0.9) !important;
         }
 
         body.khutbah-transparent .jumat-quran-arti,
         .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arti {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+            color: #FFFFFF !important;
+            font-size: clamp(18px, 1.75vw, 25px) !important;
+            font-weight: 600 !important;
+            line-height: 1.55 !important;
+            text-shadow: 
+                1px 1px 2px #000000,
+                -1px -1px 2px #000000,
+                1px -1px 2px #000000,
+                -1px 1px 2px #000000,
+                0 3px 8px rgba(0, 0, 0, 0.98), 
+                0 6px 20px rgba(0, 0, 0, 0.95) !important;
+        }
+
+        body.khutbah-transparent .jumat-quran-surat,
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-surat {
+            color: #FDE047 !important;
+            font-weight: 800 !important;
+            text-shadow: 0 2px 6px #000000, 0 0 14px rgba(253, 224, 71, 0.6) !important;
+        }
+
+        body.khutbah-transparent .adab-notice,
+        #hadithPlakat.is-transparent .adab-notice,
+        .hadith-plakat.is-transparent .adab-notice {
+            background: linear-gradient(135deg, rgba(6, 44, 25, 0.92) 0%, rgba(2, 22, 12, 0.96) 100%) !important;
+            border: 1.8px solid #FDE047 !important;
+            color: #FEF08A !important;
+            font-weight: 700 !important;
+            font-size: clamp(14px, 1.35vw, 18px) !important;
+            box-shadow: 0 0 18px rgba(253, 224, 71, 0.35), 0 6px 18px rgba(0, 0, 0, 0.8) !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
         }
 
         body.khutbah-transparent .hadith-header,
-        #hadithPlakat.is-transparent .hadith-header {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 3px 12px rgba(0, 0, 0, 0.9);
+        #hadithPlakat.is-transparent .hadith-header,
+        .hadith-plakat.is-transparent .hadith-header {
+            color: #FDE047 !important;
+            font-weight: 700 !important;
+            font-size: clamp(16px, 1.5vw, 21px) !important;
+            letter-spacing: 1.2px !important;
+            text-shadow: 0 2px 6px #000000, 0 4px 14px rgba(0, 0, 0, 0.95), 0 0 18px rgba(253, 224, 71, 0.5) !important;
+        }
+
+        body.khutbah-transparent .saw-symbol,
+        #hadithPlakat.is-transparent .saw-symbol,
+        .hadith-plakat.is-transparent .saw-symbol {
+            color: #FFE082 !important;
+            font-weight: 800 !important;
         }
 
         body.khutbah-transparent .hadith-body,
-        #hadithPlakat.is-transparent .hadith-body {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        #hadithPlakat.is-transparent .hadith-body,
+        .hadith-plakat.is-transparent .hadith-body {
+            color: #FFFFFF !important;
+            font-style: normal !important;
+            font-weight: 600 !important;
+            font-size: clamp(18px, 1.8vw, 25px) !important;
+            line-height: 1.55 !important;
+            text-shadow: 
+                1px 1px 2px #000000,
+                -1px -1px 2px #000000,
+                1px -1px 2px #000000,
+                -1px 1px 2px #000000,
+                0 3px 8px rgba(0, 0, 0, 0.98), 
+                0 6px 20px rgba(0, 0, 0, 0.95) !important;
         }
 
         body.khutbah-transparent .hadith-source,
-        #hadithPlakat.is-transparent .hadith-source {
-            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.98), 0 0 12px rgba(212, 175, 55, 0.5);
+        #hadithPlakat.is-transparent .hadith-source,
+        .hadith-plakat.is-transparent .hadith-source {
+            color: #FDE047 !important;
+            font-weight: 800 !important;
+            font-size: clamp(14px, 1.25vw, 18px) !important;
+            letter-spacing: 1.2px !important;
+            text-shadow: 0 2px 6px #000000, 0 0 14px rgba(253, 224, 71, 0.5) !important;
         }
 
         /* =====================================================
@@ -1132,35 +1198,37 @@
         }
 
         .hadith-header {
-            font-size: clamp(14px, 1.4vw, 18px);
-            font-weight: 500;
-            color: #F0DEAA;
+            font-size: clamp(15px, 1.45vw, 19px);
+            font-weight: 700;
+            color: #FDE047;
             letter-spacing: 1px;
             margin-bottom: 4px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
         }
 
         .saw-symbol {
             font-family: 'Amiri', serif;
             font-weight: bold;
-            color: #D4AF37;
+            color: #FFE082;
             font-size: 1.15em;
         }
 
         .hadith-body {
-            font-size: clamp(16px, 1.65vw, 23px);
-            font-style: italic;
-            font-weight: 500;
-            line-height: 1.45;
-            color: #F8FAFC;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+            font-size: clamp(16px, 1.65vw, 24px);
+            font-style: normal;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #FFFFFF;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
             margin-bottom: 4px;
         }
 
         .hadith-source {
-            font-size: clamp(12px, 1.1vw, 15px);
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            color: #D4AF37;
+            font-size: clamp(13px, 1.2vw, 16px);
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            color: #FDE047;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
         }
 
         /* =====================================================

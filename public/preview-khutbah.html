@@ -321,30 +321,216 @@
             display: none !important;
         }
 
-        /* Penegasan Text Shadow Kontras Tinggi Agar Terbaca Sangat Jelas di TV */
+        /* -------------------------------------------------------------
+           TEMA WARNA TEKS KHUTBAH (KONTROL KONTRAS TINGGI DI TV)
+           ------------------------------------------------------------- */
+        /* TEMA 1: EMAS RADIANT & PUTIH KRISTAL (DEFAULT REKOMENDASI) */
         body.khutbah-transparent .jumat-quran-arabic,
-        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arabic {
-            text-shadow: 0 0 22px rgba(255, 215, 0, 0.75), 0 3px 8px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.95);
+        body.khutbah-theme-radiant .jumat-quran-arabic {
+            color: #FFE082 !important;
+            font-size: clamp(28px, 3.0vw, 42px) !important;
+            font-weight: 700 !important;
+            line-height: 1.6 !important;
+            text-shadow: 
+                0 0 24px rgba(255, 215, 0, 0.8), 
+                0 3px 6px #000000, 
+                0 6px 18px rgba(0, 0, 0, 0.95), 
+                0 0 35px rgba(0, 0, 0, 0.9) !important;
         }
 
         body.khutbah-transparent .jumat-quran-arti,
-        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arti {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        body.khutbah-theme-radiant .jumat-quran-arti {
+            color: #FFFFFF !important;
+            font-size: clamp(18px, 1.75vw, 25px) !important;
+            font-weight: 600 !important;
+            line-height: 1.55 !important;
+            text-shadow: 
+                1px 1px 2px #000000,
+                -1px -1px 2px #000000,
+                1px -1px 2px #000000,
+                -1px 1px 2px #000000,
+                0 3px 8px rgba(0, 0, 0, 0.98), 
+                0 6px 20px rgba(0, 0, 0, 0.95) !important;
+        }
+
+        body.khutbah-transparent .jumat-quran-surat,
+        body.khutbah-theme-radiant .jumat-quran-surat {
+            color: #FDE047 !important;
+            font-weight: 800 !important;
+            text-shadow: 0 2px 6px #000000, 0 0 14px rgba(253, 224, 71, 0.6) !important;
+        }
+
+        body.khutbah-transparent .adab-notice,
+        body.khutbah-theme-radiant .adab-notice {
+            background: linear-gradient(135deg, rgba(6, 44, 25, 0.92) 0%, rgba(2, 22, 12, 0.96) 100%) !important;
+            border: 1.8px solid #FDE047 !important;
+            color: #FEF08A !important;
+            font-weight: 700 !important;
+            font-size: clamp(14px, 1.35vw, 18px) !important;
+            box-shadow: 0 0 18px rgba(253, 224, 71, 0.35), 0 6px 18px rgba(0, 0, 0, 0.8) !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
         }
 
         body.khutbah-transparent .hadith-header,
-        #hadithPlakat.is-transparent .hadith-header {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 3px 12px rgba(0, 0, 0, 0.9);
+        body.khutbah-theme-radiant .hadith-header {
+            color: #FDE047 !important;
+            font-weight: 700 !important;
+            font-size: clamp(16px, 1.5vw, 21px) !important;
+            letter-spacing: 1.2px !important;
+            text-shadow: 0 2px 6px #000000, 0 4px 14px rgba(0, 0, 0, 0.95), 0 0 18px rgba(253, 224, 71, 0.5) !important;
+        }
+
+        body.khutbah-transparent .saw-symbol,
+        body.khutbah-theme-radiant .saw-symbol {
+            color: #FFE082 !important;
+            font-weight: 800 !important;
         }
 
         body.khutbah-transparent .hadith-body,
-        #hadithPlakat.is-transparent .hadith-body {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        body.khutbah-theme-radiant .hadith-body {
+            color: #FFFFFF !important;
+            font-style: normal !important;
+            font-weight: 600 !important;
+            font-size: clamp(18px, 1.8vw, 25px) !important;
+            line-height: 1.55 !important;
+            text-shadow: 
+                1px 1px 2px #000000,
+                -1px -1px 2px #000000,
+                1px -1px 2px #000000,
+                -1px 1px 2px #000000,
+                0 3px 8px rgba(0, 0, 0, 0.98), 
+                0 6px 20px rgba(0, 0, 0, 0.95) !important;
         }
 
         body.khutbah-transparent .hadith-source,
-        #hadithPlakat.is-transparent .hadith-source {
-            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.98), 0 0 12px rgba(212, 175, 55, 0.5);
+        body.khutbah-theme-radiant .hadith-source {
+            color: #FDE047 !important;
+            font-weight: 800 !important;
+            font-size: clamp(14px, 1.25vw, 18px) !important;
+            letter-spacing: 1.2px !important;
+            text-shadow: 0 2px 6px #000000, 0 0 14px rgba(253, 224, 71, 0.5) !important;
+        }
+
+        /* TEMA 2: KUNING TERANG TAJAM (LEMON GOLD) */
+        body.khutbah-theme-lemon .jumat-quran-arabic {
+            color: #FEF08A !important;
+            font-size: clamp(28px, 3.0vw, 42px) !important;
+            font-weight: 700 !important;
+            line-height: 1.6 !important;
+            text-shadow: 0 0 24px rgba(254, 240, 138, 0.9), 0 3px 6px #000000, 0 6px 18px rgba(0,0,0,0.95) !important;
+        }
+        body.khutbah-theme-lemon .jumat-quran-arti {
+            color: #FFFFFF !important;
+            font-size: clamp(18px, 1.75vw, 25px) !important;
+            font-weight: 600 !important;
+            text-shadow: 0 2px 6px #000000, 0 4px 16px rgba(0,0,0,0.95) !important;
+        }
+        body.khutbah-theme-lemon .jumat-quran-surat {
+            color: #FACC15 !important;
+            font-weight: 800 !important;
+        }
+        body.khutbah-theme-lemon .adab-notice {
+            background: rgba(14, 52, 28, 0.92) !important;
+            border: 2px solid #FACC15 !important;
+            color: #FEF08A !important;
+            font-weight: 700 !important;
+        }
+        body.khutbah-theme-lemon .hadith-header {
+            color: #FACC15 !important;
+            font-weight: 700 !important;
+            text-shadow: 0 2px 6px #000000, 0 0 14px rgba(250, 204, 21, 0.6) !important;
+        }
+        body.khutbah-theme-lemon .saw-symbol {
+            color: #FEF08A !important;
+        }
+        body.khutbah-theme-lemon .hadith-body {
+            color: #FEF9C3 !important;
+            font-style: normal !important;
+            font-weight: 600 !important;
+            text-shadow: 0 2px 6px #000000, 0 4px 16px rgba(0,0,0,0.95) !important;
+        }
+        body.khutbah-theme-lemon .hadith-source {
+            color: #FACC15 !important;
+            font-weight: 800 !important;
+        }
+
+        /* TEMA 3: EMAS AMBER HANGAT (WARM AMBER GOLD) */
+        body.khutbah-theme-amber .jumat-quran-arabic {
+            color: #FBBF24 !important;
+            font-size: clamp(28px, 3.0vw, 42px) !important;
+            font-weight: 700 !important;
+            line-height: 1.6 !important;
+            text-shadow: 0 0 24px rgba(251, 191, 36, 0.8), 0 3px 6px #000000, 0 6px 18px rgba(0,0,0,0.95) !important;
+        }
+        body.khutbah-theme-amber .jumat-quran-arti {
+            color: #FFFFFF !important;
+            font-size: clamp(18px, 1.75vw, 25px) !important;
+            font-weight: 600 !important;
+            text-shadow: 0 2px 6px #000000, 0 4px 16px rgba(0,0,0,0.95) !important;
+        }
+        body.khutbah-theme-amber .jumat-quran-surat {
+            color: #F59E0B !important;
+            font-weight: 800 !important;
+        }
+        body.khutbah-theme-amber .adab-notice {
+            background: rgba(18, 48, 26, 0.92) !important;
+            border: 2px solid #F59E0B !important;
+            color: #FDE68A !important;
+            font-weight: 700 !important;
+        }
+        body.khutbah-theme-amber .hadith-header {
+            color: #FCD34D !important;
+            font-weight: 700 !important;
+        }
+        body.khutbah-theme-amber .saw-symbol {
+            color: #FBBF24 !important;
+        }
+        body.khutbah-theme-amber .hadith-body {
+            color: #FFFFFF !important;
+            font-style: normal !important;
+            font-weight: 600 !important;
+            text-shadow: 0 2px 6px #000000, 0 4px 16px rgba(0,0,0,0.95) !important;
+        }
+        body.khutbah-theme-amber .hadith-source {
+            color: #F59E0B !important;
+            font-weight: 800 !important;
+        }
+
+        /* TEMA 4: STANDAR LAMA (WARNA ASLI SEBELUM PERUBAHAN) */
+        body.khutbah-theme-classic .jumat-quran-arabic {
+            color: #FFD700 !important;
+            text-shadow: 0 0 16px rgba(255, 215, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+        }
+        body.khutbah-theme-classic .jumat-quran-arti {
+            color: #FFFFFF !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75) !important;
+        }
+        body.khutbah-theme-classic .jumat-quran-surat {
+            color: #FFD700 !important;
+        }
+        body.khutbah-theme-classic .adab-notice {
+            background: rgba(212, 175, 55, 0.16) !important;
+            border: 1px solid rgba(212, 175, 55, 0.45) !important;
+            color: #FFF3BD !important;
+        }
+        body.khutbah-theme-classic .hadith-header {
+            color: #F0DEAA !important;
+            font-weight: 500 !important;
+            text-shadow: none !important;
+        }
+        body.khutbah-theme-classic .saw-symbol {
+            color: #D4AF37 !important;
+        }
+        body.khutbah-theme-classic .hadith-body {
+            color: #F8FAFC !important;
+            font-style: italic !important;
+            font-weight: 500 !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+        }
+        body.khutbah-theme-classic .hadith-source {
+            color: #D4AF37 !important;
+            font-weight: 600 !important;
+            text-shadow: none !important;
         }
         .prayer-badge::before {
             content: '';
@@ -2346,16 +2532,37 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 
-    <!-- DOCK PERBANDINGAN DESAIN PRAKTIS -->
-    <div id="previewComparisonDock" style="position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 9999; display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; border-radius: 50px; background: rgba(3, 28, 16, 0.94); border: 2px solid rgba(255, 215, 0, 0.85); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(212, 175, 55, 0.35); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
-        <span style="font-size: 13px; font-weight: 700; color: #FFE082; text-transform: uppercase; letter-spacing: 0.5px;">Bandingkan Desain:</span>
-        <button type="button" id="btnDockTransparan" onclick="setMode(true)" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 1px solid #34d399; color: #FFFFFF; padding: 7px 18px; border-radius: 40px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 12px rgba(16, 185, 129, 0.5);">
-            <i class="fas fa-magic"></i> 1. Transparan 1 &amp; Tanpa Outline
+    <!-- DOCK PERBANDINGAN DESAIN & WARNA TEKS PRAKTIS -->
+    <div id="previewComparisonDock" style="position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 9999; display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 50px; background: rgba(3, 28, 16, 0.95); border: 2px solid rgba(255, 215, 0, 0.85); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.35); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); flex-wrap: wrap; justify-content: center; max-width: 96vw;">
+        <!-- PILIHAN KOTAK -->
+        <span style="font-size: 11px; font-weight: 800; color: #FFE082; text-transform: uppercase; letter-spacing: 0.8px;">Kotak:</span>
+        <button type="button" id="btnDockTransparan" onclick="setMode(true)" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 1px solid #34d399; color: #FFFFFF; padding: 6px 14px; border-radius: 40px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.5);">
+            <i class="fas fa-magic"></i> 1. Transparan 1
         </button>
-        <button type="button" id="btnDockStandar" onclick="setMode(false)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 215, 0, 0.35); color: #FFFFFF; padding: 7px 18px; border-radius: 40px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-            <i class="far fa-square"></i> 2. Desain Asli (Kotak Hijau &amp; Outline)
+        <button type="button" id="btnDockStandar" onclick="setMode(false)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 215, 0, 0.35); color: #FFFFFF; padding: 6px 14px; border-radius: 40px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="far fa-square"></i> 2. Berbingkai
         </button>
-        <a href="prayer-mode.html?phase=khutbah" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.25); color: #D1D5DB; padding: 7px 14px; border-radius: 40px; font-size: 13px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+
+        <span style="width: 1px; height: 20px; background: rgba(255, 215, 0, 0.3); margin: 0 4px;"></span>
+
+        <!-- PILIHAN WARNA TEKS -->
+        <span style="font-size: 11px; font-weight: 800; color: #FDE047; text-transform: uppercase; letter-spacing: 0.8px;">Warna Teks:</span>
+        <button type="button" id="btnThemeRadiant" onclick="setTheme('radiant')" class="dock-theme-btn" style="background: linear-gradient(135deg, #FFE082 0%, #EAB308 100%); border: 1px solid #FEF08A; color: #01140A; padding: 6px 13px; border-radius: 40px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 0 12px rgba(254, 240, 138, 0.6);">
+            <i class="fas fa-sparkles"></i> Emas &amp; Putih (Rekomendasi)
+        </button>
+        <button type="button" id="btnThemeLemon" onclick="setTheme('lemon')" class="dock-theme-btn" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(250, 204, 21, 0.45); color: #FEF08A; padding: 6px 13px; border-radius: 40px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fas fa-sun"></i> Kuning Tajam
+        </button>
+        <button type="button" id="btnThemeAmber" onclick="setTheme('amber')" class="dock-theme-btn" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(245, 158, 11, 0.45); color: #FDE68A; padding: 6px 13px; border-radius: 40px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fas fa-gem"></i> Emas Amber
+        </button>
+        <button type="button" id="btnThemeClassic" onclick="setTheme('classic')" class="dock-theme-btn" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.25); color: #D1D5DB; padding: 6px 13px; border-radius: 40px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fas fa-history"></i> Standar Lama
+        </button>
+
+        <span style="width: 1px; height: 20px; background: rgba(255, 215, 0, 0.3); margin: 0 4px;"></span>
+
+        <a href="prayer-mode.html?phase=khutbah" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.25); color: #D1D5DB; padding: 6px 12px; border-radius: 40px; font-size: 12px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
             <i class="fas fa-external-link-alt"></i> prayer-mode
         </a>
     </div>
@@ -2370,7 +2577,7 @@
                     btnT.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
                     btnT.style.borderColor = '#34d399';
                     btnT.style.color = '#FFFFFF';
-                    btnT.style.boxShadow = '0 2px 12px rgba(16, 185, 129, 0.5)';
+                    btnT.style.boxShadow = '0 2px 10px rgba(16, 185, 129, 0.5)';
                     btnS.style.background = 'rgba(255, 255, 255, 0.08)';
                     btnS.style.borderColor = 'rgba(255, 215, 0, 0.35)';
                     btnS.style.color = '#FFFFFF';
@@ -2379,7 +2586,7 @@
                     btnS.style.background = 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)';
                     btnS.style.borderColor = '#fde047';
                     btnS.style.color = '#000000';
-                    btnS.style.boxShadow = '0 2px 12px rgba(234, 179, 8, 0.5)';
+                    btnS.style.boxShadow = '0 2px 10px rgba(234, 179, 8, 0.5)';
                     btnT.style.background = 'rgba(255, 255, 255, 0.08)';
                     btnT.style.borderColor = 'rgba(255, 215, 0, 0.35)';
                     btnT.style.color = '#FFFFFF';
@@ -2387,6 +2594,59 @@
                 }
             }
         }
+
+        function setTheme(theme) {
+            document.body.classList.remove('khutbah-theme-radiant', 'khutbah-theme-lemon', 'khutbah-theme-amber', 'khutbah-theme-classic');
+            document.body.classList.add(`khutbah-theme-${theme}`);
+            sessionStorage.setItem('khutbah_color_theme', theme);
+
+            const buttons = {
+                radiant: document.getElementById('btnThemeRadiant'),
+                lemon: document.getElementById('btnThemeLemon'),
+                amber: document.getElementById('btnThemeAmber'),
+                classic: document.getElementById('btnThemeClassic')
+            };
+
+            for (const [key, btn] of Object.entries(buttons)) {
+                if (!btn) continue;
+                if (key === theme) {
+                    if (key === 'radiant') {
+                        btn.style.background = 'linear-gradient(135deg, #FFE082 0%, #EAB308 100%)';
+                        btn.style.borderColor = '#FEF08A';
+                        btn.style.color = '#01140A';
+                        btn.style.boxShadow = '0 0 14px rgba(254, 240, 138, 0.7)';
+                    } else if (key === 'lemon') {
+                        btn.style.background = 'linear-gradient(135deg, #FEF08A 0%, #FACC15 100%)';
+                        btn.style.borderColor = '#FEF9C3';
+                        btn.style.color = '#01140A';
+                        btn.style.boxShadow = '0 0 14px rgba(250, 204, 21, 0.7)';
+                    } else if (key === 'amber') {
+                        btn.style.background = 'linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%)';
+                        btn.style.borderColor = '#FEF3C7';
+                        btn.style.color = '#01140A';
+                        btn.style.boxShadow = '0 0 14px rgba(245, 158, 11, 0.7)';
+                    } else {
+                        btn.style.background = 'linear-gradient(135deg, #CBD5E1 0%, #64748B 100%)';
+                        btn.style.borderColor = '#FFFFFF';
+                        btn.style.color = '#01140A';
+                        btn.style.boxShadow = '0 0 14px rgba(255, 255, 255, 0.5)';
+                    }
+                } else {
+                    btn.style.background = 'rgba(255, 255, 255, 0.08)';
+                    btn.style.borderColor = 'rgba(255, 215, 0, 0.35)';
+                    btn.style.color = '#D1D5DB';
+                    btn.style.boxShadow = 'none';
+                }
+            }
+        }
+
+        // Inisialisasi tema yang tersimpan
+        (function() {
+            try {
+                const saved = sessionStorage.getItem('khutbah_color_theme') || 'radiant';
+                setTheme(saved);
+            } catch (e) {}
+        })();
     </script>
 </body>
 </html>

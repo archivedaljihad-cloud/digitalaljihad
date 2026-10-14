@@ -457,7 +457,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.80'), 'sw.js memiliki bumping versi cache terbaru v5.8.80');
+assert(swContent.includes('aljihad-signage-v5.8.81'), 'sw.js memiliki bumping versi cache terbaru v5.8.81');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -496,7 +496,10 @@ assert(fs.existsSync(path.join(baseDir, 'preview-khutbah.html')), 'File fisik pr
 const previewKhutbahContent = fs.readFileSync(path.join(baseDir, 'preview-khutbah.html'), 'utf8');
 assert(previewKhutbahContent.includes('khutbah-transparent'), 'preview-khutbah.html mendukung mode transparan');
 assert(previewKhutbahContent.includes('setMode'), 'preview-khutbah.html memiliki fungsi interaktif pembanding real-time');
+assert(previewKhutbahContent.includes('setTheme'), 'preview-khutbah.html memiliki fungsi pemilih tema warna teks');
+assert(previewKhutbahContent.includes('#FFE082') && previewKhutbahContent.includes('#FDE047'), 'preview-khutbah.html menerapkan warna kontras tinggi emas radiant & kuning terang');
 assert(prayerModeHtmlContent.includes('khutbah-transparent') && prayerModeHtmlContent.includes('toggleTransparentBox'), 'prayer-mode.html memiliki handler dan toggle khutbah transparan');
+assert(prayerModeHtmlContent.includes('#FFE082') && prayerModeHtmlContent.includes('#FDE047'), 'prayer-mode.html menerapkan penegasan kontras teks khutbah terbaru');
 assert(swContent.includes("'preview-khutbah.html'"), 'sw.js me-cache berkas preview-khutbah.html');
 
 // -------------------------------------------------------------
