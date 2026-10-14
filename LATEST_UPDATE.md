@@ -7,7 +7,36 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 14 Oktober 2026 (Pukul 23:45 WIB)
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 00:15 WIB)
+
+### 🕌 PENYELARASAN 100% HEADER & BADGE SHOLAT JUM'AT PADA PRATINJAU KHUTBAH (`preview-khutbah.html`) — (Versi SW v5.8.80):
+1. **Latar Belakang & Pertanyaan Pengguna**:
+   - Pengguna menanyakan mengapa bagian atas (Header Masjid, Kapsul Jam & Tanggal, Judul Khutbah, dan Kapsul Nama Sholat) sempat ikut berubah di `preview-khutbah.html`:
+     - Sebelumnya teks nama sholat sempat tampil berwarna gelap/kecoklatan akibat styling ad-hoc `background-clip: text` yang bentrok dengan `text-shadow`.
+     - Font dan border header sempat tidak identik dengan tampilan TV produksi utama.
+2. **Solusi & Tindakan Koreksi**:
+   - **Kloning 100% Berbasis `prayer-mode.html`**:
+     `web-statis/preview-khutbah.html` dan `public/preview-khutbah.html` dibangun ulang secara utuh dari kode sumber resmi `web-statis/prayer-mode.html`.
+   - **Header & Badge Sepenuhnya Utuh & Asli**:
+     - Judul Masjid: `Masking Renta`, warna `#FFFFFF` dengan outline `-webkit-text-stroke: 1.8px #FFD700`.
+     - Subtitle: `SISTEM INFORMASI DIGITAL` (Poppins 600).
+     - Medali Kaligrafi 3D: Kaligrafi Muhammad SAW (kiri) & Allah SWT (kanan).
+     - Kapsul Tanggal & Jam: Kapsul hijau emerald berbingkai emas 2px (`#FFD700`).
+     - Judul Fase: `KHUTBAH & SHOLAT JUM'AT BERJAMAAH` (`#FFF3BD`).
+     - Kapsul Nama Sholat: Font `Cinzel`, teks putih bersih (`#FFFFFF`) dengan kilau emas bercahaya tajam (`text-shadow: 0 0 16px rgba(255, 220, 80, 0.6)`), persis 100% seperti layar TV aslinya.
+   - **Hanya 2 Kotak Bawah yang Dibuat Transparan Sesuai Permintaan**:
+     - Kotak 1: Ayat Al-Quran (Al-A'raf: 204) ➔ Transparan 100% & tanpa border/outline.
+     - Kotak 2: Hadits Adab Khutbah Jum'at ➔ Transparan 100% & tanpa border/outline.
+   - **Dock Pembanding Interaktif**:
+     Tetap tersedia tombol `[ ✨ 1. Transparan 1 & Tanpa Outline ]` dan `[ 🔲 2. Desain Asli (Kotak Hijau & Outline) ]` untuk menguji perbandingan *before vs after*.
+   - **Sinkronisasi Cache & Service Worker**:
+     - Versi Cache dinaikkan ke **`aljihad-signage-v5.8.80`** di `web-statis/sw.js` dan `admin-settings.js` agar seluruh peramban langsung memuat tampilan baru tanpa tertahan cache usang.
+   - **Pengujian Regresi Otomatis (`npm test`)**:
+     - Hasil: **211 / 211 LULUS (100% PASS)**.
+
+---
+
+## 📜 ARSIP UPDATE — 14 Oktober 2026 (Pukul 23:45 WIB)
 
 ### 🕌 PRATINJAU DESAIN KOTAK KHUTBAH JUM'AT: TRANSPARAN 100% & TANPA OUTLINE (`preview-khutbah.html` & `prayer-mode.html`) — (Versi SW v5.8.79):
 1. **Latar Belakang & Permintaan Pengguna**:

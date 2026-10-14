@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pratinjau Khutbah Jum'at - Transparan & Tanpa Outline | Masjid Jami' Al-Jihad</title>
+    <title>Mode Sholat - Pratinjau Khutbah Jum'at | Masjid Jami' Al-Jihad</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
 
     <style>
+        /* CUSTOM FONT: Masking Renta (Sesuai Halaman Rotasi) */
         @font-face {
             font-family: 'Masking Renta';
             src: url('fonts/MaskingRenta.otf') format('opentype');
@@ -89,7 +90,7 @@
             box-sizing: border-box;
         }
 
-        /* 1. HEADER MASJID */
+        /* 1. HEADER MASJID UNIFIED (IDENTIK DENGAN HALAMAN ROTASI) */
         .header {
             text-align: center;
             margin-top: 0;
@@ -97,83 +98,123 @@
             flex-shrink: 0;
             position: relative;
             z-index: 15;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
         }
 
-        .corner-logo {
-            position: absolute;
-            top: 2px;
-            width: clamp(65px, 6.2vw, 84px);
-            height: clamp(65px, 6.2vw, 84px);
-            object-fit: contain;
-            filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.8)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.9));
-            z-index: 16;
-            pointer-events: none;
-            transition: transform 0.3s ease;
-        }
-        .corner-logo:hover {
-            transform: scale(1.05);
-        }
-        .corner-logo-left { left: clamp(10px, 2.5vw, 40px); }
-        .corner-logo-right { right: clamp(10px, 2.5vw, 40px); }
-
-        .masjid-name {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(24px, 2.8vw, 36px);
-            font-weight: 900;
-            letter-spacing: clamp(1.5px, 0.3vw, 3px);
-            text-transform: uppercase;
-            line-height: 1.15;
-            background: linear-gradient(180deg, #FFFFFF 0%, #FFF3BD 32%, #E5B232 68%, #8A6400 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(212, 175, 55, 0.45);
-            margin: 0;
-            padding: 0;
+        .header h1,
+        #nama-masjid {
+            font-family: 'Masking Renta', 'Montserrat', 'Poppins', sans-serif !important;
+            font-size: clamp(1.65rem, 2.3vw, 2.45rem) !important;
+            font-weight: 900 !important;
+            line-height: 1.1 !important;
+            letter-spacing: 4px !important;
+            text-transform: uppercase !important;
+            background: none !important;
+            -webkit-background-clip: initial !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            color: #FFFFFF !important;
+            -webkit-text-stroke: 1.8px #FFD700 !important;
+            paint-order: stroke fill !important;
+            text-shadow:
+                0 3px 6px rgba(0, 0, 0, 0.98),
+                0 6px 18px rgba(0, 0, 0, 0.92),
+                0 0 25px rgba(0, 0, 0, 0.85) !important;
+            filter: none !important;
+            margin: 0 0 -8px 0 !important;
+            padding: 0 !important;
         }
 
-        .masjid-address {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(9px, 0.95vw, 12px);
-            font-weight: 800;
-            letter-spacing: clamp(2px, 0.45vw, 4px);
-            text-transform: uppercase;
-            color: #FFFFFF;
-            margin-top: 2px;
-            margin-bottom: clamp(4px, 0.7vh, 8px);
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+        .header h3.sub-header,
+        #sub-header {
+            font-family: 'Poppins', sans-serif !important;
+            font-size: clamp(0.72rem, 1vw, 1rem) !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+            letter-spacing: 3.5px !important;
+            color: #ffffff !important;
+            text-transform: uppercase !important;
+            opacity: 1 !important;
+            text-shadow:
+                1px 1px 0 #000000,
+                -1px 1px 0 #000000,
+                1px -1px 0 #000000,
+                -1px -1px 0 #000000,
+                2px 2px 0 #000000,
+                -2px 2px 0 #000000,
+                2px -2px 0 #000000,
+                -2px -2px 0 #000000,
+                0 2px 8px rgba(0, 0, 0, 0.95) !important;
+            margin-top: clamp(4px, 0.6vh, 7px) !important;
+            margin-bottom: clamp(3px, 0.4vh, 5px) !important;
+            padding: 0 !important;
         }
 
-        .unified-datetime-capsule {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: clamp(6px, 1.2vw, 14px);
-            padding: clamp(4px, 0.6vh, 6px) clamp(16px, 2vw, 28px);
-            border-radius: 50px;
-            background: rgba(1, 22, 12, 0.65);
-            border: 1.2px solid rgba(212, 175, 55, 0.6);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 235, 150, 0.2);
-            font-size: clamp(12px, 1.25vw, 16px);
-            color: #FFFFFF;
-            font-weight: 500;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+        /* DATETIME CAPSULE (Sedikit diperbesar kotak kapsul dan teks tanggal jam sesuai instruksi) */
+        .header .datetime,
+        .datetime {
+            font-size: clamp(1.08rem, 1.38vw, 1.35rem) !important;
+            background: linear-gradient(135deg, rgba(2, 22, 15, 0.94) 0%, rgba(3, 34, 23, 0.90) 100%) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: clamp(6px, 0.8vh, 10px) clamp(22px, 2.2vw, 36px) !important;
+            border-radius: 35px !important;
+            margin: clamp(3px, 0.4vh, 6px) auto 0 auto !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.8px !important;
+            border: 2px solid #FFD700 !important;
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+            white-space: nowrap !important;
+            box-sizing: border-box !important;
         }
-        .unified-datetime-capsule .date-masehi { color: #FFFFFF; font-weight: 600; }
-        .unified-datetime-capsule .date-hijri { color: #FFE082; font-weight: 700; }
-        .unified-datetime-capsule .clock-wib {
-            font-family: 'Space Grotesk', 'Poppins', monospace;
-            font-weight: 700;
-            color: #FFFFFF;
-            letter-spacing: 1px;
+
+        .datetime .dt-date-row {
+            display: inline-flex !important;
+            align-items: center !important;
         }
-        .capsule-dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background-color: #D4AF37;
-            display: inline-block;
+
+        .datetime .masehi-date {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+
+        .datetime .hijri-date {
+            color: #ffd700 !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.8px !important;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.65), 0 0 20px rgba(255, 170, 0, 0.35) !important;
+            padding: 0 2px !important;
+        }
+
+        .datetime .dt-time-row {
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+
+        .datetime .jam-time {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-variant-numeric: tabular-nums !important;
+        }
+
+        .datetime .dt-sep {
+            color: #ffd700 !important;
+            opacity: 0.85 !important;
+            margin: 0 7px !important;
+            font-weight: bold !important;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
+        }
+
+        .datetime .dt-sep-time {
+            margin: 0 9px !important;
         }
 
         /* 2. FASE TITLE & PRAYER BADGE */
@@ -181,19 +222,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: clamp(4px, 0.7vh, 8px);
-            margin-top: 0;
-            margin-bottom: clamp(4px, 0.7vh, 8px);
-            flex-shrink: 0;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
         .phase-title {
-            font-size: clamp(15px, 1.55vw, 21px);
-            font-weight: 800;
-            letter-spacing: 2.2px;
+            font-size: clamp(16px, 1.6vw, 22px);
+            font-weight: 600;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            color: #FFFFFF;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 255, 255, 0.35);
+            color: #FFF3BD;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
         }
 
         .prayer-badge {
@@ -201,7 +240,7 @@
             display: inline-flex;
             align-items: center;
             gap: 18px;
-            padding: 8px 38px;
+            padding: 10px 42px;
             border-radius: 50px;
             border: 2px solid rgba(255, 215, 0, 0.85);
             background: linear-gradient(135deg, rgba(8, 48, 28, 0.94) 0%, rgba(2, 22, 12, 0.98) 100%);
@@ -212,6 +251,101 @@
             overflow: visible;
         }
 
+        /* Posisi Seimbang Kotak Kapsul Nama Sholat pada Fase Sholat Berjamaah */
+        body.phase-prayer .phase-section,
+        .phase-section.is-prayer,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .phase-section {
+            gap: clamp(26px, 3.8vh, 50px);
+            margin-bottom: clamp(14px, 2vh, 26px);
+        }
+
+        body.phase-prayer .prayer-badge,
+        .phase-section.is-prayer .prayer-badge,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .prayer-badge {
+            margin-top: clamp(8px, 1.2vh, 16px);
+        }
+
+        /* FASE SHOLAT BERJAMAAH: KOTAK TRANSPARAN & POSISI TEKS HADITS SHAF DIGESER KE BAWAH */
+        body.phase-prayer #hadithPlakat,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) #hadithPlakat {
+            display: none !important;
+        }
+
+        body.phase-prayer .message-section,
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .message-section {
+            margin-top: auto !important;
+            margin-bottom: clamp(90px, 12vh, 150px) !important;
+            max-width: 1180px;
+        }
+
+        body.phase-prayer .prayer-mode-box:not(.jumat-box),
+        .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) .prayer-mode-box:not(.jumat-box) {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            animation: none !important;
+            padding: 0 !important;
+        }
+
+        /* PRATINJAU KHUTBAH JUM'AT: KEDUA KOTAK TRANSPARAN & OUTLINE DIHILANGKAN */
+        body.khutbah-transparent .prayer-mode-box.jumat-box,
+        .prayer-container.khutbah-transparent .prayer-mode-box.jumat-box,
+        .prayer-mode-box.jumat-box.is-transparent {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            animation: none !important;
+            padding: clamp(6px, 1vh, 12px) 0 !important;
+        }
+
+        body.khutbah-transparent #hadithPlakat,
+        .prayer-container.khutbah-transparent #hadithPlakat,
+        #hadithPlakat.is-transparent {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            padding: clamp(6px, 1vh, 12px) 0 !important;
+        }
+
+        body.khutbah-transparent #hadithPlakat .quote-watermark,
+        .prayer-container.khutbah-transparent #hadithPlakat .quote-watermark,
+        #hadithPlakat.is-transparent .quote-watermark {
+            display: none !important;
+        }
+
+        /* Penegasan Text Shadow Kontras Tinggi Agar Terbaca Sangat Jelas di TV */
+        body.khutbah-transparent .jumat-quran-arabic,
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arabic {
+            text-shadow: 0 0 22px rgba(255, 215, 0, 0.75), 0 3px 8px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.95);
+        }
+
+        body.khutbah-transparent .jumat-quran-arti,
+        .prayer-mode-box.jumat-box.is-transparent .jumat-quran-arti {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        }
+
+        body.khutbah-transparent .hadith-header,
+        #hadithPlakat.is-transparent .hadith-header {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 3px 12px rgba(0, 0, 0, 0.9);
+        }
+
+        body.khutbah-transparent .hadith-body,
+        #hadithPlakat.is-transparent .hadith-body {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        }
+
+        body.khutbah-transparent .hadith-source,
+        #hadithPlakat.is-transparent .hadith-source {
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.98), 0 0 12px rgba(212, 175, 55, 0.5);
+        }
         .prayer-badge::before {
             content: '';
             position: absolute;
@@ -227,135 +361,477 @@
             animation: prayerBadgeOuterAura 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
+        /* 2. Efek Sapuan Kilau Emas Melintas Lembut (Golden Shimmer Sweep) */
+        .prayer-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 70%;
+            height: 100%;
+            border-radius: 50px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 250, 205, 0.22) 50%, transparent 100%);
+            transform: skewX(-25deg);
+            z-index: 1;
+            pointer-events: none;
+            animation: prayerBadgeShimmer 5s ease-in-out infinite;
+        }
+
+        /* Keyframes: Denyut Halus & Pendaran Keemasan Pinggiran Kotak Kapsul */
         @keyframes prayerBadgeGoldenPulse {
             0%, 100% {
                 transform: scale(1);
                 border-color: rgba(255, 215, 0, 0.75);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 215, 0, 0.5);
+                box-shadow: 
+                    0 4px 20px rgba(0, 0, 0, 0.6),
+                    0 0 16px rgba(255, 215, 0, 0.5),
+                    0 0 32px rgba(255, 180, 0, 0.3),
+                    inset 0 1px 1px rgba(255, 245, 190, 0.7),
+                    inset 0 0 14px rgba(255, 215, 0, 0.25);
             }
             50% {
                 transform: scale(1.032);
                 border-color: rgba(255, 245, 140, 1);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 28px rgba(255, 225, 60, 0.95);
+                box-shadow: 
+                    0 8px 32px rgba(0, 0, 0, 0.7),
+                    0 0 28px rgba(255, 225, 60, 0.95),
+                    0 0 55px rgba(255, 190, 20, 0.65),
+                    0 0 85px rgba(212, 175, 55, 0.4),
+                    inset 0 1px 2px rgba(255, 255, 235, 1),
+                    inset 0 0 22px rgba(255, 215, 0, 0.5);
             }
         }
 
+        /* Keyframes: Pendaran Aura Luar Riak Emas */
         @keyframes prayerBadgeOuterAura {
             0%, 100% {
                 transform: scale(0.98);
                 opacity: 0.45;
                 filter: blur(3px);
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
             }
             50% {
                 transform: scale(1.055);
                 opacity: 0.95;
                 filter: blur(6px);
+                box-shadow: 0 0 35px rgba(255, 220, 60, 0.85), 0 0 65px rgba(255, 180, 0, 0.45);
+            }
+        }
+
+        /* Keyframes: Sapuan Kilau Emas Melintas */
+        @keyframes prayerBadgeShimmer {
+            0%, 35% {
+                left: -120%;
+            }
+            60%, 100% {
+                left: 170%;
             }
         }
 
         .badge-gem {
             width: 10px;
             height: 10px;
-            border-radius: 50%;
             background: #FFD700;
-            box-shadow: 0 0 10px #FFD700, 0 0 18px #FFA500;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #FFD700;
+            animation: pulseGlowGem 3.2s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes pulseGlowGem {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #FFD700, 0 0 16px rgba(255, 215, 0, 0.6);
+            }
+            50% {
+                transform: scale(1.35);
+                box-shadow: 0 0 18px #FFF070, 0 0 30px rgba(255, 215, 0, 1);
+            }
         }
 
         .prayer-name {
-            font-family: 'Masking Renta', 'Space Grotesk', 'Poppins', sans-serif;
-            font-size: clamp(26px, 3.2vw, 42px);
+            font-family: 'Cinzel', serif;
+            font-size: clamp(26px, 2.8vw, 40px);
             font-weight: 900;
-            letter-spacing: 5px;
+            letter-spacing: 8px;
+            color: #FFFFFF;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 220, 80, 0.6);
             text-transform: uppercase;
-            background: linear-gradient(180deg, #FFFFFF 0%, #FFF5BD 30%, #FFD700 65%, #C99700 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(255, 215, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.95);
+            z-index: 2;
         }
 
-        /* 3. JUMAT OFFICERS GRID */
-        .jumat-officers-grid {
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-            gap: clamp(8px, 1.2vw, 16px);
-            width: 100%;
-            max-width: 1100px;
-            margin: clamp(4px, 0.8vh, 10px) auto clamp(6px, 1.2vh, 12px);
-            flex-shrink: 0;
-            flex-wrap: nowrap;
-        }
-
-        .officer-card {
-            flex: 1 1 0;
-            min-width: 0;
-            background: linear-gradient(135deg, rgba(8, 48, 28, 0.88), rgba(2, 20, 11, 0.94));
-            border: 1.5px solid rgba(212, 175, 55, 0.55);
-            border-radius: 16px;
-            padding: clamp(8px, 1.2vh, 14px) clamp(10px, 1.4vw, 16px);
+        /* 3. DUAL-TILE FLIP COUNTDOWN */
+        .countdown-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 235, 150, 0.18);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-        .officer-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 215, 0, 0.85);
+            margin: 4px 0;
         }
 
-        .officer-card.officer-card-main {
-            flex: 1.35 1 0;
-            border-color: rgba(255, 215, 0, 0.75);
-            background: linear-gradient(135deg, rgba(10, 56, 32, 0.92), rgba(3, 24, 13, 0.96));
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65), 0 0 22px rgba(212, 175, 55, 0.25), inset 0 1px 2px rgba(255, 235, 150, 0.25);
-        }
-
-        .officer-badge {
-            font-size: clamp(12px, 1.15vw, 15px);
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: #FFD700;
-            margin-bottom: 4px;
+        .timer-badge {
+            position: relative;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-            white-space: nowrap;
-        }
-
-        .officer-name {
-            font-size: clamp(14px, 1.4vw, 19px);
+            gap: 12px;
+            padding: 7px 28px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.24) 0%, rgba(3, 33, 18, 0.88) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.65);
+            font-size: 14px;
             font-weight: 700;
-            color: #FFFFFF;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-            white-space: nowrap;
+            letter-spacing: 3px;
+            color: #FFF5CC;
+            text-transform: uppercase;
             overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        /* 4. PESAN MASJID & KOTAK QURAN */
+        .badge-shimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+            pointer-events: none;
+            animation: lightSweep 2.8s ease-in-out infinite;
+        }
+
+        @keyframes lightSweep {
+            0% { transform: translateX(-150%) skewX(-22deg); }
+            35%, 100% { transform: translateX(250%) skewX(-22deg); }
+        }
+
+        /* 3. DUAL-TILE 3D MECHANICAL FLIP CLOCK COUNTDOWN (OPSI 1 + FONT CINZEL ASLI) */
+        .countdown-tiles-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            perspective: 1200px;
+        }
+
+        .countdown-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flip-card-box {
+            position: relative;
+            background: #01140a;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.75);
+            box-shadow: 
+                0 18px 42px rgba(0, 0, 0, 0.8),
+                0 0 32px rgba(255, 215, 0, 0.25),
+                inset 0 1px 2px rgba(255, 255, 255, 0.35);
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            width: clamp(140px, 15vw, 210px);
+            height: clamp(100px, 11vw, 150px);
+        }
+
+        .flip-card-box .flip-digit-text {
+            font-family: 'Cinzel', monospace;
+            font-size: clamp(64px, 7vw, 96px);
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #FFFFFF;
+            user-select: none;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .flip-card-half {
+            position: absolute;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 50%;
+            overflow: hidden;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, #052d1b 0%, #021a10 100%);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .flip-card-half.top {
+            top: 0;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.85);
+            transform-origin: 50% 100%;
+        }
+
+        .flip-card-half.bottom {
+            top: 50%;
+            border-bottom-left-radius: inherit;
+            border-bottom-right-radius: inherit;
+            border-top: 1px solid rgba(255, 215, 0, 0.25);
+            transform-origin: 50% 0%;
+        }
+
+        .flip-card-half .flip-digit-text {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .flip-card-half.top .flip-digit-text {
+            top: 0;
+        }
+
+        .flip-card-half.bottom .flip-digit-text {
+            top: -100%;
+        }
+
+        /* Flaps default hidden saat idle */
+        .flip-card-box .flap-top,
+        .flip-card-box .flap-bottom {
+            display: none;
+        }
+
+        .flip-card-half.static-top,
+        .flip-card-half.static-bottom {
+            z-index: 1;
+        }
+
+        /* Saat animasi flip aktif */
+        .flip-card-box.is-flipping .flap-top,
+        .flip-card-box.is-flipping .flap-bottom {
+            display: block;
+        }
+
+        .flip-card-box.is-flipping .flap-top {
+            z-index: 4;
+            animation: flipFlapTop 0.24s cubic-bezier(0.4, 0, 0.7, 1) forwards;
+        }
+
+        .flip-card-box.is-flipping .flap-bottom {
+            z-index: 5;
+            transform: rotateX(90deg);
+            animation: flipFlapBottom 0.24s cubic-bezier(0.3, 0, 0.6, 1) 0.24s forwards;
+        }
+
+        @keyframes flipFlapTop {
+            0% { transform: rotateX(0deg); filter: brightness(1); }
+            100% { transform: rotateX(-90deg); filter: brightness(0.5); }
+        }
+
+        @keyframes flipFlapBottom {
+            0% { transform: rotateX(90deg); filter: brightness(0.6); }
+            100% { transform: rotateX(0deg); filter: brightness(1); }
+        }
+
+        /* Engsel & Pin Hardware */
+        .hinge-bar {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #000000;
+            box-shadow: 0 1px 1px rgba(255, 215, 0, 0.4), 0 -1px 1px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .hinge-pin {
+            position: absolute;
+            top: 50%;
+            width: 8px;
+            height: 12px;
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            border: 1px solid #ffffff;
+            border-radius: 3px;
+            transform: translateY(-50%);
+            z-index: 11;
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
+            pointer-events: none;
+        }
+        .hinge-pin.left { left: 4px; }
+        .hinge-pin.right { right: 4px; }
+
+        /* MODEL BIASA (KLASIK BERSIH / BUKAN FLIP) */
+        .tile-face {
+            background: linear-gradient(180deg, #022c16 0%, #011c0e 50%, #01130a 51%, #000b05 100%);
+            border: 2px solid rgba(255, 215, 0, 0.75);
+            border-radius: 20px;
+            padding: 16px 24px;
+            width: clamp(140px, 15vw, 210px);
+            height: clamp(100px, 11vw, 150px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 18px 42px rgba(0, 0, 0, 0.8),
+                0 0 32px rgba(255, 215, 0, 0.25),
+                inset 0 1px 2px rgba(255, 255, 255, 0.35);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .tile-number {
+            font-family: 'Cinzel', monospace;
+            font-size: clamp(64px, 7vw, 96px);
+            font-weight: 900;
+            color: #FFFFFF;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
+            line-height: 1;
+            user-select: none;
+        }
+
+        .tile-crease {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .tile-label {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #FFD700;
+            margin-top: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+
+        .countdown-separator {
+            font-family: 'Cinzel', monospace;
+            font-size: clamp(48px, 5.5vw, 76px);
+            font-weight: 900;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            margin-bottom: 24px;
+            animation: pulseDots 1s infinite alternate;
+        }
+
+        @keyframes pulseDots {
+            0% { opacity: 0.4; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* 4. PESAN MASJID & MODE HENING */
         .message-section {
             width: 100%;
-            max-width: 1100px;
-            margin: clamp(2px, 0.5vh, 6px) auto;
+            max-width: 1050px;
+            margin: 4px auto;
+        }
+
+        .message-banner {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 9px 32px;
+            border-radius: 16px;
+            background: rgba(1, 16, 8, 0.65);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .message-icon {
+            color: #D4AF37;
+            font-size: 22px;
+        }
+
+        .message-banner-icon-img {
+            height: clamp(34px, 4.2vh, 46px);
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+            vertical-align: middle;
             flex-shrink: 0;
+            display: none;
+            transition: transform 0.3s ease;
+        }
+
+        .message-banner-icon-img:hover {
+            transform: scale(1.08);
+        }
+
+        .message-text {
+            font-size: clamp(18px, 1.8vw, 26px);
+            font-weight: 600;
+            line-height: 1.35;
+            color: #FFFFFF;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
 
         .prayer-mode-box {
-            display: block;
-            padding: clamp(14px, 1.8vh, 20px) clamp(20px, 2.5vw, 36px);
-            background: linear-gradient(135deg, rgba(8, 48, 28, 0.88), rgba(2, 20, 11, 0.94));
+            display: none;
+            padding: clamp(16px, 2.2vh, 26px) clamp(24px, 3.2vw, 48px);
+            background: linear-gradient(135deg, rgba(4, 28, 16, 0.46), rgba(1, 15, 8, 0.56));
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border: 1.8px solid rgba(212, 175, 55, 0.7);
             border-radius: 26px;
             box-shadow: 0 0 35px rgba(212, 175, 55, 0.25), inset 0 1px 2px rgba(255, 235, 150, 0.2);
+            animation: pulseGlow 4s infinite;
             text-align: center;
-            transition: all 0.35s ease;
+        }
+
+        .prayer-mode-box .message-text {
+            text-align: center !important;
+            line-height: 1.45 !important;
+            margin: 0 auto;
+        }
+
+        .prayer-mode-box.active {
+            display: block;
+        }
+
+        .prayer-mode-box .icons-row {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 12px;
+            color: #D4AF37;
+            font-size: 32px;
+        }
+
+        .prayer-mode-box.jumat-box {
+            background: linear-gradient(135deg, rgba(8, 48, 28, 0.88), rgba(2, 20, 11, 0.94));
+            padding: clamp(14px, 1.8vh, 20px) clamp(20px, 2.5vw, 36px);
+        }
+
+        .prayer-mode-box .icons-row.jumat-icons-row {
+            display: flex;
+            gap: clamp(16px, 2.4vw, 32px);
+            margin-bottom: 14px;
+        }
+
+        .jumat-adab-icon {
+            width: clamp(56px, 5.8vw, 82px);
+            height: clamp(56px, 5.8vw, 82px);
+            object-fit: contain;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 5px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 215, 0, 0.35);
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .jumat-adab-icon:hover {
+            transform: translateY(-2px) scale(1.05);
         }
 
         .jumat-quran-arabic {
@@ -371,7 +847,7 @@
 
         .jumat-quran-arti {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(16px, 1.6vw, 23px);
+            font-size: clamp(17px, 1.65vw, 24px);
             font-weight: 600;
             line-height: 1.5;
             color: #FFFFFF;
@@ -386,19 +862,67 @@
             font-style: normal;
         }
 
+        .prayer-shaf-arabic {
+            font-family: 'Amiri', 'Scheherazade New', serif;
+            font-size: clamp(26px, 2.9vw, 42px);
+            font-weight: 700;
+            line-height: 1.6;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 3px 8px rgba(0, 0, 0, 0.98), 0 0 30px rgba(0, 0, 0, 0.9);
+            direction: rtl;
+            text-align: center;
+            margin-bottom: clamp(6px, 1vh, 12px);
+        }
+
+        .prayer-shaf-arti {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(20px, 2.0vw, 28px);
+            font-weight: 600;
+            line-height: 1.5;
+            color: #FFFFFF;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.92);
+            text-align: center;
+            max-width: 1160px;
+            margin: 0 auto clamp(4px, 0.6vh, 8px);
+        }
+
+        .prayer-shaf-source {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(13px, 1.3vw, 18px);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            color: #FDE047;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95), 0 0 12px rgba(253, 224, 71, 0.5);
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .prayer-shaf-reminder {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(18px, 1.8vw, 25px);
+            font-weight: 600;
+            font-style: italic;
+            line-height: 1.5;
+            color: #FFFFFF;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.92);
+            text-align: center;
+            max-width: 1160px;
+            margin: clamp(6px, 0.9vh, 12px) auto 0;
+            letter-spacing: 0.3px;
+        }
+
         /* 5. HADITH VIGNETTE PLAKAT */
         .hadith-plakat {
             position: relative;
             width: 100%;
             max-width: 1100px;
-            margin: clamp(4px, 0.8vh, 8px) auto clamp(4px, 0.8vh, 8px);
+            margin: 4px auto 2px;
             padding: 12px 48px;
             border-radius: 20px;
             background: rgba(1, 18, 9, 0.7);
             border: 1px solid rgba(212, 175, 55, 0.35);
             box-shadow: inset 0 1px 0 rgba(255, 238, 170, 0.15), 0 10px 30px rgba(0, 0, 0, 0.4);
-            text-align: center;
-            transition: all 0.35s ease;
         }
 
         .quote-watermark {
@@ -410,6 +934,7 @@
             line-height: 1;
             pointer-events: none;
         }
+
         .quote-left { top: 2px; left: 16px; }
         .quote-right { bottom: -20px; right: 16px; }
 
@@ -460,286 +985,1408 @@
             color: #D4AF37;
         }
 
-        /* ========================================================
-           ✨ ATURAN MODE TRANSPARAN 1 & OUTLINE DIHILANGKAN
-           ======================================================== */
-        body.is-transparent-mode .prayer-mode-box {
-            background: transparent !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
-            animation: none !important;
-            padding: clamp(6px, 1vh, 12px) 0 !important;
+        /* 6. JUMAT OFFICERS GRID (Khotib & Imam Memanjang 1 Baris, Muadzin, Bilal, Maklumat) */
+        .jumat-officers-grid {
+            display: none;
+            grid-template-columns: 1.85fr 1.05fr 1.05fr;
+            gap: 16px;
+            width: 100%;
+            max-width: 1120px;
+            margin: 10px auto;
         }
 
-        body.is-transparent-mode .hadith-plakat {
-            background: transparent !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
-            padding: clamp(6px, 1vh, 12px) 0 !important;
+        .jumat-officers-grid.has-maklumat {
+            grid-template-columns: 1.55fr 1.05fr 1fr 1.15fr;
         }
 
-        body.is-transparent-mode .quote-watermark {
-            display: none !important;
+        .jumat-officers-grid.active {
+            display: grid;
         }
 
-        /* Penegasan Text Shadow saat Transparan agar terbaca sangat tajam dan mewah */
-        body.is-transparent-mode .jumat-quran-arabic {
-            text-shadow: 0 0 24px rgba(255, 215, 0, 0.75), 0 3px 8px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.95);
+        .officer-card {
+            background: linear-gradient(180deg, rgba(8, 48, 28, 0.88) 0%, rgba(2, 20, 11, 0.96) 100%);
+            border: 1.5px solid rgba(212, 175, 55, 0.5);
+            border-radius: 18px;
+            padding: 14px 18px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            min-width: 0;
         }
 
-        body.is-transparent-mode .jumat-quran-arti {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
+        .officer-card.officer-card-main {
+            border: 1.8px solid rgba(255, 215, 0, 0.75);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 215, 0, 0.2);
         }
 
-        body.is-transparent-mode .hadith-header {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 3px 12px rgba(0, 0, 0, 0.9);
-        }
-
-        body.is-transparent-mode .hadith-body {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.95);
-        }
-
-        body.is-transparent-mode .hadith-source {
-            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.98), 0 0 12px rgba(212, 175, 55, 0.5);
-        }
-
-        /* FLOATING COMPARISON SWITCHER DOCK */
-        .preview-dock {
-            position: fixed;
-            bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-            border-radius: 50px;
-            background: rgba(4, 28, 16, 0.92);
-            border: 1.5px solid rgba(255, 215, 0, 0.85);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(212, 175, 55, 0.35);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-
-        .preview-dock-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #FFE082;
-            margin-right: 4px;
+        .officer-badge {
+            font-size: clamp(18px, 1.65vw, 24px);
+            font-weight: 900;
+            letter-spacing: 2.8px;
+            color: #FFD700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 6px;
-        }
-
-        .preview-dock-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            color: #FFFFFF;
-            padding: 7px 18px;
-            border-radius: 40px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: 0 0 16px rgba(255, 215, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9);
             white-space: nowrap;
         }
 
-        .preview-dock-btn:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: #FFD700;
+        .officer-badge i {
+            font-size: 1.15em;
+        }
+
+        .officer-name {
+            font-size: clamp(19px, 1.75vw, 24px);
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.25;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 7. FOOTER MASJID */
+        .masjid-footer {
+            display: none !important;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(1.03); }
+        }
+
+        /* =====================================================================
+           MEDALI KALIGRAFI EMAS 3D (MUHAMMAD DI KIRI & ALLAH DI KANAN)
+           ===================================================================== */
+        .kaligrafi-medallion {
+            position: fixed !important;
+            top: 20px !important;
+            width: 125px !important;
+            height: 125px !important;
+            z-index: 25 !important;
+            user-select: none !important;
+            pointer-events: none !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        /* Gelombang Pendaran Cahaya Emas Luar (Aura Emas Utama) */
+        .kaligrafi-medallion::before {
+            content: '' !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 115% !important;
+            height: 115% !important;
+            border-radius: 50% !important;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, rgba(255, 175, 0, 0.32) 48%, rgba(212, 175, 55, 0) 75%) !important;
+            filter: blur(10px) !important;
+            z-index: -1 !important;
+            pointer-events: none !important;
+            animation: goldMedallionAuraWave 4.2s ease-in-out infinite alternate !important;
+        }
+
+        /* Gelombang Denyut Cincin Riak Emas yang Memancar Keluar */
+        .kaligrafi-medallion::after {
+            content: '' !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) scale(0.85) !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 50% !important;
+            border: 2px solid rgba(255, 220, 80, 0.75) !important;
+            box-shadow: 0 0 22px rgba(255, 215, 0, 0.7), inset 0 0 15px rgba(255, 215, 0, 0.4) !important;
+            z-index: -1 !important;
+            pointer-events: none !important;
+            opacity: 0 !important;
+            animation: goldRippleRays 4.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite !important;
+        }
+
+        .kaligrafi-medallion img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            filter: drop-shadow(0 0 12px rgba(255, 220, 50, 0.95)) 
+                   drop-shadow(0 0 28px rgba(255, 180, 0, 0.8))
+                   drop-shadow(0 0 50px rgba(255, 140, 0, 0.5))
+                   drop-shadow(0 10px 20px rgba(0, 0, 0, 0.85)) !important;
+            animation: goldMedallionHeartbeat 4.2s ease-in-out infinite alternate !important;
+        }
+
+        .kaligrafi-medallion.kaligrafi-muhammad {
+            left: 32px !important;
+            right: auto !important;
+        }
+
+        .kaligrafi-medallion.kaligrafi-allah {
+            right: 32px !important;
+            left: auto !important;
+        }
+
+        @keyframes goldMedallionHeartbeat {
+            0% {
+                opacity: 0.92;
+                transform: scale(0.98);
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.75))
+                       drop-shadow(0 0 24px rgba(255, 170, 0, 0.6))
+                       drop-shadow(0 10px 20px rgba(0, 0, 0, 0.85));
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.04);
+                filter: drop-shadow(0 0 18px rgba(255, 230, 80, 1))
+                       drop-shadow(0 0 35px rgba(255, 190, 20, 0.9))
+                       drop-shadow(0 0 65px rgba(255, 150, 0, 0.65))
+                       drop-shadow(0 12px 24px rgba(0, 0, 0, 0.9));
+            }
+        }
+
+        @keyframes goldMedallionAuraWave {
+            0% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(0.92);
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 0.95;
+                transform: translate(-50%, -50%) scale(1.12);
+                filter: blur(14px);
+            }
+        }
+
+        @keyframes goldRippleRays {
+            0% {
+                transform: translate(-50%, -50%) scale(0.85);
+                opacity: 0.85;
+            }
+            60% {
+                opacity: 0.45;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .kaligrafi-medallion {
+                width: 100px !important;
+                height: 100px !important;
+                top: 16px !important;
+            }
+            .kaligrafi-medallion.kaligrafi-muhammad {
+                left: 18px !important;
+            }
+            .kaligrafi-medallion.kaligrafi-allah {
+                right: 18px !important;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .kaligrafi-medallion {
+                width: 80px !important;
+                height: 80px !important;
+                top: 14px !important;
+            }
+            .kaligrafi-medallion.kaligrafi-muhammad {
+                left: 12px !important;
+            }
+            .kaligrafi-medallion.kaligrafi-allah {
+                right: 12px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kaligrafi-medallion {
+                width: 58px !important;
+                height: 58px !important;
+                top: 10px !important;
+            }
+            .kaligrafi-medallion.kaligrafi-muhammad {
+                left: 8px !important;
+            }
+            .kaligrafi-medallion.kaligrafi-allah {
+                right: 8px !important;
+            }
+        }
+
+        /* STANDALONE PREVIEW TOOLBAR (Tampil hanya jika dipanggil, default tersembunyi agar tampilan TV utuh) */
+        .standalone-preview-bar {
+            position: fixed;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999999;
+            background: rgba(1, 19, 10, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            border-radius: 50px;
+            padding: 8px 18px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 25px rgba(212,175,55,0.25);
+            animation: fadeInBar 0.3s ease-out;
+        }
+
+        .standalone-preview-bar.show {
+            display: flex;
+        }
+
+        .preview-mini-toggle {
+            position: fixed;
+            bottom: 14px;
+            right: 14px;
+            z-index: 999998;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(1, 19, 10, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: #d4af37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0.35;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .preview-mini-toggle:hover {
+            opacity: 1;
+            transform: scale(1.12);
+            border-color: #ffd700;
+            box-shadow: 0 0 14px rgba(212, 175, 55, 0.6);
+            color: #fff;
+        }
+
+        @keyframes fadeInBar {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .preview-badge {
+            color: #F5DC8C;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding-right: 12px;
+            border-right: 1px solid rgba(212,175,55,0.3);
+            white-space: nowrap;
+        }
+
+        .preview-btn-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .preview-btn {
+            background: rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .preview-btn:hover {
+            background: rgba(212, 175, 55, 0.25);
+            border-color: #D4AF37;
+            color: #FFFDF0;
             transform: translateY(-1px);
         }
 
-        .preview-dock-btn.active {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-color: #34d399;
-            color: #FFFFFF;
-            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.5);
-            font-weight: 700;
+        .preview-btn.active {
+            background: linear-gradient(135deg, #FFFDF0 0%, #D4AF37 50%, #9E7416 100%);
+            border-color: #F5DC8C;
+            color: #01130A;
+            font-weight: 800;
+            box-shadow: 0 0 14px rgba(212,175,55,0.5);
+            transform: translateY(-1px);
         }
 
-        .preview-dock-btn.active.box-mode {
-            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
-            border-color: #fde047;
-            color: #000000;
-            box-shadow: 0 2px 12px rgba(234, 179, 8, 0.5);
+        .preview-btn.exit-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.45);
+            color: #fca5a5;
         }
 
-        .preview-dock-link {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #D1D5DB;
+        .preview-btn.exit-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+            border-color: rgba(239, 68, 68, 0.7);
+            color: #ffffff;
         }
-        .preview-dock-link:hover {
-            color: #FFFFFF;
-            border-color: rgba(255, 255, 255, 0.5);
+
+        .preview-btn.close-btn {
+            background: rgba(239, 68, 68, 0.22);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            margin-left: 4px;
+        }
+
+        .preview-btn.close-btn:hover {
+            background: rgba(239, 68, 68, 0.5);
+            border-color: #ef4444;
+            color: #ffffff;
+        }
+
+        .preview-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 4px;
+        }
+
+        .preview-label.gold {
+            color: #F5DC8C;
+        }
+
+        .preview-btn.jumat-btn {
+            border-color: rgba(212, 175, 55, 0.45);
+            color: #fef08a;
+            background: rgba(212, 175, 55, 0.12);
+        }
+
+        .preview-btn.jumat-btn:hover {
+            background: rgba(212, 175, 55, 0.35);
+            border-color: #ffd700;
+            color: #ffffff;
         }
 
         @media (max-width: 900px) {
-            .preview-dock {
-                bottom: 8px;
-                padding: 6px 12px;
-                gap: 6px;
-                max-width: 96%;
+            .standalone-preview-bar {
+                width: 96%;
                 overflow-x: auto;
+                border-radius: 16px;
+                bottom: 12px;
+                padding: 6px 12px;
             }
-            .preview-dock-title { display: none; }
-            .preview-dock-btn { font-size: 11px; padding: 5px 12px; }
         }
     </style>
 </head>
-<body class="is-transparent-mode">
 
-    <!-- BACKGROUND LAYERS -->
+<body class="khutbah-transparent">
     <div class="bg-layer bg-gradient"></div>
     <div class="bg-layer bg-vignette"></div>
     <div class="bg-layer bg-kaabah"></div>
+    <!-- MEDALI KALIGRAFI ARAB EMAS 3D (MUHAMMAD DI KIRI & ALLAH DI KANAN) -->
+    <div class="kaligrafi-medallion kaligrafi-muhammad">
+        <img src="image/display/medallion/muhammad_3d.png" alt="Kaligrafi Muhammad SAW">
+    </div>
+    <div class="kaligrafi-medallion kaligrafi-allah">
+        <img src="image/display/medallion/allah_3d.png" alt="Kaligrafi Allah SWT">
+    </div>
 
-    <!-- CONTAINER UTAMA -->
     <div class="prayer-container">
-
-        <!-- 1. HEADER MASJID UNIFIED -->
+        <!-- 1. HEADER MASJID UNIFIED (IDENTIK DENGAN HALAMAN ROTASI) -->
         <div class="header">
-            <img src="img/LogoKiri.png" alt="Logo Kiri" class="corner-logo corner-logo-left">
-            <h1 class="masjid-name">MASJID JAMI' AL-JIHAD</h1>
-            <div class="masjid-address">SISTEM INFORMASI DIGITAL</div>
-            <div class="unified-datetime-capsule">
-                <span class="date-masehi" id="curDateMasehi">Jum'at, 16 Okt 2026</span>
-                <span class="capsule-dot"></span>
-                <span class="date-hijri" id="curDateHijri">5 Jumadil Awal 1448 H</span>
-                <span class="capsule-dot"></span>
-                <span class="clock-wib" id="curClock">12:15:30 WIB</span>
-            </div>
-            <img src="img/LogoKanan.png" alt="Logo Kanan" class="corner-logo corner-logo-right">
+            <h1 id="nama-masjid">MASJID JAMI' AL-JIHAD</h1>
+            <h3 class="sub-header" id="sub-header">SISTEM INFORMASI DIGITAL</h3>
+            <div class="datetime" id="datetime"></div>
         </div>
 
         <!-- 2. FASE TITLE & PRAYER BADGE -->
         <div class="phase-section">
-            <div class="phase-title">KHUTBAH &amp; SHOLAT JUM'AT BERJAMAAH</div>
+            <div class="phase-title" id="phaseTitle">Menjelang Waktu Sholat</div>
             <div class="prayer-badge">
                 <span class="badge-gem"></span>
-                <span class="prayer-name">SHOLAT JUM'AT</span>
+                <span class="prayer-name" id="prayerName">WAKTU SHOLAT</span>
                 <span class="badge-gem"></span>
             </div>
         </div>
 
-        <!-- 3. KARTU PETUGAS JUM'AT -->
-        <div class="jumat-officers-grid">
+        <!-- 3. COUNTDOWN TIMER (SPLIT DUAL-TILE) -->
+        <div class="countdown-section" id="countdownSection">
+            <div class="timer-badge">
+                <div class="badge-shimmer"></div>
+                <i class="far fa-clock clock-pulse-icon"></i>
+                <span class="badge-text" id="timerBadgeText">Menuju Adzan</span>
+                <span class="pulse-indicator-dot"></span>
+            </div>
+
+            <div class="countdown-tiles-wrapper">
+                <!-- TILE MENIT (3D MECHANICAL FLIP CLOCK & MODEL BIASA) -->
+                <div class="countdown-tile">
+                    <div class="flip-card-box size-large" id="flipMinutes">
+                        <div class="flip-card-half top static-top"><span class="flip-digit-text digit" id="timerMinutes">00</span></div>
+                        <div class="flip-card-half bottom static-bottom"><span class="flip-digit-text digit">00</span></div>
+                        <div class="flip-card-half top flap-top"><span class="flip-digit-text digit">00</span></div>
+                        <div class="flip-card-half bottom flap-bottom"><span class="flip-digit-text digit">00</span></div>
+                        <div class="hinge-bar"></div>
+                        <div class="hinge-pin left"></div>
+                        <div class="hinge-pin right"></div>
+                    </div>
+                    <div class="tile-face" id="tileFaceMinutes" style="display: none;">
+                        <span class="tile-number" id="timerMinutesPlain">00</span>
+                        <div class="tile-crease"></div>
+                    </div>
+                    <div class="tile-label">MENIT</div>
+                </div>
+
+                <div class="countdown-separator">:</div>
+
+                <!-- TILE DETIK (3D MECHANICAL FLIP CLOCK & MODEL BIASA) -->
+                <div class="countdown-tile">
+                    <div class="flip-card-box size-large" id="flipSeconds">
+                        <div class="flip-card-half top static-top"><span class="flip-digit-text digit" id="timerSeconds">00</span></div>
+                        <div class="flip-card-half bottom static-bottom"><span class="flip-digit-text digit">00</span></div>
+                        <div class="flip-card-half top flap-top"><span class="flip-digit-text digit">00</span></div>
+                        <div class="flip-card-half bottom flap-bottom"><span class="flip-digit-text digit">00</span></div>
+                        <div class="hinge-bar"></div>
+                        <div class="hinge-pin left"></div>
+                        <div class="hinge-pin right"></div>
+                    </div>
+                    <div class="tile-face" id="tileFaceSeconds" style="display: none;">
+                        <span class="tile-number" id="timerSecondsPlain">00</span>
+                        <div class="tile-crease"></div>
+                    </div>
+                    <div class="tile-label">DETIK</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3B. KHUSUS JUMAT: 3-4 KARTU PETUGAS JUMAT (KHOTIB & IMAM MEMANJANG, MUADZIN, BILAL, MAKLUMAT) -->
+        <div class="jumat-officers-grid" id="jumatOfficersGrid">
             <div class="officer-card officer-card-main">
                 <div class="officer-badge"><i class="fas fa-microphone"></i> KHOTIB &amp; IMAM</div>
-                <div class="officer-name" id="officerKhatibImam">Ust. Taufik Suprapto, S.Pd.I</div>
+                <div class="officer-name" id="officerKhatibImam">Ustd. Khatib &amp; Imam</div>
             </div>
             <div class="officer-card">
                 <div class="officer-badge"><i class="fas fa-bullhorn"></i> MUADZIN</div>
-                <div class="officer-name" id="officerMuadzin">Ust. Rudy</div>
+                <div class="officer-name" id="officerMuadzin">Muadzin</div>
             </div>
             <div class="officer-card">
                 <div class="officer-badge"><i class="fas fa-hands-praying"></i> BILAL</div>
-                <div class="officer-name" id="officerBilal">Ust. Mansur</div>
+                <div class="officer-name" id="officerBilal">Bilal</div>
             </div>
-            <div class="officer-card" id="cardMaklumat">
+            <div class="officer-card" id="cardMaklumat" style="display: none;">
                 <div class="officer-badge"><i class="fas fa-scroll"></i> MAKLUMAT</div>
-                <div class="officer-name" id="officerMaklumat">Ust. Fatkhurokhman</div>
+                <div class="officer-name" id="officerMaklumat">Pembaca Maklumat</div>
             </div>
         </div>
 
-        <!-- 4. KOTAK AYAT AL-QURAN -->
+        <!-- 4. PESAN MASJID & MODE HENING -->
         <div class="message-section">
+            <div class="message-banner" id="messageBanner">
+                <img src="img/IkonFlightMode.png" id="messageIconImgLeft" class="message-banner-icon-img" alt="Flight Mode" style="display: none;">
+                <i class="fas fa-mosque message-icon" id="messageIcon"></i>
+                <span class="message-text" id="messageText">Bersiap Masuk Waktu Sholat</span>
+                <img src="img/IkonSilentHP.png" id="messageIconImgRight" class="message-banner-icon-img" alt="Silent Phone" style="display: none;">
+            </div>
+
             <div class="prayer-mode-box" id="prayerModeBox">
-                <div class="jumat-quran-arabic">وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ</div>
-                <div class="jumat-quran-arti">“Apabila dibacakan Al-Quran (khutbah), maka dengarkanlah baik-baik, dan perhatikanlah dengan tenang agar kamu mendapat rahmat,” <span class="jumat-quran-surat">(Surat Al-A’raf, ayat 204)</span></div>
+                <div class="icons-row" id="prayerIconsRow" style="display: none;"></div>
+                <div class="message-text" id="prayerModeText">
+                    <div class="prayer-shaf-arabic">سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ</div>
+                    <div class="prayer-shaf-arti">“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”</div>
+                    <div class="prayer-shaf-source">(HR. Bukhari no.690 &amp; HR. Muslim no.433)</div>
+                    <div class="prayer-shaf-reminder">“Shalatlah seolah-olah ini adalah shalat terakhirmu”</div>
+                </div>
             </div>
         </div>
 
-        <!-- 5. KOTAK HADITS ADAB KHUTBAH -->
+        <!-- 5. HADITH VIGNETTE PLAKAT -->
         <div class="hadith-plakat" id="hadithPlakat">
             <span class="quote-watermark quote-left">“</span>
 
-            <div class="adab-notice">
-                <i class="fas fa-hands-praying"></i>
-                <span>Adab Khutbah Jum'at: Diam, Dengarkan dan Simak Khutbah</span>
+            <div class="adab-notice" id="adabNotice">
+                <i class="fas fa-person-praying"></i>
+                <span id="adabNoticeText">Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.</span>
             </div>
 
-            <div class="hadith-header">
+            <div class="hadith-header" id="hadithHeader">
                 Rasulullah <span class="saw-symbol">ﷺ</span> bersabda:
             </div>
-            <div class="hadith-body">
-                "Jika engkau berkata kepada sahabatmu pada hari Jum'at: 'Diamlah!' ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."
+            <div class="hadith-body" id="hadithBody">
+                "Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."
             </div>
-            <div class="hadith-source">
-                (HR. Bukhari no. 934 &amp; Muslim no. 851)
+            <div class="hadith-source" id="hadithSource">
+                (HR. Bukhari dan Muslim)
             </div>
 
             <span class="quote-watermark quote-right">”</span>
         </div>
-
     </div>
 
-    <!-- FLOATING COMPARISON SWITCHER DOCK -->
-    <div class="preview-dock">
-        <span class="preview-dock-title"><i class="fas fa-sliders-h"></i> Bandingkan Desain:</span>
-        <button type="button" class="preview-dock-btn active" id="btnTransparan" onclick="setMode(true)">
+    <!-- ELEMEN AUDIO -->
+    <audio id="audioTarhim" preload="auto"></audio>
+    <audio id="audioAdzan" preload="auto"></audio>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js?v=5.8.46"></script>
+    <script src="js/supabase-db.js?v=5.8.46"></script>
+    <script src="js/display-clock-ambient.js?v=5.8.46"></script>
+    <script src="js/prayer-engine.js?v=5.8.46"></script>
+    <script src="js/anti-idle.js?v=5.8.46"></script>
+
+    <script>
+        let settings = null;
+        let jadwalList = [];
+        let jumatPetugas = null;
+        let currentPrayerAudio = '';
+        let hasPlayedTarhim = false;
+        let hasPlayedAdzan = false;
+
+        // Preload instan dari LocalStorage agar tampilan langsung aktif tanpa jeda query database
+        try {
+            const sCached = localStorage.getItem('cached_app_settings');
+            if (sCached) settings = JSON.parse(sCached);
+            const jCached = localStorage.getItem('cached_jadwal_sholat');
+            if (jCached) jadwalList = JSON.parse(jCached);
+            const pCached = localStorage.getItem('cached_sholat_jumat');
+            if (pCached) jumatPetugas = JSON.parse(pCached);
+        } catch (e) {}
+
+        function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+
+        // Audio Handler
+        function handleAudio(phase, prayerName, remainingSeconds) {
+            const tarhimAudio = document.getElementById('audioTarhim');
+            const cleanPrayer = (prayerName || '').toLowerCase().replace(/[^a-z]/g, '');
+
+            // 1. Cek apakah Audio Tarhim diaktifkan di pengaturan (default: true)
+            const isTarhimEnabled = settings ? (settings.audio_tarhim !== false) : true;
+            const triggerSeconds = (settings && parseInt(settings.tarhim_trigger_seconds)) || 300; // default 5 menit
+
+            // 2. Tentukan berkas audio tarhim berdasarkan waktu sholat
+            let audioFile = 'audio/Dzuhur.mp3';
+            if (cleanPrayer.includes('subuh')) {
+                audioFile = (settings && settings.tarhim_audio_subuh) ? settings.tarhim_audio_subuh : 'audio/Subuh.mp3';
+            } else if (cleanPrayer.includes('ashar')) {
+                audioFile = 'audio/Ashar.mp3';
+            } else if (cleanPrayer.includes('maghrib')) {
+                audioFile = 'audio/Maghrib.mp3';
+            } else if (cleanPrayer.includes('isya')) {
+                audioFile = 'audio/Isya.mp3';
+            } else if (cleanPrayer.includes('jumat')) {
+                audioFile = 'audio/Dzuhur.mp3';
+            }
+
+            // Jika ada file custom reguler dari settings
+            if (!cleanPrayer.includes('subuh') && settings && settings.tarhim_audio_reguler) {
+                audioFile = settings.tarhim_audio_reguler;
+            }
+
+            // 3. Logika Pemutaran
+            if (phase === PrayerEngine.PHASES.COUNTDOWN && isTarhimEnabled) {
+                // Hanya putar jika sisa waktu menuju adzan sudah <= triggerSeconds
+                if (remainingSeconds <= triggerSeconds && !hasPlayedTarhim && tarhimAudio) {
+                    tarhimAudio.src = audioFile;
+                    tarhimAudio.play().then(() => {
+                        hasPlayedTarhim = true;
+                        console.log('🎵 Audio Tarhim mulai diputar:', audioFile, 'pada sisa detik:', remainingSeconds);
+                    }).catch(e => {
+                        console.log('Audio autoplay prevented by browser:', e);
+                        const unlock = () => {
+                            tarhimAudio.play();
+                            hasPlayedTarhim = true;
+                            document.removeEventListener('click', unlock);
+                            document.removeEventListener('touchstart', unlock);
+                        };
+                        document.addEventListener('click', unlock, { once: true });
+                        document.addEventListener('touchstart', unlock, { once: true });
+                    });
+                }
+            } else {
+                // Di luar fase countdown (misal masuk adzan / iqamah / sholat), hentikan tarhim seketika
+                if (tarhimAudio && !tarhimAudio.paused) {
+                    tarhimAudio.pause();
+                    tarhimAudio.currentTime = 0;
+                    console.log('⏹️ Audio Tarhim dihentikan.');
+                }
+            }
+        }
+
+        // -------------------------------------------------------------
+        // MESIN 3D MECHANICAL FLIP CLOCK CONTROLLER (OPSI 1 & MODEL BIASA)
+        // -------------------------------------------------------------
+        let prevFlipM = -1;
+        let prevFlipS = -1;
+
+        function getCountdownStyle() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const styleParam = urlParams.get('style') || urlParams.get('countdown_style') || urlParams.get('model');
+                if (styleParam === 'biasa' || styleParam === 'regular' || styleParam === 'classic') return 'biasa';
+                if (styleParam === 'flip' || styleParam === '3d') return 'flip';
+            } catch (e) {}
+
+            try {
+                const localStyle = localStorage.getItem('prayer_countdown_style');
+                if (localStyle === 'biasa' || localStyle === 'flip') return localStyle;
+            } catch (e) {}
+
+            if (settings && settings.prayer_countdown_style) {
+                const s = String(settings.prayer_countdown_style).toLowerCase();
+                if (s === 'biasa' || s === 'regular' || s === 'classic') return 'biasa';
+                if (s === 'flip' || s === '3d') return 'flip';
+            }
+            return 'flip'; // default: 3D mechanical flip clock
+        }
+
+        window.switchCountdownStyle = function(style) {
+            try {
+                localStorage.setItem('prayer_countdown_style', style);
+            } catch (e) {}
+            prevFlipM = -1;
+            prevFlipS = -1;
+            document.querySelectorAll('.preview-style-btn').forEach(b => {
+                if (b.getAttribute('data-style') === style) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+            updatePrayerUI();
+        };
+
+        function setFlipBoxInstant(boxEl, val) {
+            if (!boxEl) return;
+            if (boxEl._flipTimer) {
+                clearTimeout(boxEl._flipTimer);
+                boxEl._flipTimer = null;
+            }
+            boxEl.classList.remove('is-flipping');
+            boxEl.querySelectorAll('.digit').forEach(el => el.textContent = val);
+        }
+
+        function animateFlipBox(boxEl, oldVal, newVal) {
+            if (!boxEl || oldVal === newVal) return;
+            // Jika ada animasi yang sedang berlangsung dengan target nilai yang sama, jangan batalkan
+            if (boxEl._pendingVal === newVal && boxEl.classList.contains('is-flipping')) {
+                return;
+            }
+            if (boxEl._flipTimer) {
+                clearTimeout(boxEl._flipTimer);
+                boxEl._flipTimer = null;
+                const prevBtm = boxEl.querySelector('.static-bottom .digit');
+                if (prevBtm && boxEl._pendingVal) prevBtm.textContent = boxEl._pendingVal;
+                boxEl.classList.remove('is-flipping');
+            }
+            boxEl._pendingVal = newVal;
+
+            const staticTop = boxEl.querySelector('.static-top .digit');
+            const staticBottom = boxEl.querySelector('.static-bottom .digit');
+            const flapTop = boxEl.querySelector('.flap-top .digit');
+            const flapBottom = boxEl.querySelector('.flap-bottom .digit');
+
+            if (staticTop) staticTop.textContent = newVal;
+            if (staticBottom) staticBottom.textContent = oldVal;
+            if (flapTop) flapTop.textContent = oldVal;
+            if (flapBottom) flapBottom.textContent = newVal;
+
+            boxEl.classList.remove('is-flipping');
+            void boxEl.offsetWidth;
+            boxEl.classList.add('is-flipping');
+
+            boxEl._flipTimer = setTimeout(() => {
+                if (staticBottom) staticBottom.textContent = newVal;
+                boxEl.classList.remove('is-flipping');
+                boxEl._flipTimer = null;
+                boxEl._pendingVal = null;
+            }, 480);
+        }
+
+        // Variabel Simulasi Pratinjau (Bila dibuka mandiri oleh operator / standalone)
+        let previewPhase = 'khutbah';
+        let previewPrayer = "SHOLAT JUM'AT";
+        let simulatedSeconds = 0;
+        let wasPrayerActive = false;
+
+        window.switchPreview = function(phase) {
+            previewPhase = phase;
+            prevFlipM = -1;
+            prevFlipS = -1;
+            if (phase === 'countdown') {
+                simulatedSeconds = 195; // 03:15
+                previewPrayer = 'Ashar';
+            } else if (phase === 'countdown_jumat') {
+                simulatedSeconds = 180; // 03:00
+                previewPrayer = "SHOLAT JUM'AT";
+            } else if (phase === 'adzan') {
+                simulatedSeconds = 180; // 03:00
+                previewPrayer = 'Ashar';
+            } else if (phase === 'adzan_jumat') {
+                simulatedSeconds = 180; // 03:00
+                previewPrayer = "SHOLAT JUM'AT";
+            } else if (phase === 'iqamah') {
+                simulatedSeconds = 300; // 05:00
+                previewPrayer = 'Ashar';
+            } else if (phase === 'prayer') {
+                simulatedSeconds = 0;
+                previewPrayer = 'Ashar';
+            } else if (phase === 'khutbah') {
+                simulatedSeconds = 0;
+                previewPrayer = "SHOLAT JUM'AT";
+            }
+
+            document.querySelectorAll('.preview-btn-group .preview-btn').forEach(btn => {
+                if (btn.getAttribute('data-phase') === phase) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            updatePrayerUI();
+        };
+
+        window.togglePreviewBar = function(forceState) {
+            const bar = document.getElementById('standalonePreviewBar');
+            const toggleBtn = document.getElementById('previewMiniToggle');
+            if (!bar) return;
+
+            const isCurrentlyShown = bar.classList.contains('show');
+            const shouldShow = (typeof forceState === 'boolean') ? forceState : !isCurrentlyShown;
+
+            if (shouldShow) {
+                bar.classList.add('show');
+                if (toggleBtn) toggleBtn.style.display = 'none';
+                sessionStorage.setItem('prayer_preview_bar_open', '1');
+            } else {
+                bar.classList.remove('show');
+                if (toggleBtn) toggleBtn.style.display = 'flex';
+                sessionStorage.setItem('prayer_preview_bar_open', '0');
+            }
+        };
+
+        function setupPreviewBar() {
+            const isStandAlone = (window.self === window.top);
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!isStandAlone && !urlParams.has('preview') && !urlParams.has('debug')) return;
+
+            if (document.getElementById('standalonePreviewBar')) return;
+
+            if (urlParams.has('phase')) {
+                previewPhase = urlParams.get('phase');
+            }
+            if (urlParams.has('prayer')) {
+                previewPrayer = urlParams.get('prayer');
+            }
+            if (urlParams.has('sec')) {
+                simulatedSeconds = parseInt(urlParams.get('sec')) || 195;
+            }
+
+            // Parameter khusus pengujian Sholat Jum'at: ?jumat=countdown | adzan | khutbah atau ?preview=jumat
+            if (urlParams.has('jumat') || urlParams.get('preview') === 'jumat' || urlParams.get('test') === 'jumat') {
+                const jumatParam = (urlParams.get('jumat') || '').toLowerCase();
+                if (jumatParam === 'countdown' || jumatParam === 'menuju_adzan') {
+                    previewPhase = 'countdown_jumat';
+                    previewPrayer = "SHOLAT JUM'AT";
+                    simulatedSeconds = 180;
+                } else if (jumatParam === 'adzan') {
+                    previewPhase = 'adzan_jumat';
+                    previewPrayer = "SHOLAT JUM'AT";
+                    simulatedSeconds = 180;
+                } else {
+                    previewPhase = 'khutbah';
+                    previewPrayer = "SHOLAT JUM'AT";
+                    simulatedSeconds = 0;
+                }
+            }
+
+            // Tombol mini pemicu di pojok kanan bawah (discreet & tidak mengganggu pandangan)
+            const toggleBtn = document.createElement('button');
+            toggleBtn.id = 'previewMiniToggle';
+            toggleBtn.className = 'preview-mini-toggle';
+            toggleBtn.type = 'button';
+            toggleBtn.title = 'Buka Toolbar Pratinjau';
+            toggleBtn.innerHTML = '<i class="fas fa-sliders-h"></i>';
+            toggleBtn.onclick = () => window.togglePreviewBar(true);
+            document.body.appendChild(toggleBtn);
+
+            const isTransparentRequested = urlParams.get('box') === 'transparent' || 
+                                           urlParams.get('transparan') === '1' || 
+                                           urlParams.get('transparent') === '1' ||
+                                           (sessionStorage.getItem('khutbah_box_transparent') === '1');
+
+            if (isTransparentRequested) {
+                document.body.classList.add('khutbah-transparent');
+            }
+
+            window.toggleTransparentBox = function(forceVal) {
+                const isTrans = typeof forceVal === 'boolean' ? forceVal : !document.body.classList.contains('khutbah-transparent');
+                document.body.classList.toggle('khutbah-transparent', isTrans);
+                sessionStorage.setItem('khutbah_box_transparent', isTrans ? '1' : '0');
+                const btn = document.getElementById('btnToggleTransBox');
+                if (btn) {
+                    btn.classList.toggle('active', isTrans);
+                    btn.innerHTML = isTrans ? '<i class="fas fa-magic"></i> Kotak: Transparan' : '<i class="far fa-square"></i> Kotak: Berbingkai';
+                }
+            };
+
+            const curStyle = getCountdownStyle();
+            const bar = document.createElement('div');
+            bar.id = 'standalonePreviewBar';
+            bar.className = 'standalone-preview-bar';
+
+            // Default: TERSEMBUNYI agar layar TV tampil 100% utuh tanpa kotak mengganggu
+            const shouldOpenInitially = urlParams.has('toolbar') || (sessionStorage.getItem('prayer_preview_bar_open') === '1');
+            if (shouldOpenInitially) {
+                bar.classList.add('show');
+                toggleBtn.style.display = 'none';
+            }
+
+            bar.innerHTML = `
+                <div class="preview-badge"><i class="fas fa-eye"></i> PRATINJAU</div>
+                <div class="preview-btn-group">
+                    <span class="preview-label">FARDHU:</span>
+                    <button type="button" class="preview-btn ${previewPhase === 'countdown' ? 'active' : ''}" data-phase="countdown" onclick="switchPreview('countdown')">Menuju Adzan</button>
+                    <button type="button" class="preview-btn ${previewPhase === 'adzan' ? 'active' : ''}" data-phase="adzan" onclick="switchPreview('adzan')">Adzan</button>
+                    <button type="button" class="preview-btn ${previewPhase === 'iqamah' ? 'active' : ''}" data-phase="iqamah" onclick="switchPreview('iqamah')">Iqamah</button>
+                    <button type="button" class="preview-btn ${previewPhase === 'prayer' ? 'active' : ''}" data-phase="prayer" onclick="switchPreview('prayer')">Sholat</button>
+                    <span class="preview-label gold">JUM'AT:</span>
+                    <button type="button" class="preview-btn jumat-btn ${previewPhase === 'countdown_jumat' ? 'active' : ''}" data-phase="countdown_jumat" onclick="switchPreview('countdown_jumat')">Menuju Adzan Jum'at</button>
+                    <button type="button" class="preview-btn jumat-btn ${previewPhase === 'adzan_jumat' ? 'active' : ''}" data-phase="adzan_jumat" onclick="switchPreview('adzan_jumat')">Adzan Jum'at</button>
+                    <button type="button" class="preview-btn jumat-btn ${previewPhase === 'khutbah' ? 'active' : ''}" data-phase="khutbah" onclick="switchPreview('khutbah')">Khutbah & Sholat</button>
+                    <span class="preview-label gold" style="margin-left:6px;">DESAIN:</span>
+                    <button type="button" class="preview-btn preview-style-btn ${curStyle === 'flip' ? 'active' : ''}" data-style="flip" onclick="switchCountdownStyle('flip')"><i class="fas fa-sync-alt"></i> 3D Flip</button>
+                    <button type="button" class="preview-btn preview-style-btn ${curStyle === 'biasa' ? 'active' : ''}" data-style="biasa" onclick="switchCountdownStyle('biasa')"><i class="fas fa-stopwatch"></i> Model Biasa</button>
+                    <button type="button" id="btnToggleTransBox" class="preview-btn preview-style-btn jumat-btn ${isTransparentRequested ? 'active' : ''}" onclick="toggleTransparentBox()" title="Uji Coba Kotak Khutbah Transparan / Berbingkai">${isTransparentRequested ? '<i class="fas fa-magic"></i> Kotak: Transparan' : '<i class="far fa-square"></i> Kotak: Berbingkai'}</button>
+                </div>
+                <a href="index.html" class="preview-btn exit-btn" title="Buka Rotasi Display TV"><i class="fas fa-tv"></i> Rotator TV</a>
+                <button type="button" class="preview-btn close-btn" onclick="togglePreviewBar(false)" title="Tutup / Sembunyikan Kotak Ini"><i class="fas fa-times"></i> Tutup</button>
+            `;
+            document.body.appendChild(bar);
+
+            // Listener tombol Esc untuk menutup toolbar pratinjau kapan saja
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    window.togglePreviewBar(false);
+                }
+            });
+        }
+
+        // Render UI
+        function updatePrayerUI() {
+            if (!window.PrayerEngine) return;
+
+            // 1. Sinkronisasi data real-time dari Window Parent Display TV jika tersedia (Memory Bridge)
+            if (window.parent && window.parent !== window) {
+                try {
+                    if (window.parent.settings) settings = window.parent.settings;
+                    if (window.parent.jadwalList && window.parent.jadwalList.length > 0) jadwalList = window.parent.jadwalList;
+                    if (window.parent.jumatPetugas) jumatPetugas = window.parent.jumatPetugas;
+                } catch (e) {}
+            }
+
+            // 2. Fallback ke LocalStorage jika data lokal masih belum lengkap
+            if (!settings) {
+                try {
+                    const s = localStorage.getItem('cached_app_settings');
+                    if (s) settings = JSON.parse(s);
+                } catch (e) {}
+            }
+            if (!jadwalList || !jadwalList.length) {
+                try {
+                    const j = localStorage.getItem('cached_jadwal_sholat');
+                    if (j) jadwalList = JSON.parse(j);
+                } catch (e) {}
+            }
+            if (!jumatPetugas) {
+                try {
+                    const p = localStorage.getItem('cached_sholat_jumat');
+                    if (p) jumatPetugas = JSON.parse(p);
+                } catch (e) {}
+            }
+
+            const now = new Date();
+            let state = null;
+
+            // Prioritas state aktif: parent state > pushed state > kalkulasi lokal
+            if (window.parent && window.parent !== window && window.parent.latestPrayerState && window.parent.latestPrayerState.active) {
+                state = window.parent.latestPrayerState;
+            } else if (window._parentState && window._parentState.active) {
+                state = window._parentState;
+            } else {
+                state = window.PrayerEngine.getPrayerState(settings, jadwalList, jumatPetugas, now);
+            }
+
+            const isStandAlone = (window.self === window.top);
+            const urlParams = new URLSearchParams(window.location.search);
+            const isExplicitPreview = urlParams.has('preview') || urlParams.has('debug') || urlParams.has('test');
+
+            if (!state || !state.active) {
+                if (isStandAlone || isExplicitPreview) {
+                    // Mode Pratinjau / Standalone: Aktifkan simulasi agar operator bisa melihat tampilan kapan saja
+                    if (simulatedSeconds > 0 && previewPhase !== PrayerEngine.PHASES.PRAYER && previewPhase !== PrayerEngine.PHASES.KHUTBAH) {
+                        simulatedSeconds--;
+                    }
+                    let currentActualPhase = previewPhase;
+                    let isFri = false;
+                    if (previewPhase === 'countdown_jumat') {
+                        currentActualPhase = PrayerEngine.PHASES.COUNTDOWN;
+                        isFri = true;
+                    } else if (previewPhase === 'adzan_jumat') {
+                        currentActualPhase = PrayerEngine.PHASES.ADZAN;
+                        isFri = true;
+                    } else if (previewPhase === 'khutbah') {
+                        currentActualPhase = PrayerEngine.PHASES.KHUTBAH;
+                        isFri = true;
+                    }
+                    state = {
+                        active: true,
+                        isFriday: isFri || (previewPrayer && previewPrayer.toUpperCase().includes("JUM'AT")),
+                        phase: currentActualPhase,
+                        prayer: previewPrayer,
+                        remaining: simulatedSeconds,
+                        jumatPetugas: jumatPetugas || {
+                            khatib: 'Ust. Jamal Haris, S.Ag.',
+                            imam: 'Ust. Jamal Haris, S.Ag.',
+                            muadzin: 'Ust. Rudy',
+                            bilal: 'Ust. Sahroni'
+                        }
+                    };
+                } else {
+                    // Berada di dalam frame rotasi TV utama dan sholat selesai -> kembalikan ke rotasi normal hanya saat transisi dari aktif ke selesai
+                    if (wasPrayerActive) {
+                        wasPrayerActive = false;
+                        if (window.parent && typeof window.parent.onPrayerModeEnd === 'function') {
+                            window.parent.onPrayerModeEnd();
+                        }
+                    }
+                    return;
+                }
+            } else {
+                wasPrayerActive = true;
+            }
+
+            // Audio trigger (fase, nama sholat, dan sisa detik)
+            if (!isStandAlone || urlParams.has('audio')) {
+                handleAudio(state.phase, state.prayer || '', state.remaining || 0);
+            }
+
+            // Elements
+            const phaseTitleEl = document.getElementById('phaseTitle');
+            const prayerNameEl = document.getElementById('prayerName');
+            const countdownSectionEl = document.getElementById('countdownSection');
+            const timerBadgeTextEl = document.getElementById('timerBadgeText');
+            const timerMinutesEl = document.getElementById('timerMinutes');
+            const timerSecondsEl = document.getElementById('timerSeconds');
+            const jumatGridEl = document.getElementById('jumatOfficersGrid');
+            const messageBannerEl = document.getElementById('messageBanner');
+            const messageIconEl = document.getElementById('messageIcon');
+            const messageIconImgLeftEl = document.getElementById('messageIconImgLeft');
+            const messageIconImgRightEl = document.getElementById('messageIconImgRight');
+            const messageTextEl = document.getElementById('messageText');
+            const prayerModeBoxEl = document.getElementById('prayerModeBox');
+            const prayerModeTextEl = document.getElementById('prayerModeText');
+            const hadithPlakatEl = document.getElementById('hadithPlakat');
+            const adabNoticeEl = document.getElementById('adabNotice');
+            const adabNoticeTextEl = document.getElementById('adabNoticeText');
+            const hadithHeaderEl = document.getElementById('hadithHeader');
+            const hadithBodyEl = document.getElementById('hadithBody');
+            const hadithSourceEl = document.getElementById('hadithSource');
+
+            const isJumat = state.isFriday || (state.prayer && state.prayer.toUpperCase().includes("JUM'AT"));
+
+            prayerNameEl.textContent = state.prayer ? state.prayer.toUpperCase() : (isJumat ? "SHOLAT JUM'AT" : 'WAKTU SHOLAT');
+
+            const remaining = state.remaining || 0;
+            const m = Math.floor(remaining / 60);
+            const s = remaining % 60;
+            const mStr = pad(m);
+            const sStr = pad(s);
+
+            const activeStyle = getCountdownStyle();
+            const flipMinutesEl = document.getElementById('flipMinutes');
+            const flipSecondsEl = document.getElementById('flipSeconds');
+            const tileFaceMinutesEl = document.getElementById('tileFaceMinutes');
+            const tileFaceSecondsEl = document.getElementById('tileFaceSeconds');
+            const timerMinutesPlainEl = document.getElementById('timerMinutesPlain');
+            const timerSecondsPlainEl = document.getElementById('timerSecondsPlain');
+
+            if (activeStyle === 'biasa') {
+                if (flipMinutesEl) flipMinutesEl.style.display = 'none';
+                if (flipSecondsEl) flipSecondsEl.style.display = 'none';
+                if (tileFaceMinutesEl) tileFaceMinutesEl.style.display = 'flex';
+                if (tileFaceSecondsEl) tileFaceSecondsEl.style.display = 'flex';
+                if (timerMinutesPlainEl) timerMinutesPlainEl.textContent = mStr;
+                if (timerSecondsPlainEl) timerSecondsPlainEl.textContent = sStr;
+            } else {
+                if (tileFaceMinutesEl) tileFaceMinutesEl.style.display = 'none';
+                if (tileFaceSecondsEl) tileFaceSecondsEl.style.display = 'none';
+                if (flipMinutesEl) flipMinutesEl.style.display = 'block';
+                if (flipSecondsEl) flipSecondsEl.style.display = 'block';
+
+                if (flipMinutesEl) {
+                    if (prevFlipM !== mStr) {
+                        if (prevFlipM !== -1) animateFlipBox(flipMinutesEl, prevFlipM, mStr);
+                        else setFlipBoxInstant(flipMinutesEl, mStr);
+                        prevFlipM = mStr;
+                    }
+                } else if (timerMinutesEl) {
+                    timerMinutesEl.textContent = mStr;
+                }
+
+                if (flipSecondsEl) {
+                    if (prevFlipS !== sStr) {
+                        if (prevFlipS !== -1) animateFlipBox(flipSecondsEl, prevFlipS, sStr);
+                        else setFlipBoxInstant(flipSecondsEl, sStr);
+                        prevFlipS = sStr;
+                    }
+                } else if (timerSecondsEl) {
+                    timerSecondsEl.textContent = sStr;
+                }
+            }
+
+            // Sinkronisasi kelas body & section untuk penyesuaian posisi kapsul fase sholat
+            const isPrayerPhase = (state.phase === PrayerEngine.PHASES.PRAYER);
+            document.body.classList.toggle('phase-prayer', isPrayerPhase);
+            const phaseSectionEl = document.querySelector('.phase-section');
+            if (phaseSectionEl) phaseSectionEl.classList.toggle('is-prayer', isPrayerPhase);
+
+            // LOGIKA FASE SHOLAT
+            if (state.phase === PrayerEngine.PHASES.COUNTDOWN) {
+                phaseTitleEl.textContent = isJumat ? "Menjelang Sholat Jum'at" : 'Menjelang Waktu Sholat';
+                timerBadgeTextEl.textContent = isJumat ? "Menuju Adzan Jum'at" : 'Menuju Adzan';
+                countdownSectionEl.style.display = 'flex';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'inline-flex';
+                if (messageIconEl) messageIconEl.style.display = 'inline-block';
+                if (messageIconImgLeftEl) messageIconImgLeftEl.style.display = 'none';
+                if (messageIconImgRightEl) messageIconImgRightEl.style.display = 'none';
+                prayerModeBoxEl.classList.remove('active');
+                hadithPlakatEl.style.display = 'block';
+                messageTextEl.textContent = isJumat ? 
+                    "Bersiap Sholat Jum'at Berjamaah. Mari Merapikan Shaf & Menyimak Khutbah." : 
+                    ((settings && settings.Countdown_Adzan) || 'Bersiap Masuk Waktu Sholat');
+
+                adabNoticeEl.style.display = 'inline-flex';
+                adabNoticeTextEl.textContent = isJumat ? 
+                    "Waktu Adzan Jum'at akan Segera Tiba. Mari Mengambil Shaf Terdepan." : 
+                    'Waktu Adzan akan Segera Tiba. Mari Merapikan Pakaian Dan Berwudhu.';
+                hadithHeaderEl.style.display = 'block';
+                hadithBodyEl.textContent = isJumat ? 
+                    '"Sebaik-baik hari di mana matahari terbit padanya adalah hari Jum\'at; padanya Adam diciptakan, padanya ia dimasukkan ke surga, dan padanya ia dikeluarkan darinya."' : 
+                    '"Shalat berjamaah lebih utama daripada shalat sendirian dengan dua puluh tujuh derajat."';
+                hadithSourceEl.textContent = isJumat ? '(HR. Muslim no. 854)' : '(HR. Bukhari dan Muslim)';
+
+            } else if (state.phase === PrayerEngine.PHASES.ADZAN) {
+                phaseTitleEl.textContent = isJumat ? "Waktu Sholat Jum'at Telah Tiba" : 'Waktu Sholat Telah Tiba';
+                timerBadgeTextEl.textContent = isJumat ? "Adzan Jum'at Berkumandang" : 'Adzan Sedang Berkumandang';
+                countdownSectionEl.style.display = 'flex';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'inline-flex';
+                if (messageIconEl) messageIconEl.style.display = 'none';
+                if (messageIconImgLeftEl) messageIconImgLeftEl.style.display = 'inline-block';
+                if (messageIconImgRightEl) messageIconImgRightEl.style.display = 'inline-block';
+                prayerModeBoxEl.classList.remove('active');
+                hadithPlakatEl.style.display = 'block';
+                messageTextEl.textContent = 'Mohon untuk menonaktifkan / silent alat komunikasi';
+
+                adabNoticeEl.style.display = 'none';
+                hadithHeaderEl.style.display = 'none';
+                hadithBodyEl.textContent = '"Adzan Sedang Dikumandangkan. Dengarkanlah, Jawablah, Dan Raih Pahala Kesempurnaannya."';
+                hadithSourceEl.textContent = '';
+
+            } else if (state.phase === PrayerEngine.PHASES.IQAMAH) {
+                phaseTitleEl.textContent = 'Menunggu Waktu Iqamah';
+                timerBadgeTextEl.textContent = 'Menuju Iqamah';
+                countdownSectionEl.style.display = 'flex';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'inline-flex';
+                if (messageIconEl) messageIconEl.style.display = 'inline-block';
+                if (messageIconImgLeftEl) messageIconImgLeftEl.style.display = 'none';
+                if (messageIconImgRightEl) messageIconImgRightEl.style.display = 'none';
+                prayerModeBoxEl.classList.remove('active');
+                hadithPlakatEl.style.display = 'block';
+                messageTextEl.textContent = (settings && settings.Hitung_Mundur_Iqamah) || 'Menuju Waktu Iqamah';
+
+                adabNoticeEl.style.display = 'none';
+                hadithHeaderEl.style.display = 'none';
+                hadithBodyEl.textContent = '"Adzan Telah selesai, Mari Gunakan Waktu Yang Tersedia Untuk Berdoa. Doa Antara Adzan & Iqamah Tidak Ditolak."';
+                hadithSourceEl.textContent = '(HR. Abu Daud & Tirmidzi)';
+
+            } else if (state.phase === PrayerEngine.PHASES.PRAYER) {
+                phaseTitleEl.textContent = 'Sholat Berjamaah Sedang Berlangsung';
+                countdownSectionEl.style.display = 'none';
+                jumatGridEl.classList.remove('active');
+                messageBannerEl.style.display = 'none';
+                prayerModeBoxEl.classList.add('active');
+                prayerModeBoxEl.classList.remove('jumat-box');
+
+                const prayerIconsRowEl = document.getElementById('prayerIconsRow');
+                if (prayerIconsRowEl) {
+                    prayerIconsRowEl.style.display = 'none';
+                    prayerIconsRowEl.innerHTML = '';
+                }
+
+                prayerModeTextEl.innerHTML = `
+                    <div class="prayer-shaf-arabic">سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ</div>
+                    <div class="prayer-shaf-arti">“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”</div>
+                    <div class="prayer-shaf-source">(HR. Bukhari no.690 &amp; HR. Muslim no.433)</div>
+                    <div class="prayer-shaf-reminder">“Shalatlah seolah-olah ini adalah shalat terakhirmu”</div>
+                `;
+
+                // Kotak hadits bawah (#hadithPlakat) dihilangkan pada fase sholat berjamaah
+                hadithPlakatEl.style.display = 'none';
+
+            } else if (state.phase === PrayerEngine.PHASES.KHUTBAH) {
+                phaseTitleEl.textContent = "Khutbah & Sholat Jum'at Berjamaah";
+                countdownSectionEl.style.display = 'none';
+                jumatGridEl.classList.add('active');
+                messageBannerEl.style.display = 'none';
+                prayerModeBoxEl.classList.add('active');
+                hadithPlakatEl.style.display = 'block';
+                prayerModeBoxEl.classList.add('jumat-box');
+
+                const prayerIconsRowEl = document.getElementById('prayerIconsRow');
+                if (prayerIconsRowEl) {
+                    prayerIconsRowEl.className = 'icons-row jumat-icons-row';
+                    prayerIconsRowEl.innerHTML = `
+                        <img src="img/IkonBicara.png" alt="Dilarang Bicara" class="jumat-adab-icon" title="Dilarang Bicara">
+                        <img src="img/IkonNgobrol.png" alt="Dilarang Ngobrol" class="jumat-adab-icon" title="Dilarang Ngobrol">
+                        <img src="img/IkonSilent.png" alt="Silent HP" class="jumat-adab-icon" title="Silent HP">
+                        <img src="img/IkonNelpon.png" alt="Dilarang Menelpon" class="jumat-adab-icon" title="Dilarang Menelpon">
+                    `;
+                }
+
+                prayerModeTextEl.innerHTML = `
+                    <div class="jumat-quran-arabic">وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ</div>
+                    <div class="jumat-quran-arti">“Apabila dibacakan Al-Quran (khutbah), maka dengarkanlah baik-baik, dan perhatikanlah dengan tenang agar kamu mendapat rahmat,” <span class="jumat-quran-surat">(Surat Al-A’raf, ayat 204)</span></div>
+                `;
+
+                const pet = state.jumatPetugas || jumatPetugas || (window.parent && window.parent.jumatPetugas);
+                if (pet) {
+                    const khatib = (pet.khatib || '').trim();
+                    const imam = (pet.imam || '').trim();
+                    let namaKhotibImam = '';
+                    if (khatib && imam && khatib !== imam) {
+                        namaKhotibImam = `${khatib} / ${imam}`;
+                    } else {
+                        namaKhotibImam = khatib || imam || 'Ustd. Khatib & Imam';
+                    }
+
+                    const elKhatibImam = document.getElementById('officerKhatibImam') || document.getElementById('officerKhatib');
+                    if (elKhatibImam) elKhatibImam.textContent = namaKhotibImam;
+
+                    const elImam = document.getElementById('officerImam');
+                    if (elImam) elImam.textContent = imam || khatib || 'Ustd. Imam';
+
+                    const elMuadzin = document.getElementById('officerMuadzin');
+                    if (elMuadzin) elMuadzin.textContent = pet.muadzin || 'Muadzin';
+
+                    let rawBilal = (pet.bilal || '').trim();
+                    let bilalCardName = rawBilal || 'Bilal';
+                    let maklumatCardName = (pet.maklumat || '').trim();
+
+                    if (rawBilal.includes('/')) {
+                        const parts = rawBilal.split('/').map(s => s.trim());
+                        bilalCardName = parts[0] || 'Bilal';
+                        if (!maklumatCardName && parts[1]) {
+                            maklumatCardName = parts[1];
+                        }
+                    }
+
+                    const elBilal = document.getElementById('officerBilal');
+                    if (elBilal) elBilal.textContent = bilalCardName || 'Bilal';
+
+                    const cardMaklumat = document.getElementById('cardMaklumat');
+                    const elMaklumat = document.getElementById('officerMaklumat');
+                    if (cardMaklumat && elMaklumat) {
+                        if (maklumatCardName && maklumatCardName !== '-' && maklumatCardName !== 'Belum Ditetapkan') {
+                            elMaklumat.textContent = maklumatCardName;
+                            cardMaklumat.style.display = 'block';
+                            jumatGridEl.classList.add('has-maklumat');
+                        } else {
+                            cardMaklumat.style.display = 'none';
+                            jumatGridEl.classList.remove('has-maklumat');
+                        }
+                    }
+                }
+
+                adabNoticeEl.style.display = 'inline-flex';
+                adabNoticeTextEl.textContent = 'Adab Khutbah Jum\'at: Diam, Dengarkan dan Simak Khutbah';
+                hadithHeaderEl.style.display = 'block';
+                hadithBodyEl.textContent = '"Jika engkau berkata kepada sahabatmu pada hari Jum\'at: \'Diamlah!\' ketika imam sedang berkhutbah, maka sungguh engkau telah berbuat sia-sia."';
+                hadithSourceEl.textContent = '(HR. Bukhari no. 934 & Muslim no. 851)';
+            }
+        }
+
+        async function init(forceFresh = false) {
+            try {
+                setupPreviewBar();
+
+                // Memory Bridge dari Parent TV container jika di-embed dalam iframe
+                try {
+                    if (window.parent && window.parent !== window) {
+                        if (window.parent.settings) settings = window.parent.settings;
+                        if (window.parent.jadwalList && window.parent.jadwalList.length > 0) jadwalList = window.parent.jadwalList;
+                        if (window.parent.jumatPetugas) jumatPetugas = window.parent.jumatPetugas;
+                    }
+                } catch (e) {}
+
+                // Fallback LocalStorage instan
+                if (!settings || forceFresh) {
+                    try { const s = localStorage.getItem('cached_app_settings'); if (s) settings = JSON.parse(s); } catch (e) {}
+                }
+                if (!jadwalList || !jadwalList.length || forceFresh) {
+                    try { const j = localStorage.getItem('cached_jadwal_sholat'); if (j) jadwalList = JSON.parse(j); } catch (e) {}
+                }
+                if (!jumatPetugas || forceFresh) {
+                    try { const p = localStorage.getItem('cached_sholat_jumat'); if (p) jumatPetugas = JSON.parse(p); } catch (e) {}
+                }
+
+                // Cloud Supabase fallback jika masih ada data yang kosong atau paksaan refresh
+                if (window.SupabaseDB) {
+                    if (!settings || forceFresh) {
+                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch (e) {}
+                    }
+                    if (!jadwalList || !jadwalList.length || forceFresh) {
+                        try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch (e) {}
+                    }
+                    if (!jumatPetugas || forceFresh) {
+                        try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch (e) {}
+                    }
+                }
+
+                if (settings && settings.nama_aplikasi) {
+                    const elNama = document.getElementById('nama-masjid') || document.getElementById('masjidTitle');
+                    if (elNama) elNama.textContent = settings.nama_aplikasi.toUpperCase();
+                    const elSub = document.getElementById('sub-header');
+                    if (elSub && (settings.tagline_aplikasi || settings.sub_header)) {
+                        elSub.textContent = (settings.tagline_aplikasi || settings.sub_header).toUpperCase();
+                    }
+                    const elFooter = document.getElementById('masjidFooter');
+                    if (elFooter) elFooter.textContent = '© ' + settings.nama_aplikasi.toUpperCase();
+                }
+
+                updatePrayerUI();
+                if (!window._prayerInterval) {
+                    window._prayerInterval = setInterval(updatePrayerUI, 1000);
+                }
+            } catch (err) {
+                console.warn('Gagal inisialisasi prayer mode:', err);
+                setupPreviewBar();
+                updatePrayerUI();
+                if (!window._prayerInterval) {
+                    window._prayerInterval = setInterval(updatePrayerUI, 1000);
+                }
+            }
+        }
+
+        // Listener pesan dari Parent TV (postMessage) untuk update instan
+        window.addEventListener('message', async (event) => {
+            const msg = event.data;
+            if (!msg) return;
+
+            // Selalu adopsi payload terkini jika tersedia
+            if (msg.settings) settings = msg.settings;
+            if (msg.jadwalList && msg.jadwalList.length > 0) jadwalList = msg.jadwalList;
+            if (msg.jumatPetugas) jumatPetugas = msg.jumatPetugas;
+
+            if (msg.type === 'INIT_DISPLAY_DATA' || msg.type === 'UPDATE_PRAYER_STATE') {
+                if (msg.state) window._parentState = msg.state;
+                updatePrayerUI();
+            } else if (msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.type === 'SYNC_JUMAT' || msg.force_reload) {
+                if (window.SupabaseDB) {
+                    if (msg.table === 'sholat_jumat' || msg.type === 'SYNC_JUMAT') {
+                        try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch(e) {}
+                    }
+                    if (msg.table === 'jadwal_sholat') {
+                        try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch(e) {}
+                    }
+                    if (msg.table === 'app_settings' || msg.type === 'UPDATE_SETTINGS') {
+                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch(e) {}
+                    }
+                }
+                init(true);
+            }
+        });
+
+        // Pasang Pendengar Universal Realtime Langsung (Postgres Changes, BroadcastChannel, Storage)
+        if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
+            SupabaseDB.onDataChange(async (payload) => {
+                const tbl = (payload.table || '').toLowerCase();
+                if (tbl === 'sholat_jumat' || tbl === 'jadwal_sholat' || tbl === 'app_settings' || tbl === 'quick_petugas') {
+                    if (tbl === 'sholat_jumat') {
+                        try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch(e) {}
+                    } else if (tbl === 'jadwal_sholat') {
+                        try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch(e) {}
+                    } else {
+                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch(e) {}
+                    }
+                    updatePrayerUI();
+                }
+            });
+        }
+
+        // Expose updatePrayerUI & init ke window agar parent bisa memicu render langsung
+        window.updatePrayerUI = updatePrayerUI;
+        window.initPrayerMode = init;
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <!-- DOCK PERBANDINGAN DESAIN PRAKTIS -->
+    <div id="previewComparisonDock" style="position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 9999; display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; border-radius: 50px; background: rgba(3, 28, 16, 0.94); border: 2px solid rgba(255, 215, 0, 0.85); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75), 0 0 20px rgba(212, 175, 55, 0.35); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+        <span style="font-size: 13px; font-weight: 700; color: #FFE082; text-transform: uppercase; letter-spacing: 0.5px;">Bandingkan Desain:</span>
+        <button type="button" id="btnDockTransparan" onclick="setMode(true)" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 1px solid #34d399; color: #FFFFFF; padding: 7px 18px; border-radius: 40px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 12px rgba(16, 185, 129, 0.5);">
             <i class="fas fa-magic"></i> 1. Transparan 1 &amp; Tanpa Outline
         </button>
-        <button type="button" class="preview-dock-btn" id="btnStandar" onclick="setMode(false)">
-            <i class="far fa-square"></i> 2. Desain Saat Ini (Kotak Hijau &amp; Outline)
+        <button type="button" id="btnDockStandar" onclick="setMode(false)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 215, 0, 0.35); color: #FFFFFF; padding: 7px 18px; border-radius: 40px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+            <i class="far fa-square"></i> 2. Desain Asli (Kotak Hijau &amp; Outline)
         </button>
-        <a href="prayer-mode.html?phase=khutbah" class="preview-dock-btn preview-dock-link" title="Buka Mode Asli">
+        <a href="prayer-mode.html?phase=khutbah" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.25); color: #D1D5DB; padding: 7px 14px; border-radius: 40px; font-size: 13px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
             <i class="fas fa-external-link-alt"></i> prayer-mode
         </a>
     </div>
 
     <script>
-        function setMode(isTransparent) {
-            if (isTransparent) {
-                document.body.classList.add('is-transparent-mode');
-                document.getElementById('btnTransparan').classList.add('active');
-                document.getElementById('btnStandar').classList.remove('active', 'box-mode');
-            } else {
-                document.body.classList.remove('is-transparent-mode');
-                document.getElementById('btnTransparan').classList.remove('active');
-                document.getElementById('btnStandar').classList.add('active', 'box-mode');
-            }
-        }
-
-        // Live Clock
-        function updateClock() {
-            const now = new Date();
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const ss = String(now.getSeconds()).padStart(2, '0');
-            const clockEl = document.getElementById('curClock');
-            if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss} WIB`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Coba sinkronisasi nama petugas dari data lokal jika ada
-        try {
-            const rawPetugas = localStorage.getItem('cached_sholat_jumat');
-            if (rawPetugas) {
-                const pet = JSON.parse(rawPetugas);
-                if (pet.khatib) document.getElementById('officerKhatibImam').textContent = pet.khatib;
-                if (pet.muadzin) document.getElementById('officerMuadzin').textContent = pet.muadzin;
-                if (pet.bilal) document.getElementById('officerBilal').textContent = pet.bilal;
-                if (pet.maklumat && pet.maklumat !== '-' && pet.maklumat !== 'Belum Ditetapkan') {
-                    document.getElementById('officerMaklumat').textContent = pet.maklumat;
+        function setMode(isTrans) {
+            document.body.classList.toggle('khutbah-transparent', isTrans);
+            const btnT = document.getElementById('btnDockTransparan');
+            const btnS = document.getElementById('btnDockStandar');
+            if (btnT && btnS) {
+                if (isTrans) {
+                    btnT.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    btnT.style.borderColor = '#34d399';
+                    btnT.style.color = '#FFFFFF';
+                    btnT.style.boxShadow = '0 2px 12px rgba(16, 185, 129, 0.5)';
+                    btnS.style.background = 'rgba(255, 255, 255, 0.08)';
+                    btnS.style.borderColor = 'rgba(255, 215, 0, 0.35)';
+                    btnS.style.color = '#FFFFFF';
+                    btnS.style.boxShadow = 'none';
+                } else {
+                    btnS.style.background = 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)';
+                    btnS.style.borderColor = '#fde047';
+                    btnS.style.color = '#000000';
+                    btnS.style.boxShadow = '0 2px 12px rgba(234, 179, 8, 0.5)';
+                    btnT.style.background = 'rgba(255, 255, 255, 0.08)';
+                    btnT.style.borderColor = 'rgba(255, 215, 0, 0.35)';
+                    btnT.style.color = '#FFFFFF';
+                    btnT.style.boxShadow = 'none';
                 }
             }
-        } catch (e) {}
+        }
     </script>
 </body>
 </html>

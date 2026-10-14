@@ -457,7 +457,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.79'), 'sw.js memiliki bumping versi cache terbaru v5.8.79');
+assert(swContent.includes('aljihad-signage-v5.8.80'), 'sw.js memiliki bumping versi cache terbaru v5.8.80');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -494,7 +494,7 @@ assert(adminPageContent.includes('id="btnTopbarBersihkanCache"'), 'admin.html me
 console.log("\n📌 [TEST 21] Khutbah Jum'at Transparent Boxes Preview Integrity:");
 assert(fs.existsSync(path.join(baseDir, 'preview-khutbah.html')), 'File fisik preview-khutbah.html tersedia');
 const previewKhutbahContent = fs.readFileSync(path.join(baseDir, 'preview-khutbah.html'), 'utf8');
-assert(previewKhutbahContent.includes('is-transparent-mode'), 'preview-khutbah.html mendukung mode transparan');
+assert(previewKhutbahContent.includes('khutbah-transparent'), 'preview-khutbah.html mendukung mode transparan');
 assert(previewKhutbahContent.includes('setMode'), 'preview-khutbah.html memiliki fungsi interaktif pembanding real-time');
 assert(prayerModeHtmlContent.includes('khutbah-transparent') && prayerModeHtmlContent.includes('toggleTransparentBox'), 'prayer-mode.html memiliki handler dan toggle khutbah transparan');
 assert(swContent.includes("'preview-khutbah.html'"), 'sw.js me-cache berkas preview-khutbah.html');
