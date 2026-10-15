@@ -165,6 +165,22 @@
             } catch (e) {}
             renderRunningTextPagesPanel(cachedRunningTextPages);
 
+            // Inisialisasi awal form Yaasiin seketika dari localStorage (Mencegah input ter-reset ke 18:30 saat refresh)
+            try {
+                const localYTime = localStorage.getItem('yasin_start_time');
+                if (localYTime) {
+                    const formatted = localYTime.substring(0, 5);
+                    if (document.getElementById('cfgYasinStartTime')) document.getElementById('cfgYasinStartTime').value = formatted;
+                    if (document.getElementById('dashYasinStartTime')) document.getElementById('dashYasinStartTime').value = formatted;
+                }
+                const localYEnabled = localStorage.getItem('yasin_mode_enabled');
+                if (localYEnabled !== null) {
+                    const isEn = localYEnabled !== 'false';
+                    if (document.getElementById('cfgYasinEnabled')) document.getElementById('cfgYasinEnabled').checked = isEn;
+                    if (document.getElementById('dashYasinEnabled')) document.getElementById('dashYasinEnabled').checked = isEn;
+                }
+            } catch (e) {}
+
             // Muat Data Live dari Supabase
             loadAllSupabaseData();
 
@@ -184,7 +200,7 @@
                         }
                     }
 
-                    if (evt && (evt.table === 'app_settings' || evt.key === 'app_settings') && evt.payload) {
+                    if (evt && (evt.table === 'app_settings' || evt.key === 'app_settings' || evt.table === 'yasin') && evt.payload) {
                         const s = evt.payload;
                         const cd = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
                         if (document.getElementById('cfgCountdownAdzan') && cd) document.getElementById('cfgCountdownAdzan').value = cd;
@@ -198,6 +214,18 @@
                         if (jm) syncDurasiJumat(jm);
                         if (s.prayer_countdown_style && document.getElementById('cfgCountdownStyle')) {
                             document.getElementById('cfgCountdownStyle').value = s.prayer_countdown_style;
+                        }
+                        if (s.yasin_start_time) {
+                            const formatted = s.yasin_start_time.substring(0, 5);
+                            if (document.getElementById('cfgYasinStartTime')) document.getElementById('cfgYasinStartTime').value = formatted;
+                            if (document.getElementById('dashYasinStartTime')) document.getElementById('dashYasinStartTime').value = formatted;
+                            localStorage.setItem('yasin_start_time', formatted);
+                        }
+                        if (s.yasin_mode_enabled !== undefined) {
+                            const isEn = s.yasin_mode_enabled !== false && s.yasin_mode_enabled !== 'false';
+                            if (document.getElementById('cfgYasinEnabled')) document.getElementById('cfgYasinEnabled').checked = isEn;
+                            if (document.getElementById('dashYasinEnabled')) document.getElementById('dashYasinEnabled').checked = isEn;
+                            localStorage.setItem('yasin_mode_enabled', isEn);
                         }
                     }
                     debouncedLoadAllSupabaseData(600);

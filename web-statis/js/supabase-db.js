@@ -1137,6 +1137,27 @@
                 row1Payload.prayer_mode_after_prayer = updatedFields.prayer_mode_duration;
             }
 
+            // Proteksi Skema SQL: Kolom yasin_scroll_speed di PostgreSQL adalah varchar(20).
+            // Format JSON panjang (>20 char) wajib dikonversi menjadi format ringkas (mode:step:mushaf) agar tidak ditolak dengan error 22001.
+            if (row1Payload.yasin_scroll_speed) {
+                if (typeof row1Payload.yasin_scroll_speed === 'object') {
+                    const m = row1Payload.yasin_scroll_speed.mode || 'step';
+                    const s = row1Payload.yasin_scroll_speed.step_duration || 20;
+                    const h = row1Payload.yasin_scroll_speed.mushaf_duration || 120;
+                    row1Payload.yasin_scroll_speed = `${m}:${s}:${h}`.substring(0, 20);
+                } else if (typeof row1Payload.yasin_scroll_speed === 'string' && row1Payload.yasin_scroll_speed.length > 20) {
+                    try {
+                        const parsed = JSON.parse(row1Payload.yasin_scroll_speed);
+                        const m = parsed.mode || 'step';
+                        const s = parsed.step_duration || 20;
+                        const h = parsed.mushaf_duration || 120;
+                        row1Payload.yasin_scroll_speed = `${m}:${s}:${h}`.substring(0, 20);
+                    } catch (e) {
+                        row1Payload.yasin_scroll_speed = row1Payload.yasin_scroll_speed.substring(0, 20);
+                    }
+                }
+            }
+
             // 3. Kirim update ke Cloud Supabase
             try {
                 if (SUPABASE_CONFIG && SUPABASE_CONFIG.url) {

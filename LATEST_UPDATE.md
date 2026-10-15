@@ -7,6 +7,29 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 18:55 WIB)
+
+### 🕌 PERBAIKAN PERSISTENSI TIMER SURAT YAASIIN, PROTEKSI SCHEMA SQL VARCHAR(20) & HYDRATION INSTAN (Versi SW v5.8.86):
+1. **Akar Masalah Timer Kembali ke 18:30 Setelah Refresh**:
+   - Kolom `yasin_scroll_speed` pada tabel `app_settings` di PostgreSQL Supabase Cloud bertipe `VARCHAR(20)`.
+   - Kode penyimpanan sebelumnya (`simpanPengaturanYasin` di `admin-yasin.js` dan `simpanPengaturanSistem` di `admin-settings.js`) mengirimkan objek JSON lengkap yang di-serialize (`JSON.stringify({ mode: ..., step_duration: ..., mushaf_duration: ..., updated_at: ... })`) dengan panjang ~110 karakter.
+   - Akibatnya, Supabase menolak seluruh request mutasi `PATCH /rest/v1/app_settings?id=eq.1` dengan error Postgres `code: 22001` (*value too long for type character varying(20)*).
+   - Karena payload gagal disimpan di Supabase Cloud, nilai baru `yasin_start_time: '18:25'` tidak tersimpan di database.
+   - Saat pengguna me-refresh halaman (`F5`), sistem memuat data lama dari Supabase (`18:30`) dan menimpa nilai form input karena tidak ada mekanisme fallback instan dari `localStorage`.
+
+2. **Solusi Tuntas & Implementasi Perbaikan**:
+   - **Format Ringkas Aman Skema SQL (`<= 20 Karakter`)**: Format serialization diganti menjadi string ringkas dengan format `${mode}:${step_duration}:${mushaf_duration}` (contoh: `step:25:120`, panjang hanya 11–13 karakter), serta dipotong aman dengan `.substring(0, 20)`. Format ini 100% kompatibel dengan constraint `VARCHAR(20)` tanpa perlu migrasi DDL database yang berisiko.
+   - **Parser Dua Arah Otomatis**: Di `admin-data-loader.js` dan `slides/yasin.html`, ditambahkan parser cerdas yang mengenali format ringkas berpemisah titik dua (`mode:step:mushaf`) maupun format JSON lama secara *backward-compatible*.
+   - **Proteksi Sanitasi Otomatis di Database Adapter (`supabase-db.js`)**: Pada method `updateSettings()`, ditambahkan filter keamanan yang secara otomatis memeriksa kolom `row1Payload.yasin_scroll_speed`. Jika berupa objek atau JSON panjang, dikonversi otomatis menjadi string ringkas `<= 20` karakter.
+   - **Hydration Instan Tanpa Kedip (Zero Flicker / Zero Reset)**: Di `admin-core.js`, form timer `#cfgYasinStartTime`, `#dashYasinStartTime`, `#cfgYasinEnabled`, dan `#dashYasinEnabled` langsung dihidrasi dari `localStorage` saat event `$(document).ready`, memastikan tampilan form tidak pernah kembali ke nilai default saat halaman di-refresh. Ditambahkan pula realtime event listener pada Postgres Changes `app_settings` dan broadcast `yasin` untuk sinkronisasi nilai timer seketika ke seluruh tab admin dan TV display.
+   - **Pemberitahuan Cache & Bumping SW ke `v5.8.86`**: Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.86`** dan sinkron dengan `caches.delete` di `admin-settings.js`.
+
+3. **Hasil Pengujian Regresi Otomatis**:
+   - Ditambahkan **TEST 23: Surat Yaasiin Settings Persistence & Schema Safety** pada `scripts/test-engine.js`.
+   - `npm test`: **243 / 243 Asersi Engine Lulus** + **8 / 8 Test Keamanan Autentikasi Lulus** = **Total 251 Tests Lulus (100% PASS)**.
+
+---
+
 ## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 17:30 WIB)
 
 ### 🛡️ PERBAIKAN HASIL AUDIT KEAMANAN, MULTI-ROW REALTIME, ACK RENDER TV & SW RESILIENCY (Versi SW v5.8.85):

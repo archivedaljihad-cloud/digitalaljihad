@@ -820,11 +820,18 @@
 
                     if (settings.yasin_scroll_speed) {
                         try {
-                            if (typeof settings.yasin_scroll_speed === 'string' && settings.yasin_scroll_speed.trim().startsWith('{')) {
+                            if (typeof settings.yasin_scroll_speed === 'string' && settings.yasin_scroll_speed.includes(':') && !settings.yasin_scroll_speed.trim().startsWith('{')) {
+                                const parts = settings.yasin_scroll_speed.split(':');
+                                if (parts[0]) currentMode = parts[0];
+                                if (parts[1]) stepDuration = parseInt(parts[1]) || stepDuration;
+                                if (parts[2]) mushafDuration = parseInt(parts[2]) || mushafDuration;
+                            } else if (typeof settings.yasin_scroll_speed === 'string' && settings.yasin_scroll_speed.trim().startsWith('{')) {
                                 const parsed = JSON.parse(settings.yasin_scroll_speed);
                                 if (parsed.mode) currentMode = parsed.mode;
                                 if (parsed.step_duration) stepDuration = parseInt(parsed.step_duration) || stepDuration;
                                 if (parsed.mushaf_duration) mushafDuration = parseInt(parsed.mushaf_duration) || mushafDuration;
+                            } else if (settings.yasin_scroll_speed === 'step' || settings.yasin_scroll_speed === 'mushaf') {
+                                currentMode = settings.yasin_scroll_speed;
                             } else if (settings.yasin_scroll_speed === 'slow') {
                                 stepDuration = 28;
                                 mushafDuration = 150;

@@ -330,15 +330,18 @@
                         syncDurasiJumat(jumatDur);
 
                         // Pengaturan Agenda Surat Yaasiin & Tahlil (Sync Dashboard & Settings)
-                        const yasinEnabled = (s.yasin_mode_enabled !== false);
+                        const yasinEnabled = (s.yasin_mode_enabled !== undefined && s.yasin_mode_enabled !== null)
+                            ? (s.yasin_mode_enabled !== false && s.yasin_mode_enabled !== 'false' && s.yasin_mode_enabled !== 0 && s.yasin_mode_enabled !== '0')
+                            : (localStorage.getItem('yasin_mode_enabled') !== 'false');
                         if (document.getElementById('cfgYasinEnabled')) document.getElementById('cfgYasinEnabled').checked = yasinEnabled;
                         if (document.getElementById('dashYasinEnabled')) document.getElementById('dashYasinEnabled').checked = yasinEnabled;
 
-                        if (s.yasin_start_time) {
-                            const yStartTimeFormatted = s.yasin_start_time.substring(0, 5);
-                            if (document.getElementById('cfgYasinStartTime')) document.getElementById('cfgYasinStartTime').value = yStartTimeFormatted;
-                            if (document.getElementById('dashYasinStartTime')) document.getElementById('dashYasinStartTime').value = yStartTimeFormatted;
-                        }
+                        // Baca jam mulai dari Supabase Cloud dengan fallback aman ke LocalStorage browser
+                        const rawYTime = s.yasin_start_time || localStorage.getItem('yasin_start_time') || '18:30';
+                        const yStartTimeFormatted = String(rawYTime).trim().substring(0, 5);
+                        if (document.getElementById('cfgYasinStartTime')) document.getElementById('cfgYasinStartTime').value = yStartTimeFormatted;
+                        if (document.getElementById('dashYasinStartTime')) document.getElementById('dashYasinStartTime').value = yStartTimeFormatted;
+                        localStorage.setItem('yasin_start_time', yStartTimeFormatted);
 
                         let yMode = 'step';
                         let yStepDur = 20;
@@ -346,11 +349,18 @@
 
                         if (s.yasin_scroll_speed) {
                             try {
-                                if (typeof s.yasin_scroll_speed === 'string' && s.yasin_scroll_speed.trim().startsWith('{')) {
+                                if (typeof s.yasin_scroll_speed === 'string' && s.yasin_scroll_speed.includes(':') && !s.yasin_scroll_speed.trim().startsWith('{')) {
+                                    const parts = s.yasin_scroll_speed.split(':');
+                                    if (parts[0]) yMode = parts[0];
+                                    if (parts[1]) yStepDur = parseInt(parts[1]) || 20;
+                                    if (parts[2]) yMushafDur = parseInt(parts[2]) || 120;
+                                } else if (typeof s.yasin_scroll_speed === 'string' && s.yasin_scroll_speed.trim().startsWith('{')) {
                                     const parsed = JSON.parse(s.yasin_scroll_speed);
                                     if (parsed.mode) yMode = parsed.mode;
                                     if (parsed.step_duration) yStepDur = parseInt(parsed.step_duration) || 20;
                                     if (parsed.mushaf_duration) yMushafDur = parseInt(parsed.mushaf_duration) || 120;
+                                } else if (s.yasin_scroll_speed === 'mushaf' || s.yasin_scroll_speed === 'step') {
+                                    yMode = s.yasin_scroll_speed;
                                 } else if (s.yasin_scroll_speed === 'slow') {
                                     yStepDur = 28;
                                     yMushafDur = 150;

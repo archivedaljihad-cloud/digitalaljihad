@@ -62,12 +62,7 @@
                     cctv_mimbar_url: cctv,
                     yasin_mode_enabled: yasinEnabled,
                     yasin_start_time: yasinStartTime,
-                    yasin_scroll_speed: JSON.stringify({
-                        mode: yasinDisplayMode,
-                        step_duration: yasinStepDuration,
-                        mushaf_duration: yasinMushafDuration,
-                        updated_at: new Date().toISOString()
-                    })
+                    yasin_scroll_speed: `${yasinDisplayMode}:${yasinStepDuration}:${yasinMushafDuration}`.substring(0, 20)
                 };
                 if (typeof geminiApiKey === 'string') {
                     patchPayload.gemini_api_key = geminiApiKey;
@@ -157,7 +152,7 @@
                         const cacheNames = await caches.keys();
                         await Promise.all(
                             cacheNames.map(name => {
-                                if (name !== 'aljihad-signage-v5.8.85') {
+                                if (name !== 'aljihad-signage-v5.8.86') {
                                     console.log('🗑️ Menghapus cache usang:', name);
                                     return caches.delete(name);
                                 }
@@ -199,7 +194,7 @@
                         html: `
                             <p class="text-left mb-2">Seluruh cache usang dan memori usang telah dibersihkan:</p>
                             <ul class="text-left small text-muted mb-3 pl-3">
-                                <li>Service Worker diperbarui ke <b>v5.8.40</b></li>
+                                <li>Service Worker diperbarui ke <b>v5.8.86</b></li>
                                 <li>Kunci memori lama yang dibersihkan: <b>${removedItems.length > 0 ? removedItems.join(', ') : 'Bersih (Sudah Optimal)'}</b></li>
                                 <li>Sinyal refresh TV telah dipancarkan secara realtime (&lt; 100ms) ke seluruh layar</li>
                             </ul>

@@ -153,10 +153,24 @@
                     b.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
                 });
 
-                const chk = document.getElementById('cfgYasinEnabled') || document.getElementById('dashYasinEnabled');
+                let chk = null;
+                if (source === 'settings' && document.getElementById('cfgYasinEnabled')) {
+                    chk = document.getElementById('cfgYasinEnabled');
+                } else if (source === 'dash' && document.getElementById('dashYasinEnabled')) {
+                    chk = document.getElementById('dashYasinEnabled');
+                } else {
+                    chk = document.getElementById('cfgYasinEnabled') || document.getElementById('dashYasinEnabled');
+                }
                 const yasinEnabled = chk ? chk.checked : true;
 
-                const timeInput = document.getElementById('cfgYasinStartTime') || document.getElementById('dashYasinStartTime');
+                let timeInput = null;
+                if (source === 'settings' && document.getElementById('cfgYasinStartTime')) {
+                    timeInput = document.getElementById('cfgYasinStartTime');
+                } else if (source === 'dash' && document.getElementById('dashYasinStartTime')) {
+                    timeInput = document.getElementById('dashYasinStartTime');
+                } else {
+                    timeInput = document.getElementById('cfgYasinStartTime') || document.getElementById('dashYasinStartTime');
+                }
                 let yasinStartTime = timeInput ? timeInput.value.trim() : '18:30';
 
                 // Validasi format jam 24 jam (HH:MM)
@@ -175,6 +189,8 @@
                 }
                 if (document.getElementById('cfgYasinStartTime')) document.getElementById('cfgYasinStartTime').value = yasinStartTime;
                 if (document.getElementById('dashYasinStartTime')) document.getElementById('dashYasinStartTime').value = yasinStartTime;
+                if (document.getElementById('cfgYasinEnabled')) document.getElementById('cfgYasinEnabled').checked = yasinEnabled;
+                if (document.getElementById('dashYasinEnabled')) document.getElementById('dashYasinEnabled').checked = yasinEnabled;
 
                 const isYasinMushaf = (document.getElementById('radioYasinOption2') && document.getElementById('radioYasinOption2').checked) ||
                                       (document.getElementById('dashRadioYasinOption2') && document.getElementById('dashRadioYasinOption2').checked);
@@ -182,7 +198,10 @@
                 const yasinStepDuration = Math.max(5, parseInt(document.getElementById('cfgYasinStepDuration')?.value || document.getElementById('dashYasinStepDuration')?.value) || 20);
                 const yasinMushafDuration = Math.max(10, parseInt(document.getElementById('cfgYasinMushafDuration')?.value || document.getElementById('dashYasinMushafDuration')?.value) || 120);
 
-                // 1. Simpan ke LocalStorage seketika untuk responsivitas instan di TV
+                // Format ringkas <= 20 karakter agar sesuai tipe data SQL varchar(20) kolom yasin_scroll_speed
+                const compactSpeed = `${yasinDisplayMode}:${yasinStepDuration}:${yasinMushafDuration}`.substring(0, 20);
+
+                // 1. Simpan ke LocalStorage seketika untuk responsivitas instan di TV & pencegahan reset saat refresh
                 localStorage.setItem('yasin_mode_enabled', yasinEnabled);
                 localStorage.setItem('yasin_start_time', yasinStartTime);
                 localStorage.setItem('yasin_display_mode', yasinDisplayMode);
@@ -195,56 +214,49 @@
                     const cached = cachedRaw ? JSON.parse(cachedRaw) : {};
                     cached.yasin_mode_enabled = yasinEnabled;
                     cached.yasin_start_time = yasinStartTime;
-                    cached.yasin_scroll_speed = JSON.stringify({
-                        mode: yasinDisplayMode,
-                        step_duration: yasinStepDuration,
-                        mushaf_duration: yasinMushafDuration,
-                        updated_at: new Date().toISOString()
-                    });
+                    cached.yasin_scroll_speed = compactSpeed;
                     localStorage.setItem('cached_app_settings', JSON.stringify(cached));
                 } catch (e) {}
 
-                // 2. Simpan ke Cloud Supabase table app_settings
+                // 2. Simpan ke Cloud Supabase table app_settings (Menggunakan format compact <= 20 karakter)
                 let cloudSaved = false;
-                if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-                    const patchPayload = {
-                        yasin_mode_enabled: yasinEnabled,
-                        yasin_start_time: yasinStartTime,
-                        yasin_scroll_speed: JSON.stringify({
-                            mode: yasinDisplayMode,
-                            step_duration: yasinStepDuration,
-                            mushaf_duration: yasinMushafDuration,
-                            updated_at: new Date().toISOString()
-                        })
-                    };
+                const patchPayload = {
+                    yasin_mode_enabled: yasinEnabled,
+                    yasin_start_time: yasinStartTime,
+                    yasin_scroll_speed: compactSpeed
+                };
 
+                if (window.SupabaseDB && typeof SupabaseDB.updateSettings === 'function') {
+                    const updateRes = await SupabaseDB.updateSettings(patchPayload);
+                    cloudSaved = !!(updateRes && updateRes.success);
+                } else if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
                     const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                         method: 'PATCH',
                         headers: getSupabaseHeaders(),
                         body: JSON.stringify(patchPayload)
                     });
                     cloudSaved = res.ok;
+                }
 
-                    // Broadcast sinyal remote jika aktif
-                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
-                        SupabaseDB.broadcastChange('yasin', 'UPDATE', {
-                            yasin_mode_enabled: yasinEnabled,
-                            yasin_start_time: yasinStartTime,
-                            yasin_display_mode: yasinDisplayMode,
-                            step_duration: yasinStepDuration,
-                            mushaf_duration: yasinMushafDuration
-                        }, 'Admin Yaasiin');
-                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', patchPayload, 'Admin Yaasiin');
-                    }
-                    if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                        SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', {
-                            yasin_mode_enabled: yasinEnabled,
-                            yasin_start_time: yasinStartTime,
-                            yasin_display_mode: yasinDisplayMode,
-                            step_duration: yasinStepDuration,
-                            mushaf_duration: yasinMushafDuration
-                        }).catch(() => {});
-                    }
+                // Broadcast sinyal remote jika aktif
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('yasin', 'UPDATE', {
+                        yasin_mode_enabled: yasinEnabled,
+                        yasin_start_time: yasinStartTime,
+                        yasin_display_mode: yasinDisplayMode,
+                        step_duration: yasinStepDuration,
+                        mushaf_duration: yasinMushafDuration
+                    }, 'Admin Yaasiin');
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', patchPayload, 'Admin Yaasiin');
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
+                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', {
+                        yasin_mode_enabled: yasinEnabled,
+                        yasin_start_time: yasinStartTime,
+                        yasin_display_mode: yasinDisplayMode,
+                        step_duration: yasinStepDuration,
+                        mushaf_duration: yasinMushafDuration
+                    }).catch(() => {});
                 }
 
                 // Tampilkan feedback visual

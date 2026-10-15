@@ -470,7 +470,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.85'), 'sw.js memiliki bumping versi cache terbaru v5.8.85');
+assert(swContent.includes('aljihad-signage-v5.8.86'), 'sw.js memiliki bumping versi cache terbaru v5.8.86');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -617,6 +617,19 @@ setTimeout(() => {
     assert(mockReceivedRows.length === 2, 'Realtime Engine: Dua baris berbeda pada tabel yang sama keduanya berhasil diterima tanpa terpotong');
     assert(mockReceivedRows[0].rowId === 101 && mockReceivedRows[1].rowId === 102, 'Realtime Engine: Urutan baris mutasi pertama dan kedua terjaga utuh');
 }, 30);
+
+// -------------------------------------------------------------
+// 23. SURAT YAASIIN SETTINGS PERSISTENCE & SCHEMA SAFETY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 23] Surat Yaasiin Settings Persistence & Schema Safety:');
+const adminYasinContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-yasin.js'), 'utf8');
+const freshAdminCoreContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-core.js'), 'utf8');
+const adminDataLoaderContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-data-loader.js'), 'utf8');
+
+assert(adminYasinContent.includes('compactSpeed') && adminYasinContent.includes('.substring(0, 20)'), 'admin-yasin.js menggunakan format ringkas yasin_scroll_speed <= 20 karakter');
+assert(freshAdminCoreContent.includes("localStorage.getItem('yasin_start_time')") && freshAdminCoreContent.includes('cfgYasinStartTime'), 'admin-core.js menghidrasi timer yaasiin secara instan dari localStorage saat DOM ready');
+assert(adminDataLoaderContent.includes("localStorage.getItem('yasin_start_time')"), 'admin-data-loader.js memprioritaskan fallback timer yaasiin ke localStorage');
+assert(supabaseDbContent.includes('yasin_scroll_speed') && supabaseDbContent.includes('.substring(0, 20)'), 'supabase-db.js memproteksi kolom yasin_scroll_speed maksimal 20 karakter sebelum dikirim ke cloud');
 
 // -------------------------------------------------------------
 // HASIL AKHIR
