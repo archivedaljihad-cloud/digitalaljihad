@@ -341,12 +341,18 @@ function updatePrayerSourceBadgeUI(source) {
             syncIntervalTV(rotInterval);
             syncDurasiJumat(jumatDur);
 
-            // Simpan ke localStorage lokal browser
+            // Simpan ke localStorage lokal browser & backup spesifik
             const countdownStyle = document.getElementById('cfgCountdownStyle')?.value || 'flip';
             localStorage.setItem('display_rotation_interval', rotInterval);
             localStorage.setItem('display_prayer_mode_enabled', prayerEnabled);
             localStorage.setItem('display_prayer_mode_jumat_duration', jumatDur);
             localStorage.setItem('prayer_countdown_style', countdownStyle);
+            localStorage.setItem('cfg_countdown_adzan', countdownDur);
+            localStorage.setItem('cfg_durasi_adzan', adzanDur);
+            localStorage.setItem('cfg_durasi_iqamah', iqamahDur);
+            localStorage.setItem('cfg_durasi_sholat', sholatDur);
+            localStorage.setItem('cfg_durasi_jumat', jumatDur);
+            localStorage.setItem('cfg_audio_tarhim', audioTarhim);
 
             try {
                 const cachedRaw = localStorage.getItem('cached_app_settings');
@@ -367,6 +373,7 @@ function updatePrayerSourceBadgeUI(source) {
             } catch (e) {}
 
             // Payload bersih sesuai skema kolom tabel app_settings di Supabase
+            // Catatan: prayer_countdown_style disimpan via key-value setting karena bukan kolom tabel app_settings (mencegah PGRST204)
             const cleanPayload = {
                 rotation_interval: rotInterval,
                 value: prayerEnabled ? '1' : '0',
@@ -376,8 +383,7 @@ function updatePrayerSourceBadgeUI(source) {
                 prayer_mode_after_prayer: sholatDur,
                 prayer_mode_jumat_duration: jumatDur,
                 audio_tarhim: audioTarhim,
-                tarhim_trigger_seconds: audioTarhim * 60,
-                prayer_countdown_style: countdownStyle
+                tarhim_trigger_seconds: audioTarhim * 60
             };
 
             // Simpan juga ke key-value Supabase cloud
@@ -409,12 +415,13 @@ function updatePrayerSourceBadgeUI(source) {
                     }).catch(() => {});
                 }
 
-                // Kirim sinyal broadcast remote ke Display TV
+                // Kirim sinyal broadcast remote ke Display TV (disertai gaya countdown)
+                const broadcastPayload = { ...cleanPayload, prayer_countdown_style: countdownStyle };
                 if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
-                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', cleanPayload, 'Admin Display TV');
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', broadcastPayload, 'Admin Display TV');
                 }
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', cleanPayload).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', broadcastPayload).catch(() => {});
                 }
             } catch (err) {
                 console.warn('⚠️ Network error saat simpanPengaturanDurasiTV:', err);
@@ -463,6 +470,12 @@ function updatePrayerSourceBadgeUI(source) {
             localStorage.setItem('display_show_imsak', showImsak);
             localStorage.setItem('display_show_syuruk', showSyuruk);
             localStorage.setItem('prayer_countdown_style', countdownStyle);
+            localStorage.setItem('cfg_countdown_adzan', countdownDur);
+            localStorage.setItem('cfg_durasi_adzan', adzanDur);
+            localStorage.setItem('cfg_durasi_iqamah', iqamahDur);
+            localStorage.setItem('cfg_durasi_sholat', sholatDur);
+            localStorage.setItem('cfg_durasi_jumat', jumatDur);
+            localStorage.setItem('cfg_audio_tarhim', audioTarhim);
             syncDurasiJumat(jumatDur);
 
             // Perbarui juga cache lokal cached_app_settings agar display TV offline langsung akurat
@@ -506,8 +519,7 @@ function updatePrayerSourceBadgeUI(source) {
                     prayer_mode_after_prayer: sholatDur,
                     prayer_mode_jumat_duration: jumatDur,
                     audio_tarhim: audioTarhim,
-                    tarhim_trigger_seconds: audioTarhim * 60,
-                    prayer_countdown_style: countdownStyle
+                    tarhim_trigger_seconds: audioTarhim * 60
                 };
 
                 // Simpan juga ke key-value Supabase cloud
@@ -515,11 +527,15 @@ function updatePrayerSourceBadgeUI(source) {
                     SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
                 }
 
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
+                const resPatch = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
                     method: 'PATCH',
                     headers: getSupabaseHeaders(),
                     body: JSON.stringify(cleanPayload)
                 });
+                if (!resPatch.ok) {
+                    const errTxt = await resPatch.text();
+                    console.warn('⚠️ Gagal update app_settings cloud:', resPatch.status, errTxt);
+                }
 
                 // Sinkronkan juga baris cadangan di cloud
                 fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=gt.1`, {
@@ -529,8 +545,12 @@ function updatePrayerSourceBadgeUI(source) {
                 }).catch(() => {});
 
                 // Kirim sinyal Remote Broadcast UPDATE_SETTINGS agar display TV langsung mengadopsi interval baru tanpa jeda
+                const broadcastPayload = { ...cleanPayload, prayer_countdown_style: countdownStyle };
                 if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', cleanPayload).catch(() => {});
+                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', broadcastPayload).catch(() => {});
+                }
+                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
+                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', broadcastPayload, 'Admin Display TV');
                 }
 
                 // 2. Update waktu sholat ke tabel jadwal_sholat Supabase

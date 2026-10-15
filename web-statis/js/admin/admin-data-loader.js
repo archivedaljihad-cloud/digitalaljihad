@@ -316,21 +316,23 @@
                         // Switch & Durasi Prayer Mode
                         const prayerEnabled = (s.prayer_mode_enabled !== false && s.value != '0');
                         if (document.getElementById('cfgPrayerModeEnabled')) document.getElementById('cfgPrayerModeEnabled').checked = prayerEnabled;
-                        const cdVal = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
-                        if (document.getElementById('cfgCountdownAdzan') && cdVal) document.getElementById('cfgCountdownAdzan').value = cdVal;
-                        const adzVal = s.prayer_mode_adzan_duration || s.adzan_duration;
-                        if (document.getElementById('cfgDurasiAdzan') && adzVal) document.getElementById('cfgDurasiAdzan').value = adzVal;
-                        const iqmVal = s.prayer_mode_iqamah_duration || s.iqamah_duration;
-                        if (document.getElementById('cfgDurasiIqamah') && iqmVal) document.getElementById('cfgDurasiIqamah').value = iqmVal;
-                        const sholatDurVal = s.prayer_mode_after_prayer || s.prayer_mode_duration;
-                        if (document.getElementById('cfgDurasiSholat') && sholatDurVal) document.getElementById('cfgDurasiSholat').value = sholatDurVal;
-                        if (document.getElementById('cfgAudioTarhim') && s.audio_tarhim !== undefined) document.getElementById('cfgAudioTarhim').value = s.audio_tarhim;
-                        if (s.prayer_countdown_style && document.getElementById('cfgCountdownStyle')) {
-                            document.getElementById('cfgCountdownStyle').value = s.prayer_countdown_style;
+                        const cdVal = s.prayer_mode_before_adzan ?? s.countdown_adzan_duration ?? localStorage.getItem('cfg_countdown_adzan');
+                        if (document.getElementById('cfgCountdownAdzan') && cdVal !== null && cdVal !== undefined) document.getElementById('cfgCountdownAdzan').value = cdVal;
+                        const adzVal = s.prayer_mode_adzan_duration ?? s.adzan_duration ?? localStorage.getItem('cfg_durasi_adzan');
+                        if (document.getElementById('cfgDurasiAdzan') && adzVal !== null && adzVal !== undefined) document.getElementById('cfgDurasiAdzan').value = adzVal;
+                        const iqmVal = s.prayer_mode_iqamah_duration ?? s.iqamah_duration ?? localStorage.getItem('cfg_durasi_iqamah');
+                        if (document.getElementById('cfgDurasiIqamah') && iqmVal !== null && iqmVal !== undefined) document.getElementById('cfgDurasiIqamah').value = iqmVal;
+                        const sholatDurVal = s.prayer_mode_after_prayer ?? s.prayer_mode_duration ?? localStorage.getItem('cfg_durasi_sholat');
+                        if (document.getElementById('cfgDurasiSholat') && sholatDurVal !== null && sholatDurVal !== undefined) document.getElementById('cfgDurasiSholat').value = sholatDurVal;
+                        const audioTarhimVal = s.audio_tarhim !== undefined ? s.audio_tarhim : localStorage.getItem('cfg_audio_tarhim');
+                        if (document.getElementById('cfgAudioTarhim') && audioTarhimVal !== null && audioTarhimVal !== undefined) document.getElementById('cfgAudioTarhim').value = audioTarhimVal;
+                        const savedCountdownStyle = s.prayer_countdown_style || localStorage.getItem('prayer_countdown_style');
+                        if (savedCountdownStyle && document.getElementById('cfgCountdownStyle')) {
+                            document.getElementById('cfgCountdownStyle').value = savedCountdownStyle;
                         }
                         
                         // Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)
-                        const jumatDur = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi) || 50;
+                        const jumatDur = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi || localStorage.getItem('cfg_durasi_jumat')) || 50;
                         syncDurasiJumat(jumatDur);
 
                         // Pengaturan Agenda Surat Yaasiin & Tahlil (Sync Dashboard & Settings)

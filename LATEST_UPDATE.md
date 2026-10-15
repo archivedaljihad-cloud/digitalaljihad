@@ -7,6 +7,31 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 00:10 WIB)
+
+### ⏱️ PERBAIKAN BUG PERSISTENSI DURASI SHOLAT, ADZAN, IQAMAH & WAKTU SISTEM KE SUPABASE (ELIMINASI PGRST204) & HIDRASI INSTAN (Versi SW v5.8.89):
+1. **Akar Masalah "Angka Setingan Selalu Kembali ke Kondisi Awal Setelah Klik Simpan"**:
+   - Di file `web-statis/js/admin/admin-jadwal-sholat.js`, baik fungsi `simpanPengaturanDurasiTV()` maupun `simpanJadwalSholat()` menyusun objek `cleanPayload` yang menyertakan properti `prayer_countdown_style: countdownStyle`.
+   - Di Supabase Cloud, tabel `app_settings` (baris `id: 1`) **TIDAK memiliki kolom** `prayer_countdown_style` (karena gaya countdown disimpan terpisah melalui model key-value settings baris mandiri).
+   - Akibatnya, PostgREST Supabase menolak mutasi PATCH dengan galat keras:
+     `HTTP 400 Bad Request: {"code":"PGRST204","message":"Could not find the 'prayer_countdown_style' column of 'app_settings' in the schema cache"}`.
+   - Karena penyimpanan ke database cloud ditolak oleh Supabase, baris durasi di cloud tetap menyimpan nilai lama (`4`, `3`, `10`, `10`).
+   - Sinyal broadcast remote `UPDATE` yang dikirim sesudahnya memicu `debouncedLoadAllSupabaseData(600)`. Fungsi ini mengambil ulang data dari Supabase Cloud (yang belum terupdate) dan menimpa kembali seluruh kotak input form admin dalam waktu 600ms, sehingga angka selalu tampak kembali (*snapping back*) ke angka awal sebelum diedit.
+2. **Solusi & Perbaikan Tuntas**:
+   - **Eliminasi Kolom Ilegal dari Payload PATCH**: Mengeluarkan `prayer_countdown_style` dari objek `cleanPayload` pada panggilan `PATCH /rest/v1/app_settings?id=eq.1`.
+   - **Pemisahan Penyimpanan Mandiri**: Nilai `prayer_countdown_style` disimpan secara terpisah dan aman melalui `SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle)` dan `localStorage`.
+   - **Broadcast Remote Lengkap**: Objek siaran realtime ke TV Display tetap menyertakan gaya countdown `{ ...cleanPayload, prayer_countdown_style: countdownStyle }` sehingga TV langsung memperbarui hitung mundur secara instan tanpa jeda.
+   - **Proteksi & Validasi Respons HTTP**: Menambahkan pengecekan `res.ok` dan peringatan error eksplisit di konsol browser jika terjadi kegagalan jaringan.
+   - **Hidrasi Instan DOM Ready (`admin-core.js`)**: Kotak durasi sholat (`cfgCountdownAdzan`, `cfgDurasiAdzan`, `cfgDurasiIqamah`, `cfgDurasiSholat`, `cfgDurasiJumat`, `cfgAudioTarhim`) kini dihidrasi seketika dari `localStorage` / `cached_app_settings` saat dokumen dimuat, mencegah form berkedip atau reset saat reload.
+   - **Fallback Aman Tanpa Reset (`admin-data-loader.js`)**: Memanfaatkan operator *nullish coalescing* `??` dengan fallback ke `localStorage`, menjamin nilai input pengguna tidak pernah terhapus atau tertimpa oleh *payload* kosong.
+3. **Bumping Service Worker & Invalidation Cache ke `v5.8.89`**:
+   - `web-statis/sw.js` dinaikkan ke `aljihad-signage-v5.8.89`.
+   - `web-statis/js/admin/admin-settings.js` disinkronkan untuk membersihkan cache selain `aljihad-signage-v5.8.89`.
+   - Query string script di `web-statis/admin.html` dinaikkan ke `?v=5.8.89`.
+   - `scripts/test-engine.js` disinkronkan ke `v5.8.89` (252 / 252 tests lulus, 100% PASS).
+
+---
+
 ## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 23:55 WIB)
 
 ### 🕌 PENYELARASAN HISAB FALAKIYAH NU (LF PBNU), ANALISIS PERBEDAAN JADWAL SHOLAT & TRANSPARANSI RINCIAN WAKTU (Versi SW v5.8.88):

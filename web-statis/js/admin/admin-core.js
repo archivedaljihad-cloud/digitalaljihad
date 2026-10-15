@@ -227,6 +227,29 @@
                     if (document.getElementById('cfgIntervalTV')) document.getElementById('cfgIntervalTV').value = savedInterval;
                     if (document.getElementById('cfgIntervalTVSystem')) document.getElementById('cfgIntervalTVSystem').value = savedInterval;
                 }
+
+                // Inisialisasi instan pengaturan durasi sholat & prayer mode dari cache lokal
+                const cachedSettings = localStorage.getItem('cached_app_settings') ? JSON.parse(localStorage.getItem('cached_app_settings')) : {};
+                const cdVal = localStorage.getItem('cfg_countdown_adzan') || cachedSettings.prayer_mode_before_adzan;
+                if (cdVal && document.getElementById('cfgCountdownAdzan')) document.getElementById('cfgCountdownAdzan').value = cdVal;
+                
+                const adzVal = localStorage.getItem('cfg_durasi_adzan') || cachedSettings.prayer_mode_adzan_duration;
+                if (adzVal && document.getElementById('cfgDurasiAdzan')) document.getElementById('cfgDurasiAdzan').value = adzVal;
+                
+                const iqmVal = localStorage.getItem('cfg_durasi_iqamah') || cachedSettings.prayer_mode_iqamah_duration;
+                if (iqmVal && document.getElementById('cfgDurasiIqamah')) document.getElementById('cfgDurasiIqamah').value = iqmVal;
+                
+                const sholatVal = localStorage.getItem('cfg_durasi_sholat') || cachedSettings.prayer_mode_after_prayer || cachedSettings.prayer_mode_duration;
+                if (sholatVal && document.getElementById('cfgDurasiSholat')) document.getElementById('cfgDurasiSholat').value = sholatVal;
+                
+                const tarhimVal = localStorage.getItem('cfg_audio_tarhim') ?? cachedSettings.audio_tarhim;
+                if (tarhimVal !== null && tarhimVal !== undefined && document.getElementById('cfgAudioTarhim')) document.getElementById('cfgAudioTarhim').value = tarhimVal;
+                
+                const styleVal = localStorage.getItem('prayer_countdown_style') || cachedSettings.prayer_countdown_style;
+                if (styleVal && document.getElementById('cfgCountdownStyle')) document.getElementById('cfgCountdownStyle').value = styleVal;
+
+                const jmVal = localStorage.getItem('cfg_durasi_jumat') || localStorage.getItem('display_prayer_mode_jumat_duration') || cachedSettings.prayer_mode_jumat_duration;
+                if (jmVal && typeof syncDurasiJumat === 'function') syncDurasiJumat(parseInt(jmVal));
             } catch (e) {}
 
             // Inisialisasi awal tabel rotasi (langsung dari cache lokal atau master 18 halaman)
@@ -291,6 +314,14 @@
 
                     if (evt && (evt.table === 'app_settings' || evt.key === 'app_settings' || evt.table === 'yasin') && evt.payload) {
                         const s = evt.payload;
+                        if (s.rotation_interval) {
+                            if (document.getElementById('cfgIntervalTV')) document.getElementById('cfgIntervalTV').value = s.rotation_interval;
+                            if (document.getElementById('cfgIntervalTVSystem')) document.getElementById('cfgIntervalTVSystem').value = s.rotation_interval;
+                            localStorage.setItem('display_rotation_interval', s.rotation_interval);
+                        }
+                        if (s.prayer_mode_enabled !== undefined && document.getElementById('cfgPrayerModeEnabled')) {
+                            document.getElementById('cfgPrayerModeEnabled').checked = (s.prayer_mode_enabled !== false && s.value != '0');
+                        }
                         const cd = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
                         if (document.getElementById('cfgCountdownAdzan') && cd) document.getElementById('cfgCountdownAdzan').value = cd;
                         const ad = s.prayer_mode_adzan_duration || s.adzan_duration;
@@ -299,6 +330,9 @@
                         if (document.getElementById('cfgDurasiIqamah') && iq) document.getElementById('cfgDurasiIqamah').value = iq;
                         const sh = s.prayer_mode_after_prayer || s.prayer_mode_duration;
                         if (document.getElementById('cfgDurasiSholat') && sh) document.getElementById('cfgDurasiSholat').value = sh;
+                        if (s.audio_tarhim !== undefined && document.getElementById('cfgAudioTarhim')) {
+                            document.getElementById('cfgAudioTarhim').value = s.audio_tarhim;
+                        }
                         const jm = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi);
                         if (jm) syncDurasiJumat(jm);
                         if (s.prayer_countdown_style && document.getElementById('cfgCountdownStyle')) {
@@ -335,6 +369,14 @@
                     if (cmd === 'SYNC_JADWAL_SHOLAT' || cmd === 'UPDATE_SETTINGS') {
                         if (payload) {
                             const s = payload;
+                            if (s.rotation_interval) {
+                                if (document.getElementById('cfgIntervalTV')) document.getElementById('cfgIntervalTV').value = s.rotation_interval;
+                                if (document.getElementById('cfgIntervalTVSystem')) document.getElementById('cfgIntervalTVSystem').value = s.rotation_interval;
+                                localStorage.setItem('display_rotation_interval', s.rotation_interval);
+                            }
+                            if (s.prayer_mode_enabled !== undefined && document.getElementById('cfgPrayerModeEnabled')) {
+                                document.getElementById('cfgPrayerModeEnabled').checked = (s.prayer_mode_enabled !== false && s.value != '0');
+                            }
                             const cd = s.prayer_mode_before_adzan || s.countdown_adzan_duration;
                             if (document.getElementById('cfgCountdownAdzan') && cd) document.getElementById('cfgCountdownAdzan').value = cd;
                             const ad = s.prayer_mode_adzan_duration || s.adzan_duration;
@@ -343,6 +385,9 @@
                             if (document.getElementById('cfgDurasiIqamah') && iq) document.getElementById('cfgDurasiIqamah').value = iq;
                             const sh = s.prayer_mode_after_prayer || s.prayer_mode_duration;
                             if (document.getElementById('cfgDurasiSholat') && sh) document.getElementById('cfgDurasiSholat').value = sh;
+                            if (s.audio_tarhim !== undefined && document.getElementById('cfgAudioTarhim')) {
+                                document.getElementById('cfgAudioTarhim').value = s.audio_tarhim;
+                            }
                             const jm = parseInt(s.prayer_mode_jumat_duration || s.jumat_durasi);
                             if (jm) syncDurasiJumat(jm);
                             if (s.prayer_countdown_style && document.getElementById('cfgCountdownStyle')) {
