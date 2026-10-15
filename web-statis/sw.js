@@ -2,7 +2,7 @@
    SERVICE WORKER - AL-JIHAD DIGITAL SIGNAGE PWA
    Offline-First Resiliency & Intelligent Caching
    ===================================================== */
-const CACHE_NAME = 'aljihad-signage-v5.8.84';
+const CACHE_NAME = 'aljihad-signage-v5.8.85';
 const STATIC_ASSETS = [
     './',
     'index.html',
@@ -113,7 +113,11 @@ self.addEventListener('install', (event) => {
                 // Seluruh aset inti berhasil dicache dengan utuh
                 await self.skipWaiting();
             } else {
-                console.warn('[SW] Peringatan: Aset inti gagal dicache. Mempertahankan cache versi stabil sebelumnya.');
+                console.error(`[SW] Error: ${failedCore.length} aset inti gagal dicache. Membatalkan instalasi worker agar cache stabil sebelumnya dipertahankan.`);
+                // Bersihkan cache yang tidak lengkap agar tidak meninggalkan residu
+                await caches.delete(CACHE_NAME);
+                // Reject install promise agar browser menandai worker gagal/redundant dan tidak mengaktifkannya
+                throw new Error(`[SW] Install aborted: Core assets failed to precache (${failedCore.length} failed).`);
             }
         })
     );

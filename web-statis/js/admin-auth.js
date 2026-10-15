@@ -901,45 +901,50 @@ const AdminAuth = {
 
         // 1. Cek pada daftar akun lokal (yang telah disinkronkan dengan Cloud)
         const usersList = this.getUsers();
-        let matchedUser = usersList.find(u => 
-            this.isUserMatch(u, cleanId) && this.isPasswordMatch(u, cleanPwd)
-        );
 
-        // Fallback ke DEFAULT_AUTH_USERS jika belum ada di list
-        if (!matchedUser) {
-            matchedUser = DEFAULT_AUTH_USERS.find(u => 
-                this.isUserMatch(u, cleanId) && this.isPasswordMatch(u, cleanPwd)
-            );
+        // Cari kandidat akun yang cocok dengan identifier
+        let candidateUsers = usersList.filter(u => this.isUserMatch(u, cleanId));
+
+        // Jika belum ditemukan lewat isUserMatch standar, periksa alias pengurus di usersList
+        if (candidateUsers.length === 0) {
+            if (cleanId === 'bendahara' || cleanId === 'bendahara@aljihad.com' || (!cleanId.includes('@') && (cleanId.includes('bendahara') || cleanId.includes('utut')))) {
+                const bUser = usersList.find(u => u.email === 'bendahara@aljihad.com' || u.username === 'bendahara' || u.role === 'bendahara');
+                if (bUser) candidateUsers.push(bUser);
+            } else if (cleanId === 'dkmsatu' || cleanId === 'ketuadkm@aljihad.com' || (!cleanId.includes('@') && (cleanId.includes('dkmsatu') || cleanId.includes('ketua') || cleanId.includes('hadi')))) {
+                const kdUser = usersList.find(u => u.email === 'ketuadkm@aljihad.com' || u.username === 'dkmsatu');
+                if (kdUser) candidateUsers.push(kdUser);
+            } else if (cleanId === 'dkm' || cleanId === 'dkm@aljihad.com' || cleanId === 'petugas' || cleanId === 'operator') {
+                const pUser = usersList.find(u => u.email === 'dkm@aljihad.com' || u.username === 'dkm');
+                if (pUser) candidateUsers.push(pUser);
+            } else if (cleanId === 'admin' || cleanId === 'superadmin' || cleanId === 'archived.aljihad@gmail.com' || (!cleanId.includes('@') && (cleanId.includes('admin') || cleanId.includes('suwardi')))) {
+                const aUser = usersList.find(u => u.email === 'archived.aljihad@gmail.com' || u.username === 'admin' || u.role === 'admin');
+                if (aUser) candidateUsers.push(aUser);
+            }
         }
 
-        // Alias tambahan untuk fleksibilitas maksimal lintas perangkat
-        if (!matchedUser) {
-            // 1. Khusus Bendahara Kas (misal user mengetik 'bendahara', 'bendahara@aljihad.com', atau 'utut')
-            if (cleanId === 'bendahara' || cleanId === 'bendahara@aljihad.com' || (!cleanId.includes('@') && (cleanId.includes('bendahara') || cleanId.includes('utut')))) {
-                const bUser = usersList.find(u => u.email === 'bendahara@aljihad.com' || u.username === 'bendahara') || DEFAULT_AUTH_USERS.find(u => u.role === 'bendahara');
-                if (bUser && this.isPasswordMatch(bUser, cleanPwd)) {
-                    matchedUser = bUser;
-                }
-            } 
-            // 2. Khusus Ketua DKM (misal user mengetik 'dkmsatu', 'ketuadkm@aljihad.com', 'ketua', atau 'hadi')
-            else if (cleanId === 'dkmsatu' || cleanId === 'ketuadkm@aljihad.com' || (!cleanId.includes('@') && (cleanId.includes('dkmsatu') || cleanId.includes('ketua') || cleanId.includes('hadi')))) {
-                const kdUser = usersList.find(u => u.email === 'ketuadkm@aljihad.com' || u.username === 'dkmsatu') || DEFAULT_AUTH_USERS.find(u => u.username === 'dkmsatu');
-                if (kdUser && this.isPasswordMatch(kdUser, cleanPwd)) {
-                    matchedUser = kdUser;
-                }
+        let matchedUser = null;
+
+        if (candidateUsers.length > 0) {
+            // Akun DITEMUKAN di sistem/usersList:
+            // Verifikasi password HANYA terhadap data akun mutakhir ini.
+            // DILARANG KERAS fallback ke DEFAULT_AUTH_USERS jika akun ini telah ada di daftar pengguna!
+            matchedUser = candidateUsers.find(u => this.isPasswordMatch(u, cleanPwd));
+            if (!matchedUser) {
+                // Password salah untuk akun yang terdaftar -> Langsung tolak!
+                throw new Error('Kredensial tidak valid! Periksa kembali Email/Username atau Kata Sandi.');
             }
-            // 3. Khusus Petugas / Operator DKM (misal user mengetik 'dkm', 'dkm@aljihad.com', 'petugas', atau 'operator')
-            else if (cleanId === 'dkm' || cleanId === 'dkm@aljihad.com' || cleanId === 'petugas' || cleanId === 'operator') {
-                const pUser = usersList.find(u => u.email === 'dkm@aljihad.com' || u.username === 'dkm') || DEFAULT_AUTH_USERS.find(u => u.email === 'dkm@aljihad.com');
-                if (pUser && this.isPasswordMatch(pUser, cleanPwd)) {
-                    matchedUser = pUser;
-                }
-            } 
-            // 4. Khusus Super Admin (misal user mengetik 'admin', 'superadmin', 'archived.aljihad@gmail.com', atau 'suwardi')
-            else if (cleanId === 'admin' || cleanId === 'superadmin' || cleanId === 'archived.aljihad@gmail.com' || (!cleanId.includes('@') && (cleanId.includes('admin') || cleanId.includes('suwardi')))) {
-                const aUser = usersList.find(u => u.email === 'archived.aljihad@gmail.com' || u.username === 'admin') || DEFAULT_AUTH_USERS.find(u => u.role === 'admin');
-                if (aUser && this.isPasswordMatch(aUser, cleanPwd)) {
-                    matchedUser = aUser;
+        } else {
+            // Hanya jika usersList kosong sama sekali / akun sama sekali belum terdaftar di usersList:
+            const defCandidate = DEFAULT_AUTH_USERS.find(u => this.isUserMatch(u, cleanId));
+            if (defCandidate) {
+                // Pastikan akun default ini tidak memiliki representasi yang telah dimodifikasi di usersList
+                const hasExisting = usersList.some(u => 
+                    (u.id && String(u.id) === String(defCandidate.id)) ||
+                    (u.email && defCandidate.email && u.email.toLowerCase() === defCandidate.email.toLowerCase()) ||
+                    (u.username && defCandidate.username && u.username.toLowerCase() === defCandidate.username.toLowerCase())
+                );
+                if (!hasExisting && this.isPasswordMatch(defCandidate, cleanPwd)) {
+                    matchedUser = defCandidate;
                 }
             }
         }
@@ -1014,27 +1019,66 @@ const AdminAuth = {
 
     /**
      * Switch Role Cepat (Fitur Praktis untuk Pengurus & Pengujian)
+     * Memerlukan sesi login aktif & otorisasi aman (mencegah pembuatan sesi Super Admin tanpa verifikasi)
      */
-    switchRole(targetRole) {
+    switchRole(targetRole, verificationPassword = '') {
+        const currentUser = this.getCurrentUser();
+        if (!currentUser || !this.isLoggedIn()) {
+            throw new Error('Akses Ditolak: Anda harus login terlebih dahulu untuk beralih peran!');
+        }
+
+        const currentRole = (currentUser.role || (currentUser.role_id === 3 ? 'admin' : (currentUser.role_id === 1 ? 'bendahara' : 'petugas'))).toLowerCase();
+        let originalRole = (currentUser.original_role || currentRole).toLowerCase();
+
         const users = this.getUsers();
-        const found = users.find(u => u.role === targetRole) || DEFAULT_AUTH_USERS.find(u => u.role === targetRole);
-        if (found) {
-            const sessionPayload = {
-                id: found.id,
-                name: found.name,
-                email: found.email,
-                username: found.username,
-                role: found.role,
-                role_id: found.role_id,
-                role_label: found.role_label,
-                role_icon: found.role_icon,
-                color: found.color,
-                logged_at: new Date().toISOString(),
-                token: 'switched_' + Date.now()
-            };
+
+        // Proteksi Eskalasi Hak Akses:
+        // Jika peran sasaran adalah 'admin', pengguna harus:
+        // 1. Berasal dari sesi awal Super Admin (original_role === 'admin'), ATAU
+        // 2. Memasukkan verifikasi kata sandi Super Admin yang valid
+        if (targetRole === 'admin') {
+            if (originalRole !== 'admin') {
+                const adminUser = users.find(u => u.role === 'admin' || u.role_id === 3);
+                if (!verificationPassword || !adminUser || !this.isPasswordMatch(adminUser, verificationPassword)) {
+                    throw new Error('Akses Ditolak: Peningkatan hak akses ke Super Admin memerlukan verifikasi kata sandi!');
+                }
+                // Verifikasi kata sandi Super Admin valid: pengguna sah memegang hak Super Admin
+                originalRole = 'admin';
+            }
+        }
+
+        const found = users.find(u => u.role === targetRole);
+        if (!found) {
+            throw new Error(`Peran "${targetRole}" tidak ditemukan dalam sistem!`);
+        }
+
+        const sessionPayload = {
+            id: found.id,
+            name: found.name,
+            email: found.email,
+            username: found.username,
+            role: found.role,
+            role_id: found.role_id,
+            role_label: found.role_label,
+            role_icon: found.role_icon,
+            color: found.color,
+            original_role: originalRole,
+            logged_at: new Date().toISOString(),
+            token: 'switched_' + Date.now()
+        };
+
+        try {
             localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionPayload));
+        } catch (e) {}
+        try {
+            sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionPayload));
+        } catch (e) {}
+
+        if (typeof window !== 'undefined' && window.location && typeof window.location.reload === 'function') {
             window.location.reload();
         }
+
+        return sessionPayload;
     },
 
     /**

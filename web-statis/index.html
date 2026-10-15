@@ -674,13 +674,14 @@
         function broadcastTvState() {
             try {
                 if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.trackDevicePresence === 'function') {
+                    const devId = (typeof SupabaseDB.getTvDeviceId === 'function') ? SupabaseDB.getTvDeviceId() : 'TV_MASJID_UTAMA';
                     const curSlide = (activePages && activePages[currentIndex]) ? activePages[currentIndex] : 'slides/utama.html';
                     const cleanName = curSlide.replace(/^slides\//, '').replace(/\.html$/, '').replace(/-/g, ' ').toUpperCase();
                     const total = (activePages && activePages.length) ? activePages.length : 19;
                     SupabaseDB.trackDevicePresence({
                         type: 'tv-display',
-                        device_id: 'TV_MASJID_UTAMA',
-                        device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
+                        device_id: devId,
+                        device_name: devId === 'TV_MASJID_UTAMA' ? 'TV Layar Utama Masjid Jami\' Al-Jihad' : `Smart TV Layar Masjid (${devId})`,
                         current_slide: curSlide,
                         currentSlide: curSlide,
                         currentSlideTitle: `Slide ${cleanName} (${currentIndex + 1}/${total})`,
@@ -1688,6 +1689,8 @@
                                 table: table,
                                 action: action,
                                 data: data,
+                                batch: event.batch,
+                                batch_count: event.batch_count,
                                 jumatPetugas: jumatPetugas,
                                 settings: settings,
                                 force_reload: true
@@ -1702,14 +1705,48 @@
                         }
                     }
 
-                    // 4. Kirim Konfirmasi Penerimaan TV (TV Acknowledgment) ke Cloud
+                    // 4. Konfirmasi Penerimaan & Render TV (TV Acknowledgment) ke Cloud
+                    // Menunggu sinyal konfirmasi render selesai dari iframe slide (SLIDE_RENDER_CONFIRMED),
+                    // dengan fallback aman jika slide tidak memiliki event handler render aktif.
                     if (event.event_id && window.SupabaseDB && typeof window.SupabaseDB.sendTvAcknowledgment === 'function') {
-                        window.SupabaseDB.sendTvAcknowledgment('TV_MASJID_UTAMA', event.event_id, table, 'APPLIED');
+                        const devId = (typeof window.SupabaseDB.getTvDeviceId === 'function') ? window.SupabaseDB.getTvDeviceId() : 'TV_MASJID_UTAMA';
+                        const evtId = event.event_id;
+                        const ackTbl = table;
+
+                        if (!window._pendingTvAcks) window._pendingTvAcks = new Map();
+
+                        // Pasang timer fallback (600ms): jika iframe tidak mengembalikan konfirmasi render (misal mode sholat aktif / slide statis),
+                        // kirim acknowledgment fallback agar status cloud tetap terkonfirmasi.
+                        const fallbackTimer = setTimeout(() => {
+                            if (window._pendingTvAcks && window._pendingTvAcks.has(evtId)) {
+                                window._pendingTvAcks.delete(evtId);
+                                window.SupabaseDB.sendTvAcknowledgment(devId, evtId, ackTbl, 'APPLIED_FALLBACK');
+                            }
+                        }, 600);
+
+                        window._pendingTvAcks.set(evtId, { timer: fallbackTimer, devId, table: ackTbl });
                     }
                 } catch (e) {
                     console.warn('[Display TV] Quick refresh active slide error:', e);
                 }
             }
+
+            // Pasang Pendengar Konfirmasi Render dari Iframe Slide (SLIDE_RENDER_CONFIRMED)
+            window.addEventListener('message', (e) => {
+                if (!e.data) return;
+                if (e.data.type === 'SLIDE_RENDER_CONFIRMED' && e.data.event_id) {
+                    const evtId = e.data.event_id;
+                    if (window._pendingTvAcks && window._pendingTvAcks.has(evtId)) {
+                        const pending = window._pendingTvAcks.get(evtId);
+                        clearTimeout(pending.timer);
+                        window._pendingTvAcks.delete(evtId);
+                        if (window.SupabaseDB && typeof window.SupabaseDB.sendTvAcknowledgment === 'function') {
+                            window.SupabaseDB.sendTvAcknowledgment(pending.devId, evtId, pending.table || e.data.table || 'all', 'APPLIED');
+                            console.log(`📺 [Display TV] Konfirmasi Render Iframe Diterima & ACK Terkirim: ${pending.devId} -> ${evtId} [APPLIED]`);
+                        }
+                    }
+                }
+            });
 
             // Pasang Pendengar Universal Realtime (Postgres Changes, Remote Broadcast, Local Channel, Storage)
             if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {

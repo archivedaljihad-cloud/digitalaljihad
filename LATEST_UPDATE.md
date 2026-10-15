@@ -7,6 +7,49 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 17:30 WIB)
+
+### 🛡️ PERBAIKAN HASIL AUDIT KEAMANAN, MULTI-ROW REALTIME, ACK RENDER TV & SW RESILIENCY (Versi SW v5.8.85):
+1. **Penutupan Total Celah Fallback Password Default (`AdminAuth.login`)**:
+   - **Akar Masalah**: Pada `login(identifier, password)`, jika verifikasi password pada akun di `usersList` gagal (misal akun telah diubah password kustomnya dan `has_custom_password` bernilai `true`), fungsi login sebelumnya masih melakukan fallback ke `DEFAULT_AUTH_USERS`. Karena `DEFAULT_AUTH_USERS` menyimpan kata sandi bawaan lama tanpa flag custom, login dengan kata sandi lama tetap diterima.
+   - **Solusi Tuntas**: `AdminAuth.login()` kini mengidentifikasi kandidat akun di `usersList`. Jika akun terdaftar ditemukan, pencocokan kata sandi HANYA dilakukan terhadap data akun tersebut. Jika salah, sistem langsung melempar error `Kredensial tidak valid!` dan DILARANG KERAS mengecek `DEFAULT_AUTH_USERS`. Fallback hanya dapat diakses bila akun sama sekali belum terdaftar di sistem.
+   - **Pengujian Otomatis**: Ditambahkan Test 7 pada `scripts/test-auth-security.js` yang menguji kondisi sintetis: akun diberi password baru, dicoba login dengan password default lama -> ditolak 100%, lalu login dengan password baru -> berhasil.
+
+2. **Pengamanan Otorisasi `switchRole()` & Proteksi Eskalasi Hak Akses**:
+   - **Akar Masalah**: Fungsi `AdminAuth.switchRole()` sebelumnya dapat dipanggil tanpa login aktif atau tanpa kata sandi untuk membuat sesi Super Admin.
+   - **Solusi Tuntas**:
+     - Mewajibkan sesi login aktif (`isLoggedIn()` & `getCurrentUser()`), melempar error `Akses Ditolak: Anda harus login terlebih dahulu` jika belum login.
+     - Proteksi Eskalasi: Jika peran tujuan adalah `'admin'` dan pengguna saat ini bukan Super Admin (misal peran awal `'petugas'` atau `'bendahara'`), wajib menyertakan verifikasi kata sandi Super Admin (`verificationPassword`). Tanpa kata sandi valid, eskalasi ditolak seketika.
+     - Super Admin asli yang melakukan peninjauan/preview ke peran lain dapat kembali ke peran Admin dengan aman.
+   - **Pengujian Otomatis**: Ditambahkan Test 8 pada `scripts/test-auth-security.js` yang memverifikasi blokade panggilan tanpa login dan eskalasi tanpa verifikasi.
+
+3. **Penyempurnaan Debounce Per-Tabel dengan Batch Buffer (`SupabaseDB.onDataChange`)**:
+   - **Akar Masalah**: Dua mutasi baris berdekatan pada tabel yang sama (misal dua baris berbeda pada `keuangan`) dalam jendela debounce 80ms menyebabkan timer kedua mereset timer pertama, sehingga callback hanya memproses baris terakhir dan baris pertama berpotensi terlewat jika penerima menerapkan update per baris.
+   - **Solusi Tuntas**: Menambahkan antrean `tableEventQueues = new Map()` yang mengumpulkan seluruh perubahan baris per tabel dalam jendela debounce 80ms. Saat timer 80ms selesai, seluruh baris mutasi dieksekusi berurutan ke callback dengan lampiran `item.batch` dan `item.batch_count`. Jika ada baris dengan `rowId` yang sama persis diedit berulang dalam 80ms, data baris tersebut diperbarui ke versi paling mutakhir.
+   - **Pengujian Otomatis**: Ditambahkan pengujian simulasi batch queue pada `scripts/test-engine.js` yang memverifikasi dua baris berbeda pada tabel yang sama keduanya diterima utuh tanpa terpotong.
+
+4. **Konfirmasi Render Layar TV (ACK Nyata) & Dynamic Device ID**:
+   - **Akar Masalah**: Kode sebelumnya mengirimkan sinyal `APPLIED` segera setelah mem-postMessage pembaruan ke iframe sebelum iframe selesai merender, serta identitas pengirim masih hardcoded `'TV_MASJID_UTAMA'`.
+   - **Solusi Tuntas**:
+     - Ditambahkan `SupabaseDB.getTvDeviceId()` yang membaca URL parameter `?device_id=` / `?tv_id=` atau menghasilkan ID perangkat unik tersimpan di `localStorage` (`TV_MASJID_XXXX`).
+     - Di `index.html`, pengiriman acknowledgment `APPLIED` kini menunggu sinyal konfirmasi balik `SLIDE_RENDER_CONFIRMED` yang dikirimkan oleh iframe slide melalui `requestAnimationFrame` setelah repaint/DOM render selesai.
+     - Dilengkapi pengaman fallback timeout (600ms) berstatus `'APPLIED_FALLBACK'` jika slide tidak merespon (misal saat mode sholat aktif).
+
+5. **Keandalan Service Worker Offline & Pembatalan Instalasi Gagal (`web-statis/sw.js`)**:
+   - **Akar Masalah**: Jika precaching aset inti gagal, tidak memanggil `skipWaiting()` tidak membatalkan instalasi Service Worker. Worker tetap dapat berstatus *waiting* dan aktif kemudian, di mana tahap aktivasi akan menghapus cache lama, membahayakan kemampuan offline.
+   - **Solusi Tuntas**: Pada event `install`, jika ada aset inti (`CORE_ASSETS`) yang gagal di-precache, Service Worker langsung menghapus cache yang tidak lengkap (`caches.delete(CACHE_NAME)`) dan melempar `throw new Error(...)` pada `event.waitUntil()`. Hal ini memaksa browser menandai instalasi gagal (*redundant*), worker dibatalkan, dan cache stabil versi sebelumnya tetap utuh 100%.
+   - Versi cache dinaikkan ke **`aljihad-signage-v5.8.85`**.
+
+6. **Penyempurnaan Skrip Benchmark Latensi & Transparansi Pengukuran**:
+   - `scripts/benchmark-latency.js` kini mendukung argumen `--dry-run` / `--mock` tanpa menyentuh Supabase Cloud.
+   - Menambahkan pembersihan data uji otomatis (`DELETE` pada `_benchmark_test_latency`) di blok `finally`.
+   - Memasukkan tahapan debounce per-tabel 80ms dan bridge postMessage iframe ke dalam kalkulasi pipeline end-to-end, serta meluruskan batas pengukuran bahwa klaim <100ms hanya berlaku untuk fanout WebSocket mentah di kondisi prima, sedangkan latensi riil hardware TV berada pada rentang 350–900 ms.
+
+7. **Hasil Pengujian Regresi Otomatis**:
+   - `npm test`: **239 / 239 Asersi Engine Lulus** + **8 / 8 Test Keamanan Autentikasi Lulus** = **Total 247 Tests Lulus (100% PASS)**.
+
+---
+
 ## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 13:30 WIB)
 
 ### 🚀 PENINGKATAN KEANDALAN PENYIMPANAN & SINKRONISASI REALTIME (TAHAP 1–6 LENGKAP) — (Versi SW v5.8.84):

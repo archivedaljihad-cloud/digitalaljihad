@@ -124,5 +124,66 @@ console.log('  ✅ [3] Proteksi Custom Password Isolation terbukti aktif: passwo
 
     console.log('  ✅ [6] Login dengan kredensial valid berhasil membuat sesi aman');
 
-    console.log('\n🎉 SEMUA PENGUJIAN KEAMANAN AUTENTIKASI (TAHAP 1) 100% SUKSES!');
+    // Test d (Reviewer Audit Issue A): Uji Alur Login Lengkap dengan Akun yang Diubah Passwordnya
+    // Simpan akun dengan password baru ke localStorage (users_list)
+    const storedList = AdminAuth.getUsers();
+    const bendaharaInList = storedList.find(u => u.username === 'bendahara');
+    bendaharaInList.password = 'BendaharaBaru2026!';
+    bendaharaInList.has_custom_password = true;
+    mockLocalStorage.setItem('aljihad_users_list', JSON.stringify(storedList));
+
+    // Coba login alur lengkap menggunakan password default sebelumnya (#1.Bendahara)
+    let oldDefaultRejected = false;
+    try {
+        await AdminAuth.login('bendahara', '#1.Bendahara');
+    } catch (e) {
+        oldDefaultRejected = true;
+        assert(e.message.includes('Kredensial tidak valid'), 'Login dengan password default lama harus ditolak');
+    }
+    assert(oldDefaultRejected, 'Reviewer Issue A Fix: Login dengan password lama WAJIB DITOLAK pada seluruh alur login!');
+
+    // Coba login alur lengkap menggunakan password kustom baru
+    const newSession = await AdminAuth.login('bendahara', 'BendaharaBaru2026!');
+    assert(newSession && newSession.role === 'bendahara', 'Login dengan password kustom baru harus berhasil');
+    console.log('  ✅ [7] Reviewer Issue A Terbukti Lulus: Password default lama ditolak total pada alur login lengkap');
+
+    // Test e (Reviewer Audit Issue B): Proteksi switchRole() Tanpa Login
+    mockLocalStorage.clear();
+    mockSessionStorage.clear();
+
+    let switchWithoutLoginBlocked = false;
+    try {
+        AdminAuth.switchRole('admin');
+    } catch (e) {
+        switchWithoutLoginBlocked = true;
+        assert(e.message.includes('Akses Ditolak'), 'switchRole tanpa login harus melempar error Akses Ditolak');
+    }
+    assert(switchWithoutLoginBlocked, 'Reviewer Issue B Fix: switchRole tanpa login WAJIB DIBLOKIR');
+
+    // Test f: Proteksi switchRole() eskalasi hak akses dari non-admin ke admin tanpa verifikasi kata sandi
+    await AdminAuth.login('petugas', '135dkmlJihad'); // Login sebagai petugas
+    let escalationBlocked = false;
+    try {
+        AdminAuth.switchRole('admin'); // Coba eskalasi ke admin tanpa password
+    } catch (e) {
+        escalationBlocked = true;
+        assert(e.message.includes('Akses Ditolak'), 'Eskalasi ke Super Admin tanpa kata sandi harus ditolak');
+    }
+    assert(escalationBlocked, 'Reviewer Issue B Fix: Eskalasi peran ke Super Admin tanpa verifikasi kata sandi WAJIB DITOLAK');
+
+    // Test g: Eskalasi dengan verifikasi kata sandi Super Admin yang benar berhasil
+    const elevatedSession = AdminAuth.switchRole('admin', 'SuperUser1971');
+    assert(elevatedSession && elevatedSession.role === 'admin', 'switchRole ke Super Admin dengan password valid harus sukses');
+
+    // Test h: Super Admin dapat beralih ke Bendahara (impersonasi/preview) lalu kembali ke Admin
+    const switchedToBendahara = AdminAuth.switchRole('bendahara');
+    assert(switchedToBendahara && switchedToBendahara.role === 'bendahara', 'Admin dapat beralih ke peran bendahara untuk preview');
+    assert.strictEqual(switchedToBendahara.original_role, 'admin', 'Sesi mencatat original_role admin');
+
+    const switchedBackToAdmin = AdminAuth.switchRole('admin');
+    assert(switchedBackToAdmin && switchedBackToAdmin.role === 'admin', 'Admin yang sedang preview dapat kembali ke Admin');
+    console.log('  ✅ [8] Reviewer Issue B Terbukti Lulus: switchRole() terproteksi autentikasi & otorisasi RBAC');
+
+    console.log('\n🎉 SEMUA PENGUJIAN KEAMANAN AUTENTIKASI (TAHAP 1 & 2) 100% SUKSES!');
 })();
+

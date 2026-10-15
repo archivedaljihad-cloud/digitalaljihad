@@ -2226,6 +2226,28 @@
         },
 
         /**
+         * Mengambil / membuat Device ID unik untuk layar TV Display
+         * Mendukung URL query parameter (?tv_id= atau ?device_id=) dan localStorage
+         */
+        getTvDeviceId() {
+            try {
+                if (typeof window !== 'undefined' && window.location) {
+                    const params = new URLSearchParams(window.location.search);
+                    const qId = params.get('device_id') || params.get('tv_id');
+                    if (qId) return qId.trim();
+                }
+                if (typeof localStorage !== 'undefined') {
+                    let stored = localStorage.getItem('aljihad_tv_device_id');
+                    if (stored) return stored.trim();
+                    stored = 'TV_MASJID_' + Math.random().toString(36).substring(2, 7).toUpperCase();
+                    localStorage.setItem('aljihad_tv_device_id', stored);
+                    return stored;
+                }
+            } catch (e) {}
+            return 'TV_MASJID_UTAMA';
+        },
+
+        /**
          * Kirim konfirmasi penerimaan & penerapan data dari layar TV (TV Acknowledgment)
          * Memastikan pengurus mengetahui secara pasti bahwa layar TV telah menerapkan event tersebut
          */
@@ -2233,9 +2255,10 @@
             try {
                 const channel = this.getRemoteChannel();
                 if (!channel) return;
+                const devId = deviceId || this.getTvDeviceId();
                 const ackPayload = {
                     type: 'TV_ACK',
-                    device_id: deviceId || 'TV_MASJID_UTAMA',
+                    device_id: devId,
                     event_id: eventId,
                     table: table,
                     action: action,
@@ -2280,9 +2303,10 @@
         onDataChange(callback) {
             if (typeof callback !== 'function') return null;
 
-            // Debounce per-tabel dan deduplikasi cerdas multi-track
+            // Debounce per-tabel dan deduplikasi cerdas multi-track dengan pengumpulan baris (Batch Buffer)
             const debounceTimers = new Map();
             const recentSignatures = new Map();
+            const tableEventQueues = new Map();
 
             const safeTrigger = (evt) => {
                 if (!evt) return;
@@ -2308,19 +2332,71 @@
                 }
                 recentSignatures.set(dataHash, now);
 
+                // Kumpulkan seluruh perubahan baris per tabel dalam debounce window (Batch Buffer)
+                if (!tableEventQueues.has(table)) {
+                    tableEventQueues.set(table, []);
+                }
+                const queue = tableEventQueues.get(table);
+                if (rowId) {
+                    const existingIdx = queue.findIndex(item => {
+                        const itemRowId = (item.data && (item.data.id || item.data.tanggal || item.data.key)) || '';
+                        return itemRowId && String(itemRowId) === String(rowId);
+                    });
+                    if (existingIdx >= 0) {
+                        queue[existingIdx] = evt; // Perbarui baris yang sama dengan data mutakhir
+                    } else {
+                        queue.push(evt); // Kumpulkan baris berbeda ke dalam antrean
+                    }
+                } else {
+                    queue.push(evt);
+                }
+
                 // Debounce terisolasi per-tabel (80ms):
-                // Perubahan tabel 'jadwal_sholat' dan 'sholat_jumat' yang tiba berdekatan tidak saling membatalkan
+                // Mengumpulkan seluruh perubahan baris dalam tabel dan mengeksekusi semua event tanpa terlewat
                 if (debounceTimers.has(table)) {
                     clearTimeout(debounceTimers.get(table));
                 }
 
                 const timer = setTimeout(() => {
                     debounceTimers.delete(table);
-                    try {
-                        callback(evt);
-                    } catch (err) {
-                        console.error(`[SupabaseDB.onDataChange] Callback error on table ${table}:`, err);
-                    }
+                    const eventsToDispatch = tableEventQueues.get(table) || [];
+                    tableEventQueues.delete(table);
+
+                    eventsToDispatch.forEach(item => {
+                        try {
+                            const enriched = Object.assign({}, item, {
+                                batch: eventsToDispatch,
+                                batch_count: eventsToDispatch.length
+                            });
+                            callback(enriched);
+
+                            // Jika berada di iframe, konfirmasikan render ke window induk setelah repaint
+                            if (isInsideIframe && enriched.event_id) {
+                                try {
+                                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                                    if (typeof window.requestAnimationFrame === 'function') {
+                                        window.requestAnimationFrame(() => {
+                                            window.parent.postMessage({
+                                                type: 'SLIDE_RENDER_CONFIRMED',
+                                                event_id: enriched.event_id,
+                                                table: enriched.table || table,
+                                                timestamp: Date.now()
+                                            }, targetOrigin);
+                                        });
+                                    } else {
+                                        window.parent.postMessage({
+                                            type: 'SLIDE_RENDER_CONFIRMED',
+                                            event_id: enriched.event_id,
+                                            table: enriched.table || table,
+                                            timestamp: Date.now()
+                                        }, targetOrigin);
+                                    }
+                                } catch (e) {}
+                            }
+                        } catch (err) {
+                            console.error(`[SupabaseDB.onDataChange] Callback error on table ${table}:`, err);
+                        }
+                    });
                 }, 80);
 
                 debounceTimers.set(table, timer);
@@ -2511,10 +2587,11 @@
             const channel = this.getRemoteChannel();
             if (!channel) return;
 
+            const devId = (deviceInfo && deviceInfo.device_id) || this.getTvDeviceId();
             const payload = Object.assign({
                 type: 'tv-display',
-                device_id: 'TV_MASJID_UTAMA',
-                device_name: 'TV Layar Utama Masjid Jami\' Al-Jihad',
+                device_id: devId,
+                device_name: devId === 'TV_MASJID_UTAMA' ? 'TV Layar Utama Masjid Jami\' Al-Jihad' : `Smart TV Layar Masjid (${devId})`,
                 online_since: this._onlineSince || (this._onlineSince = new Date().toISOString()),
                 current_slide: 'slides/utama.html',
                 currentSlide: 'slides/utama.html',

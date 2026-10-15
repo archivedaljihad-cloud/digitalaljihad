@@ -470,7 +470,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.84'), 'sw.js memiliki bumping versi cache terbaru v5.8.84');
+assert(swContent.includes('aljihad-signage-v5.8.85'), 'sw.js memiliki bumping versi cache terbaru v5.8.85');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -526,6 +526,9 @@ assert(supabaseDbContent.includes('safeRestMutation'), 'supabase-db.js memiliki 
 assert(supabaseDbContent.includes("return=representation"), 'supabase-db.js meminta representasi baris dari Supabase untuk verifikasi rowsAffected > 0');
 assert(supabaseDbContent.includes('cloudConfirmed'), 'supabase-db.js memverifikasi konfirmasi cloud sebelum melaporkan status sukses');
 assert(supabaseDbContent.includes('debounceTimers = new Map()'), 'supabase-db.js memisahkan timer debounce per-tabel agar mutasi dua tabel tidak saling membatalkan');
+assert(supabaseDbContent.includes('tableEventQueues = new Map()'), 'supabase-db.js memiliki antrean batch buffer per-tabel agar seluruh baris mutasi tersampaikan');
+assert(supabaseDbContent.includes('getTvDeviceId'), 'supabase-db.js mendukung identifikasi dinamis perangkat TV Display');
+assert(indexHtmlContent.includes('SLIDE_RENDER_CONFIRMED'), 'index.html mendengarkan konfirmasi render selesai dari slide iframe');
 assert(supabaseDbContent.includes('recentSignatures = new Map()'), 'supabase-db.js memiliki ring buffer deduplikasi multi-track 250ms');
 assert(supabaseDbContent.includes('sendTvAcknowledgment') && supabaseDbContent.includes('onTvAcknowledgment'), 'supabase-db.js memiliki protokol acknowledgment (ACK) dua arah TV Display');
 assert(indexHtmlContent.includes('isPrayerModeActive'), 'index.html memiliki proteksi mode sholat/Yaasiin/kajian aktif agar tidak terganggu reload saat data berubah');
@@ -533,6 +536,7 @@ assert(supabaseDbContent.includes('event.origin !== myOrigin'), 'supabase-db.js 
 assert(petugasHtmlContent.includes('toast-saving') && petugasHtmlContent.includes('toast-tv'), 'petugas.html memiliki indikator 4 status UI (saving, cloudConfirmed, error, tv_synced)');
 assert(modeinputHtmlContent.includes('toast-saving') && modeinputHtmlContent.includes('toast-tv'), 'modeinput.html memiliki indikator 4 status UI (saving, cloudConfirmed, error, tv_synced)');
 assert(swContent.includes('Promise.allSettled'), 'sw.js mengeliminasi all-or-nothing cache install dengan Promise.allSettled');
+assert(swContent.includes('caches.delete(CACHE_NAME)') && swContent.includes('throw new Error'), 'sw.js membatalkan instalasi dan membersihkan cache jika aset inti gagal diprecache');
 
 // Sandbox Test Logika Realtime & Mutasi:
 // 1. Uji simulasi respon HTTP 403 (Forbidden / RLS Rejection)
@@ -586,6 +590,33 @@ mockHandleMultiTrack(testSig, 1000); // Track 1: Broadcast
 mockHandleMultiTrack(testSig, 1020); // Track 2: Postgres Change
 mockHandleMultiTrack(testSig, 1040); // Track 3: Local PostMessage
 assert(executedEvents === 1, 'Realtime Engine: Multi-track churn dalam 250ms berhasil dideduplikasi menjadi tepat 1 eksekusi');
+
+// 5. Uji simulasi per-tabel batch queue (dua baris berbeda pada tabel yang sama diproses seluruhnya)
+const mockTableQueue = new Map();
+const mockDebounceTimers = new Map();
+let mockReceivedRows = [];
+
+function mockTriggerRow(table, rowId, rowData) {
+    if (!mockTableQueue.has(table)) mockTableQueue.set(table, []);
+    const q = mockTableQueue.get(table);
+    q.push({ table, rowId, rowData });
+
+    if (mockDebounceTimers.has(table)) clearTimeout(mockDebounceTimers.get(table));
+    mockDebounceTimers.set(table, setTimeout(() => {
+        const rows = mockTableQueue.get(table) || [];
+        mockTableQueue.delete(table);
+        rows.forEach(r => mockReceivedRows.push(r));
+    }, 15));
+}
+
+mockTriggerRow('keuangan', 101, { nominal: 50000 });
+mockTriggerRow('keuangan', 102, { nominal: 100000 });
+
+// Jalankan timer synchronous mock check
+setTimeout(() => {
+    assert(mockReceivedRows.length === 2, 'Realtime Engine: Dua baris berbeda pada tabel yang sama keduanya berhasil diterima tanpa terpotong');
+    assert(mockReceivedRows[0].rowId === 101 && mockReceivedRows[1].rowId === 102, 'Realtime Engine: Urutan baris mutasi pertama dan kedua terjaga utuh');
+}, 30);
 
 // -------------------------------------------------------------
 // HASIL AKHIR
