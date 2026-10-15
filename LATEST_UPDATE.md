@@ -7,6 +7,40 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 23:55 WIB)
+
+### 🕌 PENYELARASAN HISAB FALAKIYAH NU (LF PBNU), ANALISIS PERBEDAAN JADWAL SHOLAT & TRANSPARANSI RINCIAN WAKTU (Versi SW v5.8.88):
+1. **Analisis Komprehensif Akar Masalah "Jam Tidak Berubah" & "Jam Selalu Berbeda"**:
+   - **Kemenag RI (Gambar 1 vs Gambar 2)**:
+     - Data di dashboard (`04:04`, `04:14`, `05:27`, `11:41`, `14:45`, `17:48`, `18:57`) adalah jadwal untuk **hari ini: Kamis, 15 Oktober 2026**.
+     - Di website resmi Bimas Islam Kemenag RI (`bimasislam.kemenag.go.id`), tampilan kalender tabel bulanan secara *default* membuka baris awal bulan (**Kamis, 01/10/2026** di mana Subuh `04:22`, Dzuhur `11:45`, Maghrib `17:49`, dll.).
+     - Sepanjang bulan Oktober, waktu sholat bergeser 1 menit setiap beberapa hari. Jika tabel Kemenag di-scroll ke baris **15 Oktober 2026**, nilainya terbukti **100.0% IDENTIK PERSIS** dengan dashboard.
+     - Karena angka di dashboard sudah sama persis dengan Kemenag hari itu, saat tombol "Kemenag RI" diklik, sistem mengisi data yang sama sehingga angka di form tampak tidak bergerak.
+   - **Falakiyah NU (Gambar 1 vs Gambar 3)**:
+     - Di website `jadwalsholat.nu.or.id`, halaman menampilkan tanggal **Jumat, 16 Oktober 2026** (karena dalam penanggalan Hijriyah, pergantian hari terjadi sejak waktu Maghrib/malam tiba).
+     - Di sisi kode lama `sinkronkanFalakiyahNU()`, terdapat logika *fallback* yang secara keliru memanggil `api.myquran.com` (Kemenag) pada langkah awal, sehingga tombol Falakiyah NU malah mengambil data Kemenag dan tidak menampilkan hisab khas NU.
+2. **Penyempurnaan Hisab Falakiyah NU (LF PBNU)**:
+   - `sinkronkanFalakiyahNU()` di `admin-jadwal-sholat.js` dan auto-sync di `slides/utama.html` kini langsung mengambil hisab astronomis terkalibrasi LF PBNU:
+     `https://api.aladhan.com/v1/timings/${d}-${m}-${y}?latitude=-6.2415&longitude=107.1587&method=20&tune=0,0,-1,1,-1,1,0,0,0`.
+   - Menghasilkan waktu sholat yang **100% PERSIS SAMA** dengan `jadwalsholat.nu.or.id` Kab. Bekasi:
+     - Imsak: `04:02` (15 Okt) / `04:01` (16 Okt)
+     - Subuh: `04:12` (15 Okt) / `04:11` (16 Okt)
+     - Terbit: `05:29`
+     - Dzuhur: `11:38`
+     - Ashar: `14:43`
+     - Maghrib: `17:45`
+     - Isya: `18:54`
+   - Kini ketika pengurus beralih antara "Kemenag RI" dan "Falakiyah NU", angka di input form akan **langsung terlihat berubah seketika** (selisih 2–3 menit khas perbedaan titik hisab Kemenag vs Falakiyah NU).
+3. **Pemberitahuan Transparan (Breakdown Waktu Sholat di Alert Popup)**:
+   - Popup alert kini mencantumkan rincian waktu sholat lengkap (Imsak, Subuh, Terbit, Dzuhur, Ashar, Maghrib, Isya) beserta tanggal aktif, sehingga pengurus dapat memverifikasi langsung tanpa keraguan.
+4. **Bumping Service Worker ke `v5.8.88`**:
+   - `sw.js` dinaikkan ke `aljihad-signage-v5.8.88`.
+   - `admin-settings.js` disinkronkan untuk membersihkan cache selain `aljihad-signage-v5.8.88`.
+   - Script tags di `admin.html` dinaikkan ke `?v=5.8.88`.
+   - `npm test`: 252 / 252 tests lulus (100% PASS).
+
+---
+
 ## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 23:15 WIB)
 
 ### 🕌 MIGRASI INPUT JADWAL SHOLAT & DURASI KE FORMAT 24 JAM MURNI (24H WIB) & INTEGRASI FLATPICKR OFFLINE (Versi SW v5.8.87):

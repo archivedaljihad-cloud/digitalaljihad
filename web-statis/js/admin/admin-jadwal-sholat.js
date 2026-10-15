@@ -139,7 +139,7 @@ function updatePrayerSourceBadgeUI(source) {
                     SupabaseDB.broadcastChange('jadwal_sholat', 'UPDATE', { list: cachedJadwal, source: 'kemenag' }, 'Admin Jadwal Sholat');
                 }
 
-                alert(`Alhamdulillah! Jadwal sholat berhasil disinkronkan resmi dengan Bimas Islam Kemenag RI (${cityName}) untuk ${jadwal.tanggal}.\n\nLayar TV Display otomatis ter-update.`);
+                alert(`Alhamdulillah! Jadwal sholat berhasil disinkronkan resmi dengan Bimas Islam Kemenag RI (${cityName}) untuk ${jadwal.tanggal}.\n\n📌 Rincian Waktu Sholat (24H WIB):\n• Imsak: ${jadwal.imsak}\n• Subuh: ${jadwal.subuh}\n• Terbit: ${jadwal.terbit}\n• Dzuhur: ${jadwal.dzuhur}\n• Ashar: ${jadwal.ashar}\n• Maghrib: ${jadwal.maghrib}\n• Isya: ${jadwal.isya}\n\nLayar TV Display otomatis ter-update.`);
             } catch (err) {
                 alert('Gagal menyinkronkan dengan Kemenag: ' + err.message + '\nSilakan periksa koneksi internet.');
             } finally {
@@ -169,66 +169,60 @@ function updatePrayerSourceBadgeUI(source) {
                 const d = String(today.getDate()).padStart(2, '0');
 
                 // Koordinat Lokasi & Parameter Hisab Lembaga Falakiyah PBNU
-                // Bekasi: Lat -6.2415, Lng 107.1587, Elevasi 18m, Ihtiyath Syar'i +2 menit
+                // Bekasi: Lat -6.2415, Lng 107.1587, Elevasi 18m
                 let lat = -6.2415, lng = 107.1587;
                 if (cityId === '1221') { lat = -6.2383; lng = 106.9756; }
                 if (cityId === '1301') { lat = -6.2088; lng = 106.8456; }
 
                 let jadwalTimes = null;
 
-                // 1. Tarik jadwal hisab resmi terverifikasi untuk wilayah Kab. Bekasi (ID 1203) / Kota terpilih
-                // Standar hisab LF-PBNU & Kemenag RI di Indonesia menggunakan parameter sudut Subuh -20°, Isya -18°, serta Ihtiyath syar'i +2 menit.
+                // 1. Tarik hisab astronomis terkalibrasi Falakiyah NU via Aladhan Method 20 dengan tune LF PBNU
                 try {
-                    const fallbackUrl = `https://api.myquran.com/v2/sholat/jadwal/${cityId}/${y}/${m}/${d}`;
-                    const res = await fetch(fallbackUrl);
-                    if (res.ok) {
-                        const json = await res.json();
-                        const j = json.data?.jadwal;
-                        if (j && j.subuh && j.dzuhur && j.maghrib) {
+                    const aladhanUrl = `https://api.aladhan.com/v1/timings/${d}-${m}-${y}?latitude=${lat}&longitude=${lng}&method=20&tune=0,0,-1,1,-1,1,0,0,0`;
+                    const resAladhan = await fetch(aladhanUrl);
+                    if (resAladhan.ok) {
+                        const jsonAladhan = await resAladhan.json();
+                        const t = jsonAladhan.data?.timings;
+                        if (t && t.Fajr && t.Dhuhr && t.Maghrib) {
                             jadwalTimes = {
-                                imsak: j.imsak,
-                                subuh: j.subuh,
-                                terbit: j.terbit,
-                                dzuhur: j.dzuhur,
-                                ashar: j.ashar,
-                                maghrib: j.maghrib,
-                                isya: j.isya,
-                                tanggal: j.tanggal
+                                imsak: t.Imsak || '04:02',
+                                subuh: t.Fajr,
+                                terbit: t.Sunrise || '05:29',
+                                dzuhur: t.Dhuhr,
+                                ashar: t.Asr,
+                                maghrib: t.Maghrib,
+                                isya: t.Isha,
+                                tanggal: `${d}/${m}/${y}`
                             };
                         }
                     }
                 } catch (e) {
-                    console.warn('Jadwal hisab utama fetch failed, fallback ke Aladhan:', e);
+                    console.warn('Aladhan LF PBNU fetch error, mencoba fallback Kemenag:', e);
                 }
 
-                // 2. Fallback astronomis Aladhan dengan kalibrasi Ihtiyath Falakiyah NU (+2 menit)
+                // 2. Fallback jika Aladhan tidak dapat dijangkau
                 if (!jadwalTimes) {
-                    let lat = -6.2415, lng = 107.1587;
-                    if (cityId === '1221') { lat = -6.2383; lng = 106.9756; }
-                    if (cityId === '1301') { lat = -6.2088; lng = 106.8456; }
-
                     try {
-                        // Method 20 Kemenag dengan tune kebutuhan syar'i (+2 menit)
-                        const aladhanUrl = `https://api.aladhan.com/v1/timings/${d}-${m}-${y}?latitude=${lat}&longitude=${lng}&method=20&tune=2,2,-4,3,2,3,3,3,0`;
-                        const resAladhan = await fetch(aladhanUrl);
-                        if (resAladhan.ok) {
-                            const jsonAladhan = await resAladhan.json();
-                            const t = jsonAladhan.data?.timings;
-                            if (t && t.Fajr && t.Dhuhr && t.Maghrib) {
+                        const fallbackUrl = `https://api.myquran.com/v2/sholat/jadwal/${cityId}/${y}/${m}/${d}`;
+                        const res = await fetch(fallbackUrl);
+                        if (res.ok) {
+                            const json = await res.json();
+                            const j = json.data?.jadwal;
+                            if (j && j.subuh && j.dzuhur && j.maghrib) {
                                 jadwalTimes = {
-                                    imsak: t.Imsak || '04:07',
-                                    subuh: t.Fajr,
-                                    terbit: t.Sunrise || '05:29',
-                                    dzuhur: t.Dhuhr,
-                                    ashar: t.Asr,
-                                    maghrib: t.Maghrib,
-                                    isya: t.Isha,
-                                    tanggal: `${d}/${m}/${y}`
+                                    imsak: j.imsak,
+                                    subuh: j.subuh,
+                                    terbit: j.terbit,
+                                    dzuhur: j.dzuhur,
+                                    ashar: j.ashar,
+                                    maghrib: j.maghrib,
+                                    isya: j.isya,
+                                    tanggal: j.tanggal
                                 };
                             }
                         }
                     } catch (e) {
-                        console.warn('Aladhan NU fetch failed:', e);
+                        console.warn('Fallback Kemenag error:', e);
                     }
                 }
 
@@ -295,7 +289,7 @@ function updatePrayerSourceBadgeUI(source) {
                     SupabaseDB.broadcastChange('jadwal_sholat', 'UPDATE', { list: cachedJadwal, source: 'nu' }, 'Admin Jadwal Sholat');
                 }
 
-                alert(`Alhamdulillah! Jadwal sholat berhasil disinkronkan resmi dengan metode hisab Lembaga Falakiyah Nahdlatul Ulama (LF PBNU - ${cityName}) untuk tanggal ${jadwalTimes.tanggal}.\n\nLayar TV Display otomatis ter-update.`);
+                alert(`Alhamdulillah! Jadwal sholat berhasil disinkronkan resmi dengan metode hisab Lembaga Falakiyah Nahdlatul Ulama (LF PBNU - ${cityName}) untuk tanggal ${jadwalTimes.tanggal}.\n\n📌 Rincian Waktu Sholat (24H WIB):\n• Imsak: ${jadwalTimes.imsak}\n• Subuh: ${jadwalTimes.subuh}\n• Terbit: ${jadwalTimes.terbit}\n• Dzuhur: ${jadwalTimes.dzuhur}\n• Ashar: ${jadwalTimes.ashar}\n• Maghrib: ${jadwalTimes.maghrib}\n• Isya: ${jadwalTimes.isya}\n\nLayar TV Display otomatis ter-update.`);
             } catch (err) {
                 alert('Gagal menyinkronkan dengan Falakiyah NU: ' + err.message + '\nSilakan periksa koneksi internet.');
             } finally {

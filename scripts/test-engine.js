@@ -470,7 +470,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.87'), 'sw.js memiliki bumping versi cache terbaru v5.8.87');
+assert(swContent.includes('aljihad-signage-v5.8.88'), 'sw.js memiliki bumping versi cache terbaru v5.8.88');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
