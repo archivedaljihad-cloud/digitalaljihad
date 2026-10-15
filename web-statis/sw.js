@@ -2,7 +2,7 @@
    SERVICE WORKER - AL-JIHAD DIGITAL SIGNAGE PWA
    Offline-First Resiliency & Intelligent Caching
    ===================================================== */
-const CACHE_NAME = 'aljihad-signage-v5.8.83';
+const CACHE_NAME = 'aljihad-signage-v5.8.84';
 const STATIC_ASSETS = [
     './',
     'index.html',
@@ -90,15 +90,32 @@ const STATIC_ASSETS = [
     'manifest.json'
 ];
 
-// 1. Install Event: Cache Core Assets
+// 1. Install Event: Resilient Precaching of Static Assets
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            console.log('[SW] Pre-caching all static assets for offline resilience');
-            return cache.addAll(STATIC_ASSETS).catch((err) => {
-                console.warn('[SW] Some assets failed to pre-cache (non-fatal):', err);
-            });
-        }).then(() => self.skipWaiting())
+        caches.open(CACHE_NAME).then(async (cache) => {
+            console.log('[SW] Pre-caching static assets with resilient allSettled strategy');
+            // Caching per-aset: kegagalan 1 aset tidak membatalkan penyimpanan aset-aset lainnya
+            const results = await Promise.allSettled(
+                STATIC_ASSETS.map((url) =>
+                    cache.add(url).catch((err) => {
+                        console.warn('[SW] Aset gagal di-precache (toleransi non-fatal):', url, err.message);
+                        throw err;
+                    })
+                )
+            );
+
+            // Verifikasi integritas aset inti sebelum skipWaiting
+            const CORE_ASSETS = ['index.html', 'prayer-mode.html', 'css/display-theme.css', 'js/supabase-db.js', 'slides/utama.html'];
+            const failedCore = results.filter((res, idx) => res.status === 'rejected' && CORE_ASSETS.includes(STATIC_ASSETS[idx]));
+
+            if (failedCore.length === 0) {
+                // Seluruh aset inti berhasil dicache dengan utuh
+                await self.skipWaiting();
+            } else {
+                console.warn('[SW] Peringatan: Aset inti gagal dicache. Mempertahankan cache versi stabil sebelumnya.');
+            }
+        })
     );
 });
 

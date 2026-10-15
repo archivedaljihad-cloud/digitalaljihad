@@ -1511,14 +1511,15 @@
                     const f1 = document.getElementById('frame1');
                     const f2 = document.getElementById('frame2');
                     const pf = document.getElementById('prayerFrame');
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
                     if (f1 && f1.contentWindow) {
-                        f1.contentWindow.postMessage(message, '*');
+                        f1.contentWindow.postMessage(message, targetOrigin);
                     }
                     if (f2 && f2.contentWindow) {
-                        f2.contentWindow.postMessage(message, '*');
+                        f2.contentWindow.postMessage(message, targetOrigin);
                     }
                     if (pf && pf.contentWindow) {
-                        pf.contentWindow.postMessage(message, '*');
+                        pf.contentWindow.postMessage(message, targetOrigin);
                     }
                 } catch(e) {
                     console.warn('[Display TV] Broadcast to active frames warning:', e);
@@ -1674,23 +1675,36 @@
                     const isCurrentSlideRelated = relatedKeywords.some(kw => currentUrl.includes(kw));
 
                     if (isCurrentSlideRelated) {
-                        const f1 = document.getElementById('frame1');
-                        const f2 = document.getElementById('frame2');
-                        const payload = {
-                            type: 'DATA_UPDATED',
-                            table: table,
-                            action: action,
-                            data: data,
-                            jumatPetugas: jumatPetugas,
-                            settings: settings,
-                            force_reload: true
-                        };
-                        if (f1 && f1.contentWindow) {
-                            try { f1.contentWindow.postMessage(payload, '*'); } catch(e) {}
+                        // GUARD: Jika TV sedang dalam mode sholat aktif, mode yaasiin, atau mode kajian interaktif,
+                        // jangan mengganggu tampilan fullscreen atau merestart countdown dengan reload frame!
+                        if (isPrayerModeActive || isYasinModeActive || isKajianModeActive) {
+                            console.log('[Display TV] Realtime update diterima di background, menjaga mode aktif (Sholat/Yasin/Kajian)');
+                        } else {
+                            const f1 = document.getElementById('frame1');
+                            const f2 = document.getElementById('frame2');
+                            const payload = {
+                                type: 'DATA_UPDATED',
+                                event_id: event.event_id,
+                                table: table,
+                                action: action,
+                                data: data,
+                                jumatPetugas: jumatPetugas,
+                                settings: settings,
+                                force_reload: true
+                            };
+                            const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                            if (f1 && f1.contentWindow) {
+                                try { f1.contentWindow.postMessage(payload, targetOrigin); } catch(e) {}
+                            }
+                            if (f2 && f2.contentWindow) {
+                                try { f2.contentWindow.postMessage(payload, targetOrigin); } catch(e) {}
+                            }
                         }
-                        if (f2 && f2.contentWindow) {
-                            try { f2.contentWindow.postMessage(payload, '*'); } catch(e) {}
-                        }
+                    }
+
+                    // 4. Kirim Konfirmasi Penerimaan TV (TV Acknowledgment) ke Cloud
+                    if (event.event_id && window.SupabaseDB && typeof window.SupabaseDB.sendTvAcknowledgment === 'function') {
+                        window.SupabaseDB.sendTvAcknowledgment('TV_MASJID_UTAMA', event.event_id, table, 'APPLIED');
                     }
                 } catch (e) {
                     console.warn('[Display TV] Quick refresh active slide error:', e);
@@ -1703,6 +1717,7 @@
             } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
                 SupabaseDB.subscribeRealtime((payload) => {
                     handleUniversalDataUpdate({
+                        event_id: payload.event_id,
                         table: payload.table,
                         action: payload.eventType || 'UPDATE',
                         data: payload.new || payload.old || {}

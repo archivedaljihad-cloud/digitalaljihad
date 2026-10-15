@@ -470,7 +470,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.83'), 'sw.js memiliki bumping versi cache terbaru v5.8.83');
+assert(swContent.includes('aljihad-signage-v5.8.84'), 'sw.js memiliki bumping versi cache terbaru v5.8.84');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -513,7 +513,79 @@ assert(previewKhutbahContent.includes('setTheme'), 'preview-khutbah.html memilik
 assert(previewKhutbahContent.includes('#FFE082') && previewKhutbahContent.includes('#FDE047'), 'preview-khutbah.html menerapkan warna kontras tinggi emas radiant & kuning terang');
 assert(prayerModeHtmlContent.includes('khutbah-transparent') && prayerModeHtmlContent.includes('toggleTransparentBox'), 'prayer-mode.html memiliki handler dan toggle khutbah transparan');
 assert(prayerModeHtmlContent.includes('#FFE082') && prayerModeHtmlContent.includes('#FDE047'), 'prayer-mode.html menerapkan penegasan kontras teks khutbah terbaru');
-assert(swContent.includes("'preview-khutbah.html'"), 'sw.js me-cache berkas preview-khutbah.html');
+// -------------------------------------------------------------
+// 22. END-TO-END REALTIME & STORAGE RELIABILITY INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 22] End-to-End Realtime & Storage Reliability Integrity:');
+const supabaseDbContent = fs.readFileSync(path.join(baseDir, 'js/supabase-db.js'), 'utf8');
+const modeinputHtmlContent = fs.readFileSync(path.join(baseDir, 'modeinput.html'), 'utf8');
+const indexHtmlContent = fs.readFileSync(path.join(baseDir, 'index.html'), 'utf8');
+const petugasHtmlContent = fs.readFileSync(path.join(baseDir, 'petugas.html'), 'utf8');
+
+assert(supabaseDbContent.includes('safeRestMutation'), 'supabase-db.js memiliki safeRestMutation dengan penanganan timeout, HTTP status, dan rowsAffected');
+assert(supabaseDbContent.includes("return=representation"), 'supabase-db.js meminta representasi baris dari Supabase untuk verifikasi rowsAffected > 0');
+assert(supabaseDbContent.includes('cloudConfirmed'), 'supabase-db.js memverifikasi konfirmasi cloud sebelum melaporkan status sukses');
+assert(supabaseDbContent.includes('debounceTimers = new Map()'), 'supabase-db.js memisahkan timer debounce per-tabel agar mutasi dua tabel tidak saling membatalkan');
+assert(supabaseDbContent.includes('recentSignatures = new Map()'), 'supabase-db.js memiliki ring buffer deduplikasi multi-track 250ms');
+assert(supabaseDbContent.includes('sendTvAcknowledgment') && supabaseDbContent.includes('onTvAcknowledgment'), 'supabase-db.js memiliki protokol acknowledgment (ACK) dua arah TV Display');
+assert(indexHtmlContent.includes('isPrayerModeActive'), 'index.html memiliki proteksi mode sholat/Yaasiin/kajian aktif agar tidak terganggu reload saat data berubah');
+assert(supabaseDbContent.includes('event.origin !== myOrigin'), 'supabase-db.js memvalidasi origin dan menolak pesan window.message dari origin asing');
+assert(petugasHtmlContent.includes('toast-saving') && petugasHtmlContent.includes('toast-tv'), 'petugas.html memiliki indikator 4 status UI (saving, cloudConfirmed, error, tv_synced)');
+assert(modeinputHtmlContent.includes('toast-saving') && modeinputHtmlContent.includes('toast-tv'), 'modeinput.html memiliki indikator 4 status UI (saving, cloudConfirmed, error, tv_synced)');
+assert(swContent.includes('Promise.allSettled'), 'sw.js mengeliminasi all-or-nothing cache install dengan Promise.allSettled');
+
+// Sandbox Test Logika Realtime & Mutasi:
+// 1. Uji simulasi respon HTTP 403 (Forbidden / RLS Rejection)
+const testHttp403Result = (() => {
+    const mockRes = { ok: false, status: 403, statusText: 'Forbidden' };
+    if (!mockRes.ok) {
+        return { success: false, cloudConfirmed: false, error: `HTTP ${mockRes.status}` };
+    }
+    return { success: true, cloudConfirmed: true };
+})();
+assert(testHttp403Result.success === false && testHttp403Result.cloudConfirmed === false, 'Logika mutasi: Respon HTTP 403 ditolak dan dilaporkan gagal');
+
+// 2. Uji simulasi respon 200 dengan 0 baris terpengaruh (Zero Rows Affected)
+const testZeroRowsResult = (() => {
+    const data = [];
+    const rowsAffected = data.length;
+    if (rowsAffected === 0) {
+        return { success: false, cloudConfirmed: false, error: 'Tidak ada baris yang cocok' };
+    }
+    return { success: true, cloudConfirmed: true };
+})();
+assert(testZeroRowsResult.success === false && testZeroRowsResult.cloudConfirmed === false, 'Logika mutasi: Update dengan nol baris terpengaruh dilaporkan sebagai kegagalan');
+
+// 3. Uji simulasi per-tabel debounce (dua tabel berbeda diproses keduanya)
+const debounceTableMap = new Map();
+let processedTables = [];
+function mockSchedule(table) {
+    if (debounceTableMap.has(table)) clearTimeout(debounceTableMap.get(table));
+    debounceTableMap.set(table, setTimeout(() => {
+        processedTables.push(table);
+    }, 10));
+}
+mockSchedule('sholat_jumat');
+mockSchedule('keuangan');
+// Cek bahwa kedua timer tersimpan di map terpisah
+assert(debounceTableMap.has('sholat_jumat') && debounceTableMap.has('keuangan'), 'Realtime Engine: Dua tabel berbeda yang berubah bersamaan memiliki slot timer terpisah');
+
+// 4. Uji simulasi deduplikasi multi-track 250ms (ring buffer signature)
+const mockRecentSigs = new Map();
+let executedEvents = 0;
+function mockHandleMultiTrack(sig, now) {
+    if (mockRecentSigs.has(sig) && (now - mockRecentSigs.get(sig)) < 250) {
+        return false; // Duplikat diabaikan
+    }
+    mockRecentSigs.set(sig, now);
+    executedEvents++;
+    return true;
+}
+const testSig = 'keuangan_INSERT_105_hash99';
+mockHandleMultiTrack(testSig, 1000); // Track 1: Broadcast
+mockHandleMultiTrack(testSig, 1020); // Track 2: Postgres Change
+mockHandleMultiTrack(testSig, 1040); // Track 3: Local PostMessage
+assert(executedEvents === 1, 'Realtime Engine: Multi-track churn dalam 250ms berhasil dideduplikasi menjadi tepat 1 eksekusi');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

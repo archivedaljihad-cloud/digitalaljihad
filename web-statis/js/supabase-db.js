@@ -109,6 +109,116 @@
             return await res.json();
         },
 
+        /**
+         * Mutasi REST Supabase yang Aman & Tervalidasi (PATCH, POST, DELETE)
+         * Memastikan res.ok, status HTTP, serta memverifikasi baris terpengaruh (rowsAffected > 0).
+         * Menangani timeout jaringan dan mengembalikan status cloudConfirmed secara jujur.
+         */
+        async safeRestMutation(endpoint, method, payload, options = {}) {
+            const cfg = getSbConfig();
+            if (!cfg || !cfg.url) {
+                return {
+                    success: false,
+                    cloudConfirmed: false,
+                    status: 0,
+                    error: 'Konfigurasi Supabase tidak ditemukan'
+                };
+            }
+
+            const headers = Object.assign({
+                'apikey': cfg.anonKey,
+                'Authorization': `Bearer ${cfg.anonKey}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=representation'
+            }, options.headers || {});
+
+            const cleanPath = endpoint.startsWith('http') ? endpoint : `${cfg.url}/rest/v1/${endpoint.replace(/^\//, '')}`;
+            
+            let controller = null;
+            let timeoutId = null;
+            if (typeof AbortController !== 'undefined') {
+                controller = new AbortController();
+                timeoutId = setTimeout(() => {
+                    try { controller.abort(); } catch(e) {}
+                }, options.timeoutMs || 10000);
+            }
+
+            try {
+                const fetchOpts = {
+                    method: String(method || 'POST').toUpperCase(),
+                    headers: headers
+                };
+                if (controller) {
+                    fetchOpts.signal = controller.signal;
+                }
+                if (payload !== undefined && payload !== null) {
+                    fetchOpts.body = typeof payload === 'string' ? payload : JSON.stringify(payload);
+                }
+
+                const res = await fetch(cleanPath, fetchOpts);
+                if (timeoutId) clearTimeout(timeoutId);
+
+                if (!res.ok) {
+                    let errMsg = `HTTP ${res.status}`;
+                    try {
+                        const errJson = await res.json();
+                        errMsg = errJson.message || errJson.hint || errJson.details || errMsg;
+                    } catch (e) {
+                        errMsg = `${res.status} ${res.statusText || 'Error'}`;
+                    }
+                    return {
+                        success: false,
+                        cloudConfirmed: false,
+                        status: res.status,
+                        error: errMsg,
+                        rowsAffected: 0,
+                        data: null
+                    };
+                }
+
+                let data = null;
+                try {
+                    data = await res.json();
+                } catch (e) {
+                    data = null;
+                }
+
+                const rows = Array.isArray(data) ? data : (data ? [data] : []);
+                const rowsAffected = rows.length;
+
+                // Khusus PATCH & DELETE: jika respons 200/204 tapi baris kosong, berarti filter tidak cocok (0 rows)
+                const isUpdateOrDelete = fetchOpts.method === 'PATCH' || fetchOpts.method === 'DELETE';
+                if (isUpdateOrDelete && rowsAffected === 0 && !options.allowZeroRows) {
+                    return {
+                        success: false,
+                        cloudConfirmed: false,
+                        status: res.status,
+                        rowsAffected: 0,
+                        error: 'Data target tidak ditemukan di cloud (0 baris terpengaruh)',
+                        data: []
+                    };
+                }
+
+                return {
+                    success: true,
+                    cloudConfirmed: true,
+                    status: res.status,
+                    rowsAffected: rowsAffected,
+                    data: data
+                };
+            } catch (err) {
+                if (timeoutId) clearTimeout(timeoutId);
+                const isAbort = err.name === 'AbortError';
+                return {
+                    success: false,
+                    cloudConfirmed: false,
+                    status: 0,
+                    isTimeout: isAbort,
+                    error: isAbort ? 'Waktu koneksi ke Supabase habis (Timeout 10s)' : (err.message || 'Kegagalan jaringan')
+                };
+            }
+        },
+
         // =========================================================================
         // SMART CACHE & EGRESS BANDWIDTH OPTIMIZER (Anti-Overquota Protection)
         // =========================================================================
@@ -388,33 +498,27 @@
             if (!key) return false;
             try {
                 const valStr = typeof value === 'string' ? value : JSON.stringify(value);
-                const headers = {
-                    'apikey': SUPABASE_CONFIG.anonKey,
-                    'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=representation'
-                };
-
-                const checkRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.${key}&select=id`, {
-                    headers: { 'apikey': SUPABASE_CONFIG.anonKey, 'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}` }
-                });
-                if (checkRes.ok) {
-                    const existing = await checkRes.json();
-                    if (existing && existing.length > 0) {
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?key=eq.${key}`, {
-                            method: 'PATCH',
-                            headers: headers,
-                            body: JSON.stringify({ value: valStr })
-                        });
-                        return true;
-                    }
+                const checkRes = await this.safeRestMutation(`app_settings?key=eq.${encodeURIComponent(key)}&select=id`, 'GET', null, { timeoutMs: 5000 });
+                
+                let mutationResult;
+                if (checkRes.success && Array.isArray(checkRes.data) && checkRes.data.length > 0) {
+                    mutationResult = await this.safeRestMutation(
+                        `app_settings?key=eq.${encodeURIComponent(key)}`,
+                        'PATCH',
+                        { value: valStr }
+                    );
+                } else {
+                    mutationResult = await this.safeRestMutation(
+                        'app_settings',
+                        'POST',
+                        { key: key, value: valStr }
+                    );
                 }
 
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings`, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({ key: key, value: valStr })
-                });
+                if (!mutationResult.success || !mutationResult.cloudConfirmed) {
+                    console.warn(`[SupabaseDB] Gagal saveSettingItem (${key}):`, mutationResult.error);
+                    return false;
+                }
                 return true;
             } catch (e) {
                 console.warn(`[SupabaseDB] Gagal saveSettingItem (${key}):`, e);
@@ -538,30 +642,17 @@
                 };
 
                 // 1. Simpan ke Tabel SQL sholat_jumat (PATCH jika tanggal sudah ada, POST jika baru)
+                let sqlSuccess = false;
                 try {
-                    const checkRows = await this.restFetch(`sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}&select=id`);
+                    const checkRows = await this.restFetch(`sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}&select=id`).catch(() => []);
                     if (Array.isArray(checkRows) && checkRows.length > 0) {
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}`, {
-                            method: 'PATCH',
-                            headers: {
-                                'apikey': SUPABASE_CONFIG.anonKey,
-                                'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                                'Content-Type': 'application/json',
-                                'Prefer': 'return=representation'
-                            },
-                            body: JSON.stringify(dbRowPayload)
-                        });
+                        const patchSqlRes = await this.safeRestMutation(`sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}`, 'PATCH', dbRowPayload);
+                        sqlSuccess = patchSqlRes.success && patchSqlRes.cloudConfirmed;
+                        if (!sqlSuccess) console.warn('[SupabaseDB] PATCH sholat_jumat gagal:', patchSqlRes.error);
                     } else {
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
-                            method: 'POST',
-                            headers: {
-                                'apikey': SUPABASE_CONFIG.anonKey,
-                                'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                                'Content-Type': 'application/json',
-                                'Prefer': 'return=representation'
-                            },
-                            body: JSON.stringify(dbRowPayload)
-                        });
+                        const postSqlRes = await this.safeRestMutation('sholat_jumat', 'POST', dbRowPayload);
+                        sqlSuccess = postSqlRes.success && postSqlRes.cloudConfirmed;
+                        if (!sqlSuccess) console.warn('[SupabaseDB] POST sholat_jumat gagal:', postSqlRes.error);
                     }
                 } catch (sqlErr) {
                     console.warn('[SupabaseDB] Error simpan sholat_jumat SQL:', sqlErr);
@@ -623,15 +714,8 @@
                     patchAppSettingsPayload.rotation_pages = updatedRotPages;
                 }
 
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(patchAppSettingsPayload)
-                }).catch(() => {});
+                const patchAppRes = await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', patchAppSettingsPayload);
+                const appSettingsSuccess = patchAppRes.success && patchAppRes.cloudConfirmed;
 
                 // 3. Sinkronkan juga ke pengumuman_jumat (id=9) agar tidak memuat nama petugas lama
                 try {
@@ -648,19 +732,15 @@
                         pjd.petugas.maklumat = maklumatOnly;
                         localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjd));
 
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.9`, {
-                            method: 'PATCH',
-                            headers: {
-                                'apikey': SUPABASE_CONFIG.anonKey,
-                                'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                value: JSON.stringify(pjd)
-                            })
-                        }).catch(() => {});
+                        await this.safeRestMutation('app_settings?id=eq.9', 'PATCH', { value: JSON.stringify(pjd) }, { allowZeroRows: true }).catch(() => {});
                     }
                 } catch (e) {}
+
+                // Validasi kegagalan penyimpanan: jika SQL dan app_settings sama-sama gagal
+                if (!sqlSuccess && !appSettingsSuccess) {
+                    console.error('[SupabaseDB] saveSholatJumat gagal ke cloud:', patchAppRes.error);
+                    return { success: false, cloudConfirmed: false, error: patchAppRes.error || 'Gagal menyimpan ke server' };
+                }
 
                 // 4. Update Local Caches
                 const unifiedResult = {
@@ -687,7 +767,7 @@
                     this.sendRemoteCommand('SYNC_JUMAT', unifiedResult);
                 }
 
-                return { success: true, data: unifiedResult };
+                return { success: true, cloudConfirmed: true, data: unifiedResult };
             } catch (err) {
                 console.error('[SupabaseDB] saveSholatJumat failed:', err);
                 return { success: false, error: err.message };
@@ -754,14 +834,8 @@
         async deleteTransaksiKas(id, table = 'keuangan') {
             if (!id) return false;
             try {
-                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${table}?id=eq.${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
-                    }
-                });
-                if (res.ok) {
+                const res = await this.safeRestMutation(`${table}?id=eq.${id}`, 'DELETE', null);
+                if (res.success && res.cloudConfirmed) {
                     if (typeof this.broadcastChange === 'function') {
                         this.broadcastChange(table, 'DELETE', { id }, 'Bendahara Unified');
                     }
@@ -782,7 +856,7 @@
          * @param {Object} payload { qurban_data, qurban_sapi, qurban_kambing, qurban_donatur, qurban_jam_sembelih, qurban_lokasi_sembelih }
          */
         async saveQurbanUnified(payload) {
-            if (!payload) return { success: false };
+            if (!payload) return { success: false, cloudConfirmed: false };
             try {
                 const qList = Array.isArray(payload.qurban_data) ? payload.qurban_data : [];
                 const updateObj = {
@@ -794,20 +868,14 @@
                     qurban_lokasi_sembelih: payload.qurban_lokasi_sembelih || "Halaman Belakang Masjid Jami' Al-Jihad"
                 };
 
-                localStorage.setItem('cached_qurban_data', JSON.stringify(qList));
+                const patchRes = await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', updateObj);
+                const itemOk = await this.saveSettingItem('cached_qurban_data', qList);
 
-                await Promise.all([
-                    this.saveSettingItem('cached_qurban_data', qList),
-                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                        method: 'PATCH',
-                        headers: {
-                            'apikey': SUPABASE_CONFIG.anonKey,
-                            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(updateObj)
-                    })
-                ]);
+                if (!patchRes.success || !patchRes.cloudConfirmed) {
+                    return { success: false, cloudConfirmed: false, error: patchRes.error || 'Gagal menyimpan data qurban ke cloud' };
+                }
+
+                localStorage.setItem('cached_qurban_data', JSON.stringify(qList));
 
                 if (typeof this.broadcastChange === 'function') {
                     this.broadcastChange('qurban', 'UPDATE', updateObj, 'Qurban Unified');
@@ -815,10 +883,10 @@
                 if (typeof this.sendRemoteCommand === 'function') {
                     this.sendRemoteCommand('SYNC_QURBAN', updateObj);
                 }
-                return { success: true, data: updateObj };
+                return { success: true, cloudConfirmed: true, data: updateObj };
             } catch (err) {
                 console.error('[SupabaseDB] saveQurbanUnified failed:', err);
-                return { success: false, error: err.message };
+                return { success: false, cloudConfirmed: false, error: err.message };
             }
         },
 
@@ -827,7 +895,7 @@
          * @param {Object} payload { malam_ke, imam, muadzin, kultum_penceramah, kultum_tema, bilal, infaq_tromol, ... }
          */
         async saveRamadhanUnified(payload) {
-            if (!payload) return { success: false };
+            if (!payload) return { success: false, cloudConfirmed: false };
             try {
                 let currentPetugas = {};
                 try {
@@ -844,8 +912,6 @@
                     bilal: payload.bilal || currentPetugas.bilal || '-'
                 });
 
-                localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(dataPetugas));
-
                 const patchBody = { ramadhan_petugas: dataPetugas };
 
                 // Jika ada data mutasi tromol baru yang disertakan
@@ -860,15 +926,12 @@
                     patchBody.ramadhan_infaq = infaqList;
                 }
 
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(patchBody)
-                });
+                const patchRes = await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', patchBody);
+                if (!patchRes.success || !patchRes.cloudConfirmed) {
+                    return { success: false, cloudConfirmed: false, error: patchRes.error || 'Gagal menyimpan data ramadhan ke cloud' };
+                }
+
+                localStorage.setItem('cached_ramadhan_petugas', JSON.stringify(dataPetugas));
 
                 if (typeof this.broadcastChange === 'function') {
                     this.broadcastChange('ramadhan', 'UPDATE', patchBody, 'Ramadhan Unified');
@@ -876,10 +939,10 @@
                 if (typeof this.sendRemoteCommand === 'function') {
                     this.sendRemoteCommand('SYNC_RAMADHAN', patchBody);
                 }
-                return { success: true, data: patchBody };
+                return { success: true, cloudConfirmed: true, data: patchBody };
             } catch (err) {
                 console.error('[SupabaseDB] saveRamadhanUnified failed:', err);
-                return { success: false, error: err.message };
+                return { success: false, cloudConfirmed: false, error: err.message };
             }
         },
 
@@ -1003,16 +1066,10 @@
                 localStorage.setItem('display_prayer_mode_jumat_duration', jumatDur);
 
                 // 3. Kirim PATCH ke Supabase dengan hanya kolom yang valid
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(dbPayload)
-                });
+                const patchRes = await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', dbPayload);
+                if (!patchRes.success || !patchRes.cloudConfirmed) {
+                    return { success: false, cloudConfirmed: false, error: patchRes.error || 'Gagal menyimpan jadwal sholat ke cloud' };
+                }
 
                 if (typeof this.broadcastChange === 'function') {
                     this.broadcastChange('app_settings', 'UPDATE', fullObj, 'Jadwal Sholat Unified');
@@ -1021,10 +1078,10 @@
                     this.sendRemoteCommand('SYNC_JADWAL_SHOLAT', fullObj);
                     this.sendRemoteCommand('UPDATE_SETTINGS', fullObj);
                 }
-                return { success: true, data: fullObj };
+                return { success: true, cloudConfirmed: true, data: fullObj };
             } catch (err) {
                 console.error('[SupabaseDB] saveJadwalSholatUnified failed:', err);
-                return { success: false, error: err.message };
+                return { success: false, cloudConfirmed: false, error: err.message };
             }
         },
 
@@ -1035,7 +1092,7 @@
          */
         async saveSettings(updatedFields) {
             if (!updatedFields || typeof updatedFields !== 'object') {
-                return { success: false, error: 'Payload tidak valid' };
+                return { success: false, cloudConfirmed: false, error: 'Payload tidak valid' };
             }
 
             // 1. Simpan langsung ke cache lokal browser
@@ -1083,34 +1140,35 @@
             // 3. Kirim update ke Cloud Supabase
             try {
                 if (SUPABASE_CONFIG && SUPABASE_CONFIG.url) {
-                    const headers = {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    };
+                    let hasError = false;
+                    let lastErrMsg = '';
 
                     // Update row 1 jika ada field row 1
                     if (Object.keys(row1Payload).length > 0) {
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                            method: 'PATCH',
-                            headers: headers,
-                            body: JSON.stringify(row1Payload)
-                        });
+                        const patchRes = await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', row1Payload);
+                        if (!patchRes.success || !patchRes.cloudConfirmed) {
+                            hasError = true;
+                            lastErrMsg = `Gagal update app_settings id=1: ${patchRes.error}`;
+                            console.warn('[SupabaseDB]', lastErrMsg);
+                        }
                     }
 
                     // Update / Upsert key-value items
                     for (const [key, val] of Object.entries(keyValuePayloads)) {
-                        await this.saveSettingItem(key, val);
+                        const ok = await this.saveSettingItem(key, val);
+                        if (!ok) {
+                            hasError = true;
+                            lastErrMsg = `Gagal menyimpan setting item "${key}"`;
+                        }
+                    }
+
+                    if (hasError) {
+                        return { success: false, cloudConfirmed: false, error: lastErrMsg };
                     }
 
                     // Sinkronkan juga baris cadangan jika rotation_interval berubah
                     if (updatedFields.rotation_interval) {
-                        fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=gt.1`, {
-                            method: 'PATCH',
-                            headers: headers,
-                            body: JSON.stringify({ rotation_interval: updatedFields.rotation_interval })
-                        }).catch(() => {});
+                        this.safeRestMutation('app_settings?id=gt.1', 'PATCH', { rotation_interval: updatedFields.rotation_interval }, { allowZeroRows: true }).catch(() => {});
                     }
 
                     // Kirim sinyal broadcast remote UPDATE_SETTINGS agar display TV langsung adopsi tanpa jeda
@@ -1121,13 +1179,14 @@
                     }
 
                     console.log('✅ [SupabaseDB] Sukses sinkronisasi settings ke cloud:', updatedFields);
-                    return { success: true };
+                    return { success: true, cloudConfirmed: true, data: updatedFields };
                 }
             } catch (err) {
                 console.warn('⚠️ [SupabaseDB] Jaringan error saat saveSettings:', err);
+                return { success: false, cloudConfirmed: false, error: err.message };
             }
 
-            return { success: false };
+            return { success: false, cloudConfirmed: false, error: 'Koneksi ke server tidak tersedia' };
         },
 
         /**
@@ -2108,7 +2167,9 @@
         broadcastChange(table, action = 'UPDATE', data = {}, sender = 'Admin') {
             this.invalidateCache(table);
             const timestamp = Date.now();
+            const eventId = 'evt_' + timestamp + '_' + Math.random().toString(36).substr(2, 6);
             const payload = {
+                event_id: eventId,
                 table: table,
                 action: action,
                 data: data,
@@ -2118,7 +2179,7 @@
 
             console.log(`📡 [Universal Sync] Memancarkan pembaruan realtime [${table} - ${action}]:`, payload);
 
-            // Track 1: WebSocket Broadcast ke seluruh TV via Remote Channel Supabase (<100ms ultra-cepat)
+            // Track 1: WebSocket Broadcast ke seluruh TV via Remote Channel Supabase
             this.sendRemoteCommand('DATA_UPDATED', payload, sender).catch(() => {});
 
             // Track 2: Command khusus legacy untuk kompatibilitas slide
@@ -2155,52 +2216,114 @@
                 }
             } catch (e) {}
 
-            // Track 5: PostMessage ke window induk (jika dijalankan dari iframe admin / slide)
+            // Track 5: PostMessage ke window induk (jika dijalankan dari iframe admin / slide) dengan targetOrigin yang aman
             try {
                 if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
-                    window.parent.postMessage({ type: 'DATA_UPDATED', ...payload }, '*');
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({ type: 'DATA_UPDATED', ...payload }, targetOrigin);
                 }
             } catch (e) {}
         },
 
         /**
+         * Kirim konfirmasi penerimaan & penerapan data dari layar TV (TV Acknowledgment)
+         * Memastikan pengurus mengetahui secara pasti bahwa layar TV telah menerapkan event tersebut
+         */
+        async sendTvAcknowledgment(deviceId, eventId, table, action = 'APPLIED') {
+            try {
+                const channel = this.getRemoteChannel();
+                if (!channel) return;
+                const ackPayload = {
+                    type: 'TV_ACK',
+                    device_id: deviceId || 'TV_MASJID_UTAMA',
+                    event_id: eventId,
+                    table: table,
+                    action: action,
+                    timestamp: Date.now()
+                };
+                if (channel.state === 'joined') {
+                    await channel.send({
+                        type: 'broadcast',
+                        event: 'tv_ack',
+                        payload: ackPayload
+                    });
+                }
+            } catch (e) {
+                console.warn('[SupabaseDB] Gagal kirim TV ACK:', e);
+            }
+        },
+
+        /**
+         * Pasang pendengar konfirmasi penerimaan TV di dashboard Admin / Petugas
+         */
+        onTvAcknowledgment(callback) {
+            const channel = this.getRemoteChannel();
+            if (!channel) return null;
+            channel.on('broadcast', { event: 'tv_ack' }, ({ payload }) => {
+                if (typeof callback === 'function' && payload) {
+                    callback(payload);
+                }
+            });
+            return true;
+        },
+
+        /**
          * Pasang pendengar pembaruan data universal (Universal Real-Time Listener)
-         * Mengikat 5 saluran redundan sekaligus:
+         * Mengikat 5 saluran redundan sekaligus dengan deduplikasi cerdas & per-tabel debounce:
          * 1. Supabase Postgres WAL Changes
-         * 2. Supabase Realtime WebSocket Remote Broadcast (<100ms)
+         * 2. Supabase Realtime WebSocket Remote Broadcast
          * 3. Local BroadcastChannel
-         * 4. Window postMessage (Parent Display TV <-> Iframe)
+         * 4. Window postMessage (Origin Validated)
          * 5. Window storage sync event
-         * @param {Function} callback - function({ table, action, data, sender, source, timestamp })
+         * @param {Function} callback - function({ table, action, data, sender, source, timestamp, event_id })
          */
         onDataChange(callback) {
             if (typeof callback !== 'function') return null;
 
-            // Debounce pelindung agar jika 5 saluran menyala bersamaan, callback hanya dipanggil 1x per batch
-            let debounceTimer = null;
-            let lastEventSignature = '';
-            let lastEventTime = 0;
+            // Debounce per-tabel dan deduplikasi cerdas multi-track
+            const debounceTimers = new Map();
+            const recentSignatures = new Map();
+
             const safeTrigger = (evt) => {
-                if (evt && evt.table) {
-                    this.invalidateCache(evt.table);
+                if (!evt) return;
+                const table = String(evt.table || 'all').toLowerCase();
+                const action = evt.action || 'UPDATE';
+                if (table && table !== 'all') {
+                    this.invalidateCache(table);
                 }
+
                 const now = Date.now();
-                const sig = `${evt?.table || 'all'}_${evt?.action || 'SYNC'}`;
-                // Jika event tabel & aksi yang sama tiba dalam rentang <150ms dari berbagai track redundan, lewati redundansi
-                if (sig === lastEventSignature && (now - lastEventTime) < 150) {
+                // Bersihkan entri lama (>5 detik)
+                for (const [key, t] of recentSignatures.entries()) {
+                    if (now - t > 5000) recentSignatures.delete(key);
+                }
+
+                // Signature unik untuk deduplikasi antar-saluran (WebSocket + BroadcastChannel + LocalStorage)
+                const rowId = (evt.data && (evt.data.id || evt.data.tanggal || evt.data.key)) || '';
+                const dataHash = evt.event_id || `${table}_${action}_${rowId}_${JSON.stringify(evt.data || {}).slice(0, 50)}`;
+
+                // Jika event persis sama sudah diproses dalam 250ms terakhir dari track lain, abaikan redundansi
+                if (recentSignatures.has(dataHash) && (now - recentSignatures.get(dataHash)) < 250) {
                     return;
                 }
-                lastEventSignature = sig;
-                lastEventTime = now;
+                recentSignatures.set(dataHash, now);
 
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
+                // Debounce terisolasi per-tabel (80ms):
+                // Perubahan tabel 'jadwal_sholat' dan 'sholat_jumat' yang tiba berdekatan tidak saling membatalkan
+                if (debounceTimers.has(table)) {
+                    clearTimeout(debounceTimers.get(table));
+                }
+
+                const timer = setTimeout(() => {
+                    debounceTimers.delete(table);
                     try {
                         callback(evt);
                     } catch (err) {
-                        console.error('[SupabaseDB.onDataChange] Callback error:', err);
+                        console.error(`[SupabaseDB.onDataChange] Callback error on table ${table}:`, err);
                     }
-                }, 120); // 120ms debounce pelindung multi-track
+                }, 80);
+
+                debounceTimers.set(table, timer);
             };
 
             // Cek jika berjalan di dalam iframe TV (child frame)
@@ -2231,6 +2354,7 @@
 
                         if (cmd === 'DATA_UPDATED') {
                             safeTrigger({
+                                event_id: cmdPayload?.event_id || d?.event_id,
                                 table: d.table,
                                 action: d.action || 'UPDATE',
                                 data: d.data || {},
@@ -2256,6 +2380,7 @@
                                 'SYNC_RUNNING_TEXT': 'running_text'
                             };
                             safeTrigger({
+                                event_id: cmdPayload?.event_id,
                                 table: tableMap[cmd] || cmd.toLowerCase(),
                                 action: 'SYNC',
                                 data: d,
@@ -2265,6 +2390,7 @@
                             });
                         } else if (cmd === 'UPDATE_SETTINGS') {
                             safeTrigger({
+                                event_id: cmdPayload?.event_id,
                                 table: 'app_settings',
                                 action: 'UPDATE',
                                 data: d,
@@ -2284,6 +2410,7 @@
                     bc.addEventListener('message', (event) => {
                         if (event.data && (event.data.type === 'DATA_UPDATED' || event.data.table)) {
                             safeTrigger({
+                                event_id: event.data.event_id,
                                 table: event.data.table,
                                 action: event.data.action || 'UPDATE',
                                 data: event.data.data || {},
@@ -2295,18 +2422,32 @@
                 }
             } catch (e) {}
 
-            // 4. Window postMessage (dari Parent TV atau iframe)
+            // 4. Window postMessage (dari Parent TV atau iframe) dengan Validasi Origin & Window Source yang Aman
             try {
                 if (typeof window !== 'undefined') {
                     window.addEventListener('message', (event) => {
                         if (!event.data) return;
+
+                        // Validasi Origin: tolak pesan dari origin asing
+                        const myOrigin = window.location.origin;
+                        if (myOrigin && myOrigin !== 'null' && event.origin && event.origin !== 'null' && event.origin !== myOrigin) {
+                            console.warn('[SupabaseDB] postMessage ditolak: Origin asing tidak dipercaya:', event.origin);
+                            return;
+                        }
+
+                        // Validasi Source Window
+                        if (event.source !== window && event.source !== window.parent && (!window.frames || !Array.from(window.frames).includes(event.source))) {
+                            return;
+                        }
+
                         if (event.data.type === 'DATA_UPDATED') {
                             safeTrigger({
+                                event_id: event.data.event_id,
                                 table: event.data.table,
                                 action: event.data.action || 'UPDATE',
                                 data: event.data.data || event.data.payload || {},
                                 source: 'window_message',
-                                timestamp: Date.now()
+                                timestamp: event.data.timestamp || Date.now()
                             });
                         } else if (typeof event.data.type === 'string' && event.data.type.startsWith('SYNC_')) {
                             const tableMap = {
@@ -2320,6 +2461,7 @@
                                 'SYNC_JUMAT': 'sholat_jumat'
                             };
                             safeTrigger({
+                                event_id: event.data.event_id,
                                 table: tableMap[event.data.type] || event.data.type.toLowerCase(),
                                 action: 'SYNC',
                                 data: event.data.data || {},

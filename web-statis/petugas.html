@@ -1161,6 +1161,24 @@
             opacity: 1;
         }
 
+        .toast-notif.toast-error {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b) !important;
+            border-color: #f87171 !important;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(239, 68, 68, 0.5) !important;
+        }
+
+        .toast-notif.toast-saving {
+            background: linear-gradient(135deg, #1e3a8a, #1d4ed8) !important;
+            border-color: #60a5fa !important;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(59, 130, 246, 0.5) !important;
+        }
+
+        .toast-notif.toast-tv {
+            background: linear-gradient(135deg, #065f46, #047857) !important;
+            border-color: var(--gold-accent) !important;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 215, 0, 0.7) !important;
+        }
+
         /* FOOTER RESMI SESUAI PERINTAH CEO */
         .footer-note {
             margin-top: 30px;
@@ -3099,6 +3117,8 @@
             };
 
             // Simpan langsung ke Supabase Cloud
+            let isCloudSaved = false;
+            let cloudErrText = '';
             try {
                 const client = window.SupabaseDB ? window.SupabaseDB.getClient() : null;
                 if (client) {
@@ -3112,13 +3132,20 @@
                     }]).select();
                     if (!error && data && data[0]) {
                         newDonasi.id = data[0].id;
+                        isCloudSaved = true;
+                    } else if (error) {
+                        cloudErrText = error.message || 'Izin simpan donasi ditolak database (RLS)';
                     }
                 }
             } catch (err) {
                 console.warn('Gagal insert donasi ke Supabase:', err);
+                cloudErrText = err.message || 'Koneksi jaringan terputus';
             }
 
-            if (!newDonasi.id) newDonasi.id = Date.now();
+            if (!isCloudSaved) {
+                showToastError(`Peringatan: Donasi gagal disimpan ke server cloud (${cloudErrText}). Transaksi tidak dicatat demi integritas kas.`);
+                return;
+            }
 
             infaqDonasiList.unshift(newDonasi);
             localStorage.setItem('cached_donasi_infaq', JSON.stringify(infaqDonasiList));
@@ -3146,7 +3173,7 @@
             if (chk) chk.checked = false;
             document.getElementById('newDonasiNama').disabled = false;
 
-            showToastSuccess('Alhamdulillah, donasi berhasil dicatat dan masuk ke sistem TV!');
+            showToastSuccess('Alhamdulillah, donasi berhasil tersimpan di server cloud!');
         }
 
         async function removeDonasiItem(id) {
@@ -3255,19 +3282,28 @@
             };
 
             // 1. Simpan langsung ke Supabase Cloud
+            let isKasSaved = false;
+            let kasErrText = '';
             try {
                 const client = window.SupabaseDB ? window.SupabaseDB.getClient() : null;
                 if (client) {
                     const { data, error } = await client.from(targetTable).insert([payload]).select();
                     if (!error && data && data[0]) {
                         payload.id = data[0].id;
+                        isKasSaved = true;
+                    } else if (error) {
+                        kasErrText = error.message || 'Izin simpan kas ditolak database (RLS)';
                     }
                 }
             } catch (err) {
                 console.warn(`Gagal insert ke Supabase ${targetTable}:`, err);
+                kasErrText = err.message || 'Koneksi jaringan terputus';
             }
 
-            if (!payload.id) payload.id = Date.now();
+            if (!isKasSaved) {
+                showToastError(`Peringatan: Transaksi kas gagal disimpan ke server cloud (${kasErrText}). Transaksi tidak dicatat demi menjaga keakuratan saldo.`);
+                return;
+            }
 
             // 2. Tambahkan ke state array lokal & localStorage
             if (isKasUtama) {
@@ -3331,7 +3367,7 @@
             if (inNominal) inNominal.value = '';
 
             updateAllCardPreviews();
-            showToastSuccess(`Alhamdulillah! Transaksi ${kat} berhasil dicatat & masuk ke TV!`);
+            showToastSuccess(`Alhamdulillah! Transaksi ${kat} berhasil tersimpan di server cloud!`);
         }
 
         async function removeKasTransactionItem(id, kategori, formId) {
@@ -3465,6 +3501,10 @@
             }
 
             // 3. Simpan ke Supabase & Trigger Realtime Broadcast
+            showToastStatus("Sedang menyimpan data ke server cloud...", "saving");
+            let hasCloudError = false;
+            let cloudErrMsg = '';
+
             try {
                 if (window.SupabaseDB) {
                     if (currentActiveModule === 'jumat') {
@@ -3479,7 +3519,11 @@
                             durasi: parseInt(mod.getVal('f_jumat_durasi') || 50, 10) || 50
                         };
                         if (typeof window.SupabaseDB.saveSholatJumat === 'function') {
-                            await window.SupabaseDB.saveSholatJumat(sjData);
+                            const res = await window.SupabaseDB.saveSholatJumat(sjData);
+                            if (!res || !res.success || !res.cloudConfirmed) {
+                                hasCloudError = true;
+                                cloudErrMsg = res?.error || 'Gagal menyimpan sholat jumat ke cloud';
+                            }
                         } else {
                             await window.SupabaseDB.setAppSetting('sholat_jumat', sjData);
                             if (typeof window.SupabaseDB.broadcastChange === 'function') {
@@ -3496,7 +3540,11 @@
                             qurban_lokasi_sembelih: mod.getVal('f_lokasi_sembelih')
                         };
                         if (typeof window.SupabaseDB.saveQurbanUnified === 'function') {
-                            await window.SupabaseDB.saveQurbanUnified(qPayload);
+                            const res = await window.SupabaseDB.saveQurbanUnified(qPayload);
+                            if (!res || !res.success || !res.cloudConfirmed) {
+                                hasCloudError = true;
+                                cloudErrMsg = res?.error || 'Gagal menyimpan qurban ke cloud';
+                            }
                         } else {
                             await window.SupabaseDB.setAppSetting('qurban', qPayload);
                             await window.SupabaseDB.setAppSetting('cached_qurban_data', qurbanShohibulList);
@@ -3522,7 +3570,11 @@
                         };
                         localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjPayload));
                         if (typeof window.SupabaseDB.savePengumumanJumat === 'function') {
-                            await window.SupabaseDB.savePengumumanJumat(pjPayload);
+                            const ok = await window.SupabaseDB.savePengumumanJumat(pjPayload);
+                            if (!ok) {
+                                hasCloudError = true;
+                                cloudErrMsg = 'Gagal menyimpan pengumuman jumat ke cloud';
+                            }
                         } else {
                             await window.SupabaseDB.setAppSetting('pengumuman_jumat', pjPayload);
                         }
@@ -3537,7 +3589,11 @@
                             pengeluaran: parseNominal(mod.getVal('f_kas_keluar')),
                             saldo_akhir: parseNominal(mod.getVal('f_kas_saldo'))
                         };
-                        await window.SupabaseDB.setAppSetting('laporan_kas_utama', kuPayload);
+                        const res = await window.SupabaseDB.setAppSetting('laporan_kas_utama', kuPayload);
+                        if (!res) {
+                            hasCloudError = true;
+                            cloudErrMsg = 'Gagal update kas utama ke cloud';
+                        }
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('keuangan', 'UPDATE', kuPayload, 'Bendahara Mobile');
                         }
@@ -3551,7 +3607,11 @@
                             donasi_masuk: parseNominal(mod.getVal('f_amb_masuk')),
                             saldo_akhir: parseNominal(mod.getVal('f_amb_saldo'))
                         };
-                        await window.SupabaseDB.setAppSetting('laporan_kas_ambulance', ambPayload);
+                        const res = await window.SupabaseDB.setAppSetting('laporan_kas_ambulance', ambPayload);
+                        if (!res) {
+                            hasCloudError = true;
+                            cloudErrMsg = 'Gagal update kas ambulance ke cloud';
+                        }
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('keuangan_ambulance', 'UPDATE', ambPayload, 'Bendahara Mobile');
                         }
@@ -3580,6 +3640,8 @@
                             }
                         } catch (e) {
                             console.warn('Gagal sinkron status program infaq:', e);
+                            hasCloudError = true;
+                            cloudErrMsg = e.message || 'Gagal sinkron program infaq';
                         }
                     } else if (currentActiveModule === 'undangan') {
                         const undPayload = {
@@ -3592,7 +3654,11 @@
                             keterangan: mod.getVal('f_und_keterangan')
                         };
                         if (typeof window.SupabaseDB.saveUndanganUnified === 'function') {
-                            await window.SupabaseDB.saveUndanganUnified(undPayload);
+                            const res = await window.SupabaseDB.saveUndanganUnified(undPayload);
+                            if (!res || !res.success) {
+                                hasCloudError = true;
+                                cloudErrMsg = res?.error || 'Gagal menyimpan undangan ke cloud';
+                            }
                         } else {
                             await window.SupabaseDB.setAppSetting('undangan_eksternal', undPayload);
                             if (typeof window.SupabaseDB.broadcastChange === 'function') {
@@ -3609,7 +3675,11 @@
                             waktu_pelaksanaan: mod.getVal('f_jam_ahad')
                         };
                         if (typeof window.SupabaseDB.saveKajianData === 'function') {
-                            await window.SupabaseDB.saveKajianData(ahadPayload, true, mod.getVal('f_jam_ahad'));
+                            const ok = await window.SupabaseDB.saveKajianData(ahadPayload, true, mod.getVal('f_jam_ahad'));
+                            if (!ok) {
+                                hasCloudError = true;
+                                cloudErrMsg = 'Gagal menyimpan kajian ke cloud';
+                            }
                         }
                     } else if (currentActiveModule === 'tafsir') {
                         const tafsirPayload = {
@@ -3621,7 +3691,11 @@
                             keterangan: mod.getVal('f_keterangan_tafsir')
                         };
                         if (typeof window.SupabaseDB.saveAgendaRutin === 'function') {
-                            await window.SupabaseDB.saveAgendaRutin(tafsirPayload);
+                            const ok = await window.SupabaseDB.saveAgendaRutin(tafsirPayload);
+                            if (!ok) {
+                                hasCloudError = true;
+                                cloudErrMsg = 'Gagal menyimpan agenda rutin ke cloud';
+                            }
                         }
                     } else if (currentActiveModule === 'ramadhan') {
                         const ramPayload = {
@@ -3638,7 +3712,11 @@
                             }
                         };
                         if (typeof window.SupabaseDB.saveRamadhanUnified === 'function') {
-                            await window.SupabaseDB.saveRamadhanUnified(ramPayload);
+                            const res = await window.SupabaseDB.saveRamadhanUnified(ramPayload);
+                            if (!res || !res.success || !res.cloudConfirmed) {
+                                hasCloudError = true;
+                                cloudErrMsg = res?.error || 'Gagal menyimpan ramadhan ke cloud';
+                            }
                         }
                     } else if (currentActiveModule === 'jadwal-sholat') {
                         const jsPayload = {
@@ -3654,7 +3732,11 @@
                             prayer_mode_jumat_duration: mod.getVal('f_jumat_durasi')
                         };
                         if (typeof window.SupabaseDB.saveJadwalSholatUnified === 'function') {
-                            await window.SupabaseDB.saveJadwalSholatUnified(jsPayload);
+                            const res = await window.SupabaseDB.saveJadwalSholatUnified(jsPayload);
+                            if (!res || !res.success || !res.cloudConfirmed) {
+                                hasCloudError = true;
+                                cloudErrMsg = res?.error || 'Gagal menyimpan jadwal sholat ke cloud';
+                            }
                         }
                     } else {
                         // Modul standar
@@ -3663,7 +3745,11 @@
                             updated_at: new Date().toISOString(),
                             values: mod.fields.map(f => f.val)
                         };
-                        await window.SupabaseDB.setAppSetting(`quick_petugas_${currentActiveModule}`, genPayload);
+                        const res = await window.SupabaseDB.setAppSetting(`quick_petugas_${currentActiveModule}`, genPayload);
+                        if (!res) {
+                            hasCloudError = true;
+                            cloudErrMsg = `Gagal menyimpan modul ${currentActiveModule}`;
+                        }
                         if (typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('quick_petugas', 'UPDATE', genPayload, 'Petugas Mobile');
                         }
@@ -3671,20 +3757,71 @@
                 }
             } catch (err) {
                 console.warn('Sinkronisasi Supabase:', err);
+                hasCloudError = true;
+                cloudErrMsg = err.message || 'Koneksi jaringan terputus';
             }
 
             updateAllCardPreviews();
-            closeSheet();
-            showToastSuccess();
+
+            if (hasCloudError) {
+                showToastError(`Peringatan: ${cloudErrMsg}. Data tersimpan sebagai draft lokal.`);
+            } else {
+                closeSheet();
+                showToastSuccess("Alhamdulillah, data tersimpan di cloud & disiarkan!");
+            }
+        }
+
+        let toastHideTimer = null;
+        function showToastStatus(msg, type = 'success') {
+            const toast = document.getElementById('toastSuccess');
+            if (!toast) return;
+            const iconEl = toast.querySelector('i');
+            const textEl = document.getElementById('toastText');
+
+            toast.classList.remove('toast-error', 'toast-saving', 'toast-tv');
+
+            if (type === 'error') {
+                toast.classList.add('toast-error');
+                if (iconEl) {
+                    iconEl.className = 'fas fa-exclamation-triangle';
+                    iconEl.style.color = '#fca5a5';
+                }
+            } else if (type === 'saving') {
+                toast.classList.add('toast-saving');
+                if (iconEl) {
+                    iconEl.className = 'fas fa-spinner fa-spin';
+                    iconEl.style.color = '#93c5fd';
+                }
+            } else if (type === 'tv_synced') {
+                toast.classList.add('toast-tv');
+                if (iconEl) {
+                    iconEl.className = 'fas fa-tv';
+                    iconEl.style.color = '#ffd700';
+                }
+            } else {
+                if (iconEl) {
+                    iconEl.className = 'fas fa-check-circle';
+                    iconEl.style.color = '#ffd700';
+                }
+            }
+
+            textEl.textContent = msg || "Data berhasil diproses";
+            toast.classList.add('show');
+
+            if (toastHideTimer) clearTimeout(toastHideTimer);
+            if (type !== 'saving') {
+                toastHideTimer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+            }
         }
 
         function showToastSuccess(customMsg) {
-            const toast = document.getElementById('toastSuccess');
-            document.getElementById('toastText').textContent = customMsg || "Alhamdulillah, data berhasil disimpan & langsung tampil di TV!";
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3500);
+            showToastStatus(customMsg || "Alhamdulillah, data tersimpan di server cloud!", 'success');
+        }
+
+        function showToastError(errMsg) {
+            showToastStatus(errMsg || "Gagal menyimpan data ke server cloud.", 'error');
         }
 
         function escapeHtml(str) {
@@ -3743,6 +3880,12 @@
                             window.AdminAuth.syncUsersFromCloud().catch(() => { });
                         }
                     }
+                });
+            }
+            if (window.SupabaseDB && typeof window.SupabaseDB.onTvAcknowledgment === 'function') {
+                window.SupabaseDB.onTvAcknowledgment((ack) => {
+                    console.log('[Petugas Mobile] Konfirmasi penerimaan TV diterima:', ack);
+                    showToastStatus("Alhamdulillah! Layar TV telah menerima pembaruan secara realtime.", "tv_synced");
                 });
             }
 

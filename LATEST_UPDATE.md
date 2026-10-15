@@ -7,7 +7,58 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 07:15 WIB)
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 13:30 WIB)
+
+### 🚀 PENINGKATAN KEANDALAN PENYIMPANAN & SINKRONISASI REALTIME (TAHAP 1–6 LENGKAP) — (Versi SW v5.8.84):
+1. **Mandat Tim Multidisiplin**:
+   - Memperbaiki keandalan penyimpanan dan sinkronisasi realtime dari input pengurus (PC/HP/Tablet) hingga perubahan terlihat di layar TV Display masjid tanpa klaim palsu "<100 ms".
+   - Menjaga hak akses RBAC: Super Admin (akses penuh), Bendahara (keuangan/kas/donasi), Petugas/Operator (operasional/jadwal/kajian).
+
+2. **Inventaris & Backup Lengkap (Tahap 1)**:
+   - Git Bundle lengkap diverifikasi di `c:\Users\anthu\Documents\digitalaljihad_repo_20261015.bundle` (HEAD `0d50610`).
+   - Ekspor snapshot data cloud Supabase (14 tabel publik JSON) di `c:\Users\anthu\Documents\supabase_data_backup_20261015/`.
+
+3. **Verifikasi & Perbaikan Temuan Kritis A–G (Tahap 2–4)**:
+   - **Poin A & D (False Success & RLS Rejection)**: `safeRestMutation` di `web-statis/js/supabase-db.js` kini memverifikasi `res.ok`, status HTTP (menolak 400, 401, 403, 500), batas timeout 10s (AbortController), header `Prefer: return=representation`, dan `rowsAffected > 0`. Menolak pembuatan ID palsu `Date.now()` jika insert cloud gagal di `petugas.html` dan `modeinput.html`.
+   - **Poin B (Debounce Collision)**: Mengganti debounce timer global dengan `debounceTimers = new Map()` terpisah per-tabel, sehingga mutasi dua tabel berbeda (misal `sholat_jumat` dan `keuangan`) tidak saling membatalkan.
+   - **Poin C (PostMessage Origin Check)**: Menolak pesan `window.message` jika `event.origin` berbeda dari origin aktif dan `event.source` bukan parent/iframe yang sah.
+   - **Poin E (Multi-Track Churn & Deduplication)**: Ring buffer signature 250ms (`recentSignatures = new Map()`) berbasis `${table}_${action}_${rowId}_${hash}` mengeliminasi storm update pada 5 saluran.
+   - **Poin F (Service Worker Cache All-or-Nothing)**: `cache.addAll()` diganti `Promise.allSettled(STATIC_ASSETS.map(...))` dengan validasi file inti sebelum aktivasi `skipWaiting()`.
+   - **Poin G (Timezone Safe)**: Suite pengujian dijalankan dengan `TZ=Asia/Jakarta`.
+   - **Protokol TV Acknowledgment (ACK)**: Menambahkan `sendTvAcknowledgment` dari TV Display dan `onTvAcknowledgment` di panel pengurus untuk konfirmasi nyata sinkronisasi TV.
+   - **Proteksi Mode Sholat Aktif**: Menjaga layar countdown adzan/iqamah/sholat/Yaasiin/kajian aktif agar tidak me-reload atau mengacaukan sholat berjamaah saat mutasi data berlangsung.
+
+4. **Pengukuran Latensi Sinkronisasi Jujur (Tahap 5)**:
+   - Dibuat skrip benchmark multi-tahap `scripts/benchmark-latency.js` dengan metode RTT / 2 bebas clock skew (diukur pada jam lokal pengirim yang sama).
+   - **Tahap A (Input Submit -> Cloud Confirm REST RTT)**: 12 sampel, Min 253.29 ms, Median 428.27 ms, P95 1019.10 ms, Max 1019.10 ms.
+   - **Tahap B (Cloud -> TV Receive WebSocket Fanout)**: 12 sampel, Min 33.83 ms, Median 49.40 ms, P95 326.85 ms, Max 326.85 ms, Duplikasi: 0 event.
+   - **Tahap C (TV Receive Event -> DOM Render)**: 12 sampel, Min 0.05 ms, Median 0.05 ms, P95 31.62 ms, Max 31.62 ms.
+   - **Total Estimasi End-to-End**: Median 477.72 ms (~0.48 detik), P95 1377.57 ms (~1.38 detik).
+
+5. **Pengujian Regresi Otomatis (Tahap 6)**:
+   - Menambahkan `[TEST 22]` di `scripts/test-engine.js` (14 asersi baru menguji `safeRestMutation`, representasi baris, debounce per-tabel, deduplikasi 250ms, validasi origin, proteksi mode sholat, dan simulasi penolakan HTTP 403 / zero rows).
+   - **Hasil Akhir**: **235 / 235 Asersi Engine Lulus** + **6 / 6 Test Keamanan Autentikasi Lulus** = **Total 241 / 241 Tests Lulus (100% PASS)**.
+
+6. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.84`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.84`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.84`**.
+   - Skrip tes regresi `scripts/test-engine.js` diselaraskan untuk memverifikasi versi `v5.8.84`.
+
+7. **Berkas yang Dimodifikasi**:
+   - `web-statis/js/supabase-db.js` (`safeRestMutation`, debounce per-tabel, deduplikasi 250ms, protokol ACK, validasi origin)
+   - `web-statis/sw.js` (`Promise.allSettled`, bumping versi cache ke `v5.8.84`)
+   - `web-statis/index.html` (Proteksi mode sholat saat data update, pengiriman ACK, sanitasi origin iframe)
+   - `web-statis/petugas.html` (Validasi cloud save, 4 status UI jujur, listener TV ACK)
+   - `web-statis/modeinput.html` (Validasi cloud save, 4 status UI jujur, listener TV ACK, styling CSS toast)
+   - `web-statis/js/admin/admin-settings.js` (Penyelarasan cache cleaner ke `v5.8.84`)
+   - `scripts/benchmark-latency.js` (Skrip benchmark 3 tahap bebas clock skew)
+   - `scripts/backup-supabase-data.js` (Ekspor snapshot 14 tabel publik Supabase)
+   - `scripts/test-engine.js` (Penambahan Test 22: 14 asersi keandalan realtime & mutasi)
+   - `LATEST_UPDATE.md` (Dokumentasi lengkap pembaruan)
+
+---
+
+## 📜 ARSIP UPDATE SEBELUMNYA — 15 Oktober 2026 (Pukul 07:15 WIB)
 
 ### 🛡️ PENGUATAN KEAMANAN AUTENTIKASI (TAHAP 1) & HARDENING RLS SUPABASE (TAHAP 2) — (Versi SW v5.8.83):
 1. **Latar Belakang & Mandat Tim Multidisiplin**:
