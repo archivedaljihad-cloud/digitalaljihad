@@ -10,7 +10,7 @@
 		href="{{ asset($settings['favicon'] ?? ($settings->favicon ?? '')) ? asset('storage/' . str_replace('storage/', '', $settings['favicon'] ?? ($settings->favicon ?? ''))) : asset('favicon.ico') }}?v=3.0.4">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Urbanist:wght@600;700;800&display=swap"
 		rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}?v=3.0.4">
 	<link rel="stylesheet" href="{{ asset('css/display-theme.css') }}?v=3.0.4">
@@ -535,7 +535,7 @@
 			font-size: 2.65rem;
 			font-weight: 700;
 			color: #ffe066;
-			font-family: 'Space Grotesk', sans-serif;
+			font-family: 'Urbanist', sans-serif;
 			letter-spacing: 0.8px;
 			text-shadow: 0 3px 8px rgba(0, 0, 0, 0.9);
 			margin-top: 3px;

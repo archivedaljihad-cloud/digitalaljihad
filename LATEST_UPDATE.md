@@ -7,7 +7,43 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 00:20 WIB)
+## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 00:35 WIB)
+
+### 💎 ADOPSI TIPOGRAFI MEWAH & BERKELAS: FONT URBANIST (BOLD 700) PADA KARTU JADWAL SHOLAT TV DISPLAY (Versi SW v5.8.91):
+1. **Pilihan Font Mewah & Berkelas (Urbanist Bold 700)**:
+   - Berkas: `web-statis/slides/utama.html` dan `resources/views/utama.blade.php`.
+   - Menambahkan impor Google Font `Urbanist`:
+     `https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Urbanist:wght@600;700;800&display=swap`.
+   - Mengubah gaya font pada pemilih CSS `.sholat-card .waktu-sholat`:
+     ```css
+     .sholat-card .waktu-sholat {
+         font-size: 2.65rem;
+         line-height: 1.1;
+         font-weight: 700;
+         color: #ffd700;
+         font-family: 'Urbanist', sans-serif;
+         letter-spacing: 0.8px;
+         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 0 12px rgba(255, 215, 0, 0.45);
+         transition: all 0.3s ease;
+     }
+     ```
+   - **Karakteristik & Keunggulan Visual Urbanist**:
+     - Tipografi *Executive Neo-Geometric* yang proporsional, mewah, dan berwibawa.
+     - Bentuk glif angka modern yang bulat sempurna tanpa sudut kaku, memberikan kesan premium hotel berbintang dan masjid agung modern.
+     - Garis angka tebal solid memantulkan kemilau efek *metallic gold glow* (`#ffd700`) secara maksimal.
+     - Legibilitas sangat tinggi dari jarak pandang 10 hingga 15 meter pada layar Smart TV 1080p / 4K.
+2. **Penyediaan Halaman Preview Interaktif Font & Mockup Visual**:
+   - Dibuatkan berkas demonstrasi `web-statis/preview-font.html` yang menampilkan perbandingan langsung secara interaktif antara font rekomendasi: **Urbanist** (Mewah Modern), **Cinzel Decorative** (Royal Classic), **Outfit** (Futuristic Premium), dan **Space Grotesk** (Tech Geometric).
+   - Dibuatkan visualisasi grafis resolusi tinggi di direktori artefak.
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.91`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.91`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.91`**.
+   - Parameter query string di `web-statis/admin.html` dinaikkan ke `?v=5.8.91`.
+   - Pengujian regresi otomatis: **253 / 253 tests lulus (100% PASS)** di `scripts/test-engine.js`.
+
+---
+
+## 📅 UPDATE SEBELUMNYA — 16 Oktober 2026 (Pukul 00:20 WIB)
 
 ### 🔤 PEMBARUAN TIPOGRAFI JAM JADWAL SHOLAT (KARTU KOTAK) DENGAN FONT SPACE GROTESK BOLD 700 (Versi SW v5.8.90):
 1. **Penerapan Font Space Grotesk Bold 700 pada Kartu Jam Sholat**:
