@@ -7,6 +7,35 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 00:20 WIB)
+
+### 🔤 PEMBARUAN TIPOGRAFI JAM JADWAL SHOLAT (KARTU KOTAK) DENGAN FONT SPACE GROTESK BOLD 700 (Versi SW v5.8.90):
+1. **Penerapan Font Space Grotesk Bold 700 pada Kartu Jam Sholat**:
+   - Berkas: `web-statis/slides/utama.html` dan `resources/views/utama.blade.php`.
+   - Menambahkan impor Google Font `Space Grotesk`:
+     `https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap`.
+   - Mengubah gaya font pada pemilih CSS `.sholat-card .waktu-sholat`:
+     ```css
+     .sholat-card .waktu-sholat {
+         font-size: 2.65rem;
+         line-height: 1.1;
+         font-weight: 700;
+         color: #ffd700;
+         font-family: 'Space Grotesk', sans-serif;
+         letter-spacing: 0.8px;
+         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 0 12px rgba(255, 215, 0, 0.45);
+         transition: all 0.3s ease;
+     }
+     ```
+   - Karakter angka Space Grotesk memiliki proporsi modern, bersih, geometris tegas, dan legibilitas tinggi yang sangat tajam dan kontras saat ditampilkan pada layar Smart TV masjid (1080p / 4K).
+2. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.90`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.90`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.90`**.
+   - Parameter query string di `web-statis/admin.html` dinaikkan ke `?v=5.8.90`.
+   - Pengujian regresi otomatis: **253 / 253 tests lulus (100% PASS)** di `scripts/test-engine.js`.
+
+---
+
 ## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 00:10 WIB)
 
 ### ⏱️ PERBAIKAN BUG PERSISTENSI DURASI SHOLAT, ADZAN, IQAMAH & WAKTU SISTEM KE SUPABASE (ELIMINASI PGRST204) & HIDRASI INSTAN (Versi SW v5.8.89):

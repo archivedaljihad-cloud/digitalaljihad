@@ -468,9 +468,10 @@ assert(!pengumumanAgendaContent.includes('Kajian Shubuh / Tematik'), 'slides/pen
 console.log('\n📌 [TEST 17] Slides Utama Prayer Time Legibility (10M Distance Visibility):');
 const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'utf8');
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
+assert(utamaContent.includes("'Space Grotesk'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Space Grotesk Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.89'), 'sw.js memiliki bumping versi cache terbaru v5.8.89');
+assert(swContent.includes('aljihad-signage-v5.8.90'), 'sw.js memiliki bumping versi cache terbaru v5.8.90');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
