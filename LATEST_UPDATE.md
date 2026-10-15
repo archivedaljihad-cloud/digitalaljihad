@@ -7,7 +7,57 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 01:00 WIB)
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 07:15 WIB)
+
+### 🛡️ PENGUATAN KEAMANAN AUTENTIKASI (TAHAP 1) & HARDENING RLS SUPABASE (TAHAP 2) — (Versi SW v5.8.83):
+1. **Latar Belakang & Mandat Tim Multidisiplin**:
+   - Menindaklanjuti audit temuan sistem otentikasi dan izin database, tim lintas disiplin (*security-vulnerability-hardening*, *clean-architecture-refactoring*, *testing-quality-assurance*, *frontend-web-engineering*, dan *devops-cloud-infra*) mengeksekusi hotfix keamanan kritis untuk menutup celah bypass autentikasi dan memperketat izin database cloud Supabase.
+
+2. **Eksekusi Tahap 1: Hotfix Keamanan Autentikasi (`web-statis/js/admin-auth.js`)**:
+   - **Penutupan Total Celah Bypass Login Supabase (`/rest/v1/users`)**:
+     - Menghapus query fallback tidak terotentikasi ke endpoint Supabase REST API yang sebelumnya dapat membuat sesi login tanpa memeriksa kecocokan kata sandi.
+     - Setiap upaya autentikasi kini diwajibkan melewati verifikasi kata sandi yang sah (`isPasswordMatch`). Jika kredensial tidak cocok, sistem langsung menolak dan melempar error tanpa membocorkan sesi ke penyimpanan lokal.
+   - **Isolasi Kata Sandi Kustom (`has_custom_password`)**:
+     - Memperbaiki metode `isPasswordMatch()` agar fallback kata sandi default lama (`#1.Bendahara`, `SuperUser1971`, `*dkm1#aljihad`, `135dkmlJihad`) **dinonaktifkan secara otomatis dan permanen** begitu akun mengubah kata sandinya ke kata sandi kustom.
+     - Menambahkan penanda `has_custom_password` pada fungsi `createUser()`, `updateUser()`, dan `getUsers()`.
+   - **Pembaruan Cache Query String**:
+     - Memperbarui tag impor skrip otentikasi menjadi `js/admin-auth.js?v=5.8.83` di `admin.html`, `login.html`, `modeinput.html`, dan `petugas.html`.
+
+3. **Eksekusi Tahap 2: Pengerasan Row Level Security (RLS) Supabase**:
+   - **Pencegahan Mutasi Destruktif oleh Anonim (`database/supabase_rls_hardened.sql`)**:
+     - Mencabut izin `DELETE`, `TRUNCATE`, `INSERT`, dan `UPDATE` pada tabel `public.users` dari peran `anon`.
+     - Memastikan peran anonim hanya diizinkan membaca (`SELECT`) kolom profil publik dasar (`id`, `name`, `email`, `role_id`), sementara hash kata sandi dan token otentikasi terkunci rapat.
+   - **Pemisahan Kebijakan Baca Display TV vs Mutasi Admin**:
+     - Display TV 24/7 tetap dijamin kelancaran baca datanya lewat policy `SELECT` publik yang bersih.
+     - Memperbarui `database/supabase_rls_security_fix.sql` dan menyertakan panduan skrip hardened untuk eksekusi di Supabase SQL Editor.
+
+4. **Pengujian & Validasi Mutu Otomatis (Quality Assurance)**:
+   - Membuat test suite otentikasi mandiri `scripts/test-auth-security.js` (6 skenario uji: inisialisasi, verifikasi password resmi, isolasi password kustom, pencegahan bypass, penolakan user asing, dan validasi sesi).
+   - Menambahkan asersi pengujian RLS dan anti-bypass ke dalam `scripts/test-engine.js`.
+   - Menghubungkan kedua suite pengujian ke perintah utama `package.json` (`npm test`).
+   - **Hasil Pengujian**: **221 / 221 Asersi Engine Lulus** + **6 / 6 Test Keamanan Autentikasi Lulus (100% PASS)**.
+
+5. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.83`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.83`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.83`**.
+   - Skrip tes regresi `scripts/test-engine.js` diselaraskan untuk memverifikasi versi `v5.8.83`.
+
+6. **Berkas yang Terkait**:
+   - `web-statis/js/admin-auth.js` (Penutupan celah bypass login & isolasi custom password)
+   - `database/supabase_rls_security_fix.sql` (Pencabutan izin DELETE users untuk anon)
+   - `database/supabase_rls_hardened.sql` (Skrip hardened RLS komprehensif)
+   - `scripts/test-auth-security.js` (Unit test keamanan autentikasi)
+   - `scripts/test-engine.js` (Pembaruan asersi RLS dan cache v5.8.83)
+   - `package.json` (Integrasi pipeline pengujian npm test)
+   - `web-statis/sw.js` (Bumping Service Worker ke v5.8.83)
+   - `web-statis/js/admin/admin-settings.js` (Penyelarasan cache cleaner v5.8.83)
+   - `web-statis/login.html`, `admin.html`, `petugas.html`, `modeinput.html` (Bumping script tag v5.8.83)
+   - `C:\Users\anthu\Documents\【coldBACKUP - Digital WebSTATIS】\` (Salinan cadangan lokal)
+   - `LATEST_UPDATE.md` (Dokumentasi pembaruan)
+
+---
+
+## 📜 ARSIP UPDATE — 15 Oktober 2026 (Pukul 01:00 WIB)
 
 ### 🕌 PENERAPAN PERMANEN KOTAK KHUTBAH TRANSPARAN 1 & TEMA WARNA TEKS "EMAS DAN PUTIH" PADA TAMPILAN TV (`prayer-mode.html`) — (Versi SW v5.8.82):
 1. **Keputusan & Mandat Pengguna**:

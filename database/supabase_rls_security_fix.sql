@@ -43,21 +43,17 @@ ALTER TABLE IF EXISTS public.sessions ENABLE ROW LEVEL SECURITY;
 -- 2. PROTEKSI KOLOM SENSITIF PADA TABEL USERS
 -- Mencegah password hash ($2y$12$...) dan remember_token terekspos ke publik
 -- ------------------------------------------------------------------------------
-REVOKE ALL ON public.users FROM anon, authenticated;
+REVOKE ALL ON public.users FROM anon;
+REVOKE DELETE, TRUNCATE, INSERT, UPDATE ON public.users FROM anon;
 GRANT SELECT (id, name, last_name, email, email_verified_at, created_at, updated_at, role_id) ON public.users TO anon, authenticated;
-GRANT INSERT (name, email, role_id) ON public.users TO anon, authenticated;
-GRANT UPDATE (name, email, role_id) ON public.users TO anon, authenticated;
-GRANT DELETE ON public.users TO anon, authenticated;
 
--- Batasi hak akses anon & authenticated agar tidak bisa membaca kolom password dan token
--- Password tetap aman tersimpan untuk backend, namun tidak bisa dibaca oleh API publik anonim
-
--- Kebijakan (Policy) Tabel Users
+-- Batasi hak akses anon agar tidak bisa membaca kolom password dan token
+-- Kebijakan (Policy) Tabel Users: Publik anonim hanya diizinkan membaca data profil dasar
 DROP POLICY IF EXISTS "Allow public users access" ON public.users;
-CREATE POLICY "Allow public users access" ON public.users
-    FOR ALL TO anon, authenticated
-    USING (true)
-    WITH CHECK (true);
+DROP POLICY IF EXISTS "Public read-only for users" ON public.users;
+CREATE POLICY "Public read-only for users" ON public.users
+    FOR SELECT TO anon, authenticated
+    USING (true);
 
 -- ------------------------------------------------------------------------------
 -- 3. KEBIJAKAN AKSES TABEL DISPLAY & ADMIN (OPERASI BROWSER / REST API)

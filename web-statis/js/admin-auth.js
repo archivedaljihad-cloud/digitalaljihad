@@ -112,8 +112,8 @@ const AdminAuth = {
     },
 
     /**
-     * Memeriksa kecocokan kata sandi resmi default
-     * Seluruh kata sandi lama/usang (bendahara123, operator123, Aljihad2024, admin123, password) telah dibersihkan permanen
+     * Memeriksa kecocokan kata sandi resmi
+     * Mencegah fallback kata sandi lama jika kata sandi akun sudah diubah/dikustomisasi
      */
     isPasswordMatch(u, enteredPassword) {
         if (!u || !enteredPassword) return false;
@@ -123,24 +123,20 @@ const AdminAuth = {
         // 1. Cocok persis dengan kata sandi akun saat ini
         if (userPwd && userPwd === cleanPwd) return true;
 
-        // 2. Khusus Akun Bendahara: password resmi default mutakhir (#1.Bendahara)
-        if (u.email === 'bendahara@aljihad.com' || u.username === 'bendahara') {
-            return cleanPwd === '#1.Bendahara' || cleanPwd.toLowerCase() === '#1.bendahara';
-        }
-
-        // 3. Khusus Akun Super Admin: password resmi default mutakhir (SuperUser1971)
-        if (u.email === 'archived.aljihad@gmail.com' || u.username === 'admin') {
-            return cleanPwd === 'SuperUser1971' || cleanPwd.toLowerCase() === 'superuser1971';
-        }
-
-        // 4. Khusus Akun Ketua DKM: password resmi default mutakhir (*dkm1#aljihad)
-        if (u.email === 'ketuadkm@aljihad.com' || u.username === 'dkmsatu') {
-            return cleanPwd === '*dkm1#aljihad' || cleanPwd.toLowerCase() === '*dkm1#aljihad';
-        }
-
-        // 5. Khusus Akun Petugas DKM Al Jihad: password resmi default mutakhir (135dkmlJihad)
-        if (u.email === 'dkm@aljihad.com' || u.username === 'dkm') {
-            return cleanPwd === '135dkmlJihad' || cleanPwd.toLowerCase() === '135dkmljihad';
+        // 2. Khusus Akun Bawaan Resmi: hanya izinkan toleransi default jika belum pernah diubah kustom
+        if (!u.has_custom_password) {
+            if (u.email === 'bendahara@aljihad.com' || u.username === 'bendahara') {
+                return userPwd === '#1.Bendahara' && (cleanPwd === '#1.Bendahara' || cleanPwd.toLowerCase() === '#1.bendahara');
+            }
+            if (u.email === 'archived.aljihad@gmail.com' || u.username === 'admin') {
+                return userPwd === 'SuperUser1971' && (cleanPwd === 'SuperUser1971' || cleanPwd.toLowerCase() === 'superuser1971');
+            }
+            if (u.email === 'ketuadkm@aljihad.com' || u.username === 'dkmsatu') {
+                return userPwd === '*dkm1#aljihad' && (cleanPwd === '*dkm1#aljihad' || cleanPwd.toLowerCase() === '*dkm1#aljihad');
+            }
+            if (u.email === 'dkm@aljihad.com' || u.username === 'dkm') {
+                return userPwd === '135dkmlJihad' && (cleanPwd === '135dkmlJihad' || cleanPwd.toLowerCase() === '135dkmljihad');
+            }
         }
 
         return false;
@@ -340,6 +336,7 @@ const AdminAuth = {
                 role_icon: role_icon,
                 color: color,
                 is_custom: defMatch ? false : !!u.is_custom,
+                has_custom_password: !!u.has_custom_password || (defMatch ? (resolvedPwd !== defMatch.password) : true),
                 created_at: u.created_at || new Date().toISOString()
             };
 
@@ -457,6 +454,7 @@ const AdminAuth = {
             role_icon: role_icon,
             color: color,
             is_custom: true,
+            has_custom_password: true,
             created_at: new Date().toISOString()
         };
 
@@ -516,6 +514,7 @@ const AdminAuth = {
         // Jika password diisi, update password baru
         if (data.password && data.password.trim()) {
             users[index].password = data.password.trim();
+            users[index].has_custom_password = true;
         }
 
         // Jika role diubah
@@ -945,55 +944,7 @@ const AdminAuth = {
             }
         }
 
-        // 2. Jika tidak cocok di akun default, coba query ke tabel users Supabase jika online
-        if (!matchedUser && typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-            try {
-                const response = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/users?or=(email.eq.${cleanId},name.ilike.%${cleanId}%)&select=id,name,email,role_id`, {
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
-                    }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.length > 0) {
-                        const sbUser = data[0];
-                        // Tentukan role berdasarkan role_id atau nama/email
-                        let resolvedRole = 'petugas';
-                        let roleLabel = 'Petugas / Operator';
-                        let roleIcon = 'fa-tv';
-                        let roleColor = '#38bdf8';
-
-                        if (sbUser.role_id === 1 || String(sbUser.email).includes('bendahara')) {
-                            resolvedRole = 'bendahara';
-                            roleLabel = 'Bendahara Kas';
-                            roleIcon = 'fa-wallet';
-                            roleColor = '#10b981';
-                        } else if (sbUser.role_id === 3 || String(sbUser.email).includes('admin') || (sbUser.name && sbUser.name.toLowerCase().includes('admin'))) {
-                            resolvedRole = 'admin';
-                            roleLabel = 'Super Admin';
-                            roleIcon = 'fa-shield-alt';
-                            roleColor = '#ffd700';
-                        }
-
-                        matchedUser = {
-                            id: sbUser.id,
-                            name: sbUser.name || 'Pengurus Masjid',
-                            email: sbUser.email,
-                            username: sbUser.email.split('@')[0],
-                            role: resolvedRole,
-                            role_id: sbUser.role_id || (resolvedRole === 'admin' ? 3 : (resolvedRole === 'bendahara' ? 1 : 2)),
-                            role_label: roleLabel,
-                            role_icon: roleIcon,
-                            color: roleColor
-                        };
-                    }
-                }
-            } catch (err) {
-                console.warn('Verifikasi Supabase users dilewati:', err);
-            }
-        }
-
+        // 2. Proteksi Keamanan: Tolak jika kredensial tidak cocok (Mencegah bypass login tanpa verifikasi kata sandi)
         if (!matchedUser) {
             throw new Error('Kredensial tidak valid! Periksa kembali Email/Username atau Kata Sandi.');
         }

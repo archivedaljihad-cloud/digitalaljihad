@@ -272,6 +272,19 @@ assert(loginContent.includes("urlParams.get('reason') === 'idle_timeout'"), 'log
 assert(petugasContent.includes('AdminAuth.initIdleTimer()'), 'petugas.html mengaktifkan idle timer saat otorisasi berhasil');
 assert(modeinputContent.includes('AdminAuth.initIdleTimer()'), 'modeinput.html mengaktifkan idle timer saat otorisasi berhasil');
 
+// Verifikasi Keamanan Autentikasi (Hotfix Anti-Bypass & Custom Password Isolation)
+assert(!authContent.includes('/rest/v1/users?or=(email.eq.'), 'AdminAuth tidak memiliki query fallback unauthenticated ke /rest/v1/users (anti-bypass)');
+assert(authContent.includes('has_custom_password'), 'AdminAuth memiliki proteksi has_custom_password untuk mematikan default password saat akun diubah');
+assert(authContent.includes('!u.has_custom_password'), 'AdminAuth isPasswordMatch memastikan password default hanya berlaku jika has_custom_password belum aktif');
+
+// Verifikasi Pengerasan RLS Database (Tahap 2)
+const rlsFixContent = fs.readFileSync(path.join(path.dirname(baseDir), 'database/supabase_rls_security_fix.sql'), 'utf8');
+const rlsHardenedContent = fs.readFileSync(path.join(path.dirname(baseDir), 'database/supabase_rls_hardened.sql'), 'utf8');
+assert(!rlsFixContent.includes('GRANT DELETE ON public.users TO anon'), 'supabase_rls_security_fix.sql tidak memberikan hak DELETE users kepada anon');
+assert(!rlsHardenedContent.includes('GRANT DELETE ON public.users TO anon'), 'supabase_rls_hardened.sql tidak memberikan hak DELETE users kepada anon');
+assert(rlsHardenedContent.includes('REVOKE DELETE, TRUNCATE, INSERT, UPDATE ON public.users FROM anon'), 'supabase_rls_hardened.sql mencabut seluruh hak destruktif users dari anon');
+assert(rlsHardenedContent.includes('Public read-only for users'), 'supabase_rls_hardened.sql menetapkan policy users read-only untuk publik');
+
 // Verifikasi Multi-Device Realtime Auth Synchronization & Fluid Layout
 assert(loginContent.includes('SYNC_AUTH_USERS') && loginContent.includes('SupabaseDB.onRemoteCommand'), 'login.html memiliki listener realtime broadcast SYNC_AUTH_USERS');
 assert(loginContent.includes('rbac_users_list') && loginContent.includes('SupabaseDB.onDataChange'), 'login.html memiliki listener realtime Postgres Changes rbac_users_list');
@@ -457,7 +470,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.82'), 'sw.js memiliki bumping versi cache terbaru v5.8.82');
+assert(swContent.includes('aljihad-signage-v5.8.83'), 'sw.js memiliki bumping versi cache terbaru v5.8.83');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
