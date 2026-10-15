@@ -211,13 +211,17 @@
                     sholatList.forEach(s => {
                         const name = (s.nama_sholat || s.nama || '').toLowerCase();
                         const timeVal = s.waktu ? s.waktu.substring(0, 5) : (s.jam || '');
-                        if (name.includes('imsak') && document.getElementById('sholatImsak')) document.getElementById('sholatImsak').value = timeVal;
-                        if (name.includes('subuh') && document.getElementById('sholatSubuh')) document.getElementById('sholatSubuh').value = timeVal;
-                        if ((name.includes('syuru') || name.includes('terbit')) && document.getElementById('sholatTerbit')) document.getElementById('sholatTerbit').value = timeVal;
-                        if (name.includes('dzuhur') && document.getElementById('sholatDzuhur')) document.getElementById('sholatDzuhur').value = timeVal;
-                        if (name.includes('ashar') && document.getElementById('sholatAshar')) document.getElementById('sholatAshar').value = timeVal;
-                        if (name.includes('maghrib') && document.getElementById('sholatMaghrib')) document.getElementById('sholatMaghrib').value = timeVal;
-                        if (name.includes('isya') && document.getElementById('sholatIsya')) document.getElementById('sholatIsya').value = timeVal;
+                        const setVal = typeof setPrayerInputValue === 'function' ? setPrayerInputValue : (id, v) => {
+                            const el = document.getElementById(id);
+                            if (el) el.value = v;
+                        };
+                        if (name.includes('imsak')) setVal('sholatImsak', timeVal);
+                        if (name.includes('subuh')) setVal('sholatSubuh', timeVal);
+                        if (name.includes('syuru') || name.includes('terbit')) setVal('sholatTerbit', timeVal);
+                        if (name.includes('dzuhur')) setVal('sholatDzuhur', timeVal);
+                        if (name.includes('ashar')) setVal('sholatAshar', timeVal);
+                        if (name.includes('maghrib')) setVal('sholatMaghrib', timeVal);
+                        if (name.includes('isya')) setVal('sholatIsya', timeVal);
                     });
                 }
 

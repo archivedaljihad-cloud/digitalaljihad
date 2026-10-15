@@ -470,7 +470,7 @@ const utamaContent = fs.readFileSync(path.join(baseDir, 'slides/utama.html'), 'u
 assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.sholat-card .waktu-sholat'), 'slides/utama.html memiliki font-size 2.65rem untuk angka jam sholat agar terbaca dari 10m');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.86'), 'sw.js memiliki bumping versi cache terbaru v5.8.86');
+assert(swContent.includes('aljihad-signage-v5.8.87'), 'sw.js memiliki bumping versi cache terbaru v5.8.87');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -630,6 +630,21 @@ assert(adminYasinContent.includes('compactSpeed') && adminYasinContent.includes(
 assert(freshAdminCoreContent.includes("localStorage.getItem('yasin_start_time')") && freshAdminCoreContent.includes('cfgYasinStartTime'), 'admin-core.js menghidrasi timer yaasiin secara instan dari localStorage saat DOM ready');
 assert(adminDataLoaderContent.includes("localStorage.getItem('yasin_start_time')"), 'admin-data-loader.js memprioritaskan fallback timer yaasiin ke localStorage');
 assert(supabaseDbContent.includes('yasin_scroll_speed') && supabaseDbContent.includes('.substring(0, 20)'), 'supabase-db.js memproteksi kolom yasin_scroll_speed maksimal 20 karakter sebelum dikirim ke cloud');
+
+// -------------------------------------------------------------
+// 24. 24-HOUR FORMAT & FLATPICKR OFFLINE INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 24] 24-Hour Format & Flatpickr Offline Resilience Integrity:');
+assert(fs.existsSync(path.join(baseDir, 'vendor/flatpickr/flatpickr.min.css')), 'vendor/flatpickr/flatpickr.min.css fisik tersedia untuk offline PWA');
+assert(fs.existsSync(path.join(baseDir, 'vendor/flatpickr/flatpickr.min.js')), 'vendor/flatpickr/flatpickr.min.js fisik tersedia untuk offline PWA');
+assert(adminPageContent.includes('vendor/flatpickr/flatpickr.min.css'), 'admin.html memuat vendor/flatpickr/flatpickr.min.css');
+assert(adminPageContent.includes('vendor/flatpickr/flatpickr.min.js'), 'admin.html memuat vendor/flatpickr/flatpickr.min.js');
+assert(adminPageContent.includes('id="sholatDzuhur"') && adminPageContent.includes('class="form-control font-weight-bold text-center timepicker-24"'), 'admin.html input sholatDzuhur menggunakan text input class timepicker-24');
+assert(!adminPageContent.includes('type="time" id="sholatDzuhur"') && !adminPageContent.includes('id="sholatDzuhur" type="time"'), 'admin.html sholatDzuhur tidak lagi menggunakan native input type="time"');
+assert(freshAdminCoreContent.includes('init24HourTimepickers') && freshAdminCoreContent.includes('formatJam24H') && freshAdminCoreContent.includes('validateJam24H'), 'admin-core.js memiliki fungsi formatJam24H, validateJam24H, dan init24HourTimepickers');
+const adminJadwalContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-jadwal-sholat.js'), 'utf8');
+assert(adminJadwalContent.includes('setPrayerInputValue'), 'admin-jadwal-sholat.js memiliki helper setPrayerInputValue yang mensinkronkan Flatpickr instance');
+assert(swContent.includes('vendor/flatpickr/flatpickr.min.css') && swContent.includes('vendor/flatpickr/flatpickr.min.js'), 'sw.js memuat flatpickr.min.css dan flatpickr.min.js dalam STATIC_ASSETS');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

@@ -16,6 +16,95 @@
         var cachedQrisList = [];
         var uploadedQrisBase64 = null;
 
+        // ==========================================
+        // GLOBAL FORMATTER & VALIDASI JAM 24H (HH:MM)
+        // ==========================================
+        window.formatJam24H = function(input) {
+            if (!input) return;
+            let v = input.value.replace(/[^0-9]/g, '');
+            if (v.length > 4) v = v.substring(0, 4);
+            if (v.length >= 3) {
+                let jam = parseInt(v.substring(0, 2), 10);
+                let menit = parseInt(v.substring(2, 4), 10);
+                if (jam > 23) jam = 23;
+                let jamStr = jam < 10 ? '0' + jam : '' + jam;
+                if (v.length === 3) {
+                    input.value = jamStr + ':' + v.substring(2, 3);
+                } else {
+                    if (menit > 59) menit = 59;
+                    let menitStr = menit < 10 ? '0' + menit : '' + menit;
+                    input.value = jamStr + ':' + menitStr;
+                }
+            } else if (v.length === 2) {
+                let jam = parseInt(v, 10);
+                if (jam > 23) jam = 23;
+                input.value = (jam < 10 ? '0' + jam : '' + jam);
+            } else {
+                input.value = v;
+            }
+        };
+
+        window.validateJam24H = function(input, fallbackVal) {
+            if (!input) return;
+            let val = input.value.trim();
+            const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+            if (!regex.test(val)) {
+                let digits = val.replace(/[^0-9]/g, '');
+                if (digits.length === 4) {
+                    let h = parseInt(digits.substring(0, 2), 10);
+                    let m = parseInt(digits.substring(2, 4), 10);
+                    if (h > 23) h = 23;
+                    if (m > 59) m = 59;
+                    input.value = (h < 10 ? '0' + h : '' + h) + ':' + (m < 10 ? '0' + m : '' + m);
+                } else if (digits.length === 2) {
+                    let h = parseInt(digits, 10);
+                    if (h > 23) h = 23;
+                    input.value = (h < 10 ? '0' + h : '' + h) + ':00';
+                } else {
+                    input.value = fallbackVal || input.getAttribute('placeholder') || input.defaultValue || '00:00';
+                }
+            }
+            if (input._flatpickr) {
+                try { input._flatpickr.setDate(input.value, false); } catch(e) {}
+            }
+        };
+
+        window.bukaTimePicker = function(inputId) {
+            const el = document.getElementById(inputId);
+            if (!el) return;
+            if (el._flatpickr) {
+                el._flatpickr.open();
+            } else {
+                el.focus();
+            }
+        };
+
+        window.init24HourTimepickers = function() {
+            if (typeof flatpickr !== 'undefined') {
+                flatpickr(".timepicker-24", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    allowInput: true,
+                    minuteIncrement: 1,
+                    onClose: function(selectedDates, dateStr, instance) {
+                        if (dateStr && instance.input) {
+                            window.validateJam24H(instance.input);
+                        }
+                    }
+                });
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                if (typeof window.init24HourTimepickers === 'function') {
+                    window.init24HourTimepickers();
+                }
+            }, 100);
+        });
+
         // Master List Resmi Seluruh 18 Halaman Layar Display TV Masjid Jami' Al-Jihad
         const MASTER_ROTATION_PAGES = [
             { order: 1, name: 'Jadwal Sholat 5 Waktu', path: 'slides/utama.html', url: 'slides/utama.html', page: '/utama-embed', category: 'Utama / Sholat', category_color: 'primary', active: true },
@@ -574,6 +663,10 @@
 
             if (sectionName === 'users') {
                 renderUsersTable();
+            } else if (sectionName === 'jadwal-sholat') {
+                if (typeof window.init24HourTimepickers === 'function') {
+                    window.init24HourTimepickers();
+                }
             } else if (sectionName === 'galeri-informasi') {
                 renderGaleriTable();
             } else if (sectionName === 'rotasi-tv') {

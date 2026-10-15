@@ -4,7 +4,16 @@
  * Versi: aljihad-signage-v5.8.46
  */
 
-        function updatePrayerSourceBadgeUI(source) {
+        function setPrayerInputValue(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = val;
+    if (el._flatpickr) {
+        try { el._flatpickr.setDate(val, false); } catch(e) {}
+    }
+}
+
+function updatePrayerSourceBadgeUI(source) {
             const badgeEl = document.getElementById('badgePrayerSource');
             if (!badgeEl) return;
             if (source === 'nu') {
@@ -69,14 +78,14 @@
 
                 if (!jadwal) throw new Error('Data jadwal tidak ditemukan dari server Kemenag.');
 
-                // Isi form input
-                if (document.getElementById('sholatImsak')) document.getElementById('sholatImsak').value = jadwal.imsak;
-                if (document.getElementById('sholatSubuh')) document.getElementById('sholatSubuh').value = jadwal.subuh;
-                if (document.getElementById('sholatTerbit')) document.getElementById('sholatTerbit').value = jadwal.terbit;
-                if (document.getElementById('sholatDzuhur')) document.getElementById('sholatDzuhur').value = jadwal.dzuhur;
-                if (document.getElementById('sholatAshar')) document.getElementById('sholatAshar').value = jadwal.ashar;
-                if (document.getElementById('sholatMaghrib')) document.getElementById('sholatMaghrib').value = jadwal.maghrib;
-                if (document.getElementById('sholatIsya')) document.getElementById('sholatIsya').value = jadwal.isya;
+                // Isi form input 24H
+                setPrayerInputValue('sholatImsak', jadwal.imsak);
+                setPrayerInputValue('sholatSubuh', jadwal.subuh);
+                setPrayerInputValue('sholatTerbit', jadwal.terbit);
+                setPrayerInputValue('sholatDzuhur', jadwal.dzuhur);
+                setPrayerInputValue('sholatAshar', jadwal.ashar);
+                setPrayerInputValue('sholatMaghrib', jadwal.maghrib);
+                setPrayerInputValue('sholatIsya', jadwal.isya);
 
                 // Sinkronkan ke tabel jadwal_sholat Supabase
                 const sholatTimes = [
@@ -225,14 +234,14 @@
 
                 if (!jadwalTimes) throw new Error('Data jadwal hisab Falakiyah NU tidak berhasil diambil.');
 
-                // Isi form input di Admin Panel
-                if (document.getElementById('sholatImsak')) document.getElementById('sholatImsak').value = jadwalTimes.imsak;
-                if (document.getElementById('sholatSubuh')) document.getElementById('sholatSubuh').value = jadwalTimes.subuh;
-                if (document.getElementById('sholatTerbit')) document.getElementById('sholatTerbit').value = jadwalTimes.terbit;
-                if (document.getElementById('sholatDzuhur')) document.getElementById('sholatDzuhur').value = jadwalTimes.dzuhur;
-                if (document.getElementById('sholatAshar')) document.getElementById('sholatAshar').value = jadwalTimes.ashar;
-                if (document.getElementById('sholatMaghrib')) document.getElementById('sholatMaghrib').value = jadwalTimes.maghrib;
-                if (document.getElementById('sholatIsya')) document.getElementById('sholatIsya').value = jadwalTimes.isya;
+                // Isi form input di Admin Panel 24H
+                setPrayerInputValue('sholatImsak', jadwalTimes.imsak);
+                setPrayerInputValue('sholatSubuh', jadwalTimes.subuh);
+                setPrayerInputValue('sholatTerbit', jadwalTimes.terbit);
+                setPrayerInputValue('sholatDzuhur', jadwalTimes.dzuhur);
+                setPrayerInputValue('sholatAshar', jadwalTimes.ashar);
+                setPrayerInputValue('sholatMaghrib', jadwalTimes.maghrib);
+                setPrayerInputValue('sholatIsya', jadwalTimes.isya);
 
                 // Sinkronkan ke tabel jadwal_sholat Supabase
                 const sholatTimes = [

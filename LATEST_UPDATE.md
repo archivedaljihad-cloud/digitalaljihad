@@ -7,6 +7,40 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 23:15 WIB)
+
+### 🕌 MIGRASI INPUT JADWAL SHOLAT & DURASI KE FORMAT 24 JAM MURNI (24H WIB) & INTEGRASI FLATPICKR OFFLINE (Versi SW v5.8.87):
+1. **Akar Masalah Tampilan AM-PM di Dashboard Admin**:
+   - Ketujuh input jadwal sholat di panel Admin (`sholatImsak`, `sholatSubuh`, `sholatTerbit`, `sholatDzuhur`, `sholatAshar`, `sholatMaghrib`, `sholatIsya`) sebelumnya menggunakan elemen native HTML `<input type="time">`.
+   - Pada peramban Chromium / WebKit (Google Chrome, Edge, WebView) yang berjalan di sistem operasi dengan regional/locale bahasa Inggris (`en-US`), input native `<input type="time">` dipaksa tampil dalam format 12 jam dengan pemilih AM/PM (contoh: `02:45 PM`, `05:48 PM`, `06:57 PM`), mengabaikan atribut `lang="id"` pada tag `<html>`.
+   - Hal ini membingungkan pengurus masjid yang terbiasa dengan format 24 jam Indonesia (WIB) seperti `14:45`, `17:48`, `18:57`.
+   - Modul lain di dashboard (Surat Yaasiin, Agenda Rutin, Qurban, Undangan, Pengumuman) telah menggunakan format 24H berbasis text, sehingga format jam sholat perlu diselaraskan secara konsisten ke 24H murni.
+
+2. **Solusi Komprehensif & Implementasi 24H Berbasis PWA Offline**:
+   - **Komponen Flatpickr Mandiri Lokal Tanpa CDN**:
+     - Mengunduh aset pustaka timepicker Flatpickr secara lokal: `web-statis/vendor/flatpickr/flatpickr.min.css` (16 KB) dan `web-statis/vendor/flatpickr/flatpickr.min.js` (50 KB).
+     - Menjamin kehandalan offline PWA di TV dan laptop tanpa bergantung pada koneksi internet atau CDN luar yang dapat mengalami gangguan.
+   - **Styling Islami Emerald-Gold & Proteksi AM/PM Tersembunyi**:
+     - Ditambahkan aturan CSS di `web-statis/admin.html`: `.flatpickr-am-pm { display: none !important; }` dan tema gelap bernuansa hijau masjid (`#064e3b` / `#059669`) dengan aksen emas (`#ffd700`).
+   - **Desain Input Group 24 Jam**:
+     - Ketujuh input sholat dikonversi ke `<div class="input-group shadow-sm input-group-time-24">` dengan ikon jam interaktif di depan (bisa diklik untuk membuka timepicker popup), input text `timepicker-24` dengan masking otomatis `HH:MM` (membatasi jam `00-23` dan menit `00-59`), serta badge hijau penanda `24H` di bagian belakang.
+   - **Modul Inti & Sinkronisasi Dua Arah (`admin-core.js` & `admin-jadwal-sholat.js`)**:
+     - Ditambahkan fungsi global `window.formatJam24H(input)` dan `window.validateJam24H(input, fallbackVal)` di `admin-core.js` dengan fallback aman ke atribut default/placeholder.
+     - Ditambahkan inisialisasi Flatpickr `window.init24HourTimepickers()` dengan konfigurasi `enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: true, minuteIncrement: 1`.
+     - Dibuat fungsi helper `setPrayerInputValue(id, val)` di `admin-jadwal-sholat.js` dan diterapkan pada `admin-data-loader.js` serta sinkronisasi Kemenag/Falakiyah NU agar instance Flatpickr dan nilai input selalu tersinkron tanpa jeda.
+
+3. **Bumping Service Worker & Pembersihan Cache Otomatis (`v5.8.87`)**:
+   - Service Worker di `web-statis/sw.js` dinaikkan ke **`aljihad-signage-v5.8.87`**.
+   - Aset `vendor/flatpickr/flatpickr.min.css` dan `vendor/flatpickr/flatpickr.min.js` didaftarkan ke `STATIC_ASSETS` untuk di-cache secara permanen.
+   - Skrip pembersih cache usang di `web-statis/js/admin/admin-settings.js` disinkronkan ke `aljihad-signage-v5.8.87`.
+   - Query string aset JavaScript di `web-statis/admin.html` dinaikkan ke `?v=5.8.87`.
+
+4. **Hasil Pengujian Regresi Otomatis**:
+   - Ditambahkan **TEST 24: 24-Hour Format & Flatpickr Offline Resilience Integrity** pada `scripts/test-engine.js`.
+   - `npm test`: **244 / 244 Asersi Engine Lulus** + **8 / 8 Test Keamanan Autentikasi Lulus** = **Total 252 Tests Lulus (100% PASS)**.
+
+---
+
 ## ✨ UPDATE TERBARU — 15 Oktober 2026 (Pukul 18:55 WIB)
 
 ### 🕌 PERBAIKAN PERSISTENSI TIMER SURAT YAASIIN, PROTEKSI SCHEMA SQL VARCHAR(20) & HYDRATION INSTAN (Versi SW v5.8.86):
