@@ -1,3 +1,30 @@
+## Optimasi pemuatan awal TV — 16 Oktober 2026 (v5.8.96)
+
+- Backup sebelum perubahan: `/workspace/backups/digitalaljihad-before-loading-fix-20261016-150621.tar.gz`.
+  Seluruh 708 berkas diverifikasi; SHA-256 `3f4717cfdd0341b36bbb39fcbb238b116ea1dbb9bcca2c97bbb759dce0c8c212`.
+  Backup kode ini tidak mencakup database Supabase live.
+- `index.html`: empat pembacaan awal settings, infaq, jadwal, dan petugas Jumat
+  berjalan bersamaan. Pemilihan mode sholat/slide tetap menunggu snapshot lengkap.
+  Kegagalan infaq tetap ditoleransi; fallback tampilan dan protokol ACK tetap berlaku.
+- Registrasi/update service worker menunggu startup selesai + 15 detik lalu idle
+  (fallback untuk TV tanpa requestIdleCallback). Worker yang sudah aktif tetap melayani.
+  Pada kunjungan pertama, kesiapan offline memang menunggu unduhan selesai.
+- `sw.js`: precache 86 aset (sekitar 14,6 MiB berkas lokal sebelum kompresi) dibatasi
+  tiga unduhan sekaligus, bukan semuanya bersamaan. Inventaris offline tetap lengkap;
+  kegagalan aset inti tetap membatalkan instalasi dan mempertahankan worker lama.
+- Versi cache, pembersihan admin, dan query script admin diselaraskan v5.8.96.
+  Tidak ada rute, kolom database, RLS, atau data pengguna yang diubah.
+- Pengujian perilaku `scripts/test-loading-performance.js` memeriksa konkurensi,
+  kegagalan precache inti/opsional, serta startup paralel yang tetap memakai data lengkap.
+  Pengukuran browser memakai fixture jaringan; hasilnya bukan jaminan kecepatan TV fisik.
+  Fixture API 400 ms/permintaan: slide pertama 2451 -> 773 ms; splash hilang
+  4346 -> 2592 ms. Empat request awal tersebar 1279 -> 48 ms, tanpa uncaught JS error.
+  Registrasi worker teruji belum berjalan saat splash hilang dan berjalan sekali kemudian.
+- Rilis sebelumnya v5.8.95 (1730443) telah dipublikasikan dengan izin pengguna;
+  build Cloudflare berhasil dan aset produksi diverifikasi pada 16 Oktober 2026.
+
+---
+
 # LATEST UPDATE - SISTEM INFORMASI DISPLAY MASJID (DIGITALv304)
 
 > **Catatan Penting untuk AI Agent / Pengembang Baru:**  

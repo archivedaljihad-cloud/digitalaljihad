@@ -1263,12 +1263,18 @@
             try {
                 if (statusEl) statusEl.textContent = 'MEMUAT DATA SUPABASE...';
 
-                // 1. Ambil settings & data program infaq
-                settings = await SupabaseDB.getSettings();
-                let programInfaqList = [];
-                try {
-                    programInfaqList = await SupabaseDB.getProgramInfaq();
-                } catch (e) {}
+                // Keempat pembacaan independen berjalan bersamaan. Tetap tunggu data
+                // sebelum menentukan mode sholat dan slide; jangan tampilkan sukses dari cache palsu.
+                const initialData = await Promise.all([
+                    SupabaseDB.getSettings(),
+                    SupabaseDB.getProgramInfaq().catch(() => []),
+                    SupabaseDB.getJadwalSholat(),
+                    SupabaseDB.getSholatJumat()
+                ]);
+                settings = initialData[0];
+                const programInfaqList = initialData[1];
+                jadwalList = initialData[2];
+                jumatPetugas = initialData[3];
 
                 if (settings) {
                     if (settings.nama_aplikasi) {
@@ -1291,9 +1297,7 @@
                     updateMasterFooter(localFooter);
                 }
 
-                // 2. Ambil jadwal & petugas Jumat
-                jadwalList = await SupabaseDB.getJadwalSholat();
-                jumatPetugas = await SupabaseDB.getSholatJumat();
+                // 2. Bagikan hasil pembacaan awal yang sudah selesai.
                 window.settings = settings;
                 window.jumatPetugas = jumatPetugas;
                 window.jadwalList = jadwalList;
@@ -1434,7 +1438,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            initDisplay();
+            const displayStartup = initDisplay();
             setInterval(checkPrayerMode, 1000);
 
             // =========================================================================
@@ -1909,11 +1913,23 @@
                     console.log('🔄 [PWA] Service Worker versi baru telah aktif di latar belakang (tanpa reload layar TV).');
                 });
 
-                navigator.serviceWorker.register('sw.js').then((reg) => {
-                    console.log('✅ [PWA] Service Worker aktif:', reg.scope);
-                }).catch((err) => {
-                    console.log('ℹ️ [PWA] Service Worker info:', err);
-                });
+                // Unduhan offline tidak boleh berebut koneksi dengan layar pertama.
+                // Worker yang sudah aktif tetap melayani offline selama penundaan ini.
+                const registerWorker = () => {
+                    navigator.serviceWorker.register('sw.js').then((reg) => {
+                        console.log('✅ [PWA] Service Worker aktif:', reg.scope);
+                    }).catch((err) => {
+                        console.log('ℹ️ [PWA] Service Worker info:', err);
+                    });
+                };
+                const deferOfflineDownload = () => setTimeout(() => {
+                    if (typeof window.requestIdleCallback === 'function') {
+                        window.requestIdleCallback(registerWorker, { timeout: 3000 });
+                    } else {
+                        registerWorker();
+                    }
+                }, 15000);
+                displayStartup.then(deferOfflineDownload, deferOfflineDownload);
             }
 
             // Network Connectivity Resilience Listener (Offline Toast Indicator)

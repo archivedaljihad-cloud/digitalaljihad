@@ -2,7 +2,7 @@
    SERVICE WORKER - AL-JIHAD DIGITAL SIGNAGE PWA
    Offline-First Resiliency & Intelligent Caching
    ===================================================== */
-const CACHE_NAME = 'aljihad-signage-v5.8.95';
+const CACHE_NAME = 'aljihad-signage-v5.8.96';
 const STATIC_ASSETS = [
     './',
     'index.html',
@@ -98,14 +98,20 @@ self.addEventListener('install', (event) => {
         caches.open(CACHE_NAME).then(async (cache) => {
             console.log('[SW] Pre-caching static assets with resilient allSettled strategy');
             // Caching per-aset: kegagalan 1 aset tidak membatalkan penyimpanan aset-aset lainnya
-            const results = await Promise.allSettled(
-                STATIC_ASSETS.map((url) =>
-                    cache.add(url).catch((err) => {
-                        console.warn('[SW] Aset gagal di-precache (toleransi non-fatal):', url, err.message);
-                        throw err;
-                    })
-                )
-            );
+            // Batasi unduhan agar koneksi TV tidak dibanjiri 86 request sekaligus.
+            // Hasil tetap berdasarkan indeks aset untuk pemeriksaan inti di bawah.
+            const results = [];
+            for (let offset = 0; offset < STATIC_ASSETS.length; offset += 3) {
+                const batch = await Promise.allSettled(
+                    STATIC_ASSETS.slice(offset, offset + 3).map((url) =>
+                        cache.add(url).catch((err) => {
+                            console.warn('[SW] Aset gagal di-precache (toleransi non-fatal):', url, err.message);
+                            throw err;
+                        })
+                    )
+                );
+                results.push(...batch);
+            }
 
             // Verifikasi integritas aset inti sebelum skipWaiting
             const CORE_ASSETS = ['index.html', 'prayer-mode.html', 'css/display-theme.css', 'js/supabase-db.js', 'slides/utama.html'];
