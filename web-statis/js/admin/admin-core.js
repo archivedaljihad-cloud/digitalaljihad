@@ -440,7 +440,7 @@
             if (cfgEl && cfgEl.value != num) cfgEl.value = num;
             if (jumatEl && jumatEl.value != num) jumatEl.value = num;
             if (badgeEl) badgeEl.innerHTML = `<i class="fas fa-hourglass-half mr-1"></i> Durasi TV: ${num} Menit`;
-            try { localStorage.setItem('cached_prayer_mode_jumat_duration', num); } catch (e) {}
+            // Preview only; confirmed duration cache is updated by the save helper.
         }
 
         function handlePrayerModeSwitch(input) {
@@ -837,3 +837,21 @@
         }
 
         // =======================================================
+// Per-module feedback is limited to this browser's own correlated save events.
+document.addEventListener('DOMContentLoaded', () => {
+    if (!window.SupabaseDB || typeof SupabaseDB.onTvAcknowledgment !== 'function') return;
+    const panel = document.createElement('div');
+    panel.id = 'tvModuleRenderStatus';
+    panel.setAttribute('role', 'status'); panel.setAttribute('aria-live', 'polite');
+    panel.style.cssText = 'position:fixed;bottom:12px;left:12px;z-index:1050;max-width:90vw;padding:8px 12px;background:#fff;color:#334155;border-radius:8px;box-shadow:0 2px 12px #0002;display:none;font-size:13px';
+    document.body.appendChild(panel);
+    const states = new Map();
+    SupabaseDB.onTvAcknowledgment(ack => {
+        const label = { sholat_jumat: 'Petugas Jumat', pengumuman_jumat: 'Pengumuman Jumat', keuangan: 'Kas Masjid', kajian: 'Kajian', slides: 'Poster', undangan: 'Undangan', yasin: 'Yasin', hikmah: 'Hikmah', app_settings: 'Pengaturan' }[ack.table] || ack.table;
+        const text = { RECEIVED: 'data diterima TV', APPLIED: 'tampilan TV terkonfirmasi', RENDER_UNCONFIRMED: 'tampilan TV belum terkonfirmasi' }[ack.action];
+        if (!text) return;
+        states.set(ack.table + ':' + ack.device_id, label + ' · ' + ack.device_id + ': ' + text);
+        panel.textContent = 'Status TV terakhir: ' + Array.from(states.values()).slice(-3).join(' | ');
+        panel.style.display = 'block';
+    });
+});

@@ -87,8 +87,8 @@
 
             // C. Petugas Sholat Jum'at Terkini
             try {
-                if (resJumatSettled.status === 'fulfilled' && resJumatSettled.value.ok) {
-                    const jumatList = await resJumatSettled.value.json();
+                if (window.SupabaseDB || (resJumatSettled.status === 'fulfilled' && resJumatSettled.value.ok)) {
+                    const jumatList = window.SupabaseDB ? [await SupabaseDB.getSholatJumat()].filter(Boolean) : await resJumatSettled.value.json();
                     if (jumatList && jumatList.length > 0) {
                         const j = jumatList[0];
                         const namaKhotibImam = (j.khatib && j.imam && j.khatib !== j.imam) 
@@ -96,8 +96,8 @@
                             : (j.khatib || j.imam || '');
 
                         if (document.getElementById('jumatTanggal')) document.getElementById('jumatTanggal').value = j.tanggal || '';
-                        if (document.getElementById('jumatKhotib')) document.getElementById('jumatKhotib').value = namaKhotibImam;
-                        if (document.getElementById('jumatImam')) document.getElementById('jumatImam').value = namaKhotibImam;
+                        if (document.getElementById('jumatKhotib')) document.getElementById('jumatKhotib').value = j.khatib || j.imam || '';
+                        if (document.getElementById('jumatImam')) document.getElementById('jumatImam').value = j.imam || j.khatib || '';
                         let bilalVal = '';
                         let maklumatVal = '';
 
@@ -150,6 +150,8 @@
                             }
                         }
 
+                        if (document.getElementById('jumatMuadzin2')) document.getElementById('jumatMuadzin2').value = j.muadzin2 || '';
+                        if (document.getElementById('jumatWaktu')) document.getElementById('jumatWaktu').value = j.waktu || '11:45';
                         if (document.getElementById('jumatMuadzin')) document.getElementById('jumatMuadzin').value = j.muadzin || '';
                         if (document.getElementById('jumatBilal')) document.getElementById('jumatBilal').value = bilalVal;
                         if (document.getElementById('jumatMaklumat')) document.getElementById('jumatMaklumat').value = maklumatVal;
@@ -680,3 +682,6 @@
     }
 
         // Render Tabel Kas
+// Restore unconfirmed edits after asynchronous form hydration.
+const hydrateSupabaseData = loadAllSupabaseData;
+loadAllSupabaseData = async function(...args) { try { return await hydrateSupabaseData.apply(this, args); } finally { if (typeof restorePetugasJumatDraft === 'function') restorePetugasJumatDraft(); } };

@@ -504,6 +504,7 @@
 
         <!-- MAIN CONTENT PANEL -->
         <div class="main-content">
+            <div id="tvKasPeriode" style="color:#cbd5e1;font-size:13px;text-align:center;margin-bottom:6px">Menunggu data kas…</div>
             <!-- 4 KARTU STATISTIK KAS UTAMA -->
             <div class="kas-kpi-grid">
                 <!-- Saldo Awal -->
@@ -511,7 +512,7 @@
                     <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
                     <div class="kpi-body">
                         <span class="kpi-label">SALDO AWAL KAS</span>
-                        <div class="kpi-val" id="tvKasSaldoAwal">Rp 0</div>
+                        <div class="kpi-val" id="tvKasSaldoAwal">…</div>
                     </div>
                 </div>
                 <!-- Pemasukan (+) -->
@@ -519,7 +520,7 @@
                     <div class="kpi-icon"><i class="fas fa-arrow-circle-down"></i></div>
                     <div class="kpi-body">
                         <span class="kpi-label">PEMASUKAN KAS (+)</span>
-                        <div class="kpi-val" id="tvKasPemasukan">+ Rp 0</div>
+                        <div class="kpi-val" id="tvKasPemasukan">…</div>
                     </div>
                 </div>
                 <!-- Pengeluaran (-) -->
@@ -527,7 +528,7 @@
                     <div class="kpi-icon"><i class="fas fa-arrow-circle-up"></i></div>
                     <div class="kpi-body">
                         <span class="kpi-label">PENGELUARAN BIAYA (-)</span>
-                        <div class="kpi-val" id="tvKasPengeluaran">- Rp 0</div>
+                        <div class="kpi-val" id="tvKasPengeluaran">…</div>
                     </div>
                 </div>
                 <!-- Saldo Akhir Kas -->
@@ -535,7 +536,7 @@
                     <div class="kpi-icon"><i class="fas fa-coins"></i></div>
                     <div class="kpi-body">
                         <span class="kpi-label">SALDO AKHIR KAS</span>
-                        <div class="kpi-val" id="tvKasSaldoAkhir">Rp 0</div>
+                        <div class="kpi-val" id="tvKasSaldoAkhir">…</div>
                     </div>
                 </div>
             </div>
@@ -553,7 +554,7 @@
                     </div>
                     <div class="table-col-footer in">
                         <span>Total Pemasukan</span>
-                        <span id="tvTotalInFooter">Rp 0</span>
+                        <span id="tvTotalInFooter">…</span>
                     </div>
                 </div>
 
@@ -568,7 +569,7 @@
                     </div>
                     <div class="table-col-footer out">
                         <span>Total Pengeluaran</span>
-                        <span id="tvTotalOutFooter">Rp 0</span>
+                        <span id="tvTotalOutFooter">…</span>
                     </div>
                 </div>
             </div>
@@ -603,7 +604,7 @@
 
     <script>
         function formatRupiah(num) {
-            const val = parseFloat(num) || 0;
+            const val = SupabaseDB.parseMoney(num);
             return new Intl.NumberFormat('id-ID').format(val);
         }
 
@@ -641,12 +642,15 @@
         setInterval(rotateRibbon, 8500);
 
         // Load & Sync Data Pengumuman & Kas Jum'at
-        async function loadKasJumatData() {
+        async function loadKasJumatData(forceRefresh = false, renderContext = null) {
+            const snapshot = await SupabaseDB.getSlideSnapshot('kas-jumat', forceRefresh);
+            if (renderContext && !renderContext.isCurrent()) return false;
+
             try {
                 // 1. Settings & Nama Masjid
-                let settings = null;
+                let settings = snapshot.settings;
                 try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
+                    if (!forceRefresh && window.parent && window.parent !== window && window.parent.settings) {
                         settings = window.parent.settings;
                     }
                 } catch (e) {}
@@ -672,41 +676,25 @@
                     } catch (e) {}
                 }
 
-                if (!pengumumanData || Object.keys(pengumumanData).length === 0) {
+                if (!forceRefresh && (!pengumumanData || Object.keys(pengumumanData).length === 0)) {
                     try {
                         const local = localStorage.getItem('pengumuman_jumat_data') || localStorage.getItem('cached_pengumuman_jumat');
                         if (local) pengumumanData = JSON.parse(local);
                     } catch (e) {}
                 }
 
-                // Default Fallback resmi Al-Jihad jika belum ada input admin atau data kosong
-                if (!pengumumanData || Object.keys(pengumumanData).length === 0) {
-                    pengumumanData = {
-                        saldo_awal: 19379023,
-                        saldoAwal: 19379023,
-                        pemasukan: 3500000,
-                        pengeluaran: 4137000,
-                        saldo_akhir: 18742023,
-                        saldoAkhir: 18742023,
-                        rincian_pemasukan: [
-                            { ket: "Pendapatan Tromol Jumat ( 25 Sept 2026 )", jumlah: 3500000, nominal: 3500000 }
-                        ],
-                        rincian_pengeluaran: [
-                            { ket: "Biaya Majlis Ta'lim Ibu - Ibu Selama 4 Minggu", jumlah: 800000, nominal: 800000 },
-                            { ket: "Biaya Alokasi Buat Operasional Ambulan", jumlah: 200000, nominal: 200000 },
-                            { ket: "Biaya Operasional Masjid Periode Tanggal 02 sd 04 Okt 2026", jumlah: 3137000, nominal: 3137000 }
-                        ],
-                        himbauan: [
-                            "Diharapkan Jamaah yang masih berada diluar dipersilakan masuk untuk mengisi shaf yang masih kosong",
-                            "Bagi Jamaah yang membawa kendaraan diharapkan diparkir dengan rapi dan jangan lupa mengunci ganda kendaraanya",
-                            "Bagi Jamaah yang membawa HP Mohon di Non Aktifkan / di Silent sementara.",
-                            "Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tidak berbicara atau mengobrol sementara waktu"
-                        ]
-                    };
-                }
+                // Never invent financial figures while waiting for the first confirmed snapshot.
+                if (!pengumumanData && !snapshot.keuangan?.length) return false;
+                pengumumanData = pengumumanData || {};
+
+                pengumumanData = SupabaseDB.buildKasJumatSnapshot(snapshot.keuangan, pengumumanData);
+
+                document.getElementById('tvKasPeriode').textContent = pengumumanData.sumber === 'keuangan'
+                    ? 'Periode kas: ' + pengumumanData.periode_mulai + ' s/d ' + pengumumanData.periode_selesai
+                    : 'Ringkasan pengumuman Jumat';
 
                 // Normalisasi Data (Mendukung format admin pjData camelCase maupun format legacy snake_case)
-                const saldoAwal = parseFloat(pengumumanData.saldo_awal ?? pengumumanData.saldoAwal ?? 19379023) || 19379023;
+                const saldoAwal = SupabaseDB.parseMoney(pengumumanData.saldo_awal ?? pengumumanData.saldoAwal ?? 19379023);
 
                 // Rincian Pemasukan
                 let listIn = [];
@@ -812,6 +800,7 @@
                     document.getElementById('ribbonContentText').innerHTML = initialItem.text;
                 }
 
+                return true;
             } catch (err) {
                 console.error('Gagal memuat data kas jumat:', err);
             }
@@ -824,38 +813,12 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadKasJumatData();
 
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    loadKasJumatData();
-                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'app_settings' || msg.table === 'sholat_jumat' || msg.table === 'keuangan' || msg.table === 'pengumuman_jumat')) {
-                    loadKasJumatData();
-                } else if (msg.type === 'SYNC_JUMAT' || msg.type === 'SYNC_PENGUMUMAN_JUMAT' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadKasJumatData();
-                }
-            });
+    </script>
 
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'app_settings' || tbl === 'sholat_jumat' || tbl === 'keuangan' || tbl === 'pengumuman_jumat') {
-                        loadKasJumatData();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'app_settings' || payload.table === 'sholat_jumat' || payload.table === 'keuangan' || payload.table === 'pengumuman_jumat') {
-                        loadKasJumatData();
-                    }
-                });
-            }
-        });
+    <script>
+        // SLIDE_RENDER_CONFIRMED is emitted after DOM/images settle by the shared lifecycle.
+        window.slideRenderLifecycle = SupabaseDB.bindSlideRenderer('kas-jumat', ["app_settings","sholat_jumat","keuangan","pengumuman_jumat"], loadKasJumatData);
     </script>
 </body>
 </html>

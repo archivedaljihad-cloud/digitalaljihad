@@ -656,7 +656,11 @@
                     bilalStr = pj.petugas.bilal;
                 }
 
-                document.getElementById('valMuadzin').textContent = (jumat && jumat.muadzin) ? jumat.muadzin.trim() : (pj?.petugas?.muadzin || 'Belum Ditetapkan');
+                document.getElementById('valMuadzin').textContent = [jumat?.muadzin, jumat?.muadzin2].filter(name => typeof name === 'string' && name.trim()).join(' / ') || pj?.petugas?.muadzin || 'Belum Ditetapkan';
+                const duration = document.getElementById('valDurasiJumat');
+                if (duration) duration.textContent = 'Durasi: ' + (jumat?.durasi || settings?.prayer_mode_jumat_duration || 50) + ' menit';
+                const time = document.getElementById('valWaktuJumat');
+                if (time) time.textContent = (jumat?.waktu || '11:45') + ' WIB';
                 document.getElementById('valBilal').textContent = bilalStr || 'Belum Ditetapkan';
 
                 const rowMaklumat = document.getElementById('rowMaklumat');
@@ -692,144 +696,39 @@
                 }
                 const elImamPhoto = document.getElementById('imamPhoto');
                 if (elImamPhoto) {
-                    elImamPhoto.src = photoUrl || '../image/display/default_imam.jpg';
+                    const nextPhoto = photoUrl || '../image/display/default_imam.jpg';
+                    if (elImamPhoto.getAttribute('src') !== nextPhoto) elImamPhoto.src = nextPhoto;
                 }
+                const badge = document.getElementById('badgeImamName');
+                if (badge) {
+                    badge.style.whiteSpace = 'nowrap'; badge.style.overflow = 'hidden'; badge.style.textOverflow = 'ellipsis';
+                    badge.title = badge.textContent;
+                    let size = 20;
+                    badge.style.fontSize = size + 'px';
+                    while (badge.scrollWidth > badge.clientWidth && size > 10) badge.style.fontSize = (--size) + 'px';
+                }
+                return true;
             } catch (err) {
                 console.error('[jumat.html] Render UI error:', err);
             }
         }
 
-        async function loadJumatData() {
-            // LAYER 1: Ambil data instan dari memori Parent TV (0ms Latency Bridge)
-            let parentBridgeSuccess = false;
+        async function loadJumatData(forceRefresh = false, renderContext = null) {
             try {
-                if (window.parent && window.parent !== window) {
-                    const pPetugas = window.parent.jumatPetugas || window.parent.__LATEST_JUMAT__;
-                    const pSettings = window.parent.settings || window.parent.__LATEST_SETTINGS__;
-                    if (pPetugas) {
-                        renderJumatData(pPetugas, pSettings);
-                        parentBridgeSuccess = true;
-                    }
-                }
-            } catch (e) {}
-
-            // LAYER 2: Ambil cache lokal offline
-            if (!parentBridgeSuccess) {
-                try {
-                    const cachedJumat = localStorage.getItem('cached_sholat_jumat');
-                    const cachedSettings = localStorage.getItem('cached_app_settings');
-                    if (cachedJumat) {
-                        renderJumatData(JSON.parse(cachedJumat), cachedSettings ? JSON.parse(cachedSettings) : null);
-                    }
-                } catch (e) {}
-            }
-
-            // LAYER 3: Direct Native REST Fetch ke Supabase Cloud (Bypass CDN SDK jika terhambat)
-            try {
-                if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url && SUPABASE_CONFIG.anonKey) {
-                    const headers = {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json'
-                    };
-                    const [jumatRes, settingsRes] = await Promise.all([
-                        fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?order=tanggal.desc,id.desc&limit=1`, { headers }),
-                        fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?select=*&order=id.asc`, { headers })
-                    ]);
-
-                    let jData = null;
-                    let sData = null;
-
-                    if (jumatRes.ok) {
-                        const rows = await jumatRes.json();
-                        if (Array.isArray(rows) && rows.length > 0) jData = rows[0];
-                    }
-                    if (settingsRes.ok) {
-                        const rows = await settingsRes.json();
-                        if (Array.isArray(rows) && rows.length > 0) {
-                            const r1 = rows.find(r => r.id === 1) || rows[0];
-                            sData = Object.assign({}, r1);
-                            rows.forEach(r => {
-                                if (r.key && r.id !== 1 && r.value !== null && r.value !== undefined) {
-                                    let val = r.value;
-                                    if (typeof val === 'string' && (val.startsWith('{') || val.startsWith('['))) {
-                                        try { val = JSON.parse(val); } catch(e) {}
-                                    }
-                                    sData[r.key] = val;
-                                }
-                            });
-                        }
-                    }
-
-                    if (jData) {
-                        try { localStorage.setItem('cached_sholat_jumat', JSON.stringify(jData)); } catch(e) {}
-                        if (sData) {
-                            try { localStorage.setItem('cached_app_settings', JSON.stringify(sData)); } catch(e) {}
-                        }
-                        renderJumatData(jData, sData);
-                        return;
-                    }
-                }
-            } catch (restErr) {
-                console.warn('[jumat.html] Direct REST fetch:', restErr);
-            }
-
-            // LAYER 4: SupabaseDB SDK Manager
-            try {
-                if (window.SupabaseDB) {
-                    const [settings, jumat] = await Promise.all([
-                        SupabaseDB.getSettings(),
-                        SupabaseDB.getSholatJumat()
-                    ]);
-                    if (jumat) {
-                        renderJumatData(jumat, settings);
-                    }
-                }
-            } catch (sdkErr) {
-                console.warn('[jumat.html] SupabaseDB SDK:', sdkErr);
-            }
+                const snapshot = await SupabaseDB.getSlideSnapshot('jumat', forceRefresh);
+                if (renderContext && !renderContext.isCurrent()) return false;
+                return renderJumatData(snapshot.jumat, snapshot.settings);
+            } catch (error) { console.warn('[jumat] Mempertahankan tampilan terakhir:', error); return false; }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadJumatData();
 
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.jumatPetugas) {
-                        renderJumatData(msg.jumatPetugas, msg.settings);
-                    }
-                } else if (msg.type === 'DATA_UPDATED' || msg.type === 'SYNC_JUMAT') {
-                    if (msg.jumatPetugas) {
-                        renderJumatData(msg.jumatPetugas, msg.settings);
-                    } else if (msg.data && (msg.data.imam || msg.data.tanggal)) {
-                        renderJumatData(msg.data, null);
-                    }
-                    loadJumatData();
-                } else if (msg.type === 'SYNC_PENGUMUMAN_JUMAT' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadJumatData();
-                }
-            });
-
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'sholat_jumat' || tbl === 'app_settings' || tbl === 'pengumuman_jumat') {
-                        loadJumatData();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'sholat_jumat' || payload.table === 'app_settings' || payload.table === 'pengumuman_jumat') {
-                        loadJumatData();
-                    }
-                });
-            }
-        });
     </script>
+
+    <script>
+        // SLIDE_RENDER_CONFIRMED is emitted after DOM/images settle by the shared lifecycle.
+        window.slideRenderLifecycle = SupabaseDB.bindSlideRenderer('jumat', ["sholat_jumat","app_settings","pengumuman_jumat","quick_petugas"], loadJumatData);
+    </script>
+<span id="valDurasiJumat" style="position:fixed;bottom:75px;right:24px;color:#ffd700;font-size:14px;z-index:10"></span>
+<span id="valWaktuJumat" style="position:fixed;bottom:52px;right:24px;color:#ffd700;font-size:16px;z-index:10">11:45 WIB</span>
 </body>
 </html>

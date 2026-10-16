@@ -811,7 +811,7 @@
             performCinematicTransition(toUrl, '', '', callback);
         }
 
-        function showSlide(item, index, total) {
+        function showSlide(item, index, total, immediate = false) {
             if (!item) return;
 
             const titleEl = document.getElementById('slideTitle');
@@ -836,6 +836,7 @@
                 dotsEl.innerHTML = '';
             }
 
+            if (immediate) lastResolvedImgUrl = '';
             // Inisialisasi awal (pertama kali dibuka): render instan
             if (!lastResolvedImgUrl) {
                 if (titleEl) titleEl.textContent = nextTitle;
@@ -917,12 +918,15 @@
         }
 
         // 2. SINKRONISASI DARI CLOUD SUPABASE SECARA ASINKRON / PARENT MEMORY BRIDGE
-        async function loadSlidesFromCloud() {
+        async function loadSlidesFromCloud(forceRefresh = false, renderContext = null) {
+            const snapshot = await SupabaseDB.getSlideSnapshot('slide', forceRefresh);
+            if (renderContext && !renderContext.isCurrent()) return false;
+
             try {
                 // Ambil Pengaturan Umum (Bridge dari Parent Memory jika ada)
-                let settings = null;
+                let settings = snapshot.settings;
                 try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
+                    if (!forceRefresh && window.parent && window.parent !== window && window.parent.settings) {
                         settings = window.parent.settings;
                     }
                 } catch (e) {}
@@ -951,71 +955,31 @@
 
                 // Ambil Daftar Galeri Informasi dari Cloud
                 if (window.SupabaseDB && typeof SupabaseDB.getSlides === 'function') {
-                    const list = await SupabaseDB.getSlides();
-                    if (Array.isArray(list) && list.length > 0) {
+                    const list = snapshot.slides;
+                    if (Array.isArray(list)) {
                         const valid = list.filter(s => s && s.aktif !== false && s.status !== 'nonaktif');
                         if (valid.length > 0) {
                             slidesData = valid;
                             if (currentSlideIdx >= slidesData.length) currentSlideIdx = 0;
-                            showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length);
+                            await showSlide(slidesData[currentSlideIdx], currentSlideIdx, slidesData.length, true);
                             startSlideRotation();
+                        } else {
+                            slidesData = []; clearTimeout(slideTimer);
+                            await showSlide({ judul: 'Belum ada poster aktif', deskripsi: '' }, 0, 0, true);
                         }
                     }
                 }
+                return true;
             } catch (err) {
                 console.warn('Gagal sinkronisasi slides dari cloud:', err);
             }
         }
 
-        function initSlideApp() {
-            loadSlidesFromCloud();
+    </script>
 
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings) {
-                        if (msg.settings.nama_aplikasi) {
-                            const nameEl = document.getElementById('nama-masjid');
-                            if (nameEl) nameEl.textContent = msg.settings.nama_aplikasi;
-                        }
-                        if (msg.settings.sub_header) {
-                            const subEl = document.getElementById('sub-header');
-                            if (subEl) subEl.textContent = msg.settings.sub_header;
-                        }
-                    }
-                    loadSlidesFromCloud();
-                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'slides' || msg.table === 'app_settings')) {
-                    loadSlidesFromCloud();
-                } else if (msg.type === 'SYNC_SLIDES' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadSlidesFromCloud();
-                }
-            });
-
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'slides' || tbl === 'app_settings') {
-                        loadSlidesFromCloud();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload && (payload.table === 'slides' || payload.table === 'app_settings')) {
-                        console.log('⚡ Menerima update data realtime untuk Galeri Informasi');
-                        loadSlidesFromCloud();
-                    }
-                });
-            }
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initSlideApp);
-        } else {
-            initSlideApp();
-        }
+    <script>
+        // SLIDE_RENDER_CONFIRMED is emitted after DOM/images settle by the shared lifecycle.
+        window.slideRenderLifecycle = SupabaseDB.bindSlideRenderer('slide', ["slides","slides_custom_data","app_settings"], loadSlidesFromCloud);
     </script>
 </body>
 </html>

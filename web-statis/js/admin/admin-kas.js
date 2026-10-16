@@ -276,7 +276,7 @@
             const uraian = document.getElementById('editKasUraian')?.value;
             const nominal = parseRupiahInput(document.getElementById('editKasNominal')?.value);
 
-            if (!id || !uraian || nominal <= 0) {
+            if (!id || !uraian || !Number.isFinite(nominal) || nominal <= 0) {
                 alert('Harap lengkapi uraian dan nominal transaksi!');
                 return;
             }
@@ -291,16 +291,11 @@
             };
 
             try {
-                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${table}?id=eq.${id}`, {
-                    method: 'PATCH',
-                    headers: {
-                        ...getSupabaseHeaders(),
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (res.ok) {
+                localStorage.setItem('draft_edit_kas', JSON.stringify({ id, table, ...payload }));
+                if (!['keuangan', 'keuangan_ambulance'].includes(table)) throw new Error('Tabel kas tidak valid');
+                const result = await SupabaseDB.safeRestMutation(`${table}?id=eq.${encodeURIComponent(id)}`, 'PATCH', payload);
+                if (result.success && result.cloudConfirmed && result.rowsAffected > 0) {
+                    localStorage.removeItem('draft_edit_kas');
                     $('#modalEditKas').modal('hide');
                     if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
                         SupabaseDB.broadcastChange(table, 'UPDATE', payload, 'Bendahara Kas');
@@ -308,8 +303,7 @@
                     await loadAllSupabaseData();
                     alert('Alhamdulillah! Koreksi transaksi kas berhasil disimpan ke Supabase.');
                 } else {
-                    const errJson = await res.json().catch(() => ({}));
-                    throw new Error(errJson.message || 'Gagal menyimpan perubahan ke server.');
+                    throw new Error(result.error || 'Perubahan belum dikonfirmasi cloud. Draft tetap tersedia.');
                 }
             } catch (err) {
                 alert('Pemberitahuan: ' + err.message);
@@ -333,7 +327,7 @@
             const uraian = document.getElementById('kasUraian')?.value;
             const nominal = parseRupiahInput(document.getElementById('kasNominal')?.value);
 
-            if (!uraian || nominal <= 0) {
+            if (!uraian || !Number.isFinite(nominal) || nominal <= 0) {
                 alert('Harap lengkapi uraian dan nominal transaksi!');
                 return;
             }
@@ -349,29 +343,12 @@
             };
 
             try {
-                let resOk = false;
-                if (window.SupabaseDB && typeof SupabaseDB.saveTransaksiKas === 'function') {
-                    const saveRes = await SupabaseDB.saveTransaksiKas(payload);
-                    resOk = saveRes.success;
-                    if (!resOk && saveRes.error) throw new Error(saveRes.error);
-                } else {
-                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${targetTable}`, {
-                        method: 'POST',
-                        headers: {
-                            ...getSupabaseHeaders(),
-                            'Prefer': 'return=representation'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                    resOk = res.ok;
-                    if (!resOk) {
-                        const errJson = await res.json().catch(() => ({}));
-                        throw new Error(errJson.message || 'Gagal menyimpan ke server.');
-                    }
-                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
-                        SupabaseDB.broadcastChange(targetTable, 'INSERT', payload, 'Bendahara Kas');
-                    }
-                }
+                localStorage.setItem('draft_transaksi_kas', JSON.stringify(payload));
+                if (!window.SupabaseDB) throw new Error('Layanan cloud belum siap');
+                const result = await SupabaseDB.saveTransaksiKas(payload);
+                const resOk = result.success === true && result.cloudConfirmed === true;
+                if (!resOk) throw new Error(result.error || 'Cloud belum mengonfirmasi transaksi. Draft tetap tersedia.');
+                localStorage.removeItem('draft_transaksi_kas');
 
                 if (resOk) {
                     $('#modalTambahKas').modal('hide');

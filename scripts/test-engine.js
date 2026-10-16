@@ -337,7 +337,7 @@ const slideContent = fs.readFileSync(path.join(baseDir, 'slides/slide.html'), 'u
 const redirectsPath = path.join(baseDir, '_redirects');
 
 assert(dbContent.includes("t === 'app_settings'") && dbContent.includes("delete this._cache['sholat_jumat']"), 'SupabaseDB.invalidateCache membersihkan seluruh tabel dependen saat app_settings berubah');
-assert(dbContent.includes("sqlFotoImam = 'custom_uploaded'") && dbContent.includes("foto_imam: sqlFotoImam"), 'SupabaseDB.saveSholatJumat melindungi kolom varchar(255) SQL dari base64 overflow');
+assert(dbContent.includes("const batch = { sholat_jumat: snapshot }") && dbContent.includes("this.saveSettingsBatch(batch)"), 'SupabaseDB.saveSholatJumat menyimpan foto dan snapshot Jumat melalui JSON settings atomik tanpa overflow kolom SQL foto');
 assert(dbContent.includes('mergeCustomSlideImages') && dbContent.includes('slides_custom_data'), 'SupabaseDB mendukung resolusi custom base64 slide tanpa merusak skema SQL');
 assert(loginContent.includes('AdminAuth.syncUsersFromCloud') && loginContent.includes('rbac_users_list'), 'login.html mendukung sinkronisasi akun mutakhir lintas perangkat dengan live fallback');
 assert(!fs.existsSync(redirectsPath), '_redirects dieliminasi untuk mencegah infinite redirect loop 307 pada Cloudflare Workers Static Assets');
@@ -474,7 +474,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.96'), 'sw.js memiliki bumping versi cache terbaru v5.8.96');
+assert(swContent.includes('aljihad-signage-v5.8.97'), 'sw.js memiliki bumping versi cache terbaru v5.8.97');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY

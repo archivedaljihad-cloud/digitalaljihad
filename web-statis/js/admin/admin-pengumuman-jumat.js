@@ -166,6 +166,8 @@
                 console.warn('Gagal memuat saved pengumuman_jumat_data:', e);
             }
 
+            try { const draft = localStorage.getItem('draft_pengumuman_jumat_data'); if (draft) pjData = Object.assign({}, pjData, JSON.parse(draft)); } catch (error) {}
+
             // Isi nilai form input
             const elTglJudul = document.getElementById('pjInputTanggalJudul');
             const elTglKas = document.getElementById('pjInputTanggalKas');
@@ -436,7 +438,7 @@
             pjData.tanggalJudul = tglJudul;
             pjData.tanggalKas = tglKas;
             pjData.titimangsa = titimangsa;
-            pjData.petugas = { imamKhotib: imam, muadzin: muadzin, bilal: bilal, maklumat: maklumat };
+            pjData.petugas = { ...pjData.petugas, imamKhotib: imam, muadzin: muadzin, bilal: bilal, maklumat: maklumat };
             pjData.ttd = { namaKetua: ketua, tampilkanKetua: checkKetua, namaBendahara: bendahara, tampilkanBendahara: checkBendahara };
 
             // Update DOM preview
@@ -2079,4 +2081,18 @@
                 renderDashPengumumanJumatWidget();
             } catch(e) {}
         });
-    
+
+function triggerAutoSavePengumumanJumat() {
+    pjUpdatePreview();
+    try { localStorage.setItem('draft_pengumuman_jumat_data', JSON.stringify(pjData)); } catch (error) {}
+    const status = document.getElementById('pjAutosaveStatus');
+    if (status) status.textContent = 'Draft — menunggu penyimpanan…';
+    const sequence = (triggerAutoSavePengumumanJumat.sequence || 0) + 1;
+    triggerAutoSavePengumumanJumat.sequence = sequence;
+    clearTimeout(triggerAutoSavePengumumanJumat.timer);
+    triggerAutoSavePengumumanJumat.timer = setTimeout(async () => {
+        const confirmed = await simpanDataPengumumanJumat(false);
+        if (sequence !== triggerAutoSavePengumumanJumat.sequence) return;
+        if (status) status.textContent = confirmed ? 'Tersimpan di cloud — tampilan TV menunggu konfirmasi.' : 'Belum terkonfirmasi di cloud. Draft tetap tersedia.';
+    }, 700);
+}

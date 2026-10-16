@@ -800,7 +800,7 @@
                 grid.classList.add('fade-card-transition');
             }
 
-            setTimeout(() => {
+            return new Promise(resolve => setTimeout(() => {
                 const now = new Date();
                 const y = now.getFullYear();
                 const m = String(now.getMonth() + 1).padStart(2, '0');
@@ -889,13 +889,14 @@
                     `;
                 });
 
-                grid.innerHTML = html;
+                grid.innerHTML = html || '<div class="text-center">Belum ada jadwal kajian aktif.</div>';
                 renderPaginationPills();
 
                 if (withTransition) {
                     grid.classList.remove('fade-card-transition');
                 }
-            }, withTransition ? 220 : 0);
+                resolve(true);
+            }, withTransition ? 220 : 0));
         }
 
         // Render Indikator Tombol Halaman (Pills)
@@ -964,11 +965,14 @@
         }
 
         // Ambil Data Kajian dari Supabase / Parent TV Memory
-        async function loadKajianData() {
+        async function loadKajianData(forceRefresh = false, renderContext = null) {
+            const snapshot = await SupabaseDB.getSlideSnapshot('kajian', forceRefresh);
+            if (renderContext && !renderContext.isCurrent()) return false;
+
             try {
-                let settings = null;
+                let settings = snapshot.settings;
                 try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
+                    if (!forceRefresh && window.parent && window.parent !== window && window.parent.settings) {
                         settings = window.parent.settings;
                     }
                 } catch (e) {}
@@ -994,7 +998,7 @@
                     if (typeof kData === 'string') {
                         try { kData = JSON.parse(kData); } catch (e) {}
                     }
-                    if (!kData) {
+                    if (!kData && !forceRefresh) {
                         try { kData = JSON.parse(localStorage.getItem('cached_kajian_sabtu')); } catch (e) {}
                     }
 
@@ -1003,13 +1007,13 @@
                             document.getElementById('timelineBulanLabel').textContent = kData.bulan_label.toUpperCase();
                         }
 
-                        if (kData.jadwal_list && Array.isArray(kData.jadwal_list) && kData.jadwal_list.length > 0) {
+                        if (Array.isArray(kData.jadwal_list)) {
                             currentJadwalList = kData.jadwal_list;
                         } else {
                             currentJadwalList = [Object.assign({}, DEFAULT_KAJIAN, kData)];
                         }
                     } else {
-                        currentJadwalList = [DEFAULT_KAJIAN];
+                        currentJadwalList = forceRefresh ? [] : [DEFAULT_KAJIAN];
                     }
 
                     // Baca preferensi interval rotasi halaman dari data atau setting Super Admin
@@ -1060,66 +1064,26 @@
                     currentPageIndex = 0;
                 }
 
-                renderCurrentPage(false);
+                await renderCurrentPage(false);
                 startAutoRotation();
+                return true;
             } catch (err) {
                 console.warn('Gagal memuat data kajian online:', err);
+                if (forceRefresh) return false;
                 currentJadwalList = [DEFAULT_KAJIAN];
                 currentPageIndex = 0;
                 renderCurrentPage(false);
             }
         }
 
-        function setupKajianRealtimeListener() {
-            try {
-                if (typeof SupabaseDB !== 'undefined') {
-                    if (typeof SupabaseDB.subscribeRealtime === 'function') {
-                        SupabaseDB.subscribeRealtime((payload) => {
-                            loadKajianData();
-                        });
-                    }
 
-                    if (typeof SupabaseDB.subscribeRemoteCommands === 'function') {
-                        SupabaseDB.subscribeRemoteCommands((cmd, data) => {
-                            const commandName = typeof cmd === 'string' ? cmd : (cmd?.command || '');
-                            if (commandName === 'SYNC_KAJIAN' || commandName === 'UPDATE_SETTINGS' || commandName === 'REFRESH') {
-                                loadKajianData();
-                            }
-                        });
-                    }
 
-                    if (typeof SupabaseDB.onDataChange === 'function') {
-                        SupabaseDB.onDataChange((payload) => {
-                            const tbl = (payload.table || '').toLowerCase();
-                            if (tbl === 'kajian' || tbl === 'app_settings' || tbl === 'jadwal_sholat') {
-                                loadKajianData();
-                            }
-                        });
-                    }
-                }
-            } catch (e) {
-                console.warn('[SlideKajian] Realtime setup failed:', e);
-            }
 
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings && msg.settings.nama_aplikasi) {
-                        const namaEl = document.getElementById('nama-masjid');
-                        if (namaEl) namaEl.textContent = msg.settings.nama_aplikasi;
-                    }
-                    loadKajianData();
-                } else if (msg.type === 'SYNC_KAJIAN' || msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.action === 'reload_data' || msg.force_reload) {
-                    loadKajianData();
-                }
-            });
-        }
+    </script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadKajianData();
-            setupKajianRealtimeListener();
-        });
+    <script>
+        // SLIDE_RENDER_CONFIRMED is emitted after DOM/images settle by the shared lifecycle.
+        window.slideRenderLifecycle = SupabaseDB.bindSlideRenderer('kajian', ["kajian","app_settings","agenda_kajian"], loadKajianData);
     </script>
 </body>
 </html>

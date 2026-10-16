@@ -2700,7 +2700,7 @@
                                                 <!-- Sisi Kanan: Input Durasi + Keterangan di Samping Kotak Menit -->
                                                 <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
                                                     <div class="input-group shadow-sm" style="width: 130px; border: 1.5px solid #a7f3d0; border-radius: 8px; overflow: hidden; background: #ffffff;">
-                                                        <input type="number" id="cfgDurasiJumat" class="form-control text-center font-weight-bold" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)" style="border: none; font-size: 17px; font-weight: 800; color: #047857; height: 38px; box-shadow: none; padding-right: 0;">
+                                                        <input type="number" id="cfgDurasiJumat" class="form-control text-center font-weight-bold" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value); triggerAutoSavePetugasJumat()" style="border: none; font-size: 17px; font-weight: 800; color: #047857; height: 38px; box-shadow: none; padding-right: 0;">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #d1fae5; font-size: 13px; font-weight: 800; color: #047857; padding: 0 10px;">menit</span>
                                                         </div>
@@ -2757,16 +2757,16 @@
                                     <div class="p-3">
                                         <div class="form-group">
                                             <label class="font-weight-bold">Tanggal Sholat Jum'at</label>
-                                            <input type="date" class="form-control" id="jumatTanggal" value="2026-09-25">
+                                            <input type="date" class="form-control" id="jumatTanggal" value="2026-09-25" oninput="triggerAutoSavePetugasJumat()">
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold d-flex align-items-center justify-content-between">
-                                                <span><i class="fas fa-user-tie text-success mr-1"></i> Khotib & Imam Sholat</span>
-                                                <small class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> 1 Kolom Terpadu</small>
+                                                <span><i class="fas fa-user-tie text-success mr-1"></i> Khatib Sholat Jumat</span>
+                                                <small class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> Simpan otomatis</small>
                                             </label>
-                                            <input type="text" class="form-control" id="jumatKhotib" value="Ust. Dr. H. Faisal, M.Ag" placeholder="Masukkan nama Khotib & Imam">
-                                            <input type="hidden" id="jumatImam" value="Ust. Dr. H. Faisal, M.Ag">
-                                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i> Khotib dan Imam sholat dijadikan 1 kolom petugas (atau pisahkan dengan ' / ' jika berbeda orang).</small>
+                                            <input type="text" class="form-control" id="jumatKhotib" value="Ust. Dr. H. Faisal, M.Ag" placeholder="Masukkan nama Khatib" oninput="triggerAutoSavePetugasJumat()">
+                                            <label class="font-weight-bold mt-2" for="jumatImam">Imam</label><input type="text" class="form-control" id="jumatImam" value="Ust. Dr. H. Faisal, M.Ag" oninput="triggerAutoSavePetugasJumat()">
+                                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i> Isi Khatib dan Imam secara terpisah. Nama yang sama boleh diisi pada keduanya.</small>
                                         </div>
 
                                         <!-- INPUT UPLOAD FOTO IMAM & KHOTIB JUMAT -->
@@ -2807,15 +2807,18 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Muadzin</label>
-                                            <input type="text" class="form-control" id="jumatMuadzin" value="Ust. Rudy" placeholder="Masukkan nama Muadzin">
+                                            <input type="text" class="form-control" id="jumatMuadzin" value="Ust. Rudy" placeholder="Masukkan nama Muadzin" oninput="triggerAutoSavePetugasJumat()">
                                         </div>
+                                        <div class="form-group"><label for="jumatMuadzin2" class="font-weight-bold">Muadzin 2 (opsional)</label><input id="jumatMuadzin2" class="form-control" oninput="triggerAutoSavePetugasJumat()"></div>
+                                        <div class="form-group"><label for="jumatWaktu" class="font-weight-bold">Waktu Jum'at</label><input id="jumatWaktu" type="time" class="form-control" value="11:45" oninput="triggerAutoSavePetugasJumat()"></div>
+                                        <p id="jumatSaveStatus" role="status" aria-live="polite">Perubahan belum disimpan.</p>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Bilal</label>
-                                            <input type="text" class="form-control" id="jumatBilal" value="Ust. Mansur" placeholder="Masukkan nama Bilal">
+                                            <input type="text" class="form-control" id="jumatBilal" value="Ust. Mansur" placeholder="Masukkan nama Bilal" oninput="triggerAutoSavePetugasJumat()">
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Pembaca Maklumat</label>
-                                            <input type="text" class="form-control" id="jumatMaklumat" value="Ust. Fatkhurokhman" placeholder="Masukkan nama Pembaca Maklumat">
+                                            <input type="text" class="form-control" id="jumatMaklumat" value="Ust. Fatkhurokhman" placeholder="Masukkan nama Pembaca Maklumat" oninput="triggerAutoSavePetugasJumat()">
                                         </div>
 
                                         <!-- INPUT DURASI SHOLAT JUMAT KHUSUS PEKAN INI -->
@@ -2834,7 +2837,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center flex-wrap" style="gap: 10px;">
                                                     <div class="input-group shadow-sm" style="width: 130px; border: 1.5px solid #a7f3d0; border-radius: 8px; overflow: hidden; background: #ffffff;">
-                                                        <input type="number" class="form-control text-center font-weight-bold" id="jumatDurasiInput" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value)" style="border: none; font-size: 17px; font-weight: 800; color: #047857; height: 38px; box-shadow: none; padding-right: 0;">
+                                                        <input type="number" class="form-control text-center font-weight-bold" id="jumatDurasiInput" value="50" min="15" max="180" oninput="syncDurasiJumat(this.value); triggerAutoSavePetugasJumat()" style="border: none; font-size: 17px; font-weight: 800; color: #047857; height: 38px; box-shadow: none; padding-right: 0;">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text bg-white" style="border: none; border-left: 1.5px solid #d1fae5; font-size: 13px; font-weight: 800; color: #047857; padding: 0 10px;">menit</span>
                                                         </div>
@@ -4912,7 +4915,7 @@
                                 <button type="button" class="btn btn-outline-success btn-sm shadow-sm font-weight-bold" onclick="tarikKasDanPetugasOtomatis()">
                                     <i class="fas fa-sync-alt mr-1"></i> Tarik Data Terkini
                                 </button>
-                                <button type="button" class="btn btn-secondary btn-sm shadow-sm font-weight-bold" onclick="simpanDataPengumumanJumat(true)">
+                                <button type="button" class="btn btn-secondary btn-sm shadow-sm font-weight-bold" id="btnSimpanPengumumanJumat" onclick="simpanDataPengumumanJumat(true)">
                                     <i class="fas fa-save mr-1"></i> Simpan Data
                                 </button>
                             </div>
@@ -5032,20 +5035,20 @@
                                         <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label class="font-weight-bold text-gray-800 small">a. Imam & Khotib:</label>
-                                                <input type="text" id="pjInputImamKhotib" class="form-control form-control-sm" value="Ust. Faiq Rido" oninput="pjUpdatePreview()">
+                                                <p id="pjAutosaveStatus" role="status" aria-live="polite">Perubahan belum disimpan.</p><input type="text" id="pjInputImamKhotib" class="form-control form-control-sm" value="Ust. Faiq Rido" oninput="triggerAutoSavePengumumanJumat()">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="font-weight-bold text-gray-800 small">b. Muadzin:</label>
-                                                <input type="text" id="pjInputMuadzin" class="form-control form-control-sm" value="Ust. Rudy" oninput="pjUpdatePreview()">
+                                                <input type="text" id="pjInputMuadzin" class="form-control form-control-sm" value="Ust. Rudy" oninput="triggerAutoSavePengumumanJumat()">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="font-weight-bold text-gray-800 small">c. Bilal:</label>
-                                                <input type="text" id="pjInputBilal" class="form-control form-control-sm" value="Ust. Mansur" oninput="pjUpdatePreview()">
+                                                <input type="text" id="pjInputBilal" class="form-control form-control-sm" value="Ust. Mansur" oninput="triggerAutoSavePengumumanJumat()">
                                                 <small class="text-success"><i class="fas fa-check-circle"></i> Petugas Bilal</small>
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="font-weight-bold text-gray-800 small">d. MC Maklumat:</label>
-                                                <input type="text" id="pjInputMaklumat" class="form-control form-control-sm" value="Ust. Fatkhurokhman" oninput="pjUpdatePreview()">
+                                                <input type="text" id="pjInputMaklumat" class="form-control form-control-sm" value="Ust. Fatkhurokhman" oninput="triggerAutoSavePengumumanJumat()">
                                                 <small class="text-info"><i class="fas fa-bullhorn"></i> Pembaca Maklumat Jum'at</small>
                                             </div>
                                         </div>
@@ -6474,7 +6477,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success" onclick="simpanTransaksiKas()">Simpan Transaksi</button>
+                    <button type="button" class="btn btn-success" id="btnSimpanKas" onclick="simpanTransaksiKas()">Simpan Transaksi</button>
                 </div>
             </div>
         </div>
@@ -6534,7 +6537,7 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-warning font-weight-bold" onclick="simpanEditTransaksiKas()">
+                    <button type="button" class="btn btn-warning font-weight-bold" id="btnSimpanEditKas" onclick="simpanEditTransaksiKas()">
                         <i class="fas fa-save mr-1"></i> Simpan Perubahan
                     </button>
                 </div>
@@ -7586,35 +7589,35 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/flatpickr/flatpickr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js?v=5.8.96"></script>
-    <script src="js/supabase-db.js?v=5.8.96"></script>
-    <script src="js/admin-auth.js?v=5.8.96"></script>
-    <script src="js/gemini-ai.js?v=5.8.96"></script>
+    <script src="js/supabase-config.js?v=5.8.97"></script>
+    <script src="js/supabase-db.js?v=5.8.97"></script>
+    <script src="js/admin-auth.js?v=5.8.97"></script>
+    <script src="js/gemini-ai.js?v=5.8.97"></script>
 
         <!-- ======================================================= -->
     <!-- MODULARISASI PANEL ADMIN SCRIPTS (AL-JIHAD SIGNAGE)     -->
     <!-- ======================================================= -->
-    <script src="js/admin/admin-core.js?v=5.8.96"></script>
-    <script src="js/admin/admin-data-loader.js?v=5.8.96"></script>
-    <script src="js/admin/admin-users.js?v=5.8.96"></script>
-    <script src="js/admin/admin-kas.js?v=5.8.96"></script>
-    <script src="js/admin/admin-infaq.js?v=5.8.96"></script>
-    <script src="js/admin/admin-qris.js?v=5.8.96"></script>
-    <script src="js/admin/admin-rotasi.js?v=5.8.96"></script>
-    <script src="js/admin/admin-jumat.js?v=5.8.96"></script>
-    <script src="js/admin/admin-kajian.js?v=5.8.96"></script>
-    <script src="js/admin/admin-jadwal-sholat.js?v=5.8.96"></script>
-    <script src="js/admin/admin-running-text.js?v=5.8.96"></script>
-    <script src="js/admin/admin-yasin.js?v=5.8.96"></script>
-    <script src="js/admin/admin-settings.js?v=5.8.96"></script>
-    <script src="js/admin/admin-ai.js?v=5.8.96"></script>
-    <script src="js/admin/admin-qurban.js?v=5.8.96"></script>
-    <script src="js/admin/admin-ramadhan.js?v=5.8.96"></script>
-    <script src="js/admin/admin-remote.js?v=5.8.96"></script>
-    <script src="js/admin/admin-galeri.js?v=5.8.96"></script>
-    <script src="js/admin/admin-undangan.js?v=5.8.96"></script>
-    <script src="js/admin/admin-agenda-rutin.js?v=5.8.96"></script>
-    <script src="js/admin/admin-pengumuman-jumat.js?v=5.8.96"></script>
+    <script src="js/admin/admin-core.js?v=5.8.97"></script>
+    <script src="js/admin/admin-data-loader.js?v=5.8.97"></script>
+    <script src="js/admin/admin-users.js?v=5.8.97"></script>
+    <script src="js/admin/admin-kas.js?v=5.8.97"></script>
+    <script src="js/admin/admin-infaq.js?v=5.8.97"></script>
+    <script src="js/admin/admin-qris.js?v=5.8.97"></script>
+    <script src="js/admin/admin-rotasi.js?v=5.8.97"></script>
+    <script src="js/admin/admin-jumat.js?v=5.8.97"></script>
+    <script src="js/admin/admin-kajian.js?v=5.8.97"></script>
+    <script src="js/admin/admin-jadwal-sholat.js?v=5.8.97"></script>
+    <script src="js/admin/admin-running-text.js?v=5.8.97"></script>
+    <script src="js/admin/admin-yasin.js?v=5.8.97"></script>
+    <script src="js/admin/admin-settings.js?v=5.8.97"></script>
+    <script src="js/admin/admin-ai.js?v=5.8.97"></script>
+    <script src="js/admin/admin-qurban.js?v=5.8.97"></script>
+    <script src="js/admin/admin-ramadhan.js?v=5.8.97"></script>
+    <script src="js/admin/admin-remote.js?v=5.8.97"></script>
+    <script src="js/admin/admin-galeri.js?v=5.8.97"></script>
+    <script src="js/admin/admin-undangan.js?v=5.8.97"></script>
+    <script src="js/admin/admin-agenda-rutin.js?v=5.8.97"></script>
+    <script src="js/admin/admin-pengumuman-jumat.js?v=5.8.97"></script>
 </body>
 </html>
 

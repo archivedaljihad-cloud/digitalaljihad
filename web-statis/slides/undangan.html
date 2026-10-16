@@ -697,7 +697,7 @@
             card.style.opacity = '0';
             card.style.transform = 'scale(0.98)';
 
-            setTimeout(() => {
+            return new Promise(resolve => setTimeout(() => {
                 document.getElementById('invPengundang').textContent = item.nama_pengundang || 'Mushola / Masjid Pengundang';
                 document.getElementById('invAcara').textContent = item.nama_acara || 'Acara Keagamaan';
                 
@@ -747,15 +747,19 @@
 
                 card.style.opacity = '1';
                 card.style.transform = 'scale(1)';
-            }, 300);
+                resolve(true);
+            }, 300));
         }
 
-        async function loadUndanganData() {
+        async function loadUndanganData(forceRefresh = false, renderContext = null) {
+            const snapshot = await SupabaseDB.getSlideSnapshot('undangan', forceRefresh);
+            if (renderContext && !renderContext.isCurrent()) return false;
+
             try {
                 // 1. Settings & Header (Bridge dari Parent Memory jika ada)
-                let settings = null;
+                let settings = snapshot.settings;
                 try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
+                    if (!forceRefresh && window.parent && window.parent !== window && window.parent.settings) {
                         settings = window.parent.settings;
                     }
                 } catch (e) {}
@@ -778,28 +782,19 @@
                 // 2. Load Undangan Eksternal
                 let list = [];
                 if (window.SupabaseDB && typeof SupabaseDB.getUndanganEksternal === 'function') {
-                    list = await SupabaseDB.getUndanganEksternal();
+                    list = snapshot.undangan;
                 }
 
                 // Filter hanya yang aktif
                 activeUndanganList = (list || []).filter(u => u.is_active !== false);
 
                 if (activeUndanganList.length === 0) {
-                    activeUndanganList = [
-                        {
-                            nama_pengundang: "Mushola Al-Ikhlas",
-                            nama_acara: "Peringatan Maulid Nabi Muhammad SAW 1448 H",
-                            penceramah: "Ustadz Dr. H. Ahmad Fauzi, M.Ag",
-                            tanggal_acara: "Sabtu, 15 Oktober 2026",
-                            waktu_acara: "20:00 WIB (Ba'da Isya) ~ Selesai",
-                            tempat_acara: "Mushola Al-Ikhlas, Jl. Melati Raya Blok B No. 12",
-                            keterangan: "Mengharap kehadiran dan kebersamaan seluruh jamaah Masjid Jami' Al-Jihad dalam mempererat tali silaturahmi.",
-                            is_active: true
-                        }
-                    ];
+                    activeUndanganList = [{ nama_pengundang: 'DKM', nama_acara: 'Belum ada undangan aktif',
+                        penceramah: '', tanggal_acara: '', waktu_acara: '', tempat_acara: '',
+                        keterangan: 'Informasi undangan akan ditampilkan setelah diterbitkan pengurus.', is_active: true }];
                 }
 
-                renderInvitationCard(activeUndanganList[currentUndanganIndex % activeUndanganList.length], activeUndanganList.length, currentUndanganIndex % activeUndanganList.length);
+                await renderInvitationCard(activeUndanganList[currentUndanganIndex % activeUndanganList.length], activeUndanganList.length, currentUndanganIndex % activeUndanganList.length);
 
                 // Auto-rotasi jika terdapat > 1 undangan
                 if (activeUndanganList.length > 1) {
@@ -809,47 +804,18 @@
                         renderInvitationCard(activeUndanganList[currentUndanganIndex], activeUndanganList.length, currentUndanganIndex);
                     }, 14000); // 14 detik per undangan
                 }
+                return true;
             } catch (err) {
                 console.error('Gagal memuat data undangan:', err);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadUndanganData();
 
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings) {
-                        if (msg.settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
-                        if (msg.settings.sub_header) document.getElementById('sub-header').textContent = msg.settings.sub_header;
-                    }
-                    loadUndanganData();
-                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'undangan_eksternal' || msg.table === 'app_settings' || msg.table === 'undangan')) {
-                    loadUndanganData();
-                } else if (msg.type === 'SYNC_UNDANGAN' || msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadUndanganData();
-                }
-            });
+    </script>
 
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'undangan_eksternal' || tbl === 'app_settings' || tbl === 'undangan') {
-                        loadUndanganData();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'undangan_eksternal' || payload.table === 'app_settings' || payload.table === 'undangan') {
-                        loadUndanganData();
-                    }
-                });
-            }
-        });
+    <script>
+        // SLIDE_RENDER_CONFIRMED is emitted after DOM/images settle by the shared lifecycle.
+        window.slideRenderLifecycle = SupabaseDB.bindSlideRenderer('undangan', ["undangan","undangan_eksternal","app_settings"], loadUndanganData);
     </script>
 </body>
 </html>

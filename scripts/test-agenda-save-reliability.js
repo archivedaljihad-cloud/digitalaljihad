@@ -29,19 +29,19 @@ function harness() {
     for (const method of ['saveAgendaRutin', 'saveKajianData', 'savePengumumanJumat']) {
         const h = harness();
         h.values.set('cached_app_settings', JSON.stringify({ marker: 'old' }));
-        h.db.saveSettingItem = async () => false;
+        h.db.saveSettingItem = h.db.saveSettingsBatch = async () => false;
         ok(await h.db[method]({ test: 1 }) === false, method + ' propagates false');
         ok(h.broadcasts.length === 0, method + ' does not broadcast failure');
         ok(JSON.parse(h.values.get('cached_app_settings')).marker === 'old', method + ' preserves confirmed cache');
-        h.db.saveSettingItem = async () => { throw new Error('offline'); };
+        h.db.saveSettingItem = h.db.saveSettingsBatch = async () => { throw new Error('offline'); };
         ok(await h.db[method]({ test: 2 }) === false, method + ' handles rejection');
-        h.db.saveSettingItem = async () => true;
+        h.db.saveSettingItem = h.db.saveSettingsBatch = async () => true;
         ok(await h.db[method]({ test: 3 }) === true, method + ' confirms success');
         ok(h.broadcasts.length === 1, method + ' broadcasts once after confirmation');
     }
     const partial = harness();
-    partial.db.saveSettingItem = async key => key !== 'kajian_sabtu_enabled';
-    ok(await partial.db.saveKajianData({}) === false, 'Partial multi-key save fails');
+    partial.db.saveSettingsBatch = async () => false;
+    ok(await partial.db.saveKajianData({}) === false, 'Rejected atomic batch save fails');
     ok(partial.broadcasts.length === 0, 'Partial save cannot emit successful aggregate');
     const quota = harness(); quota.db.saveSettingItem = async () => true;
     quota.localStorage.setItem = () => { throw new Error('quota'); };

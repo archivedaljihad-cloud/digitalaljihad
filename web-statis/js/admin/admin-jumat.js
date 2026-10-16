@@ -58,6 +58,7 @@
 
                     const urlInput = document.getElementById('jumatFotoUrlInput');
                     if (urlInput) urlInput.value = '';
+                    triggerAutoSavePetugasJumat();
                 };
                 img.src = e.target.result;
             };
@@ -79,6 +80,7 @@
                 badge.className = 'badge badge-info position-absolute';
                 badge.textContent = 'URL Web';
             }
+            triggerAutoSavePetugasJumat();
         }
 
         function resetJumatFoto() {
@@ -99,235 +101,80 @@
                 badge.className = 'badge badge-secondary position-absolute';
                 badge.textContent = 'Default';
             }
+            triggerAutoSavePetugasJumat();
         }
 
         // Simpan Petugas Sholat Jum'at & Durasi Sholat Jum'at Khusus Pekan Ini
-        async function simpanPetugasJumat() {
-            const tgl = document.getElementById('jumatTanggal')?.value;
-            const khotibImam = document.getElementById('jumatKhotib')?.value || '';
-            const muadzin = document.getElementById('jumatMuadzin')?.value || '';
-            const bilalOnly = document.getElementById('jumatBilal')?.value.trim() || '';
-            const maklumatOnly = document.getElementById('jumatMaklumat')?.value.trim() || '';
-            const jumatDur = parseInt(document.getElementById('jumatDurasiInput')?.value) || 50;
-            const urlInput = document.getElementById('jumatFotoUrlInput')?.value.trim() || '';
-
-            if (!khotibImam || !tgl) {
-                alert('Harap lengkapi nama Khotib & Imam, serta Tanggal Jum\'at!');
-                return;
-            }
-
-            if (document.getElementById('jumatImam')) {
-                document.getElementById('jumatImam').value = khotibImam;
-            }
-
-            let finalKhatib = khotibImam;
-            let finalImam = khotibImam;
-            if (khotibImam.includes('/')) {
-                const parts = khotibImam.split('/').map(s => s.trim());
-                if (parts[0]) finalKhatib = parts[0];
-                if (parts[1]) finalImam = parts[1];
-            }
-
-            // Gabungkan bilal & maklumat secara aman jika maklumat diisi
-            let combinedBilal = bilalOnly;
-            if (maklumatOnly) {
-                combinedBilal = bilalOnly ? `${bilalOnly} / ${maklumatOnly}` : `- / ${maklumatOnly}`;
-            }
-
-            // Tentukan foto_imam
-            let fotoImamVal = 'image/display/default_imam.jpg';
-            if (jumatFotoImamBase64) {
-                fotoImamVal = 'custom_uploaded';
-            } else if (urlInput) {
-                fotoImamVal = urlInput;
-            } else {
-                try {
-                    const cached = localStorage.getItem('cached_jumat_foto_imam');
-                    if (cached && cached !== 'image/display/default_imam.jpg') {
-                        fotoImamVal = cached.startsWith('data:') ? 'custom_uploaded' : cached;
-                    }
-                } catch (e) {}
-            }
-
-            const payload = {
-                tanggal: tgl,
-                khatib: finalKhatib,
-                imam: finalImam,
-                muadzin: muadzin,
-                bilal: combinedBilal,
-                foto_imam: fotoImamVal
-            };
-
-            // Simpan juga ke cache lokal
-            try {
-                localStorage.setItem('cached_jumat_bilal', bilalOnly);
-                localStorage.setItem('cached_jumat_maklumat', maklumatOnly);
-                if (jumatFotoImamBase64) {
-                    localStorage.setItem('cached_jumat_foto_imam', jumatFotoImamBase64);
-                } else if (urlInput) {
-                    localStorage.setItem('cached_jumat_foto_imam', urlInput);
-                } else if (jumatFotoImamBase64 === '') {
-                    localStorage.removeItem('cached_jumat_foto_imam');
-                }
-                localStorage.setItem('cached_sholat_jumat', JSON.stringify(payload));
-            } catch (e) {}
-
-            try {
-                // 1. Simpan petugas Jum'at ke Supabase (Gunakan PATCH jika tanggal sudah ada agar tidak menumpuk baris usang)
-                let res;
-                try {
-                    const checkRes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}&select=id`, {
-                        headers: getSupabaseHeaders()
-                    });
-                    let existingRows = [];
-                    if (checkRes.ok) existingRows = await checkRes.json();
-
-                    if (Array.isArray(existingRows) && existingRows.length > 0) {
-                        res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}`, {
-                            method: 'PATCH',
-                            headers: {
-                                ...getSupabaseHeaders(),
-                                'Prefer': 'return=representation'
-                            },
-                            body: JSON.stringify(payload)
-                        });
-                    } else {
-                        res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
-                            method: 'POST',
-                            headers: {
-                                ...getSupabaseHeaders(),
-                                'Prefer': 'return=representation'
-                            },
-                            body: JSON.stringify(payload)
-                        });
-                    }
-                } catch (dbErr) {
-                    console.warn('Fallback direct POST sholat_jumat:', dbErr);
-                    res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/sholat_jumat`, {
-                        method: 'POST',
-                        headers: {
-                            ...getSupabaseHeaders(),
-                            'Prefer': 'return=representation'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                }
-
-                // 2. Simpan durasi sholat Jum'at, maklumat & foto imam base64 ke app_settings
-                let currentRt = {};
-                try {
-                    const rtRaw = localStorage.getItem('cached_running_text_pages');
-                    if (rtRaw) currentRt = JSON.parse(rtRaw);
-                } catch (e) {}
-                currentRt.jumat_maklumat = maklumatOnly;
-                currentRt.jumat_bilal = bilalOnly;
-                if (jumatFotoImamBase64) {
-                    currentRt.jumat_foto_imam_b64 = jumatFotoImamBase64;
-                } else if (jumatFotoImamBase64 === '') {
-                    delete currentRt.jumat_foto_imam_b64;
-                }
-                try { localStorage.setItem('cached_running_text_pages', JSON.stringify(currentRt)); } catch (e) {}
-
-                // 2. Pastikan slide Petugas Jum'at otomatis aktif di daftar rotasi TV saat data petugas disimpan
-                let updatedRotPages = null;
-                try {
-                    if (!cachedRotationPages || cachedRotationPages.length === 0) {
-                        cachedRotationPages = normalizeRotationPages(localStorage.getItem('cached_rotation_pages'));
-                    }
-                    const jSlide = cachedRotationPages.find(p => (p.url || p.path || '').includes('jumat.html') && !(p.url || p.path || '').includes('kas-jumat.html'));
-                    if (jSlide && jSlide.active === false) {
-                        jSlide.active = true;
-                        cachedRotationPages = normalizeRotationPages(cachedRotationPages);
-                        localStorage.setItem('cached_rotation_pages', JSON.stringify(cachedRotationPages));
-                        updatedRotPages = cachedRotationPages;
-                        if (typeof renderRotationTable === 'function') {
-                            renderRotationTable(cachedRotationPages);
-                        }
-                    }
-                } catch (e) {}
-
-                const patchSettingsPayload = {
-                    prayer_mode_jumat_duration: jumatDur,
-                    running_text_pages: currentRt
-                };
-                if (updatedRotPages) {
-                    patchSettingsPayload.rotation_pages = updatedRotPages;
-                }
-
-                await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                    method: 'PATCH',
-                    headers: getSupabaseHeaders(),
-                    body: JSON.stringify(patchSettingsPayload)
-                }).catch(() => {});
-
-                // 3. Sinkronkan juga nama petugas ke pengumuman_jumat (id=9 & localStorage) agar selalu konsisten
-                let pjd = null;
-                try {
-                    const rawPj = localStorage.getItem('pengumuman_jumat_data');
-                    if (rawPj) pjd = JSON.parse(rawPj);
-                    if (!pjd && typeof pjData !== 'undefined') pjd = pjData;
-                    if (pjd) {
-                        if (!pjd.petugas) pjd.petugas = {};
-                        pjd.petugas.imamKhotib = khotibImam;
-                        pjd.petugas.muadzin = muadzin;
-                        pjd.petugas.bilal = bilalOnly;
-                        pjd.petugas.maklumat = maklumatOnly;
-                        localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjd));
-                        if (typeof pjData !== 'undefined') pjData = pjd;
-
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.9`, {
-                            method: 'PATCH',
-                            headers: getSupabaseHeaders(),
-                            body: JSON.stringify({
-                                value: typeof pjd === 'string' ? pjd : JSON.stringify(pjd)
-                            })
-                        }).catch(() => {});
-                    }
-                } catch (e) {}
-
-                // Sinkronkan ke UI dan local cache
-                syncDurasiJumat(jumatDur);
-                try { localStorage.setItem('cached_prayer_mode_jumat_duration', jumatDur); } catch (e) {}
-
-                if (res.ok) {
-                    if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = khotibImam;
-                    if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = khotibImam;
-                    if (document.getElementById('prevJumatMuadzin')) document.getElementById('prevJumatMuadzin').textContent = muadzin;
-                    if (document.getElementById('prevJumatBilal')) document.getElementById('prevJumatBilal').textContent = bilalOnly || '-';
-                    if (document.getElementById('prevJumatMaklumat')) document.getElementById('prevJumatMaklumat').textContent = maklumatOnly || '-';
-                    if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = khotibImam;
-                    if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = khotibImam;
-                    if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = khotibImam;
-                    if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = muadzin;
-                    if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = bilalOnly || '-';
-                    if (document.getElementById('dashJumatMaklumat')) document.getElementById('dashJumatMaklumat').textContent = maklumatOnly || '-';
-                    
-                    const badge = document.getElementById('jumatFotoBadge');
-                    if (badge) {
-                        badge.className = 'badge badge-success position-absolute';
-                        badge.textContent = 'Tersimpan';
-                    }
-
-                    if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
-                        SupabaseDB.broadcastChange('sholat_jumat', 'UPDATE', payload, 'DKM Sholat Jumat');
-                        SupabaseDB.broadcastChange('app_settings', 'UPDATE', { prayer_mode_jumat_duration: jumatDur, running_text_pages: currentRt }, 'DKM Sholat Jumat');
-                        if (pjd) {
-                            SupabaseDB.broadcastChange('pengumuman_jumat', 'UPDATE', pjd, 'DKM Sholat Jumat');
-                        }
-                    }
-
-                    alert(`Alhamdulillah! Petugas Sholat Jum'at, foto Imam & Khotib, serta durasi sholat (${jumatDur} menit) berhasil disimpan ke Supabase dan langsung tayang di Layar TV Display.`);
-                    // Otomatis generate dan buka modal flyer WhatsApp
-                    setTimeout(() => {
-                        bukaModalFlyerJumat(true);
-                    }, 400);
-                } else {
-                    alert(`Petugas Jum'at gagal disimpan ke database, namun durasi sholat (${jumatDur} menit) telah diperbarui.`);
-                }
-            } catch (err) {
-                alert('Terjadi kesalahan koneksi: ' + err.message);
-            }
+                function collectPetugasJumatDraft() {
+            const read = id => document.getElementById(id)?.value?.trim() || '';
+            const combined = read('jumatKhotib').split('/').map(value => value.trim());
+            const existingPhoto = localStorage.getItem('cached_jumat_foto_imam') || 'image/display/default_imam.jpg';
+            return { tanggal: read('jumatTanggal'), khatib: combined[0], imam: combined[1] || read('jumatImam') || combined[0],
+                muadzin: read('jumatMuadzin'), muadzin2: read('jumatMuadzin2'), bilal: read('jumatBilal'),
+                maklumat: read('jumatMaklumat'), waktu: read('jumatWaktu') || '11:45', durasi: Number(read('jumatDurasiInput') || 50),
+                foto_imam: jumatFotoImamBase64 !== null ? (jumatFotoImamBase64 || 'image/display/default_imam.jpg') : (read('jumatFotoUrlInput') || existingPhoto) };
         }
+
+        function setPetugasJumatStatus(text) {
+            const status = document.getElementById('jumatSaveStatus');
+            if (status) status.textContent = text;
+        }
+
+        function triggerAutoSavePetugasJumat() {
+            try { localStorage.setItem('draft_petugas_jumat', JSON.stringify(collectPetugasJumatDraft())); } catch (error) {}
+            setPetugasJumatStatus('Draft — menunggu penyimpanan…');
+            clearTimeout(triggerAutoSavePetugasJumat.timer);
+            triggerAutoSavePetugasJumat.timer = setTimeout(() => simpanPetugasJumat(true), 700);
+        }
+
+        function restorePetugasJumatDraft() {
+            try {
+                const raw = localStorage.getItem('draft_petugas_jumat');
+                if (!raw) return;
+                const draft = JSON.parse(raw);
+                const fields = { jumatTanggal: 'tanggal', jumatKhotib: 'khatib', jumatImam: 'imam', jumatMuadzin: 'muadzin',
+                    jumatMuadzin2: 'muadzin2', jumatBilal: 'bilal', jumatMaklumat: 'maklumat', jumatWaktu: 'waktu', jumatDurasiInput: 'durasi' };
+                Object.entries(fields).forEach(([id, key]) => { const el = document.getElementById(id); if (el && draft[key] !== undefined) el.value = draft[key]; });
+                if (draft.foto_imam) {
+                    jumatFotoImamBase64 = draft.foto_imam.startsWith('data:') ? draft.foto_imam : null;
+                    const url = document.getElementById('jumatFotoUrlInput'); if (url) url.value = jumatFotoImamBase64 ? '' : draft.foto_imam;
+                    const preview = document.getElementById('jumatFotoPreviewImg'); if (preview) preview.src = draft.foto_imam;
+                }
+                setPetugasJumatStatus('Draft dipulihkan — belum tersimpan di cloud.');
+            } catch (error) { console.warn('Draft Jumat tidak dapat dipulihkan:', error); }
+        }
+
+        async function simpanPetugasJumat(silent = false) {
+            clearTimeout(triggerAutoSavePetugasJumat.timer);
+            const snapshot = collectPetugasJumatDraft();
+            const serialized = JSON.stringify(snapshot);
+            try { localStorage.setItem('draft_petugas_jumat', serialized); } catch (error) {}
+            const sequence = (simpanPetugasJumat.sequence || 0) + 1;
+            simpanPetugasJumat.sequence = sequence;
+            setPetugasJumatStatus('Menyimpan ke cloud…');
+            const save = async () => {
+                if (!window.SupabaseDB || typeof SupabaseDB.saveSholatJumat !== 'function') return { success: false, error: 'Layanan cloud belum siap' };
+                return SupabaseDB.saveSholatJumat(snapshot);
+            };
+            simpanPetugasJumat.queue = (simpanPetugasJumat.queue || Promise.resolve()).then(save, save);
+            let result;
+            try { result = await simpanPetugasJumat.queue; } catch (error) { result = { success: false, error: error.message }; }
+            const confirmed = result?.success === true && result?.cloudConfirmed === true;
+            const unchanged = JSON.stringify(collectPetugasJumatDraft()) === serialized;
+            if (sequence === simpanPetugasJumat.sequence && unchanged) {
+                setPetugasJumatStatus(confirmed ? 'Tersimpan di cloud — tampilan TV menunggu konfirmasi.' : 'Belum terkonfirmasi di cloud. Draft tetap tersedia. ' + (result?.error || ''));
+                if (confirmed) {
+                    try {
+                        if (localStorage.getItem('draft_petugas_jumat') === serialized) localStorage.removeItem('draft_petugas_jumat');
+                        localStorage.setItem('cached_jumat_foto_imam', snapshot.foto_imam);
+                    } catch (error) {}
+                }
+            }
+            if (!silent && !confirmed) alert(result?.error || 'Penyimpanan belum terkonfirmasi. Draft tetap tersedia.');
+            return confirmed;
+        }
+
+
 
         // Live input listeners untuk form Petugas Jum'at
         document.addEventListener('DOMContentLoaded', () => {

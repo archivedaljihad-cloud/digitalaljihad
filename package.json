@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "test": "node scripts/test-engine.js && node scripts/test-auth-security.js && node scripts/test-tv-render-sync.js && node scripts/test-loading-performance.js && node scripts/test-rls-security.js && node scripts/test-agenda-save-reliability.js && node scripts/test-binding-audit.js && node scripts/test-agenda-bindings.js && node scripts/test-state-store-reference.js && node scripts/audit-bindings.js",
+        "test": "node scripts/test-engine.js && node scripts/test-auth-security.js && node scripts/test-tv-render-sync.js && node scripts/test-loading-performance.js && node scripts/test-stage2-reliability.js && node scripts/test-rls-security.js && node scripts/test-agenda-save-reliability.js && node scripts/test-binding-audit.js && node scripts/test-agenda-bindings.js && node scripts/test-state-store-reference.js && node scripts/audit-bindings.js",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -11,6 +11,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "vercel-build": "npm run prod",
         "audit:bindings": "node scripts/audit-bindings.js",
+        "test:browser:stage2": "node scripts/test-stage2-browser.cjs",
         "test:browser:agenda": "node scripts/test-agenda-browser.cjs"
     },
     "dependencies": {

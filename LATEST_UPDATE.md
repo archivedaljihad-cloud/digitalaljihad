@@ -1,3 +1,42 @@
+## Tahap 2: ACK delapan slide, binding Jumat/Kas, batch atomik — 17 Oktober 2026 WIB (v5.8.97)
+
+- Basis a2bd1cf/f7773cd dipertahankan. Backup terverifikasi 710 berkas:
+  `/workspace/backups/digitalaljihad-stage2-base-a2bd1cf.tar.gz`, SHA-256
+  `743d91ce9a78646012e4b7e50b6ee1f4f407a52a55570a4439759b0e2ce7ebf5`.
+- `supabase-db.js`: lifecycle ACK dengan event/table/slide, readiness terpisah,
+  cloud-read ketat, stale-response guard dan tunggu gambar/DOM. Parent merekam
+  readiness serta hanya menerima ACK event yang cocok dari iframe terlihat.
+  Dashboard Admin menampilkan status per modul/TV untuk event simpan miliknya.
+- Delapan slide: jumat, kas-jumat, kajian, slide, live-madinah, yasin, undangan,
+  hikmah. ACK live stream berlingkup DOM; tidak membuktikan video diputar.
+  Parser YouTube yang memakai videoId tanpa deklarasi diperbaiki.
+  Agenda/pengumuman juga menerapkan enabled dan mengonfirmasi renderer lengkapnya.
+- Jumat memakai snapshot JSON versi 2 key app_settings.sholat_jumat, dengan
+  fallback baca tabel lama. Nama, foto, Muadzin 2, waktu dan durasi disimpan
+  melalui satu batch; form draft, debounce dan respons gagal dipisahkan dari
+  data confirmed. Pengumuman Jumat disimpan bersama snapshot petugas.
+- `saveSettingsBatch`: satu upsert PostgreSQL, antrean lokal, snapshot payload,
+  validasi seluruh baris respons; kajian tidak lagi menulis lima request terpisah.
+  Tidak ada fallback per-key. Respons hilang sesudah commit berarti status belum
+  terkonfirmasi, bukan bukti rollback. Cache lama dan draft tetap tersedia.
+- Kas membaca ledger utama secara realtime, memvalidasi angka sebelum render,
+  mempertahankan nol sah dan angka terakhir saat jaringan gagal; tanpa data awal
+  menampilkan elipsis. Periode kas: Jumat terakhir sampai hari ini, opening dari
+  transaksi sebelumnya. Form tambah/edit menolak angka invalid dan nol baris.
+- Kontrak binding Jumat/keuangan ditambahkan; 23 temuan teratasi dihapus spesifik
+  dari baseline. 190 utang lama tetap dilaporkan, tanpa temuan blocking baru.
+- Cache service worker, cache cleaner dan query script Admin menjadi v5.8.97.
+  Startup SW +15 detik dan maksimal tiga precache konkurensi tetap dipertahankan.
+- Tes tambahan: test-stage2-reliability.js dan test-stage2-browser.cjs.
+  Quality gates: npm test 588 pemeriksaan lulus; integrasi browser delapan slide,
+  form Jumat HTTP403/retry, dan regresi Agenda Rutin lulus.
+  Panduan migrasi sumber data, pemulihan, pengujian dan batas atomik ada di
+  `architecture/PHASE2_RELEASE.md`. Tidak ada DDL/RLS live, route atau kolom baru.
+  saveSettings campuran row1 + KV belum merupakan transaksi lintas operasi;
+  integrasi eksternal penulis tabel Jumat lama perlu memakai helper/snapshot baru.
+
+---
+
 ## Optimasi pemuatan awal TV — 16 Oktober 2026 (v5.8.96)
 
 - Backup sebelum perubahan: `/workspace/backups/digitalaljihad-before-loading-fix-20261016-150621.tar.gz`.

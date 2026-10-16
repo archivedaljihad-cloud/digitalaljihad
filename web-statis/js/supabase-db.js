@@ -291,6 +291,8 @@
                     delete this._cacheTimestamps['keuangan_ambulance'];
                 }
                 if (t === 'sholat_jumat' || t === 'jumat') {
+                    delete this._cache['settings'];
+                    delete this._cacheTimestamps['settings'];
                     delete this._cache['sholat_jumat'];
                     delete this._cacheTimestamps['sholat_jumat'];
                 }
@@ -353,6 +355,14 @@
          * Mengambil seluruh baris konfigurasi (row 1 + baris key-value dinamis)
          */
         async getSettings(forceRefresh = false, requireCloud = false) {
+            if (forceRefresh || requireCloud) return this._readSettings(forceRefresh, requireCloud);
+            if (this._settingsReadInFlight) return this._settingsReadInFlight;
+            const pending = this._readSettings(false, false);
+            this._settingsReadInFlight = pending;
+            try { return await pending; } finally { if (this._settingsReadInFlight === pending) this._settingsReadInFlight = null; }
+        },
+
+        async _readSettings(forceRefresh = false, requireCloud = false) {
             if (!forceRefresh && !requireCloud) {
                 const cached = this.getCached('settings');
                 if (cached) return cached;
@@ -542,6 +552,192 @@
             }
         },
 
+        parseMoney(value) {
+            if (typeof value === 'string') {
+                value = value.trim().replace(/^Rp\s*/i, '').replace(/\s/g, '');
+                if (/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(value)) value = value.replace(/\./g, '').replace(',', '.');
+                else if (/^-?\d+,\d+$/.test(value)) value = value.replace(',', '.');
+            }
+            if (value === '' || value === null || value === undefined || !Number.isFinite(Number(value))) throw new Error('Nominal keuangan tidak valid');
+            return Number(value);
+        },
+
+        buildKasJumatSnapshot(rows, base) {
+            if (!Array.isArray(rows)) throw new Error('Data keuangan belum terkonfirmasi');
+            const transactions = rows.filter(row => this.isKasUtamaMasjid(row));
+            if (!transactions.length) {
+                const sum = items => items.reduce((total, item) => total + this.parseMoney(item.nominal ?? item.jumlah ?? 0), 0);
+                const income = Array.isArray(base.pemasukan) ? base.pemasukan : (base.rincian_pemasukan || []);
+                const expense = Array.isArray(base.pengeluaran) ? base.pengeluaran : (base.rincian_pengeluaran || []);
+                const masuk = Array.isArray(base.pemasukan) ? sum(income) : this.parseMoney(base.pemasukan ?? base.total_pemasukan ?? sum(income));
+                const keluar = Array.isArray(base.pengeluaran) ? sum(expense) : this.parseMoney(base.pengeluaran ?? base.total_pengeluaran ?? sum(expense));
+                const opening = this.parseMoney(base.saldo_awal ?? base.saldoAwal ?? 0);
+                const closing = this.parseMoney(base.saldo_akhir ?? base.saldoAkhir ?? (opening + masuk - keluar));
+                income.forEach(item => this.parseMoney(item.nominal ?? item.jumlah ?? 0));
+                expense.forEach(item => this.parseMoney(item.nominal ?? item.jumlah ?? 0));
+                return { ...base, saldo_awal: opening, saldo_akhir: closing, pemasukan: masuk, pengeluaran: keluar,
+                    rincian_pemasukan: income, rincian_pengeluaran: expense };
+            }
+            // Current Friday reporting week; opening balance comes from earlier ledger entries.
+            const now = new Date();
+            const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const daysSinceFriday = (start.getDay() + 2) % 7;
+            start.setDate(start.getDate() - daysSinceFriday);
+            const dateKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const from = dateKey(start), until = dateKey(now);
+            let opening = 0; const income = [], expense = [];
+            for (const row of transactions) {
+                const masuk = this.parseMoney(row.pemasukan ?? 0), keluar = this.parseMoney(row.pengeluaran ?? 0);
+                const date = String(row.tanggal || '').slice(0, 10);
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('Tanggal transaksi tidak valid');
+                if (date > until) continue;
+                if (date < from) opening += masuk - keluar;
+                else {
+                    if (masuk) income.push({ ket: row.deskripsi || row.uraian || row.keterangan || 'Penerimaan', jumlah: masuk });
+                    if (keluar) expense.push({ ket: row.deskripsi || row.uraian || row.keterangan || 'Pengeluaran', jumlah: keluar });
+                }
+            }
+            const pemasukan = income.reduce((sum, row) => sum + row.jumlah, 0);
+            const pengeluaran = expense.reduce((sum, row) => sum + row.jumlah, 0);
+            return { ...base, saldo_awal: opening, pemasukan, pengeluaran, saldo_akhir: opening + pemasukan - pengeluaran,
+                rincian_pemasukan: income, rincian_pengeluaran: expense, sumber: 'keuangan', periode_mulai: from, periode_selesai: until };
+        },
+
+        /** One PostgREST upsert = one PostgreSQL transaction. No per-key fallback. */
+        async saveSettingsBatch(settingsObject) {
+            let rows;
+            try {
+                if (!settingsObject || typeof settingsObject !== 'object' || Array.isArray(settingsObject)) return false;
+                rows = Object.entries(settingsObject).map(([key, value]) => {
+                    if (!key || ['__proto__', 'constructor', 'prototype'].includes(key) || value === undefined) throw new Error('Key/value tidak valid');
+                    const encoded = typeof value === 'string' ? value : JSON.stringify(value, (name, item) => {
+                        if (typeof item === 'number' && !Number.isFinite(item)) throw new Error('Angka settings tidak valid');
+                        return item;
+                    });
+                    if (typeof encoded !== 'string') throw new Error('Value tidak dapat diserialisasi');
+                    return { key, value: encoded };
+                });
+                if (!rows.length) return false;
+            } catch (error) { this.lastSettingsBatchError = error.message; return false; }
+            const save = async () => {
+                this.lastSettingsBatchError = null;
+                try {
+                    const result = await this.safeRestMutation('app_settings?on_conflict=key', 'POST', rows, {
+                        headers: { Prefer: 'resolution=merge-duplicates,return=representation' }
+                    });
+                    if (!result.success || !result.cloudConfirmed || !Array.isArray(result.data) ||
+                        rows.some(row => !result.data.some(saved => saved.key === row.key && saved.value === row.value))) {
+                        this.lastSettingsBatchError = result.error || 'Respons cloud tidak mengonfirmasi seluruh key';
+                        return false;
+                    }
+                    this.invalidateCache('app_settings');
+                    return true;
+                } catch (error) { this.lastSettingsBatchError = error.message; return false; }
+            };
+            this._settingsBatchQueue = (this._settingsBatchQueue || Promise.resolve()).then(save, save);
+            return this._settingsBatchQueue;
+        },
+
+        /** Canonical Friday snapshot in one settings row, including photo/time/second muezzin. */
+        async saveSholatJumat(input) {
+            let snapshot;
+            try {
+                snapshot = JSON.parse(JSON.stringify(input));
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(snapshot.tanggal || '') || !(snapshot.khatib || snapshot.imam || '').trim()) throw new Error('Tanggal dan Khatib/Imam wajib diisi');
+                if (snapshot.waktu && !/^([01]\d|2[0-3]):[0-5]\d$/.test(snapshot.waktu)) throw new Error('Waktu Jumat tidak valid');
+                snapshot.schema_version = 2;
+                snapshot.updated_at = new Date().toISOString();
+                const batch = { sholat_jumat: snapshot };
+                const currentSettings = await this.getSettings(true, true);
+                if (currentSettings.pengumuman_jumat) {
+                    const pj = typeof currentSettings.pengumuman_jumat === 'string' ? JSON.parse(currentSettings.pengumuman_jumat) : JSON.parse(JSON.stringify(currentSettings.pengumuman_jumat));
+                    pj.petugas = { ...pj.petugas, imamKhotib: snapshot.khatib === snapshot.imam ? snapshot.khatib : snapshot.khatib + ' / ' + snapshot.imam,
+                        muadzin: snapshot.muadzin || '', muadzin2: snapshot.muadzin2 || '', bilal: snapshot.bilal || '', maklumat: snapshot.maklumat || '', waktu: snapshot.waktu || '11:45' };
+                    batch.pengumuman_jumat = pj;
+                }
+                if (snapshot.durasi !== undefined) {
+                    if (!Number.isFinite(Number(snapshot.durasi)) || Number(snapshot.durasi) <= 0) throw new Error('Durasi Jumat tidak valid');
+                    batch.prayer_mode_jumat_duration = Number(snapshot.durasi);
+                }
+                if (await this.saveSettingsBatch(batch) !== true) throw new Error(this.lastSettingsBatchError || 'Penyimpanan cloud belum terkonfirmasi');
+                this.cacheConfirmedSetting('sholat_jumat', snapshot, { cached_sholat_jumat: snapshot });
+                if (batch.pengumuman_jumat) this.cacheConfirmedSetting('pengumuman_jumat', batch.pengumuman_jumat, { pengumuman_jumat_data: batch.pengumuman_jumat });
+                if (snapshot.durasi !== undefined) this.cacheConfirmedSetting('prayer_mode_jumat_duration', Number(snapshot.durasi), { cached_prayer_mode_jumat_duration: snapshot.durasi });
+                this.notifyConfirmedChange('sholat_jumat', snapshot, 'SYNC_JUMAT');
+                return { success: true, cloudConfirmed: true, data: snapshot };
+            } catch (error) { return { success: false, cloudConfirmed: false, error: error.message }; }
+        },
+
+        /** A fresh snapshot is mandatory before an edit can receive a render ACK. */
+        async getSlideSnapshot(slide, fresh = false) {
+            let settings = null;
+            if (!fresh) {
+                try { if (window.parent !== window) settings = window.parent.settings || null; } catch (error) {}
+            }
+            if (!settings) settings = await this.getSettings(fresh, fresh);
+            const snapshot = { settings };
+            if (slide === 'jumat') snapshot.jumat = await this.getSholatJumat(fresh, fresh, settings);
+            if (slide === 'kas-jumat') snapshot.keuangan = fresh
+                ? await this.restFetch('keuangan?order=tanggal.desc') : await this.getKeuangan();
+            if (slide === 'slide') {
+                snapshot.slides = fresh ? await this.restFetch('slides?order=urutan.asc') : await this.getSlides();
+                let custom = settings.slides_custom_data || {};
+                if (typeof custom === 'string') custom = JSON.parse(custom);
+                snapshot.slides = snapshot.slides.map(row => custom[row.id] && String(row.gambar || '').includes('custom_uploaded') ? { ...row, gambar: custom[row.id] } : row);
+            }
+            if (slide === 'undangan') {
+                const stored = settings.undangan_eksternal_list || settings.undangan_eksternal;
+                snapshot.undangan = stored ? (typeof stored === 'string' ? JSON.parse(stored) : stored)
+                    : (fresh ? await this.restFetch('undangan_eksternal?order=urutan.asc') : await this.getUndanganEksternal());
+                if (!Array.isArray(snapshot.undangan)) snapshot.undangan = [snapshot.undangan];
+            }
+            if (slide === 'yasin') snapshot.jadwal = await this.getJadwalSholat(fresh, fresh);
+            return snapshot;
+        },
+
+        /** Reusable lifecycle. Startup readiness never acknowledges an unrelated user edit. */
+        bindSlideRenderer(slide, tables, renderer) {
+            let generation = 0;
+            const run = async (event = null) => {
+                const ticket = ++generation;
+                const context = { isCurrent: () => ticket === generation };
+                try {
+                    const result = await renderer(!!event, context);
+                    if (result !== true || !context.isCurrent()) return;
+                    const visibleImages = Array.from(document.images || []).filter(img => img.getBoundingClientRect().width > 0 && img.getBoundingClientRect().height > 0);
+                    await Promise.all(visibleImages.map(img => new Promise((resolve, reject) => {
+                        if (img.complete && img.naturalWidth > 0) return resolve();
+                        let timer;
+                        const cleanup = () => { clearTimeout(timer); img.removeEventListener('load', done); img.removeEventListener('error', failed); };
+                        const done = () => { cleanup(); resolve(); };
+                        const failed = () => { cleanup(); reject(new Error('Gambar belum siap')); };
+                        img.addEventListener('load', done, { once: true });
+                        img.addEventListener('error', failed, { once: true });
+                        timer = setTimeout(failed, 7000);
+                    })));
+                    if (typeof window.requestAnimationFrame !== 'function') return;
+                    await new Promise(resolve => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
+                    if (!context.isCurrent() || document.visibilityState === 'hidden' || window.parent === window) return;
+                    window.parent.postMessage({ type: 'SLIDE_RENDER_CONFIRMED', slide, timestamp: Date.now(),
+                        phase: event && event.event_id ? 'update' : 'ready', scope: 'dom',
+                        ...(event && event.event_id ? { event_id: event.event_id, table: event.table } : {})
+                    }, window.location.origin);
+                } catch (error) { console.warn(`[${slide}] Render belum terkonfirmasi:`, error); }
+            };
+            this.onDataChange(event => { if (tables.includes(String(event.table || '').toLowerCase())) return run(event); });
+            window.addEventListener('message', event => {
+                if (event.origin !== window.location.origin || event.source !== window.parent || !event.data) return;
+                const msg = event.data;
+                // Correlated DATA_UPDATED is handled once through onDataChange's deduplicating queue.
+                if (msg.event_id) return;
+                if (msg.type === 'INIT_DISPLAY_DATA' || msg.type === 'UPDATE_SETTINGS' || /^SYNC_/.test(msg.type || '')) run();
+            });
+            const start = () => run();
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
+            else start();
+            return { refresh: run };
+        },
+
         /**
          * Perbarui cache lokal hanya setelah cloud mengonfirmasi penyimpanan.
          */
@@ -575,17 +771,13 @@
         async saveKajianData(payloadData, enabled = true, jamMulai = '18:25') {
             try {
                 payloadData = JSON.parse(JSON.stringify(payloadData));
-                const results = await Promise.all([
-                    this.saveSettingItem('kajian_sabtu_data', payloadData),
-                    this.saveSettingItem('kajian_sabtu_enabled', enabled),
-                    this.saveSettingItem('kajian_sabtu_start_time', jamMulai),
-                    this.saveSettingItem('kajian_rotasi_pekan_detik', payloadData.rotasi_pekan_detik || 9),
-                    this.saveSettingItem('kajian_lock_mode', payloadData.lock_mode || 'full')
-                ]);
-                if (!results.every(ok => ok === true)) {
-                    this.invalidateCache('app_settings');
-                    return false;
-                }
+                if (await this.saveSettingsBatch({
+                    kajian_sabtu_data: payloadData,
+                    kajian_sabtu_enabled: enabled,
+                    kajian_sabtu_start_time: jamMulai,
+                    kajian_rotasi_pekan_detik: payloadData.rotasi_pekan_detik || 9,
+                    kajian_lock_mode: payloadData.lock_mode || 'full'
+                }) !== true) return false;
                 this.cacheConfirmedSetting('kajian_sabtu_data', payloadData, {
                     cached_kajian_sabtu: payloadData,
                     cached_kajian_sabtu_enabled: enabled,
@@ -630,8 +822,19 @@
 
         async savePengumumanJumat(pjData) {
             try {
+                if (pjData && ('saldoAwal' in pjData || 'saldo_awal' in pjData)) this.buildKasJumatSnapshot([], pjData);
                 pjData = JSON.parse(JSON.stringify(pjData));
-                if (await this.saveSettingItem('pengumuman_jumat', pjData) !== true) return false;
+                if (pjData.petugas) {
+                    const current = await this.getSholatJumat(true, true);
+                    const names = String(pjData.petugas.imamKhotib || '').split('/').map(name => name.trim());
+                    const friday = { ...current, khatib: names[0] || current.khatib, imam: names[1] || names[0] || current.imam,
+                        muadzin: pjData.petugas.muadzin ?? current.muadzin, muadzin2: pjData.petugas.muadzin2 ?? current.muadzin2,
+                        bilal: pjData.petugas.bilal ?? current.bilal, maklumat: pjData.petugas.maklumat ?? current.maklumat,
+                        waktu: pjData.petugas.waktu || current.waktu || '11:45', schema_version: 2, updated_at: new Date().toISOString() };
+                    if (await this.saveSettingsBatch({ pengumuman_jumat: pjData, sholat_jumat: friday }) !== true) return false;
+                    this.cacheConfirmedSetting('sholat_jumat', friday, { cached_sholat_jumat: friday });
+                    this.notifyConfirmedChange('sholat_jumat', friday, 'SYNC_JUMAT');
+                } else if (await this.saveSettingItem('pengumuman_jumat', pjData) !== true) return false;
                 this.cacheConfirmedSetting('pengumuman_jumat', pjData, { pengumuman_jumat_data: pjData });
                 this.notifyConfirmedChange('pengumuman_jumat', pjData, 'SYNC_PENGUMUMAN_JUMAT');
                 return true;
@@ -641,182 +844,7 @@
             }
         },
 
-        /**
-         * Simpan Petugas Sholat Jum'at Terpadu (Unified Single Master Pipeline)
-         * Satu-satunya gerbang resmi untuk menyimpan jadwal & petugas Jumat
-         * Menyimpan serentak ke tabel sholat_jumat, app_settings id:1, app_settings id:9 (pengumuman_jumat),
-         * local cache, dan memicu realtime broadcast seketika (<50ms) ke Smart TV.
-         * @param {Object} payload { tanggal, khatib, imam, muadzin, bilal, maklumat, durasi, foto_imam }
-         */
-        async saveSholatJumat(payload) {
-            if (!payload || !payload.tanggal) {
-                console.error('[SupabaseDB] Payload saveSholatJumat tidak lengkap:', payload);
-                return { success: false, error: 'Tanggal wajib diisi' };
-            }
 
-            try {
-                const tgl = payload.tanggal;
-                const finalKhatib = (payload.khatib || payload.imam || '').trim();
-                const finalImam = (payload.imam || payload.khatib || '').trim();
-                const muadzin = (payload.muadzin || '').trim();
-                const bilalOnly = (payload.bilal || '').trim();
-                const maklumatOnly = (payload.maklumat || '').trim();
-                const jumatDur = parseInt(payload.durasi || payload.jumat_durasi || 50, 10) || 50;
-                const fotoImam = payload.foto_imam || 'image/display/default_imam.jpg';
-                let sqlFotoImam = fotoImam;
-                // Proteksi skema SQL varchar(255): string base64 panjang disimpan sebagai 'custom_uploaded' di SQL,
-                // dan disimpan utuh tanpa batas di app_settings jsonb
-                if (fotoImam && (fotoImam.length > 200 || fotoImam.startsWith('data:'))) {
-                    sqlFotoImam = 'custom_uploaded';
-                }
-
-                // Gabungkan bilal & maklumat untuk tabel SQL sholat_jumat
-                let combinedBilal = bilalOnly;
-                if (maklumatOnly) {
-                    combinedBilal = bilalOnly ? `${bilalOnly} / ${maklumatOnly}` : `- / ${maklumatOnly}`;
-                }
-
-                const dbRowPayload = {
-                    tanggal: tgl,
-                    khatib: finalKhatib,
-                    imam: finalImam,
-                    muadzin: muadzin,
-                    bilal: combinedBilal,
-                    foto_imam: sqlFotoImam
-                };
-
-                // 1. Simpan ke Tabel SQL sholat_jumat (PATCH jika tanggal sudah ada, POST jika baru)
-                let sqlSuccess = false;
-                try {
-                    const checkRows = await this.restFetch(`sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}&select=id`).catch(() => []);
-                    if (Array.isArray(checkRows) && checkRows.length > 0) {
-                        const patchSqlRes = await this.safeRestMutation(`sholat_jumat?tanggal=eq.${encodeURIComponent(tgl)}`, 'PATCH', dbRowPayload);
-                        sqlSuccess = patchSqlRes.success && patchSqlRes.cloudConfirmed;
-                        if (!sqlSuccess) console.warn('[SupabaseDB] PATCH sholat_jumat gagal:', patchSqlRes.error);
-                    } else {
-                        const postSqlRes = await this.safeRestMutation('sholat_jumat', 'POST', dbRowPayload);
-                        sqlSuccess = postSqlRes.success && postSqlRes.cloudConfirmed;
-                        if (!sqlSuccess) console.warn('[SupabaseDB] POST sholat_jumat gagal:', postSqlRes.error);
-                    }
-                } catch (sqlErr) {
-                    console.warn('[SupabaseDB] Error simpan sholat_jumat SQL:', sqlErr);
-                }
-
-                // 2. Simpan durasi & running text pages ke app_settings id=1
-                // Proteksi zero-loss: Ambil dulu running text cloud mutakhir agar 19 slide lain tidak terhapus saat diedit dari HP!
-                let currentRt = {};
-                try {
-                    const liveSettings = await this.getSettings(true).catch(() => null);
-                    if (liveSettings && typeof liveSettings.running_text_pages === 'object' && liveSettings.running_text_pages !== null) {
-                        currentRt = Object.assign({}, liveSettings.running_text_pages);
-                    }
-                } catch (e) {}
-
-                if (Object.keys(currentRt).length === 0) {
-                    try {
-                        const rtRaw = localStorage.getItem('cached_running_text_pages');
-                        if (rtRaw) currentRt = JSON.parse(rtRaw);
-                    } catch (e) {}
-                }
-
-                currentRt.jumat_maklumat = maklumatOnly;
-                currentRt.jumat_bilal = bilalOnly;
-                if (fotoImam && fotoImam.startsWith('data:')) {
-                    currentRt.jumat_foto_imam_b64 = fotoImam;
-                } else if (fotoImam === 'image/display/default_imam.jpg') {
-                    delete currentRt.jumat_foto_imam_b64;
-                }
-                try { localStorage.setItem('cached_running_text_pages', JSON.stringify(currentRt)); } catch (e) {}
-
-                // Pastikan slide Petugas Jum'at otomatis aktif di daftar rotasi TV saat data petugas disimpan
-                let updatedRotPages = null;
-                try {
-                    const liveSettings = await this.getSettings(true).catch(() => null);
-                    let rotPages = liveSettings?.rotation_pages;
-                    if (typeof rotPages === 'string') {
-                        try { rotPages = JSON.parse(rotPages); } catch(e) {}
-                    }
-                    if (!rotPages || !Array.isArray(rotPages)) {
-                        const localRot = localStorage.getItem('cached_rotation_pages');
-                        if (localRot) try { rotPages = JSON.parse(localRot); } catch(e) {}
-                    }
-                    if (Array.isArray(rotPages)) {
-                        const jSlide = rotPages.find(p => (p.url || p.path || p.page || '').includes('jumat') && !(p.url || p.path || p.page || '').includes('kas-jumat'));
-                        if (jSlide && jSlide.active === false) {
-                            jSlide.active = true;
-                            updatedRotPages = rotPages;
-                            localStorage.setItem('cached_rotation_pages', JSON.stringify(rotPages));
-                        }
-                    }
-                } catch(e) {}
-
-                const patchAppSettingsPayload = {
-                    prayer_mode_jumat_duration: jumatDur,
-                    running_text_pages: currentRt
-                };
-                if (updatedRotPages) {
-                    patchAppSettingsPayload.rotation_pages = updatedRotPages;
-                }
-
-                const patchAppRes = await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', patchAppSettingsPayload);
-                const appSettingsSuccess = patchAppRes.success && patchAppRes.cloudConfirmed;
-
-                // 3. Sinkronkan juga ke pengumuman_jumat (id=9) agar tidak memuat nama petugas lama
-                try {
-                    let pjd = null;
-                    const rawPj = localStorage.getItem('pengumuman_jumat_data');
-                    if (rawPj) {
-                        try { pjd = JSON.parse(rawPj); } catch(e) {}
-                    }
-                    if (pjd) {
-                        if (!pjd.petugas) pjd.petugas = {};
-                        pjd.petugas.imamKhotib = finalKhatib;
-                        pjd.petugas.muadzin = muadzin;
-                        pjd.petugas.bilal = bilalOnly;
-                        pjd.petugas.maklumat = maklumatOnly;
-                        localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjd));
-
-                        await this.safeRestMutation('app_settings?id=eq.9', 'PATCH', { value: JSON.stringify(pjd) }, { allowZeroRows: true }).catch(() => {});
-                    }
-                } catch (e) {}
-
-                // Validasi kegagalan penyimpanan: jika SQL dan app_settings sama-sama gagal
-                if (!sqlSuccess && !appSettingsSuccess) {
-                    console.error('[SupabaseDB] saveSholatJumat gagal ke cloud:', patchAppRes.error);
-                    return { success: false, cloudConfirmed: false, error: patchAppRes.error || 'Gagal menyimpan ke server' };
-                }
-
-                // 4. Update Local Caches
-                const unifiedResult = {
-                    ...dbRowPayload,
-                    foto_imam: fotoImam,
-                    bilal: bilalOnly,
-                    maklumat: maklumatOnly,
-                    durasi: jumatDur
-                };
-                try {
-                    localStorage.setItem('cached_jumat_bilal', bilalOnly);
-                    localStorage.setItem('cached_jumat_maklumat', maklumatOnly);
-                    localStorage.setItem('cached_prayer_mode_jumat_duration', jumatDur);
-                    localStorage.setItem('cached_sholat_jumat', JSON.stringify(unifiedResult));
-                } catch (e) {}
-
-                // 5. Broadcast Realtime ke Smart TV dan Seluruh Klien Terbuka
-                if (typeof this.broadcastChange === 'function') {
-                    this.broadcastChange('sholat_jumat', 'UPDATE', unifiedResult, 'Unified Petugas Master');
-                    this.broadcastChange('app_settings', 'UPDATE', { prayer_mode_jumat_duration: jumatDur, running_text_pages: currentRt }, 'Unified Petugas Master');
-                    this.broadcastChange('pengumuman_jumat', 'UPDATE', { petugas: { imamKhotib: finalKhatib, muadzin, bilal: bilalOnly, maklumat: maklumatOnly } }, 'Unified Petugas Master');
-                }
-                if (typeof this.sendRemoteCommand === 'function') {
-                    this.sendRemoteCommand('SYNC_JUMAT', unifiedResult);
-                }
-
-                return { success: true, cloudConfirmed: true, data: unifiedResult };
-            } catch (err) {
-                console.error('[SupabaseDB] saveSholatJumat failed:', err);
-                return { success: false, error: err.message };
-            }
-        },
 
         /**
          * Simpan Transaksi Kas Terpadu (Kas Utama & Ambulance - Bendahara)
@@ -825,49 +853,18 @@
          * @param {Object} payload { tanggal, deskripsi, pemasukan, pengeluaran, saldo, kategori }
          */
         async saveTransaksiKas(payload) {
-            if (!payload || !payload.deskripsi) return { success: false, error: 'Deskripsi transaksi wajib diisi' };
-            const kat = payload.kategori || 'Kas Utama Masjid';
-            const isAmbulance = (kat === 'Kas Ambulance');
-            const targetTable = isAmbulance ? 'keuangan_ambulance' : 'keuangan';
-            const cleanPayload = {
-                tanggal: payload.tanggal || new Date().toISOString().split('T')[0],
-                deskripsi: payload.deskripsi,
-                pemasukan: parseFloat(payload.pemasukan) || 0,
-                pengeluaran: parseFloat(payload.pengeluaran) || 0,
-                saldo: parseFloat(payload.saldo) || (parseFloat(payload.pemasukan) || 0),
-                kategori: kat
-            };
-
             try {
-                const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${targetTable}`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_CONFIG.anonKey,
-                        'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(cleanPayload)
-                });
-
-                if (res.ok) {
-                    const inserted = await res.json().catch(() => [cleanPayload]);
-                    const rowData = Array.isArray(inserted) ? inserted[0] : inserted;
-                    if (typeof this.broadcastChange === 'function') {
-                        this.broadcastChange(targetTable, 'INSERT', rowData, 'Bendahara Unified');
-                    }
-                    if (typeof this.sendRemoteCommand === 'function') {
-                        this.sendRemoteCommand(isAmbulance ? 'SYNC_AMBULANCE' : 'SYNC_KEUANGAN', rowData);
-                    }
-                    return { success: true, data: rowData };
-                } else {
-                    const errJson = await res.json().catch(() => ({}));
-                    return { success: false, error: errJson.message || 'Gagal menyimpan transaksi' };
-                }
-            } catch (err) {
-                console.error('[SupabaseDB] saveTransaksiKas failed:', err);
-                return { success: false, error: err.message };
-            }
+                if (!payload?.deskripsi?.trim()) throw new Error('Deskripsi wajib diisi');
+                const cleanPayload = { ...payload, pemasukan: this.parseMoney(payload.pemasukan ?? 0), pengeluaran: this.parseMoney(payload.pengeluaran ?? 0) };
+                if (cleanPayload.pemasukan < 0 || cleanPayload.pengeluaran < 0 || cleanPayload.pemasukan + cleanPayload.pengeluaran <= 0) throw new Error('Nominal transaksi tidak valid');
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(cleanPayload.tanggal || '')) throw new Error('Tanggal transaksi wajib diisi');
+                const table = payload.kategori === 'Kas Ambulance' ? 'keuangan_ambulance' : 'keuangan';
+                const result = await this.safeRestMutation(table, 'POST', cleanPayload);
+                if (!result.success || !result.cloudConfirmed || !(result.rowsAffected > 0)) return { success: false, cloudConfirmed: false, error: result.error || 'Tidak ada baris yang dikonfirmasi' };
+                this.invalidateCache(table);
+                this.notifyConfirmedChange(table, result.data[0], table === 'keuangan' ? 'SYNC_KEUANGAN' : 'SYNC_AMBULANCE');
+                return { success: true, cloudConfirmed: true, data: result.data[0] };
+            } catch (error) { return { success: false, cloudConfirmed: false, error: error.message }; }
         },
 
         /**
@@ -1139,18 +1136,10 @@
                 return { success: false, cloudConfirmed: false, error: 'Payload tidak valid' };
             }
 
-            // 1. Simpan langsung ke cache lokal browser
-            try {
-                const currentRaw = localStorage.getItem('cached_app_settings');
-                const current = currentRaw ? JSON.parse(currentRaw) : Object.assign({}, this.defaultSettings);
-                const merged = Object.assign({}, current, updatedFields);
-                localStorage.setItem('cached_app_settings', JSON.stringify(merged));
-                if (updatedFields.rotation_interval) {
-                    localStorage.setItem('display_rotation_interval', updatedFields.rotation_interval);
-                }
-            } catch (e) {
-                console.warn('[SupabaseDB] Gagal update cached_app_settings lokal:', e);
-            }
+            // Draft and confirmed state must remain separate until the cloud replies.
+            const snapshot = JSON.parse(JSON.stringify(updatedFields));
+            updatedFields = snapshot;
+            try { localStorage.setItem('draft_app_settings', JSON.stringify(snapshot)); } catch (error) {}
 
             // 2. Pisahkan field kolom row 1 vs key-value baris tambahan
             const validRow1Columns = [
@@ -1218,23 +1207,22 @@
                         }
                     }
 
-                    // Update / Upsert key-value items
-                    for (const [key, val] of Object.entries(keyValuePayloads)) {
-                        const ok = await this.saveSettingItem(key, val);
-                        if (!ok) {
-                            hasError = true;
-                            lastErrMsg = `Gagal menyimpan setting item "${key}"`;
-                        }
+                    if (Object.keys(keyValuePayloads).length && await this.saveSettingsBatch(keyValuePayloads) !== true) {
+                        hasError = true;
+                        lastErrMsg = this.lastSettingsBatchError || 'Batch settings belum terkonfirmasi';
                     }
 
                     if (hasError) {
                         return { success: false, cloudConfirmed: false, error: lastErrMsg };
                     }
 
-                    // Sinkronkan juga baris cadangan jika rotation_interval berubah
-                    if (updatedFields.rotation_interval) {
-                        this.safeRestMutation('app_settings?id=gt.1', 'PATCH', { rotation_interval: updatedFields.rotation_interval }, { allowZeroRows: true }).catch(() => {});
-                    }
+                    try {
+                        const confirmed = JSON.parse(localStorage.getItem('cached_app_settings') || '{}');
+                        Object.assign(confirmed, updatedFields);
+                        localStorage.setItem('cached_app_settings', JSON.stringify(confirmed));
+                        if (localStorage.getItem('draft_app_settings') === JSON.stringify(snapshot)) localStorage.removeItem('draft_app_settings');
+                    } catch (error) {}
+                    this.invalidateCache('app_settings');
 
                     // Kirim sinyal broadcast remote UPDATE_SETTINGS agar display TV langsung adopsi tanpa jeda
                     if (typeof this.broadcastChange === 'function') {
@@ -1342,7 +1330,18 @@
          * Ambil petugas sholat Jumat terbaru (Normalized & Unified)
          * Mengembalikan objek data terstandarisasi dengan pemisahan bilal & maklumat yang bersih
          */
-        async getSholatJumat(forceRefresh = false) {
+        async getSholatJumat(forceRefresh = false, requireCloud = false, knownSettings = null) {
+            const settings = knownSettings || await this.getSettings(forceRefresh, requireCloud);
+            let canonical = settings && settings.sholat_jumat;
+            if (typeof canonical === 'string') { try { canonical = JSON.parse(canonical); } catch (error) { canonical = null; } }
+            if (canonical && canonical.schema_version === 2) {
+                try {
+                    localStorage.setItem('cached_sholat_jumat', JSON.stringify(canonical));
+                    if (canonical.foto_imam) localStorage.setItem('cached_jumat_foto_imam', canonical.foto_imam);
+                } catch (error) {}
+                this.setCached('sholat_jumat', canonical);
+                return canonical;
+            }
             if (!forceRefresh) {
                 const cached = this.getCached('sholat_jumat');
                 if (cached) return cached;
@@ -1367,10 +1366,13 @@
                     if (Array.isArray(rows) && rows.length > 0) {
                         row = rows[0];
                     }
+                    else if (Array.isArray(rows) && requireCloud) return {};
                 } catch (restErr) {
                     console.warn('Gagal membaca sholat_jumat via REST:', restErr);
                 }
             }
+
+            if (!row && requireCloud) throw new Error('Petugas Jumat cloud belum terkonfirmasi');
 
             if (!row) {
                 const cached = localStorage.getItem('cached_sholat_jumat');
@@ -1960,6 +1962,7 @@
             if (!url || typeof url !== 'string') return fallbackUrl;
             const trimmed = url.trim();
             if (!trimmed) return fallbackUrl;
+            let videoId = '';
 
             // 0. Auto-resolve jika pengguna menempelkan link dari portal makkahlive.net atau handle channel YouTube
             if (trimmed.includes('makkahlive.net')) {
@@ -2401,6 +2404,18 @@
             this.sendTvAcknowledgment(pending.devId, event.event_id, pending.table, 'RECEIVED');
         },
 
+        recordSlideReadiness(message) {
+            if (!message || message.origin !== window.location.origin || message.data?.type !== 'SLIDE_RENDER_CONFIRMED' ||
+                message.data.event_id || message.data.phase !== 'ready') return false;
+            const frame = Array.from(document.querySelectorAll('iframe')).find(frame => frame.contentWindow === message.source);
+            if (!frame) return false;
+            const name = new URL(frame.src, window.location.href).pathname.split('/').pop().replace(/\.html$/, '');
+            if (name !== message.data.slide) return false;
+            this._slideReadiness = this._slideReadiness || new Map();
+            this._slideReadiness.set(name, { timestamp: Date.now(), frame: frame.id, scope: 'dom' });
+            return true;
+        },
+
         acceptTvRenderConfirmation(message) {
             if (!message || message.origin !== window.location.origin || !message.data ||
                 message.data.type !== 'SLIDE_RENDER_CONFIRMED') return false;
@@ -2409,6 +2424,7 @@
             if (!pending || !pending.source || message.source !== pending.source ||
                 data.table !== pending.table || pending.frame.src !== pending.url ||
                 !pending.isStillVisible()) return false;
+            if (data.slide && data.slide !== new URL(pending.url, window.location.href).pathname.split('/').pop().replace(/\.html$/, '')) return false;
             clearTimeout(pending.timer);
             this._pendingTvAcks.delete(data.event_id);
             this.sendTvAcknowledgment(pending.devId, data.event_id, pending.table, 'APPLIED');
@@ -2501,6 +2517,7 @@
                                 if (document.visibilityState === 'hidden') return;
                                 window.parent.postMessage({
                                     type: 'SLIDE_RENDER_CONFIRMED',
+                                    slide: (window.location.pathname || '').split('/').pop().replace(/\.html$/, ''),
                                     event_id: enriched.event_id,
                                     table: enriched.table || table,
                                     timestamp: Date.now()

@@ -158,54 +158,6 @@
       "selector": "#cfgDurasiJumat"
     },
     {
-      "id": "9497793791279e7a03e1",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatTanggal"
-    },
-    {
-      "id": "76d1b1f6cf7177475a81",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatKhotib"
-    },
-    {
-      "id": "1c81ad53f7f7cac6807a",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatFotoFile"
-    },
-    {
-      "id": "7489ed0658ae75ef4c47",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatFotoUrlInput"
-    },
-    {
-      "id": "ddd97dd1d1199018a4ac",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatMuadzin"
-    },
-    {
-      "id": "3ad00d15f7f75054202e",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatBilal"
-    },
-    {
-      "id": "db986a510b678e72b055",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatMaklumat"
-    },
-    {
-      "id": "627a190c0f1d8e092515",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#jumatDurasiInput"
-    },
-    {
       "id": "36df0fa135fe28716134",
       "code": "UNCLASSIFIED_FORM",
       "file": "web-statis/admin.html",
@@ -548,36 +500,6 @@
       "selector": "#pjInputTitimangsa"
     },
     {
-      "id": "b76abebb5d8441a752b5",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#pjInputImamKhotib"
-    },
-    {
-      "id": "1675473421a309fb94d6",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#pjInputMuadzin"
-    },
-    {
-      "id": "9471eda86a83aa6e2334",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#pjInputBilal"
-    },
-    {
-      "id": "12a4d4bb9bef1854450d",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#pjInputMaklumat"
-    },
-    {
-      "id": "ce73e30ad4afe2499b7e",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#pjInputSaldoAwal"
-    },
-    {
       "id": "ee71b7db21dd4dc77221",
       "code": "UNCLASSIFIED_FORM",
       "file": "web-statis/admin.html",
@@ -780,66 +702,6 @@
       "code": "UNCLASSIFIED_FORM",
       "file": "web-statis/admin.html",
       "selector": "#flyerWaBroadcastText"
-    },
-    {
-      "id": "774aba46d621c9636f53",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#kasTanggal"
-    },
-    {
-      "id": "365fdb62c27e6af3f8e8",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#kasTipe"
-    },
-    {
-      "id": "3e9416624ac9c5969550",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#kasKategori"
-    },
-    {
-      "id": "efbfab3541e772b3fa46",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#kasUraian"
-    },
-    {
-      "id": "81281f78eb0d790f4a82",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#kasNominal"
-    },
-    {
-      "id": "6e138ee3205962a8934a",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#editKasTanggal"
-    },
-    {
-      "id": "311336a7c26b7b558bfe",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#editKasTipe"
-    },
-    {
-      "id": "b0afd49876d1e11e8a94",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#editKasKategori"
-    },
-    {
-      "id": "447a0b74edc2c56b821d",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#editKasUraian"
-    },
-    {
-      "id": "efc75e32d113403912ee",
-      "code": "UNCLASSIFIED_FORM",
-      "file": "web-statis/admin.html",
-      "selector": "#editKasNominal"
     },
     {
       "id": "6566defc0148647eb5e1",

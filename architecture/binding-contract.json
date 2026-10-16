@@ -35,6 +35,42 @@
         4,
         5
       ]
+    },
+    "friday.tanggal": {
+      "type": "string"
+    },
+    "friday.khatib": {
+      "type": "string"
+    },
+    "friday.imam": {
+      "type": "string"
+    },
+    "friday.muadzin": {
+      "type": "string"
+    },
+    "friday.muadzin2": {
+      "type": "string"
+    },
+    "friday.bilal": {
+      "type": "string"
+    },
+    "friday.maklumat": {
+      "type": "string"
+    },
+    "friday.foto_imam": {
+      "type": "string"
+    },
+    "friday.waktu": {
+      "type": "string"
+    },
+    "friday.durasi": {
+      "type": "number"
+    },
+    "finance.transactions": {
+      "type": "array"
+    },
+    "finance.fridayReport": {
+      "type": "object"
     }
   },
   "forms": [
@@ -82,6 +118,251 @@
       "event": "change",
       "handler": "triggerAutoSaveAgendaRutin",
       "sink": "SupabaseDB.saveAgendaRutin"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatTanggal",
+      "path": "friday.tanggal",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatKhotib",
+      "path": "friday.khatib",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatImam",
+      "path": "friday.imam",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatMuadzin",
+      "path": "friday.muadzin",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatMuadzin2",
+      "path": "friday.muadzin2",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatBilal",
+      "path": "friday.bilal",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatMaklumat",
+      "path": "friday.maklumat",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatFotoUrlInput",
+      "path": "friday.foto_imam",
+      "mode": "auto",
+      "event": "change",
+      "handler": "handleJumatFotoUrlChange",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatFotoFile",
+      "path": "friday.foto_imam",
+      "mode": "auto",
+      "event": "change",
+      "handler": "handleJumatFotoUpload",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatWaktu",
+      "path": "friday.waktu",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputImamKhotib",
+      "path": "friday.khatib",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePengumumanJumat",
+      "sink": "SupabaseDB.savePengumumanJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputMuadzin",
+      "path": "friday.muadzin",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePengumumanJumat",
+      "sink": "SupabaseDB.savePengumumanJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputBilal",
+      "path": "friday.bilal",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePengumumanJumat",
+      "sink": "SupabaseDB.savePengumumanJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputMaklumat",
+      "path": "friday.maklumat",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePengumumanJumat",
+      "sink": "SupabaseDB.savePengumumanJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#jumatDurasiInput",
+      "path": "friday.durasi",
+      "mode": "auto",
+      "event": "input",
+      "handler": "triggerAutoSavePetugasJumat",
+      "sink": "SupabaseDB.saveSholatJumat"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#kasTanggal",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanTransaksiKas",
+      "sink": "SupabaseDB.saveTransaksiKas",
+      "saveSelector": "#btnSimpanKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#kasTipe",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanTransaksiKas",
+      "sink": "SupabaseDB.saveTransaksiKas",
+      "saveSelector": "#btnSimpanKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#kasKategori",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanTransaksiKas",
+      "sink": "SupabaseDB.saveTransaksiKas",
+      "saveSelector": "#btnSimpanKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#kasUraian",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanTransaksiKas",
+      "sink": "SupabaseDB.saveTransaksiKas",
+      "saveSelector": "#btnSimpanKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#kasNominal",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanTransaksiKas",
+      "sink": "SupabaseDB.saveTransaksiKas",
+      "saveSelector": "#btnSimpanKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#editKasTanggal",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanEditTransaksiKas",
+      "sink": "SupabaseDB.safeRestMutation",
+      "saveSelector": "#btnSimpanEditKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#editKasTipe",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanEditTransaksiKas",
+      "sink": "SupabaseDB.safeRestMutation",
+      "saveSelector": "#btnSimpanEditKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#editKasKategori",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanEditTransaksiKas",
+      "sink": "SupabaseDB.safeRestMutation",
+      "saveSelector": "#btnSimpanEditKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#editKasUraian",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanEditTransaksiKas",
+      "sink": "SupabaseDB.safeRestMutation",
+      "saveSelector": "#btnSimpanEditKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#editKasNominal",
+      "path": "finance.transactions",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanEditTransaksiKas",
+      "sink": "SupabaseDB.safeRestMutation",
+      "saveSelector": "#btnSimpanEditKas"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputSaldoAwal",
+      "path": "finance.fridayReport",
+      "mode": "manual",
+      "event": "click",
+      "handler": "simpanDataPengumumanJumat",
+      "sink": "SupabaseDB.savePengumumanJumat",
+      "saveSelector": "#btnSimpanPengumumanJumat"
     }
   ],
   "bindings": [
@@ -108,6 +389,96 @@
       "selector": "#waktuTafsir",
       "path": "agenda.tafsir.pekan_aktif",
       "renderer": "loadAgendaData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valTanggal",
+      "path": "friday.tanggal",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valImamKhatib",
+      "path": "friday.khatib",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valImamKhatib",
+      "path": "friday.imam",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valMuadzin",
+      "path": "friday.muadzin",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valMuadzin",
+      "path": "friday.muadzin2",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valBilal",
+      "path": "friday.bilal",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valMaklumat",
+      "path": "friday.maklumat",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#imamPhoto",
+      "path": "friday.foto_imam",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valWaktuJumat",
+      "path": "friday.waktu",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/jumat.html",
+      "selector": "#valDurasiJumat",
+      "path": "friday.durasi",
+      "renderer": "renderJumatData"
+    },
+    {
+      "file": "web-statis/slides/kas-jumat.html",
+      "selector": "#tvKasSaldoAwal",
+      "path": "finance.transactions",
+      "renderer": "loadKasJumatData"
+    },
+    {
+      "file": "web-statis/slides/kas-jumat.html",
+      "selector": "#tvKasPemasukan",
+      "path": "finance.transactions",
+      "renderer": "loadKasJumatData"
+    },
+    {
+      "file": "web-statis/slides/kas-jumat.html",
+      "selector": "#tvKasPengeluaran",
+      "path": "finance.transactions",
+      "renderer": "loadKasJumatData"
+    },
+    {
+      "file": "web-statis/slides/kas-jumat.html",
+      "selector": "#tvKasSaldoAkhir",
+      "path": "finance.transactions",
+      "renderer": "loadKasJumatData"
+    },
+    {
+      "file": "web-statis/slides/kas-jumat.html",
+      "selector": "#tvKasSaldoAwal",
+      "path": "finance.fridayReport",
+      "renderer": "loadKasJumatData"
     }
   ]
 }

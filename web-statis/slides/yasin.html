@@ -730,7 +730,7 @@
         // Sinkronisasi Otomatis Terpusat dari Halaman Admin
         window.addEventListener('storage', (e) => {
             if (e.key === 'yasin_display_mode' || e.key === 'yasin_step_duration' || e.key === 'yasin_mushaf_duration') {
-                loadSettingsAndPrayer();
+
             }
         });
         setInterval(loadSettingsAndPrayer, 300000); // 5 menit (hemat bandwidth)
@@ -787,7 +787,10 @@
         }
 
         // Load Settings Supabase & LocalStorage
-        async function loadSettingsAndPrayer() {
+        async function loadSettingsAndPrayer(forceRefresh = false, renderContext = null) {
+            const snapshot = await SupabaseDB.getSlideSnapshot('yasin', forceRefresh);
+            if (renderContext && !renderContext.isCurrent()) return false;
+
             // 1. Baca dari LocalStorage sebagai responsivitas instan
             const localMode = localStorage.getItem('yasin_display_mode');
             if (localMode) currentMode = localMode;
@@ -800,10 +803,10 @@
 
             // 2. Baca dari Supabase Cloud DB / Parent Memory Bridge
             try {
-                let settings = null;
-                let jadwals = null;
+                let settings = snapshot.settings;
+                let jadwals = snapshot.jadwal || null;
                 try {
-                    if (window.parent && window.parent !== window) {
+                    if (!forceRefresh && window.parent && window.parent !== window) {
                         if (window.parent.settings) settings = window.parent.settings;
                         if (window.parent.jadwalList) jadwals = window.parent.jadwalList;
                     }
@@ -872,50 +875,25 @@
                 }
             } catch (err) {
                 console.warn('Menggunakan fallback setting lokal:', err);
+                if (forceRefresh) return false;
             }
 
+            if (!allAyahs.length) await loadSurahYasin();
+            if (renderContext && !renderContext.isCurrent()) return false;
             // Render ulang jika setting baru tiba
             if (allAyahs.length > 0) {
                 renderCurrentSlide();
+                return true;
             }
+            return false;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSettingsAndPrayer();
-            loadSurahYasin();
 
-            // 1. Dengarkan pesan langsung dari Parent TV (postMessage) untuk respon seketika (<50ms)
-            window.addEventListener('message', (event) => {
-                const msg = event.data;
-                if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA') {
-                    if (msg.settings && msg.settings.nama_aplikasi) {
-                        document.getElementById('nama-masjid').textContent = msg.settings.nama_aplikasi;
-                    }
-                    loadSettingsAndPrayer();
-                } else if (msg.type === 'DATA_UPDATED' && (msg.table === 'yasin' || msg.table === 'app_settings' || msg.table === 'jadwal_sholat')) {
-                    loadSettingsAndPrayer();
-                } else if (msg.type === 'UPDATE_SETTINGS' || msg.force_reload) {
-                    loadSettingsAndPrayer();
-                }
-            });
+    </script>
 
-            // 2. Dengarkan sinyal universal realtime (BroadcastChannel, Remote WebSocket, Storage)
-            if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
-                SupabaseDB.onDataChange((payload) => {
-                    const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'yasin' || tbl === 'app_settings' || tbl === 'jadwal_sholat') {
-                        loadSettingsAndPrayer();
-                    }
-                });
-            } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {
-                SupabaseDB.subscribeRealtime((payload) => {
-                    if (payload.table === 'app_settings' || payload.table === 'jadwal_sholat') {
-                        loadSettingsAndPrayer();
-                    }
-                });
-            }
-        });
+    <script>
+        // SLIDE_RENDER_CONFIRMED is emitted after DOM/images settle by the shared lifecycle.
+        window.slideRenderLifecycle = SupabaseDB.bindSlideRenderer('yasin', ["yasin","yasin_settings","app_settings","jadwal_sholat"], loadSettingsAndPrayer);
     </script>
 </body>
 </html>

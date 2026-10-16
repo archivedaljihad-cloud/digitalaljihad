@@ -1085,6 +1085,7 @@
                             : settings.kegiatan_rutin_settings;
                     } catch (e) {}
                 }
+                if (forceRefresh && !agendaData) return false;
                 if (!agendaData) {
                     const raw = localStorage.getItem('agenda_rutin_settings') || localStorage.getItem('aljihad_agenda_rutin');
                     if (raw) {
@@ -1170,10 +1171,15 @@
                     }
                 }
 
+                const enabledCards = { cardYasin: agendaData?.yasin, cardKajianAhad: agendaData?.kajian_ahad, cardTahsin: agendaData?.tahsin, cardTafsir: agendaData?.tafsir };
+                Object.entries(enabledCards).forEach(([id, entry]) => {
+                    const card = document.getElementById(id);
+                    if (card) card.style.display = entry?.enabled === false ? 'none' : '';
+                });
                 loadAgendaData.lastAgenda = agendaData;
                 applySmartHighlights(agendaData);
-                // Full render ACK stays opt-in until every agenda field has a display contract.
-                return undefined;
+                // Schedule labels, highlights and enabled visibility have now been applied.
+                return true;
             } catch (err) {
                 console.warn('Gagal memuat agenda data:', err);
                 return false;

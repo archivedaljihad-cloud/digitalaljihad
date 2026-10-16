@@ -1,0 +1,126 @@
+'use strict';
+const assert = require('assert/strict'), fs = require('fs'), vm = require('vm');
+const { PGlite } = require('@electric-sql/pglite');
+const { extractFunctions } = require('./lib/source-functions');
+let checks = 0;
+const ok = (value, label) => { assert.ok(value, label); checks++; };
+const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
+function harness(child = false) {
+    const values = new Map(), messages = [], listeners = {}, frames = [];
+    const window = { location: { origin: 'https://test.invalid', pathname: '/slides/jumat.html' }, addEventListener(type, fn) { (listeners[type] ||= []).push(fn); }, requestAnimationFrame(fn) { fn(); } };
+    window.parent = child ? { postMessage(data, origin) { messages.push({ data, origin }); } } : window;
+    const document = { readyState: 'complete', visibilityState: 'visible', images: [], querySelectorAll() { return frames; } };
+    const localStorage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, String(value)), removeItem: key => values.delete(key) };
+    vm.runInNewContext(fs.readFileSync('web-statis/js/supabase-db.js', 'utf8'), { window, document, localStorage, console: { log() {}, warn() {}, error() {} }, setTimeout, clearTimeout, URLSearchParams, URL });
+    const db = window.SupabaseDB;
+    const broadcasts = []; db.broadcastChange = (...args) => broadcasts.push(args);
+    return { db, window, document, values, messages, broadcasts, listeners, frames };
+}
+(async () => {
+    const h = harness(), requests = [];
+    h.db.safeRestMutation = async (url, method, payload, options) => {
+        requests.push({ url, method, payload, options });
+        return { success: true, cloudConfirmed: true, data: payload, rowsAffected: payload.length };
+    };
+    const input = { one: { nested: [1] }, two: false, three: 'text' };
+    const pending = h.db.saveSettingsBatch(input); input.one.nested.push(2);
+    ok(await pending, 'Batch confirms all keys');
+    ok(requests.length === 1 && requests[0].method === 'POST' && requests[0].url === 'app_settings?on_conflict=key', 'All keys use exactly one upsert request');
+    ok(JSON.parse(requests[0].payload[0].value).nested.length === 1, 'Queued payload is immutable');
+    ok(requests[0].options.headers.Prefer.includes('resolution=merge-duplicates'), 'Upsert is safe to repeat with the same values');
+    ok(!await h.db.saveSettingsBatch({ a: undefined }) && requests.length === 1, 'Invalid payload is rejected before network');
+    h.values.set('cached_app_settings', '{"old":true}');
+    h.db.safeRestMutation = async () => ({ success: false, cloudConfirmed: false, error: 'offline' });
+    ok(!await h.db.saveSettingsBatch({ one: 3, two: 4 }), 'Network failure stays unconfirmed');
+    ok(h.values.get('cached_app_settings') === '{"old":true}' && h.broadcasts.length === 0, 'Failure preserves confirmed state and does not broadcast');
+    h.db.safeRestMutation = async () => ({ success: true, cloudConfirmed: true, data: [{ key: 'one', value: '3' }] });
+    ok(!await h.db.saveSettingsBatch({ one: 3, two: 4 }), 'Incomplete representation never confirms a batch');
+    const ordered = harness(), releases = [], order = [];
+    ordered.db.safeRestMutation = (url, method, rows) => new Promise(resolve => { order.push(rows[0].value); releases.push(() => resolve({ success: true, cloudConfirmed: true, data: rows })); });
+    const first = ordered.db.saveSettingsBatch({ key: 1 }), second = ordered.db.saveSettingsBatch({ key: 2 });
+    await flush(); ok(order.length === 1, 'Batch writes are serialized per browser');
+    releases.shift()(); await first; await flush(); ok(order.join(',') === '1,2', 'Newest write starts after prior commit'); releases.shift()(); await second;
+    const friday = harness(); let fridayBatch;
+    friday.db.getSettings = async () => ({ pengumuman_jumat: { saldo_awal: 100, petugas: {} } });
+    friday.db.saveSettingsBatch = async payload => { fridayBatch = payload; return true; };
+    const saved = await friday.db.saveSholatJumat({ tanggal: '2026-10-16', khatib: 'Khatib', imam: 'Imam', muadzin: 'Satu', muadzin2: 'Dua', waktu: '12:01', durasi: 45, foto_imam: 'data:image/png;base64,AA' });
+    ok(saved.success && saved.cloudConfirmed && fridayBatch.sholat_jumat.muadzin2 === 'Dua', 'Friday complete snapshot is confirmed: ' + JSON.stringify(saved));
+    ok(fridayBatch.prayer_mode_jumat_duration === 45 && fridayBatch.pengumuman_jumat.saldo_awal === 100, 'Duration and announcement snapshot share one transaction without losing finance');
+    friday.db.saveSettingsBatch = async () => false;
+    const before = friday.values.get('cached_sholat_jumat');
+    ok(!(await friday.db.saveSholatJumat({ tanggal: '2026-10-16', khatib: 'New' })).success && friday.values.get('cached_sholat_jumat') === before, 'Rejected Friday edit preserves last confirmed snapshot');
+    ok(!(await friday.db.saveSholatJumat({ tanggal: 'bad', khatib: 'Name' })).success, 'Invalid Friday date is rejected');
+    for (const value of [NaN, Infinity, 'nonsense']) assert.throws(() => h.db.parseMoney(value));
+    checks += 3;
+    ok(h.db.parseMoney('Rp 1.234.567') === 1234567 && h.db.parseMoney(0) === 0, 'Rupiah parser preserves both formatted values and legitimate zero');
+    const cash = h.db.buildKasJumatSnapshot([], { saldo_awal: 0, pemasukan: '1.000', pengeluaran: 500, saldo_akhir: 500 });
+    ok(cash.saldo_awal === 0 && cash.pemasukan === 1000 && cash.saldo_akhir === 500, 'Confirmed zero is not replaced by historic money');
+    assert.throws(() => h.db.buildKasJumatSnapshot([], { saldo_awal: 10, pemasukan: 'NaN' })); checks++;
+    const now = new Date(), today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const ledger = h.db.buildKasJumatSnapshot([{ tanggal: '2020-01-01', pemasukan: 10000, pengeluaran: 0 }, { tanggal: today, pemasukan: 1500, pengeluaran: 250 }], {});
+    ok(ledger.saldo_awal === 10000 && ledger.saldo_akhir === 11250, 'Friday ledger period has a coherent opening and closing balance');
+    const tv = harness(true), renders = []; let receive;
+    tv.db.onDataChange = fn => { receive = fn; };
+    const renderer = (fresh, context) => new Promise(resolve => renders.push({ fresh, context, resolve }));
+    tv.db.bindSlideRenderer('jumat', ['sholat_jumat'], renderer);
+    ok(renders.length === 1 && !renders[0].fresh, 'Startup is a separate readiness render');
+    renders.shift().resolve(true); await flush();
+    ok(tv.messages[0].data.phase === 'ready' && !tv.messages[0].data.event_id, 'Startup cannot acknowledge an unrelated edit');
+    const event = { event_id: 'fresh', table: 'sholat_jumat' };
+    const render = receive(event); await flush();
+    ok(tv.messages.length === 1 && renders[0].fresh, 'Slow fresh read has not acknowledged early');
+    renders.shift().resolve(true); await render; await flush();
+    ok(tv.messages.at(-1).data.event_id === 'fresh' && tv.messages.at(-1).data.slide === 'jumat', 'ACK preserves event/table/slide correlation after render');
+    const old = receive({ ...event, event_id: 'old' }), newer = receive({ ...event, event_id: 'new' });
+    const a = renders.shift(), b = renders.shift(); b.resolve(true); await newer; a.resolve(true); await old;
+    ok(!tv.messages.some(message => message.data.event_id === 'old'), 'Superseded render cannot acknowledge');
+    const fail = receive({ ...event, event_id: 'fail' }); renders.shift().resolve(false); await fail;
+    ok(!tv.messages.some(message => message.data.event_id === 'fail'), 'Failed renderer stays unconfirmed');
+    tv.document.visibilityState = 'hidden';
+    const hidden = receive({ ...event, event_id: 'hidden' }); renders.shift().resolve(true); await hidden;
+    ok(!tv.messages.some(message => message.data.event_id === 'hidden'), 'Hidden document cannot confirm an edit');
+    for (const callback of tv.listeners.message) callback({ origin: 'https://foreign.invalid', source: tv.window.parent, data: { type: 'INIT_DISPLAY_DATA' } });
+    ok(!renders.length, 'Foreign parent message is ignored');
+    for (const url of ['https://www.youtube.com/watch?v=Rs7St51oDDc', 'https://youtu.be/Rs7St51oDDc', 'https://www.youtube.com/live/Rs7St51oDDc']) {
+        ok(h.db.formatYouTubeEmbed(url).includes('/embed/Rs7St51oDDc'), 'YouTube URL parser has a local video ID for each call');
+    }
+    const media = harness(true); let mediaReceive; const imageListeners = {};
+    media.db.onDataChange = fn => { mediaReceive = fn; };
+    media.document.images = [{ complete: false, naturalWidth: 0, getBoundingClientRect() { return { width: 100, height: 100 }; },
+        addEventListener(type, callback) { imageListeners[type] = callback; }, removeEventListener() {} }];
+    media.db.bindSlideRenderer('jumat', ['sholat_jumat'], async () => true);
+    await flush();
+    ok(media.messages.length === 0, 'Startup readiness waits for visible image load');
+    imageListeners.load(); await flush();
+    ok(media.messages.length === 1, 'Loaded image allows readiness after animation frames');
+    const mediaUpdate = mediaReceive({ event_id: 'image-event', table: 'sholat_jumat' }); await flush();
+    ok(media.messages.length === 1, 'Edit ACK also waits for the image');
+    imageListeners.error(); await mediaUpdate;
+    ok(!media.messages.some(message => message.data.event_id === 'image-event'), 'Failed image prevents a green edit indicator');
+    const finance = harness(); let mutations = 0;
+    finance.db.safeRestMutation = async () => { mutations++; return { success: true, cloudConfirmed: true, rowsAffected: 0, data: [] }; };
+    const transaction = { tanggal: '2026-10-16', deskripsi: 'Infaq', pemasukan: 1000, pengeluaran: 0 };
+    ok(!(await finance.db.saveTransaksiKas(transaction)).success && finance.broadcasts.length === 0, 'Zero-row finance response cannot claim success');
+    ok(!(await finance.db.saveTransaksiKas({ ...transaction, pemasukan: NaN })).success && mutations === 1, 'Invalid amount is rejected before the financial mutation');
+    finance.db.safeRestMutation = async () => ({ success: true, cloudConfirmed: true, rowsAffected: 1, data: [{ id: 1, ...transaction }] });
+    ok((await finance.db.saveTransaksiKas(transaction)).cloudConfirmed && finance.broadcasts.length === 1, 'Confirmed finance insert broadcasts once');
+    const nodes = new Map(); let localReads = 0;
+    const cashContext = { window: {}, document: { getElementById(id) { if (!nodes.has(id)) nodes.set(id, { textContent: 'LAST CONFIRMED', style: {} }); return nodes.get(id); } },
+        SupabaseDB: { getSlideSnapshot: async () => ({ settings: {}, keuangan: [] }), getRunningTextForPage: () => '' },
+        localStorage: { getItem() { localReads++; return '{"saldo_awal":999}'; } }, console: { error() {} } };
+    cashContext.window.parent = cashContext.window;
+    vm.createContext(cashContext);
+    vm.runInContext(extractFunctions('web-statis/slides/kas-jumat.html', ['loadKasJumatData']), cashContext);
+    ok(await cashContext.loadKasJumatData(true) === false && localReads === 0, 'Deleted cloud report never confirms stale local finance');
+    ok(!nodes.has('tvKasSaldoAwal'), 'Missing financial snapshot preserves the displayed amounts');
+    const sql = await PGlite.create();
+    try {
+        await sql.exec("CREATE TABLE app_settings (key text UNIQUE, value text CHECK (value <> 'invalid')); INSERT INTO app_settings VALUES ('a', 'old'), ('b', 'old');");
+        await assert.rejects(sql.exec("INSERT INTO app_settings VALUES ('a','new'),('b','invalid') ON CONFLICT(key) DO UPDATE SET value=excluded.value")); checks++;
+        const result = await sql.query('SELECT value FROM app_settings ORDER BY key');
+        ok(result.rows.every(row => row.value === 'old'), 'Real PostgreSQL rolls back the whole multi-row upsert when one key fails');
+        await sql.exec("INSERT INTO app_settings VALUES ('a','new'),('b','new') ON CONFLICT(key) DO UPDATE SET value=excluded.value");
+        ok((await sql.query('SELECT value FROM app_settings')).rows.every(row => row.value === 'new'), 'Real PostgreSQL commits every key on success');
+    } finally { await sql.close(); }
+    console.log(`Stage 2 reliability: ${checks} checks passed`);
+})().catch(error => { console.error(error); process.exitCode = 1; });

@@ -1614,7 +1614,7 @@
                         jumatPetugas = Object.assign({}, jumatPetugas || {}, data);
                         window.jumatPetugas = jumatPetugas;
                     }
-                    masterRefresh = SupabaseDB.getSholatJumat().then(petugas => {
+                    masterRefresh = SupabaseDB.getSholatJumat(true, true).then(petugas => {
                         if (petugas) {
                             jumatPetugas = petugas;
                             window.jumatPetugas = jumatPetugas;
@@ -1762,7 +1762,10 @@
 
             // Only the expected, currently visible, same-origin frame may confirm render.
             window.addEventListener('message', (event) => {
-                if (window.SupabaseDB) SupabaseDB.acceptTvRenderConfirmation(event);
+                if (window.SupabaseDB) {
+                    SupabaseDB.recordSlideReadiness(event);
+                    SupabaseDB.acceptTvRenderConfirmation(event);
+                }
             });
 
             // Pasang Pendengar Universal Realtime (Postgres Changes, Remote Broadcast, Local Channel, Storage)
