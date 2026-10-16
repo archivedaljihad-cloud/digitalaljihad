@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "fields": {
+    "settings.prayer_countdown_style": {
+      "type": "enum",
+      "values": [
+        "flip",
+        "biasa"
+      ]
+    },
+    "agenda.tahsin.enabled": {
+      "type": "boolean"
+    },
+    "agenda.tafsir.enabled": {
+      "type": "boolean"
+    },
+    "agenda.tahsin.hari_aktif": {
+      "type": "array",
+      "items": [
+        "senin",
+        "selasa",
+        "rabu",
+        "kamis",
+        "jumat",
+        "sabtu",
+        "ahad"
+      ]
+    },
+    "agenda.tafsir.pekan_aktif": {
+      "type": "array",
+      "items": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  "forms": [
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#cfgCountdownStyle",
+      "path": "settings.prayer_countdown_style",
+      "mode": "auto",
+      "event": "change",
+      "handler": "simpanPengaturanDurasiTV",
+      "sink": "SupabaseDB.saveSettingItem"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": ".ws-day-pill",
+      "path": "agenda.tahsin.hari_aktif",
+      "mode": "auto",
+      "event": "click",
+      "handler": "triggerAutoSaveAgendaRutin",
+      "sink": "SupabaseDB.saveAgendaRutin"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": ".ws-tafsir-pekan",
+      "path": "agenda.tafsir.pekan_aktif",
+      "mode": "auto",
+      "event": "change",
+      "handler": "triggerAutoSaveAgendaRutin",
+      "sink": "SupabaseDB.saveAgendaRutin"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#wsTahsinEnabled",
+      "path": "agenda.tahsin.enabled",
+      "mode": "auto",
+      "event": "change",
+      "handler": "triggerAutoSaveAgendaRutin",
+      "sink": "SupabaseDB.saveAgendaRutin"
+    },
+    {
+      "file": "web-statis/admin.html",
+      "selector": "#wsTafsirEnabled",
+      "path": "agenda.tafsir.enabled",
+      "mode": "auto",
+      "event": "change",
+      "handler": "triggerAutoSaveAgendaRutin",
+      "sink": "SupabaseDB.saveAgendaRutin"
+    }
+  ],
+  "bindings": [
+    {
+      "file": "web-statis/slides/agenda-rutin.html",
+      "selector": "#waktuTahsin",
+      "path": "agenda.tahsin.hari_aktif",
+      "renderer": "loadAgendaData"
+    },
+    {
+      "file": "web-statis/slides/agenda-rutin.html",
+      "selector": "#waktuTafsir",
+      "path": "agenda.tafsir.pekan_aktif",
+      "renderer": "loadAgendaData"
+    },
+    {
+      "file": "web-statis/slides/pengumuman.html",
+      "selector": "#waktuTahsin",
+      "path": "agenda.tahsin.hari_aktif",
+      "renderer": "loadAgendaData"
+    },
+    {
+      "file": "web-statis/slides/pengumuman.html",
+      "selector": "#waktuTafsir",
+      "path": "agenda.tafsir.pekan_aktif",
+      "renderer": "loadAgendaData"
+    }
+  ]
+}

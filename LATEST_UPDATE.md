@@ -7,6 +7,46 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## Audit arsitektur dan alat pencegah regresi — 16 Oktober 2026 (lokal, belum dipublikasikan)
+
+- Snapshot sebelum perubahan: `/workspace/backups/digitalaljihad-before-architecture-audit-1cefc27.tar.gz`,
+  SHA-256 `21ada0393642e3f273d4fccfb54cd789b2d47a5aae238a7f530954cab182c3a2`.
+  695 berkas diverifikasi cocok. Tidak mencakup data Supabase live.
+- Basis audit `1cefc27` dengan main GitHub `a00e1d4`; perbaikan sebelumnya tetap ada.
+  Laporan dan prioritas: `architecture/README.md`; kontrak: `architecture/binding-contract.json`.
+- `scripts/audit-bindings.js` dan `scripts/lib/binding-audit.js`: parse HTML/JS menggunakan
+  parse5/acorn untuk alur form-event-handler-write sink, target DOM, script lokal hilang,
+  ID ganda dan kandidat hardcoded. Mode manual harus memiliki tombol/save handler.
+- Inventaris: 23 halaman, 220 kontrol; 206 kontrol belum diklasifikasikan, 4 kandidat teks
+  statis, 1 path script hilang, 3 field tanpa kontrak consumer display. 214 temuan legacy
+  dicatat di baseline sebagai debt yang BELUM diselesaikan; pelanggaran kontrak eksplisit
+  dan temuan baru menggagalkan npm test. Baseline tidak boleh diregenerasi otomatis di CI.
+- `scripts/test-binding-audit.js`: mutasi fixture untuk menguji deteksi linter.
+  `scripts/test-agenda-bindings.js`: renderer asli agenda/pengumuman dan ID dari markup
+  aktual, menguji nilai hari/pekan/waktu dan penggantian konten nondefault.
+- `architecture/reference/signage-store.js`: prototipe state immutable ber-revision,
+  validator, subscribe/unsubscribe dan pemisahan cache/cloud. BELUM dihubungkan ke
+  aplikasi; bukan implementasi RPC/transport/Auth atau jaminan sinkronisasi produksi.
+- `scripts/test-engine.js`: menunggu dua assertion async yang sebelumnya dilewati oleh
+  process.exit dini; hasil kini 271 checks, bukan 269. Pesan sukses tidak lagi mengklaim
+  sistem aman deploy hanya berdasarkan suite tersebut.
+- `package.json`: tiga dev dependencies versi pasti (PGlite sebelumnya, acorn, parse5),
+  perintah audit:bindings, dan integrasi tes baru ke npm test. Tidak ada dependency runtime
+  frontend baru. Jalankan npm install untuk menyediakan dependency pengujian.
+- Temuan perilaku direproduksi di VM terisolasi: inner save false tetap sukses+broadcast;
+  deselect semua hari/pekan diganti default; cache settings bertahan pada agenda event;
+  URL countdown mengalahkan nilai cloud. Temuan aplikasi ini DILAPORKAN, bukan diubah
+  diam-diam dalam pekerjaan audit.
+- Validasi akhir: 271 regresi, 8 autentikasi, 31 protokol TV, 23 SQL PostgreSQL,
+  15 deteksi linter, 52 binding renderer asli, dan 25 state-store reference lulus.
+  Gate audit: 0 pelanggaran baru/kontrak rusak, tetapi 214 debt legacy tetap terbuka.
+  `scripts/audit-behavior-probes.js` menyediakan reproduksi diagnostik tanpa akses cloud.
+- Tidak ada perubahan web-statis, rute, service worker atau database, sehingga cache versi
+  frontend tidak dinaikkan pada pekerjaan ini. Tidak ada push/deploy; izin publikasi
+  commit sebelumnya masih belum diberikan. Backup Windows tidak dapat diakses dari cloud.
+
+---
+
 ## Perbaikan terisolasi — 16 Oktober 2026 — v5.8.94 (kode diuji; RLS cloud belum diaktifkan)
 
 - Backup SEBELUM perubahan: `/workspace/backups/digitalaljihad-before-fix-20261016.tar.gz`.

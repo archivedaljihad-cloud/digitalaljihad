@@ -1,0 +1,1289 @@
+{
+  "purpose": "Known unresolved legacy inventory, NOT proof of correctness",
+  "findings": [
+    {
+      "id": "d261d73f0cb28696e7ca",
+      "code": "MISSING_SCRIPT",
+      "file": "web-statis/admin.html",
+      "selector": "js/admin-pengumuman-jumat.js?v=5.8.94"
+    },
+    {
+      "id": "ed63547cedd77d1b2e78",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#dashYasinEnabled"
+    },
+    {
+      "id": "22d85ecc9ae9a2229d8a",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#dashYasinStartTime"
+    },
+    {
+      "id": "81b02d029771b831dcde",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#dashRadioYasinOption1"
+    },
+    {
+      "id": "2d9f5ad6ccf7c679b954",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#dashYasinStepDuration"
+    },
+    {
+      "id": "8fc9bc8f5fbc55c5eba9",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#dashRadioYasinOption2"
+    },
+    {
+      "id": "8c89d03de54c1483669c",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#dashYasinMushafDuration"
+    },
+    {
+      "id": "750647c69aabdce6f381",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#selPrayerSource"
+    },
+    {
+      "id": "0dcef8d66f1901699031",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#selKemenagCity"
+    },
+    {
+      "id": "0f5592b1185c01a28ea6",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgAutoSyncKemenag"
+    },
+    {
+      "id": "44d4cc68ecbc600f628e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#sholatImsak"
+    },
+    {
+      "id": "af3f5ed22ecfcefbc341",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgShowImsak"
+    },
+    {
+      "id": "be293336dd0b85a7b6f7",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#sholatSubuh"
+    },
+    {
+      "id": "d9dd4e28be71d0e07b62",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#sholatTerbit"
+    },
+    {
+      "id": "16ad944f3bfdc9bfc822",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgShowSyuruk"
+    },
+    {
+      "id": "fe9f249538557bda7fb8",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#sholatDzuhur"
+    },
+    {
+      "id": "1ed28512e13db9b11cee",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#sholatAshar"
+    },
+    {
+      "id": "e34f7551f5fe4a299088",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#sholatMaghrib"
+    },
+    {
+      "id": "10e86e37aa4478ea3f54",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#sholatIsya"
+    },
+    {
+      "id": "7756704353d832b36c6b",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgPrayerModeEnabled"
+    },
+    {
+      "id": "484c55f0b0ac5bee7c86",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgIntervalTV"
+    },
+    {
+      "id": "474b81859c17aad5985f",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgAudioTarhim"
+    },
+    {
+      "id": "9be87c9723a659fa14b4",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgCountdownAdzan"
+    },
+    {
+      "id": "f72586e905c34901c1ba",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgDurasiAdzan"
+    },
+    {
+      "id": "a31338941d661789027f",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgDurasiIqamah"
+    },
+    {
+      "id": "414b74f5783d68a1ae9f",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgDurasiSholat"
+    },
+    {
+      "id": "bb69ea1ec5f3a412941e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgDurasiJumat"
+    },
+    {
+      "id": "9497793791279e7a03e1",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatTanggal"
+    },
+    {
+      "id": "76d1b1f6cf7177475a81",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatKhotib"
+    },
+    {
+      "id": "1c81ad53f7f7cac6807a",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatFotoFile"
+    },
+    {
+      "id": "7489ed0658ae75ef4c47",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatFotoUrlInput"
+    },
+    {
+      "id": "ddd97dd1d1199018a4ac",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatMuadzin"
+    },
+    {
+      "id": "3ad00d15f7f75054202e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatBilal"
+    },
+    {
+      "id": "db986a510b678e72b055",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatMaklumat"
+    },
+    {
+      "id": "627a190c0f1d8e092515",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#jumatDurasiInput"
+    },
+    {
+      "id": "36df0fa135fe28716134",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgKajianSabtuEnabled"
+    },
+    {
+      "id": "2657f2cdf961e2e7ba5c",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgKajianRotasiPekanDetik"
+    },
+    {
+      "id": "305c021da8b05dd2e2c8",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgKajianLockMode"
+    },
+    {
+      "id": "1308e63e15d88a7167a0",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgKajianLockDurationMinutes"
+    },
+    {
+      "id": "378be875df57b001075e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgKajianInterleaveInterval"
+    },
+    {
+      "id": "8d2e854a3f1af5020864",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianBulanSelect"
+    },
+    {
+      "id": "065f26846171fa92614b",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianTahunSelect"
+    },
+    {
+      "id": "5c3fd849ee39ab18c501",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianJamMulai"
+    },
+    {
+      "id": "87af518fd3a8b2096024",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianTanggal"
+    },
+    {
+      "id": "e439f47f00012d3ca3c1",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianWaktuPelaksanaan"
+    },
+    {
+      "id": "d88291be7a2f3671fa26",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianUstadzNama"
+    },
+    {
+      "id": "4af6ac803d67c83ffcde",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianUstadzGelar"
+    },
+    {
+      "id": "c8372d1c3a74edc9bbe2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianKitabRujukan"
+    },
+    {
+      "id": "0ffd1d394e7c079b19bd",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kajianTemaPembahasan"
+    },
+    {
+      "id": "45709ede4656c1b6aa7e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsYasinEnabled"
+    },
+    {
+      "id": "5ada8f4d21c86d2e3cbc",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsYasinJudul"
+    },
+    {
+      "id": "8b36dc58c85f9eb05d8c",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsYasinWaktu"
+    },
+    {
+      "id": "465153b2880a485d4961",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsYasinPembimbing"
+    },
+    {
+      "id": "0e6ab3878eecde0f168b",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsYasinLokasi"
+    },
+    {
+      "id": "8ed0b36d770981b4f0fb",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsKajianAhadEnabled"
+    },
+    {
+      "id": "88d1e280b5460da07ef5",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsKajianAhadJudul"
+    },
+    {
+      "id": "30da3caa038823da4190",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsKajianAhadWaktu"
+    },
+    {
+      "id": "b08294d5b45c5e9dcc90",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsKajianAhadPembimbing"
+    },
+    {
+      "id": "dc9bdbc9dff00d9c0281",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsKajianAhadKet"
+    },
+    {
+      "id": "db33dec11b68b97be765",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTahsinJudul"
+    },
+    {
+      "id": "9beaa2a52cd232ef0c77",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTahsinWaktu"
+    },
+    {
+      "id": "1c5c77a21b328187c828",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTahsinPembimbing"
+    },
+    {
+      "id": "4310df10ecd91c594b84",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTahsinKet"
+    },
+    {
+      "id": "e316fdd3c1c304efacf9",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTafsirJudul"
+    },
+    {
+      "id": "5829e08e011d258d9a28",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTafsirWaktu"
+    },
+    {
+      "id": "13b452f52a5260837ebf",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTafsirPembimbing"
+    },
+    {
+      "id": "2036be3f6adde38aa52d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTafsirKet"
+    },
+    {
+      "id": "ee388a799d25f7b3a712",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputEmergencyText"
+    },
+    {
+      "id": "caf0e85d6342f4ebbf92",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#selectEmergencyTheme"
+    },
+    {
+      "id": "bf4e8bfbe28979da37bf",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#selectEmergencyDuration"
+    },
+    {
+      "id": "a3654126810f0360a6b2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQurbanJam"
+    },
+    {
+      "id": "ba324af6790539c835bd",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQurbanLokasi"
+    },
+    {
+      "id": "3d10ebac8179ca43d3c8",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasSearchInput"
+    },
+    {
+      "id": "9baabb40eeaf25d7a274",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasFilterType"
+    },
+    {
+      "id": "1dc736fdd37d77e3f49d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasFilterKat"
+    },
+    {
+      "id": "20a0197729b2302edf18",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#selectProgramInfaq"
+    },
+    {
+      "id": "56c2341c0f150c204030",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgInfaqBankName"
+    },
+    {
+      "id": "41cd82c98cad17d5bf07",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgInfaqNoRekening"
+    },
+    {
+      "id": "c33f66af4783f47f1074",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgInfaqAtasNama"
+    },
+    {
+      "id": "7b3f0ee5ccb26b9df8d2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgInfaqWaKonfirmasi"
+    },
+    {
+      "id": "ae61256d9a9145efc376",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#donasiTanggal"
+    },
+    {
+      "id": "f7f120b48f8963098bf5",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#donasiNama"
+    },
+    {
+      "id": "11ae4ee294ba3a9d3edf",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#donasiIsAnonim"
+    },
+    {
+      "id": "44d6b12d84c526c18cc2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#donasiNominal"
+    },
+    {
+      "id": "f28409e68267c8f9b71f",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#donasiKeterangan"
+    },
+    {
+      "id": "dc39344de4ac8e369834",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#qrisEntriesPerPage"
+    },
+    {
+      "id": "02c7ebbb664eb8814a1d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#qrisSearchInput"
+    },
+    {
+      "id": "2074333e48aa83e347c6",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#switchSlideKasJumat"
+    },
+    {
+      "id": "1afb1d889a0c7f59564b",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputTanggalJudul"
+    },
+    {
+      "id": "58afae884b0a27a1b286",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputTanggalKas"
+    },
+    {
+      "id": "aad3e5c6c284a50269f7",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjPickerTanggalKas"
+    },
+    {
+      "id": "f81b4e4bce3e2e02955d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputTitimangsa"
+    },
+    {
+      "id": "b76abebb5d8441a752b5",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputImamKhotib"
+    },
+    {
+      "id": "1675473421a309fb94d6",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputMuadzin"
+    },
+    {
+      "id": "9471eda86a83aa6e2334",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputBilal"
+    },
+    {
+      "id": "12a4d4bb9bef1854450d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputMaklumat"
+    },
+    {
+      "id": "ce73e30ad4afe2499b7e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputSaldoAwal"
+    },
+    {
+      "id": "ee71b7db21dd4dc77221",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputHimbauan"
+    },
+    {
+      "id": "b9523237e57b80d48763",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputNamaKetua"
+    },
+    {
+      "id": "6452acca9be5c4a7b297",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjCheckStempelKetua"
+    },
+    {
+      "id": "4abaaa6a1bf7654f1584",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjInputNamaBendahara"
+    },
+    {
+      "id": "580123e9b116ca265999",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjCheckTtdBendahara"
+    },
+    {
+      "id": "60d7ea243ee6c7f90848",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#switchModeRamadhanTV"
+    },
+    {
+      "id": "44e4643df956bac9a701",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputRamadhanMalamKe"
+    },
+    {
+      "id": "d33cbaaa1252fac04d8a",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputRamadhanImam"
+    },
+    {
+      "id": "7a7e390df6466b34fc1d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputRamadhanMuadzin"
+    },
+    {
+      "id": "a0a1ea8096c11587cbf2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputRamadhanKultum"
+    },
+    {
+      "id": "5a4855c1b50414e59ab5",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputRamadhanTema"
+    },
+    {
+      "id": "870a4367316e74282774",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputRamadhanBilal"
+    },
+    {
+      "id": "67cfbd416823c168d132",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputRamadhanHadits"
+    },
+    {
+      "id": "2dba9e997b5e8c5588e2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputTromolTanggal"
+    },
+    {
+      "id": "f694f070d276f92e2480",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputTromolJenis"
+    },
+    {
+      "id": "82b56bb7c774ba714cdd",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputTromolUraian"
+    },
+    {
+      "id": "a924822e6c5b1cb35adc",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputTromolNominal"
+    },
+    {
+      "id": "9c6f9d980021175701d2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgNamaMasjid"
+    },
+    {
+      "id": "f8e2bbae690936c8db77",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgIntervalTVSystem"
+    },
+    {
+      "id": "1c9c1e034f4e4e76e717",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgFooterMasjid"
+    },
+    {
+      "id": "c1e16c674978f456bed1",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgLiveMekah"
+    },
+    {
+      "id": "4cd230fccdac1c6c7c6e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgLiveMadinah"
+    },
+    {
+      "id": "2eba48ff4aa2d49bb128",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgCctvMimbar"
+    },
+    {
+      "id": "e985111b8f1f37a8d6cc",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgYasinEnabled"
+    },
+    {
+      "id": "9543fcd686bb9055fc2d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgYasinStartTime"
+    },
+    {
+      "id": "cc5c6441f15e866fd924",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#radioYasinOption1"
+    },
+    {
+      "id": "53d6c0b3d256ce393889",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgYasinStepDuration"
+    },
+    {
+      "id": "e6672caf164a07f5a8a2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#radioYasinOption2"
+    },
+    {
+      "id": "03e965da237b6da18837",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgYasinMushafDuration"
+    },
+    {
+      "id": "5b41b7b56e62dfd0dbe8",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgGeminiApiKey"
+    },
+    {
+      "id": "4df920b0f5c6e976bf0b",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgGeminiModel"
+    },
+    {
+      "id": "c236ccb719d4c7e38cb9",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#pjTextBroadcastWA"
+    },
+    {
+      "id": "392547bd3d5ea2a24b2e",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#flyerResolutionSelect"
+    },
+    {
+      "id": "f82c82e0c9a25439f554",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#flyerWaBroadcastText"
+    },
+    {
+      "id": "774aba46d621c9636f53",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasTanggal"
+    },
+    {
+      "id": "365fdb62c27e6af3f8e8",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasTipe"
+    },
+    {
+      "id": "3e9416624ac9c5969550",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasKategori"
+    },
+    {
+      "id": "efbfab3541e772b3fa46",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasUraian"
+    },
+    {
+      "id": "81281f78eb0d790f4a82",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#kasNominal"
+    },
+    {
+      "id": "6e138ee3205962a8934a",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editKasTanggal"
+    },
+    {
+      "id": "311336a7c26b7b558bfe",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editKasTipe"
+    },
+    {
+      "id": "b0afd49876d1e11e8a94",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editKasKategori"
+    },
+    {
+      "id": "447a0b74edc2c56b821d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editKasUraian"
+    },
+    {
+      "id": "efc75e32d113403912ee",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editKasNominal"
+    },
+    {
+      "id": "6566defc0148647eb5e1",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputProgInfaqNama"
+    },
+    {
+      "id": "6c2d81714a9b707c7a8d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputProgInfaqTarget"
+    },
+    {
+      "id": "967ce80172751c6edee3",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputProgInfaqTglMulai"
+    },
+    {
+      "id": "f6253c6b64f0135bfef5",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputProgInfaqTglSelesai"
+    },
+    {
+      "id": "83aba3552f2629285354",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputProgInfaqKeterangan"
+    },
+    {
+      "id": "c2658845f75c1cd4f06d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#checkProgInfaqAktifTV"
+    },
+    {
+      "id": "f85f20f238530321cef4",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editProgInfaqNama"
+    },
+    {
+      "id": "031816fbe91b00adf89a",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editProgInfaqTarget"
+    },
+    {
+      "id": "8e361ad4dbecc1cc3496",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editProgInfaqTglMulai"
+    },
+    {
+      "id": "d29990e68375707e228c",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editProgInfaqTglSelesai"
+    },
+    {
+      "id": "fa2552ee48e5bc19332b",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editProgInfaqKeterangan"
+    },
+    {
+      "id": "ef90f0b9043d2ed6fa87",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editCheckProgInfaqAktifTV"
+    },
+    {
+      "id": "30db94e21f9253432e52",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editDonasiTanggal"
+    },
+    {
+      "id": "4c393172d3cfa436a77f",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editDonasiIsAnonim"
+    },
+    {
+      "id": "da4c42400f162feec129",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editDonasiNama"
+    },
+    {
+      "id": "78ed62565dfb9debd3f3",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editDonasiNominal"
+    },
+    {
+      "id": "d17f091461d6d4ce81c4",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editDonasiKeterangan"
+    },
+    {
+      "id": "52618e54afea16bfee24",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#newQurbanNama"
+    },
+    {
+      "id": "2bd9866a9aa7620fdb40",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#newQurbanBin"
+    },
+    {
+      "id": "68fe3622295993d2d01c",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#newQurbanJenis"
+    },
+    {
+      "id": "3d90293305cd4eb7ff0d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#newQurbanJumlah"
+    },
+    {
+      "id": "d96321b4f762cdffaf37",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#newQurbanInfaq"
+    },
+    {
+      "id": "3898d42937ccb5e25534",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#newQurbanStatus"
+    },
+    {
+      "id": "46a369475a31c44cbee2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#tambahUserName"
+    },
+    {
+      "id": "9649bba1f2d3661aabb2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#tambahUserUsername"
+    },
+    {
+      "id": "4298a9a1910281416103",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#tambahUserEmail"
+    },
+    {
+      "id": "6f6a46f4248f681eac0c",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#tambahUserPassword"
+    },
+    {
+      "id": "0cdf879b21e52b3a5ec3",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#tambahUserRole"
+    },
+    {
+      "id": "328bf17c020d62fd7a04",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editUserName"
+    },
+    {
+      "id": "27c3f48c7e5ea1a7acb2",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editUserUsername"
+    },
+    {
+      "id": "1aeac3fcf64c7738277a",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editUserEmail"
+    },
+    {
+      "id": "17d38c75c6c2e28d2196",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editUserPassword"
+    },
+    {
+      "id": "b9a008e5b031e5052efd",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#editUserRole"
+    },
+    {
+      "id": "13b9525b13735218e42f",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiKategori"
+    },
+    {
+      "id": "cd65811bc0b041799052",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiTargetApply"
+    },
+    {
+      "id": "872323a22cecac4626a9",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiRawPoints"
+    },
+    {
+      "id": "35d3de9c2335560cea79",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiResJudul"
+    },
+    {
+      "id": "8ad51b15635ac9fc4ae4",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiResPemateri"
+    },
+    {
+      "id": "ea2a8fc803267b77e7f7",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiResWaktu"
+    },
+    {
+      "id": "4a7f84236a8b352d87e4",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiResTempat"
+    },
+    {
+      "id": "b9d7ceb0f37bd7f76ab8",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiResIsi"
+    },
+    {
+      "id": "dc8a2452499a7e883752",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#aiResRunningText"
+    },
+    {
+      "id": "04ae157bd1b9a829c452",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisNama"
+    },
+    {
+      "id": "003eeec2c967237229f1",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisFile"
+    },
+    {
+      "id": "08aa3df9a7224adbb0ee",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisGambarUrl"
+    },
+    {
+      "id": "c1b4056acd0765764da6",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisKeterangan"
+    },
+    {
+      "id": "a7d8e6c6bc93e399f5a0",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisBank"
+    },
+    {
+      "id": "f2af333d1cef218be4fd",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisRekening"
+    },
+    {
+      "id": "28df7f92daa905709c17",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisAtasNama"
+    },
+    {
+      "id": "5ee37e6679b2daa74ca3",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#inputQrisStatus"
+    },
+    {
+      "id": "3611e2f0cdaa384f2039",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#galeriJudul"
+    },
+    {
+      "id": "f0e391205cb1b32e54b5",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#galeriDeskripsi"
+    },
+    {
+      "id": "600186b50c4f599d84fb",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#galeriUrutan"
+    },
+    {
+      "id": "a516b5c42a3cfd15b036",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#galeriDurasi"
+    },
+    {
+      "id": "772c8cc8790a51b93485",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#galeriAktif"
+    },
+    {
+      "id": "64939caa5c99c0719d52",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#galeriFileInput"
+    },
+    {
+      "id": "d190b8bad1a4ba0ddaf0",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#galeriGambarUrl"
+    },
+    {
+      "id": "90f3145d3ebde2a51136",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganPengundang"
+    },
+    {
+      "id": "acbc18a6a7e4fd080504",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganAcara"
+    },
+    {
+      "id": "e6a8a761d41e706117cb",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganPenceramah"
+    },
+    {
+      "id": "2f423f0464b16154bffb",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganTanggal"
+    },
+    {
+      "id": "2dadcb4f7254387691fc",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganWaktu"
+    },
+    {
+      "id": "0daed1460030b037c5d6",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganTempat"
+    },
+    {
+      "id": "30080d90d5420afe50d8",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganKeterangan"
+    },
+    {
+      "id": "062ae048460ae2cdbf4b",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganUrutan"
+    },
+    {
+      "id": "f9af57450b34131b7d0d",
+      "code": "UNCLASSIFIED_FORM",
+      "file": "web-statis/admin.html",
+      "selector": "#undanganActive"
+    },
+    {
+      "id": "fbc03686e469934bda5e",
+      "code": "STATIC_TEXT_CANDIDATE",
+      "file": "web-statis/slides/agenda-rutin.html",
+      "selector": "div"
+    },
+    {
+      "id": "f24dea9550ca3e1272f7",
+      "code": "STATIC_TEXT_CANDIDATE",
+      "file": "web-statis/slides/kajian.html",
+      "selector": "p"
+    },
+    {
+      "id": "145e534275c838c2fb56",
+      "code": "STATIC_TEXT_CANDIDATE",
+      "file": "web-statis/slides/pengumuman.html",
+      "selector": "div"
+    },
+    {
+      "id": "48205609ab53551ec6d1",
+      "code": "STATIC_TEXT_CANDIDATE",
+      "file": "web-statis/slides/ramadhan.html",
+      "selector": "span"
+    },
+    {
+      "id": "5c6ad7d7b0576f773324",
+      "code": "DISPLAY_CONTRACT_MISSING",
+      "file": "web-statis/admin.html",
+      "selector": "#cfgCountdownStyle"
+    },
+    {
+      "id": "4dcc14db4cc84cc0f000",
+      "code": "DISPLAY_CONTRACT_MISSING",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTahsinEnabled"
+    },
+    {
+      "id": "f70f3dbee71cbf0dd9f6",
+      "code": "DISPLAY_CONTRACT_MISSING",
+      "file": "web-statis/admin.html",
+      "selector": "#wsTafsirEnabled"
+    }
+  ]
+}

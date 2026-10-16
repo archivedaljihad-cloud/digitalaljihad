@@ -16,6 +16,7 @@ const path = require('path');
 let totalTests = 0;
 let passedTests = 0;
 let failedTests = 0;
+const pendingTests = [];
 
 function assert(condition, message) {
     totalTests++;
@@ -616,10 +617,11 @@ mockTriggerRow('keuangan', 101, { nominal: 50000 });
 mockTriggerRow('keuangan', 102, { nominal: 100000 });
 
 // Jalankan timer synchronous mock check
-setTimeout(() => {
+pendingTests.push(new Promise(resolve => setTimeout(() => {
     assert(mockReceivedRows.length === 2, 'Realtime Engine: Dua baris berbeda pada tabel yang sama keduanya berhasil diterima tanpa terpotong');
     assert(mockReceivedRows[0].rowId === 101 && mockReceivedRows[1].rowId === 102, 'Realtime Engine: Urutan baris mutasi pertama dan kedua terjaga utuh');
-}, 30);
+    resolve();
+}, 30)));
 
 // -------------------------------------------------------------
 // 23. SURAT YAASIIN SETTINGS PERSISTENCE & SCHEMA SAFETY
@@ -681,12 +683,13 @@ assert(pengumumanAgendaContent.includes('id="waktuTahsin"') && pengumumanAgendaC
 // -------------------------------------------------------------
 // HASIL AKHIR
 // -------------------------------------------------------------
-console.log('\n================================================================');
-console.log(`📊 RINGKASAN HASIL TEST: ${passedTests} / ${totalTests} LULUS`);
-if (failedTests > 0) {
-    console.error(`🚨 ADA ${failedTests} TEST GAGAL! PERBAIKI SEBELUM DEPLOY!`);
-    process.exit(1);
-} else {
-    console.log('🎉 SEMUA PENGUJIAN LULUS DENGAN SEMPURNA! SISTEM SIAP & AMAN DEPLOY.');
-    process.exit(0);
-}
+Promise.all(pendingTests).then(() => {
+    console.log('\n================================================================');
+    console.log(`📊 RINGKASAN HASIL TEST: ${passedTests} / ${totalTests} LULUS`);
+    if (failedTests > 0) {
+        console.error(`🚨 ADA ${failedTests} TEST GAGAL! PERBAIKI SEBELUM DEPLOY!`);
+        process.exitCode = 1;
+    } else {
+        console.log('Semua pemeriksaan dalam suite ini lulus; kesiapan produksi tetap memerlukan validasi integrasi.');
+    }
+}).catch(error => { console.error(error); process.exitCode = 1; });
