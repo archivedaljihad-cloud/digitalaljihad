@@ -1,3 +1,11 @@
+# 17 Oktober 2026 — Paket persiapan RLS melalui Supabase Dashboard
+
+- Panduan lengkap Markdown dan paket ZIP: `database/dashboard-rls/`.
+- SQL pemeriksaan read-only, snapshot policy/grants, penetapan peran akun terverifikasi, RPC/integrasi Jumat, aktivasi RLS berpagar, uji peran, uji atomik staging, dan rollback kebijakan.
+- 32 pemeriksaan PostgreSQL fixture lulus. Pengujian produksi belum dilakukan.
+- **Tidak mengaktifkan RLS, tidak mengubah konfigurasi frontend, tidak menerapkan migrasi live.** Web masih perlu menyelesaikan cutover Supabase Auth/RPC sebelum skrip aktivasi dapat dipakai dengan aman.
+- Disediakan pada branch persiapan; tidak mengubah rilis produksi/main.
+
 ## Tahap 2: ACK delapan slide, binding Jumat/Kas, batch atomik — 17 Oktober 2026 WIB (v5.8.97)
 
 - Basis a2bd1cf/f7773cd dipertahankan. Backup terverifikasi 710 berkas:
