@@ -1530,10 +1530,13 @@
             // =====================================================
             // UNIVERSAL REALTIME DATA HANDLER UNTUK DISPLAY TV
             // =====================================================
+            let settingsRefreshSequence = 0;
             async function handleUniversalDataUpdate(event) {
                 const table = (event.table || '').toLowerCase();
                 const action = event.action || 'UPDATE';
                 const data = event.data || {};
+                const settingsEvent = ['app_settings', 'agenda_rutin', 'kegiatan_rutin_settings'].includes(table);
+                const refreshSequence = settingsEvent ? ++settingsRefreshSequence : 0;
                 console.log(`⚡ [Display TV Realtime Update]: table=${table}, action=${action}`, data);
 
                 // 0. Purge cache seketika agar pembacaan berikutnya selalu data mutakhir
@@ -1545,7 +1548,8 @@
 
                 // 2. Refresh komponen internal TV master jika berkaitan
                 if (table === 'app_settings') {
-                    masterRefresh = Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
+                    masterRefresh = Promise.all([SupabaseDB.getSettings(true, true), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
+                        if (refreshSequence !== settingsRefreshSequence) return;
                         if (newSettings) {
                             settings = newSettings;
                             window.settings = settings;
@@ -1579,6 +1583,13 @@
                             } catch(e) {}
                         }
                         showOsd(`⚡ Pengaturan TV Diperbarui`);
+                    });
+                } else if (table === 'agenda_rutin' || table === 'kegiatan_rutin_settings') {
+                    masterRefresh = SupabaseDB.getSettings(true, true).then(newSettings => {
+                        if (refreshSequence !== settingsRefreshSequence) return;
+                        settings = newSettings;
+                        window.settings = newSettings;
+                        showOsd('Agenda terbaru diterima dari cloud');
                     });
                 } else if (table === 'program_infaq' || table === 'donasi_infaq') {
                     masterRefresh = Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
@@ -1652,6 +1663,7 @@
 
                 try {
                     await masterRefresh;
+                    if (settingsEvent && refreshSequence !== settingsRefreshSequence) return;
                 } catch (err) {
                     console.warn('[TV] Master refresh gagal; render tidak dikonfirmasi:', err);
                     return;
@@ -1665,7 +1677,7 @@
                 // Register pending ACK BEFORE dispatch; standby/hidden frames cannot confirm it.
                 broadcastToActiveFrames({
                     type: 'DATA_UPDATED', event_id: event.event_id,
-                    table, action, data, payload: event
+                    table, action, data, payload: event, settings
                 });
 
                 // 3. SEGERA RE-RENDER JIKA SLIDE YANG SEDANG TAYANG DI TV RELEVAN DENGAN DATA
@@ -1681,7 +1693,7 @@
                         'program_infaq': ['infaq', 'utama'],
                         'donasi_infaq': ['infaq', 'utama'],
                         'kajian': ['kajian', 'utama'],
-                        'agenda_rutin': ['agenda-rutin', 'utama'],
+                        'agenda_rutin': ['agenda-rutin', 'pengumuman', 'utama'],
                         'ramadhan': ['ramadhan', 'utama'],
                         'qurban': ['qurban', 'utama'],
                         'qris': ['qris'],

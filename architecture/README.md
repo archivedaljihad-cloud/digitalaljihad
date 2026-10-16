@@ -1,3 +1,15 @@
+> Pembaruan lokal v5.8.95: helper agenda/kajian/pengumuman dan status admin sudah
+> menolak sukses palsu; path modul pengumuman sudah diperbaiki; [] dipertahankan;
+> invalidasi settings dan refresh parent/iframe agenda sudah diperbaiki. Bagian
+> temuan di bawah adalah catatan historis audit d810aad, bukan status seluruhnya saat ini.
+> Baseline linter berkurang dari 214 ke 213 karena satu script path benar-benar diselesaikan.
+> Tidak ada migrasi Auth/RLS atau deployment pada tahap ini.
+>
+> Tes browser lokal: `npm run test:browser:agenda`. Memerlukan Playwright 1.62.1 dan
+> Chromium (`npx playwright install chromium`, atau set SIGNAGE_CHROMIUM_PATH).
+> Test memakai API/auth fixture lokal, memblokir seluruh jaringan lain, serta mencakup
+> HTTP403, cache confirmed, pilihan kosong, perubahan kedua dan parent settings usang.
+
 # Audit arsitektur DIGITALv304 — 16 Oktober 2026
 
 Basis audit: kode lokal `1cefc27`, turunan GitHub `a00e1d4`. Commit perbaikan TV/RLS

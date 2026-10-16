@@ -514,14 +514,7 @@
                     waktu_pelaksanaan: nearestItem.waktu_pelaksanaan || "Ba'da Sholat Maghrib s/d Menjelang Isya"
                 };
 
-                // Simpan ke local cache
-                localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
-                localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
-                localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
-                localStorage.setItem('cached_kajian_rotasi_pekan_detik', rotasiPekanDetik);
-                localStorage.setItem('cached_kajian_lock_mode', lockMode);
-                localStorage.setItem('cached_kajian_lock_duration_minutes', lockDurationMinutes);
-                localStorage.setItem('cached_kajian_interleave_interval', interleaveInterval);
+                try { localStorage.setItem('draft_kajian_sabtu', JSON.stringify({ payloadData, enabled, jamMulai })); } catch (err) {}
 
                 // Simpan ke app_settings Supabase secara multi-row aman & broadcast realtime
                 let sbSuccess = false;
@@ -540,17 +533,18 @@
 
                 // Otomatis sinkronkan jadwal pekan ini ke Pusat Agenda Rutin (Kotak 2: Kajian Malam Ahad)
                 try {
-                    if (typeof syncKajianPekanIniKeAgendaRutin === 'function') {
-                        syncKajianPekanIniKeAgendaRutin(false, nearestItem);
+                    if (sbSuccess && typeof syncKajianPekanIniKeAgendaRutin === 'function') {
+                        await syncKajianPekanIniKeAgendaRutin(false, nearestItem);
                     }
                 } catch (syncErr) {
                     console.warn('Otomatis sync ke agenda rutin:', syncErr);
                 }
 
                 if (sbSuccess) {
-                    alert(`Alhamdulillah! Seluruh Agenda Pengajian Rutin Malam Ahad 1 Bulan Penuh (${namaBulan} ${tahun}) berhasil disimpan dan otomatis tersinkronisasi ke Pusat Agenda Rutin serta Layar Display TV.`);
+                    try { localStorage.removeItem('draft_kajian_sabtu'); } catch (err) {}
+                    alert(`Agenda Kajian (${namaBulan} ${tahun}) tersimpan di cloud. Tampilan TV belum dikonfirmasi.`);
                 } else {
-                    alert(`Alhamdulillah! Agenda Pengajian Rutin Malam Ahad (${namaBulan} ${tahun}) berhasil disimpan di cache lokal peramban, tersinkronisasi ke Pusat Agenda Rutin & Layar TV (Mode Offline).`);
+                    alert(`Agenda Kajian (${namaBulan} ${tahun}) belum seluruhnya tersimpan di cloud. Draft lokal tetap tersedia; coba Simpan lagi.`);
                 }
             } catch (err) {
                 console.error('Error saat simpanKajianSabtu:', err);

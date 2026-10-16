@@ -189,7 +189,7 @@
 
                 // Khusus PATCH & DELETE: jika respons 200/204 tapi baris kosong, berarti filter tidak cocok (0 rows)
                 const isUpdateOrDelete = fetchOpts.method === 'PATCH' || fetchOpts.method === 'DELETE';
-                if (isUpdateOrDelete && rowsAffected === 0 && !options.allowZeroRows) {
+                if ((isUpdateOrDelete || fetchOpts.method === 'POST') && rowsAffected === 0 && !options.allowZeroRows) {
                     return {
                         success: false,
                         cloudConfirmed: false,
@@ -235,6 +235,11 @@
                 const t = String(table).toLowerCase();
                 delete this._cache[t];
                 delete this._cacheTimestamps[t];
+
+                if (['agenda_rutin', 'kegiatan_rutin_settings', 'kajian', 'pengumuman_jumat'].includes(t)) {
+                    delete this._cache.settings;
+                    delete this._cacheTimestamps.settings;
+                }
 
                 // Jika event berasal dari quick_petugas atau app_settings, hapus seluruh sub-cache
                 if (t === 'app_settings' || t === 'quick_petugas' || t === 'settings' || t === 'all') {
@@ -509,6 +514,8 @@
                 const valStr = typeof value === 'string' ? value : JSON.stringify(value);
                 const checkRes = await this.safeRestMutation(`app_settings?key=eq.${encodeURIComponent(key)}&select=id`, 'GET', null, { timeoutMs: 5000 });
                 
+                if (!checkRes.success || !checkRes.cloudConfirmed || !Array.isArray(checkRes.data)) return false;
+
                 let mutationResult;
                 if (checkRes.success && Array.isArray(checkRes.data) && checkRes.data.length > 0) {
                     mutationResult = await this.safeRestMutation(
@@ -536,31 +543,65 @@
         },
 
         /**
-         * Simpan / Perbarui data jadwal Kajian Rutin Malam Ahad 1 Bulan Penuh
+         * Perbarui cache lokal hanya setelah cloud mengonfirmasi penyimpanan.
          */
+        cacheConfirmedSetting(key, value, entries = {}) {
+            this.invalidateCache('app_settings');
+            try {
+                const raw = localStorage.getItem('cached_app_settings');
+                const cached = raw ? JSON.parse(raw) : {};
+                cached[key] = value;
+                localStorage.setItem('cached_app_settings', JSON.stringify(cached));
+                Object.entries(entries).forEach(([name, val]) => {
+                    localStorage.setItem(name, typeof val === 'object' ? JSON.stringify(val) : String(val));
+                });
+            } catch (err) {
+                console.warn('[SupabaseDB] Cloud tersimpan; cache lokal tidak dapat diperbarui:', err);
+            }
+        },
+
+        notifyConfirmedChange(table, data, legacyCommand) {
+            try {
+                if (typeof this.broadcastChange === 'function') this.broadcastChange(table, 'SYNC', data);
+                else if (typeof this.sendRemoteCommand === 'function') {
+                    Promise.resolve(this.sendRemoteCommand(legacyCommand, data)).catch(err => console.warn('[SupabaseDB] Broadcast tertunda:', err));
+                }
+            } catch (err) {
+                console.warn('[SupabaseDB] Cloud tersimpan; broadcast belum terkonfirmasi:', err);
+            }
+        },
+
+        /** Simpan seluruh key kajian; partial failure tidak boleh diklaim sukses. */
         async saveKajianData(payloadData, enabled = true, jamMulai = '18:25') {
             try {
-                localStorage.setItem('cached_kajian_sabtu', JSON.stringify(payloadData));
-                localStorage.setItem('cached_kajian_sabtu_enabled', enabled);
-                localStorage.setItem('cached_kajian_sabtu_start_time', jamMulai);
-                if (payloadData.rotasi_pekan_detik) localStorage.setItem('cached_kajian_rotasi_pekan_detik', payloadData.rotasi_pekan_detik);
-                if (payloadData.lock_mode) localStorage.setItem('cached_kajian_lock_mode', payloadData.lock_mode);
-                if (payloadData.lock_duration_minutes) localStorage.setItem('cached_kajian_lock_duration_minutes', payloadData.lock_duration_minutes);
-                if (payloadData.interleave_interval) localStorage.setItem('cached_kajian_interleave_interval', payloadData.interleave_interval);
-
-                await Promise.all([
+                payloadData = JSON.parse(JSON.stringify(payloadData));
+                const results = await Promise.all([
                     this.saveSettingItem('kajian_sabtu_data', payloadData),
                     this.saveSettingItem('kajian_sabtu_enabled', enabled),
                     this.saveSettingItem('kajian_sabtu_start_time', jamMulai),
                     this.saveSettingItem('kajian_rotasi_pekan_detik', payloadData.rotasi_pekan_detik || 9),
                     this.saveSettingItem('kajian_lock_mode', payloadData.lock_mode || 'full')
                 ]);
-
-                if (typeof this.broadcastChange === 'function') {
-                    this.broadcastChange('kajian', 'SYNC', { data: payloadData, enabled, jamMulai });
-                } else if (typeof this.sendRemoteCommand === 'function') {
-                    this.sendRemoteCommand('SYNC_KAJIAN', { data: payloadData, enabled, jamMulai });
+                if (!results.every(ok => ok === true)) {
+                    this.invalidateCache('app_settings');
+                    return false;
                 }
+                this.cacheConfirmedSetting('kajian_sabtu_data', payloadData, {
+                    cached_kajian_sabtu: payloadData,
+                    cached_kajian_sabtu_enabled: enabled,
+                    cached_kajian_sabtu_start_time: jamMulai,
+                    cached_kajian_rotasi_pekan_detik: payloadData.rotasi_pekan_detik || 9,
+                    cached_kajian_lock_mode: payloadData.lock_mode || 'full',
+                    cached_kajian_lock_duration_minutes: payloadData.lock_duration_minutes ?? 25,
+                    cached_kajian_interleave_interval: payloadData.interleave_interval ?? 10
+                });
+                // Preserve all confirmed settings needed by offline prayer-mode readers.
+                try {
+                    const cached = JSON.parse(localStorage.getItem('cached_app_settings') || '{}');
+                    Object.assign(cached, { kajian_sabtu_enabled: enabled, kajian_sabtu_start_time: jamMulai });
+                    localStorage.setItem('cached_app_settings', JSON.stringify(cached));
+                } catch (err) { console.warn('[SupabaseDB] Cache kajian:', err); }
+                this.notifyConfirmedChange('kajian', { data: payloadData, enabled, jamMulai }, 'SYNC_KAJIAN');
                 return true;
             } catch (err) {
                 console.warn('[SupabaseDB] Gagal saveKajianData:', err);
@@ -568,37 +609,31 @@
             }
         },
 
-        /**
-         * Simpan / Perbarui agenda rutin masjid (Yasin, Kajian, Tahsin, Tafsir)
-         */
+        /** Simpan agenda berurutan per browser; false tidak pernah disiarkan sebagai sukses. */
         async saveAgendaRutin(payload) {
-            try {
-                localStorage.setItem('agenda_rutin_settings', JSON.stringify(payload));
-                await this.saveSettingItem('kegiatan_rutin_settings', payload);
-                if (typeof this.broadcastChange === 'function') {
-                    this.broadcastChange('agenda_rutin', 'SYNC', payload);
-                } else if (typeof this.sendRemoteCommand === 'function') {
-                    this.sendRemoteCommand('SYNC_AGENDA_RUTIN', payload);
+            let snapshot;
+            try { snapshot = JSON.parse(JSON.stringify(payload)); } catch (err) { return false; }
+            const save = async () => {
+                try {
+                    if (await this.saveSettingItem('kegiatan_rutin_settings', snapshot) !== true) return false;
+                    this.cacheConfirmedSetting('kegiatan_rutin_settings', snapshot, { agenda_rutin_settings: snapshot });
+                    this.notifyConfirmedChange('agenda_rutin', snapshot, 'SYNC_AGENDA_RUTIN');
+                    return true;
+                } catch (err) {
+                    console.warn('[SupabaseDB] Gagal saveAgendaRutin:', err);
+                    return false;
                 }
-                return true;
-            } catch (err) {
-                console.warn('[SupabaseDB] Gagal saveAgendaRutin:', err);
-                return false;
-            }
+            };
+            this._agendaSaveQueue = (this._agendaSaveQueue || Promise.resolve()).then(save, save);
+            return this._agendaSaveQueue;
         },
 
-        /**
-         * Simpan / Perbarui lembar pengumuman sholat jumat & kas
-         */
         async savePengumumanJumat(pjData) {
             try {
-                localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
-                await this.saveSettingItem('pengumuman_jumat', pjData);
-                if (typeof this.broadcastChange === 'function') {
-                    this.broadcastChange('pengumuman_jumat', 'SYNC', pjData);
-                } else if (typeof this.sendRemoteCommand === 'function') {
-                    this.sendRemoteCommand('SYNC_PENGUMUMAN_JUMAT', pjData);
-                }
+                pjData = JSON.parse(JSON.stringify(pjData));
+                if (await this.saveSettingItem('pengumuman_jumat', pjData) !== true) return false;
+                this.cacheConfirmedSetting('pengumuman_jumat', pjData, { pengumuman_jumat_data: pjData });
+                this.notifyConfirmedChange('pengumuman_jumat', pjData, 'SYNC_PENGUMUMAN_JUMAT');
                 return true;
             } catch (err) {
                 console.warn('[SupabaseDB] Gagal savePengumumanJumat:', err);

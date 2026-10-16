@@ -610,25 +610,44 @@
         }
 
         async function simpanDataPengumumanJumat(tampilkanNotif = true) {
+            const snapshot = JSON.parse(JSON.stringify(pjData));
+            const serialized = JSON.stringify(snapshot);
+            const sequence = (simpanDataPengumumanJumat.sequence || 0) + 1;
+            simpanDataPengumumanJumat.sequence = sequence;
+            try { localStorage.setItem('draft_pengumuman_jumat_data', serialized); } catch (err) {}
+            let confirmed = false;
             try {
-                localStorage.setItem('pengumuman_jumat_data', JSON.stringify(pjData));
-                if (window.SupabaseDB) {
-                    if (typeof SupabaseDB.savePengumumanJumat === 'function') {
-                        await SupabaseDB.savePengumumanJumat(pjData);
-                    } else {
-                        await SupabaseDB.saveSettings({ pengumuman_jumat: pjData });
+                const save = async () => {
+                    if (window.SupabaseDB) {
+                        if (typeof SupabaseDB.savePengumumanJumat === 'function') return await SupabaseDB.savePengumumanJumat(snapshot) === true;
+                        else {
+                            const result = await SupabaseDB.saveSettings({ pengumuman_jumat: snapshot });
+                            return !!(result && result.success === true && result.cloudConfirmed === true);
+                        }
                     }
-                }
+                    return false;
+                };
+                simpanDataPengumumanJumat.queue = (simpanDataPengumumanJumat.queue || Promise.resolve()).then(save, save);
+                confirmed = await simpanDataPengumumanJumat.queue;
+                if (sequence !== simpanDataPengumumanJumat.sequence) return confirmed;
+                if (!confirmed) throw new Error('Cloud belum mengonfirmasi penyimpanan. Draft tetap tersedia.');
+                try {
+                    localStorage.setItem('pengumuman_jumat_data', serialized);
+                    if (JSON.stringify(pjData) === serialized) localStorage.removeItem('draft_pengumuman_jumat_data');
+                    else localStorage.setItem('draft_pengumuman_jumat_data', JSON.stringify(pjData));
+                } catch (err) {}
                 if (tampilkanNotif) {
-                    if (typeof showCustomToast === 'function') {
-                        showCustomToast("Lembar Pengumuman Sholat Jum'at & Kas berhasil disimpan & disinkronkan ke Layar TV!", 'success');
-                    } else {
-                        alert("Lembar Pengumuman Sholat Jum'at & Kas berhasil disimpan & disinkronkan ke Layar TV!");
-                    }
+                    if (typeof showCustomToast === 'function') showCustomToast('Pengumuman tersimpan di cloud; tampilan TV belum dikonfirmasi.', 'success');
+                    else alert('Pengumuman tersimpan di cloud; tampilan TV belum dikonfirmasi.');
                 }
-            } catch(e) {
-                console.error(e);
-                alert('Gagal menyimpan data: ' + e.message);
+                return true;
+            } catch (err) {
+                console.warn('Gagal simpan pengumuman:', err);
+                if (tampilkanNotif) {
+                    if (typeof showCustomToast === 'function') showCustomToast(err.message, 'error');
+                    else alert('Gagal menyimpan data: ' + err.message);
+                }
+                return false;
             }
         }
 

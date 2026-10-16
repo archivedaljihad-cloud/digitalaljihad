@@ -7,6 +7,57 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## Perbaikan agenda dan hasil simpan — 16 Oktober 2026 — v5.8.95 (lokal)
+
+- Backup SEBELUM perubahan: `/workspace/backups/digitalaljihad-before-agenda-fix-d810aad.tar.gz`.
+  SHA-256 `1b7a5571cc35591794580191db43b5272707ab2d151fe6725d9bb2d6728cb0ac`;
+  gzip dan hash 706 berkas cocok dengan sumber. Snapshot kode, bukan backup database live.
+- `js/supabase-db.js`: saveAgendaRutin/saveKajianData/savePengumumanJumat meneruskan
+  false/rejection, tidak broadcast sukses saat gagal, memperbarui cache confirmed hanya
+  sesudah cloud sukses. Cache quota/broadcast error tidak membatalkan commit cloud yang
+  sudah terkonfirmasi. Payload dicapture; save agenda berurutan per browser.
+- Lookup saveSettingItem gagal tidak boleh berlanjut INSERT. POST dengan representasi
+  nol baris tidak lagi dianggap confirmed. Kontrak boolean API helper dipertahankan.
+- `js/admin/admin-agenda-rutin.js`: [] dipertahankan untuk hari/pekan, status draft/saving/
+  cloud-confirmed berbeda, error tidak masuk jalur sukses. Draft agenda terpisah dan
+  dapat dipulihkan ke form; overview tetap membaca confirmed. Penyalinan kajian ke
+  agenda juga memeriksa hasil cloud. Tidak menjanjikan bahwa TV telah selesai render.
+- `js/admin/admin-jadwal-sholat.js`: durasi/style memeriksa kedua hasil dan rowsAffected;
+  jalur save jadwal memvalidasi jam serta memeriksa mutasi tiap waktu. Draft dipisahkan,
+  cache tidak diisi jam 00:00 fiktif, tidak menulis rotation_interval ke semua row key-value.
+- `js/admin/admin-kajian.js`, `js/admin/admin-pengumuman-jumat.js`: status sukses hanya
+  untuk cloud confirmed; pengumuman menyimpan snapshot tepat saat Simpan dan menjaga
+  edit berikutnya sebagai draft. Penyalinan kajian hanya setelah save kajian sukses.
+- `petugas.html`/`modeinput.html`: tidak broadcast pengumuman bila helper gagal dan
+  memberi error jika layanan cloud tidak tersedia, bukan toast berhasil.
+- `index.html`: logical event agenda_rutin/kegiatan_rutin_settings melakukan refresh
+  settings fresh sebelum fan-out; hasil refresh lama tidak menggantikan yang lebih baru.
+  Snapshot settings diteruskan ke iframe, mapping slide juga mencakup pengumuman.
+- Dua slide `agenda-rutin.html` dan `pengumuman.html`: [] menjadi label belum dipilih,
+  tidak highlight hari/pekan default. Periodic highlight memakai agenda terakhir.
+  Refresh realtime tidak memakai parent/cache lama; response kalah urutan diabaikan,
+  pesan parent diperiksa origin/source, error mempertahankan tampilan terakhir.
+  ACK render penuh agenda tetap opt-in: pekerjaan ini tidak mengklaim semua field
+  legacy (misalnya enabled) sudah memiliki kontrak render.
+- `admin.html`: path diperbaiki menjadi js/admin/admin-pengumuman-jumat.js. Entri
+  MISSING_SCRIPT yang teratasi dihapus secara spesifik dari baseline; tidak rebaseline
+  temuan lain. Masih ada 213 debt audit yang belum diselesaikan.
+- `sw.js`, `admin-settings.js`, query asset admin dan cache test diselaraskan v5.8.95.
+  `_headers` tetap revalidate. Tidak ada rute atau kolom DB baru.
+- Pengujian: `test-agenda-save-reliability.js` 67 assertion; `test-agenda-bindings.js`
+  diperluas menjadi 84 assertion, termasuk [], highlight, stale response dan offline.
+  `npm test` menjalankan keduanya beserta semua suite sebelumnya.
+  Tes browser lokal (`npm run test:browser:agenda`, dev-only Playwright) membuktikan
+  HTTP403, cache confirmed tak berubah saat gagal, [] hingga dua iframe, perubahan kedua,
+  parent stale direfresh serta modul pengumuman termuat tanpa uncaught JS error.
+- Batas: penulisan multi-key kajian/durasi belum atomik tanpa transaksi/RPC server.
+  Partial failure kini dilaporkan gagal; tidak ada klaim rollback semua key cloud.
+  Belum ada revision/CAS lintas perangkat. Auth/RLS tidak diaktifkan atau diubah.
+- Tidak ada push/deploy atau mutasi produksi. Publikasi sebelumnya belum diizinkan;
+  salinan backup Windows tidak tersedia pada environment cloud ini.
+
+---
+
 ## Audit arsitektur dan alat pencegah regresi — 16 Oktober 2026 (lokal, belum dipublikasikan)
 
 - Snapshot sebelum perubahan: `/workspace/backups/digitalaljihad-before-architecture-audit-1cefc27.tar.gz`,

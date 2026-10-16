@@ -88,7 +88,7 @@
         // =====================================================
         // SINKRONISASI JADWAL PEKAN INI KE PUSAT AGENDA RUTIN
         // =====================================================
-        function syncKajianPekanIniKeAgendaRutin(isUserClick = false, targetItem = null) {
+        async function syncKajianPekanIniKeAgendaRutin(isUserClick = false, targetItem = null) {
             let activeItem = targetItem;
 
             if (!activeItem) {
@@ -199,13 +199,7 @@
                 });
             }
 
-            // Tampilkan status sinkronisasi
-            if (elStatus) {
-                elStatus.style.display = 'block';
-                elStatus.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Tersinkronisasi dari <strong>${pekanLabel}</strong>${tglShort ? ' (' + tglShort + ')' : ''}: <em>${ustadzNama}</em>.`;
-            }
-
-            // Simpan otomatis ke agenda_rutin_settings di localStorage & Supabase
+            if (elStatus) { elStatus.style.display = 'block'; elStatus.textContent = 'Menyalin kajian dan menyimpan agenda ke cloud...'; }
             try {
                 const currentAgenda = getAgendaRutinDataWs();
                 currentAgenda.kajian_ahad.judul = (elJudul ? elJudul.value : currentAgenda.kajian_ahad.judul).trim() || 'Kajian Malam Ahad';
@@ -213,38 +207,36 @@
                 currentAgenda.kajian_ahad.pembimbing = ustadzNama;
                 currentAgenda.kajian_ahad.keterangan = ketTema;
 
-                localStorage.setItem('agenda_rutin_settings', JSON.stringify(currentAgenda));
-
-                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveAgendaRutin === 'function') {
-                    SupabaseDB.saveAgendaRutin(currentAgenda).catch(e => console.warn('Sync Supabase agenda rutin gagal:', e));
-                } else if (typeof SUPABASE_CONFIG !== 'undefined' && typeof getSupabaseHeaders === 'function') {
-                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                        method: 'PATCH',
-                        headers: getSupabaseHeaders(),
-                        body: JSON.stringify({ kegiatan_rutin_settings: currentAgenda })
-                    }).catch(e => console.warn('Sync Supabase agenda rutin gagal:', e));
-                }
-
-                if (typeof renderDashAgendaRutinWidget === 'function') {
-                    renderDashAgendaRutinWidget(currentAgenda);
-                }
-            } catch(e) {
-                console.warn('Gagal simpan sync agenda rutin:', e);
+                try { localStorage.setItem('draft_agenda_rutin_settings', JSON.stringify(currentAgenda)); } catch (err) {}
+                if (typeof SupabaseDB === 'undefined' || typeof SupabaseDB.saveAgendaRutin !== 'function' ||
+                    await SupabaseDB.saveAgendaRutin(currentAgenda) !== true) throw new Error('Agenda belum tersimpan di cloud');
+                try { localStorage.removeItem('draft_agenda_rutin_settings'); } catch (err) {}
+                if (typeof renderDashAgendaRutinWidget === 'function') renderDashAgendaRutinWidget(currentAgenda);
+                if (elStatus) elStatus.textContent = 'Agenda kajian tersimpan di cloud. Tampilan TV belum dikonfirmasi.';
+                if (isUserClick) alert('Agenda kajian tersimpan di cloud. Tampilan TV belum dikonfirmasi.');
+                return true;
+            } catch (err) {
+                console.warn('Gagal simpan sync agenda rutin:', err);
+                if (elStatus) elStatus.textContent = 'Agenda belum tersimpan di cloud. Draft tetap tersedia.';
+                if (isUserClick) alert('Agenda belum tersimpan di cloud. Periksa koneksi dan coba lagi.');
+                return false;
             }
-
-            if (isUserClick) {
-                alert(`Alhamdulillah! Jadwal Kajian Malam Ahad berhasil disinkronkan dari ${pekanLabel}:\n\n` +
-                      `• Pemateri: ${ustadzNama}\n` +
-                      `• Kitab / Tema: ${ketTema}\n` +
-                      `• Waktu: ${waktuPelaksanaan}\n\n` +
-                      `Data langsung otomatis tersimpan dan aktif di Layar Display TV.`);
-            }
-
-            return true;
         }
 
         function loadAgendaRutinAdmin() {
-            const data = getAgendaRutinDataWs();
+            const confirmedData = getAgendaRutinDataWs();
+            let data = confirmedData;
+            let hasDraft = false;
+            try {
+                const draft = JSON.parse(localStorage.getItem('draft_agenda_rutin_settings') || 'null');
+                if (draft && typeof draft === 'object' && !Array.isArray(draft)) {
+                    data = {};
+                    ['yasin', 'kajian_ahad', 'tahsin', 'tafsir'].forEach(key => {
+                        data[key] = Object.assign({}, confirmedData[key], draft[key] || {});
+                    });
+                    hasDraft = true;
+                }
+            } catch (err) { console.warn('Draft agenda tidak dapat dibaca:', err); }
 
             // 1. Yaasiin
             const wsYasinEnabled = document.getElementById('wsYasinEnabled');
@@ -355,7 +347,14 @@
                 cb.checked = pekanAktif.includes(Number(cb.value));
             });
 
-            renderDashAgendaRutinWidget(data);
+            renderDashAgendaRutinWidget(confirmedData);
+            if (hasDraft) {
+                const status = document.getElementById('wsTahsinSyncStatus');
+                if (status) {
+                    status.style.display = 'block';
+                    status.textContent = 'Draft lokal dipulihkan ke form; belum tersimpan di cloud. Klik Simpan untuk mencoba lagi.';
+                }
+            }
         }
 
         async function simpanAgendaRutinAdmin(isSilent = false) {
@@ -392,7 +391,7 @@
                 tahsin: {
                     enabled: document.getElementById('wsTahsinEnabled') ? document.getElementById('wsTahsinEnabled').checked : true,
                     judul: (document.getElementById('wsTahsinJudul') ? document.getElementById('wsTahsinJudul').value : '').trim() || 'Bimbingan Tahsin Al-Qur\'an',
-                    hari_aktif: hariAktif.length > 0 ? hariAktif : ['senin', 'rabu', 'sabtu'],
+                    hari_aktif: hariAktif,
                     waktu: (document.getElementById('wsTahsinWaktu') ? document.getElementById('wsTahsinWaktu').value : '').trim() || 'Ba\'da Sholat Isya (20:00 WIB)',
                     pembimbing: (document.getElementById('wsTahsinPembimbing') ? document.getElementById('wsTahsinPembimbing').value : '').trim() || 'Ust. Pembina Tahsin Al-Qur\'an',
                     keterangan: (document.getElementById('wsTahsinKet') ? document.getElementById('wsTahsinKet').value : '').trim() || 'Terbuka untuk Jamaah Ikhwan & Akhwat (Semua Usia)'
@@ -400,51 +399,49 @@
                 tafsir: {
                     enabled: document.getElementById('wsTafsirEnabled') ? document.getElementById('wsTafsirEnabled').checked : true,
                     judul: (document.getElementById('wsTafsirJudul') ? document.getElementById('wsTafsirJudul').value : '').trim() || 'Kajian Umum Tafsir Al-Qur\'an',
-                    pekan_aktif: pekanAktif.length > 0 ? pekanAktif : [1, 3],
+                    pekan_aktif: pekanAktif,
                     waktu: (document.getElementById('wsTafsirWaktu') ? document.getElementById('wsTafsirWaktu').value : '').trim() || 'Ahad Ba\'da Subuh (05:15 WIB)',
                     pembimbing: (document.getElementById('wsTafsirPembimbing') ? document.getElementById('wsTafsirPembimbing').value : '').trim() || 'Asatidz Dewan Syari\'ah Masjid',
                     keterangan: (document.getElementById('wsTafsirKet') ? document.getElementById('wsTafsirKet').value : '').trim() || 'Tafsir Ayat-ayat Pilihan & Sarapan Pagi Bersama'
                 }
             };
 
-            // Simpan ke LocalStorage lokal
-            localStorage.setItem('agenda_rutin_settings', JSON.stringify(payload));
-
-            // Simpan ke Supabase jika tersedia (Multi-row key-value + Realtime Broadcast)
-            try {
-                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveAgendaRutin === 'function') {
-                    await SupabaseDB.saveAgendaRutin(payload);
-                } else if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSettings === 'function') {
-                    await SupabaseDB.saveSettings({ kegiatan_rutin_settings: payload });
-                }
-            } catch(e) {
-                console.warn('Gagal simpan agenda rutin ke Supabase:', e);
-            }
-
-            renderDashAgendaRutinWidget(payload);
-
-            // Update badge status sync jika elemen tersedia
+            const sequence = (simpanAgendaRutinAdmin.sequence || 0) + 1;
+            simpanAgendaRutinAdmin.sequence = sequence;
+            try { localStorage.setItem('draft_agenda_rutin_settings', JSON.stringify(payload)); } catch (err) {}
             const statusEl = document.getElementById('wsTahsinSyncStatus');
             if (statusEl) {
-                const jam = new Date().toLocaleTimeString('id-ID');
                 statusEl.style.display = 'block';
-                statusEl.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Tersinkron ke Layar TV: ${payload.tahsin.hari_aktif.join(', ')} (${jam})`;
+                statusEl.textContent = 'Menyimpan agenda ke cloud...';
             }
-
-            if (!isSilent) {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Agenda Rutin Tersimpan!',
-                        html: 'Jadwal Agenda Rutin Masjid berhasil disimpan dan langsung disiarkan ke Layar TV.',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                } else {
-                    alert('Alhamdulillah! Jadwal Agenda Rutin Masjid berhasil disimpan dan langsung disinkronkan ke Layar TV!');
+            let cloudConfirmed = false;
+            try {
+                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveAgendaRutin === 'function') {
+                    cloudConfirmed = await SupabaseDB.saveAgendaRutin(payload) === true;
+                } else if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSettings === 'function') {
+                    const result = await SupabaseDB.saveSettings({ kegiatan_rutin_settings: payload });
+                    cloudConfirmed = !!(result && result.success === true && result.cloudConfirmed === true);
                 }
+            } catch (err) { console.warn('Gagal simpan agenda rutin:', err); }
+            if (sequence !== simpanAgendaRutinAdmin.sequence) return cloudConfirmed;
+            if (!cloudConfirmed) {
+                if (statusEl) statusEl.textContent = 'Belum tersimpan di cloud. Draft tetap tersedia; silakan coba Simpan lagi.';
+                if (!isSilent) alert('Agenda belum tersimpan di cloud. Periksa koneksi dan coba lagi.');
+                return false;
             }
+            try {
+                localStorage.setItem('agenda_rutin_settings', JSON.stringify(payload));
+                localStorage.removeItem('draft_agenda_rutin_settings');
+            } catch (err) {}
+            renderDashAgendaRutinWidget(payload);
+            if (statusEl) statusEl.textContent = 'Agenda tersimpan di cloud. Tampilan TV belum dikonfirmasi.';
+            if (!isSilent) {
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: 'success', title: 'Agenda tersimpan di cloud', text: 'Konfirmasi tampilan TV dilakukan terpisah.', timer: 2000, showConfirmButton: false });
+                else alert('Agenda tersimpan di cloud. Tampilan TV belum dikonfirmasi.');
+            }
+            return true;
         }
+
 
         function renderDashAgendaRutinWidget(data) {
             if (!data) data = getAgendaRutinDataWs();
@@ -484,7 +481,7 @@
                 elTahsinDays.innerHTML = days.map(d => {
                     const cap = d.charAt(0).toUpperCase() + d.slice(1);
                     return `<span class="badge badge-warning text-dark mr-1 mb-1">${cap}</span>`;
-                }).join('');
+                }).join('') || '<span class="text-muted small">Belum ada hari dipilih</span>';
             }
 
             // Tafsir
@@ -499,7 +496,7 @@
             }
             if (elTafsirPekan) {
                 const pekans = Array.isArray(data.tafsir.pekan_aktif) ? data.tafsir.pekan_aktif : [1, 3];
-                elTafsirPekan.textContent = 'Pekan Ke: ' + pekans.join(' & ');
+                elTafsirPekan.textContent = pekans.length ? 'Pekan Ke: ' + pekans.join(' & ') : 'Belum ada pekan dipilih';
             }
         }
 

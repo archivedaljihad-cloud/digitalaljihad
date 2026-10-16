@@ -2,12 +2,6 @@
   "purpose": "Known unresolved legacy inventory, NOT proof of correctness",
   "findings": [
     {
-      "id": "d261d73f0cb28696e7ca",
-      "code": "MISSING_SCRIPT",
-      "file": "web-statis/admin.html",
-      "selector": "js/admin-pengumuman-jumat.js?v=5.8.94"
-    },
-    {
       "id": "ed63547cedd77d1b2e78",
       "code": "UNCLASSIFIED_FORM",
       "file": "web-statis/admin.html",

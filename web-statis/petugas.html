@@ -3576,9 +3576,11 @@
                                 cloudErrMsg = 'Gagal menyimpan pengumuman jumat ke cloud';
                             }
                         } else {
-                            await window.SupabaseDB.setAppSetting('pengumuman_jumat', pjPayload);
+                            if (await window.SupabaseDB.setAppSetting('pengumuman_jumat', pjPayload) !== true) {
+                                hasCloudError = true; cloudErrMsg = 'Pengumuman belum tersimpan di cloud';
+                            }
                         }
-                        if (typeof window.SupabaseDB.broadcastChange === 'function') {
+                        if (!hasCloudError && typeof window.SupabaseDB.broadcastChange === 'function') {
                             window.SupabaseDB.broadcastChange('pengumuman_jumat', 'UPDATE', pjPayload, 'Bendahara Mobile');
                         }
                     } else if (currentActiveModule === 'kas-utama') {
@@ -3754,6 +3756,9 @@
                             window.SupabaseDB.broadcastChange('quick_petugas', 'UPDATE', genPayload, 'Petugas Mobile');
                         }
                     }
+                } else {
+                    hasCloudError = true;
+                    cloudErrMsg = 'Layanan cloud belum tersedia';
                 }
             } catch (err) {
                 console.warn('Sinkronisasi Supabase:', err);

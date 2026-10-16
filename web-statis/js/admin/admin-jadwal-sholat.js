@@ -323,13 +323,12 @@ function updatePrayerSourceBadgeUI(source) {
 
         // Simpan Pengaturan Durasi TV, Prayer Mode, dan Interval Rotasi ke Supabase Cloud
         async function simpanPengaturanDurasiTV(isSilent = false) {
+            const sequence = (simpanPengaturanDurasiTV.sequence || 0) + 1;
+            simpanPengaturanDurasiTV.sequence = sequence;
             const btn = document.getElementById('btnSimpanDurasiTV');
             const badge = document.getElementById('statusAutoSyncTV');
-            if (btn && !isSilent) {
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
-            }
-
+            if (btn) btn.disabled = true;
+            if (badge) badge.textContent = 'Menyimpan pengaturan ke cloud...';
             const prayerEnabled = document.getElementById('cfgPrayerModeEnabled') ? document.getElementById('cfgPrayerModeEnabled').checked : true;
             const rotInterval = Math.max(1, parseInt(document.getElementById('cfgIntervalTV')?.value || document.getElementById('cfgIntervalTVSystem')?.value) || 10);
             const countdownDur = Math.max(1, parseInt(document.getElementById('cfgCountdownAdzan')?.value) || 5);
@@ -342,40 +341,8 @@ function updatePrayerSourceBadgeUI(source) {
             // Sinkronkan input form
             syncIntervalTV(rotInterval, true);
             syncDurasiJumat(jumatDur);
-
-            // Simpan ke localStorage lokal browser & backup spesifik
             const countdownStyle = document.getElementById('cfgCountdownStyle')?.value || 'flip';
-            localStorage.setItem('display_rotation_interval', rotInterval);
-            localStorage.setItem('display_prayer_mode_enabled', prayerEnabled);
-            localStorage.setItem('display_prayer_mode_jumat_duration', jumatDur);
-            localStorage.setItem('prayer_countdown_style', countdownStyle);
-            localStorage.setItem('cfg_countdown_adzan', countdownDur);
-            localStorage.setItem('cfg_durasi_adzan', adzanDur);
-            localStorage.setItem('cfg_durasi_iqamah', iqamahDur);
-            localStorage.setItem('cfg_durasi_sholat', sholatDur);
-            localStorage.setItem('cfg_durasi_jumat', jumatDur);
-            localStorage.setItem('cfg_audio_tarhim', audioTarhim);
 
-            try {
-                const cachedRaw = localStorage.getItem('cached_app_settings');
-                const cached = cachedRaw ? JSON.parse(cachedRaw) : {};
-                cached.rotation_interval = rotInterval;
-                cached.prayer_mode_enabled = prayerEnabled;
-                cached.value = prayerEnabled ? '1' : '0';
-                cached.prayer_mode_before_adzan = countdownDur;
-                cached.prayer_mode_adzan_duration = adzanDur;
-                cached.prayer_mode_iqamah_duration = iqamahDur;
-                cached.prayer_mode_after_prayer = sholatDur;
-                cached.prayer_mode_duration = sholatDur;
-                cached.prayer_mode_jumat_duration = jumatDur;
-                cached.audio_tarhim = audioTarhim;
-                cached.tarhim_trigger_seconds = audioTarhim * 60;
-                cached.prayer_countdown_style = countdownStyle;
-                localStorage.setItem('cached_app_settings', JSON.stringify(cached));
-            } catch (e) {}
-
-            // Payload bersih sesuai skema kolom tabel app_settings di Supabase
-            // Catatan: prayer_countdown_style disimpan via key-value setting karena bukan kolom tabel app_settings (mencegah PGRST204)
             const cleanPayload = {
                 rotation_interval: rotInterval,
                 value: prayerEnabled ? '1' : '0',
@@ -388,117 +355,47 @@ function updatePrayerSourceBadgeUI(source) {
                 tarhim_trigger_seconds: audioTarhim * 60
             };
 
-            // Simpan juga ke key-value Supabase cloud
-            if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
-                await SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
+            try { localStorage.setItem('draft_durasi_tv', JSON.stringify({ ...cleanPayload, prayer_countdown_style: countdownStyle })); } catch (err) {}
+            const save = async () => {
+                try {
+                    if (!window.SupabaseDB || typeof SupabaseDB.safeRestMutation !== 'function' || typeof SupabaseDB.saveSettingItem !== 'function') return false;
+                    const [styleOk, result] = await Promise.all([
+                        SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle),
+                        SupabaseDB.safeRestMutation('app_settings?id=eq.1', 'PATCH', cleanPayload)
+                    ]);
+                    if (styleOk !== true || !result.success || !result.cloudConfirmed || !(result.rowsAffected > 0)) return false;
+                    try {
+                        const cached = JSON.parse(localStorage.getItem('cached_app_settings') || '{}');
+                        Object.assign(cached, cleanPayload, { prayer_mode_enabled: prayerEnabled, prayer_mode_duration: sholatDur, prayer_countdown_style: countdownStyle });
+                        localStorage.setItem('cached_app_settings', JSON.stringify(cached));
+                        const entries = { display_rotation_interval: rotInterval, display_prayer_mode_enabled: prayerEnabled,
+                            display_prayer_mode_jumat_duration: jumatDur, prayer_countdown_style: countdownStyle,
+                            cfg_countdown_adzan: countdownDur, cfg_durasi_adzan: adzanDur, cfg_durasi_iqamah: iqamahDur,
+                            cfg_durasi_sholat: sholatDur, cfg_durasi_jumat: jumatDur, cfg_audio_tarhim: audioTarhim };
+                        Object.entries(entries).forEach(([key, val]) => localStorage.setItem(key, String(val)));
+                    } catch (err) { console.warn('Cloud tersimpan; cache durasi tidak tersedia:', err); }
+                    SupabaseDB.invalidateCache('app_settings');
+                    SupabaseDB.notifyConfirmedChange('app_settings', { ...cleanPayload, prayer_countdown_style: countdownStyle }, 'UPDATE_SETTINGS');
+                    return true;
+                } catch (err) { console.warn('Pengaturan cloud belum terkonfirmasi:', err); return false; }
+            };
+            simpanPengaturanDurasiTV.queue = (simpanPengaturanDurasiTV.queue || Promise.resolve()).then(save, save);
+            const confirmed = await simpanPengaturanDurasiTV.queue;
+            if (sequence !== simpanPengaturanDurasiTV.sequence) return confirmed;
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Pengaturan Durasi TV'; }
+            if (badge) badge.textContent = confirmed
+                ? 'Pengaturan tersimpan di cloud. Tampilan TV belum dikonfirmasi.'
+                : 'Belum semua pengaturan tersimpan di cloud. Draft tetap tersedia; coba Simpan lagi.';
+            if (confirmed) { try { localStorage.removeItem('draft_durasi_tv'); } catch (err) {} }
+            if (!isSilent) {
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: confirmed ? 'success' : 'error', title: confirmed ? 'Tersimpan di cloud' : 'Penyimpanan belum terkonfirmasi', text: confirmed ? 'Konfirmasi tampilan TV dilakukan terpisah.' : 'Periksa koneksi. Draft tetap tersedia untuk dicoba kembali.' });
+                else alert(confirmed ? 'Pengaturan tersimpan di cloud; tampilan TV belum dikonfirmasi.' : 'Penyimpanan cloud belum terkonfirmasi. Draft tetap tersedia.');
             }
-
-            let saveSuccess = false;
-            try {
-                if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-                    const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                        method: 'PATCH',
-                        headers: getSupabaseHeaders(),
-                        body: JSON.stringify(cleanPayload)
-                    });
-
-                    if (res.ok) {
-                        saveSuccess = true;
-                    } else {
-                        const errTxt = await res.text();
-                        console.warn('⚠️ Gagal update app_settings cloud:', res.status, errTxt);
-                    }
-
-                    // Sinkronkan juga baris cadangan (id>1)
-                    fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=gt.1`, {
-                        method: 'PATCH',
-                        headers: getSupabaseHeaders(),
-                        body: JSON.stringify({ rotation_interval: rotInterval })
-                    }).catch(() => {});
-                }
-
-                // Kirim sinyal broadcast remote ke Display TV (disertai gaya countdown)
-                const broadcastPayload = { ...cleanPayload, prayer_countdown_style: countdownStyle };
-                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
-                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', broadcastPayload, 'Admin Display TV');
-                }
-                if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', broadcastPayload).catch(() => {});
-                }
-            } catch (err) {
-                console.warn('⚠️ Network error saat simpanPengaturanDurasiTV:', err);
-            } finally {
-                const jamSekarang = new Date().toLocaleTimeString('id-ID');
-                if (badge) {
-                    badge.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Tersinkron ke TV: ${rotInterval} detik (${jamSekarang})`;
-                }
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Pengaturan Durasi TV';
-                }
-                if (!isSilent) {
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pengaturan Durasi TV Tersimpan!',
-                            html: `Durasi rotasi halaman TV diatur ke <b>${rotInterval} detik</b>.<br>Sinyal pembaruan langsung dipancarkan secara realtime ke seluruh layar TV display.`,
-                            confirmButtonColor: '#10b981',
-                            timer: 2500
-                        });
-                    } else {
-                        alert(`Pengaturan Durasi TV berhasil disimpan (${rotInterval} detik)!`);
-                    }
-                }
-            }
+            return confirmed;
         }
 
         // Simpan Jadwal Sholat, Pengaturan Prayer Mode TV & Durasi Sholat Jum'at
         async function simpanJadwalSholat() {
-            const prayerEnabled = document.getElementById('cfgPrayerModeEnabled') ? document.getElementById('cfgPrayerModeEnabled').checked : true;
-            const rotInterval = Math.max(1, parseInt(document.getElementById('cfgIntervalTV')?.value || document.getElementById('cfgIntervalTVSystem')?.value) || 10);
-            const countdownDur = Math.max(1, parseInt(document.getElementById('cfgCountdownAdzan')?.value) || 5);
-            const adzanDur = Math.max(1, parseInt(document.getElementById('cfgDurasiAdzan')?.value) || 3);
-            const iqamahDur = Math.max(1, parseInt(document.getElementById('cfgDurasiIqamah')?.value) || 10);
-            const sholatDur = Math.max(1, parseInt(document.getElementById('cfgDurasiSholat')?.value) || 15);
-            const jumatDur = Math.max(10, parseInt(document.getElementById('cfgDurasiJumat')?.value) || 50);
-            const audioTarhim = parseInt(document.getElementById('cfgAudioTarhim')?.value ?? 5);
-
-            const showImsak = document.getElementById('cfgShowImsak') ? document.getElementById('cfgShowImsak').checked : true;
-            const showSyuruk = document.getElementById('cfgShowSyuruk') ? document.getElementById('cfgShowSyuruk').checked : true;
-            const countdownStyle = document.getElementById('cfgCountdownStyle')?.value || 'flip';
-            localStorage.setItem('display_prayer_mode_enabled', prayerEnabled);
-            localStorage.setItem('display_rotation_interval', rotInterval);
-            localStorage.setItem('display_prayer_mode_jumat_duration', jumatDur);
-            localStorage.setItem('display_show_imsak', showImsak);
-            localStorage.setItem('display_show_syuruk', showSyuruk);
-            localStorage.setItem('prayer_countdown_style', countdownStyle);
-            localStorage.setItem('cfg_countdown_adzan', countdownDur);
-            localStorage.setItem('cfg_durasi_adzan', adzanDur);
-            localStorage.setItem('cfg_durasi_iqamah', iqamahDur);
-            localStorage.setItem('cfg_durasi_sholat', sholatDur);
-            localStorage.setItem('cfg_durasi_jumat', jumatDur);
-            localStorage.setItem('cfg_audio_tarhim', audioTarhim);
-            syncDurasiJumat(jumatDur);
-
-            // Perbarui juga cache lokal cached_app_settings agar display TV offline langsung akurat
-            try {
-                const cachedRaw = localStorage.getItem('cached_app_settings');
-                const cached = cachedRaw ? JSON.parse(cachedRaw) : {};
-                cached.prayer_mode_enabled = prayerEnabled;
-                cached.value = prayerEnabled ? '1' : '0';
-                cached.rotation_interval = rotInterval;
-                cached.prayer_mode_before_adzan = countdownDur;
-                cached.prayer_mode_adzan_duration = adzanDur;
-                cached.prayer_mode_iqamah_duration = iqamahDur;
-                cached.prayer_mode_after_prayer = sholatDur;
-                cached.prayer_mode_duration = sholatDur;
-                cached.prayer_mode_jumat_duration = jumatDur;
-                cached.audio_tarhim = audioTarhim;
-                cached.tarhim_trigger_seconds = audioTarhim * 60;
-                cached.prayer_countdown_style = countdownStyle;
-                localStorage.setItem('cached_app_settings', JSON.stringify(cached));
-            } catch (e) {}
-
             const sholatTimes = [
                 { name: 'Imsak', time: document.getElementById('sholatImsak')?.value },
                 { name: 'Subuh', time: document.getElementById('sholatSubuh')?.value },
@@ -509,90 +406,32 @@ function updatePrayerSourceBadgeUI(source) {
                 { name: 'Isya', time: document.getElementById('sholatIsya')?.value }
             ];
 
+            try { localStorage.setItem('draft_jadwal_sholat', JSON.stringify(sholatTimes)); } catch (err) {}
             try {
-                // 1. Update pengaturan prayer mode & seluruh durasi ke app_settings (id=1 dan baris cadangan)
-                // Menggunakan skema kolom valid Supabase tanpa kolom usang yang memicu PGRST204
-                const cleanPayload = {
-                    rotation_interval: rotInterval,
-                    value: prayerEnabled ? '1' : '0',
-                    prayer_mode_before_adzan: countdownDur,
-                    prayer_mode_adzan_duration: adzanDur,
-                    prayer_mode_iqamah_duration: iqamahDur,
-                    prayer_mode_after_prayer: sholatDur,
-                    prayer_mode_jumat_duration: jumatDur,
-                    audio_tarhim: audioTarhim,
-                    tarhim_trigger_seconds: audioTarhim * 60
-                };
-
-                // Simpan juga ke key-value Supabase cloud
-                if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
-                    await SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
+                if (!window.SupabaseDB || typeof SupabaseDB.safeRestMutation !== 'function') throw new Error('Layanan cloud belum tersedia');
+                for (const item of sholatTimes) {
+                    if (item.time && !/^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/.test(item.time)) throw new Error('Format jam tidak valid: ' + item.name);
                 }
-
-                const resPatch = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {
-                    method: 'PATCH',
-                    headers: getSupabaseHeaders(),
-                    body: JSON.stringify(cleanPayload)
-                });
-                if (!resPatch.ok) {
-                    const errTxt = await resPatch.text();
-                    console.warn('⚠️ Gagal update app_settings cloud:', resPatch.status, errTxt);
-                }
-
-                // Sinkronkan juga baris cadangan di cloud
-                fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=gt.1`, {
-                    method: 'PATCH',
-                    headers: getSupabaseHeaders(),
-                    body: JSON.stringify({ rotation_interval: rotInterval })
-                }).catch(() => {});
-
-                // Kirim sinyal Remote Broadcast UPDATE_SETTINGS agar display TV langsung mengadopsi interval baru tanpa jeda
-                const broadcastPayload = { ...cleanPayload, prayer_countdown_style: countdownStyle };
-                if (window.SupabaseDB && typeof SupabaseDB.sendRemoteCommand === 'function') {
-                    SupabaseDB.sendRemoteCommand('UPDATE_SETTINGS', broadcastPayload).catch(() => {});
-                }
-                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
-                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', broadcastPayload, 'Admin Display TV');
-                }
-
-                // 2. Update waktu sholat ke tabel jadwal_sholat Supabase
-                for (const s of sholatTimes) {
-                    if (s.time) {
-                        const timeFormatted = s.time.length === 5 ? (s.time + ':00') : s.time;
-                        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?nama_sholat=ilike.*${encodeURIComponent(s.name)}*`, {
-                            method: 'PATCH',
-                            headers: getSupabaseHeaders(),
-                            body: JSON.stringify({
-                                waktu: timeFormatted
-                            })
-                        }).catch(() => {});
-                        // Fallback alias Syuruk / Terbit
-                        if (s.name === 'Syuruk') {
-                            await fetch(`${SUPABASE_CONFIG.url}/rest/v1/jadwal_sholat?nama_sholat=ilike.*terbit*`, {
-                                method: 'PATCH',
-                                headers: getSupabaseHeaders(),
-                                body: JSON.stringify({ waktu: timeFormatted })
-                            }).catch(() => {});
-                        }
+                if (await simpanPengaturanDurasiTV(true) !== true) throw new Error('Pengaturan durasi belum seluruhnya terkonfirmasi');
+                for (const item of sholatTimes) {
+                    if (!item.time) continue;
+                    const waktu = item.time.length === 5 ? item.time + ':00' : item.time;
+                    let result = await SupabaseDB.safeRestMutation(
+                        `jadwal_sholat?nama_sholat=ilike.*${encodeURIComponent(item.name)}*`, 'PATCH', { waktu });
+                    if ((!result.success || !result.cloudConfirmed || !(result.rowsAffected > 0)) && item.name === 'Syuruk' && result.rowsAffected === 0 && result.status >= 200 && result.status < 300) {
+                        result = await SupabaseDB.safeRestMutation('jadwal_sholat?nama_sholat=ilike.*terbit*', 'PATCH', { waktu });
                     }
+                    if (!result.success || !result.cloudConfirmed || !(result.rowsAffected > 0)) throw new Error('Jadwal ' + item.name + ' belum terkonfirmasi');
                 }
-
-                // 3. Simpan cache lokal sebagai fallback offline
-                const cachedJadwal = sholatTimes.map((s, idx) => ({
-                    id: idx + 1,
-                    nama_sholat: s.name,
-                    waktu: s.time ? (s.time.length === 5 ? s.time + ':00' : s.time) : '00:00:00'
-                }));
-                localStorage.setItem('cached_jadwal_sholat', JSON.stringify(cachedJadwal));
-
-                if (window.SupabaseDB && typeof SupabaseDB.broadcastChange === 'function') {
-                    SupabaseDB.broadcastChange('app_settings', 'UPDATE', cleanPayload, 'Admin Jadwal Sholat');
-                    SupabaseDB.broadcastChange('jadwal_sholat', 'UPDATE', { list: cachedJadwal }, 'Admin Jadwal Sholat');
-                }
-
-                alert('Alhamdulillah! Jadwal sholat, switch prayer mode TV, dan durasi sholat (termasuk Sholat Jum\'at) berhasil disinkronkan ke Supabase & Layar TV Display.');
+                const list = await SupabaseDB.getJadwalSholat(true, true);
+                SupabaseDB.notifyConfirmedChange('jadwal_sholat', { list }, 'SYNC_JADWAL_SHOLAT');
+                try { localStorage.removeItem('draft_jadwal_sholat'); } catch (err) {}
+                alert('Jadwal dan durasi tersimpan di cloud. Tampilan TV belum dikonfirmasi.');
+                return true;
             } catch (err) {
-                alert('Tersimpan di sesi lokal (koneksi offline).');
+                console.warn('Penyimpanan jadwal belum lengkap:', err);
+                alert('Belum semua perubahan terkonfirmasi di cloud. Draft tetap tersedia. ' + err.message);
+                return false;
             }
         }
 

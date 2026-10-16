@@ -935,7 +935,8 @@
         }
 
         function formatHariTahsin(hariAktif) {
-            if (!Array.isArray(hariAktif) || hariAktif.length === 0) return "Senin, Rabu, Sabtu";
+            if (!Array.isArray(hariAktif)) return "Senin, Rabu, Sabtu";
+            if (hariAktif.length === 0) return "Belum ada hari dipilih";
             const mapHari = {
                 'senin': 'Senin',
                 'selasa': 'Selasa',
@@ -951,7 +952,8 @@
         }
 
         function formatPekanTafsir(pekanAktif) {
-            if (!Array.isArray(pekanAktif) || pekanAktif.length === 0) return "Setiap pekan 1 dan pekan ke 3";
+            if (!Array.isArray(pekanAktif)) return "Setiap pekan 1 dan pekan ke 3";
+            if (pekanAktif.length === 0) return "Belum ada pekan dipilih";
             const sorted = [...pekanAktif].map(Number).filter(n => !isNaN(n)).sort((a,b) => a - b);
             if (sorted.length === 0) return "Setiap pekan 1 dan pekan ke 3";
             if (sorted.length === 1) return `Setiap pekan ke-${sorted[0]}`;
@@ -962,7 +964,7 @@
         // =========================================================================
         // SMART DAY AUTO-HIGHLIGHT ("MALAM INI" / "HARI INI")
         // =========================================================================
-        function applySmartHighlights(agendaData) {
+        function applySmartHighlights(agendaData = loadAgendaData.lastAgenda) {
             const now = new Date();
             const day = now.getDay(); // 0 = Ahad, 1 = Senin, 2 = Selasa, 3 = Rabu, 4 = Kamis, 5 = Jumat, 6 = Sabtu
 
@@ -999,7 +1001,7 @@
             const badgeTahsin = document.getElementById('badgeStatusTahsin');
             if (cardTahsin && badgeTahsin) {
                 let isTahsinToday = false;
-                if (agendaData && agendaData.tahsin && Array.isArray(agendaData.tahsin.hari_aktif) && agendaData.tahsin.hari_aktif.length > 0) {
+                if (agendaData && agendaData.tahsin && Array.isArray(agendaData.tahsin.hari_aktif)) {
                     const dayMap = { 'ahad': 0, 'minggu': 0, 'senin': 1, 'selasa': 2, 'rabu': 3, 'kamis': 4, 'jumat': 5, "jum'at": 5, 'sabtu': 6 };
                     const activeDays = agendaData.tahsin.hari_aktif.map(d => dayMap[String(d).toLowerCase()]);
                     isTahsinToday = activeDays.includes(day);
@@ -1023,11 +1025,11 @@
             if (cardTafsir && badgeTafsir) {
                 let isTafsirToday = false;
                 if (day === 0) { // Ahad
-                    if (agendaData && agendaData.tafsir && Array.isArray(agendaData.tafsir.pekan_aktif) && agendaData.tafsir.pekan_aktif.length > 0) {
+                    if (agendaData && agendaData.tafsir && Array.isArray(agendaData.tafsir.pekan_aktif)) {
                         const currentWeek = Math.min(5, Math.ceil(now.getDate() / 7));
                         isTafsirToday = agendaData.tafsir.pekan_aktif.map(Number).includes(currentWeek);
                     } else {
-                        isTafsirToday = true;
+                        isTafsirToday = [1, 3].includes(Math.min(5, Math.ceil(now.getDate() / 7)));
                     }
                 }
 
@@ -1045,18 +1047,22 @@
         // =========================================================================
         // DATA LOADER & SUPABASE / LOCALSTORAGE SYNC
         // =========================================================================
-        async function loadAgendaData() {
+        async function loadAgendaData(forceRefresh = false, incomingSettings = null) {
+            const requestId = (loadAgendaData.requestId || 0) + 1;
+            loadAgendaData.requestId = requestId;
             try {
-                let settings = null;
+                let settings = incomingSettings;
                 try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
+                    if (!settings && !forceRefresh && window.parent && window.parent !== window && window.parent.settings) {
                         settings = window.parent.settings;
                     }
                 } catch (e) {}
 
                 if (!settings && window.SupabaseDB) {
-                    settings = await SupabaseDB.getSettings();
+                    settings = await SupabaseDB.getSettings(forceRefresh, forceRefresh);
                 }
+
+                if (requestId !== loadAgendaData.requestId) return false;
 
                 if (settings) {
                     if (settings.nama_aplikasi) document.getElementById('nama-masjid').textContent = settings.nama_aplikasi;
@@ -1164,9 +1170,13 @@
                     }
                 }
 
+                loadAgendaData.lastAgenda = agendaData;
                 applySmartHighlights(agendaData);
+                // Full render ACK stays opt-in until every agenda field has a display contract.
+                return undefined;
             } catch (err) {
                 console.warn('Gagal memuat agenda data:', err);
+                return false;
             }
         }
 
@@ -1176,13 +1186,13 @@
 
             // Dengarkan postMessage dari parent TV
             window.addEventListener('message', (event) => {
+                if (event.origin !== window.location.origin || (event.source !== window.parent && event.source !== window)) return;
                 const msg = event.data;
                 if (!msg) return;
-                if (msg.type === 'INIT_DISPLAY_DATA' || msg.type === 'DATA_UPDATED' || msg.type === 'SYNC_AGENDA_RUTIN') {
-                    if (msg.data && msg.type === 'SYNC_AGENDA_RUTIN') {
-                        try { localStorage.setItem('agenda_rutin_settings', JSON.stringify(msg.data)); } catch(e) {}
-                    }
-                    loadAgendaData();
+                if (msg.type === 'INIT_DISPLAY_DATA') loadAgendaData(false, msg.settings || null);
+                else if (msg.type === 'DATA_UPDATED' || msg.type === 'SYNC_AGENDA_RUTIN') {
+                    // Do not store a hint/broadcast payload as confirmed data; use fresh cloud or parent snapshot.
+                    loadAgendaData(!msg.settings, msg.settings || null);
                 }
             });
 
@@ -1190,8 +1200,8 @@
             if (window.SupabaseDB && typeof SupabaseDB.onDataChange === 'function') {
                 SupabaseDB.onDataChange((payload) => {
                     const tbl = (payload.table || '').toLowerCase();
-                    if (tbl === 'app_settings' || tbl === 'pengumuman' || tbl === 'agenda_rutin') {
-                        loadAgendaData();
+                    if (tbl === 'app_settings' || tbl === 'pengumuman' || tbl === 'agenda_rutin' || tbl === 'kegiatan_rutin_settings') {
+                        return loadAgendaData(true);
                     }
                 });
             }
