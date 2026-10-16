@@ -1540,22 +1540,38 @@
                 if (styleParam === 'flip' || styleParam === '3d') return 'flip';
             } catch (e) {}
 
-            try {
-                const localStyle = localStorage.getItem('prayer_countdown_style');
-                if (localStyle === 'biasa' || localStyle === 'flip') return localStyle;
-            } catch (e) {}
-
+            // Prioritas 1: Pengaturan Cloud Settings Supabase dari Admin Dashboard
             if (settings && settings.prayer_countdown_style) {
                 const s = String(settings.prayer_countdown_style).toLowerCase();
                 if (s === 'biasa' || s === 'regular' || s === 'classic') return 'biasa';
                 if (s === 'flip' || s === '3d') return 'flip';
             }
+
+            // Prioritas 2: Memory Bridge dari Parent TV Display Window
+            try {
+                if (window.parent && window.parent !== window && window.parent.settings && window.parent.settings.prayer_countdown_style) {
+                    const ps = String(window.parent.settings.prayer_countdown_style).toLowerCase();
+                    if (ps === 'biasa' || ps === 'regular' || ps === 'classic') return 'biasa';
+                    if (ps === 'flip' || ps === '3d') return 'flip';
+                }
+            } catch (e) {}
+
+            // Prioritas 3: Fallback ke localStorage lokal jika offline
+            try {
+                const localStyle = localStorage.getItem('prayer_countdown_style');
+                if (localStyle === 'biasa' || localStyle === 'flip') return localStyle;
+            } catch (e) {}
+
             return 'flip'; // default: 3D mechanical flip clock
         }
 
         window.switchCountdownStyle = function(style) {
             try {
                 localStorage.setItem('prayer_countdown_style', style);
+                if (settings) settings.prayer_countdown_style = style;
+                if (window.parent && window.parent !== window && window.parent.settings) {
+                    window.parent.settings.prayer_countdown_style = style;
+                }
             } catch (e) {}
             prevFlipM = -1;
             prevFlipS = -1;

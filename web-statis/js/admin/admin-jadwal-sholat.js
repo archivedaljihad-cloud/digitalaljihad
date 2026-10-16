@@ -302,11 +302,13 @@ function updatePrayerSourceBadgeUI(source) {
 
         // Sinkronisasi otomatis nilai interval antar form jadwal sholat dan pengaturan sistem dengan auto-save debounced
         let _durasiSaveDebounce = null;
-        function syncIntervalTV(val) {
+        function syncIntervalTV(val, skipTriggerSave = false) {
             const el1 = document.getElementById('cfgIntervalTV');
             const el2 = document.getElementById('cfgIntervalTVSystem');
             if (el1 && el1.value != val) el1.value = val;
             if (el2 && el2.value != val) el2.value = val;
+
+            if (skipTriggerSave) return;
 
             const badge = document.getElementById('statusAutoSyncTV');
             if (badge) {
@@ -338,7 +340,7 @@ function updatePrayerSourceBadgeUI(source) {
             const audioTarhim = parseInt(document.getElementById('cfgAudioTarhim')?.value ?? 5);
 
             // Sinkronkan input form
-            syncIntervalTV(rotInterval);
+            syncIntervalTV(rotInterval, true);
             syncDurasiJumat(jumatDur);
 
             // Simpan ke localStorage lokal browser & backup spesifik
@@ -388,7 +390,7 @@ function updatePrayerSourceBadgeUI(source) {
 
             // Simpan juga ke key-value Supabase cloud
             if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
-                SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
+                await SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
             }
 
             let saveSuccess = false;
@@ -524,7 +526,7 @@ function updatePrayerSourceBadgeUI(source) {
 
                 // Simpan juga ke key-value Supabase cloud
                 if (window.SupabaseDB && typeof SupabaseDB.saveSettingItem === 'function') {
-                    SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
+                    await SupabaseDB.saveSettingItem('prayer_countdown_style', countdownStyle).catch(() => {});
                 }
 
                 const resPatch = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/app_settings?id=eq.1`, {

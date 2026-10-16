@@ -1877,12 +1877,15 @@
                 if (styleParam === 'flip' || styleParam === '3d') return 'flip';
             } catch (e) {}
 
+            const serverStyle = '{{ $setting->prayer_countdown_style ?? "" }}';
+            if (serverStyle === 'biasa' || serverStyle === 'flip') return serverStyle;
+
             try {
                 const localStyle = localStorage.getItem('prayer_countdown_style');
                 if (localStyle === 'biasa' || localStyle === 'flip') return localStyle;
             } catch (e) {}
 
-            return '{{ $setting->prayer_countdown_style ?? "flip" }}';
+            return 'flip';
         }
 
         window.switchCountdownStyle = function(style) {
@@ -1891,8 +1894,29 @@
             } catch (e) {}
             prevFlipM = -1;
             prevFlipS = -1;
+            const wrapEl = document.getElementById('countdownWrap');
+            if (wrapEl) {
+                if (style === 'biasa') {
+                    wrapEl.classList.remove('style-flip');
+                    wrapEl.classList.add('style-biasa');
+                } else {
+                    wrapEl.classList.remove('style-biasa');
+                    wrapEl.classList.add('style-flip');
+                }
+            }
             updateCountdown();
         };
+
+        window.addEventListener('message', function(ev) {
+            try {
+                const msg = ev.data;
+                if (!msg) return;
+                const newStyle = msg.prayer_countdown_style || (msg.settings && msg.settings.prayer_countdown_style) || (msg.data && msg.data.prayer_countdown_style);
+                if (newStyle === 'flip' || newStyle === 'biasa') {
+                    window.switchCountdownStyle(newStyle);
+                }
+            } catch (e) {}
+        });
 
         function setFlipBoxInstant(boxEl, val) {
             if (!boxEl) return;

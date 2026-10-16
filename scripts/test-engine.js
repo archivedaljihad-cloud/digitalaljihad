@@ -471,7 +471,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.91'), 'sw.js memiliki bumping versi cache terbaru v5.8.91');
+assert(swContent.includes('aljihad-signage-v5.8.92'), 'sw.js memiliki bumping versi cache terbaru v5.8.92');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -646,6 +646,19 @@ assert(freshAdminCoreContent.includes('init24HourTimepickers') && freshAdminCore
 const adminJadwalContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-jadwal-sholat.js'), 'utf8');
 assert(adminJadwalContent.includes('setPrayerInputValue'), 'admin-jadwal-sholat.js memiliki helper setPrayerInputValue yang mensinkronkan Flatpickr instance');
 assert(swContent.includes('vendor/flatpickr/flatpickr.min.css') && swContent.includes('vendor/flatpickr/flatpickr.min.js'), 'sw.js memuat flatpickr.min.css dan flatpickr.min.js dalam STATIC_ASSETS');
+
+// -------------------------------------------------------------
+// 25. COUNTDOWN SHOLAT 3D FLIP CLOCK & REALTIME SYNC INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 25] Countdown Sholat 3D Flip Clock & Realtime Sync Integrity:');
+const prayerModeContent = fs.readFileSync(path.join(baseDir, 'prayer-mode.html'), 'utf8');
+const indexTvContent = fs.readFileSync(path.join(baseDir, 'index.html'), 'utf8');
+assert(adminPageContent.includes('id="cfgCountdownStyle"') && adminPageContent.includes('onchange="simpanPengaturanDurasiTV(true)"'), 'admin.html memiliki dropdown cfgCountdownStyle dengan handler onchange otomatis');
+assert(adminJadwalContent.includes("prayer_countdown_style: countdownStyle") && adminJadwalContent.includes("SupabaseDB.saveSettingItem('prayer_countdown_style'"), 'admin-jadwal-sholat.js menyimpan prayer_countdown_style ke Supabase cloud');
+assert(prayerModeContent.includes("getCountdownStyle()") && prayerModeContent.includes("window.switchCountdownStyle"), 'prayer-mode.html memiliki getCountdownStyle dan window.switchCountdownStyle');
+assert(prayerModeContent.includes("window.addEventListener('message'") && prayerModeContent.includes("newStyle === 'flip' || newStyle === 'biasa'"), 'prayer-mode.html mendengarkan postMessage update gaya hitung mundur');
+assert(indexTvContent.includes("prayerFrame.contentWindow.postMessage") && indexTvContent.includes("prayer_countdown_style"), 'index.html menyiarkan prayer_countdown_style ke prayerFrame iframe');
+assert(supabaseDbContent.includes("prayer_countdown_style: 'flip'") && supabaseDbContent.includes("localStorage.getItem('prayer_countdown_style')"), 'supabase-db.js meng-cache dan mengembalikan fallback prayer_countdown_style');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

@@ -1726,22 +1726,38 @@
                 if (styleParam === 'flip' || styleParam === '3d') return 'flip';
             } catch (e) {}
 
-            try {
-                const localStyle = localStorage.getItem('prayer_countdown_style');
-                if (localStyle === 'biasa' || localStyle === 'flip') return localStyle;
-            } catch (e) {}
-
+            // Prioritas 1: Pengaturan Cloud Settings Supabase dari Admin Dashboard
             if (settings && settings.prayer_countdown_style) {
                 const s = String(settings.prayer_countdown_style).toLowerCase();
                 if (s === 'biasa' || s === 'regular' || s === 'classic') return 'biasa';
                 if (s === 'flip' || s === '3d') return 'flip';
             }
+
+            // Prioritas 2: Memory Bridge dari Parent TV Display Window
+            try {
+                if (window.parent && window.parent !== window && window.parent.settings && window.parent.settings.prayer_countdown_style) {
+                    const ps = String(window.parent.settings.prayer_countdown_style).toLowerCase();
+                    if (ps === 'biasa' || ps === 'regular' || ps === 'classic') return 'biasa';
+                    if (ps === 'flip' || ps === '3d') return 'flip';
+                }
+            } catch (e) {}
+
+            // Prioritas 3: Fallback ke localStorage lokal jika offline
+            try {
+                const localStyle = localStorage.getItem('prayer_countdown_style');
+                if (localStyle === 'biasa' || localStyle === 'flip') return localStyle;
+            } catch (e) {}
+
             return 'flip'; // default: 3D mechanical flip clock
         }
 
         window.switchCountdownStyle = function(style) {
             try {
                 localStorage.setItem('prayer_countdown_style', style);
+                if (settings) settings.prayer_countdown_style = style;
+                if (window.parent && window.parent !== window && window.parent.settings) {
+                    window.parent.settings.prayer_countdown_style = style;
+                }
             } catch (e) {}
             prevFlipM = -1;
             prevFlipS = -1;
@@ -2385,8 +2401,25 @@
             const msg = event.data;
             if (!msg) return;
 
-            // Selalu adopsi payload terkini jika tersedia
-            if (msg.settings) settings = msg.settings;
+            // Selalu adopsi payload data & settings terkini jika tersedia
+            if (msg.settings) {
+                settings = Object.assign(settings || {}, msg.settings);
+            }
+            if (msg.data) {
+                if (!settings) settings = {};
+                Object.assign(settings, msg.data);
+            }
+            const incomingStyle = (msg.data && msg.data.prayer_countdown_style) || 
+                                  (msg.settings && msg.settings.prayer_countdown_style) ||
+                                  (msg.payload && msg.payload.data && msg.payload.data.prayer_countdown_style);
+            if (incomingStyle) {
+                if (!settings) settings = {};
+                settings.prayer_countdown_style = incomingStyle;
+                try { localStorage.setItem('prayer_countdown_style', incomingStyle); } catch(e) {}
+                prevFlipM = -1;
+                prevFlipS = -1;
+            }
+
             if (msg.jadwalList && msg.jadwalList.length > 0) jadwalList = msg.jadwalList;
             if (msg.jumatPetugas) jumatPetugas = msg.jumatPetugas;
 
@@ -2395,6 +2428,9 @@
                 updatePrayerUI();
             } else if (msg.type === 'DATA_UPDATED' || msg.type === 'UPDATE_SETTINGS' || msg.type === 'SYNC_JUMAT' || msg.force_reload) {
                 if (window.SupabaseDB) {
+                    if (typeof SupabaseDB.invalidateCache === 'function') {
+                        SupabaseDB.invalidateCache(msg.table || 'app_settings');
+                    }
                     if (msg.table === 'sholat_jumat' || msg.type === 'SYNC_JUMAT') {
                         try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch(e) {}
                     }
@@ -2402,9 +2438,19 @@
                         try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch(e) {}
                     }
                     if (msg.table === 'app_settings' || msg.type === 'UPDATE_SETTINGS') {
-                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch(e) {}
+                        try {
+                            const s = await SupabaseDB.getSettings();
+                            if (s) {
+                                settings = s;
+                                if (s.prayer_countdown_style) {
+                                    try { localStorage.setItem('prayer_countdown_style', s.prayer_countdown_style); } catch(e) {}
+                                }
+                            }
+                        } catch(e) {}
                     }
                 }
+                prevFlipM = -1;
+                prevFlipS = -1;
                 init(true);
             }
         });
@@ -2414,13 +2460,26 @@
             SupabaseDB.onDataChange(async (payload) => {
                 const tbl = (payload.table || '').toLowerCase();
                 if (tbl === 'sholat_jumat' || tbl === 'jadwal_sholat' || tbl === 'app_settings' || tbl === 'quick_petugas') {
+                    if (typeof SupabaseDB.invalidateCache === 'function') {
+                        SupabaseDB.invalidateCache(tbl);
+                    }
                     if (tbl === 'sholat_jumat') {
                         try { const p = await SupabaseDB.getSholatJumat(); if (p) jumatPetugas = p; } catch(e) {}
                     } else if (tbl === 'jadwal_sholat') {
                         try { const j = await SupabaseDB.getJadwalSholat(); if (j && j.length) jadwalList = j; } catch(e) {}
                     } else {
-                        try { const s = await SupabaseDB.getSettings(); if (s) settings = s; } catch(e) {}
+                        try {
+                            const s = await SupabaseDB.getSettings();
+                            if (s) {
+                                settings = s;
+                                if (s.prayer_countdown_style) {
+                                    try { localStorage.setItem('prayer_countdown_style', s.prayer_countdown_style); } catch(e) {}
+                                }
+                            }
+                        } catch(e) {}
                     }
+                    prevFlipM = -1;
+                    prevFlipS = -1;
                     updatePrayerUI();
                 }
             });
@@ -2429,6 +2488,17 @@
         // Expose updatePrayerUI & init ke window agar parent bisa memicu render langsung
         window.updatePrayerUI = updatePrayerUI;
         window.initPrayerMode = init;
+
+        window.addEventListener('message', function(ev) {
+            try {
+                const msg = ev.data;
+                if (!msg) return;
+                const newStyle = msg.prayer_countdown_style || (msg.settings && msg.settings.prayer_countdown_style) || (msg.data && msg.data.prayer_countdown_style);
+                if (newStyle === 'flip' || newStyle === 'biasa') {
+                    window.switchCountdownStyle(newStyle);
+                }
+            } catch (e) {}
+        });
 
         document.addEventListener('DOMContentLoaded', init);
     </script>

@@ -1557,6 +1557,9 @@
                             settings = newSettings;
                             window.settings = settings;
                         }
+                        if (settings && settings.prayer_countdown_style) {
+                            localStorage.setItem('prayer_countdown_style', settings.prayer_countdown_style);
+                        }
                         if (settings && settings.rotation_interval) {
                             rotationInterval = Math.max(1, parseInt(settings.rotation_interval)) * 1000;
                             localStorage.setItem('display_rotation_interval', settings.rotation_interval);
@@ -1566,6 +1569,22 @@
                             updateMasterFooter(settings.footer);
                         }
                         activePages = resolveActivePages(settings, progs);
+
+                        // Teruskan update pengaturan terkini langsung ke prayerFrame
+                        const pf = document.getElementById('prayerFrame');
+                        if (pf && pf.contentWindow) {
+                            try {
+                                pf.contentWindow.postMessage({
+                                    type: 'UPDATE_SETTINGS',
+                                    table: 'app_settings',
+                                    settings: settings,
+                                    data: settings
+                                }, '*');
+                                if (typeof pf.contentWindow.updatePrayerUI === 'function') {
+                                    pf.contentWindow.updatePrayerUI();
+                                }
+                            } catch(e) {}
+                        }
                         showOsd(`⚡ Pengaturan TV Diperbarui`);
                     });
                 } else if (table === 'program_infaq' || table === 'donasi_infaq') {
@@ -1702,6 +1721,10 @@
                             if (f2 && f2.contentWindow) {
                                 try { f2.contentWindow.postMessage(payload, targetOrigin); } catch(e) {}
                             }
+                            const pf = document.getElementById('prayerFrame');
+                            if (pf && pf.contentWindow) {
+                                try { pf.contentWindow.postMessage(payload, targetOrigin); } catch(e) {}
+                            }
                         }
                     }
 
@@ -1807,6 +1830,24 @@
                             break;
                         case 'UPDATE_SETTINGS':
                             handleUniversalDataUpdate({ table: 'app_settings', action: 'UPDATE', data: d });
+                            if (d.prayer_countdown_style) {
+                                localStorage.setItem('prayer_countdown_style', d.prayer_countdown_style);
+                                if (settings) settings.prayer_countdown_style = d.prayer_countdown_style;
+                                const pf = document.getElementById('prayerFrame');
+                                if (pf && pf.contentWindow) {
+                                    try {
+                                        pf.contentWindow.postMessage({
+                                            type: 'UPDATE_SETTINGS',
+                                            table: 'app_settings',
+                                            settings: settings,
+                                            data: d
+                                        }, '*');
+                                        if (typeof pf.contentWindow.updatePrayerUI === 'function') {
+                                            pf.contentWindow.updatePrayerUI();
+                                        }
+                                    } catch(e) {}
+                                }
+                            }
                             if (d.rotation_interval) {
                                 rotationInterval = Math.max(1, parseInt(d.rotation_interval)) * 1000;
                                 localStorage.setItem('display_rotation_interval', d.rotation_interval);

@@ -7,7 +7,28 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 00:35 WIB)
+## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 19:10 WIB)
+
+### ⏱️ PENYELESAIAN SINKRONISASI REALTIME DESAIN HITUNG MUNDUR SHOLAT (3D FLIP CLOCK VS MODEL BIASA) KE TV DISPLAY (Versi SW v5.8.92):
+1. **Akar Masalah yang Diselesaikan**:
+   - **Ketiadaan Auto-Save Dropdown**: Elemen `<select id="cfgCountdownStyle">` di `web-statis/admin.html` sebelumnya tidak memiliki handler `onchange="simpanPengaturanDurasiTV(true)"`, sehingga ketika admin/operator memilih opsi "Model 3D Flip Clock", pilihan tidak otomatis disimpan dan tidak memancarkan sinyal realtime ke TV.
+   - **Inversi Prioritas Precedence**: Logika `getCountdownStyle()` di layar mode sholat membaca `localStorage.getItem('prayer_countdown_style')` terlebih dahulu sebelum setting cloud dari database Supabase (`settings.prayer_countdown_style`). Akibatnya, jika TV pernah menyimpan nilai `'biasa'` di local storage, pilihan baru dari Dashboard diabaikan secara permanen.
+   - **Bridging PostMessage ke Iframe TV**: Parent display TV (`index.html`) belum meneruskan event broadcast remote `UPDATE_SETTINGS` / `prayer_countdown_style` ke dalam iframe mode sholat (`prayerFrame`), dan `prayer-mode.html` belum memiliki listener `window.addEventListener('message')`.
+2. **Perbaikan & Optimalisasi Multi-Komponen**:
+   - `web-statis/admin.html`: Menambahkan `onchange="simpanPengaturanDurasiTV(true)"` pada `<select id="cfgCountdownStyle">` agar setiap perubahan pilihan langsung tersimpan dan disiarkan ke TV tanpa menunggu penekanan tombol manual.
+   - `web-statis/js/admin/admin-jadwal-sholat.js`: Menyimpan `prayer_countdown_style` ke Supabase cloud (`SupabaseDB.saveSettingItem`) secara asinkron (`await`), menyertakan `prayer_countdown_style` ke dalam payload broadcast realtime `SupabaseDB.broadcastChange` dan `SupabaseDB.sendRemoteCommand`, serta mematikan debounce loop berulang.
+   - `web-statis/js/supabase-db.js`: Menambahkan `prayer_countdown_style: 'flip'` ke `defaultSettings`, meng-cache ke `localStorage` saat `getSettings()`, serta menyediakan fallback pembacaan mandiri dari `localStorage` jika offline.
+   - `web-statis/index.html`: Memperbarui `handleUniversalDataUpdate` agar menyimpan `prayer_countdown_style` ke `localStorage` dan meneruskan pesan langsung (`prayerFrame.contentWindow.postMessage`) ke iframe `prayer-mode.html`.
+   - `web-statis/prayer-mode.html`: Memperbaiki urutan prioritas di `getCountdownStyle()` (URL Param -> Cloud Settings -> Parent Memory Bridge -> Local Storage Fallback -> Default `'flip'`). Menambahkan listener `window.addEventListener('message')` agar gaya hitung mundur berganti instan (<50ms) tanpa perlu refresh halaman.
+   - `web-statis/preview-khutbah.html`, `public/preview-khutbah.html`, `public/preview-prayer-mode.html`, & `resources/views/prayer-mode.blade.php`: Diselaraskan dengan hierarki resolusi gaya hitung mundur yang sama.
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.92`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.92`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.92`**.
+   - Pengujian regresi otomatis: **259 / 259 tests lulus (100% PASS)** termasuk modul uji baru `[TEST 25] Countdown Sholat 3D Flip Clock & Realtime Sync Integrity` di `scripts/test-engine.js`.
+
+---
+
+## 📅 UPDATE SEBELUMNYA — 16 Oktober 2026 (Pukul 00:35 WIB)
 
 ### 💎 ADOPSI TIPOGRAFI MEWAH & BERKELAS: FONT URBANIST (BOLD 700) PADA KARTU JADWAL SHOLAT TV DISPLAY (Versi SW v5.8.91):
 1. **Pilihan Font Mewah & Berkelas (Urbanist Bold 700)**:

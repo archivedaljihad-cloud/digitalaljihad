@@ -48,6 +48,7 @@
             prayer_mode_duration: 10,
             prayer_mode_after_prayer: 10,
             prayer_mode_jumat_duration: 50,
+            prayer_countdown_style: 'flip',
             enable_dynamic_theme: true,
             enable_next_prayer_bar: true,
             live_makkah_url: 'https://www.youtube.com/watch?v=eC4LfEVxvKg',
@@ -444,6 +445,9 @@
                         if (settings.rbac_users_list) {
                             localStorage.setItem('aljihad_users_list', typeof settings.rbac_users_list === 'string' ? settings.rbac_users_list : JSON.stringify(settings.rbac_users_list));
                         }
+                        if (settings.prayer_countdown_style) {
+                            localStorage.setItem('prayer_countdown_style', settings.prayer_countdown_style);
+                        }
                     } catch (e) {}
 
                     this.setCached('settings', settings);
@@ -482,6 +486,9 @@
                 }
                 if (!fallbackSettings.pengumuman_jumat && localStorage.getItem('pengumuman_jumat_data')) {
                     fallbackSettings.pengumuman_jumat = JSON.parse(localStorage.getItem('pengumuman_jumat_data'));
+                }
+                if (!fallbackSettings.prayer_countdown_style && localStorage.getItem('prayer_countdown_style')) {
+                    fallbackSettings.prayer_countdown_style = localStorage.getItem('prayer_countdown_style');
                 }
             } catch (e) {}
 
