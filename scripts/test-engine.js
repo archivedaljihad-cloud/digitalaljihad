@@ -471,7 +471,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.92'), 'sw.js memiliki bumping versi cache terbaru v5.8.92');
+assert(swContent.includes('aljihad-signage-v5.8.93'), 'sw.js memiliki bumping versi cache terbaru v5.8.93');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -659,6 +659,22 @@ assert(prayerModeContent.includes("getCountdownStyle()") && prayerModeContent.in
 assert(prayerModeContent.includes("window.addEventListener('message'") && prayerModeContent.includes("newStyle === 'flip' || newStyle === 'biasa'"), 'prayer-mode.html mendengarkan postMessage update gaya hitung mundur');
 assert(indexTvContent.includes("prayerFrame.contentWindow.postMessage") && indexTvContent.includes("prayer_countdown_style"), 'index.html menyiarkan prayer_countdown_style ke prayerFrame iframe');
 assert(supabaseDbContent.includes("prayer_countdown_style: 'flip'") && supabaseDbContent.includes("localStorage.getItem('prayer_countdown_style')"), 'supabase-db.js meng-cache dan mengembalikan fallback prayer_countdown_style');
+
+// -------------------------------------------------------------
+// 26. AGENDA RUTIN 1-CLICK PICKER & DYNAMIC DAYS SYNC INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 26] Agenda Rutin 1-Click Picker & Dynamic Days Sync Integrity:');
+const adminAgendaContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-agenda-rutin.js'), 'utf8');
+assert(adminAgendaContent.includes('triggerAutoSaveAgendaRutin'), 'admin-agenda-rutin.js memiliki triggerAutoSaveAgendaRutin untuk auto-sync instan');
+assert(adminAgendaContent.includes('toggleWsDayPill') && adminAgendaContent.includes('triggerAutoSaveAgendaRutin()'), 'admin-agenda-rutin.js toggleWsDayPill otomatis memicu auto-save ke TV');
+assert(adminAgendaContent.includes('initAgendaRutinAutoSync'), 'admin-agenda-rutin.js menginisialisasi listener auto-save pada checkbox siklus tafsir dan toggle aktif');
+assert(adminPageContent.includes('id="wsTahsinDayPillGroup"'), 'admin.html memiliki kontainer wsTahsinDayPillGroup untuk 1-click picker');
+assert(adminPageContent.includes('id="wsTahsinSyncStatus"'), 'admin.html memiliki elemen badge wsTahsinSyncStatus untuk feedback visual sinkronisasi');
+assert(agendaContent.includes('formatHariTahsin') && agendaContent.includes('formatPekanTafsir'), 'slides/agenda-rutin.html memiliki helper formatHariTahsin dan formatPekanTafsir');
+assert(agendaContent.includes('id="waktuTahsin"') && agendaContent.includes('id="waktuTafsir"'), 'slides/agenda-rutin.html memiliki target DOM waktuTahsin dan waktuTafsir dinamis');
+assert(agendaContent.includes('SYNC_AGENDA_RUTIN'), 'slides/agenda-rutin.html mendengarkan postMessage SYNC_AGENDA_RUTIN');
+assert(pengumumanAgendaContent.includes('formatHariTahsin') && pengumumanAgendaContent.includes('formatPekanTafsir'), 'slides/pengumuman.html memiliki helper formatHariTahsin dan formatPekanTafsir');
+assert(pengumumanAgendaContent.includes('id="waktuTahsin"') && pengumumanAgendaContent.includes('id="waktuTafsir"'), 'slides/pengumuman.html memiliki target DOM waktuTahsin dan waktuTafsir dinamis');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

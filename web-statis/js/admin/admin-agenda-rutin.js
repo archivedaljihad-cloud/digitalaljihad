@@ -62,6 +62,14 @@
             return getDefaultAgendaRutinWs();
         }
 
+        let autoSaveAgendaTimer = null;
+        function triggerAutoSaveAgendaRutin() {
+            clearTimeout(autoSaveAgendaTimer);
+            autoSaveAgendaTimer = setTimeout(() => {
+                simpanAgendaRutinAdmin(true);
+            }, 300);
+        }
+
         function toggleWsDayPill(btn) {
             const isSelected = btn.classList.contains('btn-warning');
             const day = btn.getAttribute('data-day');
@@ -73,6 +81,8 @@
                 btn.className = 'btn btn-sm ws-day-pill btn-warning font-weight-bold text-dark';
                 btn.innerHTML = `<i class="fas fa-check-circle mr-1"></i> ${label}`;
             }
+            // 1-Click Auto Save: Langsung simpan dan siarkan ke TV secara instan
+            triggerAutoSaveAgendaRutin();
         }
 
         // =====================================================
@@ -348,7 +358,7 @@
             renderDashAgendaRutinWidget(data);
         }
 
-        function simpanAgendaRutinAdmin() {
+        async function simpanAgendaRutinAdmin(isSilent = false) {
             // Ambil hari aktif tahsin
             const hariAktif = [];
             document.querySelectorAll('#wsTahsinDayPillGroup .ws-day-pill.btn-warning').forEach(btn => {
@@ -397,18 +407,43 @@
                 }
             };
 
-            // Simpan ke LocalStorage
+            // Simpan ke LocalStorage lokal
             localStorage.setItem('agenda_rutin_settings', JSON.stringify(payload));
 
             // Simpan ke Supabase jika tersedia (Multi-row key-value + Realtime Broadcast)
-            if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveAgendaRutin === 'function') {
-                SupabaseDB.saveAgendaRutin(payload);
-            } else if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSettings === 'function') {
-                SupabaseDB.saveSettings({ kegiatan_rutin_settings: payload });
+            try {
+                if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveAgendaRutin === 'function') {
+                    await SupabaseDB.saveAgendaRutin(payload);
+                } else if (typeof SupabaseDB !== 'undefined' && typeof SupabaseDB.saveSettings === 'function') {
+                    await SupabaseDB.saveSettings({ kegiatan_rutin_settings: payload });
+                }
+            } catch(e) {
+                console.warn('Gagal simpan agenda rutin ke Supabase:', e);
             }
 
             renderDashAgendaRutinWidget(payload);
-            alert('Alhamdulillah! Jadwal Agenda Rutin Masjid berhasil disimpan dan langsung disinkronkan ke Layar TV!');
+
+            // Update badge status sync jika elemen tersedia
+            const statusEl = document.getElementById('wsTahsinSyncStatus');
+            if (statusEl) {
+                const jam = new Date().toLocaleTimeString('id-ID');
+                statusEl.style.display = 'block';
+                statusEl.innerHTML = `<i class="fas fa-check-circle text-success mr-1"></i> Tersinkron ke Layar TV: ${payload.tahsin.hari_aktif.join(', ')} (${jam})`;
+            }
+
+            if (!isSilent) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Agenda Rutin Tersimpan!',
+                        html: 'Jadwal Agenda Rutin Masjid berhasil disimpan dan langsung disiarkan ke Layar TV.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    alert('Alhamdulillah! Jadwal Agenda Rutin Masjid berhasil disimpan dan langsung disinkronkan ke Layar TV!');
+                }
+            }
         }
 
         function renderDashAgendaRutinWidget(data) {
@@ -468,6 +503,26 @@
             }
         }
 
-        
-        // =========================================================================
-        // =========================================================================
+        function initAgendaRutinAutoSync() {
+            // Pasang auto-save pada checkbox pekan tafsir
+            document.querySelectorAll('.ws-tafsir-pekan').forEach(cb => {
+                cb.addEventListener('change', () => triggerAutoSaveAgendaRutin());
+            });
+
+            // Pasang auto-save pada toggle switch aktif di TV
+            ['wsYasinEnabled', 'wsKajianAhadEnabled', 'wsTahsinEnabled', 'wsTafsirEnabled'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', () => triggerAutoSaveAgendaRutin());
+            });
+        }
+
+        // Expose ke global window
+        window.toggleWsDayPill = toggleWsDayPill;
+        window.simpanAgendaRutinAdmin = simpanAgendaRutinAdmin;
+        window.loadAgendaRutinAdmin = loadAgendaRutinAdmin;
+        window.syncKajianPekanIniKeAgendaRutin = syncKajianPekanIniKeAgendaRutin;
+        window.triggerAutoSaveAgendaRutin = triggerAutoSaveAgendaRutin;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initAgendaRutinAutoSync();
+        });

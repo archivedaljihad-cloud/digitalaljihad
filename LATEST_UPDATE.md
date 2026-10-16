@@ -7,7 +7,36 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
-## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 19:10 WIB)
+## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 19:50 WIB)
+
+### 🕌 PENYELESAIAN SINKRONISASI 1-CLICK PICKER HARI TAHSIN AL-QUR'AN & SIKLUS PEKAN TAFSIR KE LAYAR TV DISPLAY (Versi SW v5.8.93):
+1. **Akar Masalah yang Diselesaikan**:
+   - **Teks Jadwal Statis di Slide TV Display**: Pada slide agenda TV (`web-statis/slides/agenda-rutin.html` & `web-statis/slides/pengumuman.html`), markup elemen `#waktuTahsin` dan `#waktuTafsir` ter-hardcode teks statis: *"Senin, Rabu, Sabtu"* dan *"Setiap pekan 2 dan pekan ke 4"*. Fungsi `loadAgendaData()` sebelumnya hanya mengisi judul, pembina, dan deskripsi, tetapi **tidak pernah memperbarui elemen waktu/jadwal DOM**. Akibatnya, perubahan hari/siklus dari Dashboard Admin diabaikan secara visual di TV.
+   - **Ketiadaan Auto-Save pada 1-Click Picker**: Tombol *1-Click Day Pill* (`toggleWsDayPill`) di `web-statis/js/admin/admin-agenda-rutin.js` sebelumnya hanya mengubah class tampilan tombol pill lokal tanpa memicu penyimpanan otomatis ke Cloud Database Supabase (`app_settings` / `kegiatan_rutin_settings`) maupun penyiaran realtime ke TV display. Checkbox siklus pekan Tafsir (`.ws-tafsir-pekan`) dan toggle switch aktif TV juga belum memiliki listener auto-save otomatis.
+   - **Highlight Hari Tahsin Ter-hardcode**: Fungsi `applySmartHighlights()` di slide TV menguji hari aktif Tahsin dengan logika statis `(day === 1 || day === 3 || day === 6)` sehingga badge status dan border aktif glow tidak bereaksi dinamis sesuai pilihan hari dari Dashboard Admin.
+
+2. **Perbaikan & Optimalisasi Multi-Komponen**:
+   - `web-statis/slides/agenda-rutin.html` & `web-statis/slides/pengumuman.html`:
+     - Menambahkan fungsi helper `formatHariTahsin(hariAktif)` dan `formatPekanTafsir(pekanAktif)` dengan mapping hari bahasa Indonesia yang rapi.
+     - Memperbarui `loadAgendaData()` agar merender secara dinamis jadwal hari dan waktu ke `#waktuTahsin`, `#waktuTafsir`, `#waktuYasin`, dan `#waktuKajianAhad` lengkap dengan sanitasi `escapeHtml()`.
+     - Memperbaiki `applySmartHighlights(agendaData)` agar menguji kecocokan hari ini secara dinamis terhadap array `agendaData.tahsin.hari_aktif` dan `agendaData.tafsir.pekan_aktif`.
+     - Menambahkan listener `window.addEventListener('message')` untuk aksi `SYNC_AGENDA_RUTIN` sehingga pembaruan dari parent TV langsung ter-render seketika.
+   - `web-statis/js/admin/admin-agenda-rutin.js`:
+     - Membuat fungsi `triggerAutoSaveAgendaRutin()` dengan debounce 300ms untuk auto-save instan yang efisien dan responsif.
+     - Memanggil `triggerAutoSaveAgendaRutin()` seketika saat tombol pill hari Tahsin diklik (`toggleWsDayPill`).
+     - Mengubah `simpanAgendaRutinAdmin()` menjadi `async` dengan `await SupabaseDB.saveAgendaRutin(payload)` agar data tersimpan mutlak ke cloud Supabase, cache `localStorage`, serta menyiarkan payload realtime.
+     - Menambahkan inisialisasi `initAgendaRutinAutoSync()` yang memasang event listener `change` pada checkbox pekan Tafsir (`.ws-tafsir-pekan`) dan toggle switch aktif TV (`wsYasinEnabled`, `wsKajianAhadEnabled`, `wsTahsinEnabled`, `wsTafsirEnabled`).
+   - `web-statis/admin.html`:
+     - Menambahkan elemen badge status sinkronisasi `#wsTahsinSyncStatus` di bawah kontainer `#wsTahsinDayPillGroup` sebagai feedback visual langsung bagi pengurus/admin saat hari diubah.
+
+3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.93`)**:
+   - Versi Service Worker dinaikkan ke **`aljihad-signage-v5.8.93`** di `web-statis/sw.js`.
+   - Logika pembersihan cache di `web-statis/js/admin/admin-settings.js` diselaraskan ke **`aljihad-signage-v5.8.93`**.
+   - Pengujian regresi otomatis: **269 / 269 tests lulus (100% PASS)** termasuk modul uji baru `[TEST 26] Agenda Rutin 1-Click Picker & Dynamic Days Sync Integrity` di `scripts/test-engine.js`.
+
+---
+
+## 📅 UPDATE SEBELUMNYA — 16 Oktober 2026 (Pukul 19:10 WIB)
 
 ### ⏱️ PENYELESAIAN SINKRONISASI REALTIME DESAIN HITUNG MUNDUR SHOLAT (3D FLIP CLOCK VS MODEL BIASA) KE TV DISPLAY (Versi SW v5.8.92):
 1. **Akar Masalah yang Diselesaikan**:
