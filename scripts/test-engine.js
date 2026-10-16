@@ -1,3 +1,5 @@
+// Prayer fixtures are wall-clock WIB, independent of CI/host timezone.
+process.env.TZ = 'Asia/Jakarta';
 /**
  * SUITE PENGUJIAN REGRESI OTOMATIS - DIGITAL SIGNAGE MASJID (DIGITALv304)
  * Menjalankan verifikasi komprehensif sebelum setiap kali deployment:
@@ -282,8 +284,8 @@ const rlsFixContent = fs.readFileSync(path.join(path.dirname(baseDir), 'database
 const rlsHardenedContent = fs.readFileSync(path.join(path.dirname(baseDir), 'database/supabase_rls_hardened.sql'), 'utf8');
 assert(!rlsFixContent.includes('GRANT DELETE ON public.users TO anon'), 'supabase_rls_security_fix.sql tidak memberikan hak DELETE users kepada anon');
 assert(!rlsHardenedContent.includes('GRANT DELETE ON public.users TO anon'), 'supabase_rls_hardened.sql tidak memberikan hak DELETE users kepada anon');
-assert(rlsHardenedContent.includes('REVOKE DELETE, TRUNCATE, INSERT, UPDATE ON public.users FROM anon'), 'supabase_rls_hardened.sql mencabut seluruh hak destruktif users dari anon');
-assert(rlsHardenedContent.includes('Public read-only for users'), 'supabase_rls_hardened.sql menetapkan policy users read-only untuk publik');
+assert(rlsHardenedContent.includes('REVOKE ALL ON TABLE public.%I FROM PUBLIC, anon, authenticated'), 'supabase_rls_hardened.sql mencabut seluruh hak destruktif users dari anon');
+assert(rlsHardenedContent.includes('signage_users_read') && rlsHardenedContent.includes('GRANT SELECT (id, name, email, role_id, created_at)'), 'supabase_rls_hardened.sql membatasi pembacaan users tanpa kolom password');
 
 // Verifikasi Multi-Device Realtime Auth Synchronization & Fluid Layout
 assert(loginContent.includes('SYNC_AUTH_USERS') && loginContent.includes('SupabaseDB.onRemoteCommand'), 'login.html memiliki listener realtime broadcast SYNC_AUTH_USERS');
@@ -471,7 +473,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.93'), 'sw.js memiliki bumping versi cache terbaru v5.8.93');
+assert(swContent.includes('aljihad-signage-v5.8.94'), 'sw.js memiliki bumping versi cache terbaru v5.8.94');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -529,7 +531,7 @@ assert(supabaseDbContent.includes('cloudConfirmed'), 'supabase-db.js memverifika
 assert(supabaseDbContent.includes('debounceTimers = new Map()'), 'supabase-db.js memisahkan timer debounce per-tabel agar mutasi dua tabel tidak saling membatalkan');
 assert(supabaseDbContent.includes('tableEventQueues = new Map()'), 'supabase-db.js memiliki antrean batch buffer per-tabel agar seluruh baris mutasi tersampaikan');
 assert(supabaseDbContent.includes('getTvDeviceId'), 'supabase-db.js mendukung identifikasi dinamis perangkat TV Display');
-assert(indexHtmlContent.includes('SLIDE_RENDER_CONFIRMED'), 'index.html mendengarkan konfirmasi render selesai dari slide iframe');
+assert(indexHtmlContent.includes('acceptTvRenderConfirmation') && supabaseDbContent.includes('SLIDE_RENDER_CONFIRMED'), 'index.html mendengarkan konfirmasi render selesai dari slide iframe');
 assert(supabaseDbContent.includes('recentSignatures = new Map()'), 'supabase-db.js memiliki ring buffer deduplikasi multi-track 250ms');
 assert(supabaseDbContent.includes('sendTvAcknowledgment') && supabaseDbContent.includes('onTvAcknowledgment'), 'supabase-db.js memiliki protokol acknowledgment (ACK) dua arah TV Display');
 assert(indexHtmlContent.includes('isPrayerModeActive'), 'index.html memiliki proteksi mode sholat/Yaasiin/kajian aktif agar tidak terganggu reload saat data berubah');

@@ -3792,6 +3792,12 @@
                     iconEl.className = 'fas fa-spinner fa-spin';
                     iconEl.style.color = '#93c5fd';
                 }
+            } else if (type === 'tv_received' || type === 'tv_unconfirmed') {
+                toast.classList.add('toast-saving');
+                if (iconEl) {
+                    iconEl.className = type === 'tv_received' ? 'fas fa-hourglass-half' : 'fas fa-exclamation-circle';
+                    iconEl.style.color = '#fbbf24';
+                }
             } else if (type === 'tv_synced') {
                 toast.classList.add('toast-tv');
                 if (iconEl) {
@@ -3885,7 +3891,13 @@
             if (window.SupabaseDB && typeof window.SupabaseDB.onTvAcknowledgment === 'function') {
                 window.SupabaseDB.onTvAcknowledgment((ack) => {
                     console.log('[Petugas Mobile] Konfirmasi penerimaan TV diterima:', ack);
-                    showToastStatus("Alhamdulillah! Layar TV telah menerima pembaruan secara realtime.", "tv_synced");
+                    if (ack.action === 'APPLIED') {
+                        showToastStatus('Pembaruan selesai dirender pada TV ' + ack.device_id + '.', 'tv_synced');
+                    } else if (ack.action === 'RECEIVED') {
+                        showToastStatus('Data diterima TV ' + ack.device_id + '; menunggu konfirmasi tampilan.', 'tv_received');
+                    } else if (ack.action === 'RENDER_UNCONFIRMED') {
+                        showToastStatus('Data sudah dikirim; tampilan TV ' + ack.device_id + ' belum terkonfirmasi.', 'tv_unconfirmed');
+                    }
                 });
             }
 

@@ -347,8 +347,8 @@
          * Ambil pengaturan umum (app_settings) dari Supabase Cloud
          * Mengambil seluruh baris konfigurasi (row 1 + baris key-value dinamis)
          */
-        async getSettings(forceRefresh = false) {
-            if (!forceRefresh) {
+        async getSettings(forceRefresh = false, requireCloud = false) {
+            if (!forceRefresh && !requireCloud) {
                 const cached = this.getCached('settings');
                 if (cached) return cached;
             }
@@ -456,6 +456,8 @@
             } catch (err) {
                 console.warn('Gagal membaca app_settings dari Supabase:', err);
             }
+
+            if (requireCloud) throw new Error('Data settings cloud belum terkonfirmasi');
 
             // Fallback ke localStorage atau default
             const cached = localStorage.getItem('cached_app_settings');
@@ -1220,8 +1222,8 @@
         /**
          * Ambil jadwal sholat dari tabel jadwal_sholat
          */
-        async getJadwalSholat(forceRefresh = false) {
-            if (!forceRefresh) {
+        async getJadwalSholat(forceRefresh = false, requireCloud = false) {
+            if (!forceRefresh && !requireCloud) {
                 const cached = this.getCached('jadwal_sholat');
                 if (cached) return cached;
             }
@@ -1249,6 +1251,8 @@
             } catch (restErr) {
                 console.warn('REST fallback jadwal_sholat:', restErr);
             }
+
+            if (requireCloud) throw new Error('Jadwal cloud belum terkonfirmasi');
 
             const cached = localStorage.getItem('cached_jadwal_sholat');
             if (cached) {
@@ -2205,6 +2209,12 @@
                 timestamp: timestamp
             };
 
+            this._sentTvEvents = this._sentTvEvents || new Map();
+            for (const [id, sent] of this._sentTvEvents) {
+                if (timestamp - sent.timestamp > 120000) this._sentTvEvents.delete(id);
+            }
+            this._sentTvEvents.set(eventId, { table: String(table).toLowerCase(), timestamp });
+
             console.log(`📡 [Universal Sync] Memancarkan pembaruan realtime [${table} - ${action}]:`, payload);
 
             // Track 1: WebSocket Broadcast ke seluruh TV via Remote Channel Supabase
@@ -2251,6 +2261,7 @@
                     window.parent.postMessage({ type: 'DATA_UPDATED', ...payload }, targetOrigin);
                 }
             } catch (e) {}
+            return eventId;
         },
 
         /**
@@ -2307,14 +2318,65 @@
         /**
          * Pasang pendengar konfirmasi penerimaan TV di dashboard Admin / Petugas
          */
+        isOwnTvAcknowledgment(ack) {
+            const sent = ack && this._sentTvEvents && this._sentTvEvents.get(ack.event_id);
+            if (!(sent && ack.device_id && ack.table === sent.table &&
+                Date.now() - sent.timestamp <= 120000 &&
+                ['RECEIVED', 'APPLIED', 'RENDER_UNCONFIRMED'].includes(ack.action))) return false;
+            sent.devices = sent.devices || new Map();
+            const previous = sent.devices.get(ack.device_id);
+            if (previous === 'APPLIED' || previous === ack.action ||
+                (previous === 'RENDER_UNCONFIRMED' && ack.action === 'RECEIVED')) return false;
+            sent.devices.set(ack.device_id, ack.action);
+            return true;
+        },
+
         onTvAcknowledgment(callback) {
             const channel = this.getRemoteChannel();
             if (!channel) return null;
             channel.on('broadcast', { event: 'tv_ack' }, ({ payload }) => {
-                if (typeof callback === 'function' && payload) {
+                if (typeof callback === 'function' && this.isOwnTvAcknowledgment(payload)) {
                     callback(payload);
                 }
             });
+            return true;
+        },
+
+        // A timeout proves only that render could not be confirmed. It must never turn green.
+        beginTvRenderConfirmation(event, frame, isStillVisible, timeoutMs = 10000) {
+            if (!event.event_id) return;
+            this._pendingTvAcks = this._pendingTvAcks || new Map();
+            for (const [id, pending] of this._pendingTvAcks) {
+                if (id === event.event_id || pending.table === event.table) {
+                    clearTimeout(pending.timer);
+                    this._pendingTvAcks.delete(id);
+                }
+            }
+            const pending = {
+                table: event.table, frame, source: frame && frame.contentWindow,
+                url: frame && frame.src, isStillVisible,
+                devId: this.getTvDeviceId()
+            };
+            pending.timer = setTimeout(() => {
+                if (this._pendingTvAcks.get(event.event_id) !== pending) return;
+                this._pendingTvAcks.delete(event.event_id);
+                this.sendTvAcknowledgment(pending.devId, event.event_id, pending.table, 'RENDER_UNCONFIRMED');
+            }, timeoutMs);
+            this._pendingTvAcks.set(event.event_id, pending);
+            this.sendTvAcknowledgment(pending.devId, event.event_id, pending.table, 'RECEIVED');
+        },
+
+        acceptTvRenderConfirmation(message) {
+            if (!message || message.origin !== window.location.origin || !message.data ||
+                message.data.type !== 'SLIDE_RENDER_CONFIRMED') return false;
+            const data = message.data;
+            const pending = this._pendingTvAcks && this._pendingTvAcks.get(data.event_id);
+            if (!pending || !pending.source || message.source !== pending.source ||
+                data.table !== pending.table || pending.frame.src !== pending.url ||
+                !pending.isStillVisible()) return false;
+            clearTimeout(pending.timer);
+            this._pendingTvAcks.delete(data.event_id);
+            this.sendTvAcknowledgment(pending.devId, data.event_id, pending.table, 'APPLIED');
             return true;
         },
 
@@ -2396,31 +2458,21 @@
                                 batch: eventsToDispatch,
                                 batch_count: eventsToDispatch.length
                             });
-                            callback(enriched);
-
-                            // Jika berada di iframe, konfirmasikan render ke window induk setelah repaint
-                            if (isInsideIframe && enriched.event_id) {
-                                try {
-                                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
-                                    if (typeof window.requestAnimationFrame === 'function') {
-                                        window.requestAnimationFrame(() => {
-                                            window.parent.postMessage({
-                                                type: 'SLIDE_RENDER_CONFIRMED',
-                                                event_id: enriched.event_id,
-                                                table: enriched.table || table,
-                                                timestamp: Date.now()
-                                            }, targetOrigin);
-                                        });
-                                    } else {
-                                        window.parent.postMessage({
-                                            type: 'SLIDE_RENDER_CONFIRMED',
-                                            event_id: enriched.event_id,
-                                            table: enriched.table || table,
-                                            timestamp: Date.now()
-                                        }, targetOrigin);
-                                    }
-                                } catch (e) {}
-                            }
+                            // Undefined (including legacy fire-and-forget handlers) is NOT proof of render.
+                            Promise.resolve().then(() => callback(enriched)).then(async (result) => {
+                                if (!isInsideIframe || !enriched.event_id || result !== true) return;
+                                if (typeof window.requestAnimationFrame !== 'function') return;
+                                await new Promise(resolve => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
+                                if (document.visibilityState === 'hidden') return;
+                                window.parent.postMessage({
+                                    type: 'SLIDE_RENDER_CONFIRMED',
+                                    event_id: enriched.event_id,
+                                    table: enriched.table || table,
+                                    timestamp: Date.now()
+                                }, window.location.origin);
+                            }).catch(err => {
+                                console.warn('[SupabaseDB] Render belum terkonfirmasi:', err);
+                            });
                         } catch (err) {
                             console.error(`[SupabaseDB.onDataChange] Callback error on table ${table}:`, err);
                         }

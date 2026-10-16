@@ -809,18 +809,18 @@
         }
 
         // Inisialisasi Data dari Supabase / Parent TV Memory
-        async function loadData() {
+        async function loadData(forceFresh = false) {
             try {
                 // 1. Settings (Bridge dari Parent Memory jika ada di iframe TV)
                 let settings = null;
                 try {
-                    if (window.parent && window.parent !== window && window.parent.settings) {
+                    if (!forceFresh && window.parent && window.parent !== window && window.parent.settings) {
                         settings = window.parent.settings;
                     }
                 } catch (e) {}
 
                 if (!settings && window.SupabaseDB) {
-                    settings = await SupabaseDB.getSettings();
+                    settings = await SupabaseDB.getSettings(forceFresh, forceFresh);
                 }
                 currentSettings = settings;
 
@@ -844,19 +844,22 @@
                 // 2. Jadwal Sholat (Bridge dari Parent Memory jika ada)
                 let jadwal = null;
                 try {
-                    if (window.parent && window.parent !== window && Array.isArray(window.parent.jadwalList) && window.parent.jadwalList.length > 0) {
+                    if (!forceFresh && window.parent && window.parent !== window && Array.isArray(window.parent.jadwalList) && window.parent.jadwalList.length > 0) {
                         jadwal = window.parent.jadwalList;
                     }
                 } catch (e) {}
 
                 if (!jadwal && window.SupabaseDB) {
-                    jadwal = await SupabaseDB.getJadwalSholat();
+                    jadwal = await SupabaseDB.getJadwalSholat(forceFresh, forceFresh);
                 }
                 if (jadwal && jadwal.length > 0) {
                     renderJadwalCards(jadwal);
+                    return !!currentSettings;
                 }
+                return false;
             } catch (err) {
                 console.error('Gagal memuat data utama:', err);
+                return false;
             }
         }
 
@@ -989,7 +992,7 @@
                 SupabaseDB.onDataChange((payload) => {
                     const tbl = (payload.table || '').toLowerCase();
                     if (tbl === 'app_settings' || tbl === 'jadwal_sholat' || tbl === 'running_text') {
-                        loadData();
+                        return loadData(true);
                     }
                 });
             } else if (window.SupabaseDB && typeof SupabaseDB.subscribeRealtime === 'function') {

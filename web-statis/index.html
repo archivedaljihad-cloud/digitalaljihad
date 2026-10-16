@@ -1530,7 +1530,7 @@
             // =====================================================
             // UNIVERSAL REALTIME DATA HANDLER UNTUK DISPLAY TV
             // =====================================================
-            function handleUniversalDataUpdate(event) {
+            async function handleUniversalDataUpdate(event) {
                 const table = (event.table || '').toLowerCase();
                 const action = event.action || 'UPDATE';
                 const data = event.data || {};
@@ -1541,18 +1541,11 @@
                     window.SupabaseDB.invalidateCache(table);
                 }
 
-                // 1. Sebarkan ke seluruh active frame (frameA, frameB, prayerFrame)
-                broadcastToActiveFrames({
-                    type: 'DATA_UPDATED',
-                    table: table,
-                    action: action,
-                    data: data,
-                    payload: event
-                });
+                let masterRefresh = Promise.resolve();
 
                 // 2. Refresh komponen internal TV master jika berkaitan
                 if (table === 'app_settings') {
-                    Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
+                    masterRefresh = Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
                         if (newSettings) {
                             settings = newSettings;
                             window.settings = settings;
@@ -1588,13 +1581,13 @@
                         showOsd(`⚡ Pengaturan TV Diperbarui`);
                     });
                 } else if (table === 'program_infaq' || table === 'donasi_infaq') {
-                    Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
+                    masterRefresh = Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([currSettings, progs]) => {
                         if (currSettings) settings = currSettings;
                         activePages = resolveActivePages(settings, progs);
                         showOsd('⚡ Infaq Diperbarui (Realtime)');
                     });
                 } else if (table === 'jadwal_sholat') {
-                    SupabaseDB.getJadwalSholat().then(list => {
+                    masterRefresh = SupabaseDB.getJadwalSholat().then(list => {
                         jadwalList = list;
                         if (typeof updatePrayerTimesBar === 'function') {
                             updatePrayerTimesBar();
@@ -1606,7 +1599,7 @@
                         jumatPetugas = Object.assign({}, jumatPetugas || {}, data);
                         window.jumatPetugas = jumatPetugas;
                     }
-                    SupabaseDB.getSholatJumat().then(petugas => {
+                    masterRefresh = SupabaseDB.getSholatJumat().then(petugas => {
                         if (petugas) {
                             jumatPetugas = petugas;
                             window.jumatPetugas = jumatPetugas;
@@ -1623,7 +1616,7 @@
                     });
                     showOsd("⚡ Petugas Jum'at Diperbarui");
                 } else if (table === 'slides' || table === 'slides_custom_data') {
-                    SupabaseDB.getSlides().then(slides => {
+                    masterRefresh = SupabaseDB.getSlides().then(slides => {
                         broadcastToActiveFrames({
                             type: 'DATA_UPDATED',
                             table: 'slides',
@@ -1639,7 +1632,7 @@
                         updateMasterFooter(data.text);
                     }
                 } else if (table === 'quick_petugas') {
-                    Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
+                    masterRefresh = Promise.all([SupabaseDB.getSettings(), SupabaseDB.getProgramInfaq()]).then(([newSettings, progs]) => {
                         if (newSettings) {
                             settings = newSettings;
                             window.settings = settings;
@@ -1656,6 +1649,24 @@
                         showOsd('⚡ Input Petugas Mobile Diterima');
                     });
                 }
+
+                try {
+                    await masterRefresh;
+                } catch (err) {
+                    console.warn('[TV] Master refresh gagal; render tidak dikonfirmasi:', err);
+                    return;
+                }
+                const visibleFrame = () => isPrayerModeActive
+                    ? document.getElementById('prayerFrame')
+                    : document.querySelector('#frame1.active, #frame2.active');
+                const expectedFrame = visibleFrame();
+                SupabaseDB.beginTvRenderConfirmation(event, expectedFrame, () =>
+                    document.visibilityState !== 'hidden' && visibleFrame() === expectedFrame);
+                // Register pending ACK BEFORE dispatch; standby/hidden frames cannot confirm it.
+                broadcastToActiveFrames({
+                    type: 'DATA_UPDATED', event_id: event.event_id,
+                    table, action, data, payload: event
+                });
 
                 // 3. SEGERA RE-RENDER JIKA SLIDE YANG SEDANG TAYANG DI TV RELEVAN DENGAN DATA
                 // Agar penginputan data di laptop/HP seketika (<100ms) tayang di layar TV masjid
@@ -1728,47 +1739,14 @@
                         }
                     }
 
-                    // 4. Konfirmasi Penerimaan & Render TV (TV Acknowledgment) ke Cloud
-                    // Menunggu sinyal konfirmasi render selesai dari iframe slide (SLIDE_RENDER_CONFIRMED),
-                    // dengan fallback aman jika slide tidak memiliki event handler render aktif.
-                    if (event.event_id && window.SupabaseDB && typeof window.SupabaseDB.sendTvAcknowledgment === 'function') {
-                        const devId = (typeof window.SupabaseDB.getTvDeviceId === 'function') ? window.SupabaseDB.getTvDeviceId() : 'TV_MASJID_UTAMA';
-                        const evtId = event.event_id;
-                        const ackTbl = table;
-
-                        if (!window._pendingTvAcks) window._pendingTvAcks = new Map();
-
-                        // Pasang timer fallback (600ms): jika iframe tidak mengembalikan konfirmasi render (misal mode sholat aktif / slide statis),
-                        // kirim acknowledgment fallback agar status cloud tetap terkonfirmasi.
-                        const fallbackTimer = setTimeout(() => {
-                            if (window._pendingTvAcks && window._pendingTvAcks.has(evtId)) {
-                                window._pendingTvAcks.delete(evtId);
-                                window.SupabaseDB.sendTvAcknowledgment(devId, evtId, ackTbl, 'APPLIED_FALLBACK');
-                            }
-                        }, 600);
-
-                        window._pendingTvAcks.set(evtId, { timer: fallbackTimer, devId, table: ackTbl });
-                    }
                 } catch (e) {
                     console.warn('[Display TV] Quick refresh active slide error:', e);
                 }
             }
 
-            // Pasang Pendengar Konfirmasi Render dari Iframe Slide (SLIDE_RENDER_CONFIRMED)
-            window.addEventListener('message', (e) => {
-                if (!e.data) return;
-                if (e.data.type === 'SLIDE_RENDER_CONFIRMED' && e.data.event_id) {
-                    const evtId = e.data.event_id;
-                    if (window._pendingTvAcks && window._pendingTvAcks.has(evtId)) {
-                        const pending = window._pendingTvAcks.get(evtId);
-                        clearTimeout(pending.timer);
-                        window._pendingTvAcks.delete(evtId);
-                        if (window.SupabaseDB && typeof window.SupabaseDB.sendTvAcknowledgment === 'function') {
-                            window.SupabaseDB.sendTvAcknowledgment(pending.devId, evtId, pending.table || e.data.table || 'all', 'APPLIED');
-                            console.log(`📺 [Display TV] Konfirmasi Render Iframe Diterima & ACK Terkirim: ${pending.devId} -> ${evtId} [APPLIED]`);
-                        }
-                    }
-                }
+            // Only the expected, currently visible, same-origin frame may confirm render.
+            window.addEventListener('message', (event) => {
+                if (window.SupabaseDB) SupabaseDB.acceptTvRenderConfirmation(event);
             });
 
             // Pasang Pendengar Universal Realtime (Postgres Changes, Remote Broadcast, Local Channel, Storage)

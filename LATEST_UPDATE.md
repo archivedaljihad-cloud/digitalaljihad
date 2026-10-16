@@ -7,6 +7,49 @@
 > 🎯 **AGENDA SESI BARU: Modularisasi Script Node.js**
 > Pengguna membuka sesi percakapan baru dengan judul Modularisasi Script Node.js untuk mengeksekusi skrip otomasi Node.js lokal guna memecah blok JavaScript monolitik di web-statis/admin.html (594 KB) menjadi modul-modul independen (js/admin/*.js) secara aman, instan, dan 100% hemat kuota token AI. Versi aktif saat ini adalah v5.8.44, 89/89 tests lolos, dan produksi Cloudflare berjalan normal.
 
+## Perbaikan terisolasi — 16 Oktober 2026 — v5.8.94 (kode diuji; RLS cloud belum diaktifkan)
+
+- Backup SEBELUM perubahan: `/workspace/backups/digitalaljihad-before-fix-20261016.tar.gz`.
+  SHA-256 `a816612827325817ce92bd72c8d2d6df24a4c5b90ccdff35a7d0a019eeaaa40a`;
+  gzip dan isi 887 berkas diverifikasi. Backup kode bukan backup database cloud.
+- `web-statis/js/supabase-db.js`, `index.html`, `petugas.html`, `modeinput.html`:
+  timeout tidak lagi menghasilkan APPLIED_FALLBACK. Status RECEIVED berbeda dari APPLIED
+  dan RENDER_UNCONFIRMED. Parent memvalidasi origin, source frame aktif, tabel, ID event,
+  URL frame dan visibilitas. Status pengurus hanya menerima ACK untuk event yang dikirim
+  browser tersebut; ACK terlambat tidak menurunkan status yang sudah APPLIED.
+- Callback iframe wajib mengembalikan Promise/boolean true setelah render selesai;
+  parent mendapat konfirmasi sesudah dua requestAnimationFrame, bukan saat fetch baru dimulai.
+  Handler legacy yang return undefined tidak boleh mengklaim selesai render.
+- `slides/utama.html`: kontrak konfirmasi eksplisit setelah settings/jadwal cloud terbaru
+  berhasil dibaca dan DOM diperbarui. Fallback offline tetap tersedia tetapi bukan bukti sync.
+  Slide lain dan prayer-mode legacy tetap menerima pembaruan seperti sebelumnya; statusnya
+  belum terkonfirmasi sampai loader masing-masing menyediakan bukti render eksplisit.
+  Ini memastikan sistem tidak mengklaim keberhasilan yang belum terbukti.
+- `database/supabase_rls_hardened.sql`: migrasi transaksional yang mencabut izin anonim
+  untuk mutasi, mengganti policy lama, dan membatasi tulis melalui Supabase Auth +
+  app_metadata.signage_role dari server. `supabase_rls_security_fix.sql` lama diblokir
+  sebelum DDL. Baca `database/RLS_MIGRATION.md`: frontend lama masih memakai anon key,
+  sehingga migrasi DILARANG diaktifkan sebelum autentikasi pengurus dimigrasikan dan
+  backup database diverifikasi. Tidak ada perubahan tabel/kolom/data cloud dalam patch.
+- `sw.js`, `js/admin/admin-settings.js`, `admin.html`: versi cache/aset v5.8.94.
+- `scripts/test-tv-render-sync.js`: menjalankan protokol asli dengan async renderer,
+  timeout, origin/source/visibility, duplikasi, korelasi ACK, dan fallback offline.
+- `scripts/test-rls-security.js`: PostgreSQL WASM sementara (@electric-sql/pglite, dev-only),
+  menguji pengaman migrasi, izin anonim, pembatasan peran dan idempotensi SQL asli.
+  `npm install` diperlukan untuk dependensi tes baru; tidak dibundel ke web-statis.
+- `scripts/test-engine.js`: fixture waktu WIB dibuat deterministik terlepas timezone host;
+  pemeriksaan lama disesuaikan dengan policy dan lokasi handler ACK yang baru.
+- Digabungkan dengan GitHub main `a00e1d4` (pembaruan countdown dan agenda tetap dipertahankan).
+  Snapshot GitHub sebelum penggabungan: `/workspace/backups/digitalaljihad-github-before-fix-a00e1d4.tar.gz`,
+  SHA-256 `23b7b3227e092a238602d03de6095e3abb3734f8a91900d7cda21060311b7f82`.
+- Validasi setelah penggabungan: 269 pemeriksaan regresi, 8 autentikasi, 31 protokol TV,
+  dan 23 pemeriksaan SQL PostgreSQL lulus. Browser lokal membuktikan data lambat tidak
+  dikonfirmasi pada 600ms, APPLIED sesudah DOM berubah, dan offline hanya UNCONFIRMED.
+- Tidak ada rute baru atau kolom database baru. Uji browser dilakukan dengan API simulasi
+  lokal dan seluruh akses keluar diblokir; tidak ada mutasi situs atau database produksi.
+
+---
+
 ## ✨ UPDATE TERBARU — 16 Oktober 2026 (Pukul 19:50 WIB)
 
 ### 🕌 PENYELESAIAN SINKRONISASI 1-CLICK PICKER HARI TAHSIN AL-QUR'AN & SIKLUS PEKAN TAFSIR KE LAYAR TV DISPLAY (Versi SW v5.8.93):

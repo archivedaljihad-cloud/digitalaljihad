@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "test": "node scripts/test-engine.js && node scripts/test-auth-security.js",
+        "test": "node scripts/test-engine.js && node scripts/test-auth-security.js && node scripts/test-tv-render-sync.js && node scripts/test-rls-security.js",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -19,5 +19,8 @@
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.15.2",
         "sass-loader": "^8.0.0"
+    },
+    "devDependencies": {
+        "@electric-sql/pglite": "0.5.10"
     }
 }
