@@ -22,12 +22,12 @@
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    // Kompresi otomatis proporsional (maks 550x700 px, kualitas 0.82)
+                    // Kompresi otomatis hemat kuota (maks 360x480 px, kualitas 0.75, ukuran <30KB)
                     const canvas = document.createElement('canvas');
                     let w = img.width;
                     let h = img.height;
-                    const maxW = 550;
-                    const maxH = 700;
+                    const maxW = 360;
+                    const maxH = 480;
                     if (w > maxW || h > maxH) {
                         if (w / h > maxW / maxH) {
                             h = Math.round((h * maxW) / w);
@@ -42,7 +42,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, w, h);
 
-                    const compressed = canvas.toDataURL('image/jpeg', 0.82);
+                    const compressed = canvas.toDataURL('image/jpeg', 0.75);
                     jumatFotoImamBase64 = compressed;
 
                     const prevForm = document.getElementById('jumatFotoPreviewImg');

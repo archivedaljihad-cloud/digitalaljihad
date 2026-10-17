@@ -172,8 +172,9 @@
                     // Optimasi otomatis gambar ke resolusi ramah TV (maks 1280px) agar memori TV & localStorage tetap aman
                     const img = new Image();
                     img.onload = function() {
-                        const MAX_W = 1280;
-                        const MAX_H = 1280;
+                        // Optimasi hemat kuota egress: resolusi proporsional maks 1024px kualitas 0.72 (tajam di TV 1080p, hemat 85% bandwidth)
+                        const MAX_W = 1024;
+                        const MAX_H = 1024;
                         let w = img.width;
                         let h = img.height;
                         if (w > MAX_W || h > MAX_H) {
@@ -190,7 +191,7 @@
                         canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
-                        galeriUploadedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+                        galeriUploadedBase64 = canvas.toDataURL('image/jpeg', 0.72);
 
                         const previewImg = document.getElementById('galeriPreviewImg');
                         const placeholder = document.getElementById('galeriPlaceholder');

@@ -371,20 +371,38 @@
                 const client = getClient();
                 let data = null;
                 if (client) {
-                    const res = await client.from('app_settings').select('*').order('id', { ascending: true });
-                    if (!res.error && res.data && res.data.length > 0) {
-                        data = res.data;
+                    try {
+                        const res = await client.from('app_settings')
+                            .select('*')
+                            .or('key.is.null,key.neq.slides_custom_data')
+                            .order('id', { ascending: true });
+                        if (!res.error && res.data && res.data.length > 0) {
+                            data = res.data;
+                        }
+                    } catch (sdkFilterErr) {
+                        // Fallback jika PostgREST .or() versi lama tidak didukung
+                        const fallbackRes = await client.from('app_settings').select('*').order('id', { ascending: true });
+                        if (!fallbackRes.error && fallbackRes.data && fallbackRes.data.length > 0) {
+                            data = fallbackRes.data;
+                        }
                     }
                 }
-                // Direct REST Fallback jika client SDK null / gagal
+                // Direct REST Fallback jika client SDK null / gagal (Filter key slides_custom_data untuk zero egress waste)
                 if (!data || data.length === 0) {
                     try {
-                        const restData = await this.restFetch('app_settings?select=*&order=id.asc');
+                        const restData = await this.restFetch('app_settings?or=(key.is.null,key.neq.slides_custom_data)&select=*&order=id.asc');
                         if (Array.isArray(restData) && restData.length > 0) {
                             data = restData;
                         }
                     } catch (restErr) {
-                        console.warn('[SupabaseDB] REST fetch app_settings:', restErr);
+                        try {
+                            const unfilterData = await this.restFetch('app_settings?select=*&order=id.asc');
+                            if (Array.isArray(unfilterData) && unfilterData.length > 0) {
+                                data = unfilterData;
+                            }
+                        } catch (e) {
+                            console.warn('[SupabaseDB] REST fetch app_settings:', e);
+                        }
                     }
                 }
 
@@ -393,9 +411,9 @@
                     const row1 = data.find(r => r.id === 1) || data[0];
                     const settings = Object.assign({}, this.defaultSettings, row1);
 
-                    // Gabungkan baris key-value tambahan dari Supabase
+                    // Gabungkan baris key-value tambahan dari Supabase (filter out slides_custom_data agar payload ringan)
                     data.forEach(r => {
-                        if (r.key && r.id !== 1 && r.value !== null && r.value !== undefined) {
+                        if (r.key && r.id !== 1 && r.key !== 'slides_custom_data' && r.value !== null && r.value !== undefined) {
                             let parsedVal = r.value;
                             if (typeof r.value === 'string' && (r.value.startsWith('{') || r.value.startsWith('['))) {
                                 try { parsedVal = JSON.parse(r.value); } catch(e) {}
@@ -678,11 +696,14 @@
             const snapshot = { settings };
             if (slide === 'jumat') snapshot.jumat = await this.getSholatJumat(fresh, fresh, settings);
             if (slide === 'kas-jumat') snapshot.keuangan = fresh
-                ? await this.restFetch('keuangan?order=tanggal.desc') : await this.getKeuangan();
+                ? await this.restFetch('keuangan?select=id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe&order=tanggal.desc&limit=200') : await this.getKeuangan();
             if (slide === 'slide') {
                 snapshot.slides = fresh ? await this.restFetch('slides?order=urutan.asc') : await this.getSlides();
-                let custom = settings.slides_custom_data || {};
-                if (typeof custom === 'string') custom = JSON.parse(custom);
+                let custom = settings.slides_custom_data || await this.getSlidesCustomData(fresh);
+                if (typeof custom === 'string') {
+                    try { custom = JSON.parse(custom); } catch(e) {}
+                }
+                custom = custom || {};
                 snapshot.slides = snapshot.slides.map(row => custom[row.id] && String(row.gambar || '').includes('custom_uploaded') ? { ...row, gambar: custom[row.id] } : row);
             }
             if (slide === 'undangan') {
@@ -1439,7 +1460,10 @@
             try {
                 const client = getClient();
                 if (client) {
-                    const { data, error } = await client.from('keuangan').select('*').order('tanggal', { ascending: false });
+                    const { data, error } = await client.from('keuangan')
+                        .select('id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe')
+                        .order('tanggal', { ascending: false })
+                        .limit(200);
                     if (!error && data) {
                         localStorage.setItem('cached_keuangan', JSON.stringify(data));
                         this.setCached('keuangan', data);
@@ -1451,7 +1475,7 @@
             }
             // Direct REST API Fallback
             try {
-                const rows = await this.restFetch('keuangan?order=tanggal.desc');
+                const rows = await this.restFetch('keuangan?select=id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe&order=tanggal.desc&limit=200');
                 if (Array.isArray(rows)) {
                     localStorage.setItem('cached_keuangan', JSON.stringify(rows));
                     this.setCached('keuangan', rows);
@@ -1516,7 +1540,10 @@
             try {
                 const client = getClient();
                 if (client) {
-                    const { data, error } = await client.from('keuangan_ambulance').select('*').order('tanggal', { ascending: false });
+                    const { data, error } = await client.from('keuangan_ambulance')
+                        .select('id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe')
+                        .order('tanggal', { ascending: false })
+                        .limit(200);
                     if (!error && data) {
                         localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(data));
                         this.setCached('keuangan_ambulance', data);
@@ -1526,6 +1553,15 @@
             } catch (err) {
                 console.warn('Gagal membaca keuangan_ambulance:', err);
             }
+            // Direct REST Fallback
+            try {
+                const rows = await this.restFetch('keuangan_ambulance?select=id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe&order=tanggal.desc&limit=200');
+                if (Array.isArray(rows)) {
+                    localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(rows));
+                    this.setCached('keuangan_ambulance', rows);
+                    return rows;
+                }
+            } catch (restErr) {}
             const cached = localStorage.getItem('cached_keuangan_ambulance');
             const resAmb = cached ? JSON.parse(cached) : [];
             this.setCached('keuangan_ambulance', resAmb);
@@ -1805,6 +1841,53 @@
 
             this.setCached('slides', mergedDefaults);
             return mergedDefaults;
+        },
+
+        /**
+         * Mengambil data gambar custom slide terisolasi secara on-demand (mencegah pembengkakan kuota egress di getSettings umum)
+         */
+        async getSlidesCustomData(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cachedMem = this.getCached('slides_custom_data');
+                if (cachedMem) return cachedMem;
+                try {
+                    const localRaw = localStorage.getItem('cached_slides_custom_data');
+                    if (localRaw) {
+                        const parsed = JSON.parse(localRaw);
+                        if (parsed && typeof parsed === 'object') {
+                            this.setCached('slides_custom_data', parsed);
+                            return parsed;
+                        }
+                    }
+                } catch(e) {}
+            }
+            try {
+                const client = getClient();
+                let val = null;
+                if (client) {
+                    const { data, error } = await client.from('app_settings').select('value').eq('key', 'slides_custom_data').limit(1);
+                    if (!error && data && data.length > 0) {
+                        val = data[0].value;
+                    }
+                }
+                if (!val) {
+                    try {
+                        const rows = await this.restFetch('app_settings?key=eq.slides_custom_data&select=value&limit=1');
+                        if (Array.isArray(rows) && rows.length > 0 && rows[0].value) {
+                            val = rows[0].value;
+                        }
+                    } catch (e) {}
+                }
+                if (val) {
+                    const parsed = typeof val === 'string' ? JSON.parse(val) : val;
+                    try { localStorage.setItem('cached_slides_custom_data', JSON.stringify(parsed)); } catch(e) {}
+                    this.setCached('slides_custom_data', parsed);
+                    return parsed;
+                }
+            } catch(e) {
+                console.warn('[SupabaseDB] getSlidesCustomData:', e);
+            }
+            return {};
         },
 
         /**

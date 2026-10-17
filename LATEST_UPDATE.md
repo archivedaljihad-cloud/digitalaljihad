@@ -1,3 +1,22 @@
+# 17 Oktober 2026 — Optimasi Kuota Egress Supabase & Anti-Overquota Protection (v5.8.98)
+
+- **Latar Belakang:** Egress Supabase sempat menyentuh 8.897 GB / 5 GB (178%) akibat pengulangan fetch string raksasa Base64 dari tabel `app_settings` (key `slides_custom_data`) serta query keuangan tanpa limit/proyeksi kolom.
+- **Optimasi `supabase-db.js`:**
+  - `_readSettings`: Memfilter keluar baris `slides_custom_data` secara aman (`key=neq.slides_custom_data`) sehingga pemuatan umum di 20+ slide dan TV boot hanya mentransfer metadata teks ringan (~2 KB alih-alih 2-3 MB Base64, efisiensi bandwidth >99%).
+  - `getSlidesCustomData`: Menyediakan pemanggilan on-demand terisolasi khusus saat slide galeri informasi dimuat.
+  - `getKeuangan` & `getKeuanganAmbulance`: Menerapkan proyeksi kolom eksplisit (`id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe`) dan limitasi 200 baris terbaru (`limit=200`).
+  - `getSlideSnapshot('kas-jumat')`: Dibatasi 200 transaksi terbaru dengan proyeksi kolom teroptimasi.
+- **Optimasi Polling & Kompresi:**
+  - `index.html`: Interval fallback background sync disesuaikan dari 30 detik menjadi 180 detik (3 menit) untuk mengeliminasi pemborosan polling network.
+  - `admin-galeri.js`: Resolusi poster disetel ke proporsional maks 1024px kualitas 0.72 (hemat >85% ukuran berkas).
+  - `admin-jumat.js`: Resolusi foto imam disetel ke proporsional maks 360x480px kualitas 0.75 (<30 KB).
+- **Service Worker & Cache Bumping:**
+  - `sw.js`: Versi cache dinaikkan ke `aljihad-signage-v5.8.98`.
+  - `admin-settings.js` & `admin.html`: Selaras dengan versi cache v5.8.98.
+- **Quality Gates:** Seluruh 11 suite uji (`npm test`, 588 assertion checks) lulus 100% tanpa regresi.
+
+---
+
 # 17 Oktober 2026 — Paket persiapan RLS melalui Supabase Dashboard
 
 - Panduan lengkap Markdown dan paket ZIP: `database/dashboard-rls/`.

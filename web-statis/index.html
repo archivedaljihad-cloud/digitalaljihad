@@ -1507,8 +1507,8 @@
                     console.warn('[Display TV Background Sync] Error:', e);
                 }
             }
-            // Jalankan sinkronisasi cadangan setiap 30 detik (sangat ringan <1KB)
-            setInterval(performBackgroundSync, 30000);
+            // Jalankan sinkronisasi cadangan setiap 3 menit (cukup untuk fallback tanpa membebani egress)
+            setInterval(performBackgroundSync, 180000);
 
             // Helper Broadcast Data ke Iframes yang Sedang Aktif di Layar TV
             function broadcastToActiveFrames(message) {
