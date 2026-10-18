@@ -478,6 +478,9 @@
                         if (settings.rbac_users_list) {
                             localStorage.setItem('aljihad_users_list', typeof settings.rbac_users_list === 'string' ? settings.rbac_users_list : JSON.stringify(settings.rbac_users_list));
                         }
+                        if (settings.cached_qris_list) {
+                            localStorage.setItem('cached_qris_list', typeof settings.cached_qris_list === 'string' ? settings.cached_qris_list : JSON.stringify(settings.cached_qris_list));
+                        }
                         if (settings.prayer_countdown_style) {
                             localStorage.setItem('prayer_countdown_style', settings.prayer_countdown_style);
                         }
@@ -696,7 +699,7 @@
             const snapshot = { settings };
             if (slide === 'jumat') snapshot.jumat = await this.getSholatJumat(fresh, fresh, settings);
             if (slide === 'kas-jumat') snapshot.keuangan = fresh
-                ? await this.restFetch('keuangan?select=id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe&order=tanggal.desc&limit=200') : await this.getKeuangan();
+                ? await this.restFetch('keuangan?select=id,tanggal,deskripsi,pemasukan,pengeluaran,saldo,kategori&order=tanggal.desc&limit=200') : await this.getKeuangan();
             if (slide === 'slide') {
                 snapshot.slides = fresh ? await this.restFetch('slides?order=urutan.asc') : await this.getSlides();
                 let custom = settings.slides_custom_data || await this.getSlidesCustomData(fresh);
@@ -1461,7 +1464,7 @@
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('keuangan')
-                        .select('id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe')
+                        .select('id,tanggal,deskripsi,pemasukan,pengeluaran,saldo,kategori')
                         .order('tanggal', { ascending: false })
                         .limit(200);
                     if (!error && data) {
@@ -1475,7 +1478,7 @@
             }
             // Direct REST API Fallback
             try {
-                const rows = await this.restFetch('keuangan?select=id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe&order=tanggal.desc&limit=200');
+                const rows = await this.restFetch('keuangan?select=id,tanggal,deskripsi,pemasukan,pengeluaran,saldo,kategori&order=tanggal.desc&limit=200');
                 if (Array.isArray(rows)) {
                     localStorage.setItem('cached_keuangan', JSON.stringify(rows));
                     this.setCached('keuangan', rows);
@@ -1541,7 +1544,7 @@
                 const client = getClient();
                 if (client) {
                     const { data, error } = await client.from('keuangan_ambulance')
-                        .select('id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe')
+                        .select('id,tanggal,deskripsi,pemasukan,pengeluaran,saldo,kategori')
                         .order('tanggal', { ascending: false })
                         .limit(200);
                     if (!error && data) {
@@ -1555,7 +1558,7 @@
             }
             // Direct REST Fallback
             try {
-                const rows = await this.restFetch('keuangan_ambulance?select=id,tanggal,kategori,keterangan,deskripsi,uraian,pemasukan,pengeluaran,nominal,tipe&order=tanggal.desc&limit=200');
+                const rows = await this.restFetch('keuangan_ambulance?select=id,tanggal,deskripsi,pemasukan,pengeluaran,saldo,kategori&order=tanggal.desc&limit=200');
                 if (Array.isArray(rows)) {
                     localStorage.setItem('cached_keuangan_ambulance', JSON.stringify(rows));
                     this.setCached('keuangan_ambulance', rows);
@@ -1888,6 +1891,56 @@
                 console.warn('[SupabaseDB] getSlidesCustomData:', e);
             }
             return {};
+        },
+
+        /**
+         * Mengambil data QRIS donasi digital dari cloud Supabase / cache lokal
+         */
+        async getQrisList(forceRefresh = false) {
+            if (!forceRefresh) {
+                const cachedMem = this.getCached('cached_qris_list');
+                if (cachedMem && Array.isArray(cachedMem) && cachedMem.length > 0) return cachedMem;
+                try {
+                    const localRaw = localStorage.getItem('cached_qris_list');
+                    if (localRaw) {
+                        const parsed = JSON.parse(localRaw);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            this.setCached('cached_qris_list', parsed);
+                            return parsed;
+                        }
+                    }
+                } catch(e) {}
+            }
+            try {
+                const client = getClient();
+                let val = null;
+                if (client) {
+                    const { data, error } = await client.from('app_settings').select('value').eq('key', 'cached_qris_list').limit(1);
+                    if (!error && data && data.length > 0) val = data[0].value;
+                }
+                if (!val) {
+                    const rows = await this.restFetch('app_settings?key=eq.cached_qris_list&select=value&limit=1');
+                    if (Array.isArray(rows) && rows.length > 0 && rows[0].value) val = rows[0].value;
+                }
+                if (val) {
+                    const parsed = typeof val === 'string' ? JSON.parse(val) : val;
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        try { localStorage.setItem('cached_qris_list', JSON.stringify(parsed)); } catch(e) {}
+                        this.setCached('cached_qris_list', parsed);
+                        return parsed;
+                    }
+                }
+            } catch(e) {
+                console.warn('[SupabaseDB] getQrisList:', e);
+            }
+            try {
+                const local = localStorage.getItem('cached_qris_list');
+                if (local) {
+                    const parsed = JSON.parse(local);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            return [];
         },
 
         /**

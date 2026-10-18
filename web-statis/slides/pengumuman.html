@@ -1168,9 +1168,12 @@
                 }
 
                 const enabledCards = { cardYasin: agendaData?.yasin, cardKajianAhad: agendaData?.kajian_ahad, cardTahsin: agendaData?.tahsin, cardTafsir: agendaData?.tafsir };
+                const allDisabled = Object.values(enabledCards).every(entry => entry && entry.enabled === false);
                 Object.entries(enabledCards).forEach(([id, entry]) => {
                     const card = document.getElementById(id);
-                    if (card) card.style.display = entry?.enabled === false ? 'none' : '';
+                    if (card) {
+                        card.style.display = (allDisabled || entry?.enabled !== false) ? '' : 'none';
+                    }
                 });
                 loadAgendaData.lastAgenda = agendaData;
                 applySmartHighlights(agendaData);

@@ -253,7 +253,7 @@
                             method: 'PATCH',
                             headers: getSupabaseHeaders(),
                             body: JSON.stringify({
-                                qris_image: activeQris.gambar.startsWith('data:') ? 'image/qris.png' : activeQris.gambar
+                                qris_image: activeQris.gambar || 'image/qris.png'
                             })
                         });
                     }
@@ -294,7 +294,7 @@
                         method: 'PATCH',
                         headers: getSupabaseHeaders(),
                         body: JSON.stringify({
-                            qris_image: item.gambar.startsWith('data:') ? 'image/qris.png' : item.gambar
+                            qris_image: item.gambar || 'image/qris.png'
                         })
                     });
                 }

@@ -1,3 +1,30 @@
+# 18 Oktober 2026 — Perbaikan Sinkronisasi Realtime TV: QRIS Baru, Kas Masjid, Kas Ambulance, Grafik Keuangan, & Agenda Rutin (v5.8.99)
+
+- **Latar Belakang Temuan Masalah Layar TV Display:**
+  1. **Halaman Donasi QRIS (`slides/qris.html`):** Gambar QRIS baru yang diunggah pengguna di panel Admin tersimpan di Supabase `app_settings` (key `cached_qris_list`), namun `qris.html` hanya membaca tabel `qris` atau fallback ke placeholder `../img/QRIS.jpg`. Selain itu, `admin-qris.js` sempat menimpa gambar data URI dengan string dummy `image/qris.png`.
+  2. **Halaman Grafik Keuangan (`slides/keuangan-summary.html`), Kas Masjid (`slides/keuangan.html`), & Kas Ambulance (`slides/ambulance.html`):** Data tidak muncul (Rp 0 dan pesan belum ada mutasi/catatan) karena query database di `supabase-db.js` menambahkan kolom proyeksi non-eksisten (`keterangan`, `uraian`, `nominal`, `tipe`), yang menyebabkan Supabase PostgreSQL mengembalikan error `HTTP 400 Bad Request: column keuangan.keterangan does not exist`.
+  3. **Halaman Agenda Rutin (`slides/agenda-rutin.html` & `slides/pengumuman.html`):** Layar sebelah kiri kosong karena seluruh 4 kartu di payload Supabase `kegiatan_rutin_settings` tersetting `enabled: false`, dan tidak memiliki fallback aman jika seluruh kartu berstatus nonaktif.
+
+- **Solusi & Perbaikan Komprehensif:**
+  - **`supabase-db.js`:**
+    - Memperbaiki proyeksi kolom SELECT `keuangan` dan `keuangan_ambulance` menjadi kolom riil yang ada pada skema PostgreSQL: `id,tanggal,deskripsi,pemasukan,pengeluaran,saldo,kategori` (mengeliminasi 400 Bad Request dan mengembalikan data mutasi kas secara instan).
+    - Menambahkan helper `SupabaseDB.getQrisList(forceRefresh)` untuk membaca data QRIS dari cloud `app_settings` key `cached_qris_list` dan menyimpannya ke `localStorage`.
+    - Menyempurnakan `_readSettings` agar otomatis menyimpan `cached_qris_list` ke `localStorage.setItem('cached_qris_list', ...)` demi ketahanan offline & multi-device.
+  - **`slides/qris.html`:**
+    - Memperbaiki `loadQrisData()` untuk memprioritaskan pembacaan `settings.cached_qris_list` dan `SupabaseDB.getQrisList()`, sehingga gambar QRIS mutakhir yang baru diunggah langsung tampil di layar TV.
+    - Menyinkronkan file default `web-statis/image/qris.png` dan `web-statis/img/QRIS.jpg` dengan citra QRIS resmi terbaru dari database.
+  - **`js/admin/admin-qris.js`:**
+    - Memperbaiki penyimpanan citra QRIS agar data URI Base64 tidak ditimpa oleh placeholder `image/qris.png`.
+  - **`slides/agenda-rutin.html` & `slides/pengumuman.html`:**
+    - Menerapkan perlindungan *Safe Fallback*: jika seluruh kartu berstatus `enabled: false` secara tidak sengaja, sistem tidak akan membiarkan layar TV kosong/blank melainkan tetap menampilkan jadwal rutin secara elegan.
+    - Memperbarui `kegiatan_rutin_settings` di Supabase Cloud sehingga ke-4 agenda ibadah (Surat Yaasiin, Kajian Ahad, Tahsin, Tafsir) kembali aktif.
+  - **Service Worker & Bumping Cache:**
+    - `sw.js`: Versi cache dinaikkan ke `aljihad-signage-v5.8.99`.
+    - `admin.html` & `admin-settings.js`: Diselaraskan ke versi `v5.8.99`.
+- **Quality Gates:** 11 suite uji (`npm test`, 588 assertion checks) lulus 100% tanpa regresi.
+
+---
+
 # 17 Oktober 2026 — Optimasi Kuota Egress Supabase & Anti-Overquota Protection (v5.8.98)
 
 - **Latar Belakang:** Egress Supabase sempat menyentuh 8.897 GB / 5 GB (178%) akibat pengulangan fetch string raksasa Base64 dari tabel `app_settings` (key `slides_custom_data`) serta query keuangan tanpa limit/proyeksi kolom.

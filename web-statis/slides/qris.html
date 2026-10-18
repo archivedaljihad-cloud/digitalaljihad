@@ -531,35 +531,46 @@
                         ? SupabaseDB.getRunningTextForPage('/qris-embed', settings)
                         : (settings.running_text || '');
                     if (rText) document.getElementById('runningTextContent').innerHTML = `<i class="fas fa-hand-holding-heart"></i> ${rText}`;
+                }
 
-                    // Update Gambar QRIS jika ada URL di app_settings
-                    if (settings.qris_image) {
-                        let imgUrl = settings.qris_image;
-                        if (imgUrl.startsWith('image/') || imgUrl.startsWith('img/')) {
-                            imgUrl = '../' + imgUrl;
-                        } else if (!imgUrl.startsWith('http') && !imgUrl.startsWith('data:') && !imgUrl.startsWith('../')) {
-                            imgUrl = `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${imgUrl}`;
-                        }
-                        document.getElementById('qrisImage').src = imgUrl;
-                    } else {
-                        document.getElementById('qrisImage').src = '../img/QRIS.jpg';
+                // 2. Muat Data Detail QRIS Aktif (Bank, Norek, Atas Nama, Keterangan, Gambar Terkini)
+                let activeQris = null;
+
+                // Prioritas A: Ambil dari settings.cached_qris_list (di-sync dari Supabase app_settings)
+                if (settings && settings.cached_qris_list) {
+                    let qList = settings.cached_qris_list;
+                    if (typeof qList === 'string') {
+                        try { qList = JSON.parse(qList); } catch(e) {}
+                    }
+                    if (Array.isArray(qList) && qList.length > 0) {
+                        activeQris = qList.find(q => q.status === 'aktif') || qList[0];
                     }
                 }
 
-                // Muat Data Detail QRIS Aktif (Bank, Norek, Atas Nama, Keterangan)
-                let activeQris = null;
-                try {
-                    if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
-                        const resQ = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?status=eq.aktif&limit=1`, {
-                            headers: { 'apikey': SUPABASE_CONFIG.anonKey }
-                        });
-                        if (resQ.ok) {
-                            const dataQ = await resQ.json();
-                            if (dataQ && dataQ.length > 0) activeQris = dataQ[0];
-                        }
+                // Prioritas B: Ambil melalui helper SupabaseDB.getQrisList()
+                if (!activeQris && window.SupabaseDB && typeof SupabaseDB.getQrisList === 'function') {
+                    const qList = await SupabaseDB.getQrisList();
+                    if (Array.isArray(qList) && qList.length > 0) {
+                        activeQris = qList.find(q => q.status === 'aktif') || qList[0];
                     }
-                } catch(e) {}
+                }
 
+                // Prioritas C: Query REST API tabel qris
+                if (!activeQris) {
+                    try {
+                        if (typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.url) {
+                            const resQ = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/qris?status=eq.aktif&limit=1`, {
+                                headers: { 'apikey': SUPABASE_CONFIG.anonKey }
+                            });
+                            if (resQ.ok) {
+                                const dataQ = await resQ.json();
+                                if (dataQ && dataQ.length > 0) activeQris = dataQ[0];
+                            }
+                        }
+                    } catch(e) {}
+                }
+
+                // Prioritas D: Fallback dari localStorage
                 if (!activeQris) {
                     try {
                         const localQ = JSON.parse(localStorage.getItem('cached_qris_list') || '[]');
@@ -574,7 +585,18 @@
                             gbr = '../' + gbr;
                         }
                         document.getElementById('qrisImage').src = gbr;
+                    } else if (settings && settings.qris_image) {
+                        let imgUrl = settings.qris_image;
+                        if (imgUrl.startsWith('image/') || imgUrl.startsWith('img/')) {
+                            imgUrl = '../' + imgUrl;
+                        } else if (!imgUrl.startsWith('http') && !imgUrl.startsWith('data:') && !imgUrl.startsWith('../')) {
+                            imgUrl = `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${imgUrl}`;
+                        }
+                        document.getElementById('qrisImage').src = imgUrl;
+                    } else {
+                        document.getElementById('qrisImage').src = '../image/qris.png';
                     }
+
                     if (activeQris.keterangan && document.getElementById('qrisInstruction')) {
                         document.getElementById('qrisInstruction').textContent = activeQris.keterangan;
                     }
@@ -592,6 +614,16 @@
                     if (activeQris.nomor_rekening && document.getElementById('qrisBankAcc')) {
                         document.getElementById('qrisBankAcc').textContent = activeQris.nomor_rekening;
                     }
+                } else if (settings && settings.qris_image) {
+                    let imgUrl = settings.qris_image;
+                    if (imgUrl.startsWith('image/') || imgUrl.startsWith('img/')) {
+                        imgUrl = '../' + imgUrl;
+                    } else if (!imgUrl.startsWith('http') && !imgUrl.startsWith('data:') && !imgUrl.startsWith('../')) {
+                        imgUrl = `https://xskusfacwsclbgdtgier.supabase.co/storage/v1/object/public/${imgUrl}`;
+                    }
+                    document.getElementById('qrisImage').src = imgUrl;
+                } else {
+                    document.getElementById('qrisImage').src = '../image/qris.png';
                 }
             } catch (err) {
                 console.error('Gagal memuat konfigurasi QRIS:', err);
