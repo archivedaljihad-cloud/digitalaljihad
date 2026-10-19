@@ -436,7 +436,8 @@ const targetSlides = [
     'slides/keuangan-summary.html',
     'slides/qris.html',
     'slides/ambulance.html',
-    'slides/infaq.html'
+    'slides/infaq.html',
+    'slides/slide.html'
 ];
 
 targetSlides.forEach(slideRel => {
@@ -446,7 +447,7 @@ targetSlides.forEach(slideRel => {
 });
 
 // Verifikasi isolasi halaman lain (tidak boleh berubah)
-const untouchedSlides = ['slides/undangan.html', 'slides/pengumuman.html', 'slides/slide.html'];
+const untouchedSlides = ['slides/undangan.html', 'slides/pengumuman.html'];
 untouchedSlides.forEach(slideRel => {
     const content = fs.readFileSync(path.join(baseDir, slideRel), 'utf8');
     assert(!content.includes('BGR-0.webp'), `Isolasi aman: ${slideRel} tidak tersentuh pembaruan background`);
@@ -474,7 +475,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.99'), 'sw.js memiliki bumping versi cache terbaru v5.8.99');
+assert(swContent.includes('aljihad-signage-v5.8.100'), 'sw.js memiliki bumping versi cache terbaru v5.8.100');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -495,6 +496,7 @@ assert(slidePageContent.includes('.slide-desc') && slidePageContent.includes('ba
 assert(slidePageContent.includes('-webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.9);'), 'slides/slide.html memiliki outline/stroke kontras gelap pada teks deskripsi');
 assert(slidePageContent.includes('performCinematicTransition'), 'slides/slide.html memiliki fungsi performCinematicTransition bebas hentakan');
 assert(slidePageContent.includes('fadeOutMs = 450') && slidePageContent.includes('fadeInMs = 550'), 'slides/slide.html memiliki kurva timing transisi sinematik sinkron');
+assert(slidePageContent.includes('BGR-0.webp') && slidePageContent.includes('BGR-5.webp'), 'slides/slide.html menggunakan background rotator islami BGR-0 s.d BGR-5 selaras dengan qris.html');
 
 // -------------------------------------------------------------
 // 20. ADMIN DASHBOARD REMINDER & REFRESH TV NOTICE INTEGRITY

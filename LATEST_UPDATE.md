@@ -1,3 +1,27 @@
+# 19 Oktober 2026 — Penyelarasan Background Islami Slide Galeri Informasi dengan Halaman QRIS (v5.8.100)
+
+- **Permintaan Pengguna:**
+  - Pada halaman `https://digitalaljihad.my.id/slides/slide`, ganti dan samakan gambar backgroundnya dengan halaman `https://digitalaljihad.my.id/slides/qris`.
+
+- **Solusi & Perubahan Berkas:**
+  - **`web-statis/slides/slide.html`:**
+    - Menyelaraskan array `backgroundImages` dari gambar lama (`BG2.webp`, `BG10.webp`, dst.) menjadi citra beresolusi tinggi WebP modern yang serasi dengan QRIS: `BGR-0.webp` s.d. `BGR-5.webp` (`../image/display/background/BGR-0.webp` s/d `../image/display/background/BGR-5.webp`).
+    - Menambahkan `background-color: #041913;` pada elemen `body` agar warna kanvas dasar identik dengan halaman QRIS saat pertama kali memuat.
+    - Memperbarui query parameter cache buster pada tag stylesheet (`display-theme.css?v=20261019_01`, `partials-theme.css?v=20261019_01`) dan core scripts (`supabase-config.js`, `supabase-db.js`, `display-clock-ambient.js`).
+  - **`resources/views/slide-embed.blade.php`:**
+    - Menyelaraskan array `backgroundImages` pada template Blade Laravel agar turut menyajikan citra WebP `BGR-0.webp` s.d. `BGR-5.webp`.
+  - **`scripts/test-engine.js`:**
+    - Memasukkan `slides/slide.html` ke dalam `targetSlides` background BGR Islami dan menambahkan assertion eksplisit `BGR-0.webp` s.d. `BGR-5.webp`.
+    - Memperbarui verifikasi versi Service Worker menjadi `aljihad-signage-v5.8.100`.
+  - **Service Worker & Invalidation Cache:**
+    - `web-statis/sw.js`: Bumping `CACHE_NAME` ke `aljihad-signage-v5.8.100` untuk membersihkan cache browser lama secara otomatis di Smart TV dan perangkat mobile/desktop.
+    - `web-statis/js/admin/admin-settings.js`: Menyinkronkan fungsi pembersihan cache Service Worker di panel Admin ke `aljihad-signage-v5.8.100`.
+
+- **Quality Gates & Validasi:**
+  - `npm test`: 272 / 272 assertion checks lulus 100% tanpa regresi.
+
+---
+
 # 18 Oktober 2026 — Perbaikan Sinkronisasi Realtime TV: QRIS Baru, Kas Masjid, Kas Ambulance, Grafik Keuangan, & Agenda Rutin (v5.8.99)
 
 - **Latar Belakang Temuan Masalah Layar TV Display:**

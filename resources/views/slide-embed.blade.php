@@ -448,13 +448,12 @@
     <!-- SCRIPT UNTUK BACKGROUND SLIDESHOW (EFEK TRIVISION BLINDS SMOOTH) -->
     <script>
         const backgroundImages = [
-            "{{ asset('image/display/background/BG1.png') }}",
-            "{{ asset('image/display/background/BG2.png') }}",
-            "{{ asset('image/display/background/BG3.png') }}",
-            "{{ asset('image/display/background/BG4.png') }}",
-            "{{ asset('image/display/background/BG5.png') }}",
-            "{{ asset('image/display/background/BG6.png') }}",
-            "{{ asset('image/display/background/BG7.png') }}"
+            "{{ asset('image/display/background/BGR-0.webp') }}",
+            "{{ asset('image/display/background/BGR-1.webp') }}",
+            "{{ asset('image/display/background/BGR-2.webp') }}",
+            "{{ asset('image/display/background/BGR-3.webp') }}",
+            "{{ asset('image/display/background/BGR-4.webp') }}",
+            "{{ asset('image/display/background/BGR-5.webp') }}"
         ];
 
         let currentBgIndex = 0;
