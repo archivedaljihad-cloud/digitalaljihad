@@ -2672,11 +2672,63 @@
                                                 </div>
                                                 <div class="col-12 mb-2 mt-2 pt-2" style="border-top: 1px dashed rgba(212, 175, 55, 0.4);">
                                                     <label class="small font-weight-bold mb-1" style="color: #064e3b;"><i class="fas fa-stopwatch text-warning mr-1"></i> Desain Hitung Mundur (Countdown Sholat)</label>
-                                                    <select class="form-control form-control-sm font-weight-bold" id="cfgCountdownStyle" onchange="simpanPengaturanDurasiTV(true)" style="border-radius: 8px; border: 1.5px solid #d4af37;">
+                                                    <select class="form-control form-control-sm font-weight-bold" id="cfgCountdownStyle" onchange="simpanPengaturanDurasiTV(true); if (typeof updateAdminCountdownMiniPreview === 'function') updateAdminCountdownMiniPreview();" style="border-radius: 8px; border: 1.5px solid #d4af37;">
                                                         <option value="flip">Model 3D Flip Clock (Mekanis / Flap Berputar)</option>
                                                         <option value="biasa">Model Biasa (Klasik Elegan Bersih / Bukan Flip)</option>
                                                     </select>
                                                     <small class="text-muted d-block mt-1">Pilih gaya tampilan hitung mundur menuju adzan & iqamah pada TV Display dan Laptop.</small>
+
+                                                    <!-- LIVE MINI PREVIEW TAMPILAN TV DI ADMIN -->
+                                                    <div id="adminCountdownPreviewBox" class="mt-2 p-2 rounded shadow-sm text-center" style="background: radial-gradient(circle at center, #052c1a 0%, #01140c 100%); border: 1.5px solid #d4af37; border-radius: 12px; position: relative; overflow: hidden;">
+                                                        <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                                                            <span class="badge badge-warning text-dark font-weight-bold" style="font-size: 10px; letter-spacing: 0.5px;"><i class="fas fa-eye mr-1"></i> LIVE PREVIEW TAMPILAN TV</span>
+                                                            <span id="adminPreviewStyleLabel" class="small font-weight-bold" style="color: #ffd700; font-size: 11px;">Model 3D Flip Clock</span>
+                                                        </div>
+                                                        <div class="d-flex justify-content-center align-items-center" style="gap: 12px; min-height: 72px;">
+                                                            <!-- Menit Mini -->
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <div id="miniFlipMin" class="admin-mini-flip-box" style="position: relative; width: 68px; height: 50px; background: #000c06; border-radius: 8px; border: 1.5px solid #ffd700; box-shadow: 0 4px 10px rgba(0,0,0,0.8); perspective: 600px; display: block;">
+                                                                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 50%; overflow: hidden; background: linear-gradient(180deg, #093822 0%, #01150c 100%); border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom: 1px solid #000;">
+                                                                        <span style="position: absolute; left: 0; width: 100%; height: 200%; top: 0; display: flex; align-items: center; justify-content: center; font-family: monospace; font-size: 32px; font-weight: 800; color: #fff;">03</span>
+                                                                    </div>
+                                                                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 50%; overflow: hidden; background: linear-gradient(180deg, #02190f 0%, #031e12 100%); border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; border-top: 1px solid rgba(255,215,0,0.3);">
+                                                                        <span style="position: absolute; left: 0; width: 100%; height: 200%; top: -100%; display: flex; align-items: center; justify-content: center; font-family: monospace; font-size: 32px; font-weight: 800; color: #fff;">03</span>
+                                                                    </div>
+                                                                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #000; transform: translateY(-50%); z-index: 5;"></div>
+                                                                    <div style="position: absolute; top: 50%; left: 2px; width: 4px; height: 8px; background: #ffd700; border-radius: 1px; transform: translateY(-50%); z-index: 6;"></div>
+                                                                    <div style="position: absolute; top: 50%; right: 2px; width: 4px; height: 8px; background: #ffd700; border-radius: 1px; transform: translateY(-50%); z-index: 6;"></div>
+                                                                </div>
+                                                                <div id="miniTileMin" class="admin-mini-tile-box" style="position: relative; width: 68px; height: 50px; background: linear-gradient(145deg, #083822 0%, #011009 100%); border-radius: 8px; border: 1.5px solid #ffd700; box-shadow: 0 4px 10px rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center;">
+                                                                    <span style="font-family: 'Poppins', sans-serif; font-size: 32px; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,215,0,0.6);">03</span>
+                                                                </div>
+                                                                <small style="color: #ffd700; font-size: 9px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;">MENIT</small>
+                                                            </div>
+
+                                                            <div style="color: #ffd700; font-size: 26px; font-weight: 900; margin-top: -16px;">:</div>
+
+                                                            <!-- Detik Mini -->
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <div id="miniFlipSec" class="admin-mini-flip-box" style="position: relative; width: 68px; height: 50px; background: #000c06; border-radius: 8px; border: 1.5px solid #ffd700; box-shadow: 0 4px 10px rgba(0,0,0,0.8); perspective: 600px; display: block;">
+                                                                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 50%; overflow: hidden; background: linear-gradient(180deg, #093822 0%, #01150c 100%); border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom: 1px solid #000;">
+                                                                        <span id="miniFlipSecTop" style="position: absolute; left: 0; width: 100%; height: 200%; top: 0; display: flex; align-items: center; justify-content: center; font-family: monospace; font-size: 32px; font-weight: 800; color: #fff;">15</span>
+                                                                    </div>
+                                                                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 50%; overflow: hidden; background: linear-gradient(180deg, #02190f 0%, #031e12 100%); border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; border-top: 1px solid rgba(255,215,0,0.3);">
+                                                                        <span id="miniFlipSecBtm" style="position: absolute; left: 0; width: 100%; height: 200%; top: -100%; display: flex; align-items: center; justify-content: center; font-family: monospace; font-size: 32px; font-weight: 800; color: #fff;">15</span>
+                                                                    </div>
+                                                                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #000; transform: translateY(-50%); z-index: 5;"></div>
+                                                                    <div style="position: absolute; top: 50%; left: 2px; width: 4px; height: 8px; background: #ffd700; border-radius: 1px; transform: translateY(-50%); z-index: 6;"></div>
+                                                                    <div style="position: absolute; top: 50%; right: 2px; width: 4px; height: 8px; background: #ffd700; border-radius: 1px; transform: translateY(-50%); z-index: 6;"></div>
+                                                                </div>
+                                                                <div id="miniTileSec" class="admin-mini-tile-box" style="position: relative; width: 68px; height: 50px; background: linear-gradient(145deg, #083822 0%, #011009 100%); border-radius: 8px; border: 1.5px solid #ffd700; box-shadow: 0 4px 10px rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center;">
+                                                                    <span id="miniTileSecDigit" style="font-family: 'Poppins', sans-serif; font-size: 32px; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,215,0,0.6);">15</span>
+                                                                </div>
+                                                                <small style="color: #ffd700; font-size: 9px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;">DETIK</small>
+                                                            </div>
+                                                        </div>
+                                                        <div id="adminPreviewDesc" class="mt-2 text-center" style="font-size: 11px; color: #a7f3d0;">
+                                                            <i class="fas fa-check-circle mr-1 text-warning"></i> Desain 3D Split-Flap Mekanis otentik dengan engsel emas & animasi berputar setiap detik.
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

@@ -246,7 +246,10 @@
                 if (tarhimVal !== null && tarhimVal !== undefined && document.getElementById('cfgAudioTarhim')) document.getElementById('cfgAudioTarhim').value = tarhimVal;
                 
                 const styleVal = localStorage.getItem('prayer_countdown_style') || cachedSettings.prayer_countdown_style;
-                if (styleVal && document.getElementById('cfgCountdownStyle')) document.getElementById('cfgCountdownStyle').value = styleVal;
+                if (styleVal && document.getElementById('cfgCountdownStyle')) {
+                    document.getElementById('cfgCountdownStyle').value = styleVal;
+                    if (typeof updateAdminCountdownMiniPreview === 'function') updateAdminCountdownMiniPreview();
+                }
 
                 const jmVal = localStorage.getItem('cfg_durasi_jumat') || localStorage.getItem('display_prayer_mode_jumat_duration') || cachedSettings.prayer_mode_jumat_duration;
                 if (jmVal && typeof syncDurasiJumat === 'function') syncDurasiJumat(parseInt(jmVal));
@@ -337,6 +340,7 @@
                         if (jm) syncDurasiJumat(jm);
                         if (s.prayer_countdown_style && document.getElementById('cfgCountdownStyle')) {
                             document.getElementById('cfgCountdownStyle').value = s.prayer_countdown_style;
+                            if (typeof updateAdminCountdownMiniPreview === 'function') updateAdminCountdownMiniPreview();
                         }
                         if (s.yasin_start_time) {
                             const formatted = s.yasin_start_time.substring(0, 5);
@@ -854,4 +858,62 @@ document.addEventListener('DOMContentLoaded', () => {
         panel.textContent = 'Status TV terakhir: ' + Array.from(states.values()).slice(-3).join(' | ');
         panel.style.display = 'block';
     });
+});
+
+// =======================================================
+// LIVE MINI PREVIEW COUNTDOWN STYLE DI ADMIN DASHBOARD
+// =======================================================
+let _adminMiniCountdownSec = 15;
+let _adminMiniTimer = null;
+
+window.updateAdminCountdownMiniPreview = function() {
+    const sel = document.getElementById('cfgCountdownStyle');
+    const val = (sel ? sel.value : (localStorage.getItem('prayer_countdown_style') || 'flip')).toLowerCase();
+    const label = document.getElementById('adminPreviewStyleLabel');
+    const desc = document.getElementById('adminPreviewDesc');
+    const flipMin = document.getElementById('miniFlipMin');
+    const flipSec = document.getElementById('miniFlipSec');
+    const tileMin = document.getElementById('miniTileMin');
+    const tileSec = document.getElementById('miniTileSec');
+
+    if (val === 'biasa') {
+        if (label) label.textContent = 'Model Biasa (Bersih / Tanpa Garis Potong)';
+        if (desc) desc.innerHTML = '<i class="fas fa-check-circle mr-1 text-info"></i> Desain Klasik Digital Monolitik Bersih, pendaran emerald menyala lembut tanpa potongan flap.';
+        if (flipMin) flipMin.style.display = 'none';
+        if (flipSec) flipSec.style.display = 'none';
+        if (tileMin) tileMin.style.display = 'flex';
+        if (tileSec) tileSec.style.display = 'flex';
+    } else {
+        if (label) label.textContent = 'Model 3D Flip Clock (Mekanis / Flap Berputar)';
+        if (desc) desc.innerHTML = '<i class="fas fa-check-circle mr-1 text-warning"></i> Desain 3D Split-Flap Mekanis otentik dengan engsel emas, baut rivet, dan animasi flap berputar setiap detik.';
+        if (tileMin) tileMin.style.display = 'none';
+        if (tileSec) tileSec.style.display = 'none';
+        if (flipMin) flipMin.style.display = 'block';
+        if (flipSec) flipSec.style.display = 'block';
+    }
+};
+
+function startAdminMiniCountdown() {
+    if (_adminMiniTimer) return;
+    _adminMiniTimer = setInterval(() => {
+        _adminMiniCountdownSec--;
+        if (_adminMiniCountdownSec < 0) _adminMiniCountdownSec = 59;
+        const sStr = String(_adminMiniCountdownSec).padStart(2, '0');
+        const tileSecDigit = document.getElementById('miniTileSecDigit');
+        if (tileSecDigit) tileSecDigit.textContent = sStr;
+
+        const flipSecTop = document.getElementById('miniFlipSecTop');
+        const flipSecBtm = document.getElementById('miniFlipSecBtm');
+        if (flipSecTop) flipSecTop.textContent = sStr;
+        if (flipSecBtm) flipSecBtm.textContent = sStr;
+    }, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (typeof window.updateAdminCountdownMiniPreview === 'function') {
+            window.updateAdminCountdownMiniPreview();
+            startAdminMiniCountdown();
+        }
+    }, 300);
 });

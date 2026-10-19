@@ -331,6 +331,7 @@
                         const savedCountdownStyle = s.prayer_countdown_style || localStorage.getItem('prayer_countdown_style');
                         if (savedCountdownStyle && document.getElementById('cfgCountdownStyle')) {
                             document.getElementById('cfgCountdownStyle').value = savedCountdownStyle;
+                            if (typeof updateAdminCountdownMiniPreview === 'function') updateAdminCountdownMiniPreview();
                         }
                         
                         // Durasi Sholat Jum'at (Khutbah & Sholat Berjamaah)

@@ -1,3 +1,37 @@
+# 19 Oktober 2026 — Penyempurnaan Desain Hitung Mundur (Countdown Sholat) 3D Flip Clock & Model Biasa serta Live Preview Admin (v5.8.101)
+
+- **Permintaan Pengguna:**
+  - "Desain Hitung Mundur (Countdown Sholat) ini belum bisa berfungsi di layar TV. Walaupun di dashboard ganti, dihalaman TV yang tampil selalu yang model biasa".
+  - Disertai tangkapan layar dropdown `#cfgCountdownStyle` di Admin Dashboard yang memiliki dua opsi:
+    1. `Model 3D Flip Clock (Mekanis / Flap Berputar)` (`value="flip"`)
+    2. `Model Biasa (Klasik Elegan Bersih / Bukan Flip)` (`value="biasa"`)
+
+- **Akar Masalah (Root Cause Discovery):**
+  1. **Kemiripan Visual dari Jarak Jauh:** Sinkronisasi database Supabase (`prayer_countdown_style`) sebenarnya berhasil tersimpan dan diterima oleh TV. Namun sebelumnya, kedua gaya memiliki ukuran kotak hijau yang sama persis, border emas yang sama, jenis font yang sama, dan yang paling krusial: **keduanya sama-sama memiliki garis belah horizontal di tengah angka** (`.hinge-bar` pada flip dan `.tile-crease` pada model biasa). Akibatnya, ketika dilihat dari jarak pandang TV (>3 meter), pergantian model flip ke biasa terlihat hampir tidak ada bedanya.
+  2. **Jeda Awal Jaringan Supabase:** Fungsi `init()` pada `prayer-mode.html` dan `preview-khutbah.html` sebelumnya menunggu 3 request `await SupabaseDB` sebelum memanggil `updatePrayerUI()`. Selama jeda jaringan tersebut, layar sempat menampilkan DOM statis default.
+  3. **Ketiadaan Pratinjau Interaktif di Dashboard:** Pengurus di Admin Dashboard tidak dapat melihat langsung seperti apa bentuk model flip vs model biasa sebelum menyimpan ke TV.
+
+- **Solusi & Perubahan Berkas:**
+  - **`web-statis/prayer-mode.html` & `web-statis/preview-khutbah.html`:**
+    - Mengimpor font modern `Outfit` untuk membedakan karakter angka kedua model.
+    - **Model 3D Flip Clock Masterpiece:** Diberikan engsel emas metalik nyata (`.hinge-pin.left`, `.hinge-pin.right`) dengan pin rivet baut tengah, pembagian plat atas berbayang inset/highlight, pembagian plat bawah dengan bayangan kedalaman 3D, serta animasi rotasi flap jatuh mekanis ganda (`flipDownTop` 0.28s dan `flipDownBottom` 0.26s slap bounce).
+    - **Model Biasa (Klasik Elegan Bersih):** Dirancang sebagai kartu monolitik utuh berbahan emerald glass premium dengan pendaran cahaya ambient (`::before`), angka utuh bercahaya tanpa garis potong flap sama sekali (`.tile-crease` dihapus total).
+    - **Render Instan:** Memanggil `updatePrayerUI()` dan mendaftarkan interval timer tepat di awal fungsi `init()` sebelum `await` Supabase, memastikan gaya langsung aktif dalam 0 milidetik dari memori/localStorage tanpa menunggu jaringan cloud.
+  - **`web-statis/admin.html`:**
+    - Menambahkan kartu live preview interaktif `#adminCountdownPreviewBox` tepat di bawah dropdown `#cfgCountdownStyle`. Kotak pratinjau ini berdetik dan berputar secara real-time menampilkan model yang dipilih.
+  - **`web-statis/js/admin/admin-core.js` & `admin-data-loader.js`:**
+    - Menambahkan modul `startAdminMiniCountdown()` dan `updateAdminCountdownMiniPreview(style)` untuk menggerakkan angka pratinjau mini di panel admin secara real-time saat dropdown dipilih maupun saat data dimuat dari Supabase / localStorage.
+  - **`web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`:**
+    - Bumping `CACHE_NAME` ke `aljihad-signage-v5.8.101` dan menyelaraskan filter pembersihan cache di panel Admin agar seluruh cache usang di Smart TV dan browser otomatis terhapus.
+  - **`scripts/test-engine.js`:**
+    - Memperbarui verifikasi versi Service Worker menjadi `aljihad-signage-v5.8.101`.
+
+- **Quality Gates & Validasi:**
+  - `npm test`: 272 / 272 assertion checks lulus 100% tanpa regresi.
+  - Verifikasi render visual Edge headless: tangkapan layar `verify_prayer_mode_flip.png` membuktikan engsel emas mekanis dan belahan flap aktif, sedangkan `verify_prayer_mode_biasa.png` membuktikan kartu utuh bersih bercahaya tanpa garis potong.
+
+---
+
 # 19 Oktober 2026 — Penyelarasan Background Islami Slide Galeri Informasi dengan Halaman QRIS (v5.8.100)
 
 - **Permintaan Pengguna:**

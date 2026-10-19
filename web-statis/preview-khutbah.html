@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Montserrat:wght@800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700;800;900&family=Montserrat:wght@800;900&family=Outfit:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@600;700&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
 
     <style>
@@ -714,29 +714,44 @@
             gap: 8px;
         }
 
+        /* =========================================================================
+           DESAIN 1: 3D MECHANICAL FLIP CLOCK MASTERPIECE (MEKANIS / FLAP BERPUTAR)
+           ========================================================================= */
         .flip-card-box {
             position: relative;
-            background: #01140a;
-            border-radius: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.75);
+            background: #000c06;
+            border-radius: 18px;
+            border: 2px solid rgba(255, 215, 0, 0.85);
             box-shadow: 
-                0 18px 42px rgba(0, 0, 0, 0.8),
-                0 0 32px rgba(255, 215, 0, 0.25),
-                inset 0 1px 2px rgba(255, 255, 255, 0.35);
-            perspective: 1000px;
+                0 20px 45px rgba(0, 0, 0, 0.9),
+                0 0 28px rgba(212, 175, 55, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            perspective: 1200px;
+            -webkit-perspective: 1200px;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
             width: clamp(140px, 15vw, 210px);
             height: clamp(100px, 11vw, 150px);
+            user-select: none;
         }
 
         .flip-card-box .flip-digit-text {
-            font-family: 'Cinzel', monospace;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'Space Grotesk', 'Outfit', 'Cinzel', monospace;
             font-size: clamp(64px, 7vw, 96px);
-            font-weight: 900;
+            font-weight: 800;
             letter-spacing: 2px;
             color: #FFFFFF;
+            line-height: 1;
             user-select: none;
-            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
+            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 215, 0, 0.45);
         }
 
         .flip-card-half {
@@ -747,36 +762,34 @@
             height: 50%;
             overflow: hidden;
             box-sizing: border-box;
-            background: linear-gradient(180deg, #052d1b 0%, #021a10 100%);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
         }
 
+        /* Plat Atas (Top Flap) dengan Bevel & Highlight Halus */
         .flip-card-half.top {
             top: 0;
-            border-top-left-radius: inherit;
-            border-top-right-radius: inherit;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.85);
+            background: linear-gradient(180deg, #093822 0%, #032013 95%, #01150c 100%);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            border-bottom: 1.5px solid #000000;
             transform-origin: 50% 100%;
+            -webkit-transform-origin: 50% 100%;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25), inset 0 -3px 6px rgba(0,0,0,0.7);
         }
 
+        /* Plat Bawah (Bottom Flap) dengan Bayangan Kedalaman */
         .flip-card-half.bottom {
             top: 50%;
-            border-bottom-left-radius: inherit;
-            border-bottom-right-radius: inherit;
-            border-top: 1px solid rgba(255, 215, 0, 0.25);
+            background: linear-gradient(180deg, #02190f 0%, #052c1a 20%, #031e12 100%);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            border-top: 1.5px solid rgba(255, 215, 0, 0.35);
             transform-origin: 50% 0%;
-        }
-
-        .flip-card-half .flip-digit-text {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 200%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            -webkit-transform-origin: 50% 0%;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.8), inset 0 -2px 4px rgba(0,0,0,0.5);
         }
 
         .flip-card-half.top .flip-digit-text {
@@ -798,102 +811,135 @@
             z-index: 1;
         }
 
-        /* Saat animasi flip aktif */
-        .flip-card-box.is-flipping .flap-top,
+        /* Animasi Realistis 3D Mechanical Split-Flap Drop & Slap Bounce */
+        .flip-card-box.is-flipping .flap-top {
+            display: block;
+            z-index: 4;
+            animation: flipDownTop 0.28s cubic-bezier(0.45, 0, 0.75, 0.5) forwards;
+            -webkit-animation: flipDownTop 0.28s cubic-bezier(0.45, 0, 0.75, 0.5) forwards;
+        }
+
         .flip-card-box.is-flipping .flap-bottom {
             display: block;
-        }
-
-        .flip-card-box.is-flipping .flap-top {
-            z-index: 4;
-            animation: flipFlapTop 0.24s cubic-bezier(0.4, 0, 0.7, 1) forwards;
-        }
-
-        .flip-card-box.is-flipping .flap-bottom {
             z-index: 5;
             transform: rotateX(90deg);
-            animation: flipFlapBottom 0.24s cubic-bezier(0.3, 0, 0.6, 1) 0.24s forwards;
+            -webkit-transform: rotateX(90deg);
+            animation: flipDownBottom 0.26s cubic-bezier(0.15, 0.85, 0.35, 1.15) 0.26s forwards;
+            -webkit-animation: flipDownBottom 0.26s cubic-bezier(0.15, 0.85, 0.35, 1.15) 0.26s forwards;
         }
 
-        @keyframes flipFlapTop {
+        @keyframes flipDownTop {
             0% { transform: rotateX(0deg); filter: brightness(1); }
-            100% { transform: rotateX(-90deg); filter: brightness(0.5); }
+            100% { transform: rotateX(-90deg); filter: brightness(0.45); }
+        }
+        @-webkit-keyframes flipDownTop {
+            0% { -webkit-transform: rotateX(0deg); filter: brightness(1); }
+            100% { -webkit-transform: rotateX(-90deg); filter: brightness(0.45); }
         }
 
-        @keyframes flipFlapBottom {
-            0% { transform: rotateX(90deg); filter: brightness(0.6); }
+        @keyframes flipDownBottom {
+            0% { transform: rotateX(90deg); filter: brightness(0.5); }
+            75% { transform: rotateX(-4deg); filter: brightness(1.05); }
             100% { transform: rotateX(0deg); filter: brightness(1); }
         }
+        @-webkit-keyframes flipDownBottom {
+            0% { -webkit-transform: rotateX(90deg); filter: brightness(0.5); }
+            75% { -webkit-transform: rotateX(-4deg); filter: brightness(1.05); }
+            100% { -webkit-transform: rotateX(0deg); filter: brightness(1); }
+        }
 
-        /* Engsel & Pin Hardware */
+        /* Engsel & Klip Besi / Pin Emas Mekanis Otentik */
         .hinge-bar {
             position: absolute;
             top: 50%;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 4px;
             background: #000000;
-            box-shadow: 0 1px 1px rgba(255, 215, 0, 0.4), 0 -1px 1px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 1px 2px rgba(255, 215, 0, 0.5), 0 -1.5px 2px rgba(0, 0, 0, 0.95);
             z-index: 10;
             transform: translateY(-50%);
             pointer-events: none;
         }
 
+        /* Klip Engsel Kiri & Kanan dengan Baut / Rivet Emas */
         .hinge-pin {
             position: absolute;
             top: 50%;
-            width: 8px;
-            height: 12px;
-            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
-            border: 1px solid #ffffff;
-            border-radius: 3px;
+            width: 12px;
+            height: 20px;
+            background: linear-gradient(135deg, #FFF3B0 0%, #FFD700 40%, #B8860B 80%, #7A5805 100%);
+            border: 1.5px solid #FFFFFF;
+            border-radius: 4px;
             transform: translateY(-50%);
-            z-index: 11;
-            box-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
+            z-index: 12;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 0 10px rgba(255, 215, 0, 0.7);
             pointer-events: none;
+        }
+        .hinge-pin::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #422a00;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 1px #000, 0 1px 1px rgba(255,255,255,0.4);
         }
         .hinge-pin.left { left: 4px; }
         .hinge-pin.right { right: 4px; }
 
-        /* MODEL BIASA (KLASIK BERSIH / BUKAN FLIP) */
+        /* =========================================================================
+           DESAIN 2: MODEL BIASA (KLASIK ELEGAN BERSIH / BUKAN FLIP / UTUH TANPA POTONGAN)
+           ========================================================================= */
         .tile-face {
-            background: linear-gradient(180deg, #022c16 0%, #011c0e 50%, #01130a 51%, #000b05 100%);
-            border: 2px solid rgba(255, 215, 0, 0.75);
-            border-radius: 20px;
-            padding: 16px 24px;
+            position: relative;
             width: clamp(140px, 15vw, 210px);
             height: clamp(100px, 11vw, 150px);
+            background: linear-gradient(145deg, rgba(8, 56, 34, 0.95) 0%, rgba(3, 30, 18, 0.98) 50%, rgba(1, 16, 9, 1) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.85);
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 
-                0 18px 42px rgba(0, 0, 0, 0.8),
-                0 0 32px rgba(255, 215, 0, 0.25),
+                0 20px 45px rgba(0, 0, 0, 0.9),
+                0 0 30px rgba(13, 110, 80, 0.4),
                 inset 0 1px 2px rgba(255, 255, 255, 0.35);
-            position: relative;
+            user-select: none;
+            overflow: hidden;
             box-sizing: border-box;
         }
 
-        .tile-number {
-            font-family: 'Cinzel', monospace;
-            font-size: clamp(64px, 7vw, 96px);
-            font-weight: 900;
-            color: #FFFFFF;
-            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.5);
-            line-height: 1;
-            user-select: none;
+        /* Cahaya Ambient Halus di Latar Belakang Kotak Biasa */
+        .tile-face::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(52, 211, 153, 0.18) 0%, transparent 65%);
+            pointer-events: none;
         }
 
-        .tile-crease {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: rgba(0, 0, 0, 0.6);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-            transform: translateY(-50%);
-            pointer-events: none;
+        /* Tipografi Angka Model Biasa (Solid, Utuh, Anggun, Tanpa Garis Potong) */
+        .tile-number {
+            position: relative;
+            z-index: 2;
+            font-family: 'Outfit', 'Cinzel', sans-serif;
+            font-size: clamp(64px, 7vw, 96px);
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+            line-height: 1;
+            text-shadow: 
+                0 4px 18px rgba(0, 0, 0, 0.95),
+                0 0 24px rgba(255, 215, 0, 0.5);
+            user-select: none;
+            transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
         .tile-label {
@@ -1642,7 +1688,6 @@
                     </div>
                     <div class="tile-face" id="tileFaceMinutes" style="display: none;">
                         <span class="tile-number" id="timerMinutesPlain">00</span>
-                        <div class="tile-crease"></div>
                     </div>
                     <div class="tile-label">MENIT</div>
                 </div>
@@ -1662,7 +1707,6 @@
                     </div>
                     <div class="tile-face" id="tileFaceSeconds" style="display: none;">
                         <span class="tile-number" id="timerSecondsPlain">00</span>
-                        <div class="tile-crease"></div>
                     </div>
                     <div class="tile-label">DETIK</div>
                 </div>
@@ -1922,7 +1966,7 @@
                 boxEl.classList.remove('is-flipping');
                 boxEl._flipTimer = null;
                 boxEl._pendingVal = null;
-            }, 480);
+            }, 540);
         }
 
         // Variabel Simulasi Pratinjau (Bila dibuka mandiri oleh operator / standalone)
@@ -2463,6 +2507,12 @@
                 }
                 if (!jumatPetugas || forceFresh) {
                     try { const p = localStorage.getItem('cached_sholat_jumat'); if (p) jumatPetugas = JSON.parse(p); } catch (e) {}
+                }
+
+                // Render instan pertama dari cache lokal & inisialisasi interval agar countdown langsung aktif seketika
+                updatePrayerUI();
+                if (!window._prayerInterval) {
+                    window._prayerInterval = setInterval(updatePrayerUI, 1000);
                 }
 
                 // Cloud Supabase fallback jika masih ada data yang kosong atau paksaan refresh
