@@ -153,10 +153,17 @@
             const combined = read('jumatKhotib').split('/').map(value => value.trim());
             const defaultLogo = 'img/logo-aljihad-circle.png';
             const existingPhoto = localStorage.getItem('cached_jumat_foto_imam') || defaultLogo;
-            return { tanggal: read('jumatTanggal'), khatib: combined[0], imam: combined[1] || read('jumatImam') || combined[0],
-                muadzin: read('jumatMuadzin'), muadzin2: read('jumatMuadzin2'), bilal: read('jumatBilal'),
-                maklumat: read('jumatMaklumat'), waktu: read('jumatWaktu') || '11:45', durasi: Number(read('jumatDurasiInput') || 50),
-                foto_imam: jumatFotoImamBase64 !== null ? (jumatFotoImamBase64 || defaultLogo) : (read('jumatFotoUrlInput') || existingPhoto) };
+            return {
+                tanggal: read('jumatTanggal'),
+                khatib: combined[0] || read('jumatKhotib'),
+                imam: combined[1] || read('jumatImam') || combined[0] || read('jumatKhotib'),
+                muadzin: read('jumatMuadzin'),
+                bilal: read('jumatBilal'),
+                maklumat: read('jumatMaklumat'),
+                waktu: read('jumatWaktu') || '11:45',
+                durasi: Number(read('jumatDurasiInput') || 50),
+                foto_imam: jumatFotoImamBase64 !== null ? (jumatFotoImamBase64 || defaultLogo) : (read('jumatFotoUrlInput') || existingPhoto)
+            };
         }
 
         function setPetugasJumatStatus(text) {
@@ -166,9 +173,14 @@
 
         function triggerAutoSavePetugasJumat() {
             try { localStorage.setItem('draft_petugas_jumat', JSON.stringify(collectPetugasJumatDraft())); } catch (error) {}
-            setPetugasJumatStatus('Draft — menunggu penyimpanan…');
+            setPetugasJumatStatus('Draft tersimpan di browser…');
             clearTimeout(triggerAutoSavePetugasJumat.timer);
-            triggerAutoSavePetugasJumat.timer = setTimeout(() => simpanPetugasJumat(true), 700);
+            triggerAutoSavePetugasJumat.timer = setTimeout(() => {
+                const draft = collectPetugasJumatDraft();
+                if ((draft.khatib || draft.imam) && draft.tanggal) {
+                    simpanPetugasJumat(true);
+                }
+            }, 2500);
         }
 
         function restorePetugasJumatDraft() {
@@ -176,15 +188,30 @@
                 const raw = localStorage.getItem('draft_petugas_jumat');
                 if (!raw) return;
                 const draft = JSON.parse(raw);
-                const fields = { jumatTanggal: 'tanggal', jumatKhotib: 'khatib', jumatImam: 'imam', jumatMuadzin: 'muadzin',
-                    jumatMuadzin2: 'muadzin2', jumatBilal: 'bilal', jumatMaklumat: 'maklumat', jumatWaktu: 'waktu', jumatDurasiInput: 'durasi' };
-                Object.entries(fields).forEach(([id, key]) => { const el = document.getElementById(id); if (el && draft[key] !== undefined) el.value = draft[key]; });
+                const fields = {
+                    jumatTanggal: 'tanggal',
+                    jumatKhotib: 'khatib',
+                    jumatImam: 'imam',
+                    jumatMuadzin: 'muadzin',
+                    jumatBilal: 'bilal',
+                    jumatMaklumat: 'maklumat',
+                    jumatWaktu: 'waktu',
+                    jumatDurasiInput: 'durasi'
+                };
+                Object.entries(fields).forEach(([id, key]) => {
+                    const el = document.getElementById(id);
+                    if (el && draft[key] !== undefined && document.activeElement !== el) {
+                        el.value = draft[key];
+                    }
+                });
                 if (draft.foto_imam) {
                     jumatFotoImamBase64 = draft.foto_imam.startsWith('data:') ? draft.foto_imam : null;
-                    const url = document.getElementById('jumatFotoUrlInput'); if (url) url.value = jumatFotoImamBase64 ? '' : draft.foto_imam;
-                    const preview = document.getElementById('jumatFotoPreviewImg'); if (preview) preview.src = draft.foto_imam;
+                    const url = document.getElementById('jumatFotoUrlInput');
+                    if (url && document.activeElement !== url) url.value = jumatFotoImamBase64 ? '' : draft.foto_imam;
+                    const preview = document.getElementById('jumatFotoPreviewImg');
+                    if (preview) preview.src = draft.foto_imam;
                 }
-                setPetugasJumatStatus('Draft dipulihkan — belum tersimpan di cloud.');
+                setPetugasJumatStatus('Draft siap disimpan.');
             } catch (error) { console.warn('Draft Jumat tidak dapat dipulihkan:', error); }
         }
 
@@ -195,7 +222,7 @@
             try { localStorage.setItem('draft_petugas_jumat', serialized); } catch (error) {}
             const sequence = (simpanPetugasJumat.sequence || 0) + 1;
             simpanPetugasJumat.sequence = sequence;
-            setPetugasJumatStatus('Menyimpan ke cloud…');
+            setPetugasJumatStatus('Menyimpan ke cloud & layar TV…');
             const save = async () => {
                 if (!window.SupabaseDB || typeof SupabaseDB.saveSholatJumat !== 'function') return { success: false, error: 'Layanan cloud belum siap' };
                 return SupabaseDB.saveSholatJumat(snapshot);
@@ -206,25 +233,40 @@
             const confirmed = result?.success === true && result?.cloudConfirmed === true;
             const unchanged = JSON.stringify(collectPetugasJumatDraft()) === serialized;
             if (sequence === simpanPetugasJumat.sequence && unchanged) {
-                setPetugasJumatStatus(confirmed ? 'Tersimpan di cloud — tampilan TV menunggu konfirmasi.' : 'Belum terkonfirmasi di cloud. Draft tetap tersedia. ' + (result?.error || ''));
+                setPetugasJumatStatus(confirmed ? '✅ Tersimpan di cloud & layar TV.' : 'Belum terkonfirmasi di cloud. Draft tetap tersedia. ' + (result?.error || ''));
                 if (confirmed) {
                     try {
                         if (localStorage.getItem('draft_petugas_jumat') === serialized) localStorage.removeItem('draft_petugas_jumat');
                         localStorage.setItem('cached_jumat_foto_imam', snapshot.foto_imam);
                     } catch (error) {}
+                    if (!silent) {
+                        if (typeof showToastSuccess === 'function') {
+                            showToastSuccess("Jadwal Petugas Sholat Jum'at berhasil disimpan ke cloud & layar TV!");
+                        } else {
+                            alert("Jadwal Petugas Sholat Jum'at berhasil disimpan ke cloud & layar TV!");
+                        }
+                    }
                 }
             }
             if (!silent && !confirmed) alert(result?.error || 'Penyimpanan belum terkonfirmasi. Draft tetap tersedia.');
             return confirmed;
         }
 
-
+        // Helper update preview live Khotib & Imam
+        function updateLiveJumatPreview() {
+            const kh = document.getElementById('jumatKhotib')?.value?.trim() || '';
+            const im = document.getElementById('jumatImam')?.value?.trim() || '';
+            const prevKh = document.getElementById('prevJumatKhotib');
+            if (prevKh) {
+                if (kh && im && kh !== im) prevKh.textContent = `${kh} / ${im}`;
+                else prevKh.textContent = kh || im || '-';
+            }
+        }
 
         // Live input listeners untuk form Petugas Jum'at
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('jumatKhotib')?.addEventListener('input', (e) => {
-                if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = e.target.value || '-';
-            });
+            document.getElementById('jumatKhotib')?.addEventListener('input', updateLiveJumatPreview);
+            document.getElementById('jumatImam')?.addEventListener('input', updateLiveJumatPreview);
             document.getElementById('jumatMuadzin')?.addEventListener('input', (e) => {
                 if (document.getElementById('prevJumatMuadzin')) document.getElementById('prevJumatMuadzin').textContent = e.target.value || '-';
             });

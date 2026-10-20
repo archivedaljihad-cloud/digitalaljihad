@@ -95,9 +95,16 @@
                             ? `${j.khatib} / ${j.imam}` 
                             : (j.khatib || j.imam || '');
 
-                        if (document.getElementById('jumatTanggal')) document.getElementById('jumatTanggal').value = j.tanggal || '';
-                        if (document.getElementById('jumatKhotib')) document.getElementById('jumatKhotib').value = j.khatib || j.imam || '';
-                        if (document.getElementById('jumatImam')) document.getElementById('jumatImam').value = j.imam || j.khatib || '';
+                        const setIfUnfocused = (id, val) => {
+                            const el = document.getElementById(id);
+                            if (el && document.activeElement !== el) {
+                                el.value = val;
+                            }
+                        };
+
+                        setIfUnfocused('jumatTanggal', j.tanggal || '');
+                        setIfUnfocused('jumatKhotib', j.khatib || j.imam || '');
+                        setIfUnfocused('jumatImam', j.imam || j.khatib || '');
                         let bilalVal = '';
                         let maklumatVal = '';
 
@@ -150,11 +157,10 @@
                             }
                         }
 
-                        if (document.getElementById('jumatMuadzin2')) document.getElementById('jumatMuadzin2').value = j.muadzin2 || '';
-                        if (document.getElementById('jumatWaktu')) document.getElementById('jumatWaktu').value = j.waktu || '11:45';
-                        if (document.getElementById('jumatMuadzin')) document.getElementById('jumatMuadzin').value = j.muadzin || '';
-                        if (document.getElementById('jumatBilal')) document.getElementById('jumatBilal').value = bilalVal;
-                        if (document.getElementById('jumatMaklumat')) document.getElementById('jumatMaklumat').value = maklumatVal;
+                        setIfUnfocused('jumatWaktu', j.waktu || '11:45');
+                        setIfUnfocused('jumatMuadzin', j.muadzin || '');
+                        setIfUnfocused('jumatBilal', bilalVal);
+                        setIfUnfocused('jumatMaklumat', maklumatVal);
 
                         // 6. Muat Foto Imam & Khotib (Display TV)
                         let fotoImamSrc = (j.foto_imam || '').trim();

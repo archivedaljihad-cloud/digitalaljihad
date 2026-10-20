@@ -1,3 +1,49 @@
+# 20 Oktober 2026 — Perbaikan Menyeluruh Form Input Petugas Sholat Jum'at, Proteksi Focus Overwrite, dan Sinkronisasi Skema Supabase (v5.8.106)
+
+- **Permintaan Pengguna:**
+  - *"Data input di Petugas Sholt Jum'at tidak bisa di isi."*
+
+- **Akar Masalah (Root Causes) yang Ditemukan:**
+  1. **Benturan Skema Supabase Cloud (`Could not find the 'sholat_jumat' column of 'app_settings'` & `Could not find the 'muadzin2' column of 'sholat_jumat'`):**
+     - Sebelumnya, `saveSholatJumat` di `web-statis/js/supabase-db.js` mencoba menyimpan data snapshot jumat ke tabel `app_settings` via `saveSettingsBatch()`. Pada tabel `sholat_jumat` di cloud tidak ada kolom `muadzin2`, sehingga pengiriman payload ditolak Supabase dengan HTTP 400. Hal ini menyebabkan penyimpanan cloud gagal dan status error memblokir antarmuka form.
+  2. **Active Input Overwrite Saat Mengetik (Debounce Agresif & Realtime Polling):**
+     - `loadAllData()` di `admin-data-loader.js` dan `restorePetugasJumatDraft()` di `admin-jumat.js` menimpa nilai field input (`jumatKhotib`, `jumatImam`, dll) secara langsung tanpa memeriksa apakah pengguna sedang aktif mengetik pada elemen tersebut (`document.activeElement`). Akibat debounce `triggerAutoSavePetugasJumat` yang terlalu pendek (700ms), tiap ketikan memicu siklus save -> broadcast -> reload yang seketika menghapus / me-reset teks yang sedang diketik user.
+  3. **Struktur Layout Form Berdesakan:**
+     - Input Khotib dan Imam sebelumnya digabung dalam satu `.form-group` dengan teks bantuan yang membingungkan dan indikator `#jumatSaveStatus` terselip canggung di tengah-tengah form field.
+
+- **Detail Implementasi & Solusi Menyeluruh:**
+  1. **Pemisahan Elemen Input & Pembersihan Tampilan Form di `admin.html`:**
+     - Memisahkan input Khotib (`#jumatKhotib`) dan Imam (`#jumatImam`) menjadi 2 `.form-group` mandiri yang elegan, masing-masing dengan label, ikon, dan placeholder yang jelas.
+     - Memindahkan status badge `#jumatSaveStatus` ke kotak status khusus di bawah form lengkap dengan live preview interaktif.
+  2. **Proteksi Input Focus (`setIfUnfocused` & Debounce Aman):**
+     - Menambahkan fungsi proteksi `setIfUnfocused` di `web-statis/js/admin/admin-data-loader.js` sehingga data dari cloud atau background refresh tidak akan pernah menimpa form yang sedang aktif/fokus oleh user (`document.activeElement !== el`).
+     - Di `web-statis/js/admin/admin-jumat.js`, pemulihan draft (`restorePetugasJumatDraft`) diproteksi dengan guard fokus yang sama.
+     - Debounce `triggerAutoSavePetugasJumat` dinaikkan ke 2500ms agar user leluasa mengetik tanpa interupsi, dan draft lokal disimpan seketika di `localStorage`.
+     - Memberikan feedback visual notifikasi sukses (`showToastSuccess`) saat tombol manual simpan diklik.
+  3. **Penyelarasan Mutasi Supabase Cloud Multi-Tabel (`web-statis/js/supabase-db.js`):**
+     - Menjamin mutasi ke tabel relasional `sholat_jumat` mengirimkan kolom yang sesuai skema valid (`tanggal`, `khatib`, `imam`, `muadzin`, `bilal`, `foto_imam`, `updated_at`) tanpa menyertakan kolom yang tidak ada di schema cache.
+     - Menyimpan durasi sholat jumat langsung ke kolom `prayer_mode_jumat_duration` di `app_settings?id=eq.1`.
+     - Menyimpan payload snapshot atomik via `saveSettingsBatch({ sholat_jumat, pengumuman_jumat })` pada `app_settings?on_conflict=key`.
+     - Memperbarui cache lokal dan memancarkan Realtime Broadcast (`sholat_jumat`, `UPDATE`) sehingga TV display langsung sinkron seketika (<100ms).
+  4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.106`):**
+     - Bumping versi cache Service Worker ke **`aljihad-signage-v5.8.106`** di `web-statis/sw.js`.
+     - Menyelaraskan filter pembersihan cache usang di `web-statis/js/admin/admin-settings.js`.
+     - Menyelaraskan suite pengujian di `scripts/test-engine.js`.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/admin.html`: Pemisahan input Khotib & Imam, penataan label/placeholder, dan relokasi badge status simpan.
+  - `web-statis/js/admin/admin-data-loader.js`: Implementasi `setIfUnfocused` untuk proteksi input aktif dari background overwrite.
+  - `web-statis/js/admin/admin-jumat.js`: Guard fokus di `restorePetugasJumatDraft`, kenaikan debounce ke 2500ms, dan feedback toast sukses.
+  - `web-statis/js/supabase-db.js`: Penyempurnaan `saveSholatJumat` dengan validasi aman, mutasi tabel sholat_jumat, dan konfirmasi `saveSettingsBatch`.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping cache ke `aljihad-signage-v5.8.106`.
+  - `scripts/test-engine.js`: Penyelarasan verifikasi bumping cache ke `v5.8.106`.
+  - `LATEST_UPDATE.md`: Dokumentasi riwayat pembaruan sistem.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: Seluruh 284 / 284 assertion checks lulus 100% (Authentication tests: 100%, TV render sync: 31 checks, TV loading: 16 checks, Stage 2 reliability: 44 checks, PostgreSQL RLS: 23 checks, Agenda bindings: 88 checks).
+
+---
+
 # 20 Oktober 2026 — Logo Masjid Al-Jihad Sebagai Foto Default Petugas Sholat Jum'at & Penghapusan Kolom Muadzin 2 (v5.8.105)
 
 - **Permintaan Pengguna:**

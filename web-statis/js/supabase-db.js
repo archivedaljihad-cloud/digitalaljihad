@@ -668,25 +668,82 @@
                 if (snapshot.waktu && !/^([01]\d|2[0-3]):[0-5]\d$/.test(snapshot.waktu)) throw new Error('Waktu Jumat tidak valid');
                 snapshot.schema_version = 2;
                 snapshot.updated_at = new Date().toISOString();
-                const batch = { sholat_jumat: snapshot };
-                const currentSettings = await this.getSettings(true, true);
-                if (currentSettings.pengumuman_jumat) {
-                    const pj = typeof currentSettings.pengumuman_jumat === 'string' ? JSON.parse(currentSettings.pengumuman_jumat) : JSON.parse(JSON.stringify(currentSettings.pengumuman_jumat));
-                    pj.petugas = { ...pj.petugas, imamKhotib: snapshot.khatib === snapshot.imam ? snapshot.khatib : snapshot.khatib + ' / ' + snapshot.imam,
-                        muadzin: snapshot.muadzin || '', muadzin2: snapshot.muadzin2 || '', bilal: snapshot.bilal || '', maklumat: snapshot.maklumat || '', waktu: snapshot.waktu || '11:45' };
-                    batch.pengumuman_jumat = pj;
+
+                const khatibVal = (snapshot.khatib || snapshot.imam || '').trim();
+                const imamVal = (snapshot.imam || snapshot.khatib || '').trim();
+
+                // 1. Mutasi ke tabel sholat_jumat di Supabase Cloud (tabel data utama TV display)
+                try {
+                    if (typeof this.restFetch === 'function' && typeof this.safeRestMutation === 'function') {
+                        const existingRows = await this.restFetch('sholat_jumat?order=tanggal.desc,id.desc&limit=1');
+                        const targetId = (Array.isArray(existingRows) && existingRows.length > 0) ? existingRows[0].id : null;
+                        const jumatRowPayload = {
+                            tanggal: snapshot.tanggal,
+                            khatib: khatibVal,
+                            imam: imamVal,
+                            muadzin: (snapshot.muadzin || '').trim(),
+                            bilal: snapshot.maklumat 
+                                ? `${(snapshot.bilal || '').trim()} / ${(snapshot.maklumat || '').trim()}`
+                                : (snapshot.bilal || '').trim(),
+                            foto_imam: snapshot.foto_imam || 'img/logo-aljihad-circle.png',
+                            updated_at: snapshot.updated_at
+                        };
+
+                        if (targetId) {
+                            await this.safeRestMutation(`sholat_jumat?id=eq.${targetId}`, 'PATCH', jumatRowPayload, {
+                                headers: { Prefer: 'return=representation' }
+                            });
+                        } else {
+                            await this.safeRestMutation('sholat_jumat', 'POST', jumatRowPayload, {
+                                headers: { Prefer: 'return=representation' }
+                            });
+                        }
+                    }
+                } catch (tblErr) {
+                    console.warn('[SupabaseDB] Gagal mutasi tabel sholat_jumat:', tblErr);
                 }
+
+                // 2. Simpan durasi sholat jumat di app_settings (kolom prayer_mode_jumat_duration row 1)
+                if (snapshot.durasi !== undefined && Number.isFinite(Number(snapshot.durasi)) && typeof this.safeRestMutation === 'function') {
+                    try {
+                        await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', {
+                            prayer_mode_jumat_duration: Number(snapshot.durasi)
+                        });
+                    } catch (durErr) {}
+                }
+
+                // 3. Simpan setting sholat_jumat di app_settings (key/value) & pengumuman_jumat jika ada
+                const batch = { sholat_jumat: snapshot };
+                try {
+                    const currentSettings = await this.getSettings(true, true);
+                    if (currentSettings && currentSettings.pengumuman_jumat) {
+                        const pj = typeof currentSettings.pengumuman_jumat === 'string' ? JSON.parse(currentSettings.pengumuman_jumat) : JSON.parse(JSON.stringify(currentSettings.pengumuman_jumat));
+                        pj.petugas = { ...pj.petugas, imamKhotib: snapshot.khatib === snapshot.imam ? snapshot.khatib : snapshot.khatib + ' / ' + snapshot.imam,
+                            muadzin: snapshot.muadzin || '', muadzin2: snapshot.muadzin2 || '', bilal: snapshot.bilal || '', maklumat: snapshot.maklumat || '', waktu: snapshot.waktu || '11:45' };
+                        batch.pengumuman_jumat = pj;
+                    }
+                } catch (e) {}
+
                 if (snapshot.durasi !== undefined) {
                     if (!Number.isFinite(Number(snapshot.durasi)) || Number(snapshot.durasi) <= 0) throw new Error('Durasi Jumat tidak valid');
                     batch.prayer_mode_jumat_duration = Number(snapshot.durasi);
                 }
                 if (await this.saveSettingsBatch(batch) !== true) throw new Error(this.lastSettingsBatchError || 'Penyimpanan cloud belum terkonfirmasi');
+
+                // 4. Update cache lokal & siarkan realtime ke seluruh TV display & admin
                 this.cacheConfirmedSetting('sholat_jumat', snapshot, { cached_sholat_jumat: snapshot });
+                if (snapshot.foto_imam) localStorage.setItem('cached_jumat_foto_imam', snapshot.foto_imam);
                 if (batch.pengumuman_jumat) this.cacheConfirmedSetting('pengumuman_jumat', batch.pengumuman_jumat, { pengumuman_jumat_data: batch.pengumuman_jumat });
                 if (snapshot.durasi !== undefined) this.cacheConfirmedSetting('prayer_mode_jumat_duration', Number(snapshot.durasi), { cached_prayer_mode_jumat_duration: snapshot.durasi });
                 this.notifyConfirmedChange('sholat_jumat', snapshot, 'SYNC_JUMAT');
+                if (typeof this.broadcastChange === 'function') {
+                    this.broadcastChange('sholat_jumat', 'UPDATE', snapshot, 'Admin');
+                }
                 return { success: true, cloudConfirmed: true, data: snapshot };
-            } catch (error) { return { success: false, cloudConfirmed: false, error: error.message }; }
+            } catch (error) {
+                console.error('[SupabaseDB] saveSholatJumat error:', error);
+                return { success: false, cloudConfirmed: false, error: error.message };
+            }
         },
 
         /** A fresh snapshot is mandatory before an edit can receive a render ACK. */

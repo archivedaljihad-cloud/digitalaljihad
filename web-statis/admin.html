@@ -2808,17 +2808,22 @@
                                     </div>
                                     <div class="p-3">
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Tanggal Sholat Jum'at</label>
-                                            <input type="date" class="form-control" id="jumatTanggal" value="2026-09-25" oninput="triggerAutoSavePetugasJumat()">
+                                            <label class="font-weight-bold" for="jumatTanggal"><i class="fas fa-calendar-day text-success mr-1"></i> Tanggal Sholat Jum'at</label>
+                                            <input type="date" class="form-control" id="jumatTanggal" value="2026-10-23" oninput="triggerAutoSavePetugasJumat()">
                                         </div>
                                         <div class="form-group">
-                                            <label class="font-weight-bold d-flex align-items-center justify-content-between">
-                                                <span><i class="fas fa-user-tie text-success mr-1"></i> Khatib Sholat Jumat</span>
+                                            <label class="font-weight-bold d-flex align-items-center justify-content-between" for="jumatKhotib">
+                                                <span><i class="fas fa-user-tie text-success mr-1"></i> Khatib Sholat Jum'at</span>
                                                 <small class="badge badge-success px-2 py-1"><i class="fas fa-check-circle mr-1"></i> Simpan otomatis</small>
                                             </label>
                                             <input type="text" class="form-control" id="jumatKhotib" value="Ust. Dr. H. Faisal, M.Ag" placeholder="Masukkan nama Khatib" oninput="triggerAutoSavePetugasJumat()">
-                                            <label class="font-weight-bold mt-2" for="jumatImam">Imam</label><input type="text" class="form-control" id="jumatImam" value="Ust. Dr. H. Faisal, M.Ag" oninput="triggerAutoSavePetugasJumat()">
-                                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i> Isi Khatib dan Imam secara terpisah. Nama yang sama boleh diisi pada keduanya.</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="jumatImam">
+                                                <i class="fas fa-user-check text-success mr-1"></i> Imam Sholat Jum'at
+                                            </label>
+                                            <input type="text" class="form-control" id="jumatImam" value="Ust. Dr. H. Faisal, M.Ag" placeholder="Masukkan nama Imam" oninput="triggerAutoSavePetugasJumat()">
+                                            <small class="form-text text-muted"><i class="fas fa-info-circle mr-1"></i> Isi Khatib dan Imam secara terpisah. Nama yang sama boleh diisi pada keduanya jika bertugas sekaligus.</small>
                                         </div>
 
                                         <!-- INPUT UPLOAD FOTO IMAM & KHOTIB JUMAT -->
@@ -2858,18 +2863,24 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Muadzin</label>
+                                            <label class="font-weight-bold" for="jumatMuadzin"><i class="fas fa-microphone-alt text-success mr-1"></i> Muadzin</label>
                                             <input type="text" class="form-control" id="jumatMuadzin" value="Ust. Rudy" placeholder="Masukkan nama Muadzin" oninput="triggerAutoSavePetugasJumat()">
                                         </div>
-                                        <div class="form-group"><label for="jumatWaktu" class="font-weight-bold">Waktu Jum'at</label><input id="jumatWaktu" type="time" class="form-control" value="11:45" oninput="triggerAutoSavePetugasJumat()"></div>
-                                        <p id="jumatSaveStatus" role="status" aria-live="polite">Perubahan belum disimpan.</p>
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Bilal</label>
+                                            <label for="jumatWaktu" class="font-weight-bold"><i class="fas fa-clock text-success mr-1"></i> Waktu Jum'at</label>
+                                            <input id="jumatWaktu" type="time" class="form-control" value="11:45" oninput="triggerAutoSavePetugasJumat()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="jumatBilal"><i class="fas fa-bullhorn text-success mr-1"></i> Bilal</label>
                                             <input type="text" class="form-control" id="jumatBilal" value="Ust. Mansur" placeholder="Masukkan nama Bilal" oninput="triggerAutoSavePetugasJumat()">
                                         </div>
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Pembaca Maklumat</label>
+                                            <label class="font-weight-bold" for="jumatMaklumat"><i class="fas fa-scroll text-success mr-1"></i> Pembaca Maklumat</label>
                                             <input type="text" class="form-control" id="jumatMaklumat" value="Ust. Fatkhurokhman" placeholder="Masukkan nama Pembaca Maklumat" oninput="triggerAutoSavePetugasJumat()">
+                                        </div>
+                                        <div class="alert alert-light border py-2 px-3 d-flex align-items-center shadow-sm" style="border-radius: 10px; font-size: 13px;">
+                                            <i class="fas fa-cloud-upload-alt text-success mr-2"></i>
+                                            <span id="jumatSaveStatus" role="status" aria-live="polite" class="font-weight-bold text-gray-700">Draft tersimpan di browser…</span>
                                         </div>
 
                                         <!-- INPUT DURASI SHOLAT JUMAT KHUSUS PEKAN INI -->
