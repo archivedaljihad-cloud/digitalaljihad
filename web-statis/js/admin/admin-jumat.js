@@ -65,9 +65,27 @@
             reader.readAsDataURL(file);
         }
 
+        function convertGoogleDriveUrl(url) {
+            if (!url || typeof url !== 'string') return url;
+            const trimmed = url.trim();
+            const match = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return trimmed;
+        }
+
         function handleJumatFotoUrlChange(url) {
-            const clean = (url || '').trim();
+            let clean = (url || '').trim();
             if (!clean) return;
+
+            const converted = convertGoogleDriveUrl(clean);
+            if (converted !== clean) {
+                clean = converted;
+                const urlInput = document.getElementById('jumatFotoUrlInput');
+                if (urlInput) urlInput.value = clean;
+            }
+
             jumatFotoImamBase64 = null;
 
             const prevForm = document.getElementById('jumatFotoPreviewImg');
@@ -77,8 +95,8 @@
 
             const badge = document.getElementById('jumatFotoBadge');
             if (badge) {
-                badge.className = 'badge badge-info position-absolute';
-                badge.textContent = 'URL Web';
+                badge.className = clean.includes('googleusercontent.com') ? 'badge badge-success position-absolute' : 'badge badge-info position-absolute';
+                badge.textContent = clean.includes('googleusercontent.com') ? 'Google Drive' : 'URL Web';
             }
             triggerAutoSavePetugasJumat();
         }

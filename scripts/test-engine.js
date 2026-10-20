@@ -475,7 +475,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.101'), 'sw.js memiliki bumping versi cache terbaru v5.8.101');
+assert(swContent.includes('aljihad-signage-v5.8.102'), 'sw.js memiliki bumping versi cache terbaru v5.8.102');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -681,6 +681,23 @@ assert(agendaContent.includes('id="waktuTahsin"') && agendaContent.includes('id=
 assert(agendaContent.includes('SYNC_AGENDA_RUTIN'), 'slides/agenda-rutin.html mendengarkan postMessage SYNC_AGENDA_RUTIN');
 assert(pengumumanAgendaContent.includes('formatHariTahsin') && pengumumanAgendaContent.includes('formatPekanTafsir'), 'slides/pengumuman.html memiliki helper formatHariTahsin dan formatPekanTafsir');
 assert(pengumumanAgendaContent.includes('id="waktuTahsin"') && pengumumanAgendaContent.includes('id="waktuTafsir"'), 'slides/pengumuman.html memiliki target DOM waktuTahsin dan waktuTafsir dinamis');
+
+// -------------------------------------------------------------
+// 27. FOTO IMAM & SLIDE AUTO-KOMPRESI CANVAS & GOOGLE DRIVE INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 27] Foto Imam & Slide Auto-Kompresi Canvas & Google Drive Integrity:');
+const freshPetugasContent = fs.readFileSync(path.join(baseDir, 'petugas.html'), 'utf8');
+const freshModeinputContent = fs.readFileSync(path.join(baseDir, 'modeinput.html'), 'utf8');
+const adminGaleriContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-galeri.js'), 'utf8');
+assert(freshPetugasContent.includes('convertGoogleDriveUrl') && freshPetugasContent.includes('lh3.googleusercontent.com/d/'), 'petugas.html memiliki helper convertGoogleDriveUrl untuk auto-convert link Google Drive');
+assert(freshPetugasContent.includes('jumatImamFotoBase64 = compressed;') && freshPetugasContent.includes("canvas.toDataURL('image/jpeg', 0.72)"), 'petugas.html memiliki auto-kompresor canvas (~30KB) untuk upload foto imam dari HP');
+assert(freshPetugasContent.includes('id="imamPhotoInfo"'), 'petugas.html memiliki badge info kompresi foto imam');
+assert(freshModeinputContent.includes('convertGoogleDriveUrl') && freshModeinputContent.includes('lh3.googleusercontent.com/d/'), 'modeinput.html memiliki helper convertGoogleDriveUrl untuk auto-convert link Google Drive');
+assert(freshModeinputContent.includes('jumatImamFotoBase64 = compressed;') && freshModeinputContent.includes("canvas.toDataURL('image/jpeg', 0.72)"), 'modeinput.html memiliki auto-kompresor canvas (~30KB) untuk upload foto imam dari HP');
+assert(freshModeinputContent.includes('id="imamPhotoInfo"'), 'modeinput.html memiliki badge info kompresi foto imam');
+const adminJumatContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-jumat.js'), 'utf8');
+assert(adminJumatContent.includes('convertGoogleDriveUrl') && adminJumatContent.includes('lh3.googleusercontent.com/d/'), 'admin-jumat.js memiliki auto-convert URL Google Drive');
+assert(adminGaleriContent.includes('convertGoogleDriveUrl') && adminGaleriContent.includes('lh3.googleusercontent.com/d/'), 'admin-galeri.js memiliki auto-convert URL Google Drive');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

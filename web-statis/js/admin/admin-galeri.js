@@ -213,6 +213,16 @@
             }
         }
 
+        function convertGoogleDriveUrl(url) {
+            if (!url || typeof url !== 'string') return url;
+            const trimmed = url.trim();
+            const match = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return trimmed;
+        }
+
         function simpanGaleriInformasi(event) {
             if (event) event.preventDefault();
 
@@ -222,7 +232,12 @@
             const urutan = parseInt(document.getElementById('galeriUrutan').value, 10) || 1;
             const durasi = parseInt(document.getElementById('galeriDurasi').value, 10) || 10;
             const aktif = (document.getElementById('galeriAktif').value === '1');
-            const urlInput = document.getElementById('galeriGambarUrl').value.trim();
+            let urlInput = document.getElementById('galeriGambarUrl').value.trim();
+            if (urlInput) {
+                urlInput = convertGoogleDriveUrl(urlInput);
+                const gInput = document.getElementById('galeriGambarUrl');
+                if (gInput) gInput.value = urlInput;
+            }
 
             if (!judul) {
                 alert('Judul Galeri Informasi wajib diisi!');

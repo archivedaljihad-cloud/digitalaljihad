@@ -2335,6 +2335,7 @@
                                         <input type="file" id="imamPhotoFileInput" accept="image/*" style="display: none;" onchange="handleImamPhotoUpload(event)">
                                     </label>
                                     <input type="text" id="${f.id}" class="form-input-big" style="padding: 6px 10px; font-size: 0.78rem;" value="${escapeHtml(f.val)}" placeholder="Atau tempel tautan URL Foto..." oninput="handleImamPhotoUrlInput(this.value)">
+                                    <div id="imamPhotoInfo" style="font-size: 0.74rem; color: #38bdf8; margin-top: 4px; display: none;"></div>
                                 </div>
                             </div>
                         </div>
@@ -2564,28 +2565,110 @@
         }
 
         /* =========================================================================
-           HANDLER UPLOAD FOTO IMAM (BASE64 & PREVIEW)
+           HANDLER UPLOAD FOTO IMAM (AUTO-KOMPRESI CANVAS & GOOGLE DRIVE CONVERT)
            ========================================================================= */
+        function convertGoogleDriveUrl(url) {
+            if (!url || typeof url !== 'string') return url;
+            const trimmed = url.trim();
+            const match = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return trimmed;
+        }
+
         function handleImamPhotoUpload(event) {
-            const file = event.target.files[0];
+            const file = event.target.files && event.target.files[0];
             if (!file) return;
 
+            if (file.size > 15 * 1024 * 1024) {
+                alert('Ukuran berkas foto terlalu besar! Maksimal 15MB.');
+                event.target.value = '';
+                return;
+            }
+
+            const infoEl = document.getElementById('imamPhotoInfo');
+            if (infoEl) {
+                infoEl.style.display = 'block';
+                infoEl.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengompres foto secara otomatis...';
+            }
+
             const reader = new FileReader();
-            reader.onload = function(e) {
-                jumatImamFotoBase64 = e.target.result;
-                const prev = document.getElementById('imamPhotoPreview');
-                if (prev) prev.src = jumatImamFotoBase64;
-                const inputUrl = document.getElementById('f_foto_imam');
-                if (inputUrl) inputUrl.value = 'Foto dari Galeri HP';
+            reader.onload = function (e) {
+                const rawDataUrl = e.target.result;
+                const img = new Image();
+                img.onload = function() {
+                    // Auto-Kompresi Canvas Hemat Kuota (Maks 360x480 px, kualitas JPEG 0.72 -> Ukuran ~25-30 KB)
+                    const maxW = 360;
+                    const maxH = 480;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxW || h > maxH) {
+                        if (w / h > maxW / maxH) {
+                            h = Math.round((h * maxW) / w);
+                            w = maxW;
+                        } else {
+                            w = Math.round((w * maxH) / h);
+                            h = maxH;
+                        }
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+
+                    const compressed = canvas.toDataURL('image/jpeg', 0.72);
+                    jumatImamFotoBase64 = compressed;
+
+                    const approxKb = Math.round((compressed.length * 0.75) / 1024);
+                    const prev = document.getElementById('imamPhotoPreview');
+                    if (prev) prev.src = compressed;
+                    const inputUrl = document.getElementById('f_foto_imam');
+                    if (inputUrl) inputUrl.value = 'Foto HP Dikompres (' + approxKb + ' KB)';
+
+                    if (infoEl) {
+                        infoEl.style.display = 'block';
+                        infoEl.innerHTML = '<i class="fas fa-bolt mr-1"></i> Foto otomatis dikompres ke <strong>' + approxKb + ' KB</strong> (Hemat kuota & siap tayang di TV)';
+                    }
+                };
+                img.onerror = function() {
+                    jumatImamFotoBase64 = rawDataUrl;
+                    const prev = document.getElementById('imamPhotoPreview');
+                    if (prev) prev.src = rawDataUrl;
+                    const inputUrl = document.getElementById('f_foto_imam');
+                    if (inputUrl) inputUrl.value = 'Foto dari Galeri HP';
+                    if (infoEl) infoEl.style.display = 'none';
+                };
+                img.src = rawDataUrl;
             };
             reader.readAsDataURL(file);
         }
 
         function handleImamPhotoUrlInput(url) {
-            if (!url) return;
+            if (!url) {
+                const infoEl = document.getElementById('imamPhotoInfo');
+                if (infoEl) infoEl.style.display = 'none';
+                return;
+            }
+            const converted = convertGoogleDriveUrl(url);
+            if (converted !== url) {
+                const inputUrl = document.getElementById('f_foto_imam');
+                if (inputUrl) inputUrl.value = converted;
+            }
             jumatImamFotoBase64 = '';
             const prev = document.getElementById('imamPhotoPreview');
-            if (prev) prev.src = url;
+            if (prev) prev.src = converted;
+
+            const infoEl = document.getElementById('imamPhotoInfo');
+            if (infoEl) {
+                if (converted.includes('googleusercontent.com')) {
+                    infoEl.style.display = 'block';
+                    infoEl.innerHTML = '<i class="fab fa-google-drive mr-1"></i> Link Google Drive terkonversi langsung (0 Byte di Supabase)';
+                } else {
+                    infoEl.style.display = 'none';
+                }
+            }
         }
 
         /* =========================================================================

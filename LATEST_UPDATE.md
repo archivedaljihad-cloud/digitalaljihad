@@ -1,3 +1,32 @@
+# 20 Oktober 2026 — Auto-Kompresor Canvas Foto Imam (~30 KB) & Auto-Converter Link Google Drive (v5.8.102)
+
+- **Permintaan Pengguna:**
+  - *"Lebih baik tambahkan Auto-Kompresor Canvas (sehingga jika upload dari HP, otomatis dikompres ke ~30 KB), agar user tidak repot untuk mengupload foto ke google drive. jadi bisa langsung upload fotonya tetap dari dasboard admin/petugas."*
+
+- **Akar Masalah (Root Cause Discovery):**
+  - Sebelumnya, pada form petugas mobile (`petugas.html` dan `modeinput.html`), fungsi `handleImamPhotoUpload` membaca berkas gambar langsung dari kamera/galeri HP sebagai data URI Base64 mentah tanpa proses *resizing/downsampling*.
+  - Kamera smartphone modern (12 MP s/d 48 MP) menghasilkan berkas Base64 raksasa berukuran 3 MB hingga 8 MB. Ketika disimpan ke dalam Supabase (`app_settings` / `sholat_jumat`), data megabyte ini diunduh secara berulang oleh Layar TV dan peramban klien saat sinkronisasi realtime, yang berpotensi menghabiskan kuota *Egress Bandwidth* Supabase gratis (2–5 GB/bulan).
+  - Tautan Google Drive biasa yang ditempel pengurus (`drive.google.com/file/d/...`) juga tidak dapat langsung dirender oleh tag `<img>` browser tanpa dikonversi ke format direct stream `lh3.googleusercontent.com/d/...`.
+
+- **Solusi & Perubahan Berkas:**
+  - **`web-statis/petugas.html` & `web-statis/modeinput.html` (serta salinan `public/`):**
+    - **Auto-Kompresor HTML5 Canvas Client-Side:** Saat petugas memilih/memotret foto ustadz/imam dari HP, script secara otomatis me-resize gambar menjadi maksimal **360x480 piksel** dengan kompresi JPEG kualitas **0.72**.
+    - Hasil kompresi langsung menyusutkan ukuran foto dari **3–8 MB menjadi hanya ~25–30 KB** (efisiensi 99%).
+    - Menambahkan indikator visual real-time `#imamPhotoInfo` di bawah tombol input: memberitahu petugas bahwa foto telah berhasil dikompres ke ukuran ~25–30 KB dan siap tayang di TV.
+    - **Auto-Converter Link Google Drive:** Menambahkan fungsi `convertGoogleDriveUrl(url)`. Jika petugas menempelkan link Google Drive biasa, sistem otomatis mendeteksi ID file dan mengubahnya menjadi format direct image CDN `https://lh3.googleusercontent.com/d/[ID_FILE]` (0 byte di Supabase).
+  - **`web-statis/js/admin/admin-jumat.js` & `web-statis/js/admin/admin-galeri.js`:**
+    - Menambahkan fungsi `convertGoogleDriveUrl` pada input URL foto imam dan galeri slide poster, menjamin tautan Google Drive langsung terkonversi otomatis ke direct stream saat disimpan.
+  - **`web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`:**
+    - Bumping `CACHE_NAME` ke **`aljihad-signage-v5.8.102`** dan menyelaraskan pembersihan cache usang browser & TV Display.
+  - **`scripts/test-engine.js`:**
+    - Memperbarui verifikasi `CACHE_NAME` ke `v5.8.102`.
+    - Menambahkan rangkaian pengujian **TEST 27** untuk memverifikasi integritas Auto-Kompresor Canvas dan Auto-Converter Google Drive di `petugas.html`, `modeinput.html`, `admin-jumat.js`, dan `admin-galeri.js`.
+
+- **Quality Gates & Validasi:**
+  - `npm test`: Seluruh rangkaian pengujian (280 assertion checks) lulus 100% tanpa regresi.
+
+---
+
 # 19 Oktober 2026 — Penyempurnaan Desain Hitung Mundur (Countdown Sholat) 3D Flip Clock & Model Biasa serta Live Preview Admin (v5.8.101)
 
 - **Permintaan Pengguna:**
