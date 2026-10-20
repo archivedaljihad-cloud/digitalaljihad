@@ -211,6 +211,11 @@
                     const preview = document.getElementById('jumatFotoPreviewImg');
                     if (preview) preview.src = draft.foto_imam;
                 }
+                if (draft.khatib && draft.imam && draft.khatib !== draft.imam) {
+                    const el = document.getElementById('jumatKhotib');
+                    if (el && document.activeElement !== el) el.value = `${draft.khatib} / ${draft.imam}`;
+                }
+                updateLiveJumatPreview();
                 setPetugasJumatStatus('Draft siap disimpan.');
             } catch (error) { console.warn('Draft Jumat tidak dapat dipulihkan:', error); }
         }
@@ -258,14 +263,31 @@
             const im = document.getElementById('jumatImam')?.value?.trim() || '';
             const prevKh = document.getElementById('prevJumatKhotib');
             if (prevKh) {
-                if (kh && im && kh !== im) prevKh.textContent = `${kh} / ${im}`;
-                else prevKh.textContent = kh || im || '-';
+                if (kh.includes('/')) {
+                    prevKh.textContent = kh;
+                } else if (kh && im && kh !== im) {
+                    prevKh.textContent = `${kh} / ${im}`;
+                } else {
+                    prevKh.textContent = kh || im || '-';
+                }
             }
         }
 
         // Live input listeners untuk form Petugas Jum'at
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('jumatKhotib')?.addEventListener('input', updateLiveJumatPreview);
+            document.getElementById('jumatKhotib')?.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const imEl = document.getElementById('jumatImam');
+                if (imEl) {
+                    if (val.includes('/')) {
+                        const parts = val.split('/').map(s => s.trim());
+                        imEl.value = parts[1] || parts[0];
+                    } else {
+                        imEl.value = val;
+                    }
+                }
+                updateLiveJumatPreview();
+            });
             document.getElementById('jumatImam')?.addEventListener('input', updateLiveJumatPreview);
             document.getElementById('jumatMuadzin')?.addEventListener('input', (e) => {
                 if (document.getElementById('prevJumatMuadzin')) document.getElementById('prevJumatMuadzin').textContent = e.target.value || '-';

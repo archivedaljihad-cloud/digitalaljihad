@@ -1,3 +1,35 @@
+# 20 Oktober 2026 — Penyatuan Kolom Khatib & Imam Sholat Jum'at Menjadi 1 Kolom Terpadu (v5.8.107)
+
+- **Permintaan Pengguna:**
+  - *"Khatib Sholat Jum'at dan Imam JADIKAN 1 KOLOM saja !!!!!!!!!!!!"*
+
+- **Detail Implementasi & Solusi:**
+  1. **Penyatuan Form Field Khatib & Imam Menjadi 1 Kolom Tunggal di `admin.html`:**
+     - Menggabungkan elemen input Khatib dan Imam di dashboard `web-statis/admin.html` menjadi tepat **1 kolom / form group tunggal**:
+       - **Label:** `<i class="fas fa-user-tie text-success mr-1"></i> Khatib & Imam Sholat Jum'at` dilengkapi badge *Simpan otomatis*.
+       - **Input Tunggal:** `#jumatKhotib` dengan placeholder deskriptif *"Masukkan nama Khatib & Imam Sholat Jum'at"*.
+       - **Hidden Companion Input:** `#jumatImam` disimpan sebagai `<input type="hidden">` di dalam form group yang sama demi menjaga integritas binding contract, suite pengujian integrasi browser, dan backward compatibility.
+       - **Teks Bantuan:** Menyediakan panduan praktis: *"Masukkan nama Khatib sekaligus Imam. Jika Khatib dan Imam berbeda orang, gunakan tanda garis miring (contoh: Ust. Faiq / Ust. Faisal)."*
+  2. **Sinkronisasi Skrip & Parsing Terpadu di `admin-jumat.js`:**
+     - Event listener input pada `#jumatKhotib` secara otomatis mendeteksi apakah nama mengandung pemisah slash (`/`). Jika satu nama diisi, maka nilai Imam otomatis sama dengan Khatib. Jika format dua nama (`Khatib / Imam`) diisi, nilai Khatib dan Imam dipetakan secara akurat.
+     - Fungsi `updateLiveJumatPreview()` menyelaraskan teks pratinjau kartu TV display secara instan saat user mengetik.
+     - Fungsi pemulihan draft (`restorePetugasJumatDraft`) memulihkan tampilan nama gabungan (`${draft.khatib} / ${draft.imam}`) jika keduanya berbeda.
+  3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.107`):**
+     - Bumping `CACHE_NAME` ke **`aljihad-signage-v5.8.107`** di `web-statis/sw.js`.
+     - Menyelaraskan filter pembersihan cache di `web-statis/js/admin/admin-settings.js` dan verifikasi assertion di `scripts/test-engine.js`.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/admin.html`: Penyatuan input Khotib & Imam menjadi 1 form-group terpadu dengan hidden input pendamping.
+  - `web-statis/js/admin/admin-jumat.js`: Pembaruan listener sinkronisasi input dan preview live 1 kolom.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping cache ke `aljihad-signage-v5.8.107`.
+  - `scripts/test-engine.js`: Penyelarasan verifikasi bumping cache ke `v5.8.107`.
+  - `LATEST_UPDATE.md`: Dokumentasi riwayat pembaruan sistem.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: Seluruh 284 / 284 assertion checks lulus 100%.
+
+---
+
 # 20 Oktober 2026 — Perbaikan Menyeluruh Form Input Petugas Sholat Jum'at, Proteksi Focus Overwrite, dan Sinkronisasi Skema Supabase (v5.8.106)
 
 - **Permintaan Pengguna:**
