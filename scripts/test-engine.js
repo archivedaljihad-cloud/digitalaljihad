@@ -376,13 +376,15 @@ assert(!keuSummaryContent.includes('.trans-val.income { color: #00e676;'), 'slid
 console.log('\n📌 [TEST 12] Prayer Mode Shaf Hadith Center Format & Transparent Box Integrity:');
 const prayerModeHtmlContent = fs.readFileSync(path.join(baseDir, 'prayer-mode.html'), 'utf8');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-arabic') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arabic format center');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-arabic') && prayerModeHtmlContent.includes('clamp(30px, 3.4vw, 50px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-arabic yang diperbesar proporsional');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-arti format center');
-assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlContent.includes('clamp(20px, 2.0vw, 28px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-arti yang diperbesar proporsional');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-arti') && prayerModeHtmlContent.includes('clamp(22px, 2.25vw, 32px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-arti yang diperbesar proporsional');
 assert(prayerModeHtmlContent.includes('.prayer-shaf-source') && prayerModeHtmlContent.includes('text-align: center;'), 'prayer-mode.html memiliki CSS .prayer-shaf-source format center');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-source') && prayerModeHtmlContent.includes('clamp(14px, 1.4vw, 20px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-source yang diperbesar proporsional');
 assert(prayerModeHtmlContent.includes('“Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”'), 'prayer-mode.html memuat terjemahan hadits shaf dengan kata "shalat"');
 assert(!prayerModeHtmlContent.includes('kesempurnaan salat'), 'prayer-mode.html tidak lagi memuat kata usang "kesempurnaan salat"');
 assert(prayerModeHtmlContent.includes('Shalatlah seolah-olah ini adalah shalat terakhirmu'), 'prayer-mode.html memuat pengingat shalat terakhir');
-assert(prayerModeHtmlContent.includes('.prayer-shaf-reminder') && prayerModeHtmlContent.includes('clamp(18px, 1.8vw, 25px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-reminder yang diperbesar proporsional');
+assert(prayerModeHtmlContent.includes('.prayer-shaf-reminder') && prayerModeHtmlContent.includes('clamp(20px, 2.0vw, 28px)'), 'prayer-mode.html memiliki ukuran font .prayer-shaf-reminder yang diperbesar proporsional');
 assert(prayerModeHtmlContent.includes('(HR. Bukhari no.690 &amp; HR. Muslim no.433)'), 'prayer-mode.html memuat sumber hadits HR. Bukhari no.690 & HR. Muslim no.433');
 assert(!prayerModeHtmlContent.includes("prayerModeTextEl.textContent = 'Iqamah Segera Dikumandangkan"), 'prayer-mode.html tidak lagi menggunakan teks Iqamah lama pada fase sholat berjamaah');
 assert(prayerModeHtmlContent.includes('body.phase-prayer .prayer-mode-box') && prayerModeHtmlContent.includes('background: transparent !important;'), 'prayer-mode.html memiliki kotak hadits shaf 100% transparan di fase sholat');
@@ -475,7 +477,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.103'), 'sw.js memiliki bumping versi cache terbaru v5.8.103');
+assert(swContent.includes('aljihad-signage-v5.8.104'), 'sw.js memiliki bumping versi cache terbaru v5.8.104');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY

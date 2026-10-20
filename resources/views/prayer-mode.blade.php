@@ -964,7 +964,7 @@
 
         .prayer-shaf-arabic {
             font-family: 'Amiri', 'Scheherazade New', serif;
-            font-size: clamp(26px, 2.9vw, 42px);
+            font-size: clamp(30px, 3.4vw, 50px);
             font-weight: 700;
             line-height: 1.6;
             color: #FFD700;
@@ -976,21 +976,21 @@
 
         .prayer-shaf-arti {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(20px, 2.0vw, 28px);
+            font-size: clamp(22px, 2.25vw, 32px);
             font-weight: 600;
             line-height: 1.5;
             color: #FFFFFF;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
             text-align: center;
-            max-width: 1160px;
+            max-width: 1440px;
             margin: 0 auto clamp(6px, 0.8vh, 10px);
         }
 
         .prayer-shaf-source {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(13px, 1.3vw, 18px);
+            font-size: clamp(14px, 1.4vw, 20px);
             font-weight: 600;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
             line-height: 1.4;
             color: #FDE047;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
@@ -1000,19 +1000,23 @@
 
         .prayer-shaf-reminder {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(18px, 1.8vw, 25px);
+            font-size: clamp(20px, 2.0vw, 28px);
             font-weight: 600;
             font-style: italic;
             line-height: 1.5;
             color: #FFFFFF;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98), 0 4px 18px rgba(0, 0, 0, 0.92);
             text-align: center;
-            max-width: 1160px;
+            max-width: 1440px;
             margin: clamp(6px, 0.9vh, 12px) auto 0;
             letter-spacing: 0.3px;
         }
 
         /* FASE SHOLAT BERJAMAAH: KOTAK TRANSPARAN & POSISI TEKS HADITS SHAF DIGESER KE BAWAH */
+        body.phase-prayer .prayer-container {
+            max-width: 1450px;
+        }
+
         body.phase-prayer #hadithPlakat,
         body.phase-prayer .hadith-plakat,
         .prayer-container:has(.prayer-mode-box.active:not(.jumat-box)) #hadithPlakat,
@@ -1024,7 +1028,7 @@
         .prayer-container:has(.prayer-mode-box:not(.jumat-box)) .message-section {
             margin-top: auto !important;
             margin-bottom: clamp(90px, 12vh, 150px) !important;
-            max-width: 1100px;
+            max-width: 1450px;
         }
 
         body.phase-prayer .prayer-mode-box:not(.jumat-box),

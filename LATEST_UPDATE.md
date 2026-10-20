@@ -1,3 +1,40 @@
+# 20 Oktober 2026 — Peningkatan Proporsional Tipografi Hadits Shaf & Pengingat Sholat pada Prayer Mode (v5.8.104)
+
+- **Permintaan Pengguna:**
+  - *"Dihalaman https://digitalaljihad.my.id/prayer-mode?phase=prayer. Perbesar sedikit lagi teks dibawah ini :
+    سَوُّوا صُفُوفَكُمْ , فَإِنَّ تَسْوِيَةَ الصَّفِّ مِنْ تَمَامِ الصَّلاةِ
+    “Luruskan shaf-shaf kalian, karena lurusnya shaf adalah kesempurnaan shalat”
+    (HR. Bukhari no.690 & HR. Muslim no.433)--> besar fontnya jangan disamakan dengan teks diatasnya
+    “Shalatlah seolah-olah ini adalah shalat terakhirmu”"*
+
+- **Detail Peningkatan Tipografi & Proporsi Layar TV Display:**
+  1. **Matan Arab Hadits Shaf (`.prayer-shaf-arabic`):**
+     - Ukuran dinaikkan dari `clamp(26px, 2.9vw, 42px)` menjadi **`clamp(30px, 3.4vw, 50px)`** (+19% pada layar TV 1080p).
+     - Kaligrafi font `Amiri` emas `#FFD700` dengan glow lembut dan harakat tajam, tampil agung di tengah dinding Ka'bah.
+  2. **Terjemahan Hadits Shaf (`.prayer-shaf-arti`):**
+     - Ukuran dinaikkan dari `clamp(20px, 2.0vw, 28px)` menjadi **`clamp(22px, 2.25vw, 32px)`** (+14.3% pada layar TV 1080p).
+     - Lebar kontainer dinaikkan hingga `max-width: 1440px;` (dan kontainer induk `body.phase-prayer .prayer-container` hingga `1450px;`) sehingga kalimat mengalir dalam 1 baris utuh, rapi, dan seimbang tanpa kata menggantung (*orphan words*).
+  3. **Sumber Perawi Hadits (`.prayer-shaf-source`):**
+     - Sesuai instruksi khusus (*"besar fontnya jangan disamakan dengan teks diatasnya"*), ukuran sumber perawi diperbesar proporsional dari `clamp(13px, 1.3vw, 18px)` menjadi **`clamp(14px, 1.4vw, 20px)`** (+11% pada layar TV 1080p).
+     - Font size 20px tetap berada pada rasio hierarki sitasi yang terpisah tegas dan jauh lebih kecil dibandingkan teks hadits di atasnya (32px vs 20px), dengan warna emas muda `#FDE047` dan `letter-spacing: 0.6px`.
+  4. **Pengingat Shalat Terakhir (`.prayer-shaf-reminder`):**
+     - Ukuran dinaikkan dari `clamp(18px, 1.8vw, 25px)` menjadi **`clamp(20px, 2.0vw, 28px)`** (+12% pada layar TV 1080p).
+     - Font `Poppins` semi-bold italic warna putih kristal `#FFFFFF`, tampil elegan dan khusyuk di atas siluet jamaah di pelataran Ka'bah.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/prayer-mode.html`: Penyesuaian CSS `.prayer-shaf-arabic`, `.prayer-shaf-arti`, `.prayer-shaf-source`, `.prayer-shaf-reminder`, serta `body.phase-prayer .prayer-container` & `.message-section`.
+  - `web-statis/preview-khutbah.html`: Sinkronisasi CSS shaf hadits dan tata letak fase sholat.
+  - `resources/views/prayer-mode.blade.php`: Sinkronisasi CSS blade template Laravel.
+  - `public/preview-prayer-mode.html` & `public/preview-khutbah.html`: Sinkronisasi berkas preview public.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping `CACHE_NAME` ke **`aljihad-signage-v5.8.104`** dan pembersihan cache usang browser & TV Display.
+  - `scripts/test-engine.js`: Penambahan dan pembaruan assertions uji integritas ukuran font di **TEST 12** dan verifikasi cache di **TEST 17**.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: 284 / 284 assertion checks lulus 100% tanpa regresi.
+  - Visual verification: Pengujian multi-resolusi (TV 1920x1080, Tablet 1024x768, dan Mobile 412x915) terbukti rapi, responsif, dan bebas overflow.
+
+---
+
 # 20 Oktober 2026 — Cakupan Penuh 100% Auto-Kompresor Canvas & Google Drive Auto-Converter (Termasuk QRIS Donasi Digital) (v5.8.103)
 
 - **Permintaan & Konteks Pengguna:**
