@@ -1,3 +1,31 @@
+# 20 Oktober 2026 — Cakupan Penuh 100% Auto-Kompresor Canvas & Google Drive Auto-Converter (Termasuk QRIS Donasi Digital) (v5.8.103)
+
+- **Permintaan & Konteks Pengguna:**
+  - *"Apakah fitur Auto-Compressor Canvas ini sudah berlaku untuk semua file gambar yang diinput langsung oleh user dari hp ?"*
+
+- **Audit & Temuan Menyeluruh:**
+  - Melakukan audit pada seluruh elemen `<input type="file">` dan fungsi pengunggah gambar di seluruh repositori:
+    1. **Foto Petugas / Khatib / Imam Jumat** (`petugas.html`, `modeinput.html`, `admin-jumat.js`): Telah aktif dengan Auto-Kompresor Canvas (360x480px, JPEG 0.72 ~25–30 KB) dan Auto-Convert Google Drive.
+    2. **Galeri Informasi / Slide Poster Acara** (`admin-galeri.js`): Telah aktif dengan Auto-Kompresor Canvas (1024x1024px, JPEG 0.72 ~150–250 KB) dan Auto-Convert Google Drive.
+    3. **QRIS Donasi Digital** (`admin-qris.js`): Sebelumnya masih menggunakan pembacaan `FileReader` mentah (tanpa kompresi canvas, file dari HP bisa mencapai ~2.6 MB string Base64 yang membebani row `qris_image` di `app_settings` Supabase).
+
+- **Solusi & Perubahan Berkas:**
+  - **`web-statis/js/admin/admin-qris.js`:**
+    - Mengintegrasikan **Auto-Kompresor Canvas Client-Side**: Foto/gambar barcode QRIS dari HP otomatis di-resize ke maksimal **600x600 piksel** dengan kompresi JPEG kualitas **0.82** (mempertahankan ketajaman kontras hitam-putih barcode QRIS agar akurat di-scan aplikasi perbankan/e-wallet di TV, namun ukuran berkas menyusut dari ~2–5 MB menjadi hanya **~35–45 KB**).
+    - Mengintegrasikan **Auto-Converter Link Google Drive**: Fungsi `convertGoogleDriveUrl(url)` dipasang pada input URL dan pratinjau QRIS, mengubah tautan Google Drive biasa menjadi direct CDN `https://lh3.googleusercontent.com/d/[ID_FILE]`.
+  - **`web-statis/admin.html`:**
+    - Memperbarui label instruksi pada modal input QRIS untuk menginfokan kompresi canvas otomatis ke ~40 KB dan dukungan tautan Google Drive.
+  - **`web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`:**
+    - Bumping `CACHE_NAME` ke **`aljihad-signage-v5.8.103`** dan menyelaraskan pembersihan cache usang browser & TV Display.
+  - **`scripts/test-engine.js`:**
+    - Menambahkan assertions uji integritas Auto-Kompresor Canvas dan Auto-Convert Google Drive pada `admin-qris.js` di dalam **TEST 27**.
+    - Memperbarui verifikasi `CACHE_NAME` Service Worker ke `v5.8.103`.
+
+- **Quality Gates & Validasi:**
+  - `npm test`: 282 / 282 assertion checks lulus 100% tanpa regresi.
+
+---
+
 # 20 Oktober 2026 — Auto-Kompresor Canvas Foto Imam (~30 KB) & Auto-Converter Link Google Drive (v5.8.102)
 
 - **Permintaan Pengguna:**

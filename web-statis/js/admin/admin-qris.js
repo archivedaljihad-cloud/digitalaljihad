@@ -148,27 +148,69 @@
             $('#modalDetailQris').modal('show');
         }
 
+        function convertGoogleDriveUrl(url) {
+            if (!url || typeof url !== 'string') return url;
+            const trimmed = url.trim();
+            const match = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return trimmed;
+        }
+
         function previewUploadQris(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            if (file.size > 2 * 1024 * 1024) {
-                alert('Ukuran file maksimal adalah 2MB.');
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Ukuran berkas terlalu besar! Maksimal 10MB.');
                 event.target.value = '';
                 return;
             }
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                uploadedQrisBase64 = e.target.result;
-                document.getElementById('previewQrisImg').src = uploadedQrisBase64;
+                const rawBase64 = e.target.result;
+                const img = new Image();
+                img.onload = function() {
+                    // Kompresi otomatis Canvas untuk QRIS: resolusi maks 600x600 px (sangat presisi untuk scan TV, ukuran hanya ~30-50 KB)
+                    const MAX_SIZE = 600;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > MAX_SIZE || h > MAX_SIZE) {
+                        if (w > h) {
+                            h = Math.round((h * MAX_SIZE) / w);
+                            w = MAX_SIZE;
+                        } else {
+                            w = Math.round((w * MAX_SIZE) / h);
+                            h = MAX_SIZE;
+                        }
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    uploadedQrisBase64 = canvas.toDataURL('image/jpeg', 0.82);
+                    document.getElementById('previewQrisImg').src = uploadedQrisBase64;
+                };
+                img.onerror = function() {
+                    uploadedQrisBase64 = rawBase64;
+                    document.getElementById('previewQrisImg').src = uploadedQrisBase64;
+                };
+                img.src = rawBase64;
             };
             reader.readAsDataURL(file);
         }
 
         function previewUrlQris(url) {
-            const cleanUrl = url.trim();
+            let cleanUrl = (url || '').trim();
             if (cleanUrl) {
+                cleanUrl = convertGoogleDriveUrl(cleanUrl);
+                const inputEl = document.getElementById('inputQrisGambarUrl');
+                if (inputEl && inputEl.value !== cleanUrl) {
+                    inputEl.value = cleanUrl;
+                }
                 document.getElementById('previewQrisImg').src = cleanUrl;
             } else if (!uploadedQrisBase64) {
                 document.getElementById('previewQrisImg').src = '../image/qris.png';
@@ -183,7 +225,12 @@
             const norek = document.getElementById('inputQrisRekening').value.trim();
             const atasNama = document.getElementById('inputQrisAtasNama').value.trim();
             const status = document.getElementById('inputQrisStatus').value;
-            const urlInput = document.getElementById('inputQrisGambarUrl').value.trim();
+            let urlInput = document.getElementById('inputQrisGambarUrl').value.trim();
+            if (urlInput) {
+                urlInput = convertGoogleDriveUrl(urlInput);
+                const gInput = document.getElementById('inputQrisGambarUrl');
+                if (gInput) gInput.value = urlInput;
+            }
 
             if (!nama) {
                 alert('Mohon isi nama QRIS.');

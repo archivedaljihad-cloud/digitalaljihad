@@ -7267,9 +7267,9 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
                                 <div style="flex: 1; min-width: 250px;">
                                     <label class="small font-weight-bold text-muted mb-1">Ganti Gambar QRIS (Opsional):</label>
                                     <input type="file" id="inputQrisFile" class="form-control-file border rounded p-1 mb-2" accept="image/*" onchange="previewUploadQris(event)">
-                                    <small class="form-text text-muted mb-2">Format: JPG, PNG, GIF, WEBP. Maksimal 2MB</small>
-                                    <label class="small font-weight-bold text-muted mb-1">Atau Tempel Tautan Gambar / CDN Supabase:</label>
-                                    <input type="text" id="inputQrisGambarUrl" class="form-control form-control-sm" placeholder="https://... / path gambar" oninput="previewUrlQris(this.value)">
+                                    <small class="form-text text-muted mb-2"><i class="fas fa-compress-arrows-alt text-success mr-1"></i>Otomatis dikompres Canvas ke ~40 KB (Maks 10MB dari HP/Kamera)</small>
+                                    <label class="small font-weight-bold text-muted mb-1">Atau Tempel Tautan Gambar / Google Drive / URL CDN:</label>
+                                    <input type="text" id="inputQrisGambarUrl" class="form-control form-control-sm" placeholder="https://... / Google Drive / path gambar" oninput="previewUrlQris(this.value)">
                                 </div>
                             </div>
                         </div>
