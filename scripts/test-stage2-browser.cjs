@@ -113,12 +113,12 @@ const server = http.createServer((req, res) => {
             const admin = await context.newPage(), errors = [];
             admin.on('pageerror', error => errors.push(error.message));
             await admin.goto(origin + '/admin.html', { waitUntil: 'domcontentloaded' });
-            await admin.waitForFunction(() => document.getElementById('jumatMuadzin2').value === 'Dua');
+            await admin.waitForFunction(() => document.getElementById('jumatMuadzin').value === 'Satu');
             const before = await admin.evaluate(() => localStorage.getItem('cached_sholat_jumat'));
             await admin.evaluate(() => {
                 document.getElementById('jumatKhotib').value = 'Dr. H. Nama Khatib Baru yang Panjang, Lc., M.Ag.';
                 document.getElementById('jumatImam').value = 'Imam Baru';
-                document.getElementById('jumatMuadzin2').value = 'Muadzin Kedua Baru';
+                document.getElementById('jumatMuadzin').value = 'Muadzin Baru';
                 document.getElementById('jumatWaktu').value = '12:07';
                 triggerAutoSavePetugasJumat();
             });
@@ -131,7 +131,7 @@ const server = http.createServer((req, res) => {
             assert.equal(await admin.evaluate(() => simpanPetugasJumat(true)), true);
             assert.equal(writes.length, count + 1, 'One HTTP mutation for the entire Friday snapshot');
             assert.ok(writes.at(-1).some(row => row.key === 'sholat_jumat') && writes.at(-1).some(row => row.key === 'prayer_mode_jumat_duration'));
-            assert.equal(values.get('sholat_jumat').muadzin2, 'Muadzin Kedua Baru');
+            assert.equal(values.get('sholat_jumat').muadzin, 'Muadzin Baru');
             assert.equal(values.get('sholat_jumat').waktu, '12:07');
             assert.equal(values.get('pengumuman_jumat').saldo_awal, 1000);
             assert.equal(await admin.evaluate(() => localStorage.getItem('draft_petugas_jumat')), null);

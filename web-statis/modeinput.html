@@ -1674,7 +1674,7 @@
                 fields: [
                     { id: "f_tgl_jumat", label: "Tanggal Jum'at (Hari H)", type: "text", val: "Jumat, 10 Oktober 2026", hint: "Hari, Tanggal Bulan Tahun" },
                     { id: "f_khatib", label: "Nama Khatib & Imam", type: "text", val: "Ust. Dr. H. Ahmad Dahlan, MA", hint: "Khatib sekaligus Imam Sholat" },
-                    { id: "f_foto_imam", label: "Upload Foto Imam (Kamera/Galeri/URL)", type: "imam_photo", val: "image/display/default_imam.jpg", hint: "Tampil di slide TV Sholat Jumat" },
+                    { id: "f_foto_imam", label: "Upload Foto Imam (Kamera/Galeri/URL)", type: "imam_photo", val: "img/logo-aljihad-circle.png", hint: "Tampil di slide TV Sholat Jumat" },
                     // Tema / Judul Khutbah: DIHILANGKAN SESUAI ARAHAN CEO
                     { id: "f_muadzin", label: "Nama Muadzin", type: "text", val: "Ustadz Bilal Ramadhan", hint: "Pengumandang adzan Jumat" },
                     { id: "f_bilal", label: "Nama Bilal / Tarhim", type: "text", val: "Ust. Ahmad Farhan", hint: "Petugas tarhim & bilal" },
@@ -2523,7 +2523,7 @@
                     `;
                 } else if (f.type === 'imam_photo') {
                     // Upload Foto Imam Widget
-                    const currentSrc = jumatImamFotoBase64 || f.val || 'image/display/default_imam.jpg';
+                    const currentSrc = jumatImamFotoBase64 || f.val || 'img/logo-aljihad-circle.png';
                     html += `
                         <div class="form-block">
                             <div class="form-label-box">

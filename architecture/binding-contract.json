@@ -157,15 +157,6 @@
     },
     {
       "file": "web-statis/admin.html",
-      "selector": "#jumatMuadzin2",
-      "path": "friday.muadzin2",
-      "mode": "auto",
-      "event": "input",
-      "handler": "triggerAutoSavePetugasJumat",
-      "sink": "SupabaseDB.saveSholatJumat"
-    },
-    {
-      "file": "web-statis/admin.html",
       "selector": "#jumatBilal",
       "path": "friday.bilal",
       "mode": "auto",

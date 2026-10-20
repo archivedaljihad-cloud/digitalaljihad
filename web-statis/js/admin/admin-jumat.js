@@ -47,8 +47,16 @@
 
                     const prevForm = document.getElementById('jumatFotoPreviewImg');
                     const prevTv = document.getElementById('prevJumatImamPhoto');
-                    if (prevForm) prevForm.src = compressed;
-                    if (prevTv) prevTv.src = compressed;
+                    if (prevForm) {
+                        prevForm.src = compressed;
+                        prevForm.style.objectFit = 'cover';
+                        prevForm.style.padding = '0';
+                    }
+                    if (prevTv) {
+                        prevTv.src = compressed;
+                        prevTv.style.objectFit = 'cover';
+                        prevTv.style.padding = '0';
+                    }
 
                     const badge = document.getElementById('jumatFotoBadge');
                     if (badge) {
@@ -88,10 +96,19 @@
 
             jumatFotoImamBase64 = null;
 
+            const isLogo = clean.includes('logo-aljihad');
             const prevForm = document.getElementById('jumatFotoPreviewImg');
             const prevTv = document.getElementById('prevJumatImamPhoto');
-            if (prevForm) prevForm.src = clean;
-            if (prevTv) prevTv.src = clean;
+            if (prevForm) {
+                prevForm.src = clean;
+                prevForm.style.objectFit = isLogo ? 'contain' : 'cover';
+                prevForm.style.padding = isLogo ? '4px' : '0';
+            }
+            if (prevTv) {
+                prevTv.src = clean;
+                prevTv.style.objectFit = isLogo ? 'contain' : 'cover';
+                prevTv.style.padding = isLogo ? '4px' : '0';
+            }
 
             const badge = document.getElementById('jumatFotoBadge');
             if (badge) {
@@ -108,11 +125,19 @@
             const urlInput = document.getElementById('jumatFotoUrlInput');
             if (urlInput) urlInput.value = '';
 
-            const defaultSrc = 'image/display/default_imam.jpg';
+            const defaultSrc = 'img/logo-aljihad-circle.png';
             const prevForm = document.getElementById('jumatFotoPreviewImg');
             const prevTv = document.getElementById('prevJumatImamPhoto');
-            if (prevForm) prevForm.src = defaultSrc;
-            if (prevTv) prevTv.src = defaultSrc;
+            if (prevForm) {
+                prevForm.src = defaultSrc;
+                prevForm.style.objectFit = 'contain';
+                prevForm.style.padding = '4px';
+            }
+            if (prevTv) {
+                prevTv.src = defaultSrc;
+                prevTv.style.objectFit = 'contain';
+                prevTv.style.padding = '4px';
+            }
 
             const badge = document.getElementById('jumatFotoBadge');
             if (badge) {
@@ -123,14 +148,15 @@
         }
 
         // Simpan Petugas Sholat Jum'at & Durasi Sholat Jum'at Khusus Pekan Ini
-                function collectPetugasJumatDraft() {
+        function collectPetugasJumatDraft() {
             const read = id => document.getElementById(id)?.value?.trim() || '';
             const combined = read('jumatKhotib').split('/').map(value => value.trim());
-            const existingPhoto = localStorage.getItem('cached_jumat_foto_imam') || 'image/display/default_imam.jpg';
+            const defaultLogo = 'img/logo-aljihad-circle.png';
+            const existingPhoto = localStorage.getItem('cached_jumat_foto_imam') || defaultLogo;
             return { tanggal: read('jumatTanggal'), khatib: combined[0], imam: combined[1] || read('jumatImam') || combined[0],
                 muadzin: read('jumatMuadzin'), muadzin2: read('jumatMuadzin2'), bilal: read('jumatBilal'),
                 maklumat: read('jumatMaklumat'), waktu: read('jumatWaktu') || '11:45', durasi: Number(read('jumatDurasiInput') || 50),
-                foto_imam: jumatFotoImamBase64 !== null ? (jumatFotoImamBase64 || 'image/display/default_imam.jpg') : (read('jumatFotoUrlInput') || existingPhoto) };
+                foto_imam: jumatFotoImamBase64 !== null ? (jumatFotoImamBase64 || defaultLogo) : (read('jumatFotoUrlInput') || existingPhoto) };
         }
 
         function setPetugasJumatStatus(text) {

@@ -1,3 +1,41 @@
+# 20 Oktober 2026 — Logo Masjid Al-Jihad Sebagai Foto Default Petugas Sholat Jum'at & Penghapusan Kolom Muadzin 2 (v5.8.105)
+
+- **Permintaan Pengguna:**
+  - *"Di dashboard Petugas Sholat jum'at. Ganti foto defaultnya adalah logo masjid Al Jihad. Hilangkan kolom Muadzin 2 (opsional)"*
+
+- **Detail Implementasi & Solusi:**
+  1. **Penggantian Foto Default Petugas Sholat Jum'at ke Logo Resmi Masjid Al-Jihad:**
+     - Mengganti seluruh referensi foto default di form admin (`#jumatFotoPreviewImg`), pratinjau TV (`#prevJumatImamPhoto`), dan slide TV (`slides/jumat.html` `#imamPhoto`) menjadi **`img/logo-aljihad-circle.png`**.
+     - Mengatur layout display `object-fit: contain` dan padding proporsional saat menampilkan logo default agar lingkaran logo tampil utuh, tajam, dan tidak terpotong oleh overlay nama/jabatan imam di bagian bawah.
+     - Memperbarui fungsi `resetJumatFoto()` di `web-statis/js/admin/admin-jumat.js` dan fallback di `admin-data-loader.js` sehingga saat pengguna menekan tombol *Reset Default*, foto seketika beralih ke logo resmi Masjid Jami' Al-Jihad.
+     - Menyinkronkan nilai fallback pada modul mobile input `web-statis/petugas.html` dan `web-statis/modeinput.html` (`f_foto_imam: "img/logo-aljihad-circle.png"`).
+     - Menyinkronkan template blade Laravel `resources/views/jumat.blade.php`.
+     - Melakukan patch langsung ke Supabase Cloud `sholat_jumat` (baris aktif id 10) dengan `foto_imam: "img/logo-aljihad-circle.png"` sehingga TV dan device lain langsung sinkron seketika.
+  2. **Penghapusan Kolom Form "Muadzin 2 (opsional)":**
+     - Menghapus elemen input `<div class="form-group"><label for="jumatMuadzin2"...>` dari seksi Petugas Sholat Jum'at di `web-statis/admin.html` agar antarmuka form lebih ringkas, bersih, dan sesuai kebutuhan DKM.
+     - Menyelaraskan form contract di `architecture/binding-contract.json` dan suite pengujian browser di `scripts/test-stage2-browser.cjs`.
+     - Skrip pengumpulan draft dan database tetap kompatibel secara aman (*graceful fallback* tanpa regresi).
+  3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.105`):**
+     - Bumping `CACHE_NAME` ke **`aljihad-signage-v5.8.105`** di `web-statis/sw.js`.
+     - Menyelaraskan filter pembersihan cache di `web-statis/js/admin/admin-settings.js` agar seluruh browser klien dan TV Display otomatis membersihkan cache usang dan memuat logo terbaru.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/admin.html`: Ganti default foto ke `img/logo-aljihad-circle.png` dan hapus kolom Muadzin 2.
+  - `web-statis/js/admin/admin-jumat.js`: Pembaruan default foto di `resetJumatFoto`, `collectPetugasJumatDraft`, dan handler upload/URL.
+  - `web-statis/js/admin/admin-data-loader.js`: Penyelarasan pemuatan foto default imam ke `img/logo-aljihad-circle.png` dengan `contain`/`cover`.
+  - `web-statis/slides/jumat.html`: Penyelarasan DOM dan render fallback foto ke `../img/logo-aljihad-circle.png` dengan padding khusus logo.
+  - `web-statis/petugas.html` & `web-statis/modeinput.html`: Penyelarasan nilai default `f_foto_imam` dan `currentSrc`.
+  - `resources/views/jumat.blade.php`: Penyelarasan fallback foto di blade view.
+  - `architecture/binding-contract.json`: Penyesuaian form contract.
+  - `scripts/test-stage2-browser.cjs`: Penyesuaian assertion field jumat.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping versi cache Service Worker ke `v5.8.105`.
+  - `scripts/test-engine.js`: Penyelarasan verifikasi bumping cache ke `v5.8.105`.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: 284 / 284 assertion checks lulus 100% tanpa regresi.
+
+---
+
 # 20 Oktober 2026 — Peningkatan Proporsional Tipografi Hadits Shaf & Pengingat Sholat pada Prayer Mode (v5.8.104)
 
 - **Permintaan Pengguna:**

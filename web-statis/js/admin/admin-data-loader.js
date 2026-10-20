@@ -167,20 +167,31 @@
                             }
                         } catch (e) {}
 
-                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded') {
+                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded' || fotoImamSrc === 'image/display/default_imam.jpg') {
                             try {
                                 const cachedF = localStorage.getItem('cached_jumat_foto_imam');
-                                if (cachedF) fotoImamSrc = cachedF;
+                                if (cachedF && cachedF !== 'image/display/default_imam.jpg') fotoImamSrc = cachedF;
                             } catch (e) {}
                         }
 
-                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded') {
-                            fotoImamSrc = 'image/display/default_imam.jpg';
+                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded' || fotoImamSrc === 'image/display/default_imam.jpg') {
+                            fotoImamSrc = 'img/logo-aljihad-circle.png';
                         }
 
-                        if (document.getElementById('jumatFotoPreviewImg')) document.getElementById('jumatFotoPreviewImg').src = fotoImamSrc;
-                        if (document.getElementById('prevJumatImamPhoto')) document.getElementById('prevJumatImamPhoto').src = fotoImamSrc;
-                        if (document.getElementById('jumatFotoUrlInput') && j.foto_imam && j.foto_imam !== 'custom_uploaded' && !j.foto_imam.startsWith('data:')) {
+                        const isDefaultLogo = fotoImamSrc.includes('logo-aljihad');
+                        const prevImgEl = document.getElementById('jumatFotoPreviewImg');
+                        if (prevImgEl) {
+                            prevImgEl.src = fotoImamSrc;
+                            prevImgEl.style.objectFit = isDefaultLogo ? 'contain' : 'cover';
+                            prevImgEl.style.padding = isDefaultLogo ? '4px' : '0';
+                        }
+                        const prevTvEl = document.getElementById('prevJumatImamPhoto');
+                        if (prevTvEl) {
+                            prevTvEl.src = fotoImamSrc;
+                            prevTvEl.style.objectFit = isDefaultLogo ? 'contain' : 'cover';
+                            prevTvEl.style.padding = isDefaultLogo ? '4px' : '0';
+                        }
+                        if (document.getElementById('jumatFotoUrlInput') && j.foto_imam && j.foto_imam !== 'custom_uploaded' && !j.foto_imam.startsWith('data:') && !j.foto_imam.includes('default_imam') && !j.foto_imam.includes('logo-aljihad')) {
                             document.getElementById('jumatFotoUrlInput').value = j.foto_imam;
                         }
 

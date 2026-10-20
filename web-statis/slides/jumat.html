@@ -442,7 +442,7 @@
             <!-- Kolom Foto Imam -->
             <div class="imam-card-box">
                 <div class="imam-photo-frame">
-                    <img id="imamPhoto" src="../image/display/default_imam.jpg" alt="Foto Imam" class="imam-photo" onerror="this.onerror=null;this.src='../image/display/default_imam.jpg';">
+                    <img id="imamPhoto" src="../img/logo-aljihad-circle.png" alt="Foto Imam" class="imam-photo" style="object-fit: contain; padding: 16px 12px 48px 12px;" onerror="this.onerror=null;this.src='../img/logo-aljihad-circle.png';">
                     <div class="imam-badge-overlay">
                         <span class="badge-role"><i class="fas fa-quran mr-1"></i> Imam & Khotib</span>
                         <span class="badge-name" id="badgeImamName">Ustd. Imam & Khotib</span>
@@ -696,8 +696,14 @@
                 }
                 const elImamPhoto = document.getElementById('imamPhoto');
                 if (elImamPhoto) {
-                    const nextPhoto = photoUrl || '../image/display/default_imam.jpg';
+                    let nextPhoto = photoUrl;
+                    if (!nextPhoto || nextPhoto === 'image/display/default_imam.jpg' || nextPhoto === '../image/display/default_imam.jpg') {
+                        nextPhoto = '../img/logo-aljihad-circle.png';
+                    }
                     if (elImamPhoto.getAttribute('src') !== nextPhoto) elImamPhoto.src = nextPhoto;
+                    const isLogo = nextPhoto.includes('logo-aljihad');
+                    elImamPhoto.style.objectFit = isLogo ? 'contain' : 'cover';
+                    elImamPhoto.style.padding = isLogo ? '16px 12px 48px 12px' : '0';
                 }
                 const badge = document.getElementById('badgeImamName');
                 if (badge) {
