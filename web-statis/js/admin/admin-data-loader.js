@@ -164,24 +164,21 @@
 
                         // 6. Muat Foto Imam & Khotib (Display TV)
                         let fotoImamSrc = (j.foto_imam || '').trim();
-                        try {
-                            if (resSetSettled.status === 'fulfilled' && resSetSettled.value.ok) {
-                                const sList = await resSetSettled.value.clone().json();
-                                if (sList && sList[0] && sList[0].running_text_pages && sList[0].running_text_pages.jumat_foto_imam_b64) {
-                                    fotoImamSrc = sList[0].running_text_pages.jumat_foto_imam_b64;
-                                }
-                            }
-                        } catch (e) {}
-
-                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded' || fotoImamSrc === 'image/display/default_imam.jpg') {
+                        // Hanya fallback ke running_text_pages.jumat_foto_imam_b64 jika foto_imam memang berstatus custom_uploaded
+                        if (fotoImamSrc === 'custom_uploaded') {
                             try {
-                                const cachedF = localStorage.getItem('cached_jumat_foto_imam');
-                                if (cachedF && cachedF !== 'image/display/default_imam.jpg') fotoImamSrc = cachedF;
+                                if (resSetSettled.status === 'fulfilled' && resSetSettled.value.ok) {
+                                    const sList = await resSetSettled.value.clone().json();
+                                    if (sList && sList[0] && sList[0].running_text_pages && sList[0].running_text_pages.jumat_foto_imam_b64) {
+                                        fotoImamSrc = sList[0].running_text_pages.jumat_foto_imam_b64;
+                                    }
+                                }
                             } catch (e) {}
                         }
 
-                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded' || fotoImamSrc === 'image/display/default_imam.jpg') {
+                        if (!fotoImamSrc || fotoImamSrc === 'custom_uploaded' || fotoImamSrc.includes('default_imam') || fotoImamSrc.includes('logo-aljihad')) {
                             fotoImamSrc = 'img/logo-aljihad-circle.png';
+                            try { localStorage.setItem('cached_jumat_foto_imam', 'img/logo-aljihad-circle.png'); } catch (e) {}
                         }
 
                         const isDefaultLogo = fotoImamSrc.includes('logo-aljihad');
@@ -197,8 +194,18 @@
                             prevTvEl.style.objectFit = isDefaultLogo ? 'contain' : 'cover';
                             prevTvEl.style.padding = isDefaultLogo ? '4px' : '0';
                         }
-                        if (document.getElementById('jumatFotoUrlInput') && j.foto_imam && j.foto_imam !== 'custom_uploaded' && !j.foto_imam.startsWith('data:') && !j.foto_imam.includes('default_imam') && !j.foto_imam.includes('logo-aljihad')) {
-                            document.getElementById('jumatFotoUrlInput').value = j.foto_imam;
+                        const badgeEl = document.getElementById('jumatFotoBadge');
+                        if (badgeEl) {
+                            badgeEl.className = isDefaultLogo ? 'badge badge-secondary position-absolute' : (fotoImamSrc.includes('googleusercontent.com') ? 'badge badge-success position-absolute' : 'badge badge-info position-absolute');
+                            badgeEl.textContent = isDefaultLogo ? 'Default' : (fotoImamSrc.includes('googleusercontent.com') ? 'Google Drive' : 'Kustom');
+                        }
+                        const urlInputEl = document.getElementById('jumatFotoUrlInput');
+                        if (urlInputEl && document.activeElement !== urlInputEl) {
+                            if (isDefaultLogo || fotoImamSrc.startsWith('data:')) {
+                                urlInputEl.value = '';
+                            } else {
+                                urlInputEl.value = fotoImamSrc;
+                            }
                         }
 
                         // Update Dashboard & Preview

@@ -703,12 +703,29 @@
                     console.warn('[SupabaseDB] Gagal mutasi tabel sholat_jumat:', tblErr);
                 }
 
-                // 2. Simpan durasi sholat jumat di app_settings (kolom prayer_mode_jumat_duration row 1)
-                if (snapshot.durasi !== undefined && Number.isFinite(Number(snapshot.durasi)) && typeof this.safeRestMutation === 'function') {
+                // 2. Simpan durasi sholat jumat & kelola base64 di app_settings?id=eq.1
+                if (typeof this.safeRestMutation === 'function') {
                     try {
-                        await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', {
-                            prayer_mode_jumat_duration: Number(snapshot.durasi)
-                        });
+                        const patchPayload = {};
+                        if (snapshot.durasi !== undefined && Number.isFinite(Number(snapshot.durasi))) {
+                            patchPayload.prayer_mode_jumat_duration = Number(snapshot.durasi);
+                        }
+                        if (typeof this.restFetch === 'function') {
+                            const setRows = await this.restFetch('app_settings?id=eq.1&select=running_text_pages');
+                            if (Array.isArray(setRows) && setRows[0]) {
+                                const rt = setRows[0].running_text_pages || {};
+                                if (snapshot.foto_imam && snapshot.foto_imam.startsWith('data:image/')) {
+                                    rt.jumat_foto_imam_b64 = snapshot.foto_imam;
+                                    patchPayload.running_text_pages = rt;
+                                } else if (rt.jumat_foto_imam_b64) {
+                                    delete rt.jumat_foto_imam_b64;
+                                    patchPayload.running_text_pages = rt;
+                                }
+                            }
+                        }
+                        if (Object.keys(patchPayload).length > 0) {
+                            await this.safeRestMutation('app_settings?id=eq.1', 'PATCH', patchPayload);
+                        }
                     } catch (durErr) {}
                 }
 

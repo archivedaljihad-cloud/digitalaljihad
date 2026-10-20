@@ -1,3 +1,43 @@
+# 21 Oktober 2026 — Perbaikan Tuntas Reset Foto Imam Default & Purge Data Base64 Cloud (v5.8.108)
+
+- **Permintaan Pengguna:**
+  - *"foto imam yang tampil selalu ini, tidak bisa di reset ke default"*
+
+- **Akar Masalah (Root Causes) yang Ditemukan:**
+  1. **Resurrection Foto Lama dari `app_settings.running_text_pages.jumat_foto_imam_b64`:**
+     - Data base64 lama foto ustadz (304KB) masih tersimpan di baris cloud `app_settings?id=eq.1` dalam properti `running_text_pages.jumat_foto_imam_b64`.
+     - Logika hidrasi di `admin-data-loader.js` secara sepihak selalu menimpa `fotoImamSrc` dengan string base64 tersebut tanpa memeriksa apakah `sholat_jumat.foto_imam` sebenarnya sudah disetel ke logo default (`img/logo-aljihad-circle.png`).
+  2. **Fallback Berantai ke Cache Lokal Lama (`cached_jumat_foto_imam`):**
+     - Fungsi `resetJumatFoto()` sebelumnya hanya mengosongkan form input dan mengandalkan debounce timer auto-save 2500ms, tanpa membersihkan `cached_jumat_foto_imam` di `localStorage`. Akibatnya, `collectPetugasJumatDraft()` dan `loadAllData()` terus membaca kembali foto lama dari cache lokal.
+  3. **Ketiadaan Sinkronisasi Pembersihan Base64 di `saveSholatJumat`:**
+     - `saveSholatJumat()` di `supabase-db.js` tidak menghapus kunci `jumat_foto_imam_b64` dari `running_text_pages` ketika pengguna mereset foto ke logo default, sehingga foto lama terus bangkit kembali saat halaman di-refresh.
+
+- **Detail Implementasi & Solusi Menyeluruh:**
+  1. **Purge Data Base64 di Supabase Cloud:**
+     - Menghapus tuntas data lama `jumat_foto_imam_b64` dari `running_text_pages` pada Supabase Cloud (`app_settings?id=eq.1`).
+     - Memperbarui `saveSholatJumat()` di `supabase-db.js` agar secara proaktif menghapus `jumat_foto_imam_b64` jika foto yang disimpan adalah logo default / bukan data base64.
+  2. **Perbaikan Logika Hidrasi di `admin-data-loader.js`:**
+     - `fotoImamSrc` kini hanya mencari fallback `jumat_foto_imam_b64` jika status foto memang `custom_uploaded`. Jika foto adalah logo resmi Masjid Al-Jihad (`img/logo-aljihad-circle.png`), logo default dipertahankan 100%.
+     - Menyelaraskan badge indikator `#jumatFotoBadge` (menampilkan *"Default"*) dan mengosongkan text input URL secara rapi.
+  3. **Eksekusi Reset Instan di `admin-jumat.js` (`resetJumatFoto`):**
+     - Tombol *"Reset Default"* kini seketika memperbarui `localStorage.cached_jumat_foto_imam` ke `img/logo-aljihad-circle.png`, mereset pratinjau form dan TV dengan `object-fit: contain` dan padding `4px`, lalu langsung memanggil mutasi cloud `simpanPetugasJumat(false)` tanpa jeda debounce.
+  4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.108`):**
+     - Bumping versi cache Service Worker ke **`aljihad-signage-v5.8.108`** di `web-statis/sw.js`.
+     - Menyelaraskan filter pembersihan cache usang di `web-statis/js/admin/admin-settings.js` dan assertions di `scripts/test-engine.js`.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/js/admin/admin-data-loader.js`: Isolasi hidrasi foto imam agar tidak tertimpa base64 usang.
+  - `web-statis/js/admin/admin-jumat.js`: Reset instan `resetJumatFoto` dan proteksi `collectPetugasJumatDraft`.
+  - `web-statis/js/supabase-db.js`: Sinkronisasi otomatis penghapusan base64 dari `running_text_pages` di `saveSholatJumat`.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping cache Service Worker ke `v5.8.108`.
+  - `scripts/test-engine.js`: Penyelarasan verifikasi bumping cache ke `v5.8.108`.
+  - `LATEST_UPDATE.md`: Dokumentasi riwayat pembaruan sistem.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: Seluruh 284 / 284 assertion checks lulus 100%.
+
+---
+
 # 20 Oktober 2026 — Penyatuan Kolom Khatib & Imam Sholat Jum'at Menjadi 1 Kolom Terpadu (v5.8.107)
 
 - **Permintaan Pengguna:**

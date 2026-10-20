@@ -118,14 +118,18 @@
             triggerAutoSavePetugasJumat();
         }
 
-        function resetJumatFoto() {
+        async function resetJumatFoto() {
             jumatFotoImamBase64 = '';
+            const defaultSrc = 'img/logo-aljihad-circle.png';
+            try {
+                localStorage.setItem('cached_jumat_foto_imam', defaultSrc);
+            } catch (e) {}
+
             const fileInput = document.getElementById('jumatFotoFile');
             if (fileInput) fileInput.value = '';
             const urlInput = document.getElementById('jumatFotoUrlInput');
             if (urlInput) urlInput.value = '';
 
-            const defaultSrc = 'img/logo-aljihad-circle.png';
             const prevForm = document.getElementById('jumatFotoPreviewImg');
             const prevTv = document.getElementById('prevJumatImamPhoto');
             if (prevForm) {
@@ -144,25 +148,41 @@
                 badge.className = 'badge badge-secondary position-absolute';
                 badge.textContent = 'Default';
             }
-            triggerAutoSavePetugasJumat();
+            setPetugasJumatStatus('Mereset foto ke logo Masjid Al-Jihad…');
+            await simpanPetugasJumat(false);
         }
 
         // Simpan Petugas Sholat Jum'at & Durasi Sholat Jum'at Khusus Pekan Ini
         function collectPetugasJumatDraft() {
             const read = id => document.getElementById(id)?.value?.trim() || '';
-            const combined = read('jumatKhotib').split('/').map(value => value.trim());
+            const rawKhotib = read('jumatKhotib');
+            const combined = rawKhotib.split('/').map(value => value.trim());
             const defaultLogo = 'img/logo-aljihad-circle.png';
             const existingPhoto = localStorage.getItem('cached_jumat_foto_imam') || defaultLogo;
+            const khatibVal = combined[0] || rawKhotib;
+            const imamVal = combined.length > 1 ? combined[1] : (read('jumatImam') || khatibVal);
+            let fotoVal = defaultLogo;
+            if (jumatFotoImamBase64 !== null && jumatFotoImamBase64 !== '') {
+                fotoVal = jumatFotoImamBase64;
+            } else if (jumatFotoImamBase64 === '') {
+                fotoVal = defaultLogo;
+            } else {
+                const urlVal = read('jumatFotoUrlInput');
+                fotoVal = urlVal || existingPhoto;
+            }
+            if (!fotoVal || fotoVal.includes('default_imam')) {
+                fotoVal = defaultLogo;
+            }
             return {
                 tanggal: read('jumatTanggal'),
-                khatib: combined[0] || read('jumatKhotib'),
-                imam: combined[1] || read('jumatImam') || combined[0] || read('jumatKhotib'),
+                khatib: khatibVal,
+                imam: imamVal,
                 muadzin: read('jumatMuadzin'),
                 bilal: read('jumatBilal'),
                 maklumat: read('jumatMaklumat'),
                 waktu: read('jumatWaktu') || '11:45',
                 durasi: Number(read('jumatDurasiInput') || 50),
-                foto_imam: jumatFotoImamBase64 !== null ? (jumatFotoImamBase64 || defaultLogo) : (read('jumatFotoUrlInput') || existingPhoto)
+                foto_imam: fotoVal
             };
         }
 
