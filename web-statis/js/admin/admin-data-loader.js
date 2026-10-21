@@ -118,19 +118,24 @@
                             bilalVal = rawBilal;
                         }
 
-                        // 2. Baca dari app_settings (running_text_pages) jika ada nilai tersimpan
+                        // Jika maklumat belum ada dari pemisahan '/', ambil dari j.maklumat eksplisit
+                        if (!maklumatVal && j.maklumat) {
+                            maklumatVal = (j.maklumat || '').trim();
+                        }
+
+                        // 2. Baca dari app_settings (running_text_pages) HANYA sebagai fallback jika belum terisi
                         try {
                             if (resSetSettled.status === 'fulfilled' && resSetSettled.value.ok) {
                                 const sList = await resSetSettled.value.clone().json();
                                 if (sList && sList[0] && sList[0].running_text_pages) {
                                     const rt = sList[0].running_text_pages;
-                                    if (rt.jumat_maklumat) maklumatVal = rt.jumat_maklumat;
-                                    if (rt.jumat_bilal) bilalVal = rt.jumat_bilal;
+                                    if (!maklumatVal && rt.jumat_maklumat) maklumatVal = rt.jumat_maklumat;
+                                    if (!bilalVal && rt.jumat_bilal) bilalVal = rt.jumat_bilal;
                                 }
                             }
                         } catch (e) {}
 
-                        // 3. Fallback cache localStorage tersimpan
+                        // 3. Fallback cache localStorage tersimpan jika masih kosong
                         if (!maklumatVal) {
                             try { maklumatVal = localStorage.getItem('cached_jumat_maklumat') || ''; } catch (e) {}
                         }
@@ -142,7 +147,14 @@
                         if (!bilalVal) bilalVal = 'Ust. Mansur';
                         if (!maklumatVal) maklumatVal = 'Ust. Fatkhurokhman';
 
-                        // 5. PROTEKSI KETAT: BEDAKAN PETUGAS BILAL DAN PEMBACA MAKLUMAT
+                        // 5. Muadzin: ambil dari j.muadzin, fallback cache localStorage, fallback default
+                        let muadzinVal = (j.muadzin || '').trim();
+                        if (!muadzinVal) {
+                            try { muadzinVal = localStorage.getItem('cached_jumat_muadzin') || ''; } catch (e) {}
+                        }
+                        if (!muadzinVal) muadzinVal = 'Ust. Rudy';
+
+                        // 6. PROTEKSI KETAT: BEDAKAN PETUGAS BILAL DAN PEMBACA MAKLUMAT
                         // Jangan biarkan bilal tertimpa menjadi sama dengan maklumat akibat riwayat data duplikat lama
                         if (bilalVal.toLowerCase() === maklumatVal.toLowerCase()) {
                             try {
@@ -158,9 +170,15 @@
                         }
 
                         setIfUnfocused('jumatWaktu', j.waktu || '11:45');
-                        setIfUnfocused('jumatMuadzin', j.muadzin || '');
+                        setIfUnfocused('jumatMuadzin', muadzinVal);
                         setIfUnfocused('jumatBilal', bilalVal);
                         setIfUnfocused('jumatMaklumat', maklumatVal);
+
+                        try {
+                            if (bilalVal) localStorage.setItem('cached_jumat_bilal', bilalVal);
+                            if (maklumatVal) localStorage.setItem('cached_jumat_maklumat', maklumatVal);
+                            if (muadzinVal) localStorage.setItem('cached_jumat_muadzin', muadzinVal);
+                        } catch (e) {}
 
                         // 6. Muat Foto Imam & Khotib (Display TV)
                         let fotoImamSrc = (j.foto_imam || '').trim();
@@ -212,12 +230,12 @@
                         if (document.getElementById('statKhotibJumat')) document.getElementById('statKhotibJumat').textContent = namaKhotibImam || '-';
                         if (document.getElementById('dashJumatKhotib')) document.getElementById('dashJumatKhotib').textContent = namaKhotibImam || '-';
                         if (document.getElementById('dashJumatImam')) document.getElementById('dashJumatImam').textContent = namaKhotibImam || '-';
-                        if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = j.muadzin || '-';
+                        if (document.getElementById('dashJumatMuadzin')) document.getElementById('dashJumatMuadzin').textContent = muadzinVal || '-';
                         if (document.getElementById('dashJumatBilal')) document.getElementById('dashJumatBilal').textContent = bilalVal || '-';
                         if (document.getElementById('dashJumatMaklumat')) document.getElementById('dashJumatMaklumat').textContent = maklumatVal || '-';
                         if (document.getElementById('prevJumatKhotib')) document.getElementById('prevJumatKhotib').textContent = namaKhotibImam || '-';
                         if (document.getElementById('prevJumatImam')) document.getElementById('prevJumatImam').textContent = namaKhotibImam || '-';
-                        if (document.getElementById('prevJumatMuadzin')) document.getElementById('prevJumatMuadzin').textContent = j.muadzin || '-';
+                        if (document.getElementById('prevJumatMuadzin')) document.getElementById('prevJumatMuadzin').textContent = muadzinVal || '-';
                         if (document.getElementById('prevJumatBilal')) document.getElementById('prevJumatBilal').textContent = bilalVal || '-';
                         if (document.getElementById('prevJumatMaklumat')) document.getElementById('prevJumatMaklumat').textContent = maklumatVal || '-';
                         if (document.getElementById('prevJumatTanggal') && j.tanggal) {

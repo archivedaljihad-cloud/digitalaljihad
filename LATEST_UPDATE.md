@@ -1,3 +1,51 @@
+# 21 Oktober 2026 — Perbaikan Tuntas Kolom Bilal, Muadzin, dan Pembaca Maklumat Sholat Jum'at Anti-Revert (v5.8.109)
+
+- **Permintaan Pengguna:**
+  - *"Didashboard petugas sholat jum'at. Kolom Bilal,Muadzin dan pembaca maklumat jika di input data baru selalu kembali ke awal."*
+
+- **Akar Masalah (Root Causes) yang Ditemukan:**
+  1. **Unconditional Overwrite dari `running_text_pages` di `admin-data-loader.js`:**
+     - Pada baris 121–131 `web-statis/js/admin/admin-data-loader.js`, properti `rt.jumat_maklumat` dan `rt.jumat_bilal` dari `app_settings?id=eq.1` menimpa secara mutlak (`maklumatVal = rt.jumat_maklumat; bilalVal = rt.jumat_bilal;`) nilai petugas yang sudah disimpan.
+     - Karena baris `app_settings` (id: 1) di Supabase Cloud menyimpan nilai default lama `{"jumat_maklumat": "Ust. Fatkhurokhman", "jumat_bilal": "Ust. Mansur"}`, setiap kali hidrasi data realtime atau pemuatan halaman berlangsung, nama Bilal dan Pembaca Maklumat dipaksa kembali ke nama awal.
+  2. **Ketiadaan Ekstraksi `j.maklumat` Mandiri jika `rawBilal` Tidak Memiliki Karakter Slash (`/`):**
+     - Jika petugas Bilal diisi nama mandiri tanpa slash, variabel `maklumatVal` dibiarkan string kosong dan `j.maklumat` tidak dibaca, sehingga sistem langsung meluncur ke fallback statis lama.
+  3. **Ketiadaan Sinkronisasi Balik ke `running_text_pages` dan Cache Lokal di `saveSholatJumat`:**
+     - Saat `saveSholatJumat()` dieksekusi, data hanya dimutasi ke tabel `sholat_jumat` dan key `sholat_jumat`, namun kunci `running_text_pages.jumat_bilal` dan `running_text_pages.jumat_maklumat` di baris 1 `app_settings` tidak diperbarui, sehingga data `running_text_pages` tetap membeku dengan nilai default lama.
+     - Nilai `cached_jumat_bilal`, `cached_jumat_maklumat`, dan `cached_jumat_muadzin` tidak disimpan ke `localStorage` secara konsisten saat penyimpanan cloud berhasil dikonfirmasi.
+  4. **Pembalikan Nilai Muadzin ke Default Lama (`Ust. Rudy`):**
+     - Variabel Muadzin tidak dinormalisasi dengan fallback berantai yang aman (`j.muadzin` -> `cached_jumat_muadzin` -> `'Ust. Rudy'`), dan event listener `onchange` belum terpasang di input form, sehingga saat autosave berlangsung dan pengguna berpindah fokus input, nilai Muadzin dapat ditarik kembali ke nilai awal.
+
+- **Detail Implementasi & Solusi Menyeluruh:**
+  1. **Perbaikan Logika Hidrasi di `web-statis/js/admin/admin-data-loader.js`:**
+     - Membaca `j.maklumat` secara mandiri jika `rawBilal` tidak mengandung slash (`/`).
+     - Mengubah logika pembacaan `running_text_pages` menjadi **hanya sebagai fallback jika nilai masih kosong** (`if (!maklumatVal && rt.jumat_maklumat) maklumatVal = rt.jumat_maklumat;` dan `if (!bilalVal && rt.jumat_bilal) bilalVal = rt.jumat_bilal;`), tidak pernah lagi menimpa data yang sudah ada.
+     - Menambahkan normalisasi aman `muadzinVal` dengan prioritas: `j.muadzin` -> `cached_jumat_muadzin` -> `'Ust. Rudy'`.
+     - Memperbarui cache lokal `cached_jumat_bilal`, `cached_jumat_maklumat`, dan `cached_jumat_muadzin` saat hidrasi berlangsung, serta mengarahkan elemen dashboard (`dashJumatMuadzin`) dan pratinjau (`prevJumatMuadzin`) ke `muadzinVal`.
+  2. **Sinkronisasi Lengkap di `web-statis/js/supabase-db.js` (`saveSholatJumat` & `getSholatJumat`):**
+     - Memperbarui `saveSholatJumat` agar juga mensinkronkan `rt.jumat_bilal` dan `rt.jumat_maklumat` ke `app_settings?id=eq.1`.
+     - Menambahkan `cached_jumat_bilal`, `cached_jumat_maklumat`, dan `cached_jumat_muadzin` ke payload `cacheConfirmedSetting` dan `localStorage`.
+     - Di `getSholatJumat()`, mengekstrak dan menormalisasi `muadzinClean`, `bilalClean`, dan `maklumatClean` secara konsisten serta meng-cache ketiganya.
+  3. **Penyempurnaan Auto-Save & Input Handlers di `web-statis/js/admin/admin-jumat.js` & `admin.html`:**
+     - Di `triggerAutoSavePetugasJumat` dan `simpanPetugasJumat`, nama Bilal, Maklumat, dan Muadzin langsung disimpan ke `localStorage` saat pengguna mengetik agar terlindung dari interupsi reload realtime background.
+     - Menambahkan event listener `onchange="triggerAutoSavePetugasJumat()"` pada input `#jumatMuadzin`, `#jumatWaktu`, `#jumatBilal`, dan `#jumatMaklumat` di `admin.html` untuk menjamin deteksi instan saat autofill atau pergantian fokus.
+  4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.109`):**
+     - Bumping versi cache Service Worker ke **`aljihad-signage-v5.8.109`** di `web-statis/sw.js`.
+     - Menyelaraskan filter pembersihan cache usang di `web-statis/js/admin/admin-settings.js` dan assertions di `scripts/test-engine.js`.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/js/admin/admin-data-loader.js`: Perbaikan hidrasi non-destruktif untuk Bilal, Maklumat, dan Muadzin.
+  - `web-statis/js/supabase-db.js`: Sinkronisasi dua arah ke `running_text_pages` dan normalisasi cache lokal di `saveSholatJumat` & `getSholatJumat`.
+  - `web-statis/js/admin/admin-jumat.js`: Perlindungan draft dan penyimpanan instan di `triggerAutoSavePetugasJumat` & `simpanPetugasJumat`.
+  - `web-statis/admin.html`: Penambahan listener `onchange` pada input petugas Sholat Jum'at.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping cache Service Worker ke `v5.8.109`.
+  - `scripts/test-engine.js`: Penyelarasan verifikasi bumping cache ke `v5.8.109`.
+  - `LATEST_UPDATE.md`: Dokumentasi riwayat pembaruan sistem.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: Seluruh 284 / 284 assertion checks lulus 100%.
+
+---
+
 # 21 Oktober 2026 — Perbaikan Tuntas Reset Foto Imam Default & Purge Data Base64 Cloud (v5.8.108)
 
 - **Permintaan Pengguna:**

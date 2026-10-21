@@ -192,12 +192,18 @@
         }
 
         function triggerAutoSavePetugasJumat() {
-            try { localStorage.setItem('draft_petugas_jumat', JSON.stringify(collectPetugasJumatDraft())); } catch (error) {}
+            const draft = collectPetugasJumatDraft();
+            try {
+                localStorage.setItem('draft_petugas_jumat', JSON.stringify(draft));
+                if (draft.bilal) localStorage.setItem('cached_jumat_bilal', draft.bilal);
+                if (draft.maklumat) localStorage.setItem('cached_jumat_maklumat', draft.maklumat);
+                if (draft.muadzin) localStorage.setItem('cached_jumat_muadzin', draft.muadzin);
+            } catch (error) {}
             setPetugasJumatStatus('Draft tersimpan di browser…');
             clearTimeout(triggerAutoSavePetugasJumat.timer);
             triggerAutoSavePetugasJumat.timer = setTimeout(() => {
-                const draft = collectPetugasJumatDraft();
-                if ((draft.khatib || draft.imam) && draft.tanggal) {
+                const currentDraft = collectPetugasJumatDraft();
+                if ((currentDraft.khatib || currentDraft.imam) && currentDraft.tanggal) {
                     simpanPetugasJumat(true);
                 }
             }, 2500);
@@ -244,7 +250,12 @@
             clearTimeout(triggerAutoSavePetugasJumat.timer);
             const snapshot = collectPetugasJumatDraft();
             const serialized = JSON.stringify(snapshot);
-            try { localStorage.setItem('draft_petugas_jumat', serialized); } catch (error) {}
+            try {
+                localStorage.setItem('draft_petugas_jumat', serialized);
+                if (snapshot.bilal) localStorage.setItem('cached_jumat_bilal', snapshot.bilal);
+                if (snapshot.maklumat) localStorage.setItem('cached_jumat_maklumat', snapshot.maklumat);
+                if (snapshot.muadzin) localStorage.setItem('cached_jumat_muadzin', snapshot.muadzin);
+            } catch (error) {}
             const sequence = (simpanPetugasJumat.sequence || 0) + 1;
             simpanPetugasJumat.sequence = sequence;
             setPetugasJumatStatus('Menyimpan ke cloud & layar TV…');
@@ -263,6 +274,9 @@
                     try {
                         if (localStorage.getItem('draft_petugas_jumat') === serialized) localStorage.removeItem('draft_petugas_jumat');
                         localStorage.setItem('cached_jumat_foto_imam', snapshot.foto_imam);
+                        if (snapshot.bilal) localStorage.setItem('cached_jumat_bilal', snapshot.bilal);
+                        if (snapshot.maklumat) localStorage.setItem('cached_jumat_maklumat', snapshot.maklumat);
+                        if (snapshot.muadzin) localStorage.setItem('cached_jumat_muadzin', snapshot.muadzin);
                     } catch (error) {}
                     if (!silent) {
                         if (typeof showToastSuccess === 'function') {

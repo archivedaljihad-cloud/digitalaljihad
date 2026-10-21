@@ -716,11 +716,16 @@
                                 const rt = setRows[0].running_text_pages || {};
                                 if (snapshot.foto_imam && snapshot.foto_imam.startsWith('data:image/')) {
                                     rt.jumat_foto_imam_b64 = snapshot.foto_imam;
-                                    patchPayload.running_text_pages = rt;
                                 } else if (rt.jumat_foto_imam_b64) {
                                     delete rt.jumat_foto_imam_b64;
-                                    patchPayload.running_text_pages = rt;
                                 }
+                                if (snapshot.bilal !== undefined) {
+                                    rt.jumat_bilal = (snapshot.bilal || '').trim();
+                                }
+                                if (snapshot.maklumat !== undefined) {
+                                    rt.jumat_maklumat = (snapshot.maklumat || '').trim();
+                                }
+                                patchPayload.running_text_pages = rt;
                             }
                         }
                         if (Object.keys(patchPayload).length > 0) {
@@ -748,8 +753,16 @@
                 if (await this.saveSettingsBatch(batch) !== true) throw new Error(this.lastSettingsBatchError || 'Penyimpanan cloud belum terkonfirmasi');
 
                 // 4. Update cache lokal & siarkan realtime ke seluruh TV display & admin
-                this.cacheConfirmedSetting('sholat_jumat', snapshot, { cached_sholat_jumat: snapshot });
+                this.cacheConfirmedSetting('sholat_jumat', snapshot, {
+                    cached_sholat_jumat: snapshot,
+                    cached_jumat_bilal: (snapshot.bilal || '').trim(),
+                    cached_jumat_maklumat: (snapshot.maklumat || '').trim(),
+                    cached_jumat_muadzin: (snapshot.muadzin || '').trim()
+                });
                 if (snapshot.foto_imam) localStorage.setItem('cached_jumat_foto_imam', snapshot.foto_imam);
+                if (snapshot.bilal !== undefined) localStorage.setItem('cached_jumat_bilal', (snapshot.bilal || '').trim());
+                if (snapshot.maklumat !== undefined) localStorage.setItem('cached_jumat_maklumat', (snapshot.maklumat || '').trim());
+                if (snapshot.muadzin !== undefined) localStorage.setItem('cached_jumat_muadzin', (snapshot.muadzin || '').trim());
                 if (batch.pengumuman_jumat) this.cacheConfirmedSetting('pengumuman_jumat', batch.pengumuman_jumat, { pengumuman_jumat_data: batch.pengumuman_jumat });
                 if (snapshot.durasi !== undefined) this.cacheConfirmedSetting('prayer_mode_jumat_duration', Number(snapshot.durasi), { cached_prayer_mode_jumat_duration: snapshot.durasi });
                 this.notifyConfirmedChange('sholat_jumat', snapshot, 'SYNC_JUMAT');
@@ -1436,6 +1449,9 @@
                 try {
                     localStorage.setItem('cached_sholat_jumat', JSON.stringify(canonical));
                     if (canonical.foto_imam) localStorage.setItem('cached_jumat_foto_imam', canonical.foto_imam);
+                    if (canonical.bilal) localStorage.setItem('cached_jumat_bilal', canonical.bilal);
+                    if (canonical.maklumat) localStorage.setItem('cached_jumat_maklumat', canonical.maklumat);
+                    if (canonical.muadzin) localStorage.setItem('cached_jumat_muadzin', canonical.muadzin);
                 } catch (error) {}
                 this.setCached('sholat_jumat', canonical);
                 return canonical;
@@ -1503,6 +1519,12 @@
                 } catch (e) {}
             }
 
+            let muadzinClean = (row.muadzin || '').trim();
+            if (!muadzinClean) {
+                try { muadzinClean = localStorage.getItem('cached_jumat_muadzin') || ''; } catch (e) {}
+            }
+            if (!muadzinClean) muadzinClean = 'Ust. Rudy';
+
             let resolvedFoto = row.foto_imam || 'image/display/default_imam.jpg';
             if (!resolvedFoto || resolvedFoto === 'custom_uploaded') {
                 try {
@@ -1518,10 +1540,16 @@
                 raw_bilal: rawBilal,
                 bilal: bilalClean,
                 maklumat: maklumatClean,
+                muadzin: muadzinClean,
                 foto_imam: resolvedFoto
             });
 
-            try { localStorage.setItem('cached_sholat_jumat', JSON.stringify(normalized)); } catch (e) {}
+            try {
+                localStorage.setItem('cached_sholat_jumat', JSON.stringify(normalized));
+                if (bilalClean) localStorage.setItem('cached_jumat_bilal', bilalClean);
+                if (maklumatClean) localStorage.setItem('cached_jumat_maklumat', maklumatClean);
+                if (muadzinClean) localStorage.setItem('cached_jumat_muadzin', muadzinClean);
+            } catch (e) {}
             this.setCached('sholat_jumat', normalized);
             return normalized;
         },
