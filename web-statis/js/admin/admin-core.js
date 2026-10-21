@@ -742,6 +742,104 @@
         // =====================================================
 
         // 5. Inisialisasi Jam & Widget Topbar
+        let _topbarJadwalCache = null;
+
+        function updateTopbarNextPrayer(forceReload = false) {
+            const el = document.getElementById('topbarNextPrayer');
+            if (!el) return;
+
+            if (forceReload || !_topbarJadwalCache) {
+                let list = [];
+                try {
+                    const cached = localStorage.getItem('cached_jadwal_sholat');
+                    if (cached) {
+                        const parsed = JSON.parse(cached);
+                        if (Array.isArray(parsed) && parsed.length > 0) list = parsed;
+                    }
+                } catch (e) {}
+
+                // Fallback: baca dari nilai input form jika cache belum tersedia
+                if (list.length === 0) {
+                    const getVal = id => document.getElementById(id)?.value?.trim();
+                    const subuh = getVal('sholatSubuh');
+                    const dzuhur = getVal('sholatDzuhur');
+                    const ashar = getVal('sholatAshar');
+                    const maghrib = getVal('sholatMaghrib');
+                    const isya = getVal('sholatIsya');
+                    if (subuh && dzuhur) {
+                        list = [
+                            { nama_sholat: 'Subuh', waktu: subuh.length === 5 ? subuh + ':00' : subuh },
+                            { nama_sholat: 'Dzuhur', waktu: dzuhur.length === 5 ? dzuhur + ':00' : dzuhur },
+                            { nama_sholat: 'Ashar', waktu: ashar.length === 5 ? ashar + ':00' : ashar },
+                            { nama_sholat: 'Maghrib', waktu: maghrib.length === 5 ? maghrib + ':00' : maghrib },
+                            { nama_sholat: 'Isya', waktu: isya.length === 5 ? isya + ':00' : isya }
+                        ];
+                    }
+                }
+
+                if (list.length > 0) {
+                    _topbarJadwalCache = list;
+                }
+            }
+
+            if (!_topbarJadwalCache || _topbarJadwalCache.length === 0) return;
+
+            const now = new Date();
+            const isFriday = now.getDay() === 5;
+            const nonFardhu = ['imsak', 'imsyak', 'terbit', 'syuruk', 'shuruk', 'sunrise', 'dhuha', 'duha'];
+            const fardhuList = _topbarJadwalCache.filter(item => {
+                if (!item) return false;
+                const name = (item.nama_sholat || item.nama || '').toLowerCase().trim();
+                return !nonFardhu.includes(name);
+            });
+
+            let nearest = null;
+            let minDiff = Infinity;
+
+            for (const item of fardhuList) {
+                const rawTime = item.waktu || item.jam || '';
+                if (!rawTime) continue;
+                const parts = rawTime.split(':');
+                if (parts.length < 2) continue;
+                const h = parseInt(parts[0], 10);
+                const m = parseInt(parts[1], 10);
+                const s = parseInt(parts[2] || 0, 10);
+                const pTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, s);
+                const diff = (pTime - now) / 1000;
+
+                if (diff > 0 && diff < minDiff) {
+                    minDiff = diff;
+                    let displayName = (item.nama_sholat || item.nama || '').trim();
+                    displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1).toLowerCase();
+                    if (isFriday && ['Dzuhur', 'Zuhur', 'Dhuhur'].includes(displayName)) {
+                        displayName = "Jum'at";
+                    }
+                    nearest = {
+                        name: displayName,
+                        time: rawTime.substring(0, 5)
+                    };
+                }
+            }
+
+            // Jika semua jadwal fardhu hari ini sudah lewat, sholat berikutnya adalah Subuh esok hari
+            if (!nearest && fardhuList.length > 0) {
+                const subuhItem = fardhuList.find(i => (i.nama_sholat || i.nama || '').toLowerCase().includes('subuh')) || fardhuList[0];
+                const rawTime = subuhItem.waktu || subuhItem.jam || '';
+                nearest = {
+                    name: 'Subuh',
+                    time: rawTime.substring(0, 5)
+                };
+            }
+
+            if (nearest && nearest.name && nearest.time) {
+                const newText = `${nearest.name} ${nearest.time}`;
+                if (el.textContent !== newText) {
+                    el.textContent = newText;
+                }
+            }
+        }
+        window.updateTopbarNextPrayer = updateTopbarNextPrayer;
+
         function startTopbarClock() {
             const timeEl = document.getElementById('topbarClockTime');
             const dateEl = document.getElementById('topbarClockDate');
@@ -754,6 +852,9 @@
                 if (dateEl) {
                     dateEl.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
                 }
+
+                // Update sholat berikutnya di topbar secara berkala
+                updateTopbarNextPrayer();
 
                 // Update ucapan selamat mengikuti jam secara real-time pada Banner Selamat Datang
                 if (typeof AdminAuth !== 'undefined' && typeof AdminAuth.getGreetingWaktu === 'function') {

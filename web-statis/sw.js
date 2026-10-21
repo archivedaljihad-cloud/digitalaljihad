@@ -2,7 +2,7 @@
    SERVICE WORKER - AL-JIHAD DIGITAL SIGNAGE PWA
    Offline-First Resiliency & Intelligent Caching
    ===================================================== */
-const CACHE_NAME = 'aljihad-signage-v5.8.110';
+const CACHE_NAME = 'aljihad-signage-v5.8.111';
 const STATIC_ASSETS = [
     './',
     'index.html',

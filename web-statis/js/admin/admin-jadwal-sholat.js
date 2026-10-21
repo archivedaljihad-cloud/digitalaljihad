@@ -120,6 +120,9 @@ function updatePrayerSourceBadgeUI(source) {
                     waktu: s.time
                 }));
                 localStorage.setItem('cached_jadwal_sholat', JSON.stringify(cachedJadwal));
+                if (typeof window.updateTopbarNextPrayer === 'function') {
+                    window.updateTopbarNextPrayer(true);
+                }
                 localStorage.setItem('sholat_source', 'kemenag');
                 localStorage.setItem('kemenag_city_id', cityId);
                 localStorage.setItem('kemenag_city_name', cityName);
@@ -270,6 +273,9 @@ function updatePrayerSourceBadgeUI(source) {
                     waktu: s.time
                 }));
                 localStorage.setItem('cached_jadwal_sholat', JSON.stringify(cachedJadwal));
+                if (typeof window.updateTopbarNextPrayer === 'function') {
+                    window.updateTopbarNextPrayer(true);
+                }
                 localStorage.setItem('sholat_source', 'nu');
                 localStorage.setItem('kemenag_city_id', cityId);
                 localStorage.setItem('kemenag_city_name', cityName);
@@ -425,6 +431,9 @@ function updatePrayerSourceBadgeUI(source) {
                 }
                 const list = await SupabaseDB.getJadwalSholat(true, true);
                 SupabaseDB.notifyConfirmedChange('jadwal_sholat', { list }, 'SYNC_JADWAL_SHOLAT');
+                if (typeof window.updateTopbarNextPrayer === 'function') {
+                    window.updateTopbarNextPrayer(true);
+                }
                 try { localStorage.removeItem('draft_jadwal_sholat'); } catch (err) {}
                 alert('Jadwal dan durasi tersimpan di cloud. Tampilan TV belum dikonfirmasi.');
                 return true;

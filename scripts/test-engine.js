@@ -477,7 +477,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.110'), 'sw.js memiliki bumping versi cache terbaru v5.8.110');
+assert(swContent.includes('aljihad-signage-v5.8.111'), 'sw.js memiliki bumping versi cache terbaru v5.8.111');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -705,6 +705,20 @@ assert(adminGaleriContent.includes('convertGoogleDriveUrl') && adminGaleriConten
 const adminQrisContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-qris.js'), 'utf8');
 assert(adminQrisContent.includes('convertGoogleDriveUrl') && adminQrisContent.includes('lh3.googleusercontent.com/d/'), 'admin-qris.js memiliki auto-convert URL Google Drive');
 assert(adminQrisContent.includes("canvas.toDataURL('image/jpeg', 0.82)"), 'admin-qris.js memiliki auto-kompresor canvas (~40KB) untuk upload barcode QRIS');
+
+// -------------------------------------------------------------
+// 28. ADMIN TOPBAR NEXT PRAYER DYNAMIC SYNC INTEGRITY
+// -------------------------------------------------------------
+console.log('\n📌 [TEST 28] Admin Topbar Next Prayer Dynamic Sync Integrity:');
+const topbarAdminCore = fs.readFileSync(path.join(baseDir, 'js/admin/admin-core.js'), 'utf8');
+const topbarDataLoader = fs.readFileSync(path.join(baseDir, 'js/admin/admin-data-loader.js'), 'utf8');
+const topbarJadwal = fs.readFileSync(path.join(baseDir, 'js/admin/admin-jadwal-sholat.js'), 'utf8');
+const adminHtmlFresh = fs.readFileSync(path.join(baseDir, 'admin.html'), 'utf8');
+assert(topbarAdminCore.includes('function updateTopbarNextPrayer') && topbarAdminCore.includes('window.updateTopbarNextPrayer'), 'admin-core.js memiliki fungsi kalkulasi sholat berikutnya updateTopbarNextPrayer');
+assert(topbarAdminCore.includes('updateTopbarNextPrayer();') && topbarAdminCore.includes('startTopbarClock'), 'admin-core.js memanggil updateTopbarNextPrayer di startTopbarClock realtime');
+assert(topbarDataLoader.includes('window.updateTopbarNextPrayer(true)'), 'admin-data-loader.js mentrigger updateTopbarNextPrayer saat jadwal sholat selesai dimuat');
+assert(topbarJadwal.includes('window.updateTopbarNextPrayer(true)'), 'admin-jadwal-sholat.js mentrigger updateTopbarNextPrayer saat jadwal sholat disimpan atau disinkronkan');
+assert(adminHtmlFresh.includes('id="topbarNextPrayer"') && adminHtmlFresh.includes("onclick=\"switchAdminSection('jadwal-sholat')\""), 'admin.html memiliki kapsul sholat berikutnya interaktif yang terhubung ke jadwal sholat');
 
 // -------------------------------------------------------------
 // HASIL AKHIR

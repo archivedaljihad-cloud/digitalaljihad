@@ -1,3 +1,47 @@
+# 21 Oktober 2026 — Perbaikan Widget Kapsul "Sholat Berikutnya" Topbar Admin Realtime Dinamis (v5.8.111)
+
+- **Permintaan / Pertanyaan Pengguna:**
+  - *"Mengapa jam sekarang :16:55 tapi di kotak kapsul disebelah kanannya ada informasi waktu Sholat berikutnya dzuhur ?"*
+
+- **Akar Masalah (Root Causes):**
+  1. **Teks Statis Hardcoded di Markup HTML:**
+     - Pada baris 1617 `web-statis/admin.html`, elemen `<span class="pill-time" id="topbarNextPrayer">Dzuhur 12:00</span>` sebelumnya masih memuat teks bawaan awal (*placeholder statis*) dari pembuatan template antarmuka topbar admin.
+  2. **Belum Terhubung ke Mesin Kalkulasi Sholat Dinamis:**
+     - Pada `startTopbarClock()` di `web-statis/js/admin/admin-core.js`, fungsi jam realtime setiap detik hanya mengupdate `#topbarClockTime` (`16:55:36`) dan `#topbarClockDate` (`Rabu, 21 Okt 2026`). Belum ada pemanggilan kalkulasi sholat berikutnya untuk memperbarui `#topbarNextPrayer`.
+     - Ketika jam menunjukkan `16:55`, waktu Ashar (±15:15) sudah berlalu dan sholat berikutnya yang ditunggu adalah **Maghrib** (±17:54). Karena kapsul tidak terhubung ke kalkulator jadwal fardhu, ia tetap membeku menampilkan `"Dzuhur 12:00"`.
+
+- **Solusi & Implementasi Menyeluruh:**
+  1. **Pembuatan Engine Kalkulasi Dinamis `updateTopbarNextPrayer()` di `admin-core.js`:**
+     - Menghitung waktu sholat fardhu berikutnya secara presisi (Subuh, Dzuhur / Jum'at, Ashar, Maghrib, Isya) berdasarkan waktu saat ini (`new Date()`).
+     - Mengabaikan waktu non-fardhu (Imsak, Syuruk/Terbit, Dhuha).
+     - Otomatis mengubah nama menjadi "Jum'at" pada hari Jum'at.
+     - Jika seluruh jadwal hari ini sudah lewat (misal malam hari ba'da Isya), otomatis menunjuk "Subuh" esok hari.
+     - Dipanggil setiap detik di dalam `startTopbarClock()`, serta diekspos ke `window.updateTopbarNextPrayer`.
+  2. **Auto-Hydrate dari Database Supabase, Input Form, & Cache Lokal:**
+     - Di `admin-data-loader.js`: Menyimpan `cached_jadwal_sholat` ke `localStorage` saat dimuat dari Supabase dan langsung memanggil `updateTopbarNextPrayer(true)`.
+     - Di `admin-jadwal-sholat.js`: Memanggil `updateTopbarNextPrayer(true)` setiap kali jadwal sholat disinkronkan dari Kemenag RI, Falakiyah NU, maupun diedit manual.
+  3. **Interaktivitas & UX Topbar Admin:**
+     - Di `web-statis/admin.html`: Kapsul kini dilengkapi handler `onclick="switchAdminSection('jadwal-sholat')"` dengan hover micro-animation, sehingga admin bisa langsung mengklik kapsul untuk berpindah ke panel pengaturan jadwal sholat.
+  4. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.111`):**
+     - Bumping versi cache Service Worker ke **`aljihad-signage-v5.8.111`** di `web-statis/sw.js`.
+     - Menyelaraskan filter pembersihan cache di `web-statis/js/admin/admin-settings.js` dan assertions di `scripts/test-engine.js`.
+  5. **Penambahan Automated Regression Test:**
+     - Menambahkan verifikasi `[TEST 28] Admin Topbar Next Prayer Dynamic Sync Integrity` (5 assertion checks) di `scripts/test-engine.js`.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/admin.html`: Markup, style hover, dan handler klik kapsul `#topbarNextPrayer`.
+  - `web-statis/js/admin/admin-core.js`: Fungsi `updateTopbarNextPrayer()` dan integrasi ke `startTopbarClock()`.
+  - `web-statis/js/admin/admin-data-loader.js`: Cache persistence dan instant update trigger.
+  - `web-statis/js/admin/admin-jadwal-sholat.js`: Update trigger pada sync Kemenag, NU, dan form save.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping cache Service Worker ke `v5.8.111`.
+  - `scripts/test-engine.js`: Penambahan TEST 28 & sinkronisasi versi cache `v5.8.111`.
+  - `LATEST_UPDATE.md`: Dokumentasi riwayat pembaruan sistem.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: Seluruh 291 / 291 assertion checks lulus 100%.
+
+---
+
 # 21 Oktober 2026 — Pembaruan Teks Flyer Sholat Jum'at: "Waktu Dzuhur" Dinamis (v5.8.110)
 
 - **Permintaan Pengguna:**

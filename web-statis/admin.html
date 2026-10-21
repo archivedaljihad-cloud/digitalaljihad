@@ -320,6 +320,13 @@
             cursor: pointer;
             margin-right: 12px;
             border: 1px solid rgba(255, 215, 0, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .topbar-prayer-pill:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 16px rgba(30, 90, 58, 0.4);
+            border-color: rgba(255, 215, 0, 0.7);
         }
 
         .topbar-prayer-pill .pill-icon {
@@ -1609,12 +1616,12 @@
                     </div>
 
                     <!-- Widget Pill Sholat Berikutnya -->
-                    <div class="topbar-prayer-pill d-none d-md-inline-flex" title="Waktu Sholat Berikutnya">
+                    <div class="topbar-prayer-pill d-none d-md-inline-flex" title="Waktu Sholat Berikutnya (Klik untuk atur Jadwal Sholat)" onclick="switchAdminSection('jadwal-sholat')">
                         <div class="pill-icon">
                             <i class="fas fa-mosque"></i>
                         </div>
                         <span class="pill-label">Sholat Berikutnya:</span>
-                        <span class="pill-time" id="topbarNextPrayer">Dzuhur 12:00</span>
+                        <span class="pill-time" id="topbarNextPrayer">...</span>
                     </div>
 
                     <!-- Topbar Navbar Right -->
@@ -7655,27 +7662,27 @@ Kepada para Jamaah semuanya, apabila khatib sudah naik mimbar dimohon untuk tida
         <!-- ======================================================= -->
     <!-- MODULARISASI PANEL ADMIN SCRIPTS (AL-JIHAD SIGNAGE)     -->
     <!-- ======================================================= -->
-    <script src="js/admin/admin-core.js?v=5.8.99"></script>
-    <script src="js/admin/admin-data-loader.js?v=5.8.99"></script>
-    <script src="js/admin/admin-users.js?v=5.8.99"></script>
-    <script src="js/admin/admin-kas.js?v=5.8.99"></script>
-    <script src="js/admin/admin-infaq.js?v=5.8.99"></script>
-    <script src="js/admin/admin-qris.js?v=5.8.99"></script>
-    <script src="js/admin/admin-rotasi.js?v=5.8.99"></script>
-    <script src="js/admin/admin-jumat.js?v=5.8.99"></script>
-    <script src="js/admin/admin-kajian.js?v=5.8.99"></script>
-    <script src="js/admin/admin-jadwal-sholat.js?v=5.8.99"></script>
-    <script src="js/admin/admin-running-text.js?v=5.8.99"></script>
-    <script src="js/admin/admin-yasin.js?v=5.8.99"></script>
-    <script src="js/admin/admin-settings.js?v=5.8.99"></script>
-    <script src="js/admin/admin-ai.js?v=5.8.99"></script>
-    <script src="js/admin/admin-qurban.js?v=5.8.99"></script>
-    <script src="js/admin/admin-ramadhan.js?v=5.8.99"></script>
-    <script src="js/admin/admin-remote.js?v=5.8.99"></script>
-    <script src="js/admin/admin-galeri.js?v=5.8.99"></script>
-    <script src="js/admin/admin-undangan.js?v=5.8.99"></script>
-    <script src="js/admin/admin-agenda-rutin.js?v=5.8.99"></script>
-    <script src="js/admin/admin-pengumuman-jumat.js?v=5.8.99"></script>
+    <script src="js/admin/admin-core.js?v=5.8.111"></script>
+    <script src="js/admin/admin-data-loader.js?v=5.8.111"></script>
+    <script src="js/admin/admin-users.js?v=5.8.111"></script>
+    <script src="js/admin/admin-kas.js?v=5.8.111"></script>
+    <script src="js/admin/admin-infaq.js?v=5.8.111"></script>
+    <script src="js/admin/admin-qris.js?v=5.8.111"></script>
+    <script src="js/admin/admin-rotasi.js?v=5.8.111"></script>
+    <script src="js/admin/admin-jumat.js?v=5.8.111"></script>
+    <script src="js/admin/admin-kajian.js?v=5.8.111"></script>
+    <script src="js/admin/admin-jadwal-sholat.js?v=5.8.111"></script>
+    <script src="js/admin/admin-running-text.js?v=5.8.111"></script>
+    <script src="js/admin/admin-yasin.js?v=5.8.111"></script>
+    <script src="js/admin/admin-settings.js?v=5.8.111"></script>
+    <script src="js/admin/admin-ai.js?v=5.8.111"></script>
+    <script src="js/admin/admin-qurban.js?v=5.8.111"></script>
+    <script src="js/admin/admin-ramadhan.js?v=5.8.111"></script>
+    <script src="js/admin/admin-remote.js?v=5.8.111"></script>
+    <script src="js/admin/admin-galeri.js?v=5.8.111"></script>
+    <script src="js/admin/admin-undangan.js?v=5.8.111"></script>
+    <script src="js/admin/admin-agenda-rutin.js?v=5.8.111"></script>
+    <script src="js/admin/admin-pengumuman-jumat.js?v=5.8.111"></script>
 </body>
 </html>
 

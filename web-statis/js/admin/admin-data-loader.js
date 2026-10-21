@@ -252,6 +252,9 @@
             try {
                 if (resSholatSettled.status === 'fulfilled' && resSholatSettled.value.ok) {
                     const sholatList = await resSholatSettled.value.json();
+                    if (Array.isArray(sholatList) && sholatList.length > 0) {
+                        try { localStorage.setItem('cached_jadwal_sholat', JSON.stringify(sholatList)); } catch (e) {}
+                    }
                     sholatList.forEach(s => {
                         const name = (s.nama_sholat || s.nama || '').toLowerCase();
                         const timeVal = s.waktu ? s.waktu.substring(0, 5) : (s.jam || '');
@@ -267,6 +270,9 @@
                         if (name.includes('maghrib')) setVal('sholatMaghrib', timeVal);
                         if (name.includes('isya')) setVal('sholatIsya', timeVal);
                     });
+                    if (typeof window.updateTopbarNextPrayer === 'function') {
+                        window.updateTopbarNextPrayer(true);
+                    }
                 }
 
                 // Status switch toggle Imsak & Syuruk
