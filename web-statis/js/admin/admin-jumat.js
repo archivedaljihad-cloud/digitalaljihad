@@ -431,6 +431,7 @@
             const bilal = document.getElementById('jumatBilal')?.value.trim() || 'Ust. Mansur';
             const maklumat = document.getElementById('jumatMaklumat')?.value.trim() || 'Ust. Fatkhurokhman';
             const jumatDur = parseInt(document.getElementById('jumatDurasiInput')?.value) || 50;
+            const waktuVal = document.getElementById('jumatWaktu')?.value || '11:45';
 
             // Format tanggal Indonesia
             let tglFormatted = 'Jum\'at, ' + tglVal;
@@ -596,7 +597,7 @@
 
             ctx.fillStyle = '#E2E8F0';
             ctx.font = '600 19px "Poppins", "Segoe UI", sans-serif';
-            ctx.fillText('⏰ Waktu Khutbah & Sholat: 11:45 WIB', 540, 625);
+            ctx.fillText(`⏰ Waktu Dzuhur: ${waktuVal} WIB`, 540, 625);
 
             // 7. EMPAT PETUGAS RESMI (RATA TENGAH, TANPA KOTAK, TEKS BESAR & TAJAM)
             const officers = [
@@ -723,6 +724,7 @@
             if (flyerUserEditedText && !force) {
                 return; // Jangan ditimpa jika sudah diedit manual oleh petugas
             }
+            const waktuVal = document.getElementById('jumatWaktu')?.value || '11:45';
             const waText = 
 `🕌 *JADWAL PETUGAS SHOLAT JUM'AT* 🕌
 *MASJID JAMI' AL-JIHAD (GRAHA ASRI)*
@@ -731,7 +733,7 @@
 _Assalamu'alaikum Warahmatullahi Wabarakatuh_
 
 📅 *Hari / Tanggal:* ${tglFormatted}
-⏰ *Waktu Khutbah & Sholat:* 11:45 WIB
+⏰ *Waktu Dzuhur:* ${waktuVal} WIB
 
 ━━━━━━━━━━━━━━━━━━━━━━
 📋 *SUSUNAN PETUGAS PEKAN INI:*

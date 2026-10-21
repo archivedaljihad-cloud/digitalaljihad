@@ -477,7 +477,7 @@ assert(utamaContent.includes('font-size: 2.65rem;') && utamaContent.includes('.s
 assert(utamaContent.includes("'Urbanist'") && utamaContent.includes('font-weight: 700;'), 'slides/utama.html menggunakan font Urbanist Bold 700 untuk angka jam sholat');
 assert(utamaContent.includes('.npb-countdown') && utamaContent.includes('font-size: 19px;'), 'slides/utama.html memiliki font-size 19px untuk countdown sholat berikutnya');
 assert(utamaContent.includes('.sholat-card .waktu-sholat') && utamaContent.includes('font-size: 2.2rem;'), 'slides/utama.html memiliki font-size adaptif 2.2rem pada layar tablet <= 1024px');
-assert(swContent.includes('aljihad-signage-v5.8.109'), 'sw.js memiliki bumping versi cache terbaru v5.8.109');
+assert(swContent.includes('aljihad-signage-v5.8.110'), 'sw.js memiliki bumping versi cache terbaru v5.8.110');
 
 // -------------------------------------------------------------
 // 18. SLIDES JUMAT IMAM PHOTO BADGE 1-LINE FORMAT INTEGRITY
@@ -699,6 +699,8 @@ assert(freshModeinputContent.includes('jumatImamFotoBase64 = compressed;') && fr
 assert(freshModeinputContent.includes('id="imamPhotoInfo"'), 'modeinput.html memiliki badge info kompresi foto imam');
 const adminJumatContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-jumat.js'), 'utf8');
 assert(adminJumatContent.includes('convertGoogleDriveUrl') && adminJumatContent.includes('lh3.googleusercontent.com/d/'), 'admin-jumat.js memiliki auto-convert URL Google Drive');
+assert(adminJumatContent.includes('⏰ Waktu Dzuhur:') && adminJumatContent.includes('⏰ *Waktu Dzuhur:*'), 'admin-jumat.js menampilkan teks Waktu Dzuhur pada canvas flyer dan WhatsApp broadcast');
+assert(!adminJumatContent.includes('Waktu Khutbah & Sholat'), 'admin-jumat.js tidak lagi memuat teks Waktu Khutbah & Sholat');
 assert(adminGaleriContent.includes('convertGoogleDriveUrl') && adminGaleriContent.includes('lh3.googleusercontent.com/d/'), 'admin-galeri.js memiliki auto-convert URL Google Drive');
 const adminQrisContent = fs.readFileSync(path.join(baseDir, 'js/admin/admin-qris.js'), 'utf8');
 assert(adminQrisContent.includes('convertGoogleDriveUrl') && adminQrisContent.includes('lh3.googleusercontent.com/d/'), 'admin-qris.js memiliki auto-convert URL Google Drive');

@@ -1,3 +1,40 @@
+# 21 Oktober 2026 — Pembaruan Teks Flyer Sholat Jum'at: "Waktu Dzuhur" Dinamis (v5.8.110)
+
+- **Permintaan Pengguna:**
+  - *"Di hasil flyer Sholat jum'at. Ganti teks "Waktu Khutbah & Sholat" menjadi Waktu Dzuhur"*
+
+- **Akar Masalah (Root Causes) & Kebutuhan:**
+  1. Pada fungsi perenderan canvas flyer Sholat Jum'at (`renderFlyerJumatCanvas()`) di `web-statis/js/admin/admin-jumat.js`, teks waktu sebelumnya bertuliskan statis `'⏰ Waktu Khutbah & Sholat: 11:45 WIB'`.
+  2. Begitu juga pada template pesan pengumuman WhatsApp (`updateFlyerWaBroadcastText()`), teks tertera `'⏰ *Waktu Khutbah & Sholat:* 11:45 WIB'`.
+  3. Nilai jam belum membaca input jam sholat (`#jumatWaktu`) secara dinamis saat digambar pada canvas flyer.
+
+- **Detail Implementasi & Solusi Menyeluruh:**
+  1. **Penggantian Teks Flyer Jum'at ke "Waktu Dzuhur" Dinamis:**
+     - Di `renderFlyerJumatCanvas()` (`web-statis/js/admin/admin-jumat.js`), teks diganti menjadi:
+       `⏰ Waktu Dzuhur: ${waktuVal} WIB`
+       dengan membaca nilai `const waktuVal = document.getElementById('jumatWaktu')?.value || '11:45'`.
+     - Hasilnya, flyer canvas kini menampilkan label resmi **`⏰ Waktu Dzuhur: [jam] WIB`** (default `11:45 WIB` atau sesuai input form).
+  2. **Penyelarasan Teks Siaran WhatsApp Broadcast:**
+     - Di `updateFlyerWaBroadcastText()`, teks diganti menjadi:
+       `⏰ *Waktu Dzuhur:* ${waktuVal} WIB`
+       sehingga sinkron antara gambar flyer dan teks siaran pesan WhatsApp.
+  3. **Pembersihan Cache & Cache Version Bumping (`aljihad-signage-v5.8.110`):**
+     - Bumping versi cache Service Worker ke **`aljihad-signage-v5.8.110`** di `web-statis/sw.js`.
+     - Menyelaraskan filter pembersihan cache usang di `web-statis/js/admin/admin-settings.js` dan assertions di `scripts/test-engine.js`.
+  4. **Penambahan Automated Regression Test:**
+     - Menambahkan verifikasi assertion di `scripts/test-engine.js` untuk memastikan flyer dan WhatsApp broadcast selalu menggunakan `Waktu Dzuhur` dan tidak memuat lagi `Waktu Khutbah & Sholat`.
+
+- **Berkas yang Diperbarui:**
+  - `web-statis/js/admin/admin-jumat.js`: Pembaruan teks flyer canvas dan teks siaran WhatsApp menjadi `Waktu Dzuhur: ${waktuVal} WIB`.
+  - `web-statis/sw.js` & `web-statis/js/admin/admin-settings.js`: Bumping cache Service Worker ke `v5.8.110`.
+  - `scripts/test-engine.js`: Penambahan assertion pengujian flyer `Waktu Dzuhur` dan verifikasi cache `v5.8.110`.
+  - `LATEST_UPDATE.md`: Dokumentasi riwayat pembaruan sistem.
+
+- **Quality Gates & Validasi Regresi:**
+  - `npm test`: Seluruh 286 / 286 assertion checks lulus 100%.
+
+---
+
 # 21 Oktober 2026 — Perbaikan Tuntas Kolom Bilal, Muadzin, dan Pembaca Maklumat Sholat Jum'at Anti-Revert (v5.8.109)
 
 - **Permintaan Pengguna:**
